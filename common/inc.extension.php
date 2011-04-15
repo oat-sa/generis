@@ -35,25 +35,16 @@ if(function_exists("date_default_timezone_set") && defined('TIME_ZONE')){
 #	 error_level	= 3;
 #	 fatal_level 	= 4;
 $GLOBALS['config_log'] 		= array(
-									array(	'nom' => 'FileAppender', 
-											'level' =>  0 , 		
-											'config' => dirname(__FILE__).'/../log/log.txt'),
+array(	'nom' => 'FileAppender', 
+		'level' =>  0 , 		
+		'config' => dirname(__FILE__).'/../log/log.txt'),
 
-									);
+);
 //used for backward compat
 $GLOBALS['default_lang']	= 'EN';
 
 require_once dirname(__FILE__)	. '/ext/class.ClassLoader.php';
 require_once INCLUDES_PATH		. '/ClearFw/clearbricks/common/_main.php';
-
-$__generis_autoload['accesBD']				= dirname(__FILE__).'/../core/kernel/accesBD.php' ;
-$__generis_autoload['accesBDsubscriber']	= dirname(__FILE__).'/../core/kernel/accesBDSubscriber.php';
-$__generis_autoload['API_impl']				= dirname(__FILE__).'/../core/kernel/API_impl.php' ;
-$__generis_autoload['rdfs_cache']			= dirname(__FILE__).'/../core/kernel/cache.php';
-$__generis_autoload['generisModel']			= dirname(__FILE__).'/../core/kernel/model.php' ;
-$__generis_autoload['modelManager']			= dirname(__FILE__).'/../core/kernel/modelManager.php';
-$__generis_autoload['generisrdfmodel']		= dirname(__FILE__).'/../core/kernel/rdfmodel.php' ;
-$__generis_autoload['generisrdfsmodel']		= dirname(__FILE__).'/../core/kernel/rdfsmodel.php';
 
 $__generis_autoload['filemanager']			= INCLUDES_PATH.'/ClearFw/clearbricks/filemanager/class.filemanager.php';
 $__generis_autoload['fileZip']				= INCLUDES_PATH.'/ClearFw/clearbricks/zip/class.zip.php';

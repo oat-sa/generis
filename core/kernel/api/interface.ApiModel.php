@@ -3,16 +3,16 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - core\kernel\api\interface.ApiModel.php
+ * Generis Object Oriented API - core/kernel/api/interface.ApiModel.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 29.03.2010, 15:28:04 with ArgoUML PHP module 
- * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
+ * Automatically generated on 15.04.2011, 16:46:04 with ArgoUML PHP module 
+ * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author firstname and lastname of author, <author@example.org>
+ * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
  * @package core
  * @subpackage kernel_api
  */
@@ -24,7 +24,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_api_Api
  *
- * @author firstname and lastname of author, <author@example.org>
+ * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
  */
 require_once('core/kernel/api/interface.Api.php');
 
@@ -41,7 +41,7 @@ require_once('core/kernel/api/interface.Api.php');
  *
  * @abstract
  * @access public
- * @author firstname and lastname of author, <author@example.org>
+ * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
  * @package core
  * @subpackage kernel_api
  */
@@ -57,7 +57,7 @@ interface core_kernel_api_ApiModel
      * of resources as collection. This makes use of pOWl third party library
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  string sparqlQuery
      * @return core_kernel_classes_ContainerCollection
      * @see sparql proposed by the w3c consortium
@@ -69,7 +69,7 @@ interface core_kernel_api_ApiModel
      * party library pOwl
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  string rdqlQuery
      * @return boolean
      */
@@ -80,7 +80,7 @@ interface core_kernel_api_ApiModel
      * may get
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  array sourceNamespaces
      * @return string
      */
@@ -90,7 +90,7 @@ interface core_kernel_api_ApiModel
      * import xml rdf files into the knowledge base
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  string targetNameSpace
      * @param  string fileLocation
      * @return boolean
@@ -101,7 +101,7 @@ interface core_kernel_api_ApiModel
      * connect on the remote module whose id is provided, retrive the knowledge
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  int idSubscription
      * @return boolean
      */
@@ -123,7 +123,7 @@ interface core_kernel_api_ApiModel
      * inferenced from te knowlege base about this resource
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  string uriResource
      * @return string
      */
@@ -148,6 +148,15 @@ interface core_kernel_api_ApiModel
     public function getRootClasses();
 
     /**
+     * Short description of method getAllClasses
+     *
+     * @access public
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @return core_kernel_classes_ContainerCollection
+     */
+    public function getAllClasses();
+
+    /**
      * add a new statment to the knowledge base
      *
      * @access public
@@ -161,41 +170,10 @@ interface core_kernel_api_ApiModel
     public function setStatement($subject, $predicate, $object, $language);
 
     /**
-     * Short description of method getResourceTree
-     *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  string uriResource
-     * @param  int depth
-     * @return common_Tree
-     */
-    public function getResourceTree($uriResource, $depth);
-
-    /**
-     * Short description of method getAllClasses
-     *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @return core_kernel_classes_ContainerCollection
-     */
-    public function getAllClasses();
-
-    /**
-     * Short description of method getSubject
-     *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  string predicate
-     * @param  string object
-     * @return core_kernel_classes_Resource
-     */
-    public function getSubject($predicate, $object);
-
-    /**
      * Short description of method removeStatement
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  string subject
      * @param  string predicate
      * @param  string object
@@ -205,15 +183,38 @@ interface core_kernel_api_ApiModel
     public function removeStatement($subject, $predicate, $object, $language);
 
     /**
+     * Short description of method getSubject
+     *
+     * @access public
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @param  string predicate
+     * @param  string object
+     * @return core_kernel_classes_Resource
+     */
+    public function getSubject($predicate, $object);
+
+    /**
      * Short description of method getObject
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  string subject
      * @param  string predicate
      * @return core_kernel_classes_ContainerCollection
      */
     public function getObject($subject, $predicate);
+
+    /**
+     * Short description of method getResourceTree
+     *
+     * @access public
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @deprecated
+     * @param  string uriResource
+     * @param  int depth
+     * @return mixed
+     */
+    public function getResourceTree($uriResource, $depth);
 
 } /* end of interface core_kernel_api_ApiModel */
 

@@ -5,8 +5,6 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 
 if (!(isset($_SESSION))) {session_start();}
 
-
-
 /**
  * Manage session with generis api using PHP Session. Using this facade is really
  * helpful for developpers if the connection to Generis has to remain open through
@@ -20,33 +18,25 @@ class core_control_FrontController
 	 * @param string $login The login identifier of the user.
 	 * @param string $password The MD5 hash of the user's password.
 	 */
-	static function connect($login = "", $password = "",$module = "")
+	static function connect($login = '', $password = '',$module = '')
 	{
 		$status =false;
-		
-		if (($login != "") and ($password != "") and ($module != ""))	
-		{
+		if (!empty($login) && !empty($password) && !empty($module)){
 
-				$status =true;	
-				
-				$apiModelOo = core_kernel_impl_ApiModelOO::singleton();
-				$apiModelOo->logIn($login,$password,$module, CLASS_ROLE_TAOMANAGER);
-				
-				$_SESSION["generis_session"] = $apiModelOo->session;
-				$_SESSION["generis_module"] = $module;
-		
-		}
-		else	
-		{
-
-			if (self::isConnected()) {
-					$status =true;
-					core_kernel_classes_Session::reset($_SESSION["generis_session"]);
-					core_kernel_impl_ApiModelOO::singleton()->session = $_SESSION["generis_session"];
-					core_kernel_classes_DbWrapper::singleton($_SESSION["generis_module"]);
-					core_kernel_classes_Session::singleton()->model->con = core_kernel_classes_DbWrapper::singleton()->dbConnector;
-				}
+			$status =true;	
+			$apiModelOo = core_kernel_impl_ApiModelOO::singleton();
+			$apiModelOo->logIn($login, $password, $module, CLASS_ROLE_TAOMANAGER);
 			
+			$session = core_kernel_classes_Session::singleton();
+			$_SESSION["generis_session"] = $session;
+			$_SESSION["generis_module"] = $module;
+		}
+		else{
+			if (self::isConnected()) {
+				$status =true;
+				core_kernel_classes_Session::reset($_SESSION["generis_session"]);
+				core_kernel_classes_DbWrapper::singleton($_SESSION["generis_module"]);
+			}
 			return $status;
 		}
 	}

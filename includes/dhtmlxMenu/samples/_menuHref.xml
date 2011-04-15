@@ -1,8 +1,0 @@
-<?xml version='1.0' ?>
-<menu absolutePosition="auto" mode="classic" maxItems="8" type="a2">
-	<MenuItem name="Search Engines" src="search.gif" id="main_a" width="100%">
-			<MenuItem name="Google" id="main_a1" href="http://www.google.com" target="_blank"/>
-			<MenuItem name="Yahoo!" id="main_a2" href="http://www.yahoo.com" target="_blank"/>
-			<MenuItem name="Altavista" id="main_a3" href="http://www.altavista.com" target="_blank"/>
-	</MenuItem>
-</menu>

@@ -1,7 +1,0 @@
-<?xml version='1.0' ?>
-<menu absolutePosition="auto" mode="popup" maxItems="8" globalCss="contextMenu" globalSecondCss="contextMenu" globalTextCss="contextMenuItem">
-	<MenuItem name="Small font" src="smallFont.gif" id="edit_8pt"/>	
-	<MenuItem name="Medium font" src="mediumFont.gif" id="edit_10pt"/>	
-	<MenuItem name="Big font"   src="bigFont.gif" id="edit_14pt"/>	
-	<MenuItem name="Huge font"  src="hugeFont.gif" id="edit_20pt"/>					
-</menu>

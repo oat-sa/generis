@@ -27,7 +27,6 @@ class UserServiceTestCase extends UnitTestCase {
 	}
 	
 	public function testAddRole(){
-
 		core_kernel_impl_ApiModelOO::singleton()->login(SYS_USER_LOGIN, SYS_USER_PASS, DATABASE_NAME, CLASS_ROLE_TAOMANAGER);
 		$role1 = $this->service->addRole('testAddRoleTESt 1','testAddRole 1');
 		$subClassProp = new core_kernel_classes_Property(RDF_SUBCLASSOF);

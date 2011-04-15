@@ -618,7 +618,7 @@ class core_kernel_impl_ApiModelOO
 		$factory = core_kernel_classes_TreeFactory::singleton();
 		$factory->setOptions(array("properties" => 'true',"instances" =>'true'));
 		$factory->setRootClass($uriResource);
-		$factory->setSession($this->session);
+		$factory->setSession(core_kernel_classes_Session::singleton());
 		$factory->setDepth($depth);
 		$returnValue = $factory->getTree();
 

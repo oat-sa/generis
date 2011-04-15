@@ -6,7 +6,7 @@ error_reporting(E_ALL);
  * session has been set public because when implementing an interface, the son
  * this class may not read this attribute otherwise in php 5.2
  *
- * @author firstname and lastname of author, <author@example.org>
+ * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
  * @package core
  * @subpackage kernel_impl
  */
@@ -18,7 +18,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_api_Api
  *
- * @author firstname and lastname of author, <author@example.org>
+ * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
  */
 require_once('core/kernel/api/interface.Api.php');
 
@@ -35,7 +35,7 @@ require_once('core/kernel/api/interface.Api.php');
  * this class may not read this attribute otherwise in php 5.2
  *
  * @access public
- * @author firstname and lastname of author, <author@example.org>
+ * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
  * @package core
  * @subpackage kernel_impl
  */
@@ -47,21 +47,13 @@ class core_kernel_impl_ApiI
 
     // --- ATTRIBUTES ---
 
-    /**
-     * Short description of attribute session
-     *
-     * @access public
-     * @var Session
-     */
-    public $session = null;
-
     // --- OPERATIONS ---
 
     /**
      * Short description of method logIn
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  string login
      * @param  string password
      * @param  string module
@@ -78,7 +70,6 @@ class core_kernel_impl_ApiI
         }
        
         core_kernel_users_Service::singleton()->login($login, $password, $role);
-		$this->session = core_kernel_classes_Session::singleton();
         // section 10-13-1--31--1e8cf08b:11927b92513:-8000:00000000000009AF end
 
         return (bool) $returnValue;
@@ -88,7 +79,7 @@ class core_kernel_impl_ApiI
      * Short description of method logOut
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @return boolean
      */
     public function logOut()

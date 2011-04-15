@@ -246,6 +246,8 @@ class core_kernel_users_Service
 			//check Role
 			$this->loginApi($userUri);
 			
+			$this->userResource = new core_kernel_classes_Resource($userUri);
+			
 			$typeProp = new core_kernel_classes_Property(RDF_TYPE);
 			$userRoleCollection = $this->userResource->getPropertyValuesCollection($typeProp);
 			$roleClass =  new core_kernel_classes_Class($role);	
@@ -257,7 +259,6 @@ class core_kernel_users_Service
 					break;
 				}
 			}
-
 		}
 		else{
 			$this->logout();
@@ -363,34 +364,38 @@ class core_kernel_users_Service
         		return false;
         	}
         }
-        
-		$this->userResource = new core_kernel_classes_Resource($uri);
-        if($this->userResource != null){
-        	$login = $this->userResource->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_LOGIN));
-        	$session->model->login = $login->literal;
-        	$session->user =  $login->literal;
-        	$returnValue = true ;
-        }
-        else{
-        	Session::removeAttribute(self::AUTH_TOKEN_KEY);
-        }
-        
-    	 /**
-         * simulate the legacy api connection
-         * @see core_control_FrontController::connect
-         * @todo to be refactored
-         */ 
-       	if(!isset($_SESSION["generis_session"])){
-	        $session = core_kernel_classes_Session::singleton($uri,$this->module);
-			$_SESSION["generis_session"] 	= $session;
-			$_SESSION["generis_module"] 	= $this->module;
-       	}
-       	else{
-       		core_kernel_classes_Session::reset($_SESSION["generis_session"]);
+        if(isset($_SESSION["generis_session"])){
+        	core_kernel_classes_Session::reset($_SESSION["generis_session"]);
 			core_kernel_impl_ApiModelOO::singleton()->session = $_SESSION["generis_session"];
 			core_kernel_classes_DbWrapper::singleton($_SESSION["generis_module"]);
-			core_kernel_classes_Session::singleton()->model->con = core_kernel_classes_DbWrapper::singleton()->dbConnector;
-       	}
+			$returnValue = true ;
+        }
+        else{
+        
+			$this->userResource = new core_kernel_classes_Resource($uri);
+	        if($this->userResource != null){
+	        	$login = $this->userResource->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_LOGIN));
+	        	
+		        /**
+		         * simulate the legacy api connection
+		         * @see core_control_FrontController::connect
+		         * @todo to be refactored
+		         */ 
+		       	if(!isset($_SESSION["generis_session"])){
+			        $session = core_kernel_classes_Session::singleton($uri,$this->module);
+			        $session->setUser($login->literal);
+			        
+					$_SESSION["generis_session"] 	= $session;
+					$_SESSION["generis_module"] 	= $this->module;
+		       	}
+	       	
+	        	$returnValue = true ;
+	        }
+	        else{
+	        	Session::removeAttribute(self::AUTH_TOKEN_KEY);
+	        }
+        }
+    	 
         // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E9B end
 
         return (bool) $returnValue;
