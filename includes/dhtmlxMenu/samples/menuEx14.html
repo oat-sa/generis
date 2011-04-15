@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+	<title>Javascript Menu samples. dhtmlXMenu - Vertical layout</title>
+</head>
+<style>
+	body {font-size:12px}
+	.{font-family:arial;font-size:12px}
+	h1 {cursor:hand;font-size:16px;margin-left:10px;line-height:10px}
+	xmp {color:green;font-size:12px;margin:0px;font-family:courier;background-color:#e6e6fa;padding:2px}
+</style>
+<body>
+	<h1>Different layouts</h1>
+	<link rel="STYLESHEET" type="text/css" href="../css/dhtmlXMenu.css">
+	<script language="JavaScript" src="../js/dhtmlXProtobar.js"></script>
+	<script language="JavaScript" src="../js/dhtmlXMenuBar.js"></script>
+	<script language="JavaScript" src="../js/dhtmlXCommon.js"></script>	
+	<table>
+		<tr>
+			<td colspan="2">
+			Classic
+				<div id="menu_zone" style="width:600;border :1px solid Silver;"/>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+			Alpha
+				<div id="menu_zone2" style="width:600;border :1px solid Silver;"/>
+			</td>
+		</tr>
+
+		<tr>
+			<td >
+			Popup
+				<div id="menu_zone3" style="width:300;"/>
+			</td>
+			<td >
+			Betta
+				<div id="menu_zone4" style="width:300;"/>
+			</td>
+		</tr>
+		
+	</table>
+	
+<hr>
+<XMP>
+<script>
+	aMenuBar=new dhtmlXMenuBarObject('menu_zone',600,20,"Demo menu",0);
+	aMenuBar.setOnClickHandler(onButtonClick);
+	aMenuBar.setGfxPath("../img/");		
+	aMenuBar.loadXML("_menu.xml")
+	aMenuBar.showBar();
+	
+	aMenuBar2=new dhtmlXMenuBarObject('menu_zone2',600,20,"",0);
+	aMenuBar2.setOnClickHandler(onButtonClick);
+	aMenuBar2.setGfxPath("../img/");
+	aMenuBar2.loadXML("_menuH2.xml")
+	aMenuBar2.showBar();
+
+
+	aMenuBar3=new dhtmlXMenuBarObject('menu_zone3',120,200,"",1);
+	aMenuBar3.setOnClickHandler(onButtonClick);
+	aMenuBar3.setGfxPath("../img/");
+	aMenuBar3.loadXML("_menuV1.xml")
+	aMenuBar3.showBar();
+
+	aMenuBar4=new dhtmlXMenuBarObject('menu_zone4',120,200,"",1);
+	aMenuBar4.setOnClickHandler(onButtonClick);
+	aMenuBar4.setGfxPath("../img/");
+	aMenuBar4.loadXML("_menuV2.xml")
+	aMenuBar4.showBar();				
+	
+</script>
+</XMP>
+
+
+	<script>
+	
+		function onButtonClick(itemId,itemValue)
+		{
+			alert("Button "+itemId+" was pressed"+(itemValue?("\n select value : "+itemValue):""));
+		};
+		
+		
+		aMenuBar=new dhtmlXMenuBarObject('menu_zone',600,20,"Demo menu",0);
+		aMenuBar.setOnClickHandler(onButtonClick);
+		aMenuBar.setGfxPath("../img/");		
+		aMenuBar.loadXML("_menu.xml")
+		aMenuBar.showBar();
+		
+		aMenuBar2=new dhtmlXMenuBarObject('menu_zone2',600,20,"",0);
+		aMenuBar2.setOnClickHandler(onButtonClick);
+		aMenuBar2.setGfxPath("../img/");
+		aMenuBar2.loadXML("_menuH2.xml")
+		aMenuBar2.showBar();
+
+
+		aMenuBar3=new dhtmlXMenuBarObject('menu_zone3',120,200,"",1);
+		aMenuBar3.setOnClickHandler(onButtonClick);
+		aMenuBar3.setGfxPath("../img/");
+		aMenuBar3.loadXML("_menuV1.xml")
+		aMenuBar3.showBar();
+
+		aMenuBar4=new dhtmlXMenuBarObject('menu_zone4',120,200,"",1);
+		aMenuBar4.setOnClickHandler(onButtonClick);
+		aMenuBar4.setGfxPath("../img/");
+		aMenuBar4.loadXML("_menuV2.xml")
+		aMenuBar4.showBar();				
+		
+	</script>
+
+
+</body>
+</html>

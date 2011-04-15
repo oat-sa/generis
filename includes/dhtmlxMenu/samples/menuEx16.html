@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+	<title>Javascript Menu samples. dhtmlXMenu - Menu Item properties</title>
+</head>
+<style>
+	body {font-size:12px}
+	.{font-family:arial;font-size:12px}
+	h1 {cursor:hand;font-size:16px;margin-left:10px;line-height:10px}
+	xmp {color:green;font-size:12px;margin:0px;font-family:courier;background-color:#e6e6fa;padding:2px}
+</style>
+<body>
+	<h1>Menu Item properties</h1>
+	<link rel="STYLESHEET" type="text/css" href="../css/dhtmlXMenu.css">
+	<script language="JavaScript" src="../js/dhtmlXProtobar.js"></script>
+	<script language="JavaScript" src="../js/dhtmlXMenuBar.js"></script>
+	<script language="JavaScript" src="../js/dhtmlXCommon.js"></script>	
+	<table>
+		<tr>
+			<td>
+				<div id="menu_zone" style="width:600; background-color:#f5f5f5;border :1px solid Silver;"/>
+			</td>
+		</tr>
+		<tr>
+		<td>
+			<table>
+				<tr><td valign="top">
+					<select id="button_id">
+						<option value="main_file">File
+						<option value="main_edit">Edit
+						<option value="main_help">Help
+					</select>
+				</td>
+				<td>
+			<a href="javascript:aMenuBar.enableItem(document.getElementById('button_id').value)">Enable button</a><br>
+			<a href="javascript:aMenuBar.disableItem(document.getElementById('button_id').value)">Disable button</a><br>
+			<a href="javascript:aMenuBar.showItem(document.getElementById('button_id').value)">Show button</a><br>
+			<a href="javascript:aMenuBar.hideItem(document.getElementById('button_id').value)">Hide button</a><br>
+			<a href="javascript:setNewText(document.getElementById('sample_1').value)">Set button text</a>&nbsp;<input type="text" id="sample_1"><br>
+			Set button image 
+			<a href="javascript:aMenuBar.getItem(document.getElementById('button_id').value).setImage('../img/iconNewNewsEntry.gif');"><img src="../img/iconNewNewsEntry.gif">
+			<a href="javascript:aMenuBar.getItem(document.getElementById('button_id').value).setImage('../img/iconSave.gif');"><img src="../img/iconSave.gif">
+			<a href="javascript:aMenuBar.getItem(document.getElementById('button_id').value).setImage('../img/iconPrint.gif');"><img src="../img/iconPrint.gif">
+			<a href="javascript:aMenuBar.getItem(document.getElementById('button_id').value).setImage('../img/iconSearch.gif');"><img src="../img/iconSearch.gif">
+			<a href="javascript:aMenuBar.getItem(document.getElementById('button_id').value).setImage('../img/iconFilter.gif');"><img src="../img/iconFilter.gif"><br>
+
+				</td>
+				</tr>
+			</table>
+			
+		</td>
+		</tr>
+	</table>
+<hr>
+<XMP>
+<div id="menu_zone" style="width:600;"/>
+<script>
+	//init menu
+	aMenuBar=new dhtmlXMenuBarObject('menu_zone','100%',30,"Demo menu");
+	// set processing function
+	aMenuBar.setOnClickHandler(onButtonClick);
+	//load menu from xml
+	aMenuBar.loadXML("_menu.xml")
+	//show menu
+	aMenuBar.showBar();
+	//show item
+	aMenuBar.showItem(itemId);
+	//hide item
+	aMenuBar.hideItem(itemId);
+	//disable item
+	aMenuBar.disableItem(itemId);	
+	//enable item
+	aMenuBar.enableItem(itemId);
+</script>
+</XMP>
+
+
+	<script>
+	
+		function onButtonClick(itemId,itemValue)
+		{
+			alert("Button "+itemId+" was pressed"+(itemValue?("\n select value : "+itemValue):""));
+			var f=document.getElementById('button_id');
+			for (var i=0; i<f.options.length; i++)
+				if (f.options[i].value==itemId) f.options[i].selected=true;
+		};
+		
+		
+		function setNewText(newText){
+			var z=aMenuBar.getItem(document.getElementById('button_id').value);
+			if (z.setText) 
+				z.setText(newText); 
+			else alert("Selected button doesn't support such action"); 
+				}
+		
+		aMenuBar=new dhtmlXMenuBarObject(document.getElementById('menu_zone'),'100%',16,"Demo menu");
+		aMenuBar.setOnClickHandler(onButtonClick);
+		aMenuBar.setGfxPath("../img/");
+		aMenuBar.loadXML("_menu.xml")
+		aMenuBar.showBar();
+		
+		
+		
+	</script>
+<br><br>
+
+</body>
+</html>

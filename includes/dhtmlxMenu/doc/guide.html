@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+	<title>DHTML Menu guide and samples</title>
+</head>
+
+<body>
+
+<div style="position:absolute;right:20"><a href="javascript:void(0)" onclick="expandAll(true)">expand</a>&nbsp;<a href="javascript:void(0)" onclick="expandAll(false)">collaps</a></div>
+<script>
+	function openFull(el){
+		el.nextSibling.style.display=='none'?el.nextSibling.style.display='block':el.nextSibling.style.display='none'
+	}
+	function expandAll(fl){
+		var elAr = document.getElementsByTagName("DIV");
+		for(var i=2;i<elAr.length;i++){
+			if(elAr[i].className=='block'){
+				if(fl)
+					elAr[i].style.display = "";
+				else
+					elAr[i].style.display = "none";
+			}
+		}
+	}
+</script>
+<style>
+	body {font-size:14px;line-height:18px;}
+	.{font-family:arial;}
+	h2 {cursor:pointer;font-size:16px;margin-left:10px;line-height:10px}
+	h3 {cursor:pointer;font-weight:normal;color:gray;text-decoration:underline;line-height:10px}
+	h4 {cursor:pointer;font-weight:normal;color:black;text-decoration:underline;line-height:10px}
+	.op {cursor:pointer;}
+	div.block {margin-left:30px;}
+	xmp {color:green;font-size:12px;margin:0px;font-family:courier;background-color:#e6e6fa;padding:2px}
+	li {margin-top:2px;}
+</style>
+<h2 onclick="openFull(this)">dhtmlXMenu Guide and Samples</h2>
+<div class="block">
+<!---  --->
+	
+	<h3 onclick="openFull(this)">Main features</h3>
+	<div style="display:show" class="block">
+			<li>Multibrowser/Multiplatform support </li>
+			<li>Full controll with JavaScript API</li>
+			<li>Dynamic loading</li>
+			<li>XML support</li>
+			<li>customizable design</li>
+			<li>horisontal and vertical layout</li>
+			<li>high stability</li>
+			<li>context menu extension</li>			
+			<li>direct link menu extension</li>									
+	</div>
+	
+	<h3 onclick="openFull(this)">Supported browsers</h3
+	><div style="display:show" class="block">
+		<li>IE 5.x and above</li>
+		<li>Mac OS X Safari</li>
+		<li>Mozilla 1.4 and above</li>
+		<li>FireFox 0.9 and above</li>
+		<li>Opera (Xml loading depends on browser version)</li>
+	</div>
+
+	<h3 onclick="openFull(this)">Working with dhtmlXMenu</h3
+	><div style="display:show" class="block">
+<!--- Initialize object on page --->
+		<h4 onclick="openFull(this)">Initialize object on page</h4
+		><div style="display:none" class="block">
+<XMP>
+<div id="menuBox" style="width:600;height:30"></div>
+<script>
+	//horisontal menu
+	menu=new dhtmlXMenuBarObject("menuBox","100%","20","Demo");
+	
+	menu.loadXML("config.xml");
+	menu.showBar();
+	
+	//vertical menu
+	menu=new dhtmlXMenuBarObject("menuBox","100%","20","Demo",1);
+	menu.loadXML("config.xml");
+	menu.showBar();	
+</script>
+</XMP>
+		Parameters passed to the constructor are:
+			<li>object to attach menu to (should be loaded before calling constructor)</li>
+			<li>width of the menu</li>
+			<li>height of the menu</li>
+			<li>Menu caption (optional)</li>
+			<li>Vertical mode flag (optional)</li><br>			
+		Additional initialisation methods:
+			<li>loadXML(url) - load menu config from xml
+			<li>showBar() - show menu</li>
+		</div>
+<!--- Set Additional init parameters --->	
+		<h4 onclick="openFull(this)">Set Event Handlers</h4
+		><div style="display:none" class="block">
+<XMP>
+<div id="menuBox" style="width:200;height:200"></div>
+<script>
+	menu=new dhtmlXMenuBarObject("menuBox","100%","20","Demo");
+	...
+	menu.setOnClickHandler(onClick);//set function object to call on menu button select
+	menu.setOnShowHandler(onShow);//set function to call on menu show
+	menu.setOnHideHandler(onHide);//set function to call on menu hide
+	
+	menu.setItemAction(itemId, itemOnClickAction); //set on select action for single button
+</script>
+</XMP>	
+		<li>Selected button ID will be passed to function specified as argument for setOnClickHandler(funcObj)</li>
+		</div>
+<!--- Adding nodes with Script --->
+		<h4 onclick="openFull(this)">Adding Items with Script</h4
+		><div style="display:none" class="block">
+<XMP>
+<script>
+	menu=new dhtmlXMenuBarObject("menuBox","100%","20","Demo");
+	...
+	// dhtmlXMenuItemObject(itemId, itemText, itemWidth, itemSrc, itemCSSClass)	
+	menu.addItem(new dhtmlXMenuItemObject('icon21.gif','New button',20,18,0,'new_Id','New tooltip'))
+
+	
+</script>
+</XMP>	
+		<li>For list of initialisation parametrs see documentation on relative objects</li>
+		</div>
+<!--- Using XML --->
+		<h4 onclick="openFull(this)">Configuring with XML</h4
+		><div style="display:none" class="block">
+<XMP>
+<script>
+	menu=new dhtmlXMenuBarObject('menuBox',"100%","100%",0);
+	menu.loadXML("config.xml");
+</script>
+</XMP>	
+<XMP>
+XML Syntax:
+<?xml version='1.0' encoding='iso-8859-1'?>
+<menu name="Demo menu" width="100%" height="20" absolutePosition="auto" menuAlign="left" mode="classic">
+	<MenuItem name="File" src="../sysGfx/iconFile.gif" height="25" width="25" id="menu_file">
+		<MenuItem name="Save" src="../sysGfx/iconSave.gif" height="25" width="25" id="file_save"/>
+		<MenuItem name="Open" src="../sysGfx/iconOpen.gif" height="25" width="25" id="file_open"/>
+		<MenuItem name="Exit" src="../sysGfx/iconExit.gif" height="25" width="25" id="file_exit"/>
+	</MenuItem>
+	<MenuItem name="Help" src="../sysGfx/iconHelp.gif" height="25" width="25" id="menu_help">
+		<MenuItem name="Content" src="" height="25" width="120" id="help_content" />
+		<MenuItem name="About" src="" height="25" width="120" id="help_about" />
+	</MenuItem>	
+</menu>
+</XMP>	
+		<strong>&lt;menu&gt;</strong> node is mandatory. It specifies parametrs global to all menu, all optional<br>
+		Optional parameters for this tag are:<br>
+			<li>name - menu caption</li>
+			<li>width - menu width</li>
+			<li>height - menu height</li>
+			<li>mode - menu design. can be "classic" - default windows like menu, "popup" - context menu style, "alfa" "betta" - mixed styles</li>
+			<li>disableType - if set to "image", then disabled items change their image, else only CSS changed</li>
+			<li>absolutePosition - positioning method of menu, allowed values: "absolute, relative, auto"</li>
+			<li>menuAlign - align of items in menu</li>
+			<li>globalCss - CSS class for menu items  instead of default</li>
+			<li>globalSecondCss - CSS class for menu items on child menu panels</li>						
+			<li>globalTextCss - CSS class for items text instead of default</li>
+			<li>type - menu buttons type, can be :"a1","a2","a3","b1","b2","b3" (default a2) <br>
+				a1 - image doesn't has own css style, selection over all button, without borders<br>
+				a2 - image doesn't has own css style, selection over all button, with borders		<br>
+				a3 - image has own css style, selection over text only, with borders			<br>	
+				b1 - image has own css style, selection over all button, without borders<br>
+				b2 - image has own css style, selection over all button, with borders		<br>
+				b3 - image has own css style, selection over text only, with borders			<br>					
+			</li>	
+			<li>withoutImages - all child menu items can not have images, attribute src will be ignored</li>					
+			<li>mixedImages - child menu items can have or not have images,based on src attribute</li>			
+		<br>
+
+			
+
+		<strong>&lt;MenuItem&gt;</strong> menu item with image and text<br>
+			Mandatory parameters for this tag are:<br>
+			<li>src - src of image</li>
+			<li>id - id of the button</li>
+			Optional parameters for this tag are:<br>
+			<li>width - button width</li>
+			<li>height - button height</li>
+			<li>disableImage - alternative image src, for disabled state</li>
+			<li>tooltip - button tooltip</li><br>
+			
+		
+
+		</div>
+<!--- Setting custom icons to nodes --->
+		<h4 onclick="openFull(this)">Examples of menu items manipulation</h4
+		><div style="display:none" class="block">
+<XMP>
+<script>
+
+	menu.hideButtons(listOfIds); //hide items, listOfIds - list of comma separated ids
+	menu.showItem(itemId); //show item
+	menu.disableItem(itemId); //disable item	
+	
+	or 
+	
+	var item=menu.getItem(itemId); //get item object by id
+	item.disable(); //disable
+	
+	item.setImage(newImageUrl); // set new image
+	item.setText(newItemText); // set new  text 
+</script>
+</XMP>	
+
+		</div>
+
+<!--- Setting custom icons to nodes --->
+		<h4 onclick="openFull(this)">Link navigation menu</h4
+		><div style="display:none" class="block">
+<XMP>
+For creation link navigation menu you need not any additional js instriction, 
+simple write neccesary links as "href" attribute of xml "MenuItem" tags. 
+You also can write "target" attribute, which will be used as a target for link. 
+(By default link loaded in current document)
+
+<script>
+		aMenuBar=new dhtmlXMenuBarObject("menu_zone","100%",22,"Demo menu");
+		aMenuBar.setGfxPath("../img/");
+		aMenuBar.loadXML("_menu3.xml")
+		aMenuBar.showBar();
+	
+</script>
+</XMP>	
+<XMP>
+XML Syntax:
+<?xml version='1.0' encoding='iso-8859-1'?>
+<menu name="Demo menu" width="100%" height="20" absolutePosition="auto" menuAlign="left">
+	<MenuItem name="File" src="../sysGfx/iconFile.gif" height="25" width="25" id="menu_file">
+		<MenuItem name="Save" src="../sysGfx/iconSave.gif" height="25" width="25" id="file_save"  href="save.html"/>
+		<MenuItem name="Open" src="../sysGfx/iconOpen.gif" height="25" width="25" id="file_open" href="open.html"/>
+		<MenuItem name="Exit" src="../sysGfx/iconExit.gif" height="25" width="25" id="file_exit" href="exit.html"/>
+	</MenuItem>
+	<MenuItem name="Help" src="../sysGfx/iconHelp.gif" height="25" width="25" id="menu_help">
+		<MenuItem name="Content" src="" height="25" width="120" id="help_content" href="help.html" target="_blank"/>
+		<MenuItem name="About" src="" height="25" width="120" id="help_about" href="about.html" target="_blank"/>
+	</MenuItem>	
+</menu>
+</XMP>	
+
+		</div>
+		
+		
+<!--- Setting custom icons to nodes --->
+		<h4 onclick="openFull(this)">Context menu</h4
+		><div style="display:none" class="block">
+<XMP>
+<script>
+		//init context menu
+		aMenu=new dhtmlXContextMenuObject('120',0,"Demo menu");
+		aMenu.menu.setGfxPath("../img/");		
+		aMenu.menu.loadXML("_context.xml");			
+		//menu send two parametrs to handler - menu item id, and context zone id	
+		aMenu.setContextMenuHandler(onButtonClick);
+		
+		//set context zones
+		//first parametr - id of html item which need context menu, second - id of context zone
+		aMenu.setContextZone("alfa1",1);
+		
+		aMenu.setContextZone("alfa2",2);
+		aMenu.setContextZone("alfa3",3);				
+</script>
+</XMP>	
+
+		</div>				
+	</div>
+	
+
+</body>
+</html>

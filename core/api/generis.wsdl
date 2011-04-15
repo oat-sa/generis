@@ -1,0 +1,83 @@
+<?php
+$wsdl='
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+    name="generis"
+    targetNamespace="urn:generis"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:si="http://soapinterop.org/xsd"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="urn:generis"
+    xmlns:typens="urn:generis"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <wsdl:types>
+        <xsd:schema
+            targetNamespace="urn:generis"
+            xmlns="http://schemas.xmlsoap.org/wsdl/"
+            xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+            xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+            xmlns:si="http://soapinterop.org/xsd"
+            xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+            xmlns:tns="urn:generis"
+            xmlns:typens="urn:generis"
+            xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <xsd:complexType name="ArrayOfstring">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]"/>
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+          
+        </xsd:schema>
+    </wsdl:types>
+<wsdl:message name="authenticateRequest">
+<wsdl:part name="pName" type="xsd:string" /> 
+<wsdl:part name="pPWD" type="xsd:string" /> 
+<wsdl:part name="pFct" type="xsd:string" /> 
+<wsdl:part name="pMD" type="xsd:string" /> 
+</wsdl:message>
+   
+ <wsdl:message name="authenticateResponse">
+        <wsdl:part name="pResult" type="xsd:string"/>
+  </wsdl:message>
+
+ <wsdl:portType name="authenticate_type">
+        <wsdl:operation name="authenticate">
+            <documentation>Request to connect to the generis system</documentation>
+            <wsdl:input message="tns:authenticateRequest"/>
+            <wsdl:output message="tns:authenticateResponse"/>
+        </wsdl:operation>
+		
+ </wsdl:portType>
+
+<wsdl:binding name="generis_Binding" type="tns:authenticate_type">
+		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+		 <wsdl:operation name="authenticate">
+		   <soap:operation soapAction="http://'.$_SERVER["HTTP_HOST"].'/generis/generis/GenerisKernel/servicesList.php" style="rpc"/>
+		   <wsdl:input><soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:generis" use="encoded"/></wsdl:input>
+		   <wsdl:output><soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:generis" use="encoded"/></wsdl:output>
+		 </wsdl:operation>
+		
+		
+</wsdl:binding>
+
+   
+   
+  <wsdl:service name="generis">
+       <wsdl:port binding="tns:generis_Binding" name="generisPort">
+            <soap:address location="http://'.$_SERVER["HTTP_HOST"].'/generis/generis/GenerisKernel/servicesList.php"/>
+        </wsdl:port>
+   </wsdl:service>
+
+</wsdl:definitions>';
+
+echo $wsdl;
+?>

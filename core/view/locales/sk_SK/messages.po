@@ -1,0 +1,37 @@
+#, fuzzy
+msgid ""
+"Please provide a text input with a length between %minLen and %maxLen for "
+"question %question."
+msgstr ""
+"V odpovedi na otázku %question uveďte text o dĺžke medzi %minLen a %maxLen "
+"znakmi."
+
+#, fuzzy
+msgid ""
+"Please provide a numeric value between %minVal and %maxVal for question %"
+"question."
+msgstr "V odpovedi na otázku %question uveďte číslicu od %minVal do %maxVal.\n"
+
+#, fuzzy
+msgid "Interviewer Instruction"
+msgstr "Pokyn pre administrátora dotazníka"
+
+#, fuzzy
+msgid "Input Code"
+msgstr "Kód odpovede"
+
+#, fuzzy
+msgid "Help"
+msgstr "Pomocník"
+
+#, fuzzy
+msgid "DK"
+msgstr "Neviem"
+
+#, fuzzy
+msgid "RF"
+msgstr "Neodpovedám"
+
+#, fuzzy
+msigid "Please answer to all questions"
+msgstr "Prosím, odpovedzte na všetky otázky"

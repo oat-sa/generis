@@ -1,0 +1,39 @@
+#, fuzzy
+msgid ""
+"Please provide a text input with a length between %minLen and %maxLen for "
+"question %question."
+msgstr ""
+"Kérem, adjon %minLen és %maxLen közötti hosszúságú választ a %question "
+"kérdésre."
+
+#, fuzzy
+msgid ""
+"Please provide a numeric value between %minVal and %maxVal for question %"
+"question."
+msgstr ""
+"Kérem, adjon meg egy számértéket   %minVal és %maxVal között a  %question "
+"kérdésre."
+
+#, fuzzy
+msgid "Interviewer Instruction"
+msgstr "Utasítás az interjúkészítő számára"
+
+#, fuzzy
+msgid "Input Code"
+msgstr "Válasz kód"
+
+#, fuzzy
+msgid "Help"
+msgstr "Súgó"
+
+#, fuzzy
+msgid "DK"
+msgstr "NT"
+
+#, fuzzy
+msgid "RF"
+msgstr "VU"
+
+#, fuzzy
+msigid "Please answer to all questions"
+msgstr "Kérem válaszoljon az összes kérdésre."

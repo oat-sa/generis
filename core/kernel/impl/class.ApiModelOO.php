@@ -1,0 +1,801 @@
+<?php
+
+error_reporting(E_ALL);
+
+/**
+ * Generis Object Oriented API - core\kernel\impl\class.ApiModelOO.php
+ *
+ * $Id$
+ *
+ * This file is part of Generis Object Oriented API.
+ *
+ * Automatically generated on 29.03.2010, 15:28:05 with ArgoUML PHP module 
+ * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
+ *
+ * @author firstname and lastname of author, <author@example.org>
+ * @package core
+ * @subpackage kernel_impl
+ */
+
+if (0 > version_compare(PHP_VERSION, '5')) {
+    die('This file was generated for PHP 5');
+}
+
+/**
+ * include core_kernel_api_ApiModel
+ *
+ * @author firstname and lastname of author, <author@example.org>
+ */
+require_once('core/kernel/api/interface.ApiModel.php');
+
+/**
+ * session has been set public because when implementing an interface, the son
+ * this class may not read this attribute otherwise in php 5.2
+ *
+ * @author firstname and lastname of author, <author@example.org>
+ */
+require_once('core/kernel/impl/class.ApiI.php');
+
+/* user defined includes */
+// section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000964-includes begin
+// section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000964-includes end
+
+/* user defined constants */
+// section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000964-constants begin
+// section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000964-constants end
+
+/**
+ * Short description of class core_kernel_impl_ApiModelOO
+ *
+ * @access public
+ * @author firstname and lastname of author, <author@example.org>
+ * @package core
+ * @subpackage kernel_impl
+ */
+class core_kernel_impl_ApiModelOO
+    extends core_kernel_impl_ApiI
+        implements core_kernel_api_ApiModel
+{
+    // --- ASSOCIATIONS ---
+
+
+    // --- ATTRIBUTES ---
+
+    /**
+     * Short description of attribute instance
+     *
+     * @access private
+     * @var ApiModelOO
+     */
+    private static $instance = null;
+
+    // --- OPERATIONS ---
+
+    /**
+     * this suport standard sparql query (string) and return the corresponding
+     * of resources as collection. This makes use of pOWl third party library
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  string sparqlQuery
+     * @return core_kernel_classes_ContainerCollection
+     * @see sparql proposed by the w3c consortium
+     */
+    public function sparqlQuery($sparqlQuery)
+    {
+        $returnValue = null;
+
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009BD begin
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009BD end
+
+        return $returnValue;
+    }
+
+    /**
+     * This supports rdql queries formulated as strings , this make use of the
+     * party library pOwl
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  string rdqlQuery
+     * @return boolean
+     */
+    public function rdqlQuery($rdqlQuery)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009CB begin
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009CB end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * build xml rdf containing rdf:Description of all meta-data the conected
+     * may get
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  array sourceNamespaces
+     * @return string
+     */
+    public function exportXmlRdf($sourceNamespaces = array())
+    {
+        $returnValue = (string) '';
+
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C0 begin
+		
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$models = array();
+		
+		foreach($sourceNamespaces as $namespace){
+			if(!preg_match("/\#$/", $namespace)){
+				$namespace .= "#";
+			}
+			$result = $dbWrapper->execSql("SELECT * FROM `models`  WHERE `modelURI` = '$namespace' OR `baseURI` = '$namespace'");
+			if (!$result->EOF){
+				$models[] = $result->fields;
+			}
+		}
+		
+		$allModels = array();
+		$result = $dbWrapper->execSql("SELECT * FROM `models`");
+		while(!$result->EOF){
+			$allModels[] = $result->fields;
+			$result->moveNext();
+		}
+		
+		
+		if(count($models) > 0){
+		
+			$baseNs = array(
+						'xmlns:rdf'		=> 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+						'xmlns:rdfs'	=> 'http://www.w3.org/2000/01/rdf-schema#'
+					);
+					
+			$currentNs = array();
+			if(count($models) == 1){
+				$currentNs['xml:base'] = $namespace;
+				$model = $models[0];
+				$currentNs["xmlns:ns{$model['modelID']}"] = $namespace;
+			}
+			foreach($models as $i => $model){
+				if(!preg_match("/#$/", $model['modelURI'])){
+					$model['modelURI'] .= '#';
+				}
+				$currentNs["xmlns:ns{$model['modelID']}"] = $model['modelURI'];
+			}
+			$currentNs = array_merge($baseNs, $currentNs);
+			
+			$allNs = array();
+			foreach($allModels as $i => $model){
+				$allNs["xmlns:ns{$model['modelID']}"] = $model['modelURI'];
+			}
+			$allNs = array_merge($baseNs, $allNs);
+				
+			try{
+				
+				$dom = new DOMDocument();
+				$dom->formatOutput = true;
+				$root = $dom->createElement('rdf:RDF');
+				
+				foreach($currentNs as $namespaceId => $namespaceUri){
+					$root->setAttribute($namespaceId, $namespaceUri);
+				}
+				$dom->appendChild($root);
+					
+				foreach($models as $i => $model){
+					
+					$modelId = $model['modelID'];
+					$modelUri = $model['modelURI'];
+					
+					$subjects = array();
+					$result = $dbWrapper->execSql("SELECT DISTINCT `subject` FROM `statements` WHERE `modelID`=$modelId");
+					while(!$result->EOF){
+						$subjects[] = $result->fields['subject'];
+						$result->moveNext();
+					}
+					foreach($subjects as $subject){
+						$description = $dom->createElement('rdf:Description');
+						$description->setAttribute('rdf:about', $subject);
+						
+							$result = $dbWrapper->execSql("SELECT * FROM `statements` WHERE `subject`= '{$subject}'");
+							while(!$result->EOF){
+								
+								$predicate 	= trim($result->fields['predicate']);
+								$object 	= trim($result->fields['object']);
+								$lang 		= trim($result->fields['l_language']);
+								
+								$nodeName = null;
+								
+								foreach($allNs as $namespaceId => $namespaceUri){
+									if($namespaceId == 'xml:base') continue;
+									if(preg_match("/^".preg_quote($namespaceUri, '/')."/", $predicate)){
+										if(!array_key_exists($namespaceId, $currentNs)){
+											$currentNs[$namespaceId] = $namespaceUri;
+											$root->setAttribute($namespaceId, $namespaceUri);
+										}
+										$nodeName = str_replace('xmlns:', '', $namespaceId).':'.str_replace($namespaceUri, '', $predicate);
+										break;
+									}
+								}
+								$resourceValue = false;
+								foreach($allNs as $namespaceId => $namespaceUri){
+									if( preg_match("/^".preg_quote($namespaceUri, '/')."/", $object) || 
+										preg_match("/^http\:\/\/(.*)\#[a-zA-Z1-9]*/", $object)){
+										$resourceValue = true;
+										break;
+									}
+								}
+								if(!is_null($nodeName)){
+									try{
+										$node = $dom->createElement($nodeName);
+										if(!empty($lang)){
+											$node->setAttribute('xml:lang', $lang);
+										}
+										if($resourceValue){
+												$node->setAttribute('rdf:resource', $object);
+										}
+										else{
+											if(!empty($object) && !is_null($object)){
+												
+												/**
+												 * Replace the CDATA section inside XML fields by a replacement tag:
+												 * <![CDATA[ ]]> to <CDATA></CDATA>
+												 * @todo check if this behavior is the right
+												 */
+												$object = str_replace('<![CDATA[', '<CDATA>', $object);
+												$object = str_replace(']]>', '</CDATA>', $object);
+
+												$node->appendChild($dom->createCDATASection($object));
+											}
+										}
+										$description->appendChild($node);
+									}
+									catch(DOMException $de){
+										//print $de;
+									}
+								}
+								$result->moveNext();
+							}
+						$root->appendChild($description);
+					}
+				}
+				$returnValue = $dom->saveXml();
+			}
+			catch(Exception $e){
+				print $e;
+			}
+		}
+		
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C0 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * import xml rdf files into the knowledge base
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  string targetNameSpace
+     * @param  string fileLocation
+     * @return boolean
+     */
+    public function importXmlRdf($targetNameSpace, $fileLocation)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C4 begin
+        
+        require_once(RDFAPI_INCLUDE_DIR . "RdfAPI.php");
+        
+	     if(!preg_match("/#$/", $targetNameSpace)){
+		 	$targetNameSpace .= '#';
+		 }
+        
+		 //rdf-api use ereg that are deprecated since PHP5.3
+		if (version_compare(phpversion(), '5.3.0', '>=')) {
+			error_reporting(E_ALL & ~E_DEPRECATED);
+		}
+		 
+		$memModel 	= ModelFactory::getMemModel();
+		$dbModel	= ModelFactory::getDefaultDbModel($targetNameSpace);
+		
+		// Load and parse document
+		$memModel->load($fileLocation);
+		
+		$added = 0;
+		
+		$it = $memModel->getStatementIterator();
+		$size = $memModel->size();
+		while ($it->hasNext()) {
+			$statement = $it->next();
+			if($dbModel->add($statement) === true){
+				$added++;
+			}
+		}
+		
+		error_reporting(E_ALL);
+		
+        if($size > 0 && $added > 0){
+			$returnValue = true;
+        }
+		
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C4 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * connect on the remote module whose id is provided, retrive the knowledge
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  int idSubscription
+     * @return boolean
+     */
+    public function connectOnRemoteModule($idSubscription)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C2 begin
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C2 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * return resource object for the provided uriResource, if the uri does not
+     * in the knowledge base, returns false
+     *
+     * @access public
+     * @author patrick.plichart@tudor.lu
+     * @param  string uriResource
+     * @return core_kernel_classes_Resource
+     */
+    public function getResourceDescription($uriResource)
+    {
+        $returnValue = null;
+
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C6 begin
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C6 end
+
+        return $returnValue;
+    }
+
+    /**
+     * returns an xml rdf serialization for uriResource with all meta dat found
+     * inferenced from te knowlege base about this resource
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  string uriResource
+     * @return string
+     */
+    public function getResourceDescriptionXML($uriResource)
+    {
+        $returnValue = (string) '';
+
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009CD begin
+        
+        
+        
+    	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$subject = mysql_real_escape_string($uriResource);
+		
+		$baseNs = array(
+						'xmlns:rdf'		=> 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+						'xmlns:rdfs'	=> 'http://www.w3.org/2000/01/rdf-schema#'
+					);
+		
+		
+		$result = $dbWrapper->execSql("SELECT `models`.`modelID`, `models`.`modelURI` FROM `models` INNER JOIN `statements` ON `statements`.`modelID` = `models`.`modelID`
+											WHERE `statements`.`subject`= '{$subject}' LIMIT 1");
+		if(!$result->EOF){
+			$modelId  = $result->fields['modelID'];
+			$modelUri =  $result->fields['modelURI'];
+			if(!preg_match("/#$/", $modelUri)){
+				$modelUri .= '#';
+			}
+		}
+		$currentNs = array("xmlns:ns{$modelId}" => $modelUri);
+		$currentNs = array_merge($baseNs, $currentNs);
+		
+		
+		$allModels = array();
+		$result = $dbWrapper->execSql("SELECT * FROM `models`");
+		while(!$result->EOF){
+			$allModels[] = $result->fields;
+			$result->moveNext();
+		}
+		
+		$allNs = array();
+		foreach($allModels as $i => $model){
+			if(!preg_match("/#$/", $model['modelURI'])){
+				$model['modelURI'] .= '#';
+			}
+			$allNs["xmlns:ns{$model['modelID']}"] = $model['modelURI'];
+		}
+		$allNs = array_merge($baseNs, $allNs);
+				
+		try{
+				
+			$dom = new DOMDocument();
+			$dom->formatOutput = true;
+			$root = $dom->createElement('rdf:RDF');
+				
+			foreach($currentNs as $namespaceId => $namespaceUri){
+				$root->setAttribute($namespaceId, $namespaceUri);
+			}
+			$dom->appendChild($root);
+					
+			$description = $dom->createElement('rdf:Description');
+			$description->setAttribute('rdf:about', $subject);
+			
+				$result = $dbWrapper->execSql("SELECT * FROM `statements` WHERE `subject`= '{$subject}'");
+				while(!$result->EOF){
+					
+					$predicate 	= trim($result->fields['predicate']);
+					$object 	= trim($result->fields['object']);
+					$lang 		= trim($result->fields['l_language']);
+					
+					$nodeName = null;
+					
+					foreach($allNs as $namespaceId => $namespaceUri){
+						if($namespaceId == 'xml:base') continue;
+						if(preg_match("/^".preg_quote($namespaceUri, '/')."/", $predicate)){
+							if(!array_key_exists($namespaceId, $currentNs)){
+								$currentNs[$namespaceId] = $namespaceUri;
+								$root->setAttribute($namespaceId, $namespaceUri);
+							}
+							$nodeName = str_replace('xmlns:', '', $namespaceId).':'.str_replace($namespaceUri, '', $predicate);
+							break;
+						}
+					}
+					
+					$resourceValue = false;
+					foreach($allNs as $namespaceId => $namespaceUri){
+						if( preg_match("/^".preg_quote($namespaceUri, '/')."/", $object) || 
+							preg_match("/^http\:\/\/(.*)\#[a-zA-Z1-9]*/", $object)){
+							$resourceValue = true;
+							break;
+						}
+					}
+					if(!is_null($nodeName)){
+						try{
+							$node = $dom->createElement($nodeName);
+							if(!empty($lang)){
+								$node->setAttribute('xml:lang', $lang);
+							}
+							
+							if($resourceValue){
+									$node->setAttribute('rdf:resource', $object);
+							}
+							else{
+								if(!empty($object) && !is_null($object)){
+									
+									/**
+									 * Replace the CDATA section inside XML fields by a replacement tag:
+									 * <![CDATA[ ]]> to <CDATA></CDATA>
+									 * @todo check if this behavior is the right
+									 */
+									$object = str_replace('<![CDATA[', '<CDATA>', $object);
+									$object = str_replace(']]>', '</CDATA>', $object);
+
+									$node->appendChild($dom->createCDATASection($object));
+								}
+							}
+							$description->appendChild($node);
+						}
+						catch(DOMException $de){
+							//print $de;
+						}
+					}
+					$result->moveNext();
+				}
+				$root->appendChild($description);
+				$returnValue = $dom->saveXml();
+			}
+			catch(DomException $e){
+				print $e;
+			}
+        
+        
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009CD end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * returns metaclasses tat are not subclasses of other metaclasses
+     *
+     * @access public
+     * @author patrick.plichart@tudor.lu
+     * @return core_kernel_classes_ContainerCollection
+     */
+    public function getMetaClasses()
+    {
+        $returnValue = null;
+
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009CF begin
+        $returnValue = new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(__METHOD__),__METHOD__);
+        
+        $classClass = new core_kernel_classes_Class(RDF_CLASS);
+        foreach($classClass->getSubClasses(true) as $uri => $subClass){
+        	$returnValue->add($subClass);
+        }
+		// section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009CF end
+
+        return $returnValue;
+    }
+
+    /**
+     * returns classes that are not subclasses of other classes
+     *
+     * @access public
+     * @author patrick.plichart@tudor.lu
+     * @return core_kernel_classes_ContainerCollection
+     */
+    public function getRootClasses()
+    {
+        $returnValue = null;
+
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009D6 begin
+    
+        $returnValue = new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(__METHOD__),__METHOD__);
+        
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        
+        $query =  "SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) 
+        			AND subject NOT IN (SELECT subject FROM statements WHERE predicate = ?)";
+    	$result	= $dbWrapper->execSql($query, array(
+        	RDF_TYPE,
+        	RDF_CLASS,
+        	RDF_SUBCLASSOF
+        ));
+        
+        while ($row = $result->FetchRow()) {
+       		$returnValue->add(new core_kernel_classes_Class($row['subject']));
+        }
+		
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009D6 end
+
+        return $returnValue;
+    }
+
+    /**
+     * add a new statment to the knowledge base
+     *
+     * @access public
+     * @author patrick.plichart@tudor.lu
+     * @param  string subject
+     * @param  string predicate
+     * @param  string object
+     * @param  string language
+     * @return boolean
+     */
+    public function setStatement($subject, $predicate, $object, $language)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009E8 begin
+        $dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
+        $session 	= core_kernel_classes_Session::singleton();
+        $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
+        $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
+        $query = "INSERT into statements (modelID,subject,predicate,object,l_language,author,stread,stedit,stdelete,epoch)
+        			VALUES  (?, ?, ?, ?, ?, ?, '{$mask}','{$mask}','{$mask}', CURRENT_TIMESTAMP);";
+
+        $returnValue = $dbWrapper->execSql($query, array(
+       		$localNs->getModelId(),
+       		$subject,
+       		$predicate,
+       		$object,
+       		$language,
+       		$session->getUser()
+        ));
+        
+        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009E8 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method getResourceTree
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  string uriResource
+     * @param  int depth
+     * @return common_Tree
+     */
+    public function getResourceTree($uriResource, $depth)
+    {
+        $returnValue = null;
+
+        // section 10-13-1--99-c056755:11a5428ab79:-8000:00000000000010B8 begin
+		$factory = core_kernel_classes_TreeFactory::singleton();
+		$factory->setOptions(array("properties" => 'true',"instances" =>'true'));
+		$factory->setRootClass($uriResource);
+		$factory->setSession($this->session);
+		$factory->setDepth($depth);
+		$returnValue = $factory->getTree();
+
+        // section 10-13-1--99-c056755:11a5428ab79:-8000:00000000000010B8 end
+
+        return $returnValue;
+    }
+
+    /**
+     * Short description of method getAllClasses
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return core_kernel_classes_ContainerCollection
+     */
+    public function getAllClasses()
+    {
+        $returnValue = null;
+
+        // section 10-13-1--99--f2ea6d:11b36a6e31a:-8000:00000000000019AD begin
+    	
+        $returnValue = new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(__METHOD__),__METHOD__);
+        
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        
+        $query =  "SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) OR predicate = ?";
+    	$result	= $dbWrapper->execSql($query, array(
+        	RDF_TYPE,
+        	RDF_CLASS,
+        	RDF_SUBCLASSOF
+        ));
+        
+        while ($row = $result->FetchRow()) {
+        	$returnValue->add(new core_kernel_classes_Class($row['subject']));
+        }
+		
+        // section 10-13-1--99--f2ea6d:11b36a6e31a:-8000:00000000000019AD end
+
+        return $returnValue;
+    }
+
+    /**
+     * Short description of method getSubject
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  string predicate
+     * @param  string object
+     * @return core_kernel_classes_ContainerCollection
+     */
+    public function getSubject($predicate, $object)
+    {
+        $returnValue = null;
+
+        // section 10-13-1--99--65c50b00:11c66591411:-8000:0000000000000E9A begin
+		
+		$sqlQuery = "select subject from statements where predicate = '". $predicate . "' and object= '". $object ."' ";
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$sqlResult = $dbWrapper->execSql($sqlQuery);
+		$returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
+		while (!$sqlResult-> EOF){
+			$container = new core_kernel_classes_Resource($sqlResult->fields['subject'], __METHOD__);
+			$container->debug = __METHOD__ ;
+			$returnValue->add($container);
+			$sqlResult->MoveNext();
+		}
+
+        // section 10-13-1--99--65c50b00:11c66591411:-8000:0000000000000E9A end
+
+        return $returnValue;
+    }
+
+    /**
+     * Short description of method removeStatement
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  string subject
+     * @param  string predicate
+     * @param  string object
+     * @param  string language
+     * @return boolean
+     */
+    public function removeStatement($subject, $predicate, $object, $language)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1--99--152a2f30:1201eae099d:-8000:0000000000001EAE begin
+        $dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
+    
+        $query = "DELETE FROM statements WHERE subject = ?
+        			AND predicate = ? AND object = ?
+        			AND (l_language = ? OR l_language = '')";
+
+        $returnValue = $dbWrapper->execSql($query, array(
+       		$subject,
+       		$predicate,
+       		$object,
+       		$language
+        ));
+        
+        // section 10-13-1--99--152a2f30:1201eae099d:-8000:0000000000001EAE end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method getObject
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  string subject
+     * @param  string predicate
+     * @return core_kernel_classes_ContainerCollection
+     */
+    public function getObject($subject, $predicate)
+    {
+        $returnValue = null;
+
+        // section -87--2--3--76-51a982f1:1278aabc987:-8000:000000000000891E begin
+    	$sqlQuery = "select object from statements where subject = '". $subject."' and predicate = '". $predicate . "' ";
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$sqlResult = $dbWrapper->execSql($sqlQuery);
+		$returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
+		while (!$sqlResult-> EOF){
+			
+			$value = $sqlResult->fields['object'];
+			if(!common_Utils::isUri($value)) {
+				$container = new core_kernel_classes_Literal($value);
+			}
+			else{
+				$container = new core_kernel_classes_Resource($value);
+			}
+			$container->debug = __METHOD__ ;
+			$returnValue->add($container);
+			$sqlResult->MoveNext();
+		}
+        // section -87--2--3--76-51a982f1:1278aabc987:-8000:000000000000891E end
+
+        return $returnValue;
+    }
+
+    /**
+     * Short description of method singleton
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return core_kernel_impl_ApiModelOO
+     */
+    public static function singleton()
+    {
+        $returnValue = null;
+
+        // section 10-13-1--31-4da692cc:119bcf499fd:-8000:0000000000000E92 begin
+		if (!isset(self::$instance)) {
+			$c = __CLASS__;
+			self::$instance = new $c();
+		}
+		$returnValue = self::$instance;
+        // section 10-13-1--31-4da692cc:119bcf499fd:-8000:0000000000000E92 end
+
+        return $returnValue;
+    }
+
+    /**
+     * Short description of method __construct
+     *
+     * @access private
+     * @author firstname and lastname of author, <author@example.org>
+     * @return void
+     */
+    private function __construct()
+    {
+        // section 10-13-1--31-4da692cc:119bcf499fd:-8000:0000000000000E96 begin
+        // section 10-13-1--31-4da692cc:119bcf499fd:-8000:0000000000000E96 end
+    }
+
+} /* end of class core_kernel_impl_ApiModelOO */
+
+?>

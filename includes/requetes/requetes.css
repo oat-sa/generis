@@ -1,0 +1,33 @@
+/* #e0e4d0 is Generis default bg, darker: #bec2b1, lighter: #f7fbe5; intenser: #d7e4a2 */
+
+body.queries {padding:1em 2em}
+.queries .group {margin-bottom:1.5em; border-top:dotted 2px #f7fbe5}
+.group .Title {border:dotted 2px #f7fbe5; border-width:0 2px 2px 0; width:15em; margin:-0.6em 0 0 -1em; background:#e0e4d0}
+
+
+/* format of autocomplete choices */
+.autoComplete {width:25em; background:#ddd}
+.autoComplete ul{list-style:none; margin:0; padding:0}
+.autoComplete li.selected {background:#fff}
+
+/* format of forms */
+form fieldset {margin:0; border:0;}
+
+/* giving layouts is required for opacity effects in IE, see http://wiki.script.aculo.us/scriptaculous/show/GivingElementsLayout */
+/* TODO fix, seems not to work: selects don't appear gradually. 
+.layout {display: inline-block} */
+
+
+#action {position:relative; right:0; margin-top:-2em}
+#action a.button {float:right; clear:right;}
+
+/*#reqLibrary {width:25em}*/
+#reqLibrary a.button {margin: auto 0.2em; float:right;}
+#reqLibrary a.delete:hover {background-color:#ffcbb5}
+#reqLibrary a.load:hover {background-color:#d7e4a2}
+
+a.button {margin:1px 0.2em; padding: 0 1ex; text-align:center; border:1px solid #f7fbe5}
+a.button:hover {text-decoration:none; 
+	border-top:1px solid #bec2b1; border-left:1px solid #bec2b1; border-bottom:1px solid white; border-right:1px solid white;
+	background-color:#f7fbe5}
+a.button:active {background-color:#d7e4a2}

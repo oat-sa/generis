@@ -1,0 +1,45 @@
+#   Generis Queries
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+	 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+	 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+	 @prefix gen: <http://www.tao.lu/Ontologies/generis.rdf#> .
+	 @prefix wid: <http://www.tao.lu/datatypes/WidgetDefinitions.rdf#> .
+     @prefix : <http://www.tao.lu/Ontologies/queries.rdf#> .
+
+#classes and properties
+
+:Query a rdfs:Class ; rdfs:subClassOf rdfs:Resource ; 
+	rdfs:label "Query" ; rdfs:comment  "the class of the object of a Generis Query."  .
+
+:Operator a rdfs:Class ; rdfs:subClassOf rdfs:Literal ; 
+	rdfs:label "Operator" ; rdfs:comment "the operator of a Generis Query."  .
+
+:Value a rdfs:Class ; rdfs:subClassOf rdfs:Literal ;
+	rdfs:label "Value" ; rdfs:comment "the operator of the Generis Query."  .
+
+:query_class a rdf:Property ; wid:widget wid:TreeView ;
+	rdfs:label "class" ; rdfs:comment  "The class of the instances you look for." ;
+	rdfs:domain :Query ; rdfs:range rdfs:Class .
+
+:query_property a rdf:Property ;  wid:widget wid:ComboBox ;
+	rdfs:label "property" ; rdfs:comment  "The property of the instance you want to constraint." ;
+	rdfs:domain :Query ; rdfs:range rdf:Property .
+
+:query_operator a rdf:Property ;  wid:widget wid:RadioBox ;
+	rdfs:label "operator" ; rdfs:comment  "The operator of a query." ;
+	rdfs:domain :Query ; rdfs:range rdfs:Operator .
+
+:query_value a rdf:Property ;  wid:widget wid:TextBox ;
+	rdfs:label "value" ; rdfs:comment  "The value you look for." ;
+	rdfs:domain :Query ; rdfs:range :Value , rdfs:Resource .
+
+#instances
+:is_txt a :Operator ; rdfs:label "is (text)" ; rdfs:comment "TEXT_IS" .
+:is_ins a :Operator ; rdfs:label "is (instance)" ; rdfs:comment "INSTANCE_IS" .
+:is_num a :Operator ; rdfs:label "is (numeral)" ; rdfs:comment "NUM_IS" .
+:isnot_txt a :Operator ; rdfs:label "is not (text)" ; rdfs:comment "TEXT_ISNOT" .
+:isnot_num a :Operator ; rdfs:label "is not (numeral)" ; rdfs:comment "NUM_ISNOT" .
+:match_txt a :Operator ; rdfs:label "matches (text)" ; rdfs:comment "TEXT_MATCH" .
+:nomatch_txt a :Operator ; rdfs:label "does not match (text)" ; rdfs:comment "TEXT_NOMATCH" .
+:lt_num a :Operator ; rdfs:label "is less than (numeral)" ; rdfs:comment "NUM_LT" .
+:gt_num a :Operator ; rdfs:label "is more than (numeral)" ; rdfs:comment "NUM_GT" .

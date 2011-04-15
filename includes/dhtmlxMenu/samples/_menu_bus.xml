@@ -1,0 +1,30 @@
+<?xml version='1.0' ?>
+<menu mode="classic" maxItems="12" name="Scand LLC" mixedImages="yes">
+	<MenuItem name="Company" id="com"  width="30px"  withoutImages="yes">	
+		<MenuItem name="Technologies" src="" href="http://www.scbr.com/docs/profile.shtml" target="_blank"  id="tech"/>	
+		<MenuItem name="Team" src="" href="http://www.scbr.com/docs/theteam.shtml"  target="_blank"  id="team"/>	
+		<MenuItem name="Workflow" src="" href="http://www.scbr.com/docs/workflow.shtml"  target="_blank"  id="work"/>	
+	</MenuItem>
+	<MenuItem name="Services" id="serv"  width="30px"  withoutImages="yes">	
+		<MenuItem name="Virtual Office" src=""  href="http://www.scbr.com/docs/voffice.shtml" target="_blank"  id="virt"/>	
+		<MenuItem name="Fixed Bid" src=""  href="http://www.scbr.com/docs/sprojects.shtml" target="_blank"  id="fixed"/>	
+		<MenuItem name="Portfolio" src=""  href="http://www.scbr.com/docs/portfolio.shtml" target="_blank"  id="port"/>	
+	</MenuItem>
+	<MenuItem name="Products" id="prod"  width="30px"  withoutImages="yes">	
+		<MenuItem name="dhtmlX" src=""  id="dhtmlx"  withoutImages="yes">
+			<MenuItem name="Tree" href="http://www.scbr.com/docs/products/dhtmlxTree/index.shtml" target="_blank"  id="tree"/>
+			<MenuItem name="Toolbar" src=""  href="http://www.scbr.com/docs/products/dhtmlxToolbar/index.shtml" target="_blank"  id="toolbar"/>
+			<MenuItem name="Menu" src=""  href="http://www.scbr.com/docs/products/dhtmlxMenu/index.shtml" target="_blank"  id="menu"/>
+		</MenuItem>
+		<MenuItem name="Java Applets" src=""  id="applets"  withoutImages="yes">
+			<MenuItem name="jTree" src=""  href="http://www.scbr.com/docs/products/jtree/jtree.shtml" target="_blank"  id="jtree"/>
+			<MenuItem name="Treetable" src=""  href="http://www.scbr.com/docs/products/treetable/treetable.shtml" target="_blank"  id="treetab"/>
+			<MenuItem name="Calendar" src=""  href="http://www.scbr.com/download/jcalendar/index.html" target="_blank"  id="calendar"/>
+			<MenuItem name="Color Dialog" src=""  href="http://www.scbr.com/download/jcolordialog/index.html" target="_blank"  id="coldial"/>
+			<MenuItem name="MenuBar" src=""  href="http://www.scbr.com/download/menubar/index.html" target="_blank"  id="menubar"/>
+			<MenuItem name="ToolBar" src=""  href="http://www.scbr.com/download/toolbar/index.html" target="_blank"  id="jtoolbar"/>
+		</MenuItem>
+		<MenuItem name="Urfin" src=""  href="http://www.scbr.com/docs/products/urfin/index.shtml" target="_blank"  id="urfin"/>
+		<MenuItem name="SmartProxy" src=""  href="http://www.scbr.com/docs/download.shtml#apache" target="_blank"  id="smartp"/>
+	</MenuItem>
+</menu>

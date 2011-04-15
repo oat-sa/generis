@@ -1,0 +1,39 @@
+#, fuzzy
+msgid ""
+"Please provide a text input with a length between %minLen and %maxLen for "
+"question %question."
+msgstr ""
+"Skriv venligst en tekst af en længde på mellem %minLen og %maxLen til "
+"spørgsmål %question."
+
+#, fuzzy
+msgid ""
+"Please provide a numeric value between %minVal and %maxVal for question %"
+"question."
+msgstr ""
+"Skriv venligst en numerisk værdi mellem %minVal og %maxVal til spørgsmål %"
+"question."
+
+#, fuzzy
+msgid "Interviewer Instruction"
+msgstr "Instruks til interviewer"
+
+#, fuzzy
+msgid "Input Code"
+msgstr "Svarkode"
+
+#, fuzzy
+msgid "Help"
+msgstr "Hjælp"
+
+#, fuzzy
+msgid "DK"
+msgstr "VI"
+
+#, fuzzy
+msgid "RF"
+msgstr "VIS"
+
+#, fuzzy
+msgid "Please answer to all questions"
+msgstr "Svar på alle spørgsmål"

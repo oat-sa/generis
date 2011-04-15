@@ -1,0 +1,46 @@
+<?xml version='1.0' ?>
+<menu absolutePosition="auto" mode="popup" maxItems="8">
+	<MenuItem name="File" src="programs.gif" id="main_file" width="30" >
+			<MenuItem name="New" id="new"/>
+			<MenuItem name="Open" id="open"/>
+			<MenuItem name="Edit with Notepad" id="edit_with"/>
+			<MenuItem name="Save As..." id="save"/>
+			<divider id="div_1"/>	
+			<MenuItem name="Page Setup..." id="page"/>
+			<MenuItem name="Print..." id="print"/>
+			<MenuItem name="Print Preview..." id="preview"/>
+			<divider id="div_2"/>	
+			<MenuItem name="Properties" id="properties"/>
+			<MenuItem name="Close" id="close"/>
+	</MenuItem>
+	<MenuItem name="Edit" id="main_edit" src="edit.gif"  width="30px" panelWidth="300px">	
+			<MenuItem name="Undo" src="undo.gif" id="edit_undo"/>	
+			<MenuItem name="Redo" src="redo.gif" id="edit_redo" />
+			<divider id="div_3"/>	
+			<MenuItem name="Cut" width="250" src="" id="cut"/>	
+			<MenuItem name="Copy" src="" id="copy"/>
+			<MenuItem name="Paste" src="paste.gif" id="paste"/>
+			<MenuItem name="Clear all" src="" id="edit_clear"/>
+			<divider id="div_4"/>	
+			<MenuItem name="Select All" src="" id="all"/>
+			<MenuItem name="Filters" src="icon15.gif" id="edit_filters">
+				<MenuItem name="Filter 1" src=""  id="edit_filters_1"/>	
+				<MenuItem name="Filter 2" src=""  id="edit_filters_2"/>	
+				<MenuItem name="Filter 3" src=""  id="edit_filters_3"/>	
+				<MenuItem name="Filter 4" src=""  id="edit_filters_4"/>	
+				<MenuItem name="Filter 5" src=""  id="edit_filters_5"/>	
+				<MenuItem name="Filter 6" src=""  id="edit_filters_6"/>	
+				<MenuItem name="Filter 7" src=""  id="edit_filters_7"/>	
+				<MenuItem name="Filter 8" src=""  id="edit_filters_8"/>	
+				<MenuItem name="Filter 9" src=""  id="edit_filters_9"/>	
+				<MenuItem name="Filter 10" src=""  id="edit_filters_9"/>					
+			</MenuItem>
+			<MenuItem name="Find on Page..." id="find"/>
+	</MenuItem>
+	<MenuItem name="Help" id="main_help" src="help.gif"  width="50px">
+			<MenuItem name="Index" id="help_index"/>	
+			<MenuItem name="License" src="" id="help_license"/>
+			<divider id="div_5"/>	
+			<MenuItem name="About" src="info.gif"  id="help_about"/>			
+	</MenuItem>
+</menu>

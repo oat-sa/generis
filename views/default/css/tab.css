@@ -1,0 +1,45 @@
+body{
+	position:absolute; 
+	height:100%; 
+	width:100%; 
+	
+	margin: 0px; 
+	padding: 0px;
+	background-color:#F4F4F4;
+}
+legend{
+	font-family: Arial,Helvetica,sans-serif;
+	color: #333333;
+	font-size: 1.2em;
+}
+table{
+	width:100%; 
+	border: solid 2px #cfcfcf;
+	border-collapse:collapse;	
+}
+table .nowrap {
+	white-space: nowrap;
+}
+
+th, td {
+	vertical-align: top;
+	border-bottom: solid 1px #cfcfcf;
+	
+}
+
+
+
+ul{
+	list-style-type:none;
+	margin:0px;
+	padding:2px;
+}
+
+
+thead {
+	border-bottom: solid 1px black;
+}
+
+input{
+	background: #
+}

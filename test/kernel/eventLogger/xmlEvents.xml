@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<events>
+  <session id="3615" user="toto">
+    <event epoch="1228213030">
+      <sender>The sender of the event</sender>
+      <comment>an optional comment</comment>
+      <business>
+        String describing the business or something more XML-ed?
+      </business>
+      <codeContext>
+        <file line="35">
+          /var/www/generis/test/kernel/eventLogger/test.php
+        </file>
+        <class name="MyClass">
+          <object>
+            a string that is characteristic of the object
+          </object>
+          <method name="theMethod" call="static">
+            <argument>An argument, optional</argument>
+            <argument>An argument, optional</argument>
+            <argument>An argument, optional</argument>
+            <argument>An argument, optional</argument>
+          </method>
+        </class>
+      </codeContext>
+      <jsContext>
+        <mouse x="12" y="14"/>
+        <key value="a"/>
+        <domElement id="xxx"/>
+      </jsContext>
+    </event>
+  </session>
+  <event epoch="3615">
+    <sender>the sender</sender>
+  </event>
+  <session id="54">
+    <event epoch="654">
+      <sender>zer</sender>
+    </event>
+  </session>
+</events>

@@ -1,0 +1,10 @@
+<?xml version='1.0' ?>
+<menu absolutePosition="auto" mode="popup" maxItems="8"  globalCss="contextMenu" globalSecondCss="contextMenu" globalTextCss="contextMenuItem">
+		<MenuItem name="Red" src="red.gif"  id="edit_Red"/>	
+		<MenuItem name="Green" src="green.gif"  id="edit_Green"/>	
+		<MenuItem name="Blue" src="blue.gif"  id="edit_Blue"/>	
+	<MenuItem name="Other..." src="" id="outher" width="120px" panelWidth="120">
+		<MenuItem name="Yellow" src="yellow.gif"  id="edit_Yellow"/>	
+		<MenuItem name="White" src="white.gif"  id="edit_White"/>	
+	</MenuItem>
+</menu>

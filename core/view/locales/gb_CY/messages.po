@@ -1,0 +1,39 @@
+#, fuzzy
+msgid ""
+"Please provide a text input with a length between %minLen and %maxLen for "
+"question %question."
+msgstr ""
+"Rhowch destun gyda hyd sydd rhwng %minLen a %maxLen ar gyfer cwestiwn %"
+"question."
+
+#, fuzzy
+msgid ""
+"Please provide a numeric value between %minVal and %maxVal for question %"
+"question."
+msgstr ""
+"Rhowch werth rhifol sydd rhwng %minVal a %maxVal ar gyfer cwestiwn %"
+"question."
+
+#, fuzzy
+msgid "Interviewer Instruction"
+msgstr "Cyfarwyddyd i'r Cyfwelydd"
+
+#, fuzzy
+msgid "Input Code"
+msgstr "Cod Mewnbynnu"
+
+#, fuzzy
+msgid "Help"
+msgstr "Help"
+
+#, fuzzy
+msgid "DK"
+msgstr ""
+
+#, fuzzy
+msgid "RF"
+msgstr ""
+
+#, fuzzy
+msigid "Please answer to all questions"
+msgstr "Atebwch bob cwestiwn"

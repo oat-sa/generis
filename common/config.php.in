@@ -1,0 +1,115 @@
+<?php
+/**
+ * Generis Object Oriented API - common\config.php
+ *
+ * This file is part of Generis Object Oriented API.
+ *
+ * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
+ * @package common
+ * @license GPLv2  http://www.opensource.org/licenses/gpl-2.0.php
+ */
+
+
+# database
+define('DATABASE_NAME',  '');
+define('DATABASE_LOGIN', '');
+define('DATABASE_PASS',  '');
+define('DATABASE_URL',   '');
+define('SGBD_DRIVER',   '');
+
+#paths
+define('ROOT_PATH', '');
+define('ROOT_URL',  '');
+
+## language
+define('LOCAL_NAMESPACE', '');
+
+## language
+define('DEFAULT_LANG', '');
+$GLOBALS['default_lang']	= DEFAULT_LANG;
+
+# session namespace
+define('SESSION_NAMESPACE', 'ClearFw');
+
+#mode
+define('DEBUG_MODE', false);
+
+# background user: to be used only for system related tasks 
+define('SYS_USER_LOGIN', 'generis');
+define('SYS_USER_PASS', md5('g3n3r1s'));
+
+#the time zone, required since PHP5.3
+define("TIME_ZONE", 'Europe/Paris');
+
+# Cache
+define('CACHE_MAX_SIZE', 64000);
+
+# Logging
+$GLOBALS["EVENTLOG"]["QUIET"] = false; // no exception raised
+$GLOBALS["EVENTLOG"]["ENABLED"] = false; // no logging at all
+$GLOBALS["EVENTLOG"]["DATABASE"] = ""; // forces the database to store logs
+$GLOBALS["EVENTLOG"]["TABLE"] = "";    // changes the table to store logs
+$GLOBALS["EVENTLOG"]["TIME_WINDOW"] = 86400; // one day
+$GLOBALS["EVENTLOG"]["SIZE_WINDOW"] = 20000; // lines to keep
+$GLOBALS["EVENTLOG"]["CHECK_OLD_LOGS_WINDOW"] = 1000;  // check log size periodicity
+// to not save logs that rer deleted (see TIME and SIZE WINDOW) don't indicate a file
+$GLOBALS["EVENTLOG"]["AUTO_SAVE_FILE_PREFIX"] = "";    // the file for auto-deleted logs
+$GLOBALS["EVENTLOG"]["AUTO_SAVE_FILE_SUFFIX"] = ".log"; // prefix for the saved logs
+
+
+#log
+#	 debug_level 	= 0;
+#	 info_level 	= 1;
+#	 warning_level 	= 2;
+#	 error_level	= 3;
+#	 fatal_level 	= 4;
+$GLOBALS['config_log'] 		= array(
+									array(	'nom' => 'FileAppender', 
+											'level' =>  0 , 		
+											'config' => dirname(__FILE__).'/../log/log.txt'),
+									);	
+
+# constants definition
+define('HTTP_GET', 		'GET');
+define('HTTP_POST', 	'POST');
+define('HTTP_PUT', 		'PUT');
+define('HTTP_DELETE', 	'DELETE');
+define('HTTP_HEAD', 	'HEAD');
+
+#if there is a .htaccess with an http auth, used for Curl request or virtual http requests
+define('USE_HTTP_AUTH', false);
+define('USE_HTTP_USER', '');
+define('USE_HTTP_PASS', '');
+
+#mail config
+define('SMTP_HOST', 'localhost');
+define('SMTP_PORT', 25);
+define('SMTP_AUTH', false);
+define('SMTP_USER', '');
+define('SMTP_PASS', '');
+
+#genris paths
+define('GENERIS_BASE_PATH' , dirname(__FILE__).'/..');									
+define('INCLUDES_PATH' , GENERIS_BASE_PATH.'/includes');
+define('EXTENSION_PATH' , GENERIS_BASE_PATH.'/..');
+define('MANIFEST_NAME' , 'manifest.php');
+define('GENERIS_FILES_PATH' , GENERIS_BASE_PATH.'/data/');
+
+define('ENABLE_SUBSCRIPTION', false);
+
+#path to RDFAPI-PHP
+define('RDFAPI_INCLUDE_DIR', INCLUDES_PATH.'/rdfapi-php/api/');
+
+# core directory
+define("DIR_CORE"			, INCLUDES_PATH . "/ClearFw/core/");
+
+# core helpers directory
+define("DIR_CORE_HELPERS"	, DIR_CORE . "helpers/");
+
+# core utils directory
+define("DIR_CORE_UTILS"		, DIR_CORE . "util/");
+
+# deprecated but used in QCM authoring, force html toolbar 
+define('ACTIVATEMOODLE', 'true', false);
+
+?>

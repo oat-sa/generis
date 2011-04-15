@@ -1,0 +1,43 @@
+#, fuzzy
+msgid ""
+"Please enter text input with a length between %minLen and %maxLen characters "
+"for question %question."
+msgstr ""
+"Veuillez entrer une donnée textuelle dont le nombre de caractères se situe "
+"entre %minLen et %maxLen pour la question %question."
+
+#, fuzzy
+msgid ""
+"Please provide a numeric value between %minVal and %maxVal for question %"
+"question."
+msgstr ""
+"Veuillez entrer une valeur numérique entre %minVal et %maxVal pour la "
+"question %question."
+
+#, fuzzy
+msgid "Interviewer Instruction"
+msgstr "INTERVIEWEUR :"
+
+#, fuzzy
+msgid "Input Code"
+msgstr "Code d'entrée"
+
+#, fuzzy
+msgid "Help"
+msgstr "Aide"
+
+#, fuzzy
+msgid "DK"
+msgstr "NSP"
+
+#, fuzzy
+msgid "RF"
+msgstr "RF"
+
+#, fuzzy
+msgid "Please answer to all questions"
+msgstr "Répondez à toutes les questions"
+
+#, fuzzy
+msgid "Please provide a valid Identifier (see PIAAC Check Digits for Operational IDs)"
+msgstr "Veuillez fournir un numéro d identifiant valide (voir le document « PIAAC Check Digits for Operational IDs »)"

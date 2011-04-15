@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE GraphXML SYSTEM "GraphXML.dtd">
+
+<GraphXML>
+
+	<graph id="My First Graph">
+					<node name="http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource">
+					<label>generis_Ressource</label>
+					<style>
+					<line colour="black"/>
+					<fill xlink:href="../../core/view/icons/class.gif"/>
+					<dataref>
+					<ref xlink:show="new" xlink:href="http://127.0.0.1/core/view/generis_UiControllerHtml.php?do=show&amp;param1=c1"/>
+					</dataref>
+					</style>
+					</node>
+
+					
+					<node name="http://www.tao.lu/Ontologies/generis.rdf#Boolean">
+					<label>Boolean</label>
+					<style>
+					<line colour="black"/>
+					<fill xlink:href="../../core/view/icons/class.gif"/>
+					<dataref>
+					<ref xlink:show="new" xlink:href="http://127.0.0.1/core/view/generis_UiControllerHtml.php?do=show&amp;param1=http://www.tao.lu/Ontologies/generis.rdf#Boolean"/>
+					</dataref>
+
+					</style>
+					</node>
+					<edge source="http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource"  target="http://www.tao.lu/Ontologies/generis.rdf#Boolean" colour="black"></edge>
+					
+					<node name="http://www.tao.lu/Ontologies/generis.rdf#True">
+					<label>True</label>
+					<dataref>
+					<ref xlink:show="new" xlink:href="http://127.0.0.1/core/view/generis_UiControllerHtml.php?do=show&amp;param1=ttp://www.tao.lu/Ontologies/generis.rdf#True"/>
+					</dataref>
+					<fill xlink:href="../../core/view/icons/Instance.gif"/>
+
+					</node>
+					<edge source="http://www.tao.lu/Ontologies/generis.rdf#Boolean" target="http://www.tao.lu/Ontologies/generis.rdf#True" linestyle="solid" colour="black">
+					</edge>
+					<node name="http://www.tao.lu/Ontologies/generis.rdf#False">
+					<label>False</label>
+					<dataref>
+					<ref xlink:show="new" xlink:href="http://127.0.0.1/core/view/generis_UiControllerHtml.php?do=show&amp;param1=ttp://www.tao.lu/Ontologies/generis.rdf#False"/>
+					</dataref>
+					<fill xlink:href="../../core/view/icons/Instance.gif"/>
+
+					</node>
+					<edge source="http://www.tao.lu/Ontologies/generis.rdf#Boolean" target="http://www.tao.lu/Ontologies/generis.rdf#False" linestyle="solid" colour="black">
+					</edge>
+					<node name="#127235146714162">
+					<label>
+fourth type
+</label>
+					<dataref>
+					<ref xlink:show="new" xlink:href="http://127.0.0.1/core/view/generis_UiControllerHtml.php?do=show&amp;param1=127235146714162"/>
+					</dataref>
+					<fill xlink:href="../../core/view/icons/Instance.gif"/>
+
+					</node>
+					<edge source="http://www.tao.lu/Ontologies/generis.rdf#Boolean" target="#127235146714162" linestyle="solid" colour="black">
+					</edge>
+					<node name="#12723572208324">
+					<label>LCMS Objects
+</label>
+					<style>
+					<line colour="black"/>
+					<fill xlink:href="../../core/view/icons/class.gif"/>
+					<dataref>
+					<ref xlink:show="new" xlink:href="http://127.0.0.1/core/view/generis_UiControllerHtml.php?do=show&amp;param1=#12723572208324"/>
+					</dataref>
+
+					</style>
+					</node>
+					<edge source="http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource"  target="#12723572208324" colour="black"></edge>
+					
+
+								<edge source="#12723572208324" isdirected="true" target="" >
+								<label>
+NbElments
+</label>
+								<line linewidth="1" linestyle="dotted" colour="#fcb86c"/>
+								</edge>
+
+								
+					<node name="#127235725222700">
+					<label>
+Mytraining
+</label>
+					<dataref>
+					<ref xlink:show="new" xlink:href="http://127.0.0.1/core/view/generis_UiControllerHtml.php?do=show&amp;param1=127235725222700"/>
+					</dataref>
+					<fill xlink:href="../../core/view/icons/Instance.gif"/>
+
+					</node>
+					<edge source="#12723572208324" target="#127235725222700" linestyle="solid" colour="black">
+					</edge>]	</graph>
+
+</GraphXML>

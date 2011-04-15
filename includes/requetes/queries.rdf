@@ -1,0 +1,111 @@
+
+<!-- Processed by Id: cwm.py,v 1.144 2003/09/14 20:20:20 timbl Exp -->
+<!--     using base file:/tmp/@6863.0-rdfconverter-->
+
+
+<rdf:RDF xmlns="http://www.tao.lu/Ontologies/queries.rdf#"
+    xmlns:gen="http://www.tao.lu/Ontologies/generis.rdf#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:wid="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+
+    <rdfs:Class rdf:about="http://www.tao.lu/Ontologies/queries.rdf#Operator">
+        <rdfs:comment>the operator of a Generis Query.</rdfs:comment>
+        <rdfs:label>Operator</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.tao.lu/Ontologies/queries.rdf#Query">
+        <rdfs:comment>the class of the object of a Generis Query.</rdfs:comment>
+        <rdfs:label>Query</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.tao.lu/Ontologies/queries.rdf#Value">
+        <rdfs:comment>the operator of the Generis Query.</rdfs:comment>
+        <rdfs:label>Value</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdfs:Class>
+
+    <Operator rdf:about="http://www.tao.lu/Ontologies/queries.rdf#gt_num">
+        <rdfs:comment>NUM_GT</rdfs:comment>
+        <rdfs:label>is more than (numeral)</rdfs:label>
+    </Operator>
+
+    <Operator rdf:about="http://www.tao.lu/Ontologies/queries.rdf#is_ins">
+        <rdfs:comment>INSTANCE_IS</rdfs:comment>
+        <rdfs:label>is (instance)</rdfs:label>
+    </Operator>
+
+    <Operator rdf:about="http://www.tao.lu/Ontologies/queries.rdf#is_num">
+        <rdfs:comment>NUM_IS</rdfs:comment>
+        <rdfs:label>is (numeral)</rdfs:label>
+    </Operator>
+
+    <Operator rdf:about="http://www.tao.lu/Ontologies/queries.rdf#is_txt">
+        <rdfs:comment>TEXT_IS</rdfs:comment>
+        <rdfs:label>is (text)</rdfs:label>
+    </Operator>
+
+    <Operator rdf:about="http://www.tao.lu/Ontologies/queries.rdf#isnot_num">
+        <rdfs:comment>NUM_ISNOT</rdfs:comment>
+        <rdfs:label>is not (numeral)</rdfs:label>
+    </Operator>
+
+    <Operator rdf:about="http://www.tao.lu/Ontologies/queries.rdf#isnot_txt">
+        <rdfs:comment>TEXT_ISNOT</rdfs:comment>
+        <rdfs:label>is not (text)</rdfs:label>
+    </Operator>
+
+    <Operator rdf:about="http://www.tao.lu/Ontologies/queries.rdf#lt_num">
+        <rdfs:comment>NUM_LT</rdfs:comment>
+        <rdfs:label>is less than (numeral)</rdfs:label>
+    </Operator>
+
+    <Operator rdf:about="http://www.tao.lu/Ontologies/queries.rdf#match_txt">
+        <rdfs:comment>TEXT_MATCH</rdfs:comment>
+        <rdfs:label>matches (text)</rdfs:label>
+    </Operator>
+
+    <Operator rdf:about="http://www.tao.lu/Ontologies/queries.rdf#nomatch_txt">
+        <rdfs:comment>TEXT_NOMATCH</rdfs:comment>
+        <rdfs:label>does not match (text)</rdfs:label>
+    </Operator>
+
+    <rdf:Property rdf:about="http://www.tao.lu/Ontologies/queries.rdf#query_class">
+        <wid:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TreeView"/>
+        <rdfs:comment>The class of the instances you look for.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/queries.rdf#Query"/>
+        <rdfs:label>class</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.tao.lu/Ontologies/queries.rdf#query_operator">
+        <wid:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#RadioBox"/>
+        <rdfs:comment>The operator of a query.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/queries.rdf#Query"/>
+        <rdfs:label>operator</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Operator"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.tao.lu/Ontologies/queries.rdf#query_property">
+        <wid:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox"/>
+        <rdfs:comment>The property of the instance you want to constraint.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/queries.rdf#Query"/>
+        <rdfs:label>property</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.tao.lu/Ontologies/queries.rdf#query_value">
+        <wid:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+        <rdfs:comment>The value you look for.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/queries.rdf#Query"/>
+        <rdfs:label>value</rdfs:label>
+        <rdfs:range rdf:resource="http://www.tao.lu/Ontologies/queries.rdf#Value"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </rdf:Property>
+</rdf:RDF>
+
+

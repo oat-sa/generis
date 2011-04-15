@@ -1,0 +1,588 @@
+<html><head>
+
+    <title>EventLogger</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style type="text/css">
+    .dump_log table {
+  border: 1px solid blue;
+  border-collapse: collapse;
+  width: 100%;
+  empty-cells: show;
+}
+
+.dump_log #arguments_header {
+ text-align: center;
+ vertical-align: middle;
+}
+
+.dump_log thead {
+  border: 1px solid red;
+}
+
+.dump_log thead tr {
+  background-color: white;
+}
+
+.dump_log thead td {
+  border-right: 1px dotted lightblue;
+}
+
+.dump_log tbody td {
+  border-right: 1px dotted lightblue;
+}
+
+.dump_log .line_1 {
+  background-color: #eee;
+  color: gray;
+}
+
+.dump_log .line_2 {
+  background-color: #ddd;
+  border-bottom: 1px solid black;
+}
+
+.dump_log .filler_line {
+ height: 0.2cm;
+ border: none;
+}
+    </style>
+  </head><body>
+    <div id="introduction">
+      <h1>Affichage du contenu des événements enregistrées</h1>
+      <p>
+Chaque événements est présenté en trois parties&nbsp;: d'abord les
+informations de contexte d'un intérêt secondaire, ensuite les
+informations directement exploitables puis les arguments passés à la
+méthode. </p>
+    </div>
+    <div id="commands" style="border-right: 3px dotted gray; text-align: right; padding-right: 1mm;">
+      <p>
+        <a href="http://localhost/generis/test/kernel/eventLogger/dumpLog.php?raw" target="_blank">Show the raw CSV content</a>
+      </p>
+      <p>
+        <a href="#bnf">BNF</a>
+      </p>
+      <p>
+        <a href="http://localhost/generis/test/kernel/eventLogger/dumpLog.php?">Reload</a>
+      </p>
+      <p style="margin-top: 2cm;">
+        <a href="http://localhost/generis/test/kernel/eventLogger/dumpLog.php?populate">Populate the logs</a>
+      </p>
+      <p>
+                        <a href="http://localhost/generis/test/kernel/eventLogger/dumpLog.php?del=want" style="color: red; font-weight: bold;">
+                  Delete the logs
+                </a>
+                    </p>
+    </div>
+    <div id="content">
+      <p><a href="http://localhost/generis/test/kernel/eventLogger/log.csv">CSV file</a></p>
+
+  <div class="dump_log">
+    <table>
+      <thead>
+        <tr class="line_1">
+          <td>epoch</td>
+          <td>sender</td>
+          <td>comment</td>
+          <td>fileName</td>
+          <td>line</td>
+        </tr>
+        <tr class="line_2">
+          <td>className</td>
+          <td>object</td>
+          <td>type</td>
+          <td>funct</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td colspan="5" id="arguments_header">{arguments}</td>
+        </tr>
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+      </thead>
+      <tbody>
+<tr class="line_1">
+          <td>1224674883</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674896</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674900</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674905</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674910</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674917</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674921</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674931</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674934</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674938</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674950</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674955</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674960</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674966</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674973</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674979</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674984</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674988</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674993</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224674997</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224675013</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224675020</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224675038</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224675044</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+<tr class="line_1">
+          <td>1224675058</td>
+          <td></td>
+          <td></td>
+          <td>/var/www/taoqual/plugins/UserFrontend/actions/ProcessBrowser.class.php</td>
+          <td>154</td>
+          </tr>
+          <tr class="line_2">
+          <td>ProcessExecution</td>
+          <td>@</td>
+          <td>-&gt;</td>
+          <td>performTransition</td>
+          <td>&nbsp;</td>
+          </tr>
+
+        <tr class="filler_line">
+          <td colspan="5">&nbsp;</td>
+        </tr>
+
+           </tbody>
+    </table>
+  </div>
+    </div>
+    <div id="BNF">
+      <a name="bnf">
+      </a><h1><a name="bnf">Forme BNF</a></h1>
+<a name="bnf">      </a><pre style="width: 50%;"><a name="bnf">newline ::= \n
+ESC ::= \
+X ::= ; // separator for CSV
+Y ::= | // separator for inner arrays
+number ::= // a strictly positive integer
+string ::= // a general string, without X not precessed by ESC
+identifier ::= // formatted like a Php identifier, without X but can contain ESC,X
+array_of_string ::= string {Y string} // string plus same rule with Y
+
+file ::= [ header ] { line }
+header ::= { string X } string newline
+line ::= epoch X sender X comment X fileName X line X className X object X type X funct [ { X arg } ]
+
+epoch ::= number
+sender ::= string
+comment ::= string
+fileName ::= string
+line ::= number
+className ::= identifier
+object ::= string
+type ::= "-&gt;" | "::"
+funct ::= identifier
+arg ::= array_of_string | string
+</a></pre>
+<a name="bnf">    </a></div>
+<a name="bnf">  </a></body></html>

@@ -1,0 +1,38 @@
+#, fuzzy
+msgid ""
+"Please provide a text input with a length between %minLen and %maxLen for "
+"question %question."
+msgstr "Per favor, posar un text d'entrada amb una durada entre %minLen i %maxLen "
+"per %question.\n"
+
+#, fuzzy
+msgid ""
+"Please provide a numeric value between %minVal and %maxVal for question %"
+"question."
+msgstr ""
+"Per favor, posar un valor numèric entre %minVal i %maxVal per qüestió %"
+"question."
+
+#, fuzzy
+msgid "Interviewer Instruction"
+msgstr "Instruccions de l'entrevistador"
+
+#, fuzzy
+msgid "Input Code"
+msgstr "Codi d'entrada"
+
+#, fuzzy
+msgid "Help"
+msgstr "Ajuda"
+
+#, fuzzy
+msgid "DK"
+msgstr "No ho sé"
+
+#, fuzzy
+msgid "RF"
+msgstr "Rebutjat"
+
+#, fuzzy
+msigid "Please answer to all questions"
+msgstr "Per favor, conteste a totes les preguntes"

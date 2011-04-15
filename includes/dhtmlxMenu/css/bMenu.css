@@ -1,0 +1,184 @@
+/*button text - all levels*/
+#bmenu_zone .menuButtonSecond td, #bmenu_zone .menuButton td, #bmenu_zone .menuButtondown td, #bmenu_zone .menuButtonover td {
+	cursor:default;
+	color : white;
+	width : 100%;
+}
+/*menu text - all levels*/
+#bmenu_zone .defaultMenuText{
+	font: 11px "Verdana",Arial;
+	padding-left:10px;
+	padding-right:10px;
+}
+/*menu caption if any*/
+#bmenu_zone .menuName{
+	color : gray;
+	letter-spacing : 0px;
+	font : 0px Arial,sans-serif;
+	padding-left : 0px;
+	padding-right : 0px;
+}
+/*========= BUTTONS ======================*/
+/*border-left : solid 0px #ffffff;  gap between buttons 1px is fine*/
+/*plain button state - top level*/
+#bmenu_zone .menuButton {
+	border-left : solid 0px #ffffff;
+	border-right : solid 1px #ffffff;
+	font:12px Verdana,sans-serif;
+	height: 26px;
+	vertical-align:top;
+	background-color : rgb(151,248,28);/*#DBD8D1*/
+	border-top : solid #FFFFFF 0px;
+	width : 100%;
+	
+}
+/*down button state - top level*/
+#bmenu_zone .menuButtondown {
+	background-color:rgb(184,252,108);
+	border-bottom : solid 1px #FFFFFF;
+	border-left : solid 1px #808080;
+	border-right : solid 1px #FFFFFF;
+	border-top : solid 1px #808080;
+	cursor : default;
+}
+/*mouse over button state - top level*/
+#bmenu_zone .menuButtonover {
+	
+	border-left : solid 0px #FFFFFF;
+	border-right : solid 1px #FFFFFF;
+
+	background-color:rgb(184,252,108);
+	
+}
+/*plain button state - other levels*/
+#bmenu_zone .menuButtonSecond {
+	background-color:rgb(151,248,28);
+	border:0px solid ButtonFace;
+	font:12px Arial,sans-serif;
+	margin-bottom:2px;
+	padding: 2px;
+	
+	
+}
+/*mouse over button and down button states - other levels*/
+#bmenu_zone .menuButtonSecondover, #bmenu_zone .menuButtonSeconddown {
+	background-color:rgb(184,252,108);
+	color:white;
+	cursor : default;
+	border:0px solid navy;
+	font:12px Arial,sans-serif;
+}
+/*icon place style on button over/down - other levels
+#bmenu_zone .menuButtonSeconddownimg {
+	background-color : #C9D9F5;
+}*/
+
+/*text of mouse over button - other levels*/
+#bmenu_zone .menuButtonSeconddown td {
+	 color:white;
+	 cursor:default;
+	 border:0px solid;
+}
+
+
+/*============ PANELS and DEVIDERS ===========================================*/
+
+/*manu panel - top level*/
+#bmenu_zone .menuTable{
+	background-color : rgb(184,252,108);
+	border-bottom : solid #808080 0px;
+	border-left : solid #FFFFFF 1px;
+	border-right : solid 0px #ffffff;
+	border-top : solid #FFFFFF 0px;
+	margin : 0px;
+	-moz-user-select : none;
+	padding : 0px;
+	width : 100%;
+	height : 100%;
+	
+	
+}
+
+/*menu panel - other levels*/
+#bmenu_zone .secondMenuTable{
+	background-color : rgb(151,248,28);
+	border: 2px outset #ffffff; 
+	margin : 0px;
+	-moz-user-select : none;
+	padding : 2 2 2 2;
+	position: relative;
+	
+}
+
+/*devider - horizontal*/
+#bmenu_zone .menudivider {
+	background-color : #ffffff;
+	border-left : solid #808080 0px;
+	border-right : solid #FFFFFF 0px;
+	height : 100%;
+	margin-bottom : 2px;
+	margin-left : 2px;
+	margin-right : 2px;
+	margin-top : 1px;
+	overflow : hidden;
+	vertical-align : middle;
+	width : 20px;
+}
+/*devider - vertical*/
+#bmenu_zone .menudividery {
+	background-color : ButtonFace;
+	border-bottom : solid #FFFFFF 1px;
+	border-top : solid #808080 1px;
+	height : 2px;
+	overflow : hidden;
+	width : 100%;
+}
+
+/*================== DRAG HANDLERS ==================*/
+
+/*drag handler for menu - horizontal*/
+#bmenu_zone .menuhandle {
+	background-color : ButtonFace;
+	border-bottom : solid #808080 1px;
+	border-left : solid #FFFFFF 1px;
+	border-right : solid #808080 1px;
+	border-top : solid #FFFFFF 1px;
+	cursor : move;
+	height : 100%;
+	overflow : hidden;
+	width : 20px;
+}
+/*drag handler for menu - vertical*/
+#bmenu_zone .vmenuhandle {
+	background-color : ButtonFace;
+	border-bottom : solid #808080 1px;
+	border-left : solid #FFFFFF 1px;
+	border-right : solid #808080 1px;
+	border-top : solid #FFFFFF 1px;
+	cursor : move;
+	height : 3px;
+}
+
+
+/*============ ICONS and SCROLLERS ====================*/
+
+/*disabled icon - all levels*/
+#bmenu_zone .iconGray {
+	filter : BlendTrans(Percent=50) gray(); 
+	cursor: default; 
+	border:solid 1px ButtonFace;
+}
+
+/*enabled scroller*/
+#bmenu_zone .menuscrollerenabled{
+	background-color:#CAC8D4;
+	 cursor: pointer;	
+	 text-align:center;
+}
+/*disabled scroller*/
+#bmenu_zone .menuscrollerdisabled{
+	background-color: #CAC8D4;
+	cursor: default;
+	visibility:hidden;
+	text-align:center;
+}

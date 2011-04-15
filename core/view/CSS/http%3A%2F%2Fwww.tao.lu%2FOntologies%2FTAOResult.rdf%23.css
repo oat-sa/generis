@@ -1,0 +1,1118 @@
+
+html, .top, .bottom, .left {}
+.bottomMenu {position:absolute; text-align:left; border-top: #9c9c9c 1px solid;  top:18%;  left:80%; margin-top: 0;background-color:rgb(229,231,211);color:#ffffff;margin-left: 0;margin-right: 0; overflow:visible;}
+.topMenu {position:absolute; text-align:left; top:0%;  left:80%; margin-top: 0;background-color:rgb(229,231,211);color:#ffffff;margin-left: 0;margin-right: 0; overflow:visible;}
+.top {position:fixed; top:0%; height:70px; left:0%; width:100%;overflow:visible;}
+.bottom {position:absolute; top:97%;  left:0%; width:100%;margin-top: 0;background-color:rgb(0,122,59);color:#ffffff;margin-left: 0;margin-right: 0;  }
+.generis_WorkPane {position:absolute; top:70px; height:90%; left:0px; width:100%;overflow:hidden;}
+
+* {margin:0; }
+
+
+.logo
+{
+background-image:url("../icons/Header_LogoGeneris_Green.gif");
+background-repeat:no-repeat;
+height:53px;
+}
+.generisTable, .generisTable TD, .generisTable TH
+{
+color:rgb(0,122,59);
+font-family: verdana; 
+font-size: 11px; 
+vertical-align:top;
+
+}
+.textBlack
+{
+
+font-family: verdana; 
+font-size: 10px; 
+}
+.leftmargin
+{
+position:relative;
+left:25%;
+top:25%;
+
+
+}
+
+.darkpurple
+{
+background-color:rgb(0,122,59);
+}
+.debugmsg {
+	
+	position:fixed;
+	COLOR:rgb(151,248,28);
+	font-weight: normal;
+	font-size: 11;
+	top:85%;
+	left:60%;
+	display:none;
+	
+}
+.treeIframe
+{
+background-color:rgb(239,240,230);
+margin-top: 0%;
+margin-left: 0;
+margin-bottom: 0;
+height:98%;
+overflow:auto;
+}
+.paneIframe
+{
+background-color:rgb(229,231,211);
+margin-top: 0;
+margin-left: 0;
+margin-bottom: 0;
+height:100%;
+overflow:auto;
+}
+
+.lightbrown
+{
+background-color:rgb(239,240,230);
+}
+.mediumbrown
+{
+background-color:rgb(229,231,211);
+}
+
+.brown
+{
+margin-top: 0;
+background-color:rgb(0,122,59);
+color:#ffffff;
+margin-left: 0;
+margin-right: 0; 
+}
+
+.red
+{
+
+background-color:rgb(60,151,95);
+color:#ffffff;
+
+}
+.oranje
+{
+margin-top: 0;
+background-color:rgb(151,248,28);
+color:#000000;
+margin-left: 0;
+margin-right: 0; 
+}
+.yellow
+{
+margin-top: 0;
+background-color:rgb(184,252,108);
+color:#000000;
+margin-left: 0;
+margin-right: 0; 
+}
+.brownselected
+{
+margin-top: 0;
+background-color:rgb(138,196,156);
+color:#ffffff;
+margin-left: 0;
+margin-right: 0; 
+}
+
+.logo
+{
+background-image:url("../icons/Header_LogoGeneris_Green.gif");
+background-repeat:no-repeat;
+height:53px;
+}
+
+.aleftcorner
+{
+width: 100px;
+background-image:url("../icons/MainMenu_LeftCorner_Green.gif");
+background-repeat:no-repeat;
+}
+
+.arightcorner
+{
+width: 100px;
+background-image:url("../icons/BottomMenu_RightCorner_Green.gif");
+background-repeat:no-repeat;
+}
+
+
+
+body 
+{  
+height: 100%;
+overflow: hidden;
+font-size: 100%;
+}
+.bottomrighttable
+{  
+
+font-family: verdana; 
+font-size: 10px; 
+margin-top: 0;
+margin-bottom: 0;
+margin-left: 0;
+margin-right: 0; 
+padding-top: 0;
+padding-bottom: 0;
+padding-left: 0;
+padding-right: 0; 
+background-color:	rgb(229,231,211);
+color:#000000;
+
+}
+
+
+
+
+A:link {
+	COLOR: #000000; TEXT-DECORATION: none;
+	font-family:Verdana;
+	font-size:10px;
+}
+A:visited {
+	COLOR: #000000; TEXT-DECORATION: none;
+	font-family:Verdana;
+	font-size:10px;
+}
+A:active {
+	COLOR: #000000; TEXT-DECORATION: none;
+	font-family:Verdana;
+	font-size:10px;
+}
+input.bouton {
+border:2px outset grey;
+background-color:white;
+font-weight:bold;
+cursor:pointer;
+
+}
+
+input.bouton:hover {
+background-color:white;
+color:#7d8fb5;
+}
+input.bouton:active {
+border:2px inset red;
+background-color:red;
+color:white;
+} 
+
+.Title {
+	
+	
+	COLOR: rgb(0,122,59);
+	font-size:14px;
+	font-family:Verdana;
+	font-weight: bold;
+
+}
+.Title:first-letter{
+font-size:200%;
+}
+
+.PropertiesTitle {
+	
+	
+	text-indent: 0px;
+	font-size:12px;
+	
+	font-family:Verdana;
+	font-weight: bold;
+	COLOR: rgb(0,122,59);	
+}
+.PropertyLabel{
+	
+	
+	text-indent: 12px;
+}
+.PropertyValue{
+	
+	
+	font-style: italic;
+}
+
+
+.TEXT {
+	
+	font-family:Verdana;
+	font-size:10px;
+	COLOR: #000000;
+	text-indent: 15px;
+	
+}
+.TEXTAREA {
+	
+	font-family:Verdana;
+	font-size:10px;
+	COLOR: #000000;
+	text-indent: 17px;
+}
+
+.PaneU {
+	
+	font-family:Verdana;
+	font-size:10px;
+	COLOR: #000000;
+	text-indent: 15px;
+	
+}
+.divLoginbox 
+{
+	position:relative;
+	width: 300px; 
+	border-right: #9c9c9c 5px solid; 
+	border-top: #9c9c9c 1px solid; 
+	border-left: #9c9c9c 1px solid; 
+	border-bottom: #9c9c9c 1px solid;
+	font-size:11px;
+	color:black;
+	font-family:Verdana;
+}
+
+.divLoginboxHeader 
+{
+	text-align:center;
+	background-color:#dddddd;
+	padding-top:2px;
+	font-size:11px;
+	color:#666666;
+	font-family:Verdana;
+}
+a.divSideboxEntry, .divSideboxEntry
+{
+	text-align:left;
+	height:16px;
+	font-size:11px;color:black;font-family:Verdana;
+	background-color:#EAF1F5;
+}
+.Date {
+	
+	font-family:Verdana;
+	text-align:center;
+	font-size:10px;
+	color: black;
+}
+
+.Authenticationform {
+	
+
+font-family:Verdana;
+	font-weight: normal;
+	font-size:13px;
+
+	BORDER-RIGHT: #000000 1px solid;
+	BORDER-TOP: #000000 1px solid;
+	BORDER-LEFT: #000000 1px solid;
+	BORDER-BOTTOM: #bdada5 0px solid;
+	margin-left:20%;
+	
+	DISPLAY: block;
+	BACKGROUND: rgb(0,122,59);
+
+	
+	COLOR: #ffffff;
+	
+	TOP: 0px; 
+	TEXT-ALIGN: center;
+	padding: 0.5em;
+	width: 40%;
+
+
+
+}
+
+.AuthBloc {
+	
+	font-family:Verdana;
+	font-weight: bold;
+	font-size:10px;
+
+	BORDER-RIGHT: #ffffff 0px solid;
+	BORDER-TOP: #ffffff 0px solid;
+	BORDER-BOTTOM: #bdada5 0px solid;
+	margin-left:20%;
+	
+	DISPLAY: block;
+	BACKGROUND: rgb(60,151,95);
+
+	
+	COLOR: #ffffff;
+	
+	TOP: 0px; 
+	TEXT-ALIGN: center;
+	padding: 0.5em;
+	width: 40%;
+}
+
+
+
+
+
+
+.AUTHINFOS {
+	
+	font-family:Verdana;
+	font-size:10px;
+	
+	
+	
+}
+.HiddenBloc {
+display:none;
+}
+.TypeValue {
+	
+	font-family:Verdana;
+	COLOR: BLUE;
+	
+}
+
+.textI{
+font-family:Verdana;
+	font-weight: bold;
+	font-size:10px;
+	COLOR:rgb(0,122,59);
+}
+.datalg {
+	
+	font-family:Verdana;
+	font-weight: bold;
+	font-size:10px;
+	border-color:rgb(0,122,59);
+	BORDER-RIGHT: rgb(0,122,59) 0px solid;
+	BORDER-TOP: rgb(0,122,59) 0px solid;
+	BORDER-BOTTOM: rgb(0,122,59) 0px solid;
+	BORDER-LEFT: rgb(0,122,59) 0px solid;
+	vertical-align: middle;
+	DISPLAY: block;
+		
+	COLOR:rgb(0,122,59);
+	margin-top: 1;
+	POSITION: relative;
+	TOP: -1px; 
+	TEXT-ALIGN: center;
+	padding: 0.1em;
+	width: 20px;
+	height: 16px;
+	-moz-border-radius : 5px;
+}
+
+.datalg_selected {
+	
+	border-color:rgb(0,122,59);
+	font-family:Verdana;
+	font-weight: bold;
+	font-size:10px;
+	COLOR:rgb(0,122,59);
+	BORDER-RIGHT: #000000 0px solid;
+	BORDER-TOP: #000000 0px solid;
+	BORDER-BOTTOM: #000000 0px solid;
+	BORDER-LEFT: #000000 0px solid;
+	vertical-align: middle;
+	DISPLAY: block;
+		
+	margin-top: 1;
+	POSITION: relative;
+	TOP: -1px; 
+	TEXT-ALIGN: center;
+	padding: 0.1em;
+	width: 20px;
+	height: 16px;
+	-moz-border-radius : 5px;
+	COLOR: #c3190F;	
+	
+}
+.datalg_default {
+	
+	
+	font-family:Verdana;
+	font-weight: bold;
+	font-size:10px;
+	border-color:rgb(0,122,59);
+	BORDER-RIGHT: rgb(0,122,59) 0px solid;
+	BORDER-TOP: rgb(0,122,59) 0px solid;
+	BORDER-BOTTOM: rgb(0,122,59) 0px solid;
+	BORDER-LEFT: rgb(0,122,59) 0px solid;
+	vertical-align: middle;
+	DISPLAY: block;
+		
+	COLOR:grey;
+	margin-top: 1;
+	POSITION: relative;
+	TOP: -1px; 
+	TEXT-ALIGN: center;
+	padding: 0.1em;
+	width: 20px;
+	height: 16px;
+	-moz-border-radius : 5px;
+	
+}
+
+.function {
+	
+	
+	font-size:11px;
+	COLOR: white;
+	
+}
+
+.guiLabel {
+	font-size:10px;
+	font-weight: bold;
+	font-family:Verdana;
+}
+
+.msg {
+	
+	
+	font-size:10px;
+	font-family:Verdana;
+	font-weight: normal;
+	COLOR: #ffffff;
+	
+}
+
+.SubjectMetaData {
+	
+	
+	background-color:#FAEBD7;
+}
+.Note {
+	
+	
+	COLOR:#3b3bFF;
+	font-weight: bold;
+}
+.groupMetaData {
+	
+	
+	background-color:#FFFFCC;
+}
+.TestMetaData {
+	
+	
+	background-color:#FFFF99;
+}
+.ItemMetaData {
+	
+	
+	background-color:#CCFF99;
+}
+.TestData {
+	
+	
+	background-color:#FFCCCC;
+}
+.ItemData {
+	
+	
+	background-color:#CCFFCC;
+}
+.ExecutionID {
+	
+	
+	background-color:#99CCFF;
+}
+
+
+.highlight {
+  
+  background: yellow;
+}
+
+.opaque {
+	background-color: rgb(239,240,230);
+	width : auto;
+	border : 1px solid #666666;
+	-moz-border-radius : 4px;
+	padding : 5px;
+}
+.opaque .box-title,
+.opaque .box-data {
+	width: auto;
+	
+}
+div.box-data {
+	overflow : hidden;
+	font-family:Verdana;
+	color : black;
+	padding : 5px;
+	font-size : 10px;
+}
+
+.calprio5 {
+	background-color : rgb(60,151,95);
+	color:white;
+	font-size:10px;
+	font-family:Verdana;
+	font-weight: bold;
+	text-align : center;
+	border : 1px solid rgb(0,122,59);
+}
+
+.navInfo
+{
+  position: absolute;
+ width:90%;
+  display: block;
+  color: #ffffff;
+  border-width: 0px 0px 0px 0px;
+ font: 10px verdana;
+  border-style: outset ;
+  white-space: nowrap;
+    color: #000000;
+    font-weight: normal;
+	font-style : italic ;
+	TEXT-ALIGN: left;
+z-index:-1;
+
+}
+.Titre
+{
+background-color: #F3F6F9;
+	border-bottom : 1px solid #ACCCDD;
+	width:100%;
+	font-size : 10px;
+	margin-top: 0;
+	margin : 0;
+	
+}
+
+
+.bottom {
+
+position: absolute;
+bottom: 10;
+font-size: 80%;
+color: blue;
+}
+
+
+#globalnav {
+	position:relative;
+	float:left;
+	width:100%;
+	padding:0 0 1.75em 1em;
+	margin:0;
+	list-style:none;
+	line-height:1em;
+}
+.mainpane {
+	position:absolute;
+	top:45px;
+	left:30px;
+}
+.slighltylright {
+	position:relative;
+	left:200px;
+	width:450px;
+	top:-20px;
+	text-align:right;
+	display:block;
+	border-left:1px solid #fff;
+	border-top:1px solid #fff;
+	border-right:1px solid #aaa;
+	padding:5 5 5 5;
+}
+
+
+#globalnav LI {
+	float:left;
+	margin:0;
+	padding:0;
+}
+
+#globalnav A {
+	display:block;
+	color:#fff;
+	text-decoration:none;
+	font-weight:normal;
+	background:rgb(0,122,59);
+	margin:0;
+	padding:0.25em 1em;
+	border-left:1px solid #fff;
+	border-top:1px solid #fff;
+	border-right:1px solid #aaa;
+}
+
+#globalnav A:hover,
+#globalnav A:active,
+#globalnav A.here:link,
+#globalnav A.here:visited {
+background-color:rgb(60,151,95);
+}
+
+
+
+
+
+#globalnav A.here:link,
+#globalnav A.here:visited {
+	position:relative;
+	z-index:102;
+}
+
+/*subnav*/
+
+#globalnav UL {
+	position:absolute;
+	left:0;
+	top:1.5em;
+	float:left;
+	background:#bbb;
+	width:100%;
+	margin:0;
+	padding:0.25em 0.25em 0.25em 1em;
+	list-style:none;
+	border-top:1px solid #fff;
+}
+
+#globalnav UL LI {
+	float:left;
+	display:block;
+	margin-top:1px;
+}
+
+#globalnav UL A {
+	background:#bbb;
+	color:#fff;
+	display:inline;
+	margin:0;
+	padding:0 1em;
+	border:0
+}
+
+#globalnav UL A:hover,
+#globalnav UL A:active,
+#globalnav UL A.here:link,
+#globalnav UL A.here:visited {
+	color:#444;
+}
+
+.purplebutton
+{
+background-color:rgb(60,151,95);
+color:white;
+font-family:verdana;
+font-size:11px;
+height:22px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*button text - all levels*/
+.menuButtonSecond td, .menuButton td, .menuButtondown td, .menuButtonover td {
+	cursor:default;
+	color : white;
+	width : 100%;
+}
+/*menu text - all levels*/
+.defaultMenuText{
+	font: 11px "Verdana",Arial;
+	padding-left:10px;
+	padding-right:10px;
+}
+/*menu caption if any*/
+.menuName{
+	color : gray;
+	letter-spacing : 0px;
+	font : 0px Arial,sans-serif;
+	padding-left : 0px;
+	padding-right : 0px;
+}
+/*========= BUTTONS ======================*/
+/*border-left : solid 0px #ffffff;  gap between buttons 1px is fine*/
+/*plain button state - top level*/
+.menuButton {
+	border-left : solid 0px #ffffff;
+	border-right : solid 1px #ffffff;
+	font:12px Verdana,sans-serif;
+	height: 26px;
+	vertical-align:top;
+	background-color : rgb(0,122,59);/*#DBD8D1*/
+	border-top : solid #FFFFFF 0px;
+	width : 100%;
+	
+}
+/*down button state - top level*/
+.menuButtondown {
+	background-color:rgb(138,196,156);
+	
+}
+/*mouse over button state - top level*/
+.menuButtonover {
+
+	background-color:rgb(138,196,156);
+	border-left : solid 0px #ffffff;
+	border-right : solid 1px #ffffff;
+	width : 100%;
+}
+/*plain button state - other levels*/
+.menuButtonSecond {
+	background-color:rgb(60,151,95);
+	border:0px solid ButtonFace;
+	font:12px Arial,sans-serif;
+	margin-bottom:2px;
+	padding: 2px;
+	
+	
+}
+/*mouse over button and down button states - other levels*/
+.menuButtonSecondover, .menuButtonSeconddown {
+	background-color:rgb(138,196,156);
+	color:white;
+	cursor : default;
+	border:0px solid navy;
+	font:12px Arial,sans-serif;
+}
+/*icon place style on button over/down - other levels
+.menuButtonSeconddownimg {
+	background-color : #C9D9F5;
+}*/
+
+/*text of mouse over button - other levels*/
+.menuButtonSeconddown td {
+	 color:white;
+	 cursor:default;
+	 border:0px solid;
+}
+
+
+/*============ PANELS and DEVIDERS ===========================================*/
+
+/*manu panel - top level*/
+.menuTable{
+	background-color : rgb(60,151,95);
+	border-bottom : solid #808080 0px;
+	border-left : solid #FFFFFF 1px;
+	border-right : solid 0px #ffffff;
+	border-top : solid #FFFFFF 0px;
+	margin : 0px;
+	-moz-user-select : none;
+	padding : 0px;
+	width : 100%;
+	height : 100%;
+	
+	
+}
+
+/*menu panel - other levels*/
+.secondMenuTable{
+	background-color : rgb(60,151,95);
+	border: 2px outset #ffffff; 
+	margin : 0px;
+	-moz-user-select : none;
+	padding : 2 2 2 2;
+	position: relative;
+	
+	
+}
+
+/*devider - horizontal*/
+.menudivider {
+	background-color : #ffffff;
+	border-left : solid #808080 0px;
+	border-right : solid #FFFFFF 0px;
+	height : 100%;
+	margin-bottom : 2px;
+	margin-left : 2px;
+	margin-right : 2px;
+	margin-top : 1px;
+	overflow : hidden;
+	vertical-align : middle;
+	width : 20px;
+}
+/*devider - vertical*/
+.menudividery {
+	background-color : ButtonFace;
+	border-bottom : solid #FFFFFF 1px;
+	border-top : solid #808080 1px;
+	height : 2px;
+	overflow : hidden;
+	width : 100%;
+}
+
+/*================== DRAG HANDLERS ==================*/
+
+/*drag handler for menu - horizontal*/
+.menuhandle {
+	background-color : ButtonFace;
+	border-bottom : solid #808080 1px;
+	border-left : solid #FFFFFF 1px;
+	border-right : solid #808080 1px;
+	border-top : solid #FFFFFF 1px;
+	cursor : move;
+	height : 100%;
+	overflow : hidden;
+	width : 20px;
+}
+/*drag handler for menu - vertical*/
+.vmenuhandle {
+	background-color : ButtonFace;
+	border-bottom : solid #808080 1px;
+	border-left : solid #FFFFFF 1px;
+	border-right : solid #808080 1px;
+	border-top : solid #FFFFFF 1px;
+	cursor : move;
+	height : 3px;
+}
+
+
+/*============ ICONS and SCROLLERS ====================*/
+
+/*disabled icon - all levels*/
+.iconGray {
+	filter : BlendTrans(Percent=50) gray(); 
+	cursor: default; 
+	border:solid 1px ButtonFace;
+}
+
+/*enabled scroller*/
+.menuscrollerenabled{
+	background-color:#CAC8D4;
+	 cursor: pointer;	
+	 text-align:center;
+}
+/*disabled scroller*/
+.menuscrollerdisabled{
+	background-color: #CAC8D4;
+	cursor: default;
+	visibility:hidden;
+	text-align:center;
+}
+
+
+
+
+
+
+/*button text - all levels*/
+#bmenu_zone .menuButtonSecond td, #bmenu_zone .menuButton td, #bmenu_zone .menuButtondown td, #bmenu_zone .menuButtonover td {
+	cursor:default;
+	color : white;
+	width : 100%;
+}
+/*menu text - all levels*/
+#bmenu_zone .defaultMenuText{
+	font: 11px "Verdana",Arial;
+	padding-left:10px;
+	padding-right:10px;
+}
+/*menu caption if any*/
+#bmenu_zone .menuName{
+	color : gray;
+	letter-spacing : 0px;
+	font : 0px Arial,sans-serif;
+	padding-left : 0px;
+	padding-right : 0px;
+}
+/*========= BUTTONS ======================*/
+/*border-left : solid 0px #ffffff;  gap between buttons 1px is fine*/
+/*plain button state - top level*/
+#bmenu_zone .menuButton {
+	border-left : solid 0px #ffffff;
+	border-right : solid 1px #ffffff;
+	font:12px Verdana,sans-serif;
+	height: 26px;
+	vertical-align:top;
+	background-color : rgb(151,248,28);/*#DBD8D1*/
+	border-top : solid #FFFFFF 0px;
+	width : 100%;
+	
+}
+/*down button state - top level*/
+#bmenu_zone .menuButtondown {
+	background-color:rgb(184,252,108);
+	border-bottom : solid 1px #FFFFFF;
+	border-left : solid 1px #808080;
+	border-right : solid 1px #FFFFFF;
+	border-top : solid 1px #808080;
+	cursor : default;
+}
+/*mouse over button state - top level*/
+#bmenu_zone .menuButtonover {
+	
+	border-left : solid 0px #FFFFFF;
+	border-right : solid 1px #FFFFFF;
+
+	background-color:rgb(184,252,108);
+	
+}
+/*plain button state - other levels*/
+#bmenu_zone .menuButtonSecond {
+	background-color:rgb(151,248,28);
+	border:0px solid ButtonFace;
+	font:12px Arial,sans-serif;
+	margin-bottom:2px;
+	padding: 2px;
+	
+	
+}
+/*mouse over button and down button states - other levels*/
+#bmenu_zone .menuButtonSecondover, #bmenu_zone .menuButtonSeconddown {
+	background-color:rgb(184,252,108);
+	color:white;
+	cursor : default;
+	border:0px solid navy;
+	font:12px Arial,sans-serif;
+}
+/*icon place style on button over/down - other levels
+#bmenu_zone .menuButtonSeconddownimg {
+	background-color : #C9D9F5;
+}*/
+
+/*text of mouse over button - other levels*/
+#bmenu_zone .menuButtonSeconddown td {
+	 color:white;
+	 cursor:default;
+	 border:0px solid;
+}
+
+
+/*============ PANELS and DEVIDERS ===========================================*/
+
+/*manu panel - top level*/
+#bmenu_zone .menuTable{
+	background-color : rgb(184,252,108);
+	border-bottom : solid #808080 0px;
+	border-left : solid #FFFFFF 1px;
+	border-right : solid 0px #ffffff;
+	border-top : solid #FFFFFF 0px;
+	margin : 0px;
+	-moz-user-select : none;
+	padding : 0px;
+	width : 100%;
+	height : 100%;
+	
+	
+}
+
+/*menu panel - other levels*/
+#bmenu_zone .secondMenuTable{
+	background-color : rgb(151,248,28);
+	border: 2px outset #ffffff; 
+	margin : 0px;
+	-moz-user-select : none;
+	padding : 2 2 2 2;
+	position: relative;
+	
+}
+
+/*devider - horizontal*/
+#bmenu_zone .menudivider {
+	background-color : #ffffff;
+	border-left : solid #808080 0px;
+	border-right : solid #FFFFFF 0px;
+	height : 100%;
+	margin-bottom : 2px;
+	margin-left : 2px;
+	margin-right : 2px;
+	margin-top : 1px;
+	overflow : hidden;
+	vertical-align : middle;
+	width : 20px;
+}
+/*devider - vertical*/
+#bmenu_zone .menudividery {
+	background-color : ButtonFace;
+	border-bottom : solid #FFFFFF 1px;
+	border-top : solid #808080 1px;
+	height : 2px;
+	overflow : hidden;
+	width : 100%;
+}
+
+/*================== DRAG HANDLERS ==================*/
+
+/*drag handler for menu - horizontal*/
+#bmenu_zone .menuhandle {
+	background-color : ButtonFace;
+	border-bottom : solid #808080 1px;
+	border-left : solid #FFFFFF 1px;
+	border-right : solid #808080 1px;
+	border-top : solid #FFFFFF 1px;
+	cursor : move;
+	height : 100%;
+	overflow : hidden;
+	width : 20px;
+}
+/*drag handler for menu - vertical*/
+#bmenu_zone .vmenuhandle {
+	background-color : ButtonFace;
+	border-bottom : solid #808080 1px;
+	border-left : solid #FFFFFF 1px;
+	border-right : solid #808080 1px;
+	border-top : solid #FFFFFF 1px;
+	cursor : move;
+	height : 3px;
+}
+
+
+/*============ ICONS and SCROLLERS ====================*/
+
+/*disabled icon - all levels*/
+#bmenu_zone .iconGray {
+	filter : BlendTrans(Percent=50) gray(); 
+	cursor: default; 
+	border:solid 1px ButtonFace;
+}
+
+/*enabled scroller*/
+#bmenu_zone .menuscrollerenabled{
+	background-color:#CAC8D4;
+	 cursor: pointer;	
+	 text-align:center;
+}
+/*disabled scroller*/
+#bmenu_zone .menuscrollerdisabled{
+	background-color: #CAC8D4;
+	cursor: default;
+	visibility:hidden;
+	text-align:center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

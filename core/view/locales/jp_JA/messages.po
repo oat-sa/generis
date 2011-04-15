@@ -1,0 +1,35 @@
+#, fuzzy
+msgid ""
+"Please provide a text input with a length between %minLen and %maxLen for "
+"question %question."
+msgstr "問%には、最低%mから最高 %mまでの文章を打ってください。"
+
+#, fuzzy
+msgid ""
+"Please provide a numeric value between %minVal and %maxVal for question %"
+"question."
+msgstr "問％には、最低%mから最高%mまでの数値を記入してください。"
+
+#, fuzzy
+msgid "Interviewer Instruction"
+msgstr "インタビューアーへの指示"
+
+#, fuzzy
+msgid "Input Code"
+msgstr "インプットコード"
+
+#, fuzzy
+msgid "Help"
+msgstr "ヘルプ"
+
+#, fuzzy
+msgid "DK"
+msgstr "不明"
+
+#, fuzzy
+msgid "RF"
+msgstr "却下"
+
+#, fuzzy
+msigid "Please answer to all questions"
+msgstr "すべての質問に答えてください。"
