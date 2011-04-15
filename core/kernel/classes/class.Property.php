@@ -147,8 +147,6 @@ class core_kernel_classes_Property
 			}
 			$sqlResult->MoveNext();
 		}
-
-        
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000780 end
 
         return (array) $returnValue;
@@ -191,7 +189,6 @@ class core_kernel_classes_Property
 			foreach ($domainValues as $domainValue){
 				$this->domain->add(new core_kernel_classes_Class($domainValue));
 			}
-			
 		}
 		$returnValue = $this->domain;
         // section 10-13-1--31--64270bf:11918ad765e:-8000:0000000000000972 end

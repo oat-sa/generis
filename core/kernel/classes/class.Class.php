@@ -106,11 +106,9 @@ class core_kernel_classes_Class
 		
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
-		$query = "SELECT object
-				FROM statements
-				WHERE subject = ?
-				AND predicate = ?
-				AND object = ?";
+		$query = "SELECT object FROM statements
+					WHERE subject = ?
+					AND predicate = ? AND object = ?";
 		$result = $dbWrapper->execSql($query, array(
 			$this->uriResource,
 			RDF_SUBCLASSOF,

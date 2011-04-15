@@ -298,12 +298,12 @@ class core_kernel_classes_Resource
         // section 127-0-0-1-71ce5466:11938f47d30:-8000:0000000000000A99 begin
     	
        	$session = core_kernel_classes_Session::singleton();
-       	
+       	$modelIds	= implode(',',array_keys($session->getLoadedModels()));
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $query =  "SELECT object FROM statements 
-		    		WHERE subject = ?
-		    		AND predicate = ?
-		    		AND (l_language = '' OR l_language = ?)";
+		    		WHERE subject = ? AND predicate = ?
+		    		AND (l_language = '' OR l_language = ?)
+		    		AND modelID IN ({$modelIds})";
     	
         $result	= $dbWrapper->execSql($query, array(
         	$this->uriResource,
@@ -354,17 +354,18 @@ class core_kernel_classes_Resource
         $returnValue = new core_kernel_classes_ContainerCollection($this);
         
     	$session = core_kernel_classes_Session::singleton();
+    	$modelIds	= implode(',',array_keys($session->getLoadedModels()));
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $query =  "SELECT object FROM statements 
-		    		WHERE subject = ?
-		    		AND predicate = ?
-		    		AND (l_language = '' OR l_language = ?)";
+		    		WHERE subject = ? AND predicate = ?
+		    		AND (l_language = '' OR l_language = ?)
+		    		AND modelID IN ({$modelIds})";
         $result	= $dbWrapper->execSql($query, array(
         	$this->uriResource,
         	$property->uriResource,
         	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
         ));
-      //  var_dump($session);exit;
+      	
         $propertiesValues = array();
         while ($row = $result->FetchRow()) {
         	$propertiesValues[] = $row['object'];
@@ -387,13 +388,11 @@ class core_kernel_classes_Resource
 
         }
         
-
         foreach ($propertiesValues as $value){
             if(!common_Utils::isUri($value)) {
                 $container = new core_kernel_classes_Literal($value);
             }
             else {
-
                 $container = new core_kernel_classes_Resource($value);
             }
 
@@ -442,7 +441,6 @@ class core_kernel_classes_Resource
             throw new common_Exception("Property {$propLabel} ({$property->uriResource}) of resource {$label} ({$this->uriResource}) 
             							has more than one value do not use getUniquePropertyValue but use getPropertyValue instead");
         }
-
         	
         // section 10-13-1--99--2465c76a:11c0440e8db:-8000:0000000000001466 end
 
@@ -464,12 +462,13 @@ class core_kernel_classes_Resource
 
         // section -87--2--3--76-51a982f1:1278aabc987:-8000:0000000000008925 begin
         
-    	$session = core_kernel_classes_Session::singleton();
-    	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+    	$session 	= core_kernel_classes_Session::singleton();
+    	$modelIds	= implode(',',array_keys($session->getLoadedModels()));
+    	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
         $query =  "SELECT object FROM statements 
-		    		WHERE subject = ?
-		    		AND predicate = ?
-		    		AND (l_language = '' OR l_language = ?) ";
+        			WHERE subject = ? AND predicate = ?
+		    		AND (l_language = '' OR l_language = ?) 
+		    		AND modelID IN ({$modelIds})";
         $params = array(
         	$this->uriResource,
         	$property->uriResource,
@@ -735,17 +734,17 @@ class core_kernel_classes_Resource
         $returnValue = (bool) false;
 
         // section 10-13-1--31--64270bf:11918ad765e:-8000:000000000000097C begin
-        //$session = core_kernel_classes_Session::singleton();
 
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $session = core_kernel_classes_Session::singleton();
+        $modelIds	= implode(',',array_keys($session->getLoadedModels()));
         
         $query =  "DELETE FROM statements 
-		    		WHERE subject = ?
-		    		AND predicate = ?";
+		    		WHERE subject = ? AND predicate = ?
+		    		AND modelID IN ({$modelIds}) ";
         
         if($property->isLgDependent()){
         	
-        	$session = core_kernel_classes_Session::singleton();
         	$query .=  " AND (l_language = '' OR l_language = ?) ";
         	$returnValue	= $dbWrapper->execSql($query,array(
 	        		$this->uriResource,
@@ -1045,7 +1044,6 @@ class core_kernel_classes_Resource
         $returnValue .= '</span>';
 
         $returnValue .= '</span>';
-
 
         // section 10-13-1--31--3bf74db1:119c3d777ef:-8000:0000000000000B3F end
 
