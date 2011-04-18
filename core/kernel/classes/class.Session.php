@@ -16,13 +16,6 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 
 /* user defined includes */
 // section 10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000071F-includes begin
-/*
-require_once('core/kernel/model.php');
-require_once('core/kernel/rdfmodel.php');
-require_once('core/kernel/rdfsmodel.php');
-require_once('core/kernel/modelManager.php');
-require_once('core/kernel/accesBD.php');
-*/
 // section 10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000071F-includes end
 
 /* user defined constants */
@@ -145,7 +138,7 @@ class core_kernel_classes_Session
         if(!$userService->isASessionOpened()){
 			throw new common_Exception('Fail openning session, check if you log in');
 	    }
-	    
+	   
        	//initialize the dbWrapper
 		core_kernel_classes_DbWrapper::singleton($module);
 		
@@ -155,6 +148,7 @@ class core_kernel_classes_Session
 		foreach ($extensionManager->getModelsToLoad() as $model){
 			$this->loadModel($model);
 		}
+		$this->loadModel(LOCAL_NAMESPACE);
 		
 		$this->defaultLg = DEFAULT_LANG;
 

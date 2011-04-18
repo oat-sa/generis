@@ -23,13 +23,15 @@ class core_control_FrontController
 		$status =false;
 		if (!empty($login) && !empty($password) && !empty($module)){
 
-			$status =true;	
-			$apiModelOo = core_kernel_impl_ApiModelOO::singleton();
-			$apiModelOo->logIn($login, $password, $module, CLASS_ROLE_TAOMANAGER);
 			
-			$session = core_kernel_classes_Session::singleton();
-			$_SESSION["generis_session"] = $session;
-			$_SESSION["generis_module"] = $module;
+			$apiModelOo = core_kernel_impl_ApiModelOO::singleton();
+			if($apiModelOo->logIn($login, $password, $module, CLASS_ROLE_TAOMANAGER)){
+				$session = core_kernel_classes_Session::singleton();
+				$_SESSION["generis_session"] = $session;
+				$_SESSION["generis_module"] = $module;
+				
+				$status =true;	
+			}
 		}
 		else{
 			if (self::isConnected()) {

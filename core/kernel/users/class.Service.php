@@ -351,50 +351,56 @@ class core_kernel_users_Service
         $returnValue = (bool) false;
 
         // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E9B begin
-        if(!$this->isASessionOpened()) {
+        
+    	if(Session::hasAttribute('generis_session')){	
+        	//re-init the objects from the session
         	
-        	$sql = "SELECT count(subject) FROM `statements` WHERE (`subject` = '" . $uri . "' AND `predicate` LIKE '" . PROPERTY_USER_LOGIN . "') OR ( `subject` = '" . $uri . "' AND `predicate` LIKE '" . PROPERTY_USER_PASSWORD . "' );" ;
-        	
-        	$result = $this->db->execSql($sql);
-        	$returnValue = !$result->EOF ? $result->fields[0] == 2 : false;
-        	if ($returnValue) {
-        		Session::setAttribute(self::AUTH_TOKEN_KEY,$uri);
-        	}
-        	else {
-        		return false;
-        	}
-        }
-        if(isset($_SESSION["generis_session"])){
-        	core_kernel_classes_Session::reset($_SESSION["generis_session"]);
-			core_kernel_impl_ApiModelOO::singleton()->session = $_SESSION["generis_session"];
-			core_kernel_classes_DbWrapper::singleton($_SESSION["generis_module"]);
+        	core_kernel_classes_Session::reset(Session::getAttribute('generis_session'));
+			core_kernel_classes_DbWrapper::singleton(Session::getAttribute('generis_module'));
 			$returnValue = true ;
         }
-        else{
         
-			$this->userResource = new core_kernel_classes_Resource($uri);
-	        if($this->userResource != null){
-	        	$login = $this->userResource->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_LOGIN));
+    	//check if the URI of the user exists
+        if(!$this->isASessionOpened()) { 
+        	$uriParam = $this->db->dbConnector->escape($uri);
+        	$sql = "SELECT count(subject) FROM `statements` 
+        			WHERE 	(`subject` = '{$uriParam}' AND `predicate` LIKE '" . PROPERTY_USER_LOGIN . "') 
+        			OR 		( `subject` = '{$uriParam}' AND `predicate` LIKE '" . PROPERTY_USER_PASSWORD . "' );" ;
+        	$result = $this->db->execSql($sql);
+        	$returnValue = !$result->EOF ? $result->fields[0] == 2 : false;
+        	if (!$returnValue) {	
+        		return false;
+        	}
+        	try{
+        		
+	        	Session::setAttribute(self::AUTH_TOKEN_KEY,	$uri);
+			       		
+	       		//Initialize the generis session 
+		        $session = core_kernel_classes_Session::singleton($uri,$this->module);
+		       	
+		       
+		        //save the current generis session
+				Session::setAttribute('generis_session', 	$session);
+				Session::setAttribute('generis_module',  	$this->module);
 	        	
-		        /**
-		         * simulate the legacy api connection
-		         * @see core_control_FrontController::connect
-		         * @todo to be refactored
-		         */ 
-		       	if(!isset($_SESSION["generis_session"])){
-			        $session = core_kernel_classes_Session::singleton($uri,$this->module);
-			        $session->setUser($login->literal);
-			        
-					$_SESSION["generis_session"] 	= $session;
-					$_SESSION["generis_module"] 	= $this->module;
-		       	}
-	       	
-	        	$returnValue = true ;
-	        }
-	        else{
-	        	Session::removeAttribute(self::AUTH_TOKEN_KEY);
-	        }
+				//get the login of the user
+				$this->userResource = new core_kernel_classes_Resource($uri);
+        		$login = $this->userResource->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_LOGIN));
+        		
+        		$session->setUser($login->literal);
+        	}
+        	catch(common_Exception $ce){
+        		//the login must be unique
+        		print $ce;
+        		exit;
+        		Session::removeAttribute(self::AUTH_TOKEN_KEY);
+        		Session::removeAttribute('generis_session');
+        		Session::removeAttribute('generis_module');
+        		return false;	
+        	}
+        	$returnValue = true ;
         }
+        
     	 
         // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E9B end
 
