@@ -173,14 +173,9 @@ class core_kernel_classes_Resource
         $returnValue = array();
 
         // section 127-0-1-1-62cf85dc:12bab18dc39:-8000:000000000000135F begin
-        $sqlQuery = "select object from statements where subject = '". $this->uriResource."' and predicate = '".RDF_TYPE."';";
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sqlResult = $dbWrapper->execSql($sqlQuery);
-        while (!$sqlResult-> EOF){
-            $uri = $sqlResult->fields['object'];
-            $returnValue[$uri] = new core_kernel_classes_Resource($uri);
-            $sqlResult->MoveNext();
-        }
+        
+        $returnValue = core_kernel_classes_ResourceProxy::singleton()->getType ($this);
+        
         // section 127-0-1-1-62cf85dc:12bab18dc39:-8000:000000000000135F end
 
         return (array) $returnValue;
@@ -297,37 +292,8 @@ class core_kernel_classes_Resource
 
         // section 127-0-0-1-71ce5466:11938f47d30:-8000:0000000000000A99 begin
     	
-       	$session = core_kernel_classes_Session::singleton();
-       	$modelIds	= implode(',',array_keys($session->getLoadedModels()));
-    	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $query =  "SELECT object FROM statements 
-		    		WHERE subject = ? AND predicate = ?
-		    		AND (l_language = '' OR l_language = ?)
-		    		AND modelID IN ({$modelIds})";
-    	
-        $result	= $dbWrapper->execSql($query, array(
-        	$this->uriResource,
-        	$property->uriResource,
-        	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
-        ));
-        while ($row = $result->FetchRow()) {
-        	$returnValue[] = $row['object'];
-        }
-		
-        if(defined('ENABLE_SUBSCRIPTION') 	&& ENABLE_SUBSCRIPTION
-        && $this->uriResource != CLASS_SUBCRIPTION 	&& $this->uriResource != CLASS_MASK
-        && $property->uriResource != PROPERTY_SUBCRIPTION_MASK && $property->uriResource != PROPERTY_SUBCRIPTION_URL
-        && $property->uriResource != PROPERTY_MASK_SUBJECT && $property->uriResource != PROPERTY_MASK_PREDICATE
-        && $property->uriResource != PROPERTY_MASK_OBJECT
-        ){
-            $subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions($this,$property,null);
-            foreach ($subcriptions as $sub){
-                $subcriptionResource = new core_kernel_classes_Resource($sub);
-                $subcriptionsInstances = core_kernel_subscriptions_Service::singleton()->getPropertyValuesFromSubscription($subcriptionResource,$this,$property);
-                $returnValue = array_merge($returnValue,$subcriptionsInstances);
-            }
-
-        }
+       	
+        $returnValue = core_kernel_classes_ResourceProxy::singleton()->getPropertyValues ($this, $property);
 
         // section 127-0-0-1-71ce5466:11938f47d30:-8000:0000000000000A99 end
 
@@ -347,60 +313,8 @@ class core_kernel_classes_Resource
         $returnValue = null;
 
         // section 10-13-1--99--32cd3c54:11be55033bf:-8000:0000000000000D79 begin
-
-    	if(DEBUG_MODE){
-        	$returnValue->debug = __METHOD__;
-        }
-        $returnValue = new core_kernel_classes_ContainerCollection($this);
-        
-    	$session = core_kernel_classes_Session::singleton();
-    	$modelIds	= implode(',',array_keys($session->getLoadedModels()));
-    	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $query =  "SELECT object FROM statements 
-		    		WHERE subject = ? AND predicate = ?
-		    		AND (l_language = '' OR l_language = ?)
-		    		AND modelID IN ({$modelIds})";
-        $result	= $dbWrapper->execSql($query, array(
-        	$this->uriResource,
-        	$property->uriResource,
-        	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
-        ));
-      	
-        $propertiesValues = array();
-        while ($row = $result->FetchRow()) {
-        	$propertiesValues[] = $row['object'];
-        }
-
-        if(defined('ENABLE_SUBSCRIPTION') 	&& ENABLE_SUBSCRIPTION
-        && $this->uriResource != CLASS_SUBCRIPTION 	&& $this->uriResource != CLASS_MASK
-        && $property->uriResource != PROPERTY_SUBCRIPTION_MASK && $property->uriResource != PROPERTY_SUBCRIPTION_URL
-        && $property->uriResource != PROPERTY_MASK_SUBJECT && $property->uriResource != PROPERTY_MASK_PREDICATE
-        && $property->uriResource != PROPERTY_MASK_OBJECT
-        ){
-
-            $subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions($this,$property,null);
-
-            foreach ($subcriptions as $sub){
-                $subcriptionResource = new core_kernel_classes_Resource($sub);
-                $subcriptionsInstances = core_kernel_subscriptions_Service::singleton()->getPropertyValuesFromSubscription($subcriptionResource,$this,$property);
-                $propertiesValues = array_merge($propertiesValues,$subcriptionsInstances);
-            }
-
-        }
-        
-        foreach ($propertiesValues as $value){
-            if(!common_Utils::isUri($value)) {
-                $container = new core_kernel_classes_Literal($value);
-            }
-            else {
-                $container = new core_kernel_classes_Resource($value);
-            }
-
-            if(DEBUG_MODE){
-            	$container->debug = __METHOD__ .'|' . $property->debug;
-            }
-            $returnValue->add($container);
-        }
+    	
+        $returnValue = core_kernel_classes_ResourceProxy::singleton()->getPropertyValuesCollection ($this, $property);
         
         // section 10-13-1--99--32cd3c54:11be55033bf:-8000:0000000000000D79 end
 
@@ -462,42 +376,7 @@ class core_kernel_classes_Resource
 
         // section -87--2--3--76-51a982f1:1278aabc987:-8000:0000000000008925 begin
         
-    	$session 	= core_kernel_classes_Session::singleton();
-    	$modelIds	= implode(',',array_keys($session->getLoadedModels()));
-    	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-        $query =  "SELECT object FROM statements 
-        			WHERE subject = ? AND predicate = ?
-		    		AND (l_language = '' OR l_language = ?) 
-		    		AND modelID IN ({$modelIds})";
-        $params = array(
-        	$this->uriResource,
-        	$property->uriResource,
-        	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
-        );
-        
-    	if($last){
-    		$result	= $dbWrapper->execSql($query, $params);
-    		if(!$result->EOF){
-    			$result->moveLast();
-    		}
-    	}
-    	else{
-	        $result	= $dbWrapper->dbConnector->selectLimit($query, 1, -1, $params);
-    	}
-    	
-    	while(!$result->EOF){
-    		
-        	$value = $result->fields['object'];
-        	if(!common_Utils::isUri($value)) {
-        		  
-                $returnValue = new core_kernel_classes_Literal($value);
-	         }
-	         else {
-                $returnValue = new core_kernel_classes_Resource($value);
-            }
-            $result->moveNext();
-          
-    	}
+        $returnValue = core_kernel_classes_ResourceProxy::singleton()->getOnePropertyValue ($this, $property, $last);
       
         // section -87--2--3--76-51a982f1:1278aabc987:-8000:0000000000008925 end
 
@@ -518,21 +397,9 @@ class core_kernel_classes_Resource
         $returnValue = null;
 
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A4 begin
-        $returnValue = new core_kernel_classes_ContainerCollection($this);
-        $sqlQuery = "select object from statements where subject = '". $this->uriResource."' and predicate = '".$property->uriResource."' and l_language = '".$lg."';";
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sqlResult = $dbWrapper->execSql($sqlQuery);
-        while (!$sqlResult-> EOF){
-            if(!common_Utils::isUri($sqlResult->fields['object'])) {
-                $container = new core_kernel_classes_Literal($sqlResult->fields['object']);
-            }
-            else {
-                $container = new core_kernel_classes_Resource($sqlResult->fields['object']);
-            }
-
-            $returnValue->add($container);
-            $sqlResult->MoveNext();
-        }
+        
+        $returnValue = core_kernel_classes_ResourceProxy::singleton()->getPropertyValuesByLg ($this, $property, $lg);
+        
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A4 end
 
         return $returnValue;
@@ -555,24 +422,7 @@ class core_kernel_classes_Resource
 
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:00000000000007AC begin
         
-        $dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-        $session 	= core_kernel_classes_Session::singleton();
-        $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
-        $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
-        $lang 		= ($property->isLgDependent() ? ( $session->getLg() != '' ? $session->getLg() : $session->defaultLg) : '');
-        
-        
-        $query = "INSERT into statements (modelID,subject,predicate,object,l_language,author,stread,stedit,stdelete,epoch)
-        			VALUES  (?, ?, ?, ?, ?, ?, '{$mask}','{$mask}','{$mask}', CURRENT_TIMESTAMP);";
-
-        $returnValue = $dbWrapper->execSql($query, array(
-       		$localNs->getModelId(),
-       		$this->uriResource,
-       		$property->uriResource,
-       		$object,
-       		$lang,
-       		$session->getUser()
-        ));
+        $returnValue = core_kernel_classes_ResourceProxy::singleton()->setPropertyValue ($this, $property, $object);
         
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:00000000000007AC end
 
@@ -594,37 +444,7 @@ class core_kernel_classes_Resource
 
         // section 127-0-1-1-44e4845c:12f4ef0414d:-8000:0000000000001437 begin
         
-        if(is_array($propertiesValues)){
-        	if(count($propertiesValues) > 0){
-        		
-	        	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-	        	$session 	= core_kernel_classes_Session::singleton();
-	        	
-	        	$localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
-	       		$modelId	= $localNs->getModelId();
-	        	$mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
-	        	$user		= $session->getUser();
-	       		
-	       		$query = "INSERT into statements (modelID,subject,predicate,object,l_language,author,stread,stedit,stdelete,epoch) VALUES ";
-	       		
-	       		foreach($propertiesValues as $propertyUri => $value){
-	       			
-	       			if(!common_Utils::isUri($propertyUri)){
-	       				$label = $this->getLabel();
-	       				throw new common_Exception("setPropertiesValues' argument must contains property uris as keys, 
-	       												in {$label} ({$this->uriResource})");
-	       			}
-	       			$property = new core_kernel_classes_Property($propertyUri);
-	       			$object = $dbWrapper->dbConnector->escape($value);
-	       			$lang 	= ($property->isLgDependent() ? ( $session->getLg() != '' ? $session->getLg() : $session->defaultLg) : '');
-	       			
-	       			$query .= " ($modelId, '{$this->uriResource}', '{$property->uriResource}', '{$object}', '{$lang}', '{$user}', '{$mask}','{$mask}','{$mask}', CURRENT_TIMESTAMP),";
-	       		}
-	       		
-	       		$query = substr($query, 0, strlen($query) -1);
-	       		$returnValue = $dbWrapper->execSql($query);
-        	}
-        }
+        $returnValue = core_kernel_classes_ResourceProxy::singleton()->setPropertiesValues ($this, $propertiesValues);
         
         // section 127-0-1-1-44e4845c:12f4ef0414d:-8000:0000000000001437 end
 
@@ -647,22 +467,7 @@ class core_kernel_classes_Resource
 
         // section -87--2--3--76-2d6cca2d:12579c74420:-8000:0000000000001831 begin
         
-        $dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-        $session 	= core_kernel_classes_Session::singleton();
-        $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
-        $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
-        
-        $query = "INSERT into statements (modelID,subject,predicate,object,l_language,author,stread,stedit,stdelete,epoch)
-        			VALUES  (?, ?, ?, ?, ?, ?, '{$mask}','{$mask}','{$mask}', CURRENT_TIMESTAMP);";
-
-        $returnValue = $dbWrapper->execSql($query, array(
-       		$localNs->getModelId(),
-       		$this->uriResource,
-       		$property->uriResource,
-       		$value,
-       		($property->isLgDependent() ? $lg : ''),
-       		$session->getUser()
-        ));
+        $returnValue = core_kernel_classes_ResourceProxy::singleton()->setPropertyValueByLg ($this, $property, $value, $lg);
         
         // section -87--2--3--76-2d6cca2d:12579c74420:-8000:0000000000001831 end
 
@@ -735,32 +540,7 @@ class core_kernel_classes_Resource
 
         // section 10-13-1--31--64270bf:11918ad765e:-8000:000000000000097C begin
 
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $session = core_kernel_classes_Session::singleton();
-        $modelIds	= implode(',',array_keys($session->getLoadedModels()));
-        
-        $query =  "DELETE FROM statements 
-		    		WHERE subject = ? AND predicate = ?
-		    		AND modelID IN ({$modelIds}) ";
-        
-        if($property->isLgDependent()){
-        	
-        	$query .=  " AND (l_language = '' OR l_language = ?) ";
-        	$returnValue	= $dbWrapper->execSql($query,array(
-	        		$this->uriResource,
-	        		$property->uriResource,
-	        		($session->getLg() != '') ? $session->getLg() : $session->defaultLg
-	        ));
-	        
-        }
-        else{
-        	
-        	$returnValue	= $dbWrapper->execSql($query,array(
-	        		$this->uriResource,
-	        		$property->uriResource
-	        ));
-	        
-        }
+        $returnValue = core_kernel_classes_ResourceProxy::singleton()->removePropertyValues ($this, $property);
         
         // section 10-13-1--31--64270bf:11918ad765e:-8000:000000000000097C end
 
@@ -781,10 +561,9 @@ class core_kernel_classes_Resource
         $returnValue = (bool) false;
 
         // section -87--2--3--76-18452630:1270a514a71:-8000:00000000000023EC begin
-       	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sqlQuery = "delete from statements where subject = '". $this->uriResource."' and predicate = '".$prop->uriResource."' and l_language = '".$lg."';";
-        $sqlResult = $dbWrapper->execSql($sqlQuery);
-        $returnValue = $sqlResult->EOF;
+       
+        $returnValue = core_kernel_classes_ResourceProxy::singleton()->removePropertyValueByLg ($this, $prop, $lg);
+        
         // section -87--2--3--76-18452630:1270a514a71:-8000:00000000000023EC end
 
         return (bool) $returnValue;
@@ -804,30 +583,8 @@ class core_kernel_classes_Resource
         $returnValue = null;
 
         // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B29 begin
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
-        $namespaces = common_ext_NamespaceManager::singleton()->getAllNamespaces();
-        $namespace = $namespaces[substr($this->uriResource, 0, strpos($this->uriResource, '#') + 1)];
-        
-        $query = "SELECT * FROM statements WHERE subject = ? AND modelID = ?";
-        $result	= $dbWrapper->execSql($query, array(
-        	$this->uriResource,
-        	$namespace->getModelId()
-        ));
-        
-        $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
-        while($statement = $result->fetchRow()){
-            $triple = new core_kernel_classes_Triple();
-            $triple->subject = $statement["subject"];
-            $triple->predicate = $statement["predicate"];
-            $triple->object = $statement["object"];
-            $triple->id = $statement["id"];
-            $triple->lg = $statement["l_language"];
-            $triple->readPrivileges = $statement["stread"];
-            $triple->editPrivileges = $statement["stedit"];
-            $triple->deletePrivileges = $statement["stdelete"];
-            $returnValue->add($triple);
-        }
+        $returnValue = core_kernel_classes_ResourceProxy::singleton()->getRdfTriples ($this);
         
         // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B29 end
 
@@ -876,27 +633,7 @@ class core_kernel_classes_Resource
 
         // section 127-0-1-1-440a1f14:12e71f49661:-8000:000000000000141E begin
         
-    	$newUri = common_Utils::getNewUri();
-    	
-    	$collection = $this->getRdfTriples();
-    	if($collection->count() > 0){
-    		
-    		$session = core_kernel_classes_Session::singleton();
-    		$user = $session->getUser();
-    		
-	    	$insert = "INSERT INTO `statements` (`modelID`, `subject`, `predicate`, `object`, `l_language`, `author`, `stread`, `stedit`, `stdelete`) VALUES ";
-    		foreach($collection->getIterator() as $triple){
-    			if(!in_array($triple->predicate, $excludedProperties)){
-	    			$insert .= "(8, '$newUri', '{$triple->predicate}', '{$triple->object}',  '{$triple->lg}', '{$user}', '{$triple->readPrivileges}', '{$triple->editPrivileges}', '{$triple->deletePrivileges}'),"; 
-	    		}
-	    	}
-	    	$insert = substr($insert, 0, strlen($insert) -1);
-	    	
-	    	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        	if($dbWrapper->execSql($insert)){
-        		$returnValue = new core_kernel_classes_Resource($newUri);
-        	}
-    	}
+        $returnValue = core_kernel_classes_ResourceProxy::singleton()->duplicate ($this, $excludedProperties);
         
         // section 127-0-1-1-440a1f14:12e71f49661:-8000:000000000000141E end
 
@@ -917,16 +654,8 @@ class core_kernel_classes_Resource
 
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000976 begin
         
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $returnValue = core_kernel_classes_ResourceProxy::singleton()->delete ($this, $deleteReference);
         
-		$query = "DELETE FROM statements WHERE subject = ?";
-        $returnValue = $dbWrapper->execSql($query, array($this->uriResource));
-        
-    	if($deleteReference){
-        	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        	$sqlQuery = "DELETE FROM statements WHERE object = '".$this->uriResource."'";
-        	$returnValue = $dbWrapper->execSql($sqlQuery) && $returnValue;
-        }
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000976 end
 
         return (bool) $returnValue;
@@ -967,34 +696,9 @@ class core_kernel_classes_Resource
         $returnValue = null;
 
         // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000235D begin
-        $sqlQuery = "select epoch from statements where subject = '". $this->uriResource."' ";
-
-        if(!is_null($property) && $property instanceof core_kernel_classes_Property){
-            $sqlQuery = "$sqlQuery and predicate = '". $property->uriResource."' ";
-        }
-
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sqlResult = $dbWrapper->execSql($sqlQuery);
-
-        if(!is_null($property) && $sqlResult-> EOF){
-            throw new common_Exception("The resource does not have the specified property.");
-        }
-
-        while (!$sqlResult-> EOF){
-            $last = $sqlResult->fields['epoch'];
-            $lastDate = date_create($last);
-            if($returnValue == null ) {
-                $returnValue = $lastDate;
-            }
-            else {
-                if($returnValue < $lastDate) {
-                    $returnValue = $lastDate;
-                }
-            }
-
-            $sqlResult->MoveNext();
-        }
-
+        
+        $returnValue = core_kernel_classes_ResourceProxy::singleton()->getLastModificationDate ($this, $property);
+        
         // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000235D end
 
         return $returnValue;
@@ -1012,11 +716,9 @@ class core_kernel_classes_Resource
         $returnValue = (string) '';
 
         // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002361 begin
-        $sqlQuery = "select author from statements where subject = '". $this->uriResource."' and predicate = '".RDF_TYPE."'";
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sqlResult = $dbWrapper->execSql($sqlQuery);
-        $returnValue =  $sqlResult->fields['author'];
-
+        
+        $returnValue = core_kernel_classes_ResourceProxy::singleton()->getLastModificationUser ($this);
+        
         // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002361 end
 
         return (string) $returnValue;
