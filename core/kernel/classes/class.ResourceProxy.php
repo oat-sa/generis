@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of TAO.
  *
- * Automatically generated on 18.04.2011, 22:47:33 with ArgoUML PHP module 
+ * Automatically generated on 19.04.2011, 13:55:12 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -198,16 +198,21 @@ class core_kernel_classes_ResourceProxy
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
-     * @return mixed
+     * @param  string object
+     * @return boolean
      */
-    public function setPropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
+    public function setPropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $object)
     {
+        $returnValue = (bool) false;
+
         // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002DA0 begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
-        $returnValue = $delegate->setPropertyValue ($resource, $property);
+        $returnValue = $delegate->setPropertyValue ($resource, $property, $object);
         
         // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002DA0 end
+
+        return (bool) $returnValue;
     }
 
     /**
@@ -240,17 +245,18 @@ class core_kernel_classes_ResourceProxy
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
+     * @param  string value
      * @param  string lg
      * @return boolean
      */
-    public function setPropertyValueByLg( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $lg)
+    public function setPropertyValueByLg( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $value, $lg)
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DA3 begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
-        $returnValue = $delegate->setPropertyValueByLg ($resource, $property, $lg);
+        $returnValue = $delegate->setPropertyValueByLg ($resource, $property, $value, $lg);
         
         // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DA3 end
 
@@ -288,16 +294,20 @@ class core_kernel_classes_ResourceProxy
      * @param  Resource resource
      * @param  Property property
      * @param  string lg
-     * @return mixed
+     * @return boolean
      */
     public function removePropertyValueByLg( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $lg)
     {
+        $returnValue = (bool) false;
+
         // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DAA begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->removePropertyValueByLg ($resource, $property, $lg);
         
         // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DAA end
+
+        return (bool) $returnValue;
     }
 
     /**
@@ -456,6 +466,86 @@ class core_kernel_classes_ResourceProxy
         // section 127-0-1-1--9398bc2:12f6a3d8694:-8000:0000000000002E5F end
 
         return $returnValue;
+    }
+
+    /**
+     * Short description of method isHardSql
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @return boolean
+     */
+    public function isHardSql( core_kernel_classes_Resource $resource)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1-a9158b5:12f6c77139f:-8000:0000000000002E2F begin
+
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
+        $hardSqlTable = null;
+		
+        // Check if the hard sql tables exist
+		$hardSqlTablesExistSql = "SELECT count(*) FROM information_schema.TABLES WHERE Table_Name='resource_to_table' and TABLE_SCHEMA='mytao'";
+		$resulthardSqlTablesExist = $dbWrapper->execSql($hardSqlTablesExistSql);
+		
+		if ($resulthardSqlTablesExist && $resulthardSqlTablesExist->fields[0]){
+
+			// Check if the resource has been hard sqled
+			$isHardSqlResourceSql = "SELECT `table` FROM `resource_to_table` WHERE `uri`='{$resource->uriResource}'";
+			$isHardSqlResourceResult = $dbWrapper->execSql($isHardSqlResourceSql);
+			if ($isHardSqlResourceResult && !$isHardSqlResourceResult->EOF){
+				$hardSqlTable = $isHardSqlResourceResult->fields['table'];
+			}
+			
+		}
+		
+		if ($hardSqlTable){
+			$returnValue = true;
+		}
+        
+        // section 127-0-1-1-a9158b5:12f6c77139f:-8000:0000000000002E2F end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method isSmoothSql
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @return boolean
+     */
+    public function isSmoothSql( core_kernel_classes_Resource $resource)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1-a9158b5:12f6c77139f:-8000:0000000000002E32 begin
+        
+        $returnValue = true;
+        
+        // section 127-0-1-1-a9158b5:12f6c77139f:-8000:0000000000002E32 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method isVirtuozo
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @return boolean
+     */
+    public function isVirtuozo( core_kernel_classes_Resource $resource)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1-a9158b5:12f6c77139f:-8000:0000000000002E35 begin
+        // section 127-0-1-1-a9158b5:12f6c77139f:-8000:0000000000002E35 end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class core_kernel_classes_ResourceProxy */

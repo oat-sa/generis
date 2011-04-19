@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of TAO.
  *
- * Automatically generated on 18.04.2011, 22:47:33 with ArgoUML PHP module 
+ * Automatically generated on 19.04.2011, 09:00:50 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -77,13 +77,22 @@ abstract class core_kernel_classes_PersistanceProxy
 
         // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002E7F begin
         
-//        if (isset($this->ressourcesDelegatedTo[$resource->uriResource])){
-//        	$returnValue = $this->ressourcesDelegatedTo[$resource->uriResource];
-//        } else {
-//        	
-//        }
+        // If it is the first access to the resource
+        if (!isset(core_kernel_classes_PersistanceProxy::$ressourcesDelegatedTo[$resource->uriResource])) {
+        	$delegate = null;
+        	if ($this->isHardSql($resource)){
+	        	$delegate = core_kernel_classes_ResourceHardSql::singleton();
+	        } 
+	        else if ($this->isVirtuozo($resource)){
+	        	$delegate = core_kernel_classes_ResourceVirtuozo::singleton();
+	        }
+	        else if ($this->isSmoothSql($resource)){
+	        	$delegate = core_kernel_classes_ResourceSmoothSql::singleton();
+	        }
+	        core_kernel_classes_PersistanceProxy::$ressourcesDelegatedTo[$resource->uriResource] = $delegate;
+        }
         
-        $returnValue = core_kernel_classes_ResourceHardSql::singleton();
+        $returnValue = core_kernel_classes_PersistanceProxy::$ressourcesDelegatedTo[$resource->uriResource];
         
         // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002E7F end
 
@@ -114,6 +123,39 @@ abstract class core_kernel_classes_PersistanceProxy
      * @return core_kernel_classes_PersistanceProxy
      */
     public static abstract function singleton();
+
+    /**
+     * Short description of method isHardSql
+     *
+     * @abstract
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @return boolean
+     */
+    public abstract function isHardSql( core_kernel_classes_Resource $resource);
+
+    /**
+     * Short description of method isSmoothSql
+     *
+     * @abstract
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @return boolean
+     */
+    public abstract function isSmoothSql( core_kernel_classes_Resource $resource);
+
+    /**
+     * Short description of method isVirtuozo
+     *
+     * @abstract
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @return boolean
+     */
+    public abstract function isVirtuozo( core_kernel_classes_Resource $resource);
 
 } /* end of abstract class core_kernel_classes_PersistanceProxy */
 

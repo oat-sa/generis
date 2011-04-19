@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of TAO.
  *
- * Automatically generated on 18.04.2011, 22:47:33 with ArgoUML PHP module 
+ * Automatically generated on 19.04.2011, 13:55:12 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -106,9 +106,10 @@ interface core_kernel_classes_ResourceInterface
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
-     * @return mixed
+     * @param  string object
+     * @return boolean
      */
-    public function setPropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property);
+    public function setPropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $object);
 
     /**
      * Short description of method setPropertiesValues
@@ -128,10 +129,11 @@ interface core_kernel_classes_ResourceInterface
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
+     * @param  string value
      * @param  string lg
      * @return boolean
      */
-    public function setPropertyValueByLg( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $lg);
+    public function setPropertyValueByLg( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $value, $lg);
 
     /**
      * Short description of method removePropertyValues
@@ -152,7 +154,7 @@ interface core_kernel_classes_ResourceInterface
      * @param  Resource resource
      * @param  Property property
      * @param  string lg
-     * @return mixed
+     * @return boolean
      */
     public function removePropertyValueByLg( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $lg);
 
