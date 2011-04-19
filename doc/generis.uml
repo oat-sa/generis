@@ -4,7 +4,7 @@
     <documentation>
       <authorname>Patrick Plichart</authorname>
       <authoremail>patrick.plichart@tudor.lu</authoremail>
-      <version>0.32.2</version>
+      <version>0.30.2</version>
       <description>
         Generis
       </description>
@@ -25,8 +25,8 @@
       <hidebidirectionalarrows>true</hidebidirectionalarrows>    
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
-      <defaultstereotypeview>2</defaultstereotypeview>
-      <activediagram>Design generis API oo</activediagram>
+      <defaultstereotypeview>0</defaultstereotypeview>
+      <activediagram>Persistence</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -70,6 +70,10 @@
               name="generis_Subscriptions.pgml"
               diagramclass="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram"
               diagramname="Subscriptions" />
+      <member type="pgml"
+              name="generis_ClassDiagram.pgml"
+              diagramclass="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram"
+              diagramname="Persistence" />
       <member type="todo"
               name="generis.todo" />
     </members>
@@ -80,10 +84,10 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Apr 15 17:22:28 CEST 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Apr 19 14:42:18 CEST 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
-      <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
+      <XMI.exporterVersion>0.30.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
     </XMI.documentation>
     <XMI.metamodel xmi.name="UML" xmi.version="1.4"/></XMI.header>
   <XMI.content>
@@ -7470,6 +7474,824 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                     </UML:Class>
                   </UML:Namespace.ownedElement>
                 </UML:Package>
+                <UML:Package xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001296'
+                  name = 'persistence' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
+                  isAbstract = 'false'>
+                  <UML:Namespace.ownedElement>
+                    <UML:Interface xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297'
+                      name = 'ResourceInterface' visibility = 'public' isSpecification = 'false'
+                      isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
+                      <UML:Classifier.feature>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298'
+                          name = 'getType' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001299'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129A'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B'
+                          name = 'getPropertyValues' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129C'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129D'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129E'
+                              name = 'property' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F'
+                          name = 'getPropertyValuesCollection' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A0'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000078B'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A1'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A2'
+                              name = 'property' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3'
+                          name = 'getOnePropertyValue' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A4'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000761'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A5'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A6'
+                              name = 'property' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A7'
+                              name = 'last' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A8'
+                                  language = 'UML 1.4' body = 'false'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9'
+                          name = 'getPropertyValuesByLg' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AA'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000078B'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AB'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AC'
+                              name = 'property' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AD'
+                              name = 'lg' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE'
+                          name = 'setPropertyValue' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AF'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B0'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B1'
+                              name = 'property' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B2'
+                              name = 'object' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3'
+                          name = 'setPropertiesValues' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B4'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B5'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B6'
+                              name = 'properties' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7'
+                          name = 'setPropertyValueByLg' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B8'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B9'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BA'
+                              name = 'property' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BB'
+                              name = 'value' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BC'
+                              name = 'lg' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD'
+                          name = 'removePropertyValues' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BE'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BF'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C0'
+                              name = 'property' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1'
+                          name = 'removePropertyValueByLg' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C2'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C3'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C4'
+                              name = 'property' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C5'
+                              name = 'lg' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6'
+                          name = 'getRdfTriples' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C7'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000078B'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C8'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C9'
+                          name = 'getUsedLanguages' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CA'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CB'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CC'
+                              name = 'property' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD'
+                          name = 'duplicate' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CE'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CF'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D0'
+                              name = 'excludedProperties' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D1'
+                                  language = 'UML 1.4' body = 'array()'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2'
+                          name = 'delete' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D3'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D4'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D5'
+                              name = 'deleteReference' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D6'
+                                  language = 'UML 1.4' body = 'false'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7'
+                          name = 'getLastModificationDate' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D8'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DB'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D9'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DA'
+                              name = 'property' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC'
+                          name = 'getLastModificationUser' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DD'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DE'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                      </UML:Classifier.feature>
+                    </UML:Interface>
+                    <UML:Class xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DB'
+                      name = 'doc_date' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false' isActive = 'false'/>
+                    <UML:Package xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DF'
+                      name = 'hard_sql' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:Namespace.ownedElement>
+                        <UML:Class xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000135E'
+                          name = 'Resource' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                          <UML:ModelElement.clientDependency>
+                            <UML:Abstraction xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000138A'/>
+                          </UML:ModelElement.clientDependency>
+                          <UML:Classifier.feature>
+                            <UML:Attribute xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001373'
+                              name = 'instance' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                              changeability = 'changeable' targetScope = 'instance'>
+                              <UML:StructuralFeature.multiplicity>
+                                <UML:Multiplicity xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001383'>
+                                  <UML:Multiplicity.range>
+                                    <UML:MultiplicityRange xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001382'
+                                      lower = '1' upper = '1'/>
+                                  </UML:Multiplicity.range>
+                                </UML:Multiplicity>
+                              </UML:StructuralFeature.multiplicity>
+                              <UML:StructuralFeature.type>
+                                <UML:Class xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000135E'/>
+                              </UML:StructuralFeature.type>
+                            </UML:Attribute>
+                            <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000137E'
+                              name = 'singleton' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                              isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                              isAbstract = 'false'>
+                              <UML:BehavioralFeature.parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000137F'
+                                  name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                              </UML:BehavioralFeature.parameter>
+                            </UML:Operation>
+                          </UML:Classifier.feature>
+                        </UML:Class>
+                        <UML:Abstraction xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000138A'
+                          isSpecification = 'false'>
+                          <UML:ModelElement.stereotype>
+                            <UML:Stereotype xmi.idref = '10-13-1--31-5c77d5ee:119187ec9d2:-8000:000000000000096A'/>
+                          </UML:ModelElement.stereotype>
+                          <UML:Dependency.client>
+                            <UML:Class xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000135E'/>
+                          </UML:Dependency.client>
+                          <UML:Dependency.supplier>
+                            <UML:Interface xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297'/>
+                          </UML:Dependency.supplier>
+                        </UML:Abstraction>
+                      </UML:Namespace.ownedElement>
+                    </UML:Package>
+                    <UML:Package xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E0'
+                      name = 'smooth_sql' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:Namespace.ownedElement>
+                        <UML:Class xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001347'
+                          name = 'Resource' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                          <UML:ModelElement.clientDependency>
+                            <UML:Abstraction xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001388'/>
+                          </UML:ModelElement.clientDependency>
+                          <UML:Classifier.feature>
+                            <UML:Attribute xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001348'
+                              name = 'instance' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                              changeability = 'changeable' targetScope = 'instance'>
+                              <UML:StructuralFeature.multiplicity>
+                                <UML:Multiplicity xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001387'>
+                                  <UML:Multiplicity.range>
+                                    <UML:MultiplicityRange xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001386'
+                                      lower = '1' upper = '1'/>
+                                  </UML:Multiplicity.range>
+                                </UML:Multiplicity>
+                              </UML:StructuralFeature.multiplicity>
+                              <UML:StructuralFeature.type>
+                                <UML:Class xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001347'/>
+                              </UML:StructuralFeature.type>
+                            </UML:Attribute>
+                            <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001354'
+                              name = 'singleton' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                              isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                              isAbstract = 'false'>
+                              <UML:BehavioralFeature.parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001355'
+                                  name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                              </UML:BehavioralFeature.parameter>
+                            </UML:Operation>
+                          </UML:Classifier.feature>
+                        </UML:Class>
+                        <UML:Abstraction xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001388'
+                          isSpecification = 'false'>
+                          <UML:ModelElement.stereotype>
+                            <UML:Stereotype xmi.idref = '10-13-1--31-5c77d5ee:119187ec9d2:-8000:000000000000096A'/>
+                          </UML:ModelElement.stereotype>
+                          <UML:Dependency.client>
+                            <UML:Class xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001347'/>
+                          </UML:Dependency.client>
+                          <UML:Dependency.supplier>
+                            <UML:Interface xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297'/>
+                          </UML:Dependency.supplier>
+                        </UML:Abstraction>
+                      </UML:Namespace.ownedElement>
+                    </UML:Package>
+                    <UML:Package xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E1'
+                      name = 'virtuozo' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'/>
+                    <UML:Package xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E2'
+                      name = 'remote' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'/>
+                    <UML:Class xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E4'
+                      name = 'PersistenceProxy' visibility = 'public' isSpecification = 'false'
+                      isRoot = 'false' isLeaf = 'false' isAbstract = 'true' isActive = 'false'>
+                      <UML:Classifier.feature>
+                        <UML:Attribute xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E5'
+                          name = 'ressourcesDelegatedTo' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'classifier' changeability = 'changeable' targetScope = 'instance'>
+                          <UML:StructuralFeature.multiplicity>
+                            <UML:Multiplicity xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012F3'>
+                              <UML:Multiplicity.range>
+                                <UML:MultiplicityRange xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012F2'
+                                  lower = '1' upper = '1'/>
+                              </UML:Multiplicity.range>
+                            </UML:Multiplicity>
+                          </UML:StructuralFeature.multiplicity>
+                          <UML:StructuralFeature.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:StructuralFeature.type>
+                        </UML:Attribute>
+                        <UML:Attribute xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012F4'
+                          name = 'instance' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                          changeability = 'changeable' targetScope = 'instance'>
+                          <UML:StructuralFeature.multiplicity>
+                            <UML:Multiplicity xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001302'>
+                              <UML:Multiplicity.range>
+                                <UML:MultiplicityRange xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001301'
+                                  lower = '1' upper = '1'/>
+                              </UML:Multiplicity.range>
+                            </UML:Multiplicity>
+                          </UML:StructuralFeature.multiplicity>
+                          <UML:StructuralFeature.type>
+                            <UML:Class xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001303'/>
+                          </UML:StructuralFeature.type>
+                        </UML:Attribute>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001304'
+                          name = 'getClassToDelegateTo' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001305'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Interface xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001306'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001307'
+                          name = 'setClassToDelegateTo' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001308'
+                              name = 'return' isSpecification = 'false' kind = 'return'/>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001309'
+                              name = 'ressource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000130A'
+                              name = 'classToDelegateTo' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Interface xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000130B'
+                          name = 'singleton' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000130C'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001303'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000130D'
+                          name = 'isHardSql' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000130E'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000130F'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001310'
+                          name = 'isSmoothSql' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001311'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001312'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001313'
+                          name = 'isVirtuozo' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001314'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001315'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                      </UML:Classifier.feature>
+                    </UML:Class>
+                    <UML:Class xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001303'
+                      name = 'PersistanceProxy' visibility = 'public' isSpecification = 'false'
+                      isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'/>
+                    <UML:Generalization xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001340'
+                      isSpecification = 'false'>
+                      <UML:Generalization.child>
+                        <UML:Class xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3'/>
+                      </UML:Generalization.child>
+                      <UML:Generalization.parent>
+                        <UML:Class xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E4'/>
+                      </UML:Generalization.parent>
+                    </UML:Generalization>
+                    <UML:Abstraction xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001341'
+                      isSpecification = 'false'>
+                      <UML:ModelElement.stereotype>
+                        <UML:Stereotype xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001342'/>
+                      </UML:ModelElement.stereotype>
+                      <UML:Dependency.client>
+                        <UML:Class xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3'/>
+                      </UML:Dependency.client>
+                      <UML:Dependency.supplier>
+                        <UML:Interface xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297'/>
+                      </UML:Dependency.supplier>
+                    </UML:Abstraction>
+                    <UML:Stereotype xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001342'
+                      name = 'realize' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:Stereotype.baseClass>Abstraction</UML:Stereotype.baseClass>
+                    </UML:Stereotype>
+                    <UML:Class xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3'
+                      name = 'ResourceProxy' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                      <UML:ModelElement.clientDependency>
+                        <UML:Abstraction xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001341'/>
+                      </UML:ModelElement.clientDependency>
+                      <UML:GeneralizableElement.generalization>
+                        <UML:Generalization xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001340'/>
+                      </UML:GeneralizableElement.generalization>
+                      <UML:Classifier.feature>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000132D'
+                          name = 'isHardSql' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000132E'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000132F'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001330'
+                          name = 'isSmoothSql' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001331'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001332'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001333'
+                          name = 'isVirtuozo' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001334'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001335'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000133E'
+                          name = 'singleton' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000133F'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                      </UML:Classifier.feature>
+                    </UML:Class>
+                  </UML:Namespace.ownedElement>
+                </UML:Package>
               </UML:Namespace.ownedElement>
             </UML:Package>
             <UML:Package xmi.id = '10-11-2-47-1b36df14:1192debf4a9:-8000:00000000000009B4'
@@ -11792,7 +12614,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       name="Design generis API oo"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1080, 16, 560, 291]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1080, 16, 560, 291]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000071F"
        fill="1"
        fillcolor="white"
@@ -11829,7 +12651,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >core::kernel::classes::Session</text>
     <group name="Fig0.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1081, 17, 562, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1081, 17, 558, 0]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000071F"
          fill="0"
          fillcolor="white"
@@ -11843,7 +12665,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig0.2.0"
         x="1081"
         y="17"
-        width="562"
+        width="558"
         height="0"
         fill="0"
         fillcolor="white"
@@ -11986,7 +12808,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="false"
@@ -12146,7 +12968,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="false"
@@ -12178,7 +13000,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="false"
@@ -12205,7 +13027,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[128, 360, 208, 39]pathVisible=true;stereotypeView=2;operationsVisible=false;attributesVisible=false;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[128, 360, 208, 39]pathVisible=true;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
        href="10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000075A"
        fill="1"
        fillcolor="200 200 255"
@@ -12282,7 +13104,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <rectangle name="Fig1.3"
       x="128"
       y="398"
-      width="135"
+      width="139"
       height="1"
       fill="1"
       fillcolor="black"
@@ -12291,7 +13113,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       visibility="0"
     />
     <group name="Fig1.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[129, 399, 133, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[129, 399, 137, 21]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000075A"
          fill="0"
          fillcolor="200 200 255"
@@ -12305,7 +13127,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig1.4.0"
         x="129"
         y="399"
-        width="133"
+        width="137"
         height="21"
         fill="0"
         fillcolor="white"
@@ -12317,7 +13139,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <rectangle name="Fig1.5"
       x="128"
       y="419"
-      width="135"
+      width="139"
       height="1"
       fill="1"
       fillcolor="black"
@@ -12326,7 +13148,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       visibility="0"
     />
     <group name="Fig1.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[129, 420, 133, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[129, 420, 137, 21]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000075A"
          fill="0"
          fillcolor="200 200 255"
@@ -12340,7 +13162,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig1.6.0"
         x="129"
         y="420"
-        width="133"
+        width="137"
         height="21"
         fill="0"
         fillcolor="white"
@@ -12351,7 +13173,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig2"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[128, 144, 208, 40]pathVisible=true;stereotypeView=2;operationsVisible=false;attributesVisible=false;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[128, 144, 208, 40]pathVisible=true;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
        href="10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000075C"
        fill="1"
        fillcolor="204 204 255"
@@ -12428,7 +13250,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <rectangle name="Fig2.3"
       x="128"
       y="182"
-      width="171"
+      width="175"
       height="1"
       fill="1"
       fillcolor="black"
@@ -12437,7 +13259,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       visibility="0"
     />
     <group name="Fig2.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[129, 183, 169, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[129, 183, 173, 21]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000075C"
          fill="0"
          fillcolor="204 204 255"
@@ -12451,7 +13273,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig2.4.0"
         x="129"
         y="183"
-        width="169"
+        width="173"
         height="21"
         fill="0"
         fillcolor="white"
@@ -12463,7 +13285,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <rectangle name="Fig2.5"
       x="128"
       y="203"
-      width="171"
+      width="175"
       height="1"
       fill="1"
       fillcolor="black"
@@ -12472,7 +13294,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       visibility="0"
     />
     <group name="Fig2.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[129, 204, 169, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[129, 204, 173, 21]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000075C"
          fill="0"
          fillcolor="204 204 255"
@@ -12486,7 +13308,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig2.6.0"
         x="129"
         y="204"
-        width="169"
+        width="173"
         height="21"
         fill="0"
         fillcolor="white"
@@ -12497,7 +13319,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig3"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1160, 952, 262, 97]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1160, 952, 262, 97]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000761"
        fill="1"
        fillcolor="192 192 192"
@@ -12654,7 +13476,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig4"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[752, 1288, 519, 524]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[752, 1288, 519, 524]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765"
        fill="1"
        fillcolor="200 200 255"
@@ -13307,7 +14129,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig5"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[976, 1840, 533, 357]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[976, 1840, 533, 357]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767"
        fill="1"
        fillcolor="200 200 255"
@@ -13656,7 +14478,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig6"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[640, 1880, 305, 277]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[640, 1880, 305, 277]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769"
        fill="1"
        fillcolor="200 200 255"
@@ -14021,7 +14843,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig7"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[352, 936, 350, 145]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[352, 936, 350, 145]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000078B"
        fill="1"
        fillcolor="192 192 192"
@@ -14242,7 +15064,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig8"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1160, 1080, 256, 152]pathVisible=false;stereotypeView=2;operationsVisible=false;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1160, 1080, 256, 152]pathVisible=false;stereotypeView=0;operationsVisible=false;attributesVisible=true;"
        href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000812"
        fill="1"
        fillcolor="200 200 255"
@@ -14279,7 +15101,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >Triple</text>
     <group name="Fig8.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1161, 1081, 131, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1161, 1081, 135, 0]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000812"
          fill="0"
          fillcolor="200 200 255"
@@ -14293,7 +15115,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig8.2.0"
         x="1161"
         y="1081"
-        width="131"
+        width="135"
         height="0"
         fill="0"
         fillcolor="200 200 255"
@@ -14464,7 +15286,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <rectangle name="Fig8.5"
       x="1160"
       y="1222"
-      width="133"
+      width="137"
       height="1"
       fill="1"
       fillcolor="black"
@@ -14473,7 +15295,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       visibility="0"
     />
     <group name="Fig8.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1161, 1223, 131, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1161, 1223, 135, 21]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000812"
          fill="0"
          fillcolor="200 200 255"
@@ -14487,7 +15309,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig8.6.0"
         x="1161"
         y="1223"
-        width="131"
+        width="135"
         height="21"
         fill="0"
         fillcolor="white"
@@ -14498,7 +15320,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig9"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1072, 336, 325, 151]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1072, 336, 325, 151]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB"
        fill="1"
        fillcolor="white"
@@ -14751,7 +15573,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig10"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[120, 480, 216, 104]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[120, 480, 216, 104]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000964"
        fill="1"
        fillcolor="200 200 255"
@@ -14939,7 +15761,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig11"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[48, 32, 200, 40]pathVisible=true;stereotypeView=2;operationsVisible=false;attributesVisible=false;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[48, 32, 200, 40]pathVisible=true;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
        href="10-13-1--31--64270bf:11918ad765e:-8000:000000000000098C"
        fill="1"
        fillcolor="204 204 255"
@@ -15016,7 +15838,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <rectangle name="Fig11.3"
       x="48"
       y="70"
-      width="112"
+      width="116"
       height="1"
       fill="1"
       fillcolor="black"
@@ -15025,7 +15847,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       visibility="0"
     />
     <group name="Fig11.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[49, 71, 110, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[49, 71, 114, 21]"
          href="10-13-1--31--64270bf:11918ad765e:-8000:000000000000098C"
          fill="0"
          fillcolor="204 204 255"
@@ -15039,7 +15861,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig11.4.0"
         x="49"
         y="71"
-        width="110"
+        width="114"
         height="21"
         fill="0"
         fillcolor="white"
@@ -15051,7 +15873,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <rectangle name="Fig11.5"
       x="48"
       y="91"
-      width="112"
+      width="116"
       height="1"
       fill="1"
       fillcolor="black"
@@ -15060,7 +15882,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       visibility="0"
     />
     <group name="Fig11.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[49, 92, 110, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[49, 92, 114, 21]"
          href="10-13-1--31--64270bf:11918ad765e:-8000:000000000000098C"
          fill="0"
          fillcolor="204 204 255"
@@ -15074,7 +15896,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig11.6.0"
         x="49"
         y="92"
-        width="110"
+        width="114"
         height="21"
         fill="0"
         fillcolor="white"
@@ -15085,7 +15907,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig12"
-       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[472, 24, 576, 88]pathVisible=true;stereotypeView=2;operationsVisible=true;operationsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[472, 24, 576, 88]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
        href="10-13-1--31--1e8cf08b:11927b92513:-8000:00000000000009AD"
        fill="1"
        fillcolor="255 255 200"
@@ -15225,7 +16047,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig13"
-       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[472, 136, 304, 96]pathVisible=true;stereotypeView=2;operationsVisible=true;operationsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[472, 136, 304, 96]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
        href="10-13-1--31--1e8cf08b:11927b92513:-8000:00000000000009B7"
        fill="1"
        fillcolor="255 255 200"
@@ -15381,7 +16203,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig14"
-       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[472, 360, 228, 104]pathVisible=true;stereotypeView=2;operationsVisible=true;operationsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[472, 360, 228, 104]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
        href="10-13-1--31--1e8cf08b:11927b92513:-8000:00000000000009BD"
        fill="1"
        fillcolor="255 255 200"
@@ -15537,7 +16359,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig15"
-       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[472, 488, 496, 272]pathVisible=true;stereotypeView=2;operationsVisible=true;operationsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[472, 488, 496, 272]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
        href="10-13-1--31--1e8cf08b:11927b92513:-8000:00000000000009C7"
        fill="1"
        fillcolor="255 255 200"
@@ -15885,7 +16707,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig16"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[752, 904, 334, 344]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[752, 904, 334, 344]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BA1"
        fill="1"
        fillcolor="192 192 192"
@@ -16298,7 +17120,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig17"
-       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[472, 248, 536, 94]pathVisible=false;stereotypeView=2;operationsVisible=true;operationsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[472, 248, 536, 94]pathVisible=false;stereotypeView=0;operationsVisible=true;operationsVisible=true"
        href="10-13-1--99--4fdec042:11a2a3b44dc:-8000:00000000000010AB"
        fill="1"
        fillcolor="255 255 200"
@@ -16454,7 +17276,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig18"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[128, 240, 208, 39]pathVisible=false;stereotypeView=2;operationsVisible=false;attributesVisible=false;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[128, 240, 208, 39]pathVisible=false;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
        href="10-13-1--99-c056755:11a5428ab79:-8000:00000000000010B2"
        fill="1"
        fillcolor="200 200 255"
@@ -16566,7 +17388,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <rectangle name="Fig18.5"
       x="128"
       y="299"
-      width="146"
+      width="150"
       height="1"
       fill="1"
       fillcolor="black"
@@ -16575,7 +17397,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       visibility="0"
     />
     <group name="Fig18.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[129, 300, 144, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[129, 300, 148, 21]"
          href="10-13-1--99-c056755:11a5428ab79:-8000:00000000000010B2"
          fill="0"
          fillcolor="200 200 255"
@@ -16589,7 +17411,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig18.6.0"
         x="129"
         y="300"
-        width="144"
+        width="148"
         height="21"
         fill="0"
         fillcolor="white"
@@ -16600,7 +17422,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig19"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1040, 768, 316, 85]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1040, 768, 316, 85]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31--86a648e:11985da1cd8:-8000:0000000000000ACE"
        fill="1"
        fillcolor="192 192 192"
@@ -16773,7 +17595,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig20"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[64, 632, 360, 253]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[64, 632, 360, 253]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31--3b304a1e:11b08118c60:-8000:0000000000000D0E"
        fill="1"
        fillcolor="white"
@@ -17106,7 +17928,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig21"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1072, 520, 395, 97]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1072, 520, 395, 97]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99--f2ea6d:11b36a6e31a:-8000:000000000000193C"
        fill="1"
        fillcolor="white"
@@ -17279,7 +18101,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig22"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[264, 1832, 210, 72]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[264, 1832, 210, 72]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99-6bb5697e:11bda1bbfa6:-8000:000000000000133B"
        fill="1"
        fillcolor="0 255 255"
@@ -17436,7 +18258,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig23"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[536, 2176, 338, 304]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[536, 2176, 338, 304]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99-6bb5697e:11bda1bbfa6:-8000:0000000000001345"
        fill="1"
        fillcolor="0 255 255"
@@ -17817,7 +18639,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <text name="Fig23.6.14"
         x="537"
         y="2444"
-        width="336"
+        width="344"
         height="20"
         fill="0"
         fillcolor="0 255 255"
@@ -17833,7 +18655,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig24"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1472, 928, 385, 97]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1472, 928, 385, 97]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99--32cd3c54:11be55033bf:-8000:0000000000000D6F"
        fill="1"
        fillcolor="white"
@@ -18006,7 +18828,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig25"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[24, 1920, 593, 181]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[24, 1920, 593, 181]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DB7"
        fill="1"
        fillcolor="0 255 255"
@@ -18147,7 +18969,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <text name="Fig25.6.2"
         x="25"
         y="1986"
-        width="591"
+        width="610"
         height="14"
         fill="0"
         fillcolor="0 255 255"
@@ -18259,7 +19081,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig26"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[48, 2160, 428, 165]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[48, 2160, 428, 165]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DFF"
        fill="1"
        fillcolor="0 255 255"
@@ -18512,7 +19334,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig27"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1472, 800, 286, 69]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1472, 800, 286, 69]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EB2"
        fill="1"
        fillcolor="192 192 192"
@@ -19392,7 +20214,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       name="Extension"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[136, 56, 216, 177]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[136, 56, 216, 177]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:00000000000009B9"
        fill="1"
        fillcolor="white"
@@ -19645,7 +20467,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[296, 232, 90, 67]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[296, 232, 90, 67]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:00000000000009CB"
        fill="1"
        fillcolor="white"
@@ -19770,7 +20592,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig2"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[392, 232, 90, 67]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[392, 232, 90, 67]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:00000000000009CD"
        fill="1"
        fillcolor="white"
@@ -19952,7 +20774,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </path>
   </group>
   <group name="Fig4"
-       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[520, 136, 82, 62]pathVisible=false;stereotypeView=2;operationsVisible=true;operationsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[520, 136, 82, 62]pathVisible=false;stereotypeView=0;operationsVisible=true;operationsVisible=true"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:00000000000009EF"
        fill="1"
        fillcolor="white"
@@ -20060,7 +20882,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig5"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[488, 232, 90, 67]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[488, 232, 90, 67]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:00000000000009F1"
        fill="1"
        fillcolor="white"
@@ -20216,7 +21038,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </path>
   </group>
   <group name="Fig7"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[400, 96, 107, 69]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[400, 96, 107, 69]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:0000000000000A24"
        fill="1"
        fillcolor="white"
@@ -20523,7 +21345,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       name="delivery model"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[280, 160, 139, 176]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[280, 160, 139, 176]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:0000000000000A4E"
        fill="1"
        fillcolor="white"
@@ -20728,7 +21550,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[576, 224, 150, 120]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[576, 224, 150, 120]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:0000000000000A50"
        fill="1"
        fillcolor="white"
@@ -20885,7 +21707,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig2"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[128, 168, 95, 69]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[128, 168, 95, 69]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:0000000000000A52"
        fill="1"
        fillcolor="white"
@@ -21026,7 +21848,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig3"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[296, 56, 90, 67]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[296, 56, 90, 67]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:0000000000000A5F"
        fill="1"
        fillcolor="white"
@@ -21151,7 +21973,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig4"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[128, 56, 90, 67]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[128, 56, 90, 67]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:0000000000000A61"
        fill="1"
        fillcolor="white"
@@ -21276,7 +22098,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig5"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[456, 48, 90, 67]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[456, 48, 90, 67]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:0000000000000A63"
        fill="1"
        fillcolor="white"
@@ -21401,7 +22223,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig6"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[296, 376, 113, 83]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[296, 376, 113, 83]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:0000000000000A65"
        fill="1"
        fillcolor="white"
@@ -21558,7 +22380,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig7"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[472, 184, 90, 67]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[472, 184, 90, 67]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:0000000000000A86"
        fill="1"
        fillcolor="white"
@@ -21740,7 +22562,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </path>
   </group>
   <group name="Fig9"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[720, 232, 98, 69]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[720, 232, 98, 69]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:0000000000000A96"
        fill="1"
        fillcolor="white"
@@ -21881,7 +22703,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig10"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[688, 120, 137, 69]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[688, 120, 137, 69]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:0000000000000A9F"
        fill="1"
        fillcolor="white"
@@ -22369,7 +23191,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </path>
   </group>
   <group name="Fig18"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[128, 272, 94, 67]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[128, 272, 94, 67]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-4ebe2442:1192e5ce578:-8000:0000000000000AD9"
        fill="1"
        fillcolor="white"
@@ -22612,7 +23434,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       name="Event Logger"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[464, 432, 487, 357]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[464, 432, 487, 357]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-0-1-48ef8247:11bf9e06099:-8000:0000000000000D81"
        fill="1"
        fillcolor="white"
@@ -23057,7 +23879,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[152, 16, 228, 120]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[152, 16, 228, 120]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-0-1-48ef8247:11bf9e06099:-8000:0000000000000D83"
        fill="1"
        fillcolor="white"
@@ -23094,7 +23916,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >EventFilter</text>
     <group name="Fig1.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[153, 17, 160, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[153, 17, 162, 0]"
          href="127-0-0-1-48ef8247:11bf9e06099:-8000:0000000000000D83"
          fill="0"
          fillcolor="white"
@@ -23108,7 +23930,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig1.2.0"
         x="153"
         y="17"
-        width="160"
+        width="162"
         height="0"
         fill="0"
         fillcolor="white"
@@ -23246,7 +24068,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig2"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[112, 400, 296, 197]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[112, 400, 296, 197]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-0-1-48ef8247:11bf9e06099:-8000:0000000000000D87"
        fill="1"
        fillcolor="white"
@@ -23531,7 +24353,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig3"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[688, 184, 443, 213]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[688, 184, 443, 213]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-0-1--6c40f9ad:11c0323fc26:-8000:0000000000000DE8"
        fill="1"
        fillcolor="white"
@@ -23720,7 +24542,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig4"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[16, 200, 630, 174]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[16, 200, 630, 174]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-0-1-2d1c59d3:11c0478bd31:-8000:0000000000000DF2"
        fill="1"
        fillcolor="white"
@@ -23989,7 +24811,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig5"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[440, 8, 254, 161]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[440, 8, 254, 161]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-0-1-293e509c:11c0d865d9e:-8000:0000000000000E81"
        fill="1"
        fillcolor="white"
@@ -24026,7 +24848,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >EventParamConverter</text>
     <group name="Fig5.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[441, 9, 217, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[441, 9, 221, 0]"
          href="127-0-0-1-293e509c:11c0d865d9e:-8000:0000000000000E81"
          fill="0"
          fillcolor="white"
@@ -24040,7 +24862,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig5.2.0"
         x="441"
         y="9"
-        width="217"
+        width="221"
         height="0"
         fill="0"
         fillcolor="white"
@@ -24226,7 +25048,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig6"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1016, 464, 382, 164]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1016, 464, 382, 164]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1-85-5a611d25:1213534f5a0:-8000:000000000000163A"
        fill="1"
        fillcolor="white"
@@ -24479,7 +25301,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig7"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1216, 184, 990, 196]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1216, 184, 990, 196]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1-85-5a611d25:1213534f5a0:-8000:0000000000001655"
        fill="1"
        fillcolor="white"
@@ -24830,7 +25652,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       name="Factory"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[104, 216, 666, 69]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[104, 216, 666, 69]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99--2e5efe17:11fffe7b282:-8000:0000000000001518"
        fill="1"
        fillcolor="white"
@@ -24971,7 +25793,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[104, 392, 326, 100]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[104, 392, 326, 100]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99-2335bfbb:1207fc834f5:-8000:000000000000173E"
        fill="1"
        fillcolor="white"
@@ -25128,7 +25950,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig2"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[104, 304, 421, 69]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[104, 304, 421, 69]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99-2335bfbb:1207fc834f5:-8000:0000000000001740"
        fill="1"
        fillcolor="white"
@@ -25269,7 +26091,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig3"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[104, 8, 546, 83]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[104, 8, 546, 83]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99-2335bfbb:1207fc834f5:-8000:0000000000001742"
        fill="1"
        fillcolor="white"
@@ -25426,7 +26248,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig4"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[104, 112, 568, 96]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[104, 112, 568, 96]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1-3c0ae01:12c2c9debde:-8000:000000000000138C"
        fill="1"
        fillcolor="white"
@@ -25603,7 +26425,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       name="Extension Management"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[560, 176, 410, 258]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[560, 176, 410, 258]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-87--2--3--76-e9002fe:123ebbb9fa8:-8000:0000000000001799"
        fill="1"
        fillcolor="white"
@@ -25936,7 +26758,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[336, 416, 200, 69]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[336, 416, 200, 69]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-87--2--3--76-e9002fe:123ebbb9fa8:-8000:000000000000179B"
        fill="1"
        fillcolor="white"
@@ -25973,7 +26795,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >ExtensionLoader</text>
     <group name="Fig1.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[337, 417, 157, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[337, 417, 161, 0]"
          href="-87--2--3--76-e9002fe:123ebbb9fa8:-8000:000000000000179B"
          fill="0"
          fillcolor="white"
@@ -25987,7 +26809,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig1.2.0"
         x="337"
         y="417"
-        width="157"
+        width="161"
         height="0"
         fill="0"
         fillcolor="white"
@@ -26077,7 +26899,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig2"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[264, 24, 237, 239]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[264, 24, 237, 239]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017AF"
        fill="1"
        fillcolor="white"
@@ -26426,7 +27248,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig3"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[64, 416, 240, 83]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[64, 416, 240, 83]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017B9"
        fill="1"
        fillcolor="white"
@@ -26583,7 +27405,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig4"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[224, 296, 251, 71]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[224, 296, 251, 71]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017BD"
        fill="1"
        fillcolor="white"
@@ -26802,7 +27624,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </path>
   </group>
   <group name="Fig7"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[32, 24, 204, 194]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[32, 24, 204, 194]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-87--2--3--76-f244745:1240028df28:-8000:00000000000017B5"
        fill="1"
        fillcolor="white"
@@ -27055,7 +27877,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig8"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[40, 248, 107, 69]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[40, 248, 107, 69]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-87--2--3--76--148ee98a:12452773959:-8000:0000000000002342"
        fill="1"
        fillcolor="white"
@@ -27092,7 +27914,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >ExtensionException</text>
     <group name="Fig8.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[41, 249, 171, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[41, 249, 175, 0]"
          href="-87--2--3--76--148ee98a:12452773959:-8000:0000000000002342"
          fill="0"
          fillcolor="white"
@@ -27106,7 +27928,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig8.2.0"
         x="41"
         y="249"
-        width="171"
+        width="175"
         height="0"
         fill="0"
         fillcolor="white"
@@ -27180,7 +28002,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig9"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[576, 32, 397, 116]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[576, 32, 397, 116]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002388"
        fill="1"
        fillcolor="white"
@@ -27385,7 +28207,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig10"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[392, 528, 194, 123]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[392, 528, 194, 123]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001588"
        fill="1"
        fillcolor="white"
@@ -27606,7 +28428,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig11"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[64, 536, 219, 137]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[64, 536, 219, 137]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001589"
        fill="1"
        fillcolor="white"
@@ -27908,7 +28730,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       name="Rules Management"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[392, 8, 594, 187]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[392, 8, 594, 187]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DB7"
        fill="1"
        fillcolor="white"
@@ -28161,7 +28983,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[360, 304, 195, 71]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[360, 304, 195, 71]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99-6bb5697e:11bda1bbfa6:-8000:000000000000133B"
        fill="1"
        fillcolor="white"
@@ -28318,7 +29140,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig2"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[8, 104, 408, 69]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[8, 104, 408, 69]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99-2335bfbb:1207fc834f5:-8000:0000000000001740"
        fill="1"
        fillcolor="white"
@@ -28459,7 +29281,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig3"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[8, 296, 339, 294]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[8, 296, 339, 294]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99-6bb5697e:11bda1bbfa6:-8000:0000000000001345"
        fill="1"
        fillcolor="white"
@@ -28856,7 +29678,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig4"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[8, 200, 502, 83]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[8, 200, 502, 83]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99-2335bfbb:1207fc834f5:-8000:0000000000001742"
        fill="1"
        fillcolor="white"
@@ -29013,7 +29835,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig5"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[528, 240, 382, 159]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[528, 240, 382, 159]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DFF"
        fill="1"
        fillcolor="white"
@@ -29266,7 +30088,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig6"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[8, 8, 326, 83]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[8, 8, 326, 83]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99-2335bfbb:1207fc834f5:-8000:000000000000173E"
        fill="1"
        fillcolor="white"
@@ -29427,7 +30249,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       name="Generis Core Kernel"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[872, 384, 502, 256]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[872, 384, 502, 256]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767"
        fill="1"
        fillcolor="white"
@@ -29776,7 +30598,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[408, 160, 400, 501]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[408, 160, 400, 501]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765"
        fill="1"
        fillcolor="white"
@@ -30429,7 +31251,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig2"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[88, 408, 273, 249]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[88, 408, 273, 249]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769"
        fill="1"
        fillcolor="white"
@@ -30794,7 +31616,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig3"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[320, 0, 212, 97]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[320, 0, 212, 97]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000761"
        fill="1"
        fillcolor="white"
@@ -30951,7 +31773,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig4"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[656, 0, 324, 136]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[656, 0, 324, 136]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000078B"
        fill="1"
        fillcolor="white"
@@ -31172,7 +31994,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig5"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[88, 160, 310, 85]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[88, 160, 310, 85]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99--32cd3c54:11be55033bf:-8000:0000000000000D6F"
        fill="1"
        fillcolor="white"
@@ -31345,7 +32167,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig6"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[984, 288, 128, 82]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[984, 288, 128, 82]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31--64270bf:11918ad765e:-8000:000000000000098C"
        fill="1"
        fillcolor="white"
@@ -31485,7 +32307,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig7"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1240, 280, 224, 97]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1240, 280, 224, 97]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000964"
        fill="1"
        fillcolor="white"
@@ -31673,7 +32495,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig8"
-       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[992, 8, 481, 257]pathVisible=true;stereotypeView=2;operationsVisible=true;operationsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[992, 8, 481, 257]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
        href="10-13-1--31--1e8cf08b:11927b92513:-8000:00000000000009C7"
        fill="1"
        fillcolor="white"
@@ -32109,7 +32931,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </path>
   </group>
   <group name="Fig11"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[88, 264, 270, 128]pathVisible=true;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[88, 264, 270, 128]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001365"
        fill="1"
        fillcolor="white"
@@ -32411,7 +33233,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       name="Subscriptions"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[306, 136, 532, 234]pathVisible=false;stereotypeView=2;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[306, 136, 532, 234]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1-51aaeb25:12ce3ab9b71:-8000:00000000000013AC"
        fill="1"
        fillcolor="white"
@@ -32742,6 +33564,1464 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         justification="Left"
       >getPropertyValuesFromSubscription(subscription : Resource,instance : Resource,property : Property) : array</text>
     </group>
+  </group>
+</pgml>
+<pgml description="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram|10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000071E"
+      name="Persistence"
+>
+  <group name="Fig0"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[32, 24, 495, 271]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
+       href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+    </private>
+    
+    <rectangle name="Fig0.0"
+      x="32"
+      y="24"
+      width="495"
+      height="271"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig0.1"
+      x="33"
+      y="25"
+      width="493"
+      height="37"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >core::kernel::persistence::ResourceInterface</text>
+    <group name="Fig0.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[33, 25, 493, 17]"
+         href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig0.2.0"
+        x="33"
+        y="25"
+        width="493"
+        height="17"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig0.2.1"
+        x="33"
+        y="25"
+        width="493"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Center"
+      >«interface»</text>
+    </group>
+    <rectangle name="Fig0.3"
+      x="32"
+      y="62"
+      width="495"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig0.4"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[33, 63, 493, 232]"
+         href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig0.4.0"
+        x="33"
+        y="63"
+        width="493"
+        height="232"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig0.4.1"
+        x="33"
+        y="63"
+        width="493"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getType(resource : Resource) : array</text>
+      <text name="Fig0.4.2"
+        x="33"
+        y="77"
+        width="493"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getPropertyValues(resource : Resource,property : Property) : array</text>
+      <text name="Fig0.4.3"
+        x="33"
+        y="91"
+        width="493"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getPropertyValuesCollection(resource : Resource,property : Property) : ContainerCollection</text>
+      <text name="Fig0.4.4"
+        x="33"
+        y="105"
+        width="493"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getOnePropertyValue(resource : Resource,property : Property,last : boolean = false) : Container</text>
+      <text name="Fig0.4.5"
+        x="33"
+        y="119"
+        width="493"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getPropertyValuesByLg(resource : Resource,property : Property,lg : string) : ContainerCollection</text>
+      <text name="Fig0.4.6"
+        x="33"
+        y="133"
+        width="493"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setPropertyValue(resource : Resource,property : Property,object : string) : boolean</text>
+      <text name="Fig0.4.7"
+        x="33"
+        y="147"
+        width="493"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setPropertiesValues(resource : Resource,properties : array) : boolean</text>
+      <text name="Fig0.4.8"
+        x="33"
+        y="161"
+        width="493"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setPropertyValueByLg(resource : Resource,property : Property,value : string,lg : string) : boolean</text>
+      <text name="Fig0.4.9"
+        x="33"
+        y="175"
+        width="493"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >removePropertyValues(resource : Resource,property : Property) : boolean</text>
+      <text name="Fig0.4.10"
+        x="33"
+        y="189"
+        width="493"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >removePropertyValueByLg(resource : Resource,property : Property,lg : string) : boolean</text>
+      <text name="Fig0.4.11"
+        x="33"
+        y="203"
+        width="493"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getRdfTriples(resource : Resource) : ContainerCollection</text>
+      <text name="Fig0.4.12"
+        x="33"
+        y="217"
+        width="493"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getUsedLanguages(resource : Resource,property : Property) : array</text>
+      <text name="Fig0.4.13"
+        x="33"
+        y="231"
+        width="493"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >duplicate(resource : Resource,excludedProperties : array = array()) : Resource</text>
+      <text name="Fig0.4.14"
+        x="33"
+        y="245"
+        width="493"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >delete(resource : Resource,deleteReference : boolean = false) : boolean</text>
+      <text name="Fig0.4.15"
+        x="33"
+        y="259"
+        width="493"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getLastModificationDate(resource : Resource,property : Property) : doc_date</text>
+      <text name="Fig0.4.16"
+        x="33"
+        y="273"
+        width="493"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getLastModificationUser(resource : Resource) : string</text>
+    </group>
+  </group>
+  <group name="Fig1"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[584, 24, 431, 151]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E4"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+    </private>
+    
+    <rectangle name="Fig1.0"
+      x="584"
+      y="24"
+      width="431"
+      height="151"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig1.1"
+      x="585"
+      y="25"
+      width="429"
+      height="21"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="true"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >core::kernel::persistence::PersistenceProxy</text>
+    <group name="Fig1.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[585, 25, 224, 0]"
+         href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E4"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig1.2.0"
+        x="585"
+        y="25"
+        width="224"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig1.3"
+      x="584"
+      y="46"
+      width="431"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig1.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[585, 47, 429, 36]"
+         href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E4"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig1.4.0"
+        x="585"
+        y="47"
+        width="429"
+        height="36"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig1.4.1"
+        x="585"
+        y="47"
+        width="429"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >ressourcesDelegatedTo : array</text>
+      <text name="Fig1.4.2"
+        x="585"
+        y="61"
+        width="429"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >instance : PersistanceProxy</text>
+    </group>
+    <rectangle name="Fig1.5"
+      x="584"
+      y="82"
+      width="431"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig1.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[585, 83, 429, 92]"
+         href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E4"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig1.6.0"
+        x="585"
+        y="83"
+        width="429"
+        height="92"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig1.6.1"
+        x="585"
+        y="83"
+        width="429"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getClassToDelegateTo(resource : Resource) : ResourceInterface</text>
+      <text name="Fig1.6.2"
+        x="585"
+        y="97"
+        width="429"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setClassToDelegateTo(ressource : Resource,classToDelegateTo : ResourceInterface)</text>
+      <text name="Fig1.6.3"
+        x="585"
+        y="111"
+        width="429"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >singleton() : PersistanceProxy</text>
+      <text name="Fig1.6.4"
+        x="585"
+        y="125"
+        width="429"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >isHardSql(resource : Resource) : boolean</text>
+      <text name="Fig1.6.5"
+        x="585"
+        y="139"
+        width="429"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >isSmoothSql(resource : Resource) : boolean</text>
+      <text name="Fig1.6.6"
+        x="585"
+        y="153"
+        width="429"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >isVirtuozo(resource : Resource) : boolean</text>
+    </group>
+  </group>
+  <group name="Fig2"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[440, 384, 228, 108]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+    </private>
+    
+    <rectangle name="Fig2.0"
+      x="440"
+      y="384"
+      width="228"
+      height="108"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig2.1"
+      x="441"
+      y="385"
+      width="226"
+      height="21"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >core::kernel::persistence::ResourceProxy</text>
+    <group name="Fig2.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[441, 385, 218, 0]"
+         href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig2.2.0"
+        x="441"
+        y="385"
+        width="218"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig2.3"
+      x="440"
+      y="406"
+      width="228"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig2.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[441, 407, 226, 21]"
+         href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig2.4.0"
+        x="441"
+        y="407"
+        width="226"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig2.5"
+      x="440"
+      y="427"
+      width="228"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig2.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[441, 428, 226, 64]"
+         href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig2.6.0"
+        x="441"
+        y="428"
+        width="226"
+        height="64"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig2.6.1"
+        x="441"
+        y="428"
+        width="226"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >isHardSql(resource : Resource) : boolean</text>
+      <text name="Fig2.6.2"
+        x="441"
+        y="442"
+        width="226"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >isSmoothSql(resource : Resource) : boolean</text>
+      <text name="Fig2.6.3"
+        x="441"
+        y="456"
+        width="226"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >isVirtuozo(resource : Resource) : boolean</text>
+      <text name="Fig2.6.4"
+        x="441"
+        y="470"
+        width="226"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >singleton() : ResourceProxy</text>
+    </group>
+  </group>
+  <group name="Fig3"
+       description="org.argouml.uml.diagram.ui.FigGeneralization"
+       href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001340"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+      sourcePortFig="Fig2.0"
+      destPortFig="Fig1"
+      sourceFigNode="Fig2"
+      destFigNode="Fig1"
+      <argouml:pathitem figname="Fig3.1"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
+                        ownerhref="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001340"
+                        angle="270.0"
+                        offset="-10" />
+    </private>
+    <path name="Fig3.0"
+      description="org.tigris.gef.presentation.FigPoly"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    >
+      <moveto x="568"
+              y="384" />
+      <lineto x="568"
+              y="272" />
+      <lineto x="896"
+              y="272" />
+      <lineto x="896"
+              y="175" />
+    </path>
+  </group>
+  <group name="Fig4"
+       description="org.argouml.uml.diagram.ui.FigAbstraction"
+       href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001341"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+      sourcePortFig="Fig2.0"
+      destPortFig="Fig0.0"
+      sourceFigNode="Fig2"
+      destFigNode="Fig0"
+      <argouml:pathitem figname="Fig4.1"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
+                        ownerhref="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001341"
+                        angle="-251.00000000000003"
+                        offset="22" />
+    </private>
+    <path name="Fig4.0"
+      description="org.tigris.gef.presentation.FigPoly"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    >
+      <moveto x="440"
+              y="456" />
+      <lineto x="352"
+              y="456" />
+      <lineto x="352"
+              y="295" />
+    </path>
+  </group>
+  <group name="Fig5"
+       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[32, 560, 288, 272]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
+       href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E0"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+    </private>
+    
+    <rectangle name="Fig5.0"
+      x="32"
+      y="560"
+      width="288"
+      height="272"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+    />
+    <path name="Fig5.1"
+      description="org.argouml.uml.diagram.static_structure.ui.FigPackage$PackageBackground"
+      fill="1"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+    >
+      <moveto x="32"
+              y="560" />
+      <lineto x="270"
+              y="560" />
+      <lineto x="270"
+              y="581" />
+      <lineto x="319"
+              y="581" />
+      <lineto x="319"
+              y="831" />
+      <lineto x="32"
+              y="831" />
+      <lineto x="32"
+              y="560" />
+    </path>
+    <text name="Fig5.2"
+      x="32"
+      y="560"
+      width="239"
+      height="22"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Left"
+    >core::kernel::persistence::smooth_sql</text>
+    <group name="Fig5.3"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[32, 560, 238, 1]"
+         href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E0"
+         fill="1"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig5.3.0"
+        x="32"
+        y="560"
+        width="238"
+        height="1"
+        fill="1"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <text name="Fig5.4"
+      x="32"
+      y="581"
+      width="288"
+      height="251"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    ></text>
+  </group>
+  <group name="Fig6"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[48, 600, 251, 67]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001347"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+      enclosingFig="Fig5"
+    </private>
+    
+    <rectangle name="Fig6.0"
+      x="48"
+      y="600"
+      width="251"
+      height="67"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig6.1"
+      x="49"
+      y="601"
+      width="249"
+      height="21"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >core::kernel::persistence::smooth_sql::Resource</text>
+    <group name="Fig6.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[49, 601, 248, 0]"
+         href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001347"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig6.2.0"
+        x="49"
+        y="601"
+        width="248"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig6.3"
+      x="48"
+      y="622"
+      width="251"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig6.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[49, 623, 249, 22]"
+         href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001347"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig6.4.0"
+        x="49"
+        y="623"
+        width="249"
+        height="22"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig6.4.1"
+        x="49"
+        y="623"
+        width="249"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >instance : Resource</text>
+    </group>
+    <rectangle name="Fig6.5"
+      x="48"
+      y="644"
+      width="251"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig6.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[49, 645, 249, 22]"
+         href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001347"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig6.6.0"
+        x="49"
+        y="645"
+        width="249"
+        height="22"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig6.6.1"
+        x="49"
+        y="645"
+        width="249"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >singleton() : Resource</text>
+    </group>
+  </group>
+  <group name="Fig7"
+       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[400, 560, 280, 264]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
+       href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DF"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+    </private>
+    
+    <rectangle name="Fig7.0"
+      x="400"
+      y="560"
+      width="280"
+      height="264"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+    />
+    <path name="Fig7.1"
+      description="org.argouml.uml.diagram.static_structure.ui.FigPackage$PackageBackground"
+      fill="1"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+    >
+      <moveto x="400"
+              y="560" />
+      <lineto x="630"
+              y="560" />
+      <lineto x="630"
+              y="581" />
+      <lineto x="679"
+              y="581" />
+      <lineto x="679"
+              y="823" />
+      <lineto x="400"
+              y="823" />
+      <lineto x="400"
+              y="560" />
+    </path>
+    <text name="Fig7.2"
+      x="400"
+      y="560"
+      width="231"
+      height="22"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Left"
+    >core::kernel::persistence::hard_sql</text>
+    <group name="Fig7.3"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[400, 560, 230, 1]"
+         href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DF"
+         fill="1"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig7.3.0"
+        x="400"
+        y="560"
+        width="230"
+        height="1"
+        fill="1"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <text name="Fig7.4"
+      x="400"
+      y="581"
+      width="280"
+      height="243"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    ></text>
+  </group>
+  <group name="Fig8"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[416, 600, 237, 67]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000135E"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+      enclosingFig="Fig7"
+    </private>
+    
+    <rectangle name="Fig8.0"
+      x="416"
+      y="600"
+      width="237"
+      height="67"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig8.1"
+      x="417"
+      y="601"
+      width="235"
+      height="21"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >core::kernel::persistence::hard_sql::Resource</text>
+    <group name="Fig8.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[417, 601, 234, 0]"
+         href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000135E"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig8.2.0"
+        x="417"
+        y="601"
+        width="234"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig8.3"
+      x="416"
+      y="622"
+      width="237"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig8.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[417, 623, 235, 22]"
+         href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000135E"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig8.4.0"
+        x="417"
+        y="623"
+        width="235"
+        height="22"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig8.4.1"
+        x="417"
+        y="623"
+        width="235"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >instance : Resource</text>
+    </group>
+    <rectangle name="Fig8.5"
+      x="416"
+      y="644"
+      width="237"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig8.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[417, 645, 235, 22]"
+         href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000135E"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig8.6.0"
+        x="417"
+        y="645"
+        width="235"
+        height="22"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig8.6.1"
+        x="417"
+        y="645"
+        width="235"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >singleton() : Resource</text>
+    </group>
+  </group>
+  <group name="Fig9"
+       description="org.argouml.uml.diagram.ui.FigAbstraction"
+       href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001388"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+      sourcePortFig="Fig6.0"
+      destPortFig="Fig0.0"
+      sourceFigNode="Fig6"
+      destFigNode="Fig0"
+      <argouml:pathitem figname="Fig9.1"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
+                        ownerhref="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001388"
+                        angle="-39.0"
+                        offset="15" />
+    </private>
+    <path name="Fig9.0"
+      description="org.tigris.gef.presentation.FigPoly"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    >
+      <moveto x="299"
+              y="632" />
+      <lineto x="352"
+              y="632" />
+      <lineto x="352"
+              y="295" />
+    </path>
+  </group>
+  <group name="Fig10"
+       description="org.argouml.uml.diagram.ui.FigAbstraction"
+       href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000138A"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+      sourcePortFig="Fig8.0"
+      destPortFig="Fig0.0"
+      sourceFigNode="Fig8"
+      destFigNode="Fig0"
+      <argouml:pathitem figname="Fig10.1"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
+                        ownerhref="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000138A"
+                        angle="-187.00000000000003"
+                        offset="105" />
+    </private>
+    <path name="Fig10.0"
+      description="org.tigris.gef.presentation.FigPoly"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    >
+      <moveto x="416"
+              y="632" />
+      <lineto x="352"
+              y="632" />
+      <lineto x="352"
+              y="295" />
+    </path>
   </group>
 </pgml>
 <todo>
