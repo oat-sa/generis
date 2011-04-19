@@ -84,7 +84,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Apr 19 15:10:13 CEST 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Apr 19 15:51:12 CEST 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.30.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -7971,7 +7971,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                           </UML:Dependency.supplier>
                         </UML:Abstraction>
                         <UML:Usage xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000138C'
-                          isSpecification = 'false'>
+                          name = 'delegate' isSpecification = 'false'>
                           <UML:Dependency.client>
                             <UML:Class xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3'/>
                           </UML:Dependency.client>
@@ -8035,7 +8035,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                           </UML:Dependency.supplier>
                         </UML:Abstraction>
                         <UML:Usage xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000138D'
-                          isSpecification = 'false'>
+                          name = 'delegate' isSpecification = 'false'>
                           <UML:Dependency.client>
                             <UML:Class xmi.idref = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3'/>
                           </UML:Dependency.client>
@@ -8252,7 +8252,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
                         <UML:Operation xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001390'
-                          name = 'isSmoothSql' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          name = 'isHardSql' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
                           <UML:BehavioralFeature.parameter>
@@ -34360,7 +34360,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         bold="false"
         textsize="10"
         justification="Left"
-      >isSmoothSql(resource : Resource) : boolean</text>
+      >isHardSql(resource : Resource) : boolean</text>
       <text name="Fig2.6.3"
         x="465"
         y="464"
@@ -35025,8 +35025,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000138A"
-                        angle="-187.00000000000003"
-                        offset="105" />
+                        angle="-180.0"
+                        offset="134" />
     </private>
     <path name="Fig10.0"
       description="org.tigris.gef.presentation.FigPoly"
@@ -35058,8 +35058,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000138C"
-                        angle="270.0"
-                        offset="25" />
+                        angle="254.00000000000006"
+                        offset="53" />
     </private>
     <path name="Fig11.0"
       description="org.tigris.gef.presentation.FigPoly"
@@ -35089,8 +35089,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000138D"
-                        angle="270.0"
-                        offset="25" />
+                        angle="-160.99999999999997"
+                        offset="33" />
     </private>
     <path name="Fig12.0"
       description="org.tigris.gef.presentation.FigPoly"
