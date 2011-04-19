@@ -3,18 +3,18 @@
 error_reporting(E_ALL);
 
 /**
- * TAO - core/kernel/classes/class.ResourceProxy.php
+ * Generis Object Oriented API - core/kernel/persistence/class.ResourceProxy.php
  *
  * $Id$
  *
- * This file is part of TAO.
+ * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 19.04.2011, 13:55:12 with ArgoUML PHP module 
+ * Automatically generated on 19.04.2011, 15:13:18 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
- * @subpackage kernel_classes
+ * @subpackage kernel_persistence
  */
 
 if (0 > version_compare(PHP_VERSION, '5')) {
@@ -22,52 +22,52 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 }
 
 /**
- * include core_kernel_classes_PersistanceProxy
+ * include core_kernel_persistence_PersistenceProxy
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
-require_once('core/kernel/classes/class.PersistanceProxy.php');
+require_once('core/kernel/persistence/class.PersistenceProxy.php');
 
 /**
- * include core_kernel_classes_ResourceHardSql
+ * include core_kernel_persistence_hard_sql_Resource
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
-require_once('core/kernel/classes/class.ResourceHardSql.php');
+require_once('core/kernel/persistence/hard_sql/class.Resource.php');
 
 /**
- * include core_kernel_classes_ResourceSmoothSql
+ * include core_kernel_persistence_ResourceInterface
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
-require_once('core/kernel/classes/class.ResourceSmoothSql.php');
+require_once('core/kernel/persistence/interface.ResourceInterface.php');
 
 /**
- * include core_kernel_classes_ResourceInterface
+ * include core_kernel_persistence_smooth_sql_Resource
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
-require_once('core/kernel/classes/interface.ResourceInterface.php');
+require_once('core/kernel/persistence/smooth_sql/class.Resource.php');
 
 /* user defined includes */
-// section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D85-includes begin
-// section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D85-includes end
+// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3-includes begin
+// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3-includes end
 
 /* user defined constants */
-// section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D85-constants begin
-// section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D85-constants end
+// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3-constants begin
+// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3-constants end
 
 /**
- * Short description of class core_kernel_classes_ResourceProxy
+ * Short description of class core_kernel_persistence_ResourceProxy
  *
  * @access public
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
- * @subpackage kernel_classes
+ * @subpackage kernel_persistence
  */
-class core_kernel_classes_ResourceProxy
-    extends core_kernel_classes_PersistanceProxy
-        implements core_kernel_classes_ResourceInterface
+class core_kernel_persistence_ResourceProxy
+    extends core_kernel_persistence_PersistenceProxy
+        implements core_kernel_persistence_ResourceInterface
 {
     // --- ASSOCIATIONS ---
 
@@ -88,12 +88,12 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = array();
 
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D8E begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->getType ($resource);
         
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D8E end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 end
 
         return (array) $returnValue;
     }
@@ -111,12 +111,12 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = array();
 
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D90 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->getPropertyValues ($resource, $property);
         
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D90 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B end
 
         return (array) $returnValue;
     }
@@ -134,11 +134,12 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = null;
 
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D95 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->getPropertyValuesCollection ($resource, $property);
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D95 end
+        
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F end
 
         return $returnValue;
     }
@@ -157,12 +158,12 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = null;
 
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D97 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->getOnePropertyValue ($resource, $property, $last);
         
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D97 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 end
 
         return $returnValue;
     }
@@ -181,12 +182,12 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = null;
 
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D9C begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->getPropertyValuesByLg ($resource, $property, $lg);
         
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D9C end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 end
 
         return $returnValue;
     }
@@ -205,12 +206,12 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002DA0 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->setPropertyValue ($resource, $property, $object);
         
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002DA0 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE end
 
         return (bool) $returnValue;
     }
@@ -228,12 +229,12 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DA0 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3 begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->setPropertiesValues ($resource, $properties);
         
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DA0 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3 end
 
         return (bool) $returnValue;
     }
@@ -253,12 +254,12 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DA3 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7 begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->setPropertyValueByLg ($resource, $property, $value, $lg);
         
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DA3 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7 end
 
         return (bool) $returnValue;
     }
@@ -276,12 +277,12 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DA7 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->removePropertyValues ($resource, $property);
         
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DA7 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD end
 
         return (bool) $returnValue;
     }
@@ -300,12 +301,12 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DAA begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->removePropertyValueByLg ($resource, $property, $lg);
         
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DAA end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 end
 
         return (bool) $returnValue;
     }
@@ -322,12 +323,12 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = null;
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DAE begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6 begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->getRdfTriples ($resource);
         
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DAE end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6 end
 
         return $returnValue;
     }
@@ -345,12 +346,12 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = array();
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DB0 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C9 begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->getUsedLanguages ($resource, $property);
         
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DB0 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C9 end
 
         return (array) $returnValue;
     }
@@ -368,11 +369,12 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = null;
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DB3 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->duplicate ($resource, $excludedProperties);
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DB3 end
+        
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD end
 
         return $returnValue;
     }
@@ -390,12 +392,12 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DB6 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->delete ($resource, $deleteReference);
         
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DB6 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 end
 
         return (bool) $returnValue;
     }
@@ -407,18 +409,18 @@ class core_kernel_classes_ResourceProxy
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
-     * @return doc_date
+     * @return core_kernel_persistence_doc_date
      */
     public function getLastModificationDate( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
     {
         $returnValue = null;
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DB9 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->getLastModificationDate ($resource, $property);
         
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DB9 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 end
 
         return $returnValue;
     }
@@ -435,12 +437,12 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DBD begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC begin
         
         $delegate = $this->getClassToDelegateTo ($resource);
         $returnValue = $delegate->getLastModificationUser ($resource);
         
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DBD end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC end
 
         return (string) $returnValue;
     }
@@ -450,20 +452,20 @@ class core_kernel_classes_ResourceProxy
      *
      * @access public
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @return core_kernel_classes_RessourceProxy
+     * @return core_kernel_persistence_PersistanceProxy
      */
     public static function singleton()
     {
         $returnValue = null;
 
-        // section 127-0-1-1--9398bc2:12f6a3d8694:-8000:0000000000002E5F begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000138E begin
         
-        if (core_kernel_classes_ResourceProxy::$instance == null){
-        	core_kernel_classes_ResourceProxy::$instance = new core_kernel_classes_ResourceProxy();
+        if (core_kernel_persistence_ResourceProxy::$instance == null){
+        	core_kernel_persistence_ResourceProxy::$instance = new core_kernel_persistence_ResourceProxy();
         }
-        $returnValue = core_kernel_classes_ResourceProxy::$instance;
+        $returnValue = core_kernel_persistence_ResourceProxy::$instance;
         
-        // section 127-0-1-1--9398bc2:12f6a3d8694:-8000:0000000000002E5F end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000138E end
 
         return $returnValue;
     }
@@ -480,8 +482,8 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-a9158b5:12f6c77139f:-8000:0000000000002E2F begin
-
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001390 begin
+        
         $dbWrapper = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
         $hardSqlTable = null;
 		
@@ -504,7 +506,7 @@ class core_kernel_classes_ResourceProxy
 			$returnValue = true;
 		}
         
-        // section 127-0-1-1-a9158b5:12f6c77139f:-8000:0000000000002E2F end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001390 end
 
         return (bool) $returnValue;
     }
@@ -521,11 +523,11 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-a9158b5:12f6c77139f:-8000:0000000000002E32 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001393 begin
         
         $returnValue = true;
         
-        // section 127-0-1-1-a9158b5:12f6c77139f:-8000:0000000000002E32 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001393 end
 
         return (bool) $returnValue;
     }
@@ -542,12 +544,12 @@ class core_kernel_classes_ResourceProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-a9158b5:12f6c77139f:-8000:0000000000002E35 begin
-        // section 127-0-1-1-a9158b5:12f6c77139f:-8000:0000000000002E35 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001396 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001396 end
 
         return (bool) $returnValue;
     }
 
-} /* end of class core_kernel_classes_ResourceProxy */
+} /* end of class core_kernel_persistence_ResourceProxy */
 
 ?>

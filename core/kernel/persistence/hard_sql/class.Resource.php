@@ -3,18 +3,18 @@
 error_reporting(E_ALL);
 
 /**
- * TAO - core/kernel/classes/class.ResourceHardSql.php
+ * Generis Object Oriented API -
  *
  * $Id$
  *
- * This file is part of TAO.
+ * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 19.04.2011, 13:55:12 with ArgoUML PHP module 
+ * Automatically generated on 19.04.2011, 15:00:43 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
- * @subpackage kernel_classes
+ * @subpackage kernel_persistence_hard_sql
  */
 
 if (0 > version_compare(PHP_VERSION, '5')) {
@@ -22,30 +22,30 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 }
 
 /**
- * include core_kernel_classes_ResourceInterface
+ * include core_kernel_persistence_ResourceInterface
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
-require_once('core/kernel/classes/interface.ResourceInterface.php');
+require_once('core/kernel/persistence/interface.ResourceInterface.php');
 
 /* user defined includes */
-// section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D86-includes begin
-// section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D86-includes end
+// section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000135E-includes begin
+// section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000135E-includes end
 
 /* user defined constants */
-// section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D86-constants begin
-// section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D86-constants end
+// section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000135E-constants begin
+// section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000135E-constants end
 
 /**
- * Short description of class core_kernel_classes_ResourceHardSql
+ * Short description of class core_kernel_persistence_hard_sql_Resource
  *
  * @access public
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
- * @subpackage kernel_classes
+ * @subpackage kernel_persistence_hard_sql
  */
-class core_kernel_classes_ResourceHardSql
-        implements core_kernel_classes_ResourceInterface
+class core_kernel_persistence_hard_sql_Resource
+        implements core_kernel_persistence_ResourceInterface
 {
     // --- ASSOCIATIONS ---
 
@@ -56,7 +56,7 @@ class core_kernel_classes_ResourceHardSql
      * Short description of attribute instance
      *
      * @access public
-     * @var RessourceHardSql
+     * @var Resource
      */
     public static $instance = null;
 
@@ -74,11 +74,8 @@ class core_kernel_classes_ResourceHardSql
     {
         $returnValue = array();
 
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D8E begin
-        
-
-        
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D8E end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 end
 
         return (array) $returnValue;
     }
@@ -96,11 +93,8 @@ class core_kernel_classes_ResourceHardSql
     {
         $returnValue = array();
 
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D90 begin
-        
-        
-        
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D90 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B end
 
         return (array) $returnValue;
     }
@@ -118,11 +112,8 @@ class core_kernel_classes_ResourceHardSql
     {
         $returnValue = null;
 
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D95 begin
-        
-    	
-        
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D95 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F end
 
         return $returnValue;
     }
@@ -141,10 +132,8 @@ class core_kernel_classes_ResourceHardSql
     {
         $returnValue = null;
 
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D97 begin
-        
-        
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D97 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 end
 
         return $returnValue;
     }
@@ -163,11 +152,8 @@ class core_kernel_classes_ResourceHardSql
     {
         $returnValue = null;
 
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D9C begin
-        
-    	
-        
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D9C end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 end
 
         return $returnValue;
     }
@@ -186,11 +172,8 @@ class core_kernel_classes_ResourceHardSql
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002DA0 begin
-        
-    	
-    	
-        // section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002DA0 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE end
 
         return (bool) $returnValue;
     }
@@ -208,11 +191,8 @@ class core_kernel_classes_ResourceHardSql
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DA0 begin
-        
-    	
-        
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DA0 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3 end
 
         return (bool) $returnValue;
     }
@@ -232,11 +212,8 @@ class core_kernel_classes_ResourceHardSql
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DA3 begin
-        
-        
-        
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DA3 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7 end
 
         return (bool) $returnValue;
     }
@@ -254,11 +231,8 @@ class core_kernel_classes_ResourceHardSql
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DA7 begin
-    	
-        
-        
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DA7 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD end
 
         return (bool) $returnValue;
     }
@@ -277,10 +251,8 @@ class core_kernel_classes_ResourceHardSql
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DAA begin
-        
-    	    	
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DAA end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 end
 
         return (bool) $returnValue;
     }
@@ -297,8 +269,8 @@ class core_kernel_classes_ResourceHardSql
     {
         $returnValue = null;
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DAE begin
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DAE end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6 end
 
         return $returnValue;
     }
@@ -316,11 +288,8 @@ class core_kernel_classes_ResourceHardSql
     {
         $returnValue = array();
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DB0 begin
-        
-    	
-        
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DB0 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C9 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C9 end
 
         return (array) $returnValue;
     }
@@ -338,11 +307,8 @@ class core_kernel_classes_ResourceHardSql
     {
         $returnValue = null;
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DB3 begin
-        
-    	
-        
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DB3 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD end
 
         return $returnValue;
     }
@@ -360,9 +326,8 @@ class core_kernel_classes_ResourceHardSql
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DB6 begin
-        
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DB6 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 end
 
         return (bool) $returnValue;
     }
@@ -374,15 +339,14 @@ class core_kernel_classes_ResourceHardSql
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
-     * @return doc_date
+     * @return core_kernel_persistence_doc_date
      */
     public function getLastModificationDate( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
     {
         $returnValue = null;
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DB9 begin
-        
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DB9 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 end
 
         return $returnValue;
     }
@@ -399,9 +363,8 @@ class core_kernel_classes_ResourceHardSql
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DBD begin
-        
-        // section 127-0-1-1--6761ba9f:12f6868ffc5:-8000:0000000000002DBD end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC end
 
         return (string) $returnValue;
     }
@@ -411,24 +374,18 @@ class core_kernel_classes_ResourceHardSql
      *
      * @access public
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @return core_kernel_classes_RessourceHardSql
+     * @return core_kernel_classes_Resource
      */
     public static function singleton()
     {
         $returnValue = null;
 
-        // section 127-0-1-1--9398bc2:12f6a3d8694:-8000:0000000000002E55 begin
-        
-        if (core_kernel_classes_ResourceHardSql::$instance == null){
-        	core_kernel_classes_ResourceHardSql::$instance = new core_kernel_classes_ResourceHardSql();
-        }
-        $returnValue = core_kernel_classes_ResourceHardSql::$instance;
-        
-        // section 127-0-1-1--9398bc2:12f6a3d8694:-8000:0000000000002E55 end
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000137E begin
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000137E end
 
         return $returnValue;
     }
 
-} /* end of class core_kernel_classes_ResourceHardSql */
+} /* end of class core_kernel_persistence_hard_sql_Resource */
 
 ?>

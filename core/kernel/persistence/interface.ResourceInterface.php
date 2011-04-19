@@ -3,18 +3,18 @@
 error_reporting(E_ALL);
 
 /**
- * TAO - core/kernel/classes/interface.ResourceInterface.php
+ * Generis Object Oriented API -
  *
  * $Id$
  *
- * This file is part of TAO.
+ * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 19.04.2011, 13:55:12 with ArgoUML PHP module 
+ * Automatically generated on 19.04.2011, 14:35:06 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
- * @subpackage kernel_classes
+ * @subpackage kernel_persistence
  */
 
 if (0 > version_compare(PHP_VERSION, '5')) {
@@ -22,22 +22,22 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 }
 
 /* user defined includes */
-// section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D7D-includes begin
-// section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D7D-includes end
+// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297-includes begin
+// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297-includes end
 
 /* user defined constants */
-// section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D7D-constants begin
-// section 127-0-1-1-7002f6a4:12f67d9b54d:-8000:0000000000002D7D-constants end
+// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297-constants begin
+// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297-constants end
 
 /**
- * Short description of class core_kernel_classes_ResourceInterface
+ * Short description of class core_kernel_persistence_ResourceInterface
  *
  * @access public
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
- * @subpackage kernel_classes
+ * @subpackage kernel_persistence
  */
-interface core_kernel_classes_ResourceInterface
+interface core_kernel_persistence_ResourceInterface
 {
 
 
@@ -208,7 +208,7 @@ interface core_kernel_classes_ResourceInterface
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
-     * @return doc_date
+     * @return core_kernel_persistence_doc_date
      */
     public function getLastModificationDate( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property);
 
@@ -222,6 +222,6 @@ interface core_kernel_classes_ResourceInterface
      */
     public function getLastModificationUser( core_kernel_classes_Resource $resource);
 
-} /* end of interface core_kernel_classes_ResourceInterface */
+} /* end of interface core_kernel_persistence_ResourceInterface */
 
 ?>
