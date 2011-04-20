@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.04.2011, 11:59:27 with ArgoUML PHP module 
+ * Automatically generated on 20.04.2011, 14:10:07 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -29,11 +29,11 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 require_once('core/kernel/persistence/class.PersistenceProxy.php');
 
 /**
- * include core_kernel_persistence_hard_sql_Resource
+ * include core_kernel_persistence_hardsql_Resource
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
-require_once('core/kernel/persistence/hard_sql/class.Resource.php');
+require_once('core/kernel/persistence/hardsql/class.Resource.php');
 
 /**
  * include core_kernel_persistence_ResourceInterface
@@ -43,11 +43,11 @@ require_once('core/kernel/persistence/hard_sql/class.Resource.php');
 require_once('core/kernel/persistence/interface.ResourceInterface.php');
 
 /**
- * include core_kernel_persistence_smooth_sql_Resource
+ * include core_kernel_persistence_smoothsql_Resource
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
-require_once('core/kernel/persistence/smooth_sql/class.Resource.php');
+require_once('core/kernel/persistence/smoothsql/class.Resource.php');
 
 /* user defined includes */
 // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3-includes begin
@@ -504,14 +504,14 @@ class core_kernel_persistence_ResourceProxy
         if (!isset(core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource])) {
         	
         	$delegate = null;
-            if (core_kernel_persistence_hard_sql_Resource::singleton()->isValidContext($resource)){
-	        	$delegate = core_kernel_persistence_hard_sql_Resource::singleton();
+            if (core_kernel_persistence_hardsql_Resource::singleton()->isValidContext($resource)){
+	        	$delegate = core_kernel_persistence_hardsql_Resource::singleton();
 	        }
 //	        else if (core_kernel_persistence_virtuozo_Resource::singleton()->isValidContext($resource)){
 //	        	$delegate = core_kernel_persistence_virtuozo_Resource::singleton();
 //	        }
-	        else if (core_kernel_persistence_smooth_sql_Resource::singleton()->isValidContext($resource)){
-	        	$delegate = core_kernel_persistence_smooth_sql_Resource::singleton();
+	        else if (core_kernel_persistence_smoothsql_Resource::singleton()->isValidContext($resource)){
+	        	$delegate = core_kernel_persistence_smoothsql_Resource::singleton();
 	        }
 	        
 	        core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource] = $delegate;

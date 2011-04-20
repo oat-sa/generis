@@ -3,18 +3,18 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API -
+ * Generis Object Oriented API - core/kernel/persistence/hardsql/class.Class.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.04.2011, 11:59:28 with ArgoUML PHP module 
+ * Automatically generated on 20.04.2011, 14:10:07 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
- * @subpackage kernel_persistence_hard_sql
+ * @subpackage kernel_persistence_hardsql
  */
 
 if (0 > version_compare(PHP_VERSION, '5')) {
@@ -44,14 +44,14 @@ require_once('core/kernel/persistence/interface.ClassInterface.php');
 // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A7-constants end
 
 /**
- * Short description of class core_kernel_persistence_hard_sql_Class
+ * Short description of class core_kernel_persistence_hardsql_Class
  *
  * @access public
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
- * @subpackage kernel_persistence_hard_sql
+ * @subpackage kernel_persistence_hardsql
  */
-class core_kernel_persistence_hard_sql_Class
+class core_kernel_persistence_hardsql_Class
     extends core_kernel_persistence_PersistenceImpl
         implements core_kernel_persistence_ClassInterface
 {
@@ -297,10 +297,10 @@ class core_kernel_persistence_hard_sql_Class
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001495 begin
         
-    	if (core_kernel_persistence_hard_sql_Class::$instance == null){
-        	core_kernel_persistence_hard_sql_Class::$instance = new core_kernel_persistence_hard_sql_Class();
+    	if (core_kernel_persistence_hardsql_Class::$instance == null){
+        	core_kernel_persistence_hardsql_Class::$instance = new core_kernel_persistence_hardsql_Class();
         }
-        $returnValue = core_kernel_persistence_hard_sql_Class::$instance;
+        $returnValue = core_kernel_persistence_hardsql_Class::$instance;
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001495 end
 
@@ -325,6 +325,6 @@ class core_kernel_persistence_hard_sql_Class
         return (bool) $returnValue;
     }
 
-} /* end of class core_kernel_persistence_hard_sql_Class */
+} /* end of class core_kernel_persistence_hardsql_Class */
 
 ?>

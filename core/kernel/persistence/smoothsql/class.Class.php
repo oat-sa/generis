@@ -9,12 +9,12 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.04.2011, 11:59:28 with ArgoUML PHP module 
+ * Automatically generated on 20.04.2011, 14:10:07 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
- * @subpackage kernel_persistence_smooth_sql
+ * @subpackage kernel_persistence_smoothsql
  */
 
 if (0 > version_compare(PHP_VERSION, '5')) {
@@ -44,14 +44,14 @@ require_once('core/kernel/persistence/interface.ClassInterface.php');
 // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001399-constants end
 
 /**
- * Short description of class core_kernel_persistence_smooth_sql_Class
+ * Short description of class core_kernel_persistence_smoothsql_Class
  *
  * @access public
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
- * @subpackage kernel_persistence_smooth_sql
+ * @subpackage kernel_persistence_smoothsql
  */
-class core_kernel_persistence_smooth_sql_Class
+class core_kernel_persistence_smoothsql_Class
     extends core_kernel_persistence_PersistenceImpl
         implements core_kernel_persistence_ClassInterface
 {
@@ -473,10 +473,10 @@ class core_kernel_persistence_smooth_sql_Class
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001493 begin
         
-        if (core_kernel_persistence_smooth_sql_Class::$instance == null){
-        	core_kernel_persistence_smooth_sql_Class::$instance = new core_kernel_persistence_smooth_sql_Class();
+        if (core_kernel_persistence_smoothsql_Class::$instance == null){
+        	core_kernel_persistence_smoothsql_Class::$instance = new core_kernel_persistence_smoothsql_Class();
         }
-        $returnValue = core_kernel_persistence_smooth_sql_Class::$instance;
+        $returnValue = core_kernel_persistence_smoothsql_Class::$instance;
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001493 end
 
@@ -504,6 +504,6 @@ class core_kernel_persistence_smooth_sql_Class
         return (bool) $returnValue;
     }
 
-} /* end of class core_kernel_persistence_smooth_sql_Class */
+} /* end of class core_kernel_persistence_smoothsql_Class */
 
 ?>

@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.04.2011, 11:59:27 with ArgoUML PHP module 
+ * Automatically generated on 20.04.2011, 14:10:07 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -29,11 +29,11 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 require_once('core/kernel/persistence/class.PersistenceProxy.php');
 
 /**
- * include core_kernel_persistence_hard_sql_Class
+ * include core_kernel_persistence_hardsql_Class
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
-require_once('core/kernel/persistence/hard_sql/class.Class.php');
+require_once('core/kernel/persistence/hardsql/class.Class.php');
 
 /**
  * include core_kernel_persistence_ClassInterface
@@ -43,11 +43,11 @@ require_once('core/kernel/persistence/hard_sql/class.Class.php');
 require_once('core/kernel/persistence/interface.ClassInterface.php');
 
 /**
- * include core_kernel_persistence_smooth_sql_Class
+ * include core_kernel_persistence_smoothsql_Class
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
-require_once('core/kernel/persistence/smooth_sql/class.Class.php');
+require_once('core/kernel/persistence/smoothsql/class.Class.php');
 
 /* user defined includes */
 // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139B-includes begin
@@ -397,8 +397,8 @@ class core_kernel_persistence_ClassProxy
 //	        else if (core_kernel_persistence_virtuozo_Class::singleton()->isValidContext($resource)){
 //	        	$delegate = core_kernel_persistence_virtuozo_Class::singleton();
 //	        }
-	        else if (true && core_kernel_persistence_smooth_sql_Class::singleton()->isValidContext($resource)){
-	        	$delegate = core_kernel_persistence_smooth_sql_Class::singleton();
+	        else if (true && core_kernel_persistence_smoothsql_Class::singleton()->isValidContext($resource)){
+	        	$delegate = core_kernel_persistence_smoothsql_Class::singleton();
 	        }
 	        core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo[$resource->uriResource] = $delegate;
 	        
