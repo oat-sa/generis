@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 19.04.2011, 15:00:43 with ArgoUML PHP module 
+ * Automatically generated on 20.04.2011, 11:59:28 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -20,6 +20,13 @@ error_reporting(E_ALL);
 if (0 > version_compare(PHP_VERSION, '5')) {
     die('This file was generated for PHP 5');
 }
+
+/**
+ * include core_kernel_persistence_PersistenceImpl
+ *
+ * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ */
+require_once('core/kernel/persistence/class.PersistenceImpl.php');
 
 /**
  * include core_kernel_persistence_ResourceInterface
@@ -45,6 +52,7 @@ require_once('core/kernel/persistence/interface.ResourceInterface.php');
  * @subpackage kernel_persistence_smooth_sql
  */
 class core_kernel_persistence_smooth_sql_Resource
+    extends core_kernel_persistence_PersistenceImpl
         implements core_kernel_persistence_ResourceInterface
 {
     // --- ASSOCIATIONS ---
@@ -768,6 +776,27 @@ class core_kernel_persistence_smooth_sql_Resource
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001354 end
 
         return $returnValue;
+    }
+
+    /**
+     * Short description of method isValidContext
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @return boolean
+     */
+    public function isValidContext( core_kernel_classes_Resource $resource)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F4B begin
+        
+        $returnValue = true;
+        
+        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F4B end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class core_kernel_persistence_smooth_sql_Resource */

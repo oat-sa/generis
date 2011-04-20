@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 19.04.2011, 15:13:18 with ArgoUML PHP module 
+ * Automatically generated on 20.04.2011, 11:59:27 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -74,6 +74,22 @@ class core_kernel_persistence_ResourceProxy
 
     // --- ATTRIBUTES ---
 
+    /**
+     * Short description of attribute instance
+     *
+     * @access public
+     * @var PersistanceProxy
+     */
+    public static $instance = null;
+
+    /**
+     * Short description of attribute ressourcesDelegatedTo
+     *
+     * @access public
+     * @var array
+     */
+    public static $ressourcesDelegatedTo = array();
+
     // --- OPERATIONS ---
 
     /**
@@ -90,7 +106,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 begin
         
-        $delegate = $this->getClassToDelegateTo ($resource);
+        $delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->getType ($resource);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 end
@@ -113,7 +129,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
         
-        $delegate = $this->getClassToDelegateTo ($resource);
+        $delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->getPropertyValues ($resource, $property);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B end
@@ -136,7 +152,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F begin
         
-        $delegate = $this->getClassToDelegateTo ($resource);
+        $delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->getPropertyValuesCollection ($resource, $property);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F end
@@ -160,7 +176,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
         
-        $delegate = $this->getClassToDelegateTo ($resource);
+        $delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->getOnePropertyValue ($resource, $property, $last);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 end
@@ -184,7 +200,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 begin
         
-        $delegate = $this->getClassToDelegateTo ($resource);
+        $delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->getPropertyValuesByLg ($resource, $property, $lg);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 end
@@ -208,7 +224,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE begin
         
-        $delegate = $this->getClassToDelegateTo ($resource);
+        $delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->setPropertyValue ($resource, $property, $object);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE end
@@ -231,7 +247,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3 begin
         
-        $delegate = $this->getClassToDelegateTo ($resource);
+        $delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->setPropertiesValues ($resource, $properties);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3 end
@@ -256,7 +272,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7 begin
         
-        $delegate = $this->getClassToDelegateTo ($resource);
+        $delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->setPropertyValueByLg ($resource, $property, $value, $lg);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7 end
@@ -279,7 +295,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD begin
         
-        $delegate = $this->getClassToDelegateTo ($resource);
+        $delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->removePropertyValues ($resource, $property);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD end
@@ -303,7 +319,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 begin
         
-        $delegate = $this->getClassToDelegateTo ($resource);
+        $delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->removePropertyValueByLg ($resource, $property, $lg);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 end
@@ -325,7 +341,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6 begin
         
-        $delegate = $this->getClassToDelegateTo ($resource);
+        $delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->getRdfTriples ($resource);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6 end
@@ -348,7 +364,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C9 begin
         
-        $delegate = $this->getClassToDelegateTo ($resource);
+        $delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->getUsedLanguages ($resource, $property);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C9 end
@@ -371,7 +387,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD begin
         
-        $delegate = $this->getClassToDelegateTo ($resource);
+        $delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->duplicate ($resource, $excludedProperties);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD end
@@ -394,7 +410,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 begin
         
-        $delegate = $this->getClassToDelegateTo ($resource);
+        $delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->delete ($resource, $deleteReference);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 end
@@ -417,7 +433,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 begin
         
-        $delegate = $this->getClassToDelegateTo ($resource);
+        $delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->getLastModificationDate ($resource, $property);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 end
@@ -439,7 +455,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC begin
         
-        $delegate = $this->getClassToDelegateTo ($resource);
+        $delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->getLastModificationUser ($resource);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC end
@@ -471,83 +487,42 @@ class core_kernel_persistence_ResourceProxy
     }
 
     /**
-     * Short description of method isHardSql
+     * Short description of method getImpToDelegateTo
      *
      * @access public
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
-     * @return boolean
+     * @return core_kernel_persistence_ResourceInterface
      */
-    public function isHardSql( core_kernel_classes_Resource $resource)
+    public function getImpToDelegateTo( core_kernel_classes_Resource $resource)
     {
-        $returnValue = (bool) false;
+        $returnValue = null;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001390 begin
+        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5D begin
         
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
-        $hardSqlTable = null;
-		
-        // Check if the hard sql tables exist
-		$hardSqlTablesExistSql = "SELECT count(*) FROM information_schema.TABLES WHERE Table_Name='resource_to_table' and TABLE_SCHEMA='mytao'";
-		$resulthardSqlTablesExist = $dbWrapper->execSql($hardSqlTablesExistSql);
-		
-		if ($resulthardSqlTablesExist && $resulthardSqlTablesExist->fields[0]){
-
-			// Check if the resource has been hard sqled
-			$isHardSqlResourceSql = "SELECT `table` FROM `resource_to_table` WHERE `uri`='{$resource->uriResource}'";
-			$isHardSqlResourceResult = $dbWrapper->execSql($isHardSqlResourceSql);
-			if ($isHardSqlResourceResult && !$isHardSqlResourceResult->EOF){
-				$hardSqlTable = $isHardSqlResourceResult->fields['table'];
-			}
-			
-		}
-		
-		if ($hardSqlTable){
-			$returnValue = true;
-		}
+        // First access to the resource
+        if (!isset(core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource])) {
+        	
+        	$delegate = null;
+            if (core_kernel_persistence_hard_sql_Resource::singleton()->isValidContext($resource)){
+	        	$delegate = core_kernel_persistence_hard_sql_Resource::singleton();
+	        }
+//	        else if (core_kernel_persistence_virtuozo_Resource::singleton()->isValidContext($resource)){
+//	        	$delegate = core_kernel_persistence_virtuozo_Resource::singleton();
+//	        }
+	        else if (core_kernel_persistence_smooth_sql_Resource::singleton()->isValidContext($resource)){
+	        	$delegate = core_kernel_persistence_smooth_sql_Resource::singleton();
+	        }
+	        
+	        core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource] = $delegate;
+	        
+        }
         
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001390 end
-
-        return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method isSmoothSql
-     *
-     * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  Resource resource
-     * @return boolean
-     */
-    public function isSmoothSql( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = (bool) false;
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001393 begin
+        $returnValue = core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource];
         
-        $returnValue = true;
-        
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001393 end
+        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5D end
 
-        return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method isVirtuozo
-     *
-     * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  Resource resource
-     * @return boolean
-     */
-    public function isVirtuozo( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = (bool) false;
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001396 begin
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001396 end
-
-        return (bool) $returnValue;
+        return $returnValue;
     }
 
 } /* end of class core_kernel_persistence_ResourceProxy */

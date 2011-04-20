@@ -22,15 +22,15 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 }
 
 /* user defined includes */
-// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E4-includes begin
-// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E4-includes end
+// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001403-includes begin
+// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001403-includes end
 
 /* user defined constants */
-// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E4-constants begin
-// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E4-constants end
+// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001403-constants begin
+// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001403-constants end
 
 /**
- * Short description of class core_kernel_persistence_PersistenceProxy
+ * Short description of class core_kernel_persistence_PersistenceImpl
  *
  * @abstract
  * @access public
@@ -38,25 +38,22 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * @package core
  * @subpackage kernel_persistence
  */
-abstract class core_kernel_persistence_PersistenceProxy
+abstract class core_kernel_persistence_PersistenceImpl
 {
     // --- ASSOCIATIONS ---
 
 
     // --- ATTRIBUTES ---
 
-    // --- OPERATIONS ---
-
     /**
-     * Short description of method getImpToDelegateTo
+     * Short description of attribute enabled
      *
-     * @abstract
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  Resource resource
-     * @return core_kernel_persistence_ResourceInterface
+     * @var boolean
      */
-    public abstract function getImpToDelegateTo( core_kernel_classes_Resource $resource);
+    public $enabled = false;
+
+    // --- OPERATIONS ---
 
     /**
      * Short description of method singleton
@@ -64,10 +61,21 @@ abstract class core_kernel_persistence_PersistenceProxy
      * @abstract
      * @access public
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @return core_kernel_persistence_PersistanceProxy
+     * @return core_kernel_classes_Resource
      */
     public static abstract function singleton();
 
-} /* end of abstract class core_kernel_persistence_PersistenceProxy */
+    /**
+     * Short description of method isValidContext
+     *
+     * @abstract
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @return boolean
+     */
+    public abstract function isValidContext( core_kernel_classes_Resource $resource);
+
+} /* end of abstract class core_kernel_persistence_PersistenceImpl */
 
 ?>

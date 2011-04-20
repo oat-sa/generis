@@ -71,19 +71,8 @@ class core_kernel_classes_Class
         $returnValue = array();
 
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000772 begin
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlQuery = "select subject FROM statements where predicate = '".RDF_SUBCLASSOF."' and object = '".$this->uriResource."'";
-		$returnValue = array();
-		$sqlResult = $dbWrapper->execSql($sqlQuery);
-		while (!$sqlResult-> EOF){
-			$subClass = new core_kernel_classes_Class($sqlResult->fields['subject']);
-			$returnValue[$subClass->uriResource] = $subClass;
-			if($recursive == true ){
-				$plop = $subClass->getSubClasses(true);
-				$returnValue = array_merge($returnValue , $plop);
-			}
-			$sqlResult->MoveNext();
-		}
+		
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getSubClasses ($this, $recursive);
 
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000772 end
 
@@ -104,29 +93,7 @@ class core_kernel_classes_Class
 
         // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000AF2 begin
 		
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        
-		$query = "SELECT object FROM statements
-					WHERE subject = ?
-					AND predicate = ? AND object = ?";
-		$result = $dbWrapper->execSql($query, array(
-			$this->uriResource,
-			RDF_SUBCLASSOF,
-			$parentClass->uriResource
-		));
-		while(!$result-> EOF){
-			$returnValue =  true;
-			$result->moveNext();
-			break;
-		}
-		if(!$returnValue){
-			foreach ($parentClass->getSubClasses(true) as $subClass){
-				if ($subClass->uriResource == $this->uriResource) {
-					$returnValue =  true;
-					break;
-				}
-			}
-		}
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->isSubClassOf ($this, $parentClass);
 		
 		// section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000AF2 end
 
@@ -147,25 +114,9 @@ class core_kernel_classes_Class
         $returnValue = array();
 
         // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B20 begin
-		//		$classes = core_kernel_classes_Session::singleton()->model->getindirectSuperClasses($this->uriResource);
-		$returnValue =  array();
-		$sqlQuery ="SELECT object FROM statements WHERE subject = '". $this->uriResource."' AND (predicate = '".
-												RDF_SUBCLASSOF."' OR predicate = '".RDF_TYPE."')";
-
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->execSql($sqlQuery);
-
-		while (!$sqlResult-> EOF){
-
-			$parentClass = new core_kernel_classes_Class($sqlResult->fields['object']);
-
-			$returnValue[$parentClass->uriResource] = $parentClass ;
-			if($recursive == true && $parentClass->uriResource != RDF_CLASS && $parentClass->uriResource != RDF_RESOURCE){
-				$plop = $parentClass->getParentClasses(true);
-				$returnValue = array_merge($returnValue,$plop);
-			}
-			$sqlResult->MoveNext();
-		}
+		
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getParentClasses ($this, $recursive);
+		
         // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B20 end
 
         return (array) $returnValue;
@@ -184,24 +135,10 @@ class core_kernel_classes_Class
         $returnValue = array();
 
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:000000000000094B begin
+		
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getProperties ($this, $recursive);
 
-		$sqlQuery = "select subject from statements where predicate = '". RDF_DOMAIN."' and object = '".$this->uriResource."'";
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->execSql($sqlQuery);
-
-		while (!$sqlResult-> EOF){
-			$property = new core_kernel_classes_Property($sqlResult->fields['subject']);
-			$returnValue[$property->uriResource] = $property;
-			$sqlResult->MoveNext();
-		}
-    	if($recursive == true) {
-				$parentClasses = $this->getParentClasses(true);
-				foreach ($parentClasses as $parent) {
-					if($parent->uriResource != RDF_CLASS) {
-						$returnValue = array_merge($returnValue,$parent->getProperties(true));
-					}
-				}
-			}	
+		
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:000000000000094B end
 
         return (array) $returnValue;
@@ -221,50 +158,9 @@ class core_kernel_classes_Class
         $returnValue = array();
 
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000958 begin
-		$sqlQuery = "select subject from statements
-									where predicate = '".RDF_TYPE."'  
-									and object = '".$this->uriResource."' ";
-
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->execSql($sqlQuery);
-
-		while (!$sqlResult-> EOF){
-
-			$instance = new core_kernel_classes_Resource($sqlResult->fields['subject']);
-				
-			$returnValue[$instance->uriResource] = $instance ;
-
-			//In case of a meta class, subclasses of instances may be returned*/
-			if (($instance->uriResource!=RDF_CLASS) 
-				&& ($this->uriResource == RDF_CLASS)
-				&& ($instance->uriResource!=RDF_RESOURCE)) {
-
-				$instanceClass = new core_kernel_classes_Class($instance->uriResource);
-				$subClasses = $instanceClass->getSubClasses(true);
-
-				foreach($subClasses as $subClass) {
-					$returnValue[$subClass->uriResource] = $subClass;
-				}
-			}	
-			$sqlResult->MoveNext();
-		}
-		if($recursive == true){
-			$subClasses = $this->getSubClasses(true);
-			foreach ($subClasses as $subClass){
-				$returnValue = array_merge($returnValue,$subClass->getInstances(true));
-			}
-		}
 		
-		if(defined('ENABLE_SUBSCRIPTION') && ENABLE_SUBSCRIPTION && $this->uriResource != CLASS_SUBCRIPTION){
-			$typeProp = new core_kernel_classes_Property(RDF_TYPE);
-			$subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions(null,$typeProp,$this);
-
-			foreach ($subcriptions as $sub){
-				$subcriptionResource = new core_kernel_classes_Resource($sub);
-				$subcriptionsInstances = core_kernel_subscriptions_Service::singleton()->getInstancesFromSubscription($subcriptionResource,$this);
-				$returnValue = array_merge($returnValue,$subcriptionsInstances);
-			}
-		}
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getInstances ($this, $recursive);
+		
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000958 end
 
         return (array) $returnValue;
@@ -284,13 +180,9 @@ class core_kernel_classes_Class
         $returnValue = null;
 
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000978 begin
-
-        $rdfType = new core_kernel_classes_Property(RDF_TYPE);
-        $newInstance = clone $instance;	//call Resource::__clone
-		$newInstance->setPropertyValue($rdfType, $this->uriResource);
 		
-		$returnValue = $newInstance;
-
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->setInstance ($this, $instance);
+        
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000978 end
 
         return $returnValue;
@@ -310,10 +202,9 @@ class core_kernel_classes_Class
         $returnValue = (bool) false;
 
         // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AB0 begin
-        
-		$subClassOf = new core_kernel_classes_Property(RDF_SUBCLASSOF);
-		$returnValue = $this->setPropertyValue($subClassOf,$iClass->uriResource);
 		
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->setSubClassOf ($this, $iClass);
+        
         // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AB0 end
 
         return (bool) $returnValue;
@@ -334,9 +225,7 @@ class core_kernel_classes_Class
 
         // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AC1 begin
 		
-        $domain = new core_kernel_classes_Property(RDF_DOMAIN,__METHOD__);
-		$instanceProperty = new core_kernel_classes_Resource($property->uriResource,__METHOD__);
-		$returnValue = $instanceProperty->setPropertyValue($domain, $this->uriResource);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->setProperty ($this, $property);
         
 		// section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AC1 end
 
@@ -437,27 +326,8 @@ class core_kernel_classes_Class
         $returnValue = null;
 
         // section 10-13-1--99-5d680c37:11e406b020f:-8000:0000000000000F23 begin
-
-		if($uri == ''){
-			$subject = common_Utils::getNewUri();
-		}
-		else {
-			//$uri should start with # and be well formed
-			$modelUri = core_kernel_classes_Session::singleton()->getNameSpace();
-			$subject = $modelUri . $uri;
-		}
-
-		$returnValue = new core_kernel_classes_Resource($subject,__METHOD__);
 		
-		$rdfType = new core_kernel_classes_Property(RDF_TYPE);
-		$returnValue->setPropertyValue($rdfType, $this->uriResource);
-		
-		if ($label != '') {
-			$returnValue->setLabel($label);
-		}
-		if( $comment != '') {
-			$returnValue->setComment($comment);
-		}
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->createInstance ($this, $label, $comment, $uri);
 
         // section 10-13-1--99-5d680c37:11e406b020f:-8000:0000000000000F23 end
 
@@ -478,10 +348,9 @@ class core_kernel_classes_Class
         $returnValue = null;
 
         // section 10-13-1--99-3835caab:11e45736d24:-8000:0000000000000F2A begin
-		$class = new core_kernel_classes_Class(RDF_CLASS,__METHOD__);
-		$intance = $class->createInstance($label,$comment);
-		$returnValue = new core_kernel_classes_Class($intance->uriResource);
-		$returnValue->setSubClassOf($this);
+		
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->createSubClass ($this, $label, $comment);
+        
         // section 10-13-1--99-3835caab:11e45736d24:-8000:0000000000000F2A end
 
         return $returnValue;
@@ -502,14 +371,9 @@ class core_kernel_classes_Class
         $returnValue = null;
 
         // section 10-13-1--99--47c96501:11e4ab45b34:-8000:0000000000000F34 begin
-		$property = new core_kernel_classes_Class(RDF_PROPERTY,__METHOD__);
-		$propertyInstance = $property->createInstance($label,$comment);
-		$returnValue = new core_kernel_classes_Property($propertyInstance->uriResource,__METHOD__);
-		$returnValue->setLgDependent($isLgDependent);
 		
-		if (!$this->setProperty($returnValue)){
-			throw new common_Exception('proplem creating property');
-		}
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->createProperty ($this, $label, $comment, $isLgDependent);
+        
         // section 10-13-1--99--47c96501:11e4ab45b34:-8000:0000000000000F34 end
 
         return $returnValue;
