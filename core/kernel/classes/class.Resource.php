@@ -292,7 +292,6 @@ class core_kernel_classes_Resource
 
         // section 127-0-0-1-71ce5466:11938f47d30:-8000:0000000000000A99 begin
     	
-       	
         $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getPropertyValues ($this, $property);
 
         // section 127-0-0-1-71ce5466:11938f47d30:-8000:0000000000000A99 end

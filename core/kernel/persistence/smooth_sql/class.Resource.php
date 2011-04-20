@@ -464,18 +464,16 @@ class core_kernel_persistence_smooth_sql_Resource
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD begin
         
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $session = core_kernel_classes_Session::singleton();
-        $modelIds	= implode(',',array_keys($session->getLoadedModels()));
-        
         $query =  "DELETE FROM statements 
-		    		WHERE subject = ? AND predicate = ?
-		    		AND modelID IN ({$modelIds}) ";
+		    		WHERE subject = ? AND predicate = ?";
         
         if($property->isLgDependent()){
+        	$session = core_kernel_classes_Session::singleton();
         	
         	$query .=  " AND (l_language = '' OR l_language = ?) ";
+        	
         	$returnValue	= $dbWrapper->execSql($query,array(
-	        		$resource->uriResource,
+	        		$this->uriResource,
 	        		$property->uriResource,
 	        		($session->getLg() != '') ? $session->getLg() : $session->defaultLg
 	        ));
@@ -484,7 +482,7 @@ class core_kernel_persistence_smooth_sql_Resource
         else{
         	
         	$returnValue	= $dbWrapper->execSql($query,array(
-	        		$resource->uriResource,
+	        		$this->uriResource,
 	        		$property->uriResource
 	        ));
 	        

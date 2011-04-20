@@ -3,7 +3,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
     die('This file was generated for PHP 5');
 }
 
-if (!(isset($_SESSION))) {session_start();}
+//if (!(isset($_SESSION))) {session_start();}
 
 /**
  * Manage session with generis api using PHP Session. Using this facade is really
