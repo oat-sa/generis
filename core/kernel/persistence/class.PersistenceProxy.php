@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.04.2011, 14:10:07 with ArgoUML PHP module 
+ * Automatically generated on 20.04.2011, 17:29:04 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -45,6 +45,14 @@ abstract class core_kernel_persistence_PersistenceProxy
 
     // --- ATTRIBUTES ---
 
+    /**
+     * Short description of attribute impls
+     *
+     * @access public
+     * @var array
+     */
+    public $impls = array();
+
     // --- OPERATIONS ---
 
     /**
@@ -54,9 +62,10 @@ abstract class core_kernel_persistence_PersistenceProxy
      * @access public
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
+     * @param  array params
      * @return core_kernel_persistence_ResourceInterface
      */
-    public abstract function getImpToDelegateTo( core_kernel_classes_Resource $resource);
+    public abstract function getImpToDelegateTo( core_kernel_classes_Resource $resource, $params = array());
 
     /**
      * Short description of method singleton
@@ -67,6 +76,45 @@ abstract class core_kernel_persistence_PersistenceProxy
      * @return core_kernel_persistence_PersistanceProxy
      */
     public static abstract function singleton();
+
+    /**
+     * Short description of method getAvailableImpl
+     *
+     * @access protected
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  array params
+     * @return array
+     */
+    protected function getAvailableImpl($params = array())
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000147C begin
+        
+        $returnValue = array("hardsql"=>true, "smoothsql"=>true, "virtuozo"=>false, "subscription"=>false);
+        
+        foreach ($returnValue as $name=>$enabled){
+        	if (isset($params[$name])){
+        		$returnValue[$name] = $enabled;
+        	}
+        }
+        
+        // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000147C end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method isValidContext
+     *
+     * @abstract
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  string context
+     * @param  Resource resource
+     * @return boolean
+     */
+    public abstract function isValidContext($context,  core_kernel_classes_Resource $resource);
 
 } /* end of abstract class core_kernel_persistence_PersistenceProxy */
 

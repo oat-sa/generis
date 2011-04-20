@@ -243,6 +243,7 @@ class core_kernel_classes_Property
         $returnValue = null;
 
         // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000ABA begin
+        
 		if (is_null($this->range)){
 			$rangeValues = $this->getPropertyValues(new core_kernel_classes_Property(RDFS_RANGE));
 			if (sizeOf($rangeValues)>0)
@@ -255,6 +256,7 @@ class core_kernel_classes_Property
 			}
 		}
 		$returnValue=$this->range;
+		
         // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000ABA end
 
         return $returnValue;

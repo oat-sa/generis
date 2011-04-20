@@ -3,18 +3,18 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - core/kernel/persistence/class.ClassProxy.php
+ * Generis Object Oriented API -
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.04.2011, 17:29:04 with ArgoUML PHP module 
+ * Automatically generated on 20.04.2011, 14:33:25 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
- * @subpackage kernel_persistence
+ * @subpackage kernel_persistence_subscription
  */
 
 if (0 > version_compare(PHP_VERSION, '5')) {
@@ -22,18 +22,11 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 }
 
 /**
- * include core_kernel_persistence_PersistenceProxy
+ * include core_kernel_persistence_PersistenceImpl
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
-require_once('core/kernel/persistence/class.PersistenceProxy.php');
-
-/**
- * include core_kernel_persistence_hardsql_Class
- *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
- */
-require_once('core/kernel/persistence/hardsql/class.Class.php');
+require_once('core/kernel/persistence/class.PersistenceImpl.php');
 
 /**
  * include core_kernel_persistence_ClassInterface
@@ -42,38 +35,24 @@ require_once('core/kernel/persistence/hardsql/class.Class.php');
  */
 require_once('core/kernel/persistence/interface.ClassInterface.php');
 
-/**
- * include core_kernel_persistence_smoothsql_Class
- *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
- */
-require_once('core/kernel/persistence/smoothsql/class.Class.php');
-
-/**
- * include core_kernel_persistence_subscription_Class
- *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
- */
-require_once('core/kernel/persistence/subscription/class.Class.php');
-
 /* user defined includes */
-// section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139B-includes begin
-// section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139B-includes end
+// section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000140D-includes begin
+// section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000140D-includes end
 
 /* user defined constants */
-// section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139B-constants begin
-// section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139B-constants end
+// section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000140D-constants begin
+// section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000140D-constants end
 
 /**
- * Short description of class core_kernel_persistence_ClassProxy
+ * Short description of class core_kernel_persistence_subscription_Class
  *
  * @access public
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
- * @subpackage kernel_persistence
+ * @subpackage kernel_persistence_subscription
  */
-class core_kernel_persistence_ClassProxy
-    extends core_kernel_persistence_PersistenceProxy
+class core_kernel_persistence_subscription_Class
+    extends core_kernel_persistence_PersistenceImpl
         implements core_kernel_persistence_ClassInterface
 {
     // --- ASSOCIATIONS ---
@@ -85,17 +64,9 @@ class core_kernel_persistence_ClassProxy
      * Short description of attribute instance
      *
      * @access public
-     * @var PersistanceProxy
+     * @var Resource
      */
     public static $instance = null;
-
-    /**
-     * Short description of attribute ressourcesDelegatedTo
-     *
-     * @access public
-     * @var array
-     */
-    public static $ressourcesDelegatedTo = array();
 
     // --- OPERATIONS ---
 
@@ -114,8 +85,7 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014EB begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->getSubClasses ($resource, $recursive);
+        throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014EB end
 
@@ -137,8 +107,8 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F0 begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->isSubClassOf ($resource, $parentClass);
+        throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F0 end
 
@@ -160,8 +130,8 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F5 begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->getParentClasses ($resource, $recursive);
+        throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F5 end
 
@@ -183,8 +153,8 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014FA begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->getProperties ($resource, $recursive);
+        throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014FA end
 
@@ -206,15 +176,15 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->getInstances ($resource, $recursive);
-    
-        if ($this->isValidContext ('subscription', $resource)){
-        	$delegate = core_kernel_persistence_subscription_Class::singleton();
-        	$subscriptionValue = $delegate->getInstances ($resource, $recursive);
-        	$returnValue = array_merge ($returnValue, $subscriptionValue);
-        }
-        
+		$typeProp = new core_kernel_classes_Property(RDF_TYPE);
+		$subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions(null,$typeProp,$resource);
+
+		foreach ($subcriptions as $sub){
+			$subcriptionResource = new core_kernel_classes_Resource($sub);
+			$subcriptionsInstances = core_kernel_subscriptions_Service::singleton()->getInstancesFromSubscription($subcriptionResource,$resource);
+			$returnValue = array_merge($returnValue,$subcriptionsInstances);
+		}
+		        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 end
 
         return (array) $returnValue;
@@ -235,8 +205,8 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001506 begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->setInstance ($resource, $instance);
+        throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001506 end
 
@@ -258,8 +228,8 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000150F begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->setSubClassOf ($resource, $iClass);
+        throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000150F end
 
@@ -281,8 +251,8 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->setProperty ($resource, $property);
+        throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 end
 
@@ -306,8 +276,8 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F27 begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->createInstance ($resource, $label, $comment, $uri);
+        throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
         
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F27 end
 
@@ -330,8 +300,8 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->createSubClass ($resource, $label, $comment);
+        throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
         
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 end
 
@@ -355,8 +325,8 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F3C begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->createProperty ($resource, $label, $comment, $isLgDependent);
+        throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
         
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F3C end
 
@@ -368,65 +338,20 @@ class core_kernel_persistence_ClassProxy
      *
      * @access public
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @return core_kernel_persistence_PersistanceProxy
+     * @return core_kernel_classes_Resource
      */
     public static function singleton()
     {
         $returnValue = null;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013FF begin
+        // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000142D begin
         
-        if (core_kernel_persistence_ClassProxy::$instance == null){
-        	core_kernel_persistence_ClassProxy::$instance = new core_kernel_persistence_ClassProxy();
+        if (core_kernel_persistence_subscription_Class::$instance == null){
+        	core_kernel_persistence_subscription_Class::$instance = new core_kernel_persistence_subscription_Class();
         }
-        $returnValue = core_kernel_persistence_ClassProxy::$instance;
+        $returnValue = core_kernel_persistence_subscription_Class::$instance;
         
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013FF end
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method getImpToDelegateTo
-     *
-     * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  Resource resource
-     * @param  array params
-     * @return core_kernel_persistence_ResourceInterface
-     */
-    public function getImpToDelegateTo( core_kernel_classes_Resource $resource, $params = array())
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F60 begin
-
-        $impls = $this->getAvailableImpl ($params);
-        
-        // First access to the resource
-        if (!isset(core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo[$resource->uriResource])) {
-        	
-        	$delegate = null;
-        
-            if ($this->isValidContext ('subscription', $resource)) {
-	        	$delegate = core_kernel_persistence_subscription_Class::singleton();
-	        }
-            else if ($this->isValidContext ('hardsql', $resource)) {
-	        	$delegate = core_kernel_persistence_hardsql_Class::singleton();
-	        }
-            else if ($this->isValidContext ('virtuozo', $resource)) {
-	        	$delegate = core_kernel_persistence_virtuozo_Class::singleton();
-	        }
-            else if ($this->isValidContext ('smoothsql', $resource)) {
-	        	$delegate = core_kernel_persistence_smoothsql_Class::singleton();
-	        }
-	        
-	        core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo[$resource->uriResource] = $delegate;
-        }
-        
-        $returnValue = core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo[$resource->uriResource];
-        
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F60 end
+        // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000142D end
 
         return $returnValue;
     }
@@ -436,31 +361,24 @@ class core_kernel_persistence_ClassProxy
      *
      * @access public
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  string context
      * @param  Resource resource
      * @return boolean
      */
-    public function isValidContext($context,  core_kernel_classes_Resource $resource)
+    public function isValidContext( core_kernel_classes_Resource $resource)
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000155B begin
+        // section 127-0-1-1--499759bc:12f72c12020:-8000:0000000000001434 begin
         
-        $impls = $this->getAvailableImpl ();
-    	$className = "core_kernel_persistence_".$context."_Class";
-    	
-    	if (isset($impls["$context"])
-        && $impls["$context"] 
-        && $className::singleton()->isValidContext($resource))
-        {
-    		$returnValue = true;
-    	}
+        if(defined('ENABLE_SUBSCRIPTION') && ENABLE_SUBSCRIPTION && $resource->uriResource != CLASS_SUBCRIPTION){
+        	$returnValue = true;
+        }
         
-        // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000155B end
+        // section 127-0-1-1--499759bc:12f72c12020:-8000:0000000000001434 end
 
         return (bool) $returnValue;
     }
 
-} /* end of class core_kernel_persistence_ClassProxy */
+} /* end of class core_kernel_persistence_subscription_Class */
 
 ?>

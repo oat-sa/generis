@@ -272,16 +272,16 @@ class core_kernel_persistence_smoothsql_Class
 			}
 		}
 
-		if(defined('ENABLE_SUBSCRIPTION') && ENABLE_SUBSCRIPTION && $resource->uriResource != CLASS_SUBCRIPTION){
-			$typeProp = new core_kernel_classes_Property(RDF_TYPE);
-			$subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions(null,$typeProp,$resource);
-
-			foreach ($subcriptions as $sub){
-				$subcriptionResource = new core_kernel_classes_Resource($sub);
-				$subcriptionsInstances = core_kernel_subscriptions_Service::singleton()->getInstancesFromSubscription($subcriptionResource,$resource);
-				$returnValue = array_merge($returnValue,$subcriptionsInstances);
-			}
-		}
+//		if(defined('ENABLE_SUBSCRIPTION') && ENABLE_SUBSCRIPTION && $resource->uriResource != CLASS_SUBCRIPTION){
+//			$typeProp = new core_kernel_classes_Property(RDF_TYPE);
+//			$subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions(null,$typeProp,$resource);
+//
+//			foreach ($subcriptions as $sub){
+//				$subcriptionResource = new core_kernel_classes_Resource($sub);
+//				$subcriptionsInstances = core_kernel_subscriptions_Service::singleton()->getInstancesFromSubscription($subcriptionResource,$resource);
+//				$returnValue = array_merge($returnValue,$subcriptionsInstances);
+//			}
+//		}
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 end
 

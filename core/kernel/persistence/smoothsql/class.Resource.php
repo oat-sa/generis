@@ -130,20 +130,20 @@ class core_kernel_persistence_smoothsql_Resource
         	$returnValue[] = $row['object'];
         }
 		
-        if(defined('ENABLE_SUBSCRIPTION') 	&& ENABLE_SUBSCRIPTION
-        && $resource->uriResource != CLASS_SUBCRIPTION 	&& $resource->uriResource != CLASS_MASK
-        && $property->uriResource != PROPERTY_SUBCRIPTION_MASK && $property->uriResource != PROPERTY_SUBCRIPTION_URL
-        && $property->uriResource != PROPERTY_MASK_SUBJECT && $property->uriResource != PROPERTY_MASK_PREDICATE
-        && $property->uriResource != PROPERTY_MASK_OBJECT
-        ){
-            $subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions($resource,$property,null);
-            foreach ($subcriptions as $sub){
-                $subcriptionResource = new core_kernel_classes_Resource($sub);
-                $subcriptionsInstances = core_kernel_subscriptions_Service::singleton()->getPropertyValuesFromSubscription($subcriptionResource,$resource,$property);
-                $returnValue = array_merge($returnValue,$subcriptionsInstances);
-            }
-
-        }
+//        if(defined('ENABLE_SUBSCRIPTION') 	&& ENABLE_SUBSCRIPTION
+//        && $resource->uriResource != CLASS_SUBCRIPTION 	&& $resource->uriResource != CLASS_MASK
+//        && $property->uriResource != PROPERTY_SUBCRIPTION_MASK && $property->uriResource != PROPERTY_SUBCRIPTION_URL
+//        && $property->uriResource != PROPERTY_MASK_SUBJECT && $property->uriResource != PROPERTY_MASK_PREDICATE
+//        && $property->uriResource != PROPERTY_MASK_OBJECT
+//        ){
+//            $subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions($resource,$property,null);
+//            foreach ($subcriptions as $sub){
+//                $subcriptionResource = new core_kernel_classes_Resource($sub);
+//                $subcriptionsInstances = core_kernel_subscriptions_Service::singleton()->getPropertyValuesFromSubscription($subcriptionResource,$resource,$property);
+//                $returnValue = array_merge($returnValue,$subcriptionsInstances);
+//            }
+//
+//        }
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B end
 
@@ -188,22 +188,22 @@ class core_kernel_persistence_smoothsql_Resource
         	$propertiesValues[] = $row['object'];
         }
 
-        if(defined('ENABLE_SUBSCRIPTION') 	&& ENABLE_SUBSCRIPTION
-        && $resource->uriResource != CLASS_SUBCRIPTION 	&& $resource->uriResource != CLASS_MASK
-        && $property->uriResource != PROPERTY_SUBCRIPTION_MASK && $property->uriResource != PROPERTY_SUBCRIPTION_URL
-        && $property->uriResource != PROPERTY_MASK_SUBJECT && $property->uriResource != PROPERTY_MASK_PREDICATE
-        && $property->uriResource != PROPERTY_MASK_OBJECT
-        ){
-
-            $subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions($resource,$property,null);
-
-            foreach ($subcriptions as $sub){
-                $subcriptionResource = new core_kernel_classes_Resource($sub);
-                $subcriptionsInstances = core_kernel_subscriptions_Service::singleton()->getPropertyValuesFromSubscription($subcriptionResource,$resource,$property);
-                $propertiesValues = array_merge($propertiesValues,$subcriptionsInstances);
-            }
-
-        }
+//        if(defined('ENABLE_SUBSCRIPTION') 	&& ENABLE_SUBSCRIPTION
+//        && $resource->uriResource != CLASS_SUBCRIPTION 	&& $resource->uriResource != CLASS_MASK
+//        && $property->uriResource != PROPERTY_SUBCRIPTION_MASK && $property->uriResource != PROPERTY_SUBCRIPTION_URL
+//        && $property->uriResource != PROPERTY_MASK_SUBJECT && $property->uriResource != PROPERTY_MASK_PREDICATE
+//        && $property->uriResource != PROPERTY_MASK_OBJECT
+//        ){
+//
+//            $subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions($resource,$property,null);
+//
+//            foreach ($subcriptions as $sub){
+//                $subcriptionResource = new core_kernel_classes_Resource($sub);
+//                $subcriptionsInstances = core_kernel_subscriptions_Service::singleton()->getPropertyValuesFromSubscription($subcriptionResource,$resource,$property);
+//                $propertiesValues = array_merge($propertiesValues,$subcriptionsInstances);
+//            }
+//
+//        }
         
         foreach ($propertiesValues as $value){
             if(!common_Utils::isUri($value)) {

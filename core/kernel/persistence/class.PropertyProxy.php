@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.04.2011, 14:10:07 with ArgoUML PHP module 
+ * Automatically generated on 20.04.2011, 17:29:04 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -48,6 +48,13 @@ require_once('core/kernel/persistence/interface.PropertyInterface.php');
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
 require_once('core/kernel/persistence/smoothsql/class.Property.php');
+
+/**
+ * include core_kernel_persistence_subscription_Property
+ *
+ * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ */
+require_once('core/kernel/persistence/subscription/class.Property.php');
 
 /* user defined includes */
 // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139D-includes begin
@@ -115,9 +122,10 @@ class core_kernel_persistence_PropertyProxy
      * @access public
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
+     * @param  array params
      * @return core_kernel_persistence_ResourceInterface
      */
-    public function getImpToDelegateTo( core_kernel_classes_Resource $resource)
+    public function getImpToDelegateTo( core_kernel_classes_Resource $resource, $params = array())
     {
         $returnValue = null;
 
@@ -125,6 +133,25 @@ class core_kernel_persistence_PropertyProxy
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F63 end
 
         return $returnValue;
+    }
+
+    /**
+     * Short description of method isValidContext
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  string context
+     * @param  Resource resource
+     * @return boolean
+     */
+    public function isValidContext($context,  core_kernel_classes_Resource $resource)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000155E begin
+        // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000155E end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class core_kernel_persistence_PropertyProxy */
