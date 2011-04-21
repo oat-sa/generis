@@ -99,25 +99,49 @@ class core_kernel_persistence_hardapi_RowManager
 		if($size > 0){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
+			//building the insert query
+			
+			//1st step : set the column names
 			$query = "INSERT INTO {$this->table} (uri";
 			foreach($this->columns as $column){
+				if(isset($column['multi']) && $column['multi'] === true){
+					continue;
+				}
 				$query .= ", {$column['name']}";
 			}
 			$query .= ') VALUES ';
+			
+			//set the values
 			foreach($rows as $i => $row){
 				$query.= "('{$row['uri']}'";
 				foreach($this->columns as $column){
 					if(isset($row[$column['name']])){
+						if(isset($column['multi']) && $column['multi'] === true){
+							continue;
+						}
+						
+						//set the ID
 						if(isset($column['foreign'])){
 							
-						}
-						else if(isset($column['foreign_tr'])){
-						
-						}
-						else if(isset($column['foreign_tr'])){							
-						
+							$uri = $row[$column['name']];
+							
+							//get foreign id
+							$foreignQuery 	= "SELECT id FROM {$column['foreign']} WHERE uri = ?";
+							$foreignResult 	= $dbWrapper->execSql($foreignQuery, array($uri));
+							if($foreignResult->recordCount() == 0){
+								$query.= ", NULL";
+							}
+							else{
+								while($foreignRow =  $foreignResult->fetchRow()){
+									$id = $foreignRow['id'];
+									
+									$query.= ", {$id}";
+									break;
+								}
+							}
 						}
 						else{
+							//set the literal value
 							$query.= ", '{$row[$column['name']]}'";
 						}
 					}
@@ -127,7 +151,16 @@ class core_kernel_persistence_hardapi_RowManager
 					$query .= ',';
 				}
 			}
-			echo "<br>$query<br>";
+			$dbWrapper->execSql($query);
+			if($dbWrapper->dbConnector->errorNo() === 0){
+				throw new core_kernel_persistence_hardapi_Exception("Unable to insert the rows : " .$dbWrapper->dbConnector->errorMsg());
+			}
+			
+			/*
+			 * 
+			 * @todo insert the multiple values! 
+			 * 
+			 */
 		}
         
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001626 end

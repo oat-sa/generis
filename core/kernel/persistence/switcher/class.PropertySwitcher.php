@@ -210,16 +210,22 @@ bewteen a class and it's parent to retrieve the properties.
 			$column = array('name' => core_kernel_persistence_hardapi_Utils::getShortName($property));
 				
 			$range 			= $property->getRange();
-			$isTranslatable	= $property->isLgDependent();
 			if(!is_null($range) && $range->uriResource != RDFS_LITERAL){
 				
 				//constraint to the class that represents the range
 				$column['foreign'] = core_kernel_persistence_hardapi_Utils::getShortName($range);
 			}
-			else if ($isTranslatable === true){
+			
+			/*
+			 * 
+			 *  @todo $property->isMultiple() is not yet implemented
+			 * 
+			 */
+			
+			if ($property->isLgDependent() === true || $property->isMultiple()){
 				
-				//create a translation table
-				$column['foreign_tr'] = core_kernel_persistence_hardapi_Utils::getShortName($range);
+				//to put to the side table
+				$column['multi'] = true;
 			}
 			$returnValue[] = $column;
 		}

@@ -122,7 +122,10 @@ class core_kernel_persistence_hardapi_TableManager
         
     	if(!$this->exists() && !empty($this->name)){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+			
+			$hasMultiple = false;
 
+			//build the query to create the main table
 			$query = "CREATE TABLE {$this->name} (
 						id int NOT NULL AUTO_INCREMENT,
 						PRIMARY KEY (id),
@@ -130,6 +133,10 @@ class core_kernel_persistence_hardapi_TableManager
 						KEY idx_{$this->name}_uri (uri)";
 			foreach($columns as $column){
 				if(isset($column['name'])){
+					if(isset($column['multi'])){
+						$hasMultiple = true;
+						continue;
+					}
 					$query .= ", {$column['name']}";
 					if(isset($column['foreign'])){
 						$query .= " int,";
@@ -146,6 +153,30 @@ class core_kernel_persistence_hardapi_TableManager
 
 			$dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() === 0){
+				
+				//create the multi prop table if needed
+				if($hasMultiple){
+					$query = "CREATE TABLE {$this->name}Props (
+						id int NOT NULL AUTO_INCREMENT,
+						property_uri VARCHAR(255),
+						property_value LONGTEXT,
+						property_foreign_id int,
+						l_language VARCHAR(4),
+						instance_id int NOT NULL ,
+						PRIMARY KEY (id),
+						KEY idx_property_uri (property_uri),
+						CONSTRAINT fk_{$this->name}_instance_id 
+									FOREIGN KEY (instance_id) 
+									REFERENCES {$this->name}(id)
+						";
+					$dbWrapper->execSql($query);
+					if($dbWrapper->dbConnector->errorNo() === 0){
+						throw new core_kernel_persistence_hardapi_Exception("Unable to create the table {$this->name}Props : " .$dbWrapper->dbConnector->errorMsg());
+					}
+					self::$_tables[] = "{$this->name}Props";
+				}
+				
+				//auto reference
 				self::$_tables[] = $this->name;
 				$returnValue = true;
 			}
@@ -175,9 +206,22 @@ class core_kernel_persistence_hardapi_TableManager
         
     	if($this->exists() && !empty($this->name)){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+
+			//remove the multi property table
+			if(in_array("{$this->name}Props", self::$_tables)){
+				$dbWrapper->execSql("DROP TABLE `{$this->name}Props`");
+				$tblKey = array_search("{$this->name}Props", self::$_tables);
+					if($tblKey !== false){
+						unset(self::$_tables[$tblKey]);
+					}
+			}
 			
+			//remove the table
 			$dbWrapper->execSql("DROP TABLE `{$this->name}`");
+			
 			if($dbWrapper->dbConnector->errorNo() === 0){
+				
+				//remove all the references to the table
 				$cascadeDelete = "DELETE class_to_table.*, resource_has_class.*, resource_to_table.* FROM class_to_table 
 									INNER JOIN resource_has_class ON resource_has_class.class_id = class_to_table.id
 									INNER JOIN resource_to_table ON resource_has_class.resource_id = resource_to_table.id

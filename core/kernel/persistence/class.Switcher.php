@@ -83,43 +83,31 @@ class core_kernel_persistence_Switcher
 			
 			$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
 			$properties = $ps->getProperties();
-			//$columns = $ps->getTableColumns();
 			
-			foreach($properties as $property){
-
-				$column = array('name' => core_kernel_persistence_hardapi_Utils::getShortName($property));
+			$columns = $ps->getTableColumns();
+			foreach($columns as $column){
 				
-				$range 			= $property->getRange();
-				$isTranslatable	= $property->isLgDependent();
-				if(!is_null($range) && $range->uriResource != RDFS_LITERAL){
+				if($recursive && isset($column['foreign'])){
 					
-					//constraint to the class that represents the range
-					
-					$column['foreign'] = core_kernel_persistence_hardapi_Utils::getShortName($range);
-					
-					//in case of recursive mode, we create the foreign table regarding the non-litral ranges
-					if($recursive && $range instanceof core_kernel_classes_Class){
-						$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
-						if(!$foreignTableMgr->exists()){
-							self::hardifier($range, array('recursive' => false));
-						}
+					//create the foreign tables recursively 
+					$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
+					if(!$foreignTableMgr->exists()){
+						self::hardifier($range);
 					}
 				}
-				else if ($isTranslatable === true){
-					
-					//create a translation table
-					
-				}
-				
-				$columns[] = $column;
 			}
-			
+
+			//create the table
 			$myTableMgr = new core_kernel_persistence_hardapi_TableManager($tableName);
 			if($myTableMgr->exists()){
 				$myTableMgr->remove();
 			}
+
 			$myTableMgr->create($columns);
-			$referencer->referenceClass($class);
+			$referencer->referenceClass($class);	//reference the class
+			
+			
+			//insert the resources
 			
 			$instances = $class->getInstances(false);
 			
