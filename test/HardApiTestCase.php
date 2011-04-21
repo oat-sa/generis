@@ -3,14 +3,19 @@ require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
 require_once INCLUDES_PATH.'/simpletest/autorun.php';
 
 
-class HardDbTestCase extends UnitTestCase {
+class HardApiTestCase extends UnitTestCase {
 	
 	public function setUp(){
-
 	    TestRunner::initTest();
-
 	}
-
+	
+	public function testUtils(){
+		
+		$class = new core_kernel_classes_Class(CLASS_ROLE);
+		$shortName = core_kernel_persistence_hardapi_Utils::getShortName($class);
+		$this->assertEqual($shortName, "15ClassRole");
+	}
+	
 	public function testCreateDTable(){
 		$myTblMgr = new core_kernel_persistence_hardapi_TableManager('15ClassRole');
 		$this->assertFalse($myTblMgr->exists());
@@ -38,6 +43,16 @@ class HardDbTestCase extends UnitTestCase {
 		
 		$this->assertTrue($myRoleTblMgr->remove());
 		$this->assertTrue($myLevelTblMgr->remove());
+	}
+	
+	public function testResourceReferencer(){
+		$rsRef = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+		$this->assertIsA($rsRef, 'core_kernel_persistence_hardapi_ResourceReferencer');
+		
+		$testTakerClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
+		$testTaker = $testTakerClass->createInstance('test taker 1');
+		
+		$rsRef->referenceResource($testTaker, false);
 	}
 }
 ?>

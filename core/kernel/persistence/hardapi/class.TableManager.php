@@ -79,7 +79,7 @@ class core_kernel_persistence_hardapi_TableManager
 			self::$_tables = $dbWrapper->dbConnector->MetaTables('TABLES');
 		}
 		if(!preg_match("/^[0-9a-zA-Z\-_]{4,}$/", $name)){
-			throw new core_kernel_persistence_harddb_Exception("Dangerous table name $name . Only alphanumeric, - and _ characters are allowed");
+			throw new core_kernel_persistence_hardapi_Exception("Dangerous table name $name . Only alphanumeric, - and _ characters are allowed");
 		}
 		$this->name = $name;
                 
@@ -126,7 +126,7 @@ class core_kernel_persistence_hardapi_TableManager
 			$query = "CREATE TABLE {$this->name} (
 						id int NOT NULL AUTO_INCREMENT,
 						PRIMARY KEY (id),
-						uri VARCHAR(255),
+						uri VARCHAR(255) NOT NULL ,
 						KEY idx_{$this->name}_uri (uri)";
 			foreach($columns as $column){
 				if(isset($column['name'])){
@@ -142,7 +142,7 @@ class core_kernel_persistence_hardapi_TableManager
 					}
 				}
 			}
-			$query .= ')';
+			$query .= ')DEFAULT CHARSET=utf8';
 
 			$dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() === 0){
@@ -151,7 +151,7 @@ class core_kernel_persistence_hardapi_TableManager
 			}
 			else{
 				//the user may not have the right to create a table
-				throw new core_kernel_persistence_harddb_Exception("Unable to create the table {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
+				throw new core_kernel_persistence_hardapi_Exception("Unable to create the table {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
 			}
 		}
         
@@ -193,12 +193,12 @@ class core_kernel_persistence_hardapi_TableManager
 
 				}
 				else{
-					throw new core_kernel_persistence_harddb_Exception("Unable to remove data related to {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
+					throw new core_kernel_persistence_hardapi_Exception("Unable to remove data related to {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
 				}
 			}
 			else{
 				//the user may not have the right to drop a table
-				throw new core_kernel_persistence_harddb_Exception("Unable to remove the table {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
+				throw new core_kernel_persistence_hardapi_Exception("Unable to remove the table {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
 			}
     	}
         

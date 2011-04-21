@@ -21,13 +21,6 @@ if (0 > version_compare(PHP_VERSION, '5')) {
     die('This file was generated for PHP 5');
 }
 
-/**
- * include core_kernel_persistence_Switcher
- *
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
- */
-require_once('core/kernel/persistence/class.Switcher.php');
-
 /* user defined includes */
 // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001596-includes begin
 // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001596-includes end
@@ -44,7 +37,7 @@ require_once('core/kernel/persistence/class.Switcher.php');
  * @package core
  * @subpackage kernel_persistence_swicther
  */
-class core_kernel_persistence_swicther_Utils
+class core_kernel_persistence_hardapi_Utils
 {
     // --- ASSOCIATIONS ---
 
@@ -86,8 +79,8 @@ class core_kernel_persistence_swicther_Utils
 				}
 			}
 		}
-		if(isset(self::$namespaceIds[$nsUri])){
-			$returnValue = self::$namespaceIds[$nsUri];
+		if(isset(self::$namespaceIds[$namespaceUri])){
+			$returnValue = self::$namespaceIds[$namespaceUri];
 		}
         
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:000000000000159A end

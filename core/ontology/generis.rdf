@@ -32,6 +32,14 @@
     <rdfs:range rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#Boolean"/>
     <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#RadioBox"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#Multiple">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="EN"><![CDATA[Has multiple values?]]></rdfs:label>
+    <rdfs:comment xml:lang="EN"><![CDATA[If the cardinality of the property allows multiple values]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:range rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#Boolean"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#RadioBox"/>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#Boolean">
     <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource"/>
     <rdfs:label xml:lang="EN"><![CDATA[Boolean]]></rdfs:label>

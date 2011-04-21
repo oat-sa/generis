@@ -42,7 +42,7 @@ define('CLASS_GENERIS_RESOURCE' , 				GENERIS_NS . '#generis_Ressource' , true) 
 define('CLASS_GENERIS_FILE' , 				    GENERIS_NS . '#File' , true) ;
 define('PROPERTY_FILE_FILENAME' , 				GENERIS_NS . '#FileName' , true) ;
 define('PROPERTY_FILE_FILEPATH' , 				GENERIS_NS . '#FilePath' , true) ;
-
+define('PROPERTY_MULTIPLE',						GENERIS_NS . '#Multiple' , true) ;
 
 #user
 define('CLASS_ROLE', 							'http://www.tao.lu/middleware/wfEngine.rdf#ClassRole',true);

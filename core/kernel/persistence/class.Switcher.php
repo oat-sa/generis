@@ -65,16 +65,81 @@ class core_kernel_persistence_Switcher
 		(isset($options['recursive'])) ? $recursive = $options['recursive'] : $recursive = false;
 		
 		//check if we append the data in case the hard table exists or truncate the table and add the new rows
-		(isset($options['append'])) ? $append = $options['append'] : $append = true;
+		(isset($options['append'])) ? $append = $options['append'] : $append = false;
 		
 		//if true, the instances of the class will  be removed!
 		(isset($options['rmSources'])) ? $rmSources = $options['rmSources'] : $rmSources = false;
 		
-		$tableName = core_kernel_persistence_switcher_Utils::getShortName($class);
+		//if defined, we took all the properties of the class and it's parents till the topclass
+		(isset($options['topClass'])) ? $topClass = $options['topClass'] : $topClass = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
 		
-		$myTableMgr = new core_kernel_persistence_hardapi_TableManager($tableName);
-		if(!$myTableMgr->exists() && !$append){
-		//	$myTableMgr->create();
+		$tableName = core_kernel_persistence_hardapi_Utils::getShortName($class);
+		if(!$append){
+					
+			$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+			
+			//get the table columns from the class properties
+			$columns = array();
+			
+			$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
+			$properties = $ps->getProperties();
+			//$columns = $ps->getTableColumns();
+			
+			foreach($properties as $property){
+
+				$column = array('name' => core_kernel_persistence_hardapi_Utils::getShortName($property));
+				
+				$range 			= $property->getRange();
+				$isTranslatable	= $property->isLgDependent();
+				if(!is_null($range) && $range->uriResource != RDFS_LITERAL){
+					
+					//constraint to the class that represents the range
+					
+					$column['foreign'] = core_kernel_persistence_hardapi_Utils::getShortName($range);
+					
+					//in case of recursive mode, we create the foreign table regarding the non-litral ranges
+					if($recursive && $range instanceof core_kernel_classes_Class){
+						$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
+						if(!$foreignTableMgr->exists()){
+							self::hardifier($range, array('recursive' => false));
+						}
+					}
+				}
+				else if ($isTranslatable === true){
+					
+					//create a translation table
+					
+				}
+				
+				$columns[] = $column;
+			}
+			
+			$myTableMgr = new core_kernel_persistence_hardapi_TableManager($tableName);
+			if($myTableMgr->exists()){
+				$myTableMgr->remove();
+			}
+			$myTableMgr->create($columns);
+			$referencer->referenceClass($class);
+			
+			$instances = $class->getInstances(false);
+			
+			$rows = array();
+			foreach($instances as $resource){
+				$row = array('uri' => $resource->uriResource);
+				foreach($properties as $property){
+					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $resource->getOnePropertyValue($property);
+				}
+				$rows[] = $row;
+			}
+			
+			$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
+			$rowMgr->insertRows($rows);
+			
+			
+			foreach($instances as $resource){
+				$referencer->referenceResource($resource);
+			}
+			
 		}
 		
         
