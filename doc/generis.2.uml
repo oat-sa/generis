@@ -31,55 +31,55 @@
     <searchpath href="PROJECT_DIR" />
     <members>
       <member type="profile"
-              name="generis_profile.profile" />
+              name="generis.2_profile.profile" />
       <member type="xmi"
-              name="generis.xmi" />
+              name="generis.2.xmi" />
       <member type="pgml"
-              name="generis_DesigngenerisAPIoo.pgml"
+              name="generis.2_DesigngenerisAPIoo.pgml"
               diagramclass="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram"
               diagramname="Design generis API oo" />
       <member type="pgml"
-              name="generis_Extension.pgml"
+              name="generis.2_Extension.pgml"
               diagramclass="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram"
               diagramname="Extension" />
       <member type="pgml"
-              name="generis_deliverymodel.pgml"
+              name="generis.2_deliverymodel.pgml"
               diagramclass="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram"
               diagramname="delivery model" />
       <member type="pgml"
-              name="generis_EventLogger.pgml"
+              name="generis.2_EventLogger.pgml"
               diagramclass="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram"
               diagramname="Event Logger" />
       <member type="pgml"
-              name="generis_Factory.pgml"
+              name="generis.2_Factory.pgml"
               diagramclass="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram"
               diagramname="Factory" />
       <member type="pgml"
-              name="generis_ExtensionManagement.pgml"
+              name="generis.2_ExtensionManagement.pgml"
               diagramclass="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram"
               diagramname="Extension Management" />
       <member type="pgml"
-              name="generis_RulesManagement.pgml"
+              name="generis.2_RulesManagement.pgml"
               diagramclass="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram"
               diagramname="Rules Management" />
       <member type="pgml"
-              name="generis_GenerisCoreKernel.pgml"
+              name="generis.2_GenerisCoreKernel.pgml"
               diagramclass="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram"
               diagramname="Generis Core Kernel" />
       <member type="pgml"
-              name="generis_Subscriptions.pgml"
+              name="generis.2_Subscriptions.pgml"
               diagramclass="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram"
               diagramname="Subscriptions" />
       <member type="pgml"
-              name="generis_Persistence.pgml"
+              name="generis.2_Persistence.pgml"
               diagramclass="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram"
               diagramname="Persistence" />
       <member type="pgml"
-              name="generis_PersistenceSwitcher.pgml"
+              name="generis.2_PersistenceSwitcher.pgml"
               diagramclass="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram"
               diagramname="PersistenceSwitcher" />
       <member type="todo"
-              name="generis.todo" />
+              name="generis.2.todo" />
     </members>
     <historyfile name="" />
   </argo>
@@ -88,7 +88,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Apr 20 17:50:09 CEST 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Apr 21 13:34:52 CEST 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.30.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -9333,7 +9333,39 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                     </UML:Interface>
                     <UML:Interface xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A0'
                       name = 'PropertyInterface' visibility = 'public' isSpecification = 'false'
-                      isRoot = 'false' isLeaf = 'false' isAbstract = 'false'/>
+                      isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
+                      <UML:Classifier.feature>
+                        <UML:Operation xmi.id = '127-0-1-1-7b8668ff:12f77d22c39:-8000:000000000000144D'
+                          name = 'getSubProperties' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1-7b8668ff:12f77d22c39:-8000:000000000000144E'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1-7b8668ff:12f77d22c39:-8000:000000000000144F'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1-7b8668ff:12f77d22c39:-8000:0000000000001450'
+                              name = 'recursive' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1-7b8668ff:12f77d22c39:-8000:0000000000001451'
+                                  language = 'UML 1.4' body = 'false'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                      </UML:Classifier.feature>
+                    </UML:Interface>
                     <UML:Abstraction xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A5'
                       isSpecification = 'false'>
                       <UML:ModelElement.stereotype>
@@ -9742,9 +9774,9 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                               name = 'instance' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
                               changeability = 'changeable' targetScope = 'instance'>
                               <UML:StructuralFeature.multiplicity>
-                                <UML:Multiplicity xmi.id = '127-0-1-1--499759bc:12f72c12020:-8000:0000000000001445'>
+                                <UML:Multiplicity xmi.id = '127-0-1-1-7b8668ff:12f77d22c39:-8000:0000000000001455'>
                                   <UML:Multiplicity.range>
-                                    <UML:MultiplicityRange xmi.id = '127-0-1-1--499759bc:12f72c12020:-8000:0000000000001444'
+                                    <UML:MultiplicityRange xmi.id = '127-0-1-1-7b8668ff:12f77d22c39:-8000:0000000000001454'
                                       lower = '1' upper = '1'/>
                                   </UML:Multiplicity.range>
                                 </UML:Multiplicity>
@@ -20427,7 +20459,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <text name="Fig23.6.14"
         x="537"
         y="2444"
-        width="344"
+        width="336"
         height="20"
         fill="0"
         fillcolor="0 255 255"
@@ -20757,7 +20789,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <text name="Fig25.6.2"
         x="25"
         y="1986"
-        width="610"
+        width="591"
         height="14"
         fill="0"
         fillcolor="0 255 255"
@@ -35759,7 +35791,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >core::kernel::persistence::PersistenceProxy</text>
     <group name="Fig1.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[217, 337, 334, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[217, 337, 446, 0]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E4"
          fill="0"
          fillcolor="white"
@@ -35773,7 +35805,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig1.2.0"
         x="217"
         y="337"
-        width="334"
+        width="446"
         height="0"
         fill="0"
         fillcolor="white"
@@ -35927,7 +35959,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig2"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[216, 528, 448, 109]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[216, 520, 448, 109]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3"
        fill="1"
        fillcolor="255 200 255"
@@ -35939,7 +35971,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     
     <rectangle name="Fig2.0"
       x="216"
-      y="528"
+      y="520"
       width="448"
       height="109"
       fill="1"
@@ -35949,7 +35981,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     />
     <text name="Fig2.1"
       x="217"
-      y="529"
+      y="521"
       width="446"
       height="21"
       fill="0"
@@ -35964,7 +35996,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >core::kernel::persistence::ResourceProxy</text>
     <group name="Fig2.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[217, 529, 320, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[217, 521, 446, 0]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3"
          fill="0"
          fillcolor="255 200 255"
@@ -35977,8 +36009,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       
       <rectangle name="Fig2.2.0"
         x="217"
-        y="529"
-        width="320"
+        y="521"
+        width="446"
         height="0"
         fill="0"
         fillcolor="255 200 255"
@@ -35988,7 +36020,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
     <rectangle name="Fig2.3"
       x="216"
-      y="550"
+      y="542"
       width="448"
       height="1"
       fill="1"
@@ -35997,7 +36029,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig2.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[217, 551, 446, 36]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[217, 543, 446, 36]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3"
          fill="0"
          fillcolor="255 200 255"
@@ -36009,7 +36041,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       
       <rectangle name="Fig2.4.0"
         x="217"
-        y="551"
+        y="543"
         width="446"
         height="36"
         fill="0"
@@ -36019,7 +36051,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       />
       <text name="Fig2.4.1"
         x="217"
-        y="551"
+        y="543"
         width="446"
         height="14"
         fill="0"
@@ -36035,7 +36067,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       >instance : PersistanceProxy</text>
       <text name="Fig2.4.2"
         x="217"
-        y="565"
+        y="557"
         width="446"
         height="20"
         fill="0"
@@ -36052,7 +36084,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
     <rectangle name="Fig2.5"
       x="216"
-      y="586"
+      y="578"
       width="448"
       height="1"
       fill="1"
@@ -36061,7 +36093,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig2.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[217, 587, 446, 50]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[217, 579, 446, 50]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E3"
          fill="0"
          fillcolor="255 200 255"
@@ -36073,7 +36105,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       
       <rectangle name="Fig2.6.0"
         x="217"
-        y="587"
+        y="579"
         width="446"
         height="50"
         fill="0"
@@ -36083,7 +36115,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       />
       <text name="Fig2.6.1"
         x="217"
-        y="587"
+        y="579"
         width="446"
         height="14"
         fill="0"
@@ -36099,7 +36131,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       >singleton() : PersistanceProxy</text>
       <text name="Fig2.6.2"
         x="217"
-        y="601"
+        y="593"
         width="446"
         height="14"
         fill="0"
@@ -36115,11 +36147,11 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       >getImpToDelegateTo(resource : Resource,params : array = array()) : ResourceInterface</text>
       <text name="Fig2.6.3"
         x="217"
-        y="615"
+        y="607"
         width="446"
         height="20"
         fill="0"
-        fillcolor="white"
+        fillcolor="255 200 255"
         stroke="0"
         strokecolor="black"
         textcolor="black"
@@ -36157,7 +36189,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     >
       <moveto x="520"
-              y="528" />
+              y="520" />
       <lineto x="520"
               y="445" />
     </path>
@@ -36196,7 +36228,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </path>
   </group>
   <group name="Fig5"
-       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[392, 680, 944, 144]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
+       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[392, 680, 1152, 144]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E0"
        fill="1"
        fillcolor="255 255 200"
@@ -36209,7 +36241,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <rectangle name="Fig5.0"
       x="392"
       y="680"
-      width="944"
+      width="1152"
       height="144"
       fill="0"
       fillcolor="white"
@@ -36225,13 +36257,13 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     >
       <moveto x="392"
               y="680" />
-      <lineto x="1286"
+      <lineto x="1494"
               y="680" />
-      <lineto x="1286"
+      <lineto x="1494"
               y="701" />
-      <lineto x="1335"
+      <lineto x="1543"
               y="701" />
-      <lineto x="1335"
+      <lineto x="1543"
               y="823" />
       <lineto x="392"
               y="823" />
@@ -36241,7 +36273,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <text name="Fig5.2"
       x="392"
       y="680"
-      width="895"
+      width="1103"
       height="22"
       fill="0"
       fillcolor="255 255 200"
@@ -36255,7 +36287,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Left"
     >core::kernel::persistence::smoothsql</text>
     <group name="Fig5.3"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[392, 680, 894, 1]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[392, 680, 1102, 1]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E0"
          fill="1"
          fillcolor="255 255 200"
@@ -36269,7 +36301,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig5.3.0"
         x="392"
         y="680"
-        width="894"
+        width="1102"
         height="1"
         fill="1"
         fillcolor="255 255 200"
@@ -36280,7 +36312,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <text name="Fig5.4"
       x="392"
       y="701"
-      width="944"
+      width="1152"
       height="123"
       fill="0"
       fillcolor="255 255 200"
@@ -36469,7 +36501,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig7"
-       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[392, 896, 944, 136]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
+       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[392, 896, 1152, 136]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DF"
        fill="1"
        fillcolor="255 255 200"
@@ -36482,7 +36514,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <rectangle name="Fig7.0"
       x="392"
       y="896"
-      width="944"
+      width="1152"
       height="136"
       fill="0"
       fillcolor="white"
@@ -36498,13 +36530,13 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     >
       <moveto x="392"
               y="896" />
-      <lineto x="1286"
+      <lineto x="1494"
               y="896" />
-      <lineto x="1286"
+      <lineto x="1494"
               y="917" />
-      <lineto x="1335"
+      <lineto x="1543"
               y="917" />
-      <lineto x="1335"
+      <lineto x="1543"
               y="1031" />
       <lineto x="392"
               y="1031" />
@@ -36514,7 +36546,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <text name="Fig7.2"
       x="392"
       y="896"
-      width="895"
+      width="1103"
       height="22"
       fill="0"
       fillcolor="255 255 200"
@@ -36528,7 +36560,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Left"
     >core::kernel::persistence::hardsql</text>
     <group name="Fig7.3"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[392, 896, 894, 1]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[392, 896, 1102, 1]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DF"
          fill="1"
          fillcolor="255 255 200"
@@ -36542,7 +36574,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig7.3.0"
         x="392"
         y="896"
-        width="894"
+        width="1102"
         height="1"
         fill="1"
         fillcolor="255 255 200"
@@ -36553,7 +36585,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <text name="Fig7.4"
       x="392"
       y="917"
-      width="944"
+      width="1152"
       height="115"
       fill="0"
       fillcolor="255 255 200"
@@ -36726,7 +36758,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <text name="Fig8.6.2"
         x="409"
         y="995"
-        width="236"
+        width="235"
         height="20"
         fill="0"
         fillcolor="white"
@@ -36833,7 +36865,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     >
       <moveto x="368"
-              y="637" />
+              y="629" />
       <lineto x="368"
               y="976" />
       <lineto x="408"
@@ -36866,7 +36898,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     >
       <moveto x="368"
-              y="637" />
+              y="629" />
       <lineto x="368"
               y="752" />
       <lineto x="408"
@@ -36874,7 +36906,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </path>
   </group>
   <group name="Fig13"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[744, 720, 237, 81]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[856, 720, 237, 81]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001399"
        fill="1"
        fillcolor="white"
@@ -36886,7 +36918,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </private>
     
     <rectangle name="Fig13.0"
-      x="744"
+      x="856"
       y="720"
       width="237"
       height="81"
@@ -36896,7 +36928,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <text name="Fig13.1"
-      x="745"
+      x="857"
       y="721"
       width="235"
       height="21"
@@ -36912,7 +36944,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >core::kernel::persistence::smoothsql::Class</text>
     <group name="Fig13.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[745, 721, 235, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[857, 721, 235, 0]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001399"
          fill="0"
          fillcolor="white"
@@ -36924,7 +36956,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig13.2.0"
-        x="745"
+        x="857"
         y="721"
         width="235"
         height="0"
@@ -36935,7 +36967,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       />
     </group>
     <rectangle name="Fig13.3"
-      x="744"
+      x="856"
       y="742"
       width="237"
       height="1"
@@ -36945,7 +36977,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig13.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[745, 743, 235, 22]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[857, 743, 235, 22]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001399"
          fill="0"
          fillcolor="white"
@@ -36956,7 +36988,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig13.4.0"
-        x="745"
+        x="857"
         y="743"
         width="235"
         height="22"
@@ -36966,7 +36998,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         strokecolor="black"
       />
       <text name="Fig13.4.1"
-        x="745"
+        x="857"
         y="743"
         width="235"
         height="20"
@@ -36983,7 +37015,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       >instance : Resource</text>
     </group>
     <rectangle name="Fig13.5"
-      x="744"
+      x="856"
       y="764"
       width="237"
       height="1"
@@ -36993,7 +37025,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig13.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[745, 765, 235, 36]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[857, 765, 235, 36]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001399"
          fill="0"
          fillcolor="white"
@@ -37004,7 +37036,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig13.6.0"
-        x="745"
+        x="857"
         y="765"
         width="235"
         height="36"
@@ -37014,7 +37046,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         strokecolor="black"
       />
       <text name="Fig13.6.1"
-        x="745"
+        x="857"
         y="765"
         width="235"
         height="14"
@@ -37030,9 +37062,9 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         justification="Left"
       >singleton() : Resource</text>
       <text name="Fig13.6.2"
-        x="745"
+        x="857"
         y="779"
-        width="236"
+        width="235"
         height="20"
         fill="0"
         fillcolor="white"
@@ -37048,7 +37080,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig14"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1072, 720, 248, 81]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1224, 720, 248, 81]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139A"
        fill="1"
        fillcolor="white"
@@ -37060,7 +37092,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </private>
     
     <rectangle name="Fig14.0"
-      x="1072"
+      x="1224"
       y="720"
       width="248"
       height="81"
@@ -37070,7 +37102,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <text name="Fig14.1"
-      x="1073"
+      x="1225"
       y="721"
       width="246"
       height="21"
@@ -37086,7 +37118,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >core::kernel::persistence::smoothsql::Property</text>
     <group name="Fig14.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1073, 721, 246, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1225, 721, 246, 0]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139A"
          fill="0"
          fillcolor="white"
@@ -37098,7 +37130,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig14.2.0"
-        x="1073"
+        x="1225"
         y="721"
         width="246"
         height="0"
@@ -37109,7 +37141,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       />
     </group>
     <rectangle name="Fig14.3"
-      x="1072"
+      x="1224"
       y="742"
       width="248"
       height="1"
@@ -37119,7 +37151,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig14.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1073, 743, 246, 22]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1225, 743, 246, 22]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139A"
          fill="0"
          fillcolor="white"
@@ -37130,7 +37162,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig14.4.0"
-        x="1073"
+        x="1225"
         y="743"
         width="246"
         height="22"
@@ -37140,7 +37172,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         strokecolor="black"
       />
       <text name="Fig14.4.1"
-        x="1073"
+        x="1225"
         y="743"
         width="246"
         height="20"
@@ -37157,7 +37189,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       >instance : Resource</text>
     </group>
     <rectangle name="Fig14.5"
-      x="1072"
+      x="1224"
       y="764"
       width="248"
       height="1"
@@ -37167,7 +37199,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig14.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1073, 765, 246, 36]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1225, 765, 246, 36]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139A"
          fill="0"
          fillcolor="white"
@@ -37178,7 +37210,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig14.6.0"
-        x="1073"
+        x="1225"
         y="765"
         width="246"
         height="36"
@@ -37188,7 +37220,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         strokecolor="black"
       />
       <text name="Fig14.6.1"
-        x="1073"
+        x="1225"
         y="765"
         width="246"
         height="14"
@@ -37204,7 +37236,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         justification="Left"
       >singleton() : Resource</text>
       <text name="Fig14.6.2"
-        x="1073"
+        x="1225"
         y="779"
         width="246"
         height="20"
@@ -37222,7 +37254,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig15"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[696, 424, 448, 109]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[696, 520, 448, 109]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139B"
        fill="1"
        fillcolor="255 200 255"
@@ -37234,7 +37266,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     
     <rectangle name="Fig15.0"
       x="696"
-      y="424"
+      y="520"
       width="448"
       height="109"
       fill="1"
@@ -37244,7 +37276,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     />
     <text name="Fig15.1"
       x="697"
-      y="425"
+      y="521"
       width="446"
       height="21"
       fill="0"
@@ -37259,7 +37291,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >core::kernel::persistence::ClassProxy</text>
     <group name="Fig15.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[697, 425, 320, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[697, 521, 446, 0]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139B"
          fill="0"
          fillcolor="255 200 255"
@@ -37272,8 +37304,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       
       <rectangle name="Fig15.2.0"
         x="697"
-        y="425"
-        width="320"
+        y="521"
+        width="446"
         height="0"
         fill="0"
         fillcolor="255 200 255"
@@ -37283,7 +37315,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
     <rectangle name="Fig15.3"
       x="696"
-      y="446"
+      y="542"
       width="448"
       height="1"
       fill="1"
@@ -37292,7 +37324,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig15.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[697, 447, 446, 36]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[697, 543, 446, 36]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139B"
          fill="0"
          fillcolor="255 200 255"
@@ -37304,7 +37336,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       
       <rectangle name="Fig15.4.0"
         x="697"
-        y="447"
+        y="543"
         width="446"
         height="36"
         fill="0"
@@ -37314,7 +37346,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       />
       <text name="Fig15.4.1"
         x="697"
-        y="447"
+        y="543"
         width="446"
         height="14"
         fill="0"
@@ -37330,7 +37362,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       >instance : PersistanceProxy</text>
       <text name="Fig15.4.2"
         x="697"
-        y="461"
+        y="557"
         width="446"
         height="20"
         fill="0"
@@ -37347,7 +37379,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
     <rectangle name="Fig15.5"
       x="696"
-      y="482"
+      y="578"
       width="448"
       height="1"
       fill="1"
@@ -37356,7 +37388,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig15.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[697, 483, 446, 50]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[697, 579, 446, 50]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139B"
          fill="0"
          fillcolor="255 200 255"
@@ -37368,7 +37400,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       
       <rectangle name="Fig15.6.0"
         x="697"
-        y="483"
+        y="579"
         width="446"
         height="50"
         fill="0"
@@ -37378,7 +37410,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       />
       <text name="Fig15.6.1"
         x="697"
-        y="483"
+        y="579"
         width="446"
         height="14"
         fill="0"
@@ -37394,7 +37426,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       >singleton() : PersistanceProxy</text>
       <text name="Fig15.6.2"
         x="697"
-        y="497"
+        y="593"
         width="446"
         height="14"
         fill="0"
@@ -37410,11 +37442,11 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       >getImpToDelegateTo(resource : Resource,params : array = array()) : ResourceInterface</text>
       <text name="Fig15.6.3"
         x="697"
-        y="511"
+        y="607"
         width="446"
         height="20"
         fill="0"
-        fillcolor="white"
+        fillcolor="255 200 255"
         stroke="0"
         strokecolor="black"
         textcolor="black"
@@ -37452,7 +37484,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     >
       <moveto x="864"
-              y="424" />
+              y="520" />
       <lineto x="864"
               y="400" />
       <lineto x="664"
@@ -37460,7 +37492,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </path>
   </group>
   <group name="Fig17"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1072, 536, 448, 109]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1192, 520, 448, 109]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139D"
        fill="1"
        fillcolor="255 200 255"
@@ -37471,8 +37503,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </private>
     
     <rectangle name="Fig17.0"
-      x="1072"
-      y="536"
+      x="1192"
+      y="520"
       width="448"
       height="109"
       fill="1"
@@ -37481,8 +37513,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <text name="Fig17.1"
-      x="1073"
-      y="537"
+      x="1193"
+      y="521"
       width="446"
       height="21"
       fill="0"
@@ -37497,7 +37529,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >core::kernel::persistence::PropertyProxy</text>
     <group name="Fig17.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1073, 537, 320, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1193, 521, 446, 0]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139D"
          fill="0"
          fillcolor="255 200 255"
@@ -37509,9 +37541,9 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig17.2.0"
-        x="1073"
-        y="537"
-        width="320"
+        x="1193"
+        y="521"
+        width="446"
         height="0"
         fill="0"
         fillcolor="255 200 255"
@@ -37520,8 +37552,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       />
     </group>
     <rectangle name="Fig17.3"
-      x="1072"
-      y="558"
+      x="1192"
+      y="542"
       width="448"
       height="1"
       fill="1"
@@ -37530,7 +37562,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig17.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1073, 559, 446, 36]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1193, 543, 446, 36]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139D"
          fill="0"
          fillcolor="255 200 255"
@@ -37541,8 +37573,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig17.4.0"
-        x="1073"
-        y="559"
+        x="1193"
+        y="543"
         width="446"
         height="36"
         fill="0"
@@ -37551,8 +37583,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         strokecolor="black"
       />
       <text name="Fig17.4.1"
-        x="1073"
-        y="559"
+        x="1193"
+        y="543"
         width="446"
         height="14"
         fill="0"
@@ -37567,8 +37599,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         justification="Left"
       >instance : PersistanceProxy</text>
       <text name="Fig17.4.2"
-        x="1073"
-        y="573"
+        x="1193"
+        y="557"
         width="446"
         height="20"
         fill="0"
@@ -37584,8 +37616,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       >ressourcesDelegatedTo : array</text>
     </group>
     <rectangle name="Fig17.5"
-      x="1072"
-      y="594"
+      x="1192"
+      y="578"
       width="448"
       height="1"
       fill="1"
@@ -37594,7 +37626,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig17.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1073, 595, 446, 50]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1193, 579, 446, 50]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139D"
          fill="0"
          fillcolor="255 200 255"
@@ -37605,8 +37637,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig17.6.0"
-        x="1073"
-        y="595"
+        x="1193"
+        y="579"
         width="446"
         height="50"
         fill="0"
@@ -37615,8 +37647,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         strokecolor="black"
       />
       <text name="Fig17.6.1"
-        x="1073"
-        y="595"
+        x="1193"
+        y="579"
         width="446"
         height="14"
         fill="0"
@@ -37631,8 +37663,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         justification="Left"
       >singleton() : PersistanceProxy</text>
       <text name="Fig17.6.2"
-        x="1073"
-        y="609"
+        x="1193"
+        y="593"
         width="446"
         height="14"
         fill="0"
@@ -37647,12 +37679,12 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         justification="Left"
       >getImpToDelegateTo(resource : Resource,params : array = array()) : ResourceInterface</text>
       <text name="Fig17.6.3"
-        x="1073"
-        y="623"
+        x="1193"
+        y="607"
         width="446"
         height="20"
         fill="0"
-        fillcolor="white"
+        fillcolor="255 200 255"
         stroke="0"
         strokecolor="black"
         textcolor="black"
@@ -37690,7 +37722,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     >
       <moveto x="1200"
-              y="536" />
+              y="520" />
       <lineto x="1200"
               y="400" />
       <lineto x="664"
@@ -37698,7 +37730,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </path>
   </group>
   <group name="Fig19"
-       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[1368, 32, 272, 80]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[1368, 32, 375, 80]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A0"
        fill="1"
        fillcolor="200 255 255"
@@ -37711,7 +37743,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <rectangle name="Fig19.0"
       x="1368"
       y="32"
-      width="272"
+      width="375"
       height="80"
       fill="1"
       fillcolor="200 255 255"
@@ -37721,7 +37753,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <text name="Fig19.1"
       x="1369"
       y="33"
-      width="270"
+      width="373"
       height="37"
       fill="0"
       fillcolor="200 255 255"
@@ -37735,7 +37767,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >core::kernel::persistence::PropertyInterface</text>
     <group name="Fig19.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1369, 33, 270, 17]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1369, 33, 373, 17]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A0"
          fill="0"
          fillcolor="200 255 255"
@@ -37748,7 +37780,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig19.2.0"
         x="1369"
         y="33"
-        width="270"
+        width="373"
         height="17"
         fill="0"
         fillcolor="200 255 255"
@@ -37758,7 +37790,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <text name="Fig19.2.1"
         x="1369"
         y="33"
-        width="270"
+        width="373"
         height="15"
         fill="0"
         fillcolor="200 255 255"
@@ -37775,7 +37807,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <rectangle name="Fig19.3"
       x="1368"
       y="70"
-      width="272"
+      width="375"
       height="1"
       fill="1"
       fillcolor="black"
@@ -37783,7 +37815,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig19.4"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1369, 71, 270, 40]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1369, 71, 373, 40]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A0"
          fill="0"
          fillcolor="200 255 255"
@@ -37796,13 +37828,29 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig19.4.0"
         x="1369"
         y="71"
-        width="270"
+        width="373"
         height="40"
         fill="0"
         fillcolor="white"
         stroke="0"
         strokecolor="black"
       />
+      <text name="Fig19.4.1"
+        x="1369"
+        y="71"
+        width="373"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getSubProperties(resource : Resource,recursive : boolean = false) : array</text>
     </group>
   </group>
   <group name="Fig20"
@@ -38104,8 +38152,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A3"
-                        angle="-167.0"
-                        offset="112" />
+                        angle="-163.0"
+                        offset="82" />
     </private>
     <path name="Fig21.0"
       description="org.argouml.gefext.ArgoFigPoly"
@@ -38114,11 +38162,11 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="981"
-              y="736" />
-      <lineto x="1024"
-              y="736" />
-      <lineto x="1024"
+      <moveto x="1093"
+              y="784" />
+      <lineto x="1160"
+              y="784" />
+      <lineto x="1160"
               y="233" />
     </path>
   </group>
@@ -38137,8 +38185,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A5"
-                        angle="-155.0"
-                        offset="58" />
+                        angle="-154.00000000000003"
+                        offset="42" />
     </private>
     <path name="Fig22.0"
       description="org.argouml.gefext.ArgoFigPoly"
@@ -38147,14 +38195,16 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1024"
-              y="424" />
-      <lineto x="1024"
+      <moveto x="1144"
+              y="584" />
+      <lineto x="1160"
+              y="584" />
+      <lineto x="1160"
               y="233" />
     </path>
   </group>
   <group name="Fig23"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[744, 936, 229, 81]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[856, 936, 229, 81]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A7"
        fill="1"
        fillcolor="white"
@@ -38166,7 +38216,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </private>
     
     <rectangle name="Fig23.0"
-      x="744"
+      x="856"
       y="936"
       width="229"
       height="81"
@@ -38176,7 +38226,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <text name="Fig23.1"
-      x="745"
+      x="857"
       y="937"
       width="227"
       height="21"
@@ -38192,7 +38242,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >core::kernel::persistence::hardsql::Class</text>
     <group name="Fig23.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[745, 937, 227, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[857, 937, 227, 0]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A7"
          fill="0"
          fillcolor="white"
@@ -38204,7 +38254,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig23.2.0"
-        x="745"
+        x="857"
         y="937"
         width="227"
         height="0"
@@ -38215,7 +38265,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       />
     </group>
     <rectangle name="Fig23.3"
-      x="744"
+      x="856"
       y="958"
       width="229"
       height="1"
@@ -38225,7 +38275,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig23.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[745, 959, 227, 22]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[857, 959, 227, 22]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A7"
          fill="0"
          fillcolor="white"
@@ -38236,7 +38286,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig23.4.0"
-        x="745"
+        x="857"
         y="959"
         width="227"
         height="22"
@@ -38246,7 +38296,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         strokecolor="black"
       />
       <text name="Fig23.4.1"
-        x="745"
+        x="857"
         y="959"
         width="227"
         height="20"
@@ -38263,7 +38313,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       >instance : Resource</text>
     </group>
     <rectangle name="Fig23.5"
-      x="744"
+      x="856"
       y="980"
       width="229"
       height="1"
@@ -38273,7 +38323,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig23.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[745, 981, 227, 36]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[857, 981, 227, 36]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A7"
          fill="0"
          fillcolor="white"
@@ -38284,7 +38334,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig23.6.0"
-        x="745"
+        x="857"
         y="981"
         width="227"
         height="36"
@@ -38294,7 +38344,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         strokecolor="black"
       />
       <text name="Fig23.6.1"
-        x="745"
+        x="857"
         y="981"
         width="227"
         height="14"
@@ -38310,9 +38360,9 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         justification="Left"
       >singleton() : Resource</text>
       <text name="Fig23.6.2"
-        x="745"
+        x="857"
         y="995"
-        width="236"
+        width="227"
         height="20"
         fill="0"
         fillcolor="white"
@@ -38328,7 +38378,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig24"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1080, 936, 238, 81]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1232, 936, 238, 81]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A8"
        fill="1"
        fillcolor="white"
@@ -38340,7 +38390,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </private>
     
     <rectangle name="Fig24.0"
-      x="1080"
+      x="1232"
       y="936"
       width="238"
       height="81"
@@ -38350,7 +38400,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <text name="Fig24.1"
-      x="1081"
+      x="1233"
       y="937"
       width="236"
       height="21"
@@ -38366,7 +38416,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >core::kernel::persistence::hardsql::Property</text>
     <group name="Fig24.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1081, 937, 235, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1233, 937, 236, 0]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A8"
          fill="0"
          fillcolor="white"
@@ -38378,9 +38428,9 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig24.2.0"
-        x="1081"
+        x="1233"
         y="937"
-        width="235"
+        width="236"
         height="0"
         fill="0"
         fillcolor="white"
@@ -38389,7 +38439,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       />
     </group>
     <rectangle name="Fig24.3"
-      x="1080"
+      x="1232"
       y="958"
       width="238"
       height="1"
@@ -38399,7 +38449,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig24.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1081, 959, 236, 22]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1233, 959, 236, 22]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A8"
          fill="0"
          fillcolor="white"
@@ -38410,7 +38460,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig24.4.0"
-        x="1081"
+        x="1233"
         y="959"
         width="236"
         height="22"
@@ -38420,7 +38470,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         strokecolor="black"
       />
       <text name="Fig24.4.1"
-        x="1081"
+        x="1233"
         y="959"
         width="236"
         height="20"
@@ -38437,7 +38487,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       >instance : Resource</text>
     </group>
     <rectangle name="Fig24.5"
-      x="1080"
+      x="1232"
       y="980"
       width="238"
       height="1"
@@ -38447,7 +38497,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig24.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1081, 981, 236, 36]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1233, 981, 236, 36]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A8"
          fill="0"
          fillcolor="white"
@@ -38458,7 +38508,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig24.6.0"
-        x="1081"
+        x="1233"
         y="981"
         width="236"
         height="36"
@@ -38468,7 +38518,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         strokecolor="black"
       />
       <text name="Fig24.6.1"
-        x="1081"
+        x="1233"
         y="981"
         width="236"
         height="14"
@@ -38484,7 +38534,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         justification="Left"
       >singleton() : Resource</text>
       <text name="Fig24.6.2"
-        x="1081"
+        x="1233"
         y="995"
         width="236"
         height="20"
@@ -38516,8 +38566,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A9"
-                        angle="-172.0"
-                        offset="210" />
+                        angle="-171.0"
+                        offset="196" />
     </private>
     <path name="Fig25.0"
       description="org.argouml.gefext.ArgoFigPoly"
@@ -38526,11 +38576,11 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="973"
-              y="968" />
-      <lineto x="1024"
-              y="968" />
-      <lineto x="1024"
+      <moveto x="1085"
+              y="976" />
+      <lineto x="1160"
+              y="976" />
+      <lineto x="1160"
               y="233" />
     </path>
   </group>
@@ -38549,8 +38599,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013AB"
-                        angle="241.00000000000003"
-                        offset="63" />
+                        angle="232.0"
+                        offset="77" />
     </private>
     <path name="Fig26.0"
       description="org.argouml.gefext.ArgoFigPoly"
@@ -38559,11 +38609,11 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="704"
-              y="533" />
-      <lineto x="704"
+      <moveto x="784"
+              y="629" />
+      <lineto x="784"
               y="736" />
-      <lineto x="744"
+      <lineto x="856"
               y="736" />
     </path>
   </group>
@@ -38582,8 +38632,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013AC"
-                        angle="-33.0"
-                        offset="104" />
+                        angle="-42.0"
+                        offset="87" />
     </private>
     <path name="Fig27.0"
       description="org.argouml.gefext.ArgoFigPoly"
@@ -38592,11 +38642,11 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="704"
-              y="533" />
-      <lineto x="704"
+      <moveto x="784"
+              y="629" />
+      <lineto x="784"
               y="944" />
-      <lineto x="744"
+      <lineto x="856"
               y="944" />
     </path>
   </group>
@@ -38615,8 +38665,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013AD"
-                        angle="-83.00000000000001"
-                        offset="55" />
+                        angle="261.0"
+                        offset="56" />
     </private>
     <path name="Fig28.0"
       description="org.argouml.gefext.ArgoFigPoly"
@@ -38625,13 +38675,13 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1072"
+      <moveto x="1192"
               y="584" />
-      <lineto x="1040"
+      <lineto x="1168"
               y="584" />
-      <lineto x="1040"
+      <lineto x="1168"
               y="736" />
-      <lineto x="1072"
+      <lineto x="1224"
               y="736" />
     </path>
   </group>
@@ -38650,8 +38700,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013AE"
-                        angle="-25.0"
-                        offset="128" />
+                        angle="-29.0"
+                        offset="108" />
     </private>
     <path name="Fig29.0"
       description="org.argouml.gefext.ArgoFigPoly"
@@ -38660,14 +38710,14 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1072"
+      <moveto x="1192"
               y="584" />
-      <lineto x="1040"
+      <lineto x="1168"
               y="584" />
-      <lineto x="1040"
-              y="944" />
-      <lineto x="1080"
-              y="944" />
+      <lineto x="1168"
+              y="952" />
+      <lineto x="1232"
+              y="952" />
     </path>
   </group>
   <group name="Fig30"
@@ -38696,7 +38746,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     >
       <moveto x="1416"
-              y="536" />
+              y="520" />
       <lineto x="1416"
               y="112" />
     </path>
@@ -38716,8 +38766,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013B1"
-                        angle="-151.0"
-                        offset="34" />
+                        angle="-169.0"
+                        offset="157" />
     </private>
     <path name="Fig31.0"
       description="org.argouml.gefext.ArgoFigPoly"
@@ -38726,11 +38776,11 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1320"
-              y="752" />
-      <lineto x="1416"
-              y="752" />
-      <lineto x="1416"
+      <moveto x="1472"
+              y="736" />
+      <lineto x="1656"
+              y="736" />
+      <lineto x="1656"
               y="112" />
     </path>
   </group>
@@ -38749,8 +38799,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013B3"
-                        angle="-168.0"
-                        offset="133" />
+                        angle="-173.0"
+                        offset="260" />
     </private>
     <path name="Fig32.0"
       description="org.argouml.gefext.ArgoFigPoly"
@@ -38759,16 +38809,16 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1318"
-              y="960" />
-      <lineto x="1416"
-              y="960" />
-      <lineto x="1416"
+      <moveto x="1470"
+              y="944" />
+      <lineto x="1656"
+              y="944" />
+      <lineto x="1656"
               y="112" />
     </path>
   </group>
   <group name="Fig33"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[16, 680, 237, 80]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[8, 920, 237, 80]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001403"
        fill="1"
        fillcolor="white"
@@ -38779,8 +38829,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </private>
     
     <rectangle name="Fig33.0"
-      x="16"
-      y="680"
+      x="8"
+      y="920"
       width="237"
       height="80"
       fill="1"
@@ -38789,8 +38839,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <text name="Fig33.1"
-      x="17"
-      y="681"
+      x="9"
+      y="921"
       width="235"
       height="21"
       fill="0"
@@ -38805,7 +38855,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >core::kernel::persistence::PersistenceImpl</text>
     <group name="Fig33.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[17, 681, 235, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[9, 921, 235, 0]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001403"
          fill="0"
          fillcolor="white"
@@ -38817,8 +38867,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig33.2.0"
-        x="17"
-        y="681"
+        x="9"
+        y="921"
         width="235"
         height="0"
         fill="0"
@@ -38828,8 +38878,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       />
     </group>
     <rectangle name="Fig33.3"
-      x="16"
-      y="702"
+      x="8"
+      y="942"
       width="237"
       height="1"
       fill="1"
@@ -38838,7 +38888,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig33.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[17, 703, 235, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[9, 943, 235, 21]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001403"
          fill="0"
          fillcolor="white"
@@ -38849,8 +38899,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig33.4.0"
-        x="17"
-        y="703"
+        x="9"
+        y="943"
         width="235"
         height="21"
         fill="0"
@@ -38860,8 +38910,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       />
     </group>
     <rectangle name="Fig33.5"
-      x="16"
-      y="723"
+      x="8"
+      y="963"
       width="237"
       height="1"
       fill="1"
@@ -38870,7 +38920,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig33.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[17, 724, 235, 36]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[9, 964, 235, 36]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001403"
          fill="0"
          fillcolor="white"
@@ -38881,8 +38931,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig33.6.0"
-        x="17"
-        y="724"
+        x="9"
+        y="964"
         width="235"
         height="36"
         fill="0"
@@ -38891,8 +38941,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         strokecolor="black"
       />
       <text name="Fig33.6.1"
-        x="17"
-        y="724"
+        x="9"
+        y="964"
         width="235"
         height="14"
         fill="0"
@@ -38907,8 +38957,8 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         justification="Left"
       >singleton() : Resource</text>
       <text name="Fig33.6.2"
-        x="17"
-        y="738"
+        x="9"
+        y="978"
         width="235"
         height="20"
         fill="0"
@@ -38956,7 +39006,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <lineto x="176"
               y="864" />
       <lineto x="176"
-              y="760" />
+              y="920" />
     </path>
   </group>
   <group name="Fig35"
@@ -38991,7 +39041,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <lineto x="176"
               y="864" />
       <lineto x="176"
-              y="760" />
+              y="920" />
     </path>
   </group>
   <group name="Fig36"
@@ -39019,14 +39069,14 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1208"
+      <moveto x="1344"
               y="801" />
-      <lineto x="1208"
+      <lineto x="1344"
               y="864" />
       <lineto x="176"
               y="864" />
       <lineto x="176"
-              y="760" />
+              y="920" />
     </path>
   </group>
   <group name="Fig37"
@@ -39061,7 +39111,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <lineto x="176"
               y="1064" />
       <lineto x="176"
-              y="760" />
+              y="1000" />
     </path>
   </group>
   <group name="Fig38"
@@ -39096,7 +39146,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <lineto x="176"
               y="1064" />
       <lineto x="176"
-              y="760" />
+              y="1000" />
     </path>
   </group>
   <group name="Fig39"
@@ -39124,14 +39174,14 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1208"
+      <moveto x="1344"
               y="1017" />
-      <lineto x="1208"
+      <lineto x="1344"
               y="1064" />
       <lineto x="176"
               y="1064" />
       <lineto x="176"
-              y="760" />
+              y="1000" />
     </path>
   </group>
   <group name="Fig40"
@@ -39403,7 +39453,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         offset="31" />
     </private>
     <path name="Fig42.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -39416,7 +39466,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </path>
   </group>
   <group name="Fig43"
-       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[392, 1096, 944, 136]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
+       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[392, 1096, 1152, 136]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
        href="127-0-1-1--499759bc:12f72c12020:-8000:000000000000140A"
        fill="1"
        fillcolor="255 255 200"
@@ -39429,7 +39479,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <rectangle name="Fig43.0"
       x="392"
       y="1096"
-      width="944"
+      width="1152"
       height="136"
       fill="0"
       fillcolor="white"
@@ -39445,13 +39495,13 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     >
       <moveto x="392"
               y="1096" />
-      <lineto x="1286"
+      <lineto x="1494"
               y="1096" />
-      <lineto x="1286"
+      <lineto x="1494"
               y="1117" />
-      <lineto x="1335"
+      <lineto x="1543"
               y="1117" />
-      <lineto x="1335"
+      <lineto x="1543"
               y="1231" />
       <lineto x="392"
               y="1231" />
@@ -39461,7 +39511,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <text name="Fig43.2"
       x="392"
       y="1096"
-      width="895"
+      width="1103"
       height="22"
       fill="0"
       fillcolor="255 255 200"
@@ -39475,7 +39525,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Left"
     >core::kernel::persistence::subscription</text>
     <group name="Fig43.3"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[392, 1096, 894, 1]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[392, 1096, 1102, 1]"
          href="127-0-1-1--499759bc:12f72c12020:-8000:000000000000140A"
          fill="1"
          fillcolor="255 255 200"
@@ -39489,7 +39539,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig43.3.0"
         x="392"
         y="1096"
-        width="894"
+        width="1102"
         height="1"
         fill="1"
         fillcolor="255 255 200"
@@ -39500,7 +39550,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     <text name="Fig43.4"
       x="392"
       y="1117"
-      width="944"
+      width="1152"
       height="115"
       fill="0"
       fillcolor="255 255 200"
@@ -39515,7 +39565,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     ></text>
   </group>
   <group name="Fig44"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[744, 1136, 237, 81]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[856, 1136, 237, 81]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--499759bc:12f72c12020:-8000:000000000000140D"
        fill="1"
        fillcolor="white"
@@ -39527,7 +39577,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </private>
     
     <rectangle name="Fig44.0"
-      x="744"
+      x="856"
       y="1136"
       width="237"
       height="81"
@@ -39537,7 +39587,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <text name="Fig44.1"
-      x="745"
+      x="857"
       y="1137"
       width="235"
       height="21"
@@ -39553,7 +39603,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >core::kernel::persistence::subscription::Class</text>
     <group name="Fig44.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[745, 1137, 232, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[857, 1137, 235, 0]"
          href="127-0-1-1--499759bc:12f72c12020:-8000:000000000000140D"
          fill="0"
          fillcolor="white"
@@ -39565,9 +39615,9 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig44.2.0"
-        x="745"
+        x="857"
         y="1137"
-        width="232"
+        width="235"
         height="0"
         fill="0"
         fillcolor="white"
@@ -39576,7 +39626,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       />
     </group>
     <rectangle name="Fig44.3"
-      x="744"
+      x="856"
       y="1158"
       width="237"
       height="1"
@@ -39586,7 +39636,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig44.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[745, 1159, 235, 22]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[857, 1159, 235, 22]"
          href="127-0-1-1--499759bc:12f72c12020:-8000:000000000000140D"
          fill="0"
          fillcolor="white"
@@ -39597,7 +39647,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig44.4.0"
-        x="745"
+        x="857"
         y="1159"
         width="235"
         height="22"
@@ -39607,7 +39657,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         strokecolor="black"
       />
       <text name="Fig44.4.1"
-        x="745"
+        x="857"
         y="1159"
         width="235"
         height="20"
@@ -39624,7 +39674,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       >instance : Resource</text>
     </group>
     <rectangle name="Fig44.5"
-      x="744"
+      x="856"
       y="1180"
       width="237"
       height="1"
@@ -39634,7 +39684,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig44.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[745, 1181, 235, 36]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[857, 1181, 235, 36]"
          href="127-0-1-1--499759bc:12f72c12020:-8000:000000000000140D"
          fill="0"
          fillcolor="white"
@@ -39645,7 +39695,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig44.6.0"
-        x="745"
+        x="857"
         y="1181"
         width="235"
         height="36"
@@ -39655,7 +39705,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         strokecolor="black"
       />
       <text name="Fig44.6.1"
-        x="745"
+        x="857"
         y="1181"
         width="235"
         height="14"
@@ -39671,7 +39721,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         justification="Left"
       >singleton() : Resource</text>
       <text name="Fig44.6.2"
-        x="745"
+        x="857"
         y="1195"
         width="235"
         height="20"
@@ -39689,7 +39739,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </group>
   </group>
   <group name="Fig45"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1080, 1136, 252, 81]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1232, 1136, 252, 81]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--499759bc:12f72c12020:-8000:000000000000140C"
        fill="1"
        fillcolor="white"
@@ -39701,7 +39751,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
     </private>
     
     <rectangle name="Fig45.0"
-      x="1080"
+      x="1232"
       y="1136"
       width="252"
       height="81"
@@ -39711,7 +39761,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <text name="Fig45.1"
-      x="1081"
+      x="1233"
       y="1137"
       width="250"
       height="21"
@@ -39727,7 +39777,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >core::kernel::persistence::subscription::Property</text>
     <group name="Fig45.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1081, 1137, 249, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1233, 1137, 250, 0]"
          href="127-0-1-1--499759bc:12f72c12020:-8000:000000000000140C"
          fill="0"
          fillcolor="white"
@@ -39739,9 +39789,9 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig45.2.0"
-        x="1081"
+        x="1233"
         y="1137"
-        width="249"
+        width="250"
         height="0"
         fill="0"
         fillcolor="white"
@@ -39750,7 +39800,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       />
     </group>
     <rectangle name="Fig45.3"
-      x="1080"
+      x="1232"
       y="1158"
       width="252"
       height="1"
@@ -39760,7 +39810,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig45.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1081, 1159, 250, 22]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1233, 1159, 250, 22]"
          href="127-0-1-1--499759bc:12f72c12020:-8000:000000000000140C"
          fill="0"
          fillcolor="white"
@@ -39771,7 +39821,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig45.4.0"
-        x="1081"
+        x="1233"
         y="1159"
         width="250"
         height="22"
@@ -39781,7 +39831,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         strokecolor="black"
       />
       <text name="Fig45.4.1"
-        x="1081"
+        x="1233"
         y="1159"
         width="250"
         height="20"
@@ -39798,7 +39848,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       >instance : Resource</text>
     </group>
     <rectangle name="Fig45.5"
-      x="1080"
+      x="1232"
       y="1180"
       width="252"
       height="1"
@@ -39808,7 +39858,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       strokecolor="black"
     />
     <group name="Fig45.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1081, 1181, 250, 36]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1233, 1181, 250, 36]"
          href="127-0-1-1--499759bc:12f72c12020:-8000:000000000000140C"
          fill="0"
          fillcolor="white"
@@ -39819,7 +39869,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       </private>
       
       <rectangle name="Fig45.6.0"
-        x="1081"
+        x="1233"
         y="1181"
         width="250"
         height="36"
@@ -39829,7 +39879,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         strokecolor="black"
       />
       <text name="Fig45.6.1"
-        x="1081"
+        x="1233"
         y="1181"
         width="250"
         height="14"
@@ -39845,7 +39895,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
         justification="Left"
       >singleton() : Resource</text>
       <text name="Fig45.6.2"
-        x="1081"
+        x="1233"
         y="1195"
         width="250"
         height="20"
@@ -39901,7 +39951,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       justification="Center"
     >core::kernel::persistence::subscription::Resource</text>
     <group name="Fig46.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[409, 1137, 252, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[409, 1137, 253, 0]"
          href="127-0-1-1--499759bc:12f72c12020:-8000:000000000000140B"
          fill="0"
          fillcolor="white"
@@ -39915,7 +39965,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <rectangle name="Fig46.2.0"
         x="409"
         y="1137"
-        width="252"
+        width="253"
         height="0"
         fill="0"
         fillcolor="white"
@@ -40055,7 +40105,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         offset="-10" />
     </private>
     <path name="Fig47.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -40068,7 +40118,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <lineto x="176"
               y="1264" />
       <lineto x="176"
-              y="760" />
+              y="1000" />
     </path>
   </group>
   <group name="Fig48"
@@ -40090,7 +40140,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         offset="-10" />
     </private>
     <path name="Fig48.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -40103,7 +40153,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <lineto x="176"
               y="1264" />
       <lineto x="176"
-              y="760" />
+              y="1000" />
     </path>
   </group>
   <group name="Fig49"
@@ -40125,20 +40175,20 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         offset="-10" />
     </private>
     <path name="Fig49.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1200"
+      <moveto x="1344"
               y="1217" />
-      <lineto x="1200"
+      <lineto x="1344"
               y="1264" />
       <lineto x="176"
               y="1264" />
       <lineto x="176"
-              y="760" />
+              y="1000" />
     </path>
   </group>
   <group name="Fig50"
@@ -40160,14 +40210,14 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         offset="174" />
     </private>
     <path name="Fig50.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
       strokecolor="black"
     >
       <moveto x="368"
-              y="637" />
+              y="629" />
       <lineto x="368"
               y="1176" />
       <lineto x="408"
@@ -40189,21 +40239,21 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="127-0-1-1--499759bc:12f72c12020:-8000:000000000000144A"
-                        angle="-19.0"
-                        offset="170" />
+                        angle="-21.999999999999996"
+                        offset="152" />
     </private>
     <path name="Fig51.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="704"
-              y="533" />
-      <lineto x="704"
+      <moveto x="784"
+              y="629" />
+      <lineto x="784"
               y="1184" />
-      <lineto x="744"
+      <lineto x="856"
               y="1184" />
     </path>
   </group>
@@ -40223,22 +40273,22 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="127-0-1-1--499759bc:12f72c12020:-8000:000000000000144B"
                         angle="-16.0"
-                        offset="200" />
+                        offset="186" />
     </private>
     <path name="Fig52.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1072"
+      <moveto x="1192"
               y="584" />
-      <lineto x="1040"
+      <lineto x="1168"
               y="584" />
-      <lineto x="1040"
+      <lineto x="1168"
               y="1184" />
-      <lineto x="1080"
+      <lineto x="1232"
               y="1184" />
     </path>
   </group>
@@ -40261,7 +40311,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         offset="293" />
     </private>
     <path name="Fig53.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -40294,17 +40344,17 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         offset="316" />
     </private>
     <path name="Fig54.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="981"
-              y="1168" />
-      <lineto x="1024"
-              y="1168" />
-      <lineto x="1024"
+      <moveto x="1093"
+              y="1184" />
+      <lineto x="1160"
+              y="1184" />
+      <lineto x="1160"
               y="233" />
     </path>
   </group>
@@ -40323,21 +40373,21 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="127-0-1-1--499759bc:12f72c12020:-8000:0000000000001450"
-                        angle="-172.0"
-                        offset="235" />
+                        angle="-174.99999999999997"
+                        offset="379" />
     </private>
     <path name="Fig55.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1332"
-              y="1184" />
-      <lineto x="1416"
-              y="1184" />
-      <lineto x="1416"
+      <moveto x="1484"
+              y="1168" />
+      <lineto x="1656"
+              y="1168" />
+      <lineto x="1656"
               y="112" />
     </path>
   </group>
@@ -41120,7 +41170,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
       <text name="Fig6.6.1"
         x="49"
         y="333"
-        width="247"
+        width="246"
         height="14"
         fill="0"
         fillcolor="white"
