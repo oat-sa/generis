@@ -75,7 +75,7 @@ class core_kernel_persistence_Switcher
 		
 		$tableName = core_kernel_persistence_hardapi_Utils::getShortName($class);
 		if(!$append){
-					
+			
 			$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
 			
 			//get the table columns from the class properties
@@ -92,6 +92,8 @@ class core_kernel_persistence_Switcher
 					//create the foreign tables recursively 
 					$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
 					if(!$foreignTableMgr->exists()){
+						$rangeUri = core_kernel_persistence_hardapi_Utils::getLongName($column['foreign']);
+						$range = new core_kernel_classes_Class($rangeUri);
 						self::hardifier($range);
 					}
 				}
@@ -110,7 +112,6 @@ class core_kernel_persistence_Switcher
 			//insert the resources
 			
 			$instances = $class->getInstances(false);
-			
 			$rows = array();
 			foreach($instances as $resource){
 				$row = array('uri' => $resource->uriResource);
@@ -119,10 +120,8 @@ class core_kernel_persistence_Switcher
 				}
 				$rows[] = $row;
 			}
-			
 			$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
 			$rowMgr->insertRows($rows);
-			
 			
 			foreach($instances as $resource){
 				$referencer->referenceResource($resource);

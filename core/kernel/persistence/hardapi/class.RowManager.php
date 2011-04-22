@@ -151,8 +151,9 @@ class core_kernel_persistence_hardapi_RowManager
 					$query .= ',';
 				}
 			}
+
 			$dbWrapper->execSql($query);
-			if($dbWrapper->dbConnector->errorNo() === 0){
+			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to insert the rows : " .$dbWrapper->dbConnector->errorMsg());
 			}
 			

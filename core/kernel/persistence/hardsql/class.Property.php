@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.04.2011, 14:10:07 with ArgoUML PHP module 
+ * Automatically generated on 21.04.2011, 13:09:33 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -71,6 +71,26 @@ class core_kernel_persistence_hardsql_Property
     // --- OPERATIONS ---
 
     /**
+     * Short description of method getSubProperties
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @param  boolean recursive
+     * @return array
+     */
+    public function getSubProperties( core_kernel_classes_Resource $resource, $recursive = false)
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1-563beb61:12f77be445a:-8000:000000000000144D begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        // section 127-0-1-1-563beb61:12f77be445a:-8000:000000000000144D end
+
+        return (array) $returnValue;
+    }
+
+    /**
      * Short description of method singleton
      *
      * @access public
@@ -82,6 +102,12 @@ class core_kernel_persistence_hardsql_Property
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001499 begin
+        
+        if (core_kernel_persistence_hardsql_Property::$instance == null){
+        	core_kernel_persistence_hardsql_Property::$instance = new core_kernel_persistence_hardsql_Property();
+        }
+        $returnValue = core_kernel_persistence_hardsql_Property::$instance;
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001499 end
 
         return $returnValue;

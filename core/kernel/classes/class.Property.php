@@ -81,7 +81,15 @@ class core_kernel_classes_Property
      * @access private
      * @var boolean
      */
-    private $lgDependent = true;
+    private $lgDepe5ndent = false;
+
+    /**
+     * Short description of attribute lgDependent
+     *
+     * @access public
+     * @var boolean
+     */
+    public $lgDependent = false;
 
     // --- OPERATIONS ---
 
@@ -89,7 +97,7 @@ class core_kernel_classes_Property
      * Short description of method __construct
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string uri
      * @param  string debug
      * @return void
@@ -98,6 +106,7 @@ class core_kernel_classes_Property
     {
         // section 10-5-2-6--89b5018:11b0b8ddfb0:-8000:0000000000000D5E begin
 		parent::__construct($uri,$debug);
+		$this->lgDependent = null;
         // section 10-5-2-6--89b5018:11b0b8ddfb0:-8000:0000000000000D5E end
     }
 
@@ -105,7 +114,7 @@ class core_kernel_classes_Property
      * Short description of method feed
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return void
      */
     public function feed()
@@ -125,7 +134,7 @@ class core_kernel_classes_Property
      * Short description of method getSubProperties
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  boolean recursive
      * @return array
      */
@@ -134,19 +143,9 @@ class core_kernel_classes_Property
         $returnValue = array();
 
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000780 begin
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sqlQuery = "select subject from statements where predicate = 'http://www.w3.org/2000/01/rdf-schema#subPropertyOf' and object = '".$this->uriResource."'";
-        $returnValue = array();
-		$sqlResult = $dbWrapper->execSql($sqlQuery);
-		while (!$sqlResult-> EOF){
-			$property = new core_kernel_classes_Property($sqlResult->fields['subject']);
-			$returnValue[$property->uriResource] = $property;
-
-			if($recursive == true) {
-				$returnValue = array_merge($returnValue,$property->getSubProperties(true));
-			}
-			$sqlResult->MoveNext();
-		}
+        
+        $returnValue = core_kernel_persistence_PropertyProxy::singleton()->getSubProperties ($this, $recursive);
+        
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000780 end
 
         return (array) $returnValue;
@@ -156,7 +155,7 @@ class core_kernel_classes_Property
      * Short description of method setSubPropertyOf
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Property property
      * @return boolean
      */
@@ -175,7 +174,7 @@ class core_kernel_classes_Property
      * return classes that are described by this property
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return core_kernel_classes_ContainerCollection
      */
     public function getDomain()
@@ -200,7 +199,7 @@ class core_kernel_classes_Property
      * Short description of method setDomain
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -235,7 +234,7 @@ class core_kernel_classes_Property
      * Short description of method getRange
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return core_kernel_classes_ContainerCollection
      */
     public function getRange()
@@ -266,7 +265,7 @@ class core_kernel_classes_Property
      * Short description of method setRange
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -288,7 +287,7 @@ class core_kernel_classes_Property
      * Short description of method getWidget
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return core_kernel_classes_Property
      */
     public function getWidget()
@@ -310,7 +309,7 @@ class core_kernel_classes_Property
      * Short description of method isLgDependent
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return boolean
      */
     public function isLgDependent()
@@ -323,15 +322,17 @@ class core_kernel_classes_Property
 	        
         	$lgDependentProperty = new core_kernel_classes_Property(PROPERTY_IS_LG_DEPENDENT,__METHOD__);
 	        $lgDependent = $this->getOnePropertyValue($lgDependentProperty);
+	        
 	        if(is_null($lgDependent)){
 	        	$this->lgDependent = false;
 	        }
 	        else{
 	        	$this->lgDependent = ($lgDependent->uriResource == GENERIS_TRUE);
-	        }     	
+	        }
         }
  
         $returnValue = $this->lgDependent;
+        //echo ('check is lg dependent '.PROPERTY_IS_LG_DEPENDENT.'<br/>');
         
         // section 10-13-1--99--152a2f30:1201eae099d:-8000:000000000000157A end
 
@@ -342,7 +343,7 @@ class core_kernel_classes_Property
      * Short description of method setLgDependent
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  boolean isLgDependent
      * @return mixed
      */

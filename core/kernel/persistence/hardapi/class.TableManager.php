@@ -167,10 +167,11 @@ class core_kernel_persistence_hardapi_TableManager
 						KEY idx_property_uri (property_uri),
 						CONSTRAINT fk_{$this->name}_instance_id 
 									FOREIGN KEY (instance_id) 
-									REFERENCES {$this->name}(id)
+									REFERENCES {$this->name}(id))
 						";
+					
 					$dbWrapper->execSql($query);
-					if($dbWrapper->dbConnector->errorNo() === 0){
+					if($dbWrapper->dbConnector->errorNo() !== 0){
 						throw new core_kernel_persistence_hardapi_Exception("Unable to create the table {$this->name}Props : " .$dbWrapper->dbConnector->errorMsg());
 					}
 					self::$_tables[] = "{$this->name}Props";

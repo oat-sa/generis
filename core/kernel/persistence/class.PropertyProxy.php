@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.04.2011, 17:29:04 with ArgoUML PHP module 
+ * Automatically generated on 21.04.2011, 13:09:34 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -100,6 +100,25 @@ class core_kernel_persistence_PropertyProxy
     // --- OPERATIONS ---
 
     /**
+     * Short description of method getSubProperties
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @param  boolean recursive
+     * @return array
+     */
+    public function getSubProperties( core_kernel_classes_Resource $resource, $recursive = false)
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1-563beb61:12f77be445a:-8000:000000000000144D begin
+        // section 127-0-1-1-563beb61:12f77be445a:-8000:000000000000144D end
+
+        return (array) $returnValue;
+    }
+
+    /**
      * Short description of method singleton
      *
      * @access public
@@ -111,6 +130,12 @@ class core_kernel_persistence_PropertyProxy
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001401 begin
+        
+        if (core_kernel_persistence_PropertyProxy::$instance == null){
+        	core_kernel_persistence_PropertyProxy::$instance = new core_kernel_persistence_PropertyProxy();
+        }
+        $returnValue = core_kernel_persistence_PropertyProxy::$instance;
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001401 end
 
         return $returnValue;
@@ -130,6 +155,29 @@ class core_kernel_persistence_PropertyProxy
         $returnValue = null;
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F63 begin
+        
+        if (!isset(core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo[$resource->uriResource])) {
+        	
+        	$delegate = null;
+        
+            if ($this->isValidContext ('subscription', $resource)) {
+	        	$delegate = core_kernel_persistence_subscription_Property::singleton();
+	        }
+            else if ($this->isValidContext ('hardsql', $resource)) {
+	        	$delegate = core_kernel_persistence_hardsql_Property::singleton();
+	        }
+            else if ($this->isValidContext ('virtuozo', $resource)) {
+	        	$delegate = core_kernel_persistence_virtuozo_Property::singleton();
+	        }
+            else if ($this->isValidContext ('smoothsql', $resource)) {
+	        	$delegate = core_kernel_persistence_smoothsql_Property::singleton();
+	        }
+	        
+	        core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo[$resource->uriResource] = $delegate;
+        }
+        
+        $returnValue = core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo[$resource->uriResource];
+        
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F63 end
 
         return $returnValue;
@@ -149,6 +197,17 @@ class core_kernel_persistence_PropertyProxy
         $returnValue = (bool) false;
 
         // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000155E begin
+        
+        $impls = $this->getAvailableImpl ();
+    	$className = "core_kernel_persistence_".$context."_Property";
+    	
+    	if (isset($impls["$context"])
+        && $impls["$context"] 
+        && $className::singleton()->isValidContext($resource))
+        {
+    		$returnValue = true;
+    	}
+        
         // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000155E end
 
         return (bool) $returnValue;

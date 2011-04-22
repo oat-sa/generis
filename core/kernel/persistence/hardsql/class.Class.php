@@ -84,6 +84,7 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014EB begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014EB end
 
         return (array) $returnValue;
@@ -103,6 +104,7 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F0 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F0 end
 
         return (bool) $returnValue;
@@ -122,6 +124,7 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F5 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F5 end
 
         return (array) $returnValue;
@@ -141,6 +144,7 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014FA begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014FA end
 
         return (array) $returnValue;
@@ -160,6 +164,7 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 end
 
         return (array) $returnValue;
@@ -179,6 +184,7 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001506 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001506 end
 
         return $returnValue;
@@ -198,6 +204,7 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000150F begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000150F end
 
         return (bool) $returnValue;
@@ -217,6 +224,7 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 end
 
         return (bool) $returnValue;
@@ -238,6 +246,7 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = null;
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F27 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F27 end
 
         return $returnValue;
@@ -258,6 +267,7 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = null;
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 end
 
         return $returnValue;
@@ -279,6 +289,7 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = null;
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F3C begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F3C end
 
         return $returnValue;

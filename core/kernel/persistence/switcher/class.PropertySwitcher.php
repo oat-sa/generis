@@ -223,7 +223,8 @@ bewteen a class and it's parent to retrieve the properties.
 			 */
 			
 			if ($property->isLgDependent() === true || $property->isMultiple()){
-				
+				//var_dump($property);
+				//echo ("s lg dependent {$property->isLgDependent()} <br/>");
 				//to put to the side table
 				$column['multi'] = true;
 			}

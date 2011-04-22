@@ -404,6 +404,7 @@ class core_kernel_persistence_ClassProxy
         $impls = $this->getAvailableImpl ($params);
         
         // First access to the resource
+        
         if (!isset(core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo[$resource->uriResource])) {
         	
         	$delegate = null;

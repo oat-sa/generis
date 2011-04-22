@@ -83,6 +83,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 end
 
         return (array) $returnValue;
@@ -102,6 +103,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B end
 
         return (array) $returnValue;
@@ -121,6 +123,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F end
 
         return $returnValue;
@@ -141,6 +144,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 end
 
         return $returnValue;
@@ -161,6 +165,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 end
 
         return $returnValue;
@@ -181,6 +186,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE end
 
         return (bool) $returnValue;
@@ -200,6 +206,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3 end
 
         return (bool) $returnValue;
@@ -221,6 +228,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7 end
 
         return (bool) $returnValue;
@@ -240,6 +248,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD end
 
         return (bool) $returnValue;
@@ -260,6 +269,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 end
 
         return (bool) $returnValue;
@@ -278,6 +288,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6 end
 
         return $returnValue;
@@ -297,6 +308,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C9 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C9 end
 
         return (array) $returnValue;
@@ -316,6 +328,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD end
 
         return $returnValue;
@@ -335,6 +348,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 end
 
         return (bool) $returnValue;
@@ -354,6 +368,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 end
 
         return $returnValue;
@@ -414,34 +429,34 @@ class core_kernel_persistence_hardsql_Resource
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5A begin
         
-    	$dbWrapper = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
-        $hardSqlTable = null;
-		
-        /****
-         * 
-         * BE CAREFULL:
-         * the database name is hard coded (mytao)
-         * 
-         */
-        
-        // Check if the hard sql tables exist
-		$hardSqlTablesExistSql = "SELECT count(*) FROM information_schema.TABLES WHERE Table_Name='resource_to_table' and TABLE_SCHEMA='mytao'";
-		$resulthardSqlTablesExist = $dbWrapper->execSql($hardSqlTablesExistSql);
-		
-		if ($resulthardSqlTablesExist && $resulthardSqlTablesExist->fields[0]){
-
-			// Check if the resource has been hard sqled
-			$isHardSqlResourceSql = "SELECT `table` FROM `resource_to_table` WHERE `uri`='{$resource->uriResource}'";
-			$isHardSqlResourceResult = $dbWrapper->execSql($isHardSqlResourceSql);
-			if ($isHardSqlResourceResult && !$isHardSqlResourceResult->EOF){
-				$hardSqlTable = $isHardSqlResourceResult->fields['table'];
-			}
-			
-		}
-		
-		if ($hardSqlTable){
-			$returnValue = true;
-		}
+//    	$dbWrapper = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
+//        $hardSqlTable = null;
+//		
+//        /****
+//         * 
+//         * BE CAREFULL:
+//         * the database name is hard coded (mytao)
+//         * 
+//         */
+//        
+//        // Check if the hard sql tables exist
+//		$hardSqlTablesExistSql = "SELECT count(*) FROM information_schema.TABLES WHERE Table_Name='resource_to_table' and TABLE_SCHEMA='mytao'";
+//		$resulthardSqlTablesExist = $dbWrapper->execSql($hardSqlTablesExistSql);
+//		
+//		if ($resulthardSqlTablesExist && $resulthardSqlTablesExist->fields[0]){
+//
+//			// Check if the resource has been hard sqled
+//			$isHardSqlResourceSql = "SELECT `table` FROM `resource_to_table` WHERE `uri`='{$resource->uriResource}'";
+//			$isHardSqlResourceResult = $dbWrapper->execSql($isHardSqlResourceSql);
+//			if ($isHardSqlResourceResult && !$isHardSqlResourceResult->EOF){
+//				$hardSqlTable = $isHardSqlResourceResult->fields['table'];
+//			}
+//			
+//		}
+//		
+//		if ($hardSqlTable){
+//			$returnValue = true;
+//		}
         
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5A end
 

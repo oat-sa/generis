@@ -3,23 +3,24 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API -
+ * Utility class that provides transversal methods 
+ * to manage  the hard api
  *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 20.04.2011, 13:05:54 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
- * @subpackage kernel_persistence_swicther
+ * @subpackage kernel_persistence_hardapi
  */
 
 if (0 > version_compare(PHP_VERSION, '5')) {
     die('This file was generated for PHP 5');
 }
+
+/**
+ * include core_kernel_persistence_Switcher
+ *
+ * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ */
+require_once('core/kernel/persistence/class.Switcher.php');
 
 /* user defined includes */
 // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001596-includes begin
@@ -30,12 +31,13 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001596-constants end
 
 /**
- * Short description of class core_kernel_persistence_swicther_Utils
+ * Utility class that provides transversal methods 
+ * to manage  the hard api
  *
  * @access public
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
- * @subpackage kernel_persistence_swicther
+ * @subpackage kernel_persistence_hardapi
  */
 class core_kernel_persistence_hardapi_Utils
 {
@@ -55,10 +57,11 @@ class core_kernel_persistence_hardapi_Utils
     // --- OPERATIONS ---
 
     /**
-     * Short description of method getNamespaceId
+     * Get the namespace identifier of an URI,
+     * using the modelID/baseUri mapping
      *
      * @access private
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string namespaceUri
      * @return string
      */
@@ -89,10 +92,12 @@ class core_kernel_persistence_hardapi_Utils
     }
 
     /**
-     * Short description of method getShortName
+     * Get the shortname of a resource.
+     * It helps you for the tables and columns names
+     * that cannot be longer than 64 characters
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return string
      */
@@ -112,6 +117,34 @@ class core_kernel_persistence_hardapi_Utils
         return (string) $returnValue;
     }
 
-} /* end of class core_kernel_persistence_swicther_Utils */
+    /**
+     * Short description of method getLongName
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  string shortName
+     * @return string
+     */
+    public static function getLongName($shortName)
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1--151fe597:12f7c91b993:-8000:00000000000014C7 begin
+        
+        if (!empty($shortName) && strlen($shortName)>2){
+        	$modelID = intval (substr($shortName, 0, 2));
+        	
+        	if ($modelID != null && $modelID >0){
+	        	$nsUri = common_ext_NamespaceManager::singleton()->getNamespace ($modelID);
+	         	$returnValue = $nsUri . substr($shortName, 2);
+        	}
+        }       
+        
+        // section 127-0-1-1--151fe597:12f7c91b993:-8000:00000000000014C7 end
+
+        return (string) $returnValue;
+    }
+
+} /* end of class core_kernel_persistence_hardapi_Utils */
 
 ?>
