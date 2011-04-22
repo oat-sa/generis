@@ -199,14 +199,32 @@ class core_kernel_persistence_PropertyProxy
         // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000155E begin
         
         $impls = $this->getAvailableImpl ();
-    	$className = "core_kernel_persistence_".$context."_Property";
     	
-    	if (isset($impls["$context"])
-        && $impls["$context"] 
-        && $className::singleton()->isValidContext($resource))
-        {
-    		$returnValue = true;
-    	}
+    	if (isset($impls["$context"]) && $impls["$context"])
+		{
+			switch ($context){
+				case 'subscription':
+					if (core_kernel_persistence_subscription_Property::singleton()->isValidContext($resource)){
+						$returnValue = true;
+					}
+					break;
+				case 'hardsql':
+					if (core_kernel_persistence_hardsql_Property::singleton()->isValidContext($resource)){
+						$returnValue = true;
+					}
+					break;
+				case 'virtuozo':
+					if (core_kernel_persistence_virtuozo_Property::singleton()->isValidContext($resource)){
+						$returnValue = true;
+					}
+					break;
+				case 'smoothsql':
+					if (core_kernel_persistence_smoothsql_Property::singleton()->isValidContext($resource)){
+						$returnValue = true;
+					}
+					break;
+			}
+		}
         
         // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000155E end
 
