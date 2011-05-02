@@ -165,9 +165,10 @@ bewteen a class and it's parent to retrieve the properties.
      *
      * @access public
      * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @param array additionalProp
      * @return array
      */
-    public function getProperties()
+    public function getProperties($additionalProps=array())
     {
         $returnValue = array();
 
@@ -179,6 +180,11 @@ bewteen a class and it's parent to retrieve the properties.
     	else{
     		$returnValue = $this->_properties;
     	}
+    	
+        foreach ($additionalProps as $additionalProp){
+        	$returnValue[$additionalProp->uriResource] = $additionalProp;
+        }
+    	
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001615 end
 
         return (array) $returnValue;
@@ -194,23 +200,27 @@ bewteen a class and it's parent to retrieve the properties.
      *
      * @access public
      * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @param array additionalProp
      * @return array
      */
-    public function getTableColumns()
+    public function getTableColumns($additionalProps)
     {
         $returnValue = array();
 
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001618 begin
         
-        $properties = $this->getProperties();
-    	
+        $properties = $this->getProperties($additionalProps);
+        $notForeignableClass = array (
+        	RDF_CLASS
+        );
+        
     	/// HERE repalce what the switcher is doing: determine the column type: literal/class, translate, multiple values
     	foreach($properties as $property){
 
 			$column = array('name' => core_kernel_persistence_hardapi_Utils::getShortName($property));
 				
 			$range 			= $property->getRange();
-			if(!is_null($range) && $range->uriResource != RDFS_LITERAL){
+			if(!is_null($range) && $range->uriResource != RDFS_LITERAL && !in_array($range->uriResource, $notForeignableClass)){
 				
 				//constraint to the class that represents the range
 				$column['foreign'] = core_kernel_persistence_hardapi_Utils::getShortName($range);
@@ -229,6 +239,8 @@ bewteen a class and it's parent to retrieve the properties.
 			}
 			$returnValue[] = $column;
 		}
+		
+		var_dump($returnValue);
 		
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001618 end
 

@@ -101,9 +101,7 @@ class core_kernel_persistence_hardapi_RowManager
         $size = count($rows);
 		if($size > 0){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-			
-			var_dump($this->columns);
-			
+						
 			//building the insert query
 			
 			//1st step : set the column names
@@ -141,7 +139,9 @@ class core_kernel_persistence_hardapi_RowManager
 								$query.= ", NULL";
 							}
 							else{
+								
 								while($foreignRow =  $foreignResult->fetchRow()){
+									
 									$id = $foreignRow['id'];
 									$query.= ", {$id}";
 									break;
@@ -149,8 +149,16 @@ class core_kernel_persistence_hardapi_RowManager
 							}
 						}
 						else{
-							//set the literal value
-							$query.= ", '{$row[$column['name']]}'";
+							
+							//the value is a literal
+							$value = $row[$column['name']];
+							if (!common_Utils::isUri($value)){
+								$query.= ", '{$value}'";
+							}
+							//the value is a resource
+							else {
+								$query.= ", '{$value->uriResource}'";
+							}
 						}
 					}
 				}
@@ -176,6 +184,13 @@ class core_kernel_persistence_hardapi_RowManager
 					if (!isset($column['multi']) || $column['multi'] === false){
 						continue;
 					}
+					
+					/**
+					 * 
+					 * @todo
+					 * multiple : foreign lgDependent ?
+					 * 
+					 */
 					
 					//foreign content
 //					if (isset($column['foreign']) && $column['foreign'] === true){

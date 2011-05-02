@@ -60,7 +60,7 @@ class core_kernel_persistence_Switcher
         $returnValue = (bool) false;
         
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 begin
-//        echo "begin hardify : ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
+        echo "begin hardify : ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
         
 		//recursive will hardify the class that are range of the properties
 		(isset($options['recursive'])) ? $recursive = $options['recursive'] : $recursive = false;
@@ -74,8 +74,8 @@ class core_kernel_persistence_Switcher
 		//if defined, we took all the properties of the class and it's parents till the topclass
 		(isset($options['topClass'])) ? $topClass = $options['topClass'] : $topClass = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
 		
-		// Mask of classes to exclude
-		(isset($options['excludedClass'])) ? $excludedClass = $options['excludedClass'] : array();
+		//if defined, compile the additional properties
+		(isset($options['additionalProperties'])) ? $additionalProperties = $options['additionalProperties'] : $additionalProperties = array();
 		
 		$tableName = core_kernel_persistence_hardapi_Utils::getShortName($class);
 		if(!$append){
@@ -86,22 +86,25 @@ class core_kernel_persistence_Switcher
 			$columns = array();
 			
 			$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
-			$properties = $ps->getProperties();
+			$properties = $ps->getProperties($additionalProperties);
+			$columns = $ps->getTableColumns($additionalProperties);
 			
-			$columns = $ps->getTableColumns();
 			foreach($columns as $column){
+
 //       			echo 'treat column '.$column['name'].'<br/>';
-				
-				if($recursive && isset($column['foreign'])){
-//       				echo $column['foreign'].' <span style="color:red">(foreign)</span> <br/>';
-					//create the foreign tables recursively
-					$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
-					if(!$foreignTableMgr->exists()){
-						$rangeUri = core_kernel_persistence_hardapi_Utils::getLongName($column['foreign']);
-						$range = new core_kernel_classes_Class($rangeUri);
-						$subHardifyOption = array_merge($options, array());
-						$subHardifyOption['topClass'] = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
-						self::hardifier($range, $subHardifyOption);
+				//create the foreign tables recursively
+				if(isset($column['foreign']) && $recursive){
+					
+					$foreignClassUri = core_kernel_persistence_hardapi_Utils::getLongName($column['foreign']);
+					if (!in_array($foreignClassUri, $blackListClass)){
+
+						$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
+						if(!$foreignTableMgr->exists()){
+							$range = new core_kernel_classes_Class($foreignClassUri);
+							$subHardifyOption = array_merge($options, array());
+							$subHardifyOption['topClass'] = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
+							self::hardifier($range, $subHardifyOption);
+						}
 					}
 				}
 			}
@@ -115,12 +118,11 @@ class core_kernel_persistence_Switcher
 			$myTableMgr->create($columns);
 			//reference the class
 			$referencer->referenceClass($class);
-				
 			
 			//insert the resources
 			$instances = $class->getInstances(false);
 			$rows = array();
-			$i=0;
+			
 			foreach($instances as $resource){
 				$row = array('uri' => $resource->uriResource);
 //				$propertiesValue = $resource->getPropertiesValue ($properties, false);

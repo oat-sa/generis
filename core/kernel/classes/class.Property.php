@@ -76,14 +76,6 @@ class core_kernel_classes_Property
     public $widget = null;
 
     /**
-     * If the property depends of a language or not
-     *
-     * @access private
-     * @var boolean
-     */
-    private $lgDepe5ndent = false;
-
-    /**
      * Short description of attribute lgDependent
      *
      * @access public
@@ -329,16 +321,7 @@ class core_kernel_classes_Property
 
         if(is_null($this->lgDependent )){
 	        
-        	$lgDependentProperty = new core_kernel_classes_Property(PROPERTY_IS_LG_DEPENDENT,__METHOD__);
-	        $lgDependent = $this->getOnePropertyValue($lgDependentProperty);
-	        //var_dump($lgDependent, $this->getLabel(), $this->uriResource);
-	        
-	        if(is_null($lgDependent)){
-	        	$this->lgDependent = false;
-	        }
-	        else{
-	        	$this->lgDependent = ($lgDependent->uriResource == GENERIS_TRUE);
-	        }
+        	$this->lgDependent = core_kernel_persistence_PropertyProxy::singleton()->isLgDependent ($this);
         }
  
         $returnValue = $this->lgDependent;

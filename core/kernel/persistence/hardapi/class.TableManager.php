@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.04.2011, 13:15:25 with ArgoUML PHP module 
+ * Automatically generated on 02.05.2011, 17:36:34 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -33,7 +33,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class core_kernel_persistence_hardapi_TableManager
  *
  * @access public
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -66,7 +66,7 @@ class core_kernel_persistence_hardapi_TableManager
      * Short description of method __construct
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string name
      * @return mixed
      */
@@ -90,7 +90,7 @@ class core_kernel_persistence_hardapi_TableManager
      * Short description of method exists
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return boolean
      */
     public function exists()
@@ -110,7 +110,7 @@ class core_kernel_persistence_hardapi_TableManager
      * Short description of method create
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  array columns
      * @return boolean
      */
@@ -196,7 +196,7 @@ class core_kernel_persistence_hardapi_TableManager
      * Short description of method remove
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return boolean
      */
     public function remove()
@@ -250,6 +250,65 @@ class core_kernel_persistence_hardapi_TableManager
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015B9 end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method instanceExists
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  string uri
+     * @return boolean
+     */
+    public static function instanceExists($resource)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014D8 begin
+        
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        
+        $query = "SELECT count(*) FROM resource_to_table WHERE uri=\"{$resource->uriResource}\"";
+    	$result = $dbWrapper->execSql($query);
+		if($dbWrapper->dbConnector->errorNo() !== 0){
+			throw new core_kernel_persistence_hardapi_Exception("Unable to define if a resource has been harified: " .$dbWrapper->dbConnector->errorMsg());
+
+		} 
+		else {
+			if (!$result->EOF){
+				$returnValue = true;
+			}
+		}
+        
+        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014D8 end
+
+        return (bool) $returnValue;
+    }
+    
+    
+    public static function whereIsTheResource($resource)
+    {
+        $returnValue = "";
+
+        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014D8 begin
+        
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        
+        $query = "SELECT `table` FROM resource_to_table WHERE uri=\"{$resource->uriResource}\"";
+    	$result = $dbWrapper->execSql($query);
+		if($dbWrapper->dbConnector->errorNo() !== 0){
+			throw new core_kernel_persistence_hardapi_Exception("Unable to define where is the hardified resource: " .$dbWrapper->dbConnector->errorMsg());
+
+		} 
+		else {
+			if (!$result->EOF){
+				$returnValue = $result->fields['table'];
+			}
+		}
+        
+        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014D8 end
+
+        return $returnValue;
     }
 
 } /* end of class core_kernel_persistence_hardapi_TableManager */

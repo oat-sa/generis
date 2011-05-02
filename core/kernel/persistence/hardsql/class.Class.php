@@ -367,12 +367,12 @@ class core_kernel_persistence_hardsql_Class
 
         $tableManager = new core_kernel_persistence_hardapi_TableManager(core_kernel_persistence_hardapi_Utils::getShortName($resource));
         if ($tableManager->exists()){
-			$returnValue = true;
-//			var_dump ('EXISTS', $resource);      	
+			$returnValue = true;     	
         }        
         
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F57 end
-
+		
+        $returnValue=false;
         return (bool) $returnValue;
     }
 

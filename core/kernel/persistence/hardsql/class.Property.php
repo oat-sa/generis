@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 21.04.2011, 13:09:33 with ArgoUML PHP module 
+ * Automatically generated on 02.05.2011, 18:52:12 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -83,11 +83,49 @@ class core_kernel_persistence_hardsql_Property
     {
         $returnValue = array();
 
-        // section 127-0-1-1-563beb61:12f77be445a:-8000:000000000000144D begin
+        // section 127-0-1-1-7b8668ff:12f77d22c39:-8000:000000000000144D begin
         throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        // section 127-0-1-1-563beb61:12f77be445a:-8000:000000000000144D end
+        // section 127-0-1-1-7b8668ff:12f77d22c39:-8000:000000000000144D end
 
         return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method isLgDependent
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @return boolean
+     */
+    public function isLgDependent( core_kernel_classes_Resource $resource)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014DB begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014DB end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method isMultiple
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @return boolean
+     */
+    public function isMultiple( core_kernel_classes_Resource $resource)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014DD begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014DD end
+
+        return (bool) $returnValue;
     }
 
     /**

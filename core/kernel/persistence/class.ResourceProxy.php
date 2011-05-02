@@ -599,7 +599,7 @@ class core_kernel_persistence_ResourceProxy
 					}
 					break;
 				case 'hardsql':
-					if (false && core_kernel_persistence_hardsql_Resource::singleton()->isValidContext($resource)){
+					if (core_kernel_persistence_hardsql_Resource::singleton()->isValidContext($resource)){
 						$returnValue = true;
 					}
 					break;

@@ -6,7 +6,7 @@ require_once INCLUDES_PATH.'/simpletest/autorun.php';
 class PersistenceSwitcherTestCase extends UnitTestCase {
 	
 	private $hardifySubject = true;
-	private $hardifyGroups = true;
+	private $hardifyGroups = false;
 	
 	public function setUp(){
 
@@ -14,40 +14,47 @@ class PersistenceSwitcherTestCase extends UnitTestCase {
 
 	}
 
-	public function testPropertyFinder(){
-		return;
-		$testTakerClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
-		
-		$ps = new core_kernel_persistence_switcher_PropertySwitcher($testTakerClass, new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#User'));
-		$result = $ps->getProperties();
-		$this->assertEqual(count($result), 8);
-		$this->assertTrue(array_key_exists('http://www.tao.lu/Ontologies/generis.rdf#userFirstName', $result));
-		$this->assertTrue(array_key_exists('http://www.tao.lu/Ontologies/generis.rdf#userLastName', $result));
-		$this->assertTrue(array_key_exists('http://www.tao.lu/Ontologies/generis.rdf#password', $result));
-		$this->assertTrue(array_key_exists('http://www.tao.lu/Ontologies/generis.rdf#login', $result));
-		$this->assertTrue(array_key_exists('http://www.tao.lu/Ontologies/generis.rdf#userMail', $result));
-		$this->assertTrue(array_key_exists('http://www.tao.lu/Ontologies/generis.rdf#userDefLg', $result));
-		$this->assertTrue(array_key_exists('http://www.tao.lu/Ontologies/generis.rdf#userUILg', $result));
-		
-		
-		$ps = new core_kernel_persistence_switcher_PropertySwitcher($testTakerClass, new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#TAOObject'));
-		$result = $ps->getProperties();
-		$this->assertEqual(count($result), 1);
-		$this->assertTrue(array_key_exists(RDFS_LABEL, $result));
-		
-		$ps = new core_kernel_persistence_switcher_PropertySwitcher($testTakerClass);
-		$result = $ps->getProperties();
-		$this->assertTrue(array_key_exists(RDFS_LABEL, $result));
-	}
+//	public function testPropertyFinder(){
+//		$testTakerClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
+//		
+//		$ps = new core_kernel_persistence_switcher_PropertySwitcher($testTakerClass, new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#User'));
+//		$result = $ps->getProperties();
+//		$this->assertEqual(count($result), 8);
+//		$this->assertTrue(array_key_exists('http://www.tao.lu/Ontologies/generis.rdf#userFirstName', $result));
+//		$this->assertTrue(array_key_exists('http://www.tao.lu/Ontologies/generis.rdf#userLastName', $result));
+//		$this->assertTrue(array_key_exists('http://www.tao.lu/Ontologies/generis.rdf#password', $result));
+//		$this->assertTrue(array_key_exists('http://www.tao.lu/Ontologies/generis.rdf#login', $result));
+//		$this->assertTrue(array_key_exists('http://www.tao.lu/Ontologies/generis.rdf#userMail', $result));
+//		$this->assertTrue(array_key_exists('http://www.tao.lu/Ontologies/generis.rdf#userDefLg', $result));
+//		$this->assertTrue(array_key_exists('http://www.tao.lu/Ontologies/generis.rdf#userUILg', $result));
+//		
+//		
+//		$ps = new core_kernel_persistence_switcher_PropertySwitcher($testTakerClass, new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#TAOObject'));
+//		$result = $ps->getProperties();
+//		$this->assertEqual(count($result), 1);
+//		$this->assertTrue(array_key_exists(RDFS_LABEL, $result));
+//		
+//		$ps = new core_kernel_persistence_switcher_PropertySwitcher($testTakerClass);
+//		$result = $ps->getProperties();
+//		$this->assertTrue(array_key_exists(RDFS_LABEL, $result));
+//	}
 	
 	public function testHardify(){
+		if (true){
+			$languagesClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#Languages');
+			$topClass		= new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#TAOObject');	
+			core_kernel_persistence_Switcher::hardifier($languagesClass, array(
+				'topClass'		=> $topClass
+			));
+		}
+		
 		if ($this->hardifySubject){
 			$testTakerClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
-			$userClass		= new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#User');
-	
+			$userClass		= new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#User');	
 			core_kernel_persistence_Switcher::hardifier($testTakerClass, array(
 				'topClass'		=> $userClass,
-				'recursive'		=> true
+				'recursive'		=> true,
+				'additionalProperties' => array (new core_kernel_classes_Property (RDF_TYPE))
 			));
 		}
 		if ($this->hardifyGroups){
@@ -86,5 +93,5 @@ class PersistenceSwitcherTestCase extends UnitTestCase {
 
 //	}
 	
-}
+} 
 ?>
