@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.04.2011, 14:10:07 with ArgoUML PHP module 
+ * Automatically generated on 01.05.2011, 00:35:26 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -247,6 +247,7 @@ class core_kernel_persistence_smoothsql_Resource
         			WHERE subject = ? AND predicate = ?
 		    		AND (l_language = '' OR l_language = ?) 
 		    		AND modelID IN ({$modelIds})";
+
         $params = array(
         	$resource->uriResource,
         	$property->uriResource,
@@ -751,6 +752,59 @@ class core_kernel_persistence_smoothsql_Resource
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC end
 
         return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method getPropertiesValue
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @param  array properties
+     * @param  boolean last
+     * @return array
+     */
+    public function getPropertiesValue( core_kernel_classes_Resource $resource, $properties, $last)
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 begin       
+        
+    	$predicatesQuery = '"'.implode ('","', array_keys($properties)).'"';
+        $session 	= core_kernel_classes_Session::singleton();
+    	$modelIds	= implode(',',array_keys($session->getLoadedModels()));
+    	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
+    	
+        $query =  "SELECT predicate, object FROM statements 
+        			WHERE subject = ? AND predicate IN ({$predicatesQuery})
+		    		AND (l_language = '' OR l_language = ?) 
+		    		AND modelID IN ({$modelIds})
+		    		ORDER BY predicate";
+
+        $params = array(
+        	$resource->uriResource
+        	, ($session->getLg() != '') ? $session->getLg() : $session->defaultLg
+        );
+        $result	= $dbWrapper->execSql($query, $params);
+        
+        $previousPredicate = null;
+        while(!$result->EOF){
+        	if ($previousPredicate != $result->fields['predicate']){
+        		$previousPredicate = $result->fields['predicate'];
+	        	$value = $result->fields['object'];
+        		if(!common_Utils::isUri($value)) {
+	                $returnValue[$result->fields['predicate']] = new core_kernel_classes_Literal($value);
+		         }
+		         else {
+	                $returnValue[$result->fields['predicate']] = new core_kernel_classes_Resource($value);
+	            }
+        	}
+        	$result->moveNext();
+        }
+        
+        // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 end
+
+        return (array) $returnValue;
     }
 
     /**

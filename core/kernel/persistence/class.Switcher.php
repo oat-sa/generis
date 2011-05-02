@@ -58,8 +58,9 @@ class core_kernel_persistence_Switcher
     public static function hardifier( core_kernel_classes_Class $class, $options = array())
     {
         $returnValue = (bool) false;
-
+        
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 begin
+//        echo "begin hardify : ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
         
 		//recursive will hardify the class that are range of the properties
 		(isset($options['recursive'])) ? $recursive = $options['recursive'] : $recursive = false;
@@ -72,6 +73,9 @@ class core_kernel_persistence_Switcher
 		
 		//if defined, we took all the properties of the class and it's parents till the topclass
 		(isset($options['topClass'])) ? $topClass = $options['topClass'] : $topClass = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
+		
+		// Mask of classes to exclude
+		(isset($options['excludedClass'])) ? $excludedClass = $options['excludedClass'] : array();
 		
 		$tableName = core_kernel_persistence_hardapi_Utils::getShortName($class);
 		if(!$append){
@@ -86,55 +90,69 @@ class core_kernel_persistence_Switcher
 			
 			$columns = $ps->getTableColumns();
 			foreach($columns as $column){
+//       			echo 'treat column '.$column['name'].'<br/>';
 				
 				if($recursive && isset($column['foreign'])){
-					
-					//create the foreign tables recursively 
+//       				echo $column['foreign'].' <span style="color:red">(foreign)</span> <br/>';
+					//create the foreign tables recursively
 					$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
 					if(!$foreignTableMgr->exists()){
 						$rangeUri = core_kernel_persistence_hardapi_Utils::getLongName($column['foreign']);
 						$range = new core_kernel_classes_Class($rangeUri);
-						self::hardifier($range);
+						$subHardifyOption = array_merge($options, array());
+						$subHardifyOption['topClass'] = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
+						self::hardifier($range, $subHardifyOption);
 					}
 				}
 			}
-
+			
 			//create the table
+//       		echo "create table and column for ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
 			$myTableMgr = new core_kernel_persistence_hardapi_TableManager($tableName);
 			if($myTableMgr->exists()){
 				$myTableMgr->remove();
 			}
-
 			$myTableMgr->create($columns);
-			$referencer->referenceClass($class);	//reference the class
-			
+			//reference the class
+			$referencer->referenceClass($class);
+				
 			
 			//insert the resources
-			
 			$instances = $class->getInstances(false);
 			$rows = array();
+			$i=0;
 			foreach($instances as $resource){
 				$row = array('uri' => $resource->uriResource);
+				$propertiesValue = $resource->getPropertiesValue ($properties, false);
 				foreach($properties as $property){
-					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $resource->getOnePropertyValue($property);
+					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propertiesValue[$property->uriResource];
 				}
+				
+//				foreach($properties as $property){
+//					$propValue = $resource->getOnePropertyValue($property);
+//					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propValue;
+//				}
 				$rows[] = $row;
+//				$i++; if ($i>100) break;
 			}
+			
+//       		echo "insert rows (#".count($rows).") for ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
 			$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
 			$rowMgr->insertRows($rows);
 			
-			foreach($instances as $resource){
-				$referencer->referenceResource($resource);
-			}
+//			foreach($instances as $resource){
+//				$referencer->referenceResource($resource);
+//			}
 			
 		}
 		
+//        echo "end hardify : {$class->uriResource}<br/><br/>";
         
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 end
 
         return (bool) $returnValue;
     }
-
+    
 } /* end of class core_kernel_persistence_Switcher */
 
 ?>

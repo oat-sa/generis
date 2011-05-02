@@ -91,6 +91,14 @@ class core_kernel_classes_Property
      */
     public $lgDependent = false;
 
+    /**
+     * Short description of attribute multiple
+     *
+     * @access public
+     * @var boolean
+     */
+    public $multiple = false;
+
     // --- OPERATIONS ---
 
     /**
@@ -107,6 +115,7 @@ class core_kernel_classes_Property
         // section 10-5-2-6--89b5018:11b0b8ddfb0:-8000:0000000000000D5E begin
 		parent::__construct($uri,$debug);
 		$this->lgDependent = null;
+		$this->multiple = null;
         // section 10-5-2-6--89b5018:11b0b8ddfb0:-8000:0000000000000D5E end
     }
 
@@ -322,6 +331,7 @@ class core_kernel_classes_Property
 	        
         	$lgDependentProperty = new core_kernel_classes_Property(PROPERTY_IS_LG_DEPENDENT,__METHOD__);
 	        $lgDependent = $this->getOnePropertyValue($lgDependentProperty);
+	        //var_dump($lgDependent, $this->getLabel(), $this->uriResource);
 	        
 	        if(is_null($lgDependent)){
 	        	$this->lgDependent = false;
@@ -332,7 +342,6 @@ class core_kernel_classes_Property
         }
  
         $returnValue = $this->lgDependent;
-        //echo ('check is lg dependent '.PROPERTY_IS_LG_DEPENDENT.'<br/>');
         
         // section 10-13-1--99--152a2f30:1201eae099d:-8000:000000000000157A end
 
@@ -358,6 +367,39 @@ class core_kernel_classes_Property
         }
         
         // section 10-13-1--99--152a2f30:1201eae099d:-8000:000000000000157E end
+    }
+
+    /**
+     * Short description of method isMultiple
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @return boolean
+     */
+    public function isMultiple()
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--7856c56:12f911716ca:-8000:00000000000014C8 begin
+        
+        if(is_null($this->multiple )){
+        	
+        	$multipleProperty = new core_kernel_classes_Property(PROPERTY_MULTIPLE,__METHOD__);
+	        $multiple = $this->getOnePropertyValue($multipleProperty);
+	        
+	        if(is_null($multiple)){
+	        	$this->multiple = false;
+	        }
+	        else{
+	        	$this->multiple = ($multiple->uriResource == GENERIS_TRUE);
+	        }
+        }
+ 
+        $returnValue = $this->multiple;
+        
+        // section 127-0-1-1--7856c56:12f911716ca:-8000:00000000000014C8 end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class core_kernel_classes_Property */

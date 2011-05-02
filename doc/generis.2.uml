@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Generis Core Kernel</activediagram>
+      <activediagram>Persistence</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -88,7 +88,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Sun May 01 00:22:21 CEST 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Sun May 01 02:06:34 CEST 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.30.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -7976,6 +7976,37 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                               name = 'resource' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1'
+                          name = 'getPropertiesValue' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D2'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D3'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D4'
+                              name = 'properties' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D5'
+                              name = 'last' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -36303,7 +36334,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       name="Persistence"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[232, 32, 495, 271]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[232, 32, 495, 285]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297"
        fill="1"
        fillcolor="200 255 255"
@@ -36317,7 +36348,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       x="232"
       y="32"
       width="495"
-      height="271"
+      height="285"
       fill="1"
       fillcolor="200 255 255"
       stroke="1"
@@ -36388,7 +36419,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig0.4"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[233, 71, 493, 232]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[233, 71, 493, 246]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297"
          fill="0"
          fillcolor="200 255 255"
@@ -36402,7 +36433,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         x="233"
         y="71"
         width="493"
-        height="232"
+        height="246"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -36652,7 +36683,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         x="233"
         y="281"
         width="493"
-        height="20"
+        height="14"
         fill="0"
         fillcolor="200 255 255"
         stroke="0"
@@ -36664,6 +36695,22 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getLastModificationUser(resource : Resource) : string</text>
+      <text name="Fig0.4.17"
+        x="233"
+        y="295"
+        width="493"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getPropertiesValue(resource : Resource,properties : array,last : boolean) : array</text>
     </group>
   </group>
   <group name="Fig1"
@@ -37137,7 +37184,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       <lineto x="680"
               y="576" />
       <lineto x="680"
-              y="303" />
+              y="317" />
     </path>
   </group>
   <group name="Fig5"
@@ -37671,7 +37718,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       <text name="Fig8.6.2"
         x="409"
         y="995"
-        width="235"
+        width="236"
         height="20"
         fill="0"
         fillcolor="white"
@@ -37716,7 +37763,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       <lineto x="680"
               y="752" />
       <lineto x="680"
-              y="303" />
+              y="317" />
     </path>
   </group>
   <group name="Fig10"
@@ -37749,7 +37796,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       <lineto x="680"
               y="968" />
       <lineto x="680"
-              y="303" />
+              y="317" />
     </path>
   </group>
   <group name="Fig11"
@@ -37977,7 +38024,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       <text name="Fig13.6.2"
         x="857"
         y="779"
-        width="235"
+        width="236"
         height="20"
         fill="0"
         fillcolor="white"
@@ -39275,7 +39322,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       <text name="Fig23.6.2"
         x="857"
         y="995"
-        width="227"
+        width="236"
         height="20"
         fill="0"
         fillcolor="white"
@@ -39874,7 +39921,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       <text name="Fig33.6.2"
         x="9"
         y="978"
-        width="235"
+        width="236"
         height="20"
         fill="0"
         fillcolor="white"
@@ -40638,7 +40685,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       <text name="Fig44.6.2"
         x="857"
         y="1195"
-        width="235"
+        width="236"
         height="20"
         fill="0"
         fillcolor="white"
@@ -41237,7 +41284,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       <lineto x="680"
               y="1176" />
       <lineto x="680"
-              y="303" />
+              y="317" />
     </path>
   </group>
   <group name="Fig54"

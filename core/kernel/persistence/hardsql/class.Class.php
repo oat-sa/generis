@@ -164,7 +164,40 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 begin
-        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
+        $tableName = core_kernel_persistence_hardapi_Utils::getShortName($resource);
+        
+    	$sqlQuery = "SELECT uri FROM {$tableName} WHERE 1";
+
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$sqlResult = $dbWrapper->execSql($sqlQuery);
+
+		while (!$sqlResult->EOF){
+
+			$instance = new core_kernel_classes_Resource($sqlResult->fields['uri']);
+			$returnValue[$instance->uriResource] = $instance ;
+
+			// In case of a meta class, subclasses of instances may be returned
+//			if (($instance->uriResource!=RDF_CLASS)
+//			&& ($resource->uriResource == RDF_CLASS)
+//			&& ($instance->uriResource!=RDF_RESOURCE)) {
+//
+//				$instanceClass = new core_kernel_classes_Class($instance->uriResource);
+//				$subClasses = $instanceClass->getSubClasses(true);
+//
+//				foreach($subClasses as $subClass) {
+//					$returnValue[$subClass->uriResource] = $subClass;
+//				}
+//			}
+			$sqlResult->MoveNext();
+		}
+//		if($recursive == true){
+//			$subClasses = $resource->getSubClasses(true);
+//			foreach ($subClasses as $subClass){
+//				$returnValue = array_merge($returnValue,$subClass->getInstances(true));
+//			}
+//		}
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 end
 
         return (array) $returnValue;
@@ -331,6 +364,13 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = (bool) false;
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F57 begin
+
+        $tableManager = new core_kernel_persistence_hardapi_TableManager(core_kernel_persistence_hardapi_Utils::getShortName($resource));
+        if ($tableManager->exists()){
+			$returnValue = true;
+//			var_dump ('EXISTS', $resource);      	
+        }        
+        
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F57 end
 
         return (bool) $returnValue;

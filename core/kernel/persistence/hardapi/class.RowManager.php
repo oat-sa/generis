@@ -110,31 +110,33 @@ class core_kernel_persistence_hardapi_RowManager
 				$query .= ", {$column['name']}";
 			}
 			$query .= ') VALUES ';
-			
 			//set the values
 			foreach($rows as $i => $row){
 				$query.= "('{$row['uri']}'";
 				foreach($this->columns as $column){
-					if(isset($row[$column['name']])){
+					
+					if(array_key_exists($column['name'], $row)){
 						if(isset($column['multi']) && $column['multi'] === true){
 							continue;
 						}
 						
 						//set the ID
 						if(isset($column['foreign'])){
-							
-							$uri = $row[$column['name']];
+							$foreignResource = $row[$column['name']];
 							
 							//get foreign id
 							$foreignQuery 	= "SELECT id FROM {$column['foreign']} WHERE uri = ?";
-							$foreignResult 	= $dbWrapper->execSql($foreignQuery, array($uri));
+							$foreignResult 	= $dbWrapper->execSql($foreignQuery, array($foreignResource->uriResource));
+						
+							if($dbWrapper->dbConnector->errorNo() !== 0){
+								throw new core_kernel_persistence_hardapi_Exception("Unable to select foreign data : " .$dbWrapper->dbConnector->errorMsg());
+							}
 							if($foreignResult->recordCount() == 0){
 								$query.= ", NULL";
 							}
 							else{
 								while($foreignRow =  $foreignResult->fetchRow()){
 									$id = $foreignRow['id'];
-									
 									$query.= ", {$id}";
 									break;
 								}

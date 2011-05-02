@@ -5,6 +5,9 @@ require_once INCLUDES_PATH.'/simpletest/autorun.php';
 
 class PersistenceSwitcherTestCase extends UnitTestCase {
 	
+	private $hardifySubject = true;
+	private $hardifyGroups = false;
+	
 	public function setUp(){
 
 	    TestRunner::initTest();
@@ -12,7 +15,7 @@ class PersistenceSwitcherTestCase extends UnitTestCase {
 	}
 
 	public function testPropertyFinder(){
-		
+		return;
 		$testTakerClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
 		
 		$ps = new core_kernel_persistence_switcher_PropertySwitcher($testTakerClass, new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#User'));
@@ -38,14 +41,51 @@ class PersistenceSwitcherTestCase extends UnitTestCase {
 	}
 	
 	public function testHardify(){
-		$testTakerClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
-		$userClass		= new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#User');
-
-		core_kernel_persistence_Switcher::hardifier($testTakerClass, array(
-			'topClass'		=> $userClass,
-			'recursive'		=> true
-		));
+		if ($this->hardifySubject){
+			$testTakerClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
+			$userClass		= new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#User');
+	
+			core_kernel_persistence_Switcher::hardifier($testTakerClass, array(
+				'topClass'		=> $userClass,
+				'recursive'		=> true
+			));
+		}
+		if ($this->hardifyGroups){
+			$groupClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOGroup.rdf#Group');
+			$topClass		= new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#TAOObject');
+			core_kernel_persistence_Switcher::hardifier($groupClass, array(
+				'topClass'		=> $topClass,
+				'recursive'		=> true,
+				'excludedClass' => $options['excludedClass']
+			));
+		}
 	}
+	
+	public function testHardifiedSubject(){
+		return;
+		// Get TaoSubjects Instance
+		$subjectClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
+		$subjectInstances = $subjectClass->getInstances();
+		$this->assertIsA ($subjectInstances, 'array');
+		$this->assertEqual (count($subjectInstances), 1000);
+		// Get the current user
+//	    $userUri = Session::getAttribute(core_kernel_users_Service::AUTH_TOKEN_KEY);
+//	    $this->assertNotNull($userUri);
+//        $currentUser = new core_kernel_classes_Resource($userUri);
+//  		$login = (string)$currentUser->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_LOGIN));
+//  		$this->assertEqual ($login, 'generis');
+//	        		$password 		= (string)$currentUser->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD));
+//					try{
+//	        			$dataLang 	= (string)$currentUser->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_DEFLG));
+//					}
+//					catch(common_Exception $ce){
+//						$dataLang 	= 'EN';
+//					}
+	}
+	
+//	public function testHardifyMultiple(){
+
+//	}
 	
 }
 ?>

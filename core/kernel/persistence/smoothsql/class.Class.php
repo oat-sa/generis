@@ -238,7 +238,8 @@ class core_kernel_persistence_smoothsql_Class
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 begin
-		$sqlQuery = "select subject from statements
+		
+        $sqlQuery = "select subject from statements
 									where predicate = '".RDF_TYPE."'  
 									and object = '".$resource->uriResource."' ";
 

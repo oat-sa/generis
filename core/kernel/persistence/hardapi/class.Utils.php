@@ -54,6 +54,9 @@ class core_kernel_persistence_hardapi_Utils
      */
     private static $namespaceIds = array();
 
+    
+    private static $shortNames = array();
+    
     // --- OPERATIONS ---
 
     /**
@@ -108,8 +111,15 @@ class core_kernel_persistence_hardapi_Utils
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:000000000000159D begin
         
     	if(!is_null($resource)){
-			$nsUri = substr($resource->uriResource, 0, strpos($resource->uriResource, '#')+1);
-			$returnValue = str_replace($nsUri, self::getNamespaceId($nsUri), $resource->uriResource);
+    		
+    		if (isset(self::$shortNames[$resource->uriResource])){
+    			$returnValue = self::$shortNames[$resource->uriResource];
+    		} else {
+    			$nsUri = substr($resource->uriResource, 0, strpos($resource->uriResource, '#')+1);
+				$returnValue = str_replace($nsUri, self::getNamespaceId($nsUri), $resource->uriResource);
+				self::$shortNames[$resource->uriResource] = $returnValue;
+    		}
+			
 		}
         
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:000000000000159D end

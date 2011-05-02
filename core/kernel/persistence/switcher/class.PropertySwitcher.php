@@ -222,15 +222,14 @@ bewteen a class and it's parent to retrieve the properties.
 			 * 
 			 */
 			
-			if ($property->isLgDependent() === true || $property->isMultiple()){
-				//var_dump($property);
+			if ($property->isLgDependent() === true || $property->isMultiple()=== true ){
 				//echo ("s lg dependent {$property->isLgDependent()} <br/>");
 				//to put to the side table
 				$column['multi'] = true;
 			}
 			$returnValue[] = $column;
 		}
-        
+		
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001618 end
 
         return (array) $returnValue;
