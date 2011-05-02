@@ -107,7 +107,7 @@ class core_kernel_persistence_Switcher
 			}
 			
 			//create the table
-//       		echo "create table and column for ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
+       		echo "create table and column for ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
 			$myTableMgr = new core_kernel_persistence_hardapi_TableManager($tableName);
 			if($myTableMgr->exists()){
 				$myTableMgr->remove();
@@ -123,26 +123,25 @@ class core_kernel_persistence_Switcher
 			$i=0;
 			foreach($instances as $resource){
 				$row = array('uri' => $resource->uriResource);
-				$propertiesValue = $resource->getPropertiesValue ($properties, false);
-				foreach($properties as $property){
-					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propertiesValue[$property->uriResource];
-				}
-				
+//				$propertiesValue = $resource->getPropertiesValue ($properties, false);
 //				foreach($properties as $property){
-//					$propValue = $resource->getOnePropertyValue($property);
-//					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propValue;
+//					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propertiesValue[$property->uriResource];
 //				}
+				
+				foreach($properties as $property){
+					$propValue = $resource->getOnePropertyValue($property);
+					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propValue;
+				}
 				$rows[] = $row;
-//				$i++; if ($i>100) break;
 			}
 			
-//       		echo "insert rows (#".count($rows).") for ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
+       		echo "insert rows (#".count($rows).") for ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
 			$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
 			$rowMgr->insertRows($rows);
 			
-//			foreach($instances as $resource){
-//				$referencer->referenceResource($resource);
-//			}
+			foreach($instances as $resource){
+				$referencer->referenceResource($resource);
+			}
 			
 		}
 		

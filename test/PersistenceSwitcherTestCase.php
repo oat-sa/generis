@@ -6,7 +6,7 @@ require_once INCLUDES_PATH.'/simpletest/autorun.php';
 class PersistenceSwitcherTestCase extends UnitTestCase {
 	
 	private $hardifySubject = true;
-	private $hardifyGroups = false;
+	private $hardifyGroups = true;
 	
 	public function setUp(){
 
@@ -55,8 +55,7 @@ class PersistenceSwitcherTestCase extends UnitTestCase {
 			$topClass		= new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#TAOObject');
 			core_kernel_persistence_Switcher::hardifier($groupClass, array(
 				'topClass'		=> $topClass,
-				'recursive'		=> true,
-				'excludedClass' => $options['excludedClass']
+				'recursive'		=> true
 			));
 		}
 	}

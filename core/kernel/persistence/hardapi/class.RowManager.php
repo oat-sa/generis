@@ -94,10 +94,15 @@ class core_kernel_persistence_hardapi_RowManager
         $returnValue = (bool) false;
 
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001626 begin
+
+        // The class has  multiple properties 
+        $multipleColumns = array();
         
         $size = count($rows);
 		if($size > 0){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+			
+			var_dump($this->columns);
 			
 			//building the insert query
 			
@@ -110,18 +115,19 @@ class core_kernel_persistence_hardapi_RowManager
 				$query .= ", {$column['name']}";
 			}
 			$query .= ') VALUES ';
+			
 			//set the values
 			foreach($rows as $i => $row){
 				$query.= "('{$row['uri']}'";
 				foreach($this->columns as $column){
 					
 					if(array_key_exists($column['name'], $row)){
+						//the property is multiple, postone its treatment
 						if(isset($column['multi']) && $column['multi'] === true){
 							continue;
 						}
-						
 						//set the ID
-						if(isset($column['foreign'])){
+						else if(isset($column['foreign'])){
 							$foreignResource = $row[$column['name']];
 							
 							//get foreign id
@@ -154,16 +160,60 @@ class core_kernel_persistence_hardapi_RowManager
 				}
 			}
 
+			// Insert rows of the main table
 			$dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to insert the rows : " .$dbWrapper->dbConnector->errorMsg());
 			}
 			
-			/*
-			 * 
-			 * @todo insert the multiple values! 
-			 * 
-			 */
+			// If the class has multiple properties
+			// Insert rows in its associate table <tableName>Props
+			foreach ($rows as $row){
+				$queryRows = "";
+				
+				foreach($this->columns as $column){
+					
+					if (!isset($column['multi']) || $column['multi'] === false){
+						continue;
+					}
+					
+					//foreign content
+//					if (isset($column['foreign']) && $column['foreign'] === true){
+//						
+//					}
+					//local content
+					else {
+						$multiplePropertyUri = core_kernel_persistence_hardapi_Utils::getLongName($column['name']);
+						$foreignQuery = "SELECT object FROM statements WHERE subject = ? AND predicate = ?";
+						$foreignResult = $dbWrapper->execSql($foreignQuery, array($row['uri'], $multiplePropertyUri));
+						
+						if($dbWrapper->dbConnector->errorNo() !== 0){
+							throw new core_kernel_persistence_hardapi_Exception("Unable to select foreign data for the property {$multiplePropertyUri} : " .$dbWrapper->dbConnector->errorMsg());
+						}
+	
+						while (!$foreignResult->EOF){
+							if(!(empty($queryRows))){
+								$queryRows .= ',';
+							}
+							$queryRows .= "(0, \"{$multiplePropertyUri}\", \"{$foreignResult->fields['object']}\", NULL, NULL)";
+							$foreignResult->moveNext();
+						}
+					}
+					
+				}
+				
+				if (!empty($queryRows)){
+					
+					$queryMultiple = "INSERT INTO {$this->table}Props
+						(instance_id, property_uri, property_value, property_foreign_id, l_language) VALUES " . $queryRows;
+					
+					$multiplePropertiesResult = $dbWrapper->execSql($queryMultiple);
+					if($dbWrapper->dbConnector->errorNo() !== 0){
+						throw new core_kernel_persistence_hardapi_Exception("Unable to insert multiple properties for table {$this->table} : " .$dbWrapper->dbConnector->errorMsg());
+					}
+				}
+
+			}
 		}
         
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001626 end
