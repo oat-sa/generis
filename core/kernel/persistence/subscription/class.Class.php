@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.04.2011, 14:33:25 with ArgoUML PHP module 
+ * Automatically generated on 03.05.2011, 12:04:39 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_subscription
  */
@@ -24,14 +24,14 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_persistence_PersistenceImpl
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  */
 require_once('core/kernel/persistence/class.PersistenceImpl.php');
 
 /**
  * include core_kernel_persistence_ClassInterface
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  */
 require_once('core/kernel/persistence/interface.ClassInterface.php');
 
@@ -47,7 +47,7 @@ require_once('core/kernel/persistence/interface.ClassInterface.php');
  * Short description of class core_kernel_persistence_subscription_Class
  *
  * @access public
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_subscription
  */
@@ -74,7 +74,7 @@ class core_kernel_persistence_subscription_Class
      * Short description of method getSubClasses
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -96,7 +96,7 @@ class core_kernel_persistence_subscription_Class
      * Short description of method isSubClassOf
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Class parentClass
      * @return boolean
@@ -119,7 +119,7 @@ class core_kernel_persistence_subscription_Class
      * Short description of method getParentClasses
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -142,7 +142,7 @@ class core_kernel_persistence_subscription_Class
      * Short description of method getProperties
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -165,12 +165,13 @@ class core_kernel_persistence_subscription_Class
      * Short description of method getInstances
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  boolean recursive
+     * @param  array params
      * @return array
      */
-    public function getInstances( core_kernel_classes_Resource $resource, $recursive = false)
+    public function getInstances( core_kernel_classes_Resource $resource, $recursive = false, $params = array())
     {
         $returnValue = array();
 
@@ -194,7 +195,7 @@ class core_kernel_persistence_subscription_Class
      * Short description of method setInstance
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Resource instance
      * @return core_kernel_classes_Resource
@@ -217,7 +218,7 @@ class core_kernel_persistence_subscription_Class
      * Short description of method setSubClassOf
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Class iClass
      * @return boolean
@@ -240,7 +241,7 @@ class core_kernel_persistence_subscription_Class
      * Short description of method setProperty
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return boolean
@@ -263,7 +264,7 @@ class core_kernel_persistence_subscription_Class
      * Short description of method createInstance
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  string label
      * @param  string comment
@@ -288,7 +289,7 @@ class core_kernel_persistence_subscription_Class
      * Short description of method createSubClass
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  string label
      * @param  string comment
@@ -312,7 +313,7 @@ class core_kernel_persistence_subscription_Class
      * Short description of method createProperty
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  string label
      * @param  string comment
@@ -337,7 +338,7 @@ class core_kernel_persistence_subscription_Class
      * Short description of method singleton
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return core_kernel_classes_Resource
      */
     public static function singleton()
@@ -360,7 +361,7 @@ class core_kernel_persistence_subscription_Class
      * Short description of method isValidContext
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */

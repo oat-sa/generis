@@ -120,31 +120,41 @@ class core_kernel_persistence_Switcher
 			$referencer->referenceClass($class);
 			
 			//insert the resources
-			$instances = $class->getInstances(false);
-			$rows = array();
-			
-			foreach($instances as $resource){
-				$row = array('uri' => $resource->uriResource);
-//				$propertiesValue = $resource->getPropertiesValue ($properties, false);
-//				foreach($properties as $property){
-//					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propertiesValue[$property->uriResource];
-//				}
+			do{
+				$instances = array();
+				$instances = $class->getInstances(false, 100);//limit to 100
+				$rows = array();
 				
-				foreach($properties as $property){
-					$propValue = $resource->getOnePropertyValue($property);
-					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propValue;
+				
+				foreach($instances as $resource){
+					$row = array('uri' => $resource->uriResource);
+	//				$propertiesValue = $resource->getPropertiesValue ($properties, false);
+	//				foreach($properties as $property){
+	//					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propertiesValue[$property->uriResource];
+	//				}
+					
+					foreach($properties as $property){
+						$propValue = $resource->getOnePropertyValue($property);
+						$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propValue;
+					}
+					$rows[] = $row;
 				}
-				$rows[] = $row;
-			}
-			
-       		echo "insert rows (#".count($rows).") for ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
-			$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
-			$rowMgr->insertRows($rows);
-			
-			foreach($instances as $resource){
-				$referencer->referenceResource($resource);
-			}
-			
+				
+				echo "insert rows (#".count($rows).") for ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
+				$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
+				$rowMgr->insertRows($rows);
+				
+				foreach($instances as $resource){
+					$referencer->referenceResource($resource);
+					
+					//remove exported resources in smooth sql:
+					$resource->delete();
+				}
+				
+				$count = count($instances);
+				unset($instances);
+				
+			}while($count>0);
 		}
 		
 //        echo "end hardify : {$class->uriResource}<br/><br/>";

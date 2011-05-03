@@ -95,11 +95,10 @@ class core_kernel_classes_Class
 		
         $returnValue = core_kernel_persistence_ClassProxy::singleton()->isSubClassOf ($this, $parentClass);
 		
-		// section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000AF2 end
+        // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000AF2 end
 
         return (bool) $returnValue;
     }
-
 
     /**
      * returns all parent classes as a collection
@@ -144,22 +143,22 @@ class core_kernel_classes_Class
         return (array) $returnValue;
     }
 
-
     /**
      * return direct instances of this class as a collection
      *
      * @access public
      * @author patrick.plichart@tudor.lu
      * @param  boolean recursive
+     * @param  array params
      * @return array
      */
-    public function getInstances($recursive = false)
+    public function getInstances($recursive = false, $params = array())
     {
         $returnValue = array();
 
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000958 begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getInstances ($this, $recursive);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getInstances ($this, $recursive, $params);
 		
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000958 end
 
@@ -171,7 +170,7 @@ class core_kernel_classes_Class
      * which simply link the previously created ressource with this class
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource instance
      * @return core_kernel_classes_Resource
      */
@@ -227,7 +226,7 @@ class core_kernel_classes_Class
 		
         $returnValue = core_kernel_persistence_ClassProxy::singleton()->setProperty ($this, $property);
         
-		// section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AC1 end
+        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AC1 end
 
         return (bool) $returnValue;
     }
@@ -236,7 +235,7 @@ class core_kernel_classes_Class
      * Short description of method __construct
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string uri
      * @param  string debug
      * @return void
@@ -248,13 +247,12 @@ class core_kernel_classes_Class
         // section 10-5-2-6-d9cdd2e:11b0c43cdd8:-8000:0000000000000D4D end
     }
 
-
     /**
      * Creates the hyperClass related to a class
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @return core_kernel_hyperclasses_HyperClass
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @return mixed
      */
     public function createHyperClass()
     {
@@ -309,13 +307,11 @@ class core_kernel_classes_Class
         return $returnValue;
     }
 
-
-
     /**
      * Short description of method createInstance
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string label
      * @param  string comment
      * @param  string uri
@@ -338,7 +334,7 @@ class core_kernel_classes_Class
      * Short description of method createSubClass
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string label
      * @param  string comment
      * @return core_kernel_classes_Class
@@ -360,7 +356,7 @@ class core_kernel_classes_Class
      * Short description of method createProperty
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string label
      * @param  string comment
      * @param  boolean isLgDependent
@@ -383,7 +379,7 @@ class core_kernel_classes_Class
      * Short description of method getMethodes
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return array
      */
     public function getMethodes()
@@ -396,8 +392,6 @@ class core_kernel_classes_Class
 
         return (array) $returnValue;
     }
-
-
 
 } /* end of class core_kernel_classes_Class */
 
