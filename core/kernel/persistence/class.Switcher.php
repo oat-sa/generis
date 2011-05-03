@@ -122,7 +122,7 @@ class core_kernel_persistence_Switcher
 			//insert the resources
 			do{
 				$instances = array();
-				$instances = $class->getInstances(false, 100);//limit to 100
+				$instances = $class->getInstances(false, array('limit' => 100));//limit to 100
 				$rows = array();
 				
 				
@@ -133,6 +133,10 @@ class core_kernel_persistence_Switcher
 	//					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propertiesValue[$property->uriResource];
 	//				}
 					
+					/**
+					 * 
+					 * @todo set the multiple values too?
+					 */
 					foreach($properties as $property){
 						$propValue = $resource->getOnePropertyValue($property);
 						$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propValue;
@@ -140,10 +144,11 @@ class core_kernel_persistence_Switcher
 					$rows[] = $row;
 				}
 				
+				
 				echo "insert rows (#".count($rows).") for ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
 				$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
 				$rowMgr->insertRows($rows);
-				
+			
 				foreach($instances as $resource){
 					$referencer->referenceResource($resource);
 					

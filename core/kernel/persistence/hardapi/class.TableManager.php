@@ -167,7 +167,7 @@ class core_kernel_persistence_hardapi_TableManager
 						KEY idx_property_uri (property_uri),
 						CONSTRAINT fk_{$this->name}_instance_id 
 									FOREIGN KEY (instance_id) 
-									REFERENCES {$this->name}(id))
+									REFERENCES {$this->name}(id))DEFAULT CHARSET=utf8
 						";
 					
 					$dbWrapper->execSql($query);

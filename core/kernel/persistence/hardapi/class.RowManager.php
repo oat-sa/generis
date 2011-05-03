@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 21.04.2011, 17:17:55 with ArgoUML PHP module 
+ * Automatically generated on 03.05.2011, 15:34:23 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
@@ -102,9 +102,14 @@ class core_kernel_persistence_hardapi_RowManager
 		if($size > 0){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 						
+			
+			//get the ids of foreigns value 
+			$foreignsIds  = $this->getForeignIds($rows);
+			var_dump($foreignsIds);
+			
 			//building the insert query
 			
-			//1st step : set the column names
+			//set the column names
 			$query = "INSERT INTO {$this->table} (uri";
 			foreach($this->columns as $column){
 				if(isset($column['multi']) && $column['multi'] === true){
@@ -114,8 +119,12 @@ class core_kernel_persistence_hardapi_RowManager
 			}
 			$query .= ') VALUES ';
 			
+			$uris = array();
+			
 			//set the values
 			foreach($rows as $i => $row){
+				$uris[] = $row['uri'];
+				 
 				$query.= "('{$row['uri']}'";
 				foreach($this->columns as $column){
 					
@@ -124,28 +133,16 @@ class core_kernel_persistence_hardapi_RowManager
 						if(isset($column['multi']) && $column['multi'] === true){
 							continue;
 						}
-						//set the ID
-						else if(isset($column['foreign'])){
-							$foreignResource = $row[$column['name']];
-							
-							//get foreign id
-							$foreignQuery 	= "SELECT id FROM {$column['foreign']} WHERE uri = ?";
-							$foreignResult 	= $dbWrapper->execSql($foreignQuery, array($foreignResource->uriResource));
 						
-							if($dbWrapper->dbConnector->errorNo() !== 0){
-								throw new core_kernel_persistence_hardapi_Exception("Unable to select foreign data : " .$dbWrapper->dbConnector->errorMsg());
-							}
-							if($foreignResult->recordCount() == 0){
-								$query.= ", NULL";
+						else if(isset($column['foreign'])){
+							
+							//set the id of the foreign resource
+							$foreignResource = $row[$column['name']];
+							if(isset($foreignsIds[$column['foreign']][$foreignResource->uriResource])){
+								$query.= ", {$foreignsIds[$column['foreign']][$foreignResource->uriResource]}";
 							}
 							else{
-								
-								while($foreignRow =  $foreignResult->fetchRow()){
-									
-									$id = $foreignRow['id'];
-									$query.= ", {$id}";
-									break;
-								}
+								$query.= ", NULL";
 							}
 						}
 						else{
@@ -174,6 +171,22 @@ class core_kernel_persistence_hardapi_RowManager
 				throw new core_kernel_persistence_hardapi_Exception("Unable to insert the rows : " .$dbWrapper->dbConnector->errorMsg());
 			}
 			
+			//get the ids of the inserted rows
+			$uriList = '';
+			foreach($uris as $uri){
+				$uriList .= "'$uri',";
+			}
+			$uriList = substr($uriList, 0, strlen($uriList) -1);
+			
+			$instanceIds = array();
+			
+			$query 	= "SELECT id, uri FROM {$this->table} WHERE uri IN ({$uriList})";
+			$result = $dbWrapper->execSql($query);
+			while (!$result->EOF){
+				$instanceIds[$result->fields['uri']] = $result->fields['id'];
+				$result->moveNext();
+			}
+			
 			// If the class has multiple properties
 			// Insert rows in its associate table <tableName>Props
 			foreach ($rows as $row){
@@ -192,28 +205,35 @@ class core_kernel_persistence_hardapi_RowManager
 					 * 
 					 */
 					
-					//foreign content
-//					if (isset($column['foreign']) && $column['foreign'] === true){
-//						
-//					}
-					//local content
-					else {
+					
 						$multiplePropertyUri = core_kernel_persistence_hardapi_Utils::getLongName($column['name']);
-						$foreignQuery = "SELECT object FROM statements WHERE subject = ? AND predicate = ?";
-						$foreignResult = $dbWrapper->execSql($foreignQuery, array($row['uri'], $multiplePropertyUri));
+						$multiQuery = "SELECT object, l_language FROM statements WHERE subject = ? AND predicate = ?";
+						$multiResult = $dbWrapper->execSql($multiQuery, array($row['uri'], $multiplePropertyUri));
 						
 						if($dbWrapper->dbConnector->errorNo() !== 0){
 							throw new core_kernel_persistence_hardapi_Exception("Unable to select foreign data for the property {$multiplePropertyUri} : " .$dbWrapper->dbConnector->errorMsg());
 						}
 	
-						while (!$foreignResult->EOF){
+						while (!$multiResult->EOF){
 							if(!(empty($queryRows))){
 								$queryRows .= ',';
 							}
-							$queryRows .= "(0, \"{$multiplePropertyUri}\", \"{$foreignResult->fields['object']}\", NULL, NULL)";
-							$foreignResult->moveNext();
+							if (isset($column['foreign'])){
+								if(isset($foreignsIds[$column['foreign']][$multiResult->fields['object']])){
+									$foreignsId = $foreignsIds[$column['foreign']][$multiResult->fields['object']];
+								}
+								else{
+									
+									$foreignsId = 'NULL';
+								}
+								$queryRows .= "({$instanceIds[$row['uri']]}, \"{$multiplePropertyUri}\", NULL, NULL, \"{$multiResult->fields['l_language']}\")";
+							}
+							else{
+								
+								$queryRows .= "({$instanceIds[$row['uri']]}, \"{$multiplePropertyUri}\", \"{$multiResult->fields['object']}\", NULL, \"{$multiResult->fields['l_language']}\")";
+							}
+							$multiResult->moveNext();
 						}
-					}
 					
 				}
 				
@@ -227,13 +247,71 @@ class core_kernel_persistence_hardapi_RowManager
 						throw new core_kernel_persistence_hardapi_Exception("Unable to insert multiple properties for table {$this->table} : " .$dbWrapper->dbConnector->errorMsg());
 					}
 				}
-
 			}
 		}
         
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001626 end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method getForeignIds
+     *
+     * @access protected
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @param  array rows
+     * @return array
+     */
+    protected function getForeignIds($rows)
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1--2b59d385:12fb60e84b9:-8000:0000000000001686 begin
+        
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        
+        $foreigns = array();
+        foreach($this->columns as $column){
+			if(isset($column['foreign'])){
+				
+				$uriList = '';
+				foreach($rows as  $row){
+					$foreignResource = $row[$column['name']];
+					$uriList .= "'{$foreignResource->uriResource}',";
+				}
+				$uriList = substr($uriList, 0, strlen($uriList) -1);
+				
+				$query = "SELECT id, uri FROM {$column['foreign']} WHERE uri IN ({$uriList})";
+				$result = $dbWrapper->execSql($query);
+				if($dbWrapper->dbConnector->errorNo() !== 0){
+					throw new core_kernel_persistence_hardapi_Exception("Unable to select foreign data : " .$dbWrapper->dbConnector->errorMsg());
+				}
+				$foreign = array();
+				while(!$result->EOF){
+					if(!isset($column['multi']) || $column['multi'] === false){
+						$foreign[$result->fields['uri']]  = $result->fields['id'];
+					}
+					else{
+						$key = $result->fields['uri'];
+						if(array_key_exists($key, $foreign)){
+							$foreign[$result->fields['uri']][] = $result->fields['id'];
+						}
+						else{
+							$foreign[$result->fields['uri']]  = array($result->fields['id']);
+						}
+					}
+					$result->moveNext();
+				}
+				$foreigns[$column['foreign']] = $foreign;
+			}
+		}
+		
+		$returnValue = $foreigns;
+        
+        // section 127-0-1-1--2b59d385:12fb60e84b9:-8000:0000000000001686 end
+
+        return (array) $returnValue;
     }
 
 } /* end of class core_kernel_persistence_hardapi_RowManager */
