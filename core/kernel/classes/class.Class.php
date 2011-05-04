@@ -256,8 +256,6 @@ class core_kernel_classes_Class
      */
     public function createHyperClass()
     {
-        $returnValue = null;
-
         // section 10-13-1--31-42d46662:11bb6ef4845:-8000:0000000000000D54 begin
 			
 			
@@ -303,8 +301,6 @@ class core_kernel_classes_Class
 		}
 		$returnValue =$hyperClass;
         // section 10-13-1--31-42d46662:11bb6ef4845:-8000:0000000000000D54 end
-
-        return $returnValue;
     }
 
     /**
@@ -389,6 +385,26 @@ class core_kernel_classes_Class
         // section -87--2--3--76--148ee98a:12452773959:-8000:00000000000017DF begin
         $returnValue = array( 'instanciate' => true , 'addSubclass' => true , 'addPropery' => true);
         // section -87--2--3--76--148ee98a:12452773959:-8000:00000000000017DF end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method searchInstances
+     *
+     * @access public
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  array propertyFilters
+     * @param  array options
+     * @return array
+     */
+    public function searchInstances($propertyFilters = array(), $options = array())
+    {
+        $returnValue = array();
+
+        // section 10-13-1--128--26678bb4:12fbafcb344:-8000:0000000000001503 begin
+		$returnValue = core_kernel_persistence_ClassProxy::singleton()->searchInstances ($this, $propertyFilters, $options);
+        // section 10-13-1--128--26678bb4:12fbafcb344:-8000:0000000000001503 end
 
         return (array) $returnValue;
     }

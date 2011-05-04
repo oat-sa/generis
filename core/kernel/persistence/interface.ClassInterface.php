@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.05.2011, 12:04:39 with ArgoUML PHP module 
+ * Automatically generated on 04.05.2011, 14:40:23 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
@@ -169,6 +169,18 @@ interface core_kernel_persistence_ClassInterface
      * @return core_kernel_classes_Property
      */
     public function createProperty( core_kernel_classes_Resource $resource, $label = '', $comment = '', $isLgDependent = false);
+
+    /**
+     * Short description of method searchInstances
+     *
+     * @access public
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  Resource resource
+     * @param  array propertyFilters
+     * @param  array options
+     * @return array
+     */
+    public function searchInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array());
 
 } /* end of interface core_kernel_persistence_ClassInterface */
 
