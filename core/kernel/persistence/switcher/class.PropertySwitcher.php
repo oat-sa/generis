@@ -132,7 +132,10 @@ bewteen a class and it's parent to retrieve the properties.
 				}
 				$lastLevelParents = array();
 				foreach($parentClasses as $parentClass){
-					if($parentClass->uriResource == $this->topClass->uriResource || ($parentClass->uriResource == RDF_CLASS) ) {
+					if($parentClass->uriResource == RDF_CLASS){
+						continue;
+					}
+					if($parentClass->uriResource == $this->topClass->uriResource) {
 						$parents[$parentClass->uriResource] = $parentClass;	
 						$top = true;
 						break;
@@ -220,27 +223,20 @@ bewteen a class and it's parent to retrieve the properties.
 			$column = array('name' => core_kernel_persistence_hardapi_Utils::getShortName($property));
 				
 			$range 			= $property->getRange();
+			
 			if(!is_null($range) && $range->uriResource != RDFS_LITERAL && !in_array($range->uriResource, $notForeignableClass)){
 				
 				//constraint to the class that represents the range
 				$column['foreign'] = core_kernel_persistence_hardapi_Utils::getShortName($range);
 			}
 			
-			/*
-			 * 
-			 *  @todo $property->isMultiple() is not yet implemented
-			 * 
-			 */
-			
 			if ($property->isLgDependent() === true || $property->isMultiple()=== true ){
-				//echo ("s lg dependent {$property->isLgDependent()} <br/>");
 				//to put to the side table
 				$column['multi'] = true;
 			}
 			$returnValue[] = $column;
 		}
 		
-		var_dump($returnValue);
 		
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001618 end
 

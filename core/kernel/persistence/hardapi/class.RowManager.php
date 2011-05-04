@@ -105,7 +105,6 @@ class core_kernel_persistence_hardapi_RowManager
 			
 			//get the ids of foreigns value 
 			$foreignsIds  = $this->getForeignIds($rows);
-			var_dump($foreignsIds);
 			
 			//building the insert query
 			
@@ -221,15 +220,23 @@ class core_kernel_persistence_hardapi_RowManager
 							if (isset($column['foreign'])){
 								if(isset($foreignsIds[$column['foreign']][$multiResult->fields['object']])){
 									$foreignsId = $foreignsIds[$column['foreign']][$multiResult->fields['object']];
+									if(is_array($foreignsId)){
+										foreach($foreignsId as $index => $id){
+											if($index > 0){
+												$queryRows .= ',';
+											}
+											$queryRows .= "({$instanceIds[$row['uri']]}, \"{$multiplePropertyUri}\", NULL, {$id}, \"{$multiResult->fields['l_language']}\")";
+										}
+									}
+									else{
+										$queryRows .= "({$instanceIds[$row['uri']]}, \"{$multiplePropertyUri}\", NULL, {$foreignsId}, \"{$multiResult->fields['l_language']}\")";
+									}
 								}
 								else{
-									
-									$foreignsId = 'NULL';
+									$queryRows .= "({$instanceIds[$row['uri']]}, \"{$multiplePropertyUri}\", NULL, NULL, \"{$multiResult->fields['l_language']}\")";
 								}
-								$queryRows .= "({$instanceIds[$row['uri']]}, \"{$multiplePropertyUri}\", NULL, NULL, \"{$multiResult->fields['l_language']}\")";
 							}
 							else{
-								
 								$queryRows .= "({$instanceIds[$row['uri']]}, \"{$multiplePropertyUri}\", \"{$multiResult->fields['object']}\", NULL, \"{$multiResult->fields['l_language']}\")";
 							}
 							$multiResult->moveNext();
@@ -244,7 +251,7 @@ class core_kernel_persistence_hardapi_RowManager
 					
 					$multiplePropertiesResult = $dbWrapper->execSql($queryMultiple);
 					if($dbWrapper->dbConnector->errorNo() !== 0){
-						throw new core_kernel_persistence_hardapi_Exception("Unable to insert multiple properties for table {$this->table} : " .$dbWrapper->dbConnector->errorMsg());
+						throw new core_kernel_persistence_hardapi_Exception("Unable to insert multiple properties for table {$this->table}Props : " .$dbWrapper->dbConnector->errorMsg(). "<br>$queryMultiple");
 					}
 				}
 			}

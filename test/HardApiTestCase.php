@@ -16,7 +16,7 @@ class HardApiTestCase extends UnitTestCase {
 		$this->assertEqual($shortName, "15ClassRole");
 	}
 	
-	public function testCreateDTable(){
+	public function testCreateTable(){
 		$myTblMgr = new core_kernel_persistence_hardapi_TableManager('15ClassRole');
 		$this->assertFalse($myTblMgr->exists());
 		$this->assertTrue($myTblMgr->create());
@@ -54,5 +54,6 @@ class HardApiTestCase extends UnitTestCase {
 		
 		$rsRef->referenceResource($testTaker, false);
 	}
+	
 }
 ?>

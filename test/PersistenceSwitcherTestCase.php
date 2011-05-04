@@ -6,7 +6,7 @@ require_once INCLUDES_PATH.'/simpletest/autorun.php';
 class PersistenceSwitcherTestCase extends UnitTestCase {
 	
 	private $hardifySubject = true;
-	private $hardifyGroups = false;
+	private $hardifyGroups = true;
 	
 	public function setUp(){
 

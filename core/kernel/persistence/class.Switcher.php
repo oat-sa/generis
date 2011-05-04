@@ -60,7 +60,7 @@ class core_kernel_persistence_Switcher
         $returnValue = (bool) false;
         
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 begin
-        echo "begin hardify : ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
+   //     echo "begin hardify : ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
         
 		//recursive will hardify the class that are range of the properties
 		(isset($options['recursive'])) ? $recursive = $options['recursive'] : $recursive = false;
@@ -89,6 +89,7 @@ class core_kernel_persistence_Switcher
 			$properties = $ps->getProperties($additionalProperties);
 			$columns = $ps->getTableColumns($additionalProperties);
 			
+			
 			foreach($columns as $column){
 
 //       			echo 'treat column '.$column['name'].'<br/>';
@@ -110,7 +111,7 @@ class core_kernel_persistence_Switcher
 			}
 			
 			//create the table
-       		echo "create table and column for ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
+     //  		echo "create table and column for ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
 			$myTableMgr = new core_kernel_persistence_hardapi_TableManager($tableName);
 			if($myTableMgr->exists()){
 				$myTableMgr->remove();
@@ -145,7 +146,7 @@ class core_kernel_persistence_Switcher
 				}
 				
 				
-				echo "insert rows (#".count($rows).") for ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
+		//		echo "insert rows (#".count($rows).") for ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
 				$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
 				$rowMgr->insertRows($rows);
 			
