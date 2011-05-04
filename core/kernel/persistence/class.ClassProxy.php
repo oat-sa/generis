@@ -114,8 +114,9 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014EB begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->getSubClasses ($resource, $recursive);
+    	// Use the smooth sql implementation to get this information
+		// Or find the right way to treat this case
+		$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->getSubClasses ($resource, $recursive);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014EB end
 
@@ -137,8 +138,9 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F0 begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->isSubClassOf ($resource, $parentClass);
+    	// Use the smooth sql implementation to get this information
+		// Or find the right way to treat this case
+		$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->isSubClassOf ($resource, $parentClass);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F0 end
 
@@ -160,8 +162,9 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F5 begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->getParentClasses ($resource, $recursive);
+    	// Use the smooth sql implementation to get this information
+		// Or find the right way to treat this case
+		$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->getParentClasses ($resource, $recursive);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F5 end
 
@@ -183,8 +186,9 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014FA begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->getProperties ($resource, $recursive);
+    	// Use the smooth sql implementation to get this information
+		// Or find the right way to treat this case
+		$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->getProperties ($resource, $recursive);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014FA end
 
@@ -259,8 +263,9 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000150F begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->setSubClassOf ($resource, $iClass);
+    	// Use the smooth sql implementation to get this information
+		// Or find the right way to treat this case
+		$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->setSubClassOf ($resource, $iClass);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000150F end
 
@@ -282,8 +287,9 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->setProperty ($resource, $property);
+    	// Use the smooth sql implementation to get this information
+		// Or find the right way to treat this case
+		$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->setProperty ($resource, $property);
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 end
 
@@ -331,8 +337,9 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->createSubClass ($resource, $label, $comment);
+    	// Use the smooth sql implementation to get this information
+		// Or find the right way to treat this case
+		$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->createSubClass ($resource, $label, $label);
         
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 end
 
@@ -356,8 +363,9 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F3C begin
         
-        $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->createProperty ($resource, $label, $comment, $isLgDependent);
+    	// Use the smooth sql implementation to get this information
+		// Or find the right way to treat this case
+		$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->createProperty ($resource, $label = '', $comment = '', $isLgDependent = false);
         
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F3C end
 
@@ -379,8 +387,10 @@ class core_kernel_persistence_ClassProxy
         $returnValue = array();
 
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 begin
+        
 		$delegate = $this->getImpToDelegateTo ($resource);
         $returnValue = $delegate->searchInstances ($resource, $propertyFilters, $options);
+        
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
 
         return (array) $returnValue;
@@ -472,7 +482,7 @@ class core_kernel_persistence_ClassProxy
         // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000155B begin
         
         $impls = $this->getAvailableImpl ();
-
+        
     	if (isset($impls["$context"]) && $impls["$context"])
 		{
 			switch ($context){
@@ -482,7 +492,7 @@ class core_kernel_persistence_ClassProxy
 					}
 					break;
 				case 'hardsql':
-					if (false&&core_kernel_persistence_hardsql_Class::singleton()->isValidContext($resource)){
+					if (core_kernel_persistence_hardsql_Class::singleton()->isValidContext($resource)){
 						$returnValue = true;
 					}
 					break;

@@ -245,17 +245,10 @@ class core_kernel_classes_Property
         // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000ABA begin
         
 		if (is_null($this->range)){
-			$rangeValues = $this->getPropertyValues(new core_kernel_classes_Property(RDFS_RANGE));
-			if (sizeOf($rangeValues)>0)
-			{
-				$this->range = new core_kernel_classes_Class($rangeValues[0]);
-			}
-			else
-			{
-				$this->range = new core_kernel_classes_Class("");
-			}
+			
+			$this->range = core_kernel_persistence_PropertyProxy::singleton()->getRange ($this);
 		}
-		$returnValue=$this->range;
+		$returnValue = $this->range;
 		
         // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000ABA end
 
@@ -367,15 +360,7 @@ class core_kernel_classes_Property
         
         if(is_null($this->multiple )){
         	
-        	$multipleProperty = new core_kernel_classes_Property(PROPERTY_MULTIPLE,__METHOD__);
-	        $multiple = $this->getOnePropertyValue($multipleProperty);
-	        
-	        if(is_null($multiple)){
-	        	$this->multiple = false;
-	        }
-	        else{
-	        	$this->multiple = ($multiple->uriResource == GENERIS_TRUE);
-	        }
+        	$this->multiple = core_kernel_persistence_PropertyProxy::singleton()->isMultiple ($this);
         }
  
         $returnValue = $this->multiple;

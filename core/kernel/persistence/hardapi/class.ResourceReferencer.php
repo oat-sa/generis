@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  * By default, the classes reference is cached in memory
  * and the instances are not cached
  *
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -34,7 +34,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * and the instances are not cached
  *
  * @access public
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -107,7 +107,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method __construct
      *
      * @access private
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return mixed
      */
     private function __construct()
@@ -125,7 +125,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method singleton
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return core_kernel_persistence_hardapi_ResourceReferencer
      */
     public static function singleton()
@@ -149,7 +149,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setClassCache
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  int mode
      * @return mixed
      */
@@ -168,7 +168,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setInstanceCache
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  int mode
      * @return mixed
      */
@@ -187,7 +187,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method loadClasses
      *
      * @access private
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  boolean force
      * @return mixed
      */
@@ -210,7 +210,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method isClassReferenced
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -248,7 +248,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method referenceClass
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -286,7 +286,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method unReferenceClass
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -325,7 +325,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method loadResources
      *
      * @access private
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  boolean force
      * @return mixed
      */
@@ -349,7 +349,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method isResourceReferenced
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -392,26 +392,31 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method referenceResource
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
+     * @param  array types
      * @param  boolean referenceClassLink
      * @return boolean
      */
-    public function referenceResource( core_kernel_classes_Resource $resource, $referenceClassLink = false)
+    public function referenceResource( core_kernel_classes_Resource $resource, $types = null, $referenceClassLink = false)
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:000000000000165E begin
+        $types = isset($types) ? $types : $resource->getType();
         
         if(!$this->isResourceReferenced($resource)){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
 			$rows = array();
-			foreach($resource->getType() as $class){
+			foreach($types as $class){
 				$tableName = core_kernel_persistence_hardapi_Utils::getShortName($class);
 				
 				$query = "INSERT INTO resource_to_table (uri, `table`) VALUES (?,?)";
 				$insertResult = $dbWrapper->execSql($query, array($resource->uriResource, $tableName));
+				if($dbWrapper->dbConnector->errorNo() !== 0){
+					throw new core_kernel_persistence_hardapi_Exception("Unable to reference the resource : {$resource->uriResource} / {$table} : " .$dbWrapper->dbConnector->errorMsg());
+				}
 				if($referenceClassLink && $insertResult !== false){
 					$query = "SELECT * FROM resource_to_table WHERE uri = ? AND `table` = ?";
 					$result = $dbWrapper->execSql($query, array($resource->uriResource, $tableName));
@@ -420,7 +425,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 						$rows[] = $row;
 					}
 				}
-				$returnValue &= (bool) $insertResult;
+				$returnValue = (bool) $insertResult;
 			}
 			if($referenceClassLink){
 				foreach($rows as $row){
@@ -446,7 +451,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				);
 			}
 		}
-        
+		
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:000000000000165E end
 
         return (bool) $returnValue;
@@ -456,7 +461,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method unReferenceResource
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */

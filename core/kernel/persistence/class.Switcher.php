@@ -154,7 +154,6 @@ class core_kernel_persistence_Switcher
 					$rows[] = $row;
 				}
 				
-				
 				$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
 				$rowMgr->insertRows($rows);
 			
@@ -176,7 +175,6 @@ class core_kernel_persistence_Switcher
 				unset($instances);
 			}while($count>0);
 		}
-		
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 end
 
         return (bool) $returnValue;

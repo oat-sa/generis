@@ -121,7 +121,7 @@ class common_Utils
                 $returnValue = false;
             }
         }
-        error_reporting("E_ALL");
+        error_reporting(E_ALL);
         // section 10-13-1--31--3b304a1e:11b08118c60:-8000:0000000000000D10 end
 
         return (bool) $returnValue;

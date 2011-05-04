@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 02.05.2011, 18:52:12 with ArgoUML PHP module 
+ * Automatically generated on 03.05.2011, 17:03:36 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -73,6 +73,16 @@ interface core_kernel_persistence_PropertyInterface
      * @return boolean
      */
     public function isMultiple( core_kernel_classes_Resource $resource);
+
+    /**
+     * Short description of method getRange
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @return core_kernel_classes_ContainerCollection
+     */
+    public function getRange( core_kernel_classes_Resource $resource);
 
 } /* end of interface core_kernel_persistence_PropertyInterface */
 

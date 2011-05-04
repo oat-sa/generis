@@ -268,7 +268,7 @@ class core_kernel_persistence_hardapi_TableManager
         
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
-        $query = "SELECT count(*) FROM resource_to_table WHERE uri=\"{$resource->uriResource}\"";
+        $query = "SELECT * FROM resource_to_table WHERE uri=\"{$resource->uriResource}\"";
     	$result = $dbWrapper->execSql($query);
 		if($dbWrapper->dbConnector->errorNo() !== 0){
 			throw new core_kernel_persistence_hardapi_Exception("Unable to define if a resource has been harified: " .$dbWrapper->dbConnector->errorMsg());
@@ -286,7 +286,7 @@ class core_kernel_persistence_hardapi_TableManager
     }
     
     
-    public static function whereIsTheResource($resource)
+    public static function resourceLocation($resource)
     {
         $returnValue = "";
 

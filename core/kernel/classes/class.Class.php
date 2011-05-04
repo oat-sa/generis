@@ -159,7 +159,7 @@ class core_kernel_classes_Class
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000958 begin
 		
         $returnValue = core_kernel_persistence_ClassProxy::singleton()->getInstances ($this, $recursive, $params);
-		
+
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000958 end
 
         return (array) $returnValue;

@@ -127,27 +127,45 @@ implements core_kernel_persistence_ResourceInterface
 		if(DEBUG_MODE){
 			$returnValue->debug = __METHOD__;
 		}
-
+		
 		$returnValue = new core_kernel_classes_ContainerCollection($resource);
-		$table = core_kernel_persistence_hardapi_TableManager::whereIsTheResource($resource);
-
+		$table = core_kernel_persistence_hardapi_TableManager::resourceLocation($resource);
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		 
-		/*
-		 *
-		 * @todo manage the isMultiple case
-		 *  || $property->isMultiple ()
-		 *
-		 */
-		 
-		 
+		$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
+		$propertiesValues = array();
+		
 		if ($property->isLgDependent()){
-			// Attak the props table
+			
 			var_dump("isLgDepedent");
 		}
-		else {
-			$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
-			var_dump(core_kernel_persistence_hardapi_Utils::getShortName($property));
+		else if ($property->isMultiple()){
+			
+			$query = "SELECT property_value, property_foreign_id FROM {$table} M, {$table}Props P
+			    		WHERE M.uri = ?
+						AND M.id = P.instance_id";
+			$result	= $dbWrapper->execSql($query, array(
+				$resource->uriResource
+			));
+			if($dbWrapper->dbConnector->errorNo() !== 0){
+				
+				throw new core_kernel_persistence_hardapi_Exception("ERROR : " .$dbWrapper->dbConnector->errorMsg());
+			}
+			if (!$result->EOF){
+				
+		        while ($row = $result->FetchRow()) {
+		        	
+		        	//is foreign key
+		        	if ($row['property_foreign_id']!=null){
+		        		throw new core_kernel_persistence_hardapi_Exception("property_foreign_id treatment not implemented");
+		        		//$propertiesValues[] = $targetUri;
+		        	}
+		        	else {
+		        		$propertiesValues[] = $row['property_value'];
+		        	}
+		        }
+			}
+		}
+		else {			
 			$query =  "SELECT {$propertyAlias} FROM {$table}
 			    		WHERE uri = ?";
 			$result	= $dbWrapper->execSql($query, array(
@@ -157,30 +175,27 @@ implements core_kernel_persistence_ResourceInterface
 				throw new core_kernel_persistence_hardapi_Exception("Unable to get Property Values Collection : " .$dbWrapper->dbConnector->errorMsg());
 			}
 
-			$propertiesValues = array();
 			if (!$result->EOF){
+				
 				while ($row = $result->FetchRow()) {
 					$propertiesValues[] = $row[$propertyAlias];
 				}
-			}
-			
-			foreach ($propertiesValues as $value){
-	            if(!common_Utils::isUri($value)) {
-	                $container = new core_kernel_classes_Literal($value);
-	            }
-	            else {
-	                $container = new core_kernel_classes_Resource($value);
-	            }
-	
-	            if(DEBUG_MODE){
-	            	$container->debug = __METHOD__ .'|' . $property->debug;
-	            }
-	            $returnValue->add($container);
-	        }
-			
+			}			
 		}
+			
+		foreach ($propertiesValues as $value){
+            if(!common_Utils::isUri($value)) {
+                $container = new core_kernel_classes_Literal($value);
+            }
+            else {
+                $container = new core_kernel_classes_Resource($value);
+            }
 
-		//        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+            if(DEBUG_MODE){
+            	$container->debug = __METHOD__ .'|' . $property->debug;
+            }
+            $returnValue->add($container);
+        }
 
 		// section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F end
 
@@ -202,7 +217,69 @@ implements core_kernel_persistence_ResourceInterface
 		$returnValue = null;
 
 		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+
+		if(DEBUG_MODE){
+			$returnValue->debug = __METHOD__;
+		}
+		
+		$returnValue = new core_kernel_classes_ContainerCollection($resource);
+		$table = core_kernel_persistence_hardapi_TableManager::resourceLocation($resource);
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
+		$propertiesValues = array();
+		
+		if ($property->isLgDependent()){
+			
+			var_dump("isLgDepedent");
+		}
+		else if ($property->isMultiple()){
+			
+			$query = "SELECT property_value, property_foreign_id FROM {$table} M, {$table}Props P
+			    		WHERE M.uri = ?
+						AND M.id = P.instance_id";
+			$result	= $dbWrapper->execSql($query, array(
+				$resource->uriResource
+			));
+			if($dbWrapper->dbConnector->errorNo() !== 0){
+				
+				throw new core_kernel_persistence_hardapi_Exception("ERROR : " .$dbWrapper->dbConnector->errorMsg());
+			}
+			if (!$result->EOF){
+				
+		        while ($row = $result->FetchRow()) {
+		        	
+		        	//is foreign key
+		        	if ($row['property_foreign_id']!=null){
+		        		throw new core_kernel_persistence_hardapi_Exception("property_foreign_id treatment not implemented");
+		        		//$propertiesValues[] = $targetUri;
+		        	}
+		        	else {
+		        		$propertiesValues[] = $row['property_value'];
+		        	}
+		        }
+			}
+		}
+		else {			
+			$query =  "SELECT {$propertyAlias} as object FROM {$table}
+			    		WHERE uri = ?";
+			$result	= $dbWrapper->execSql($query, array(
+				$resource->uriResource
+			));
+			if($dbWrapper->dbConnector->errorNo() !== 0){
+				throw new core_kernel_persistence_hardapi_Exception("Unable to get Property Values Collection : " .$dbWrapper->dbConnector->errorMsg());
+			}		
+		}
+			
+	    $value = $result->fields['object'];
+        if(!common_Utils::isUri($value)) {
+        		  
+        	$returnValue = new core_kernel_classes_Literal($value);
+	    }
+	    else {
+        	$returnValue = new core_kernel_classes_Resource($value);
+        }
+		
+//        var_dump($returnValue);
 		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 end
 
 		return $returnValue;
@@ -406,7 +483,18 @@ implements core_kernel_persistence_ResourceInterface
 		$returnValue = (bool) false;
 
 		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 begin
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+		
+	    $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        
+//		$query = "DELETE FROM statements WHERE subject = ?";
+//        $returnValue = $dbWrapper->execSql($query, array($resource->uriResource));
+//        
+//    	if($deleteReference){
+//        	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+//        	$sqlQuery = "DELETE FROM statements WHERE object = '".$resource->uriResource."'";
+//        	$returnValue = $dbWrapper->execSql($sqlQuery) && $returnValue;
+//        }
+		
 		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 end
 
 		return (bool) $returnValue;
@@ -507,45 +595,14 @@ implements core_kernel_persistence_ResourceInterface
 
 		// section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5A begin
 		 
-		if (core_kernel_persistence_hardapi_TableManager::instanceExists($resource)){
-			//var_dump("instance has bee, hardified {$resource->uriResource}");
+        if (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isResourceReferenced ($resource)){
 			$returnValue = true;
 		}
 
-		//    	$dbWrapper = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
-		//        $hardSqlTable = null;
-		//
-		//        /****
-		//         *
-		//         * BE CAREFULL:
-		//         * the database name is hard coded (mytao)
-		//         *
-		//         */
-		//
-		//        // Check if the hard sql tables exist
-		//		$hardSqlTablesExistSql = "SELECT count(*) FROM information_schema.TABLES WHERE Table_Name='resource_to_table' and TABLE_SCHEMA='mytao'";
-		//		$resulthardSqlTablesExist = $dbWrapper->execSql($hardSqlTablesExistSql);
-		//
-		//		if ($resulthardSqlTablesExist && $resulthardSqlTablesExist->fields[0]){
-		//
-		//			// Check if the resource has been hard sqled
-		//			$isHardSqlResourceSql = "SELECT `table` FROM `resource_to_table` WHERE `uri`='{$resource->uriResource}'";
-		//			$isHardSqlResourceResult = $dbWrapper->execSql($isHardSqlResourceSql);
-		//			if ($isHardSqlResourceResult && !$isHardSqlResourceResult->EOF){
-		//				$hardSqlTable = $isHardSqlResourceResult->fields['table'];
-		//			}
-		//
-		//		}
-		//
-		//		if ($hardSqlTable){
-		//			$returnValue = true;
-		//		}
+		// section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5A end
 
-			// section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5A end
-
-			$returnValue = false;
-			return (bool) $returnValue;
-		}
+		return (bool) $returnValue;
+	}
 
 } /* end of class core_kernel_persistence_hardsql_Resource */
 

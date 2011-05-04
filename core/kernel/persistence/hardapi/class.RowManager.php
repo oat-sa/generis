@@ -137,7 +137,7 @@ class core_kernel_persistence_hardapi_RowManager
 							
 							//set the id of the foreign resource
 							$foreignResource = $row[$column['name']];
-							if(isset($foreignsIds[$column['foreign']][$foreignResource->uriResource])){
+							if($foreignResource != null && isset($foreignsIds[$column['foreign']][$foreignResource->uriResource])){
 								$query.= ", {$foreignsIds[$column['foreign']][$foreignResource->uriResource]}";
 							}
 							else{
@@ -278,15 +278,20 @@ class core_kernel_persistence_hardapi_RowManager
         
         $foreigns = array();
         foreach($this->columns as $column){
+        	
 			if(isset($column['foreign'])){
 				
 				$uriList = '';
 				foreach($rows as  $row){
+					
 					$foreignResource = $row[$column['name']];
-					$uriList .= "'{$foreignResource->uriResource}',";
+					if ($foreignResource!=null){
+						$uriList .= "'{$foreignResource->uriResource}',";
+					} 
 				}
-				$uriList = substr($uriList, 0, strlen($uriList) -1);
 				
+				if (!empty ($uriList)){
+					$uriList = substr($uriList, 0, strlen($uriList) -1);
 				$query = "SELECT id, uri FROM {$column['foreign']} WHERE uri IN ({$uriList})";
 				$result = $dbWrapper->execSql($query);
 				if($dbWrapper->dbConnector->errorNo() !== 0){
@@ -294,6 +299,7 @@ class core_kernel_persistence_hardapi_RowManager
 				}
 				$foreign = array();
 				while(!$result->EOF){
+					
 					if(!isset($column['multi']) || $column['multi'] === false){
 						$foreign[$result->fields['uri']]  = $result->fields['id'];
 					}
@@ -309,6 +315,7 @@ class core_kernel_persistence_hardapi_RowManager
 					$result->moveNext();
 				}
 				$foreigns[$column['foreign']] = $foreign;
+				}
 			}
 		}
 		

@@ -125,16 +125,18 @@ class core_kernel_persistence_smoothsql_Class
 					WHERE subject = ?
 					AND predicate = ? AND object = ?";
 		$result = $dbWrapper->execSql($query, array(
-		$resource->uriResource,
-		RDF_SUBCLASSOF,
-		$parentClass->uriResource
+			$resource->uriResource,
+			RDF_SUBCLASSOF,
+			$parentClass->uriResource
 		));
 		while(!$result-> EOF){
+			
 			$returnValue =  true;
 			$result->moveNext();
 			break;
 		}
 		if(!$returnValue){
+			
 			foreach ($parentClass->getSubClasses(true) as $subClass){
 				if ($subClass->uriResource == $resource->uriResource) {
 					$returnValue =  true;
