@@ -374,13 +374,13 @@ class core_kernel_persistence_ClassProxy
      * @param  array options
      * @return array
      */
-    public function searchInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $propertyFilters = array())
+    public function searchInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array())
     {
         $returnValue = array();
 
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 begin
 		$delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->searchInstances ($resource, $propertyFilters, $propertyFilters);
+        $returnValue = $delegate->searchInstances ($resource, $propertyFilters, $options);
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
 
         return (array) $returnValue;

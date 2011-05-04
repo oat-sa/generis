@@ -344,6 +344,7 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = array();
 
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 begin
+		
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
 
         return (array) $returnValue;

@@ -267,6 +267,28 @@ class ClassTestCase extends UnitTestCase {
 
 	}
 	
+	public function testSearchInstances(){
+		
+		$propertyClass = new core_kernel_classes_Class(RDF_PROPERTY);
+		
+		$propertyFilter = array(
+			PROPERTY_IS_LG_DEPENDENT => GENERIS_TRUE
+		);
+		$options = array('like' => false, 'checkSubclasses' => false);
+		$languagesDependantProp = $propertyClass->searchInstances($propertyFilter, $options);
+		
+		$found = count($languagesDependantProp);
+		$this->assertTrue($found > 0);
+		
+		$propertyFilter = array(
+			PROPERTY_IS_LG_DEPENDENT => GENERIS_TRUE,
+			RDF_TYPE				 => RDF_PROPERTY
+		);
+		$languagesDependantProp = $propertyClass->searchInstances($propertyFilter, $options);
+		$nfound = count($languagesDependantProp);
+		$this->assertTrue($nfound > 0);
+		$this->assertEqual($found, $nfound);
+	}
 
 	
 }
