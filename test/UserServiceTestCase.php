@@ -2,7 +2,7 @@
 
 error_reporting(E_ALL);
 
-require_once dirname(__FILE__).'/../common/common.php';
+require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
 require_once INCLUDES_PATH.'/simpletest/autorun.php';
 
 	
@@ -11,6 +11,7 @@ class UserServiceTestCase extends UnitTestCase {
 	protected $service;
 	
 	public function setUp(){
+		TestRunner::initTest();
 		$this->service = core_kernel_users_Service::singleton();
 	}
 
@@ -58,7 +59,6 @@ class UserServiceTestCase extends UnitTestCase {
 	
 	
 	public function testLoginApi(){
-	   
 		$this->assertTrue($this->service->loginApi('http://www.tao.lu/Ontologies/TAO.rdf#installator'));
 	}
 	

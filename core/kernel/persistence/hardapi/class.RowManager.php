@@ -146,14 +146,12 @@ class core_kernel_persistence_hardapi_RowManager
 						}
 						else{
 							
-							//the value is a literal
 							$value = $row[$column['name']];
-							if (!common_Utils::isUri($value)){
-								$query.= ", '{$value}'";
-							}
-							//the value is a resource
-							else {
+							if($value instanceof core_kernel_classes_Resource){
 								$query.= ", '{$value->uriResource}'";
+							}
+							else{	//the value is a literal
+								$query.= ", '{$value}'";
 							}
 						}
 					}

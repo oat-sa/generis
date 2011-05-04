@@ -60,10 +60,15 @@ class core_kernel_persistence_Switcher
         $returnValue = (bool) false;
         
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 begin
-   //     echo "begin hardify : ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
         
-		//recursive will hardify the class that are range of the properties
+        //recursive will hardify the class and it's subclasses in the same table!
 		(isset($options['recursive'])) ? $recursive = $options['recursive'] : $recursive = false;
+        
+		//recursive will hardify the class and it's subclasses in the same table!
+		//(isset($options['sameTableRecursive'])) ? $subClassesProperties = $options['subClassesProperties'] : $subClassesProperties = false;
+		
+		//createForeigns will hardify the class that are range of the properties
+		(isset($options['createForeigns'])) ? $createForeigns = $options['createForeigns'] : $createForeigns = false;
 		
 		//check if we append the data in case the hard table exists or truncate the table and add the new rows
 		(isset($options['append'])) ? $append = $options['append'] : $append = false;
@@ -77,6 +82,17 @@ class core_kernel_persistence_Switcher
 		//if defined, compile the additional properties
 		(isset($options['additionalProperties'])) ? $additionalProperties = $options['additionalProperties'] : $additionalProperties = array();
 		
+		
+		
+			
+		/*if($recursive){
+			$subClassesOptions = $options;
+			$subClassesOptions['recursive'] = false;
+			foreach($class->getSubClasses(true) as $subClass){
+				self::hardifier($subClass, $subClassesOptions);
+			}
+		}*/
+		
 		$tableName = core_kernel_persistence_hardapi_Utils::getShortName($class);
 		if(!$append){
 			
@@ -85,6 +101,8 @@ class core_kernel_persistence_Switcher
 			//get the table columns from the class properties
 			$columns = array();
 			
+			//change the baseClass if recursive && subClassesProperties
+			
 			$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
 			$properties = $ps->getProperties($additionalProperties);
 			$columns = $ps->getTableColumns($additionalProperties);
@@ -92,26 +110,25 @@ class core_kernel_persistence_Switcher
 			
 			foreach($columns as $column){
 
-//       			echo 'treat column '.$column['name'].'<br/>';
 				//create the foreign tables recursively
-				if(isset($column['foreign']) && $recursive){
-					
-					$foreignClassUri = core_kernel_persistence_hardapi_Utils::getLongName($column['foreign']);
-					if (!in_array($foreignClassUri, $blackListClass)){
-
+				if(isset($column['foreign'])){
+					if($createForeigns){
+						$foreignClassUri = core_kernel_persistence_hardapi_Utils::getLongName($column['foreign']);
 						$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
 						if(!$foreignTableMgr->exists()){
 							$range = new core_kernel_classes_Class($foreignClassUri);
-							$subHardifyOption = array_merge($options, array());
+							$subHardifyOption = $options;
 							$subHardifyOption['topClass'] = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
 							self::hardifier($range, $subHardifyOption);
 						}
+					}
+					else{
+						unset($column['foreign']);
 					}
 				}
 			}
 			
 			//create the table
-     //  		echo "create table and column for ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
 			$myTableMgr = new core_kernel_persistence_hardapi_TableManager($tableName);
 			if($myTableMgr->exists()){
 				$myTableMgr->remove();
@@ -130,15 +147,6 @@ class core_kernel_persistence_Switcher
 				
 				foreach($instances as $resource){
 					$row = array('uri' => $resource->uriResource);
-	//				$propertiesValue = $resource->getPropertiesValue ($properties, false);
-	//				foreach($properties as $property){
-	//					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propertiesValue[$property->uriResource];
-	//				}
-					
-					/**
-					 * 
-					 * @todo set the multiple values too?
-					 */
 					foreach($properties as $property){
 						$propValue = $resource->getOnePropertyValue($property);
 						$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propValue;
@@ -147,7 +155,6 @@ class core_kernel_persistence_Switcher
 				}
 				
 				
-		//		echo "insert rows (#".count($rows).") for ".core_kernel_persistence_hardapi_Utils::getShortName($class)."<br/>";
 				$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
 				$rowMgr->insertRows($rows);
 			
@@ -170,8 +177,6 @@ class core_kernel_persistence_Switcher
 			}while($count>0);
 		}
 		
-//        echo "end hardify : {$class->uriResource}<br/><br/>";
-        
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 end
 
         return (bool) $returnValue;

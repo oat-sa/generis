@@ -38,14 +38,6 @@ class core_kernel_classes_Session
     // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute sessionID
-     *
-     * @access private
-     * @var int
-     */
-    private $sessionID = 0;
-
-    /**
      * Short description of attribute lg
      *
      * @access private
@@ -109,7 +101,7 @@ class core_kernel_classes_Session
         $returnValue = null;
 
         // section 10-13-1--31--7858878e:119b84cada6:-8000:0000000000000AE0 begin
-		if (!isset(self::$instance)) {
+		if (!isset(self::$instance) || is_null(self::$instance)) {
 			$c = __CLASS__;
 			self::$instance = new $c($uri,$module);
 		}
@@ -134,10 +126,10 @@ class core_kernel_classes_Session
         $returnValue = (string) '';
 
         // section 10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000AE7 begin
-	    $userService = core_kernel_users_Service::singleton();
+	   /* $userService = core_kernel_users_Service::singleton();
         if(!$userService->isASessionOpened()){
 			throw new common_Exception('Fail openning session, check if you log in');
-	    }
+	    }*/
 	   
        	//initialize the dbWrapper
 		core_kernel_classes_DbWrapper::singleton($module);
@@ -330,7 +322,7 @@ class core_kernel_classes_Session
      * @param  Session staticInstance
      * @return void
      */
-    public function reset( core_kernel_classes_Session $staticInstance)
+    public function reset( core_kernel_classes_Session $staticInstance = null)
     {
         // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 begin
 		self::$instance = $staticInstance;

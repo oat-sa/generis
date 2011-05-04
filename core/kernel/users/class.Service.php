@@ -3,16 +3,16 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - core\kernel\users\class.Service.php
+ * Generis Object Oriented API - core/kernel/users/class.Service.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 18.05.2010, 08:42:18 with ArgoUML PHP module 
- * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
+ * Automatically generated on 04.05.2011, 15:31:32 with ArgoUML PHP module 
+ * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author firstname and lastname of author, <author@example.org>
+ * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
  * @package core
  * @subpackage kernel_users
  */
@@ -33,7 +33,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class core_kernel_users_Service
  *
  * @access public
- * @author firstname and lastname of author, <author@example.org>
+ * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
  * @package core
  * @subpackage kernel_users
  */
@@ -43,14 +43,6 @@ class core_kernel_users_Service
 
 
     // --- ATTRIBUTES ---
-
-    /**
-     * Short description of attribute db
-     *
-     * @access private
-     * @var DbWrapper
-     */
-    private $db = null;
 
     /**
      * Short description of attribute userResource
@@ -90,21 +82,24 @@ class core_kernel_users_Service
      * Short description of method loginExists
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  string login
+     * @param  Class class
      * @return boolean
      */
-    public function loginExists($login)
+    public function loginExists($login,  core_kernel_classes_Class $class = null)
     {
         $returnValue = (bool) false;
 
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001816 begin
 		
-        $login = $this->db->dbConnector->escape($login);
-        
-		$sql = "SELECT * FROM `statements` WHERE `predicate` LIKE '" . PROPERTY_USER_LOGIN . "' AND `object` LIKE '" .$login ."' ";
-		$result = $this->db->execSql($sql);
-		$returnValue = !$result->EOF;
+        if(is_null($class)){
+        	$class = new core_kernel_classes_Class(CLASS_GENERIS_USER);
+        }
+        $users = $class->searchInstances(array(PROPERTY_USER_LOGIN => $login), array('like' => true));
+        if(count($users) > 0){
+        	$returnValue = true;
+        }
 		
 		
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001816 end
@@ -116,7 +111,7 @@ class core_kernel_users_Service
      * Short description of method addRole
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  string label
      * @param  string comment
      * @param  string parentRole
@@ -143,7 +138,7 @@ class core_kernel_users_Service
      * Short description of method removeRole
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  Resource role
      * @return boolean
      */
@@ -152,6 +147,7 @@ class core_kernel_users_Service
         $returnValue = (bool) false;
 
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001828 begin
+        $returnValue = $role->delete();
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001828 end
 
         return (bool) $returnValue;
@@ -161,7 +157,7 @@ class core_kernel_users_Service
      * Short description of method addUser
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  string login
      * @param  string password
      * @param  Resource role
@@ -192,7 +188,7 @@ class core_kernel_users_Service
      * Short description of method removeUser
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  Resource user
      * @return boolean
      */
@@ -211,7 +207,7 @@ class core_kernel_users_Service
      * Short description of method login
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  string login
      * @param  string password
      * @param  string role
@@ -222,35 +218,38 @@ class core_kernel_users_Service
         $returnValue = (bool) false;
 
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001834 begin
-		//check login
-		$login 		= $this->db->dbConnector->escape($login);
-		$password 	= $this->db->dbConnector->escape($password);
 		
-        $sql = "SELECT subject FROM `statements` WHERE `predicate` LIKE '" . PROPERTY_USER_LOGIN ."' AND `object` LIKE '" .$login ."' ;";
-		
-        $result = $this->db->execSql($sql);
-		if( !$result->EOF){
+        if(!empty($role)){
+	        
+        	$userClass = new core_kernel_classes_Class(CLASS_GENERIS_USER);
+	        
+	        //check login
+			$users = $userClass->searchInstances(
+				array(
+					PROPERTY_USER_LOGIN 	=> $login,
+					PROPERTY_USER_PASSWORD	=> $password
+				), 
+				array('like' => true)
+			);
+			$user = null;
+			foreach($users as $foundUser){
+				$user = $foundUser;
+				break;
+			}
+			if(is_null($user)){
+				$this->logout();
+				throw new core_kernel_users_Exception('Authentication failed',core_kernel_users_Exception::BAD_LOGIN );
+			}
 			
-			$userUri = $result->fields['subject'];
-			//check password
-			$sql = "SELECT COUNT(id) FROM `statements` WHERE `subject` = '" .$userUri. "' AND `predicate` LIKE '" . PROPERTY_USER_PASSWORD ."' AND `object` LIKE '" .$password ."' ;";
-			$result = $this->db->execSql($sql);
-			$returnValue = !$result->EOF ? $result->fields[0] == 1 : false;
-		}
-		else{
-			$this->logout();
-			throw new core_kernel_users_Exception('Authentication failed',core_kernel_users_Exception::BAD_LOGIN );
-		}
-		if($returnValue) {
+				
+			$this->loginApi($user->uriResource);
 			
 			//check Role
-			$this->loginApi($userUri);
+			$this->userResource = $user;
 			
-			$this->userResource = new core_kernel_classes_Resource($userUri);
-			
+			$roleClass =  new core_kernel_classes_Class($role);
 			$typeProp = new core_kernel_classes_Property(RDF_TYPE);
 			$userRoleCollection = $this->userResource->getPropertyValuesCollection($typeProp);
-			$roleClass =  new core_kernel_classes_Class($role);	
 			$acceptedRole =  array_merge(array($role) , array_keys($roleClass->getInstances(true))); 
 			$returnValue = false; 
 			foreach ($userRoleCollection->getIterator() as $userRole){
@@ -259,18 +258,13 @@ class core_kernel_users_Service
 					break;
 				}
 			}
-		}
-		else{
-			$this->logout();
-			throw new core_kernel_users_Exception('Authentication failed : Bad password',core_kernel_users_Exception::BAD_PASSWORD );
-		}
-
+        }
 
 		if(!$returnValue) {
 			$this->logout();
 			throw new core_kernel_users_Exception('Authentication failed : Role do not match',core_kernel_users_Exception::BAD_PASSWORD );
 		}
-
+		
 		
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001834 end
 
@@ -281,38 +275,51 @@ class core_kernel_users_Service
      * Short description of method getOneUser
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  string login
-     * @return mixed
+     * @param  Class class
+     * @return core_kernel_classes_Resource
      */
-    public function getOneUser($login)
+    public function getOneUser($login,  core_kernel_classes_Class $class = null)
     {
+        $returnValue = null;
+
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001839 begin
 		
-    	$login 		= $this->db->dbConnector->escape($login);
+    	if(is_null($class)){
+        	$class = new core_kernel_classes(CLASS_GENERIS_USER);
+    	}
+        
+    	$users = $class->searchInstances(array(PROPERTY_USER_LOGIN => $login), array('like' => true));
+    	foreach($users as $user){
+    		$returnValue = $user;
+    		break;
+    	}
     	
-    	$sql = "SELECT subject FROM `statements` WHERE `predicate` LIKE '" . PROPERTY_USER_LOGIN . "' AND `object` LIKE '" .$login ."' ";
-		$result = $this->db->execSql($sql);
-		if( !$result->EOF){
-			$userUri = $result->fields['subject'];
-			return new core_kernel_classes_Resource($userUri);
-		}
-		return false;
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001839 end
+
+        return $returnValue;
     }
 
     /**
      * Short description of method __construct
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @return mixed
      */
     private function __construct()
     {
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:000000000000183B begin
         $this->module = DATABASE_NAME;
-		$this->db = core_kernel_classes_DbWrapper::singleton($this->module);
+        
+         if(!$this->isASessionOpened()) { 
+         	
+         	//init a fake session to do the 1st cheks
+		    core_kernel_classes_Session::singleton(true, $this->module);
+		    $this->db = core_kernel_classes_DbWrapper::singleton($this->module);
+         }
+		    
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:000000000000183B end
     }
 
@@ -320,7 +327,7 @@ class core_kernel_users_Service
      * Short description of method singleton
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @return core_kernel_users_Service
      */
     public static function singleton()
@@ -342,7 +349,7 @@ class core_kernel_users_Service
      * Short description of method loginApi
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  string uri
      * @return boolean
      */
@@ -362,37 +369,29 @@ class core_kernel_users_Service
         
     	//check if the URI of the user exists
         if(!$this->isASessionOpened()) { 
-        	$uriParam = $this->db->dbConnector->escape($uri);
-        	$sql = "SELECT count(subject) FROM `statements` 
-        			WHERE 	(`subject` = '{$uriParam}' AND `predicate` LIKE '" . PROPERTY_USER_LOGIN . "') 
-        			OR 		( `subject` = '{$uriParam}' AND `predicate` LIKE '" . PROPERTY_USER_PASSWORD . "' );" ;
-        	$result = $this->db->execSql($sql);
-        	$returnValue = !$result->EOF ? $result->fields[0] == 2 : false;
-        	if (!$returnValue) {	
-        		return false;
-        	}
+        	
         	try{
         		
 	        	Session::setAttribute(self::AUTH_TOKEN_KEY,	$uri);
 			       		
-	       		//Initialize the generis session 
-		        $session = core_kernel_classes_Session::singleton($uri,$this->module);
+	       		//Initialize the real generis session 
+	       		core_kernel_classes_Session::reset();
+		        $session = core_kernel_classes_Session::singleton($uri, $this->module);
 		       	
 		       
 		        //save the current generis session
-				Session::setAttribute('generis_session', 	$session);
-				Session::setAttribute('generis_module',  	$this->module);
+				Session::setAttribute('generis_session', $session);
+				Session::setAttribute('generis_module',  $this->module);
 	        	
 				//get the login of the user
 				$this->userResource = new core_kernel_classes_Resource($uri);
         		$login = $this->userResource->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_LOGIN));
-        		
         		$session->setUser($login->literal);
+        		
         	}
         	catch(common_Exception $ce){
         		//the login must be unique
-        		print $ce;
-        		exit;
+        		core_kernel_classes_Session::reset();
         		Session::removeAttribute(self::AUTH_TOKEN_KEY);
         		Session::removeAttribute('generis_session');
         		Session::removeAttribute('generis_module');
@@ -411,7 +410,7 @@ class core_kernel_users_Service
      * Short description of method isASessionOpened
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @return boolean
      */
     public function isASessionOpened()
@@ -431,7 +430,7 @@ class core_kernel_users_Service
      * Short description of method logout
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @return boolean
      */
     public function logout()
@@ -439,6 +438,7 @@ class core_kernel_users_Service
         $returnValue = (bool) false;
 
         // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EB5 begin
+        core_kernel_classes_Session::reset();
         Session::removeAttribute(self::AUTH_TOKEN_KEY);
         $returnValue = true;
         // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EB5 end

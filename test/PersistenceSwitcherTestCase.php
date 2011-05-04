@@ -55,6 +55,7 @@ class PersistenceSwitcherTestCase extends UnitTestCase {
 			core_kernel_persistence_Switcher::hardifier($testTakerClass, array(
 				'topClass'		=> $userClass,
 				'recursive'		=> true,
+				'createForeigns'=> true,
 				'additionalProperties' => array (new core_kernel_classes_Property (RDF_TYPE)),
 				'rmSources'		=> true
 			));
@@ -65,6 +66,7 @@ class PersistenceSwitcherTestCase extends UnitTestCase {
 			core_kernel_persistence_Switcher::hardifier($groupClass, array(
 				'topClass'		=> $topClass,
 				'recursive'		=> true,
+				'createForeigns'=> true,
 				'rmSources'		=> false
 			));
 		}
