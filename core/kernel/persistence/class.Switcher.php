@@ -69,7 +69,7 @@ class core_kernel_persistence_Switcher
 		(isset($options['append'])) ? $append = $options['append'] : $append = false;
 		
 		//if true, the instances of the class will  be removed!
-		(isset($options['rmSources'])) ? $rmSources = $options['rmSources'] : $rmSources = false;
+		(isset($options['rmSources'])) ? $rmSources = (bool) $options['rmSources'] : $rmSources = false;
 		
 		//if defined, we took all the properties of the class and it's parents till the topclass
 		(isset($options['topClass'])) ? $topClass = $options['topClass'] : $topClass = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
@@ -121,11 +121,12 @@ class core_kernel_persistence_Switcher
 			$referencer->referenceClass($class);
 			
 			//insert the resources
+			$startIndex = 0;
+			$instancePackSize = 100;
 			do{
 				$instances = array();
-				$instances = $class->getInstances(false, array('limit' => 100));//limit to 100
+				$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
 				$rows = array();
-				
 				
 				foreach($instances as $resource){
 					$row = array('uri' => $resource->uriResource);
@@ -153,10 +154,13 @@ class core_kernel_persistence_Switcher
 				foreach($instances as $resource){
 					$referencer->referenceResource($resource);
 					
-					//remove exported resources in smooth sql:
-					$resource->delete();
+					if($rmSources){
+						//remove exported resources in smooth sql, if required:
+						$resource->delete();
+					}
 				}
 				
+				$startIndex += $instancePackSize;
 				$count = count($instances);
 				unset($instances);
 				

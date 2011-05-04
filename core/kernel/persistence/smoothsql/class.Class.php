@@ -246,10 +246,13 @@ class core_kernel_persistence_smoothsql_Class
 		if(isset($params['limit'])){
 			$limit = intval($params['limit']);
 			if($limit){
-				$sqlQuery .= "LIMIT {$limit} ";
+				$offset = 0;
+				if(isset($params['offset'])){
+					$offset = intval($params['offset']);
+				}
+				$sqlQuery .= "LIMIT {$offset},{$limit} ";
 			}
 		}
-		
 		
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$sqlResult = $dbWrapper->execSql($sqlQuery);

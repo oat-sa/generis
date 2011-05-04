@@ -208,7 +208,7 @@ class core_kernel_persistence_ClassProxy
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 begin
         
         $delegate = $this->getImpToDelegateTo ($resource);
-        $returnValue = $delegate->getInstances ($resource, $recursive);
+        $returnValue = $delegate->getInstances ($resource, $recursive, $params);
     
         if ($this->isValidContext ('subscription', $resource)){
         	$delegate = core_kernel_persistence_subscription_Class::singleton();
