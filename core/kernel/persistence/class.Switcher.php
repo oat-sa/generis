@@ -160,10 +160,13 @@ class core_kernel_persistence_Switcher
 					}
 				}
 				
-				$startIndex += $instancePackSize;
+				if(!$rmSources){
+					//increment start index only if not removed
+					$startIndex += $instancePackSize;
+				}
+				
 				$count = count($instances);
 				unset($instances);
-				
 			}while($count>0);
 		}
 		
