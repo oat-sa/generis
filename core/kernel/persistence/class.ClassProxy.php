@@ -339,7 +339,7 @@ class core_kernel_persistence_ClassProxy
         
     	// Use the smooth sql implementation to get this information
 		// Or find the right way to treat this case
-		$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->createSubClass ($resource, $label, $label);
+		$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->createSubClass ($resource, $label, $comment);
         
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 end
 
@@ -365,7 +365,7 @@ class core_kernel_persistence_ClassProxy
         
     	// Use the smooth sql implementation to get this information
 		// Or find the right way to treat this case
-		$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->createProperty ($resource, $label = '', $comment = '', $isLgDependent = false);
+		$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->createProperty ($resource, $label, $comment, $isLgDependent);
         
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F3C end
 

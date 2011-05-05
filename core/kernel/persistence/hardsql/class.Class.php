@@ -353,7 +353,117 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = array();
 
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 begin
+		$tableName = core_kernel_persistence_hardapi_Utils::getShortName($resource);
+        
+    	$sqlQuery = "SELECT `uri` FROM `{$tableName}` WHERE ";
 		
+		if(count($propertyFilters) == 0){
+			return $returnValue;
+		}
+		
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
+
+		// $langToken = '';
+		// if(isset($options['lang'])){
+			// if(preg_match('/^[a-zA-Z]{2,4}$/', $options['lang'])){
+				// $langToken = " AND (l_language = '' OR l_language = '{$options['lang']}') ";
+			// }
+		// }
+		$like = true;
+		if(isset($options['like'])){
+			$like = ($options['like'] === true);
+		}
+
+		$conditions = array();
+		foreach($propertyFilters as $propUri => $pattern){
+			
+			$propertyName = core_kernel_persistence_hardapi_Utils::getShortName($propUri);
+			
+			if(is_string($pattern)){
+				if(!empty($pattern)){
+
+					$pattern = $dbWrapper->dbConnector->escape($pattern);
+					
+					if($like){
+						$object = trim(str_replace('*', '%', $pattern));
+						if(!preg_match("/^%/", $object)){
+							$object = "%".$object;
+						}
+						if(!preg_match("/%$/", $object)){
+							$object = $object."%";
+						}
+						$conditions[] = " (`{$propertyName}` LIKE '{$object}' $langToken ) ";
+					}
+					else{
+						$conditions[] = " (`{$propertyName}` = '{$pattern}' $langToken ) ";
+					}
+				}
+			}
+			if(is_array($pattern)){
+				if(count($pattern) > 0){
+					$multiCondition =  '(';
+					foreach($pattern as $i => $patternToken){
+						
+						$patternToken = $dbWrapper->dbConnector->escape($patternToken);
+						
+						if($i > 0){
+							$multiCondition .= " OR ";
+						}
+						if($like){
+							$object = trim(str_replace('*', '%', $patternToken));
+							if(!preg_match("/^%/", $object)){
+								$object = "%".$object;
+							}
+							if(!preg_match("/%$/", $object)){
+								$object = $object."%";
+							}
+							$multiCondition .= " `{$propertyName}` LIKE '{$object}' ";
+						}else{
+							$multiCondition .= " `{$propertyName}` = '{$object}' ";
+						}
+					}
+					$conditions[] = "{$multiCondition}) ";
+				}
+			}
+		}
+		if(count($conditions) == 0){
+			return $returnValue;
+		}
+
+		$intersect = true;
+		if(isset($options['chaining'])){
+			if($options['chaining'] == 'or'){
+				$intersect = false;
+			}
+		}
+		
+		if(count($conditions) > 0){
+			$i = 0;
+			foreach($conditions as $condition){
+				if($i > 0){
+					$sqlQuery .= ($intersect)?' AND ':' OR ';
+				}
+				$sqlQuery .= $condition;
+				$i++;
+			}
+		}
+		
+		$sqlResult = $dbWrapper->execSql($sqlQuery);
+
+		while (!$sqlResult->EOF){
+
+			$instance = new core_kernel_classes_Resource($sqlResult->fields['uri']);
+			$returnValue[$instance->uriResource] = $instance ;
+			
+			$sqlResult->MoveNext();
+		}
+		
+		if(!isset($options['checkSubclasses']) || $options['checkSubclasses'] !== false){
+			//recursive:
+			foreach($resource->getSubClasses(true) as $subClass){
+				$returnValue = array_merge($returnValue, $subClass->searchInstances($propertyFilters, $options));
+			}
+		}
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
 
         return (array) $returnValue;
