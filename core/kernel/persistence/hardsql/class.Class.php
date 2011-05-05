@@ -353,100 +353,157 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = array();
 
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 begin
-		$tableName = core_kernel_persistence_hardapi_Utils::getShortName($resource);
-        
-    	$sqlQuery = "SELECT `uri` FROM `{$tableName}` WHERE ";
 		
 		if(count($propertyFilters) == 0){
 			return $returnValue;
 		}
 		
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
-
-		// $langToken = '';
-		// if(isset($options['lang'])){
-			// if(preg_match('/^[a-zA-Z]{2,4}$/', $options['lang'])){
-				// $langToken = " AND (l_language = '' OR l_language = '{$options['lang']}') ";
-			// }
-		// }
+		
 		$like = true;
 		if(isset($options['like'])){
 			$like = ($options['like'] === true);
 		}
 
+		
+		$tableName = core_kernel_persistence_hardapi_Utils::getShortName($resource);
+		$tablePropertiesName = core_kernel_persistence_hardapi_Utils::getPropertiesTableName($resource);
+		$tableNames = array('t0' => $tableName);
+		
 		$conditions = array();
 		foreach($propertyFilters as $propUri => $pattern){
 			
-			$propertyName = core_kernel_persistence_hardapi_Utils::getShortName($propUri);
+			$propDesc = core_kernel_persistence_hardapi_Utils::propertyDescriptor(new core_kernel_classes_Property($propUri), true);
+			$propsTabIndex = '00';
 			
-			if(is_string($pattern)){
-				if(!empty($pattern)){
-
-					$pattern = $dbWrapper->dbConnector->escape($pattern);
-					
-					if($like){
-						$object = trim(str_replace('*', '%', $pattern));
-						if(!preg_match("/^%/", $object)){
-							$object = "%".$object;
-						}
-						if(!preg_match("/%$/", $object)){
-							$object = $object."%";
-						}
-						$conditions[] = " (`{$propertyName}` LIKE '{$object}' $langToken ) ";
-					}
-					else{
-						$conditions[] = " (`{$propertyName}` = '{$pattern}' $langToken ) ";
+			if($propDesc['isMultiple']){
+				
+				$classPropsTabIndex = count($tableNames);
+				$tableNames['t'.$classPropsTabIndex] = $tablePropertiesName;
+				if(!empty($propDesc['range'])){
+					$propsTabIndex = $classPropsTabIndex+1;
+					$tableNames['t'.$propsTabIndex] = $propDesc['range'][0];
+				}
+				
+				$langToken = '';
+				if(isset($options['lang'])){
+					if(preg_match('/^[a-zA-Z]{2,4}$/', $options['lang'])){
+						$langToken = " AND ( t{$classPropsTabIndex}.l_language = '' OR t{$classPropsTabIndex}.l_language = '{$options['lang']}')";
 					}
 				}
-			}
-			if(is_array($pattern)){
-				if(count($pattern) > 0){
-					$multiCondition =  '(';
-					foreach($pattern as $i => $patternToken){
+				
+				$condition = "";
+				
+				if(is_string($pattern)){
+				
+					if(!empty($pattern)){
 						
-						$patternToken = $dbWrapper->dbConnector->escape($patternToken);
-						
-						if($i > 0){
-							$multiCondition .= " OR ";
-						}
-						if($like){
-							$object = trim(str_replace('*', '%', $patternToken));
-							if(!preg_match("/^%/", $object)){
-								$object = "%".$object;
-							}
-							if(!preg_match("/%$/", $object)){
-								$object = $object."%";
-							}
-							$multiCondition .= " `{$propertyName}` LIKE '{$object}' ";
+						$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
+						if(empty($propDesc['range'])){
+							$condition = " ( t{$classPropsTabIndex}.property_value {$searchPattern} {$langToken})";
 						}else{
-							$multiCondition .= " `{$propertyName}` = '{$object}' ";
+							$condition = " ( t{$classPropsTabIndex}.property_foreign_id = t{$propsTabIndex}.id AND t{$propsTabIndex}.uri {$searchPattern} {$langToken})";
 						}
+						
 					}
-					$conditions[] = "{$multiCondition}) ";
 				}
-			}
-		}
-		if(count($conditions) == 0){
-			return $returnValue;
-		}
-
-		$intersect = true;
-		if(isset($options['chaining'])){
-			if($options['chaining'] == 'or'){
-				$intersect = false;
+				else if(is_array($pattern)){
+					if(count($pattern) > 0){
+						$multiCondition =  "(";//empty($propDesc['range'])? "( 1 AND " : "( t0.{$propDesc['name']} = t{$propsTabIndex}.id AND ";
+						foreach($pattern as $i => $patternToken){
+							
+							if(!empty($patternToken)){
+								$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
+								
+								if($i > 0){
+									$multiCondition .= " OR ";
+								}
+								if(empty($propDesc['range'])){
+									$multiCondition .= " ( t{$classPropsTabIndex}.property_value {$searchPattern} {$langToken}) ";
+								}else{
+									$multiCondition .= " ( t{$classPropsTabIndex}.property_foreign_id = t{$propsTabIndex}.id AND t{$propsTabIndex}.uri {$searchPattern} {$langToken}) ";
+								}
+							}
+						}
+						$condition = "{$multiCondition}) ";
+					}
+				}
+				
+				if(!empty($condition)){
+					$conditions[] = " ( t0.id = t{$classPropsTabIndex}.instance_id AND {$condition} )";
+				}
+				
+			}else{
+					
+				$propsTabIndex = count($tableNames);
+				if(!empty($propDesc['range'])) $tableNames['t'.$propsTabIndex] = $propDesc['range'][0];
+				
+				if(is_string($pattern)){
+					if(!empty($pattern)){
+						$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
+						if(empty($propDesc['range'])){
+							$conditions[] = " ( t0.{$propDesc['name']} {$searchPattern} )";
+						}else{
+							$conditions[] = " ( t0.{$propDesc['name']} = t{$propsTabIndex}.id AND t{$propsTabIndex}.uri {$searchPattern} )";
+						}
+						
+					}
+				}
+				else if(is_array($pattern)){
+					if(count($pattern) > 0){
+						$multiCondition =  empty($propDesc['range'])? "( 1 AND " : "( t0.{$propDesc['name']} = t{$propsTabIndex}.id AND ";
+						foreach($pattern as $i => $patternToken){
+							
+							$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
+							
+							if($i > 0){
+								$multiCondition .= " OR ";
+							}
+							$multiCondition .= empty($propDesc['range'])? " ( t0.{$propDesc['name']} {$searchPattern} ) " : " ( t{$propsTabIndex}.uri {$searchPattern} ) ";
+						}
+						$conditions[] = "{$multiCondition}) ";
+					}
+				}
+				
 			}
 		}
 		
+		if(count($conditions) == 0){
+			return $returnValue;
+		}
+		
+		$sqlQuery = "SELECT `uri` FROM ";
+		
+		$i = 0;
+		foreach($tableNames as $tableIdentifier => $tableName){
+			if($i > 0){
+				$sqlQuery .= ", ";
+			}
+			$sqlQuery .= "{$tableName} {$tableIdentifier}";
+			$i++;
+		}
+		
+		$sqlQuery .= " WHERE ";
+		
 		if(count($conditions) > 0){
-			$i = 0;
+			$intersect = true;
+			if(isset($options['chaining'])){
+				if($options['chaining'] == 'or'){
+					$intersect = false;
+				}
+			}
+			
+			$j = 0;
 			foreach($conditions as $condition){
-				if($i > 0){
+				if($j > 0){
 					$sqlQuery .= ($intersect)?' AND ':' OR ';
 				}
 				$sqlQuery .= $condition;
-				$i++;
+				$j++;
 			}
 		}
+		
+		var_dump($sqlQuery);exit;
 		
 		$sqlResult = $dbWrapper->execSql($sqlQuery);
 
@@ -460,9 +517,7 @@ class core_kernel_persistence_hardsql_Class
 		
 		if(!isset($options['checkSubclasses']) || $options['checkSubclasses'] !== false){
 			//recursive:
-			foreach($resource->getSubClasses(true) as $subClass){
-				$returnValue = array_merge($returnValue, $subClass->searchInstances($propertyFilters, $options));
-			}
+			//option not implemented yet
 		}
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
 

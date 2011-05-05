@@ -179,6 +179,78 @@ class core_kernel_persistence_hardapi_Utils
         return (string) $returnValue;
     }
 
+    /**
+     * Short description of method propertyDescriptor
+     *
+     * @access public
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  Property property
+     * @param  boolean hardRangeClassOnly
+     * @return array
+     */
+    public static function propertyDescriptor( core_kernel_classes_Property $property, $hardRangeClassOnly = false)
+    {
+        $returnValue = array();
+
+        // section 10-13-1--128-743691ae:12fc0ed9381:-8000:0000000000001525 begin
+		
+		$returnValue = array(
+			'name'			=> core_kernel_persistence_hardapi_Utils::getShortName($property),
+			'isMultiple' 	=> $property->isMultiple(),
+			'isLgDependent'	=> $property->isLgDependent(),
+			'range'			=> array()
+		);
+		
+		$range = $property->getRange();
+		$rangeClassName = core_kernel_persistence_hardapi_Utils::getShortName($range);
+		if($hardRangeClassOnly){
+			if($range->uriResource!=RDFS_LITERAL && core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($range)){
+				$returnValue[] = $rangeClassName;
+			}
+		}else{
+			$returnValue[] = $rangeClassName;
+		}
+		
+        // section 10-13-1--128-743691ae:12fc0ed9381:-8000:0000000000001525 end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method buildSearchPattern
+     *
+     * @access public
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  string pattern
+     * @param  boolean like
+     * @return string
+     */
+    public static function buildSearchPattern($pattern, $like = true)
+    {
+        $returnValue = (string) '';
+
+        // section 10-13-1--128-743691ae:12fc0ed9381:-8000:000000000000152E begin
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
+		$pattern = $dbWrapper->dbConnector->escape($pattern);
+		
+		if($like){
+			$object = trim(str_replace('*', '%', $pattern));
+			if(!preg_match("/^%/", $object)){
+				$object = "%".$object;
+			}
+			if(!preg_match("/%$/", $object)){
+				$object = $object."%";
+			}
+			$returnValue = " LIKE '{$object}' ";
+		}
+		else{
+			$returnValue = " = '{$pattern}' ";
+		}
+        // section 10-13-1--128-743691ae:12fc0ed9381:-8000:000000000000152E end
+
+        return (string) $returnValue;
+    }
+
 } /* end of class core_kernel_persistence_hardapi_Utils */
 
 ?>
