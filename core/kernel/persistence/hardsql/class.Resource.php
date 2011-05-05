@@ -83,7 +83,12 @@ implements core_kernel_persistence_ResourceInterface
 		$returnValue = array();
 
 		// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 begin
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+		
+		// Get the type functions of the table name
+		$tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
+		$uri = core_kernel_persistence_hardapi_utils::getLongName($tableName);
+		$returnValue[] = new core_kernel_classes_Resource ($uri);
+		
 		// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 end
 
 		return (array) $returnValue;
@@ -484,11 +489,14 @@ implements core_kernel_persistence_ResourceInterface
 
 		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 begin
 		
-	    $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
         
-//		$query = "DELETE FROM statements WHERE subject = ?";
-//        $returnValue = $dbWrapper->execSql($query, array($resource->uriResource));
-//        
+		$query = "DELETE FROM {$tableName} WHERE uri = ?";
+        $returnValue = $dbWrapper->execSql($query, array($resource->uriResource));
+        
+        core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unreferenceResource($resource);
+        
 //    	if($deleteReference){
 //        	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 //        	$sqlQuery = "DELETE FROM statements WHERE object = '".$resource->uriResource."'";

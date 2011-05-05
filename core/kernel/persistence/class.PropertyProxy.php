@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.05.2011, 17:03:36 with ArgoUML PHP module 
+ * Automatically generated on 05.05.2011, 12:49:11 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -186,13 +186,13 @@ class core_kernel_persistence_PropertyProxy
      * @access public
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
-     * @return core_kernel_classes_ContainerCollection
+     * @return core_kernel_classes_Class
      */
     public function getRange( core_kernel_classes_Resource $resource)
     {
         $returnValue = null;
 
-        // section 127-0-1-1-69f26b71:12fb6440cb7:-8000:00000000000014E9 begin
+        // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001539 begin
         
     	// Use the smooth sql implementation to get this information
 		// Or find the right way to treat this case
@@ -208,7 +208,7 @@ class core_kernel_persistence_PropertyProxy
 			$returnValue = new core_kernel_classes_Class("");
 		}
         
-        // section 127-0-1-1-69f26b71:12fb6440cb7:-8000:00000000000014E9 end
+        // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001539 end
 
         return $returnValue;
     }
@@ -250,34 +250,22 @@ class core_kernel_persistence_PropertyProxy
         $returnValue = null;
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F63 begin
-
-		$profile = array (
-			'subscription'	=> false
-			,'hardsql'		=> true
-			,'virtuozo'		=> false
-			,'smoothsql'		=> true
-		);
-		$profile = array_merge($profile, $params);
 		
-		if (!isset(core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo[$resource->uriResource])) {
-			 
-			$delegate = null;
-
-			if ($profile['subscription'] && $this->isValidContext ('subscription', $resource)) {
-				$delegate = core_kernel_persistence_subscription_Property::singleton();
+        if (!isset(core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo[$resource->uriResource]) || core_kernel_persistence_PersistenceProxy::$mode != null){
+        	
+	    	$impls = $this->getAvailableImpl ($params);
+			foreach ($impls as $implName=>$enable){
+				
+				// If the implementation is enabled && the resource exists in this context
+				if ($enable && $this->isValidContext ($implName, $resource)){
+		        	$implClass = "core_kernel_persistence_{$implName}_Property";
+		        	$reflectionMethod = new ReflectionMethod($implClass, 'singleton');
+					$delegate = $reflectionMethod->invoke(null);
+					core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo[$resource->uriResource] = $delegate;
+					break;
+		        }
 			}
-			else if ($profile['hardsql'] && $this->isValidContext ('hardsql', $resource)) {
-				$delegate = core_kernel_persistence_hardsql_Property::singleton();
-			}
-			else if ($profile['virtuozo'] && $this->isValidContext ('virtuozo', $resource)) {
-				$delegate = core_kernel_persistence_virtuozo_Property::singleton();
-			}
-			else if ($profile['smoothsql'] && $this->isValidContext ('smoothsql', $resource)) {
-				$delegate = core_kernel_persistence_smoothsql_Property::singleton();
-			}
-			 
-			core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo[$resource->uriResource] = $delegate;
-		}
+        }
 
 		$returnValue = core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo[$resource->uriResource];
 
@@ -301,34 +289,14 @@ class core_kernel_persistence_PropertyProxy
 
         // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000155E begin
 
-		$impls = $this->getAvailableImpl ();
-
-		if (isset($impls[$context]) && $impls[$context]===true)
-		{
-			switch ($context){
-				case 'subscription':
-					if (core_kernel_persistence_subscription_Property::singleton()->isValidContext($resource)){
-						$returnValue = true;
-					}
-					break;
-				case 'hardsql':
-					if (core_kernel_persistence_hardsql_Property::singleton()->isValidContext($resource)){
-						$returnValue = true;
-					}
-					break;
-				case 'virtuozo':
-					if (core_kernel_persistence_virtuozo_Property::singleton()->isValidContext($resource)){
-						$returnValue = true;
-					}
-					break;
-				case 'smoothsql':
-					if (core_kernel_persistence_smoothsql_Property::singleton()->isValidContext($resource)){
-						$returnValue = true;
-					}
-					break;
-			}
-		}
-
+        $impls = $this->getAvailableImpl (); 
+        if (isset ($impls[$context]) && $impls[$context]){
+        	$implClass = "core_kernel_persistence_{$context}_Property";
+        	$reflectionMethod = new ReflectionMethod($implClass, 'singleton');
+			$singleton = $reflectionMethod->invoke(null);
+			$returnValue = $singleton->isValidContext($resource);
+        }
+        
         // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000155E end
 
         return (bool) $returnValue;

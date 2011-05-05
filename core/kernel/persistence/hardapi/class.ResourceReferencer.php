@@ -302,11 +302,15 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
-			$query = "DELETE class_to_table.*, resource_has_class.*, resource_to_table.* FROM class_to_table 
-								INNER JOIN resource_has_class ON resource_has_class.class_id = class_to_table.id
-								INNER JOIN resource_to_table ON resource_has_class.resource_id = resource_to_table.id
-								WHERE class_to_table.`table` = '{$tableName}' OR resource_to_table.`table` = '{$tableName}'";
+//			$query = "DELETE class_to_table.*, resource_has_class.*, resource_to_table.* FROM class_to_table 
+//								INNER JOIN resource_has_class ON resource_has_class.class_id = class_to_table.id
+//								INNER JOIN resource_to_table ON resource_has_class.resource_id = resource_to_table.id
+//								WHERE class_to_table.`table` = '{$tableName}' OR resource_to_table.`table` = '{$tableName}'";
 		
+			$query = "DELETE class_to_table.*, resource_to_table.* FROM class_to_table 
+								INNER JOIN resource_to_table ON class_to_table.id = resource_to_table.id
+								WHERE class_to_table.`table` = '{$tableName}' OR resource_to_table.`table` = '{$tableName}'";
+			
 			$result = $dbWrapper->execSql($query);
 			if($result !== false){
 				$returnValue = true;
@@ -472,11 +476,12 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001661 begin
         
         if($this->isResourceReferenced($resource)){
-			
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
-			$query = "DELETE resource_to_table.*, resource_has_class.* FROM resource_to_table 
-						INNER JOIN resource_has_class ON resource_has_class.resource_id = resource_to_table.id
+//			$query = "DELETE resource_to_table.*, resource_has_class.* FROM resource_to_table 
+//						INNER JOIN resource_has_class ON resource_has_class.resource_id = resource_to_table.id
+//						WHERE resource_to_table.uri = ?";
+		$query = "DELETE resource_to_table.* FROM resource_to_table 
 						WHERE resource_to_table.uri = ?";
 			$result = $dbWrapper->execSql($query, array($resource->uriResource));
 			if($result !== false){
@@ -494,6 +499,40 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001661 end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method resourceLocation
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @return string
+     */
+    public function resourceLocation( core_kernel_classes_Resource $resource)
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1-56674b31:12fbf31d598:-8000:0000000000001505 begin
+        
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        
+        $query = "SELECT `table` FROM resource_to_table WHERE uri=? LIMIT 1";
+    	$result = $dbWrapper->execSql($query, array ($resource->uriResource));
+		if($dbWrapper->dbConnector->errorNo() !== 0){
+			
+			throw new core_kernel_persistence_hardapi_Exception("Unable to define where is the hardified resource: " .$dbWrapper->dbConnector->errorMsg());
+		} 
+		else {
+			
+			if (!$result->EOF){
+				$returnValue = $result->fields['table'];
+			}
+		}
+        
+        // section 127-0-1-1-56674b31:12fbf31d598:-8000:0000000000001505 end
+
+        return (string) $returnValue;
     }
 
 } /* end of class core_kernel_persistence_hardapi_ResourceReferencer */

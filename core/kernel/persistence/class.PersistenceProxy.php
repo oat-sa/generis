@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 01.05.2011, 00:35:26 with ArgoUML PHP module 
+ * Automatically generated on 05.05.2011, 12:50:11 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -53,6 +53,14 @@ abstract class core_kernel_persistence_PersistenceProxy
      */
     public $impls = array();
 
+    /**
+     * Short description of attribute mode
+     *
+     * @access public
+     * @var string
+     */
+    public static $mode = '';
+
     // --- OPERATIONS ---
 
     /**
@@ -80,25 +88,34 @@ abstract class core_kernel_persistence_PersistenceProxy
     /**
      * Short description of method getAvailableImpl
      *
-     * @access protected
+     * @access public
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  array params
      * @return array
      */
-    protected function getAvailableImpl($params = array())
+    public function getAvailableImpl($params = array())
     {
         $returnValue = array();
 
         // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000147C begin
         
-        $returnValue = array("hardsql"=>true, "smoothsql"=>true, "virtuozo"=>false, "subscription"=>false);
+        $returnValue = array(
+        	PERSISTENCE_HARD => true, 
+        	PERSISTENCE_SMOOTH => true, 
+        	PERSISTENCE_VIRTUOZO => false, 
+        	PERSISTENCE_SUBSCRIPTION => false
+       	);
         
-        foreach ($returnValue as $name=>$enabled){
-        	if (isset($params[$name])){
-        		$returnValue[$name] = $enabled;
-        	}
+        if (self::isForcedMode()){
+        	
+        	$returnValue = array (
+        		self::$mode => true
+        	);
+        } else if (count ($params)){
+        	
+        	$returnValue = array_merge ($returnValue, $params);
         }
-        
+       	
         // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000147C end
 
         return (array) $returnValue;
@@ -115,6 +132,63 @@ abstract class core_kernel_persistence_PersistenceProxy
      * @return boolean
      */
     public abstract function isValidContext($context,  core_kernel_classes_Resource $resource);
+
+    /**
+     * Short description of method setMode
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  string mode
+     * @return mixed
+     */
+    public static function setMode($mode)
+    {
+        // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:000000000000153C begin
+        
+    	if (isset($mode) && !empty($mode)){
+    		self::$mode = $mode;
+    	}
+    	
+        // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:000000000000153C end
+    }
+
+    /**
+     * Short description of method isForcedMode
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @return boolean
+     */
+    public static function isForcedMode()
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:000000000000153F begin
+        
+        if (!empty(self::$mode)){
+        	$returnValue = true;
+        }
+        
+        // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:000000000000153F end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method resetMode
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @return mixed
+     */
+    public function resetMode()
+    {
+        // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001545 begin
+   	
+   		self::$mode = "";
+    		
+        // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001545 end
+    }
 
 } /* end of abstract class core_kernel_persistence_PersistenceProxy */
 

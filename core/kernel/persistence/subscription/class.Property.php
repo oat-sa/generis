@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.05.2011, 17:03:36 with ArgoUML PHP module 
+ * Automatically generated on 05.05.2011, 12:38:01 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -134,14 +134,15 @@ class core_kernel_persistence_subscription_Property
      * @access public
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
-     * @return core_kernel_classes_ContainerCollection
+     * @return core_kernel_classes_Class
      */
     public function getRange( core_kernel_classes_Resource $resource)
     {
         $returnValue = null;
 
-        // section 127-0-1-1-69f26b71:12fb6440cb7:-8000:00000000000014E9 begin
-        // section 127-0-1-1-69f26b71:12fb6440cb7:-8000:00000000000014E9 end
+        // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001539 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001539 end
 
         return $returnValue;
     }

@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 02.05.2011, 17:36:34 with ArgoUML PHP module 
+ * Automatically generated on 05.05.2011, 10:10:07 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -223,11 +223,15 @@ class core_kernel_persistence_hardapi_TableManager
 			if($dbWrapper->dbConnector->errorNo() === 0){
 				
 				//remove all the references to the table
-				$cascadeDelete = "DELETE class_to_table.*, resource_has_class.*, resource_to_table.* FROM class_to_table 
-									INNER JOIN resource_has_class ON resource_has_class.class_id = class_to_table.id
-									INNER JOIN resource_to_table ON resource_has_class.resource_id = resource_to_table.id
-									WHERE class_to_table.`table` = '{$this->name}' OR resource_to_table.`table` = '{$this->name}'";
-				$dbWrapper->execSql($cascadeDelete);
+//				$cascadeDelete = "DELETE class_to_table.*, resource_has_class.*, resource_to_table.* FROM class_to_table 
+//									INNER JOIN resource_has_class ON resource_has_class.class_id = class_to_table.id
+//									INNER JOIN resource_to_table ON resource_has_class.resource_id = resource_to_table.id
+//									WHERE class_to_table.`table` = '{$this->name}' OR resource_to_table.`table` = '{$this->name}'";
+				$cascadeDelete = "DELETE class_to_table.*, resource_to_table.* FROM class_to_table 
+									LEFT JOIN resource_to_table ON class_to_table.id = resource_to_table.id
+									WHERE class_to_table.`table` = ? OR resource_to_table.`table` = ?";
+				$dbWrapper->execSql($cascadeDelete, array($this->name,$this->name));
+				
 				if($dbWrapper->dbConnector->errorNo() === 0){
 
 					$tblKey = array_search($this->name, self::$_tables);
@@ -250,65 +254,6 @@ class core_kernel_persistence_hardapi_TableManager
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015B9 end
 
         return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method instanceExists
-     *
-     * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  string uri
-     * @return boolean
-     */
-    public static function instanceExists($resource)
-    {
-        $returnValue = (bool) false;
-
-        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014D8 begin
-        
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        
-        $query = "SELECT * FROM resource_to_table WHERE uri=\"{$resource->uriResource}\"";
-    	$result = $dbWrapper->execSql($query);
-		if($dbWrapper->dbConnector->errorNo() !== 0){
-			throw new core_kernel_persistence_hardapi_Exception("Unable to define if a resource has been harified: " .$dbWrapper->dbConnector->errorMsg());
-
-		} 
-		else {
-			if (!$result->EOF){
-				$returnValue = true;
-			}
-		}
-        
-        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014D8 end
-
-        return (bool) $returnValue;
-    }
-    
-    
-    public static function resourceLocation($resource)
-    {
-        $returnValue = "";
-
-        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014D8 begin
-        
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        
-        $query = "SELECT `table` FROM resource_to_table WHERE uri=\"{$resource->uriResource}\"";
-    	$result = $dbWrapper->execSql($query);
-		if($dbWrapper->dbConnector->errorNo() !== 0){
-			throw new core_kernel_persistence_hardapi_Exception("Unable to define where is the hardified resource: " .$dbWrapper->dbConnector->errorMsg());
-
-		} 
-		else {
-			if (!$result->EOF){
-				$returnValue = $result->fields['table'];
-			}
-		}
-        
-        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014D8 end
-
-        return $returnValue;
     }
 
 } /* end of class core_kernel_persistence_hardapi_TableManager */

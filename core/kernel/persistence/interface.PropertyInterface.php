@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.05.2011, 17:03:36 with ArgoUML PHP module 
+ * Automatically generated on 05.05.2011, 12:38:01 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -80,7 +80,7 @@ interface core_kernel_persistence_PropertyInterface
      * @access public
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
-     * @return core_kernel_classes_ContainerCollection
+     * @return core_kernel_classes_Class
      */
     public function getRange( core_kernel_classes_Resource $resource);
 

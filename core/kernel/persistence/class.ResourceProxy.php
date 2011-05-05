@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 01.05.2011, 00:35:26 with ArgoUML PHP module 
+ * Automatically generated on 05.05.2011, 12:49:11 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -544,27 +544,21 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5D begin
 
-		$impls = $this->getAvailableImpl ($params);
-
-		// First access to the resource
-		if (!isset(core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource])) {
-			 
-			$delegate = null;
-			 
-			if ($this->isValidContext ('subscription', $resource)) {
-				$delegate = core_kernel_persistence_subscription_Resource::singleton();
+        if (!isset(core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource]) || core_kernel_persistence_PersistenceProxy::$mode != null){
+        	
+	    	$impls = $this->getAvailableImpl ($params);
+			foreach ($impls as $implName=>$enable){
+				
+				// If the implementation is enabled && the resource exists in this context
+				if ($enable && $this->isValidContext ($implName, $resource)){
+		        	$implClass = "core_kernel_persistence_{$implName}_Resource";
+		        	$reflectionMethod = new ReflectionMethod($implClass, 'singleton');
+					$delegate = $reflectionMethod->invoke(null);
+					core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource] = $delegate;
+					break;
+		        }
 			}
-			else if ($this->isValidContext ('hardsql', $resource)) {
-				$delegate = core_kernel_persistence_hardsql_Resource::singleton();
-			}
-			else if ($this->isValidContext ('virtuozo', $resource)) {
-				$delegate = core_kernel_persistence_virtuozo_Resource::singleton();
-			}
-			else if ($this->isValidContext ('smoothsql', $resource)) {
-				$delegate = core_kernel_persistence_smoothsql_Resource::singleton();
-			}
-			core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource] = $delegate;
-		}
+        }
 
 		$returnValue = core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource];
 
@@ -588,33 +582,13 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--499759bc:12f72c12020:-8000:0000000000001558 begin
 
-		$impls = $this->getAvailableImpl ();
-		 
-		if (isset($impls["$context"]) && $impls["$context"])
-		{
-			switch ($context){
-				case 'subscription':
-					if (core_kernel_persistence_subscription_Resource::singleton()->isValidContext($resource)){
-						$returnValue = true;
-					}
-					break;
-				case 'hardsql':
-					if (core_kernel_persistence_hardsql_Resource::singleton()->isValidContext($resource)){
-						$returnValue = true;
-					}
-					break;
-				case 'virtuozo':
-					if (core_kernel_persistence_virtuozo_Resource::singleton()->isValidContext($resource)){
-						$returnValue = true;
-					}
-					break;
-				case 'smoothsql':
-					if (core_kernel_persistence_smoothsql_Resource::singleton()->isValidContext($resource)){
-						$returnValue = true;
-					}
-					break;
-			}
-		}
+        $impls = $this->getAvailableImpl ();        
+        if (isset ($impls[$context]) && $impls[$context]){
+        	$implClass = "core_kernel_persistence_{$context}_Resource";
+        	$reflectionMethod = new ReflectionMethod($implClass, 'singleton');
+			$singleton = $reflectionMethod->invoke(null);
+			$returnValue = $singleton->isValidContext($resource);
+        }
 		 
         // section 127-0-1-1--499759bc:12f72c12020:-8000:0000000000001558 end
 

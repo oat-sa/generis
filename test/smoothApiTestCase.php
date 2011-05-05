@@ -68,17 +68,19 @@ class HardDbSubjectTestCase extends UnitTestCase {
 	}
 	
 	public function testHardCreateInstance() {
-//		var_dump(core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectClass));
 		$subI = $this->targetSubjectClass->createInstance ("Hard Sub Subject (Unit Test)");
-//		var_dump(core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectClass));
-//		var_dump(core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isResourceReferenced ($subI));
-//		var_dump($subI->getType());
 		$this->assertEqual (count($this->targetSubjectClass->getInstances ()), 2);
 		$subSubI = $this->targetSubjectSubClass->createInstance ("Hard Sub Sub Subject (Unit Test)");
 		$this->assertEqual (count($this->targetSubjectSubClass->getInstances ()), 2);
 		$this->assertEqual (count($this->targetSubjectClass->getInstances (true)), 4);
-		
-		$subI->delete();
+	}
+	
+	public function testForceMode (){
+		// Check if the returner implementation are correct
+		core_kernel_persistence_PersistenceProxy::setMode (PERSISTENCE_SMOOTH);
+		$classProxy = core_kernel_persistence_ClassProxy::singleton();
+		$impl = $classProxy->getImpToDelegateTo($this->targetSubjectClass);
+		core_kernel_persistence_PersistenceProxy::resetMode (PERSISTENCE_SMOOTH);
 	}
 	
 	public function testProperties (){
@@ -86,6 +88,12 @@ class HardDbSubjectTestCase extends UnitTestCase {
 	}
 	
 	public function testClean (){
+		// Remove the resources
+		foreach ($this->targetSubjectClass->getInstances(true) as $instance){
+			$instance->delete ();
+		}
+		
+		// Remove the tables
 		$tm = new core_kernel_persistence_hardapi_TableManager (core_kernel_persistence_hardapi_Utils::getShortName ($this->targetSubjectClass));
 		$tm->remove();
 		$tm = new core_kernel_persistence_hardapi_TableManager (core_kernel_persistence_hardapi_Utils::getShortName ($this->targetSubjectSubClass));
