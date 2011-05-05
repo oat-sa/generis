@@ -54,6 +54,14 @@ class core_kernel_persistence_hardapi_Utils
      */
     private static $namespaceIds = array();
 
+    /**
+     * Short description of attribute shortNames
+     *
+     * @access private
+     * @var array
+     */
+    private static $shortNames = array();
+
     // --- OPERATIONS ---
 
     /**
