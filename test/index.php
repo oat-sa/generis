@@ -11,11 +11,11 @@ $tests = array_merge(
 
 //create the test sutie
 
-//foreach($tests as $i => $testCase){
-//	$testSuite->addFile($testCase);
-//}
+foreach($tests as $i => $testCase){
+	$testSuite->addFile($testCase);
+}
 
-$testSuite->addFile('PersistenceSwitcherTestCase.php');
+//$testSuite->addFile('PersistenceSwitcherTestCase.php');
 //$testSuite->addFile('HardApiTestCase.php');
 
 //add the reporter regarding the context

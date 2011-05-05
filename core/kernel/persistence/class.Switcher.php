@@ -64,9 +64,6 @@ class core_kernel_persistence_Switcher
         //recursive will hardify the class and it's subclasses in the same table!
 		(isset($options['recursive'])) ? $recursive = $options['recursive'] : $recursive = false;
         
-		//recursive will hardify the class and it's subclasses in the same table!
-		//(isset($options['sameTableRecursive'])) ? $subClassesProperties = $options['subClassesProperties'] : $subClassesProperties = false;
-		
 		//createForeigns will hardify the class that are range of the properties
 		(isset($options['createForeigns'])) ? $createForeigns = $options['createForeigns'] : $createForeigns = false;
 		
@@ -83,15 +80,13 @@ class core_kernel_persistence_Switcher
 		(isset($options['additionalProperties'])) ? $additionalProperties = $options['additionalProperties'] : $additionalProperties = array();
 		
 		
-		
-			
-		/*if($recursive){
+		if($recursive){
 			$subClassesOptions = $options;
 			$subClassesOptions['recursive'] = false;
 			foreach($class->getSubClasses(true) as $subClass){
 				self::hardifier($subClass, $subClassesOptions);
 			}
-		}*/
+		}
 		
 		$tableName = core_kernel_persistence_hardapi_Utils::getShortName($class);
 		if(!$append){
@@ -158,7 +153,7 @@ class core_kernel_persistence_Switcher
 				$rowMgr->insertRows($rows);
 			
 				foreach($instances as $resource){
-					$referencer->referenceResource($resource);
+					$referencer->referenceResource($resource, null, true);
 					
 					if($rmSources){
 						//remove exported resources in smooth sql, if required:

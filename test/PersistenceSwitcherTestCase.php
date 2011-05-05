@@ -6,7 +6,7 @@ require_once INCLUDES_PATH.'/simpletest/autorun.php';
 class PersistenceSwitcherTestCase extends UnitTestCase {
 	
 	private $hardifySubject = true;
-	private $hardifyGroups = true;
+	private $hardifyGroups = false;
 	
 	public function setUp(){
 
@@ -53,11 +53,11 @@ class PersistenceSwitcherTestCase extends UnitTestCase {
 			$testTakerClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
 			$userClass		= new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#User');	
 			core_kernel_persistence_Switcher::hardifier($testTakerClass, array(
-				'topClass'		=> $userClass,
-				'recursive'		=> true,
-				'createForeigns'=> true,
-				'additionalProperties' => array (new core_kernel_classes_Property (RDF_TYPE)),
-				'rmSources'		=> true
+				'topClass'				=> $userClass,
+				'recursive'				=> true,
+				'createForeigns'		=> true,
+				'additionalProperties' 	=> array (new core_kernel_classes_Property (RDF_TYPE)),
+				'rmSources'				=> true
 			));
 		}
 		if ($this->hardifyGroups){
