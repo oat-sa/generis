@@ -52,7 +52,7 @@ class HardApiTestCase extends UnitTestCase {
 		$testTakerClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
 		$testTaker = $testTakerClass->createInstance('test taker 1');
 		
-		$rsRef->referenceResource($testTaker, false);
+		$rsRef->referenceResource($testTaker, core_kernel_persistence_hardapi_Utils::getShortName($testTakerClass));
 	}
 	
 }

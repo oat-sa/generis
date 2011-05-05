@@ -115,7 +115,6 @@ abstract class core_kernel_persistence_PersistenceProxy
         	
         	$returnValue = array_merge ($returnValue, $params);
         }
-       	
         // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000147C end
 
         return (array) $returnValue;

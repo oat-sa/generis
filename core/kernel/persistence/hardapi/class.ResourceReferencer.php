@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  * By default, the classes reference is cached in memory
  * and the instances are not cached
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -34,7 +34,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * and the instances are not cached
  *
  * @access public
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -107,7 +107,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method __construct
      *
      * @access private
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @return mixed
      */
     private function __construct()
@@ -125,7 +125,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method singleton
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @return core_kernel_persistence_hardapi_ResourceReferencer
      */
     public static function singleton()
@@ -149,7 +149,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setClassCache
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  int mode
      * @return mixed
      */
@@ -168,7 +168,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setInstanceCache
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  int mode
      * @return mixed
      */
@@ -187,7 +187,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method loadClasses
      *
      * @access private
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  boolean force
      * @return mixed
      */
@@ -210,7 +210,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method isClassReferenced
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -234,6 +234,9 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				case self::CACHE_MEMORY:
 					
 					$this->loadResources();
+					if(!is_string($class->uriResource)){
+						var_dump($class->uriResource);
+					}else
 					$returnValue = array_key_exists($class->uriResource, self::$_classes);
 					break;
 			}
@@ -248,11 +251,12 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method referenceClass
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  Class class
+     * @param  string table
      * @return boolean
      */
-    public function referenceClass( core_kernel_classes_Class $class)
+    public function referenceClass( core_kernel_classes_Class $class, $table = null)
     {
         $returnValue = (bool) false;
 
@@ -260,19 +264,21 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         
         if(!$this->isClassReferenced($class)){
 			
-			$tableName = core_kernel_persistence_hardapi_Utils::getShortName($class);
-			
+        	if(is_null($table)){
+        		$table = core_kernel_persistence_hardapi_Utils::getShortName($class);
+        	}
+        	
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
 			$query = "INSERT INTO class_to_table (uri, `table`) VALUES (?,?)";
 			$result = $dbWrapper->execSql($query, array(
 				$class->uriResource, 
-				$tableName
+				$table
 			));
 			if($result !== false){
 				$returnValue = true;
 				if($this->classMode == self::CACHE_MEMORY){
-					self::$_classes[$class->uriResource] = $tableName;
+					self::$_classes[$class->uriResource] = $table;
 				}
 			}
 		}
@@ -286,7 +292,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method unReferenceClass
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -329,7 +335,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method loadResources
      *
      * @access private
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  boolean force
      * @return mixed
      */
@@ -353,7 +359,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method isResourceReferenced
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -396,66 +402,71 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method referenceResource
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  Resource resource
+     * @param  string table
      * @param  array types
      * @param  boolean referenceClassLink
      * @return boolean
      */
-    public function referenceResource( core_kernel_classes_Resource $resource, $types = null, $referenceClassLink = false)
+    public function referenceResource( core_kernel_classes_Resource $resource, $table, $types = null, $referenceClassLink = false)
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:000000000000165E begin
-        $types = isset($types) ? $types : $resource->getType();
-        
+        $types = !is_null($types) ? $types : $resource->getType();
         if(!$this->isResourceReferenced($resource)){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-			
-			$rows = array();
-			foreach($types as $class){
-				$tableName = core_kernel_persistence_hardapi_Utils::getShortName($class);
 				
-				$query = "INSERT INTO resource_to_table (uri, `table`) VALUES (?,?)";
-				$insertResult = $dbWrapper->execSql($query, array($resource->uriResource, $tableName));
-				if($dbWrapper->dbConnector->errorNo() !== 0){
-					throw new core_kernel_persistence_hardapi_Exception("Unable to reference the resource : {$resource->uriResource} / {$table} : " .$dbWrapper->dbConnector->errorMsg());
-				}
-				if($referenceClassLink && $insertResult !== false){
-					$query = "SELECT * FROM resource_to_table WHERE uri = ? AND `table` = ?";
-					$result = $dbWrapper->execSql($query, array($resource->uriResource, $tableName));
-					while($row = $result->fetchRow()){
-						$row['class'] = $class->uriResource;
-						$rows[] = $row;
-					}
-				}
-				$returnValue = (bool) $insertResult;
+			$query = "INSERT INTO resource_to_table (uri, `table`) VALUES (?,?)";
+			$insertResult = $dbWrapper->execSql($query, array($resource->uriResource, $table));
+			if($dbWrapper->dbConnector->errorNo() !== 0){
+				throw new core_kernel_persistence_hardapi_Exception("Unable to reference the resource : {$resource->uriResource} / {$table} : " .$dbWrapper->dbConnector->errorMsg());
 			}
+			if($referenceClassLink && $insertResult !== false){
+				$query = "SELECT * FROM resource_to_table WHERE uri = ? AND `table` = ?";
+				$result = $dbWrapper->execSql($query, array($resource->uriResource, $table));
+				while($row = $result->fetchRow()){
+					$rows[] = $row;
+				}
+			}
+			$returnValue = (bool) $insertResult;
+			
 			if($referenceClassLink){
-				foreach($rows as $row){
-					if($this->isClassReferenced(new core_kernel_classes_Class($row['class']))){
-						
-						$query = "SELECT id FROM class_to_table WHERE uri = ? AND `table` = ?";
-						$result = $dbWrapper->execSql($query, array($resource->uriResource, $tableName));
-						if($result->RecordCount() == 1){
-							while($classRow = $result->fetchRow()){
+				
+				foreach($types as $type){
+					$typeClass = new core_kernel_classes_Class($type->uriResource);
+					if($this->isClassReferenced($typeClass)){
+						$classId = null;
+						switch($this->classMode){
+							case self::CACHE_MEMORY:
+								$classId = self::$_classes[$typeClass->uriResource];
+							case self::CACHE_NONE:
+								$query = "SELECT id FROM class_to_table WHERE uri = ? AND `table` = ?";
+								$result = $dbWrapper->execSql($query, array($typeClass->uriResource, $table));
+								while(!$result->EOF){
+									$classId = $result->fields['id'];
+									break;
+								}
+						}
+						if(!is_null($classId)){
+							foreach($rows as $row){
 								$query = "INSERT INTO resource_has_class (resource_id, class_id) VALUES (?,?)";
-								$dbWrapper->execSql($query, array($row['id'],$classRow['id']));
+								$dbWrapper->execSql($query, array($row['id'], $classId));
 							}
 						}
 					}
 				}
 			}
-		}
-		if($returnValue && $this->instanceMode == self::CACHE_MEMORY){
-			foreach($rows as $row){
-				self::$_resources[] = array(
-					'uri' 	=> $row['uri'],
-					'table'	=> $row['table']
-				);
+			if($returnValue && $this->instanceMode == self::CACHE_MEMORY){
+				foreach($rows as $row){
+					self::$_resources[] = array(
+						'uri' 	=> $row['uri'],
+						'table'	=> $row['table']
+					);
+				}
 			}
-		}
-		
+        }
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:000000000000165E end
 
         return (bool) $returnValue;
@@ -465,7 +476,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method unReferenceResource
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -505,7 +516,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method resourceLocation
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  Resource resource
      * @return string
      */

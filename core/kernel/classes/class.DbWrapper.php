@@ -101,6 +101,10 @@ class core_kernel_classes_DbWrapper
 	
 		//to manage utf8
         $this->dbConnector->Execute('SET NAMES utf8');
+        
+        if($this->dbConnector->errorNo() !== 0){
+			throw new Exception("Database error ".$this->dbConnector->errorMsg());
+		}
 
         // section 10-13-1--31-6e1b148f:1192d5c62ab:-8000:00000000000009A7 end
     }

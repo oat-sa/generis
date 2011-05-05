@@ -288,7 +288,7 @@ class core_kernel_persistence_hardsql_Class
         ));
         
         // reference the newly created instance
-        core_kernel_persistence_hardapi_ResourceReferencer::singleton()->referenceResource($returnValue, array($resource));
+        core_kernel_persistence_hardapi_ResourceReferencer::singleton()->referenceResource($returnValue, $table, array(new core_kernel_classes_Class($resource)));
         
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F27 end
 

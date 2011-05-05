@@ -40,10 +40,14 @@ class PersistenceSwitcherTestCase extends UnitTestCase {
 //	}
 	
 	public function testHardify(){
+		
+		$switcher = new core_kernel_persistence_Switcher();
+		
 		if (true){
 			$languagesClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#Languages');
 			$topClass		= new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#TAOObject');	
-			core_kernel_persistence_Switcher::hardifier($languagesClass, array(
+			
+			$switcher->hardify($languagesClass, array(
 				'topClass'		=> $topClass,
 				'rmSources'		=> false
 			));
@@ -52,24 +56,26 @@ class PersistenceSwitcherTestCase extends UnitTestCase {
 		if ($this->hardifySubject){
 			$testTakerClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
 			$userClass		= new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#User');	
-			core_kernel_persistence_Switcher::hardifier($testTakerClass, array(
+			$switcher->hardify($testTakerClass, array(
 				'topClass'				=> $userClass,
 				'recursive'				=> true,
 				'createForeigns'		=> true,
-				'additionalProperties' 	=> array (new core_kernel_classes_Property (RDF_TYPE)),
-				'rmSources'				=> true
+				'referencesAllTypes'	=> true,
+				'rmSources'				=> false
 			));
 		}
 		if ($this->hardifyGroups){
 			$groupClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOGroup.rdf#Group');
 			$topClass		= new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#TAOObject');
-			core_kernel_persistence_Switcher::hardifier($groupClass, array(
+			$switcher->hardify($groupClass, array(
 				'topClass'		=> $topClass,
 				'recursive'		=> true,
 				'createForeigns'=> true,
 				'rmSources'		=> false
 			));
 		}
+		
+		unset($switcher);
 	}
 	
 	public function testHardifiedSubject(){
