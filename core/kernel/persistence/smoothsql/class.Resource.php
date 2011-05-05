@@ -335,6 +335,10 @@ class core_kernel_persistence_smoothsql_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE begin
         
+        if(!is_string($object) && $object instanceof core_kernel_classes_Resource){
+        	$object = $object->uriResource;
+        }
+        
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
         $session 	= core_kernel_classes_Session::singleton();
         $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();

@@ -116,7 +116,6 @@ class core_kernel_persistence_Switcher
 			$columns = $ps->getTableColumns($additionalProperties);
 			
 			
-			
 			foreach($columns as $column){
 
 				//create the foreign tables recursively
@@ -146,7 +145,11 @@ class core_kernel_persistence_Switcher
 			
 			//reference the class
 			$referencer->referenceClass($class);
-		
+
+			if($referencesAllTypes){
+				$referencer->referenceInstanceTypes($class);
+			}
+			
 			
 			//insert the resources
 			$startIndex = 0;
