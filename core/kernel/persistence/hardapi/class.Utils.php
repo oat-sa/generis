@@ -6,7 +6,7 @@ error_reporting(E_ALL);
  * Utility class that provides transversal methods 
  * to manage  the hard api
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -18,7 +18,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_persistence_Switcher
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  */
 require_once('core/kernel/persistence/class.Switcher.php');
 
@@ -35,7 +35,7 @@ require_once('core/kernel/persistence/class.Switcher.php');
  * to manage  the hard api
  *
  * @access public
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -54,9 +54,6 @@ class core_kernel_persistence_hardapi_Utils
      */
     private static $namespaceIds = array();
 
-    
-    private static $shortNames = array();
-    
     // --- OPERATIONS ---
 
     /**
@@ -64,7 +61,7 @@ class core_kernel_persistence_hardapi_Utils
      * using the modelID/baseUri mapping
      *
      * @access private
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string namespaceUri
      * @return string
      */
@@ -100,7 +97,7 @@ class core_kernel_persistence_hardapi_Utils
      * that cannot be longer than 64 characters
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @return string
      */
@@ -131,7 +128,7 @@ class core_kernel_persistence_hardapi_Utils
      * Short description of method getLongName
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string shortName
      * @return string
      */
@@ -151,6 +148,25 @@ class core_kernel_persistence_hardapi_Utils
         }       
         
         // section 127-0-1-1--151fe597:12f7c91b993:-8000:00000000000014C7 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method getPropertiesTableName
+     *
+     * @access public
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  Resource resource
+     * @return string
+     */
+    public static function getPropertiesTableName( core_kernel_classes_Resource $resource)
+    {
+        $returnValue = (string) '';
+
+        // section 10-13-1--128--4620d5d7:12fbf26f8b8:-8000:0000000000001502 begin
+		$returnValue = self::getShortName($resource).'props';
+        // section 10-13-1--128--4620d5d7:12fbf26f8b8:-8000:0000000000001502 end
 
         return (string) $returnValue;
     }
