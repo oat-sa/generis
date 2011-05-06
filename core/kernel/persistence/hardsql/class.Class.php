@@ -167,7 +167,7 @@ class core_kernel_persistence_hardsql_Class
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 begin
         
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $tableName = core_kernel_persistence_hardapi_Utils::getShortName($resource);
+        $tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($resource);
     	$sqlQuery = "SELECT uri FROM {$tableName} WHERE 1";
 		$sqlResult = $dbWrapper->execSql($sqlQuery);
 		
@@ -282,7 +282,7 @@ class core_kernel_persistence_hardsql_Class
 
 		$returnValue = new core_kernel_classes_Resource($subject,__METHOD__);
 		
-		$table = core_kernel_persistence_hardapi_Utils::getShortName ($resource);
+		$table = '_'.core_kernel_persistence_hardapi_Utils::getShortName ($resource);
 		$query = "INSERT INTO `{$table}` (`uri`, `05label`) VALUES (?, ?)";
 		$result = $dbWrapper->execSql($query, array(
        		$subject
@@ -368,7 +368,7 @@ class core_kernel_persistence_hardsql_Class
 		}
 
 		
-		$tableName = core_kernel_persistence_hardapi_Utils::getShortName($resource);
+		$tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($resource);
 		$tablePropertiesName = core_kernel_persistence_hardapi_Utils::getPropertiesTableName($resource);
 		$tableNames = array('t0' => $tableName);
 		

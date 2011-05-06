@@ -291,7 +291,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         
         if(!$this->isClassReferenced($class, $table)){
         	if(is_null($table)){
-        		$table = core_kernel_persistence_hardapi_Utils::getShortName($class);
+        		$table = '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
         	}
         	
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
@@ -339,7 +339,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         
         if($this->isClassReferenced($class)){
 			
-			$tableName = core_kernel_persistence_hardapi_Utils::getShortName($class);
+			$tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
 			
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
@@ -676,7 +676,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         	$result->moveNext();
         }
         
-        $tableName = core_kernel_persistence_hardapi_Utils::getShortName($class);
+        $tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
         
         foreach($types as $type){
         	$this->referenceClass(new core_kernel_classes_Class($type), $tableName);

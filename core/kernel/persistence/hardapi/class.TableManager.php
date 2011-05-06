@@ -78,8 +78,8 @@ class core_kernel_persistence_hardapi_TableManager
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			self::$_tables = $dbWrapper->dbConnector->MetaTables('TABLES');
 		}
-		if(!preg_match("/^[0-9a-zA-Z\-_]{4,}$/", $name)){
-			throw new core_kernel_persistence_hardapi_Exception("Dangerous table name $name . Only alphanumeric, - and _ characters are allowed");
+		if(!preg_match("/^_[0-9a-zA-Z\-_]{4,}$/", $name)){
+			throw new core_kernel_persistence_hardapi_Exception("Dangerous table name '$name' . Table name must begin by a underscore, followed  with only alphanumeric, - and _ characters are allowed");
 		}
 		$this->name = $name;
                 
@@ -130,7 +130,7 @@ class core_kernel_persistence_hardapi_TableManager
 						id int NOT NULL AUTO_INCREMENT,
 						PRIMARY KEY (id),
 						uri VARCHAR(255) NOT NULL ,
-						KEY idx_{$this->name}_uri (uri)";
+						KEY idx{$this->name}_uri (uri)";
 			foreach($columns as $column){
 				if(isset($column['name'])){
 					if(isset($column['multi'])){
@@ -138,11 +138,12 @@ class core_kernel_persistence_hardapi_TableManager
 						continue;
 					}
 					$query .= ", {$column['name']}";
-					if(isset($column['foreign'])){
-						$query .= " int,";
+					if(isset($column['foreign']) && !empty($column['foreign'])){
+						$query .= " VARCHAR(255),";
 						$query .= " CONSTRAINT fk_{$column['name']} 
 									FOREIGN KEY ({$column['name']}) 
-									REFERENCES {$column['foreign']}(id)";
+									REFERENCES {$column['foreign']}(uri)
+								";
 					}
 					else{
 						$query .= " LONGTEXT";
@@ -160,18 +161,22 @@ class core_kernel_persistence_hardapi_TableManager
 						id int NOT NULL AUTO_INCREMENT,
 						property_uri VARCHAR(255),
 						property_value LONGTEXT,
-						property_foreign_id int,
+						property_foreign_uri VARCHAR(255),
 						l_language VARCHAR(4),
 						instance_id int NOT NULL ,
 						PRIMARY KEY (id),
-						KEY idx_property_uri (property_uri),
-						CONSTRAINT fk_{$this->name}_instance_id 
-									FOREIGN KEY (instance_id) 
-									REFERENCES {$this->name}(id))DEFAULT CHARSET=utf8
-						";
+						KEY idx{$this->name}Props_property_uri (property_uri),
+						KEY idx{$this->name}Props_foreign_property_uri (property_foreign_uri),
+						CONSTRAINT fk{$this->name}_instance_id 
+								FOREIGN KEY (instance_id) 
+								REFERENCES {$this->name}(id)
+					)DEFAULT CHARSET=utf8";
 					
 					$dbWrapper->execSql($query);
 					if($dbWrapper->dbConnector->errorNo() !== 0){
+						if(DEBUG_MODE){
+							echo $query;
+						}
 						throw new core_kernel_persistence_hardapi_Exception("Unable to create the table {$this->name}Props : " .$dbWrapper->dbConnector->errorMsg());
 					}
 					self::$_tables[] = "{$this->name}Props";
@@ -182,6 +187,9 @@ class core_kernel_persistence_hardapi_TableManager
 				$returnValue = true;
 			}
 			else{
+				if(DEBUG_MODE){
+					echo $query;
+				}
 				//the user may not have the right to create a table
 				throw new core_kernel_persistence_hardapi_Exception("Unable to create the table {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
 			}

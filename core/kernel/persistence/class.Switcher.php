@@ -94,53 +94,59 @@ class core_kernel_persistence_Switcher
 		//if defined, reference the additional class to the table
 		(isset($options['referencesAllTypes'])) ? $referencesAllTypes = $options['referencesAllTypes'] : $referencesAllTypes = false;
 		
-		
+		//echo " - ".$class->uriResource." : ".$class->getLabel()."\n";
 		
 		if($recursive){
 			$subClassesOptions = $options;
 			$subClassesOptions['recursive'] = false;
+			$subClassesOptions['append'] = true;
 			foreach($class->getSubClasses(true) as $subClass){
 				$this->hardify($subClass, $subClassesOptions);
 			}
 		}
 		
-		$tableName = core_kernel_persistence_hardapi_Utils::getShortName($class);
-		if(!$append){
+		$tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
+		$myTableMgr = new core_kernel_persistence_hardapi_TableManager($tableName);
+		
+		
 			
-			$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
-			
-			//get the table columns from the class properties
-			$columns = array();
-			
-			//change the baseClass if recursive && subClassesProperties
-			
-			$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
-			$properties = $ps->getProperties($additionalProperties);
-			$columns = $ps->getTableColumns($additionalProperties);
-			
-			
-			foreach($columns as $column){
+		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+		
+		//get the table columns from the class properties
+		$columns = array();
+		
+		
+		
+		$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
+		$properties = $ps->getProperties($additionalProperties);
+		$columns = $ps->getTableColumns($additionalProperties);
+		
+		
+		foreach($columns as $i => $column){
 
-				//create the foreign tables recursively
-				if(isset($column['foreign'])){
-					if($createForeigns){
-						$foreignClassUri = core_kernel_persistence_hardapi_Utils::getLongName($column['foreign']);
-						$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
-						if(!$foreignTableMgr->exists()){
-							$range = new core_kernel_classes_Class($foreignClassUri);
-							$subHardifyOption = $options;
-							$subHardifyOption['topClass'] = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
-							$this->hardify($range, $subHardifyOption);
-						}
-					}
-					else{
-						unset($column['foreign']);
+			//create the foreign tables recursively
+			if(isset($column['foreign']) && !empty($column['foreign'])){
+				if($createForeigns){
+					$foreignClassUri = core_kernel_persistence_hardapi_Utils::getLongName($column['foreign']);
+					$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
+					if(!$foreignTableMgr->exists() && $foreignClassUri != $class->uriResource){
+						$range = new core_kernel_classes_Class($foreignClassUri);
+						$subHardifyOption = $options;
+						$subHardifyOption['topClass'] = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
+						$subHardifyOption['recursive'] = false;
+						$subHardifyOption['append'] = true;
+						$this->hardify($range, $subHardifyOption);
 					}
 				}
+				else{
+					unset($columns[$i]['foreign']);
+				}
 			}
+		}
+			
+		if(!$append || ($append && !$myTableMgr->exists()) ){
 			
 			//create the table
-			$myTableMgr = new core_kernel_persistence_hardapi_TableManager($tableName);
 			if($myTableMgr->exists()){
 				$myTableMgr->remove();
 			}
@@ -153,45 +159,44 @@ class core_kernel_persistence_Switcher
 				$referencer->referenceInstanceTypes($class);
 			}
 			
-			
-			//insert the resources
-			$startIndex = 0;
-			$instancePackSize = 100;
-			$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
-			do{
-				$rows = array();
-				
-				foreach($instances as $resource){
-					$row = array('uri' => $resource->uriResource);
-					foreach($properties as $property){
-						$propValue = $resource->getOnePropertyValue($property);
-						$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propValue;
-					}
-					
-					$rows[] = $row;
-				}
-				
-				$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
-				$rowMgr->insertRows($rows);
-			
-				foreach($instances as $resource){
-					$referencer->referenceResource($resource, $tableName, null, true);
-					
-					if($rmSources){
-						//remove exported resources in smooth sql, if required:
-						$resource->delete();
-					}
-				}
-				
-				if(!$rmSources){
-					//increment start index only if not removed
-					$startIndex += $instancePackSize;
-				}
-				
-				$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
-				$count = count($instances);
-			} while($count>0);
 		}
+		
+		//insert the resources
+		$startIndex = 0;
+		$instancePackSize = 100;
+		$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
+		do{
+			$rows = array();
+			
+			foreach($instances as $resource){
+				$row = array('uri' => $resource->uriResource);
+				foreach($properties as $property){
+					$propValue = $resource->getOnePropertyValue($property);
+					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propValue;
+				}
+				
+				$rows[] = $row;
+			}
+			
+			$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
+			$rowMgr->insertRows($rows);
+		
+			foreach($instances as $resource){
+				$referencer->referenceResource($resource, $tableName, null, true);
+				
+				if($rmSources){
+					//remove exported resources in smooth sql, if required:
+					$resource->delete();
+				}
+			}
+			
+			if(!$rmSources){
+				//increment start index only if not removed
+				$startIndex += $instancePackSize;
+			}
+			
+			$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
+		} while(count($instances) > 0);
 		
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 end
 

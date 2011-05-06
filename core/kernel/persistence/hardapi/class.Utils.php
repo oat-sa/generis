@@ -147,6 +147,7 @@ class core_kernel_persistence_hardapi_Utils
         // section 127-0-1-1--151fe597:12f7c91b993:-8000:00000000000014C7 begin
         
         if (!empty($shortName) && strlen($shortName)>2){
+        	$shortName = preg_replace("/^_/", '', $shortName);
         	$modelID = intval (substr($shortName, 0, 2));
         	
         	if ($modelID != null && $modelID >0){
@@ -173,7 +174,7 @@ class core_kernel_persistence_hardapi_Utils
         $returnValue = (string) '';
 
         // section 10-13-1--128--4620d5d7:12fbf26f8b8:-8000:0000000000001502 begin
-		$returnValue = self::getShortName($resource).'props';
+		$returnValue = '_'.self::getShortName($resource).'Props';
         // section 10-13-1--128--4620d5d7:12fbf26f8b8:-8000:0000000000001502 end
 
         return (string) $returnValue;

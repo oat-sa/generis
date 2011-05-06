@@ -225,9 +225,9 @@ bewteen a class and it's parent to retrieve the properties.
 			$range 			= $property->getRange();
 			
 			if(!is_null($range) && $range->uriResource != RDFS_LITERAL && !in_array($range->uriResource, $notForeignableClass)){
-				
 				//constraint to the class that represents the range
-				$column['foreign'] = core_kernel_persistence_hardapi_Utils::getShortName($range);
+				
+				$column['foreign'] = '_'.core_kernel_persistence_hardapi_Utils::getShortName($range);
 			}
 			
 			if ($property->isLgDependent() === true || $property->isMultiple()=== true ){
