@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 06.05.2011, 09:52:36 with ArgoUML PHP module 
+ * Automatically generated on 06.05.2011, 16:09:17 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -87,7 +87,7 @@ class core_kernel_persistence_hardsql_Resource
 		// Get the type functions of the table name
 		
 		$tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
-		$uri = core_kernel_persistence_hardapi_utils::getLongName($tableName);
+		$uri = core_kernel_persistence_hardapi_Utils::getLongName($tableName);
 		$returnValue[] = new core_kernel_classes_Resource ($uri);
 		
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 end
@@ -102,14 +102,116 @@ class core_kernel_persistence_hardsql_Resource
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
+     * @param  array option
      * @return array
      */
-    public function getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
+    public function getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $option = array())
     {
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+
+        $session 	= core_kernel_classes_Session::singleton();
+		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
+		
+        // Optional params
+        $one = isset($options['one']) && $options['one'] == true ? true : false;
+        $last = isset($options['last']) && $options['last'] == true ? true : false;
+        
+    	$table = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
+		$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
+        $propertyRange = $property->getRange();
+		// Will be used to store the property value or the property foreign id
+		$propertyValues = array();
+        // Define language if required
+        $lang = "";
+        if ($property->isLgDependent()){
+        	if (isset($options['lg'])){
+        		$lang = $options['lg'];
+        	} else if ($session->getLg() != ''){
+        		$lang = $session->getLg();
+        	} else {
+        		$lang = $session->defaultLg;
+        	}
+        }
+		
+		// Select in the properties table of the class
+		if ($property->isMultiple() || $property->isLgDependent()){
+			
+			$query = "SELECT property_value, property_foreign_uri 
+				FROM {$table} M
+				INNER JOIN {$table}Props P on M.id = P.instance_id
+			   	WHERE M.uri = ?
+				AND P.property_uri = ?
+				AND ( l_language = ? OR l_language = '')";
+			
+			// Select first
+			if ($one) {
+				$result	= $dbWrapper->dbConnector->selectLimit($query, 1, -1, array(
+					$resource->uriResource
+					, $property->uriResource
+					, $lang
+				));
+			} 
+			// Select Last
+			else if ($last) {
+				$result	= $dbWrapper->execSql($query, array(
+					$resource->uriResource
+					, $property->uriResource
+					, $lang
+				));
+				if (!$result->EOF){
+					$result->moveLast();
+				}
+			} 
+			// Select All
+			else {
+				
+				$result	= $dbWrapper->execSql($query, array(
+					$resource->uriResource
+					, $property->uriResource
+					, $lang
+				));
+			}
+			
+			
+			if($dbWrapper->dbConnector->errorNo() !== 0){
+				throw new core_kernel_persistence_hardapi_Exception("Unable to get property (multiple) values for {$resource->uriResource} in {$table} : " .$dbWrapper->dbConnector->errorMsg());
+			}
+			while (!$result->EOF){
+				$propertyValues[] = $result->fields['property_value'] != null ? $result->fields['property_value'] : $result->fields['property_foreign_uri'];
+				if ($propertyValues==null){
+					throw new core_kernel_persistence_hardapi_Exception("Unable to get property (multiple) values for {$resource->uriResource} in {$table}, no value defined : " .$dbWrapper->dbConnector->errorMsg());
+				}
+				$result->moveNext();
+			}
+		}
+		
+		// Select in the main table of the class
+		else {			
+			$query =  "SELECT {$propertyAlias} as propertyValue FROM {$table} WHERE uri = ?";
+			$result	= $dbWrapper->execSql($query, array(
+				$resource->uriResource
+			));
+			if($dbWrapper->dbConnector->errorNo() !== 0){
+				throw new core_kernel_persistence_hardapi_Exception("Unable to get property (single) values for {$resource->uriResource} in {$table} : " .$dbWrapper->dbConnector->errorMsg());
+			}
+		
+			while (!$result->EOF){
+				$propertyValues[] = $result->fields['propertyValue'];
+				$result->moveNext();
+			}
+		}
+		
+		// Format output data
+		foreach ($propertyValues as $propertyValue){
+			if(!common_Utils::isUri($propertyValue)) {
+                $returnValue[] = new core_kernel_classes_Literal($propertyValue);
+	         } else {
+                $returnValue[] = new core_kernel_classes_Resource($propertyValue);
+            }
+		}
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B end
 
         return (array) $returnValue;
@@ -135,72 +237,13 @@ class core_kernel_persistence_hardsql_Resource
 		}
 		
 		$returnValue = new core_kernel_classes_ContainerCollection($resource);
-		$table = core_kernel_persistence_hardapi_TableManager::resourceLocation($resource);
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
-		$propertiesValues = array();
-		
-		if ($property->isLgDependent()){
-			
-			var_dump("isLgDepedent");
-		}
-		else if ($property->isMultiple()){
-			
-			$query = "SELECT property_value, property_foreign_id FROM {$table} M, {$table}Props P
-			    		WHERE M.uri = ?
-						AND M.id = P.instance_id";
-			$result	= $dbWrapper->execSql($query, array(
-				$resource->uriResource
-			));
-			if($dbWrapper->dbConnector->errorNo() !== 0){
-				
-				throw new core_kernel_persistence_hardapi_Exception("ERROR : " .$dbWrapper->dbConnector->errorMsg());
-			}
-			if (!$result->EOF){
-				
-		        while ($row = $result->FetchRow()) {
-		        	
-		        	//is foreign key
-		        	if ($row['property_foreign_id']!=null){
-		        		throw new core_kernel_persistence_hardapi_Exception("property_foreign_id treatment not implemented");
-		        		//$propertiesValues[] = $targetUri;
-		        	}
-		        	else {
-		        		$propertiesValues[] = $row['property_value'];
-		        	}
-		        }
-			}
-		}
-		else {			
-			$query =  "SELECT {$propertyAlias} FROM {$table}
-			    		WHERE uri = ?";
-			$result	= $dbWrapper->execSql($query, array(
-				$resource->uriResource
-			));
-			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to get Property Values Collection : " .$dbWrapper->dbConnector->errorMsg());
-			}
-
-			if (!$result->EOF){
-				
-				while ($row = $result->FetchRow()) {
-					$propertiesValues[] = $row[$propertyAlias];
-				}
-			}			
-		}
-			
-		foreach ($propertiesValues as $value){
-            if(!common_Utils::isUri($value)) {
-                $container = new core_kernel_classes_Literal($value);
+		$values = $this->getPropertyValues ($resource, $property);
+					
+		foreach ($values as $value){
+			if(DEBUG_MODE){
+            	$value->debug = __METHOD__ .'|' . $property->debug;
             }
-            else {
-                $container = new core_kernel_classes_Resource($value);
-            }
-
-            if(DEBUG_MODE){
-            	$container->debug = __METHOD__ .'|' . $property->debug;
-            }
-            $returnValue->add($container);
+            $returnValue->add($value);
         }
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F end
@@ -228,60 +271,18 @@ class core_kernel_persistence_hardsql_Resource
 			$returnValue->debug = __METHOD__;
 		}
 		
-		$returnValue = new core_kernel_classes_ContainerCollection($resource);
-		$table = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
-		$propertiesValues = array();
-		
-		if ($property->isMultiple() || $property->isLgDependent()){
-			
-			$query = "SELECT property_value, property_foreign_id 
-				FROM {$table} M, {$table}Props P
-			   	WHERE M.uri = ?
-				AND M.id = P.instance_id";
-			$result	= $dbWrapper->execSql($query, array(
-				$resource->uriResource
-			));
-			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception("ERROR : " .$dbWrapper->dbConnector->errorMsg());
-			}
-			if (!$result->EOF){
-				
-		        while ($row = $result->FetchRow()) {
-		        	
-		        	//is foreign key
-		        	if ($row['property_foreign_id']!=null){
-		        		throw new core_kernel_persistence_hardapi_Exception("property_foreign_id treatment not implemented");
-		        		//$propertiesValues[] = $targetUri;
-		        	}
-		        	else {
-		        		$propertiesValues[] = $row['property_value'];
-		        	}
-		        }
-			} else {
-				var_dump('no type found');
-			}
+		$options = array();
+		if ($last){
+			$options['last'] = true;
+		} else {
+			$options['one'] = true;
 		}
-		else {			
-			$query =  "SELECT {$propertyAlias} as object FROM {$table}
-			    		WHERE uri = ?";
-			$result	= $dbWrapper->execSql($query, array(
-				$resource->uriResource
-			));
-			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to get Property Values Collection : " .$dbWrapper->dbConnector->errorMsg());
-			}		
-		}
-			
-	    $value = $result->fields['object'];
-        if(!common_Utils::isUri($value)) {
-        	$returnValue = new core_kernel_classes_Literal($value);
-	    }
-	    else {
-        	$returnValue = new core_kernel_classes_Resource($value);
-        }
 		
+		$value = $this->getPropertyValues ($resource, $property, $options);
+		if (count($value)){
+			$returnValue = $value[0];
+		}
+	
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 end
 
         return $returnValue;
@@ -302,7 +303,10 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 begin
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+		
+    	$options = array('lg'=>$lg);
+		$returnValue = $this->getPropertyValues ($resource, $property, $options);
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 end
 
         return $returnValue;
@@ -324,14 +328,15 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE begin
-		
+		        
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
         $session 	= core_kernel_classes_Session::singleton();
-        $objectUri  = !is_string($object) && $object instanceof core_kernel_classes_Resource ? $object->uriResource : $object;
+        $object  = !is_string($object) && $object instanceof core_kernel_classes_Resource ? $object->uriResource : $object;
 		$instanceId = null;
         $propertyValue = null;
-       	$propertyForeignId = null;
+       	$propertyForeignUri = null;
         $propertyRange = $property->getRange();
+        
         $lang = "";
         // Define language if required
         if ($property->isLgDependent()){
@@ -344,77 +349,53 @@ class core_kernel_persistence_hardsql_Resource
         	}
         }
         
-        // Get the type of the resource
+        // Get the table name
         $tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
         
         // Get property instance
-        $queryInstance = "SELECT id FROM {$tableName} WHERE uri='{$resource->uriResource}'";
-		$resultInstance	= $dbWrapper->execSql($queryInstance);
-		if($dbWrapper->dbConnector->errorNo() !== 0){
-			throw new core_kernel_persistence_hardapi_Exception("Unable to find the instance {$resource->uriResource} in {$tableName} : " .$dbWrapper->dbConnector->errorMsg());
-		}
-        if (!$resultInstance->EOF){
-        	$instanceId = $resultInstance->fields['id'];
-        }
+        $instanceId = core_kernel_persistence_hardsql_Utils::getInstanceId ($resource);
 
         // Get the property value or property foreign id
         if(!is_null($propertyRange)){
 
         	// Foregin resource
         	if ($propertyRange->uriResource != RDFS_LITERAL){
-
-        		// check if the foreign class has been hardified
-        		if (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($propertyRange)){
-					
-        			$foreignTable = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation (new core_kernel_classes_Resource($object));
-        			$queryForeign = "SELECT id from {$foreignTable} WHERE uri=?";
-					$resultForeign	= $dbWrapper->execSql($queryForeign, array($objectUri));
-					if($dbWrapper->dbConnector->errorNo() !== 0){
-						throw new core_kernel_persistence_hardapi_Exception("Unable to select foreign id for the object {$objectUri} in {$foreignTable} : " .$dbWrapper->dbConnector->errorMsg());
-					}
-			        if (!$resultForeign->EOF){
-			        	$propertyForeignId = $resultForeign->fields['id'];
-			        }
-        		}
-        		// The object is not hardified, use its uri
-        		else {
-
-        			$propertyValue = $objectUri;
-        		}
+        		$propertyForeignUri = $object;
         	}
         	// The object is a literal
         	else {
-
-        		$propertyValue = $objectUri;
+        		$propertyValue = $object;
         	}
         }
         
         if ($property->isMultiple() || $property->isLgDependent()){
         	
-        	$query = "INSERT INTO {$tableName}Props (instance_id, property_uri, property_value, property_foreign_id, l_language) VALUES (?, ?, ?, ?, ?)";
+        	$query = "INSERT INTO {$tableName}Props 
+        		(instance_id, property_uri, property_value, property_foreign_uri, l_language) 
+        		VALUES (?, ?, ?, ?, ?)";
 	        $result	= $dbWrapper->execSql($query, array(
 	        	$instanceId, 
-	        	$resource->uriResource, 
+	        	$property->uriResource, 
 	        	$propertyValue, 
-	        	$propertyForeignId, 
+	        	$propertyForeignUri, 
 	        	$lang
 	        ));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to set property Value for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+				throw new core_kernel_persistence_hardapi_Exception("Unable to set property (single) Value for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
 			}
         } else {
         	
         	$propertyName = core_kernel_persistence_hardapi_Utils::getShortName ($property);
-            $query = "UPDATE {$tableName} SET {$propertyName}=? WHERE id=?";
+            $query = "UPDATE {$tableName} SET {$propertyName} = ? WHERE id = ?";
 	        $result	= $dbWrapper->execSql($query, array(
-	        	$propertyValue!=null?$propertyValue:$propertyForeignId
+	        	$propertyValue != null ? $propertyValue : $propertyForeignUri
 	        	, $instanceId
 	        ));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to set property Value for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+				throw new core_kernel_persistence_hardapi_Exception("Unable to set property (multiple) Value for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
 			}
         }
-		
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE end
 
         return (bool) $returnValue;
@@ -581,10 +562,14 @@ class core_kernel_persistence_hardsql_Resource
 		
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
-        
-		$query = "DELETE FROM {$tableName} WHERE uri = ?";
+
+        // Delete the records in the main table  and the properties table
+		$query = "DELETE {$tableName}.*, {$tableName}Props.* FROM {$tableName} M
+			INNER JOIN {$tableName}Props.* P ON M.id = P.instance_id
+			WHERE uri = ?";
         $returnValue = $dbWrapper->execSql($query, array($resource->uriResource));
         
+        // Unreference the resource
         core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unreferenceResource($resource);
         
 //    	if($deleteReference){
@@ -631,6 +616,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = (string) '';
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC end
 
         return (string) $returnValue;
@@ -651,6 +637,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = array();
 
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 end
 
         return (array) $returnValue;

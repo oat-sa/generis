@@ -167,7 +167,15 @@ class core_kernel_persistence_hardsql_Class
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 begin
         
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($resource);
+		
+		/*
+		 * 
+		 * @todo Be carefull, we just use the first table returned by classLocation function
+		 * 
+		 */
+		
+		$classLocation = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($resource);
+		$tableName = $classLocation[0]['table'];
     	$sqlQuery = "SELECT uri FROM {$tableName} WHERE 1";
 		$sqlResult = $dbWrapper->execSql($sqlQuery);
 		

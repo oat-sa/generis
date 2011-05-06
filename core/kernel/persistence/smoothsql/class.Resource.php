@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 06.05.2011, 09:52:36 with ArgoUML PHP module 
+ * Automatically generated on 06.05.2011, 16:09:17 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -105,9 +105,10 @@ class core_kernel_persistence_smoothsql_Resource
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
+     * @param  array option
      * @return array
      */
-    public function getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
+    public function getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $option = array())
     {
         $returnValue = array();
 
@@ -129,21 +130,6 @@ class core_kernel_persistence_smoothsql_Resource
         while ($row = $result->FetchRow()) {
         	$returnValue[] = $row['object'];
         }
-		
-//        if(defined('ENABLE_SUBSCRIPTION') 	&& ENABLE_SUBSCRIPTION
-//        && $resource->uriResource != CLASS_SUBCRIPTION 	&& $resource->uriResource != CLASS_MASK
-//        && $property->uriResource != PROPERTY_SUBCRIPTION_MASK && $property->uriResource != PROPERTY_SUBCRIPTION_URL
-//        && $property->uriResource != PROPERTY_MASK_SUBJECT && $property->uriResource != PROPERTY_MASK_PREDICATE
-//        && $property->uriResource != PROPERTY_MASK_OBJECT
-//        ){
-//            $subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions($resource,$property,null);
-//            foreach ($subcriptions as $sub){
-//                $subcriptionResource = new core_kernel_classes_Resource($sub);
-//                $subcriptionsInstances = core_kernel_subscriptions_Service::singleton()->getPropertyValuesFromSubscription($subcriptionResource,$resource,$property);
-//                $returnValue = array_merge($returnValue,$subcriptionsInstances);
-//            }
-//
-//        }
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B end
 
@@ -187,23 +173,6 @@ class core_kernel_persistence_smoothsql_Resource
         while ($row = $result->FetchRow()) {
         	$propertiesValues[] = $row['object'];
         }
-
-//        if(defined('ENABLE_SUBSCRIPTION') 	&& ENABLE_SUBSCRIPTION
-//        && $resource->uriResource != CLASS_SUBCRIPTION 	&& $resource->uriResource != CLASS_MASK
-//        && $property->uriResource != PROPERTY_SUBCRIPTION_MASK && $property->uriResource != PROPERTY_SUBCRIPTION_URL
-//        && $property->uriResource != PROPERTY_MASK_SUBJECT && $property->uriResource != PROPERTY_MASK_PREDICATE
-//        && $property->uriResource != PROPERTY_MASK_OBJECT
-//        ){
-//
-//            $subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions($resource,$property,null);
-//
-//            foreach ($subcriptions as $sub){
-//                $subcriptionResource = new core_kernel_classes_Resource($sub);
-//                $subcriptionsInstances = core_kernel_subscriptions_Service::singleton()->getPropertyValuesFromSubscription($subcriptionResource,$resource,$property);
-//                $propertiesValues = array_merge($propertiesValues,$subcriptionsInstances);
-//            }
-//
-//        }
         
         foreach ($propertiesValues as $value){
             if(!common_Utils::isUri($value)) {

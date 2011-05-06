@@ -101,7 +101,6 @@ class core_kernel_persistence_hardapi_RowManager
         $size = count($rows);
 		if($size > 0){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-						
 			//building the insert query
 			
 			//set the column names

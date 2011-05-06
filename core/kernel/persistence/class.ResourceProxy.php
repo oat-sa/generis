@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 06.05.2011, 09:52:36 with ArgoUML PHP module 
+ * Automatically generated on 06.05.2011, 16:09:17 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -128,9 +128,10 @@ class core_kernel_persistence_ResourceProxy
      * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
+     * @param  array option
      * @return array
      */
-    public function getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
+    public function getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $option = array())
     {
         $returnValue = array();
 
