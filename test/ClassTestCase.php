@@ -1,7 +1,8 @@
 <?php
 
 
-require_once dirname(__FILE__).'/../common/common.php';
+// require_once dirname(__FILE__).'/../common/common.php';
+require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
 require_once INCLUDES_PATH.'/simpletest/autorun.php';
 
 
@@ -288,8 +289,87 @@ class ClassTestCase extends UnitTestCase {
 		$nfound = count($languagesDependantProp);
 		$this->assertTrue($nfound > 0);
 		$this->assertEqual($found, $nfound);
+		
 	}
-
 	
+	public function testSearchInstancesHard($hard = false){
+		
+		if(!$hard) return;
+		
+		core_kernel_persistence_PersistenceProxy::setMode(PERSISTENCE_HARD);
+		
+		$class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#Languages');
+		if(core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($class)){
+		
+			$propertyFilter = array(
+				RDFS_LABEL => 'EN'
+			);
+			$options = array('like' => false, 'checkSubclasses' => false);
+					
+			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
+			
+			$found = count($languagesDependantProp);
+			$this->assertTrue($found > 0);
+			
+			$propertyFilter = array(
+				RDFS_LABEL	=> 'EN',
+				'http://www.tao.lu/Ontologies/TAO.rdf#level'	=> '1'
+			);
+			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
+			$nfound = count($languagesDependantProp);
+			$this->assertTrue($nfound > 0);
+			$this->assertEqual($found, $nfound);
+			
+		}
+		
+		core_kernel_persistence_PersistenceProxy::resetMode();
+		
+	}
+	
+	public function testSearchInstancesVeryHard($hard=true){
+		
+		if(!$hard) return;
+		
+		// core_kernel_persistence_PersistenceProxy::setMode(PERSISTENCE_HARD);
+		
+		$class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
+		if(core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($class)){
+			
+			//test simple search:
+			$propertyFilter = array(
+				'http://www.tao.lu/Ontologies/generis.rdf#login' => 'login1',
+				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'a722c63db8ec8625af6cf71cb8c2d939'
+			);
+			$options = array('like' => false, 'checkSubclasses' => false);
+			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
+			$nfound = count($languagesDependantProp);
+			$this->assertTrue($nfound > 0);
+			
+			//test like option
+			$propertyFilter = array(
+				'http://www.tao.lu/Ontologies/generis.rdf#login' => '%login%',
+				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'a722c63db8ec8625af6cf71cb8c2d939'
+			);
+			$options = array('like' => true, 'checkSubclasses' => false);
+			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
+			$likeFound = count($languagesDependantProp);
+			$this->assertTrue($likeFound > 0);
+			$this->assertEqual($nfound, $likeFound);
+			
+			//test reference resource prop value:
+			$propertyFilter = array(
+				'http://www.tao.lu/Ontologies/generis.rdf#login' => '%login%',
+				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'a722c63db8ec8625af6cf71cb8c2d939',
+				'http://www.tao.lu/Ontologies/generis.rdf#userDefLg' => '%FR%'
+			);
+			$options = array('like' => true, 'checkSubclasses' => false);
+			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
+			$refFound = count($languagesDependantProp);
+			$this->assertTrue($refFound > 0);
+			$this->assertEqual($nfound, $refFound);
+		}
+		
+		// core_kernel_persistence_PersistenceProxy::resetMode();
+	}
 }
 ?>

@@ -203,13 +203,17 @@ class core_kernel_persistence_hardapi_Utils
 		);
 		
 		$range = $property->getRange();
-		$rangeClassName = core_kernel_persistence_hardapi_Utils::getShortName($range);
+		
+		$classLocations = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($range);
+		$rangeClassName = $classLocations[0]['table'];
 		if($hardRangeClassOnly){
-			if($range->uriResource!=RDFS_LITERAL && core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($range)){
-				$returnValue[] = $rangeClassName;
+			$is_class_referenced = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($range);
+			// var_dump('is referenced class: '.$range, $is_class_referenced);
+			if($range->uriResource!=RDFS_LITERAL && $is_class_referenced){
+				$returnValue['range'][] = $rangeClassName;
 			}
 		}else{
-			$returnValue[] = $rangeClassName;
+			$returnValue['range'][] = $rangeClassName;
 		}
 		
         // section 10-13-1--128-743691ae:12fc0ed9381:-8000:0000000000001525 end

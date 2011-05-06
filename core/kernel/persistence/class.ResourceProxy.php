@@ -566,9 +566,20 @@ class core_kernel_persistence_ResourceProxy
 		        }
 			}
         }
-
-		$returnValue = core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource];
-
+		if(isset(core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource])){
+			$returnValue = core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource];
+		}else{
+			$errorMessage = "The resource with uri {$resource->uriResource} does not exist in the available implementation(s):";
+			$i = 0;
+			foreach($this->getAvailableImpl() as $name => $valid){
+				if($valid){
+					if($i>0) $errorMessage .= ", ";
+					$errorMessage .= $name;
+				} 
+			}
+			throw new Exception($errorMessage);
+		}
+		
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5D end
 
         return $returnValue;
@@ -589,7 +600,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--499759bc:12f72c12020:-8000:0000000000001558 begin
 
-        $impls = $this->getAvailableImpl ();
+        $impls = $this->getAvailableImpl();
         if (isset ($impls[$context]) && $impls[$context]){
         	$implClass = "core_kernel_persistence_{$context}_Resource";
         	$reflectionMethod = new ReflectionMethod($implClass, 'singleton');

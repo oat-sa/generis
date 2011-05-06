@@ -374,7 +374,6 @@ class core_kernel_persistence_hardsql_Class
 		if(isset($options['like'])){
 			$like = ($options['like'] === true);
 		}
-
 		
 		$tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($resource);
 		$tablePropertiesName = core_kernel_persistence_hardapi_Utils::getPropertiesTableName($resource);
@@ -385,6 +384,8 @@ class core_kernel_persistence_hardsql_Class
 			
 			$propDesc = core_kernel_persistence_hardapi_Utils::propertyDescriptor(new core_kernel_classes_Property($propUri), true);
 			$propsTabIndex = '00';
+			
+			
 			
 			if($propDesc['isMultiple']){
 				
@@ -513,10 +514,12 @@ class core_kernel_persistence_hardsql_Class
 			}
 		}
 		
-		var_dump($sqlQuery);exit;
-		
 		$sqlResult = $dbWrapper->execSql($sqlQuery);
-
+		
+		//var_dump($propDesc);
+		// var_dump($sqlResult);
+		//var_dump($sqlQuery);
+		
 		while (!$sqlResult->EOF){
 
 			$instance = new core_kernel_classes_Resource($sqlResult->fields['uri']);
@@ -528,6 +531,9 @@ class core_kernel_persistence_hardsql_Class
 		if(!isset($options['checkSubclasses']) || $options['checkSubclasses'] !== false){
 			//recursive:
 			//option not implemented yet
+			foreach($resource->getSubClasses(true) as $subclass){
+				$returnValue = array_merge($returnValue, $subclass->searchInstances($propertyFilters, $options));
+			}
 		}
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
 
