@@ -243,6 +243,29 @@ bewteen a class and it's parent to retrieve the properties.
         return (array) $returnValue;
     }
 
+    public function propertyDescriptor(core_kernel_classes_Property $property, $hardRangeClassOnly = false){
+
+    	$returnValue = array(
+		   'name'   => core_kernel_persistence_hardapi_Utils::getShortName($property),
+		   'isMultiple'  => $property->isMultiple(),
+		   'isLgDependent' => $property->isLgDependent(),
+		   'range'   => array()
+    	);
+
+    	$range = $property->getRange();
+    	$rangeClassName = core_kernel_persistence_hardapi_Utils::getShortName($range);
+    	if($hardRangeClassOnly){
+    		if(core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($range)){
+    			$returnValue[] = $rangeClassName;
+    		}
+    	}else{
+    		$returnValue[] = $rangeClassName;
+    	}
+
+    	return (array) $returnValue;
+
+    }
+    
 } /* end of class core_kernel_persistence_switcher_PropertySwicther */
 
 ?>

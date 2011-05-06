@@ -343,14 +343,14 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
-//			$query = "DELETE class_to_table.*, resource_has_class.*, resource_to_table.* FROM class_to_table 
-//								INNER JOIN resource_has_class ON resource_has_class.class_id = class_to_table.id
-//								INNER JOIN resource_to_table ON resource_has_class.resource_id = resource_to_table.id
-//								WHERE class_to_table.`table` = '{$tableName}' OR resource_to_table.`table` = '{$tableName}'";
-		
-			$query = "DELETE class_to_table.*, resource_to_table.* FROM class_to_table 
-								INNER JOIN resource_to_table ON class_to_table.id = resource_to_table.id
+			$query = "DELETE class_to_table.*, resource_has_class.*, resource_to_table.* FROM class_to_table 
+								INNER JOIN resource_has_class ON resource_has_class.class_id = class_to_table.id
+								INNER JOIN resource_to_table ON resource_has_class.resource_id = resource_to_table.resource_id
 								WHERE class_to_table.`table` = '{$tableName}' OR resource_to_table.`table` = '{$tableName}'";
+		
+//			$query = "DELETE class_to_table.*, resource_to_table.* FROM class_to_table 
+//								INNER JOIN resource_to_table ON class_to_table.id = resource_to_table.id
+//								WHERE class_to_table.`table` = '{$tableName}' OR resource_to_table.`table` = '{$tableName}'";
 			
 			$result = $dbWrapper->execSql($query);
 			if($result !== false){
@@ -460,9 +460,21 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         $types = !is_null($types) ? $types : $resource->getType();
         if(!$this->isResourceReferenced($resource)){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-				
-			$query = "INSERT INTO `resource_to_table` (`uri`, `table`) VALUES (?,?)";
-			$insertResult = $dbWrapper->execSql($query, array($resource->uriResource, $table));
+
+        	// Get the resource id
+			$queryResource = "SELECT id FROM `{$table}` WHERE uri=?";
+        	$resultResource = $dbWrapper->execSql($queryResource, array($resource->uriResource));
+			if($dbWrapper->dbConnector->errorNo() !== 0){
+				throw new core_kernel_persistence_hardapi_Exception("Unable to select the resource to reference : {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+			}
+			if(!$resultResource->EOF){
+				$resourceId = $resultResource->fields['id']; 
+			}else {
+				throw new core_kernel_persistence_hardapi_Exception("Unable to find the resource to reference : {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+			}
+			
+			$query = "INSERT INTO `resource_to_table` (`uri`, `table`, `resource_id`) VALUES (?,?,?)";
+			$insertResult = $dbWrapper->execSql($query, array($resource->uriResource, $table, $resourceId));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to reference the resource : {$resource->uriResource} / {$table} : " .$dbWrapper->dbConnector->errorMsg());
 			}
@@ -475,16 +487,19 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			}
 			$returnValue = (bool) $insertResult;
 			
-			if($referenceClassLink){
-				
+        	if($referenceClassLink){
 				foreach($types as $type){
+					
 					$typeClass = new core_kernel_classes_Class($type->uriResource);
 					if($this->isClassReferenced($typeClass)){
-						$classLocation = $this->classLocations($typeClass);
-						if(isset($classLocation['id'])){
+						
+						$classLocations = $this->classLocations($typeClass);
+						foreach ($classLocations as $classLocation){
+							
 							foreach($rows as $row){
+								
 								$query = "INSERT INTO resource_has_class (resource_id, class_id) VALUES (?,?)";
-								$dbWrapper->execSql($query, array($row['id'], $classLocation['id']));
+								$dbWrapper->execSql($query, array($row['resource_id'], $classLocation['id']));
 							}
 						}
 					}
@@ -515,7 +530,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     public function unReferenceResource( core_kernel_classes_Resource $resource)
     {
         $returnValue = (bool) false;
-
+        
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001661 begin
         
         if($this->isResourceReferenced($resource)){
@@ -524,7 +539,8 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 //			$query = "DELETE resource_to_table.*, resource_has_class.* FROM resource_to_table 
 //						INNER JOIN resource_has_class ON resource_has_class.resource_id = resource_to_table.id
 //						WHERE resource_to_table.uri = ?";
-		$query = "DELETE resource_to_table.* FROM resource_to_table 
+
+			$query = "DELETE resource_to_table.* FROM resource_to_table 
 						WHERE resource_to_table.uri = ?";
 			$result = $dbWrapper->execSql($query, array($resource->uriResource));
 			if($result !== false){

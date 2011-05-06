@@ -434,7 +434,8 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F60 begin
 
-        if (!isset(core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo[$resource->uriResource]) || core_kernel_persistence_PersistenceProxy::$mode != null){
+        if (!isset(core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo[$resource->uriResource]) 
+        || core_kernel_persistence_PersistenceProxy::isForcedMode()){
         	
 	    	$impls = $this->getAvailableImpl ($params);
 			foreach ($impls as $implName=>$enable){
@@ -443,6 +444,11 @@ class core_kernel_persistence_ClassProxy
 		        	$implClass = "core_kernel_persistence_{$implName}_Class";
 		        	$reflectionMethod = new ReflectionMethod($implClass, 'singleton');
 					$delegate = $reflectionMethod->invoke(null);
+					
+					if (core_kernel_persistence_PersistenceProxy::isForcedMode()){
+						return $delegate;
+					}
+					
 					core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo[$resource->uriResource] = $delegate;
 					break;
 		        }

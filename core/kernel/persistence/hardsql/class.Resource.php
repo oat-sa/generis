@@ -85,6 +85,7 @@ implements core_kernel_persistence_ResourceInterface
 		// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 begin
 		
 		// Get the type functions of the table name
+		
 		$tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
 		$uri = core_kernel_persistence_hardapi_utils::getLongName($tableName);
 		$returnValue[] = new core_kernel_classes_Resource ($uri);
@@ -326,9 +327,89 @@ implements core_kernel_persistence_ResourceInterface
 		$returnValue = (bool) false;
 
 		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE begin
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE end
+		
+    	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
+        $session 	= core_kernel_classes_Session::singleton();
+        $lang 		= ($property->isLgDependent() ? ( $session->getLg() != '' ? $session->getLg() : $session->defaultLg) : '');
+        $objectUri  = !is_string($object) && $object instanceof core_kernel_classes_Resource ? $object->uriResource : $object;
+		$instanceId = null;
+        $propertyValue = null;
+       	$propertyForeignId = null;
+        $propertyRange = $property->getRange();
+        
+        // Get the type of the resource
+        $tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
+        
+        // Get property instance
+        $queryInstance = "SELECT id FROM {$tableName} WHERE uri='{$resource->uriResource}'";
+		$resultInstance	= $dbWrapper->execSql($queryInstance);
+		if($dbWrapper->dbConnector->errorNo() !== 0){
+			throw new core_kernel_persistence_hardapi_Exception("Unable to find the instance {$resource->uriResource} in {$tableName} : " .$dbWrapper->dbConnector->errorMsg());
+		}
+        if (!$resultInstance->EOF){
+        	$instanceId = $resultInstance->fields['id'];
+        }
 
+        // Get the property value or property foreign id
+        if(!is_null($propertyRange)){
+
+        	// Foregin resource
+        	if ($propertyRange->uriResource != RDFS_LITERAL){
+
+        		// check if the foreign class has been hardified
+        		if (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($propertyRange)){
+					
+        			$foreignTable = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation (new core_kernel_classes_Resource($object));
+        			$queryForeign = "SELECT id from {$foreignTable} WHERE uri=?";
+					$resultForeign	= $dbWrapper->execSql($queryForeign, array($objectUri));
+					if($dbWrapper->dbConnector->errorNo() !== 0){
+						throw new core_kernel_persistence_hardapi_Exception("Unable to select foreign id for the object {$objectUri} in {$foreignTable} : " .$dbWrapper->dbConnector->errorMsg());
+					}
+			        if (!$resultForeign->EOF){
+			        	$propertyForeignId = $resultForeign->fields['id'];
+			        }
+        		}
+        		// The object is not hardified, use its uri
+        		else {
+
+        			$propertyValue = $objectUri;
+        		}
+        	}
+        	// The object is a literal
+        	else {
+
+        		$propertyValue = $objectUri;
+        	}
+        }
+        
+        if ($property->isMultiple() || $property->isLgDependent()){
+        	
+        	$query = "INSERT INTO {$tableName}Props (instance_id, property_uri, property_value, property_foreign_id, l_language) VALUES (?, ?, ?, ?, ?)";
+	        $result	= $dbWrapper->execSql($query, array(
+	        	$instanceId, 
+	        	$resource->uriResource, 
+	        	$propertyValue, 
+	        	$propertyForeignId, 
+	        	$lang
+	        ));
+			if($dbWrapper->dbConnector->errorNo() !== 0){
+				throw new core_kernel_persistence_hardapi_Exception("Unable to set property Value for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+			}
+        } else {
+        	
+        	$propertyName = core_kernel_persistence_hardapi_Utils::getShortName ($property);
+            $query = "UPDATE {$tableName} SET {$propertyName}=? WHERE id=?";
+	        $result	= $dbWrapper->execSql($query, array(
+	        	$propertyValue!=null?$propertyValue:$propertyForeignId
+	        	, $instanceId
+	        ));
+			if($dbWrapper->dbConnector->errorNo() !== 0){
+				throw new core_kernel_persistence_hardapi_Exception("Unable to set property Value for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+			}
+        }
+		
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE end
+		
 		return (bool) $returnValue;
 	}
 
@@ -606,7 +687,7 @@ implements core_kernel_persistence_ResourceInterface
         if (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isResourceReferenced ($resource)){
 			$returnValue = true;
 		}
-
+		
 		// section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5A end
 
 		return (bool) $returnValue;

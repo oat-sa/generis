@@ -53,6 +53,9 @@ class core_kernel_persistence_Switcher
 	
 	public function __destruct(){
 		core_kernel_persistence_PersistenceProxy::resetMode();
+		core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo = array();
+		core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo = array();
+		core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo = array();
 	}
 
     /**
@@ -189,7 +192,6 @@ class core_kernel_persistence_Switcher
 				$count = count($instances);
 			} while($count>0);
 		}
-		
 		
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 end
 

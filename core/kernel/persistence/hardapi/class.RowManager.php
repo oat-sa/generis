@@ -216,10 +216,14 @@ class core_kernel_persistence_hardapi_RowManager
 								$queryRows .= ',';
 							}
 							if (isset($column['foreign'])){
+								
 								if(isset($foreignsIds[$column['foreign']][$multiResult->fields['object']])){
+									
 									$foreignsId = $foreignsIds[$column['foreign']][$multiResult->fields['object']];
 									if(is_array($foreignsId)){
+										
 										foreach($foreignsId as $index => $id){
+											
 											if($index > 0){
 												$queryRows .= ',';
 											}

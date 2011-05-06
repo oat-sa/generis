@@ -544,16 +544,21 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5D begin
 
-        if (!isset(core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource]) || core_kernel_persistence_PersistenceProxy::$mode != null){
+        if (!isset(core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource]) 
+        || core_kernel_persistence_PersistenceProxy::isForcedMode()){
         	
 	    	$impls = $this->getAvailableImpl ($params);
 			foreach ($impls as $implName=>$enable){
-				
 				// If the implementation is enabled && the resource exists in this context
 				if ($enable && $this->isValidContext ($implName, $resource)){
 		        	$implClass = "core_kernel_persistence_{$implName}_Resource";
 		        	$reflectionMethod = new ReflectionMethod($implClass, 'singleton');
 					$delegate = $reflectionMethod->invoke(null);
+					
+					if (core_kernel_persistence_PersistenceProxy::isForcedMode()){
+						return $delegate;
+					}
+					
 					core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource] = $delegate;
 					break;
 		        }
@@ -582,7 +587,7 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--499759bc:12f72c12020:-8000:0000000000001558 begin
 
-        $impls = $this->getAvailableImpl ();        
+        $impls = $this->getAvailableImpl ();
         if (isset ($impls[$context]) && $impls[$context]){
         	$implClass = "core_kernel_persistence_{$context}_Resource";
         	$reflectionMethod = new ReflectionMethod($implClass, 'singleton');
