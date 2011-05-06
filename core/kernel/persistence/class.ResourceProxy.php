@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 05.05.2011, 12:49:11 with ArgoUML PHP module 
+ * Automatically generated on 06.05.2011, 09:52:36 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -235,9 +235,10 @@ class core_kernel_persistence_ResourceProxy
      * @param  Resource resource
      * @param  Property property
      * @param  string object
+     * @param  string lg
      * @return boolean
      */
-    public function setPropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $object)
+    public function setPropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $object, $lg = null)
     {
         $returnValue = (bool) false;
 

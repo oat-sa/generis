@@ -345,7 +345,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			
 			$query = "DELETE class_to_table.*, resource_has_class.*, resource_to_table.* FROM class_to_table 
 								INNER JOIN resource_has_class ON resource_has_class.class_id = class_to_table.id
-								INNER JOIN resource_to_table ON resource_has_class.resource_id = resource_to_table.resource_id
+								INNER JOIN resource_to_table ON resource_has_class.resource_id = resource_to_table.id
 								WHERE class_to_table.`table` = '{$tableName}' OR resource_to_table.`table` = '{$tableName}'";
 		
 //			$query = "DELETE class_to_table.*, resource_to_table.* FROM class_to_table 
@@ -460,21 +460,9 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         $types = !is_null($types) ? $types : $resource->getType();
         if(!$this->isResourceReferenced($resource)){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-
-        	// Get the resource id
-			$queryResource = "SELECT id FROM `{$table}` WHERE uri=?";
-        	$resultResource = $dbWrapper->execSql($queryResource, array($resource->uriResource));
-			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to select the resource to reference : {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
-			}
-			if(!$resultResource->EOF){
-				$resourceId = $resultResource->fields['id']; 
-			}else {
-				throw new core_kernel_persistence_hardapi_Exception("Unable to find the resource to reference : {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
-			}
 			
-			$query = "INSERT INTO `resource_to_table` (`uri`, `table`, `resource_id`) VALUES (?,?,?)";
-			$insertResult = $dbWrapper->execSql($query, array($resource->uriResource, $table, $resourceId));
+			$query = "INSERT INTO `resource_to_table` (`uri`, `table`) VALUES (?,?)";
+			$insertResult = $dbWrapper->execSql($query, array($resource->uriResource, $table));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to reference the resource : {$resource->uriResource} / {$table} : " .$dbWrapper->dbConnector->errorMsg());
 			}
@@ -499,7 +487,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 							foreach($rows as $row){
 								
 								$query = "INSERT INTO resource_has_class (resource_id, class_id) VALUES (?,?)";
-								$dbWrapper->execSql($query, array($row['resource_id'], $classLocation['id']));
+								$dbWrapper->execSql($query, array($row['id'], $classLocation['id']));
 							}
 						}
 					}

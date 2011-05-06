@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 01.05.2011, 00:35:26 with ArgoUML PHP module 
+ * Automatically generated on 06.05.2011, 09:52:36 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -327,9 +327,10 @@ class core_kernel_persistence_smoothsql_Resource
      * @param  Resource resource
      * @param  Property property
      * @param  string object
+     * @param  string lg
      * @return boolean
      */
-    public function setPropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $object)
+    public function setPropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $object, $lg = null)
     {
         $returnValue = (bool) false;
 
@@ -343,7 +344,17 @@ class core_kernel_persistence_smoothsql_Resource
         $session 	= core_kernel_classes_Session::singleton();
         $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
         $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
-        $lang 		= ($property->isLgDependent() ? ( $session->getLg() != '' ? $session->getLg() : $session->defaultLg) : '');
+        $lang = "";
+        // Define language if required
+        if ($property->isLgDependent()){
+        	if ($lg!=null){
+        		$lang = $lg;
+        	} else if ($session->getLg() != ''){
+        		$lang = $session->getLg();
+        	} else {
+        		$lang = $session->defaultLg;
+        	}
+        }
         
         $query = "INSERT into statements (modelID,subject,predicate,object,l_language,author,stread,stedit,stdelete,epoch)
         			VALUES  (?, ?, ?, ?, ?, ?, '{$mask}','{$mask}','{$mask}', CURRENT_TIMESTAMP);";
@@ -772,7 +783,7 @@ class core_kernel_persistence_smoothsql_Resource
     {
         $returnValue = array();
 
-        // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 begin       
+        // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 begin
         
     	$predicatesQuery = '"'.implode ('","', array_keys($properties)).'"';
         $session 	= core_kernel_classes_Session::singleton();
