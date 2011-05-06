@@ -43,12 +43,29 @@ class core_kernel_persistence_Switcher
 
 
     // --- ATTRIBUTES ---
+    
+	/**
+	 * The list of classes that should never been compiled
+	 * @var array
+	 */
+	private static $blackList = array();
+	
 
     // --- OPERATIONS ---
     
 	public function __construct(){
 		//force the API to get it's data in the triple store
 		core_kernel_persistence_PersistenceProxy::setMode(PERSISTENCE_SMOOTH);
+		
+		if(count(self::$blackList) == 0){
+			self::$blackList = array(
+				CLASS_GENERIS_USER,
+				CLASS_ROLE_TAOMANAGER,
+				CLASS_ROLE_BACKOFFICE,
+				CLASS_ROLE_FRONTOFFICE,
+				RDF_CLASS
+			);
+		}
 	}
 	
 	public function __destruct(){
@@ -73,6 +90,10 @@ class core_kernel_persistence_Switcher
         
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 begin
         
+        if(in_array($class->uriResource, self::$blackList)){
+        	return $returnValue;
+        }
+        
         //recursive will hardify the class and it's subclasses in the same table!
 		(isset($options['recursive'])) ? $recursive = $options['recursive'] : $recursive = false;
         
@@ -95,6 +116,8 @@ class core_kernel_persistence_Switcher
 		(isset($options['referencesAllTypes'])) ? $referencesAllTypes = $options['referencesAllTypes'] : $referencesAllTypes = false;
 		
 		//echo " - ".$class->uriResource." : ".$class->getLabel()."\n";
+		
+		
 		
 		if($recursive){
 			$subClassesOptions = $options;
