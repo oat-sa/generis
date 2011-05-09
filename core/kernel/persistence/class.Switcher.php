@@ -103,6 +103,9 @@ class core_kernel_persistence_Switcher
 		//check if we append the data in case the hard table exists or truncate the table and add the new rows
 		(isset($options['append'])) ? $append = $options['append'] : $append = false;
 		
+		//If the option is true, we check if the table has alreayd been created, if yes, it's finished. If no, we can continue.
+		(isset($options['allOrNothing'])) ? $allOrNothing = $options['allOrNothing'] : $allOrNothing = false;
+		
 		//if true, the instances of the class will  be removed!
 		(isset($options['rmSources'])) ? $rmSources = (bool) $options['rmSources'] : $rmSources = false;
 		
@@ -115,35 +118,30 @@ class core_kernel_persistence_Switcher
 		//if defined, reference the additional class to the table
 		(isset($options['referencesAllTypes'])) ? $referencesAllTypes = $options['referencesAllTypes'] : $referencesAllTypes = false;
 		
-		//echo " - ".$class->uriResource." : ".$class->getLabel()."\n";
-		
-		
-		
-		if($recursive){
-			$subClassesOptions = $options;
-			$subClassesOptions['recursive'] = false;
-			$subClassesOptions['append'] = true;
-			foreach($class->getSubClasses(true) as $subClass){
-				$this->hardify($subClass, $subClassesOptions);
-			}
-		}
-		
 		$tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
 		$myTableMgr = new core_kernel_persistence_hardapi_TableManager($tableName);
 		
+		if($allOrNothing && $myTableMgr->exists()){
+			return $returnValue;
+		}
 		
+		if($recursive){
+			foreach($class->getSubClasses(true) as $subClass){
+				$this->hardify($subClass, array_merge($options, array(
+					'recursive' 	=> false,
+					'append' 		=> true,
+					'allOrNothing'	=> true
+				)));
+			}
+		}
 			
 		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
 		
 		//get the table columns from the class properties
 		$columns = array();
-		
-		
-		
 		$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
 		$properties = $ps->getProperties($additionalProperties);
 		$columns = $ps->getTableColumns($additionalProperties);
-		
 		
 		foreach($columns as $i => $column){
 
@@ -154,11 +152,12 @@ class core_kernel_persistence_Switcher
 					$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
 					if(!$foreignTableMgr->exists() && $foreignClassUri != $class->uriResource){
 						$range = new core_kernel_classes_Class($foreignClassUri);
-						$subHardifyOption = $options;
-						$subHardifyOption['topClass'] = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
-						$subHardifyOption['recursive'] = false;
-						$subHardifyOption['append'] = true;
-						$this->hardify($range, $subHardifyOption);
+						$this->hardify($range, array_merge($options, array(
+							'topClass'		=> new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE),
+							'recursive' 	=> false,
+							'append' 		=> true,
+							'allOrNothing'	=> true
+						)));
 					}
 				}
 				else{
@@ -167,7 +166,7 @@ class core_kernel_persistence_Switcher
 			}
 		}
 			
-		if(!$append || ($append && !$myTableMgr->exists()) ){
+		if(!$append || ($append && !$myTableMgr->exists())){
 			
 			//create the table
 			if($myTableMgr->exists()){
@@ -181,7 +180,6 @@ class core_kernel_persistence_Switcher
 			if($referencesAllTypes){
 				$referencer->referenceInstanceTypes($class);
 			}
-			
 		}
 		
 		//insert the resources
