@@ -124,7 +124,6 @@ class core_kernel_persistence_hardapi_Utils
 				$returnValue = str_replace($nsUri, self::getNamespaceId($nsUri), $resource->uriResource);
 				self::$shortNames[$resource->uriResource] = $returnValue;
     		}
-			$returnValue = strtolower($returnValue);
 		}
         
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:000000000000159D end
@@ -154,7 +153,7 @@ class core_kernel_persistence_hardapi_Utils
 	        	$nsUri = common_ext_NamespaceManager::singleton()->getNamespace ($modelID);
 	         	$returnValue = $nsUri . substr($shortName, 2);
         	}
-        }       
+        }
         
         // section 127-0-1-1--151fe597:12f7c91b993:-8000:00000000000014C7 end
 

@@ -280,7 +280,9 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 				
 				if($activityNumber){
 					//set as a subject
-					$this->currentUser->setPropertyValue(new core_kernel_classes_Property(RDFS_TYPE), CLASS_ROLE_SUBJECT);
+					$roleSubjectClass = new core_kernel_classes_Class(CLASS_ROLE_SUBJECT);
+					$this->currentUser->removeType($roleSubjectClass);
+					$this->currentUser->setType($roleSubjectClass);
 					
 					$authoringService = tao_models_classes_ServiceFactory::get('wfEngine_models_classes_ProcessAuthoringService');
 					$processExecutionService = tao_models_classes_ServiceFactory::get('wfEngine_models_classes_ProcessExecutionService');

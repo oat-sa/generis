@@ -76,7 +76,11 @@ class core_kernel_persistence_hardapi_TableManager
         
     	if(count(self::$_tables) == 0){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-			self::$_tables = $dbWrapper->dbConnector->MetaTables('TABLES');
+			$result = $dbWrapper->execSql('SELECT DISTINCT `table` FROM class_to_table');
+			while(!$result->EOF){
+				self::$_tables[] = $result->fields['table'];
+				$result->moveNext();
+			}
 		}
 		if(!preg_match("/^_[0-9a-zA-Z\-_]{4,}$/", $name)){
 			throw new core_kernel_persistence_hardapi_Exception("Dangerous table name '$name' . Table name must begin by a underscore, followed  with only alphanumeric, - and _ characters are allowed");
@@ -123,8 +127,6 @@ class core_kernel_persistence_hardapi_TableManager
     	if(!$this->exists() && !empty($this->name)){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
-			$hasMultiple = false;
-
 			//build the query to create the main table
 			$query = "CREATE TABLE {$this->name} (
 						id int NOT NULL AUTO_INCREMENT,
@@ -134,7 +136,6 @@ class core_kernel_persistence_hardapi_TableManager
 			foreach($columns as $column){
 				if(isset($column['name'])){
 					if(isset($column['multi'])){
-						$hasMultiple = true;
 						continue;
 					}
 					$query .= ", {$column['name']}";
@@ -153,46 +154,43 @@ class core_kernel_persistence_hardapi_TableManager
 			$query .= ')DEFAULT CHARSET=utf8';
 
 			$dbWrapper->execSql($query);
-			if($dbWrapper->dbConnector->errorNo() === 0){
-				
-				//create the multi prop table if needed
-				if($hasMultiple){
-					$query = "CREATE TABLE {$this->name}Props (
-						id int NOT NULL AUTO_INCREMENT,
-						property_uri VARCHAR(255),
-						property_value LONGTEXT,
-						property_foreign_uri VARCHAR(255),
-						l_language VARCHAR(4),
-						instance_id int NOT NULL ,
-						PRIMARY KEY (id),
-						KEY idx{$this->name}Props_property_uri (property_uri),
-						KEY idx{$this->name}Props_foreign_property_uri (property_foreign_uri),
-						CONSTRAINT fk{$this->name}_instance_id 
-								FOREIGN KEY (instance_id) 
-								REFERENCES {$this->name}(id)
-					)DEFAULT CHARSET=utf8";
-					
-					$dbWrapper->execSql($query);
-					if($dbWrapper->dbConnector->errorNo() !== 0){
-						if(DEBUG_MODE){
-							echo $query;
-						}
-						throw new core_kernel_persistence_hardapi_Exception("Unable to create the table {$this->name}Props : " .$dbWrapper->dbConnector->errorMsg());
-					}
-					self::$_tables[] = "{$this->name}Props";
-				}
-				
-				//auto reference
-				self::$_tables[] = $this->name;
-				$returnValue = true;
-			}
-			else{
+			if($dbWrapper->dbConnector->errorNo() > 0){
 				if(DEBUG_MODE){
 					echo $query;
 				}
 				//the user may not have the right to create a table
 				throw new core_kernel_persistence_hardapi_Exception("Unable to create the table {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
 			}
+			
+			//create the multi prop table if needed
+			$query = "CREATE TABLE {$this->name}Props (
+				id int NOT NULL AUTO_INCREMENT,
+				property_uri VARCHAR(255),
+				property_value LONGTEXT,
+				property_foreign_uri VARCHAR(255),
+				l_language VARCHAR(4),
+				instance_id int NOT NULL ,
+				PRIMARY KEY (id),
+				KEY idx{$this->name}props_property_uri (property_uri),
+				KEY idx{$this->name}props_foreign_property_uri (property_foreign_uri),
+				CONSTRAINT fk{$this->name}_instance_id 
+						FOREIGN KEY (instance_id) 
+						REFERENCES {$this->name}(id)
+			)DEFAULT CHARSET=utf8";
+			
+			$dbWrapper->execSql($query);
+			if($dbWrapper->dbConnector->errorNo() !== 0){
+				if(DEBUG_MODE){
+					echo $query;
+				}
+				throw new core_kernel_persistence_hardapi_Exception("Unable to create the table {$this->name}Props : " .$dbWrapper->dbConnector->errorMsg());
+			}
+			self::$_tables[] = "{$this->name}Props";
+			
+			//auto reference
+			self::$_tables[] = $this->name;
+			$returnValue = true;
+			
 		}
         
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AF end
@@ -217,7 +215,7 @@ class core_kernel_persistence_hardapi_TableManager
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
 			//remove the multi property table
-			if(in_array("{$this->name}Props", self::$_tables)){
+			if(in_array("{$this->name}props", self::$_tables)){
 				$dbWrapper->execSql("DROP TABLE `{$this->name}Props`");
 				$tblKey = array_search("{$this->name}Props", self::$_tables);
 					if($tblKey !== false){
