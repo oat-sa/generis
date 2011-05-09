@@ -86,7 +86,7 @@ class HardDbSubjectTestCase extends UnitTestCase {
 		$this->assertTrue (core_kernel_persistence_ResourceProxy::singleton()->getImpToDelegateTo($this->subject1) instanceof core_kernel_persistence_hardsql_Resource);
 	}
 	
-	public function testProperties (){
+	public function testSetProperties (){
 		// Set properties
 		foreach ($this->targetSubjectClass->getInstances(true) as $instance){
 			// Set mutltiple property
@@ -101,10 +101,10 @@ class HardDbSubjectTestCase extends UnitTestCase {
 			$instance->setPropertyValue (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/generis.rdf#userDefLg'), 'http://www.tao.lu/Ontologies/TAO.rdf#LangEN');
 			$instance->setPropertyValue (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/generis.rdf#userUiLg'), 'http://www.tao.lu/Ontologies/TAO.rdf#LangFR');
 		}
-		// Get properties
+	}
+	
+	public function testGetOnePropertyValue (){
 		foreach ($this->targetSubjectClass->getInstances() as $instance){
-			
-			///// GET ONE PROPERTY VALUE
 			
 			// Specific case show later
 			$prop = $instance->getOnePropertyValue (new core_kernel_classes_Property(RDF_TYPE));
@@ -119,8 +119,11 @@ class HardDbSubjectTestCase extends UnitTestCase {
 			$prop = $instance->getOnePropertyValue (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOGroup.rdf#Members'));
 			$this->assertTrue ($prop instanceof core_kernel_classes_Resource);
 			//$this->assertTrue ($label instanceof core_kernel_classes_Literal);
-
-			// GET PROPERTY VALUES
+		}
+	}
+	
+	public function testGetPropertyValues () {
+		foreach ($this->targetSubjectClass->getInstances() as $instance){
 			
 			// Get property values on single (literal) property 
 			$props = $instance->getPropertyValues (new core_kernel_classes_Property(RDFS_LABEL));
@@ -146,13 +149,87 @@ class HardDbSubjectTestCase extends UnitTestCase {
 			$this->assertEqual (count($props), 1);
 			foreach ($props as $prop){
 				$this->assertTrue ($prop instanceof core_kernel_classes_Literal);
-			}
+			}		
+		}
+	}
 			
-			///// GET PROPERTY VALUE BY LG
+	public function testGetPropertyValuesCollection (){
+		foreach ($this->targetSubjectClass->getInstances() as $instance){
 			
-//			$prop = $instance->getPropertyValuesByLg (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOTest.rdf#TestContent'), 'EN');
-//			var_dump ($prop);
-//			$this->assertTrue ($prop instanceof core_kernel_classes_Resource);
+			$props = $instance->getPropertyValuesCollection (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOGroup.rdf#Members'));
+			$this->assertTrue ($props instanceof core_kernel_classes_ContainerCollection);
+			$this->assertEqual ($props->count(), 2);
+			foreach ($props->getIterator() as $prop){
+				
+				$this->assertTrue ($prop instanceof core_kernel_classes_Resource);
+			}		
+		}
+	}
+	
+	public function testGetPropertyValuesByLg (){
+		foreach ($this->targetSubjectClass->getInstances() as $instance){	
+			
+			$props = $instance->getPropertyValuesByLg (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOTest.rdf#TestContent'), 'FR');
+			$this->assertEqual ($props[0], 'Test Content FR');
+			$this->assertEqual (count($props), 1);
+			foreach ($props as $prop){
+				
+				$this->assertTrue ($prop instanceof core_kernel_classes_Literal);
+			}		
+		}
+	}
+	
+	public function testRemovePropertyValues (){
+		foreach ($this->targetSubjectClass->getInstances() as $instance){	
+			
+			// Remove literal single property
+//			$instance->removePropertyValues (new core_kernel_classes_Property(RDFS_LABEL));
+//			$props = $instance->getPropertyValues (new core_kernel_classes_Property(RDFS_LABEL));
+//			$this->assertTrue (empty($props));
+			
+			// Remove foreign single property
+			$instance->removePropertyValues (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/generis.rdf#userDefLg'));
+			$props = $instance->getPropertyValues (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/generis.rdf#userDefLg'));
+			$this->assertTrue (empty($props));
+			
+			// Remove literal multiple property
+			$instance->removePropertyValues (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOTest.rdf#TestContent'));
+			$props = $instance->getPropertyValues (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOTest.rdf#TestContent'));
+			$this->assertTrue (empty($props));
+			
+			// Remove foreign multiple property
+			$instance->removePropertyValues (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOGroup.rdf#Members'));
+			$props = $instance->getPropertyValues (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOGroup.rdf#Members'));
+			$this->assertTrue (empty($props));
+			
+		}
+	}
+	
+	public function testRemovePropertyValuesByLg (){
+		
+		$this->testSetProperties();
+		
+		foreach ($this->targetSubjectClass->getInstances() as $instance){	
+			
+			// Remove literal single property
+			$instance->removePropertyValueByLg (new core_kernel_classes_Property(RDFS_LABEL), 'FR');
+			$props = $instance->getPropertyValues (new core_kernel_classes_Property(RDFS_LABEL));
+			$this->assertFalse (empty($props));
+			
+			// Remove foreign single property
+			$instance->removePropertyValueByLg (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/generis.rdf#userDefLg'), 'FR');
+			$props = $instance->getPropertyValues (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/generis.rdf#userDefLg'));
+			$this->assertFalse (empty($props));
+			
+			// Remove literal multiple property
+			$instance->removePropertyValueByLg (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOTest.rdf#TestContent'), 'FR');
+			$props = $instance->getPropertyValues (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOTest.rdf#TestContent'));
+			$this->assertTrue (empty($props));
+			
+			// Remove foreign multiple property
+			$instance->removePropertyValueByLg (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOGroup.rdf#Members'), 'FR');
+			$props = $instance->getPropertyValues (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOGroup.rdf#Members'));
+			$this->assertFalse (empty($props));
 			
 		}
 	}

@@ -126,15 +126,14 @@ class core_kernel_persistence_hardsql_Resource
         // Define language if required
         $lang = "";
         if ($property->isLgDependent()){
-        	if (isset($options['lg'])){
-        		$lang = $options['lg'];
+        	if (isset($option['lg'])){
+        		$lang = $option['lg'];
         	} else if ($session->getLg() != ''){
         		$lang = $session->getLg();
         	} else {
         		$lang = $session->defaultLg;
         	}
         }
-		
 		// Select in the properties table of the class
 		if ($property->isMultiple() || $property->isLgDependent()){
 			
@@ -174,7 +173,6 @@ class core_kernel_persistence_hardsql_Resource
 				));
 			}
 			
-			
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to get property (multiple) values for {$resource->uriResource} in {$table} : " .$dbWrapper->dbConnector->errorMsg());
 			}
@@ -198,7 +196,9 @@ class core_kernel_persistence_hardsql_Resource
 			}
 		
 			while (!$result->EOF){
-				$propertyValues[] = $result->fields['propertyValue'];
+				if ($result->fields['propertyValue']!=null){
+					$propertyValues[] = $result->fields['propertyValue'];
+				}
 				$result->moveNext();
 			}
 		}
@@ -459,7 +459,38 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD begin
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+
+    	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
+        
+        // Get the table name
+        $tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
+        
+        if ($property->isMultiple() || $property->isLgDependent()){
+        	
+        	$query = "DELETE `{$tableName}Props`.* FROM `{$tableName}`, `{$tableName}Props`
+        		WHERE `{$tableName}`.uri = '{$resource->uriResource}' 
+        		AND `{$tableName}Props`.property_uri = '{$property->uriResource}'
+        		AND `{$tableName}`.id = `{$tableName}Props`.instance_id";
+	        $result	= $dbWrapper->execSql($query);
+			if($dbWrapper->dbConnector->errorNo() !== 0){
+				throw new core_kernel_persistence_hardapi_Exception("Unable to delete property values (multiple) for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+			} else {
+				$returnValue = true;
+			}
+        } else {
+        	
+        	$propertyName = core_kernel_persistence_hardapi_Utils::getShortName ($property);
+            $query = "UPDATE {$tableName} SET {$propertyName} = NULL WHERE uri = ?";
+	        $result	= $dbWrapper->execSql($query, array(
+	        	$resource->uriResource
+	        ));
+			if($dbWrapper->dbConnector->errorNo() !== 0){
+				throw new core_kernel_persistence_hardapi_Exception("Unable to delete property values (single) for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+			} else {
+				$returnValue = true;
+			}
+        }
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD end
 
         return (bool) $returnValue;
@@ -480,7 +511,26 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 begin
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
+        $dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
+        
+        // Get the table name
+        $tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
+        
+        if ($property->isLgDependent()){
+        	
+        	$query = "DELETE `{$tableName}Props`.* FROM `{$tableName}`, `{$tableName}Props`
+        		WHERE `{$tableName}`.uri = '{$resource->uriResource}' 
+        		AND `{$tableName}Props`.property_uri = '{$property->uriResource}'
+        		AND `{$tableName}`.id = `{$tableName}Props`.instance_id";
+	        $result	= $dbWrapper->execSql($query);
+			if($dbWrapper->dbConnector->errorNo() !== 0){
+				throw new core_kernel_persistence_hardapi_Exception("Unable to delete property values (multiple) for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+			} else {
+				$returnValue = true;
+			}
+        }
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 end
 
         return (bool) $returnValue;
