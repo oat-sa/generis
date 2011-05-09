@@ -292,7 +292,7 @@ class ClassTestCase extends UnitTestCase {
 		
 	}
 	
-	public function testSearchInstancesHard($hard = false){
+	public function testSearchInstancesHard($hard = true){
 		
 		if(!$hard) return;
 		
@@ -330,8 +330,6 @@ class ClassTestCase extends UnitTestCase {
 		
 		if(!$hard) return;
 		
-		// core_kernel_persistence_PersistenceProxy::setMode(PERSISTENCE_HARD);
-		
 		$class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
 		if(core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($class)){
 			
@@ -362,14 +360,16 @@ class ClassTestCase extends UnitTestCase {
 				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'a722c63db8ec8625af6cf71cb8c2d939',
 				'http://www.tao.lu/Ontologies/generis.rdf#userDefLg' => '%FR%'
 			);
+			
 			$options = array('like' => true, 'checkSubclasses' => false);
+			//test language filter (property 'http://www.tao.lu/Ontologies/generis.rdf#userDefLg' must be set to language dependent first!):
+			// $options['lang'] = 'EN';
+			
 			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
 			$refFound = count($languagesDependantProp);
 			$this->assertTrue($refFound > 0);
 			$this->assertEqual($nfound, $refFound);
 		}
-		
-		// core_kernel_persistence_PersistenceProxy::resetMode();
 	}
 }
 ?>
