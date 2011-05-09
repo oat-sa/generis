@@ -267,10 +267,6 @@ class core_kernel_persistence_hardsql_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
 
-		if(DEBUG_MODE){
-			$returnValue->debug = __METHOD__;
-		}
-		
 		$options = array();
 		if ($last){
 			$options['last'] = true;

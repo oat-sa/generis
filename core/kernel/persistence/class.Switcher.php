@@ -63,7 +63,8 @@ class core_kernel_persistence_Switcher
 				CLASS_ROLE_TAOMANAGER,
 				CLASS_ROLE_BACKOFFICE,
 				CLASS_ROLE_FRONTOFFICE,
-				RDF_CLASS
+				RDF_CLASS,
+				CLASS_PROCESSVARIABLES
 			);
 		}
 	}
