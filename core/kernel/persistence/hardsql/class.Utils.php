@@ -62,6 +62,39 @@ class core_kernel_persistence_hardsql_Utils
     	
     	return $returnValue;
     }
+
+    public function getResourceToTableId ($resource) {
+    	$returnValue = null;
+    	
+    	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
+    	$query = "SELECT id from `resource_to_table` WHERE uri=?";
+    	$result = $dbWrapper->execSql($query, array ($resource->uriResource));
+    	
+    	if($dbWrapper->dbConnector->errorNo() !== 0){
+			throw new core_kernel_persistence_hardapi_Exception("Unable to find the class {$resource->uriResource} in resource_to_table : " .$dbWrapper->dbConnector->errorMsg());
+		}
+    	if (!$result->EOF){
+    		$returnValue = $result->fields['id'];
+    	}
+    	
+    	return $returnValue;
+    }
+    
+    public function getClassId ($class){
+    	$returnValue = null;
+    	
+    	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
+    	$query = "SELECT id from `class_to_table` WHERE uri=?";
+    	$result = $dbWrapper->execSql($query, array ($class->uriResource));
+    	if($dbWrapper->dbConnector->errorNo() !== 0){
+			throw new core_kernel_persistence_hardapi_Exception("Unable to find the class {$class->uriResource} in class_to_table : " .$dbWrapper->dbConnector->errorMsg());
+		}
+    	if (!$result->EOF){
+    		$returnValue = $result->fields['id'];
+    	}
+    	
+    	return $returnValue;
+    }
 	
 } /* end of class core_kernel_persistence_hardsql_Utils */
 

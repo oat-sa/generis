@@ -174,8 +174,8 @@ class core_kernel_persistence_hardsql_Class
 		 * 
 		 */
 		
-		$classLocation = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($resource);
-		$tableName = $classLocation[0]['table'];
+		$classLocations = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($resource);
+		$tableName = $classLocations[0]['table'];
     	$sqlQuery = "SELECT uri FROM {$tableName} WHERE 1";
 		$sqlResult = $dbWrapper->execSql($sqlQuery);
 		
@@ -298,7 +298,7 @@ class core_kernel_persistence_hardsql_Class
         ));
         
         // reference the newly created instance
-        core_kernel_persistence_hardapi_ResourceReferencer::singleton()->referenceResource($returnValue, $table, array(new core_kernel_classes_Class($resource)));
+        core_kernel_persistence_hardapi_ResourceReferencer::singleton()->referenceResource($returnValue, $table, array($resource), true);
         
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F27 end
 

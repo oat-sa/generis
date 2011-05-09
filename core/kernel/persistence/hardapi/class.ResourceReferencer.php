@@ -476,6 +476,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			$returnValue = (bool) $insertResult;
 			
         	if($referenceClassLink){
+        		
 				foreach($types as $type){
 					
 					$typeClass = new core_kernel_classes_Class($type->uriResource);
@@ -485,7 +486,6 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 						foreach ($classLocations as $classLocation){
 							
 							foreach($rows as $row){
-								
 								$query = "INSERT INTO resource_has_class (resource_id, class_id) VALUES (?,?)";
 								$dbWrapper->execSql($query, array($row['id'], $classLocation['id']));
 							}

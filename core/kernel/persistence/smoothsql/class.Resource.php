@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 06.05.2011, 16:09:17 with ArgoUML PHP module 
+ * Automatically generated on 09.05.2011, 15:50:59 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -788,6 +788,63 @@ class core_kernel_persistence_smoothsql_Resource
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 end
 
         return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method setType
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @param  Class class
+     * @return boolean
+     */
+    public function setType( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $class)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 begin
+        
+        $this->setPropertyValue ($resource, new core_kernel_classes_Property(RDF_TYPE), $class);
+        
+        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method removeType
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @param  Class class
+     * @return boolean
+     */
+    public function removeType( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $class)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000154C begin
+        
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $query =  "DELETE FROM statements 
+		    		WHERE subject = ? AND predicate = ? AND object = ?";
+        
+        $returnValue = $dbWrapper->execSql($query,array(
+        	$resource->uriResource,
+        	RDF_TYPE,
+        	$class->uriResource
+        ));
+    	if($dbWrapper->dbConnector->errorNo() !== 0){
+			throw new core_kernel_persistence_hardapi_Exception("Unable to delete type {$property->uriResource} for the resource {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+		} else {
+			$returnValue = true;
+		}
+        
+        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000154C end
+
+        return (bool) $returnValue;
     }
 
     /**

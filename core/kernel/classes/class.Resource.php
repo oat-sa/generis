@@ -791,6 +791,74 @@ class core_kernel_classes_Resource
         return (array) $returnValue;
     }
 
+    /**
+     * Short description of method setType
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Class type
+     * @return boolean
+     */
+    public function setType( core_kernel_classes_Class $type)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001550 begin
+        
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->setType ($this, $type);
+        
+        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001550 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method removeType
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Class type
+     * @return boolean
+     */
+    public function removeType( core_kernel_classes_Class $type)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001553 begin
+        
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->removeType ($this, $type);
+        
+        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001553 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method hasType
+     *
+     * @access public
+     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Class class
+     * @return boolean
+     */
+    public function hasType( core_kernel_classes_Class $class)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--72f5bf1f:12fd500f94d:-8000:0000000000001552 begin
+        
+    	foreach ($this->getType () as $type){
+        	if ($class->uriResource == $type->uriResource){
+        		$returnValue = true;
+        		break;
+        	}
+        }
+        
+        // section 127-0-1-1--72f5bf1f:12fd500f94d:-8000:0000000000001552 end
+
+        return (bool) $returnValue;
+    }
+
 } /* end of class core_kernel_classes_Resource */
 
 ?>
