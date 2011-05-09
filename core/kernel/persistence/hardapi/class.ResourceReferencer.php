@@ -623,7 +623,11 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 					} 
 					else {
 						while(!$result->EOF){
-							$returnValue[] = $result->fields;
+							$returnValue[] = array(
+								'id'	=> $result->fields['id'],
+				        		'uri' 	=> $result->fields['uri'],
+				        		'table' => $result->fields['table']
+							);
 							$result->moveNext();
 						}
 					}

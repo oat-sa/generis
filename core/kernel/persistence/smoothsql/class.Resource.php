@@ -656,7 +656,6 @@ class core_kernel_persistence_smoothsql_Resource
         $returnValue = $dbWrapper->execSql($query, array($resource->uriResource));
         
     	if($deleteReference){
-        	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
         	$sqlQuery = "DELETE FROM statements WHERE object = '".$resource->uriResource."'";
         	$returnValue = $dbWrapper->execSql($sqlQuery) && $returnValue;
         }
