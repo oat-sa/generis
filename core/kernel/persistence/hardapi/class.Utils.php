@@ -124,7 +124,7 @@ class core_kernel_persistence_hardapi_Utils
 				$returnValue = str_replace($nsUri, self::getNamespaceId($nsUri), $resource->uriResource);
 				self::$shortNames[$resource->uriResource] = $returnValue;
     		}
-			
+			$returnValue = strtolower($returnValue);
 		}
         
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:000000000000159D end
@@ -174,7 +174,8 @@ class core_kernel_persistence_hardapi_Utils
         $returnValue = (string) '';
 
         // section 10-13-1--128--4620d5d7:12fbf26f8b8:-8000:0000000000001502 begin
-		$returnValue = '_'.self::getShortName($resource).'Props';
+		$returnValue = '_'.self::getShortName($resource).'props';
+		$returnValue = strtolower($returnValue);
         // section 10-13-1--128--4620d5d7:12fbf26f8b8:-8000:0000000000001502 end
 
         return (string) $returnValue;
@@ -204,16 +205,19 @@ class core_kernel_persistence_hardapi_Utils
 		
 		$range = $property->getRange();
 		
-		$classLocations = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($range);
-		$rangeClassName = $classLocations[0]['table'];
+		
 		if($hardRangeClassOnly){
 			$is_class_referenced = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($range);
-			// var_dump('is referenced class: '.$range, $is_class_referenced);
 			if($range->uriResource!=RDFS_LITERAL && $is_class_referenced){
-				$returnValue['range'][] = $rangeClassName;
+				$classLocations = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($range);
+				
+				if(isset($classLocations[0])){
+					$rangeClassName = $classLocations[0]['table'];
+					$returnValue['range'][] = $rangeClassName;
+				}
 			}
 		}else{
-			$returnValue['range'][] = $rangeClassName;
+			$returnValue['range'][] = $range;
 		}
 		
         // section 10-13-1--128-743691ae:12fc0ed9381:-8000:0000000000001525 end
