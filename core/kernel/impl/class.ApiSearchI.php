@@ -247,7 +247,7 @@ class core_kernel_impl_ApiSearchI
 		
 		if(!is_null($topClazz)){
 			$recursive = true;
-			if(isset($options['checkSubclasses']) && $options['checkSubclasses'] === false){
+			if(isset($options['recursive']) && $options['recursive'] === false){
                    $recursive = false;
 			}
             $instances = $topClazz->getInstances($recursive);
@@ -332,126 +332,6 @@ class core_kernel_impl_ApiSearchI
    			$returnValue[] = new core_kernel_classes_Resource ($result->fields['uri']);
 			$result->MoveNext();
 		}
-		
-		/*
-		$langToken = '';
-		if(isset($options['lang'])){
-			if(preg_match('/^[a-zA-Z]{2,4}$/', $options['lang'])){
-				$langToken = " AND (l_language = '' OR l_language = '{$options['lang']}') ";
-			}
-		}
-		$like = true;
-		if(isset($options['like'])){
-			$like = ($options['like'] === true);
-		}
-
-		$query = "SELECT DISTINCT `subject` FROM `statements` WHERE ";
-
-		$conditions = array();
-		foreach($propertyFilters as $propUri => $pattern){
-			
-			$propUri = $dbWrapper->dbConnector->escape($propUri);
-			
-			if(is_string($pattern)){
-				if(!empty($pattern)){
-
-					$pattern = $dbWrapper->dbConnector->escape($pattern);
-					
-					if($like){
-						$object = trim(str_replace('*', '%', $pattern));
-						if(!preg_match("/^%/", $object)){
-							$object = "%".$object;
-						}
-						if(!preg_match("/%$/", $object)){
-							$object = $object."%";
-						}
-						$conditions[] = " (`predicate` = '{$propUri}' AND `object` LIKE '{$object}' $langToken ) ";
-					}
-					else{
-						$conditions[] = " (`predicate` = '{$propUri}' AND `object` = '{$pattern}' $langToken ) ";
-					}
-				}
-			}
-			if(is_array($pattern)){
-				if(count($pattern) > 0){
-					$multiCondition =  " (`predicate` = '{$propUri}' AND  ";
-					foreach($pattern as $i => $patternToken){
-						
-						$patternToken = $dbWrapper->dbConnector->escape($patternToken);
-						
-						if($i > 0){
-							$multiCondition .= " OR ";
-						}
-						$object = trim(str_replace('*', '%', $patternToken));
-						if(!preg_match("/^%/", $object)){
-							$object = "%".$object;
-						}
-						if(!preg_match("/%$/", $object)){
-							$object = $object."%";
-						}
-						$multiCondition .= " `object` LIKE '{$object}' ";
-					}
-					$conditions[] = "{$multiCondition} {$langToken} ) ";
-				}
-			}
-		}
-		if(count($conditions) == 0){
-			return $returnValue;
-		}
-		$matchingUris = array();
-
-		$intersect = true;
-		if(isset($options['chaining'])){
-			if($options['chaining'] == 'or'){
-				$intersect = false;
-			}
-		}
-		
-		if(count($conditions) > 0){
-			$i = 0;
-			foreach($conditions as $condition){
-				$tmpMatchingUris = array();
-				$result = $dbWrapper->execSql($query . $condition);
-				while (!$result->EOF){
-					$tmpMatchingUris[] = $result->fields['subject'];
-					$result->MoveNext();
-				}
-				if($intersect){
-					//EXCLUSIVES CONDITIONS
-					if($i == 0){
-						$matchingUris = $tmpMatchingUris;
-					}
-					else{
-						$matchingUris = array_intersect($matchingUris, $tmpMatchingUris);
-					}
-				}
-				else{
-					//INCLUSIVES CONDITIONS
-					$matchingUris = array_merge($matchingUris, $tmpMatchingUris);
-				}
-				$i++;
-			}
-		}
-				
-		if(!is_null($topClazz)){
-			$recursive = true;
-			if(isset($options['checkSubclasses']) && $options['checkSubclasses'] === false){
-                   $recursive = false;
-			}
-            $instances = $topClazz->getInstances($recursive);
-            
-			foreach($matchingUris as $matchingUri){
-				if(isset($instances[$matchingUri])){
-					if(!in_array($instances[$matchingUri], $returnValue)){
-						$returnValue[] = $instances[$matchingUri];
-					}
-				}
-			}
-		}
-		else{
-			$returnValue = $matchingUris;
-		}
-		*/
 		
         // section -87--2--3--76-51a982f1:1278aabc987:-8000:00000000000088FC end
 

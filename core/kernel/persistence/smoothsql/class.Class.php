@@ -610,7 +610,7 @@ class core_kernel_persistence_smoothsql_Class
 			foreach($resource->getSubClasses(true) as $subClass){
 				$returnValue = array_merge(
 					$returnValue, 
-					$subClass->searchInstances($propertyFilters, array_merge($options, array('checkSubclasses' => false)))
+					$subClass->searchInstances($propertyFilters, array_merge($options, array('recursive' => false)))
 				);
 			}
 		}

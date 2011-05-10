@@ -367,7 +367,7 @@ class core_kernel_persistence_hardsql_Class
 			options lists:
 			like			: (bool) 	true/false (default: true)
 			chaining		: (string) 	'or'/'and' (default: 'and')
-			checkSubclasses	: (bool) 	true/false (default: true)
+			recursive		: (bool) 	true/false (default: true)
 			lang			: (string) 	e.g. 'EN', 'FR' (default: '')
 		*/
 		if(count($propertyFilters) == 0 || !core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced(new core_kernel_classes_Class($resource->uriResource))){
@@ -549,7 +549,7 @@ class core_kernel_persistence_hardsql_Class
 			foreach($resource->getSubClasses(true) as $subclass){
 				$returnValue = array_merge(
 					$returnValue, 
-					$subclass->searchInstances($propertyFilters, array_merge($options, array('checkSubclasses' => false)))
+					$subclass->searchInstances($propertyFilters, array_merge($options, array('recursive' => false)))
 				);
 			}
 		}
