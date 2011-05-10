@@ -275,7 +275,7 @@ class ClassTestCase extends UnitTestCase {
 		$propertyFilter = array(
 			PROPERTY_IS_LG_DEPENDENT => GENERIS_TRUE
 		);
-		$options = array('like' => false, 'checkSubclasses' => false);
+		$options = array('like' => false, 'recursive' => false);
 		$languagesDependantProp = $propertyClass->searchInstances($propertyFilter, $options);
 		
 		$found = count($languagesDependantProp);
@@ -304,7 +304,7 @@ class ClassTestCase extends UnitTestCase {
 			$propertyFilter = array(
 				RDFS_LABEL => 'EN'
 			);
-			$options = array('like' => false, 'checkSubclasses' => false);
+			$options = array('like' => false, 'recursive' => false);
 					
 			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
 			
@@ -338,7 +338,7 @@ class ClassTestCase extends UnitTestCase {
 				'http://www.tao.lu/Ontologies/generis.rdf#login' => 'login1',
 				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'a722c63db8ec8625af6cf71cb8c2d939'
 			);
-			$options = array('like' => false, 'checkSubclasses' => false);
+			$options = array('like' => false, 'recursive' => false);
 			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
 			$nfound = count($languagesDependantProp);
 			$this->assertTrue($nfound > 0);
@@ -348,7 +348,7 @@ class ClassTestCase extends UnitTestCase {
 				'http://www.tao.lu/Ontologies/generis.rdf#login' => '%login%',
 				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'a722c63db8ec8625af6cf71cb8c2d939'
 			);
-			$options = array('like' => true, 'checkSubclasses' => false);
+			$options = array('like' => true, 'recursive' => false);
 			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
 			$likeFound = count($languagesDependantProp);
 			$this->assertTrue($likeFound > 0);
@@ -361,7 +361,7 @@ class ClassTestCase extends UnitTestCase {
 				'http://www.tao.lu/Ontologies/generis.rdf#userDefLg' => '%FR%'
 			);
 			
-			$options = array('like' => true, 'checkSubclasses' => false);
+			$options = array('like' => true, 'recursive' => false);
 			//test language filter (property 'http://www.tao.lu/Ontologies/generis.rdf#userDefLg' must be set to language dependent first!):
 			// $options['lang'] = 'EN';
 			

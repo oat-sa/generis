@@ -494,7 +494,10 @@ class core_kernel_persistence_smoothsql_Class
 		}
 		
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
-
+		
+		//add the type check to the filters
+		$propertyFilters[RDF_TYPE] = $resource->uriResource;
+		
 		$langToken = '';
 		if(isset($options['lang'])){
 			if(preg_match('/^[a-zA-Z]{2,4}$/', $options['lang'])){
@@ -594,36 +597,24 @@ class core_kernel_persistence_smoothsql_Class
 			}
 		}
 		
-		//check type now:
-		
-		$recursive = true;
-		if(isset($options['checkSubclasses']) && $options['checkSubclasses'] === false){
-			$recursive = false;
+		foreach($matchingUris as $matchingUri){
+			$returnValue[$matchingUri] = new core_kernel_classes_Resource($matchingUri);
 		}
 		
-		if(count($matchingUris)<10 && $recursive){
-			//low number of instance found: less costly to compare thir type against possible subclasses?
-			$validClasses = array_keys($this->getSubClasses($resource, true));//subclasses should be in the smooth base: array_keys($resource->getSubClasses(true));
-			array_unshift($validClasses, $resource->uriResource);
-			
-			foreach($matchingUris as $matchingUri){
-				$instance = new core_kernel_classes_Resource($matchingUri);
-				foreach($instance->getType() as $typeUri => $typeResource){
-					if(in_array($typeUri, $validClasses)){//use smooth implementation
-						$returnValue[] = $instance;
-						break;
-					}
-				}
-			}
-		}else{
-			//large number of instances found, less costly to check against all instances of the class?
-			$instances = $resource->getInstances($recursive);
-			foreach($matchingUris as $matchingUri){
-				if(isset($instances[$matchingUri])){
-					$returnValue[] = $instances[$matchingUri];
-				}
+		
+		//Check in the subClasses recurslively.
+		// Be carefull, it can be perf consuming with large data set and subclasses
+		(isset($options['recursive'])) ? $recursive = (bool)$options['recursive'] : $recursive = false;
+		if($recursive){
+			//the recusivity depth is set to one level
+			foreach($resource->getSubClasses(true) as $subClass){
+				$returnValue = array_merge(
+					$returnValue, 
+					$subClass->searchInstances($propertyFilters, array_merge($options, array('checkSubclasses' => false)))
+				);
 			}
 		}
+
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
 
         return (array) $returnValue;

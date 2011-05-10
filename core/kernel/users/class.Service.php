@@ -96,7 +96,10 @@ class core_kernel_users_Service
         if(is_null($class)){
         	$class = new core_kernel_classes_Class(CLASS_GENERIS_USER);
         }
-        $users = $class->searchInstances(array(PROPERTY_USER_LOGIN => $login), array('like' => true));
+        $users = $class->searchInstances(
+        	array(PROPERTY_USER_LOGIN => $login), 
+        	array('like' => true, 'recursive' => true)
+        );
         if(count($users) > 0){
         	$returnValue = true;
         }
@@ -229,7 +232,10 @@ class core_kernel_users_Service
 					PROPERTY_USER_LOGIN 	=> $login,
 					PROPERTY_USER_PASSWORD	=> $password
 				), 
-				array('like' => true)
+				array(
+					'like' 		=> true,
+					'recursive'	=> true
+				)
 			);
 			$user = null;
 			foreach($users as $foundUser){
@@ -289,7 +295,10 @@ class core_kernel_users_Service
         	$class = new core_kernel_classes(CLASS_GENERIS_USER);
     	}
         
-    	$users = $class->searchInstances(array(PROPERTY_USER_LOGIN => $login), array('like' => true));
+    	$users = $class->searchInstances(
+    		array(PROPERTY_USER_LOGIN => $login), 
+    		array('like' => true, 'recursive' => true)
+    	);
     	foreach($users as $user){
     		$returnValue = $user;
     		break;

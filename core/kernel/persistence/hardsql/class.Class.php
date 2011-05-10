@@ -541,11 +541,16 @@ class core_kernel_persistence_hardsql_Class
 			$sqlResult->MoveNext();
 		}
 		
-		if(!isset($options['checkSubclasses']) || $options['checkSubclasses'] !== false){
-			//recursive:
-			//option not implemented yet
+		//Check in the subClasses recurslively.
+		// Be carefull, it can be perf consuming with large data set and subclasses
+		(isset($options['recursive'])) ? $recursive = (bool)$options['recursive'] : $recursive = false;
+		if($recursive){
+			//the recusivity depth is set to one level
 			foreach($resource->getSubClasses(true) as $subclass){
-				$returnValue = array_merge($returnValue, $subclass->searchInstances($propertyFilters, $options));
+				$returnValue = array_merge(
+					$returnValue, 
+					$subclass->searchInstances($propertyFilters, array_merge($options, array('checkSubclasses' => false)))
+				);
 			}
 		}
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end

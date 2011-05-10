@@ -33,7 +33,7 @@ class ApiSearchTestCase extends UnitTestCase {
 		$propertyFilter = array(
 			PROPERTY_IS_LG_DEPENDENT => GENERIS_TRUE
 		);
-		$options = array('like' => false, 'subclasses' => false);
+		$options = array('like' => false, 'recursive' => false);
 		$languagesDependantProp = $this->api->searchInstances($propertyFilter, $propertyClass, $options);
 		
 		$found = count($languagesDependantProp);
