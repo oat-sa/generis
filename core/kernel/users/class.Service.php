@@ -248,13 +248,12 @@ class core_kernel_users_Service
 			$this->userResource = $user;
 			
 			$roleClass =  new core_kernel_classes_Class($role);
-			$typeProp = new core_kernel_classes_Property(RDF_TYPE);
-			$userRoleCollection = $this->userResource->getPropertyValuesCollection($typeProp);
 			$acceptedRole =  array_merge(array($role) , array_keys($roleClass->getInstances(true))); 
+			
 			$returnValue = false; 
-			foreach ($userRoleCollection->getIterator() as $userRole){
-				$returnValue = in_array($userRole->uriResource, $acceptedRole);
-				if($returnValue){
+			foreach ($this->userResource->getType() as $userRole){
+				if(in_array($userRole->uriResource, $acceptedRole)){
+					$returnValue = true;
 					break;
 				}
 			}
