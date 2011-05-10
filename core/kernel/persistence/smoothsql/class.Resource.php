@@ -89,7 +89,7 @@ class core_kernel_persistence_smoothsql_Resource
         $sqlResult = $dbWrapper->execSql($sqlQuery);
         while (!$sqlResult-> EOF){
             $uri = $sqlResult->fields['object'];
-            $returnValue[$uri] = new core_kernel_classes_Resource($uri);
+            $returnValue[$uri] = new core_kernel_classes_Class($uri);
             $sqlResult->MoveNext();
         }
         
