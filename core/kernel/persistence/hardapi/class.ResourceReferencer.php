@@ -729,11 +729,12 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				
 				//file where is the data saved
     			$file = GENERIS_CACHE_PATH . 'hard-api-property.cache';
-    			if(is_readable($file) || is_writable($file)){
-    				throw core_kernel_persistence_hardapi_Exception("Cache file $file must have read/write permissions");
-    			}
+    			
     			//if the properties are cached in the file, we load it
-				if(file_exsits($file)){
+				if(file_exists($file)){
+					if(!is_readable($file)){
+		    			throw new core_kernel_persistence_hardapi_Exception("Cache file $file must have read/write permissions");
+		    		}
 					$properties = @unserialize(file_get_contents($file));
 					if($properties !== false && is_array($properties) && count($properties) > 0){
 						self::$_properties = $properties;
@@ -790,7 +791,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 
         // section 127-0-1-1-78ed0233:12fde709f61:-8000:0000000000001714 begin
         
-        if(!is_null($resource)){
+        if(!is_null($property)){
 			switch($this->cacheModes['property']){
 				
 				case self::CACHE_FILE:
@@ -826,7 +827,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 
         // section 127-0-1-1-78ed0233:12fde709f61:-8000:0000000000001717 begin
         
-        if(!is_null($resource)){
+        if(!is_null($property)){
 			switch($this->cacheModes['property']){
 				
 				case self::CACHE_FILE:
