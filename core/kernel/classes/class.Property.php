@@ -386,7 +386,7 @@ class core_kernel_classes_Property
     	$multipleProperty = new core_kernel_classes_Property(PROPERTY_MULTIPLE);
         $value = ((bool)$isMultiple) ?  GENERIS_TRUE : GENERIS_FALSE ;
         if($this->editPropertyValues($multipleProperty, $value)) {
-        	$this->isMultiple() = (bool)$isMultiple;
+        	$this->multiple = (bool)$isMultiple;
         }
     	
         // section 127-0-1-1-2ada041a:12fde2cecc0:-8000:00000000000016F8 end
