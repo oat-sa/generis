@@ -215,16 +215,23 @@ class core_kernel_rules_Term
         // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015BF begin
         $logger = new common_Logger('Generis Term evaluateXPO');
 		$logger->debug('XPO TYPE' , __FILE__, __LINE__);
+		$classTerm = new core_kernel_classes_Class(CLASS_TERM_X_PREDICATE_OBJECT);
 		$obj = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_TERM_XPO_OBJECT));
 		$pred = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_TERM_XPO_PREDICATE));
-		if($obj instanceof core_kernel_classes_Literal ) {
+		if($obj instanceof core_kernel_classes_Literal) {
 			$objValue = $obj->literal;
 		}
-   		if($obj instanceof core_kernel_classes_Resource  ) {
+   		if($obj instanceof core_kernel_classes_Resource) {
 			$objValue = $pred->uriResource;
 		}
-		$returnValue = core_kernel_classes_ApiModelOO::singleton()->getSubject($pred->uriResource,$objValue);
-    	$returnValue->debug = __METHOD__;
+		
+		$returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
+		$terms = $classTerm->searchInstances(array($pred->uriResource => $objValue), array('like' => false));
+		foreach($terms as $term){
+			$returnValue->add($term);
+		}
+    	
+		$returnValue->debug = __METHOD__;
     	return $returnValue;
         // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015BF end
     }
