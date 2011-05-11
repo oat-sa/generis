@@ -608,6 +608,7 @@ class core_kernel_persistence_smoothsql_Class
 		if($recursive){
 			//the recusivity depth is set to one level
 			foreach($resource->getSubClasses(true) as $subClass){
+				unset($propertyFilters[RDF_TYPE]);//reset the RDF_TYPE filter for recursive searching!
 				$returnValue = array_merge(
 					$returnValue, 
 					$subClass->searchInstances($propertyFilters, array_merge($options, array('recursive' => false)))

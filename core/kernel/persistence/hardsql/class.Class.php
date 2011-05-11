@@ -361,7 +361,7 @@ class core_kernel_persistence_hardsql_Class
     public function searchInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array())
     {
         $returnValue = array();
-
+		
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 begin
 		/*
 			options lists:
@@ -390,8 +390,7 @@ class core_kernel_persistence_hardsql_Class
 			return $returnValue;
 		}
 		
-		$tablePropertiesName = core_kernel_persistence_hardapi_Utils::getPropertiesTableName($resource);
-		$tablePropertiesExists = false;
+		$tablePropertiesName = $tableName.'props';
 		$tableNames = array('t0' => $tableName);
 		
 		$conditions = array();
@@ -399,27 +398,13 @@ class core_kernel_persistence_hardsql_Class
 			
 			$propDesc = core_kernel_persistence_hardapi_Utils::propertyDescriptor(new core_kernel_classes_Property($propUri), true);
 			$propsTabIndex = '00';
-			
+						
 			if($propDesc['isMultiple'] || $propDesc['isLgDependent']){
-				
-				if(!$tablePropertiesExists){
-					//check if properties table exists:
-					$tableMgr = new core_kernel_persistence_hardapi_TableManager($tablePropertiesName);
-					if($tableMgr->exists()){
-						$tablePropertiesExists = true;
-					}else{
-						continue;
-					}
-				}
-				
+								
 				$classPropsTabIndex = count($tableNames);
 				$tableNames['t'.$classPropsTabIndex] = $tablePropertiesName;
-				// if(!empty($propDesc['range'])){
-					// $propsTabIndex = $classPropsTabIndex+1;
-					// $tableNames['t'.$propsTabIndex] = $propDesc['range'][0];
-				// }
 				
-				$langToken = '';
+				$langToken = "";				
 				if(isset($options['lang']) && $propDesc['isLgDependent']){
 					if(preg_match('/^[a-zA-Z]{2,4}$/', $options['lang'])){
 						$langToken = " AND ( t{$classPropsTabIndex}.l_language = '' OR t{$classPropsTabIndex}.l_language = '{$options['lang']}')";
@@ -462,9 +447,8 @@ class core_kernel_persistence_hardsql_Class
 						$condition = "{$multiCondition} ) ";
 					}
 				}
-				
 				if(!empty($condition)){
-					$conditions[] = " ( t0.id = t{$classPropsTabIndex}.instance_id AND {$condition} )";
+					$conditions[] = " ( t0.id = t{$classPropsTabIndex}.instance_id AND t{$classPropsTabIndex}.property_uri = \"{$propUri}\" AND {$condition} )";
 				}
 				
 			}else{
@@ -532,7 +516,7 @@ class core_kernel_persistence_hardsql_Class
 		}
 		
 		$sqlResult = $dbWrapper->execSql($sqlQuery);
-		
+		//var_dump("searching in class {$resource->uriResource} ({$resource->getLabel()})", $sqlQuery);
 		while (!$sqlResult->EOF){
 
 			$instance = new core_kernel_classes_Resource($sqlResult->fields['uri']);

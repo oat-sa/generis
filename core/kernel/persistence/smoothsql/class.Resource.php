@@ -654,7 +654,6 @@ class core_kernel_persistence_smoothsql_Resource
         
 		$query = "DELETE FROM statements WHERE subject = ?";
         $returnValue = $dbWrapper->execSql($query, array($resource->uriResource));
-        
     	if($deleteReference){
         	$sqlQuery = "DELETE FROM statements WHERE object = '".$resource->uriResource."'";
         	$returnValue = $dbWrapper->execSql($sqlQuery) && $returnValue;
@@ -805,7 +804,7 @@ class core_kernel_persistence_smoothsql_Resource
 
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 begin
         
-        $this->setPropertyValue ($resource, new core_kernel_classes_Property(RDF_TYPE), $class);
+		$returnValue = $this->setPropertyValue($resource, new core_kernel_classes_Property(RDF_TYPE), $class);
         
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 end
 

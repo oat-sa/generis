@@ -292,7 +292,7 @@ class core_kernel_users_Service
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001839 begin
 		
     	if(is_null($class)){
-        	$class = new core_kernel_classes(CLASS_GENERIS_USER);
+        	$class = new core_kernel_classes_Class(CLASS_GENERIS_USER);
     	}
         
     	$users = $class->searchInstances(
