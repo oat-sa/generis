@@ -618,17 +618,8 @@ class core_kernel_persistence_hardsql_Resource
 		
 		$uri = $resource->uriResource;
 		
-        // Delete the records in the main table  and the properties table
-		$query = "DELETE {$tableName}.*, {$tableName}Props.* FROM {$tableName} M
-			INNER JOIN {$tableName}Props.* P ON M.id = P.instance_id
-			WHERE uri = ?";
-        $returnValue = $dbWrapper->execSql($query, array($uri));
-        
-        // Unreference the resource
-        core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unreferenceResource($resource);
-        
         /*
-         * Delete all the references of the resource, 
+         * Delete all the references of the resource first, before the resource is delete of course, 
          * if the parameter $deleteReference is true
          */
 		if($deleteReference){
@@ -641,11 +632,13 @@ class core_kernel_persistence_hardsql_Resource
 				$properties[$type->uriResource] = array();
 				$types = "'".$type->uriResource."',";
 			}
+			
 			$types = substr($types, 0, strlen($types) - 1);
 			
 			//get all the properties that have one of the resource class as range 
 			$sqlQuery = "SELECT subject, object FROM statements WHERE predicate = '".RDFS_RANGE."' AND object IN ({$types})";
 			$result = $dbWrapper->execSql($sqlQuery);
+			
 			while(!$result->EOF){
 				$properties[$result->fields['object']][] = $result->fields['subject'];
 				$result->moveNext();
@@ -653,40 +646,51 @@ class core_kernel_persistence_hardsql_Resource
 			
 			//delete the references 
 			$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
-			foreach($properties as $classUri => $propertyUri){
-				
-				//property -> column
-				$property = new core_kernel_classes_Property($propertyUri);
-				$isMulti = ($property->isMultiple() || $property->isLgDependent());
-				$columnName = '';
-				if(!$isMulti){
-					$columnName = core_kernel_persistence_hardapi_Utils::getShortName($property);
-					if(empty($columnName)){
-						continue;
+			
+			foreach($properties as $classUri => $propertyUris){
+				foreach($propertyUris as $propertyUri){
+					//property -> column
+					$property = new core_kernel_classes_Property($propertyUri);
+					$isMulti = ($property->isMultiple() || $property->isLgDependent());
+					$columnName = '';
+					if(!$isMulti){
+						$columnName = core_kernel_persistence_hardapi_Utils::getShortName($property);
+						if(empty($columnName)){
+							continue;
+						}
 					}
-				}
-				
-				//classLocations -> table
-				$classLocations = $referencer->classLocations(new core_kernel_classes_Class($classUri));
-				foreach ($classLocations as $classLocation){
 					
-					if($property->isMultiple()){
-						//delete the row in the props table
-						$query = "DELETE FROM {$classLocation['table']}Props 
-									WHERE property_uri = '{$propertyUri}' 
-									AND (property_value = '$uri' OR property_foreign_uri = '{$uri}')";
-						$dbWrapper->execSql($query);
-					}
-					else {
-						//set the col value to NULL
-						$query = "UPDATE {$classLocation['table']} 
-									SET {$columnName} = NULL 
-									WHERE {$columnName} = '{$uri}'";
-						$dbWrapper->execSql($query);
+					//classLocations -> table
+					$classLocations = $referencer->classLocations(new core_kernel_classes_Class($classUri));
+					foreach ($classLocations as $classLocation){
+						
+						if($property->isMultiple()){
+							//delete the row in the props table
+							$query = "DELETE FROM {$classLocation['table']}Props 
+										WHERE property_uri = '{$propertyUri}' 
+										AND (property_value = '{$uri}' OR property_foreign_uri = '{$uri}')";
+							$dbWrapper->execSql($query);
+						}
+						else {
+							//set the col value to NULL
+							$query = "UPDATE {$classLocation['table']} 
+										SET {$columnName} = NULL 
+										WHERE {$columnName} = '{$uri}'";
+							$dbWrapper->execSql($query);
+						}
 					}
 				}
 			}
 		}
+		
+		// Delete the records in the main table  and the properties table
+		$query = "DELETE M.*, P.* FROM {$tableName} M
+			INNER JOIN {$tableName}Props P ON M.id = P.instance_id
+			WHERE uri = ?";
+        $returnValue = $dbWrapper->execSql($query, array($uri));
+        
+        // Unreference the resource
+        core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unreferenceResource($resource);
 		
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 end
 
