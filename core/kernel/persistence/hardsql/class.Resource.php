@@ -148,7 +148,8 @@ class core_kernel_persistence_hardsql_Resource
         	}
         }
 		// Select in the properties table of the class
-		if ($property->isMultiple() || $property->isLgDependent()){
+		if ($property->isMultiple() || $property->isLgDependent()
+			|| ! core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isPropertyReferenced($property)){
 			
 			$query = "SELECT property_value, property_foreign_uri 
 				FROM {$table} M
@@ -365,7 +366,8 @@ class core_kernel_persistence_hardsql_Resource
         	}
         }
         
-        if ($property->isMultiple() || $property->isLgDependent()){
+        if ($property->isMultiple() || $property->isLgDependent() 
+        	|| !core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isPropertyReferenced($property)){
         	
         	$query = "INSERT INTO {$tableName}Props 
         		(instance_id, property_uri, property_value, property_foreign_uri, l_language) 
