@@ -94,6 +94,7 @@ define('INCLUDES_PATH' , GENERIS_BASE_PATH.'/includes');
 define('EXTENSION_PATH' , GENERIS_BASE_PATH.'/..');
 define('MANIFEST_NAME' , 'manifest.php');
 define('GENERIS_FILES_PATH' , GENERIS_BASE_PATH.'/data/');
+define('GENERIS_CACHE_PATH', GENERIS_FILES_PATH.'cache/');
 
 define('ENABLE_SUBSCRIPTION', false);
 

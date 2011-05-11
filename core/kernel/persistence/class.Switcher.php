@@ -53,18 +53,20 @@ class core_kernel_persistence_Switcher
 
     // --- OPERATIONS ---
     
-	public function __construct(){
+	public function __construct($blackList = array()){
 		//force the API to get it's data in the triple store
 		core_kernel_persistence_PersistenceProxy::setMode(PERSISTENCE_SMOOTH);
 		
-		if(count(self::$blackList) == 0){
-			self::$blackList = array(
-				CLASS_GENERIS_USER,
-				CLASS_ROLE_TAOMANAGER,
-				CLASS_ROLE_BACKOFFICE,
-				CLASS_ROLE_FRONTOFFICE,
-				RDF_CLASS,
-				CLASS_PROCESSVARIABLES
+		if(count(self::$blackList) == 0 || count($blackList) > 0){
+			self::$blackList = array_merge(
+				array(
+					CLASS_GENERIS_USER,
+					CLASS_ROLE_TAOMANAGER,
+					CLASS_ROLE_BACKOFFICE,
+					CLASS_ROLE_FRONTOFFICE,
+					RDF_CLASS
+				),
+				$blackList
 			);
 		}
 	}
@@ -125,6 +127,8 @@ class core_kernel_persistence_Switcher
 		if($allOrNothing && $myTableMgr->exists()){
 			return $returnValue;
 		}
+		
+		echo $tableName."\n";
 		
 		if($recursive){
 			foreach($class->getSubClasses(true) as $subClass){
@@ -190,7 +194,11 @@ class core_kernel_persistence_Switcher
 		do{
 			$rows = array();
 			
-			foreach($instances as $resource){
+			foreach($instances as $index =>  $resource){
+				if($referencer->isResourceReferenced($resource)){
+					unset($instances[$index]);
+					continue;
+				}
 				$row = array('uri' => $resource->uriResource);
 				foreach($properties as $property){
 					$propValue = $resource->getOnePropertyValue($property);

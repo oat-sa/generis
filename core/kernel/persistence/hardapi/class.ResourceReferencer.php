@@ -70,20 +70,28 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     const CACHE_MEMORY = 1;
 
     /**
-     * Short description of attribute classMode
+     * Short description of attribute CACHE_FILE
      *
-     * @access protected
+     * @access public
      * @var int
      */
-    protected $classMode = 0;
+    const CACHE_FILE = 2;
 
     /**
-     * Short description of attribute instanceMode
+     * Short description of attribute CACHE_DB
      *
-     * @access protected
+     * @access public
      * @var int
      */
-    protected $instanceMode = 0;
+    const CACHE_DB = 3;
+
+    /**
+     * Short description of attribute cacheModes
+     *
+     * @access protected
+     * @var array
+     */
+    protected $cacheModes = array();
 
     /**
      * Short description of attribute _classes
@@ -101,6 +109,14 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      */
     private static $_resources = array();
 
+    /**
+     * Short description of attribute _properties
+     *
+     * @access private
+     * @var array
+     */
+    private static $_properties = array();
+
     // --- OPERATIONS ---
 
     /**
@@ -115,8 +131,11 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001633 begin
         
     	//default cache values
-		$this->classMode 	= self::CACHE_MEMORY;
-		$this->instanceMode = self::CACHE_NONE;
+		$this->cacheModes = array(
+			'instance' 	=> self::CACHE_NONE,
+			'class'		=> self::CACHE_MEMORY,
+			'property'	=> self::CACHE_FILE
+		);
     	
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001633 end
     }
@@ -146,6 +165,32 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     }
 
     /**
+     * Short description of method setCache
+     *
+     * @access protected
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @param  string type
+     * @param  int mode
+     * @return mixed
+     */
+    protected function setCache($type, $mode)
+    {
+        // section 127-0-1-1-78ed0233:12fde709f61:-8000:000000000000170D begin
+        
+        if(!array_key_exists($type, $this->cacheModes)){
+        	throw new core_kernel_persistence_hardapi_Exception("Unknow cacheable object $type");
+        }
+        $refClass = new ReflectionClass($this);
+        if(!in_array($mode, $refClass->getConstants())){
+        	throw new core_kernel_persistence_hardapi_Exception("Unknow CACHE MODE $mode");
+        }
+        
+        $this->cacheModes[$type] = $mode;
+        
+        // section 127-0-1-1-78ed0233:12fde709f61:-8000:000000000000170D end
+    }
+
+    /**
      * Short description of method setClassCache
      *
      * @access public
@@ -156,10 +201,8 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     public function setClassCache($mode)
     {
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:000000000000164C begin
-        
-    	if($mode == self::CACHE_NONE || $mode == self::CACHE_MEMORY){
-			$this->classMode = $mode;
-		}
+    	
+    	$this->setCache('class', $mode);
     	
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:000000000000164C end
     }
@@ -176,11 +219,26 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     {
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:000000000000164F begin
         
-    	if($mode == self::CACHE_NONE || $mode == self::CACHE_MEMORY){
-			$this->instanceMode = $mode;
-		}
+    	$this->setCache('instance', $mode);
     	
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:000000000000164F end
+    }
+
+    /**
+     * Short description of method setPropertyCache
+     *
+     * @access public
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @param  int mode
+     * @return mixed
+     */
+    public function setPropertyCache($mode)
+    {
+        // section 127-0-1-1-78ed0233:12fde709f61:-8000:0000000000001711 begin
+        
+    	$this->setCache('property', $mode);
+    	
+        // section 127-0-1-1-78ed0233:12fde709f61:-8000:0000000000001711 end
     }
 
     /**
@@ -227,7 +285,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001652 begin
         
         if(!is_null($class)){
-			switch($this->classMode){
+			switch($this->cacheModes['class']){
 				
 				case self::CACHE_NONE:
 					$dbWrapper = core_kernel_classes_DbWrapper::singleton();
@@ -266,6 +324,11 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 					}
 					
 					break;
+					
+				default:
+					throw core_kernel_persistence_hardapi_Exception("File and Db cache not yet implemented for classes");
+					break;
+					
 			}
 		}
         
@@ -303,7 +366,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			));
 			if($result !== false){
 				$returnValue = true;
-				if($this->classMode == self::CACHE_MEMORY){
+				if($this->cacheModes['class'] == self::CACHE_MEMORY){
 					$memQuery = "SELECT `id`, `uri`, `table` FROM `class_to_table` WHERE `uri` = ? AND `table` = ?";
 					$memResult = $dbWrapper->execSql($memQuery, array($class->uriResource, $table));
 					while(!$memResult->EOF){
@@ -344,18 +407,14 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
 			$query = "DELETE class_to_table.*, resource_has_class.*, resource_to_table.* FROM class_to_table 
-								INNER JOIN resource_has_class ON resource_has_class.class_id = class_to_table.id
-								INNER JOIN resource_to_table ON resource_has_class.resource_id = resource_to_table.id
+								LEFT JOIN resource_has_class ON resource_has_class.class_id = class_to_table.id
+								LEFT JOIN resource_to_table ON resource_has_class.resource_id = resource_to_table.id
 								WHERE class_to_table.`table` = '{$tableName}' OR resource_to_table.`table` = '{$tableName}'";
 		
-//			$query = "DELETE class_to_table.*, resource_to_table.* FROM class_to_table 
-//								INNER JOIN resource_to_table ON class_to_table.id = resource_to_table.id
-//								WHERE class_to_table.`table` = '{$tableName}' OR resource_to_table.`table` = '{$tableName}'";
-			
 			$result = $dbWrapper->execSql($query);
 			if($result !== false){
 				$returnValue = true;
-				if($this->classMode == self::CACHE_MEMORY){
+				if($this->cacheModes['class'] == self::CACHE_MEMORY){
 					foreach(self::$_classes as $index => $aClass){
 						if($aClass['uri'] == $class->uriResource){
 							unset(self::$_classes[$index]);
@@ -368,6 +427,59 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001658 end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method classLocations
+     *
+     * @access public
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @param  Class class
+     * @return array
+     */
+    public function classLocations( core_kernel_classes_Class $class)
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1-46522299:12fc0802dbc:-8000:00000000000016C7 begin
+        
+        if(!is_null($class)){
+			switch($this->cacheModes['class']){
+				
+				case self::CACHE_NONE:
+			        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+			        
+			        $query = "SELECT id, uri, table FROM class_to_table WHERE uri=? ";
+			    	$result = $dbWrapper->execSql($query, array ($class->uriResource));
+					if($dbWrapper->dbConnector->errorNo() !== 0){
+						throw new core_kernel_persistence_hardapi_Exception("Unable to define where is the hardified resource: " .$dbWrapper->dbConnector->errorMsg());
+					} 
+					else {
+						while(!$result->EOF){
+							$returnValue[] = array(
+								'id'	=> $result->fields['id'],
+				        		'uri' 	=> $result->fields['uri'],
+				        		'table' => $result->fields['table']
+							);
+							$result->moveNext();
+						}
+					}
+			        break;
+			
+			   case self::CACHE_MEMORY:
+			   		$this->loadClasses();
+			   		foreach( self::$_classes as $key =>  $res){
+						if($res['uri'] == $class->uriResource){
+							$returnValue[] = $res;
+						}
+					}
+			   break;
+			}
+		}
+        
+        // section 127-0-1-1-46522299:12fc0802dbc:-8000:00000000000016C7 end
+
+        return (array) $returnValue;
     }
 
     /**
@@ -413,7 +525,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:000000000000165B begin
         
         if(!is_null($resource)){
-			switch($this->instanceMode){
+			switch($this->cacheModes['instance']){
 				
 				case self::CACHE_NONE:
 					$dbWrapper = core_kernel_classes_DbWrapper::singleton();
@@ -432,6 +544,10 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 							break;
 						}
 					}
+					break;
+					
+				default:
+					throw core_kernel_persistence_hardapi_Exception("File and Db cache not yet implemented for resources");
 					break;
 			}
 		}
@@ -493,7 +609,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 					}
 				}
 			}
-			if($returnValue && $this->instanceMode == self::CACHE_MEMORY){
+			if($returnValue && $this->cacheModes['instance'] == self::CACHE_MEMORY){
 				foreach($rows as $row){
 					self::$_resources[] = array(
 						'uri' 	=> $row['uri'],
@@ -518,22 +634,20 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     public function unReferenceResource( core_kernel_classes_Resource $resource)
     {
         $returnValue = (bool) false;
-        
+
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001661 begin
         
         if($this->isResourceReferenced($resource)){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
-//			$query = "DELETE resource_to_table.*, resource_has_class.* FROM resource_to_table 
-//						INNER JOIN resource_has_class ON resource_has_class.resource_id = resource_to_table.id
-//						WHERE resource_to_table.uri = ?";
-
-			$query = "DELETE resource_to_table.* FROM resource_to_table 
+			$query = "DELETE resource_to_table.*, resource_has_class.* FROM resource_to_table 
+						LEFT JOIN resource_has_class ON resource_has_class.resource_id = resource_to_table.id
 						WHERE resource_to_table.uri = ?";
+
 			$result = $dbWrapper->execSql($query, array($resource->uriResource));
 			if($result !== false){
 				$returnValue = true;
-				if($this->instanceMode == self::CACHE_MEMORY ){
+				if($this->cacheModes['instance'] == self::CACHE_MEMORY ){
 					foreach( self::$_resources as $key =>  $res){
 						if($res['uri'] == $resource->uriResource){
 							unset(self::$_resources[$key]);
@@ -563,7 +677,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         // section 127-0-1-1-56674b31:12fbf31d598:-8000:0000000000001505 begin
         
          if(!is_null($resource)){
-			switch($this->instanceMode){
+			switch($this->cacheModes['instance']){
 				
 				case self::CACHE_NONE:
 			        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
@@ -582,6 +696,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			        break;
 			
 			   case self::CACHE_MEMORY:
+			   		$this->loadResources();
 			   		foreach( self::$_resources as $key =>  $res){
 						if($res['uri'] == $resource->uriResource){
 							$returnValue = $res['table'];
@@ -597,53 +712,135 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     }
 
     /**
-     * Short description of method classLocations
+     * Short description of method loadProperties
+     *
+     * @access private
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @param  boolean force
+     * @return mixed
+     */
+    private function loadProperties($force = false)
+    {
+        // section 127-0-1-1-78ed0233:12fde709f61:-8000:0000000000001723 begin
+        
+    	if(count(self::$_properties) == 0 || $force){
+    		
+    		if(!$force && $this->cacheModes['property'] == self::CACHE_FILE){
+				
+				//file where is the data saved
+    			$file = GENERIS_CACHE_PATH . 'hard-api-property.cache';
+    			if(is_readable($file) || is_writable($file)){
+    				throw core_kernel_persistence_hardapi_Exception("Cache file $file must have read/write permissions");
+    			}
+    			//if the properties are cached in the file, we load it
+				if(file_exsits($file)){
+					$properties = @unserialize(file_get_contents($file));
+					if($properties !== false && is_array($properties) && count($properties) > 0){
+						self::$_properties = $properties;
+						return;
+					}
+				}
+			}
+    		
+			//get all the compiled tables
+    		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+    		$tables = array();
+    		$query = "SELECT DISTINCT `table` FROM `class_to_table`";
+    		$result = $dbWrapper->execSql($query);
+    		while(!$result->EOF){
+    			$tables[] = $result->fields['table'];
+    			$result->moveNext();
+    		}
+    		
+    		//retrieve each property by table
+    		foreach($tables as $table){
+   				foreach($dbWrapper->dbConnector->MetaColumnNames($table) as $column){
+    				if(preg_match("/^[0-9]{2,}/", $column)){
+    					$propertyUri = core_kernel_persistence_hardapi_Utils::getLongName($column);
+    					if(isset(self::$_properties[$propertyUri]) && !in_array($table, self::$_properties[$propertyUri])){
+    						self::$_properties[$propertyUri][] = $table;
+    					}
+    					else{
+    						self::$_properties[$propertyUri] = array($table);
+    					}
+    				}
+    			}
+    		}
+    		
+    		//saving the propertuies in the cache file
+    		if($this->cacheModes['property'] == self::CACHE_FILE){
+    			file_put_contents($file, serialize(self::$_properties));
+    		}
+    	}
+    	
+        // section 127-0-1-1-78ed0233:12fde709f61:-8000:0000000000001723 end
+    }
+
+    /**
+     * Short description of method isPropertyReferenced
      *
      * @access public
      * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
-     * @param  Class class
-     * @return array
+     * @param  Property property
+     * @return boolean
      */
-    public function classLocations( core_kernel_classes_Class $class)
+    public function isPropertyReferenced( core_kernel_classes_Property $property)
     {
-        $returnValue = array();
+        $returnValue = (bool) false;
 
-        // section 127-0-1-1-46522299:12fc0802dbc:-8000:00000000000016C7 begin
+        // section 127-0-1-1-78ed0233:12fde709f61:-8000:0000000000001714 begin
         
-        if(!is_null($class)){
-			switch($this->classMode){
+        if(!is_null($resource)){
+			switch($this->cacheModes['property']){
 				
+				case self::CACHE_FILE:
+				case self::CACHE_MEMORY:
+					
+					$this->loadProperties();
+					$returnValue = array_key_exists($property->uriResource, self::$_properties);
+					break;
+					
 				case self::CACHE_NONE:
-			        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-			        
-			        $query = "SELECT id, uri, table FROM class_to_table WHERE uri=? ";
-			    	$result = $dbWrapper->execSql($query, array ($class->uriResource));
-					if($dbWrapper->dbConnector->errorNo() !== 0){
-						throw new core_kernel_persistence_hardapi_Exception("Unable to define where is the hardified resource: " .$dbWrapper->dbConnector->errorMsg());
-					} 
-					else {
-						while(!$result->EOF){
-							$returnValue[] = array(
-								'id'	=> $result->fields['id'],
-				        		'uri' 	=> $result->fields['uri'],
-				        		'table' => $result->fields['table']
-							);
-							$result->moveNext();
-						}
-					}
-			        break;
-			
-			   case self::CACHE_MEMORY:
-			   		foreach( self::$_classes as $key =>  $res){
-						if($res['uri'] == $class->uriResource){
-							$returnValue[] = $res;
-						}
-					}
-			   break;
+					throw core_kernel_persistence_hardapi_Exception("Property are always cached");
+				case self::CACHE_DB:
+					throw core_kernel_persistence_hardapi_Exception("Db cache not yet implemented for classes");
 			}
 		}
         
-        // section 127-0-1-1-46522299:12fc0802dbc:-8000:00000000000016C7 end
+        // section 127-0-1-1-78ed0233:12fde709f61:-8000:0000000000001714 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method propertyLocation
+     *
+     * @access public
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @param  Property property
+     * @return array
+     */
+    public function propertyLocation( core_kernel_classes_Property $property)
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1-78ed0233:12fde709f61:-8000:0000000000001717 begin
+        
+        if(!is_null($resource)){
+			switch($this->cacheModes['property']){
+				
+				case self::CACHE_FILE:
+				case self::CACHE_MEMORY:
+					
+					$this->loadProperties();
+					if(isset(self::$_properties[$property->uriResource]) && is_array(self::$_properties[$property->uriResource])){
+						$returnValue = self::$_properties[$property->uriResource];
+					}
+					break;
+			}
+		}
+        
+        // section 127-0-1-1-78ed0233:12fde709f61:-8000:0000000000001717 end
 
         return (array) $returnValue;
     }

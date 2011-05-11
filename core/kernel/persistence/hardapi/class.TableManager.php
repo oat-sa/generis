@@ -156,7 +156,7 @@ class core_kernel_persistence_hardapi_TableManager
 			$dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() > 0){
 				if(DEBUG_MODE){
-					echo $query;
+					echo $query."<br>";
 				}
 				//the user may not have the right to create a table
 				throw new core_kernel_persistence_hardapi_Exception("Unable to create the table {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
@@ -181,7 +181,7 @@ class core_kernel_persistence_hardapi_TableManager
 			$dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				if(DEBUG_MODE){
-					echo $query;
+					echo $query."<br>";
 				}
 				throw new core_kernel_persistence_hardapi_Exception("Unable to create the table {$this->name}Props : " .$dbWrapper->dbConnector->errorMsg());
 			}
@@ -215,7 +215,7 @@ class core_kernel_persistence_hardapi_TableManager
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
 			//remove the multi property table
-			if(in_array("{$this->name}props", self::$_tables)){
+			if(in_array("{$this->name}Props", self::$_tables)){
 				$dbWrapper->execSql("DROP TABLE `{$this->name}Props`");
 				$tblKey = array_search("{$this->name}Props", self::$_tables);
 					if($tblKey !== false){

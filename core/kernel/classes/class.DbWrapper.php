@@ -99,6 +99,11 @@ class core_kernel_classes_DbWrapper
 		$this->dbConnector->Connect(DATABASE_URL, DATABASE_LOGIN, DATABASE_PASS, $database);
         $this->dbConnector->debug = false;
 	
+        if(defined('GENERIS_CACHE_PATH')){
+        	$ADODB_CACHE_DIR = GENERIS_CACHE_PATH;
+        	$this->dbConnector->cacheSecs = 3600*24;	//24 hours cache for ado db
+        }
+        
 		//to manage utf8
         $this->dbConnector->Execute('SET NAMES utf8');
         
