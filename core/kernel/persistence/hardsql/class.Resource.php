@@ -464,7 +464,8 @@ class core_kernel_persistence_hardsql_Resource
         // Get the table name
         $tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
         
-        if ($property->isMultiple() || $property->isLgDependent()){
+        if ($property->isMultiple() || $property->isLgDependent() 
+        	|| !core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isPropertyReferenced($property)){
         	
         	$query = "DELETE `{$tableName}Props`.* FROM `{$tableName}`, `{$tableName}Props`
         		WHERE `{$tableName}`.uri = '{$resource->uriResource}' 
