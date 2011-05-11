@@ -390,7 +390,7 @@ class core_kernel_persistence_hardsql_Class
 			return $returnValue;
 		}
 		
-		$tablePropertiesName = $tableName.'props';
+		$tablePropertiesName = $tableName.'Props';
 		$tableNames = array('t0' => $tableName);
 		
 		$conditions = array();
@@ -516,6 +516,7 @@ class core_kernel_persistence_hardsql_Class
 		}
 		
 		$sqlResult = $dbWrapper->execSql($sqlQuery);
+	
 		//var_dump("searching in class {$resource->uriResource} ({$resource->getLabel()})", $sqlQuery);
 		while (!$sqlResult->EOF){
 

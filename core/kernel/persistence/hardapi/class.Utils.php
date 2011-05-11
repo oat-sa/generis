@@ -174,7 +174,7 @@ class core_kernel_persistence_hardapi_Utils
 
         // section 10-13-1--128--4620d5d7:12fbf26f8b8:-8000:0000000000001502 begin
 		
-		$returnValue = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($resource).'props';
+		$returnValue = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($resource).'Props';
 		
         // section 10-13-1--128--4620d5d7:12fbf26f8b8:-8000:0000000000001502 end
 
