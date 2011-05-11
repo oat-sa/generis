@@ -97,7 +97,7 @@ class core_kernel_classes_Property
      * Short description of method __construct
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  string uri
      * @param  string debug
      * @return void
@@ -115,7 +115,7 @@ class core_kernel_classes_Property
      * Short description of method feed
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @return void
      */
     public function feed()
@@ -135,7 +135,7 @@ class core_kernel_classes_Property
      * Short description of method getSubProperties
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  boolean recursive
      * @return array
      */
@@ -156,7 +156,7 @@ class core_kernel_classes_Property
      * Short description of method setSubPropertyOf
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  Property property
      * @return boolean
      */
@@ -175,7 +175,7 @@ class core_kernel_classes_Property
      * return classes that are described by this property
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @return core_kernel_classes_ContainerCollection
      */
     public function getDomain()
@@ -200,7 +200,7 @@ class core_kernel_classes_Property
      * Short description of method setDomain
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -235,7 +235,7 @@ class core_kernel_classes_Property
      * Short description of method getRange
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @return core_kernel_classes_ContainerCollection
      */
     public function getRange()
@@ -259,7 +259,7 @@ class core_kernel_classes_Property
      * Short description of method setRange
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -281,7 +281,7 @@ class core_kernel_classes_Property
      * Short description of method getWidget
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @return core_kernel_classes_Property
      */
     public function getWidget()
@@ -300,10 +300,10 @@ class core_kernel_classes_Property
     }
 
     /**
-     * Short description of method isLgDependent
+     * Is the property translatable?
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @return boolean
      */
     public function isLgDependent()
@@ -325,10 +325,10 @@ class core_kernel_classes_Property
     }
 
     /**
-     * Short description of method setLgDependent
+     * Set mannually if a property can be translated
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  boolean isLgDependent
      * @return mixed
      */
@@ -346,10 +346,10 @@ class core_kernel_classes_Property
     }
 
     /**
-     * Short description of method isMultiple
+     * Check if a property can have multiple values.
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @return boolean
      */
     public function isMultiple()
@@ -368,6 +368,28 @@ class core_kernel_classes_Property
         // section 127-0-1-1--7856c56:12f911716ca:-8000:00000000000014C8 end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Define mannualy if a property is multiple or not.
+     * Usefull on just created property.
+     *
+     * @access public
+     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @param  boolean isMultiple
+     * @return mixed
+     */
+    public function setMultiple($isMultiple)
+    {
+        // section 127-0-1-1-2ada041a:12fde2cecc0:-8000:00000000000016F8 begin
+        
+    	$multipleProperty = new core_kernel_classes_Property(PROPERTY_MULTIPLE);
+        $value = ((bool)$isMultiple) ?  GENERIS_TRUE : GENERIS_FALSE ;
+        if($this->editPropertyValues($multipleProperty, $value)) {
+        	$this->isMultiple() = (bool)$isMultiple;
+        }
+    	
+        // section 127-0-1-1-2ada041a:12fde2cecc0:-8000:00000000000016F8 end
     }
 
 } /* end of class core_kernel_classes_Property */
