@@ -128,8 +128,6 @@ class core_kernel_persistence_Switcher
 			return $returnValue;
 		}
 		
-		echo $tableName."\n";
-		
 		if($recursive){
 			foreach($class->getSubClasses(true) as $subClass){
 				$this->hardify($subClass, array_merge($options, array(
