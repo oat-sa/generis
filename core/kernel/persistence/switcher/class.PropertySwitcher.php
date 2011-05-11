@@ -150,7 +150,10 @@ bewteen a class and it's parent to retrieve the properties.
 			}while(!$top);
 		}
 		$returnValue = array_merge(
-			array(RDFS_LABEL => new core_kernel_classes_Property(RDFS_LABEL)),
+			array(
+				RDFS_LABEL 		=> new core_kernel_classes_Property(RDFS_LABEL),
+				RDFS_COMMENT	=> new core_kernel_classes_Property(RDFS_COMMENT)
+			),
 			$this->class->getProperties(false)
 		);
 		foreach($parents as $parent){
