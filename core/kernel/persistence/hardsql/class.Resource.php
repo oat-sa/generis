@@ -128,12 +128,17 @@ class core_kernel_persistence_hardsql_Resource
         $session 	= core_kernel_classes_Session::singleton();
 		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
 		
-        // Optional params
+        
+        
+    	$table = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
+    	if(empty($table)){
+    		return $returnValue;
+    	}
+    	// Optional params
         $one = isset($options['one']) && $options['one'] == true ? true : false;
         $last = isset($options['last']) && $options['last'] == true ? true : false;
         
-    	$table = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
-		$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
+    	$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
         $propertyRange = $property->getRange();
 
         // Define language if required
@@ -589,7 +594,104 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD begin
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+		
+        $referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+		$tableName = $referencer->resourceLocation ($resource);
+		if(empty($tableName)){
+			return $returnValue;
+		}
+		
+		//the new Uri
+		$newUri = common_Utils::getNewUri();
+		
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+
+		//duplicate the row in the main table
+		$query = "SELECT * FROM $tableName WHERE uri = ?";
+		$result = $dbWrapper->execSql($query, array($resource->uriResource));
+		if(!$result->EOF){
+			
+			//get the columns to duplicate
+			$columnProps =array();
+			for($i=0; $i < $result->FieldCount(); $i++){
+				$column = $result->FetchField($i);
+				
+				if(preg_match("/^[0-9]{2,}/", $column->name)){
+					$propertyUri = core_kernel_persistence_hardapi_Utils::getLongName($column->name);
+					if(!in_array($propertyUri, $excludedProperties)){	//check if the property is excluded
+						$columnProps[$propertyUri] = $column->name;
+					}
+				}
+			}
+			$instanceId = $result->fields['id'];
+			
+			//build the insert query
+			$insertQuery = "INSERT INTO $tableName (uri";
+			foreach($columnProps as $column){
+				$insertQuery .= ', '.$column;
+			}
+			$insertQuery .= ') VALUES (';
+			$insertQuery .= "'{$newUri}'";
+			foreach($columnProps as $column){
+				$insertQuery .= ", '".$result->fields[$column]."'";
+			}
+			$insertQuery .= ')';
+			
+			$insertResult = $dbWrapper->execSql($insertQuery);
+			if($insertResult !== false  && $instanceId > -1){
+				
+				//duplicated data
+				$duplicatedResource = new core_kernel_classes_Resource($newUri);
+				$referencer->referenceResource($duplicatedResource, $tableName, $resource->getType(), true);
+				
+				$duplicateInstanceId = core_kernel_persistence_hardsql_Utils::getInstanceId($duplicatedResource);
+
+				//now we duplciate the rows of the Props table
+				
+				//linearize the excluded properties
+				$excludedPropertyList = '';
+				foreach($excludedProperties as $excludedProperty){
+					$excludedPropertyList = "'{$excludedProperty}',";
+				}
+				$excludedPropertyList = substr($excludedPropertyList, 0, strlen($excludedPropertyList) -1);
+				
+				//query templates of the 3 ways to insert the props rows
+				$insertPropValueQuery = "INSERT INTO {$tableName}Props (property_uri, property_value, l_language, instance_id) VALUES (?,?,?,?)"; 
+				$insertPropForeignQuery = "INSERT INTO {$tableName}Props (property_uri, property_foreign_uri, l_language, instance_id) VALUES (?,?,?,?)";
+				$insertPropEmptyQuery = "INSERT INTO {$tableName}Props (property_uri, l_language, instance_id) VALUES (?,?,?)";
+				
+				//get the rows to duplicate
+				$propsQuery = "SELECT * FROM {$tableName}Props WHERE instance_id = ? AND property_uri NOT IN ({$excludedPropertyList})";
+				$propsResult = $dbWrapper->execSql($propsQuery, array($instanceId));
+				while(!$propsResult->EOF){
+					
+					$propUri 		= $propsResult->fields['property_uri'];
+					$propValue 		= $propsResult->fields['property_value'];
+					$propForeign	= $propsResult->fields['property_foreign_uri'];
+					$proplang 		= $propsResult->fields['l_language'];
+					
+					//insert them regarding the populated columns
+					if(!is_null($propValue)  && !empty($propValue)){
+						$dbWrapper->execSql($insertPropValueQuery, array($propUri, $propValue, $proplang, $duplicateInstanceId));
+					}
+					else if(!is_null($propForeign)  && !empty($propForeign)){
+						$dbWrapper->execSql($insertPropForeignQuery, array($propUri, $propForeign, $proplang, $duplicateInstanceId));
+					}
+					else{
+						$dbWrapper->execSql($insertPropEmptyQuery, array($propUri, $proplang, $duplicateInstanceId));
+					}
+					
+					$propsResult->moveNext();
+				}
+				
+				//return the duplciated resource
+				$returnValue = $duplicatedResource;
+				
+				echo $returnValue->uriResource."<br>";
+			}
+		}
+		
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD end
 
         return $returnValue;
@@ -635,6 +737,10 @@ class core_kernel_persistence_hardsql_Resource
 			
 			$types = substr($types, 0, strlen($types) - 1);
 			
+			if(empty($types)){
+				return $returnValue;
+			}
+			
 			//get all the properties that have one of the resource class as range 
 			$sqlQuery = "SELECT subject, object FROM statements WHERE predicate = '".RDFS_RANGE."' AND object IN ({$types})";
 			$result = $dbWrapper->execSql($sqlQuery);
@@ -646,7 +752,6 @@ class core_kernel_persistence_hardsql_Resource
 			
 			//delete the references 
 			$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
-			
 			foreach($properties as $classUri => $propertyUris){
 				foreach($propertyUris as $propertyUri){
 					//property -> column
@@ -690,7 +795,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = $dbWrapper->execSql($query, array($uri));
         
         // Unreference the resource
-        core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unreferenceResource($resource);
+        core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unReferenceResource($resource);
 		
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 end
 

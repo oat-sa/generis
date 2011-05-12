@@ -754,12 +754,9 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     		}
     		
     		//retrieve each property by table
-			$debug = array();
     		foreach($tables as $table){
-				$debug[$table] = array();
 				
    				foreach($dbWrapper->dbConnector->MetaColumnNames($table) as $column){
-					$debug[$table][] = $column;
     				if(preg_match("/^[0-9]{2,}/", $column)){
     					$propertyUri = core_kernel_persistence_hardapi_Utils::getLongName($column);
     					if(isset(self::$_properties[$propertyUri]) && !in_array($table, self::$_properties[$propertyUri])){
