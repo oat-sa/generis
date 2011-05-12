@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  * By default, the classes reference is cached in memory
  * and the instances are not cached
  *
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -34,7 +34,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * and the instances are not cached
  *
  * @access public
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -123,7 +123,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method __construct
      *
      * @access private
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return mixed
      */
     private function __construct()
@@ -144,7 +144,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method singleton
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return core_kernel_persistence_hardapi_ResourceReferencer
      */
     public static function singleton()
@@ -168,7 +168,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setCache
      *
      * @access protected
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string type
      * @param  int mode
      * @return mixed
@@ -194,7 +194,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setClassCache
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  int mode
      * @return mixed
      */
@@ -211,7 +211,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setInstanceCache
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  int mode
      * @return mixed
      */
@@ -228,7 +228,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setPropertyCache
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  int mode
      * @return mixed
      */
@@ -245,7 +245,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method loadClasses
      *
      * @access private
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  boolean force
      * @return mixed
      */
@@ -273,7 +273,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method isClassReferenced
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Class class
      * @param  string table
      * @return boolean
@@ -341,7 +341,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method referenceClass
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Class class
      * @param  string table
      * @return boolean
@@ -390,7 +390,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method unReferenceClass
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -433,7 +433,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method classLocations
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Class class
      * @return array
      */
@@ -486,7 +486,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method loadResources
      *
      * @access private
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  boolean force
      * @return mixed
      */
@@ -514,7 +514,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method isResourceReferenced
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -561,7 +561,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method referenceResource
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  string table
      * @param  array types
@@ -627,7 +627,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method unReferenceResource
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -666,7 +666,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method resourceLocation
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @return string
      */
@@ -715,7 +715,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method loadProperties
      *
      * @access private
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  boolean force
      * @return mixed
      */
@@ -725,10 +725,10 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         
     	if(count(self::$_properties) == 0 || $force){
     		
-    		if(!$force && $this->cacheModes['property'] == self::CACHE_FILE){
+			//file where is the data saved
+   			$file = GENERIS_CACHE_PATH . 'hard-api-property.cache';
 				
-				//file where is the data saved
-    			$file = GENERIS_CACHE_PATH . 'hard-api-property.cache';
+    		if(!$force && $this->cacheModes['property'] == self::CACHE_FILE){
     			
     			//if the properties are cached in the file, we load it
 				if(file_exists($file)){
@@ -754,8 +754,12 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     		}
     		
     		//retrieve each property by table
+			$debug = array();
     		foreach($tables as $table){
+				$debug[$table] = array();
+				
    				foreach($dbWrapper->dbConnector->MetaColumnNames($table) as $column){
+					$debug[$table][] = $column;
     				if(preg_match("/^[0-9]{2,}/", $column)){
     					$propertyUri = core_kernel_persistence_hardapi_Utils::getLongName($column);
     					if(isset(self::$_properties[$propertyUri]) && !in_array($table, self::$_properties[$propertyUri])){
@@ -768,7 +772,9 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     			}
     		}
     		
-    		//saving the propertuies in the cache file
+			var_dump('comparing', $debug, self::$_properties);
+			
+    		//saving the properties in the cache file
     		if($this->cacheModes['property'] == self::CACHE_FILE){
     			file_put_contents($file, serialize(self::$_properties));
     		}
@@ -781,7 +787,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method isPropertyReferenced
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Property property
      * @return boolean
      */
@@ -798,6 +804,9 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				case self::CACHE_MEMORY:
 					
 					$this->loadProperties();
+					if($property->uriResource == 'http://www.tao.lu/Ontologies/TAODelivery.rdf#AuthoringMode'){
+						var_dump(self::$_properties);
+					}
 					$returnValue = array_key_exists($property->uriResource, self::$_properties);
 					break;
 					
@@ -817,7 +826,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method propertyLocation
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Property property
      * @return array
      */
@@ -850,7 +859,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method referenceInstanceTypes
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -887,6 +896,21 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         // section 127-0-1-1-46522299:12fc0802dbc:-8000:00000000000016C4 end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method resetCache
+     *
+     * @access public
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @return mixed
+     */
+    public function resetCache()
+    {
+        // section 10-13-1--128-7c4fbea6:12fe371c06a:-8000:0000000000001573 begin
+		$this->loadClasses(true);
+		$this->loadProperties(true);
+        // section 10-13-1--128-7c4fbea6:12fe371c06a:-8000:0000000000001573 end
     }
 
 } /* end of class core_kernel_persistence_hardapi_ResourceReferencer */

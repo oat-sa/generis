@@ -226,6 +226,9 @@ class core_kernel_persistence_Switcher
 			$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
 		} while(count($instances) > 0);
 		
+		//reset cache:
+		$referencer->resetCache();
+		
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 end
 
         return (bool) $returnValue;
