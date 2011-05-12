@@ -771,8 +771,6 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     				}
     			}
     		}
-    		
-			var_dump('comparing', $debug, self::$_properties);
 			
     		//saving the properties in the cache file
     		if($this->cacheModes['property'] == self::CACHE_FILE){
@@ -802,11 +800,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				
 				case self::CACHE_FILE:
 				case self::CACHE_MEMORY:
-					
 					$this->loadProperties();
-					if($property->uriResource == 'http://www.tao.lu/Ontologies/TAODelivery.rdf#AuthoringMode'){
-						var_dump(self::$_properties);
-					}
 					$returnValue = array_key_exists($property->uriResource, self::$_properties);
 					break;
 					
