@@ -784,9 +784,10 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * @access public
      * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Property property
+     * @param  inClass
      * @return boolean
      */
-    public function isPropertyReferenced( core_kernel_classes_Property $property)
+    public function isPropertyReferenced( core_kernel_classes_Property $property, $inClass = null)
     {
         $returnValue = (bool) false;
 
@@ -798,7 +799,27 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				case self::CACHE_FILE:
 				case self::CACHE_MEMORY:
 					$this->loadProperties();
-					$returnValue = array_key_exists($property->uriResource, self::$_properties);
+					if(!empty($inClass)){
+						$propertyLocation = $this->propertyLocation($property);
+						if(!empty($propertyLocation)){
+							if($inClass instanceof core_kernel_classes_Class){
+								$classLocations = $this->classLocations($inClass);
+								foreach($classLocations as $classTableData){
+									if(in_array($classTableData['table'], $propertyLocation) ){
+										$returnValue = true;
+										break;
+									}
+								}
+							}else if(is_string($inClass)){
+								if(in_array((string) $inClass, $propertyLocation) ){
+									$returnValue = true;
+									break;
+								}
+							}
+						}
+					}else{
+						$returnValue = array_key_exists($property->uriResource, self::$_properties);
+					}
 					break;
 					
 				case self::CACHE_NONE:

@@ -536,7 +536,7 @@ class core_kernel_persistence_smoothsql_Class
 					}
 				}
 			}
-			if(is_array($pattern)){
+			else if(is_array($pattern)){
 				if(count($pattern) > 0){
 					$multiCondition =  " (`predicate` = '{$propUri}' AND  ";
 					foreach($pattern as $i => $patternToken){

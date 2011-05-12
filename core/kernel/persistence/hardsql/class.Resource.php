@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 09.05.2011, 15:50:58 with ArgoUML PHP module 
+ * Automatically generated on 12.05.2011, 12:24:21 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardsql
  */
@@ -24,14 +24,14 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_persistence_PersistenceImpl
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  */
 require_once('core/kernel/persistence/class.PersistenceImpl.php');
 
 /**
  * include core_kernel_persistence_ResourceInterface
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  */
 require_once('core/kernel/persistence/interface.ResourceInterface.php');
 
@@ -47,7 +47,7 @@ require_once('core/kernel/persistence/interface.ResourceInterface.php');
  * Short description of class core_kernel_persistence_hardsql_Resource
  *
  * @access public
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardsql
  */
@@ -74,7 +74,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getType
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @return array
      */
@@ -113,7 +113,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getPropertyValues
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  array option
@@ -228,7 +228,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getPropertyValuesCollection
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return core_kernel_classes_ContainerCollection
@@ -262,7 +262,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getOnePropertyValue
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  boolean last
@@ -295,7 +295,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getPropertyValuesByLg
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string lg
@@ -319,7 +319,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method setPropertyValue
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string object
@@ -409,7 +409,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method setPropertiesValues
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  array properties
      * @return boolean
@@ -429,7 +429,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method setPropertyValueByLg
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string value
@@ -453,12 +453,13 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method removePropertyValues
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Property property
+     * @param  array options
      * @return boolean
      */
-    public function removePropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
+    public function removePropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $options = array())
     {
         $returnValue = (bool) false;
 
@@ -466,16 +467,49 @@ class core_kernel_persistence_hardsql_Resource
 
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
         
+		// Optional params
+        $pattern = isset($options['pattern']) && !empty($options['pattern']) ? $options['pattern'] : '';
+        $like = isset($options['like']) && $options['like'] == true ? true : false;
+		
         // Get the table name
         $tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
         
         if ($property->isMultiple() || $property->isLgDependent() 
-        	|| !core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isPropertyReferenced($property)){
+        	|| !core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isPropertyReferenced($property, $tableName)){
         	
-        	$query = "DELETE `{$tableName}Props`.* FROM `{$tableName}`, `{$tableName}Props`
+			$propsTableName = $tableName.'Props';
+        	$query = "DELETE `{$propsTableName}`.* FROM `{$tableName}`, `{$propsTableName}`
         		WHERE `{$tableName}`.uri = '{$resource->uriResource}' 
-        		AND `{$tableName}Props`.property_uri = '{$property->uriResource}'
-        		AND `{$tableName}`.id = `{$tableName}Props`.instance_id";
+        		AND `{$propsTableName}`.property_uri = '{$property->uriResource}'
+        		AND `{$tableName}`.id = `{$propsTableName}`.instance_id";
+			
+			//build additionnal conditions:
+			$additionalConditions = array();
+			if(!empty($pattern)){
+				if(is_string($pattern)){
+					if(!empty($pattern)){
+						$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
+						$additionalConditions[] = " ({$propsTableName}.property_value {$searchPattern} OR {$propsTableName}.property_foreign_uri {$searchPattern}) ";
+					}
+				}else if(is_array($pattern)){
+					if(count($pattern) > 0){
+						$multiCondition =  "(";
+						foreach($pattern as $i => $patternToken){
+							if(!empty($patternToken)){
+								$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
+								if($i > 0) $multiCondition .= " OR ";
+								$multiCondition .= " ({$propsTableName}.property_value {$searchPattern} OR {$propsTableName}.property_foreign_uri {$searchPattern}) ";
+							}
+						}
+						$additionalConditions[] = "{$multiCondition}) ";
+					}
+				}
+			}
+			
+			foreach($additionalConditions as $i => $additionalCondition){
+				$query .= " AND ( {$additionalCondition} ) ";
+			}
+			
 	        $result	= $dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to delete property values (multiple) for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
@@ -486,10 +520,39 @@ class core_kernel_persistence_hardsql_Resource
         	
         	$propertyName = core_kernel_persistence_hardapi_Utils::getShortName ($property);
             $query = "UPDATE {$tableName} SET {$propertyName} = NULL WHERE uri = ?";
+			
+			//build additionnal conditions:
+			$additionalConditions = array();
+			if(!empty($pattern)){
+				if(is_string($pattern)){
+					if(!empty($pattern)){
+						$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
+						$additionalConditions[] = " ({$propertyName} {$searchPattern}) ";
+					}
+				}else if(is_array($pattern)){
+					if(count($pattern) > 0){
+						$multiCondition =  "(";
+						foreach($pattern as $i => $patternToken){
+							if(!empty($patternToken)){
+								$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
+								if($i > 0) $multiCondition .= " OR ";
+								$multiCondition .= " ({$tableName}.`{$propertyName}` {$searchPattern}) ";
+							}
+						}
+						$additionalConditions[] = "{$multiCondition}) ";
+					}
+				}
+			}
+			
+			foreach($additionalConditions as $i => $additionalCondition){
+				$query .= " AND ( {$additionalCondition} ) ";
+			}
+			
 	        $result	= $dbWrapper->execSql($query, array(
 	        	$resource->uriResource
 	        ));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
+				var_dump('query: '.$query);
 				throw new core_kernel_persistence_hardapi_Exception("Unable to delete property values (single) for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
 			} else {
 				$returnValue = true;
@@ -505,13 +568,14 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method removePropertyValueByLg
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string lg
+     * @param  array options
      * @return boolean
      */
-    public function removePropertyValueByLg( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $lg)
+    public function removePropertyValueByLg( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $lg, $options = array())
     {
         $returnValue = (bool) false;
 
@@ -519,15 +583,47 @@ class core_kernel_persistence_hardsql_Resource
         
         $dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
         
+		// Optional params
+        $pattern = isset($options['pattern']) && !empty($options['pattern']) ? $options['pattern'] : '';
+        $like = isset($options['like']) && $options['like'] == true ? true : false;
+		
         // Get the table name
         $tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
-        
-        if ($property->isLgDependent()){
-        	
-        	$query = "DELETE `{$tableName}Props`.* FROM `{$tableName}`, `{$tableName}Props`
+        if($property->isLgDependent()){
+		
+        	$propsTableName = $tableName.'Props';
+        	$query = "DELETE `{$propsTableName}`.* FROM `{$tableName}`, `{$propsTableName}`
         		WHERE `{$tableName}`.uri = '{$resource->uriResource}' 
-        		AND `{$tableName}Props`.property_uri = '{$property->uriResource}'
-        		AND `{$tableName}`.id = `{$tableName}Props`.instance_id";
+        		AND `{$propsTableName}`.property_uri = '{$property->uriResource}'
+        		AND `{$tableName}`.id = `{$propsTableName}`.instance_id";
+				
+			//build additionnal conditions:
+			$additionalConditions = array();
+			if(!empty($pattern)){
+				if(is_string($pattern)){
+					if(!empty($pattern)){
+						$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
+						$additionalConditions[] = " ({$propsTableName}.property_value {$searchPattern} OR {$propsTableName}.property_foreign_uri {$searchPattern}) ";
+					}
+				}else if(is_array($pattern)){
+					if(count($pattern) > 0){
+						$multiCondition =  "(";
+						foreach($pattern as $i => $patternToken){
+							if(!empty($patternToken)){
+								$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
+								if($i > 0) $multiCondition .= " OR ";
+								$multiCondition .= " ({$propsTableName}.property_value {$searchPattern} OR {$propsTableName}.property_foreign_uri {$searchPattern}) ";
+							}
+						}
+						$additionalConditions[] = "{$multiCondition}) ";
+					}
+				}
+			}
+			
+			foreach($additionalConditions as $i => $additionalCondition){
+				$query .= " AND ( {$additionalCondition} ) ";
+			}
+			
 	        $result	= $dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to delete property values (multiple) for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
@@ -545,7 +641,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getRdfTriples
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @return core_kernel_classes_ContainerCollection
      */
@@ -564,7 +660,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getUsedLanguages
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return array
@@ -584,7 +680,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method duplicate
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  array excludedProperties
      * @return core_kernel_classes_Resource
@@ -701,7 +797,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method delete
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  boolean deleteReference
      * @return boolean
@@ -806,7 +902,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getLastModificationDate
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return core_kernel_persistence_doc_date
@@ -826,7 +922,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getLastModificationUser
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @return string
      */
@@ -845,7 +941,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getPropertiesValue
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  array properties
      * @param  boolean last
@@ -866,7 +962,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method setType
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Class class
      * @return boolean
@@ -933,7 +1029,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method removeType
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Class class
      * @return boolean
@@ -973,7 +1069,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method singleton
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return core_kernel_classes_Resource
      */
     public static function singleton()
@@ -996,7 +1092,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method isValidContext
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -1022,7 +1118,7 @@ class core_kernel_persistence_hardsql_Resource
      * like funcions. It should be good to refactor.
      *
      * @access private
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  array options
