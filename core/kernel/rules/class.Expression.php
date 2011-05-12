@@ -267,7 +267,6 @@ class core_kernel_rules_Expression
 			else if ($firstPart instanceof core_kernel_classes_ContainerCollection 
 					&& $secondPart instanceof core_kernel_classes_ContainerCollection ) {
 						$returnValue = false;
-						//error_reporting(E_ALL);
 						foreach ($firstPart->getIterator() as $subLeftPart)
 						{
 							//analyse left collection and remove any container in it which is not literal

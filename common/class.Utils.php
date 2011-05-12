@@ -98,30 +98,12 @@ class common_Utils
         $returnValue = (bool) false;
 
         // section 10-13-1--31--3b304a1e:11b08118c60:-8000:0000000000000D10 begin
-        //problem with  preg_match( '/^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]*'.'((:[0-9]{1,5})?\/.*)?$/i' ,$strarg)
-        error_reporting("^E_NOTICE");
-        $infos = parse_url($strarg);
-        if (($infos['scheme']=='http'||$infos['scheme']=='https' || $infos['scheme']=='file'||$infos['scheme']=='ftp')&& $infos['host']!="" )
-        {
-            if(strpos($strarg,'#')>0){        
-                $returnValue = true;
-            }
-            else {
-                  $logger = new common_Logger('isUri',Logger::debug_level);
-                  $logger->info('# not found in isUri, remove $resource->uriResource, check your code ' . $strarg ,__FILE__,__LINE__);
-            }    
+        $uri = trim($strarg);
+        if(!empty($uri)){
+        	if( (preg_match("/^(http|https|file|ftp):\/\/(.*)+/", $uri) && strpos($uri,'#')>0) || strpos($uri,"#")===0){
+        		$returnValue = true;
+        	}
         }
-        else
-        {
-            //todo normally the first char after the # should not be numeric
-            if (strpos($strarg,"#")===0){
-                $returnValue = true;
-            } 
-            else {
-                $returnValue = false;
-            }
-        }
-        error_reporting(E_ALL);
         // section 10-13-1--31--3b304a1e:11b08118c60:-8000:0000000000000D10 end
 
         return (bool) $returnValue;
@@ -178,8 +160,7 @@ class common_Utils
         $returnValue = (string) '';
 
         // section 10-13-1--31--3b304a1e:11b08118c60:-8000:0000000000000D1A begin
-        $returnValue = trim($strarg);
-        $returnValue = strip_tags($returnValue);
+        $returnValue = strip_tags(trim($strarg));
         // section 10-13-1--31--3b304a1e:11b08118c60:-8000:0000000000000D1A end
 
         return (string) $returnValue;
