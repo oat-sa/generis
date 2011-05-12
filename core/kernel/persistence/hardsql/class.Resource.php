@@ -895,10 +895,10 @@ class core_kernel_persistence_hardsql_Resource
 		
 		// Delete the records in the main table  and the properties table
 		$query = "DELETE M.*, P.* FROM {$tableName} M
-			INNER JOIN {$tableName}Props P ON M.id = P.instance_id
+			LEFT JOIN {$tableName}Props P ON M.id = P.instance_id
 			WHERE uri = ?";
         $returnValue = $dbWrapper->execSql($query, array($uri));
-        
+		
         // Unreference the resource
         core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unReferenceResource($resource);
 		
