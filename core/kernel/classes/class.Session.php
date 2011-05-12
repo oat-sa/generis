@@ -126,10 +126,6 @@ class core_kernel_classes_Session
         $returnValue = (string) '';
 
         // section 10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000AE7 begin
-	   /* $userService = core_kernel_users_Service::singleton();
-        if(!$userService->isASessionOpened()){
-			throw new common_Exception('Fail openning session, check if you log in');
-	    }*/
 	   
        	//initialize the dbWrapper
 		core_kernel_classes_DbWrapper::singleton($module);
@@ -278,14 +274,13 @@ class core_kernel_classes_Session
         	$resturnValue = true;
         }
         else{
-	        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-	         
-	        $query = 'SELECT modelID FROM models where baseURI = ?';
-	        $result = $dbWrapper->execSql($query, array($model));
-	        while($row = $result->fetchRow()){
-	        	$this->loadedModels[$row['modelID']] = $model;
-	        	$resturnValue = true;
-	        }
+        	$nsManager = common_ext_NamespaceManager::singleton();
+        	foreach($nsManager->getAllNamespaces() as $namespace){
+        		if($namespace->getUri() == $model){
+        			$this->loadedModels[$namespace->getModelId()] = $model;
+        			break;
+        		}
+        	}
         }
         // section 127-0-1-1--ded7727:12f59911cd7:-8000:0000000000001433 end
 

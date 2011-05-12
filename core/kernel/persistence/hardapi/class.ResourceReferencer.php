@@ -498,10 +498,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			$result = $dbWrapper->execSql("SELECT `uri`, `table` FROM `resource_to_table`");
 			while (!$result->EOF) {
-	        	self::$_resources[] = array(
-	        		'uri' 	=> $result->fields['uri'],
-	        		'table' => $result->fields['table']
-	        	);
+	        	self::$_resources[$result->fields['uri']] = $result->fields['table'];
 	        	$result->moveNext();
 	        }
 		}
@@ -528,9 +525,15 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			switch($this->cacheModes['instance']){
 				
 				case self::CACHE_NONE:
+					if(array_key_exists($resource->uriResource, self::$_resources)){
+						$returnValue = true;
+						break;
+					}
+					
 					$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-					$result = $dbWrapper->execSql("SELECT `id` FROM `resource_to_table` WHERE `uri` = ?", array($resource->uriResource));
+					$result = $dbWrapper->execSql("SELECT `table` FROM `resource_to_table` WHERE `uri` = ?", array($resource->uriResource));
 					if($result->RecordCount() > 0){
+						self::$_resources[$resource->uriResource] = $result->fields['table'];
 						$returnValue = true;
 					}
 					break;
@@ -538,12 +541,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				case self::CACHE_MEMORY:
 					
 					$this->loadResources();
-					foreach( self::$_resources as $res){
-						if($res['uri'] == $resource->uriResource){
-							$returnValue = true;
-							break;
-						}
-					}
+					$returnValue = array_key_exists($resource->uriResource, self::$_resources);
 					break;
 					
 				default:
@@ -609,12 +607,9 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 					}
 				}
 			}
-			if($returnValue && $this->cacheModes['instance'] == self::CACHE_MEMORY){
+			if($returnValue){
 				foreach($rows as $row){
-					self::$_resources[] = array(
-						'uri' 	=> $row['uri'],
-						'table'	=> $row['table']
-					);
+					self::$_resources[$row['uri']] = $row['table'];
 				}
 			}
         }
@@ -647,12 +642,8 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			$result = $dbWrapper->execSql($query, array($resource->uriResource));
 			if($result !== false){
 				$returnValue = true;
-				if($this->cacheModes['instance'] == self::CACHE_MEMORY ){
-					foreach( self::$_resources as $key =>  $res){
-						if($res['uri'] == $resource->uriResource){
-							unset(self::$_resources[$key]);
-						}
-					}
+				if(array_key_exists($resource->uriResource, self::$_resources)){
+					unset(self::$_resources[$resource->uriResource]);
 				}
 			}
 		}
@@ -680,9 +671,14 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			switch($this->cacheModes['instance']){
 				
 				case self::CACHE_NONE:
+					if(array_key_exists($resource->uriResource, self::$_resources)){
+						$returnValue = self::$_resources[$resource->uriResource];
+						break;
+					}
+					
 			        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			        
-			        $query = "SELECT `table` FROM resource_to_table WHERE uri=? LIMIT 1";
+			        $query = "SELECT `table` FROM resource_to_table WHERE uri=?";
 			    	$result = $dbWrapper->execSql($query, array ($resource->uriResource));
 					if($dbWrapper->dbConnector->errorNo() !== 0){
 						
@@ -691,17 +687,16 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 					else {
 						if (!$result->EOF){
 							$returnValue = $result->fields['table'];
+							self::$_resources[$resource->uriResource] = $result->fields['table'];
 						}
 					}
 			        break;
 			
 			   case self::CACHE_MEMORY:
 			   		$this->loadResources();
-			   		foreach( self::$_resources as $key =>  $res){
-						if($res['uri'] == $resource->uriResource){
-							$returnValue = $res['table'];
-							break;
-						}
+			   		if(array_key_exists($resource->uriResource, self::$_resources)){
+						$returnValue = self::$_resources[$resource->uriResource];
+						break;
 					}
 			   break;
 			}
@@ -766,6 +761,19 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     						self::$_properties[$propertyUri] = array($table);
     					}
     				}
+    			}
+    			
+    			$query 	= "SELECT DISTINCT property_uri FROM `{$table}Props`";
+    			$result = $dbWrapper->execSql($query);
+    			while(!$result->EOF){
+    				$propertyUri = $result->fields['property_uri'];
+    				if(isset(self::$_properties[$propertyUri]) && !in_array("{$table}Props", self::$_properties[$propertyUri])){
+    					self::$_properties[$propertyUri][] = "{$table}Props";
+    				}
+    				else{
+    					self::$_properties[$propertyUri] = array("{$table}Props");
+    				}
+    				$result->moveNext();
     			}
     		}
 			

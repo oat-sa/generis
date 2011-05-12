@@ -382,8 +382,8 @@ class core_kernel_persistence_hardsql_Class
 		}
 		
 		$tableName = '';
-		// $tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($resource);
-		$classLocations = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($resource);
+		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+		$classLocations = $referencer->classLocations($resource);
 		if(isset($classLocations[0])){
 			$tableName = $classLocations[0]['table'];
 		}else{
@@ -396,16 +396,18 @@ class core_kernel_persistence_hardsql_Class
 		$conditions = array();
 		foreach($propertyFilters as $propUri => $pattern){
 			
-			$propDesc = core_kernel_persistence_hardapi_Utils::propertyDescriptor(new core_kernel_classes_Property($propUri), true);
+			$property = new core_kernel_classes_Property($propUri);
+			$propName = core_kernel_persistence_hardapi_Utils::getShortName($property);
+			
 			$propsTabIndex = '00';
 						
-			if($propDesc['isMultiple'] || $propDesc['isLgDependent']){
-								
+			$propertyLocation = $referencer->propertyLocation($property);
+			if(in_array($tablePropertiesName, $propertyLocation)){
 				$classPropsTabIndex = count($tableNames);
 				$tableNames['t'.$classPropsTabIndex] = $tablePropertiesName;
 				
 				$langToken = "";				
-				if(isset($options['lang']) && $propDesc['isLgDependent']){
+				if(isset($options['lang']) && $property->isLgDependent()){
 					if(preg_match('/^[a-zA-Z]{2,4}$/', $options['lang'])){
 						$langToken = " AND ( t{$classPropsTabIndex}.l_language = '' OR t{$classPropsTabIndex}.l_language = '{$options['lang']}')";
 					}
@@ -418,12 +420,7 @@ class core_kernel_persistence_hardsql_Class
 					if(!empty($pattern)){
 						
 						$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
-						if(empty($propDesc['range'])){
-							$condition = " ( t{$classPropsTabIndex}.property_value {$searchPattern} {$langToken})";
-						}else{
-							$condition = " ( t{$classPropsTabIndex}.property_foreign_uri {$searchPattern} {$langToken})";
-						}
-						
+						$condition = " ( (t{$classPropsTabIndex}.property_value {$searchPattern} OR t{$classPropsTabIndex}.property_foreign_uri {$searchPattern}) {$langToken})";
 					}
 				}
 				else if(is_array($pattern)){
@@ -437,11 +434,7 @@ class core_kernel_persistence_hardsql_Class
 								if($i > 0){
 									$multiCondition .= " OR ";
 								}
-								if(empty($propDesc['range'])){
-									$multiCondition .= " ( t{$classPropsTabIndex}.property_value {$searchPattern} {$langToken}) ";
-								}else{
-									$multiCondition .= " ( t{$classPropsTabIndex}.property_foreign_uri {$searchPattern} {$langToken}) ";
-								}
+								$multiCondition .= " ( (t{$classPropsTabIndex}.property_value {$searchPattern} OR t{$classPropsTabIndex}.property_foreign_uri {$searchPattern}) {$langToken})";
 							}
 						}
 						$condition = "{$multiCondition} ) ";
@@ -451,14 +444,16 @@ class core_kernel_persistence_hardsql_Class
 					$conditions[] = " ( t0.id = t{$classPropsTabIndex}.instance_id AND t{$classPropsTabIndex}.property_uri = \"{$propUri}\" AND {$condition} )";
 				}
 				
-			}else{
+			}
+			elseif(in_array($tableName, $propertyLocation)){
 					
+				
 				$propsTabIndex = count($tableNames);
 				
 				if(is_string($pattern)){
 					if(!empty($pattern)){
 						$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
-						$conditions[] = " ( t0.{$propDesc['name']} {$searchPattern} )";
+						$conditions[] = " ( t0.{$propName} {$searchPattern} )";
 					}
 				}
 				else if(is_array($pattern)){
@@ -471,7 +466,7 @@ class core_kernel_persistence_hardsql_Class
 							if($i > 0){
 								$multiCondition .= " OR ";
 							}
-							$multiCondition .= " ( t0.{$propDesc['name']} {$searchPattern} ) ";
+							$multiCondition .= " ( t0.{$propName} {$searchPattern} ) ";
 						}
 						$conditions[] = "{$multiCondition}) ";
 					}
@@ -516,8 +511,6 @@ class core_kernel_persistence_hardsql_Class
 		}
 		
 		$sqlResult = $dbWrapper->execSql($sqlQuery);
-	
-		//var_dump("searching in class {$resource->uriResource} ({$resource->getLabel()})", $sqlQuery);
 		while (!$sqlResult->EOF){
 
 			$instance = new core_kernel_classes_Resource($sqlResult->fields['uri']);

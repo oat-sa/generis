@@ -125,37 +125,39 @@ class core_kernel_persistence_hardsql_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
 
-        $session 	= core_kernel_classes_Session::singleton();
-		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-		
-        
-        
+		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+    	$table = $referencer->resourceLocation($resource);
+    	if(empty($table)){
+    		return $returnValue;
+    	}
+    	
     	$table = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
     	if(empty($table)){
     		return $returnValue;
     	}
-    	// Optional params
+
         $one = isset($options['one']) && $options['one'] == true ? true : false;
         $last = isset($options['last']) && $options['last'] == true ? true : false;
         
+       
+		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
     	$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
-        $propertyRange = $property->getRange();
-
-        // Define language if required
-        $lang = "";
-        if ($property->isLgDependent()){
-        	if (isset($option['lg'])){
-        		$lang = $option['lg'];
-        	} else if ($session->getLg() != ''){
-        		$lang = $session->getLg();
-        	} else {
-        		$lang = $session->defaultLg;
-        	}
-        }
+    	$propertyLocation = $referencer->propertyLocation($property);
+      
 		// Select in the properties table of the class
-		if ($property->isMultiple() || $property->isLgDependent()
-			|| ! core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isPropertyReferenced($property)){
+		if (in_array("{$table}Props", $propertyLocation)
+			|| ! $referencer->isPropertyReferenced($property)){
 			
+			 $session 	= core_kernel_classes_Session::singleton();
+			 // Define language if required
+		     $lang = '';
+		     if (isset($option['lg'])){
+		     	$lang = $option['lg'];
+		     }
+		     else{
+		     	($session->getLg() != '') ? $lang = $session->getLg() : $lang = $session->defaultLg;
+		     }
+				
 			$query = "SELECT property_value, property_foreign_uri 
 				FROM {$table} M
 				INNER JOIN {$table}Props P on M.id = P.instance_id
@@ -202,7 +204,7 @@ class core_kernel_persistence_hardsql_Resource
 		}
 		
 		// Select in the main table of the class
-		else {			
+		else{			
 			$query =  "SELECT {$propertyAlias} as propertyValue FROM {$table} WHERE uri = ?";
 			$result	= $dbWrapper->execSql($query, array(
 				$resource->uriResource
@@ -332,28 +334,20 @@ class core_kernel_persistence_hardsql_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE begin
 		        
+        // Get the table name
+        $referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+        $tableName = $referencer->resourceLocation ($resource);
+        if(empty($tableName)){
+        	return $returnValue;
+        }
+        
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-        $session 	= core_kernel_classes_Session::singleton();
         $object  = !is_string($object) && $object instanceof core_kernel_classes_Resource ? $object->uriResource : $object;
 		$instanceId = null;
         $propertyValue = null;
        	$propertyForeignUri = null;
-        $propertyRange = $property->getRange();
-        
-        $lang = "";
-        // Define language if required
-        if ($property->isLgDependent()){
-        	if ($lg!=null){
-        		$lang = $lg;
-        	} else if ($session->getLg() != ''){
-        		$lang = $session->getLg();
-        	} else {
-        		$lang = $session->defaultLg;
-        	}
-        }
-        
-        // Get the table name
-        $tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
+       	$propertyRange = $property->getRange();
+       
         
         // Get property instance
         $instanceId = core_kernel_persistence_hardsql_Utils::getInstanceId ($resource);
@@ -371,9 +365,23 @@ class core_kernel_persistence_hardsql_Resource
         	}
         }
         
-        if ($property->isMultiple() || $property->isLgDependent() 
-        	|| !core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isPropertyReferenced($property)){
+        $propertyLocation = $referencer->propertyLocation($property);
+        if (in_array("{$tableName}Props", $propertyLocation)
+        	|| !$referencer->isPropertyReferenced($property)){
         	
+        	$session 	= core_kernel_classes_Session::singleton();
+        	$lang = "";
+	        // Define language if required
+	        if ($property->isLgDependent()){
+	        	if ($lg!=null){
+	        		$lang = $lg;
+	        	} else if ($session->getLg() != ''){
+	        		$lang = $session->getLg();
+	        	} else {
+	        		$lang = $session->defaultLg;
+	        	}
+	        }
+        		
         	$query = "INSERT INTO {$tableName}Props 
         		(instance_id, property_uri, property_value, property_foreign_uri, l_language) 
         		VALUES (?, ?, ?, ?, ?)";
@@ -465,17 +473,23 @@ class core_kernel_persistence_hardsql_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD begin
 
+        // Get the table name
+        $referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+        $tableName = $referencer->resourceLocation ($resource);
+        if(empty($tableName)){
+        	return $returnValue;
+        }
+        
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
         
 		// Optional params
         $pattern = isset($options['pattern']) && !empty($options['pattern']) ? $options['pattern'] : '';
         $like = isset($options['like']) && $options['like'] == true ? true : false;
 		
-        // Get the table name
-        $tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
         
-        if ($property->isMultiple() || $property->isLgDependent() 
-        	|| !core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isPropertyReferenced($property, $tableName)){
+        $propertyLocation = $referencer->propertyLocation($property);
+        if (in_array("{$tableName}Props", $propertyLocation)
+        	|| !$referencer->isPropertyReferenced($property, $tableName)){
         	
 			$propsTableName = $tableName.'Props';
         	$query = "DELETE `{$propsTableName}`.* FROM `{$tableName}`, `{$propsTableName}`
@@ -690,7 +704,6 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD begin
-		
         $referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
 		$tableName = $referencer->resourceLocation ($resource);
 		if(empty($tableName)){
@@ -782,12 +795,8 @@ class core_kernel_persistence_hardsql_Resource
 				
 				//return the duplciated resource
 				$returnValue = $duplicatedResource;
-				
-				//echo $returnValue->uriResource."<br>";
 			}
 		}
-		
-        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD end
 
         return $returnValue;

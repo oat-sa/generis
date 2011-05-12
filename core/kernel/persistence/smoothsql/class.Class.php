@@ -164,10 +164,10 @@ class core_kernel_persistence_smoothsql_Class
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F5 begin
-		//		$classes = core_kernel_classes_Session::singleton()->model->getindirectSuperClasses($resource->uriResource);
-		$returnValue =  array();
-		$sqlQuery ="SELECT object FROM statements WHERE subject = '". $resource->uriResource."' AND (predicate = '".
-		RDF_SUBCLASSOF."' OR predicate = '".RDF_TYPE."')";
+        $returnValue =  array();
+		
+        $sqlQuery ="SELECT object FROM statements WHERE subject = '". $resource->uriResource."' AND (predicate = '".
+        			RDF_SUBCLASSOF."' OR predicate = '".RDF_TYPE."')";
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$sqlResult = $dbWrapper->execSql($sqlQuery);
@@ -285,17 +285,6 @@ class core_kernel_persistence_smoothsql_Class
 				$returnValue = array_merge($returnValue,$subClass->getInstances(true));
 			}
 		}
-
-//		if(defined('ENABLE_SUBSCRIPTION') && ENABLE_SUBSCRIPTION && $resource->uriResource != CLASS_SUBCRIPTION){
-//			$typeProp = new core_kernel_classes_Property(RDF_TYPE);
-//			$subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions(null,$typeProp,$resource);
-//
-//			foreach ($subcriptions as $sub){
-//				$subcriptionResource = new core_kernel_classes_Resource($sub);
-//				$subcriptionsInstances = core_kernel_subscriptions_Service::singleton()->getInstancesFromSubscription($subcriptionResource,$resource);
-//				$returnValue = array_merge($returnValue,$subcriptionsInstances);
-//			}
-//		}
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 end
 
@@ -493,7 +482,7 @@ class core_kernel_persistence_smoothsql_Class
 			return $returnValue;
 		}
 		
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		
 		//add the type check to the filters
 		$propertyFilters[RDF_TYPE] = $resource->uriResource;

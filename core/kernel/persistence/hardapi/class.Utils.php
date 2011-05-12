@@ -195,7 +195,7 @@ class core_kernel_persistence_hardapi_Utils
         $returnValue = array();
 
         // section 10-13-1--128-743691ae:12fc0ed9381:-8000:0000000000001525 begin
-		
+        
 		$returnValue = array(
 			'name'			=> core_kernel_persistence_hardapi_Utils::getShortName($property),
 			'isMultiple' 	=> $property->isMultiple(),
