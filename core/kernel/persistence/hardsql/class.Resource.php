@@ -783,7 +783,7 @@ class core_kernel_persistence_hardsql_Resource
 				//return the duplciated resource
 				$returnValue = $duplicatedResource;
 				
-				echo $returnValue->uriResource."<br>";
+				//echo $returnValue->uriResource."<br>";
 			}
 		}
 		
