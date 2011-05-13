@@ -760,7 +760,7 @@ class core_kernel_persistence_hardsql_Resource
 				//linearize the excluded properties
 				$excludedPropertyList = '';
 				foreach($excludedProperties as $excludedProperty){
-					$excludedPropertyList = "'{$excludedProperty}',";
+					$excludedPropertyList .= "'{$excludedProperty}',";
 				}
 				$excludedPropertyList = substr($excludedPropertyList, 0, strlen($excludedPropertyList) -1);
 				
