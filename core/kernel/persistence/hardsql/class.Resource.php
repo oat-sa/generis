@@ -770,7 +770,8 @@ class core_kernel_persistence_hardsql_Resource
 				$insertPropEmptyQuery = "INSERT INTO {$tableName}Props (property_uri, l_language, instance_id) VALUES (?,?,?)";
 				
 				//get the rows to duplicate
-				$propsQuery = "SELECT * FROM {$tableName}Props WHERE instance_id = ? AND property_uri NOT IN ({$excludedPropertyList})";
+				$propsQuery = "SELECT * FROM {$tableName}Props WHERE instance_id = ? AND property_uri ";
+				$propsQuery .= empty($excludedPropertyList)?'':" NOT IN ({$excludedPropertyList}) ";
 				$propsResult = $dbWrapper->execSql($propsQuery, array($instanceId));
 				while(!$propsResult->EOF){
 					
