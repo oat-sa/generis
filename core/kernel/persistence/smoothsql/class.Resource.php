@@ -452,7 +452,7 @@ class core_kernel_persistence_smoothsql_Resource
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		
 		// Optional params
-        $pattern = isset($options['pattern']) && !empty($options['pattern']) ? $options['pattern'] : '';
+        $pattern = isset($options['pattern']) && !is_null($options['pattern']) ? $options['pattern'] : null;
         $like = isset($options['like']) && $options['like'] == true ? true : false;
 		
 		//build query:
@@ -460,7 +460,7 @@ class core_kernel_persistence_smoothsql_Resource
 		
 		$conditions = array();
 		if(is_string($pattern)){
-			if(!empty($pattern)){
+			if(!is_null($pattern)){
 				$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
 				$conditions[] = "( `object` {$searchPattern} )";
 			}

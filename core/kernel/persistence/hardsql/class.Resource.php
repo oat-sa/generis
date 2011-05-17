@@ -487,7 +487,7 @@ class core_kernel_persistence_hardsql_Resource
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
         
 		// Optional params
-        $pattern = isset($options['pattern']) && !empty($options['pattern']) ? $options['pattern'] : '';
+        $pattern = isset($options['pattern']) && !is_null($options['pattern']) ? $options['pattern'] : null;
         $like = isset($options['like']) && $options['like'] == true ? true : false;
 		
         
@@ -503,21 +503,17 @@ class core_kernel_persistence_hardsql_Resource
 			
 			//build additionnal conditions:
 			$additionalConditions = array();
-			if(!empty($pattern)){
+			if(!is_null($pattern)){
 				if(is_string($pattern)){
-					if(!empty($pattern)){
-						$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
-						$additionalConditions[] = " ({$propsTableName}.property_value {$searchPattern} OR {$propsTableName}.property_foreign_uri {$searchPattern}) ";
-					}
+					$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
+					$additionalConditions[] = " ({$propsTableName}.property_value {$searchPattern} OR {$propsTableName}.property_foreign_uri {$searchPattern}) ";
 				}else if(is_array($pattern)){
 					if(count($pattern) > 0){
 						$multiCondition =  "(";
 						foreach($pattern as $i => $patternToken){
-							if(!empty($patternToken)){
-								$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
-								if($i > 0) $multiCondition .= " OR ";
-								$multiCondition .= " ({$propsTableName}.property_value {$searchPattern} OR {$propsTableName}.property_foreign_uri {$searchPattern}) ";
-							}
+							$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
+							if($i > 0) $multiCondition .= " OR ";
+							$multiCondition .= " ({$propsTableName}.property_value {$searchPattern} OR {$propsTableName}.property_foreign_uri {$searchPattern}) ";
 						}
 						$additionalConditions[] = "{$multiCondition}) ";
 					}
@@ -541,21 +537,17 @@ class core_kernel_persistence_hardsql_Resource
 			
 			//build additionnal conditions:
 			$additionalConditions = array();
-			if(!empty($pattern)){
+			if(!is_null($pattern)){
 				if(is_string($pattern)){
-					if(!empty($pattern)){
-						$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
-						$additionalConditions[] = " ({$propertyName} {$searchPattern}) ";
-					}
+					$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
+					$additionalConditions[] = " ({$propertyName} {$searchPattern}) ";
 				}else if(is_array($pattern)){
 					if(count($pattern) > 0){
 						$multiCondition =  "(";
 						foreach($pattern as $i => $patternToken){
-							if(!empty($patternToken)){
-								$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
-								if($i > 0) $multiCondition .= " OR ";
-								$multiCondition .= " ({$tableName}.`{$propertyName}` {$searchPattern}) ";
-							}
+							$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
+							if($i > 0) $multiCondition .= " OR ";
+							$multiCondition .= " ({$tableName}.`{$propertyName}` {$searchPattern}) ";
 						}
 						$additionalConditions[] = "{$multiCondition}) ";
 					}
@@ -601,7 +593,7 @@ class core_kernel_persistence_hardsql_Resource
         $dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
         
 		// Optional params
-        $pattern = isset($options['pattern']) && !empty($options['pattern']) ? $options['pattern'] : '';
+        $pattern = isset($options['pattern']) && !is_null($options['pattern']) ? $options['pattern'] : null;
         $like = isset($options['like']) && $options['like'] == true ? true : false;
 		
         // Get the table name
@@ -616,21 +608,17 @@ class core_kernel_persistence_hardsql_Resource
 				
 			//build additionnal conditions:
 			$additionalConditions = array();
-			if(!empty($pattern)){
+			if(!is_null($pattern)){
 				if(is_string($pattern)){
-					if(!empty($pattern)){
-						$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
-						$additionalConditions[] = " ({$propsTableName}.property_value {$searchPattern} OR {$propsTableName}.property_foreign_uri {$searchPattern}) ";
-					}
+					$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
+					$additionalConditions[] = " ({$propsTableName}.property_value {$searchPattern} OR {$propsTableName}.property_foreign_uri {$searchPattern}) ";
 				}else if(is_array($pattern)){
 					if(count($pattern) > 0){
 						$multiCondition =  "(";
 						foreach($pattern as $i => $patternToken){
-							if(!empty($patternToken)){
-								$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
-								if($i > 0) $multiCondition .= " OR ";
-								$multiCondition .= " ({$propsTableName}.property_value {$searchPattern} OR {$propsTableName}.property_foreign_uri {$searchPattern}) ";
-							}
+							$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
+							if($i > 0) $multiCondition .= " OR ";
+							$multiCondition .= " ({$propsTableName}.property_value {$searchPattern} OR {$propsTableName}.property_foreign_uri {$searchPattern}) ";
 						}
 						$additionalConditions[] = "{$multiCondition}) ";
 					}
