@@ -242,7 +242,7 @@ class core_kernel_persistence_smoothsql_Class
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 begin
 		
-        $sqlQuery = "SELECT DISTINCT `subject` FROM `statements` 
+        $sqlQuery = "SELECT `subject` FROM `statements` 
 						WHERE predicate = '".RDF_TYPE."'  
 							AND object = '".$resource->uriResource."' ";
 		if(isset($params['limit'])){
@@ -498,7 +498,7 @@ class core_kernel_persistence_smoothsql_Class
 			$like = ($options['like'] === true);
 		}
 
-		$query = "SELECT DISTINCT `subject` FROM `statements` WHERE ";
+		$query = "SELECT `subject` FROM `statements` WHERE ";
 
 		$conditions = array();
 		foreach($propertyFilters as $propUri => $pattern){
@@ -566,15 +566,15 @@ class core_kernel_persistence_smoothsql_Class
 				$tmpMatchingUris = array();
 				$result = $dbWrapper->execSql($query . $condition);
 				while (!$result->EOF){
-					$tmpMatchingUris[] = $result->fields['subject'];
+					$foundInstancesUri = $result->fields['subject'];
+					$tmpMatchingUris[$foundInstancesUri] = $foundInstancesUri;
 					$result->MoveNext();
 				}
 				if($intersect){
 					//EXCLUSIVES CONDITIONS
 					if($i == 0){
 						$matchingUris = $tmpMatchingUris;
-					}
-					else{
+					}else{
 						$matchingUris = array_intersect($matchingUris, $tmpMatchingUris);
 					}
 				}
