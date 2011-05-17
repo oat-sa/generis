@@ -297,7 +297,7 @@ class core_kernel_users_Service
         
     	$users = $class->searchInstances(
     		array(PROPERTY_USER_LOGIN => $login), 
-    		array('like' => true, 'recursive' => true)
+    		array('like' => false, 'recursive' => true)
     	);
     	foreach($users as $user){
     		$returnValue = $user;
@@ -426,7 +426,7 @@ class core_kernel_users_Service
         $returnValue = (bool) false;
 
         // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E9D begin
-        if(Session::hasAttribute(self::AUTH_TOKEN_KEY)) {
+		if(Session::hasAttribute(self::AUTH_TOKEN_KEY)) {
         	$returnValue = true;
         }
         // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E9D end

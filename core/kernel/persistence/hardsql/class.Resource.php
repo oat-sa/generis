@@ -394,6 +394,8 @@ class core_kernel_persistence_hardsql_Resource
 	        ));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to set property (single) Value for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+			}else{
+				$returnValue = true;
 			}
         } else {
         	
@@ -405,6 +407,8 @@ class core_kernel_persistence_hardsql_Resource
 	        ));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to set property (multiple) Value for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+			}else{
+				$returnValue = true;
 			}
         }
         
@@ -566,7 +570,6 @@ class core_kernel_persistence_hardsql_Resource
 	        	$resource->uriResource
 	        ));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
-				var_dump('query: '.$query);
 				throw new core_kernel_persistence_hardapi_Exception("Unable to delete property values (single) for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
 			} else {
 				$returnValue = true;
@@ -843,51 +846,64 @@ class core_kernel_persistence_hardsql_Resource
 			
 			$types = substr($types, 0, strlen($types) - 1);
 			
-			if(empty($types)){
-				return $returnValue;
-			}
-			
-			//get all the properties that have one of the resource class as range 
-			$sqlQuery = "SELECT subject, object FROM statements WHERE predicate = '".RDFS_RANGE."' AND object IN ({$types})";
-			$result = $dbWrapper->execSql($sqlQuery);
-			
-			while(!$result->EOF){
-				$properties[$result->fields['object']][] = $result->fields['subject'];
-				$result->moveNext();
-			}
-			
-			//delete the references 
-			$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
-			foreach($properties as $classUri => $propertyUris){
-				foreach($propertyUris as $propertyUri){
-					//property -> column
+			if(!empty($types)){
+		
+				//get all the properties that have one of the resource class as range 
+				$sqlQuery = "SELECT subject, object FROM statements WHERE predicate = '".RDFS_RANGE."' AND object IN ({$types})";
+				$result = $dbWrapper->execSql($sqlQuery);
+				
+				while(!$result->EOF){
+					//fill the properties range: propertyUri => domains:
+					$propertyUri = $result->fields['subject'];
+					$rangeUri = $result->fields['object'];
+					$properties[$rangeUri][$propertyUri] = array();
+					$result->moveNext();
+					
+					//get the domain of the property:
 					$property = new core_kernel_classes_Property($propertyUri);
-					$isMulti = ($property->isMultiple() || $property->isLgDependent());
-					$columnName = '';
-					if(!$isMulti){
-						$columnName = core_kernel_persistence_hardapi_Utils::getShortName($property);
-						if(empty($columnName)){
-							continue;
+					foreach($property->getDomain()->getIterator() as $domain){
+						if($domain instanceof core_kernel_classes_Class){
+							$properties[$rangeUri][$propertyUri][] = $domain->uriResource;
 						}
 					}
-					
-					//classLocations -> table
-					$classLocations = $referencer->classLocations(new core_kernel_classes_Class($classUri));
-					foreach ($classLocations as $classLocation){
-						
-						if($property->isMultiple()){
-							//delete the row in the props table
-							$query = "DELETE FROM {$classLocation['table']}Props 
-										WHERE property_uri = '{$propertyUri}' 
-										AND (property_value = '{$uri}' OR property_foreign_uri = '{$uri}')";
-							$dbWrapper->execSql($query);
+				}
+				
+				//delete the references 
+				$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+				foreach($properties as $rangeUri=> $propertyUris){
+					foreach($propertyUris as $propertyUri => $domains){
+						//property -> column
+						$property = new core_kernel_classes_Property($propertyUri);
+						$isMulti = ($property->isMultiple() || $property->isLgDependent());
+						$columnName = '';
+						if(!$isMulti){
+							$columnName = core_kernel_persistence_hardapi_Utils::getShortName($property);
+							if(empty($columnName)){
+								continue;
+							}
 						}
-						else {
-							//set the col value to NULL
-							$query = "UPDATE {$classLocation['table']} 
-										SET {$columnName} = NULL 
-										WHERE {$columnName} = '{$uri}'";
-							$dbWrapper->execSql($query);
+							
+						foreach($domains as $domainUri){
+							
+							//classLocations -> table
+							$classLocations = $referencer->classLocations(new core_kernel_classes_Class($domainUri));
+							foreach ($classLocations as $classLocation){
+								
+								if($property->isMultiple()){
+									//delete the row in the props table
+									$query = "DELETE FROM {$classLocation['table']}Props 
+												WHERE property_uri = '{$propertyUri}' 
+												AND (property_value = '{$uri}' OR property_foreign_uri = '{$uri}')";
+									$dbWrapper->execSql($query);
+								}
+								else {
+									//set the col value to NULL
+									$query = "UPDATE {$classLocation['table']} 
+												SET {$columnName} = NULL 
+												WHERE {$columnName} = '{$uri}'";
+									$dbWrapper->execSql($query);
+								}
+							}
 						}
 					}
 				}
