@@ -84,8 +84,13 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014EB begin
-        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014EB end
+		if(class_exists('core_kernel_persistence_smoothsql_Class')){
+			//the model is not hardened and remains in the soft table:
+			$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->getSubClasses($resource, $recursive);
+		}else{
+			throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        }
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014EB end
 
         return (array) $returnValue;
     }
@@ -104,7 +109,12 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F0 begin
-        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+		if(class_exists('core_kernel_persistence_smoothsql_Class')){
+			//the model is not hardened and remains in the soft table:
+			$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->isSubClassOf($resource, $parentClass);
+		}else{
+			throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        }
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F0 end
 
         return (bool) $returnValue;

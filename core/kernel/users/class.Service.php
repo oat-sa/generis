@@ -253,15 +253,26 @@ class core_kernel_users_Service
 			//check Role
 			$this->userResource = $user;
 			
-			$roleClass =  new core_kernel_classes_Class($role);
-			$acceptedRole =  array_merge(array($role) , array_keys($roleClass->getInstances(true))); 
+			$acceptedRoleUri = $role;
+			$acceptedRoleClass = new core_kernel_classes_Class($acceptedRoleUri);
 			
-			$returnValue = false; 
 			foreach ($this->userResource->getType() as $userRole){
-				if(in_array($userRole->uriResource, $acceptedRole)){
+				if($userRole->uriResource == $acceptedRoleUri){
 					$returnValue = true;
-					break;
+				}else if($userRole->isSubClassOf($acceptedRoleClass)){
+					$returnValue = true;
+					
+				}else if($userRole->isSubClassOf(new core_kernel_classes_Class(CLASS_GENERIS_USER))){
+					foreach ($userRole->getType() as $userRoleType){
+						$userRoleTypeClass = new core_kernel_classes_Class($userRoleType->uriResource);
+						if($userRoleType->uriResource == $acceptedRoleUri || $userRoleTypeClass->isSubClassOf($acceptedRoleClass)){
+							$returnValue = true;
+							break;
+						}
+					}
+					
 				}
+				if($returnValue) break;
 			}
         }
 

@@ -136,8 +136,8 @@ class core_kernel_persistence_smoothsql_Class
 			break;
 		}
 		if(!$returnValue){
-			
-			foreach ($parentClass->getSubClasses(true) as $subClass){
+			$parentSubClasses = $parentClass->getSubClasses(true);
+			foreach ($parentSubClasses as $subClass){
 				if ($subClass->uriResource == $resource->uriResource) {
 					$returnValue =  true;
 					break;
