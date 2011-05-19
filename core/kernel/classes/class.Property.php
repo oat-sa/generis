@@ -145,7 +145,7 @@ class core_kernel_classes_Property
 
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000780 begin
         
-        $returnValue = core_kernel_persistence_PropertyProxy::singleton()->getSubProperties ($this, $recursive);
+        $returnValue = core_kernel_persistence_PropertyProxy::singleton()->getSubProperties($this, $recursive);
         
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000780 end
 
@@ -246,7 +246,7 @@ class core_kernel_classes_Property
         
 		if (is_null($this->range)){
 			
-			$this->range = core_kernel_persistence_PropertyProxy::singleton()->getRange ($this);
+			$this->range = core_kernel_persistence_PropertyProxy::singleton()->getRange($this);
 		}
 		$returnValue = $this->range;
 		
@@ -314,7 +314,7 @@ class core_kernel_classes_Property
 
         if(is_null($this->lgDependent )){
 	        
-        	$this->lgDependent = core_kernel_persistence_PropertyProxy::singleton()->isLgDependent ($this);
+        	$this->lgDependent = core_kernel_persistence_PropertyProxy::singleton()->isLgDependent($this);
         }
  
         $returnValue = $this->lgDependent;
@@ -360,7 +360,7 @@ class core_kernel_classes_Property
         
         if(is_null($this->multiple )){
         	
-        	$this->multiple = core_kernel_persistence_PropertyProxy::singleton()->isMultiple ($this);
+        	$this->multiple = core_kernel_persistence_PropertyProxy::singleton()->isMultiple($this);
         }
  
         $returnValue = $this->multiple;

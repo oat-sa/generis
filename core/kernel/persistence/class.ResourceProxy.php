@@ -593,7 +593,6 @@ class core_kernel_persistence_ResourceProxy
         $returnValue = null;
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5D begin
-
         if (!isset(core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource]) 
         || core_kernel_persistence_PersistenceProxy::isForcedMode()){
         	
@@ -617,13 +616,14 @@ class core_kernel_persistence_ResourceProxy
 		if(isset(core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource])){
 			$returnValue = core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo[$resource->uriResource];
 		}else{
-			$errorMessage = "The resource with uri {$resource->uriResource} does not exist in the available implementation(s):";
+			$errorMessage = "The resource with uri {$resource->uriResource} does not exist in the available implementation(s): ";
 			$i = 0;
 			foreach($this->getAvailableImpl() as $name => $valid){
 				if($valid){
 					if($i>0) $errorMessage .= ", ";
 					$errorMessage .= $name;
-				} 
+				}
+				$i++;
 			}
 			throw new Exception($errorMessage);
 		}

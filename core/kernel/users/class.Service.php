@@ -247,30 +247,25 @@ class core_kernel_users_Service
 				throw new core_kernel_users_Exception('Authentication failed',core_kernel_users_Exception::BAD_LOGIN );
 			}
 			
-				
 			$this->loginApi($user->uriResource);
 			
-			//check Role
+			//assign user
 			$this->userResource = $user;
 			
-			$acceptedRoleUri = $role;
-			$acceptedRoleClass = new core_kernel_classes_Class($acceptedRoleUri);
-			
+			//check Role
+			$acceptedRoleClass = new core_kernel_classes_Class($role);
 			foreach ($this->userResource->getType() as $userRole){
-				if($userRole->uriResource == $acceptedRoleUri){
+				if($userRole->uriResource == $acceptedRoleClass->uriResource){
 					$returnValue = true;
 				}else if($userRole->isSubClassOf($acceptedRoleClass)){
 					$returnValue = true;
-					
 				}else if($userRole->isSubClassOf(new core_kernel_classes_Class(CLASS_GENERIS_USER))){
 					foreach ($userRole->getType() as $userRoleType){
-						$userRoleTypeClass = new core_kernel_classes_Class($userRoleType->uriResource);
-						if($userRoleType->uriResource == $acceptedRoleUri || $userRoleTypeClass->isSubClassOf($acceptedRoleClass)){
+						if($userRoleType->uriResource == $acceptedRoleClass->uriResource || $userRoleType->isSubClassOf($acceptedRoleClass)){
 							$returnValue = true;
 							break;
 						}
 					}
-					
 				}
 				if($returnValue) break;
 			}

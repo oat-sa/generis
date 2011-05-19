@@ -199,13 +199,8 @@ class core_kernel_persistence_PropertyProxy
 		$rangeProperty = new core_kernel_classes_Property(RDFS_RANGE,__METHOD__);
     	$rangeValues = core_kernel_persistence_smoothsql_Resource::singleton()->getPropertyValues($resource, $rangeProperty);
 		        
-		if (sizeOf($rangeValues)>0)
-		{
+		if (sizeOf($rangeValues)>0){
 			$returnValue = new core_kernel_classes_Class($rangeValues[0]);
-		}
-		else
-		{
-			$returnValue = new core_kernel_classes_Class("");
 		}
         
         // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001539 end

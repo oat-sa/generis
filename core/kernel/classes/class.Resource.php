@@ -90,7 +90,13 @@ class core_kernel_classes_Resource
     {
         // section 127-0-0-1-59fa2263:1193cca7051:-8000:0000000000000AFB begin
         //we should check using utils if the uri is short or long always use long uri inside the api (nevertheless the api may be called with short )
-        $this->uriResource =$uri;
+        if(!is_string($uri)){
+			throw new Exception('cannot construct the resource because the uri is not a "string", debug: '.$debug);
+		}else if(empty($uri)){
+			throw new Exception('cannot construct the resource because the uri cannot be empty, debug: '.$debug);
+		}
+		
+		$this->uriResource = $uri;
         
         if(DEBUG_MODE){
         	$this->debug = $debug;
