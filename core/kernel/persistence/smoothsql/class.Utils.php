@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 23.05.2011, 14:52:14 with ArgoUML PHP module 
+ * Automatically generated on 23.05.2011, 16:11:47 with ArgoUML PHP module 
  * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
  *
  * @author firstname and lastname of author, <author@example.org>
@@ -131,6 +131,38 @@ class core_kernel_persistence_smoothsql_Utils
         // section 10-13-1-85-61dcfc6d:1301cc5c657:-8000:0000000000001915 end
 
         return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method identifyFirstLanguage
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  array values
+     * @return string
+     */
+    public function identifyFirstLanguage($values)
+    {
+        $returnValue = (string) '';
+
+        // section 10-13-1-85--4651ba20:1301d2ffa69:-8000:0000000000001915 begin
+    	if (count($values) > 0) {
+    		$previousLanguage = $values[0]['language'];
+    		$returnValue = $previousLanguage;
+    		
+    		foreach ($values as $value) {
+    			if ($value['language'] == $previousLanguage) {
+    				continue;
+    			}
+    			else {
+    				$returnValue = $previousLanguage;
+    				break;
+    			}
+    		}
+    	}
+        // section 10-13-1-85--4651ba20:1301d2ffa69:-8000:0000000000001915 end
+
+        return (string) $returnValue;
     }
 
 } /* end of class core_kernel_persistence_smoothsql_Utils */
