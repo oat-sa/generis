@@ -69,10 +69,26 @@ class ApiModelTestCase extends UnitTestCase {
 		$true = new core_kernel_classes_Resource(GENERIS_TRUE, __METHOD__);
 		$predicate = RDFS_SEEALSO;
 		$property = new core_kernel_classes_Property($predicate,__METHOD__); 
-		$this->assertTrue($this->object->setStatement($true->uriResource,$predicate,'test', 'EN'));
-		$value = $true->getUniquePropertyValue($property);
-		$this->assertTrue($value instanceof core_kernel_classes_Literal);
-		$this->assertEqual($value->literal,'test');
+		$this->assertTrue($this->object->setStatement($true->uriResource,$predicate,'test', 'EN'), 
+						  "setStatement should be able to set a value.");
+		
+		// In the default ontology, generisTrue has a triple with an empty object.
+		// Then we should get multiple results for the #seeAlso property.
+		// We should get one literal value with 'test' as the label.
+		$values = $true->getPropertyValues($property);
+		$this->assertTrue(count($values) > 0);
+		
+		$tripleFound = false;
+		foreach ($values as $value) {
+			if (!common_Utils::isUri($value) && $value == 'test') {
+				$tripleFound = true;
+				break;
+			}
+		}
+		
+		$this->assertTrue($tripleFound, "A property value for property " . $property->uriResource . 
+										" should be found for resource " . $true->uriResource);
+		
 		$this->object->removeStatement($true->uriResource,$predicate,'test','EN');
 	}
 	
