@@ -72,9 +72,6 @@ class ApiModelTestCase extends UnitTestCase {
 		$this->assertTrue($this->object->setStatement($true->uriResource,$predicate,'test', 'EN'), 
 						  "setStatement should be able to set a value.");
 		
-		// In the default ontology, generisTrue has a triple with an empty object.
-		// Then we should get multiple results for the #seeAlso property.
-		// We should get one literal value with 'test' as the label.
 		$values = $true->getPropertyValues($property);
 		$this->assertTrue(count($values) > 0);
 		
@@ -151,6 +148,78 @@ class ApiModelTestCase extends UnitTestCase {
 				$this->assertEqual($aClass->getComment(), 'The class of RDF datatypes.');
 			}
 		}
+	}
+	
+	public function testFilterByLanguage() {
+		$session = core_kernel_classes_Session::singleton();
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$true = new core_kernel_classes_Resource(GENERIS_TRUE);
+		
+		$this->object->setStatement($true->uriResource,RDFS_SEEALSO,'test1', '');
+		$this->object->setStatement($true->uriResource,RDFS_SEEALSO,'test2', '');
+		$this->object->setStatement($true->uriResource,RDFS_SEEALSO,'testing', 'EN');
+		$this->object->setStatement($true->uriResource,RDFS_SEEALSO,'essai', 'FR');
+		$this->object->setStatement($true->uriResource,RDFS_SEEALSO,'testung1', 'SE');
+		$this->object->setStatement($true->uriResource,RDFS_SEEALSO,'testung2', 'SE');
+		
+		// Get some propertyValues as if it was obtained by an SQL Statement.
+		// First test is made with the default language selected.
+		$modelIds	= implode(',',array_keys($session->getLoadedModels()));
+        $query =  "SELECT object, l_language FROM statements 
+		    		WHERE subject = ? AND predicate = ?
+		    		AND (l_language = '' OR l_language = ? OR l_language = ?)
+		    		AND modelID IN ({$modelIds})";
+		    		
+        $result	= $dbWrapper->execSql($query, array(
+        	GENERIS_TRUE,
+        	RDFS_SEEALSO,
+        	$session->defaultLg,
+        	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
+        ));
+        
+        $sorted = core_kernel_persistence_smoothsql_Utils::sortByLanguage($result, 'l_language');
+        $filtered = core_kernel_persistence_smoothsql_Utils::getFirstLanguage($sorted);
+        $this->assertTrue(count($sorted) == 3 && $sorted[0]['value'] == 'testing');
+        $this->assertTrue(count($filtered) == 1 && $filtered[0] == 'testing');
+       
+        // Second test is based on a particular language.
+        $session->setLg('FR');
+        $result	= $dbWrapper->execSql($query, array(
+        	GENERIS_TRUE,
+        	RDFS_SEEALSO,
+        	$session->defaultLg,
+        	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
+        ));
+        
+        $sorted = core_kernel_persistence_smoothsql_Utils::sortByLanguage($result, 'l_language');
+        $filtered = core_kernel_persistence_smoothsql_Utils::getFirstLanguage($sorted);
+        $this->assertTrue(count($sorted) == 4 && $sorted[0]['value'] == 'essai');
+        $this->assertTrue(count($filtered) == 1 && $filtered[0] == 'essai');
+		
+		// Third test looks if the default language is respected.
+		// No japanese values here, but default language set to EN.
+		// Here we use the function filterByLanguage which aggregates sortByLanguage
+		// and getFirstLanguage.
+		$session->setLg('JA');
+        $result	= $dbWrapper->execSql($query, array(
+        	GENERIS_TRUE,
+        	RDFS_SEEALSO,
+        	$session->defaultLg,
+        	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
+        ));
+        
+        $filtered = core_kernel_persistence_smoothsql_Utils::filterByLanguage($result, 'l_language');
+        $this->assertTrue(count($filtered) == 1 && $filtered[0] == 'testing');
+		
+		$session->setLg('');
+		
+		// Set back ontology to normal.
+		$this->object->removeStatement($true->uriResource,RDFS_SEEALSO,'test1', '');
+		$this->object->removeStatement($true->uriResource,RDFS_SEEALSO,'test2', '');
+		$this->object->removeStatement($true->uriResource,RDFS_SEEALSO,'testing', 'EN');
+		$this->object->removeStatement($true->uriResource,RDFS_SEEALSO,'essai', 'FR');
+		$this->object->removeStatement($true->uriResource,RDFS_SEEALSO,'testung1', 'SE');
+		$this->object->removeStatement($true->uriResource,RDFS_SEEALSO,'testung2', 'SE');
 	}
 }
 ?>
