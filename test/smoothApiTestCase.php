@@ -170,9 +170,9 @@ class HardDbSubjectTestCase extends UnitTestCase {
 		foreach ($this->targetSubjectClass->getInstances() as $instance){	
 			
 			$props = $instance->getPropertyValuesByLg (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOTest.rdf#TestContent'), 'FR');
-			$this->assertEqual ($props[0], 'Test Content FR');
+			$this->assertEqual ($props->sequence[0], 'Test Content FR');
 			$this->assertEqual (count($props), 1);
-			foreach ($props as $prop){
+			foreach ($props->getIterator() as $prop){
 				
 				$this->assertTrue ($prop instanceof core_kernel_classes_Literal);
 			}		
