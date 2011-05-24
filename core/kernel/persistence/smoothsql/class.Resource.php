@@ -117,19 +117,19 @@ class core_kernel_persistence_smoothsql_Resource
         $session = core_kernel_classes_Session::singleton();
        	$modelIds	= implode(',',array_keys($session->getLoadedModels()));
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $query =  "SELECT object FROM statements 
+        $query =  "SELECT object, l_language FROM statements 
 		    		WHERE subject = ? AND predicate = ?
-		    		AND (l_language = '' OR l_language = ?)
+		    		AND (l_language = '' OR l_language = ? OR l_language = ?)
 		    		AND modelID IN ({$modelIds})";
     	
         $result	= $dbWrapper->execSql($query, array(
         	$resource->uriResource,
         	$property->uriResource,
+        	$session->defaultLg,
         	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
         ));
-        while ($row = $result->FetchRow()) {
-        	$returnValue[] = $row['object'];
-        }
+        
+        $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage($result, 'l_language');
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B end
 
@@ -159,20 +159,18 @@ class core_kernel_persistence_smoothsql_Resource
     	$session = core_kernel_classes_Session::singleton();
     	$modelIds	= implode(',',array_keys($session->getLoadedModels()));
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $query =  "SELECT object FROM statements 
+        $query =  "SELECT object, l_language FROM statements 
 		    		WHERE subject = ? AND predicate = ?
-		    		AND (l_language = '' OR l_language = ?)
+		    		AND (l_language = '' OR l_language = ? OR l_language = ?)
 		    		AND modelID IN ({$modelIds})";
         $result	= $dbWrapper->execSql($query, array(
         	$resource->uriResource,
         	$property->uriResource,
+        	$session->defaultLg,
         	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
         ));
       	
-        $propertiesValues = array();
-        while ($row = $result->FetchRow()) {
-        	$propertiesValues[] = $row['object'];
-        }
+        $propertiesValues = core_kernel_persistence_smoothsql_Utils::filterByLanguage($result, 'l_language');
         
         foreach ($propertiesValues as $value){
             if(!common_Utils::isUri($value)) {
@@ -212,38 +210,38 @@ class core_kernel_persistence_smoothsql_Resource
     	$session 	= core_kernel_classes_Session::singleton();
     	$modelIds	= implode(',',array_keys($session->getLoadedModels()));
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-        $query =  "SELECT object FROM statements 
+        $query =  "SELECT object, l_language FROM statements 
         			WHERE subject = ? AND predicate = ?
-		    		AND (l_language = '' OR l_language = ?) 
+		    		AND (l_language = '' OR l_language = ? OR l_language = ?) 
 		    		AND modelID IN ({$modelIds})";
 
         $params = array(
         	$resource->uriResource,
         	$property->uriResource,
+        	$session->defaultLg,
         	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
         );
+
+        $result = $dbWrapper->execSql($query, $params);
+        $propertyValues = core_kernel_persistence_smoothsql_Utils::filterByLanguage($result, 'l_language');
+        $finalResult = null;
         
-    	if($last){
-    		$result	= $dbWrapper->execSql($query, $params);
-    		if(!$result->EOF){
-    			$result->moveLast();
-    		}
+    	if($last && count($propertyValues > 0)){
+    		$finalResult = $propertyValues[count($propertyValues) - 1];
     	}
-    	else{
-	        $result	= $dbWrapper->dbConnector->selectLimit($query, 1, -1, $params);
+    	else if (count($propertyValues) > 0){
+	        $finalResult = $propertyValues[0];
     	}
     	
-    	while(!$result->EOF){
+    	if($finalResult !== null){
     		
-        	$value = $result->fields['object'];
-        	if(!common_Utils::isUri($value)) {
+        	if(!common_Utils::isUri($finalResult)) {
         		  
-                $returnValue = new core_kernel_classes_Literal($value);
+                $returnValue = new core_kernel_classes_Literal($finalResult);
 	         }
 	         else {
-                $returnValue = new core_kernel_classes_Resource($value);
+                $returnValue = new core_kernel_classes_Resource($finalResult);
             }
-            $result->moveNext();
           
     	}
         
@@ -483,11 +481,12 @@ class core_kernel_persistence_smoothsql_Resource
         if($property->isLgDependent()){
         	$session = core_kernel_classes_Session::singleton();
         	
-        	$query .=  " AND (l_language = '' OR l_language = ?) ";
+        	$query .=  " AND (l_language = '' OR l_language = ? OR l_language = ?) ";
         	
         	$returnValue	= $dbWrapper->execSql($query,array(
 	        		$resource->uriResource,
 	        		$property->uriResource,
+	        		$session->defaultLg,
 	        		($session->getLg() != '') ? $session->getLg() : $session->defaultLg
 	        ));
 	        
@@ -786,29 +785,34 @@ class core_kernel_persistence_smoothsql_Resource
     	$modelIds	= implode(',',array_keys($session->getLoadedModels()));
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
     	
-        $query =  "SELECT predicate, object FROM statements 
+        $query =  "SELECT predicate, object, l_language FROM statements 
         			WHERE subject = ? AND predicate IN ({$predicatesQuery})
-		    		AND (l_language = '' OR l_language = ?) 
+		    		AND (l_language = '' OR l_language = ? OR l_language = ?) 
 		    		AND modelID IN ({$modelIds})
 		    		ORDER BY predicate";
 
         $params = array(
-        	$resource->uriResource
-        	, ($session->getLg() != '') ? $session->getLg() : $session->defaultLg
+        	$resource->uriResource,
+        	$session->defaultLg, 
+        	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
         );
         $result	= $dbWrapper->execSql($query, $params);
+        $sortedByLg = core_kernel_persistence_smoothsql_Utils::sortByLanguage($result, 'l_language');
+        $identifiedLg = core_kernel_persistence_smoothsql_Utils::identifyFirstLanguage($sortedByLg);
         
         $previousPredicate = null;
         while(!$result->EOF){
-        	if ($previousPredicate != $result->fields['predicate']){
-        		$previousPredicate = $result->fields['predicate'];
-	        	$value = $result->fields['object'];
-        		if(!common_Utils::isUri($value)) {
-	                $returnValue[$result->fields['predicate']] = new core_kernel_classes_Literal($value);
-		         }
-		         else {
-	                $returnValue[$result->fields['predicate']] = new core_kernel_classes_Resource($value);
-	            }
+        	if ($result->fields['l_language'] == $identifiedLg) {
+	        	if ($previousPredicate != $result->fields['predicate']){
+	        		$previousPredicate = $result->fields['predicate'];
+		        	$value = $result->fields['object'];
+	        		if(!common_Utils::isUri($value)) {
+		                $returnValue[$result->fields['predicate']] = new core_kernel_classes_Literal($value);
+			         }
+			         else {
+		                $returnValue[$result->fields['predicate']] = new core_kernel_classes_Resource($value);
+		            }
+	        	}
         	}
         	$result->moveNext();
         }
