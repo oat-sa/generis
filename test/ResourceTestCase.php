@@ -245,7 +245,57 @@ class ResourceTestCase extends UnitTestCase{
 
 		$instance->delete();
 		$seeAlso->delete();
-
+	}
+	
+	public function testRemovePropertyValues(){
+		$session = core_kernel_classes_Session::singleton();
+		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+		$instance = $class->createInstance('test', 'test');
+		$instance2 = $class->createInstance('test2', 'test2');
+		
+		$prop1 = $class->createProperty('property1','monologingual');
+		$prop2 = $class->createProperty('property2','multilingual',true);
+		
+		// We first go with monolingual property.
+		$instance->setPropertyValue($prop1, 'mono');
+		$propValue = $instance->getOnePropertyValue($prop1);
+		$this->assertTrue($propValue->literal == 'mono');
+		$this->assertTrue($instance->removePropertyValues($prop1));
+		$this->assertTrue(count($instance->getPropertyValues($prop1)) == 0);
+		
+		// And new we go multilingual.
+		$instance->setPropertyValue($prop2,'multi');
+		$instance->setPropertyValueByLg($prop2,'multiFR1','FR');
+		$instance->setPropertyValueByLg($prop2,'multiFR2','FR');
+		$instance->setPropertyValueByLg($prop2,'multiSE1','SE');
+		$instance->setPropertyValueByLg($prop2,'multiSE1','SE');
+		$instance->setPropertyValueByLg($prop2,'multiJA','JA');
+		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 1);
+		
+		// We are by default in EN language (English). If we call removePropertyValues
+		// for property values on a language dependant property, we should only remove
+		// one triple with value 'multi'@EN.
+		$this->assertTrue($instance->removePropertyValues($prop2));
+		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 0);
+		
+		// We now switch to Swedish language and remove the values in the language.
+		$session->setLg('SE');
+		$this->assertTrue($instance->removePropertyValues($prop2));
+		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 0);
+		
+		// Same as above with Japanese language.
+		$session->setLg('JA');
+		$this->assertTrue($instance->removePropertyValues($prop2));
+		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 0);
+		
+		// And now final check in French language.
+		$session->setLg('FR');
+		$this->assertTrue($instance->removePropertyValues($prop2));
+		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 0);
+		
+		$prop1->delete();
+		$prop2->delete();
+		$instance->delete();
 	}
 
 	public function testEditPropertyValueByLg(){
