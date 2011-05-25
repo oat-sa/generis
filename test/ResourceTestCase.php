@@ -275,21 +275,25 @@ class ResourceTestCase extends UnitTestCase{
 		// We are by default in EN language (English). If we call removePropertyValues
 		// for property values on a language dependant property, we should only remove
 		// one triple with value 'multi'@EN.
+		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 1);
 		$this->assertTrue($instance->removePropertyValues($prop2));
 		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 0);
 		
 		// We now switch to Swedish language and remove the values in the language.
 		$session->setLg('SE');
+		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 2);
 		$this->assertTrue($instance->removePropertyValues($prop2));
 		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 0);
 		
 		// Same as above with Japanese language.
 		$session->setLg('JA');
+		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 1);
 		$this->assertTrue($instance->removePropertyValues($prop2));
 		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 0);
 		
 		// And now final check in French language.
 		$session->setLg('FR');
+		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 2);
 		$this->assertTrue($instance->removePropertyValues($prop2));
 		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 0);
 		
