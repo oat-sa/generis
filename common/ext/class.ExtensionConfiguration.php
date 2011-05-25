@@ -63,24 +63,34 @@ class common_ext_ExtensionConfiguration
      */
     public $ghost = false;
 
+    /**
+     * Short description of attribute version
+     *
+     * @access public
+     * @var string
+     */
+    public $version = '';
+
     // --- OPERATIONS ---
 
     /**
      * Short description of method __construct
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  boolean loaded
      * @param  boolean loadedAtStartUp
      * @param  boolean ghost
+     * @param  string version
      * @return mixed
      */
-    public function __construct($loaded, $loadedAtStartUp, $ghost = false)
+    public function __construct($loaded, $loadedAtStartUp, $ghost = false, $version = '')
     {
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002392 begin
         $this->loaded =$loaded;
         $this->loadedAtStartUp = $loadedAtStartUp;
         $this->ghost = $ghost;
+		$this->version = $version;
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002392 end
     }
 
@@ -88,7 +98,7 @@ class common_ext_ExtensionConfiguration
      * Update the config stored in the database
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  SimpleExtension extension
      * @return mixed
      */

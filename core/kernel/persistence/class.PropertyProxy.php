@@ -135,7 +135,7 @@ class core_kernel_persistence_PropertyProxy
 		// Use the smooth sql implementation to get this information
 		// Or find the right way to treat this case	
 		$lgDependentProperty = new core_kernel_classes_Property(PROPERTY_IS_LG_DEPENDENT,__METHOD__);
-		$lgDependent = core_kernel_persistence_smoothsql_Resource::singleton()->getOnePropertyValue ($resource, $lgDependentProperty);
+		$lgDependent = core_kernel_persistence_smoothsql_Resource::singleton()->getOnePropertyValue($resource, $lgDependentProperty);
 		 
 		if(is_null($lgDependent)){
 			$returnValue = false;
@@ -166,7 +166,7 @@ class core_kernel_persistence_PropertyProxy
 		// Use the smooth sql implementation to get this information
 		// Or find the right way to treat this case
 		$multipleProperty = new core_kernel_classes_Property(PROPERTY_MULTIPLE,__METHOD__);
-		$multiple = core_kernel_persistence_smoothsql_Resource::singleton()->getOnePropertyValue ($resource, $multipleProperty);
+		$multiple = core_kernel_persistence_smoothsql_Resource::singleton()->getOnePropertyValue($resource, $multipleProperty);
 		 
 		if(is_null($multiple)){
 			$returnValue = false;
@@ -199,7 +199,7 @@ class core_kernel_persistence_PropertyProxy
 		$rangeProperty = new core_kernel_classes_Property(RDFS_RANGE,__METHOD__);
     	$rangeValues = core_kernel_persistence_smoothsql_Resource::singleton()->getPropertyValues($resource, $rangeProperty);
 		        
-		if (sizeOf($rangeValues)>0){
+		if(sizeOf($rangeValues)>0){
 			$returnValue = new core_kernel_classes_Class($rangeValues[0]);
 		}
         
@@ -221,7 +221,7 @@ class core_kernel_persistence_PropertyProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001401 begin
 
-		if (core_kernel_persistence_PropertyProxy::$instance == null){
+		if(core_kernel_persistence_PropertyProxy::$instance == null){
 			core_kernel_persistence_PropertyProxy::$instance = new core_kernel_persistence_PropertyProxy();
 		}
 		$returnValue = core_kernel_persistence_PropertyProxy::$instance;
@@ -246,19 +246,19 @@ class core_kernel_persistence_PropertyProxy
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F63 begin
 		
-        if (!isset(core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo[$resource->uriResource]) 
+        if(!isset(core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo[$resource->uriResource]) 
         || core_kernel_persistence_PersistenceProxy::isForcedMode()){
         	
-	    	$impls = $this->getAvailableImpl ($params);
-			foreach ($impls as $implName=>$enable){
+	    	$impls = $this->getAvailableImpl($params);
+			foreach($impls as $implName=>$enable){
 				
 				// If the implementation is enabled && the resource exists in this context
-				if ($enable && $this->isValidContext ($implName, $resource)){
+				if($enable && $this->isValidContext($implName, $resource)){
 		        	$implClass = "core_kernel_persistence_{$implName}_Property";
 		        	$reflectionMethod = new ReflectionMethod($implClass, 'singleton');
 					$delegate = $reflectionMethod->invoke(null);
 					
-					if (core_kernel_persistence_PersistenceProxy::isForcedMode()){
+					if(core_kernel_persistence_PersistenceProxy::isForcedMode()){
 						return $delegate;
 					}
 					
@@ -290,8 +290,8 @@ class core_kernel_persistence_PropertyProxy
 
         // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000155E begin
 
-        $impls = $this->getAvailableImpl (); 
-        if (isset ($impls[$context]) && $impls[$context]){
+        $impls = $this->getAvailableImpl(); 
+        if(isset($impls[$context]) && $impls[$context]){
         	$implClass = "core_kernel_persistence_{$context}_Property";
         	$reflectionMethod = new ReflectionMethod($implClass, 'singleton');
 			$singleton = $reflectionMethod->invoke(null);

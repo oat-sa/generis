@@ -88,9 +88,10 @@ class common_ext_ExtensionsManager
 				$extension = new common_ext_SimpleExtension($id);
 
 				$extension->configuration = new common_ext_ExtensionConfiguration(
-				($result->fields["loaded"] == 1),
-				($result->fields["loadAtStartUp"] == 1),
-				($result->fields["ghost"] == 1)
+					($result->fields["loaded"] == 1),
+					($result->fields["loadAtStartUp"] == 1),
+					($result->fields["ghost"] == 1),
+					$result->fields["version"]
 				);
 
 				$this->extensions[$id] = $extension;

@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 05.05.2011, 12:50:11 with ArgoUML PHP module 
+ * Automatically generated on 25.05.2011, 11:09:22 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -34,7 +34,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  *
  * @abstract
  * @access public
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -68,7 +68,7 @@ abstract class core_kernel_persistence_PersistenceProxy
      *
      * @abstract
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  array params
      * @return core_kernel_persistence_ResourceInterface
@@ -80,7 +80,7 @@ abstract class core_kernel_persistence_PersistenceProxy
      *
      * @abstract
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return core_kernel_persistence_PersistanceProxy
      */
     public static abstract function singleton();
@@ -88,12 +88,12 @@ abstract class core_kernel_persistence_PersistenceProxy
     /**
      * Short description of method getAvailableImpl
      *
-     * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @access protected
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  array params
      * @return array
      */
-    public function getAvailableImpl($params = array())
+    protected function getAvailableImpl($params = array())
     {
         $returnValue = array();
 
@@ -107,13 +107,11 @@ abstract class core_kernel_persistence_PersistenceProxy
        	);
         
         if (self::isForcedMode()){
-        	
         	$returnValue = array (
         		self::$mode => true
         	);
         } else if (count ($params)){
-        	
-        	$returnValue = array_merge ($returnValue, $params);
+        	$returnValue = array_merge($returnValue, $params);
         }
         // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000147C end
 
@@ -125,7 +123,7 @@ abstract class core_kernel_persistence_PersistenceProxy
      *
      * @abstract
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string context
      * @param  Resource resource
      * @return boolean
@@ -133,14 +131,14 @@ abstract class core_kernel_persistence_PersistenceProxy
     public abstract function isValidContext($context,  core_kernel_classes_Resource $resource);
 
     /**
-     * Short description of method setMode
+     * Short description of method forceMode
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string mode
      * @return mixed
      */
-    public static function setMode($mode)
+    public static function forceMode($mode)
     {
         // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:000000000000153C begin
         
@@ -155,17 +153,22 @@ abstract class core_kernel_persistence_PersistenceProxy
      * Short description of method isForcedMode
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  string mode
      * @return boolean
      */
-    public static function isForcedMode()
+    public static function isForcedMode($mode = '')
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:000000000000153F begin
         
         if (!empty(self::$mode)){
-        	$returnValue = true;
+			if(!empty($mode)){
+				$returnValue = ($mode == self::$mode);
+			}else{
+				$returnValue = true;
+			}
         }
         
         // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:000000000000153F end
@@ -174,13 +177,13 @@ abstract class core_kernel_persistence_PersistenceProxy
     }
 
     /**
-     * Short description of method resetMode
+     * Short description of method unforceMode
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return mixed
      */
-    public function resetMode()
+    public function unforceMode()
     {
         // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001545 begin
    	
