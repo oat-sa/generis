@@ -347,11 +347,10 @@ class core_kernel_persistence_hardsql_Resource
         $propertyValue = null;
        	$propertyForeignUri = null;
        	$propertyRange = $property->getRange();
-       
         
         // Get property instance
-        $instanceId = core_kernel_persistence_hardsql_Utils::getInstanceId ($resource);
-
+        $instanceId = core_kernel_persistence_hardsql_Utils::getInstanceId($resource);
+	
         // Get the property value or property foreign id
         if(!is_null($propertyRange)){
 
