@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 25.05.2011, 11:09:22 with ArgoUML PHP module 
+ * Automatically generated on 25.05.2011, 14:43:15 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
@@ -177,13 +177,13 @@ abstract class core_kernel_persistence_PersistenceProxy
     }
 
     /**
-     * Short description of method unforceMode
+     * Short description of method resetMode
      *
      * @access public
      * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return mixed
      */
-    public function unforceMode()
+    public function resetMode()
     {
         // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001545 begin
    	

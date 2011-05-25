@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Extension Management</activediagram>
+      <activediagram>Persistence</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -92,7 +92,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed May 25 11:56:01 CEST 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed May 25 15:14:04 CEST 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -9120,7 +9120,7 @@ like funcions. It should be good to refactor.</UML:TaggedValue.dataValue>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
                         <UML:Operation xmi.id = '127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001545'
-                          name = 'unforceMode' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          name = 'resetMode' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
                           <UML:BehavioralFeature.parameter>
@@ -31863,7 +31863,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       justification="Center"
     >ExtensionConfiguration</text>
     <group name="Fig9.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[577, 33, 387, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[577, 33, 457, 0]"
          href="-87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002388"
          fill="0"
          fillcolor="white"
@@ -31877,7 +31877,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       <rectangle name="Fig9.2.0"
         x="577"
         y="33"
-        width="387"
+        width="457"
         height="0"
         fill="0"
         fillcolor="white"
@@ -38215,7 +38215,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >unforceMode()</text>
+      >resetMode()</text>
     </group>
   </group>
   <group name="Fig2"
