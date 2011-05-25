@@ -455,7 +455,7 @@ class core_kernel_persistence_smoothsql_Class
 		$returnValue->setLgDependent($isLgDependent);
 
 		if (!$resource->setProperty($returnValue)){
-			throw new common_Exception('proplem creating property');
+			throw new common_Exception('problem creating property');
 		}
         
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F3C end
