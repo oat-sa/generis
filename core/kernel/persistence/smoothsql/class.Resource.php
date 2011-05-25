@@ -481,12 +481,11 @@ class core_kernel_persistence_smoothsql_Resource
         if($property->isLgDependent()){
         	$session = core_kernel_classes_Session::singleton();
         	
-        	$query .=  " AND (l_language = '' OR l_language = ? OR l_language = ?) ";
+        	$query .=  " AND (l_language = '' OR l_language = ?) ";
         	
         	$returnValue	= $dbWrapper->execSql($query,array(
 	        		$resource->uriResource,
 	        		$property->uriResource,
-	        		$session->defaultLg,
 	        		($session->getLg() != '') ? $session->getLg() : $session->defaultLg
 	        ));
 	        
