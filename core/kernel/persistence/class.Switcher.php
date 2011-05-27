@@ -55,7 +55,7 @@ class core_kernel_persistence_Switcher
     
 	public function __construct($blackList = array()){
 		//force the API to get it's data in the triple store
-		core_kernel_persistence_PersistenceProxy::setMode(PERSISTENCE_SMOOTH);
+		core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
 		
 		if(count(self::$blackList) == 0 || count($blackList) > 0){
 			self::$blackList = array_merge(
