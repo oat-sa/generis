@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 23.05.2011, 16:11:47 with ArgoUML PHP module 
+ * Automatically generated on 27.05.2011, 10:31:56 with ArgoUML PHP module 
  * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
  *
  * @author firstname and lastname of author, <author@example.org>
@@ -55,7 +55,7 @@ class core_kernel_persistence_smoothsql_Utils
      * @param  string langColname
      * @return array
      */
-    public function sortByLanguage($dataset, $langColname)
+    public static function sortByLanguage($dataset, $langColname)
     {
         $returnValue = array();
 
@@ -92,7 +92,7 @@ class core_kernel_persistence_smoothsql_Utils
      * @param  array values
      * @return array
      */
-    public function getFirstLanguage($values)
+    public static function getFirstLanguage($values)
     {
         $returnValue = array();
 
@@ -123,7 +123,7 @@ class core_kernel_persistence_smoothsql_Utils
      * @param  string langColname
      * @return array
      */
-    public function filterByLanguage($dataset, $langColname)
+    public static function filterByLanguage($dataset, $langColname)
     {
         $returnValue = array();
 
@@ -143,7 +143,7 @@ class core_kernel_persistence_smoothsql_Utils
      * @param  array values
      * @return string
      */
-    public function identifyFirstLanguage($values)
+    public static function identifyFirstLanguage($values)
     {
         $returnValue = (string) '';
 
