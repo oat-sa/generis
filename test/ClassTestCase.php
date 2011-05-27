@@ -296,7 +296,7 @@ class ClassTestCase extends UnitTestCase {
 		
 		if(!$hard) return;
 		
-		core_kernel_persistence_PersistenceProxy::setMode(PERSISTENCE_HARD);
+		core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_HARD);
 		
 		$class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#Languages');
 		if(core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($class)){
