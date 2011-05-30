@@ -301,14 +301,23 @@ class core_kernel_persistence_hardsql_Class
 		$returnValue = new core_kernel_classes_Resource($subject,__METHOD__);
 		
 		$table = '_'.core_kernel_persistence_hardapi_Utils::getShortName ($resource);
-		$query = "INSERT INTO `{$table}` (`uri`, `05label`) VALUES (?, ?)";
-		$result = $dbWrapper->execSql($query, array(
-       		$subject
-       		, $label
-        ));
-        
-        // reference the newly created instance
-        core_kernel_persistence_hardapi_ResourceReferencer::singleton()->referenceResource($returnValue, $table, array($resource), true);
+		$query = "INSERT INTO `{$table}` (`uri`) VALUES (?)";
+		$result = $dbWrapper->execSql($query, array($subject));
+    	
+        if($dbWrapper->dbConnector->errorNo() !== 0){
+			throw new core_kernel_persistence_hardapi_Exception("Unable to create instance for the resource {$resource->uriResource} in the table {$table} : " .$dbWrapper->dbConnector->errorMsg());
+		} else {
+			
+			// reference the newly created instance
+	        core_kernel_persistence_hardapi_ResourceReferencer::singleton()->referenceResource($returnValue, $table, array($resource), true);
+	        
+			if (!empty($label)){
+				$returnValue->setPropertyValue(new core_kernel_classes_Property(RDFS_LABEL), $label);
+			}
+			if (!empty($comment)){
+				$returnValue->setPropertyValue(new core_kernel_classes_Property(RDFS_COMMENT), $comment);
+			}
+		}
         
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F27 end
 
