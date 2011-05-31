@@ -393,7 +393,7 @@ class core_kernel_persistence_hardsql_Resource
 	        	$lang
 	        ));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to set property (multiple) Value for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+				throw new core_kernel_persistence_hardapi_Exception("Unable to set property (multiple) Value for the instance {$resource->uriResource} in {$tableName} : " .$dbWrapper->dbConnector->errorMsg());
 			}else{
 				$returnValue = true;
 			}
@@ -406,7 +406,8 @@ class core_kernel_persistence_hardsql_Resource
 	        	, $instanceId
 	        ));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to set property (single) Value for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+        var_dump($propertyLocation);
+				throw new core_kernel_persistence_hardapi_Exception("Unable to set property (single) Value for the instance {$resource->uriResource} in {$tableName} : " .$dbWrapper->dbConnector->errorMsg());
 			}else{
 				$returnValue = true;
 			}

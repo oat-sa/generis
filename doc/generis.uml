@@ -92,7 +92,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue May 31 15:05:01 CEST 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue May 31 17:22:17 CEST 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -11048,11 +11048,21 @@ of the resource referencer.</UML:TaggedValue.dataValue>
                                 <UML:Parameter xmi.id = '127-0-1-1--1428ffa6:12fc062a5dc:-8000:00000000000016C2'
                                   name = 'table' isSpecification = 'false' kind = 'in'>
                                   <UML:Parameter.defaultValue>
-                                    <UML:Expression xmi.id = '127-0-1-1--1428ffa6:12fc062a5dc:-8000:00000000000016C6'
-                                      language = '' body = 'null'/>
+                                    <UML:Expression xmi.id = '127-0-1-1-3e482d09:13046a44fb6:-8000:0000000000001597'
+                                      language = 'UML 1.4' body = 'null'/>
                                   </UML:Parameter.defaultValue>
                                   <UML:Parameter.type>
                                     <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1-3e482d09:13046a44fb6:-8000:0000000000001598'
+                                  name = 'topClass' isSpecification = 'false' kind = 'in'>
+                                  <UML:Parameter.defaultValue>
+                                    <UML:Expression xmi.id = '127-0-1-1-3e482d09:13046a44fb6:-8000:0000000000001599'
+                                      language = 'UML 1.4' body = 'null'/>
+                                  </UML:Parameter.defaultValue>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767'/>
                                   </UML:Parameter.type>
                                 </UML:Parameter>
                               </UML:BehavioralFeature.parameter>
@@ -43625,7 +43635,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         width="494"
         height="20"
         fill="0"
-        fillcolor="white"
+        fillcolor="246 208 164"
         stroke="0"
         strokecolor="black"
         textcolor="black"
@@ -45306,7 +45316,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >referenceClass(class : Class,table : string = null) : boolean</text>
+      >referenceClass(class : Class,table : string = null,topClass : Class = null) : boolean</text>
       <text name="Fig10.6.10"
         x="721"
         y="704"

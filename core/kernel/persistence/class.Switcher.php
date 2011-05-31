@@ -180,7 +180,7 @@ class core_kernel_persistence_Switcher
 			$myTableMgr->create($columns);
 			
 			//reference the class
-			$referencer->referenceClass($class);
+			$referencer->referenceClass($class, null, $topClass);
 
 			if($referencesAllTypes){
 				$referencer->referenceInstanceTypes($class);
