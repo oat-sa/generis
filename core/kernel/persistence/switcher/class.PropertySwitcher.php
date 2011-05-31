@@ -225,7 +225,7 @@ bewteen a class and it's parent to retrieve the properties.
 
 			$column = array('name' => core_kernel_persistence_hardapi_Utils::getShortName($property));
 				
-			$range 			= $property->getRange();
+			$range = $property->getRange();
 			
 			if(!is_null($range) && $range->uriResource != RDFS_LITERAL && !in_array($range->uriResource, $notForeignableClass)){
 				//constraint to the class that represents the range
