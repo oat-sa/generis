@@ -206,7 +206,8 @@ class core_kernel_persistence_hardapi_RowManager
 							$queryRows .= "({$instanceIds[$row['uri']]}, '{$multiplePropertyUri}', NULL, '{$multiResult->fields['object']}', '{$multiResult->fields['l_language']}')";
 						}
 						else{
-							$queryRows .= "({$instanceIds[$row['uri']]}, '{$multiplePropertyUri}', '{$multiResult->fields['object']}', NULL, '{$multiResult->fields['l_language']}')";
+							$object = addslashes($multiResult->fields['object']);
+							$queryRows .= "({$instanceIds[$row['uri']]}, '{$multiplePropertyUri}', '{$object}', NULL, '{$multiResult->fields['l_language']}')";
 						}
 						$multiResult->moveNext();
 					}
