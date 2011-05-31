@@ -230,12 +230,9 @@ class core_kernel_persistence_hardapi_TableManager
 				
 				//remove all the references to the table
 				$cascadeDelete = "DELETE class_to_table.*, resource_has_class.*, resource_to_table.* FROM class_to_table 
-									INNER JOIN resource_has_class ON resource_has_class.class_id = class_to_table.id
-									INNER JOIN resource_to_table ON resource_has_class.resource_id = resource_to_table.id
+									LEFT JOIN resource_has_class ON resource_has_class.class_id = class_to_table.id
+									LEFT JOIN resource_to_table ON resource_has_class.resource_id = resource_to_table.id
 									WHERE class_to_table.`table` = '{$this->name}' OR resource_to_table.`table` = '{$this->name}'";
-//				$cascadeDelete = "DELETE class_to_table.*, resource_to_table.* FROM class_to_table 
-//									LEFT JOIN resource_to_table ON class_to_table.id = resource_to_table.id
-//									WHERE class_to_table.`table` = ? OR resource_to_table.`table` = ?";
 				$dbWrapper->execSql($cascadeDelete);
 				
 				if($dbWrapper->dbConnector->errorNo() === 0){
