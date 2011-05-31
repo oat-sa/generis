@@ -148,6 +148,7 @@ class core_kernel_persistence_hardsql_Resource
 		if (in_array("{$table}Props", $propertyLocation)
 			|| ! $referencer->isPropertyReferenced($property)){
 			
+		     $tableProps = $table."Props";
 			 $session 	= core_kernel_classes_Session::singleton();
 			 // Define language if required
 		     $lang = '';
@@ -157,12 +158,12 @@ class core_kernel_persistence_hardsql_Resource
 		     else{
 		     	($session->getLg() != '') ? $lang = $session->getLg() : $lang = $session->defaultLg;
 		     }
-				
+			
 			$query = "SELECT property_value, property_foreign_uri 
-				FROM {$table} M
-				INNER JOIN {$table}Props P on M.id = P.instance_id
-			   	WHERE M.uri = ?
-				AND P.property_uri = ?
+				FROM {$table}
+				INNER JOIN {$tableProps} on {$table}.id = {$tableProps}.instance_id
+			   	WHERE {$table}.uri = ?
+				AND {$tableProps}.property_uri = ?
 				AND ( l_language = ? OR l_language = '')";
 			
 			// Select first
@@ -392,7 +393,7 @@ class core_kernel_persistence_hardsql_Resource
 	        	$lang
 	        ));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to set property (single) Value for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+				throw new core_kernel_persistence_hardapi_Exception("Unable to set property (multiple) Value for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
 			}else{
 				$returnValue = true;
 			}
@@ -405,7 +406,7 @@ class core_kernel_persistence_hardsql_Resource
 	        	, $instanceId
 	        ));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to set property (multiple) Value for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+				throw new core_kernel_persistence_hardapi_Exception("Unable to set property (single) Value for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
 			}else{
 				$returnValue = true;
 			}
