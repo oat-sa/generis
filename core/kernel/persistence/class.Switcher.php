@@ -49,7 +49,7 @@ class core_kernel_persistence_Switcher
 	 * @var array
 	 */
 	private static $blackList = array();
-	
+	private $hardenedClasses = array();
 
     // --- OPERATIONS ---
     
@@ -95,6 +95,8 @@ class core_kernel_persistence_Switcher
         
         if(in_array($class->uriResource, self::$blackList)){
         	return $returnValue;
+        }else{
+            $this->hardenedClasses[] = $class->uriResource;
         }
         
         //recursive will hardify the class and it's subclasses in the same table!
@@ -153,7 +155,7 @@ class core_kernel_persistence_Switcher
 				if($createForeigns){
 					$foreignClassUri = core_kernel_persistence_hardapi_Utils::getLongName($column['foreign']);
 					$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
-					if(!$foreignTableMgr->exists() && $foreignClassUri != $class->uriResource){
+					if(!$foreignTableMgr->exists() && $foreignClassUri != $class->uriResource && !in_array($class->uriResource, $this->hardenedClasses)){
 						$range = new core_kernel_classes_Class($foreignClassUri);
 						$this->hardify($range, array_merge($options, array(
 							'topClass'		=> new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE),
