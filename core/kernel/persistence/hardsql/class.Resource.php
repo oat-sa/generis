@@ -988,51 +988,65 @@ class core_kernel_persistence_hardsql_Resource
 
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 begin
         
-        $classToTableId = core_kernel_persistence_hardsql_Utils::getClassId ($class);
+        $classToTableId = core_kernel_persistence_hardsql_Utils::getClassId ($class, $resource);
+        $resourceLocation = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
         
+        // If classToTableId is null
+        // !!!!!!!!!!!! BE CARREFULL !!!!!!!!!!!!!!
+        // We reference it in class_to_table, setType function is used to mark resources with classes (like a tag system)
+        // If the class has not been hardified and contains instances, the function will throw an exception
         if ($classToTableId==null){
-        	throw new core_kernel_persistence_hardapi_Exception("Unable to set the type {$class->uriResource} for {$resource->uriResource}. Class not found : ");
-        } 
-        else {
-        	// Check if the resource is yet associated with the class
-        	if ($resource->hasType($class)){
-        		return true;
+        	
+        	/*
+        	 * 
+        	 * @todo Write a class hasInstance function
+        	 */
+        	$instances = $class->getInstances();
+        	if (!core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($class) && !empty($instances)) {
+        		throw new core_kernel_persistence_hardapi_Exception("Try to set a type ({$class->getLabel()}), which has not been hardified and has instances, to a resource ({$resource->getLabel()})");
         	}
         	
-			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        	$resourceToTableId = core_kernel_persistence_hardsql_Utils::getResourceToTableId ($resource);
-        	$resourceLocation = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
+        	core_kernel_persistence_hardapi_ResourceReferencer::singleton()->referenceClass($class, $resourceLocation);
+        	$classToTableId = core_kernel_persistence_hardsql_Utils::getClassId ($class, $resource);
+        }
+        
+        // Check if the resource is yet associated with the class
+        if ($resource->hasType($class)){
+        	return true;
+        }
+        
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $resourceToTableId = core_kernel_persistence_hardsql_Utils::getResourceToTableId ($resource);
+        
+        // Associate the resource with the class
+        $query = "INSERT INTO resource_has_class (resource_id, class_id) VALUES (?,?)";
+        $result	= $dbWrapper->execSql($query, array(
+        $resourceToTableId,
+        $classToTableId
+        ));
+        if($dbWrapper->dbConnector->errorNo() !== 0){
+        	throw new core_kernel_persistence_hardapi_Exception("Unable to associate a class {$class->uriResource} to a resource {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+        } else {
+        	$returnValue = true;
+        }
         	
-        	// Associate the resource with the class
-	        $query = "INSERT INTO resource_has_class (resource_id, class_id) VALUES (?,?)";
-	    	$result	= $dbWrapper->execSql($query, array(
-	    		$resourceToTableId,
-	    		$classToTableId
-	    	));
-			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to associate a class {$class->uriResource} to a resource {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
-			} else {
-				$returnValue = true;
-			}
-			
-			// Check if the association class to table has not yet been referenced
-			foreach (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations ($class) as $classLocation){
-				if ($classLocation['uri'] == $class->uriResource && $classLocation['table']==$resourceLocation){
-					return true;
-				}
-			}
-				
-			// Associate the class with the table
-       		$query = "INSERT INTO class_to_table (`uri`, `table`) VALUES (?,?)";
-	    	$result	= $dbWrapper->execSql($query, array(
-	    		$class->uriResource,
-	    		$resourceLocation
-	    	));
-			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to associate a class {$class->uriResource} to a table {$resourceLocation} : " .$dbWrapper->dbConnector->errorMsg());
-			} else {
-				$returnValue = true;
-			}
+        // Check if the association class to table has not yet been referenced
+        foreach (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations ($class) as $classLocation){
+        	if ($classLocation['uri'] == $class->uriResource && $classLocation['table']==$resourceLocation){
+        		return true;
+        	}
+        }
+
+        // Associate the class with the table
+        $query = "INSERT INTO class_to_table (`uri`, `table`) VALUES (?,?)";
+        $result	= $dbWrapper->execSql($query, array(
+        $class->uriResource,
+        $resourceLocation
+        ));
+        if($dbWrapper->dbConnector->errorNo() !== 0){
+        	throw new core_kernel_persistence_hardapi_Exception("Unable to associate a class {$class->uriResource} to a table {$resourceLocation} : " .$dbWrapper->dbConnector->errorMsg());
+        } else {
+        	$returnValue = true;
         }
         
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 end
@@ -1057,7 +1071,7 @@ class core_kernel_persistence_hardsql_Resource
         
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $instanceId = core_kernel_persistence_hardsql_Utils::getInstanceId ($resource);
-        $classId = core_kernel_persistence_hardsql_Utils::getClassId ($class);
+        $classId = core_kernel_persistence_hardsql_Utils::getClassId ($class, $resource);
         
         $query = "DELETE resource_has_class.* 
         	FROM resource_has_class 
