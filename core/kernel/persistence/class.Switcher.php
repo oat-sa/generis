@@ -95,8 +95,6 @@ class core_kernel_persistence_Switcher
         
         if(in_array($class->uriResource, self::$blackList)){
         	return $returnValue;
-        }else{
-            $this->hardenedClasses[] = $class->uriResource;
         }
         
         //recursive will hardify the class and it's subclasses in the same table!
@@ -147,29 +145,6 @@ class core_kernel_persistence_Switcher
 		$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
 		$properties = $ps->getProperties($additionalProperties);
 		$columns = $ps->getTableColumns($additionalProperties);
-		
-		foreach($columns as $i => $column){
-
-			//create the foreign tables recursively
-			if(isset($column['foreign']) && !empty($column['foreign'])){
-				if($createForeigns){
-					$foreignClassUri = core_kernel_persistence_hardapi_Utils::getLongName($column['foreign']);
-					$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
-					if(!$foreignTableMgr->exists() && $foreignClassUri != $class->uriResource && !in_array($class->uriResource, $this->hardenedClasses)){
-						$range = new core_kernel_classes_Class($foreignClassUri);
-						$this->hardify($range, array_merge($options, array(
-							'topClass'		=> new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE),
-							'recursive' 	=> false,
-							'append' 		=> true,
-							'allOrNothing'	=> true
-						)));
-					}
-				}
-				else{
-					unset($columns[$i]['foreign']);
-				}
-			}
-		}
 			
 		if(!$append || ($append && !$myTableMgr->exists())){
 			
@@ -184,6 +159,31 @@ class core_kernel_persistence_Switcher
 
 			if($referencesAllTypes){
 				$referencer->referenceInstanceTypes($class);
+			}
+		}
+		
+    	foreach($columns as $i => $column){
+
+			//create the foreign tables recursively
+			if(isset($column['foreign']) && !empty($column['foreign'])){
+				if($createForeigns){
+					$foreignClassUri = core_kernel_persistence_hardapi_Utils::getLongName($column['foreign']);
+					$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
+					if(!$foreignTableMgr->exists() 
+						&& $foreignClassUri != $class->uriResource){
+						
+						$range = new core_kernel_classes_Class($foreignClassUri);
+						$this->hardify($range, array_merge($options, array(
+							'topClass'		=> new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE),
+							'recursive' 	=> false,
+							'append' 		=> true,
+							'allOrNothing'	=> true
+						)));
+					}
+				}
+				else{
+					unset($columns[$i]['foreign']);
+				}
 			}
 		}
 		
