@@ -622,13 +622,8 @@ class core_kernel_classes_Resource
         $returnValue = array();
 
         // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B13 begin
-        $sqlQuery = "select l_language from statements where subject = '". $this->uriResource."' and predicate = '". $property->uriResource . "' ";
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sqlResult = $dbWrapper->execSql($sqlQuery);
-        while (!$sqlResult-> EOF){
-            $returnValue[]=$sqlResult->fields['l_language'];
-            $sqlResult->MoveNext();
-        }
+        
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getUsedLanguages ($this, $property);
 
         // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B13 end
 

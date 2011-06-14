@@ -137,11 +137,15 @@ class common_Utils
      * @param  string strarg
      * @return string
      */
-    public function getShortUri($strarg)
+    public static function getShortUri($strarg)
     {
         $returnValue = (string) '';
 
         // section 10-13-1--31--3b304a1e:11b08118c60:-8000:0000000000000D15 begin
+        
+        $explode = explode('#', $strarg);
+        $returnValue = $explode[1];
+        
         // section 10-13-1--31--3b304a1e:11b08118c60:-8000:0000000000000D15 end
 
         return (string) $returnValue;

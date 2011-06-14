@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 12.05.2011, 12:24:21 with ArgoUML PHP module 
+ * Automatically generated on 12.05.2011, 12:24:21 with ArgoUML PHP module
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
@@ -18,7 +18,7 @@ error_reporting(E_ALL);
  */
 
 if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
+	die('This file was generated for PHP 5');
 }
 
 /**
@@ -52,149 +52,149 @@ require_once('core/kernel/persistence/interface.ResourceInterface.php');
  * @subpackage kernel_persistence_hardsql
  */
 class core_kernel_persistence_hardsql_Resource
-    extends core_kernel_persistence_PersistenceImpl
-        implements core_kernel_persistence_ResourceInterface
+extends core_kernel_persistence_PersistenceImpl
+implements core_kernel_persistence_ResourceInterface
 {
-    // --- ASSOCIATIONS ---
+	// --- ASSOCIATIONS ---
 
 
-    // --- ATTRIBUTES ---
+	// --- ATTRIBUTES ---
 
-    /**
-     * Short description of attribute instance
-     *
-     * @access public
-     * @var Resource
-     */
-    public static $instance = null;
+	/**
+	 * Short description of attribute instance
+	 *
+	 * @access public
+	 * @var Resource
+	 */
+	public static $instance = null;
 
-    // --- OPERATIONS ---
+	// --- OPERATIONS ---
 
-    /**
-     * Short description of method getType
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @return array
-     */
-    public function getType( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = array();
+	/**
+	 * Short description of method getType
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @return array
+	 */
+	public function getType( core_kernel_classes_Resource $resource)
+	{
+		$returnValue = array();
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 begin
-		
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 begin
+
 		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-    	$query = "SELECT class_to_table.uri 
+		$query = "SELECT class_to_table.uri
     		FROM class_to_table
     		INNER JOIN resource_has_class ON resource_has_class.class_id = class_to_table.id
     		INNER JOIN resource_to_table ON resource_to_table.id = resource_has_class.resource_id
     		WHERE resource_to_table.uri = ?";
-    	$result	= $dbWrapper->execSql($query, array(
-    		$resource->uriResource
-    	));
+		$result	= $dbWrapper->execSql($query, array(
+			$resource->uriResource
+		));
 		if($dbWrapper->dbConnector->errorNo() !== 0){
 			throw new core_kernel_persistence_hardapi_Exception("Unable to getType of the resource {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
 		} else {
-			
-			while (!$result->EOF){
 				
+			while (!$result->EOF){
+
 				$returnValue[] = new core_kernel_classes_Class ($result->fields['uri']);
 				$result->moveNext();
 			}
 		}
-		
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 end
 
-        return (array) $returnValue;
-    }
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 end
 
-    /**
-     * Short description of method getPropertyValues
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  array option
-     * @return array
-     */
-    public function getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $option = array())
-    {
-        $returnValue = array();
+		return (array) $returnValue;
+	}
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
+	/**
+	 * Short description of method getPropertyValues
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  Property property
+	 * @param  array option
+	 * @return array
+	 */
+	public function getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $option = array())
+	{
+		$returnValue = array();
+
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
 
 		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
-    	$table = $referencer->resourceLocation($resource);
-    	if(empty($table)){
-    		return $returnValue;
-    	}
-    	
-    	$table = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
-    	if(empty($table)){
-    		return $returnValue;
-    	}
+		$table = $referencer->resourceLocation($resource);
+		if(empty($table)){
+			return $returnValue;
+		}
+		 
+		$table = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
+		if(empty($table)){
+			return $returnValue;
+		}
 
-        $one = isset($options['one']) && $options['one'] == true ? true : false;
-        $last = isset($options['last']) && $options['last'] == true ? true : false;
-        
-       
+		$one = isset($options['one']) && $options['one'] == true ? true : false;
+		$last = isset($options['last']) && $options['last'] == true ? true : false;
+
+		 
 		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-    	$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
-    	$propertyLocation = $referencer->propertyLocation($property);
-      
+		$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
+		$propertyLocation = $referencer->propertyLocation($property);
+
 		// Select in the properties table of the class
 		if (in_array("{$table}Props", $propertyLocation)
-			|| ! $referencer->isPropertyReferenced($property)){
-			
-		     $tableProps = $table."Props";
-			 $session 	= core_kernel_classes_Session::singleton();
-			 // Define language if required
-		     $lang = '';
-		     if (isset($option['lg'])){
-		     	$lang = $option['lg'];
-		     }
-		     else{
-		     	($session->getLg() != '') ? $lang = $session->getLg() : $lang = $session->defaultLg;
-		     }
-			
-			$query = "SELECT property_value, property_foreign_uri 
+		|| ! $referencer->isPropertyReferenced($property)){
+				
+			$tableProps = $table."Props";
+			$session 	= core_kernel_classes_Session::singleton();
+			// Define language if required
+			$lang = '';
+			if (isset($option['lg'])){
+				$lang = $option['lg'];
+			}
+			else{
+				($session->getLg() != '') ? $lang = $session->getLg() : $lang = $session->defaultLg;
+			}
+				
+			$query = "SELECT property_value, property_foreign_uri
 				FROM {$table}
 				INNER JOIN {$tableProps} on {$table}.id = {$tableProps}.instance_id
 			   	WHERE {$table}.uri = ?
 				AND {$tableProps}.property_uri = ?
 				AND ( l_language = ? OR l_language = '')";
-			
+				
 			// Select first
 			if ($one) {
 				$result	= $dbWrapper->dbConnector->selectLimit($query, 1, -1, array(
-					$resource->uriResource
-					, $property->uriResource
-					, $lang
+				$resource->uriResource
+				, $property->uriResource
+				, $lang
 				));
-			} 
+			}
 			// Select Last
 			else if ($last) {
 				$result	= $dbWrapper->execSql($query, array(
-					$resource->uriResource
-					, $property->uriResource
-					, $lang
+				$resource->uriResource
+				, $property->uriResource
+				, $lang
 				));
 				if (!$result->EOF){
 					$result->moveLast();
 				}
-			} 
+			}
 			// Select All
 			else {
-				
+
 				$result	= $dbWrapper->execSql($query, array(
-					$resource->uriResource
-					, $property->uriResource
-					, $lang
+				$resource->uriResource
+				, $property->uriResource
+				, $lang
 				));
 			}
-			
+				
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to get property (multiple) values for {$resource->uriResource} in {$table} : " .$dbWrapper->dbConnector->errorMsg());
 			}
@@ -203,17 +203,17 @@ class core_kernel_persistence_hardsql_Resource
 				$result->moveNext();
 			}
 		}
-		
+
 		// Select in the main table of the class
-		else{			
+		else{
 			$query =  "SELECT {$propertyAlias} as propertyValue FROM {$table} WHERE uri = ?";
 			$result	= $dbWrapper->execSql($query, array(
-				$resource->uriResource
+			$resource->uriResource
 			));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to get property (single) values for {$resource->uriResource} in {$table} : " .$dbWrapper->dbConnector->errorMsg());
 			}
-		
+
 			while (!$result->EOF){
 				if ($result->fields['propertyValue']!=null){
 					$returnValue[] = $result->fields['propertyValue'];
@@ -221,287 +221,286 @@ class core_kernel_persistence_hardsql_Resource
 				$result->moveNext();
 			}
 		}
-        
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B end
 
-        return (array) $returnValue;
-    }
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B end
 
-    /**
-     * Short description of method getPropertyValuesCollection
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return core_kernel_classes_ContainerCollection
-     */
-    public function getPropertyValuesCollection( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
-    {
-        $returnValue = null;
+		return (array) $returnValue;
+	}
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F begin
+	/**
+	 * Short description of method getPropertyValuesCollection
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  Property property
+	 * @return core_kernel_classes_ContainerCollection
+	 */
+	public function getPropertyValuesCollection( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
+	{
+		$returnValue = null;
+
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F begin
 
 		if(DEBUG_MODE){
 			$returnValue->debug = __METHOD__;
 		}
-		
+
 		$returnValue = new core_kernel_classes_ContainerCollection($resource);
 		$values = $this->_getPropertyValues ($resource, $property);
-					
+			
 		foreach ($values as $value){
 			if(DEBUG_MODE){
-            	$value->debug = __METHOD__ .'|' . $property->debug;
-            }
-            $returnValue->add($value);
-        }
+				$value->debug = __METHOD__ .'|' . $property->debug;
+			}
+			$returnValue->add($value);
+		}
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F end
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F end
 
-        return $returnValue;
-    }
+		return $returnValue;
+	}
 
-    /**
-     * Short description of method getOnePropertyValue
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  boolean last
-     * @return core_kernel_classes_Container
-     */
-    public function getOnePropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $last = false)
-    {
-        $returnValue = null;
+	/**
+	 * Short description of method getOnePropertyValue
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  Property property
+	 * @param  boolean last
+	 * @return core_kernel_classes_Container
+	 */
+	public function getOnePropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $last = false)
+	{
+		$returnValue = null;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
-		
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
+
 		$options = array();
 		if ($last){
 			$options['last'] = true;
 		} else {
 			$options['one'] = true;
 		}
-		
+
 		$value = $this->_getPropertyValues ($resource, $property, $options);
 		if (count($value)){
 			$returnValue = $value[0];
 		}
-	
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 end
 
-        return $returnValue;
-    }
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 end
 
-    /**
-     * Short description of method getPropertyValuesByLg
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  string lg
-     * @return core_kernel_classes_ContainerCollection
-     */
-    public function getPropertyValuesByLg( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $lg)
-    {
-        $returnValue = null;
+		return $returnValue;
+	}
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 begin
-		
-    	$options = array('lg'=>$lg);
+	/**
+	 * Short description of method getPropertyValuesByLg
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  Property property
+	 * @param  string lg
+	 * @return core_kernel_classes_ContainerCollection
+	 */
+	public function getPropertyValuesByLg( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $lg)
+	{
+		$returnValue = null;
+
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 begin
+
+		$options = array('lg'=>$lg);
 		$returnValue = $this->_getPropertyValues ($resource, $property, $options);
-        
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 end
 
-        return $returnValue;
-    }
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 end
 
-    /**
-     * Short description of method setPropertyValue
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  string object
-     * @param  string lg
-     * @return boolean
-     */
-    public function setPropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $object, $lg = null)
-    {
-        $returnValue = (bool) false;
+		return $returnValue;
+	}
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE begin
-		        
-        // Get the table name
-        $referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
-        $tableName = $referencer->resourceLocation ($resource);
-        if(empty($tableName)){
-        	return $returnValue;
-        }
-        
-    	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-        $object  = !is_string($object) && $object instanceof core_kernel_classes_Resource ? $object->uriResource : $object;
+	/**
+	 * Short description of method setPropertyValue
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  Property property
+	 * @param  string object
+	 * @param  string lg
+	 * @return boolean
+	 */
+	public function setPropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $object, $lg = null)
+	{
+		$returnValue = (bool) false;
+
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE begin
+
+		// Get the table name
+		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+		$tableName = $referencer->resourceLocation ($resource);
+		if(empty($tableName)){
+			return $returnValue;
+		}
+
+		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
+		$object  = !is_string($object) && $object instanceof core_kernel_classes_Resource ? $object->uriResource : $object;
 		$instanceId = null;
-        $propertyValue = null;
-       	$propertyForeignUri = null;
-       	$propertyRange = $property->getRange();
-        
-        // Get property instance
-        $instanceId = core_kernel_persistence_hardsql_Utils::getInstanceId($resource);
-	
-        // Get the property value or property foreign id
-        if(!is_null($propertyRange)){
+		$propertyValue = null;
+		$propertyForeignUri = null;
+		$propertyRange = $property->getRange();
 
-        	// Foregin resource
-        	if ($propertyRange->uriResource != RDFS_LITERAL){
-        		$propertyForeignUri = $object;
-        	}
-        	// The object is a literal
-        	else {
-        		$propertyValue = $object;
-        	}
-        }
-        
-        $propertyLocation = $referencer->propertyLocation($property);
-        if (in_array("{$tableName}Props", $propertyLocation)
-        	|| !$referencer->isPropertyReferenced($property)){
-        	
-        	$session 	= core_kernel_classes_Session::singleton();
-        	$lang = "";
-	        // Define language if required
-	        if ($property->isLgDependent()){
-	        	if ($lg!=null){
-	        		$lang = $lg;
-	        	} else if ($session->getLg() != ''){
-	        		$lang = $session->getLg();
-	        	} else {
-	        		$lang = $session->defaultLg;
-	        	}
-	        }
-        		
-        	$query = "INSERT INTO {$tableName}Props 
+		// Get property instance
+		$instanceId = core_kernel_persistence_hardsql_Utils::getInstanceId($resource);
+
+		// Get the property value or property foreign id
+		if(!is_null($propertyRange)){
+
+			// Foregin resource
+			if ($propertyRange->uriResource != RDFS_LITERAL){
+				$propertyForeignUri = $object;
+			}
+			// The object is a literal
+			else {
+				$propertyValue = $object;
+			}
+		}
+
+		$propertyLocation = $referencer->propertyLocation($property);
+		if (in_array("{$tableName}Props", $propertyLocation)
+		|| !$referencer->isPropertyReferenced($property)){
+			 
+			$session 	= core_kernel_classes_Session::singleton();
+			$lang = "";
+			// Define language if required
+			if ($property->isLgDependent()){
+				if ($lg!=null){
+					$lang = $lg;
+				} else if ($session->getLg() != ''){
+					$lang = $session->getLg();
+				} else {
+					$lang = $session->defaultLg;
+				}
+			}
+
+			$query = "INSERT INTO {$tableName}Props
         		(instance_id, property_uri, property_value, property_foreign_uri, l_language) 
         		VALUES (?, ?, ?, ?, ?)";
-	        $result	= $dbWrapper->execSql($query, array(
-	        	$instanceId, 
-	        	$property->uriResource, 
-	        	$propertyValue, 
-	        	$propertyForeignUri, 
-	        	$lang
-	        ));
+			$result	= $dbWrapper->execSql($query, array(
+			$instanceId,
+			$property->uriResource,
+			$propertyValue,
+			$propertyForeignUri,
+			$lang
+			));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to set property (multiple) Value for the instance {$resource->uriResource} in {$tableName} : " .$dbWrapper->dbConnector->errorMsg());
 			}else{
 				$returnValue = true;
 			}
-        } else {
-        	
-        	$propertyName = core_kernel_persistence_hardapi_Utils::getShortName ($property);
-            $query = "UPDATE {$tableName} SET {$propertyName} = ? WHERE id = ?";
-	        $result	= $dbWrapper->execSql($query, array(
-	        	$propertyValue != null ? $propertyValue : $propertyForeignUri
-	        	, $instanceId
-	        ));
+		} else {
+			 
+			$propertyName = core_kernel_persistence_hardapi_Utils::getShortName ($property);
+			$query = "UPDATE {$tableName} SET {$propertyName} = ? WHERE id = ?";
+			$result	= $dbWrapper->execSql($query, array(
+			$propertyValue != null ? $propertyValue : $propertyForeignUri
+			, $instanceId
+			));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
-        var_dump($propertyLocation);
 				throw new core_kernel_persistence_hardapi_Exception("Unable to set property (single) Value for the instance {$resource->uriResource} in {$tableName} : " .$dbWrapper->dbConnector->errorMsg());
 			}else{
 				$returnValue = true;
 			}
-        }
-        
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE end
+		}
 
-        return (bool) $returnValue;
-    }
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE end
 
-    /**
-     * Short description of method setPropertiesValues
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  array properties
-     * @return boolean
-     */
-    public function setPropertiesValues( core_kernel_classes_Resource $resource, $properties)
-    {
-        $returnValue = (bool) false;
+		return (bool) $returnValue;
+	}
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3 begin
+	/**
+	 * Short description of method setPropertiesValues
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  array properties
+	 * @return boolean
+	 */
+	public function setPropertiesValues( core_kernel_classes_Resource $resource, $properties)
+	{
+		$returnValue = (bool) false;
+
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3 begin
 		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3 end
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3 end
 
-        return (bool) $returnValue;
-    }
+		return (bool) $returnValue;
+	}
 
-    /**
-     * Short description of method setPropertyValueByLg
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  string value
-     * @param  string lg
-     * @return boolean
-     */
-    public function setPropertyValueByLg( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $value, $lg)
-    {
-        $returnValue = (bool) false;
+	/**
+	 * Short description of method setPropertyValueByLg
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  Property property
+	 * @param  string value
+	 * @param  string lg
+	 * @return boolean
+	 */
+	public function setPropertyValueByLg( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $value, $lg)
+	{
+		$returnValue = (bool) false;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7 begin
-		
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7 begin
+
 		$returnValue = $this->setPropertyValue ($resource, $property, $value, $lg);
-		
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7 end
 
-        return (bool) $returnValue;
-    }
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7 end
 
-    /**
-     * Short description of method removePropertyValues
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  array options
-     * @return boolean
-     */
-    public function removePropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $options = array())
-    {
-        $returnValue = (bool) false;
+		return (bool) $returnValue;
+	}
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD begin
+	/**
+	 * Short description of method removePropertyValues
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  Property property
+	 * @param  array options
+	 * @return boolean
+	 */
+	public function removePropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $options = array())
+	{
+		$returnValue = (bool) false;
 
-        // Get the table name
-        $referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
-        $tableName = $referencer->resourceLocation ($resource);
-        if(empty($tableName)){
-        	return $returnValue;
-        }
-        
-    	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-        
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD begin
+
+		// Get the table name
+		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+		$tableName = $referencer->resourceLocation ($resource);
+		if(empty($tableName)){
+			return $returnValue;
+		}
+
+		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
+
 		// Optional params
-        $pattern = isset($options['pattern']) && !is_null($options['pattern']) ? $options['pattern'] : null;
-        $like = isset($options['like']) && $options['like'] == true ? true : false;
-		
-        
-        $propertyLocation = $referencer->propertyLocation($property);
-        if (in_array("{$tableName}Props", $propertyLocation)
-        	|| !$referencer->isPropertyReferenced($property, $tableName)){
-        	
+		$pattern = isset($options['pattern']) && !is_null($options['pattern']) ? $options['pattern'] : null;
+		$like = isset($options['like']) && $options['like'] == true ? true : false;
+
+
+		$propertyLocation = $referencer->propertyLocation($property);
+		if (in_array("{$tableName}Props", $propertyLocation)
+		|| !$referencer->isPropertyReferenced($property, $tableName)){
+			 
 			$propsTableName = $tableName.'Props';
-        	$query = "DELETE `{$propsTableName}`.* FROM `{$tableName}`, `{$propsTableName}`
+			$query = "DELETE `{$propsTableName}`.* FROM `{$tableName}`, `{$propsTableName}`
         		WHERE `{$tableName}`.uri = '{$resource->uriResource}' 
         		AND `{$propsTableName}`.property_uri = '{$property->uriResource}'
         		AND `{$tableName}`.id = `{$propsTableName}`.instance_id";
-			
+				
 			//build additionnal conditions:
 			$additionalConditions = array();
 			if(!is_null($pattern)){
@@ -520,22 +519,22 @@ class core_kernel_persistence_hardsql_Resource
 					}
 				}
 			}
-			
+				
 			foreach($additionalConditions as $i => $additionalCondition){
 				$query .= " AND ( {$additionalCondition} ) ";
 			}
-			
-	        $result	= $dbWrapper->execSql($query);
+				
+			$result	= $dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to delete property values (multiple) for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
 			} else {
 				$returnValue = true;
 			}
-        } else {
-        	
-        	$propertyName = core_kernel_persistence_hardapi_Utils::getShortName ($property);
-            $query = "UPDATE {$tableName} SET {$propertyName} = NULL WHERE uri = ?";
-			
+		} else {
+			 
+			$propertyName = core_kernel_persistence_hardapi_Utils::getShortName ($property);
+			$query = "UPDATE {$tableName} SET {$propertyName} = NULL WHERE uri = ?";
+				
 			//build additionnal conditions:
 			$additionalConditions = array();
 			if(!is_null($pattern)){
@@ -554,59 +553,59 @@ class core_kernel_persistence_hardsql_Resource
 					}
 				}
 			}
-			
+				
 			foreach($additionalConditions as $i => $additionalCondition){
 				$query .= " AND ( {$additionalCondition} ) ";
 			}
-			
-	        $result	= $dbWrapper->execSql($query, array(
-	        	$resource->uriResource
-	        ));
+				
+			$result	= $dbWrapper->execSql($query, array(
+			$resource->uriResource
+			));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to delete property values (single) for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
 			} else {
 				$returnValue = true;
 			}
-        }
-        
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD end
+		}
 
-        return (bool) $returnValue;
-    }
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD end
 
-    /**
-     * Short description of method removePropertyValueByLg
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  string lg
-     * @param  array options
-     * @return boolean
-     */
-    public function removePropertyValueByLg( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $lg, $options = array())
-    {
-        $returnValue = (bool) false;
+		return (bool) $returnValue;
+	}
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 begin
-        
-        $dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-        
+	/**
+	 * Short description of method removePropertyValueByLg
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  Property property
+	 * @param  string lg
+	 * @param  array options
+	 * @return boolean
+	 */
+	public function removePropertyValueByLg( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $lg, $options = array())
+	{
+		$returnValue = (bool) false;
+
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 begin
+
+		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
+
 		// Optional params
-        $pattern = isset($options['pattern']) && !is_null($options['pattern']) ? $options['pattern'] : null;
-        $like = isset($options['like']) && $options['like'] == true ? true : false;
-		
-        // Get the table name
-        $tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
-        if($property->isLgDependent()){
-		
-        	$propsTableName = $tableName.'Props';
-        	$query = "DELETE `{$propsTableName}`.* FROM `{$tableName}`, `{$propsTableName}`
+		$pattern = isset($options['pattern']) && !is_null($options['pattern']) ? $options['pattern'] : null;
+		$like = isset($options['like']) && $options['like'] == true ? true : false;
+
+		// Get the table name
+		$tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
+		if($property->isLgDependent()){
+
+			$propsTableName = $tableName.'Props';
+			$query = "DELETE `{$propsTableName}`.* FROM `{$tableName}`, `{$propsTableName}`
         		WHERE `{$tableName}`.uri = '{$resource->uriResource}' 
         		AND `{$propsTableName}`.property_uri = '{$property->uriResource}'
         		AND `{$tableName}`.id = `{$propsTableName}`.instance_id";
-				
+
 			//build additionnal conditions:
 			$additionalConditions = array();
 			if(!is_null($pattern)){
@@ -625,98 +624,113 @@ class core_kernel_persistence_hardsql_Resource
 					}
 				}
 			}
-			
+				
 			foreach($additionalConditions as $i => $additionalCondition){
 				$query .= " AND ( {$additionalCondition} ) ";
 			}
-			
-	        $result	= $dbWrapper->execSql($query);
+				
+			$result	= $dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to delete property values (multiple) for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
 			} else {
 				$returnValue = true;
 			}
-        }
-        
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 end
+		}
 
-        return (bool) $returnValue;
-    }
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 end
 
-    /**
-     * Short description of method getRdfTriples
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @return core_kernel_classes_ContainerCollection
-     */
-    public function getRdfTriples( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = null;
+		return (bool) $returnValue;
+	}
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6 begin
+	/**
+	 * Short description of method getRdfTriples
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @return core_kernel_classes_ContainerCollection
+	 */
+	public function getRdfTriples( core_kernel_classes_Resource $resource)
+	{
+		$returnValue = null;
+
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6 begin
 		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6 end
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6 end
 
-        return $returnValue;
-    }
+		return $returnValue;
+	}
 
-    /**
-     * Short description of method getUsedLanguages
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return array
-     */
-    public function getUsedLanguages( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
-    {
-        $returnValue = array();
+	/**
+	 * Short description of method getUsedLanguages
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  Property property
+	 * @return array
+	 */
+	public function getUsedLanguages( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
+	{
+		$returnValue = array();
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C9 begin
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C9 end
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C9 begin
+		
+		$tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
+		$sqlQuery = "SELECT `{$tableName}Props`.l_language FROM `{$tableName}Props` 
+			LEFT JOIN `{$tableName}` ON `{$tableName}`.id = `{$tableName}Props`.instance_id
+			WHERE `{$tableName}`.uri = ? 
+				AND `{$tableName}Props`.property_uri = ?";
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$sqlResult = $dbWrapper->execSql($sqlQuery, array (
+			$resource->uriResource,
+			$property->uriResource
+		));
+		while (!$sqlResult-> EOF){
+			$returnValue[]=$sqlResult->fields['l_language'];
+			$sqlResult->MoveNext();
+		}
+		
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C9 end
 
-        return (array) $returnValue;
-    }
+		return (array) $returnValue;
+	}
 
-    /**
-     * Short description of method duplicate
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  array excludedProperties
-     * @return core_kernel_classes_Resource
-     */
-    public function duplicate( core_kernel_classes_Resource $resource, $excludedProperties = array())
-    {
-        $returnValue = null;
+	/**
+	 * Short description of method duplicate
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  array excludedProperties
+	 * @return core_kernel_classes_Resource
+	 */
+	public function duplicate( core_kernel_classes_Resource $resource, $excludedProperties = array())
+	{
+		$returnValue = null;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD begin
-        $referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD begin
+		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
 		$tableName = $referencer->resourceLocation ($resource);
 		if(empty($tableName)){
 			return $returnValue;
 		}
-		
+
 		//the new Uri
 		$newUri = common_Utils::getNewUri();
-		
+
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
 		//duplicate the row in the main table
 		$query = "SELECT * FROM $tableName WHERE uri = ?";
 		$result = $dbWrapper->execSql($query, array($resource->uriResource));
 		if(!$result->EOF){
-			
+				
 			//get the columns to duplicate
 			$columnProps =array();
 			for($i=0; $i < $result->FieldCount(); $i++){
 				$column = $result->FetchField($i);
-				
+
 				if(preg_match("/^[0-9]{2,}/", $column->name)){
 					$propertyUri = core_kernel_persistence_hardapi_Utils::getLongName($column->name);
 					if(!in_array($propertyUri, $excludedProperties)){	//check if the property is excluded
@@ -725,7 +739,7 @@ class core_kernel_persistence_hardsql_Resource
 				}
 			}
 			$instanceId = $result->fields['id'];
-			
+				
 			//build the insert query
 			$insertQuery = "INSERT INTO $tableName (uri";
 			foreach($columnProps as $column){
@@ -737,41 +751,41 @@ class core_kernel_persistence_hardsql_Resource
 				$insertQuery .= ", '".$result->fields[$column]."'";
 			}
 			$insertQuery .= ')';
-			
+				
 			$insertResult = $dbWrapper->execSql($insertQuery);
 			if($insertResult !== false  && $instanceId > -1){
-				
+
 				//duplicated data
 				$duplicatedResource = new core_kernel_classes_Resource($newUri);
 				$referencer->referenceResource($duplicatedResource, $tableName, $resource->getType(), true);
-				
+
 				$duplicateInstanceId = core_kernel_persistence_hardsql_Utils::getInstanceId($duplicatedResource);
 
 				//now we duplciate the rows of the Props table
-				
+
 				//linearize the excluded properties
 				$excludedPropertyList = '';
 				foreach($excludedProperties as $excludedProperty){
 					$excludedPropertyList .= "'{$excludedProperty}',";
 				}
 				$excludedPropertyList = substr($excludedPropertyList, 0, strlen($excludedPropertyList) -1);
-				
+
 				//query templates of the 3 ways to insert the props rows
-				$insertPropValueQuery = "INSERT INTO {$tableName}Props (property_uri, property_value, l_language, instance_id) VALUES (?,?,?,?)"; 
+				$insertPropValueQuery = "INSERT INTO {$tableName}Props (property_uri, property_value, l_language, instance_id) VALUES (?,?,?,?)";
 				$insertPropForeignQuery = "INSERT INTO {$tableName}Props (property_uri, property_foreign_uri, l_language, instance_id) VALUES (?,?,?,?)";
 				$insertPropEmptyQuery = "INSERT INTO {$tableName}Props (property_uri, l_language, instance_id) VALUES (?,?,?)";
-				
+
 				//get the rows to duplicate
 				$propsQuery = "SELECT * FROM {$tableName}Props WHERE instance_id = ? AND property_uri ";
 				$propsQuery .= empty($excludedPropertyList)?'':" NOT IN ({$excludedPropertyList}) ";
 				$propsResult = $dbWrapper->execSql($propsQuery, array($instanceId));
 				while(!$propsResult->EOF){
-					
+						
 					$propUri 		= $propsResult->fields['property_uri'];
 					$propValue 		= $propsResult->fields['property_value'];
 					$propForeign	= $propsResult->fields['property_foreign_uri'];
 					$proplang 		= $propsResult->fields['l_language'];
-					
+						
 					//insert them regarding the populated columns
 					if(!is_null($propValue)  && !empty($propValue)){
 						$dbWrapper->execSql($insertPropValueQuery, array($propUri, $propValue, $proplang, $duplicateInstanceId));
@@ -782,72 +796,72 @@ class core_kernel_persistence_hardsql_Resource
 					else{
 						$dbWrapper->execSql($insertPropEmptyQuery, array($propUri, $proplang, $duplicateInstanceId));
 					}
-					
+						
 					$propsResult->moveNext();
 				}
-				
+
 				//return the duplciated resource
 				$returnValue = $duplicatedResource;
 			}
 		}
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD end
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012CD end
 
-        return $returnValue;
-    }
+		return $returnValue;
+	}
 
-    /**
-     * Short description of method delete
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  boolean deleteReference
-     * @return boolean
-     */
-    public function delete( core_kernel_classes_Resource $resource, $deleteReference = false)
-    {
-        $returnValue = (bool) false;
+	/**
+	 * Short description of method delete
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  boolean deleteReference
+	 * @return boolean
+	 */
+	public function delete( core_kernel_classes_Resource $resource, $deleteReference = false)
+	{
+		$returnValue = (bool) false;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 begin
-		
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 begin
+
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
 		if(empty($tableName)){
 			return $returnValue;
 		}
-		
+
 		$uri = $resource->uriResource;
-		
-        /*
-         * Delete all the references of the resource first, before the resource is delete of course, 
-         * if the parameter $deleteReference is true
-         */
+
+		/*
+		 * Delete all the references of the resource first, before the resource is delete of course,
+		 * if the parameter $deleteReference is true
+		 */
 		if($deleteReference){
-			
+				
 			$properties = array();
-			
+				
 			//get the resource classes (type)
 			$types = '';
 			foreach($resource->getType() as $type){
 				$properties[$type->uriResource] = array();
 				$types = "'".$type->uriResource."',";
 			}
-			
+				
 			$types = substr($types, 0, strlen($types) - 1);
-			
+				
 			if(!empty($types)){
-		
-				//get all the properties that have one of the resource class as range 
+
+				//get all the properties that have one of the resource class as range
 				$sqlQuery = "SELECT subject, object FROM statements WHERE predicate = '".RDFS_RANGE."' AND object IN ({$types})";
 				$result = $dbWrapper->execSql($sqlQuery);
-				
+
 				while(!$result->EOF){
 					//fill the properties range: propertyUri => domains:
 					$propertyUri = $result->fields['subject'];
 					$rangeUri = $result->fields['object'];
 					$properties[$rangeUri][$propertyUri] = array();
 					$result->moveNext();
-					
+						
 					//get the domain of the property:
 					$property = new core_kernel_classes_Property($propertyUri);
 					foreach($property->getDomain()->getIterator() as $domain){
@@ -856,8 +870,8 @@ class core_kernel_persistence_hardsql_Resource
 						}
 					}
 				}
-				
-				//delete the references 
+
+				//delete the references
 				$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
 				foreach($properties as $rangeUri=> $propertyUris){
 					foreach($propertyUris as $propertyUri => $domains){
@@ -873,21 +887,21 @@ class core_kernel_persistence_hardsql_Resource
 						}
 							
 						foreach($domains as $domainUri){
-							
+								
 							//classLocations -> table
 							$classLocations = $referencer->classLocations(new core_kernel_classes_Class($domainUri));
 							foreach ($classLocations as $classLocation){
-								
+
 								if($property->isMultiple()){
 									//delete the row in the props table
-									$query = "DELETE FROM {$classLocation['table']}Props 
+									$query = "DELETE FROM {$classLocation['table']}Props
 												WHERE property_uri = '{$propertyUri}' 
 												AND (property_value = '{$uri}' OR property_foreign_uri = '{$uri}')";
 									$dbWrapper->execSql($query);
 								}
 								else {
 									//set the col value to NULL
-									$query = "UPDATE {$classLocation['table']} 
+									$query = "UPDATE {$classLocation['table']}
 												SET {$columnName} = NULL 
 												WHERE {$columnName} = '{$uri}'";
 									$dbWrapper->execSql($query);
@@ -898,282 +912,282 @@ class core_kernel_persistence_hardsql_Resource
 				}
 			}
 		}
-		
+
 		// Delete the records in the main table  and the properties table
 		$query = "DELETE M.*, P.* FROM {$tableName} M
 			LEFT JOIN {$tableName}Props P ON M.id = P.instance_id
 			WHERE uri = ?";
-        $returnValue = $dbWrapper->execSql($query, array($uri));
-		
-        // Unreference the resource
-        core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unReferenceResource($resource);
-		
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 end
+		$returnValue = $dbWrapper->execSql($query, array($uri));
 
-        return (bool) $returnValue;
-    }
+		// Unreference the resource
+		core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unReferenceResource($resource);
 
-    /**
-     * Short description of method getLastModificationDate
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return core_kernel_persistence_doc_date
-     */
-    public function getLastModificationDate( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
-    {
-        $returnValue = null;
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 end
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 begin
+		return (bool) $returnValue;
+	}
+
+	/**
+	 * Short description of method getLastModificationDate
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  Property property
+	 * @return core_kernel_persistence_doc_date
+	 */
+	public function getLastModificationDate( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
+	{
+		$returnValue = null;
+
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 begin
 		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 end
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 end
 
-        return $returnValue;
-    }
+		return $returnValue;
+	}
 
-    /**
-     * Short description of method getLastModificationUser
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @return string
-     */
-    public function getLastModificationUser( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = (string) '';
+	/**
+	 * Short description of method getLastModificationUser
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @return string
+	 */
+	public function getLastModificationUser( core_kernel_classes_Resource $resource)
+	{
+		$returnValue = (string) '';
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC begin
-        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC end
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC begin
+		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC end
 
-        return (string) $returnValue;
-    }
+		return (string) $returnValue;
+	}
 
-    /**
-     * Short description of method getPropertiesValue
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  array properties
-     * @param  boolean last
-     * @return array
-     */
-    public function getPropertiesValue( core_kernel_classes_Resource $resource, $properties, $last)
-    {
-        $returnValue = array();
+	/**
+	 * Short description of method getPropertiesValue
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  array properties
+	 * @param  boolean last
+	 * @return array
+	 */
+	public function getPropertiesValue( core_kernel_classes_Resource $resource, $properties, $last)
+	{
+		$returnValue = array();
 
-        // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 begin
-        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 end
+		// section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 begin
+		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+		// section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 end
 
-        return (array) $returnValue;
-    }
+		return (array) $returnValue;
+	}
 
-    /**
-     * Short description of method setType
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  Class class
-     * @return boolean
-     */
-    public function setType( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $class)
-    {
-        $returnValue = (bool) false;
+	/**
+	 * Short description of method setType
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  Class class
+	 * @return boolean
+	 */
+	public function setType( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $class)
+	{
+		$returnValue = (bool) false;
 
-        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 begin
-        
-        $classToTableId = core_kernel_persistence_hardsql_Utils::getClassId ($class, $resource);
-        $resourceLocation = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
-        
-        // If classToTableId is null
-        // !!!!!!!!!!!! BE CARREFULL !!!!!!!!!!!!!!
-        // We reference it in class_to_table, setType function is used to mark resources with classes (like a tag system)
-        // If the class has not been hardified and contains instances, the function will throw an exception
-        if ($classToTableId==null){
-        	
-        	/*
-        	 * 
-        	 * @todo Write a class hasInstance function
-        	 */
-        	$instances = $class->getInstances();
-        	if (!core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($class) && !empty($instances)) {
-        		throw new core_kernel_persistence_hardapi_Exception("Try to set a type ({$class->getLabel()}), which has not been hardified and has instances, to a resource ({$resource->getLabel()})");
-        	}
-        	
-        	core_kernel_persistence_hardapi_ResourceReferencer::singleton()->referenceClass($class, $resourceLocation);
-        	$classToTableId = core_kernel_persistence_hardsql_Utils::getClassId ($class, $resource);
-        }
-        
-        // Check if the resource is yet associated with the class
-        if ($resource->hasType($class)){
-        	return true;
-        }
-        
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $resourceToTableId = core_kernel_persistence_hardsql_Utils::getResourceToTableId ($resource);
-        
-        // Associate the resource with the class
-        $query = "INSERT INTO resource_has_class (resource_id, class_id) VALUES (?,?)";
-        $result	= $dbWrapper->execSql($query, array(
-        $resourceToTableId,
-        $classToTableId
-        ));
-        if($dbWrapper->dbConnector->errorNo() !== 0){
-        	throw new core_kernel_persistence_hardapi_Exception("Unable to associate a class {$class->uriResource} to a resource {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
-        } else {
-        	$returnValue = true;
-        }
-        	
-        // Check if the association class to table has not yet been referenced
-        foreach (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations ($class) as $classLocation){
-        	if ($classLocation['uri'] == $class->uriResource && $classLocation['table']==$resourceLocation){
-        		return true;
-        	}
-        }
+		// section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 begin
 
-        // Associate the class with the table
-        $query = "INSERT INTO class_to_table (`uri`, `table`) VALUES (?,?)";
-        $result	= $dbWrapper->execSql($query, array(
-        $class->uriResource,
-        $resourceLocation
-        ));
-        if($dbWrapper->dbConnector->errorNo() !== 0){
-        	throw new core_kernel_persistence_hardapi_Exception("Unable to associate a class {$class->uriResource} to a table {$resourceLocation} : " .$dbWrapper->dbConnector->errorMsg());
-        } else {
-        	$returnValue = true;
-        }
-        
-        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 end
+		$classToTableId = core_kernel_persistence_hardsql_Utils::getClassId ($class, $resource);
+		$resourceLocation = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
 
-        return (bool) $returnValue;
-    }
+		// If classToTableId is null
+		// !!!!!!!!!!!! BE CARREFULL !!!!!!!!!!!!!!
+		// We reference it in class_to_table, setType function is used to mark resources with classes (like a tag system)
+		// If the class has not been hardified and contains instances, the function will throw an exception
+		if ($classToTableId==null){
+			 
+			/*
+			 *
+			 * @todo Write a class hasInstance function
+			 */
+			$instances = $class->getInstances();
+			if (!core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($class) && !empty($instances)) {
+				throw new core_kernel_persistence_hardapi_Exception("Try to set a type ({$class->getLabel()}), which has not been hardified and has instances, to a resource ({$resource->getLabel()})");
+			}
+			 
+			core_kernel_persistence_hardapi_ResourceReferencer::singleton()->referenceClass($class, $resourceLocation);
+			$classToTableId = core_kernel_persistence_hardsql_Utils::getClassId ($class, $resource);
+		}
 
-    /**
-     * Short description of method removeType
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  Class class
-     * @return boolean
-     */
-    public function removeType( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $class)
-    {
-        $returnValue = (bool) false;
+		// Check if the resource is yet associated with the class
+		if ($resource->hasType($class)){
+			return true;
+		}
 
-        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000154C begin
-        
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $instanceId = core_kernel_persistence_hardsql_Utils::getInstanceId ($resource);
-        $classId = core_kernel_persistence_hardsql_Utils::getClassId ($class, $resource);
-        
-        $query = "DELETE resource_has_class.* 
+		$resourceToTableId = core_kernel_persistence_hardsql_Utils::getResourceToTableId ($resource);
+
+		// Associate the resource with the class
+		$query = "INSERT INTO resource_has_class (resource_id, class_id) VALUES (?,?)";
+		$result	= $dbWrapper->execSql($query, array(
+		$resourceToTableId,
+		$classToTableId
+		));
+		if($dbWrapper->dbConnector->errorNo() !== 0){
+			throw new core_kernel_persistence_hardapi_Exception("Unable to associate a class {$class->uriResource} to a resource {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+		} else {
+			$returnValue = true;
+		}
+		 
+		// Check if the association class to table has not yet been referenced
+		foreach (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations ($class) as $classLocation){
+			if ($classLocation['uri'] == $class->uriResource && $classLocation['table']==$resourceLocation){
+				return true;
+			}
+		}
+
+		// Associate the class with the table
+		$query = "INSERT INTO class_to_table (`uri`, `table`) VALUES (?,?)";
+		$result	= $dbWrapper->execSql($query, array(
+		$class->uriResource,
+		$resourceLocation
+		));
+		if($dbWrapper->dbConnector->errorNo() !== 0){
+			throw new core_kernel_persistence_hardapi_Exception("Unable to associate a class {$class->uriResource} to a table {$resourceLocation} : " .$dbWrapper->dbConnector->errorMsg());
+		} else {
+			$returnValue = true;
+		}
+
+		// section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 end
+
+		return (bool) $returnValue;
+	}
+
+	/**
+	 * Short description of method removeType
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  Class class
+	 * @return boolean
+	 */
+	public function removeType( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $class)
+	{
+		$returnValue = (bool) false;
+
+		// section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000154C begin
+
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$instanceId = core_kernel_persistence_hardsql_Utils::getInstanceId ($resource);
+		$classId = core_kernel_persistence_hardsql_Utils::getClassId ($class, $resource);
+
+		$query = "DELETE resource_has_class.*
         	FROM resource_has_class 
         	INNER JOIN class_to_table ON resource_has_class.class_id = class_to_table.id
     		INNER JOIN resource_to_table ON resource_to_table.id = resource_has_class.resource_id
         	WHERE resource_to_table.uri = ?
         	AND class_to_table.uri = ?";
-    	$result	= $dbWrapper->execSql($query, array(
-    		$resource->uriResource,
-    		$class->uriResource
-    	));
+		$result	= $dbWrapper->execSql($query, array(
+		$resource->uriResource,
+		$class->uriResource
+		));
 		if($dbWrapper->dbConnector->errorNo() !== 0){
 			throw new core_kernel_persistence_hardapi_Exception("Unable to remove the type {$class->uriResource} for {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
 		} else {
 			$returnValue = true;
-		} 
-        
-        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000154C end
+		}
 
-        return (bool) $returnValue;
-    }
+		// section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000154C end
 
-    /**
-     * Short description of method singleton
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @return core_kernel_classes_Resource
-     */
-    public static function singleton()
-    {
-        $returnValue = null;
+		return (bool) $returnValue;
+	}
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000137E begin
+	/**
+	 * Short description of method singleton
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @return core_kernel_classes_Resource
+	 */
+	public static function singleton()
+	{
+		$returnValue = null;
+
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000137E begin
 
 		if (core_kernel_persistence_hardsql_Resource::$instance == null){
 			core_kernel_persistence_hardsql_Resource::$instance = new core_kernel_persistence_hardsql_Resource();
 		}
 		$returnValue = core_kernel_persistence_hardsql_Resource::$instance;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000137E end
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000137E end
 
-        return $returnValue;
-    }
+		return $returnValue;
+	}
 
-    /**
-     * Short description of method isValidContext
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @return boolean
-     */
-    public function isValidContext( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = (bool) false;
+	/**
+	 * Short description of method isValidContext
+	 *
+	 * @access public
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @return boolean
+	 */
+	public function isValidContext( core_kernel_classes_Resource $resource)
+	{
+		$returnValue = (bool) false;
 
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5A begin
-		 
-        if (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isResourceReferenced ($resource)){
+		// section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5A begin
+			
+		if (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isResourceReferenced ($resource)){
 			$returnValue = true;
 		}
-		
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5A end
 
-        return (bool) $returnValue;
-    }
+		// section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5A end
 
-    /**
-     * Similar to getPropertyValues but return an array of 
-     * Resources. GetPropertyValues does not have the 
-     * same behavior than other getPropertyValues 
-     * like funcions. It should be good to refactor.
-     *
-     * @access private
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  array options
-     * @return array
-     */
-    private function _getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $options = array())
-    {
-        $returnValue = array();
+		return (bool) $returnValue;
+	}
 
-        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000153E begin
-        
-    	$propertyValues = $this->getPropertyValues($resource, $property, $options);
-		
+	/**
+	 * Similar to getPropertyValues but return an array of
+	 * Resources. GetPropertyValues does not have the
+	 * same behavior than other getPropertyValues
+	 * like funcions. It should be good to refactor.
+	 *
+	 * @access private
+	 * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+	 * @param  Resource resource
+	 * @param  Property property
+	 * @param  array options
+	 * @return array
+	 */
+	private function _getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $options = array())
+	{
+		$returnValue = array();
+
+		// section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000153E begin
+
+		$propertyValues = $this->getPropertyValues($resource, $property, $options);
+
 		// Format output data
 		foreach ($propertyValues as $propertyValue){
 			if(!common_Utils::isUri($propertyValue)) {
-                $returnValue[] = new core_kernel_classes_Literal($propertyValue);
-	         } else {
-                $returnValue[] = new core_kernel_classes_Resource($propertyValue);
-            }
+				$returnValue[] = new core_kernel_classes_Literal($propertyValue);
+			} else {
+				$returnValue[] = new core_kernel_classes_Resource($propertyValue);
+			}
 		}
-		
-        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000153E end
 
-        return (array) $returnValue;
-    }
+		// section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000153E end
+
+		return (array) $returnValue;
+	}
 
 } /* end of class core_kernel_persistence_hardsql_Resource */
 

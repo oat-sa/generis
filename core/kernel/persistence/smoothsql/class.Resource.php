@@ -590,29 +590,15 @@ class core_kernel_persistence_smoothsql_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C9 begin
         
+    	$sqlQuery = "select l_language from statements where subject = ? and predicate = ? ";
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        
-        $namespaces = common_ext_NamespaceManager::singleton()->getAllNamespaces();
-        $namespace = $namespaces[substr($resource->uriResource, 0, strpos($resource->uriResource, '#') + 1)];
-        
-        $query = "SELECT * FROM statements WHERE subject = ? AND modelID = ?";
-        $result	= $dbWrapper->execSql($query, array(
+        $sqlResult = $dbWrapper->execSql($sqlQuery, array (
         	$resource->uriResource,
-        	$namespace->getModelId()
+        	$property->uriResource
         ));
-        
-        $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
-        while($statement = $result->fetchRow()){
-            $triple = new core_kernel_classes_Triple();
-            $triple->subject = $statement["subject"];
-            $triple->predicate = $statement["predicate"];
-            $triple->object = $statement["object"];
-            $triple->id = $statement["id"];
-            $triple->lg = $statement["l_language"];
-            $triple->readPrivileges = $statement["stread"];
-            $triple->editPrivileges = $statement["stedit"];
-            $triple->deletePrivileges = $statement["stdelete"];
-            $returnValue->add($triple);
+        while (!$sqlResult-> EOF){
+            $returnValue[]=$sqlResult->fields['l_language'];
+            $sqlResult->MoveNext();
         }
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C9 end

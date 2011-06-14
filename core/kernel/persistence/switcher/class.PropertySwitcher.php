@@ -209,7 +209,7 @@ bewteen a class and it's parent to retrieve the properties.
      * @param array additionalProp
      * @return array
      */
-    public function getTableColumns($additionalProps)
+    public function getTableColumns($additionalProps = array())
     {
         $returnValue = array();
 

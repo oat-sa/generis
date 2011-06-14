@@ -385,12 +385,16 @@ class core_kernel_persistence_smoothsql_Class
 		}
 		else {
 			//$uri should start with # and be well formed
-			$modelUri = core_kernel_classes_Session::singleton()->getNameSpace();
-			$subject = $modelUri . $uri;
+			if ($uri[0]=='#'){
+				$modelUri = core_kernel_classes_Session::singleton()->getNameSpace();
+				$subject = $modelUri . $uri;
+			} else {
+				$subject = $uri;
+			}
 		}
 
 		$returnValue = new core_kernel_classes_Resource($subject,__METHOD__);
-
+		
 		$rdfType = new core_kernel_classes_Property(RDF_TYPE);
 		$returnValue->setPropertyValue($rdfType, $resource->uriResource);
 

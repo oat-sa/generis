@@ -371,13 +371,18 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				$table,
 				$topClassUri
 			));
+			
+			if($dbWrapper->dbConnector->errorNo() !== 0){
+				throw new core_kernel_persistence_hardapi_Exception("Unable to reference the class {$class->uriResource} in {$table}: " .$dbWrapper->dbConnector->errorMsg());
+			} 
+			
 			if($result !== false){
 				$returnValue = true;
 				if($this->cacheModes['class'] == self::CACHE_MEMORY){
 					$memQuery = "SELECT `id`, `uri`, `table`, `topClass` FROM `class_to_table` WHERE `uri` = ? AND `table` = ?";
 					$memResult = $dbWrapper->execSql($memQuery, array($class->uriResource, $table));
 					while(!$memResult->EOF){
-						self::$_classes[] = array(
+						self::$_classes[$memResult->fields['uri']] = array(
 			        		'id'		=> $memResult->fields['id'],
 			        		'uri' 		=> $memResult->fields['uri'],
 			        		'table' 	=> $memResult->fields['table'],
@@ -409,11 +414,16 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001658 begin
         
         if($this->isClassReferenced($class)){
-			
+        	
+        	$classLocations = $this->classLocations($class);
 			$tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
 			
+			// delete table associated to the class
+			$tm = new core_kernel_persistence_hardapi_TableManager($tableName);
+			$tm->remove();
+        	
+        	// Delete reference of the class in classs_to_table, resource_has_class, resource_to_table
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-			
 			$query = "DELETE class_to_table.*, resource_has_class.*, resource_to_table.* FROM class_to_table 
 								LEFT JOIN resource_has_class ON resource_has_class.class_id = class_to_table.id
 								LEFT JOIN resource_to_table ON resource_has_class.resource_id = resource_to_table.id
@@ -457,17 +467,18 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				case self::CACHE_NONE:
 			        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			        
-			        $query = "SELECT id, uri, table FROM class_to_table WHERE uri=? ";
+			        $query = "SELECT id, uri, table, topClass FROM class_to_table WHERE uri=? ";
 			    	$result = $dbWrapper->execSql($query, array ($class->uriResource));
 					if($dbWrapper->dbConnector->errorNo() !== 0){
 						throw new core_kernel_persistence_hardapi_Exception("Unable to define where is the hardified resource: " .$dbWrapper->dbConnector->errorMsg());
 					} 
 					else {
 						while(!$result->EOF){
-							$returnValue[] = array(
+							$returnValue[$result->fields['uri']] = array(
 								'id'	=> $result->fields['id'],
 				        		'uri' 	=> $result->fields['uri'],
-				        		'table' => $result->fields['table']
+				        		'table' => $result->fields['table'],
+				        		'topClass' => $result->fields['topClass']
 							);
 							$result->moveNext();
 						}
@@ -484,7 +495,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			   break;
 			}
 		}
-        
+		
         // section 127-0-1-1-46522299:12fc0802dbc:-8000:00000000000016C7 end
 
         return (array) $returnValue;
