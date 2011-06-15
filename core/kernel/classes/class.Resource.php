@@ -191,7 +191,7 @@ class core_kernel_classes_Resource
 
         // section 127-0-1-1-62cf85dc:12bab18dc39:-8000:000000000000135F begin
         
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getType ($this);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getType($this);
         
         // section 127-0-1-1-62cf85dc:12bab18dc39:-8000:000000000000135F end
 
@@ -730,7 +730,7 @@ class core_kernel_classes_Resource
 
         // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002361 begin
         
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getLastModificationUser ($this);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getLastModificationUser($this);
         
         // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002361 end
 
@@ -751,10 +751,10 @@ class core_kernel_classes_Resource
         // section 10-13-1--31--3bf74db1:119c3d777ef:-8000:0000000000000B3F begin
         $returnValue .= '<span style="postition:relative;margin:5px;display:block;align:center;border: #9c9c9c 1px solid;border-color:black;font-family:Verdana;background-color:#Ffffcc;width:32%;height:9%;">';
         $returnValue .= '<span style="display:block;height=10px;border: #9c9c9c 1px solid;border-color:black;font-weight:bold;text-align:center;background-color:#ffcc99;font-size:10;">';
-        $returnValue .= ''.$this->label;
+        $returnValue .= ''.$this->getLabel();
         $returnValue .= '</span>';
         $returnValue .= '<span style="display:block;height=90px;font-weight:normal;font-style:italic;font-size:9;">';
-        $returnValue .= ''.$this->comment."<br />";
+        $returnValue .= ''.$this->getComment()."<br />";
         $returnValue .= '<span style="font-size:5;">'.$this->uriResource.'</span>';
         $returnValue .= '</span>';
 
@@ -869,6 +869,24 @@ class core_kernel_classes_Resource
         }
         
         // section 127-0-1-1--72f5bf1f:12fd500f94d:-8000:0000000000001552 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method exists
+     *
+     * @access public
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @return boolean
+     */
+    public function exists()
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1-7c36bc99:13092a153cd:-8000:0000000000001599 begin
+        $returnValue = count($this->getType())?true:false;
+        // section 127-0-1-1-7c36bc99:13092a153cd:-8000:0000000000001599 end
 
         return (bool) $returnValue;
     }

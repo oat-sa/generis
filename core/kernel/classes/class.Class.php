@@ -403,7 +403,7 @@ class core_kernel_classes_Class
         $returnValue = array();
 
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:0000000000001503 begin
-		$returnValue = core_kernel_persistence_ClassProxy::singleton()->searchInstances ($this, $propertyFilters, $options);
+	$returnValue = core_kernel_persistence_ClassProxy::singleton()->searchInstances ($this, $propertyFilters, $options);
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:0000000000001503 end
 
         return (array) $returnValue;

@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Persistence</activediagram>
+      <activediagram>Generis Core Kernel</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -92,7 +92,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Jun 08 10:48:48 CEST 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Jun 15 11:35:10 CEST 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -1460,6 +1460,19 @@ The method returns the new resource. </UML:TaggedValue.dataValue>
                               name = 'class' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1-7c36bc99:13092a153cd:-8000:0000000000001599'
+                          name = 'exists' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1-7c36bc99:13092a153cd:-8000:000000000000159A'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -17269,7 +17282,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig4.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[753, 1311, 517, 85]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[753, 1311, 517, 78]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765"
          fill="0"
          fillcolor="200 200 255"
@@ -17283,7 +17296,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         x="753"
         y="1311"
         width="517"
-        height="85"
+        height="78"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -17340,7 +17353,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig4.5"
       x="752"
-      y="1396"
+      y="1389"
       width="519"
       height="1"
       fill="1"
@@ -17349,7 +17362,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig4.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[753, 1397, 517, 519]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[753, 1390, 517, 526]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765"
          fill="0"
          fillcolor="200 200 255"
@@ -17361,9 +17374,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig4.6.0"
         x="753"
-        y="1397"
+        y="1390"
         width="517"
-        height="519"
+        height="526"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -17371,7 +17384,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       />
       <text name="Fig4.6.1"
         x="753"
-        y="1397"
+        y="1390"
         width="517"
         height="14"
         fill="0"
@@ -17387,7 +17400,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >«create» __construct(uri : string,debug : string = &apos;&apos;) : void</text>
       <text name="Fig4.6.2"
         x="753"
-        y="1411"
+        y="1404"
         width="517"
         height="14"
         fill="0"
@@ -17403,7 +17416,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >__clone() : Resource</text>
       <text name="Fig4.6.3"
         x="753"
-        y="1425"
+        y="1418"
         width="517"
         height="14"
         fill="0"
@@ -17419,7 +17432,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >isClass() : boolean</text>
       <text name="Fig4.6.4"
         x="753"
-        y="1439"
+        y="1432"
         width="517"
         height="14"
         fill="0"
@@ -17435,7 +17448,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >isProperty() : boolean</text>
       <text name="Fig4.6.5"
         x="753"
-        y="1453"
+        y="1446"
         width="517"
         height="14"
         fill="0"
@@ -17451,7 +17464,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getType() : array</text>
       <text name="Fig4.6.6"
         x="753"
-        y="1467"
+        y="1460"
         width="517"
         height="14"
         fill="0"
@@ -17467,7 +17480,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getLabel() : string</text>
       <text name="Fig4.6.7"
         x="753"
-        y="1481"
+        y="1474"
         width="517"
         height="14"
         fill="0"
@@ -17483,7 +17496,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >setLabel(label : string) : boolean</text>
       <text name="Fig4.6.8"
         x="753"
-        y="1495"
+        y="1488"
         width="517"
         height="14"
         fill="0"
@@ -17499,7 +17512,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getComment() : string</text>
       <text name="Fig4.6.9"
         x="753"
-        y="1509"
+        y="1502"
         width="517"
         height="14"
         fill="0"
@@ -17515,7 +17528,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >setComment(comment : string) : boolean</text>
       <text name="Fig4.6.10"
         x="753"
-        y="1523"
+        y="1516"
         width="517"
         height="14"
         fill="0"
@@ -17531,7 +17544,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getPropertyValues(property : Property) : array</text>
       <text name="Fig4.6.11"
         x="753"
-        y="1537"
+        y="1530"
         width="517"
         height="14"
         fill="0"
@@ -17547,7 +17560,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getPropertyValuesCollection(property : Property) : ContainerCollection</text>
       <text name="Fig4.6.12"
         x="753"
-        y="1551"
+        y="1544"
         width="517"
         height="14"
         fill="0"
@@ -17563,7 +17576,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getUniquePropertyValue(property : Property) : Container</text>
       <text name="Fig4.6.13"
         x="753"
-        y="1565"
+        y="1558"
         width="517"
         height="14"
         fill="0"
@@ -17579,7 +17592,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getOnePropertyValue(property : Property,last : boolean = false) : Container</text>
       <text name="Fig4.6.14"
         x="753"
-        y="1579"
+        y="1572"
         width="517"
         height="14"
         fill="0"
@@ -17595,7 +17608,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getPropertyValuesByLg(property : Property,lg : string) : ContainerCollection</text>
       <text name="Fig4.6.15"
         x="753"
-        y="1593"
+        y="1586"
         width="517"
         height="14"
         fill="0"
@@ -17611,7 +17624,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >setPropertyValue(property : Property,object : string) : boolean</text>
       <text name="Fig4.6.16"
         x="753"
-        y="1607"
+        y="1600"
         width="517"
         height="14"
         fill="0"
@@ -17627,7 +17640,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >setPropertiesValues(propertiesValues : array) : boolean</text>
       <text name="Fig4.6.17"
         x="753"
-        y="1621"
+        y="1614"
         width="517"
         height="14"
         fill="0"
@@ -17643,7 +17656,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >setPropertyValueByLg(property : Property,value : string,lg : string) : boolean</text>
       <text name="Fig4.6.18"
         x="753"
-        y="1635"
+        y="1628"
         width="517"
         height="14"
         fill="0"
@@ -17659,7 +17672,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >editPropertyValues(property : Property,object : string) : boolean</text>
       <text name="Fig4.6.19"
         x="753"
-        y="1649"
+        y="1642"
         width="517"
         height="14"
         fill="0"
@@ -17675,7 +17688,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >editPropertyValueByLg(prop : Property,value : string,lg : string) : boolean</text>
       <text name="Fig4.6.20"
         x="753"
-        y="1663"
+        y="1656"
         width="517"
         height="14"
         fill="0"
@@ -17691,7 +17704,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >removePropertyValues(property : Property,options : array = array()) : boolean</text>
       <text name="Fig4.6.21"
         x="753"
-        y="1677"
+        y="1670"
         width="517"
         height="14"
         fill="0"
@@ -17707,7 +17720,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >removePropertyValueByLg(prop : Property,lg : string,options : array = array()) : boolean</text>
       <text name="Fig4.6.22"
         x="753"
-        y="1691"
+        y="1684"
         width="517"
         height="14"
         fill="0"
@@ -17723,7 +17736,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getRdfTriples() : ContainerCollection</text>
       <text name="Fig4.6.23"
         x="753"
-        y="1705"
+        y="1698"
         width="517"
         height="14"
         fill="0"
@@ -17739,7 +17752,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getUsedLanguages(property : Property) : array</text>
       <text name="Fig4.6.24"
         x="753"
-        y="1719"
+        y="1712"
         width="517"
         height="14"
         fill="0"
@@ -17755,7 +17768,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >duplicate(excludedProperties : array = array()) : Resource</text>
       <text name="Fig4.6.25"
         x="753"
-        y="1733"
+        y="1726"
         width="517"
         height="14"
         fill="0"
@@ -17771,7 +17784,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >delete(deleteReference : boolean = false) : boolean</text>
       <text name="Fig4.6.26"
         x="753"
-        y="1747"
+        y="1740"
         width="517"
         height="14"
         fill="0"
@@ -17787,7 +17800,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getPrivileges() : array</text>
       <text name="Fig4.6.27"
         x="753"
-        y="1761"
+        y="1754"
         width="517"
         height="14"
         fill="0"
@@ -17803,7 +17816,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getLastModificationDate(property : Property = null) : date</text>
       <text name="Fig4.6.28"
         x="753"
-        y="1775"
+        y="1768"
         width="517"
         height="14"
         fill="0"
@@ -17819,7 +17832,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getLastModificationUser() : string</text>
       <text name="Fig4.6.29"
         x="753"
-        y="1789"
+        y="1782"
         width="517"
         height="14"
         fill="0"
@@ -17835,7 +17848,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >toHtml() : string</text>
       <text name="Fig4.6.30"
         x="753"
-        y="1803"
+        y="1796"
         width="517"
         height="14"
         fill="0"
@@ -17851,7 +17864,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >__toString() : string</text>
       <text name="Fig4.6.31"
         x="753"
-        y="1817"
+        y="1810"
         width="517"
         height="14"
         fill="0"
@@ -17867,7 +17880,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getPropertiesValue(properties : array,last : boolean) : array</text>
       <text name="Fig4.6.32"
         x="753"
-        y="1831"
+        y="1824"
         width="517"
         height="14"
         fill="0"
@@ -17883,7 +17896,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >setType(type : Class) : boolean</text>
       <text name="Fig4.6.33"
         x="753"
-        y="1845"
+        y="1838"
         width="517"
         height="14"
         fill="0"
@@ -17899,9 +17912,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >removeType(type : Class) : boolean</text>
       <text name="Fig4.6.34"
         x="753"
-        y="1859"
+        y="1852"
         width="517"
-        height="20"
+        height="14"
         fill="0"
         fillcolor="200 200 255"
         stroke="0"
@@ -17913,6 +17926,22 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >hasType(class : Class) : boolean</text>
+      <text name="Fig4.6.35"
+        x="753"
+        y="1866"
+        width="517"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >exists() : boolean</text>
     </group>
   </group>
   <group name="Fig5"
@@ -34549,7 +34578,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[409, 183, 471, 85]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[409, 183, 471, 78]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765"
          fill="0"
          fillcolor="white"
@@ -34563,7 +34592,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         x="409"
         y="183"
         width="471"
-        height="85"
+        height="78"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -34620,7 +34649,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig1.5"
       x="408"
-      y="268"
+      y="261"
       width="473"
       height="1"
       fill="1"
@@ -34629,7 +34658,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[409, 269, 471, 519]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[409, 262, 471, 526]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765"
          fill="0"
          fillcolor="white"
@@ -34641,9 +34670,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig1.6.0"
         x="409"
-        y="269"
+        y="262"
         width="471"
-        height="519"
+        height="526"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -34651,7 +34680,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       />
       <text name="Fig1.6.1"
         x="409"
-        y="269"
+        y="262"
         width="471"
         height="14"
         fill="0"
@@ -34667,7 +34696,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >«create» __construct(uri : string,debug : string = &apos;&apos;) : void</text>
       <text name="Fig1.6.2"
         x="409"
-        y="283"
+        y="276"
         width="471"
         height="14"
         fill="0"
@@ -34683,7 +34712,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >__clone() : Resource</text>
       <text name="Fig1.6.3"
         x="409"
-        y="297"
+        y="290"
         width="471"
         height="14"
         fill="0"
@@ -34699,7 +34728,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >isClass() : boolean</text>
       <text name="Fig1.6.4"
         x="409"
-        y="311"
+        y="304"
         width="471"
         height="14"
         fill="0"
@@ -34715,7 +34744,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >isProperty() : boolean</text>
       <text name="Fig1.6.5"
         x="409"
-        y="325"
+        y="318"
         width="471"
         height="14"
         fill="0"
@@ -34731,7 +34760,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getType() : array</text>
       <text name="Fig1.6.6"
         x="409"
-        y="339"
+        y="332"
         width="471"
         height="14"
         fill="0"
@@ -34747,7 +34776,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getLabel() : string</text>
       <text name="Fig1.6.7"
         x="409"
-        y="353"
+        y="346"
         width="471"
         height="14"
         fill="0"
@@ -34763,7 +34792,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >setLabel(label : string) : boolean</text>
       <text name="Fig1.6.8"
         x="409"
-        y="367"
+        y="360"
         width="471"
         height="14"
         fill="0"
@@ -34779,7 +34808,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getComment() : string</text>
       <text name="Fig1.6.9"
         x="409"
-        y="381"
+        y="374"
         width="471"
         height="14"
         fill="0"
@@ -34795,7 +34824,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >setComment(comment : string) : boolean</text>
       <text name="Fig1.6.10"
         x="409"
-        y="395"
+        y="388"
         width="471"
         height="14"
         fill="0"
@@ -34811,7 +34840,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getPropertyValues(property : Property) : array</text>
       <text name="Fig1.6.11"
         x="409"
-        y="409"
+        y="402"
         width="471"
         height="14"
         fill="0"
@@ -34827,7 +34856,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getPropertyValuesCollection(property : Property) : ContainerCollection</text>
       <text name="Fig1.6.12"
         x="409"
-        y="423"
+        y="416"
         width="471"
         height="14"
         fill="0"
@@ -34843,7 +34872,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getUniquePropertyValue(property : Property) : Container</text>
       <text name="Fig1.6.13"
         x="409"
-        y="437"
+        y="430"
         width="471"
         height="14"
         fill="0"
@@ -34859,7 +34888,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getOnePropertyValue(property : Property,last : boolean = false) : Container</text>
       <text name="Fig1.6.14"
         x="409"
-        y="451"
+        y="444"
         width="471"
         height="14"
         fill="0"
@@ -34875,7 +34904,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getPropertyValuesByLg(property : Property,lg : string) : ContainerCollection</text>
       <text name="Fig1.6.15"
         x="409"
-        y="465"
+        y="458"
         width="471"
         height="14"
         fill="0"
@@ -34891,7 +34920,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >setPropertyValue(property : Property,object : string) : boolean</text>
       <text name="Fig1.6.16"
         x="409"
-        y="479"
+        y="472"
         width="471"
         height="14"
         fill="0"
@@ -34907,7 +34936,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >setPropertiesValues(propertiesValues : array) : boolean</text>
       <text name="Fig1.6.17"
         x="409"
-        y="493"
+        y="486"
         width="471"
         height="14"
         fill="0"
@@ -34923,7 +34952,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >setPropertyValueByLg(property : Property,value : string,lg : string) : boolean</text>
       <text name="Fig1.6.18"
         x="409"
-        y="507"
+        y="500"
         width="471"
         height="14"
         fill="0"
@@ -34939,7 +34968,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >editPropertyValues(property : Property,object : string) : boolean</text>
       <text name="Fig1.6.19"
         x="409"
-        y="521"
+        y="514"
         width="471"
         height="14"
         fill="0"
@@ -34955,7 +34984,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >editPropertyValueByLg(prop : Property,value : string,lg : string) : boolean</text>
       <text name="Fig1.6.20"
         x="409"
-        y="535"
+        y="528"
         width="471"
         height="14"
         fill="0"
@@ -34971,7 +35000,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >removePropertyValues(property : Property,options : array = array()) : boolean</text>
       <text name="Fig1.6.21"
         x="409"
-        y="549"
+        y="542"
         width="471"
         height="14"
         fill="0"
@@ -34987,7 +35016,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >removePropertyValueByLg(prop : Property,lg : string,options : array = array()) : boolean</text>
       <text name="Fig1.6.22"
         x="409"
-        y="563"
+        y="556"
         width="471"
         height="14"
         fill="0"
@@ -35003,7 +35032,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getRdfTriples() : ContainerCollection</text>
       <text name="Fig1.6.23"
         x="409"
-        y="577"
+        y="570"
         width="471"
         height="14"
         fill="0"
@@ -35019,7 +35048,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getUsedLanguages(property : Property) : array</text>
       <text name="Fig1.6.24"
         x="409"
-        y="591"
+        y="584"
         width="471"
         height="14"
         fill="0"
@@ -35035,7 +35064,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >duplicate(excludedProperties : array = array()) : Resource</text>
       <text name="Fig1.6.25"
         x="409"
-        y="605"
+        y="598"
         width="471"
         height="14"
         fill="0"
@@ -35051,7 +35080,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >delete(deleteReference : boolean = false) : boolean</text>
       <text name="Fig1.6.26"
         x="409"
-        y="619"
+        y="612"
         width="471"
         height="14"
         fill="0"
@@ -35067,7 +35096,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getPrivileges() : array</text>
       <text name="Fig1.6.27"
         x="409"
-        y="633"
+        y="626"
         width="471"
         height="14"
         fill="0"
@@ -35083,7 +35112,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getLastModificationDate(property : Property = null) : date</text>
       <text name="Fig1.6.28"
         x="409"
-        y="647"
+        y="640"
         width="471"
         height="14"
         fill="0"
@@ -35099,7 +35128,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getLastModificationUser() : string</text>
       <text name="Fig1.6.29"
         x="409"
-        y="661"
+        y="654"
         width="471"
         height="14"
         fill="0"
@@ -35115,7 +35144,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >toHtml() : string</text>
       <text name="Fig1.6.30"
         x="409"
-        y="675"
+        y="668"
         width="471"
         height="14"
         fill="0"
@@ -35131,7 +35160,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >__toString() : string</text>
       <text name="Fig1.6.31"
         x="409"
-        y="689"
+        y="682"
         width="471"
         height="14"
         fill="0"
@@ -35147,7 +35176,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >getPropertiesValue(properties : array,last : boolean) : array</text>
       <text name="Fig1.6.32"
         x="409"
-        y="703"
+        y="696"
         width="471"
         height="14"
         fill="0"
@@ -35163,7 +35192,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >setType(type : Class) : boolean</text>
       <text name="Fig1.6.33"
         x="409"
-        y="717"
+        y="710"
         width="471"
         height="14"
         fill="0"
@@ -35179,7 +35208,23 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >removeType(type : Class) : boolean</text>
       <text name="Fig1.6.34"
         x="409"
-        y="731"
+        y="724"
+        width="471"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >hasType(class : Class) : boolean</text>
+      <text name="Fig1.6.35"
+        x="409"
+        y="738"
         width="471"
         height="20"
         fill="0"
@@ -35192,7 +35237,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >hasType(class : Class) : boolean</text>
+      >exists() : boolean</text>
     </group>
   </group>
   <group name="Fig2"
