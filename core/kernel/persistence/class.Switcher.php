@@ -68,7 +68,7 @@ class core_kernel_persistence_Switcher
 			);
 		}
 	}
-
+        
 	public function __destruct(){
 		core_kernel_persistence_PersistenceProxy::resetMode();
 		core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo = array();
@@ -264,7 +264,7 @@ class core_kernel_persistence_Switcher
 		if(in_array($class->uriResource, self::$blackList)){
 			return $returnValue;
 		}
-
+                
 		// ENTER IN SMOOTH SQL MODE
 		core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
 
@@ -327,6 +327,7 @@ class core_kernel_persistence_Switcher
 		$startIndex = 0;
 		$instancePackSize = 100;
 		$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
+                $count = count($instances);
 		do{
 			$rows = array();
 
@@ -359,9 +360,19 @@ class core_kernel_persistence_Switcher
 				//increment start index only if not removed
 				$startIndex += $instancePackSize;
 			}
-
+                        
+                        //record hardened instances number
+                        if(isset($this->hardenedClasses[$class->uriResource])){
+                                $this->hardenedClasses[$class->uriResource] += $count;
+                        }else{
+                                $this->hardenedClasses[$class->uriResource] = $count;
+                        }
+                        
+                        //update instance array and count value
 			$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
-		} while(count($instances) > 0);
+                        $count = count($instances);
+                        
+		} while($count> 0);
 
 		// Treat subclasses of the current class
 		if($recursive){
@@ -416,7 +427,10 @@ class core_kernel_persistence_Switcher
 
 		return (bool) $returnValue;
 	}
-
+        
+        public function getHardenedClasses(){
+                return $this->hardenedClasses;
+        }
 } /* end of class core_kernel_persistence_Switcher */
 
 ?>
