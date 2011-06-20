@@ -440,6 +440,10 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 					}
 				}
 			}
+			
+			core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo = array();
+			core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo = array();
+			core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo = array();
 		}
         
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001658 end

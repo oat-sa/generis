@@ -28,7 +28,7 @@ class HardImplTestCase extends UnitTestCase {
 		// Create a new subject sub class to the previous sub class
 		$this->targetSubjectSubClass = $this->targetSubjectClass->createSubClass ("Sub Sub Subject Class (Unit Test)");
 		// Add an instance to this sub subject class
-		$this->targetSubjectSubClass->createInstance ("Sub Sub Subject (Unit Test)");
+		$this->subject2 = $this->targetSubjectSubClass->createInstance ("Sub Sub Subject (Unit Test)");
 		$this->assertEqual (count($this->targetSubjectSubClass->getInstances ()), 1);
 		
 		$this->assertEqual (count($this->targetSubjectClass->getInstances ()), 1);
@@ -245,11 +245,20 @@ class HardImplTestCase extends UnitTestCase {
 			$this->assertFalse (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isResourceReferenced($instance));
 		}
 		
-		// Remove the tables
-		$tm = new core_kernel_persistence_hardapi_TableManager ('_'.core_kernel_persistence_hardapi_Utils::getShortName ($this->targetSubjectClass));
-		$tm->remove();
-		$tm = new core_kernel_persistence_hardapi_TableManager ('_'.core_kernel_persistence_hardapi_Utils::getShortName ($this->targetSubjectSubClass));
-		$tm->remove();
+		// unreference the subject class
+		core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unReferenceClass($this->targetSubjectClass);
+		$this->assertFalse (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($this->targetSubjectClass));
+		$this->assertTrue (core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectClass) instanceof core_kernel_persistence_smoothsql_Class);
+		$this->targetSubjectClass->delete(true);
+		$this->subject1->delete();
+		
+		// unreference the subject sub class
+		core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unReferenceClass($this->targetSubjectSubClass);
+		$this->assertFalse (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($this->targetSubjectSubClass));
+		$this->assertTrue (core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectSubClass) instanceof core_kernel_persistence_smoothsql_Class);
+		$this->targetSubjectSubClass->delete(true);
+		$this->subject2->delete();
+		
 		$tm = new core_kernel_persistence_hardapi_TableManager ('_06Languages');
 		$tm->remove();
 	}
@@ -328,6 +337,7 @@ class HardImplTestCase extends UnitTestCase {
 	}
 	
 	public function testIdentifyFirstLanguage() {
+		return;
 		$values = array(
 			array('language' => 'EN', 'value' => 'testFallback'),
 			array('language' => '', 'value' => 'testEN')

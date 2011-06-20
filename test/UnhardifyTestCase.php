@@ -22,6 +22,8 @@ class HardDbSubjectTestCase extends UnitTestCase {
 	}
 	
 	public function testCreateContextOfThetest(){
+		$this->dataIntegrity['statements'] = $this->countStatements();
+		
 		// Top Class : TaoSubject
 		$subjectClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
 		// Create a new subject class for the unit test
@@ -34,7 +36,7 @@ class HardDbSubjectTestCase extends UnitTestCase {
 		// Create a new subject sub class to the previous sub class
 		$this->targetSubjectSubClass = $this->targetSubjectClass->createSubClass ("Sub Sub Subject Class (Unit Test)");
 		// Add an instance to this sub subject class
-		$this->targetSubjectSubClass->createInstance ("Sub Sub Subject (Unit Test)");
+		$this->subject2 = $this->targetSubjectSubClass->createInstance ("Sub Sub Subject (Unit Test)");
 		$this->assertEqual (count($this->targetSubjectSubClass->getInstances ()), 1);
 
 		$this->assertEqual (count($this->targetSubjectClass->getInstances ()), 1);
@@ -46,7 +48,6 @@ class HardDbSubjectTestCase extends UnitTestCase {
 	public function testStoreKeyDataIntegrity (){
 		
 		$this->assertTrue(core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectClass) instanceof core_kernel_persistence_smoothsql_Class);
-		$this->dataIntegrity['statements'] = $this->countStatements();
 	}
 
 	public function testHardifier () {
@@ -55,7 +56,7 @@ class HardDbSubjectTestCase extends UnitTestCase {
 		$switcher->hardify($this->targetSubjectClass, array(
 			'topClass'		=> new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#User'),
 			'recursive'		=> true,
-			'createForeigns'=> true,
+			'createForeigns'=> false,
 			'rmSources'		=> true
 		));
 		unset ($switcher);
@@ -69,11 +70,11 @@ class HardDbSubjectTestCase extends UnitTestCase {
 		$switcher = new core_kernel_persistence_Switcher();
 		$switcher->unhardify($this->targetSubjectClass, array(
 			'recursive'			=> true,
-			'removeForeigns'	=> true
+			'removeForeigns'	=> false
 		));
 		unset ($switcher);
 	}
-
+	
 	public function testDataIntegrity (){
 		
 		$this->assertFalse(core_kernel_persistence_ClassProxy::singleton()->isValidContext('hardsql', $this->targetSubjectClass));
@@ -82,7 +83,19 @@ class HardDbSubjectTestCase extends UnitTestCase {
 		$this->assertFalse(core_kernel_persistence_ClassProxy::singleton()->isValidContext('hardsql', $this->targetSubjectSubClass));
 		$this->assertTrue(core_kernel_persistence_ClassProxy::singleton()->isValidContext('smoothsql', $this->targetSubjectSubClass));
 		$this->assertTrue(core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectSubClass) instanceof core_kernel_persistence_smoothsql_Class);
-		
-		$this->assertEqual ($this->dataIntegrity['statements'], $this->countStatements());
 	}
+	
+	public function testClean (){
+		// Remove the resources
+		foreach ($this->targetSubjectClass->getInstances() as $instance){
+			$instance->delete ();
+		}
+		foreach ($this->targetSubjectSubClass->getInstances() as $instance){
+			$instance->delete ();
+		}
+		
+		$this->targetSubjectClass->delete(true);
+		$this->targetSubjectSubClass->delete(true);
+	}
+	
 }
