@@ -265,7 +265,6 @@ class ClassTestCase extends UnitTestCase {
 		$this->assertTrue($property->getDomain()->get(0)->uriResource ==$class->uriResource );
 		$property->delete();
 		$property2->delete();
-
 	}
 	
 	public function testSearchInstances(){

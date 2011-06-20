@@ -210,8 +210,9 @@ class core_kernel_persistence_hardapi_TableManager
 		$returnValue = (bool) false;
 
 		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015B9 begin
-
+		 
 		if($this->exists() && !empty($this->name)){
+			
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
 			//remove the multi properties table

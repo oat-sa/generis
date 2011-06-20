@@ -85,8 +85,7 @@ class HardApiTestCase extends UnitTestCase {
 		$testTakerClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
 		$testTaker = $testTakerClass->createInstance('test taker 1');
 		
-		$table = core_kernel_persistence_hardapi_Utils::getShortName($testTakerClass);
-		
+		$table = '_'.core_kernel_persistence_hardapi_Utils::getShortName($testTakerClass);
 		$referencer->referenceResource($testTaker, $table);
 		$this->assertTrue($referencer->isResourceReferenced($testTaker));
 		$this->assertEqual($referencer->resourceLocation($testTaker), $table);
@@ -125,12 +124,14 @@ class HardApiTestCase extends UnitTestCase {
 			$this->assertEqual($foundTable['uri'], $class->uriResource);
 		}
 		
+		$this->assertTrue($myTblMgr->exists());
 		$referencer->unReferenceClass($class);
 		$this->assertFalse($referencer->isClassReferenced($class));
-		
-		
-		$this->assertTrue($myTblMgr->remove());
 		$this->assertFalse($myTblMgr->exists());
+		
+		// unreference a class -> remove the associated table
+		//$this->assertTrue($myTblMgr->remove());
+		//$this->assertFalse($myTblMgr->exists());
 	}
 	
 	/**
@@ -185,11 +186,14 @@ class HardApiTestCase extends UnitTestCase {
 			$this->assertEqual($foundTable, $table);
 		}
 		
+		$this->assertTrue($myUserTblMgr->exists());
 		$referencer->unReferenceClass($class);
 		$this->assertFalse($referencer->isClassReferenced($class));
-		
-		$this->assertTrue($myUserTblMgr->remove());
 		$this->assertFalse($myUserTblMgr->exists());
+		
+		// unreference a class -> remove the associated table
+		//$this->assertTrue($myUserTblMgr->remove());
+		//$this->assertFalse($myUserTblMgr->exists());
 		
 		$cacheFile = GENERIS_CACHE_PATH . 'hard-api-property.cache';
 		$this->assertTrue(file_exists($cacheFile));

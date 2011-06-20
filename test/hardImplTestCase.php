@@ -3,7 +3,7 @@ require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
 require_once INCLUDES_PATH.'/simpletest/autorun.php';
 
 
-class HardDbSubjectTestCase extends UnitTestCase {
+class HardImplTestCase extends UnitTestCase {
 	
 	protected $targetSubjectClass = null;
 	protected $targetSubjectSubClass = null;

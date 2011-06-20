@@ -10,6 +10,8 @@ class HardDbSubjectTestCase extends UnitTestCase {
 	protected $dataIntegrity = array ();
 
 	public function setUp(){
+		//if (!defined('DEBUG_PERSISTENCE'))
+		//	define('DEBUG_PERSISTENCE', true);
 		TestRunner::initTest();
 	}
 
