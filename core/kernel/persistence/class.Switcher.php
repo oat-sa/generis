@@ -50,8 +50,8 @@ class core_kernel_persistence_Switcher
 	 */
 	private static $blackList = array();
 	private $hardenedClasses = array();
-        private $decompiledClasses = array();
-        
+	private $decompiledClasses = array();
+
 	// --- OPERATIONS ---
 
 	public function __construct($blackList = array()){
@@ -69,7 +69,7 @@ class core_kernel_persistence_Switcher
 			);
 		}
 	}
-        
+
 	public function __destruct(){
 		core_kernel_persistence_PersistenceProxy::resetMode();
 		core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo = array();
@@ -94,11 +94,11 @@ class core_kernel_persistence_Switcher
 	 */
 	public function unhardify (core_kernel_classes_Class $class, $options = array ()) {
 		$returnValue = (bool) false;
-		
+
 		if (defined ("DEBUG_PERSISTENCE") && DEBUG_PERSISTENCE){
 			var_dump('unhardify '.$class->uriResource);
 		}
-		
+
 		// Check if the class has been hardened
 		if (!core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($class)){
 			throw new core_kernel_persistence_hardapi_Exception("Try to unhardify the class {$class->uriResource} which has not been hardened");
@@ -107,7 +107,7 @@ class core_kernel_persistence_Switcher
 		//if defined, we took all the properties of the class and it's parents till the topclass
 		$classLocations = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($class);
 		$topClass = null;
-                if (count($classLocations)>1){
+		if (count($classLocations)>1){
 			throw new core_kernel_persistence_hardapi_Exception("Try to unhardify the class {$class->uriResource} which has multiple locations");
 		}
 		else {
@@ -120,50 +120,50 @@ class core_kernel_persistence_Switcher
 		//removeForeigns will unhardify the class that are range of the properties
 		(isset($options['removeForeigns'])) ? $removeForeigns = $options['removeForeigns'] : $removeForeigns = false;
 
-                //removeForeigns will unhardify the class that are range of the properties
+		//removeForeigns will unhardify the class that are range of the properties
 		(isset($options['rmSources'])) ? $rmSources = $options['rmSources'] : $rmSources = true;
 
 		// Get class' properties
 		$propertySwitcher = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
 		$properties = $propertySwitcher->getProperties();
 		$columns = $propertySwitcher->getTableColumns();
-                
+
 		// Get all instances of this class
-                set_time_limit(600);
-                $startIndex = 0;
+		set_time_limit(600);
+		$startIndex = 0;
 		$instancePackSize = 100;
 		$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
-                $count = count($instances);
-                do{     
-                        //reset timeout:
-                        set_time_limit(30);
-                        
-                        foreach ($instances as $instance) {
+		$count = count($instances);
+		do{
+			//reset timeout:
+			set_time_limit(30);
 
-                                // Get Instance type
-                                $types = $instance->getType();
+			foreach ($instances as $instance) {
 
-                                // Create instance in the smooth implementation
-                                core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
-                                $class->createInstance('', '', $instance->uriResource);
-                                // set types to the newly created instance
-                                foreach ($types as $type) {
+				// Get Instance type
+				$types = $instance->getType();
 
-                                        if ($type->uriResource != $class->uriResource) {
-                                                $instance->setType($type);
-                                        }
-                                }
-                                core_kernel_persistence_PersistenceProxy::resetMode();
+				// Create instance in the smooth implementation
+				core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
+				$class->createInstance('', '', $instance->uriResource);
+				// set types to the newly created instance
+				foreach ($types as $type) {
 
-                                // Export properties of the instance
-                                foreach ($columns as $column) {
+					if ($type->uriResource != $class->uriResource) {
+						$instance->setType($type);
+					}
+				}
+				core_kernel_persistence_PersistenceProxy::resetMode();
 
-                                        $property = new core_kernel_classes_Property(core_kernel_persistence_hardapi_Utils::getLongName($column['name']));
-                                        // Multiple property
-                                        if (isset($column['multi']) && $column['multi']) {
+				// Export properties of the instance
+				foreach ($columns as $column) {
 
-                                                $tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($instance);
-                                                $sqlQuery = "SELECT
+					$property = new core_kernel_classes_Property(core_kernel_persistence_hardapi_Utils::getLongName($column['name']));
+					// Multiple property
+					if (isset($column['multi']) && $column['multi']) {
+
+						$tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($instance);
+						$sqlQuery = "SELECT
 								`{$tableName}Props`.property_value,
 								`{$tableName}Props`.property_foreign_uri, 
 								`{$tableName}Props`.l_language 
@@ -171,72 +171,72 @@ class core_kernel_persistence_Switcher
 							LEFT JOIN `{$tableName}` ON `{$tableName}`.id = `{$tableName}Props`.instance_id
 							WHERE `{$tableName}`.uri = ? 
 								AND `{$tableName}Props`.property_uri = ?";
-                                                $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-                                                $sqlResult = $dbWrapper->execSql($sqlQuery, array(
-                                                        $instance->uriResource,
-                                                        $property->uriResource
-                                                    ));
-                                                if ($dbWrapper->dbConnector->errorNo() !== 0) {
-                                                        throw new core_kernel_persistence_hardapi_Exception("ERROR : " . $dbWrapper->dbConnector->errorMsg());
-                                                }
+						$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+						$sqlResult = $dbWrapper->execSql($sqlQuery, array(
+							$instance->uriResource,
+							$property->uriResource
+						));
+						if ($dbWrapper->dbConnector->errorNo() !== 0) {
+							throw new core_kernel_persistence_hardapi_Exception("ERROR : " . $dbWrapper->dbConnector->errorMsg());
+						}
 
-                                                // ENTER IN SMOOTH SQL MODE
-                                                core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
+						// ENTER IN SMOOTH SQL MODE
+						core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
 
-                                                while (!$sqlResult->EOF) {
-                                                        $value = null;
-                                                        if (!empty($sqlResult->fields['property_value'])) {
-                                                                $value = $sqlResult->fields['property_value'];
-                                                        } else {
-                                                                $value = $sqlResult->fields['property_foreign_uri'];
-                                                        }
+						while (!$sqlResult->EOF) {
+							$value = null;
+							if (!empty($sqlResult->fields['property_value'])) {
+								$value = $sqlResult->fields['property_value'];
+							} else {
+								$value = $sqlResult->fields['property_foreign_uri'];
+							}
 
-                                                        $lg = $sqlResult->fields['l_language'];
-                                                        if (!empty($lg)) {
-                                                                $instance->setPropertyValueByLg($property, $value, $lg);
-                                                        } else {
-                                                                $instance->setPropertyValue($property, $value);
-                                                        }
+							$lg = $sqlResult->fields['l_language'];
+							if (!empty($lg)) {
+								$instance->setPropertyValueByLg($property, $value, $lg);
+							} else {
+								$instance->setPropertyValue($property, $value);
+							}
 
-                                                        $sqlResult->MoveNext();
-                                                }
-                                                /// EXIT HARD SQL MODE
-                                                core_kernel_persistence_PersistenceProxy::resetMode();
-                                        }
-                                        // Single property
-                                        else {
-                                                $value = $instance->getOnePropertyValue($property);
-                                                if ($value != null) {
-                                                        core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
-                                                        $instance->setPropertyValue($property, $value);
-                                                        core_kernel_persistence_PersistenceProxy::resetMode();
-                                                }
-                                        }
-                                }
-                                // delete instance in the hard implementation
-                                if($rmSources) $instance->delete();
-                        }
-                        
-                        
-                        if(!$rmSources){
+							$sqlResult->MoveNext();
+						}
+						/// EXIT HARD SQL MODE
+						core_kernel_persistence_PersistenceProxy::resetMode();
+					}
+					// Single property
+					else {
+						$value = $instance->getOnePropertyValue($property);
+						if ($value != null) {
+							core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
+							$instance->setPropertyValue($property, $value);
+							core_kernel_persistence_PersistenceProxy::resetMode();
+						}
+					}
+				}
+				// delete instance in the hard implementation
+				if($rmSources) $instance->delete();
+			}
+
+
+			if(!$rmSources){
 				//increment start index only if not removed
 				$startIndex += $instancePackSize;
 			}
-                        
-                        //record decompiled instances number
-                        if(isset($this->decompiledClasses[$class->uriResource])){
-                                $this->decompiledClasses[$class->uriResource] += $count;
-                        }else{
-                                $this->decompiledClasses[$class->uriResource] = $count;
-                        }
-                        
-                        //update instance array and count value
+
+			//record decompiled instances number
+			if(isset($this->decompiledClasses[$class->uriResource])){
+				$this->decompiledClasses[$class->uriResource] += $count;
+			}else{
+				$this->decompiledClasses[$class->uriResource] = $count;
+			}
+
+			//update instance array and count value
 			$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
-                        $count = count($instances);
-                        
-                }while($count > 0);
-                        
-		
+			$count = count($instances);
+
+		}while($count > 0);
+
+
 
 		// Unreference the class
 		core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unReferenceClass($class);
@@ -282,7 +282,7 @@ class core_kernel_persistence_Switcher
 		$returnValue = (bool) false;
 
 		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 begin
-		
+
 		if (defined ("DEBUG_PERSISTENCE") && DEBUG_PERSISTENCE){
 			if (in_array($class->uriResource, self::$debug_tables)){
 				return;
@@ -295,7 +295,7 @@ class core_kernel_persistence_Switcher
 		if(in_array($class->uriResource, self::$blackList)){
 			return $returnValue;
 		}
-                
+
 		// ENTER IN SMOOTH SQL MODE
 		core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
 
@@ -358,11 +358,11 @@ class core_kernel_persistence_Switcher
 		$startIndex = 0;
 		$instancePackSize = 100;
 		$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
-                $count = count($instances);
+		$count = count($instances);
 		do{
-                        //reset timeout:
-                        set_time_limit('30');
-                        
+			//reset timeout:
+			set_time_limit('30');
+
 			$rows = array();
 
 			foreach($instances as $index =>  $resource){
@@ -394,18 +394,18 @@ class core_kernel_persistence_Switcher
 				//increment start index only if not removed
 				$startIndex += $instancePackSize;
 			}
-                        
-                        //record hardened instances number
-                        if(isset($this->hardenedClasses[$class->uriResource])){
-                                $this->hardenedClasses[$class->uriResource] += $count;
-                        }else{
-                                $this->hardenedClasses[$class->uriResource] = $count;
-                        }
-                        
-                        //update instance array and count value
+
+			//record hardened instances number
+			if(isset($this->hardenedClasses[$class->uriResource])){
+				$this->hardenedClasses[$class->uriResource] += $count;
+			}else{
+				$this->hardenedClasses[$class->uriResource] = $count;
+			}
+
+			//update instance array and count value
 			$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
-                        $count = count($instances);
-                        
+			$count = count($instances);
+
 		} while($count> 0);
 
 		// Treat subclasses of the current class
@@ -448,7 +448,7 @@ class core_kernel_persistence_Switcher
 		$referencer->resetCache();
 		// EXIT SMOOTH SQL MODE
 		core_kernel_persistence_PersistenceProxy::resetMode();
-		
+
 		if (defined ("DEBUG_PERSISTENCE") && DEBUG_PERSISTENCE){
 			$this->unhardify($class, array_merge($options, array(
 				'recursive' 		=> false,
@@ -461,51 +461,51 @@ class core_kernel_persistence_Switcher
 
 		return (bool) $returnValue;
 	}
-        
-        public function getHardenedClasses(){
-                return $this->hardenedClasses;
-        }
-        
-        public function getDecompiledClasses(){
-                return $this->decompiledClasses;
-        }
-        
-        public static function createIndex($indexProperties = array()){
-                
-                $referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
-                $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-                
-                foreach($indexProperties as $indexProperty){
-	    		$property = new core_kernel_classes_Property($indexProperty);
-	    		$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
-	    		foreach($referencer->propertyLocation($property) as $table){
-	    			if(!preg_match("/Props$/", $table) && preg_match("/^_[0-9]{2,}/", $table)){
-	    				$dbWrapper->execSql("ALTER TABLE `{$table}` ADD INDEX `idx_{$propertyAlias}` (`{$propertyAlias}`( 255 ))");
-	    			}
-	    		}
-	    	}
-                        
-                //Need to OPTIMIZE / FLUSH the tables in order to rebuild the indexes
-	    	$tables = $dbWrapper->dbConnector->MetaTables('TABLES');
-	    	
-	    	$size = count($tables);
-	    	$i = 0;
-	    	while($i < $size){
-	    		
-	    		$percent = round(($i / $size) * 100);
-	    		if($percent < 10){
-	    			$percent = '0'.$percent;
-	    		}
-	    		
-	    		$dbWrapper->execSql("OPTIMIZE TABLE `{$tables[$i]}`");
-	    		$dbWrapper->execSql("FLUSH TABLE `{$tables[$i]}`");
-	    		
-	    		$i++;
-	    	}
-                
-                return true;
-                
-        }
+
+	public function getHardenedClasses(){
+		return $this->hardenedClasses;
+	}
+
+	public function getDecompiledClasses(){
+		return $this->decompiledClasses;
+	}
+
+	public static function createIndex($indexProperties = array()){
+
+		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+
+		foreach($indexProperties as $indexProperty){
+			$property = new core_kernel_classes_Property($indexProperty);
+			$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
+			foreach($referencer->propertyLocation($property) as $table){
+				if(!preg_match("/Props$/", $table) && preg_match("/^_[0-9]{2,}/", $table)){
+					$dbWrapper->execSql("ALTER TABLE `{$table}` ADD INDEX `idx_{$propertyAlias}` (`{$propertyAlias}`( 255 ))");
+				}
+			}
+		}
+
+		//Need to OPTIMIZE / FLUSH the tables in order to rebuild the indexes
+		$tables = $dbWrapper->dbConnector->MetaTables('TABLES');
+
+		$size = count($tables);
+		$i = 0;
+		while($i < $size){
+	   
+			$percent = round(($i / $size) * 100);
+			if($percent < 10){
+				$percent = '0'.$percent;
+			}
+	   
+			$dbWrapper->execSql("OPTIMIZE TABLE `{$tables[$i]}`");
+			$dbWrapper->execSql("FLUSH TABLE `{$tables[$i]}`");
+	   
+			$i++;
+		}
+
+		return true;
+
+	}
 } /* end of class core_kernel_persistence_Switcher */
 
 ?>

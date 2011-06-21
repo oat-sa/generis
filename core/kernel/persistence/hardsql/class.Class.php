@@ -176,12 +176,27 @@ implements core_kernel_persistence_ClassInterface
 
 		// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 begin
 
+		if(isset($params['limit'])){
+			$limit = intval($params['limit']);
+			if($limit){
+				$offset = 0;
+				if(isset($params['offset'])){
+					$offset = intval($params['offset']);
+					if ($ofset>0){
+						throw new core_kernel_persistence_hardapi_Exception("The offset options is not allowed in this persistence mode");
+					}
+				}
+			}
+		}
+		
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$classLocations = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($resource);
 		foreach ($classLocations as $classLocation){
 				
 			$tableName = $classLocation['table'];
 			$sqlQuery = "SELECT uri FROM `{$tableName}` WHERE 1";
+			if (isset($limit)) $sqlQuery .= " LIMIT {$offset},{$limit}";
+			
 			$sqlResult = $dbWrapper->execSql($sqlQuery);
 			while (!$sqlResult->EOF){
 
@@ -193,7 +208,16 @@ implements core_kernel_persistence_ClassInterface
 					
 				$subClasses = $resource->getSubClasses(true);
 				foreach ($subClasses as $subClass){
-					$returnValue = array_merge($returnValue, $subClass->getInstances(true));
+
+					if (isset($limit)){
+						
+						$limit = $limit - count($returnValue);
+						if ($limit > 0){
+							$returnValue = array_merge($returnValue, $subClass->getInstances(true), array('limit'=>$limit));
+						}
+					}else{
+						$returnValue = array_merge($returnValue, $subClass->getInstances(true));
+					}
 				}
 			}
 		}
