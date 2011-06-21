@@ -329,6 +329,9 @@ class core_kernel_persistence_Switcher
 		$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
                 $count = count($instances);
 		do{
+                        //reset timeout:
+                        set_time_limit('30');
+                        
 			$rows = array();
 
 			foreach($instances as $index =>  $resource){
@@ -430,6 +433,43 @@ class core_kernel_persistence_Switcher
         
         public function getHardenedClasses(){
                 return $this->hardenedClasses;
+        }
+        
+        public static function createIndex($indexProperties = array()){
+                
+                $referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+                $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+                
+                foreach($indexProperties as $indexProperty){
+	    		$property = new core_kernel_classes_Property($indexProperty);
+	    		$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
+	    		foreach($referencer->propertyLocation($property) as $table){
+	    			if(!preg_match("/Props$/", $table) && preg_match("/^_[0-9]{2,}/", $table)){
+	    				$dbWrapper->execSql("ALTER TABLE `{$table}` ADD INDEX `idx_{$propertyAlias}` (`{$propertyAlias}`( 255 ))");
+	    			}
+	    		}
+	    	}
+                        
+                //Need to OPTIMIZE / FLUSH the tables in order to rebuild the indexes
+	    	$tables = $dbWrapper->dbConnector->MetaTables('TABLES');
+	    	
+	    	$size = count($tables);
+	    	$i = 0;
+	    	while($i < $size){
+	    		
+	    		$percent = round(($i / $size) * 100);
+	    		if($percent < 10){
+	    			$percent = '0'.$percent;
+	    		}
+	    		
+	    		$dbWrapper->execSql("OPTIMIZE TABLE `{$tables[$i]}`");
+	    		$dbWrapper->execSql("FLUSH TABLE `{$tables[$i]}`");
+	    		
+	    		$i++;
+	    	}
+                
+                return true;
+                
         }
 } /* end of class core_kernel_persistence_Switcher */
 
