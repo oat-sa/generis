@@ -129,7 +129,6 @@ class core_kernel_persistence_Switcher
 		$columns = $propertySwitcher->getTableColumns();
 
 		// Get all instances of this class
-		set_time_limit(600);
 		$startIndex = 0;
 		$instancePackSize = 100;
 		$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));

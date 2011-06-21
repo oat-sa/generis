@@ -182,7 +182,7 @@ implements core_kernel_persistence_ClassInterface
 				$offset = 0;
 				if(isset($params['offset'])){
 					$offset = intval($params['offset']);
-					if ($ofset>0){
+					if ($offset>0){
 						throw new core_kernel_persistence_hardapi_Exception("The offset options is not allowed in this persistence mode");
 					}
 				}
@@ -195,7 +195,14 @@ implements core_kernel_persistence_ClassInterface
 				
 			$tableName = $classLocation['table'];
 			$sqlQuery = "SELECT uri FROM `{$tableName}` WHERE 1";
-			if (isset($limit)) $sqlQuery .= " LIMIT {$offset},{$limit}";
+			if (isset($limit)) {
+				$limit = $limit - count($returnValue);
+				if ($limit > 0) {
+					$sqlQuery .= " LIMIT {$limit}";
+				} else {
+					break;
+				}
+			}
 			
 			$sqlResult = $dbWrapper->execSql($sqlQuery);
 			while (!$sqlResult->EOF){
@@ -214,6 +221,8 @@ implements core_kernel_persistence_ClassInterface
 						$limit = $limit - count($returnValue);
 						if ($limit > 0){
 							$returnValue = array_merge($returnValue, $subClass->getInstances(true), array('limit'=>$limit));
+						} else {
+							break 2;
 						}
 					}else{
 						$returnValue = array_merge($returnValue, $subClass->getInstances(true));
