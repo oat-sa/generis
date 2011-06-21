@@ -210,16 +210,22 @@ implements core_kernel_persistence_ResourceInterface
 			$result	= $dbWrapper->execSql($query, array(
 			$resource->uriResource
 			));
-			if($dbWrapper->dbConnector->errorNo() !== 0){
+			
+			if ($dbWrapper->dbConnector->errorNo() == 1054) {
+				// Column doesn't exists is not an error. Try to get a property which does not exist is allowed
+			}
+			else if ($dbWrapper->dbConnector->errorNo() !== 0){ 
 				throw new core_kernel_persistence_hardapi_Exception("Unable to get property (single) values for {$resource->uriResource} in {$table} : " .$dbWrapper->dbConnector->errorMsg());
+			} 
+			else {
+				while (!$result->EOF){
+					if ($result->fields['propertyValue']!=null){
+						$returnValue[] = $result->fields['propertyValue'];
+					}
+					$result->moveNext();
+				}
 			}
 
-			while (!$result->EOF){
-				if ($result->fields['propertyValue']!=null){
-					$returnValue[] = $result->fields['propertyValue'];
-				}
-				$result->moveNext();
-			}
 		}
 
 		// section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B end

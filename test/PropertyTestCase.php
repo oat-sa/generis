@@ -1,8 +1,7 @@
 <?php
-require_once dirname(__FILE__).'/../common/common.php';
+
+require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
 require_once INCLUDES_PATH.'/simpletest/autorun.php';
-
-
 
 
 class PropertyTestCase extends UnitTestCase{

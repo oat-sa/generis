@@ -334,8 +334,8 @@ class ClassTestCase extends UnitTestCase {
 			
 			//test simple search:
 			$propertyFilter = array(
-				'http://www.tao.lu/Ontologies/generis.rdf#login' => 'login1',
-				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'a722c63db8ec8625af6cf71cb8c2d939'
+				'http://www.tao.lu/Ontologies/generis.rdf#login' => 's1',
+				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'e10adc3949ba59abbe56e057f20f883e'
 			);
 			$options = array('like' => false, 'recursive' => false);
 			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
@@ -344,8 +344,8 @@ class ClassTestCase extends UnitTestCase {
 			
 			//test like option
 			$propertyFilter = array(
-				'http://www.tao.lu/Ontologies/generis.rdf#login' => '%login%',
-				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'a722c63db8ec8625af6cf71cb8c2d939'
+				'http://www.tao.lu/Ontologies/generis.rdf#login' => '%s1',
+				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'e10adc3949ba59abbe56e057f20f883e'
 			);
 			$options = array('like' => true, 'recursive' => false);
 			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
@@ -355,8 +355,8 @@ class ClassTestCase extends UnitTestCase {
 			
 			//test reference resource prop value:
 			$propertyFilter = array(
-				'http://www.tao.lu/Ontologies/generis.rdf#login' => '%login%',
-				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'a722c63db8ec8625af6cf71cb8c2d939',
+				'http://www.tao.lu/Ontologies/generis.rdf#login' => '%s1',
+				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'e10adc3949ba59abbe56e057f20f883e',
 				'http://www.tao.lu/Ontologies/generis.rdf#userDefLg' => '%FR%'
 			);
 			

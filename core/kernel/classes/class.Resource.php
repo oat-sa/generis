@@ -350,7 +350,7 @@ class core_kernel_classes_Resource
         $returnValue = null;
 
         // section 10-13-1--99--2465c76a:11c0440e8db:-8000:0000000000001466 begin
- 
+ 		
         $collection = $this->getPropertyValuesCollection($property);
 
         if($collection->isEmpty()){

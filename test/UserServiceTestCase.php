@@ -37,8 +37,12 @@ class UserServiceTestCase extends UnitTestCase {
 		$backoffice = new core_kernel_classes_Resource(CLASS_ROLE_BACKOFFICE);
 		$role2 = $this->service->addRole('testAddRoleTESt 2','test2',$backoffice);
 		$this->assertTrue($role2->getOnePropertyValue($subClassProp)->uriResource == CLASS_GENERIS_USER);
-		$this->assertTrue($role1->getOnePropertyValue($typeProp)->uriResource == CLASS_ROLE);
-		$this->assertTrue($role2->getOnePropertyValue($typeProp)->uriResource == $backoffice->uriResource);
+		//$this->assertTrue($role1->getOnePropertyValue($typeProp)->uriResource == CLASS_ROLE);
+		$role1Type = array_shift($role1->getType());
+		$this->assertTrue($role1Type->uriResource == CLASS_ROLE);
+		//$this->assertTrue($role2->getOnePropertyValue($typeProp)->uriResource == $backoffice->uriResource)
+		$role2Type = array_shift($role2->getType());
+		$this->assertTrue($role2Type->uriResource == $backoffice->uriResource);
 	
 		$role1->delete();
 		$role2->delete();
