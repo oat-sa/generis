@@ -170,7 +170,7 @@ class core_kernel_classes_Class
      * which simply link the previously created ressource with this class
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource instance
      * @return core_kernel_classes_Resource
      */
@@ -235,7 +235,7 @@ class core_kernel_classes_Class
      * Short description of method __construct
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string uri
      * @param  string debug
      * @return void
@@ -251,7 +251,7 @@ class core_kernel_classes_Class
      * Creates the hyperClass related to a class
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return mixed
      */
     public function createHyperClass()
@@ -307,7 +307,7 @@ class core_kernel_classes_Class
      * Short description of method createInstance
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string label
      * @param  string comment
      * @param  string uri
@@ -330,7 +330,7 @@ class core_kernel_classes_Class
      * Short description of method createSubClass
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string label
      * @param  string comment
      * @return core_kernel_classes_Class
@@ -352,7 +352,7 @@ class core_kernel_classes_Class
      * Short description of method createProperty
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string label
      * @param  string comment
      * @param  boolean isLgDependent
@@ -375,7 +375,7 @@ class core_kernel_classes_Class
      * Short description of method getMethodes
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return array
      */
     public function getMethodes()
@@ -393,7 +393,7 @@ class core_kernel_classes_Class
      * Short description of method searchInstances
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  array propertyFilters
      * @param  array options
      * @return array
@@ -403,10 +403,28 @@ class core_kernel_classes_Class
         $returnValue = array();
 
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:0000000000001503 begin
-	$returnValue = core_kernel_persistence_ClassProxy::singleton()->searchInstances ($this, $propertyFilters, $options);
+		$returnValue = core_kernel_persistence_ClassProxy::singleton()->searchInstances ($this, $propertyFilters, $options);
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:0000000000001503 end
 
         return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method countInstances
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return Integer
+     */
+    public function countInstances()
+    {
+        $returnValue = null;
+
+        // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159B begin
+		$returnValue = core_kernel_persistence_ClassProxy::singleton()->countInstances ($this);
+        // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159B end
+
+        return $returnValue;
     }
 
 } /* end of class core_kernel_classes_Class */
