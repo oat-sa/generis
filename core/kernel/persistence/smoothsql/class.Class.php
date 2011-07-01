@@ -639,13 +639,6 @@ class core_kernel_persistence_smoothsql_Class
 		if (!$sqlResult-> EOF){
 			$returnValue = $sqlResult->fields['count'];
 		}
-		/*
-		if($recursive == true){
-			$subClasses = $resource->getSubClasses(true);
-			foreach ($subClasses as $subClass){
-				$returnValue = array_merge($returnValue,$subClass->getInstances(true));
-			}
-		}*/
         
         // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159D end
 

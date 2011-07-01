@@ -176,21 +176,20 @@ class core_kernel_persistence_hardsql_Class
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 begin
 
-		if(isset($params['limit'])){
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$classLocations = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($resource);
+
+    	if(isset($params['limit'])){
+			$offset = 0;
 			$limit = intval($params['limit']);
-			if($limit){
-				$offset = 0;
-				if(isset($params['offset'])){
-					$offset = intval($params['offset']);
-					if ($offset>0){
-						throw new core_kernel_persistence_hardapi_Exception("The offset options is not allowed in this persistence mode");
-					}
-				}
+			if ($limit==0){
+				$limit = 1000000;
+			}
+			if(isset($params['offset'])){
+				$offset = intval($params['offset']);
 			}
 		}
 		
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$classLocations = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($resource);
 		foreach ($classLocations as $classLocation){
 				
 			$tableName = $classLocation['table'];
@@ -198,7 +197,7 @@ class core_kernel_persistence_hardsql_Class
 			if (isset($limit)) {
 				$limit = $limit - count($returnValue);
 				if ($limit > 0) {
-					$sqlQuery .= " LIMIT {$limit}";
+					$sqlQuery .= " LIMIT {$offset},{$limit}";
 				} else {
 					break;
 				}
@@ -596,6 +595,21 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = null;
 
         // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159D begin
+        
+        $returnValue = 0;
+    	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$classLocations = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($resource);
+		foreach ($classLocations as $classLocation){
+				
+			$tableName = $classLocation['table'];
+			$sqlQuery = "SELECT count(*) as count FROM `{$tableName}` WHERE 1";
+			
+			$sqlResult = $dbWrapper->execSql($sqlQuery);
+			if(!$sqlResult->EOF){
+				$returnValue += $sqlResult->fields['count'];
+			}
+		}
+        
         // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159D end
 
         return $returnValue;
