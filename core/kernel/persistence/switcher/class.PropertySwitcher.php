@@ -209,17 +209,14 @@ bewteen a class and it's parent to retrieve the properties.
      * @param array additionalProp
      * @return array
      */
-    public function getTableColumns($additionalProps = array())
+    public function getTableColumns($additionalProps = array(), $blackListedProps = array())
     {
         $returnValue = array();
 
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001618 begin
         
         $properties = $this->getProperties($additionalProps);
-        $notForeignableClass = array (
-        	RDF_CLASS
-        );
-        
+                
     	/// HERE repalce what the switcher is doing: determine the column type: literal/class, translate, multiple values
     	foreach($properties as $property){
 
@@ -227,7 +224,7 @@ bewteen a class and it's parent to retrieve the properties.
 				
 			$range = $property->getRange();
 			
-			if(!is_null($range) && $range->uriResource != RDFS_LITERAL && !in_array($range->uriResource, $notForeignableClass)){
+			if(!is_null($range) && $range->uriResource != RDFS_LITERAL && !in_array($range->uriResource, $blackListedProps)){
 				//constraint to the class that represents the range
 				
 				$column['foreign'] = '_'.core_kernel_persistence_hardapi_Utils::getShortName($range);

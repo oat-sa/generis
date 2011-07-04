@@ -140,18 +140,23 @@ class core_kernel_persistence_hardapi_TableManager
 					}
 					$query .= ", {$column['name']}";
 					if(isset($column['foreign']) && !empty($column['foreign'])){
-						$query .= " VARCHAR(255),";
-						$query .= " CONSTRAINT fk_{$column['name']}
-									FOREIGN KEY ({$column['name']}) 
-									REFERENCES {$column['foreign']}(uri)
-								";
+                                                $query .= " LONGTEXT";
+                                                
+                                                //currently disable the foreign key constraint management:
+                                                /*
+                                                $myTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
+                                                if($myTableMgr->exists()){
+                                                        $query .= " VARCHAR(255),";
+                                                        $query .= " CONSTRAINT fk_{$column['name']} FOREIGN KEY ({$column['name']}) REFERENCES {$column['foreign']}(uri)";
+                                                }
+                                                 */
 					}
 					else{
 						$query .= " LONGTEXT";
 					}
 				}
 			}
-			$query .= ')DEFAULT CHARSET=utf8';
+			$query .= ')ENGINE=MyISAM, DEFAULT CHARSET=utf8';
 
 			$dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() > 0){
@@ -162,7 +167,7 @@ class core_kernel_persistence_hardapi_TableManager
 				throw new core_kernel_persistence_hardapi_Exception("Unable to create the table {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
 			}
 				
-			//create the multi prop table if needed
+			//always create the multi prop table
 			$query = "CREATE TABLE {$this->name}Props (
 				id int NOT NULL AUTO_INCREMENT,
 				property_uri VARCHAR(255),
@@ -172,11 +177,16 @@ class core_kernel_persistence_hardapi_TableManager
 				instance_id int NOT NULL ,
 				PRIMARY KEY (id),
 				KEY idx{$this->name}props_property_uri (property_uri),
-				KEY idx{$this->name}props_foreign_property_uri (property_foreign_uri),
-				CONSTRAINT fk{$this->name}_instance_id 
+				KEY idx{$this->name}props_foreign_property_uri (property_foreign_uri)";
+                        
+                        //currently disable the foreign key constraint management:
+                        /*        
+			$query. = ",CONSTRAINT fk{$this->name}_instance_id 
 						FOREIGN KEY (instance_id) 
-						REFERENCES {$this->name}(id)
-			)DEFAULT CHARSET=utf8";
+						REFERENCES {$this->name}(id)";
+                         */
+                                
+			$query .= ")ENGINE=MyISAM,DEFAULT CHARSET=utf8";
 				
 			$dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() !== 0){

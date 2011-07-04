@@ -58,14 +58,16 @@ class core_kernel_persistence_Switcher
 
 		if(count(self::$blackList) == 0 || count($blackList) > 0){
 			self::$blackList = array_merge(
-			array(
-			CLASS_GENERIS_USER,
-			CLASS_ROLE_TAOMANAGER,
-			CLASS_ROLE_BACKOFFICE,
-			CLASS_ROLE_FRONTOFFICE,
-			RDF_CLASS
-			),
-			$blackList
+                                array(
+                                        CLASS_GENERIS_USER,
+                                        CLASS_ROLE,
+                                        CLASS_ROLE_TAOMANAGER,
+                                        CLASS_ROLE_BACKOFFICE,
+                                        CLASS_ROLE_FRONTOFFICE,
+                                        RDF_CLASS,
+                                        'http://www.tao.lu/middleware/wfEngine.rdf#ClassProcessVariables'
+                                ),
+                                $blackList
 			);
 		}
 	}
@@ -126,7 +128,7 @@ class core_kernel_persistence_Switcher
 		// Get class' properties
 		$propertySwitcher = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
 		$properties = $propertySwitcher->getProperties();
-		$columns = $propertySwitcher->getTableColumns();
+		$columns = $propertySwitcher->getTableColumns(array(), self::$blackList);
 
 		// Get all instances of this class
 		$startIndex = 0;
@@ -266,7 +268,8 @@ class core_kernel_persistence_Switcher
 
 
 	public static $debug_tables = array();
-
+        protected $foreignPropertiesWaitingList = array();
+        
 	/**
 	 * Short description of method hardifier
 	 *
@@ -335,22 +338,77 @@ class core_kernel_persistence_Switcher
 		$columns = array();
 		$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
 		$properties = $ps->getProperties($additionalProperties);
-		$columns = $ps->getTableColumns($additionalProperties);
-
+		$columns = $ps->getTableColumns($additionalProperties, self::$blackList);
+                
+                //init the count value in hardened classes:
+                if(isset($this->hardenedClasses[$class->uriResource])){
+                        return true;//already being compiled
+                }else{
+                       $this->hardenedClasses[$class->uriResource] = 0;
+                }
+                
+                // Treat foreign classes of the current class
+		foreach($columns as $i => $column){
+			//create the foreign tables recursively
+			if(isset($column['foreign']) && !empty($column['foreign'])){
+				if($createForeigns){
+					$foreignClassUri = core_kernel_persistence_hardapi_Utils::getLongName($column['foreign']);
+					$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
+					if(!$foreignTableMgr->exists()){
+                                                if(!in_array($foreignClassUri, array_keys($this->hardenedClasses))){
+                                                        $range = new core_kernel_classes_Class($foreignClassUri);
+                                                        $this->hardify($range, array_merge($options, array(
+                                                                'topClass'      => new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE),
+                                                                'recursive' 	=> false,
+                                                                'append' 	=> true,
+                                                                'allOrNothing'	=> true
+                                                        )));
+                                                }else{
+                                                        //set in waiting list, the property to be set as foreign key on a table to be compiled
+                                                        //array(range => array(currentClass => property))
+                                                        //array(foreignTable => array(currentTable => column))
+                                                        if(!isset($this->foreignPropertiesWaitingList[$column['foreign']])){
+                                                                $this->foreignPropertiesWaitingList[$column['foreign']] = array($tableName => $column['name']);
+                                                        }else{
+                                                                $this->foreignPropertiesWaitingList[$column['foreign']][$tableName] = $column['name'];
+                                                        }
+                                                        unset($columns[$i]['foreign']);//do not create the foreign key for now
+                                                }
+					}
+				}else{
+					unset($columns[$i]['foreign']);//do not create foreign key at all
+				}
+			}
+		}
+                
+                // important! need to force the mode again to "smooth" after foreign classes (ranges) compilation
+		core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
+                
 		if(!$append || ($append && !$myTableMgr->exists())){
-
 			//create the table
 			if($myTableMgr->exists()){
 				$myTableMgr->remove();
 			}
-			$myTableMgr->create($columns);
-
+                        $myTableMgr->create($columns);
+                        
 			//reference the class
 			$referencer->referenceClass($class, null, $topClass);
 
 			if($referencesAllTypes){
 				$referencer->referenceInstanceTypes($class);
 			}
+                        
+                        //currently disable the foreign key constraint management:
+                        /*
+                        //when the table is created, check if it is a missing range (i.e. column) of a foreign key:
+                        if(isset($this->foreignPropertiesWaitingList[$tableName])){
+                                $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+                                foreach($this->foreignPropertiesWaitingList[$tableName] as $sourceTable => $sourceColumn){
+                                        $alterForeignKeyQuery = "ALTER TABLE {$sourceTable} ADD fk_{$sourceColumn} FOREIGN KEY ({$sourceColumn}) REFERENCES {$tableName};";
+                                        $dbWrapper->execSql($alterForeignKeyQuery);
+                                }
+                        }
+                         */
 		}
 
 		//insert the resources
@@ -412,34 +470,9 @@ class core_kernel_persistence_Switcher
 			foreach($class->getSubClasses(true) as $subClass){
 				$this->hardify($subClass, array_merge($options, array(
 					'recursive' 	=> false,
-					'append' 		=> true,
+					'append' 	=> true,
 					'allOrNothing'	=> true
 				)));
-			}
-		}
-
-		// Treat foreign classes of the current class
-		foreach($columns as $i => $column){
-
-			//create the foreign tables recursively
-			if(isset($column['foreign']) && !empty($column['foreign'])){
-				if($createForeigns){
-					$foreignClassUri = core_kernel_persistence_hardapi_Utils::getLongName($column['foreign']);
-					$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
-					if(!$foreignTableMgr->exists() && $foreignClassUri != $class->uriResource){
-
-						$range = new core_kernel_classes_Class($foreignClassUri);
-						$this->hardify($range, array_merge($options, array(
-							'topClass'		=> new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE),
-							'recursive' 	=> false,
-							'append' 		=> true,
-							'allOrNothing'	=> true
-						)));
-					}
-				}
-				else{
-					unset($columns[$i]['foreign']);
-				}
 			}
 		}
 
@@ -460,7 +493,7 @@ class core_kernel_persistence_Switcher
 
 		return (bool) $returnValue;
 	}
-
+        
 	public function getHardenedClasses(){
 		return $this->hardenedClasses;
 	}
