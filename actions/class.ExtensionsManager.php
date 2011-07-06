@@ -43,12 +43,12 @@ class generis_actions_ExtensionsManager extends Module {
 		$this->setData('message',$message);
 		$this->index();
 
-
 	}
 	
 
 
 	public function modify($loaded,$loadAtStartUp){
+                
 		$extensionManager = common_ext_ExtensionsManager::singleton();
 		$installedExtArray = $extensionManager->getInstalledExtensions();
 		$configurationArray = array();
@@ -65,8 +65,6 @@ class generis_actions_ExtensionsManager extends Module {
 		}
 		$this->setData('message', $message);
 		$this->index();
-
-
 
 	}
 
