@@ -139,8 +139,8 @@ define('INSTANCE_EMPTY_TERM_URI' , 				RULES_NS.'#Empty', true);
 define('INSTANCE_TERM_IS_NULL' ,	 			RULES_NS.'#IsNull', true);
 
 define('PERSISTENCE_SMOOTH' ,					"smoothsql");
-define('PERSISTENCE_HARD' ,						"hardsql");
-define('PERSISTENCE_VIRTUOZO' ,					"virtuozo");
+define('PERSISTENCE_HARD' ,					"hardsql");
+define('PERSISTENCE_VIRTUOSO' ,					"virtuoso");
 define('PERSISTENCE_SUBSCRIPTION' ,				"subscription");
 
 ?>
