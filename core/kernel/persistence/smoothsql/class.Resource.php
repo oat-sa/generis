@@ -115,7 +115,7 @@ class core_kernel_persistence_smoothsql_Resource
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
         
         $session = core_kernel_classes_Session::singleton();
-       	$modelIds	= implode(',',array_keys($session->getLoadedModels()));
+       	$modelIds = implode(',',array_keys($session->getLoadedModels()));
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $query =  "SELECT object, l_language FROM statements 
 		    		WHERE subject = ? AND predicate = ?

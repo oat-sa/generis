@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 07.07.2011, 17:23:09 with ArgoUML PHP module 
+ * Automatically generated on 08.07.2011, 12:39:23 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
@@ -27,11 +27,6 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 
 /* user defined constants */
 // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:0000000000002303-constants begin
-
-define(VIRTUOSO_ODBC_NAME, 'VOS');
-define(VIRTUOSO_LOGINE, 'dba');
-define(VIRTUOSO_PASSWORD, 'tao');
-
 // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:0000000000002303-constants end
 
 /**
@@ -53,7 +48,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
      * Short description of attribute dbConnector
      *
      * @access private
-     * @var void
+     * @var resource
      */
     private $dbConnector = null;
 
@@ -90,8 +85,8 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
         if (!isset(self::$instance)) {
             $c = __CLASS__;
             self::$instance = new $c();
-
         }
+        
         $returnValue = self::$instance;
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:000000000000230A end
 
@@ -104,25 +99,35 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
      * @access public
      * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string query
-     * @return void
+     * @param  string outputFormat
+     * @return resource
      */
-    public function execQuery($query)
+    public function execQuery($query, $outputFormat = 'Array')
     {
+        $returnValue = null;
+
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:000000000000230C begin
         
         if(!$this->dbConnector){
                 throw new core_kernel_persistence_virtuoso_Exception("[VIRTUOSO ERROR] Virtuoso is not connected");
         }
 
-        $res = odbc_exec($this->dbConnector, 'sparql ' . $query);
-
-        $err = odbc_errormsg($this->dbConnector);
-        if(!empty($err)){
-                throw new core_kernel_persistence_virtuoso_Exception("[VIRTUOSO ERROR] $err");
+        $result = odbc_exec($this->dbConnector, 'sparql ' . $query);
+        if($outputFormat == 'Array'){
+                $returnValue = $this->resultToArray($result);
+        }else if($outputFormat == 'Boolean'){
+                $returnValue = $this->resultToBoolean($result);
+        }
+        
+        
+        $error = odbc_errormsg($this->dbConnector);
+        if(!empty($error)){
+                throw new core_kernel_persistence_virtuoso_Exception("[VIRTUOSO ERROR] $error");
         }
 
-        return $res;
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:000000000000230C end
+
+        return $returnValue;
     }
 
     /**
@@ -172,11 +177,68 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
 
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:000000000000231A begin
         
-        $returnValue = 'localNSgraph';//since in practice, only local data could be changed...
+        $returnValue = VIRTUOSO_GRAPH_TAO;//all data store in a single graph
         
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:000000000000231A end
 
         return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method resultToArray
+     *
+     * @access private
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  result
+     * @return array
+     */
+    private function resultToArray($result)
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1--18467de:13108b1b06a:-8000:00000000000015D7 begin
+        
+        if(!empty($result)){
+                $row = 0;
+                $count = odbc_num_fields($result);
+                while(odbc_fetch_row($result)){
+                        $returnValue[$row] = array();
+                        for($col=0; $col < $count; $col++){
+                                $returnValue[$row][$col] = odbc_result($result, $col+1);
+                        }
+                        $row ++;
+                }
+        }
+        // section 127-0-1-1--18467de:13108b1b06a:-8000:00000000000015D7 end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method resultToBoolean
+     *
+     * @access private
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  result
+     * @return boolean
+     */
+    private function resultToBoolean($result)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--18467de:13108b1b06a:-8000:00000000000015DA begin
+        if(!empty($result)){
+                $resultArray = $this->resultToArray($result);
+                if(isset($resultArray[0]) && isset($resultArray[0][0])){
+                        if(preg_match('/done$/', $resultArray[0][0])){
+                                $returnValue = true;
+                        }
+                }
+                
+        }
+        // section 127-0-1-1--18467de:13108b1b06a:-8000:00000000000015DA end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class core_kernel_persistence_virtuoso_VirtuosoDataStore */

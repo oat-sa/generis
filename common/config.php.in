@@ -17,14 +17,20 @@ define('DATABASE_PASS',  '');
 define('DATABASE_URL',   '');
 define('SGBD_DRIVER',   '');
 
-#paths
+# virtuoso
+define('VIRTUOSO_ODBC_NAME','VOS');
+define('VIRTUOSO_LOGIN','dba');
+define('VIRTUOSO_PASSWORD','tao');
+define('VIRTUOSO_GRAPH_TAO','http://localhost:8890/DAV/tao');
+
+# paths
 define('ROOT_PATH', '');
 define('ROOT_URL',  '');
 
-## language
+# local namespace
 define('LOCAL_NAMESPACE', '');
 
-## language
+# language
 define('DEFAULT_LANG', '');
 $GLOBALS['default_lang']	= DEFAULT_LANG;
 

@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 07.07.2011, 16:08:41 with ArgoUML PHP module 
+ * Automatically generated on 08.07.2011, 12:25:52 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
@@ -20,6 +20,13 @@ error_reporting(E_ALL);
 if (0 > version_compare(PHP_VERSION, '5')) {
     die('This file was generated for PHP 5');
 }
+
+/**
+ * include core_kernel_persistence_PersistenceImpl
+ *
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+ */
+require_once('core/kernel/persistence/class.PersistenceImpl.php');
 
 /**
  * include core_kernel_persistence_ResourceInterface
@@ -45,6 +52,7 @@ require_once('core/kernel/persistence/interface.ResourceInterface.php');
  * @subpackage kernel_persistence_virtuoso
  */
 class core_kernel_persistence_virtuoso_Resource
+    extends core_kernel_persistence_PersistenceImpl
         implements core_kernel_persistence_ResourceInterface
 {
     // --- ASSOCIATIONS ---
@@ -75,6 +83,26 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 begin
+        
+        list($NS, $ID) = explode('#', $resource->uriResource);
+        if(isset($ID) && !empty($ID)){
+                
+                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                
+                $query = 'PREFIX resourceNS: <'.$NS.'#>
+                        SELECT ?type WHERE {resourceNS:'.$ID.' rdf:type ?type}';
+                
+                $resultArray = $virtuoso->execQuery($query);
+                $count = count($resultArray);
+                for($i = 0; $i<$count; $i++){
+                        if(isset($resultArray[$i][0]) && !empty($resultArray[$i][0])){
+                                $uri = $resultArray[$i][0];
+                                $returnValue[$uri] = new core_kernel_classes_Class($uri);
+                        }
+                }
+                
+        }
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 end
 
         return (array) $returnValue;
@@ -95,6 +123,27 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
+        
+        list($NS, $ID) = explode('#', $resource->uriResource);
+        list($propNS, $propID) = explode('#', $property->uriResource);
+        if(isset($ID) && !empty($ID)){
+                
+                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                
+                $query = 'PREFIX resourceNS: <'.$NS.'#>
+                        PREFIX propNS: <'.$propNS.'#>
+                        SELECT ?o WHERE {resourceNS:'.$ID.' propNS:'.$propID.' ?o}';
+                
+                $resultArray = $virtuoso->execQuery($query);
+                $count = count($resultArray);
+                for($i = 0; $i<$count; $i++){
+                        if(isset($resultArray[$i][0])){
+                                $returnValue[] = (string) $resultArray[$i][0];
+                        }
+                }
+                
+        }
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B end
 
         return (array) $returnValue;
@@ -114,6 +163,29 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F begin
+        $propertyValues = $this->getPropertyValues($resource, $property);
+        
+        $returnValue = new core_kernel_classes_ContainerCollection($resource);
+        
+        $count = count($propertyValues);
+        for($i=0;$i<$count;$i++){
+
+            $value = $propertyValues[$i];
+            
+            if(!common_Utils::isUri($value)) {
+                $container = new core_kernel_classes_Literal($value);
+            }
+            else {
+                $container = new core_kernel_classes_Resource($value);
+            }
+
+            if(DEBUG_MODE){
+            	$container->debug = __METHOD__ .'|' . $property->debug;
+            }
+            $returnValue->add($container);
+        }
+        
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F end
 
         return $returnValue;
@@ -334,12 +406,21 @@ class core_kernel_persistence_virtuoso_Resource
         
         list($NS, $id) = explode('#', $resource->uriResource);
         if(isset($id) && !empty($id)){
+                
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
                 
-                $query = 'PREFIX local: <'.$NS.'>
-                DELETE FROM <'.$virtuoso->getCurrentGraph().'> {local:'.$id.' ?p ?o} WHERE {local:'.$id.' ?p ?o}';
+                $query = 'PREFIX resourceNS: <'.$NS.'#>
+                        DELETE FROM <'.$virtuoso->getCurrentGraph().'> {resourceNS:'.$id.' ?p ?o} WHERE {resourceNS:'.$id.' ?p ?o}';
 
-                $res = $virtuoso->execQuery($query);
+                $returnValue = $virtuoso->execQuery($query, 'Boolean');
+                
+                if($deleteReference){
+                        
+                        $query = 'PREFIX resourceNS: <'.$NS.'#>
+                                DELETE FROM <'.$virtuoso->getCurrentGraph().'> {?s ?p resourceNS:'.$id.'} WHERE {?s ?p resourceNS:'.$id.'}';
+                        
+                        $returnValue = $virtuoso->execQuery($query, 'Boolean');
+                }
         }
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 end
@@ -361,6 +442,9 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 begin
+        
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 end
 
         return $returnValue;
@@ -454,6 +538,12 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = null;
 
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:00000000000022E4 begin
+        
+        if (core_kernel_persistence_virtuoso_Resource::$instance == null){
+        	core_kernel_persistence_virtuoso_Resource::$instance = new core_kernel_persistence_virtuoso_Resource();
+        }
+        $returnValue = core_kernel_persistence_virtuoso_Resource::$instance;
+        
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:00000000000022E4 end
 
         return $returnValue;
@@ -472,6 +562,19 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:00000000000022E6 begin
+        
+        list($NS, $id) = explode('#', $resource->uriResource);
+        if(isset($id) && !empty($id)){
+                
+                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                
+                $query = 'PREFIX resourceNS: <'.$NS.'#>
+                        SELECT ?p ?o WHERE {resourceNS:'.$id.' ?p ?o} LIMIT 1';
+                
+                $resultArray = $virtuoso->execQuery($query);
+                $returnValue = count($resultArray)?true:false;
+        }
+        
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:00000000000022E6 end
 
         return (bool) $returnValue;

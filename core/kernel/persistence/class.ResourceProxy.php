@@ -651,9 +651,13 @@ class core_kernel_persistence_ResourceProxy
         $impls = $this->getAvailableImpl();
         if(isset($impls[$context]) && $impls[$context]){
         	$implClass = "core_kernel_persistence_{$context}_Resource";
-        	$reflectionMethod = new ReflectionMethod($implClass, 'singleton');
-			$singleton = $reflectionMethod->invoke(null);
-			$returnValue = $singleton->isValidContext($resource);
+                if(class_exists($implClass)){
+                        $reflectionMethod = new ReflectionMethod($implClass, 'singleton');
+                        $singleton = $reflectionMethod->invoke(null);
+                        $returnValue = $singleton->isValidContext($resource);  
+                }else{
+                        throw new Exception('the persistence class does not exists: '.$implClass);
+                }
         }
 		 
         // section 127-0-1-1--499759bc:12f72c12020:-8000:0000000000001558 end
