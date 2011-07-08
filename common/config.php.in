@@ -18,10 +18,10 @@ define('DATABASE_URL',   '');
 define('SGBD_DRIVER',   '');
 
 # virtuoso
-define('VIRTUOSO_ODBC_NAME','VOS');
-define('VIRTUOSO_LOGIN','dba');
-define('VIRTUOSO_PASSWORD','tao');
-define('VIRTUOSO_GRAPH_TAO','http://localhost:8890/DAV/tao');
+define('VIRTUOSO_ODBC_NAME','');
+define('VIRTUOSO_LOGIN','');
+define('VIRTUOSO_PASSWORD','');
+define('VIRTUOSO_GRAPH_TAO','');
 
 # paths
 define('ROOT_PATH', '');
