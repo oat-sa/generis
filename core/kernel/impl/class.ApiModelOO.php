@@ -132,7 +132,10 @@ class core_kernel_impl_ApiModelOO
 			if(!preg_match("/\#$/", $namespace)){
 				$namespace .= "#";
 			}
-			$result = $dbWrapper->execSql("SELECT * FROM `models`  WHERE `modelURI` = '$namespace' OR `baseURI` = '$namespace'");
+			$result = $dbWrapper->execSql('SELECT * FROM "models"  WHERE "modelURI" = ? OR "baseURI" = ?', array(
+				$namespace,
+				$namespace
+			));
 			if (!$result->EOF){
 				$models[] = $result->fields;
 			}
@@ -585,8 +588,8 @@ class core_kernel_impl_ApiModelOO
         $session 	= core_kernel_classes_Session::singleton();
         $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
         $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
-        $query = "INSERT into statements (modelID,subject,predicate,object,l_language,author,stread,stedit,stdelete,epoch)
-        			VALUES  (?, ?, ?, ?, ?, ?, '{$mask}','{$mask}','{$mask}', CURRENT_TIMESTAMP);";
+        $query = 'INSERT INTO "statements" ("modelID","subject","predicate","object","l_language","author","stread","stedit","stdelete","epoch")
+        			VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP);';
 
         $returnValue = $dbWrapper->execSql($query, array(
        		$localNs->getModelId(),
@@ -594,8 +597,15 @@ class core_kernel_impl_ApiModelOO
        		$predicate,
        		$object,
        		$language,
-       		$session->getUser()
+       		$session->getUser(),
+       		$mask,
+       		$mask,
+       		$mask
         ));
+        
+    	if($dbWrapper->dbConnector->errorNo() !== 0){
+			throw new common_Exception ("Unable to setStatement (SPO) {$subject}, {$predicate}, {$object} : " .$dbWrapper->dbConnector->errorMsg());
+		}
         
         // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009E8 end
 
@@ -676,9 +686,12 @@ class core_kernel_impl_ApiModelOO
 
         // section 10-13-1--99--65c50b00:11c66591411:-8000:0000000000000E9A begin
 		
-		$sqlQuery = "select subject from statements where predicate = '". $predicate . "' and object= '". $object ."' ";
+		$sqlQuery = "SELECT subject FROM statements WHERE predicate = ? AND object= ? ";
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->execSql($sqlQuery);
+		$sqlResult = $dbWrapper->execSql($sqlQuery, array (
+			$predicate,
+			$object
+		));
 		$returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
 		while (!$sqlResult-> EOF){
 			$container = new core_kernel_classes_Resource($sqlResult->fields['subject'], __METHOD__);
@@ -740,9 +753,12 @@ class core_kernel_impl_ApiModelOO
         $returnValue = null;
 
         // section -87--2--3--76-51a982f1:1278aabc987:-8000:000000000000891E begin
-    	$sqlQuery = "select object from statements where subject = '". $subject."' and predicate = '". $predicate . "' ";
+    	$sqlQuery = "select object from statements where subject = ? and predicate = ? ";
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->execSql($sqlQuery);
+		$sqlResult = $dbWrapper->execSql($sqlQuery, array (
+			$subject,
+			$predicate
+		));
 		$returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
 		while (!$sqlResult-> EOF){
 			

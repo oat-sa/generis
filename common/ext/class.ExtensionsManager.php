@@ -79,10 +79,12 @@ class common_ext_ExtensionsManager
 		if(empty($this->extensions)){
 
 			$db = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
-			$query = "SELECT * FROM `extensions`;";
-
+			$query = 'SELECT * FROM "extensions";';
 			$result = $db->execSql($query);
-				
+			if($db->dbConnector->errorNo() !== 0){
+				throw new core_kernel_persistence_hardapi_Exception($db->dbConnector->errorMsg());
+			}
+			
 			while (!$result-> EOF){
 				$id = $result->fields["id"];
 				$extension = new common_ext_SimpleExtension($id);

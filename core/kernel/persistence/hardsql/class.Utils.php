@@ -51,10 +51,10 @@ class core_kernel_persistence_hardsql_Utils
     	
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
     	$table = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
-    	$query = "SELECT id from {$table} WHERE uri=?";
+    	$query = 'SELECT "id" FROM "'.$table.'" WHERE uri= ? ';
     	$result = $dbWrapper->execSql($query, array ($resource->uriResource));
     	if($dbWrapper->dbConnector->errorNo() !== 0){
-			throw new core_kernel_persistence_hardapi_Exception("Unable to find the resource {$resource->uriResource} in {$table} : " .$dbWrapper->dbConnector->errorMsg());
+			throw new core_kernel_persistence_hardsql_Exception("Unable to find the resource {$resource->uriResource} in {$table} : " .$dbWrapper->dbConnector->errorMsg());
 		}
     	if (!$result->EOF){
     		$returnValue = $result->fields['id'];
@@ -67,11 +67,11 @@ class core_kernel_persistence_hardsql_Utils
     	$returnValue = null;
     	
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-    	$query = "SELECT id from `resource_to_table` WHERE uri=?";
+    	$query = 'SELECT "id" FROM "resource_to_table" WHERE "uri"=?';
     	$result = $dbWrapper->execSql($query, array ($resource->uriResource));
     	
     	if($dbWrapper->dbConnector->errorNo() !== 0){
-			throw new core_kernel_persistence_hardapi_Exception("Unable to find the class {$resource->uriResource} in resource_to_table : " .$dbWrapper->dbConnector->errorMsg());
+			throw new core_kernel_persistence_hardsql_Exception("Unable to find the class {$resource->uriResource} in resource_to_table : " .$dbWrapper->dbConnector->errorMsg());
 		}
     	if (!$result->EOF){
     		$returnValue = $result->fields['id'];
@@ -84,14 +84,14 @@ class core_kernel_persistence_hardsql_Utils
     	$returnValue = null;
     	
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-    	$query = "SELECT id from `class_to_table` WHERE `uri`=? AND `table`=?";
+    	$query = 'SELECT "id" FROM "class_to_table" WHERE "uri"=? AND "table"=?';
     	$result = $dbWrapper->execSql($query, array (
     		$class->uriResource
     		, core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource)
     	));
     	
     	if($dbWrapper->dbConnector->errorNo() !== 0){
-			throw new core_kernel_persistence_hardapi_Exception("Unable to find the class {$class->uriResource} in class_to_table : " .$dbWrapper->dbConnector->errorMsg());
+			throw new core_kernel_persistence_hardsql_Exception("Unable to find the class {$class->uriResource} in class_to_table : " .$dbWrapper->dbConnector->errorMsg());
 		}
     	
     	if (!$result->EOF){

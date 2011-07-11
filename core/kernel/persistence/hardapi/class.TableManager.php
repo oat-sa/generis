@@ -76,7 +76,7 @@ class core_kernel_persistence_hardapi_TableManager
 
 		if(count(self::$_tables) == 0){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-			$result = $dbWrapper->execSql('SELECT DISTINCT `table` FROM class_to_table');
+			$result = $dbWrapper->execSql('SELECT DISTINCT "table" FROM class_to_table');
 			while(!$result->EOF){
 				self::$_tables[] = $result->fields['table'];
 				$result->moveNext();
@@ -128,19 +128,18 @@ class core_kernel_persistence_hardapi_TableManager
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 				
 			//build the query to create the main table
-			$query = "CREATE TABLE {$this->name} (
-						id int NOT NULL AUTO_INCREMENT,
-						PRIMARY KEY (id),
-						uri VARCHAR(255) NOT NULL ,
-						KEY idx{$this->name}_uri (uri)";
+			$query = 'CREATE TABLE "'.$this->name.'" (
+						"id" SERIAL,
+						PRIMARY KEY ("id"),
+						"uri" VARCHAR(255) NOT NULL';
 			foreach($columns as $column){
 				if(isset($column['name'])){
 					if(isset($column['multi'])){
 						continue;
 					}
-					$query .= ", {$column['name']}";
+					$query .= ', "'.$column['name'].'"';
 					if(isset($column['foreign']) && !empty($column['foreign'])){
-                                                $query .= " LONGTEXT";
+                                                $query .= " TEXT";
                                                 
                                                 //currently disable the foreign key constraint management:
                                                 /*
@@ -152,11 +151,11 @@ class core_kernel_persistence_hardapi_TableManager
                                                  */
 					}
 					else{
-						$query .= " LONGTEXT";
+						$query .= " TEXT";
 					}
 				}
 			}
-			$query .= ')ENGINE=MyISAM, DEFAULT CHARSET=utf8';
+			$query .= ');';
 
 			$dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() > 0){
@@ -166,18 +165,23 @@ class core_kernel_persistence_hardapi_TableManager
 				//the user may not have the right to create a table
 				throw new core_kernel_persistence_hardapi_Exception("Unable to create the table {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
 			}
+			
+			// create table index
+			$query = 'CREATE INDEX "idx'.$this->name.'" ON "'.$this->name.'" ("uri");';
+			if($dbWrapper->dbConnector->errorNo() > 0){
+				//the user may not have the right to create the table index
+				throw new core_kernel_persistence_hardapi_Exception("Unable to create the table index  {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
+			}
 				
 			//always create the multi prop table
-			$query = "CREATE TABLE {$this->name}Props (
-				id int NOT NULL AUTO_INCREMENT,
-				property_uri VARCHAR(255),
-				property_value LONGTEXT,
-				property_foreign_uri VARCHAR(255),
-				l_language VARCHAR(4),
-				instance_id int NOT NULL ,
-				PRIMARY KEY (id),
-				KEY idx{$this->name}props_property_uri (property_uri),
-				KEY idx{$this->name}props_foreign_property_uri (property_foreign_uri)";
+			$query = 'CREATE TABLE "'.$this->name.'Props" (
+				"id" SERIAL,
+				"property_uri" VARCHAR(255),
+				"property_value" TEXT,
+				"property_foreign_uri" VARCHAR(255),
+				"l_language" VARCHAR(4),
+				"instance_id" int NOT NULL ,
+				PRIMARY KEY ("id")';
                         
                         //currently disable the foreign key constraint management:
                         /*        
@@ -186,7 +190,7 @@ class core_kernel_persistence_hardapi_TableManager
 						REFERENCES {$this->name}(id)";
                          */
                                 
-			$query .= ")ENGINE=MyISAM,DEFAULT CHARSET=utf8";
+			$query .= ");";
 				
 			$dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() !== 0){
@@ -196,7 +200,15 @@ class core_kernel_persistence_hardapi_TableManager
 				throw new core_kernel_persistence_hardapi_Exception("Unable to create the table {$this->name}Props : " .$dbWrapper->dbConnector->errorMsg());
 			}
 			self::$_tables[] = "{$this->name}Props";
-				
+			
+			// Create multiples properties table indexes
+			$query = 'CREATE INDEX "idx'.$this->name.'props_property_uri" ON "'.$this->name.'Props" ("property_uri");';
+			$query .= 'CREATE INDEX "idx'.$this->name.'props_foreign_property_uri" ON "'.$this->name.'Props" ("property_foreign_uri");';
+			if($dbWrapper->dbConnector->errorNo() > 0){
+				//the user may not have the right to create the table index
+				throw new core_kernel_persistence_hardapi_Exception("Unable to create the multiples properties table indexes  {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
+			}
+			
 			//auto reference
 			self::$_tables[] = $this->name;
 			$returnValue = true;
@@ -226,43 +238,26 @@ class core_kernel_persistence_hardapi_TableManager
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
 			//remove the multi properties table
-			$dbWrapper->execSql("DROP TABLE `{$this->name}Props`");
+			$dbWrapper->execSql('DROP TABLE "'.$this->name.'Props"');
 			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to remove the properties table {$this->name}Props :" .$dbWrapper->dbConnector->errorMsg());
+				throw new core_kernel_persistence_hardapi_Exception("Unable to remove the multiple properties table {$this->name}Props :" .$dbWrapper->dbConnector->errorMsg());
 			}
 			$tblKey = array_search("{$this->name}Props", self::$_tables);
 			if($tblKey !== false){
 				unset(self::$_tables[$tblKey]);
 			}
-				
+			
 			//remove the table
-			$dbWrapper->execSql("DROP TABLE `{$this->name}`");
-			if($dbWrapper->dbConnector->errorNo() === 0){
-
-				//remove all the references to the table
-				$cascadeDelete = "DELETE class_to_table.*, resource_has_class.*, resource_to_table.* FROM class_to_table
-									LEFT JOIN resource_has_class ON resource_has_class.class_id = class_to_table.id
-									LEFT JOIN resource_to_table ON resource_has_class.resource_id = resource_to_table.id
-									WHERE class_to_table.`table` = '{$this->name}' OR resource_to_table.`table` = '{$this->name}'";
-				$dbWrapper->execSql($cascadeDelete);
-
-				if($dbWrapper->dbConnector->errorNo() === 0){
-
-					$tblKey = array_search($this->name, self::$_tables);
-					if($tblKey !== false){
-						unset(self::$_tables[$tblKey]);
-					}
-					$returnValue = true;
-
-				}
-				else{
-					throw new core_kernel_persistence_hardapi_Exception("Unable to remove data related to {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
-				}
-			}
-			else{
-				//the user may not have the right to drop a table
+			$result = $dbWrapper->execSql('DROP TABLE "'.$this->name.'";');
+        	if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to remove the table {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
 			}
+			$tblKey = array_search($this->name, self::$_tables);
+			if($tblKey !== false){
+				unset(self::$_tables[$tblKey]);
+			}
+			
+			$returnValue = true;
 		}
 
 		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015B9 end

@@ -139,10 +139,10 @@ class DbModel extends Model{
 
 		if (!$this->contains($statement)) {
 
-			$sql = "INSERT INTO statements
-			        (modelID, subject, predicate, object, l_language, author, stread, stedit, stdelete, epoch)
+			$sql = 'INSERT INTO "statements"
+			        ("modelID", "subject", "predicate", "object", "l_language", "author", "stread", "stedit", "stdelete", "epoch")
 			        VALUES
-                    (" .$this->modelID .","
+                    (' .$this->modelID .","
 			. $this->dbConn->qstr($statement->getLabelSubject()) .","
 			. $this->dbConn->qstr($statement->getLabelPredicate()) .",";
 			
@@ -349,8 +349,8 @@ class DbModel extends Model{
 	*/
 	function contains(&$statement) {
 
-		$sql = 'SELECT modelID FROM statements
-           WHERE modelID = ' .$this->modelID;
+		$sql = 'SELECT "modelID" FROM "statements"
+           WHERE "modelID" = ' .$this->modelID;
 		$sql .= $this->_createDynSqlPart_SPO($statement->subj, $statement->pred, $statement->obj);
 		
 		$res =& $this->dbConn->getOne($sql);

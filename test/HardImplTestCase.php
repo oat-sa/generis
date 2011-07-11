@@ -47,7 +47,7 @@ class HardImplTestCase extends UnitTestCase {
 		unset ($switcher);
 	}
 	
-	public function testSwitchOnHardOK(){
+	public function testHardSwitchOK(){
 		// Test that resource are now available from the hard sql implementation
 		$this->assertTrue (core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectClass) instanceof core_kernel_persistence_hardsql_Class);
 		$this->assertTrue (core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectSubClass) instanceof core_kernel_persistence_hardsql_Class);
@@ -214,7 +214,7 @@ class HardImplTestCase extends UnitTestCase {
 			// Remove literal single property
 			$instance->removePropertyValueByLg (new core_kernel_classes_Property(RDFS_LABEL), 'FR');
 			$props = $instance->getPropertyValues (new core_kernel_classes_Property(RDFS_LABEL));
-			$this->assertTrue (empty($props));
+			$this->assertFalse (empty($props));
 			
 			// Remove foreign single property
 			$instance->removePropertyValueByLg (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/generis.rdf#userDefLg'), 'FR');
@@ -224,7 +224,7 @@ class HardImplTestCase extends UnitTestCase {
 			// Remove literal multiple property
 			$instance->removePropertyValueByLg (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOTest.rdf#TestContent'), 'FR');
 			$props = $instance->getPropertyValues (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOTest.rdf#TestContent'));
-			$this->assertTrue (empty($props));
+			$this->assertFalse (empty($props));
 			
 			// Remove foreign multiple property
 			$instance->removePropertyValueByLg (new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOGroup.rdf#Members'), 'FR');
@@ -259,8 +259,7 @@ class HardImplTestCase extends UnitTestCase {
 		$this->targetSubjectSubClass->delete(true);
 		$this->subject2->delete();
 		
-		$tm = new core_kernel_persistence_hardapi_TableManager ('_06Languages');
-		$tm->remove();
+		core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unreferenceClass(new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#Languages'));
 	}
 	
 	public function testFilterByLanguage() {

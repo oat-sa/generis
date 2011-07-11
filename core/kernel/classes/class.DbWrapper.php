@@ -105,7 +105,15 @@ class core_kernel_classes_DbWrapper
         }
         
 		//to manage utf8
-        $this->dbConnector->Execute('SET NAMES utf8');
+        $this->dbConnector->Execute('SET NAMES \'UTF8\';');
+        
+        //specific code to execute for each sgbd
+    	switch (SGBD_DRIVER){
+        	case 'mysql':
+        		// enable ansi quotes to escape fieldname like it is mentionned in the standard with double qotes
+       			$this->dbConnector->Execute('SET GLOBAL SQL_MODE=\'ANSI_QUOTES\';');
+       			break;
+        }
         
         if($this->dbConnector->errorNo() !== 0){
 			throw new Exception("Database error ".$this->dbConnector->errorMsg());
@@ -165,7 +173,7 @@ class core_kernel_classes_DbWrapper
         $returnValue = (string) '';
 
         // section 10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000B1F begin
-		$returnValue = $this->dbConnector->Execute($sqlQuery, $parameters);
+        $returnValue = $this->dbConnector->Execute($sqlQuery, $parameters);	
         // section 10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000B1F end
 
         return $returnValue;

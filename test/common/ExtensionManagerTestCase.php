@@ -18,13 +18,13 @@ class ExtensionManagerTestCase extends UnitTestCase {
 	
 	public function testGetInstalledExtensions(){
 		$db = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
-		$fakeExtensionSql = "INSERT INTO `extensions` (`id`, `name`, `version`, `loaded`, `loadAtStartUp`) 
-							VALUES ('testExtension', 'test', '0.1', 1, 1);";
+		$fakeExtensionSql = 'INSERT INTO "extensions" ("id", "name", "version", "loaded", "loadAtStartUp") '.
+							"VALUES ('testExtension', 'test', '0.1', 1, 1);";
 		
 		$this->assertTrue($db->execSql($fakeExtensionSql));
-		$extensinoManager = common_ext_ExtensionsManager::singleton();
+		$extensionManager = common_ext_ExtensionsManager::singleton();
 		try{
-			$ext = $extensinoManager->getInstalledExtensions();
+			$ext = $extensionManager->getInstalledExtensions();
 		}
 		catch(common_ext_ExtensionException $ee){
 			$this->assertEqual('Extension Manifest not found : <b>testExtension</b>', $ee->getMessage());
@@ -58,8 +58,8 @@ class ExtensionManagerTestCase extends UnitTestCase {
 		
 		$this->assertTrue(file_exists(EXTENSION_PATH.'/testExtension/'.MANIFEST_NAME));
 		
-		$extensinoManager->reset();
-		$ext = $extensinoManager->getInstalledExtensions();
+		$extensionManager->reset();
+		$ext = $extensionManager->getInstalledExtensions();
 		$this->assertTrue(isset($ext['testExtension']));
 		
 		$this->assertEqual($ext['testExtension']->author, 'CRP Henry Tudor');
@@ -71,7 +71,7 @@ class ExtensionManagerTestCase extends UnitTestCase {
 		
 		$this->assertFalse(file_exists(EXTENSION_PATH.'/testExtension/'.MANIFEST_NAME));
 		
-		$fakeExtensionSql = "DELETE FROM `extensions` where  `id` = 'testExtension'";
+		$fakeExtensionSql = 'DELETE FROM "extensions" where "id" = \'testExtension\'';
 		$this->assertTrue($db->execSql($fakeExtensionSql));
 	}
 	

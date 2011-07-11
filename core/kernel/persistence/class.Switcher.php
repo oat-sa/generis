@@ -141,6 +141,9 @@ class core_kernel_persistence_Switcher
 
 			foreach ($instances as $instance) {
 
+				// Get table name where the resource is located
+				$tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($instance);
+				
 				// Get Instance type
 				$types = $instance->getType();
 
@@ -163,22 +166,22 @@ class core_kernel_persistence_Switcher
 					// Multiple property
 					if (isset($column['multi']) && $column['multi']) {
 
-						$tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($instance);
-						$sqlQuery = "SELECT
-								`{$tableName}Props`.property_value,
-								`{$tableName}Props`.property_foreign_uri, 
-								`{$tableName}Props`.l_language 
-							FROM `{$tableName}Props`
-							LEFT JOIN `{$tableName}` ON `{$tableName}`.id = `{$tableName}Props`.instance_id
-							WHERE `{$tableName}`.uri = ? 
-								AND `{$tableName}Props`.property_uri = ?";
+						$sqlQuery = 'SELECT
+								"'.$tableName.'Props"."property_value",
+								"'.$tableName.'Props"."property_foreign_uri", 
+								"'.$tableName.'Props"."l_language" 
+							FROM "'.$tableName.'Props"
+							LEFT JOIN "'.$tableName.'" ON "'.$tableName.'"."id" = "'.$tableName.'Props"."instance_id"
+							WHERE "'.$tableName.'"."uri" = ? 
+								AND "'.$tableName.'Props"."property_uri" = ?';
 						$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 						$sqlResult = $dbWrapper->execSql($sqlQuery, array(
 							$instance->uriResource,
 							$property->uriResource
 						));
 						if ($dbWrapper->dbConnector->errorNo() !== 0) {
-							throw new core_kernel_persistence_hardapi_Exception("ERROR : " . $dbWrapper->dbConnector->errorMsg());
+							var_dump($sqlQuery);
+							throw new core_kernel_persistence_hardapi_Exception("unable to unhardify : " . $dbWrapper->dbConnector->errorMsg());
 						}
 
 						// ENTER IN SMOOTH SQL MODE
@@ -236,12 +239,10 @@ class core_kernel_persistence_Switcher
 			$count = count($instances);
 
 		}while($count > 0);
-
-
-
+		
 		// Unreference the class
 		core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unReferenceClass($class);
-
+		
 		// If removeForeigns, treat the foreign classes
 		if($removeForeigns){
 
@@ -512,7 +513,7 @@ class core_kernel_persistence_Switcher
 			$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
 			foreach($referencer->propertyLocation($property) as $table){
 				if(!preg_match("/Props$/", $table) && preg_match("/^_[0-9]{2,}/", $table)){
-					$dbWrapper->execSql("ALTER TABLE `{$table}` ADD INDEX `idx_{$propertyAlias}` (`{$propertyAlias}`( 255 ))");
+					$dbWrapper->execSql('ALTER TABLE "'.$table.'" ADD INDEX "idx_'.$propertyAlias.'" ("'.$propertyAlias.'"( 255 ))');
 				}
 			}
 		}
@@ -529,8 +530,8 @@ class core_kernel_persistence_Switcher
 				$percent = '0'.$percent;
 			}
 	   
-			$dbWrapper->execSql("OPTIMIZE TABLE `{$tables[$i]}`");
-			$dbWrapper->execSql("FLUSH TABLE `{$tables[$i]}`");
+			$dbWrapper->execSql('OPTIMIZE TABLE "'.$tables[$i].'"');
+			$dbWrapper->execSql('FLUSH TABLE "'.$tables[$i].'"');
 	   
 			$i++;
 		}

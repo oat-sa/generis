@@ -107,25 +107,25 @@ class common_ext_ExtensionConfiguration
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002396 begin
         $db = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
 		if($this->loaded){
-			$set1 = "`loaded` = '1'";
+			$set1 = "loaded = '1'";
 		}
 		else {
-			$set1 = "`loaded` = '0'";
+			$set1 = "loaded = '0'";
 		}
 		if($this->loadedAtStartUp){
-			$set2 = "`loadAtStartUp` = '1'";
+			$set2 = "\"loadAtStartUp\" = '1'";
 		}
 		else {
-			$set2 = "`loadAtStartUp` = '0'";
+			$set2 = "\"loadAtStartUp\" = '0'";
 		}
     	if($this->ghost){
-			$set3 = "`ghost` = '1'";
+			$set3 = "ghost = '1'";
 		}
 		else {
-			$set3 = "`ghost` = '0'";
+			$set3 = "ghost = '0'";
 		}
 
-		$sql = "UPDATE `extensions` SET " . $set1 ." , ". $set2 . ", ". $set3 . " WHERE `id` ='". $extension->id."';";
+		$sql = "UPDATE extensions SET " . $set1 ." , ". $set2 . ", ". $set3 . " WHERE id ='". $extension->id."';";
 		$db->execSql($sql);
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002396 end
     }

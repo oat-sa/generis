@@ -85,7 +85,7 @@ class common_ext_ExtensionInstaller
 					require_once $manifestArray['additional']['install']['php'];
 				}
 				//add extension to db
-				$sql = "INSERT INTO `extensions` (`id`, `name`, `version`, `loaded`, `loadAtStartUp`) VALUES ('".$this->extension->id."', '".$this->extension->name."', '".$this->extension->version."', '', '');";
+				$sql = "INSERT INTO extensions (id, name, version, loaded, \"loadAtStartUp\") VALUES ('".$this->extension->id."', '".$this->extension->name."', '".$this->extension->version."', '', '');";
 				$db->execSql($sql);
 			}
 				

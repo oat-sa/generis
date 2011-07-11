@@ -255,7 +255,10 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         
     	if(count(self::$_classes) == 0 || $force){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-			$result = $dbWrapper->execSql("SELECT `id`, `uri`, `table`, `topClass` FROM `class_to_table`");
+			$result = $dbWrapper->execSql('SELECT "id", "uri", "table", "topClass" FROM "class_to_table"');
+    		if($dbWrapper->dbConnector->errorNo() !== 0){
+				throw new core_kernel_persistence_hardapi_Exception($dbWrapper->dbConnector->errorMsg());
+			}
 			 while (!$result->EOF) {
 	        	self::$_classes[$result->fields['uri']] = array(
 	        		'id'	=> $result->fields['id'],
@@ -291,10 +294,16 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				case self::CACHE_NONE:
 					$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 					if(is_null($table)){
-						$result = $dbWrapper->execSql("SELECT `id` FROM `class_to_table` WHERE `uri` = ?", array($class->uriResource));
+						$result = $dbWrapper->execSql('SELECT "id" FROM "class_to_table" WHERE "uri" = ?', array($class->uriResource));
+						if($dbWrapper->dbConnector->errorNo() !== 0){
+							throw new core_kernel_persistence_hardapi_Exception($dbWrapper->dbConnector->errorMsg());
+						}
 					}
 					else{
-						$result = $dbWrapper->execSql("SELECT `id` FROM `class_to_table` WHERE `uri` = ? AND table = ?", array($class->uriResource, $table));
+						$result = $dbWrapper->execSql('SELECT "id" FROM "class_to_table" WHERE "uri" = ? AND "table" = ?', array($class->uriResource, $table));
+						if($dbWrapper->dbConnector->errorNo() !== 0){
+							throw new core_kernel_persistence_hardapi_Exception($dbWrapper->dbConnector->errorMsg());
+						}
 					}
 					
 					if($result->RecordCount() > 0){
@@ -365,7 +374,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         	
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
-			$query = "INSERT INTO `class_to_table` (`uri`, `table`, `topClass`) VALUES (?,?,?)";
+			$query = 'INSERT INTO "class_to_table" ("uri", "table", "topClass") VALUES (?,?,?)';
 			$result = $dbWrapper->execSql($query, array(
 				$class->uriResource, 
 				$table,
@@ -379,7 +388,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			if($result !== false){
 				$returnValue = true;
 				if($this->cacheModes['class'] == self::CACHE_MEMORY){
-					$memQuery = "SELECT `id`, `uri`, `table`, `topClass` FROM `class_to_table` WHERE `uri` = ? AND `table` = ?";
+					$memQuery = 'SELECT "id", "uri", "table", "topClass" FROM "class_to_table" WHERE "uri" = ? AND "table" = ?';
 					$memResult = $dbWrapper->execSql($memQuery, array($class->uriResource, $table));
 					while(!$memResult->EOF){
 						self::$_classes[$memResult->fields['uri']] = array(
@@ -417,21 +426,35 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         	
         	$classLocations = $this->classLocations($class);
 			$tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
-			
-			// delete table associated to the class
-			$tm = new core_kernel_persistence_hardapi_TableManager($tableName);
-			$tm->remove();
         	
         	// Delete reference of the class in classs_to_table, resource_has_class, resource_to_table
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-			$query = "DELETE class_to_table.*, resource_has_class.*, resource_to_table.* FROM class_to_table 
-								LEFT JOIN resource_has_class ON resource_has_class.class_id = class_to_table.id
-								LEFT JOIN resource_to_table ON resource_has_class.resource_id = resource_to_table.id
-								WHERE class_to_table.`table` = '{$tableName}' OR resource_to_table.`table` = '{$tableName}'";
-		
-			$result = $dbWrapper->execSql($query);
-			if($result !== false){
-				$returnValue = true;
+			// Remove references of the resources in the resource has class table
+			$queries[] = 'DELETE 
+				FROM "resource_has_class" 
+				WHERE "resource_has_class"."resource_id" 
+					IN (SELECT "resource_to_table"."id" FROM "resource_to_table" WHERE "resource_to_table"."table" = \''.$tableName.'\' );';
+			// Remove resferences of the resources int resource to table table
+			$queries[] = 'DELETE FROM "resource_to_table" WHERE "resource_to_table"."table" = \''.$tableName.'\';';
+			// Remove reference of the class in the class to table table
+			$queries[] = 'DELETE FROM "class_to_table" WHERE "class_to_table"."table" = \''.$tableName.'\';';
+			
+			$returnValue = true;
+			foreach ($queries as $query){
+				$result = $dbWrapper->execSql($query);
+	        	if($dbWrapper->dbConnector->errorNo() !== 0){
+					throw new core_kernel_persistence_hardapi_Exception("Unable to unreference class {$class->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+				}
+				if ($result===false){
+					$returnValue = false;
+				}
+			}
+			if($returnValue !== false){
+				
+				// delete table associated to the class
+				$tm = new core_kernel_persistence_hardapi_TableManager($tableName);
+				$tm->remove();
+				// remove class from the cache
 				if($this->cacheModes['class'] == self::CACHE_MEMORY){
 					foreach(self::$_classes as $index => $aClass){
 						if($aClass['uri'] == $class->uriResource){
@@ -519,7 +542,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         
     	if(count(self::$_resources) == 0 || $force){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-			$result = $dbWrapper->execSql("SELECT `uri`, `table` FROM `resource_to_table`");
+			$result = $dbWrapper->execSql('SELECT "uri", "table" FROM "resource_to_table"');
 			while (!$result->EOF) {
 	        	self::$_resources[$result->fields['uri']] = $result->fields['table'];
 	        	$result->moveNext();
@@ -554,7 +577,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 					}
 					
 					$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-					$result = $dbWrapper->execSql("SELECT `table` FROM `resource_to_table` WHERE `uri` = ?", array($resource->uriResource));
+					$result = $dbWrapper->execSql('SELECT "table" FROM "resource_to_table" WHERE "uri" = ?', array($resource->uriResource));
 					if($result->RecordCount() > 0){
 						self::$_resources[$resource->uriResource] = $result->fields['table'];
 						$returnValue = true;
@@ -599,13 +622,13 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         if(!$this->isResourceReferenced($resource)){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
-			$query = "INSERT INTO `resource_to_table` (`uri`, `table`) VALUES (?,?)";
+			$query = 'INSERT INTO "resource_to_table" ("uri", "table") VALUES (?,?)';
 			$insertResult = $dbWrapper->execSql($query, array($resource->uriResource, $table));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to reference the resource : {$resource->uriResource} / {$table} : " .$dbWrapper->dbConnector->errorMsg());
 			}
 			if($referenceClassLink && $insertResult !== false){
-				$query = "SELECT * FROM `resource_to_table` WHERE `uri` = ? AND `table` = ?";
+				$query = 'SELECT * FROM "resource_to_table" WHERE "uri" = ? AND "table" = ?';
 				$result = $dbWrapper->execSql($query, array($resource->uriResource, $table));
 				while($row = $result->fetchRow()){
 					$rows[] = $row;
@@ -659,13 +682,24 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         if($this->isResourceReferenced($resource)){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
-			$query = "DELETE resource_to_table.*, resource_has_class.* FROM resource_to_table 
-						LEFT JOIN resource_has_class ON resource_has_class.resource_id = resource_to_table.id
-						WHERE resource_to_table.uri = ?";
-
-			$result = $dbWrapper->execSql($query, array($resource->uriResource));
-			if($result !== false){
-				$returnValue = true;
+			$queries[] = 'DELETE 
+				FROM "resource_has_class" 
+				WHERE "resource_has_class"."resource_id" 
+					IN (SELECT "resource_to_table"."id" FROM "resource_to_table" WHERE "resource_to_table"."uri" = \''.$resource->uriResource.'\' );';
+			$queries[] = 'DELETE FROM "resource_to_table" WHERE "resource_to_table"."uri" = \''.$resource->uriResource.'\';';
+			
+        	$returnValue = true;
+			foreach ($queries as $query){
+				$result = $dbWrapper->execSql($query);
+	        	if($dbWrapper->dbConnector->errorNo() !== 0){
+					throw new core_kernel_persistence_hardapi_Exception("Unable to unreference resource {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+				}
+				if ($result===false){
+					$returnValue = false;
+				}
+			}
+			
+			if($returnValue !== false){
 				if(array_key_exists($resource->uriResource, self::$_resources)){
 					unset(self::$_resources[$resource->uriResource]);
 				}
@@ -702,7 +736,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 					
 			        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			        
-			        $query = "SELECT `table` FROM resource_to_table WHERE uri=?";
+			        $query = 'SELECT "table" FROM "resource_to_table" WHERE uri=?';
 			    	$result = $dbWrapper->execSql($query, array ($resource->uriResource));
 					if($dbWrapper->dbConnector->errorNo() !== 0){
 						
@@ -765,7 +799,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			//get all the compiled tables
     		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
     		$tables = array();
-    		$query = "SELECT DISTINCT `table` FROM `class_to_table`";
+    		$query = 'SELECT DISTINCT "table" FROM "class_to_table"';
     		$result = $dbWrapper->execSql($query);
     		while(!$result->EOF){
     			$tables[] = $result->fields['table'];

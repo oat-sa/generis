@@ -53,8 +53,6 @@ class ApiModelTestCase extends UnitTestCase {
 		}
 	}
 	
-
-	
 	public function testGetMetaClasses(){
 		$metaClasses = $this->object->getMetaClasses();
 		$this->assertIsA($metaClasses,'core_kernel_classes_ContainerCollection');

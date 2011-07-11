@@ -86,9 +86,11 @@ class core_kernel_persistence_smoothsql_Class
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014EB begin
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlQuery = "select subject FROM statements where predicate = '".RDF_SUBCLASSOF."' and object = '".$resource->uriResource."'";
-		$returnValue = array();
-		$sqlResult = $dbWrapper->execSql($sqlQuery);
+		$sqlQuery = 'SELECT "subject" FROM "statements" WHERE "predicate" = ? and "object" = ?';
+		$sqlResult = $dbWrapper->execSql($sqlQuery, array (
+			RDF_SUBCLASSOF,
+			$resource->uriResource
+		));
 		while (!$sqlResult-> EOF){
 			$subClass = new core_kernel_classes_Class($sqlResult->fields['subject']);
 			$returnValue[$subClass->uriResource] = $subClass;
@@ -121,9 +123,9 @@ class core_kernel_persistence_smoothsql_Class
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
-		$query = "SELECT object FROM statements
-					WHERE subject = ?
-					AND predicate = ? AND object = ?";
+		$query = 'SELECT "object" FROM "statements"
+					WHERE "subject" = ?
+					AND "predicate" = ? AND "object" = ?';
 		$result = $dbWrapper->execSql($query, array(
 			$resource->uriResource,
 			RDF_SUBCLASSOF,
@@ -166,11 +168,16 @@ class core_kernel_persistence_smoothsql_Class
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F5 begin
         $returnValue =  array();
 		
-        $sqlQuery ="SELECT object FROM statements WHERE subject = '". $resource->uriResource."' AND (predicate = '".
-        			RDF_SUBCLASSOF."' OR predicate = '".RDF_TYPE."')";
+        $sqlQuery = 'SELECT "object" FROM "statements" 
+        			WHERE "subject" = ? 
+        			AND ("predicate" = ? OR "predicate" = ?)';
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->execSql($sqlQuery);
+		$sqlResult = $dbWrapper->execSql($sqlQuery, array (
+			$resource->uriResource,
+			RDF_SUBCLASSOF,
+			RDF_TYPE
+		));
 
 		while (!$sqlResult-> EOF){
 
@@ -203,9 +210,14 @@ class core_kernel_persistence_smoothsql_Class
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014FA begin
-		$sqlQuery = "select subject from statements where predicate = '". RDF_DOMAIN."' and object = '".$resource->uriResource."'";
+		$sqlQuery = 'SELECT "subject" FROM "statements"
+			WHERE "predicate" = ? 
+			AND "object" = ?';
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->execSql($sqlQuery);
+		$sqlResult = $dbWrapper->execSql($sqlQuery, array(
+			RDF_DOMAIN,
+			$resource->uriResource
+		));
 
 		while (!$sqlResult-> EOF){
 			$property = new core_kernel_classes_Property($sqlResult->fields['subject']);
@@ -242,9 +254,9 @@ class core_kernel_persistence_smoothsql_Class
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 begin
 		
-        $sqlQuery = "SELECT `subject` FROM `statements` 
-						WHERE predicate = '".RDF_TYPE."'  
-							AND object = '".$resource->uriResource."' ";
+        $sqlQuery = 'SELECT "subject" FROM "statements" 
+						WHERE "predicate" = ?  
+							AND "object" = ? ';
 		if(isset($params['limit'])){
 			$offset = 0;
 			$limit = intval($params['limit']);
@@ -254,11 +266,17 @@ class core_kernel_persistence_smoothsql_Class
 			if(isset($params['offset'])){
 				$offset = intval($params['offset']);
 			}
-			$sqlQuery .= "LIMIT {$offset},{$limit} ";
+			$sqlQuery .= "LIMIT {$limit} OFFSET {$offset}";
 		}
 		
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->execSql($sqlQuery);
+		$sqlResult = $dbWrapper->execSql($sqlQuery, array (
+			RDF_TYPE,
+			$resource->uriResource
+		));
+    	if($dbWrapper->dbConnector->errorNo() !== 0){
+			throw new core_kernel_persistence_smoothsql_Exception('Unable to get instances of a class ('.$resource->uriResource.') : '.$dbWrapper->dbConnector->errorMsg());
+		}
 
 		while (!$sqlResult-> EOF){
 
@@ -495,7 +513,7 @@ class core_kernel_persistence_smoothsql_Class
 		$langToken = '';
 		if(isset($options['lang'])){
 			if(preg_match('/^[a-zA-Z]{2,4}$/', $options['lang'])){
-				$langToken = " AND (l_language = '' OR l_language = '{$options['lang']}') ";
+				$langToken = ' AND ("l_language" = \'\' OR "l_language" = \''.$options['lang'].'\') ';
 			}
 		}
 		$like = true;
@@ -503,7 +521,7 @@ class core_kernel_persistence_smoothsql_Class
 			$like = ($options['like'] === true);
 		}
 
-		$query = "SELECT `subject` FROM `statements` WHERE ";
+		$query = 'SELECT "subject" FROM "statements" WHERE ';
 
 		$conditions = array();
 		foreach($propertyFilters as $propUri => $pattern){
@@ -523,16 +541,16 @@ class core_kernel_persistence_smoothsql_Class
 						if(!preg_match("/%$/", $object)){
 							$object = $object."%";
 						}
-						$conditions[] = " (`predicate` = '{$propUri}' AND `object` LIKE '{$object}' $langToken ) ";
+						$conditions[] = ' ("predicate" = \''.$propUri.'\' AND "object" LIKE \''.$object.'\' '.$langToken.' ) ';
 					}
 					else{
-						$conditions[] = " (`predicate` = '{$propUri}' AND `object` = '{$pattern}' $langToken ) ";
+						$conditions[] = ' ("predicate" = \''.$propUri.'\' AND "object" = \''.$pattern.'\' '.$langToken.' ) ';
 					}
 				}
 			}
 			else if(is_array($pattern)){
 				if(count($pattern) > 0){
-					$multiCondition =  " (`predicate` = '{$propUri}' AND  ";
+					$multiCondition =  ' ("predicate" = \''.$propUri.'\' AND  ';
 					foreach($pattern as $i => $patternToken){
 						
 						$patternToken = $dbWrapper->dbConnector->escape($patternToken);
@@ -547,7 +565,7 @@ class core_kernel_persistence_smoothsql_Class
 						if(!preg_match("/%$/", $object)){
 							$object = $object."%";
 						}
-						$multiCondition .= " `object` LIKE '{$object}' ";
+						$multiCondition .= ' "object" LIKE \''.$object.'\' ';
 					}
 					$conditions[] = "{$multiCondition} {$langToken} ) ";
 				}
@@ -629,12 +647,15 @@ class core_kernel_persistence_smoothsql_Class
 
     	// section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159D begin
 
-    	$sqlQuery = "SELECT count(`subject`) as count FROM `statements`
-						WHERE predicate = '".RDF_TYPE."'  
-							AND object = '".$resource->uriResource."' ";
+    	$sqlQuery = 'SELECT count("subject") as count FROM "statements"
+						WHERE "predicate" = ?  
+							AND "object" = ? ';
 		
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->execSql($sqlQuery);
+		$sqlResult = $dbWrapper->execSql($sqlQuery, array(
+			RDF_TYPE,
+			$resource->uriResource
+		));
 
 		if (!$sqlResult-> EOF){
 			$returnValue = $sqlResult->fields['count'];

@@ -104,12 +104,12 @@ class core_kernel_persistence_hardapi_RowManager
 			//building the insert query
 			
 			//set the column names
-			$query = "INSERT INTO {$this->table} (uri";
+			$query = 'INSERT INTO "'.$this->table.'" (uri';
 			foreach($this->columns as $column){
 				if(isset($column['multi']) && $column['multi'] === true){
 					continue;
 				}
-				$query .= ", {$column['name']}";
+				$query .= ', "'.$column['name'].'"';
 			}
 			$query .= ') VALUES ';
 			
@@ -172,7 +172,7 @@ class core_kernel_persistence_hardapi_RowManager
 			
 			$instanceIds = array();
 			
-			$query 	= "SELECT id, uri FROM {$this->table} WHERE uri IN ({$uriList})";
+			$query 	= 'SELECT "id", "uri" FROM "'.$this->table.'" WHERE "uri" IN ('.$uriList.')';
 			$result = $dbWrapper->execSql($query);
 			while (!$result->EOF){
 				$instanceIds[$result->fields['uri']] = $result->fields['id'];
@@ -191,7 +191,7 @@ class core_kernel_persistence_hardapi_RowManager
 					}
 					
 					$multiplePropertyUri = core_kernel_persistence_hardapi_Utils::getLongName($column['name']);
-					$multiQuery = "SELECT object, l_language FROM statements WHERE subject = ? AND predicate = ?";
+					$multiQuery = 'SELECT "object", "l_language" FROM "statements" WHERE "subject" = ? AND "predicate" = ?';
 					$multiResult = $dbWrapper->execSql($multiQuery, array($row['uri'], $multiplePropertyUri));
 					
 					if($dbWrapper->dbConnector->errorNo() !== 0){
@@ -216,8 +216,8 @@ class core_kernel_persistence_hardapi_RowManager
 				
 				if (!empty($queryRows)){
 					
-					$queryMultiple = "INSERT INTO {$this->table}Props
-						(instance_id, property_uri, property_value, property_foreign_uri, l_language) VALUES " . $queryRows;
+					$queryMultiple = 'INSERT INTO "'.$this->table.'Props"
+						("instance_id", "property_uri", "property_value", "property_foreign_uri", "l_language") VALUES ' . $queryRows;
 					
 					$multiplePropertiesResult = $dbWrapper->execSql($queryMultiple);
 					if($dbWrapper->dbConnector->errorNo() !== 0){
@@ -266,7 +266,7 @@ class core_kernel_persistence_hardapi_RowManager
 				
 				if (!empty ($uriList)){
 					$uriList = substr($uriList, 0, strlen($uriList) -1);
-				$query = "SELECT id, uri FROM {$column['foreign']} WHERE uri IN ({$uriList})";
+				$query = 'SELECT "id", "uri" FROM "'.$column['foreign'].'" WHERE uri IN ('.$uriList.')';
 				$result = $dbWrapper->execSql($query);
 				if($dbWrapper->dbConnector->errorNo() !== 0){
 					if(DEBUG_MODE) echo $query;

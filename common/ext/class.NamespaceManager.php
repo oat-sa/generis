@@ -114,7 +114,7 @@ class common_ext_NamespaceManager
         
         if(count($this->namespaces) == 0){
         	$db = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
-        	$query = 'SELECT modelID, baseURI FROM models';
+        	$query = 'SELECT "modelID", "baseURI" FROM "models"';
 			$result = $db->execSql($query);
 			while (!$result-> EOF){
 				$id 	= $result->fields['modelID'];

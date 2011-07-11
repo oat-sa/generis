@@ -37,7 +37,8 @@ class DbStore extends Object
         "MySQL",
         "MySQLi",
         "MSSQL",
-        'MsAccess'
+        'MsAccess',
+    	'Postgres8'
     );
 
     /**
@@ -109,8 +110,8 @@ class DbStore extends Object
  */
  function listModels() {
 
-   $recordSet =& $this->dbConn->execute("SELECT modelURI, baseURI
-                                         FROM models");
+   $recordSet =& $this->dbConn->execute('SELECT "modelURI", "baseURI"
+                                         FROM "models"');
    if (!$recordSet)
       echo $this->dbConn->errorMsg();
    else {
@@ -146,9 +147,11 @@ class DbStore extends Object
   	$shortModelUri = $modelURI;
   	$modelURI .= '#';
   }
- 	
-   $res =& $this->dbConn->execute("SELECT COUNT(*) FROM models
-                                   WHERE (modelURI = '" .$modelURI ."' OR  modelURI = '" .$shortModelUri ."')");
+   
+   $res =& $this->dbConn->execute('SELECT COUNT(*) FROM "models" WHERE ("modelURI" = ? OR  "modelURI" = ?)', array (
+   	$modelURI,
+   	$shortModelUri
+   ));
    if (!$res)
       echo $this->dbConn->errorMsg();
    else {
@@ -197,9 +200,12 @@ class DbStore extends Object
 	  	$shortModelUri = $modelURI;
 	  	$modelURI .= '#';
 	  }
-      $modelVars =& $this->dbConn->execute("SELECT modelURI, modelID, baseURI
-                                            FROM models
-                                            WHERE (modelURI='" .$modelURI ."' OR modelURI='" .$shortModelUri ."')");
+      $modelVars =& $this->dbConn->execute('SELECT "modelURI", "modelID", "baseURI"
+                                            FROM "models"
+                                            WHERE ("modelURI" = ? OR "modelURI" = ? )', array (
+      	$modelURI,
+      	$shortModelUri 
+      ));
 
       return new DbModel($this->dbConn, $modelVars->fields[0],
                          $modelVars->fields[1], $modelVars->fields[2]);
@@ -230,11 +236,13 @@ class DbStore extends Object
 				$baseURI .= '#';
 			}
 		}
-      $rs =& $this->dbConn->execute("INSERT INTO models
+      $rs =& $this->dbConn->execute('INSERT INTO models
                                             (modelID, modelURI, baseURI)
-                                            VALUES (" .$modelID .",
-                                                    " .$this->dbConn->qstr($modelURI) .",
-                                                    " .$this->dbConn->qstr($baseURI) .")");
+                                            VALUES (?,?,?)', array (
+      	$modelID,
+      	$this->dbConn->qstr($modelURI),
+      	$this->dbConn->qstr($baseURI)
+      ));
 
       if (!$rs)
          return $this->dbConn->errorMsg();
@@ -299,7 +307,7 @@ class DbStore extends Object
  */
  function _createUniqueModelID() {
 
-   $maxModelID =& $this->dbConn->GetOne('SELECT MAX(modelID) FROM models');
+   $maxModelID =& $this->dbConn->GetOne('SELECT MAX("modelID") FROM "models"');
    return ++$maxModelID;
  }
 
@@ -312,7 +320,7 @@ class DbStore extends Object
  */
  function _createUniqueDatasetID() {
 
-   $maxDatasetID =& $this->dbConn->GetOne('SELECT MAX(datasetId) FROM datasets');
+   $maxDatasetID =& $this->dbConn->GetOne('SELECT MAX("datasetId") FROM "datasets"');
    return ++$maxDatasetID;
  }
 
