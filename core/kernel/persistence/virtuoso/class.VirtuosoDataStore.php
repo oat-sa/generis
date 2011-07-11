@@ -113,9 +113,9 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
         }
 
         $result = odbc_exec($this->dbConnector, 'sparql ' . $query);
-        if($outputFormat == 'Array'){
+        if(strtolower($outputFormat) == 'array'){
                 $returnValue = $this->resultToArray($result);
-        }else if($outputFormat == 'Boolean'){
+        }else if(strtolower ($outputFormat) == 'boolean'){
                 $returnValue = $this->resultToBoolean($result);
         }
         

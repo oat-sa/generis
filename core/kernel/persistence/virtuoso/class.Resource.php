@@ -206,6 +206,30 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
+        
+        list($NS, $ID) = explode('#', $resource->uriResource);
+        list($propNS, $propID) = explode('#', $property->uriResource);
+        if(isset($ID) && !empty($ID)){
+                
+                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                
+                $query = 'PREFIX resourceNS: <'.$NS.'#>
+                        PREFIX propNS: <'.$propNS.'#>
+                        SELECT ?o WHERE {resourceNS:'.$ID.' propNS:'.$propID.' ?o} LIMIT 1';
+                
+                $resultArray = $virtuoso->execQuery($query);
+                if(isset($resultArray[0])){
+                        $value = (string) $resultArray[0][0];
+                        
+                        if(!common_Utils::isUri($value)) {
+                                $returnValue = new core_kernel_classes_Literal($value);
+                        }else{
+                                $returnValue = new core_kernel_classes_Resource($value);
+                        }
+                }
+                
+        }
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 end
 
         return $returnValue;
@@ -226,6 +250,32 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 begin
+       
+        list($NS, $ID) = explode('#', $resource->uriResource);
+        list($propNS, $propID) = explode('#', $property->uriResource);
+        if(isset($ID) && !empty($ID)){
+                
+                $lg = trim($lg);
+                if(preg_match("/[A-Z_]{2,5}$/",$lg)){
+                        
+                        $query = 'PREFIX resourceNS: <'.$NS.'#>
+                                PREFIX propNS: <'.$propNS.'#>
+                                SELECT ?o WHERE {resourceNS:'.$ID.' propNS:'.$propID.' ?o . FILTER langMatches( lang(?o), "'.$lg.'" )}';
+                        
+                        $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                        $resultArray = $virtuoso->execQuery($query);
+                        $count = count($resultArray);
+                        for($i = 0; $i<$count; $i++){
+                                if(isset($resultArray[$i][0])){
+                                        $returnValue[] = (string) $resultArray[$i][0];
+                                }
+                        }
+                
+                }
+                
+        }
+        
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 end
 
         return $returnValue;
@@ -247,10 +297,40 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE begin
+        
+        list($NS, $ID) = explode('#', $resource->uriResource);
+		
+        if(!empty($ID)){
+                
+                $query = '';
+                
+                if(common_Utils::isUri($object)){
+                        list($objectNS, $objectID) = explode('#', $object);
+                        $query = 'PREFIX objNS: <'.$objectNS.'#> ';
+                        $object = 'objNS:'.$objectID;
+                }else{
+                        $object = '"'.$object.'"';
+                }
+
+                //decompose property uri:
+                list($propNS, $propID) = explode('#', $property->uriResource);
+                
+                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                
+                $query .= '
+                        PREFIX resourceNS: <'.$NS.'#>
+                        PREFIX propNS: <'.$propNS.'#>
+                        INSERT INTO <'.$virtuoso->getCurrentGraph().'> {resourceNS:'.$ID.' propNS:'.$propID.' '.$object.'}';
+                //add possible multiple values insertion
+
+                $returnValue = $virtuoso->execQuery($query, 'Boolean');
+        }
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE end
 
         return (bool) $returnValue;
     }
+    
 
     /**
      * Short description of method setPropertiesValues
@@ -287,6 +367,34 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7 begin
+        
+        list($NS, $ID) = explode('#', $resource->uriResource);
+        list($propNS, $propID) = explode('#', $property->uriResource);
+                
+        if(!empty($ID) && !empty($propID)){
+                
+                $query = '';
+                
+                $object = '"'.$value.'"';
+                //only literal values can have a lagnuage value
+                $lg = trim($lg);
+                if(preg_match("/[A-Z_]{2,5}$/",$lg)){
+                        $object .= '@'.strtolower($lg);
+                }else{
+                        return $returnValue;
+                }
+                
+                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                
+                $query .= '
+                        PREFIX resourceNS: <'.$NS.'#>
+                        PREFIX propNS: <'.$propNS.'#>
+                        INSERT INTO <'.$virtuoso->getCurrentGraph().'> {resourceNS:'.$ID.' propNS:'.$propID.' '.$object.'}';
+                //add possible multiple values insertion
+
+                $returnValue = $virtuoso->execQuery($query, 'Boolean');
+        }
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7 end
 
         return (bool) $returnValue;
@@ -307,6 +415,21 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD begin
+        
+        list($NS, $ID) = explode('#', $resource->uriResource);
+        list($propNS, $propID) = explode('#', $property->uriResource);
+        if(!empty($ID) && !empty($propID)){
+                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                
+                $query = '
+                        PREFIX resourceNS: <'.$NS.'#>
+                        PREFIX propNS: <'.$propNS.'#>
+                        DELETE FROM <'.$virtuoso->getCurrentGraph().'> {resourceNS:'.$ID.' propNS:'.$propID.' ?o} 
+                        WHERE {resourceNS:'.$ID.' propNS:'.$propID.' ?o}';
+                
+                $returnValue = $virtuoso->execQuery($query, 'Boolean');
+        }
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD end
 
         return (bool) $returnValue;
@@ -328,6 +451,28 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 begin
+        
+        list($NS, $ID) = explode('#', $resource->uriResource);
+        list($propNS, $propID) = explode('#', $property->uriResource);
+        if(!empty($ID) && !empty($propID)){
+                
+                $lg = trim($lg);
+                if(!empty($lg) && preg_match("/[A-Z_]{2,5}$/", $lg)){
+                        $lg = strtolower($lg);
+                        
+                        $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                        
+                        $query = '
+                                PREFIX resourceNS: <'.$NS.'#>
+                                PREFIX propNS: <'.$propNS.'#>
+                                DELETE FROM <'.$virtuoso->getCurrentGraph().'> {resourceNS:'.$ID.' propNS:'.$propID.' ?o} 
+                                WHERE {resourceNS:'.$ID.' propNS:'.$propID.' ?o . FILTER langMatches( lang(?o), "'.$lg.'" )}';
+
+                        $returnValue = $virtuoso->execQuery($query, 'Boolean');
+                }        
+
+        }
+                
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 end
 
         return (bool) $returnValue;
@@ -463,6 +608,9 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = (string) '';
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC begin
+        
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC end
 
         return (string) $returnValue;
@@ -483,6 +631,9 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = array();
 
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 begin
+        
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 end
 
         return (array) $returnValue;
@@ -502,6 +653,39 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 begin
+        
+        list($NS, $ID) = explode('#', $resource->uriResource);
+		
+        if(!empty($ID)){
+                if(Util::isResourceUri($newValue)){
+                        $newValue = '"'.$newValue.'"';
+                }else{
+                        if(!empty($language)){
+                                $language = trim($language);
+                                if(preg_match("/[A-Z]{2,4}$/",$language)){
+                                        $newValue .= '@'.strtolower($language);
+                                }
+                        }
+                }
+
+                
+
+                //decompose property uri:
+                list($propNS, $propID) = explode('#', $propertyUri);
+                
+                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                
+                $query = '
+                        PREFIX resourceNS: <'.$NS.'#>
+                        PREFIX propNS: <'.$propNS.'#>
+                        INSERT INTO <'.$virtuoso->getCurrentGraph().'#> {
+                                resourceNS:'.$ID.' propNS:'.$propID.' '.$newValue.'
+                        }';
+                //add possible multiple values insertion
+
+                $returnValue = $this->virtuoso->execQuery($query, 'Boolean');
+        }
+        
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 end
 
         return (bool) $returnValue;
