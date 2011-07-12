@@ -113,10 +113,15 @@ class core_kernel_persistence_ClassProxy
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014EB begin
-        
-    	// Use the smooth sql implementation to get this information
+    	
+        $delegate = $this->getImpToDelegateTo($resource);
+        if($delegate instanceof core_kernel_persistence_hardsql_Class){
+                // Use the smooth sql implementation to get this information
 		// Or find the right way to treat this case
-		$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->getSubClasses($resource, $recursive);
+                $returnValue = core_kernel_persistence_smoothsql_Class::singleton()->getSubClasses($resource, $recursive);
+        }else{
+                $returnValue = $delegate->getSubClasses($resource);
+        }
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014EB end
 

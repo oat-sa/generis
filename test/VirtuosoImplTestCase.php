@@ -131,6 +131,49 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 
                 $this->assertIsA($clone, 'core_kernel_classes_Resource');
                 $this->assertEqual($clone->getLabel(), $resource->getLabel());
+                $this->assertTrue($clone->delete());
+        }
+        
+        public function testCreateCountInstances(){
+                $class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#Languages');
+                $count = $class->countInstances();
+                $instances = $class->getInstances();
+                
+//                $this->assertEqual($count, 9);
+                $this->assertEqual($count, count($instances));
+        }
+        
+        public function testCreateInstances(){
+                $class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#Languages');
+                $count = $class->countInstances();
+                $instances = $class->getInstances();
+                
+                $newLabel = 'newInstance';
+                $newInstance =  $class->createInstance($newLabel, 'created for unit virtuoso test @ '.date('Y:i:s'));
+                $this->assertIsA($newInstance, 'core_kernel_classes_Resource');
+                $this->assertEqual($class->countInstances(), $count+1);
+                $this->assertEqual($newLabel, $newInstance->getLabel());
+                $this->assertTrue($newInstance->delete());
+                $this->assertEqual($class->countInstances(), $count);
+        }
+        
+        public function testCreateSubclass(){
+                $class = new core_kernel_classes_Class(RDF_CLASS);
+                $label = 'new subclass';
+                $comment = 'created for unit virtuoso test @ '.date('Y:i:s');
+                $subclass = $class->createSubClass($label, $comment);
+                $this->assertIsA($subclass, 'core_kernel_classes_Class');
+                
+                $label2 = 'sub_'.$label;
+                $subSubClass = $subclass->createSubClass($label2, $comment);
+                $this->assertIsA($subSubClass, 'core_kernel_classes_Class');
+                
+                core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_VIRTUOSO);
+                $foundSubclasses = $subclass->getSubClasses();
+                $this->assertEqual(count($foundSubclasses), 1);
+                
+                $this->assertTrue($subSubClass->delete());
+                $this->assertTrue($subclass->delete());
         }
 }
 ?>
