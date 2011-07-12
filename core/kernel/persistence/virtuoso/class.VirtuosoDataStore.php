@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 08.07.2011, 12:39:23 with ArgoUML PHP module 
+ * Automatically generated on 12.07.2011, 11:41:56 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
@@ -239,6 +239,62 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
         // section 127-0-1-1--18467de:13108b1b06a:-8000:00000000000015DA end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method filterLanguageValue
+     *
+     * @access public
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  string lg
+     * @return string
+     */
+    public function filterLanguageValue($lg)
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1-732c983d:1311db156b2:-8000:00000000000015E7 begin
+        $lg = trim($lg);
+        if(preg_match("/[A-Z_]{2,5}$/",$lg)){
+                $returnValue .= '@'.strtolower($lg);
+        }
+        // section 127-0-1-1-732c983d:1311db156b2:-8000:00000000000015E7 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method filterObjectValue
+     *
+     * @access public
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  string object
+     * @param  string lg
+     * @return string
+     */
+    public function filterObjectValue($object, $lg = '')
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1-732c983d:1311db156b2:-8000:00000000000015EA begin
+        if(!empty($lg)){
+                $lg = $this->filterLanguageValue($lg);
+        }
+        
+        if(!empty($lg)){
+                $returnValue = '"' . $object . '"@'.$lg;
+        }else{
+                if (common_Utils::isUri($object)) {
+                        $returnValue = $object;//do not alter it
+                } else {
+                        $returnValue = '"' . $object . '"';
+                }
+        }
+        
+        
+        // section 127-0-1-1-732c983d:1311db156b2:-8000:00000000000015EA end
+
+        return (string) $returnValue;
     }
 
 } /* end of class core_kernel_persistence_virtuoso_VirtuosoDataStore */

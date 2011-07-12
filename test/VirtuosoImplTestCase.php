@@ -11,7 +11,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_VIRTUOSO);
 	}
         
-        public function _testGetType(){
+        public function testGetType(){
                 $resource = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#LangEN');
                 $types = $resource->getType();
                 
@@ -20,12 +20,12 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 $this->assertEqual($theType->uriResource, 'http://www.tao.lu/Ontologies/TAO.rdf#Languages');
         }
         
-        public function _testGetLabel(){
+        public function testGetLabel(){
                 $resource = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#LangEN');
                 $this->assertEqual($resource->getLabel(), 'EN');
         }
         
-        public function _testGetPropertyValues(){
+        public function testGetPropertyValues(){
                 $resource = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#LangEN');
                 $property1 = new core_kernel_classes_Property('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
                 $types = $resource->getPropertyValues($property1);
@@ -47,7 +47,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 
         }
         
-        public function _testPropertyValuesCollection(){
+        public function testPropertyValuesCollection(){
                 $resource = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#LangEN');
                 $property1 = new core_kernel_classes_Property('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
                 $typesCollection = $resource->getPropertyValuesCollection($property1);
@@ -90,5 +90,47 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 $this->assertEqual(count($resource->getPropertyValues($property1)), 0);
         }
         
+        public function testSetType(){
+                $resource = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#LangEN');
+                $class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#myLanguages');
+                $this->assertTrue($resource->setType(new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#Languages')));
+                
+                //add type 'myLanguages':
+                $this->assertTrue($resource->setType($class));
+                $this->assertEqual(count($resource->getType()), 2);
+                
+                //remove type 'myLanguages'
+                $this->assertTrue($resource->removeType($class));
+                $this->assertEqual(count($resource->getType()), 1);
+        }
+        
+        public function testSetPropertiesValues(){
+                $resource = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#LangEN');
+                
+                $propertiesValues = array(
+                    'http://www.tao.lu/Ontologies/TAOTestCase1.rdf#Prop1' => 'value@'.time(),
+                    'http://www.tao.lu/Ontologies/TAOTestCase2.rdf#Prop2' => 'value2@'.time(),
+                    'http://www.tao.lu/Ontologies/TAOTestCase1.rdf#Prop3' => 'http://www.tao.lu/Ontologies/TAOtestCase3.rdf#Value_'.time()
+                );
+                
+                $this->assertTrue($resource->setPropertiesValues($propertiesValues));
+                
+                foreach($propertiesValues as $propUri => $val){
+                        $this->assertTrue($resource->removePropertyValues(new core_kernel_classes_Property($propUri)));
+                }
+        }
+        
+        public function testGetRDFtriples(){
+                $resource = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#LangEN');
+                $this->assertFalse($resource->getRdfTriples()->isEmpty());
+        }
+        
+        public function testDuplicate(){
+                $resource = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#LangEN');
+                $clone = $resource->duplicate();
+                
+                $this->assertIsA($clone, 'core_kernel_classes_Resource');
+                $this->assertEqual($clone->getLabel(), $resource->getLabel());
+        }
 }
 ?>
