@@ -111,7 +111,7 @@ class core_kernel_classes_DbWrapper
     	switch (SGBD_DRIVER){
         	case 'mysql':
         		// enable ansi quotes to escape fieldname like it is mentionned in the standard with double qotes
-       			$this->dbConnector->Execute('SET GLOBAL SQL_MODE=\'ANSI_QUOTES\';');
+       			$this->dbConnector->Execute('SET SESSION SQL_MODE=\'ANSI_QUOTES\';');
        			break;
         }
         

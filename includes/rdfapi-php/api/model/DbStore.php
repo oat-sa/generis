@@ -90,6 +90,9 @@ class DbStore extends Object
 
    // connect to database
    $r = $this->dbConn->NConnect($host, $user, $password, $dbName);
+   if ($dbDriver == 'mysql'){
+   	$this->dbConn->execute ('SET SESSION SQL_MODE=\'ANSI_QUOTES\';');
+   }
    if ($r !== true) {
       throw new Exception('Could not connect to database');
    }
