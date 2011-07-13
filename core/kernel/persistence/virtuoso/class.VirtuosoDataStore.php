@@ -115,7 +115,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
         $result = odbc_exec($this->dbConnector, 'sparql ' . $query);
         if(strtolower($outputFormat) == 'array'){
                 $returnValue = $this->resultToArray($result);
-        }else if(strtolower ($outputFormat) == 'boolean'){
+        }else if(strtolower($outputFormat) == 'boolean' || strtolower($outputFormat) == 'bool'){
                 $returnValue = $this->resultToBoolean($result);
         }
         
@@ -230,7 +230,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
         if(!empty($result)){
                 $resultArray = $this->resultToArray($result);
                 if(isset($resultArray[0]) && isset($resultArray[0][0])){
-                        if(preg_match('/done$/', $resultArray[0][0])){
+                        if($resultArray[0][0] == 1 || preg_match('/done$/', $resultArray[0][0])){
                                 $returnValue = true;
                         }
                 }
@@ -255,7 +255,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
 
         // section 127-0-1-1-732c983d:1311db156b2:-8000:00000000000015E7 begin
         $lg = trim($lg);
-        if(preg_match("/[A-Z_]{2,5}$/",$lg)){
+        if(preg_match("/[a-zA-Z_]{2,5}$/",$lg)){//e.g. "en_gb" is a valid language tag 
                 $returnValue .= '@'.strtolower($lg);
         }
         // section 127-0-1-1-732c983d:1311db156b2:-8000:00000000000015E7 end

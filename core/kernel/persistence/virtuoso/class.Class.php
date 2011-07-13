@@ -126,23 +126,19 @@ class core_kernel_persistence_virtuoso_Class
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F0 begin
-        
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        list($NS, $ID) = explode('#', $resource->uriResource);
+        list($parentNS, $parentID) = explode('#', $parentClass->uriResource);
+        if (isset($ID) && !empty($ID)) {
 
-        $query = "SELECT object FROM statements
-                                WHERE subject = ?
-                                AND predicate = ? AND object = ?";
-        $result = $dbWrapper->execSql($query, array(
-                $resource->uriResource,
-                RDF_SUBCLASSOF,
-                $parentClass->uriResource
-            ));
-        while (!$result->EOF) {
-
-                $returnValue = true;
-                $result->moveNext();
-                break;
+                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                
+                $query = 'PREFIX classNS: <' . $NS . '#> 
+                        PREFIX parentNS: <' . $parentNS . '#> 
+                        ASK {classNS:' . $ID . ' rdfs:subClassOf parentNS:' . $parentID . '}';
+                //TODO: check issue: only one triple allowed for an identical SPO for a given language-> issue with multiple identical objects for SP (i.e. parallel branch for wfEngine)
+                $returnValue = $virtuoso->execQuery($query, 'Boolean');
         }
+        
         if (!$returnValue) {
                 $parentSubClasses = $parentClass->getSubClasses(true);
                 foreach ($parentSubClasses as $subClass) {
@@ -172,6 +168,28 @@ class core_kernel_persistence_virtuoso_Class
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F5 begin
+        
+        list($NS, $ID) = explode('#', $resource->uriResource);
+        if (isset($ID) && !empty($ID)) {
+
+                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                //TODO: check why or condiiton with rdf:type?? in the smooth impl
+                $query = 'PREFIX classNS: <' . $NS . '#>  SELECT ?o WHERE {classNS:' . $ID . ' rdfs:subClassOf ?o}';
+                
+                $resultArray = $virtuoso->execQuery($query);
+                $count = count($resultArray);
+                for ($i = 0; $i < $count; $i++) {
+                        if (isset($resultArray[$i][0])) {
+                                $parentClass = new core_kernel_classes_Class($resultArray[$i][0]);
+                                $returnValue[$parentClass->uriResource] = $parentClass ;
+                                if($recursive == true && $parentClass->uriResource != RDF_CLASS && $parentClass->uriResource != RDF_RESOURCE){
+                                        $recursiveParents = $parentClass->getParentClasses(true);
+                                        $returnValue = array_merge($returnValue, $recursiveParents);
+                                }
+                        }
+                }
+        }
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F5 end
 
         return (array) $returnValue;
@@ -191,6 +209,33 @@ class core_kernel_persistence_virtuoso_Class
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014FA begin
+        
+        list($NS, $ID) = explode('#', $resource->uriResource);
+        if (isset($ID) && !empty($ID)) {
+
+                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                //TODO: check why or condiiton with rdf:type?? in the smooth impl
+                $query = 'PREFIX classNS: <' . $NS . '#>  SELECT ?s WHERE {?s rdfs:domain classNS:' . $ID . '}';
+
+                $resultArray = $virtuoso->execQuery($query);
+                $count = count($resultArray);
+                for ($i = 0; $i < $count; $i++) {
+                        if (isset($resultArray[$i][0])) {
+                                $property = new core_kernel_classes_Property($resultArray[$i][0]);
+                                $returnValue[$property->uriResource] = $property;
+                        }
+                }
+                
+                if($recursive == true) {
+			$parentClasses = $resource->getParentClasses(true);
+			foreach ($parentClasses as $parent) {
+				if($parent->uriResource != RDF_CLASS) {
+					$returnValue = array_merge($returnValue, $parent->getProperties(true));
+				}
+			}
+		}
+        }
+                
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014FA end
 
         return (array) $returnValue;
@@ -285,6 +330,15 @@ class core_kernel_persistence_virtuoso_Class
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001506 begin
+        
+        $newInstance = $instance->duplicate();
+        
+        if(!is_null($newInstance)){
+                if($newInstance->setType($resource)){
+                        $returnValue = $newInstance; 
+                }
+        }
+                
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001506 end
 
         return $returnValue;
@@ -327,6 +381,11 @@ class core_kernel_persistence_virtuoso_Class
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 begin
+        
+        $domain = new core_kernel_classes_Property(RDF_DOMAIN,__METHOD__);
+        $instanceProperty = new core_kernel_classes_Resource($property->uriResource,__METHOD__);
+        $returnValue = $instanceProperty->setPropertyValue($domain, $resource->uriResource);
+                
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 end
 
         return (bool) $returnValue;
@@ -461,6 +520,134 @@ class core_kernel_persistence_virtuoso_Class
         $returnValue = array();
 
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 begin
+        
+        if(count($propertyFilters) == 0){
+			return $returnValue;
+        }
+
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+
+        //add the type check to the filters
+        $propertyFilters[RDF_TYPE] = $resource->uriResource;
+
+        $langToken = '';
+        if(isset($options['lang'])){
+                if(preg_match('/^[a-zA-Z]{2,4}$/', $options['lang'])){
+                        $langToken = " AND (l_language = '' OR l_language = '{$options['lang']}') ";
+                }
+        }
+        $like = true;
+        if(isset($options['like'])){
+                $like = ($options['like'] === true);
+        }
+
+        $query = "SELECT `subject` FROM `statements` WHERE ";
+
+        $conditions = array();
+        foreach($propertyFilters as $propUri => $pattern){
+
+                $propUri = $dbWrapper->dbConnector->escape($propUri);
+
+                if(is_string($pattern)){
+                        if(!empty($pattern)){
+
+                                $pattern = $dbWrapper->dbConnector->escape($pattern);
+
+                                if($like){
+                                        $object = trim(str_replace('*', '%', $pattern));
+                                        if(!preg_match("/^%/", $object)){
+                                                $object = "%".$object;
+                                        }
+                                        if(!preg_match("/%$/", $object)){
+                                                $object = $object."%";
+                                        }
+                                        $conditions[] = " (`predicate` = '{$propUri}' AND `object` LIKE '{$object}' $langToken ) ";
+                                }
+                                else{
+                                        $conditions[] = " (`predicate` = '{$propUri}' AND `object` = '{$pattern}' $langToken ) ";
+                                }
+                        }
+                }
+                else if(is_array($pattern)){
+                        if(count($pattern) > 0){
+                                $multiCondition =  " (`predicate` = '{$propUri}' AND  ";
+                                foreach($pattern as $i => $patternToken){
+
+                                        $patternToken = $dbWrapper->dbConnector->escape($patternToken);
+
+                                        if($i > 0){
+                                                $multiCondition .= " OR ";
+                                        }
+                                        $object = trim(str_replace('*', '%', $patternToken));
+                                        if(!preg_match("/^%/", $object)){
+                                                $object = "%".$object;
+                                        }
+                                        if(!preg_match("/%$/", $object)){
+                                                $object = $object."%";
+                                        }
+                                        $multiCondition .= " `object` LIKE '{$object}' ";
+                                }
+                                $conditions[] = "{$multiCondition} {$langToken} ) ";
+                        }
+                }
+        }
+        if(count($conditions) == 0){
+                return $returnValue;
+        }
+
+        $intersect = true;
+        if(isset($options['chaining'])){
+                if($options['chaining'] == 'or'){
+                        $intersect = false;
+                }
+        }
+
+        $matchingUris = array();
+        if(count($conditions) > 0){
+                $i = 0;
+                foreach($conditions as $condition){
+                        $tmpMatchingUris = array();
+                        $result = $dbWrapper->execSql($query . $condition);
+                        while (!$result->EOF){
+                                $foundInstancesUri = $result->fields['subject'];
+                                $tmpMatchingUris[$foundInstancesUri] = $foundInstancesUri;
+                                $result->MoveNext();
+                        }
+                        if($intersect){
+                                //EXCLUSIVES CONDITIONS
+                                if($i == 0){
+                                        $matchingUris = $tmpMatchingUris;
+                                }else{
+                                        $matchingUris = array_intersect($matchingUris, $tmpMatchingUris);
+                                }
+                        }
+                        else{
+                                //INCLUSIVES CONDITIONS
+                                $matchingUris = array_merge($matchingUris, $tmpMatchingUris);
+                        }
+                        $i++;
+                }
+        }
+
+        foreach($matchingUris as $matchingUri){
+                $returnValue[$matchingUri] = new core_kernel_classes_Resource($matchingUri);
+        }
+
+
+        //Check in the subClasses recurslively.
+        // Be carefull, it can be perf consuming with large data set and subclasses
+        (isset($options['recursive'])) ? $recursive = (bool)$options['recursive'] : $recursive = false;
+        if($recursive){
+                //the recusivity depth is set to one level
+                foreach($resource->getSubClasses(true) as $subClass){
+                        unset($propertyFilters[RDF_TYPE]);//reset the RDF_TYPE filter for recursive searching!
+                        $returnValue = array_merge(
+                                $returnValue, 
+                                $subClass->searchInstances($propertyFilters, array_merge($options, array('recursive' => false)))
+                        );
+                }
+        }
+        
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
 
         return (array) $returnValue;
