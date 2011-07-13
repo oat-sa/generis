@@ -230,11 +230,10 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
         if(!empty($result)){
                 $resultArray = $this->resultToArray($result);
                 if(isset($resultArray[0]) && isset($resultArray[0][0])){
-                        if($resultArray[0][0] == 1 || preg_match('/done$/', $resultArray[0][0])){
+                        if($resultArray[0][0] == true || $resultArray[0][0] == 1 || preg_match('/done$/', $resultArray[0][0])){
                                 $returnValue = true;
                         }
                 }
-                
         }
         // section 127-0-1-1--18467de:13108b1b06a:-8000:00000000000015DA end
 
@@ -256,7 +255,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
         // section 127-0-1-1-732c983d:1311db156b2:-8000:00000000000015E7 begin
         $lg = trim($lg);
         if(preg_match("/[a-zA-Z_]{2,5}$/",$lg)){//e.g. "en_gb" is a valid language tag 
-                $returnValue .= '@'.strtolower($lg);
+                $returnValue .= strtolower($lg);
         }
         // section 127-0-1-1-732c983d:1311db156b2:-8000:00000000000015E7 end
 

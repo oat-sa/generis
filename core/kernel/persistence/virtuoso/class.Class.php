@@ -524,129 +524,165 @@ class core_kernel_persistence_virtuoso_Class
         if(count($propertyFilters) == 0){
 			return $returnValue;
         }
-
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-
+        
         //add the type check to the filters
         $propertyFilters[RDF_TYPE] = $resource->uriResource;
-
-        $langToken = '';
-        if(isset($options['lang'])){
-                if(preg_match('/^[a-zA-Z]{2,4}$/', $options['lang'])){
-                        $langToken = " AND (l_language = '' OR l_language = '{$options['lang']}') ";
+        
+        list($NS, $ID) = explode('#', $resource->uriResource);
+        if(!empty($ID)){
+                
+                $session = core_kernel_classes_Session::singleton();
+                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                
+                $prefixes =  array($NS => 'classNS');//not really useful but set for information only
+                $filters = array();
+                $objects = array();
+                
+                $lg = '';
+                if(isset($options['lang'])){
+                        $lg = $virtuoso->filterLanguageValue($options['lang']);
                 }
-        }
-        $like = true;
-        if(isset($options['like'])){
-                $like = ($options['like'] === true);
-        }
-
-        $query = "SELECT `subject` FROM `statements` WHERE ";
-
-        $conditions = array();
-        foreach($propertyFilters as $propUri => $pattern){
-
-                $propUri = $dbWrapper->dbConnector->escape($propUri);
-
-                if(is_string($pattern)){
-                        if(!empty($pattern)){
-
-                                $pattern = $dbWrapper->dbConnector->escape($pattern);
-
-                                if($like){
-                                        $object = trim(str_replace('*', '%', $pattern));
-                                        if(!preg_match("/^%/", $object)){
-                                                $object = "%".$object;
-                                        }
-                                        if(!preg_match("/%$/", $object)){
-                                                $object = $object."%";
-                                        }
-                                        $conditions[] = " (`predicate` = '{$propUri}' AND `object` LIKE '{$object}' $langToken ) ";
+                
+                $like = true;
+                if(isset($options['like'])){
+                        $like = ($options['like'] === true);
+                }
+                
+                $conditions = array();
+                foreach($propertyFilters as $propertyUri => $pattern){
+                        
+                        list($propNS, $propID) = explode('#', $propertyUri);
+                        if(!empty($propID)){
+                                
+                                if(!isset($prefixes[$propNS])){
+                                        $prefixes[$propNS] = 'NS'.count($prefixes);
                                 }
-                                else{
-                                        $conditions[] = " (`predicate` = '{$propUri}' AND `object` = '{$pattern}' $langToken ) ";
+                                        
+                                if (is_string($pattern)) {
+                                        if (!empty($pattern)) {
+                                                $o = '?o'.count($objects);
+                                                $objects[] = $o;
+                                                
+                                                $object = trim(str_replace('*', '', $pattern));
+                                                if(!empty($lg) && !common_Utils::isUri($object)){//&& !common_Utils::isUri($object)
+                                                        $filters[] = 'langMatches(lang('.$o.'),"'.$lg.'")';
+                                                }
+                                                if (!$like) {
+                                                        $object = preg_match('/^\^/', $object)? $object : '^'.$object;
+                                                        $object = preg_match('/\$$/', $object)? $object : $object.'$';
+                                                }
+                                                
+                                                $filters[] = 'regex(str('.$o.'), "'.$object.'")';
+                                                
+                                                $conditions[] = $prefixes[$propNS].':'.$propID.' '.$o.' ; ';
+                                        }
+                                } else if (is_array($pattern)) {
+                                        if (count($pattern) > 0) {
+                                                $o = '?o'.count($objects);
+                                                $objects[] = $o;
+                                                
+                                                $validLanguageMatching = true;
+                                                $multiCondition = '(';
+                                                foreach ($pattern as $i => $patternToken) {
+                                                        if ($i > 0) {
+                                                                $multiCondition .= " || ";
+                                                        }
+                                                        
+                                                        $object = trim(str_replace('*', '', $patternToken));
+                                                        
+                                                        if(!$validLanguageMatching && common_Utils::isUri($object)) $validLanguageMatching = false;//no resource available for language dependent check
+                                                        
+                                                        if (!$like) {
+                                                                $object = preg_match('/^\^/', $object)? $object : '^'.$object;
+                                                                $object = preg_match('/\$$/', $object)? $object : $object.'$';
+                                                        }
+                                                
+                                                        $multiCondition .= 'regex(str('.$o.'), "'.$object.'")';
+                                                }
+                                                
+                                                if(!empty($lg) && $validLanguageMatching){
+                                                        $filters[] = 'langMatches(lang('.$o.'),'.$lg.')';
+                                                }
+                                                
+                                                $filters[] = $multiCondition.')';
+                                                
+                                                $conditions[] = $prefixes[$propNS].':'.$propID.' '.$o.' ; ';
+                                        }
                                 }
                         }
                 }
-                else if(is_array($pattern)){
-                        if(count($pattern) > 0){
-                                $multiCondition =  " (`predicate` = '{$propUri}' AND  ";
-                                foreach($pattern as $i => $patternToken){
-
-                                        $patternToken = $dbWrapper->dbConnector->escape($patternToken);
-
-                                        if($i > 0){
-                                                $multiCondition .= " OR ";
-                                        }
-                                        $object = trim(str_replace('*', '%', $patternToken));
-                                        if(!preg_match("/^%/", $object)){
-                                                $object = "%".$object;
-                                        }
-                                        if(!preg_match("/%$/", $object)){
-                                                $object = $object."%";
-                                        }
-                                        $multiCondition .= " `object` LIKE '{$object}' ";
-                                }
-                                $conditions[] = "{$multiCondition} {$langToken} ) ";
-                        }
+                if(count($conditions) == 0){
+                        return $returnValue;
                 }
-        }
-        if(count($conditions) == 0){
-                return $returnValue;
-        }
-
-        $intersect = true;
-        if(isset($options['chaining'])){
-                if($options['chaining'] == 'or'){
-                        $intersect = false;
+                
+                //start building query:
+                $query = '';
+                
+                //insert prefixes:
+                foreach($prefixes as $ns => $alias){
+                        $query .= '
+                                PREFIX '.$alias.':<'.$ns.'#> ';
                 }
-        }
-
-        $matchingUris = array();
-        if(count($conditions) > 0){
-                $i = 0;
+                
+                $query .= '
+                        SELECT ?s WHERE {?s ';
+                
+                //append conditions:
                 foreach($conditions as $condition){
-                        $tmpMatchingUris = array();
-                        $result = $dbWrapper->execSql($query . $condition);
-                        while (!$result->EOF){
-                                $foundInstancesUri = $result->fields['subject'];
-                                $tmpMatchingUris[$foundInstancesUri] = $foundInstancesUri;
-                                $result->MoveNext();
+                        $query .= ' '.$condition;
+                }
+                $query = substr_replace($query, '.', -2);//close conditions
+                
+                //add filters:
+                $intersect = true;
+                if(isset($options['chaining'])){
+                        if(strtolower($options['chaining']) == 'or'){
+                                $intersect = false;
                         }
-                        if($intersect){
-                                //EXCLUSIVES CONDITIONS
-                                if($i == 0){
-                                        $matchingUris = $tmpMatchingUris;
-                                }else{
-                                        $matchingUris = array_intersect($matchingUris, $tmpMatchingUris);
-                                }
+                }
+                if($intersect){
+                        foreach($filters as $filter){
+                                $query .='
+                                        FILTER '.$filter;
                         }
-                        else{
-                                //INCLUSIVES CONDITIONS
-                                $matchingUris = array_merge($matchingUris, $tmpMatchingUris);
+                }else{
+                        $query .='
+                                FILTER (';
+                        $i = 0;
+                        foreach($filters as $filter){
+                                if($i>0) $query .= ' || ';
+                                $query .= $filter;
+                                $i++;
                         }
-                        $i++;
+                }
+                $query .= '}';
+                
+                var_dump($query);
+                
+                $resultArray = $virtuoso->execQuery($query);
+                $count = count($resultArray);
+                for($i=0; $i<$count; $i++){
+                        if (isset($resultArray[$i][0])) {
+                                $instanceUri = $resultArray[$i][0];
+                                $returnValue[$instanceUri] = new core_kernel_classes_Resource($instanceUri);
+                        }
+                }
+                
+                //Check in the subClasses recurslively.
+                // Be carefull, it can be perf consuming with large data set and subclasses
+                (isset($options['recursive'])) ? $recursive = (bool)$options['recursive'] : $recursive = false;
+                if($recursive){
+                        //the recusivity depth is set to one level
+                        foreach($resource->getSubClasses(true) as $subClass){
+                                unset($propertyFilters[RDF_TYPE]);//reset the RDF_TYPE filter for recursive searching!!!
+                                $returnValue = array_merge(
+                                        $returnValue, 
+                                        $subClass->searchInstances($propertyFilters, array_merge($options, array('recursive' => false)))
+                                );
+                        }
                 }
         }
-
-        foreach($matchingUris as $matchingUri){
-                $returnValue[$matchingUri] = new core_kernel_classes_Resource($matchingUri);
-        }
-
-
-        //Check in the subClasses recurslively.
-        // Be carefull, it can be perf consuming with large data set and subclasses
-        (isset($options['recursive'])) ? $recursive = (bool)$options['recursive'] : $recursive = false;
-        if($recursive){
-                //the recusivity depth is set to one level
-                foreach($resource->getSubClasses(true) as $subClass){
-                        unset($propertyFilters[RDF_TYPE]);//reset the RDF_TYPE filter for recursive searching!
-                        $returnValue = array_merge(
-                                $returnValue, 
-                                $subClass->searchInstances($propertyFilters, array_merge($options, array('recursive' => false)))
-                        );
-                }
-        }
+        
         
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
 

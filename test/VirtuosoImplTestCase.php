@@ -227,5 +227,52 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 $this->assertTrue($subclass1->delete());
                 $this->assertTrue($subclass2->delete());
         }
+        
+        public function testSearchInstance(){
+                $class = new core_kernel_classes_Class(RDF_CLASS);
+                $instance = $class->createInstance('instance for unit test', 'instance for unit test @ '.date('d-m-Y H:i:s'));
+                $prop = new core_kernel_classes_Property(RDFS_COMMENT);
+                $prop2 = new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOtestCase.rdf#property1');
+                $instance1 = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOtestCase.rdf#instance1');
+                $instance2 = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOtestCase.rdf#instance2');
+                
+                $instance->setPropertyValue($prop, 'comment1');
+                $instance->setPropertyValueByLg($prop, 'comment2', 'EN');
+                $instance->setPropertyValue($prop2, $instance1->uriResource);
+                $instance->setPropertyValueByLg($prop2, $instance2->uriResource, 'en');
+                 
+                var_dump('created resrouce: '.$instance->uriResource);
+                
+                $propertyFilters = array(
+                    $prop->uriResource => 'comment2',
+                    $prop2->uriResource => $instance1->uriResource
+                );
+                
+                //like(true), lang (''), chaining (or/and), recursive(false)
+                $options = array();
+                
+                $foundInstances = $class->searchInstances($propertyFilters, $options);
+                $this->assertFalse(empty($foundInstances));
+                
+                //change "lang" option:
+                $options = array('lang' => 'en');
+                $foundInstances = $class->searchInstances($propertyFilters, $options);
+                $this->assertFalse(empty($foundInstances));
+                
+                $propertyFilters = array(
+                    $prop->uriResource => 'comment1'
+                );
+                $foundInstances = $class->searchInstances($propertyFilters, $options);
+                $this->assertTrue(empty($foundInstances));
+                
+                $propertyFilters = array(
+                    $prop->uriResource => 'comment2',
+                    $prop2->uriResource => $instance2->uriResource
+                );
+                $foundInstances = $class->searchInstances($propertyFilters, $options);
+                $this->assertTrue(empty($foundInstances));
+                
+                $this->assertTrue($instance->delete());
+        }
 }
 ?>
