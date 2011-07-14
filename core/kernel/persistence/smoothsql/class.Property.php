@@ -178,10 +178,10 @@ class core_kernel_persistence_smoothsql_Property
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001497 begin
 
-		if (core_kernel_persistence_PropertyProxy::$instance == null){
-			core_kernel_persistence_PropertyProxy::$instance = new core_kernel_persistence_PropertyProxy();
+		if (core_kernel_persistence_smoothsql_Property::$instance == null){
+			core_kernel_persistence_smoothsql_Property::$instance = new core_kernel_persistence_smoothsql_Property();
 		}
-		$returnValue = core_kernel_persistence_PropertyProxy::$instance;
+		$returnValue = core_kernel_persistence_smoothsql_Property::$instance;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001497 end
 
