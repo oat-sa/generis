@@ -564,17 +564,26 @@ class core_kernel_persistence_virtuoso_Class
                                                 $objects[] = $o;
                                                 
                                                 $object = trim(str_replace('*', '', $pattern));
-                                                if(!empty($lg) && !common_Utils::isUri($object)){//&& !common_Utils::isUri($object)
-                                                        $filters[] = 'langMatches(lang('.$o.'),"'.$lg.'")';
+                                                if(common_Utils::isUri($object)){
+                                                        //if it is a uri, ignore "like" and "lang" options:
+                                                        list($objectNS, $objectID) = explode('#', $object);
+                                                        if(!empty($objectID)){
+                                                                if(!isset($prefixes[$objectNS])){
+                                                                        $prefixes[$objectNS] = 'NS'.count($prefixes);
+                                                                }
+                                                                $conditions[] = $prefixes[$propNS].':'.$propID.' '.$prefixes[$objectNS].':'.$objectID.' ; '; 
+                                                        }
+                                                }else{
+                                                        if(!empty($lg)){//&& !common_Utils::isUri($object)
+                                                                $filters[] = 'langMatches(lang('.$o.'),"'.$lg.'")';
+                                                        }
+                                                        if (!$like) {
+                                                                $object = preg_match('/^\^/', $object)? $object : '^'.$object;
+                                                                $object = preg_match('/\$$/', $object)? $object : $object.'$';
+                                                        }
+                                                        $filters[] = 'regex(str('.$o.'), "'.$object.'")';
+                                                        $conditions[] = $prefixes[$propNS].':'.$propID.' '.$o.' ; ';
                                                 }
-                                                if (!$like) {
-                                                        $object = preg_match('/^\^/', $object)? $object : '^'.$object;
-                                                        $object = preg_match('/\$$/', $object)? $object : $object.'$';
-                                                }
-                                                
-                                                $filters[] = 'regex(str('.$o.'), "'.$object.'")';
-                                                
-                                                $conditions[] = $prefixes[$propNS].':'.$propID.' '.$o.' ; ';
                                         }
                                 } else if (is_array($pattern)) {
                                         if (count($pattern) > 0) {
