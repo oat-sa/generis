@@ -93,7 +93,6 @@ class VirtuosoImplTestCase extends UnitTestCase {
         public function testSetType(){
                 $resource = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#LangEN');
                 $class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#myLanguages');
-                $this->assertTrue($resource->setType(new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#Languages')));
                 
                 //add type 'myLanguages':
                 $this->assertTrue($resource->setType($class));
@@ -139,8 +138,6 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 $class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#Languages');
                 $count = $class->countInstances();
                 $instances = $class->getInstances();
-                
-//                $this->assertEqual($count, 9);
                 $this->assertEqual($count, count($instances));
         }
         

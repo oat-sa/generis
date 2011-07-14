@@ -245,8 +245,13 @@ class core_kernel_classes_Property
         // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000ABA begin
         
 		if (is_null($this->range)){
-			
-			$this->range = core_kernel_persistence_PropertyProxy::singleton()->getRange($this);
+			$rangeProperty = new core_kernel_classes_Property(RDFS_RANGE,__METHOD__);
+                        $rangeValues = $this->getPropertyValues($rangeProperty);
+
+                        if(sizeOf($rangeValues)>0){
+                                $returnValue = new core_kernel_classes_Class($rangeValues[0]);
+                        }
+			$this->range = $returnValue;
 		}
 		$returnValue = $this->range;
 		
@@ -313,8 +318,17 @@ class core_kernel_classes_Property
         // section 10-13-1--99--152a2f30:1201eae099d:-8000:000000000000157A begin
 
         if(is_null($this->lgDependent )){
-	        
-        	$this->lgDependent = core_kernel_persistence_PropertyProxy::singleton()->isLgDependent($this);
+	        $lgDependentProperty = new core_kernel_classes_Property(PROPERTY_IS_LG_DEPENDENT,__METHOD__);
+		$lgDependent = $this->getOnePropertyValue($lgDependentProperty);
+		 
+		if(is_null($lgDependent)){
+			$returnValue = false;
+		}
+		else{
+			$returnValue = ($lgDependent->uriResource == GENERIS_TRUE);
+		}
+                
+        	$this->lgDependent = $returnValue;
         }
  
         $returnValue = $this->lgDependent;
@@ -359,8 +373,16 @@ class core_kernel_classes_Property
         // section 127-0-1-1--7856c56:12f911716ca:-8000:00000000000014C8 begin
         
         if(is_null($this->multiple )){
-        	
-        	$this->multiple = core_kernel_persistence_PropertyProxy::singleton()->isMultiple($this);
+        	$multipleProperty = new core_kernel_classes_Property(PROPERTY_MULTIPLE,__METHOD__);
+		$multiple = $this->getOnePropertyValue($multipleProperty);
+		 
+		if(is_null($multiple)){
+			$returnValue = false;
+		}
+		else{
+			$returnValue = ($multiple->uriResource == GENERIS_TRUE);
+		}
+        	$this->multiple = $returnValue;
         }
  
         $returnValue = $this->multiple;

@@ -306,10 +306,15 @@ class core_kernel_persistence_PropertyProxy
 
         $impls = $this->getAvailableImpl(); 
         if(isset($impls[$context]) && $impls[$context]){
+                var_dump($context);
         	$implClass = "core_kernel_persistence_{$context}_Property";
         	$reflectionMethod = new ReflectionMethod($implClass, 'singleton');
-			$singleton = $reflectionMethod->invoke(null);
-			$returnValue = $singleton->isValidContext($resource);
+                $singleton = $reflectionMethod->invoke(null);
+                try{
+                        $returnValue = $singleton->isValidContext($resource);
+                }catch(Exception $e){
+                        echo 'error*';
+                }
         }
         
         // section 127-0-1-1--499759bc:12f72c12020:-8000:000000000000155E end

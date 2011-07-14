@@ -716,7 +716,6 @@ class core_kernel_persistence_virtuoso_Class
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
                 
                 $query = 'PREFIX resourceNS: <'.$NS.'#>  SELECT ?s WHERE {?s rdf:type resourceNS:'.$ID.'}';
-                
                 $resultArray = $virtuoso->execQuery($query);
                 $returnValue = count($resultArray);
         }
