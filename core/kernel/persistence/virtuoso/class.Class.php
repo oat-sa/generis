@@ -666,8 +666,6 @@ class core_kernel_persistence_virtuoso_Class
                 }
                 $query .= '}';
                 
-                var_dump($query);
-                
                 $resultArray = $virtuoso->execQuery($query);
                 $count = count($resultArray);
                 for($i=0; $i<$count; $i++){

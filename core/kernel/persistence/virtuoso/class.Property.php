@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 08.07.2011, 12:25:52 with ArgoUML PHP module 
+ * Automatically generated on 14.07.2011, 09:40:27 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
@@ -29,11 +29,11 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 require_once('core/kernel/persistence/class.PersistenceImpl.php');
 
 /**
- * include core_kernel_persistence_ClassInterface
+ * include core_kernel_persistence_PropertyInterface
  *
  * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  */
-require_once('core/kernel/persistence/interface.ClassInterface.php');
+require_once('core/kernel/persistence/interface.PropertyInterface.php');
 
 /* user defined includes */
 // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:00000000000022F2-includes begin
@@ -53,7 +53,7 @@ require_once('core/kernel/persistence/interface.ClassInterface.php');
  */
 class core_kernel_persistence_virtuoso_Property
     extends core_kernel_persistence_PersistenceImpl
-        implements core_kernel_persistence_ClassInterface
+        implements core_kernel_persistence_PropertyInterface
 {
     // --- ASSOCIATIONS ---
 
@@ -71,7 +71,7 @@ class core_kernel_persistence_virtuoso_Property
     // --- OPERATIONS ---
 
     /**
-     * Short description of method getSubClasses
+     * Short description of method getSubProperties
      *
      * @access public
      * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
@@ -79,246 +79,78 @@ class core_kernel_persistence_virtuoso_Property
      * @param  boolean recursive
      * @return array
      */
-    public function getSubClasses( core_kernel_classes_Resource $resource, $recursive = false)
+    public function getSubProperties( core_kernel_classes_Resource $resource, $recursive = false)
     {
         $returnValue = array();
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014EB begin
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014EB end
+        // section 127-0-1-1-7b8668ff:12f77d22c39:-8000:000000000000144D begin
+        
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
+        // section 127-0-1-1-7b8668ff:12f77d22c39:-8000:000000000000144D end
 
         return (array) $returnValue;
     }
 
     /**
-     * Short description of method isSubClassOf
+     * Short description of method isLgDependent
      *
      * @access public
      * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
-     * @param  Class parentClass
      * @return boolean
      */
-    public function isSubClassOf( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $parentClass)
+    public function isLgDependent( core_kernel_classes_Resource $resource)
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F0 begin
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F0 end
+        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014DB begin
+        
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
+        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014DB end
 
         return (bool) $returnValue;
     }
 
     /**
-     * Short description of method getParentClasses
+     * Short description of method isMultiple
      *
      * @access public
      * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
-     * @param  boolean recursive
-     * @return array
-     */
-    public function getParentClasses( core_kernel_classes_Resource $resource, $recursive = false)
-    {
-        $returnValue = array();
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F5 begin
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F5 end
-
-        return (array) $returnValue;
-    }
-
-    /**
-     * Short description of method getProperties
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  boolean recursive
-     * @return array
-     */
-    public function getProperties( core_kernel_classes_Resource $resource, $recursive = false)
-    {
-        $returnValue = array();
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014FA begin
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014FA end
-
-        return (array) $returnValue;
-    }
-
-    /**
-     * Short description of method getInstances
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  boolean recursive
-     * @param  array params
-     * @return array
-     */
-    public function getInstances( core_kernel_classes_Resource $resource, $recursive = false, $params = array())
-    {
-        $returnValue = array();
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 begin
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 end
-
-        return (array) $returnValue;
-    }
-
-    /**
-     * Short description of method setInstance
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  Resource instance
-     * @return core_kernel_classes_Resource
-     */
-    public function setInstance( core_kernel_classes_Resource $resource,  core_kernel_classes_Resource $instance)
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001506 begin
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001506 end
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method setSubClassOf
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  Class iClass
      * @return boolean
      */
-    public function setSubClassOf( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $iClass)
+    public function isMultiple( core_kernel_classes_Resource $resource)
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000150F begin
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000150F end
+        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014DD begin
+        
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
+        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014DD end
 
         return (bool) $returnValue;
     }
 
     /**
-     * Short description of method setProperty
+     * Short description of method getRange
      *
      * @access public
      * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
-     * @param  Property property
-     * @return boolean
-     */
-    public function setProperty( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
-    {
-        $returnValue = (bool) false;
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 begin
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 end
-
-        return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method createInstance
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  string label
-     * @param  string comment
-     * @param  string uri
-     * @return core_kernel_classes_Resource
-     */
-    public function createInstance( core_kernel_classes_Resource $resource, $label = '', $comment = '', $uri = '')
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F27 begin
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F27 end
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method createSubClass
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  string label
-     * @param  string comment
      * @return core_kernel_classes_Class
      */
-    public function createSubClass( core_kernel_classes_Resource $resource, $label = '', $comment = '')
+    public function getRange( core_kernel_classes_Resource $resource)
     {
         $returnValue = null;
 
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 begin
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 end
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method createProperty
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  string label
-     * @param  string comment
-     * @param  boolean isLgDependent
-     * @return core_kernel_classes_Property
-     */
-    public function createProperty( core_kernel_classes_Resource $resource, $label = '', $comment = '', $isLgDependent = false)
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F3C begin
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F3C end
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method searchInstances
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  array propertyFilters
-     * @param  array options
-     * @return array
-     */
-    public function searchInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array())
-    {
-        $returnValue = array();
-
-        // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 begin
-        // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
-
-        return (array) $returnValue;
-    }
-
-    /**
-     * Short description of method countInstances
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @return Integer
-     */
-    public function countInstances( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159D begin
-        // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159D end
+        // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001539 begin
+        
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
+        // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001539 end
 
         return $returnValue;
     }
@@ -335,6 +167,12 @@ class core_kernel_persistence_virtuoso_Property
         $returnValue = null;
 
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:00000000000022F6 begin
+        
+        if (core_kernel_persistence_virtuoso_Property::$instance == null){
+                core_kernel_persistence_virtuoso_Property::$instance = new core_kernel_persistence_virtuoso_Property();
+        }
+        $returnValue = core_kernel_persistence_virtuoso_Property::$instance;
+        
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:00000000000022F6 end
 
         return $returnValue;
@@ -353,6 +191,15 @@ class core_kernel_persistence_virtuoso_Property
         $returnValue = (bool) false;
 
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:00000000000022FA begin
+        list($NS, $id) = explode('#', $resource->uriResource);
+        if(isset($id) && !empty($id)){
+                
+                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                
+                $query = 'PREFIX resourceNS: <'.$NS.'#> ASK {resourceNS:'.$id.' ?p ?o}';
+                
+                $returnValue = $virtuoso->execQuery($query, 'Boolean');
+        }
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:00000000000022FA end
 
         return (bool) $returnValue;

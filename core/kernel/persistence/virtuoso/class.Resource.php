@@ -367,8 +367,12 @@ class core_kernel_persistence_virtuoso_Resource
                                 list($propNS, $propID) = explode('#', $propertyUri);
                                 if(!empty($propID)){
                                         $property = new core_kernel_classes_Property($propertyUri);
-                                        $lg = ($property->isLgDependent() ? ( $session->getLg() != '' ? $virtuoso->filterLanguageValue($session->getLg()) : $session->defaultLg) : '');
-
+                                        try{
+                                                $lg = ($property->exists() && $property->isLgDependent()) ? ( $session->getLg() != '' ? $virtuoso->filterLanguageValue($session->getLg()) : $session->defaultLg) : '';
+                                        }catch(Exception $e){
+                                                //leave the lg empty, to prevent
+                                        }
+                                        
                                         $object = '';
                                         if (!empty($lg)) {
                                                 $object = '"' . $value . '"@' . $lg;
@@ -547,17 +551,13 @@ class core_kernel_persistence_virtuoso_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6 begin
         
-//                $namespaces = common_ext_NamespaceManager::singleton()->getAllNamespaces();
-//                $namespace = $namespaces[substr($resource->uriResource, 0, strpos($resource->uriResource, '#') + 1)];
-
-             
         list($NS, $ID) = explode('#', $resource->uriResource);
         if(isset($ID) && !empty($ID)){
 
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
 
                 $query = 'PREFIX resourceNS: <'.$NS.'#>
-                        SELECT ?p ?o WHERE {resourceNS:'.$ID.' ?p ?o}';
+                        SELECT ?p ?o lang(?o) WHERE {resourceNS:'.$ID.' ?p ?o}';
 
                 $resultArray = $virtuoso->execQuery($query);
                 $count = count($resultArray);
@@ -568,8 +568,8 @@ class core_kernel_persistence_virtuoso_Resource
                                 $triple->subject = $resource->uriResource;
                                 $triple->predicate = (string) $resultArray[$i][0];
                                 $triple->object = (string) $resultArray[$i][1];
-                                $triple->id = '???';
-                                $triple->lg = '';
+                                $triple->id = '';
+                                $triple->lg = (string) strtoupper($resultArray[$i][2]);
                                 $triple->readPrivileges = '???';
                                 $triple->editPrivileges = '???';
                                 $triple->deletePrivileges = '???';

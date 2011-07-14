@@ -122,7 +122,8 @@ class VirtuosoImplTestCase extends UnitTestCase {
         
         public function testGetRDFtriples(){
                 $resource = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#LangEN');
-                $this->assertFalse($resource->getRdfTriples()->isEmpty());
+                $triplesCollection = $resource->getRdfTriples();
+                $this->assertFalse($triplesCollection->isEmpty());
         }
         
         public function testDuplicate(){
@@ -241,7 +242,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 $instance->setPropertyValue($prop2, $instance1->uriResource);
                 $instance->setPropertyValueByLg($prop2, $instance2->uriResource, 'en');
                  
-                var_dump('created resrouce: '.$instance->uriResource);
+//                var_dump('created resrouce: '.$instance->uriResource);
                 
                 $propertyFilters = array(
                     $prop->uriResource => 'comment2',
