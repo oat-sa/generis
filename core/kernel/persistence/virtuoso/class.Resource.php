@@ -304,18 +304,23 @@ class core_kernel_persistence_virtuoso_Resource
                 
                 $query = '';
                 
+                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                
                 if(common_Utils::isUri($object)){
                         list($objectNS, $objectID) = explode('#', $object);
                         $query = 'PREFIX objNS: <'.$objectNS.'#> ';
+                        
+                        if(strpos($objectID, '|')){
+                                var_dump('wrong objId', $object, $objectID, debug_backtrace());
+                        }
+                        
                         $object = 'objNS:'.$objectID;
                 }else{
-                        $object = '"'.$object.'"';
+                        $object = '"'.$virtuoso->escape($object).'"';
                 }
 
                 //decompose property uri:
                 list($propNS, $propID) = explode('#', $property->uriResource);
-                
-                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
                 
                 $query .= '
                         PREFIX resourceNS: <'.$NS.'#>
@@ -375,7 +380,7 @@ class core_kernel_persistence_virtuoso_Resource
                                         
                                         $object = '';
                                         if (!empty($lg)) {
-                                                $object = '"' . $value . '"@' . $lg;
+                                                $object = '"'.$virtuoso->escape($value).'"@' . $lg;
                                         } else {
                                                 if (common_Utils::isUri($value)) {
                                                         list($objectNS, $objectID) = explode('#', $value);
@@ -384,7 +389,7 @@ class core_kernel_persistence_virtuoso_Resource
                                                         }
                                                         $object = $prefixes[$objectNS].':'.$objectID;
                                                 } else {
-                                                        $object = '"' . $value . '"';
+                                                        $object = '"' . $virtuoso->escape($value) . '"';
                                                 }
                                         }
                                         
@@ -648,7 +653,7 @@ class core_kernel_persistence_virtuoso_Resource
                                         $value = $triple->object;
                                         $object = '';
                                         if (!empty($lg)) {
-                                                $object = '"' . $value . '"@' . $lg;
+                                                $object = '"'.$virtuoso->escape($value).'"@' . $lg;
                                         } else {
                                                 if (common_Utils::isUri($value)) {
                                                         list($objectNS, $objectID) = explode('#', $value);
@@ -657,7 +662,7 @@ class core_kernel_persistence_virtuoso_Resource
                                                         }
                                                         $object = $prefixes[$objectNS] . ':' . $objectID;
                                                 } else {
-                                                        $object = '"' . $value . '"';
+                                                        $object = '"'.$virtuoso->escape($value).'"';
                                                 }
                                         }
 
@@ -903,11 +908,9 @@ class core_kernel_persistence_virtuoso_Resource
                 
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
                 
-                $query = 'PREFIX resourceNS: <'.$NS.'#>
-                        SELECT ?p ?o WHERE {resourceNS:'.$id.' ?p ?o} LIMIT 1';
+                $query = 'PREFIX resourceNS: <'.$NS.'#> ASK {resourceNS:'.$id.' ?p ?o}';
                 
-                $resultArray = $virtuoso->execQuery($query);
-                $returnValue = count($resultArray)?true:false;
+                $returnValue = $virtuoso->execQuery($query, 'Boolean');
         }
         
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:00000000000022E6 end

@@ -272,5 +272,92 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 
                 $this->assertTrue($instance->delete());
         }
+        
+        public function testCreateSuperUser(){
+                $modelUri = core_kernel_classes_Session::singleton()->getNameSpace();
+                $superUserUri = $modelUri.'#superUser';
+                $superUser = new core_kernel_classes_Resource($superUserUri);
+                try{
+                        if($superUser->exists()){
+                                return true;
+                        }
+                }catch(Exception $e){
+                        echo 'notice: caught exception when checking the super user: '.$e->getMessage();
+                }
+                
+                $class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole');
+                $newSuperUser = $class->createInstance('SuperUser', 'super user created during the Virtuoso Unit Test', '#superUser');
+                
+                $this->assertIsA($newSuperUser, 'core_kernel_classes_Resource');
+                $this->assertEqual($newSuperUser->uriResource, $superUserUri);
+                
+                $newSuperUser->setPropertiesValues(array(
+                        'http://www.tao.lu/Ontologies/generis.rdf#login' => 'tao',
+                        'http://www.tao.lu/Ontologies/generis.rdf#password' => md5('tao'),
+                        'http://www.tao.lu/Ontologies/generis.rdf#userDefLg' => 'http://www.tao.lu/Ontologies/TAO.rdf#LangEN',
+                        'http://www.tao.lu/Ontologies/generis.rdf#userUILg' => 'http://www.tao.lu/Ontologies/TAO.rdf#LangEN'
+                ));
+        }
+        
+        public function _testExecProcedure(){
+                
+                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                
+                $rootPath = (substr(ROOT_PATH, -1)=='/')? substr(ROOT_PATH,0,-1) : ROOT_PATH;
+                
+                $this->assertTrue($virtuoso->execProcedure('CALL loadTAOontology(?)', array($rootPath)));
+                
+        }
+        
+        public function testInstallTAO(){
+                
+                $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
+                $rootPath = (substr(ROOT_PATH, -1)=='/')? substr(ROOT_PATH,0,-1) : ROOT_PATH;
+                
+                //load procedure:
+//                $procedureScript = $rootPath.'/tao/install/db/VirtBulkRDFLoaderScript.sql';
+//                $loaded = $virtuoso->execProcedure(file_get_contents($procedureScript));
+//                var_dump($loaded);
+//                
+//                if(!$loaded){
+//                        throw new core_kernel_persistence_virtuoso_Exception('cannot load TAO ontology loader procedure');
+//                }
+                
+                $extensionManager = common_ext_ExtensionsManager::singleton();
+		$extensions = $extensionManager->getInstalledExtensions();
+                $tmpLocalFiles = array();
+                foreach($extensions as $extensionId => $extension){
+			if($extensionId == 'generis') continue; 	//generis is the root and has been installed above 
+                        $file = ROOT_PATH . $extensionId . '/models/ontology/local.rdf';
+			if(file_exists($file)){
+                                if (!file_exists($file) || !is_readable($file)) {
+                                        throw new Exception("Unable to load ontology : $file");
+                                }
+                                
+                                $directory = dirname($file);
+                                if(!is_writable($directory)){
+                                        throw new Exception("Unable to load ontology {$file} because the directory {$directory} is not writable");
+                                }
+                                
+                                $model = file_get_contents($file);
+                                $model = str_replace('LOCAL_NAMESPACE', LOCAL_NAMESPACE, $model);
+                                $model = str_replace('{ROOT_PATH}', ROOT_PATH, $model);
+                                
+                                $tmpLocalFile = $directory.'/local.tmp.rdf';
+                                $tmpLocalFiles[] = $tmpLocalFile;
+                                file_put_contents($tmpLocalFile, $model);
+			}
+		}
+                
+                $loaded = $virtuoso->execProcedure('CALL loadTAOontology(?)', array($rootPath));
+                if(!$loaded){
+                        throw new core_kernel_persistence_virtuoso_Exception('cannot load TAO ontology');
+                }
+                
+                foreach($tmpLocalFiles as $tmpLocalFile){
+                        tao_helpers_File::remove($tmpLocalFile);
+                }
+                
+        }
 }
 ?>

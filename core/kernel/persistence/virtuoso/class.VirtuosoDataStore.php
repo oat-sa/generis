@@ -77,7 +77,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
      * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return core_kernel_persistence_virtuoso_VirtuosoDataStore
      */
-    public function singleton()
+    public static function singleton()
     {
         $returnValue = null;
 
@@ -111,8 +111,14 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
         if(!$this->dbConnector){
                 throw new core_kernel_persistence_virtuoso_Exception("[VIRTUOSO ERROR] Virtuoso is not connected");
         }
-
-        $result = odbc_exec($this->dbConnector, 'sparql ' . $query);
+        
+        $result = null;
+        try{
+                $result = odbc_exec($this->dbConnector, 'SPARQL ' . $query);
+        }catch(Exception $e){
+                throw new core_kernel_persistence_virtuoso_Exception("[VIRTUOSO ERROR] occured during query: ".$e->getMessage());
+        }
+        
         if(strtolower($outputFormat) == 'array'){
                 $returnValue = $this->resultToArray($result);
         }else if(strtolower($outputFormat) == 'boolean' || strtolower($outputFormat) == 'bool'){
@@ -129,7 +135,40 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
 
         return $returnValue;
     }
+    
+    public function execProcedure($proc, $params = array(), $outputFormat = 'array'){
+        
+        $returnValue = false;
+        
+        if (!$this->dbConnector) {
+                throw new core_kernel_persistence_virtuoso_Exception("[VIRTUOSO ERROR] Virtuoso is not connected");
+        }
 
+        try {
+                if(preg_match('/^CALL /', $proc)){
+                        $procedure = odbc_prepare($this->dbConnector, $proc);
+                        $returnValue = odbc_execute($procedure, $params);
+                }else if(preg_match('/^LOAD /', $proc)){
+                        $result = odbc_exec($this->dbConnector, $proc);
+                        $returnValue = $this->resultToArray($result);
+                }else{
+                        $result = odbc_exec($this->dbConnector, $proc);
+                        $returnValue = $this->resultToArray($result);
+                }
+                
+        } catch (Exception $e) {
+                throw new core_kernel_persistence_virtuoso_Exception("[VIRTUOSO ERROR] occured during procedure execution ({$procedure}): " . $e->getMessage());
+        }
+
+        $error = odbc_errormsg($this->dbConnector);
+        if (!empty($error)) {
+                throw new core_kernel_persistence_virtuoso_Exception("[VIRTUOSO ERROR] {$error}");
+        }
+        
+        return $returnValue;
+        
+    }
+    
     /**
      * Short description of method __construct
      *
@@ -140,7 +179,6 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
     private function __construct()
     {
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:000000000000230F begin
-        
         $this->dbConnector = odbc_connect(VIRTUOSO_ODBC_NAME, VIRTUOSO_LOGIN, VIRTUOSO_PASSWORD);
 	if(!$this->dbConnector){
                 throw new core_kernel_persistence_virtuoso_Exception('[VIRTUOSO ERROR] Enable to connect to '.VIRTUOSO_ODBC_NAME. ': '.VIRTUOSO_LOGIN.'/'.VIRTUOSO_PASSWORD);
@@ -294,6 +332,16 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
         // section 127-0-1-1-732c983d:1311db156b2:-8000:00000000000015EA end
 
         return (string) $returnValue;
+    }
+    
+    public function escape($str){
+            
+            $returnValue = '';
+            
+            $str = stripslashes($str);
+            $returnValue = addslashes($str);
+            
+            return $returnValue;
     }
 
 } /* end of class core_kernel_persistence_virtuoso_VirtuosoDataStore */
