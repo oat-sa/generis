@@ -885,7 +885,12 @@ class core_kernel_classes_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1-7c36bc99:13092a153cd:-8000:0000000000001599 begin
-        $returnValue = count($this->getType())?true:false;
+        try{
+                $returnValue = count($this->getType())?true:false;
+        }catch(Exception $e){
+                //return false by default
+        }
+               
         // section 127-0-1-1-7c36bc99:13092a153cd:-8000:0000000000001599 end
 
         return (bool) $returnValue;

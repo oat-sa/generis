@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 12.07.2011, 11:41:56 with ArgoUML PHP module 
+ * Automatically generated on 18.07.2011, 11:40:31 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
@@ -135,40 +135,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
 
         return $returnValue;
     }
-    
-    public function execProcedure($proc, $params = array(), $outputFormat = 'array'){
-        
-        $returnValue = false;
-        
-        if (!$this->dbConnector) {
-                throw new core_kernel_persistence_virtuoso_Exception("[VIRTUOSO ERROR] Virtuoso is not connected");
-        }
 
-        try {
-                if(preg_match('/^CALL /', $proc)){
-                        $procedure = odbc_prepare($this->dbConnector, $proc);
-                        $returnValue = odbc_execute($procedure, $params);
-                }else if(preg_match('/^LOAD /', $proc)){
-                        $result = odbc_exec($this->dbConnector, $proc);
-                        $returnValue = $this->resultToArray($result);
-                }else{
-                        $result = odbc_exec($this->dbConnector, $proc);
-                        $returnValue = $this->resultToArray($result);
-                }
-                
-        } catch (Exception $e) {
-                throw new core_kernel_persistence_virtuoso_Exception("[VIRTUOSO ERROR] occured during procedure execution ({$procedure}): " . $e->getMessage());
-        }
-
-        $error = odbc_errormsg($this->dbConnector);
-        if (!empty($error)) {
-                throw new core_kernel_persistence_virtuoso_Exception("[VIRTUOSO ERROR] {$error}");
-        }
-        
-        return $returnValue;
-        
-    }
-    
     /**
      * Short description of method __construct
      *
@@ -292,7 +259,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
 
         // section 127-0-1-1-732c983d:1311db156b2:-8000:00000000000015E7 begin
         $lg = trim($lg);
-        if(preg_match("/[a-zA-Z_]{2,5}$/",$lg)){//e.g. "en_gb" is a valid language tag 
+        if(preg_match("/[a-zA-Z-]{2,5}$/",$lg)){//e.g. "en_gb" is a valid language tag 
                 $returnValue .= strtolower($lg);
         }
         // section 127-0-1-1-732c983d:1311db156b2:-8000:00000000000015E7 end
@@ -333,15 +300,53 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
 
         return (string) $returnValue;
     }
-    
-    public function escape($str){
+
+    /**
+     * Short description of method escape
+     *
+     * @access public
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  string str
+     * @return string
+     */
+    public function escape($str)
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1-53e96cc6:1313c9aedee:-8000:00000000000015EF begin
+        $str = stripslashes($str);
+        $returnValue = addslashes($str);
+        // section 127-0-1-1-53e96cc6:1313c9aedee:-8000:00000000000015EF end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method escapeRegex
+     *
+     * @access public
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  string str
+     * @return string
+     */
+    public function escapeRegex($str)
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1-53e96cc6:1313c9aedee:-8000:00000000000015F1 begin
+        
+        $str = stripslashes($str);
+        $returnValue = $str;
+
+        $specialChars= array('*', '.', '+', '?', '^', '$');
+        $count = count($specialChars);
+        for($i = 0; $i<$count; $i++){
+                $returnValue = str_replace($specialChars[$i], '\\\\'.$specialChars[$i], $returnValue);
+        }
             
-            $returnValue = '';
-            
-            $str = stripslashes($str);
-            $returnValue = addslashes($str);
-            
-            return $returnValue;
+        // section 127-0-1-1-53e96cc6:1313c9aedee:-8000:00000000000015F1 end
+
+        return (string) $returnValue;
     }
 
 } /* end of class core_kernel_persistence_virtuoso_VirtuosoDataStore */

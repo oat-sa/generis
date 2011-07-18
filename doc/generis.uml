@@ -92,7 +92,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jul 14 09:40:10 CEST 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Jul 18 11:40:18 CEST 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -9181,7 +9181,7 @@ like funcions. It should be good to refactor.</UML:TaggedValue.dataValue>
                               </UML:StructuralFeature.type>
                             </UML:Attribute>
                             <UML:Operation xmi.id = '127-0-1-1--3a4c22:13104bcfe8d:-8000:000000000000230A'
-                              name = 'singleton' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                              name = 'singleton' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
                               isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                               isAbstract = 'false'>
                               <UML:BehavioralFeature.parameter>
@@ -9340,6 +9340,44 @@ like funcions. It should be good to refactor.</UML:TaggedValue.dataValue>
                                     <UML:Expression xmi.id = '127-0-1-1-732c983d:1311db156b2:-8000:00000000000015EF'
                                       language = '' body = '&apos;&apos;'/>
                                   </UML:Parameter.defaultValue>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                              </UML:BehavioralFeature.parameter>
+                            </UML:Operation>
+                            <UML:Operation xmi.id = '127-0-1-1-53e96cc6:1313c9aedee:-8000:00000000000015EF'
+                              name = 'escape' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                              isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                              isAbstract = 'false'>
+                              <UML:BehavioralFeature.parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1-53e96cc6:1313c9aedee:-8000:00000000000015F0'
+                                  name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1-53e96cc6:1313c9aedee:-8000:00000000000015F3'
+                                  name = 'str' isSpecification = 'false' kind = 'in'>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                              </UML:BehavioralFeature.parameter>
+                            </UML:Operation>
+                            <UML:Operation xmi.id = '127-0-1-1-53e96cc6:1313c9aedee:-8000:00000000000015F1'
+                              name = 'escapeRegex' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                              isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                              isAbstract = 'false'>
+                              <UML:BehavioralFeature.parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1-53e96cc6:1313c9aedee:-8000:00000000000015F2'
+                                  name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1-53e96cc6:1313c9aedee:-8000:00000000000015F4'
+                                  name = 'str' isSpecification = 'false' kind = 'in'>
                                   <UML:Parameter.type>
                                     <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                                   </UML:Parameter.type>
@@ -40447,7 +40485,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::persistence::PropertyProxy</text>
     <group name="Fig17.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1281, 521, 481, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1281, 481, 446, 0]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139D"
          fill="0"
          fillcolor="255 200 255"
@@ -40460,8 +40498,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig17.2.0"
         x="1281"
-        y="521"
-        width="481"
+        y="481"
+        width="446"
         height="0"
         fill="0"
         fillcolor="255 200 255"
@@ -44385,7 +44423,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
     </path>
   </group>
   <group name="Fig63"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1464, 1344, 347, 207]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1464, 1344, 347, 235]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--3a4c22:13104bcfe8d:-8000:0000000000002303"
        fill="1"
        fillcolor="white"
@@ -44400,7 +44438,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       x="1464"
       y="1344"
       width="347"
-      height="207"
+      height="235"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -44536,7 +44574,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig63.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1465, 1417, 345, 134]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1465, 1417, 345, 162]"
          href="127-0-1-1--3a4c22:13104bcfe8d:-8000:0000000000002303"
          fill="0"
          fillcolor="white"
@@ -44550,7 +44588,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         x="1465"
         y="1417"
         width="345"
-        height="134"
+        height="162"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -44688,7 +44726,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         x="1465"
         y="1529"
         width="345"
-        height="20"
+        height="14"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -44700,6 +44738,38 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >filterObjectValue(object : string,lg : string = &apos;&apos;) : string</text>
+      <text name="Fig63.6.10"
+        x="1465"
+        y="1543"
+        width="345"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >escape(str : string) : string</text>
+      <text name="Fig63.6.11"
+        x="1465"
+        y="1557"
+        width="345"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >escapeRegex(str : string) : string</text>
     </group>
   </group>
   <group name="Fig64"
@@ -45204,7 +45274,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
                         offset="25" />
     </private>
     <path name="Fig70.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"

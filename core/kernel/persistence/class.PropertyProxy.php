@@ -138,7 +138,7 @@ class core_kernel_persistence_PropertyProxy
         if ($delegate instanceof core_kernel_persistence_hardsql_Property) {
                 // Use the smooth sql implementation to get this information
                 // Or find the right way to treat this case
-                $lgDependent = core_kernel_persistence_smoothsql_Property::singleton()->getOnePropertyValue($resource, $lgDependentProperty);
+                $lgDependent = core_kernel_persistence_smoothsql_Resource::singleton()->getOnePropertyValue($resource, $lgDependentProperty);
         } else {
                 $lgDependent = $delegate->getOnePropertyValue($resource, $lgDependentProperty);
         }
@@ -173,7 +173,7 @@ class core_kernel_persistence_PropertyProxy
         if($delegate instanceof core_kernel_persistence_hardsql_Property){
                 // Use the smooth sql implementation to get this information
 		// Or find the right way to treat this case
-                $multiple = core_kernel_persistence_smoothsql_Property::singleton()->getOnePropertyValue($resource, $multipleProperty);
+                $multiple = core_kernel_persistence_smoothsql_Resource::singleton()->getOnePropertyValue($resource, $multipleProperty);
         }else{
                 $multiple = $delegate->getOnePropertyValue($resource, $multipleProperty);
         }
@@ -209,7 +209,7 @@ class core_kernel_persistence_PropertyProxy
         if($delegate instanceof core_kernel_persistence_hardsql_Property){
                 // Use the smooth sql implementation to get this information
 		// Or find the right way to treat this case
-                $rangeValues = core_kernel_persistence_smoothsql_Property::singleton()->getPropertyValues($resource, $rangeProperty);
+                $rangeValues = core_kernel_persistence_smoothsql_Resource::singleton()->getPropertyValues($resource, $rangeProperty);
         }else{
                 $rangeValues = $delegate->getPropertyValues($resource, $rangeProperty);
         }

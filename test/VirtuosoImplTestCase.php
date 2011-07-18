@@ -231,15 +231,18 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 $instance = $class->createInstance('instance for unit test', 'instance for unit test @ '.date('d-m-Y H:i:s'));
                 $prop = new core_kernel_classes_Property(RDFS_COMMENT);
                 $prop2 = new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOtestCase.rdf#property1');
+                $prop3 = new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOtestCase.rdf#property2');
                 $instance1 = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOtestCase.rdf#instance1');
                 $instance2 = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOtestCase.rdf#instance2');
+                $complexStringValue = "/taoDelivery/ItemDelivery/runner?itemUri=^itemUri&testUri=^testUri&deliveryUri=^deliveryUri&abs=*?.+?^$\\";//.+?^$
+                //'*', '.', '+', '?', '^', '$'
                 
                 $instance->setPropertyValue($prop, 'comment1');
                 $instance->setPropertyValueByLg($prop, 'comment2', 'EN');
                 $instance->setPropertyValue($prop2, $instance1->uriResource);
                 $instance->setPropertyValueByLg($prop2, $instance2->uriResource, 'en');
-                 
-//                var_dump('created resrouce: '.$instance->uriResource);
+                $instance->setPropertyValue($prop3, $complexStringValue);
+                
                 
                 $propertyFilters = array(
                     $prop->uriResource => 'comment2',
@@ -269,6 +272,13 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 );
                 $foundInstances = $class->searchInstances($propertyFilters, $options);
                 $this->assertTrue(empty($foundInstances));
+                
+                $propertyFilters = array(
+                    $prop3->uriResource => $complexStringValue
+                );
+                $options = array();
+                $foundInstances = $class->searchInstances($propertyFilters, $options);
+                $this->assertFalse(empty($foundInstances));
                 
                 $this->assertTrue($instance->delete());
         }
@@ -309,7 +319,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 
         }
         
-        public function testInstallTAO(){
+        public function __testInstallTAO(){
                 
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
                 $rootPath = (substr(ROOT_PATH, -1)=='/')? substr(ROOT_PATH,0,-1) : ROOT_PATH;

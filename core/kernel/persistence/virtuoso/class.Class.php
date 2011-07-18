@@ -563,7 +563,8 @@ class core_kernel_persistence_virtuoso_Class
                                                 $o = '?o'.count($objects);
                                                 $objects[] = $o;
                                                 
-                                                $object = trim(str_replace('*', '', $pattern));
+                                                $object = trim($pattern);
+                                                
                                                 if(common_Utils::isUri($object)){
                                                         //if it is a uri, ignore "like" and "lang" options:
                                                         list($objectNS, $objectID) = explode('#', $object);
@@ -581,7 +582,7 @@ class core_kernel_persistence_virtuoso_Class
                                                                 $object = preg_match('/^\^/', $object)? $object : '^'.$object;
                                                                 $object = preg_match('/\$$/', $object)? $object : $object.'$';
                                                         }
-                                                        $filters[] = 'regex(str('.$o.'), "'.$object.'")';
+                                                        $filters[] = 'regex(str('.$o.'), "'.$virtuoso->escapeRegex($object, 'regex').'")';
                                                         $conditions[] = $prefixes[$propNS].':'.$propID.' '.$o.' ; ';
                                                 }
                                         }
@@ -597,7 +598,7 @@ class core_kernel_persistence_virtuoso_Class
                                                                 $multiCondition .= " || ";
                                                         }
                                                         
-                                                        $object = trim(str_replace('*', '', $patternToken));
+                                                        $object = trim($patternToken);
                                                         
                                                         if(!$validLanguageMatching && common_Utils::isUri($object)) $validLanguageMatching = false;//no resource available for language dependent check
                                                         
@@ -606,7 +607,7 @@ class core_kernel_persistence_virtuoso_Class
                                                                 $object = preg_match('/\$$/', $object)? $object : $object.'$';
                                                         }
                                                 
-                                                        $multiCondition .= 'regex(str('.$o.'), "'.$object.'")';
+                                                        $multiCondition .= 'regex(str('.$o.'), "'.$virtuoso->escapeRegex($object, 'regex').'")';
                                                 }
                                                 
                                                 if(!empty($lg) && $validLanguageMatching){
@@ -684,7 +685,7 @@ class core_kernel_persistence_virtuoso_Class
                                 unset($propertyFilters[RDF_TYPE]);//reset the RDF_TYPE filter for recursive searching!!!
                                 $returnValue = array_merge(
                                         $returnValue, 
-                                        $subClass->searchInstances($propertyFilters, array_merge($options, array('recursive' => false)))
+                                        $subClass->searchInstances($propertyFilters, array_merge($options, array('recursive' => true)))
                                 );
                         }
                 }
