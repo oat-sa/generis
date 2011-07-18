@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 18.07.2011, 11:40:31 with ArgoUML PHP module 
+ * Automatically generated on 18.07.2011, 13:36:00 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
@@ -347,6 +347,52 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
         // section 127-0-1-1-53e96cc6:1313c9aedee:-8000:00000000000015F1 end
 
         return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method execProcedure
+     *
+     * @access public
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  string proc
+     * @param  array params
+     * @param  string outputFormat
+     * @return boolean
+     */
+    public function execProcedure($proc, $params = array(), $outputFormat = 'array')
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--adc66f6:1313d03f90b:-8000:00000000000015F5 begin
+        
+        if (!$this->dbConnector) {
+                throw new core_kernel_persistence_virtuoso_Exception("[VIRTUOSO ERROR] Virtuoso is not connected");
+        }
+
+        try {
+                if(preg_match('/^CALL /', $proc)){
+                        $procedure = odbc_prepare($this->dbConnector, $proc);
+                        $returnValue = odbc_execute($procedure, $params);
+                }else if(preg_match('/^LOAD /', $proc)){
+                        $result = odbc_exec($this->dbConnector, $proc);
+                        $returnValue = $this->resultToArray($result);
+                }else{
+                        $result = odbc_exec($this->dbConnector, $proc);
+                        $returnValue = $this->resultToArray($result);
+                }
+                
+        } catch (Exception $e) {
+                throw new core_kernel_persistence_virtuoso_Exception("[VIRTUOSO ERROR] occured during procedure execution ({$procedure}): " . $e->getMessage());
+        }
+
+        $error = odbc_errormsg($this->dbConnector);
+        if (!empty($error)) {
+                throw new core_kernel_persistence_virtuoso_Exception("[VIRTUOSO ERROR] {$error}");
+        }
+        
+        // section 127-0-1-1--adc66f6:1313d03f90b:-8000:00000000000015F5 end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class core_kernel_persistence_virtuoso_VirtuosoDataStore */
