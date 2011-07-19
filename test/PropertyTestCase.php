@@ -36,11 +36,7 @@ class PropertyTestCase extends UnitTestCase{
 		$this->assertEqual($widget->uriResource,WIDGET_COMBO);
 		$this->assertEqual($widget->getLabel(), 'Drop down menu');
 		$this->assertEqual($widget->getComment(), 'In drop down menu, one may select 1 to N options');
-	}
-	
-
-
-	
+	}	
 
 }
 ?>

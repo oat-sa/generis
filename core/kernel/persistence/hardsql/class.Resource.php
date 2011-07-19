@@ -533,7 +533,6 @@ implements core_kernel_persistence_ResourceInterface
 				
 			$result	= $dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() !== 0){
-				var_dump($query);
 				throw new core_kernel_persistence_hardsql_Exception("Unable to delete property values (multiple) for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
 			} else {
 				$returnValue = true;
