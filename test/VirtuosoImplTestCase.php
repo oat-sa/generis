@@ -11,7 +11,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_VIRTUOSO);
 	}
         
-        public function testInstallTAO(){
+        public function __testInstallTAO(){
                 
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
                 $rootPath = (substr(ROOT_PATH, -1)=='/')? substr(ROOT_PATH,0,-1) : ROOT_PATH;
@@ -294,35 +294,55 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 $instance->setPropertyValueByLg($prop2, $instance2->uriResource, 'en');
                 $instance->setPropertyValue($prop3, $complexStringValue);
                 
+                $propertyFilters = array(
+                    $prop->uriResource => 'comment1',
+                    $prop2->uriResource => $instance1->uriResource
+                );
+                //like(true), lang (''), chaining (or/and), recursive(false)
+                $options = array('like'=>false);
+                
+                $foundInstances = $class->searchInstances($propertyFilters, $options);
+                $this->assertFalse(empty($foundInstances));
+                
+                
                 
                 $propertyFilters = array(
                     $prop->uriResource => 'comment2',
                     $prop2->uriResource => $instance1->uriResource
                 );
-                
-                //like(true), lang (''), chaining (or/and), recursive(false)
-                $options = array();
-                
+                $options = array('like'=>false, 'lang' => 'en');
                 $foundInstances = $class->searchInstances($propertyFilters, $options);
                 $this->assertFalse(empty($foundInstances));
                 
-                //change "lang" option:
-                $options = array('lang' => 'en');
+                
+                $propertyFilters = array(
+                    $prop->uriResource => 'ent2',
+                    $prop2->uriResource => $instance1->uriResource
+                );
+                $options = array('like'=>true, 'lang' => 'en');
                 $foundInstances = $class->searchInstances($propertyFilters, $options);
                 $this->assertFalse(empty($foundInstances));
+                
+                
                 
                 $propertyFilters = array(
                     $prop->uriResource => 'comment1'
                 );
+                $options = array('like'=>false, 'lang' => 'en');
                 $foundInstances = $class->searchInstances($propertyFilters, $options);
                 $this->assertTrue(empty($foundInstances));
+                
+                
                 
                 $propertyFilters = array(
                     $prop->uriResource => 'comment2',
                     $prop2->uriResource => $instance2->uriResource
                 );
+                $options = array('like'=>false, 'lang' => 'en');
                 $foundInstances = $class->searchInstances($propertyFilters, $options);
                 $this->assertTrue(empty($foundInstances));
+                
+                
                 
                 $propertyFilters = array(
                     $prop3->uriResource => $complexStringValue
@@ -331,6 +351,9 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 $foundInstances = $class->searchInstances($propertyFilters, $options);
                 $this->assertFalse(empty($foundInstances));
                 
+                
+                
+                //delete instance:
                 $this->assertTrue($instance->delete());
         }
         

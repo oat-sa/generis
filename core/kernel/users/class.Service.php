@@ -233,7 +233,7 @@ class core_kernel_users_Service
 					PROPERTY_USER_PASSWORD	=> $password
 				), 
 				array(
-					'like' 		=> true,
+					'like' 		=> false,
 					'recursive'	=> true
 				)
 			);

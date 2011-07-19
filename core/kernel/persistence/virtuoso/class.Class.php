@@ -575,15 +575,17 @@ class core_kernel_persistence_virtuoso_Class
                                                                 $conditions[] = $prefixes[$propNS].':'.$propID.' '.$prefixes[$objectNS].':'.$objectID.' ; '; 
                                                         }
                                                 }else{
-                                                        if(!empty($lg)){//&& !common_Utils::isUri($object)
-                                                                $filters[] = 'langMatches(lang('.$o.'),"'.$lg.'")';
+                                                        if ($like) {
+                                                                $filters[] = 'regex(str('.$o.'), "'.$virtuoso->escapeRegex($object, 'regex').'")';
+                                                                if (!empty($lg)) {//&& !common_Utils::isUri($object)
+                                                                        $filters[] = 'langMatches(lang(' . $o . '),"' . $lg . '")';
+                                                                }
+                                                                $conditions[] = $prefixes[$propNS].':'.$propID.' '.$o.' ; ';
+                                                        }else{
+                                                                $object = '"'.$virtuoso->escape($object).'"';
+                                                                $object .= empty($lg)?'':'@'.$lg;
+                                                                $conditions[] = $prefixes[$propNS].':'.$propID.' '.$object.' ; ';
                                                         }
-                                                        if (!$like) {
-                                                                $object = preg_match('/^\^/', $object)? $object : '^'.$object;
-                                                                $object = preg_match('/\$$/', $object)? $object : $object.'$';
-                                                        }
-                                                        $filters[] = 'regex(str('.$o.'), "'.$virtuoso->escapeRegex($object, 'regex').'")';
-                                                        $conditions[] = $prefixes[$propNS].':'.$propID.' '.$o.' ; ';
                                                 }
                                         }
                                 } else if (is_array($pattern)) {
