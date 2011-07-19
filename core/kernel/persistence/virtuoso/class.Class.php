@@ -637,12 +637,12 @@ class core_kernel_persistence_virtuoso_Class
                 }
                 
                 $from = '';
-                $taoNS = array();
-                preg_match_all('/http:\/\/www\.tao\.lu\/(middleware|Ontologies)\/(.*).rdf/i', $NS, $taoNS);
-                if(!empty($taoNS[0]) && !empty($taoNS[1]) && !empty($taoNS[2])){
-                        $tao_ns = strtolower($taoNS[2][0]);
-                        $from = ' FROM <http://tao.ontology/'. $tao_ns .'> ';
-                }
+//                $taoNS = array();
+//                preg_match_all('/http:\/\/www\.tao\.lu\/(middleware|Ontologies)\/(.*).rdf/i', $NS, $taoNS);
+//                if(!empty($taoNS[0]) && !empty($taoNS[1]) && !empty($taoNS[2])){
+//                        $tao_ns = strtolower($taoNS[2][0]);
+//                        $from = ' FROM <http://tao.ontology/'. $tao_ns .'> ';
+//                }
                 
                 $query .= '
                         SELECT ?s '.$from.' WHERE {?s ';
