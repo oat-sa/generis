@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 19.07.2011, 17:27:05 with ArgoUML PHP module 
+ * Automatically generated on 20.07.2011, 08:42:00 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author firstname and lastname of author, <author@example.org>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -33,7 +33,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class core_kernel_persistence_ClassInterface
  *
  * @access public
- * @author firstname and lastname of author, <author@example.org>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -47,7 +47,7 @@ interface core_kernel_persistence_ClassInterface
      * Short description of method getSubClasses
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -58,7 +58,7 @@ interface core_kernel_persistence_ClassInterface
      * Short description of method isSubClassOf
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Class parentClass
      * @return boolean
@@ -69,7 +69,7 @@ interface core_kernel_persistence_ClassInterface
      * Short description of method getParentClasses
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -80,7 +80,7 @@ interface core_kernel_persistence_ClassInterface
      * Short description of method getProperties
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -91,7 +91,7 @@ interface core_kernel_persistence_ClassInterface
      * Short description of method getInstances
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  boolean recursive
      * @param  array params
@@ -103,7 +103,7 @@ interface core_kernel_persistence_ClassInterface
      * Short description of method setInstance
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Resource instance
      * @return core_kernel_classes_Resource
@@ -114,7 +114,7 @@ interface core_kernel_persistence_ClassInterface
      * Short description of method setSubClassOf
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Class iClass
      * @return boolean
@@ -125,7 +125,7 @@ interface core_kernel_persistence_ClassInterface
      * Short description of method setProperty
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return boolean
@@ -136,7 +136,7 @@ interface core_kernel_persistence_ClassInterface
      * Short description of method createInstance
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  string label
      * @param  string comment
@@ -149,7 +149,7 @@ interface core_kernel_persistence_ClassInterface
      * Short description of method createSubClass
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  string label
      * @param  string comment
@@ -161,7 +161,7 @@ interface core_kernel_persistence_ClassInterface
      * Short description of method createProperty
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  string label
      * @param  string comment
@@ -174,7 +174,7 @@ interface core_kernel_persistence_ClassInterface
      * Short description of method searchInstances
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  array propertyFilters
      * @param  array options
@@ -186,7 +186,7 @@ interface core_kernel_persistence_ClassInterface
      * Short description of method countInstances
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return Integer
      */
@@ -196,7 +196,7 @@ interface core_kernel_persistence_ClassInterface
      * Short description of method getInstancesPropertyValues
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  array propertyFilters

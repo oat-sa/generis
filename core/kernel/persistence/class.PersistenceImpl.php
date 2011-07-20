@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.04.2011, 14:10:07 with ArgoUML PHP module 
+ * Automatically generated on 20.07.2011, 08:42:00 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -34,7 +34,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  *
  * @abstract
  * @access public
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -45,14 +45,6 @@ abstract class core_kernel_persistence_PersistenceImpl
 
     // --- ATTRIBUTES ---
 
-    /**
-     * Short description of attribute enabled
-     *
-     * @access public
-     * @var boolean
-     */
-    public $enabled = false;
-
     // --- OPERATIONS ---
 
     /**
@@ -60,7 +52,7 @@ abstract class core_kernel_persistence_PersistenceImpl
      *
      * @abstract
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return core_kernel_classes_Resource
      */
     public static abstract function singleton();
@@ -70,7 +62,7 @@ abstract class core_kernel_persistence_PersistenceImpl
      *
      * @abstract
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */

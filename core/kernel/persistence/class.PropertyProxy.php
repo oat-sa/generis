@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 05.05.2011, 12:49:11 with ArgoUML PHP module 
+ * Automatically generated on 20.07.2011, 08:42:00 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -24,35 +24,35 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_persistence_PersistenceProxy
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
 require_once('core/kernel/persistence/class.PersistenceProxy.php');
 
 /**
  * include core_kernel_persistence_hardsql_Property
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
 require_once('core/kernel/persistence/hardsql/class.Property.php');
 
 /**
  * include core_kernel_persistence_PropertyInterface
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
 require_once('core/kernel/persistence/interface.PropertyInterface.php');
 
 /**
  * include core_kernel_persistence_smoothsql_Property
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
 require_once('core/kernel/persistence/smoothsql/class.Property.php');
 
 /**
  * include core_kernel_persistence_subscription_Property
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
 require_once('core/kernel/persistence/subscription/class.Property.php');
 
@@ -68,7 +68,7 @@ require_once('core/kernel/persistence/subscription/class.Property.php');
  * Short description of class core_kernel_persistence_PropertyProxy
  *
  * @access public
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -103,7 +103,7 @@ class core_kernel_persistence_PropertyProxy
      * Short description of method getSubProperties
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -122,7 +122,7 @@ class core_kernel_persistence_PropertyProxy
      * Short description of method isLgDependent
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -157,7 +157,7 @@ class core_kernel_persistence_PropertyProxy
      * Short description of method isMultiple
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -193,7 +193,7 @@ class core_kernel_persistence_PropertyProxy
      * Short description of method getRange
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return core_kernel_classes_Class
      */
@@ -227,7 +227,7 @@ class core_kernel_persistence_PropertyProxy
      * Short description of method singleton
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return core_kernel_persistence_PersistanceProxy
      */
     public static function singleton()
@@ -250,7 +250,7 @@ class core_kernel_persistence_PropertyProxy
      * Short description of method getImpToDelegateTo
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  array params
      * @return core_kernel_persistence_ResourceInterface
@@ -293,7 +293,7 @@ class core_kernel_persistence_PropertyProxy
      * Short description of method isValidContext
      *
      * @access public
-     * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string context
      * @param  Resource resource
      * @return boolean

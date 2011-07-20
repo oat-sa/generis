@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 27.05.2011, 10:31:56 with ArgoUML PHP module 
- * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
+ * Automatically generated on 20.07.2011, 08:42:00 with ArgoUML PHP module 
+ * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author firstname and lastname of author, <author@example.org>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_smoothsql
  */
@@ -33,7 +33,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class core_kernel_persistence_smoothsql_Utils
  *
  * @access public
- * @author firstname and lastname of author, <author@example.org>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_smoothsql
  */
@@ -50,7 +50,7 @@ class core_kernel_persistence_smoothsql_Utils
      * Short description of method sortByLanguage
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  dataset
      * @param  string langColname
      * @return array
@@ -88,7 +88,7 @@ class core_kernel_persistence_smoothsql_Utils
      * Short description of method getFirstLanguage
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  array values
      * @return array
      */
@@ -118,7 +118,7 @@ class core_kernel_persistence_smoothsql_Utils
      * Short description of method filterByLanguage
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  dataset
      * @param  string langColname
      * @return array
@@ -139,7 +139,7 @@ class core_kernel_persistence_smoothsql_Utils
      * Short description of method identifyFirstLanguage
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  array values
      * @return string
      */

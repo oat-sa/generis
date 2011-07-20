@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 05.05.2011, 20:51:56 with ArgoUML PHP module 
+ * Automatically generated on 20.07.2011, 08:42:00 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardsql
  */
@@ -33,7 +33,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class core_kernel_persistence_hardsql_Utils
  *
  * @access public
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardsql
  */
@@ -46,9 +46,20 @@ class core_kernel_persistence_hardsql_Utils
 
     // --- OPERATIONS ---
 
-    public function getInstanceId ($resource){
-    	$returnValue = null;
-    	
+    /**
+     * Short description of method getInstanceId
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @return string
+     */
+    public function getInstanceId( core_kernel_classes_Resource $resource)
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1-53ffc1dd:131463d99b5:-8000:000000000000160E begin
+        
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
     	$table = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
     	$query = 'SELECT "id" FROM "'.$table.'" WHERE uri= ? ';
@@ -59,13 +70,26 @@ class core_kernel_persistence_hardsql_Utils
     	if (!$result->EOF){
     		$returnValue = $result->fields['id'];
     	}
-    	
-    	return $returnValue;
+        
+        // section 127-0-1-1-53ffc1dd:131463d99b5:-8000:000000000000160E end
+
+        return (string) $returnValue;
     }
 
-    public function getResourceToTableId ($resource) {
-    	$returnValue = null;
-    	
+    /**
+     * Short description of method getResourceToTableId
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @return string
+     */
+    public function getResourceToTableId( core_kernel_classes_Resource $resource)
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1-53ffc1dd:131463d99b5:-8000:0000000000001611 begin
+        
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
     	$query = 'SELECT "id" FROM "resource_to_table" WHERE "uri"=?';
     	$result = $dbWrapper->execSql($query, array ($resource->uriResource));
@@ -76,14 +100,28 @@ class core_kernel_persistence_hardsql_Utils
     	if (!$result->EOF){
     		$returnValue = $result->fields['id'];
     	}
-    	
-    	return $returnValue;
-    }
     
-    public function getClassId ($class, $resource){
-    	$returnValue = null;
-    	
-    	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
+        // section 127-0-1-1-53ffc1dd:131463d99b5:-8000:0000000000001611 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method getClassId
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Class class
+     * @param  Resource resource
+     * @return string
+     */
+    public function getClassId( core_kernel_classes_Class $class,  core_kernel_classes_Resource $resource)
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1-53ffc1dd:131463d99b5:-8000:0000000000001614 begin
+        
+        $dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
     	$query = 'SELECT "id" FROM "class_to_table" WHERE "uri"=? AND "table"=?';
     	$result = $dbWrapper->execSql($query, array (
     		$class->uriResource
@@ -97,10 +135,12 @@ class core_kernel_persistence_hardsql_Utils
     	if (!$result->EOF){
     		$returnValue = $result->fields['id'];
     	}
-    	
-    	return $returnValue;
+        
+        // section 127-0-1-1-53ffc1dd:131463d99b5:-8000:0000000000001614 end
+
+        return (string) $returnValue;
     }
-	
+
 } /* end of class core_kernel_persistence_hardsql_Utils */
 
 ?>

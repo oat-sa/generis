@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 18.07.2011, 13:36:00 with ArgoUML PHP module 
+ * Automatically generated on 20.07.2011, 08:42:00 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_virtuoso
  */
@@ -33,7 +33,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class core_kernel_persistence_virtuoso_VirtuosoDataStore
  *
  * @access public
- * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_virtuoso
  */
@@ -74,7 +74,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
      * Short description of method singleton
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return core_kernel_persistence_virtuoso_VirtuosoDataStore
      */
     public static function singleton()
@@ -97,7 +97,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
      * Short description of method execQuery
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string query
      * @param  string outputFormat
      * @return resource
@@ -140,7 +140,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
      * Short description of method __construct
      *
      * @access private
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return mixed
      */
     private function __construct()
@@ -157,7 +157,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
      * Short description of method __destruct
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return mixed
      */
     public function __destruct()
@@ -173,7 +173,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
      * Short description of method getCurrentGraph
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return string
      */
     public function getCurrentGraph()
@@ -193,7 +193,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
      * Short description of method resultToArray
      *
      * @access private
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  result
      * @return array
      */
@@ -223,7 +223,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
      * Short description of method resultToBoolean
      *
      * @access private
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  result
      * @return boolean
      */
@@ -249,7 +249,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
      * Short description of method filterLanguageValue
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string lg
      * @return string
      */
@@ -271,7 +271,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
      * Short description of method filterObjectValue
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string object
      * @param  string lg
      * @return string
@@ -305,7 +305,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
      * Short description of method escape
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string str
      * @return string
      */
@@ -325,7 +325,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
      * Short description of method escapeRegex
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string str
      * @return string
      */
@@ -353,7 +353,7 @@ class core_kernel_persistence_virtuoso_VirtuosoDataStore
      * Short description of method execProcedure
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string proc
      * @param  array params
      * @param  string outputFormat
