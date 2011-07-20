@@ -268,7 +268,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 	        	);
 	        	$result->moveNext();
 	        }
-		}
+	}
     	
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001666 end
     }
@@ -996,8 +996,8 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     public function resetCache()
     {
         // section 10-13-1--128-7c4fbea6:12fe371c06a:-8000:0000000000001573 begin
-		$this->loadClasses(true);
-		$this->loadProperties(true);
+        $this->loadClasses(true);
+        $this->loadProperties(true);
         // section 10-13-1--128-7c4fbea6:12fe371c06a:-8000:0000000000001573 end
     }
 

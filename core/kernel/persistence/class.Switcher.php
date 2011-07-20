@@ -95,6 +95,7 @@ class core_kernel_persistence_Switcher
 	 * @return boolean
 	 */
 	public function unhardify (core_kernel_classes_Class $class, $options = array ()) {
+                
 		$returnValue = (bool) false;
 
 		if (defined ("DEBUG_PERSISTENCE") && DEBUG_PERSISTENCE){
@@ -241,8 +242,8 @@ class core_kernel_persistence_Switcher
 		}while($count > 0);
 		
 		// Unreference the class
-		core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unReferenceClass($class);
-		
+		$returnValue = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unReferenceClass($class);
+                
 		// If removeForeigns, treat the foreign classes
 		if($removeForeigns){
 
@@ -259,7 +260,7 @@ class core_kernel_persistence_Switcher
 
 			foreach($class->getSubClasses(true) as $subClass){
 				if (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($subClass)){
-					$this->unhardify($subClass, $options);
+					$returnValue = $this->unhardify($subClass, $options);
 				}
 			}
 		}
@@ -386,6 +387,7 @@ class core_kernel_persistence_Switcher
 		core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
                 
 		if(!$append || ($append && !$myTableMgr->exists())){
+                        
 			//create the table
 			if($myTableMgr->exists()){
 				$myTableMgr->remove();
@@ -465,11 +467,13 @@ class core_kernel_persistence_Switcher
 			$count = count($instances);
 
 		} while($count> 0);
-
+                
+                $returnValue = true;
+                
 		// Treat subclasses of the current class
 		if($recursive){
 			foreach($class->getSubClasses(true) as $subClass){
-				$this->hardify($subClass, array_merge($options, array(
+				$returnValue = $this->hardify($subClass, array_merge($options, array(
 					'recursive' 	=> false,
 					'append' 	=> true,
 					'allOrNothing'	=> true

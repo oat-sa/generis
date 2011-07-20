@@ -102,7 +102,7 @@ abstract class core_kernel_persistence_PersistenceProxy
         $returnValue = array(
         	PERSISTENCE_HARD => true, 
         	PERSISTENCE_SMOOTH => true, 
-        	PERSISTENCE_VIRTUOSO => true, 
+        	PERSISTENCE_VIRTUOSO => false, 
         	PERSISTENCE_SUBSCRIPTION => false
        	);
         
