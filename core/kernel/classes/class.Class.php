@@ -428,7 +428,7 @@ class core_kernel_classes_Class
     }
 
     /**
-     * Get instances' property values.The instances can be filtered.
+     * Short description of method getInstancesPropertyValues
      *
      * @access public
      * @author firstname and lastname of author, <author@example.org>
@@ -441,9 +441,9 @@ class core_kernel_classes_Class
     {
         $returnValue = array();
 
-        // section 127-0-1-1--a5ad399:1312ca1eb42:-8000:0000000000004A89 begin
+        // section 127-0-1-1--120bf54f:13142fdf597:-8000:0000000000003137 begin
         $returnValue = core_kernel_persistence_ClassProxy::singleton()->getInstancesPropertyValues ($this, $property, $propertyFilters, $options);
-        // section 127-0-1-1--a5ad399:1312ca1eb42:-8000:0000000000004A89 end
+        // section 127-0-1-1--120bf54f:13142fdf597:-8000:0000000000003137 end
 
         return (array) $returnValue;
     }
