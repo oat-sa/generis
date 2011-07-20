@@ -21,12 +21,8 @@ if (0 > version_compare(PHP_VERSION, '5')) {
     die('This file was generated for PHP 5');
 }
 
-/**
- * include Exception
- *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
- */
-require_once('class.Exception.php');
+
+
 
 /* user defined includes */
 // section 127-0-1-1--499759bc:12f72c12020:-8000:0000000000001408-includes begin

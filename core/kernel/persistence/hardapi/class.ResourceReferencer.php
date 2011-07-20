@@ -423,13 +423,17 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001658 begin
         
         if($this->isClassReferenced($class)){
-        	
-        	$classLocations = $this->classLocations($class);
+                
 			$tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
-        	
-        	// Delete reference of the class in classs_to_table, resource_has_class, resource_to_table
+                        
+                        //need to instanciate table manager before unreferencing otherwise, the "remove table" will fail
+                        $tm = new core_kernel_persistence_hardapi_TableManager($tableName);
+                        
+                        // Delete reference of the class in classs_to_table, resource_has_class, resource_to_table
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+                        
 			// Remove references of the resources in the resource has class table
+                        $queries = array();
 			$queries[] = 'DELETE 
 				FROM "resource_has_class" 
 				WHERE "resource_has_class"."resource_id" 
@@ -442,17 +446,16 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			$returnValue = true;
 			foreach ($queries as $query){
 				$result = $dbWrapper->execSql($query);
-	        	if($dbWrapper->dbConnector->errorNo() !== 0){
+                                if($dbWrapper->dbConnector->errorNo() !== 0){
 					throw new core_kernel_persistence_hardapi_Exception("Unable to unreference class {$class->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
 				}
 				if ($result===false){
 					$returnValue = false;
 				}
 			}
+                        
 			if($returnValue !== false){
-				
 				// delete table associated to the class
-				$tm = new core_kernel_persistence_hardapi_TableManager($tableName);
 				$tm->remove();
 				// remove class from the cache
 				if($this->cacheModes['class'] == self::CACHE_MEMORY){
