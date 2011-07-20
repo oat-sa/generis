@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 15.07.2011, 12:06:16 with ArgoUML PHP module 
+ * Automatically generated on 19.07.2011, 17:27:05 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author firstname and lastname of author, <author@example.org>
@@ -388,8 +388,11 @@ class core_kernel_persistence_subscription_Class
     {
         $returnValue = array();
 
-        // section 127-0-1-1--a5ad399:1312ca1eb42:-8000:0000000000004AA8 begin
-        // section 127-0-1-1--a5ad399:1312ca1eb42:-8000:0000000000004AA8 end
+        // section 127-0-1-1--120bf54f:13142fdf597:-8000:000000000000312D begin
+        
+        throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        
+        // section 127-0-1-1--120bf54f:13142fdf597:-8000:000000000000312D end
 
         return (array) $returnValue;
     }
