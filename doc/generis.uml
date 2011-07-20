@@ -92,7 +92,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Jul 20 08:35:09 CEST 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Jul 20 08:45:52 CEST 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -8707,7 +8707,7 @@ like funcions. It should be good to refactor.</UML:TaggedValue.dataValue>
                                 <UML:Parameter xmi.id = '127-0-1-1-53ffc1dd:131463d99b5:-8000:0000000000001617'
                                   name = 'resource' isSpecification = 'false' kind = 'in'>
                                   <UML:Parameter.type>
-                                    <UML:DataType xmi.idref = '127-0-1-1--18467de:13108b1b06a:-8000:00000000000015D9'/>
+                                    <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                                   </UML:Parameter.type>
                                 </UML:Parameter>
                               </UML:BehavioralFeature.parameter>

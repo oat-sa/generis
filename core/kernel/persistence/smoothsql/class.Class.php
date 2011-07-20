@@ -413,9 +413,7 @@ class core_kernel_persistence_smoothsql_Class
 		}
 
 		$returnValue = new core_kernel_classes_Resource($subject,__METHOD__);
-		
-		$rdfType = new core_kernel_classes_Property(RDF_TYPE);
-		$returnValue->setPropertyValue($rdfType, $resource->uriResource);
+		$returnValue->setType($resource);
 
 		if ($label != '') {
 			$returnValue->setLabel($label);
