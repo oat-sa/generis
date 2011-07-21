@@ -424,7 +424,7 @@ class core_kernel_persistence_Switcher
 			set_time_limit('30');
 
 			$rows = array();
-
+                        
 			foreach($instances as $index =>  $resource){
 				if($referencer->isResourceReferenced($resource)){
 					unset($instances[$index]);
@@ -433,12 +433,13 @@ class core_kernel_persistence_Switcher
 				$row = array('uri' => $resource->uriResource);
 				foreach($properties as $property){
 					$propValue = $resource->getOnePropertyValue($property);
+                                        $propValue = ($propValue instanceof core_kernel_classes_Resource)?$propValue->uriResource:$propValue;
 					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propValue;
 				}
 
 				$rows[] = $row;
 			}
-
+                        
 			$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
 			$rowMgr->insertRows($rows);
 			foreach($instances as $resource){
@@ -482,7 +483,7 @@ class core_kernel_persistence_Switcher
 		}
 
 		//reset cache:
-		$referencer->resetCache();
+		$referencer->resetCache($additionalProperties);
 		// EXIT SMOOTH SQL MODE
 		core_kernel_persistence_PersistenceProxy::resetMode();
 

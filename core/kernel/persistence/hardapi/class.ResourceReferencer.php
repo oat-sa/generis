@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  * By default, the classes reference is cached in memory
  * and the instances are not cached
  *
- * @author firstname and lastname of author, <author@example.org>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -34,7 +34,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * and the instances are not cached
  *
  * @access public
- * @author firstname and lastname of author, <author@example.org>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -123,7 +123,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method __construct
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return mixed
      */
     private function __construct()
@@ -144,7 +144,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method singleton
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return core_kernel_persistence_hardapi_ResourceReferencer
      */
     public static function singleton()
@@ -168,7 +168,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setCache
      *
      * @access protected
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string type
      * @param  int mode
      * @return mixed
@@ -194,7 +194,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setClassCache
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  int mode
      * @return mixed
      */
@@ -211,7 +211,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setInstanceCache
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  int mode
      * @return mixed
      */
@@ -228,7 +228,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setPropertyCache
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  int mode
      * @return mixed
      */
@@ -245,7 +245,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method loadClasses
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  boolean force
      * @return mixed
      */
@@ -277,7 +277,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method isClassReferenced
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Class class
      * @param  string table
      * @return boolean
@@ -351,7 +351,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method referenceClass
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Class class
      * @param  string table
      * @param  Class topClass
@@ -412,7 +412,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method unReferenceClass
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -481,7 +481,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method classLocations
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Class class
      * @return array
      */
@@ -535,7 +535,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method loadResources
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  boolean force
      * @return mixed
      */
@@ -560,7 +560,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method isResourceReferenced
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -608,7 +608,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method referenceResource
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @param  string table
      * @param  array types
@@ -672,7 +672,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method unReferenceResource
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -718,7 +718,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method resourceLocation
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @return string
      */
@@ -771,35 +771,36 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method loadProperties
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  boolean force
+     * @param  array additionalProperties
      * @return mixed
      */
-    private function loadProperties($force = false)
+    private function loadProperties($force = false, $additionalProperties = array())
     {
         // section 127-0-1-1-78ed0233:12fde709f61:-8000:0000000000001723 begin
         
     	if(count(self::$_properties) == 0 || $force){
     		
-			//file where is the data saved
-   			$file = GENERIS_CACHE_PATH . 'hard-api-property.cache';
+                //file where is the data saved
+                $file = GENERIS_CACHE_PATH . 'hard-api-property.cache';
 				
     		if(!$force && $this->cacheModes['property'] == self::CACHE_FILE){
     			
     			//if the properties are cached in the file, we load it
-				if(file_exists($file)){
-					if(!is_readable($file)){
-		    			throw new core_kernel_persistence_hardapi_Exception("Cache file $file must have read/write permissions");
-		    		}
-					$properties = @unserialize(file_get_contents($file));
-					if($properties !== false && is_array($properties) && count($properties) > 0){
-						self::$_properties = $properties;
-						return;
-					}
-				}
-			}
+                        if(file_exists($file)){
+                                if(!is_readable($file)){
+                                throw new core_kernel_persistence_hardapi_Exception("Cache file $file must have read/write permissions");
+                        }
+                                $properties = @unserialize(file_get_contents($file));
+                                if($properties !== false && is_array($properties) && count($properties) > 0){
+                                        self::$_properties = $properties;
+                                        return;
+                                }
+                        }
+                }
     		
-			//get all the compiled tables
+                //get all the compiled tables
     		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
     		$tables = array();
     		$query = 'SELECT DISTINCT "table" FROM "class_to_table"';
@@ -816,35 +817,36 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     			$class = new core_kernel_classes_Class($classUri);
     			$topClassUri = self::$_classes[$classUri]['topClass'];
     			$topClass = new core_kernel_classes_Class($topClassUri);
-				$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
-				$properties = $ps->getProperties();
-				foreach ($properties as $property){
-					
-					$propertyUri = $property->uriResource;
-					if ($property->isMultiple() || $property->isLgDependent()){
-						
-						if(isset(self::$_properties[$propertyUri])) {
-							if (!in_array("{$table}Props", self::$_properties[$propertyUri])){
-								self::$_properties[$propertyUri][] = "{$table}Props";
-							}
-						} else {
-							self::$_properties[$propertyUri] = array("{$table}Props");
-						} 
-						
-					} else {
-						
-						if(isset(self::$_properties[$propertyUri])) {
-							if (!in_array("{$table}", self::$_properties[$propertyUri])){
-								self::$_properties[$propertyUri][] = "{$table}";
-							}
-						} else {
-							self::$_properties[$propertyUri] = array("{$table}");
-						} 
-					}
-					
-				}
+                        $ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
+                        $properties = $ps->getProperties($additionalProperties);
+                        
+                        foreach ($properties as $property){
+
+                                $propertyUri = $property->uriResource;
+                                if ($property->isMultiple() || $property->isLgDependent()){
+
+                                        if(isset(self::$_properties[$propertyUri])) {
+                                                if (!in_array("{$table}Props", self::$_properties[$propertyUri])){
+                                                        self::$_properties[$propertyUri][] = "{$table}Props";
+                                                }
+                                        } else {
+                                                self::$_properties[$propertyUri] = array("{$table}Props");
+                                        } 
+
+                                } else {
+
+                                        if(isset(self::$_properties[$propertyUri])) {
+                                                if (!in_array("{$table}", self::$_properties[$propertyUri])){
+                                                        self::$_properties[$propertyUri][] = "{$table}";
+                                                }
+                                        } else {
+                                                self::$_properties[$propertyUri] = array("{$table}");
+                                        } 
+                                }
+
+                        }
     		}
-			
+		
     		//saving the properties in the cache file
     		if($this->cacheModes['property'] == self::CACHE_FILE){
     			file_put_contents($file, serialize(self::$_properties));
@@ -858,7 +860,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method isPropertyReferenced
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Property property
      * @param  inClass
      * @return boolean
@@ -895,6 +897,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 						}
 					}else{
 						$returnValue = array_key_exists($property->uriResource, self::$_properties);
+//                                                var_dump($property->uriResource, $returnValue);
 					}
 					break;
 					
@@ -914,7 +917,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method propertyLocation
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Property property
      * @return array
      */
@@ -947,7 +950,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method referenceInstanceTypes
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -990,14 +993,15 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method resetCache
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  array additionalProperties
      * @return mixed
      */
-    public function resetCache()
+    public function resetCache($additionalProperties = array())
     {
         // section 10-13-1--128-7c4fbea6:12fe371c06a:-8000:0000000000001573 begin
         $this->loadClasses(true);
-        $this->loadProperties(true);
+        $this->loadProperties(true, $additionalProperties);
         // section 10-13-1--128-7c4fbea6:12fe371c06a:-8000:0000000000001573 end
     }
 

@@ -87,7 +87,7 @@ bewteen a class and it's parent to retrieve the properties.
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001609 begin
         
     	$this->class = $class;
-		$this->topClass = $topClass;
+        $this->topClass = $topClass;
     	
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001609 end
     }
@@ -220,22 +220,22 @@ bewteen a class and it's parent to retrieve the properties.
     	/// HERE repalce what the switcher is doing: determine the column type: literal/class, translate, multiple values
     	foreach($properties as $property){
 
-			$column = array('name' => core_kernel_persistence_hardapi_Utils::getShortName($property));
-				
-			$range = $property->getRange();
-			
-			if(!is_null($range) && $range->uriResource != RDFS_LITERAL && !in_array($range->uriResource, $blackListedProps)){
-				//constraint to the class that represents the range
-				
-				$column['foreign'] = '_'.core_kernel_persistence_hardapi_Utils::getShortName($range);
-			}
-			
-			if ($property->isLgDependent() === true || $property->isMultiple()=== true ){
-				//to put to the side table
-				$column['multi'] = true;
-			}
-			$returnValue[] = $column;
-		}
+                $column = array('name' => core_kernel_persistence_hardapi_Utils::getShortName($property));
+
+                $range = $property->getRange();
+
+                if(!is_null($range) && $range->uriResource != RDFS_LITERAL && !in_array($range->uriResource, $blackListedProps)){
+                        //constraint to the class that represents the range
+
+                        $column['foreign'] = '_'.core_kernel_persistence_hardapi_Utils::getShortName($range);
+                }
+
+                if ($property->isLgDependent() === true || $property->isMultiple()=== true ){
+                        //to put to the side table
+                        $column['multi'] = true;
+                }
+                $returnValue[] = $column;
+        }
 		
 		
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001618 end
