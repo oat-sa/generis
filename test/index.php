@@ -12,6 +12,7 @@ $tests = array_merge(
 //create the test sutie
 
 foreach($tests as $i => $testCase){
+    //TODO disable for release, remove after
     if(strpos($testCase, 'VirtuosoImplTestCase.php')== false){
        $testSuite->addFile($testCase);
     }
