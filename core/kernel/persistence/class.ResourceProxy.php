@@ -166,14 +166,14 @@ class core_kernel_persistence_ResourceProxy
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F begin
 
-		$delegate = $this->getImpToDelegateTo($resource);
-		$returnValue = $delegate->getPropertyValuesCollection($resource, $property);
+        $delegate = $this->getImpToDelegateTo($resource);
+        $returnValue = $delegate->getPropertyValuesCollection($resource, $property);
 
-		if($this->isValidContext('subscription', $resource)){
-			$delegate = core_kernel_persistence_subscription_Resource::singleton();
-			$subscriptionValue = $delegate->getPropertyValuesCollection($resource, $property);
-			$returnValue = $returnValue->union($subscriptionValue);
-		}
+        if($this->isValidContext('subscription', $resource)){
+                $delegate = core_kernel_persistence_subscription_Resource::singleton();
+                $subscriptionValue = $delegate->getPropertyValuesCollection($resource, $property);
+                $returnValue = $returnValue->union($subscriptionValue);
+        }
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F end
 
@@ -195,10 +195,10 @@ class core_kernel_persistence_ResourceProxy
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
-		
-		$delegate = $this->getImpToDelegateTo($resource);
-		$returnValue = $delegate->getOnePropertyValue($resource, $property, $last);
-
+        
+        $delegate = $this->getImpToDelegateTo($resource);
+        $returnValue = $delegate->getOnePropertyValue($resource, $property, $last);
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 end
 
         return $returnValue;

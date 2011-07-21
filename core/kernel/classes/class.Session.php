@@ -159,7 +159,10 @@ class core_kernel_classes_Session
         $returnValue = (bool) false;
 
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000752 begin
-		$this->lg = $lg;
+        if(empty($lg)){
+                throw new Exception('Forbidden to set an empty language string in session!');
+        }
+        $this->lg = $lg;
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000752 end
 
         return (bool) $returnValue;
@@ -230,7 +233,7 @@ class core_kernel_classes_Session
         $returnValue = (string) '';
 
         // section 10-13-1--31-42d46662:11bb6ef4845:-8000:0000000000000D59 begin
-		$returnValue = $this->user;
+	$returnValue = $this->user;
         // section 10-13-1--31-42d46662:11bb6ef4845:-8000:0000000000000D59 end
 
         return (string) $returnValue;

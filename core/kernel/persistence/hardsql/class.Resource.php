@@ -158,7 +158,7 @@ class core_kernel_persistence_hardsql_Resource
 			else{
 				($session->getLg() != '') ? $lang = $session->getLg() : $lang = $session->defaultLg;
 			}
-				
+                        
 			$query = 'SELECT "property_value", "property_foreign_uri"
 				FROM "'.$table.'"
 				INNER JOIN "'.$tableProps.'" on "'.$table.'"."id" = "'.$tableProps.'"."instance_id"
@@ -290,7 +290,7 @@ class core_kernel_persistence_hardsql_Resource
 			$options['one'] = true;
 		}
 
-		$value = $this->_getPropertyValues ($resource, $property, $options);
+		$value = $this->_getPropertyValues($resource, $property, $options);
 		if (count($value)){
 			$returnValue = $value[0];
 		}
