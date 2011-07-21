@@ -12,7 +12,10 @@ $tests = array_merge(
 //create the test sutie
 
 foreach($tests as $i => $testCase){
-	$testSuite->addFile($testCase);
+    if(strpos($testCase, 'VirtuosoImplTestCase.php')== false){
+       $testSuite->addFile($testCase);
+    }
+    
 }
 
 //$testSuite->addFile('PersistenceSwitcherTestCase.php');
