@@ -376,5 +376,24 @@ class ResourceTestCase extends UnitTestCase{
 		$this->assertTrue($inst->getComment() == 'generis_Ressource');
 		$this->assertTrue($inst->comment == 'generis_Ressource');
 	}
+	
+	public function testGetLastModificationDate(){
+	    $itemClass = new core_kernel_classes_Class(GENERIS_BOOLEAN);
+
+	    $newInstance = $itemClass->createInstance('date','date' );
+	    $propType = new core_kernel_classes_Property(RDF_TYPE);
+	    $instances = $itemClass->getInstances();
+	   
+	    $now = new DateTime();
+	    $this->assertTrue( $newInstance->getLastModificationDate() == $now);
+	    sleep(2);
+	    $newInstance->setLabel('change Date');
+	    $labelChange = $newInstance->getLastModificationDate();
+	    $this->assertTrue($labelChange  > $now);
+	    $typeChnge = $newInstance->getLastModificationDate(new core_kernel_classes_Property(RDF_TYPE));
+	    $this->assertTrue($labelChange  > $typeChnge);
+	    $this->assertTrue($now ==  $typeChnge);
+	    $newInstance->delete();
+	}
 }
 ?>
