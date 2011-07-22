@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.07.2011, 08:42:00 with ArgoUML PHP module 
+ * Automatically generated on 22.07.2011, 15:07:09 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_virtuoso
  */
@@ -24,14 +24,14 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_persistence_PersistenceImpl
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
  */
 require_once('core/kernel/persistence/class.PersistenceImpl.php');
 
 /**
  * include core_kernel_persistence_ResourceInterface
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
  */
 require_once('core/kernel/persistence/interface.ResourceInterface.php');
 
@@ -47,7 +47,7 @@ require_once('core/kernel/persistence/interface.ResourceInterface.php');
  * Short description of class core_kernel_persistence_virtuoso_Resource
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_virtuoso
  */
@@ -74,7 +74,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method getType
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @return array
      */
@@ -112,7 +112,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method getPropertyValues
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  array option
@@ -153,7 +153,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method getPropertyValuesCollection
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return core_kernel_classes_ContainerCollection
@@ -195,7 +195,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method getOnePropertyValue
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  boolean last
@@ -239,7 +239,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method getPropertyValuesByLg
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string lg
@@ -285,7 +285,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method setPropertyValue
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string object
@@ -340,7 +340,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method setPropertiesValues
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @param  array properties
      * @return boolean
@@ -418,7 +418,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method setPropertyValueByLg
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string value
@@ -467,7 +467,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method removePropertyValues
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  array options
@@ -502,7 +502,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method removePropertyValueByLg
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string lg
@@ -545,7 +545,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method getRdfTriples
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @return core_kernel_classes_ContainerCollection
      */
@@ -592,7 +592,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method getUsedLanguages
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return array
@@ -615,7 +615,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method duplicate
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @param  array excludedProperties
      * @return core_kernel_classes_Resource
@@ -694,7 +694,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method delete
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @param  boolean deleteReference
      * @return boolean
@@ -733,12 +733,12 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method getLastModificationDate
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return core_kernel_persistence_doc_date
      */
-    public function getLastModificationDate( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
+    public function getLastModificationDate( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property = null)
     {
         $returnValue = null;
 
@@ -755,7 +755,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method getLastModificationUser
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @return string
      */
@@ -776,7 +776,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method getPropertiesValue
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @param  array properties
      * @param  boolean last
@@ -799,7 +799,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method setType
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @param  Class class
      * @return boolean
@@ -835,7 +835,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method removeType
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @param  Class class
      * @return boolean
@@ -869,7 +869,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method singleton
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @return core_kernel_classes_Resource
      */
     public static function singleton()
@@ -892,7 +892,7 @@ class core_kernel_persistence_virtuoso_Resource
      * Short description of method isValidContext
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
