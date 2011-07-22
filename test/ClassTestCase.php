@@ -237,8 +237,10 @@ class ClassTestCase extends UnitTestCase {
 		$instance = $class->createInstance('toto' , 'tata');
 		$this->assertEqual($instance->getLabel(), 'toto');
 		$this->assertEqual($instance->getComment(), 'tata');
-		$this->assertNotIdentical($instance,$class->createInstance('toto' , 'tata'));
+		$instance2 = $class->createInstance('toto' , 'tata');
+		$this->assertNotIdentical($instance,$instance2);
 		$instance->delete();
+		$instance2->delete();
 	}
 	
 	public function testCreateSubClass(){
