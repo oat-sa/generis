@@ -160,7 +160,8 @@ class core_kernel_classes_Session
 
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000752 begin
         if(empty($lg)){
-                throw new Exception('Forbidden to set an empty language string in session!');
+                //if lg null lg is set to defaultLG
+                $lg=$this->defaultLg;
         }
         $this->lg = $lg;
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000752 end
