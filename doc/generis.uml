@@ -4,7 +4,7 @@
     <documentation>
       <authorname>Patrick Plichart</authorname>
       <authoremail>patrick.plichart@tudor.lu</authoremail>
-      <version>0.32.2</version>
+      <version>0.30.1</version>
       <description>
         Generis
       </description>
@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Hard Database API</activediagram>
+      <activediagram>Persistence</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -92,10 +92,10 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jul 21 13:51:22 CEST 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jul 22 15:09:45 CEST 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
-      <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
+      <XMI.exporterVersion>0.30.1(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
     </XMI.documentation>
     <XMI.metamodel xmi.name="UML" xmi.version="1.4"/></XMI.header>
   <XMI.content>
@@ -8216,6 +8216,10 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DA'
                               name = 'property' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--65ced5c8:13151ef86a1:-8000:0000000000001626'
+                                  language = 'UML 1.4' body = 'null'/>
+                              </UML:Parameter.defaultValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769'/>
                               </UML:Parameter.type>
@@ -17059,6 +17063,26 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       language = 'UML 1.4' body = 'false'/>
     <UML:Expression xmi.id = '127-0-1-1--58840f15:12fc4490a92:-8000:0000000000001531'
       language = 'UML 1.4' body = 'nulll'/>
+    <UML:Expression xmi.id = '127-0-1-1--65ced5c8:13151ef86a1:-8000:000000000000161C'
+      language = '' body = 'n'/>
+    <UML:Expression xmi.id = '127-0-1-1--65ced5c8:13151ef86a1:-8000:000000000000161D'
+      language = '' body = 'un'/>
+    <UML:Expression xmi.id = '127-0-1-1--65ced5c8:13151ef86a1:-8000:000000000000161E'
+      language = '' body = 'lun'/>
+    <UML:Expression xmi.id = '127-0-1-1--65ced5c8:13151ef86a1:-8000:000000000000161F'
+      language = '' body = 'llun'/>
+    <UML:Expression xmi.id = '127-0-1-1--65ced5c8:13151ef86a1:-8000:0000000000001620'
+      language = '' body = '&#10;llun'/>
+    <UML:Expression xmi.id = '127-0-1-1--65ced5c8:13151ef86a1:-8000:0000000000001621'
+      language = 'U' body = ''/>
+    <UML:Expression xmi.id = '127-0-1-1--65ced5c8:13151ef86a1:-8000:0000000000001622'
+      language = 'MU' body = ''/>
+    <UML:Expression xmi.id = '127-0-1-1--65ced5c8:13151ef86a1:-8000:0000000000001623'
+      language = 'LMU' body = ''/>
+    <UML:Expression xmi.id = '127-0-1-1--65ced5c8:13151ef86a1:-8000:0000000000001624'
+      language = 'MU' body = ''/>
+    <UML:Expression xmi.id = '127-0-1-1--65ced5c8:13151ef86a1:-8000:0000000000001625'
+      language = 'U' body = ''/>
     <UML:Multiplicity xmi.id = '10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000079C'>
       <UML:Multiplicity.range>
         <UML:MultiplicityRange xmi.id = '10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000079B'
@@ -38821,7 +38845,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getLastModificationDate(resource : Resource,property : Property) : doc_date</text>
+      >getLastModificationDate(resource : Resource,property : Property = null) : doc_date</text>
       <text name="Fig0.4.16"
         x="761"
         y="257"
@@ -42747,7 +42771,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       <text name="Fig36.6.3"
         x="2201"
         y="1176"
-        width="267"
+        width="268"
         height="20"
         fill="0"
         fillcolor="255 204 51"
