@@ -139,16 +139,16 @@ class core_kernel_persistence_hardapi_TableManager
 					}
 					$query .= ', "'.$column['name'].'"';
 					if(isset($column['foreign']) && !empty($column['foreign'])){
-                                                $query .= " TEXT";
-                                                
-                                                //currently disable the foreign key constraint management:
-                                                /*
-                                                $myTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
-                                                if($myTableMgr->exists()){
-                                                        $query .= " VARCHAR(255),";
-                                                        $query .= " CONSTRAINT fk_{$column['name']} FOREIGN KEY ({$column['name']}) REFERENCES {$column['foreign']}(uri)";
-                                                }
-                                                 */
+						$query .= " TEXT";
+
+						//currently disable the foreign key constraint management:
+						/*
+						$myTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
+						if($myTableMgr->exists()){
+						$query .= " VARCHAR(255),";
+						$query .= " CONSTRAINT fk_{$column['name']} FOREIGN KEY ({$column['name']}) REFERENCES {$column['foreign']}(uri)";
+						}
+						*/
 					}
 					else{
 						$query .= " TEXT";
@@ -183,12 +183,12 @@ class core_kernel_persistence_hardapi_TableManager
 				"instance_id" int NOT NULL ,
 				PRIMARY KEY ("id")';
                         
-                        //currently disable the foreign key constraint management:
-                        /*        
+            //currently disable the foreign key constraint management:
+            /*        
 			$query. = ",CONSTRAINT fk{$this->name}_instance_id 
-						FOREIGN KEY (instance_id) 
-						REFERENCES {$this->name}(id)";
-                         */
+				FOREIGN KEY (instance_id) 
+				REFERENCES {$this->name}(id)";
+            */
                                 
 			$query .= ");";
 				

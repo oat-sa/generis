@@ -1017,8 +1017,10 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = array();
 
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 begin
+        
 		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 end
+        
+		// section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 end
 
         return (array) $returnValue;
     }

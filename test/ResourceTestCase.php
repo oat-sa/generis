@@ -101,7 +101,6 @@ class ResourceTestCase extends UnitTestCase{
 
 	}
 
-
 	public function testDelete(){
 
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
@@ -182,7 +181,6 @@ class ResourceTestCase extends UnitTestCase{
 		$this->assertTrue(in_array('EN',$lg));
 		$seeAlso->delete();
 		$instance->delete();
-
 	}
 
 	public function testGetPropertyValuesByLg(){

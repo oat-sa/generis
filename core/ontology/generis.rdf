@@ -175,4 +175,54 @@
   <rdf:Description rdf:about="http://www.w3.org/2000/01/rdf-schema#label">
     <generis:is_language_dependent rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#True"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#Subscription">
+    <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource"/>
+    <rdfs:label><![CDATA[Subscription]]></rdfs:label>
+    <rdfs:comment><![CDATA[Subscribtion Class to manage distributed data]]></rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#Mask">
+    <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource"/>
+    <rdfs:label><![CDATA[Mask]]></rdfs:label>
+    <rdfs:comment><![CDATA[Mask Class to manage right]]></rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#SubscriptionUrl">
+    <rdfs:label><![CDATA[Url]]></rdfs:label>
+    <rdfs:comment><![CDATA[Distributed Generis Url of the subscription]]></rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TexBox"/>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#Subscription"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#SubscriptionMask">
+    <rdfs:label><![CDATA[Mask]]></rdfs:label>
+    <rdfs:comment><![CDATA[Distributed Generis Mask of the subscription]]></rdfs:comment>
+    <rdfs:range rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#Mask"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TexBox"/>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#Subscription"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#MaskSubject">
+    <rdfs:label><![CDATA[Subject]]></rdfs:label>
+    <rdfs:comment><![CDATA[Allowed Subject by the mask]]></rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TexBox"/>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#Mask"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#MaskPredicate">
+    <rdfs:label><![CDATA[Predicate]]></rdfs:label>
+    <rdfs:comment><![CDATA[Allowed Predicate by the mask]]></rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Property"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TexBox"/>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#Mask"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#MaskObject">
+    <rdfs:label><![CDATA[Object]]></rdfs:label>
+    <rdfs:comment><![CDATA[Allowed Object by the mask]]></rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TexBox"/>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#Mask"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
 </rdf:RDF>

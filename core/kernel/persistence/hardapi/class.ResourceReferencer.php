@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  * By default, the classes reference is cached in memory
  * and the instances are not cached
  *
- * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -34,7 +34,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * and the instances are not cached
  *
  * @access public
- * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -123,7 +123,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method __construct
      *
      * @access private
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return mixed
      */
     private function __construct()
@@ -144,7 +144,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method singleton
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return core_kernel_persistence_hardapi_ResourceReferencer
      */
     public static function singleton()
@@ -168,7 +168,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setCache
      *
      * @access protected
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string type
      * @param  int mode
      * @return mixed
@@ -194,7 +194,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setClassCache
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  int mode
      * @return mixed
      */
@@ -211,7 +211,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setInstanceCache
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  int mode
      * @return mixed
      */
@@ -228,7 +228,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setPropertyCache
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  int mode
      * @return mixed
      */
@@ -245,7 +245,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method loadClasses
      *
      * @access private
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  boolean force
      * @return mixed
      */
@@ -277,7 +277,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method isClassReferenced
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Class class
      * @param  string table
      * @return boolean
@@ -351,27 +351,26 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method referenceClass
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Class class
-     * @param  string table
-     * @param  Class topClass
+     * @param  array options
      * @return boolean
      */
-    public function referenceClass( core_kernel_classes_Class $class, $table = null,  core_kernel_classes_Class $topClass = null)
+    public function referenceClass( core_kernel_classes_Class $class, $options = array())
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001655 begin
         
+        // Get optional parameters
+        $table = isset($options['table']) ? $options['table'] : '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
+        $topClass = isset($options['topClass']) ? $options['topClass'] : new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
+        $additionalProperties = isset($options['additionalProperties']) ? $options['additionalProperties'] : array ();
+        
+        // Is the class is not already referenced
         if(!$this->isClassReferenced($class, $table)){
-        	if(is_null($table)){
-        		$table = '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
-        	}
-        	if(is_null($topClass)){
-        		$topClass = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
-        	}
-        	$topClassUri = $topClass->uriResource;
         	
+        	$topClassUri = $topClass->uriResource;
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
 			$query = 'INSERT INTO "class_to_table" ("uri", "table", "topClass") VALUES (?,?,?)';
@@ -380,15 +379,32 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				$table,
 				$topClassUri
 			));
-			
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception("Unable to reference the class {$class->uriResource} in {$table}: " .$dbWrapper->dbConnector->errorMsg());
 			} 
 			
+			// Store additional properties
+			$classId = $dbWrapper->getLastInsertId ();
+			if (!is_null($additionalProperties) && !empty($additionalProperties)){
+				$query = 'INSERT INTO "class_additional_properties" ("class_id", "property_uri") VALUES';
+				foreach ($additionalProperties as $additionalProperty){
+					$query .= " ('{$classId}', '{$additionalProperty->uriResource}')";
+				}
+				$result = $dbWrapper->execSql($query);
+				if($dbWrapper->dbConnector->errorNo() !== 0){
+					throw new core_kernel_persistence_hardapi_Exception("Unable to reference the additional properties of the class {$class->uriResource} in class_additional_properties: " .$dbWrapper->dbConnector->errorMsg());
+				}
+			} 		
+			
+			
 			if($result !== false){
+				
 				$returnValue = true;
 				if($this->cacheModes['class'] == self::CACHE_MEMORY){
-					$memQuery = 'SELECT "id", "uri", "table", "topClass" FROM "class_to_table" WHERE "uri" = ? AND "table" = ?';
+					$memQuery = 'SELECT "id", "uri", "table", "topClass" 
+						FROM "class_to_table" 
+						WHERE "uri" = ? 
+						AND "table" = ?';
 					$memResult = $dbWrapper->execSql($memQuery, array($class->uriResource, $table));
 					while(!$memResult->EOF){
 						self::$_classes[$memResult->fields['uri']] = array(
@@ -412,7 +428,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method unReferenceClass
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -426,18 +442,23 @@ class core_kernel_persistence_hardapi_ResourceReferencer
                 
 			$tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
                         
-                        //need to instanciate table manager before unreferencing otherwise, the "remove table" will fail
-                        $tm = new core_kernel_persistence_hardapi_TableManager($tableName);
+            //need to instanciate table manager before unreferencing otherwise, the "remove table" will fail
+            $tm = new core_kernel_persistence_hardapi_TableManager($tableName);
                         
-                        // Delete reference of the class in classs_to_table, resource_has_class, resource_to_table
+            // Delete reference of the class in classs_to_table, resource_has_class, resource_to_table
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
                         
 			// Remove references of the resources in the resource has class table
-                        $queries = array();
+            $queries = array();
 			$queries[] = 'DELETE 
 				FROM "resource_has_class" 
 				WHERE "resource_has_class"."resource_id" 
 					IN (SELECT "resource_to_table"."id" FROM "resource_to_table" WHERE "resource_to_table"."table" = \''.$tableName.'\' );';
+			// Remove reference of the class in the additional properties tables
+			$queries[] = 'DELETE 
+				FROM "class_additional_properties"
+				WHERE "class_id" 
+					IN (SELECT "class_to_table"."id" FROM "class_to_table" WHERE "class_to_table"."table" = \''.$tableName.'\' );';
 			// Remove resferences of the resources int resource to table table
 			$queries[] = 'DELETE FROM "resource_to_table" WHERE "resource_to_table"."table" = \''.$tableName.'\';';
 			// Remove reference of the class in the class to table table
@@ -481,7 +502,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method classLocations
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Class class
      * @return array
      */
@@ -535,7 +556,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method loadResources
      *
      * @access private
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  boolean force
      * @return mixed
      */
@@ -560,7 +581,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method isResourceReferenced
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -608,7 +629,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method referenceResource
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  string table
      * @param  array types
@@ -672,7 +693,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method unReferenceResource
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -718,7 +739,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method resourceLocation
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return string
      */
@@ -771,7 +792,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method loadProperties
      *
      * @access private
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  boolean force
      * @param  array additionalProperties
      * @return mixed
@@ -860,7 +881,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method isPropertyReferenced
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Property property
      * @param  inClass
      * @return boolean
@@ -917,7 +938,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method propertyLocation
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Property property
      * @return array
      */
@@ -950,7 +971,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method referenceInstanceTypes
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -981,7 +1002,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         $tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
         
         foreach($types as $type){
-        	$this->referenceClass(new core_kernel_classes_Class($type), $tableName);
+        	$this->referenceClass(new core_kernel_classes_Class($type), array ("table"=>$tableName));
         }
         
         // section 127-0-1-1-46522299:12fc0802dbc:-8000:00000000000016C4 end
@@ -993,7 +1014,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method resetCache
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  array additionalProperties
      * @return mixed
      */
@@ -1003,6 +1024,43 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         $this->loadClasses(true);
         $this->loadProperties(true, $additionalProperties);
         // section 10-13-1--128-7c4fbea6:12fe371c06a:-8000:0000000000001573 end
+    }
+
+    /**
+     * Get additional properties used during class' compilation.
+     * This function is usefull specially during unhardening
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Class clazz
+     * @return array
+     */
+    public function getAdditionalProperties( core_kernel_classes_Class $clazz)
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1--642cfc1e:13160cfbaf5:-8000:000000000000162A begin
+        
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        
+		$query = "SELECT property_uri 
+			FROM class_additional_properties, class_to_table 
+			WHERE class_additional_properties.class_id = class_to_table.id
+			AND class_to_table.uri = ?";
+		$result = $dbWrapper->execSql($query, array($clazz->uriResource));
+		
+		if($dbWrapper->dbConnector->errorNo() !== 0){
+        	throw new core_kernel_persistence_hardapi_Exception("Error by retrieving the additional properties of the class {$clazz->uriResource}: " .$dbWrapper->dbConnector->errorMsg());
+		} 
+		
+   		while(!$result->EOF){
+			$returnValue[] = new core_kernel_classes_Property($result->fields['property_uri']);
+			$result->moveNext();
+		}
+        
+        // section 127-0-1-1--642cfc1e:13160cfbaf5:-8000:000000000000162A end
+
+        return (array) $returnValue;
     }
 
 } /* end of class core_kernel_persistence_hardapi_ResourceReferencer */

@@ -128,8 +128,9 @@ class core_kernel_persistence_Switcher
 
 		// Get class' properties
 		$propertySwitcher = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
-		$properties = $propertySwitcher->getProperties();
-		$columns = $propertySwitcher->getTableColumns(array(), self::$blackList);
+		$additionalProperties = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->getAdditionalProperties($class);
+		$properties = $propertySwitcher->getProperties($additionalProperties);
+		$columns = $propertySwitcher->getTableColumns($additionalProperties, self::$blackList);
 
 		// Get all instances of this class
 		$startIndex = 0;
@@ -395,23 +396,24 @@ class core_kernel_persistence_Switcher
 			$myTableMgr->create($columns);
 
 			//reference the class
-			$referencer->referenceClass($class, null, $topClass);
+			$referencer->referenceClass($class, array (
+				"topClass" 				=> $topClass,
+				"additionalProperties" 	=> $additionalProperties
+			));
 
 			if($referencesAllTypes){
 				$referencer->referenceInstanceTypes($class);
 			}
 
 			//currently disable the foreign key constraint management:
-			/*
 			//when the table is created, check if it is a missing range (i.e. column) of a foreign key:
-			if(isset($this->foreignPropertiesWaitingList[$tableName])){
-			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-			foreach($this->foreignPropertiesWaitingList[$tableName] as $sourceTable => $sourceColumn){
-			$alterForeignKeyQuery = "ALTER TABLE {$sourceTable} ADD fk_{$sourceColumn} FOREIGN KEY ({$sourceColumn}) REFERENCES {$tableName};";
-			$dbWrapper->execSql($alterForeignKeyQuery);
-			}
-			}
-			*/
+			/*if(isset($this->foreignPropertiesWaitingList[$tableName])){
+				$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+				foreach($this->foreignPropertiesWaitingList[$tableName] as $sourceTable => $sourceColumn){
+					$alterForeignKeyQuery = "ALTER TABLE {$sourceTable} ADD fk_{$sourceColumn} FOREIGN KEY ({$sourceColumn}) REFERENCES {$tableName};";
+					$dbWrapper->execSql($alterForeignKeyQuery);
+				}
+			}*/
 		}
 
 		//insert the resources

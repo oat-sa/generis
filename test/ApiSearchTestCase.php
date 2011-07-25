@@ -48,7 +48,7 @@ class ApiSearchTestCase extends UnitTestCase {
 		$this->assertTrue($nfound > 0);
 		$this->assertEqual($found, $nfound);
 	}
-
+/*
 	public function testFullTextSearch(){
 		
 		$result = $this->api->fullTextSearch("Is language dependent?");
@@ -58,5 +58,6 @@ class ApiSearchTestCase extends UnitTestCase {
 		$this->assertIsA($result->get(0), 'core_kernel_classes_Resource');
 		$this->assertEqual($result->get(0)->uriResource, PROPERTY_IS_LG_DEPENDENT);
 	}
+*/
 }
 ?>

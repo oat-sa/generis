@@ -4,7 +4,7 @@
     <documentation>
       <authorname>Patrick Plichart</authorname>
       <authoremail>patrick.plichart@tudor.lu</authoremail>
-      <version>0.30.1</version>
+      <version>0.32.2</version>
       <description>
         Generis
       </description>
@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Persistence</activediagram>
+      <activediagram>Hard Database API</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -92,10 +92,10 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jul 22 15:15:32 CEST 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Jul 25 14:56:45 CEST 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
-      <XMI.exporterVersion>0.30.1(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
+      <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
     </XMI.documentation>
     <XMI.metamodel xmi.name="UML" xmi.version="1.4"/></XMI.header>
   <XMI.content>
@@ -2678,7 +2678,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                             <UML:Parameter xmi.id = '10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000B20'
                               name = 'return' isSpecification = 'false' kind = 'return'>
                               <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                                <UML:Class xmi.idref = '10-13-1--31--86a648e:11985da1cd8:-8000:0000000000000ACE'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000B21'
@@ -2723,6 +2723,19 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                               name = 'name' isSpecification = 'false'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--642cfc1e:13160cfbaf5:-8000:0000000000001628'
+                          name = 'getLastInsertId' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--642cfc1e:13160cfbaf5:-8000:0000000000001629'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType href = 'http://argouml.org/profiles/uml14/default-uml14.xmi#-84-17--56-5-43645a83:11466542d86:-8000:000000000000087C'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -11509,6 +11522,9 @@ that cannot be longer than 64 characters</UML:TaggedValue.dataValue>
                             </UML:Operation>
                           </UML:Classifier.feature>
                         </UML:Class>
+                        <UML:Class xmi.id = '127-0-1-1--210baba0:13160b91e3f:-8000:0000000000001627'
+                          name = 'Arra' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false' isActive = 'false'/>
                         <UML:Class xmi.id = '127-0-1-1-8da8919:12f7878e80a:-8000:000000000000162A'
                           name = 'ResourceReferencer' visibility = 'public' isSpecification = 'false'
                           isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
@@ -11835,23 +11851,13 @@ of the resource referencer.</UML:TaggedValue.dataValue>
                                   </UML:Parameter.type>
                                 </UML:Parameter>
                                 <UML:Parameter xmi.id = '127-0-1-1--1428ffa6:12fc062a5dc:-8000:00000000000016C2'
-                                  name = 'table' isSpecification = 'false' kind = 'in'>
+                                  name = 'options' isSpecification = 'false' kind = 'in'>
                                   <UML:Parameter.defaultValue>
-                                    <UML:Expression xmi.id = '127-0-1-1-3e482d09:13046a44fb6:-8000:0000000000001597'
-                                      language = 'UML 1.4' body = 'null'/>
+                                    <UML:Expression xmi.id = '127-0-1-1--210baba0:13160b91e3f:-8000:0000000000001628'
+                                      language = 'UML 1.4' body = 'array()'/>
                                   </UML:Parameter.defaultValue>
                                   <UML:Parameter.type>
-                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                                  </UML:Parameter.type>
-                                </UML:Parameter>
-                                <UML:Parameter xmi.id = '127-0-1-1-3e482d09:13046a44fb6:-8000:0000000000001598'
-                                  name = 'topClass' isSpecification = 'false' kind = 'in'>
-                                  <UML:Parameter.defaultValue>
-                                    <UML:Expression xmi.id = '127-0-1-1-3e482d09:13046a44fb6:-8000:0000000000001599'
-                                      language = 'UML 1.4' body = 'null'/>
-                                  </UML:Parameter.defaultValue>
-                                  <UML:Parameter.type>
-                                    <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767'/>
+                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
                                   </UML:Parameter.type>
                                 </UML:Parameter>
                               </UML:BehavioralFeature.parameter>
@@ -12138,6 +12144,35 @@ of the resource referencer.</UML:TaggedValue.dataValue>
                                   </UML:Parameter.defaultValue>
                                   <UML:Parameter.type>
                                     <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                              </UML:BehavioralFeature.parameter>
+                            </UML:Operation>
+                            <UML:Operation xmi.id = '127-0-1-1--642cfc1e:13160cfbaf5:-8000:000000000000162A'
+                              name = 'getAdditionalProperties' visibility = 'public' isSpecification = 'false'
+                              ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                              isLeaf = 'false' isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '127-0-1-1--642cfc1e:13160cfbaf5:-8000:000000000000162D'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Get additional properties used during class&apos; compilation.
+This function is usefull specially during unhardening</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
+                              <UML:BehavioralFeature.parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1--642cfc1e:13160cfbaf5:-8000:000000000000162B'
+                                  name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1--642cfc1e:13160cfbaf5:-8000:000000000000162C'
+                                  name = 'clazz' isSpecification = 'false' kind = 'in'>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767'/>
                                   </UML:Parameter.type>
                                 </UML:Parameter>
                               </UML:BehavioralFeature.parameter>
@@ -17137,6 +17172,16 @@ of the resource referencer.</UML:TaggedValue.dataValue>
           lower = '1' upper = '1'/>
       </UML:Multiplicity.range>
     </UML:Multiplicity>
+    <UML:Parameter xmi.id = '127-0-1-1-3e482d09:13046a44fb6:-8000:0000000000001598'
+      name = 'topClass' isSpecification = 'false' kind = 'in'>
+      <UML:Parameter.defaultValue>
+        <UML:Expression xmi.id = '127-0-1-1-3e482d09:13046a44fb6:-8000:0000000000001599'
+          language = 'UML 1.4' body = 'null'/>
+      </UML:Parameter.defaultValue>
+      <UML:Parameter.type>
+        <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767'/>
+      </UML:Parameter.type>
+    </UML:Parameter>
     <UML:Parameter xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001534'
       name = 'uri' isSpecification = 'false' kind = 'in'>
       <UML:Parameter.type>
@@ -20131,7 +20176,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="192 192 192"
     />
     <group name="Fig9.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1073, 359, 328, 42]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1073, 359, 328, 36]"
          href="10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB"
          fill="0"
          fillcolor="white"
@@ -20145,7 +20190,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         x="1073"
         y="359"
         width="328"
-        height="42"
+        height="36"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -20186,7 +20231,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig9.5"
       x="1072"
-      y="401"
+      y="394"
       width="330"
       height="1"
       fill="1"
@@ -20195,7 +20240,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="192 192 192"
     />
     <group name="Fig9.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1073, 402, 328, 98]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1073, 395, 328, 106]"
          href="10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB"
          fill="0"
          fillcolor="white"
@@ -20207,9 +20252,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig9.6.0"
         x="1073"
-        y="402"
+        y="395"
         width="328"
-        height="98"
+        height="106"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -20217,7 +20262,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       />
       <text name="Fig9.6.1"
         x="1073"
-        y="402"
+        y="395"
         width="328"
         height="14"
         fill="0"
@@ -20233,7 +20278,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >singleton(database : string = &quot;&quot;) : DbWrapper</text>
       <text name="Fig9.6.2"
         x="1073"
-        y="416"
+        y="409"
         width="328"
         height="14"
         fill="0"
@@ -20249,7 +20294,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >«create» __construct(database : string) : void</text>
       <text name="Fig9.6.3"
         x="1073"
-        y="430"
+        y="423"
         width="328"
         height="14"
         fill="0"
@@ -20265,7 +20310,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >«destroy» __destruct()</text>
       <text name="Fig9.6.4"
         x="1073"
-        y="444"
+        y="437"
         width="328"
         height="14"
         fill="0"
@@ -20281,7 +20326,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >__clone() : DbWrapper</text>
       <text name="Fig9.6.5"
         x="1073"
-        y="458"
+        y="451"
         width="328"
         height="14"
         fill="0"
@@ -20294,12 +20339,12 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >execSql(sqlQuery : string,parameters : array = false) : string</text>
+      >execSql(sqlQuery : string,parameters : array = false) : Object</text>
       <text name="Fig9.6.6"
         x="1073"
-        y="472"
+        y="465"
         width="328"
-        height="20"
+        height="14"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -20311,6 +20356,22 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getSetting(name : string) : string</text>
+      <text name="Fig9.6.7"
+        x="1073"
+        y="479"
+        width="328"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getLastInsertId() : Integer</text>
     </group>
   </group>
   <group name="Fig10"
@@ -37098,7 +37159,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig6"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[984, 288, 128, 107]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1064, 304, 128, 107]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31--64270bf:11918ad765e:-8000:000000000000098C"
        fill="1"
        fillcolor="white"
@@ -37109,8 +37170,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
     </private>
     
     <rectangle name="Fig6.0"
-      x="984"
-      y="288"
+      x="1064"
+      y="304"
       width="128"
       height="107"
       fill="1"
@@ -37119,8 +37180,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <text name="Fig6.1"
-      x="985"
-      y="289"
+      x="1065"
+      y="305"
       width="126"
       height="37"
       fill="0"
@@ -37135,7 +37196,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::impl::ApiI</text>
     <group name="Fig6.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[985, 289, 126, 17]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1065, 305, 126, 17]"
          href="10-13-1--31--64270bf:11918ad765e:-8000:000000000000098C"
          fill="0"
          fillcolor="white"
@@ -37146,8 +37207,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig6.2.0"
-        x="985"
-        y="289"
+        x="1065"
+        y="305"
         width="126"
         height="17"
         fill="0"
@@ -37156,8 +37217,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
       <text name="Fig6.2.1"
-        x="985"
-        y="289"
+        x="1065"
+        y="305"
         width="126"
         height="15"
         fill="0"
@@ -37173,8 +37234,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >«implementation»</text>
     </group>
     <rectangle name="Fig6.3"
-      x="984"
-      y="326"
+      x="1064"
+      y="342"
       width="128"
       height="1"
       fill="1"
@@ -37183,7 +37244,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig6.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[985, 327, 126, 33]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1065, 343, 126, 33]"
          href="10-13-1--31--64270bf:11918ad765e:-8000:000000000000098C"
          fill="0"
          fillcolor="white"
@@ -37194,8 +37255,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig6.4.0"
-        x="985"
-        y="327"
+        x="1065"
+        y="343"
         width="126"
         height="33"
         fill="0"
@@ -37205,8 +37266,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig6.5"
-      x="984"
-      y="360"
+      x="1064"
+      y="376"
       width="128"
       height="1"
       fill="1"
@@ -37215,7 +37276,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig6.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[985, 361, 126, 33]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1065, 377, 126, 33]"
          href="10-13-1--31--64270bf:11918ad765e:-8000:000000000000098C"
          fill="0"
          fillcolor="white"
@@ -37226,8 +37287,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig6.6.0"
-        x="985"
-        y="361"
+        x="1065"
+        y="377"
         width="126"
         height="33"
         fill="0"
@@ -37238,7 +37299,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig7"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1240, 280, 224, 127]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1232, 304, 224, 127]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000964"
        fill="1"
        fillcolor="white"
@@ -37249,8 +37310,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
     </private>
     
     <rectangle name="Fig7.0"
-      x="1240"
-      y="280"
+      x="1232"
+      y="304"
       width="224"
       height="127"
       fill="1"
@@ -37259,8 +37320,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <text name="Fig7.1"
-      x="1241"
-      y="281"
+      x="1233"
+      y="305"
       width="222"
       height="37"
       fill="0"
@@ -37275,7 +37336,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::impl::ApiModelOO</text>
     <group name="Fig7.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1241, 281, 222, 17]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1233, 305, 222, 17]"
          href="10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000964"
          fill="0"
          fillcolor="white"
@@ -37286,8 +37347,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig7.2.0"
-        x="1241"
-        y="281"
+        x="1233"
+        y="305"
         width="222"
         height="17"
         fill="0"
@@ -37296,8 +37357,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
       <text name="Fig7.2.1"
-        x="1241"
-        y="281"
+        x="1233"
+        y="305"
         width="222"
         height="15"
         fill="0"
@@ -37313,8 +37374,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >«implementation»</text>
     </group>
     <rectangle name="Fig7.3"
-      x="1240"
-      y="318"
+      x="1232"
+      y="342"
       width="224"
       height="1"
       fill="1"
@@ -37323,7 +37384,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig7.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1241, 319, 222, 36]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1233, 343, 222, 36]"
          href="10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000964"
          fill="0"
          fillcolor="white"
@@ -37334,8 +37395,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig7.4.0"
-        x="1241"
-        y="319"
+        x="1233"
+        y="343"
         width="222"
         height="36"
         fill="0"
@@ -37344,8 +37405,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
       <text name="Fig7.4.1"
-        x="1241"
-        y="319"
+        x="1233"
+        y="343"
         width="222"
         height="20"
         fill="0"
@@ -37361,8 +37422,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >instance : ApiModelOO</text>
     </group>
     <rectangle name="Fig7.5"
-      x="1240"
-      y="355"
+      x="1232"
+      y="379"
       width="224"
       height="1"
       fill="1"
@@ -37371,7 +37432,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig7.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1241, 356, 222, 50]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1233, 380, 222, 50]"
          href="10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000964"
          fill="0"
          fillcolor="white"
@@ -37382,8 +37443,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig7.6.0"
-        x="1241"
-        y="356"
+        x="1233"
+        y="380"
         width="222"
         height="50"
         fill="0"
@@ -37392,8 +37453,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
       <text name="Fig7.6.1"
-        x="1241"
-        y="356"
+        x="1233"
+        y="380"
         width="222"
         height="14"
         fill="0"
@@ -37408,8 +37469,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         justification="Left"
       >singleton() : ApiModelOO</text>
       <text name="Fig7.6.2"
-        x="1241"
-        y="370"
+        x="1233"
+        y="394"
         width="222"
         height="20"
         fill="0"
@@ -37426,7 +37487,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig8"
-       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[992, 8, 511, 288]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[1064, 16, 496, 257]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
        href="10-13-1--31--1e8cf08b:11927b92513:-8000:00000000000009C7"
        fill="1"
        fillcolor="white"
@@ -37437,19 +37498,19 @@ of the resource referencer.</UML:TaggedValue.dataValue>
     </private>
     
     <rectangle name="Fig8.0"
-      x="992"
-      y="8"
-      width="511"
-      height="288"
+      x="1064"
+      y="16"
+      width="496"
+      height="257"
       fill="1"
       fillcolor="white"
       stroke="1"
       strokecolor="black"
     />
     <text name="Fig8.1"
-      x="993"
-      y="9"
-      width="509"
+      x="1065"
+      y="17"
+      width="494"
       height="37"
       fill="0"
       fillcolor="white"
@@ -37463,7 +37524,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::api::ApiModel</text>
     <group name="Fig8.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[993, 9, 509, 17]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1065, 17, 494, 17]"
          href="10-13-1--31--1e8cf08b:11927b92513:-8000:00000000000009C7"
          fill="0"
          fillcolor="white"
@@ -37474,9 +37535,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig8.2.0"
-        x="993"
-        y="9"
-        width="509"
+        x="1065"
+        y="17"
+        width="494"
         height="17"
         fill="0"
         fillcolor="white"
@@ -37484,9 +37545,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
       <text name="Fig8.2.1"
-        x="993"
-        y="9"
-        width="509"
+        x="1065"
+        y="17"
+        width="494"
         height="15"
         fill="0"
         fillcolor="white"
@@ -37501,9 +37562,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >«interface»</text>
     </group>
     <rectangle name="Fig8.3"
-      x="992"
-      y="46"
-      width="511"
+      x="1064"
+      y="54"
+      width="496"
       height="1"
       fill="1"
       fillcolor="black"
@@ -37511,7 +37572,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig8.4"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[993, 47, 509, 248]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1065, 55, 494, 218]"
          href="10-13-1--31--1e8cf08b:11927b92513:-8000:00000000000009C7"
          fill="0"
          fillcolor="white"
@@ -37522,19 +37583,19 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig8.4.0"
-        x="993"
-        y="47"
-        width="509"
-        height="248"
+        x="1065"
+        y="55"
+        width="494"
+        height="218"
         fill="0"
         fillcolor="white"
         stroke="0"
         strokecolor="black"
       />
       <text name="Fig8.4.1"
-        x="993"
-        y="47"
-        width="509"
+        x="1065"
+        y="55"
+        width="494"
         height="14"
         fill="0"
         fillcolor="white"
@@ -37548,9 +37609,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         justification="Left"
       >sparqlQuery(sparqlQuery : string) : ContainerCollection</text>
       <text name="Fig8.4.2"
-        x="993"
-        y="61"
-        width="509"
+        x="1065"
+        y="69"
+        width="494"
         height="14"
         fill="0"
         fillcolor="white"
@@ -37564,9 +37625,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         justification="Left"
       >rdqlQuery(rdqlQuery : string) : boolean</text>
       <text name="Fig8.4.3"
-        x="993"
-        y="75"
-        width="509"
+        x="1065"
+        y="83"
+        width="494"
         height="14"
         fill="0"
         fillcolor="white"
@@ -37580,9 +37641,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         justification="Left"
       >exportXmlRdf(sourceNamespaces : array = array()) : string</text>
       <text name="Fig8.4.4"
-        x="993"
-        y="89"
-        width="509"
+        x="1065"
+        y="97"
+        width="494"
         height="14"
         fill="0"
         fillcolor="white"
@@ -37596,9 +37657,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         justification="Left"
       >importXmlRdf(targetNameSpace : string,fileLocation : string) : boolean</text>
       <text name="Fig8.4.5"
-        x="993"
-        y="103"
-        width="509"
+        x="1065"
+        y="111"
+        width="494"
         height="14"
         fill="0"
         fillcolor="white"
@@ -37612,9 +37673,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         justification="Left"
       >connectOnRemoteModule(idSubscription : int) : boolean</text>
       <text name="Fig8.4.6"
-        x="993"
-        y="117"
-        width="509"
+        x="1065"
+        y="125"
+        width="494"
         height="14"
         fill="0"
         fillcolor="white"
@@ -37628,9 +37689,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         justification="Left"
       >getResourceDescription(uriResource : string) : Resource</text>
       <text name="Fig8.4.7"
-        x="993"
-        y="131"
-        width="509"
+        x="1065"
+        y="139"
+        width="494"
         height="14"
         fill="0"
         fillcolor="white"
@@ -37644,9 +37705,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         justification="Left"
       >getResourceDescriptionXML(uriResource : string) : string</text>
       <text name="Fig8.4.8"
-        x="993"
-        y="145"
-        width="509"
+        x="1065"
+        y="153"
+        width="494"
         height="14"
         fill="0"
         fillcolor="white"
@@ -37660,9 +37721,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         justification="Left"
       >getMetaClasses() : ContainerCollection</text>
       <text name="Fig8.4.9"
-        x="993"
-        y="159"
-        width="509"
+        x="1065"
+        y="167"
+        width="494"
         height="14"
         fill="0"
         fillcolor="white"
@@ -37676,9 +37737,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         justification="Left"
       >getRootClasses() : ContainerCollection</text>
       <text name="Fig8.4.10"
-        x="993"
-        y="173"
-        width="509"
+        x="1065"
+        y="181"
+        width="494"
         height="14"
         fill="0"
         fillcolor="white"
@@ -37692,9 +37753,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         justification="Left"
       >getAllClasses() : ContainerCollection</text>
       <text name="Fig8.4.11"
-        x="993"
-        y="187"
-        width="509"
+        x="1065"
+        y="195"
+        width="494"
         height="14"
         fill="0"
         fillcolor="white"
@@ -37708,9 +37769,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         justification="Left"
       >setStatement(subject : string,predicate : string,object : string,language : string) : boolean</text>
       <text name="Fig8.4.12"
-        x="993"
-        y="201"
-        width="509"
+        x="1065"
+        y="209"
+        width="494"
         height="14"
         fill="0"
         fillcolor="white"
@@ -37724,9 +37785,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         justification="Left"
       >removeStatement(subject : string,predicate : string,object : string,language : string) : boolean</text>
       <text name="Fig8.4.13"
-        x="993"
-        y="215"
-        width="509"
+        x="1065"
+        y="223"
+        width="494"
         height="14"
         fill="0"
         fillcolor="white"
@@ -37740,9 +37801,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         justification="Left"
       >getSubject(predicate : string,object : string) : Resource</text>
       <text name="Fig8.4.14"
-        x="993"
-        y="229"
-        width="509"
+        x="1065"
+        y="237"
+        width="494"
         height="14"
         fill="0"
         fillcolor="white"
@@ -37756,9 +37817,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         justification="Left"
       >getObject(subject : string,predicate : string) : ContainerCollection</text>
       <text name="Fig8.4.15"
-        x="993"
-        y="243"
-        width="509"
+        x="1065"
+        y="251"
+        width="494"
         height="20"
         fill="0"
         fillcolor="white"
@@ -47056,7 +47117,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig10"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[800, 408, 663, 517]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[800, 408, 663, 473]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1-8da8919:12f7878e80a:-8000:000000000000162A"
        fill="1"
        fillcolor="white"
@@ -47071,7 +47132,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       x="800"
       y="408"
       width="663"
-      height="517"
+      height="473"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -47127,7 +47188,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="200 60 60"
     />
     <group name="Fig10.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[801, 431, 661, 162]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[801, 431, 661, 134]"
          href="127-0-1-1-8da8919:12f7878e80a:-8000:000000000000162A"
          fill="0"
          fillcolor="white"
@@ -47141,7 +47202,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         x="801"
         y="431"
         width="661"
-        height="162"
+        height="134"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -47294,7 +47355,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig10.5"
       x="800"
-      y="593"
+      y="564"
       width="663"
       height="1"
       fill="1"
@@ -47303,7 +47364,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       strokecolor="200 60 60"
     />
     <group name="Fig10.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[801, 594, 661, 330]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[801, 565, 661, 316]"
          href="127-0-1-1-8da8919:12f7878e80a:-8000:000000000000162A"
          fill="0"
          fillcolor="white"
@@ -47315,9 +47376,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig10.6.0"
         x="801"
-        y="594"
+        y="565"
         width="661"
-        height="330"
+        height="316"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -47325,7 +47386,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       />
       <text name="Fig10.6.1"
         x="801"
-        y="594"
+        y="565"
         width="661"
         height="14"
         fill="0"
@@ -47341,7 +47402,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >__construct()</text>
       <text name="Fig10.6.2"
         x="801"
-        y="608"
+        y="579"
         width="661"
         height="14"
         fill="0"
@@ -47357,7 +47418,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >singleton() : ResourceReferencer</text>
       <text name="Fig10.6.3"
         x="801"
-        y="622"
+        y="593"
         width="661"
         height="14"
         fill="0"
@@ -47373,7 +47434,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >setCache(type : string,mode : int)</text>
       <text name="Fig10.6.4"
         x="801"
-        y="636"
+        y="607"
         width="661"
         height="14"
         fill="0"
@@ -47389,7 +47450,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >setClassCache(mode : int)</text>
       <text name="Fig10.6.5"
         x="801"
-        y="650"
+        y="621"
         width="661"
         height="14"
         fill="0"
@@ -47405,7 +47466,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >setInstanceCache(mode : int)</text>
       <text name="Fig10.6.6"
         x="801"
-        y="664"
+        y="635"
         width="661"
         height="14"
         fill="0"
@@ -47421,7 +47482,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >setPropertyCache(mode : int)</text>
       <text name="Fig10.6.7"
         x="801"
-        y="678"
+        y="649"
         width="661"
         height="14"
         fill="0"
@@ -47437,7 +47498,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >loadClasses(force : boolean = false)</text>
       <text name="Fig10.6.8"
         x="801"
-        y="692"
+        y="663"
         width="661"
         height="14"
         fill="0"
@@ -47453,7 +47514,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >isClassReferenced(class : Class,table : string = null) : boolean</text>
       <text name="Fig10.6.9"
         x="801"
-        y="706"
+        y="677"
         width="661"
         height="14"
         fill="0"
@@ -47466,10 +47527,10 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >referenceClass(class : Class,table : string = null,topClass : Class = null) : boolean</text>
+      >referenceClass(class : Class,options : array = array()) : boolean</text>
       <text name="Fig10.6.10"
         x="801"
-        y="720"
+        y="691"
         width="661"
         height="14"
         fill="0"
@@ -47485,7 +47546,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >unReferenceClass(class : Class) : boolean</text>
       <text name="Fig10.6.11"
         x="801"
-        y="734"
+        y="705"
         width="661"
         height="14"
         fill="0"
@@ -47501,7 +47562,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >classLocations(class : Class) : array</text>
       <text name="Fig10.6.12"
         x="801"
-        y="748"
+        y="719"
         width="661"
         height="14"
         fill="0"
@@ -47517,7 +47578,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >loadResources(force : boolean = false)</text>
       <text name="Fig10.6.13"
         x="801"
-        y="762"
+        y="733"
         width="661"
         height="14"
         fill="0"
@@ -47533,7 +47594,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >isResourceReferenced(resource : Resource) : boolean</text>
       <text name="Fig10.6.14"
         x="801"
-        y="776"
+        y="747"
         width="661"
         height="14"
         fill="0"
@@ -47549,7 +47610,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >referenceResource(resource : Resource,table : string,types : array = null,referenceClassLink : boolean = false) : boolean</text>
       <text name="Fig10.6.15"
         x="801"
-        y="790"
+        y="761"
         width="661"
         height="14"
         fill="0"
@@ -47565,7 +47626,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >unReferenceResource(resource : Resource) : boolean</text>
       <text name="Fig10.6.16"
         x="801"
-        y="804"
+        y="775"
         width="661"
         height="14"
         fill="0"
@@ -47581,7 +47642,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >resourceLocation(resource : Resource) : string</text>
       <text name="Fig10.6.17"
         x="801"
-        y="818"
+        y="789"
         width="661"
         height="14"
         fill="0"
@@ -47597,7 +47658,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >loadProperties(force : boolean = false,additionalProperties : array = array())</text>
       <text name="Fig10.6.18"
         x="801"
-        y="832"
+        y="803"
         width="661"
         height="14"
         fill="0"
@@ -47613,7 +47674,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >isPropertyReferenced(property : Property,inClass = null) : boolean</text>
       <text name="Fig10.6.19"
         x="801"
-        y="846"
+        y="817"
         width="661"
         height="14"
         fill="0"
@@ -47629,7 +47690,7 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >propertyLocation(property : Property) : array</text>
       <text name="Fig10.6.20"
         x="801"
-        y="860"
+        y="831"
         width="661"
         height="14"
         fill="0"
@@ -47645,9 +47706,9 @@ of the resource referencer.</UML:TaggedValue.dataValue>
       >referenceInstanceTypes(class : Class) : boolean</text>
       <text name="Fig10.6.21"
         x="801"
-        y="874"
+        y="845"
         width="661"
-        height="20"
+        height="14"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -47659,6 +47720,22 @@ of the resource referencer.</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >resetCache(additionalProperties : array = array())</text>
+      <text name="Fig10.6.22"
+        x="801"
+        y="859"
+        width="661"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getAdditionalProperties(clazz : Class) : array</text>
     </group>
   </group>
   <group name="Fig11"

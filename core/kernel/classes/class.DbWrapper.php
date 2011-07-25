@@ -6,7 +6,7 @@ error_reporting(E_ALL);
  * Simple utility class that allow you to wrap the database connector.
  * You can retrieve an instance evreywhere using the singleton.
  *
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
@@ -29,7 +29,7 @@ require_once('includes/adodb5/adodb.inc.php');
  * You can retrieve an instance evreywhere using the singleton.
  *
  * @access public
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
@@ -63,7 +63,7 @@ class core_kernel_classes_DbWrapper
      * Enables you to retrieve staticly the DbWrapper instance
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string database
      * @return core_kernel_classes_DbWrapper
      */
@@ -88,7 +88,7 @@ class core_kernel_classes_DbWrapper
      * Initialize the storage engine connection
      *
      * @access private
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string database
      * @return void
      */
@@ -126,7 +126,7 @@ class core_kernel_classes_DbWrapper
      * Used to close the database connection on destruction
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return mixed
      */
     public function __destruct()
@@ -144,7 +144,7 @@ class core_kernel_classes_DbWrapper
      * Short description of method __clone
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return core_kernel_classes_DbWrapper
      */
     public function __clone()
@@ -163,14 +163,14 @@ class core_kernel_classes_DbWrapper
      * The second argument is used only for prepared like statements
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string sqlQuery
      * @param  array parameters query parameters in the order the ? are found
-     * @return string
+     * @return common_Object
      */
     public function execSql($sqlQuery, $parameters = false)
     {
-        $returnValue = (string) '';
+        $returnValue = null;
 
         // section 10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000B1F begin
         $returnValue = $this->dbConnector->Execute($sqlQuery, $parameters);	
@@ -183,7 +183,7 @@ class core_kernel_classes_DbWrapper
      * Short description of method getSetting
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string name
      * @return string
      */
@@ -198,6 +198,26 @@ class core_kernel_classes_DbWrapper
         // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000235A end
 
         return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method getLastInsertId
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @return Integer
+     */
+    public function getLastInsertId()
+    {
+        $returnValue = null;
+
+        // section 127-0-1-1--642cfc1e:13160cfbaf5:-8000:0000000000001628 begin
+        
+        $returnValue = $this->dbConnector->Insert_ID();
+        
+        // section 127-0-1-1--642cfc1e:13160cfbaf5:-8000:0000000000001628 end
+
+        return $returnValue;
     }
 
 } /* end of class core_kernel_classes_DbWrapper */

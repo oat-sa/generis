@@ -114,7 +114,7 @@ class HardApiTestCase extends UnitTestCase {
 		$this->assertTrue($myTblMgr->exists());
 		
 		
-		$referencer->referenceClass($class, $table);
+		$referencer->referenceClass($class, array ('table'=>$table));
 		
 		$this->assertTrue($referencer->isClassReferenced($class));
 		$this->assertTrue($referencer->isClassReferenced($class, $table));

@@ -476,7 +476,6 @@ class core_kernel_persistence_subscription_Resource
 
 		throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
 
-
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC end
 
         return (string) $returnValue;
@@ -497,6 +496,9 @@ class core_kernel_persistence_subscription_Resource
         $returnValue = array();
 
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 begin
+        
+		throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+		
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 end
 
         return (array) $returnValue;
@@ -516,6 +518,9 @@ class core_kernel_persistence_subscription_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 begin
+        
+		throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+		
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 end
 
         return (bool) $returnValue;
@@ -535,6 +540,9 @@ class core_kernel_persistence_subscription_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000154C begin
+        
+		throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+		
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000154C end
 
         return (bool) $returnValue;
