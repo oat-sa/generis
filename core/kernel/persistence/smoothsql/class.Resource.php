@@ -220,9 +220,6 @@ class core_kernel_persistence_smoothsql_Resource
         			WHERE "subject" = ? AND "predicate" = ?
 		    		AND ("l_language" = \'\' OR "l_language" = ? OR "l_language" = ?) 
 		    		AND "modelID" IN ('.$modelIds.')';
-        if(!$last){
-                $query .= " LIMIT 1 ";
-        }       
         
         $params = array(
         	$resource->uriResource,
