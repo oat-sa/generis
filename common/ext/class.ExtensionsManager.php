@@ -242,9 +242,9 @@ class common_ext_ExtensionsManager
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002383 begin
 		foreach ($configurationArray as $id => $configuration) {
 			$ext = new common_ext_SimpleExtension($id);
-			var_dump($ext->requiredExtensionsList);
+//			TODO var_dump($ext->requiredExtensionsList);
 			foreach ($ext->requiredExtensionsList as $id) {
-				var_dump($configurationArray[$id]);
+//				var_dump($configurationArray[$id]);
 			}
 
 			//throw new common_ext_ExtensionException(__('Extension '). $ext->id  .__( ' could not be removed :'). $e->getMessage());
