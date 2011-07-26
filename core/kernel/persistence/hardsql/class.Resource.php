@@ -152,14 +152,14 @@ class core_kernel_persistence_hardsql_Resource
 			$session 	= core_kernel_classes_Session::singleton();
 			// Define language if required
 			$lang = '';
+                        $defaultLg = '';
 			if (isset($option['lg'])){
 				$lang = $option['lg'];
 			}
 			else{
 				($session->getLg() != '') ? $lang = $session->getLg() : $lang = $session->defaultLg;
+                                $defaultLg = ' OR "l_language" = \''.$session->defaultLg.'\' ';
 			}
-                        
-                        $defaultLg = ' OR "l_language" = \''.$session->defaultLg.'\' ';
                         
 			$query = 'SELECT "property_value", "property_foreign_uri"
 				FROM "'.$table.'"
