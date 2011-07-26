@@ -366,6 +366,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         $table = isset($options['table']) ? $options['table'] : '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
         $topClass = isset($options['topClass']) ? $options['topClass'] : new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
         $additionalProperties = isset($options['additionalProperties']) ? $options['additionalProperties'] : array ();
+        $classId = null;
         
         // Is the class is not already referenced
         if(!$this->isClassReferenced($class, $table)){
@@ -383,8 +384,19 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				throw new core_kernel_persistence_hardapi_Exception("Unable to reference the class {$class->uriResource} in {$table}: " .$dbWrapper->dbConnector->errorMsg());
 			} 
 			
+			// Get last inserted id
+			$query = 'SELECT "id" FROM "class_to_table" WHERE "uri" = ? AND "table" = ?';
+			$result = $dbWrapper->execSql($query, array(
+				$class->uriResource, 
+				$table
+			));
+			if (!$result->EOF){
+				$classId = $result->fields['id'];
+			} else {
+				throw new core_kernel_persistence_hardapi_Exception("Unable to retrieve the class Id of the referenced class {$class->uriResource}");
+			}
+			
 			// Store additional properties
-			$classId = $dbWrapper->getLastInsertId ();
 			if (!is_null($additionalProperties) && !empty($additionalProperties)){
 				$query = 'INSERT INTO "class_additional_properties" ("class_id", "property_uri") VALUES';
 				foreach ($additionalProperties as $additionalProperty){
