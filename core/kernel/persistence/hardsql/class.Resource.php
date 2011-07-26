@@ -124,7 +124,7 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
-
+                
 		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
 		$table = $referencer->resourceLocation($resource);
 		if(empty($table)){
@@ -138,7 +138,7 @@ class core_kernel_persistence_hardsql_Resource
 
 		$one = isset($options['one']) && $options['one'] == true ? true : false;
 		$last = isset($options['last']) && $options['last'] == true ? true : false;
-
+                $forceDefaultLg = isset($options['forceDefaultLg']) && $options['forceDefaultLg'] == true ? true : false;
 		 
 		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
 		$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
@@ -159,15 +159,18 @@ class core_kernel_persistence_hardsql_Resource
 				($session->getLg() != '') ? $lang = $session->getLg() : $lang = $session->defaultLg;
 			}
                         
+                        $defaultLg = ' OR "l_language" = \''.$session->defaultLg.'\' ';
+                        
 			$query = 'SELECT "property_value", "property_foreign_uri"
 				FROM "'.$table.'"
 				INNER JOIN "'.$tableProps.'" on "'.$table.'"."id" = "'.$tableProps.'"."instance_id"
 			   	WHERE "'.$table.'"."uri" = ?
 				AND "'.$tableProps.'"."property_uri" = ?
-				AND ( "l_language" = ? OR "l_language" = \'\')';
-				
+				AND ( "l_language" = ? OR "l_language" = \'\' '.$defaultLg.')';
+//			
 			// Select first
 			if ($one) {
+                                
 				$result	= $dbWrapper->dbConnector->selectLimit($query, 1, -1, array(
 				$resource->uriResource
 				, $property->uriResource
@@ -284,9 +287,10 @@ class core_kernel_persistence_hardsql_Resource
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
 
 		$options = array();
-		if ($last){
+                $options['forceDefaultLg'] = true;  
+		if($last){
 			$options['last'] = true;
-		} else {
+		}else{
 			$options['one'] = true;
 		}
 
