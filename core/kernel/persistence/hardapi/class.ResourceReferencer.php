@@ -716,31 +716,44 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001661 begin
         
         if($this->isResourceReferenced($resource)){
-			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-			
-			$queries[] = 'DELETE 
-				FROM "resource_has_class" 
-				WHERE "resource_has_class"."resource_id" 
-					IN (SELECT "resource_to_table"."id" FROM "resource_to_table" WHERE "resource_to_table"."uri" = \''.$resource->uriResource.'\' );';
-			$queries[] = 'DELETE FROM "resource_to_table" WHERE "resource_to_table"."uri" = \''.$resource->uriResource.'\';';
-			
-        	$returnValue = true;
-			foreach ($queries as $query){
-				$result = $dbWrapper->execSql($query);
-	        	if($dbWrapper->dbConnector->errorNo() !== 0){
-					throw new core_kernel_persistence_hardapi_Exception("Unable to unreference resource {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
-				}
-				if ($result===false){
-					$returnValue = false;
-				}
-			}
-			
-			if($returnValue !== false){
-				if(array_key_exists($resource->uriResource, self::$_resources)){
-					unset(self::$_resources[$resource->uriResource]);
-				}
-			}
-		}
+                
+                $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+
+                //select id to be removed:
+                $selectQuery = 'SELECT "resource_to_table"."id" FROM "resource_to_table" WHERE "resource_to_table"."uri" = \''.$resource->uriResource.'\' LIMIT 1;';
+                $selectResult = $dbWrapper->execSql($selectQuery);
+                if($dbWrapper->dbConnector->errorNo() !== 0){
+                        throw new core_kernel_persistence_hardsql_Exception("Unable to get the id of the resource {$resource->uriResource} to be deleted in 'resource_to_table: ' " .$dbWrapper->dbConnector->errorMsg());
+                }
+                $resourceId = 0;
+                while (!$selectResult->EOF){
+                        $resourceId = $selectResult->fields['id'];
+                        break;
+                }
+
+                if($resourceId){
+                        $queries[] = 'DELETE FROM "resource_has_class" WHERE "resource_has_class"."resource_id" = \'' . $resourceId . '\';';
+                        $queries[] = 'DELETE FROM "resource_to_table" WHERE "resource_to_table"."id" = \'' . $resourceId . '\';';
+
+                        $returnValue = true;
+                        foreach ($queries as $query) {
+                                $result = $dbWrapper->execSql($query);
+                                if ($dbWrapper->dbConnector->errorNo() !== 0) {
+                                        throw new core_kernel_persistence_hardapi_Exception("Unable to unreference resource {$resource->uriResource} : " . $dbWrapper->dbConnector->errorMsg());
+                                }
+                                if ($result === false) {
+                                        $returnValue = false;
+                                }
+                        }
+
+                        if ($returnValue !== false) {
+                                if (array_key_exists($resource->uriResource, self::$_resources)) {
+                                        unset(self::$_resources[$resource->uriResource]);
+                                }
+                        }
+                }
+
+        }
         
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001661 end
 
