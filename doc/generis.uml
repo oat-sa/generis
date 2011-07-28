@@ -92,7 +92,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Jul 25 14:56:45 CEST 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jul 28 09:46:31 CEST 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -11422,6 +11422,31 @@ that cannot be longer than 64 characters</UML:TaggedValue.dataValue>
                                 </UML:Parameter>
                               </UML:BehavioralFeature.parameter>
                             </UML:Operation>
+                            <UML:Operation xmi.id = '127-0-1-1--4d72422d:1316c1e6091:-8000:000000000000162E'
+                              name = 'getResourceIdByTable' visibility = 'public' isSpecification = 'false'
+                              ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                              isLeaf = 'false' isAbstract = 'false'>
+                              <UML:BehavioralFeature.parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1--4d72422d:1316c1e6091:-8000:000000000000162F'
+                                  name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:Parameter.type>
+                                    <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1--4d72422d:1316c1e6091:-8000:0000000000001630'
+                                  name = 'resource' isSpecification = 'false' kind = 'in'>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1--4d72422d:1316c1e6091:-8000:0000000000001631'
+                                  name = 'tableName' isSpecification = 'false' kind = 'in'>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                              </UML:BehavioralFeature.parameter>
+                            </UML:Operation>
                           </UML:Classifier.feature>
                         </UML:Class>
                         <UML:Class xmi.id = '127-0-1-1-8da8919:12f7878e80a:-8000:000000000000161B'
@@ -20364,7 +20389,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="false"
@@ -46139,7 +46164,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       strokecolor="black"
     />
     <group name="Fig5.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[577, 255, 464, 42]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[577, 255, 464, 36]"
          href="127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001596"
          fill="0"
          fillcolor="white"
@@ -46153,7 +46178,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
         x="577"
         y="255"
         width="464"
-        height="42"
+        height="36"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -46194,7 +46219,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
     </group>
     <rectangle name="Fig5.5"
       x="576"
-      y="297"
+      y="290"
       width="466"
       height="1"
       fill="1"
@@ -46203,7 +46228,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       strokecolor="black"
     />
     <group name="Fig5.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[577, 298, 464, 98]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[577, 291, 464, 106]"
          href="127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001596"
          fill="0"
          fillcolor="white"
@@ -46215,9 +46240,9 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       
       <rectangle name="Fig5.6.0"
         x="577"
-        y="298"
+        y="291"
         width="464"
-        height="98"
+        height="106"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -46225,7 +46250,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       />
       <text name="Fig5.6.1"
         x="577"
-        y="298"
+        y="291"
         width="464"
         height="14"
         fill="0"
@@ -46241,7 +46266,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >getNamespaceId(namespaceUri : string) : string</text>
       <text name="Fig5.6.2"
         x="577"
-        y="312"
+        y="305"
         width="464"
         height="14"
         fill="0"
@@ -46257,7 +46282,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >getShortName(resource : Resource) : string</text>
       <text name="Fig5.6.3"
         x="577"
-        y="326"
+        y="319"
         width="464"
         height="14"
         fill="0"
@@ -46273,7 +46298,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >getLongName(shortName : string) : string</text>
       <text name="Fig5.6.4"
         x="577"
-        y="340"
+        y="333"
         width="464"
         height="14"
         fill="0"
@@ -46289,7 +46314,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >getPropertiesTableName(resource : Resource) : string</text>
       <text name="Fig5.6.5"
         x="577"
-        y="354"
+        y="347"
         width="464"
         height="14"
         fill="0"
@@ -46305,7 +46330,23 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >propertyDescriptor(property : Property,hardRangeClassOnly : boolean = false) : array</text>
       <text name="Fig5.6.6"
         x="577"
-        y="368"
+        y="361"
+        width="464"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >buildSearchPattern(pattern : string,like : boolean = true) : string</text>
+      <text name="Fig5.6.7"
+        x="577"
+        y="375"
         width="464"
         height="20"
         fill="0"
@@ -46318,7 +46359,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
         bold="false"
         textsize="10"
         justification="Left"
-      >buildSearchPattern(pattern : string,like : boolean = true) : string</text>
+      >getResourceIdByTable(resource : Resource,tableName : string) : int</text>
     </group>
   </group>
   <group name="Fig6"
@@ -47728,7 +47769,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="200 60 60"
         textcolor="black"
         font="Dialog"
         italic="false"

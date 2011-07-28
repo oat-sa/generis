@@ -504,43 +504,43 @@ class core_kernel_persistence_hardsql_Resource
 		if (in_array("{$tableName}Props", $propertyLocation)
 		|| !$referencer->isPropertyReferenced($property, $tableName)){
 			 
-			$propsTableName = $tableName.'Props';
-			$query = 'DELETE FROM "'.$propsTableName.'"
-        		WHERE "property_uri" = \''.$property->uriResource.'\' 
-        		AND   "instance_id" IN (
-        			SELECT id FROM "'.$tableName.'"
-        				WHERE "uri" = \''.$resource->uriResource.'\'
-        		)';
-			
-			//build additionnal conditions:
-			$additionalConditions = array();
-			if(!is_null($pattern)){
-				if(is_string($pattern)){
-					$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
-					$additionalConditions[] = ' ("property_value" '.$searchPattern.' OR "property_foreign_uri" '.$searchPattern.') ';
-				}else if(is_array($pattern)){
-					if(count($pattern) > 0){
-						$multiCondition =  "(";
-						foreach($pattern as $i => $patternToken){
-							$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
-							if($i > 0) $multiCondition .= " OR ";
-							$multiCondition .= ' ("property_value" '.$searchPattern.' OR "property_foreign_uri" '.$searchPattern.') ';
-						}
-						$additionalConditions[] = "{$multiCondition}) ";
-					}
-				}
-			}
-				
-			foreach($additionalConditions as $i => $additionalCondition){
-				$query .= " AND ( {$additionalCondition} ) ";
-			}
-				
-			$result	= $dbWrapper->execSql($query);
-			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardsql_Exception("Unable to delete property values (multiple) for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
-			} else {
-				$returnValue = true;
-			}
+                        $resourceId = core_kernel_persistence_hardapi_Utils::getResourceIdByTable($resource, $tableName);
+                        
+                        if($resourceId){
+                                
+                                $propsTableName = $tableName.'Props';
+                                $query = 'DELETE FROM "'.$propsTableName.'" WHERE "property_uri" = \''.$property->uriResource.'\' AND "instance_id" = \''.$resourceId.'\' ';
+
+                                //build additionnal conditions:
+                                $additionalConditions = array();
+                                if(!is_null($pattern)){
+                                        if(is_string($pattern)){
+                                                $searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
+                                                $additionalConditions[] = ' ("property_value" '.$searchPattern.' OR "property_foreign_uri" '.$searchPattern.') ';
+                                        }else if(is_array($pattern)){
+                                                if(count($pattern) > 0){
+                                                        $multiCondition =  "(";
+                                                        foreach($pattern as $i => $patternToken){
+                                                                $searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
+                                                                if($i > 0) $multiCondition .= " OR ";
+                                                                $multiCondition .= ' ("property_value" '.$searchPattern.' OR "property_foreign_uri" '.$searchPattern.') ';
+                                                        }
+                                                        $additionalConditions[] = "{$multiCondition}) ";
+                                                }
+                                        }
+                                }
+
+                                foreach($additionalConditions as $i => $additionalCondition){
+                                        $query .= " AND ( {$additionalCondition} ) ";
+                                }
+
+                                $result	= $dbWrapper->execSql($query);
+                                if($dbWrapper->dbConnector->errorNo() !== 0){
+                                        throw new core_kernel_persistence_hardsql_Exception("Unable to delete property values (multiple) for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+                                } else {
+                                        $returnValue = true;
+                                }
+                        }
 		} else {
 			 
 			$propertyName = core_kernel_persistence_hardapi_Utils::getShortName ($property);
@@ -608,48 +608,50 @@ class core_kernel_persistence_hardsql_Resource
 		$like = isset($options['like']) && $options['like'] == true ? true : false;
 
 		// Get the table name
-		$tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
+		$tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
 		if($property->isLgDependent()){
+                        
+                        $resourceId = core_kernel_persistence_hardapi_Utils::getResourceIdByTable($resource, $tableName);
+                        if($resourceId){
+                                
+                                $propsTableName = $tableName.'Props';
+                                $query = 'DELETE FROM "'.$propsTableName.'"
+                                        WHERE "property_uri" = \''.$property->uriResource.'\' 
+                                        AND "instance_id" = \''.$resourceId.'\'
+                                        AND "l_language" = \''.$lg.'\' ';
 
-			$propsTableName = $tableName.'Props';
-			$query = 'DELETE FROM "'.$propsTableName.'"
-        		WHERE "property_uri" = \''.$property->uriResource.'\' 
-        		AND   "instance_id" IN (
-        			SELECT id FROM "'.$tableName.'"
-        				WHERE "uri" = \''.$resource->uriResource.'\'
-        		)
-        		AND "l_language" = \''.$lg.'\' ';
+                                //build additionnal conditions:
+                                $additionalConditions = array();
+                                if(!is_null($pattern)){
+                                        if(is_string($pattern)){ 
+                                                $searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
+                                                $additionalConditions[] = ' ("property_value" '.$searchPattern.' OR "property_foreign_uri" '.$searchPattern.') ';
+                                        }else if(is_array($pattern)){
+                                                if(count($pattern) > 0){
+                                                        $multiCondition =  "(";
+                                                        foreach($pattern as $i => $patternToken){
+                                                                $searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
+                                                                if($i > 0) $multiCondition .= " OR ";
+                                                                $multiCondition .= ' ("property_value" '.$searchPattern.' OR "property_foreign_uri" '.$searchPattern.') ';
+                                                        }
+                                                        $additionalConditions[] = "{$multiCondition}) ";
+                                                }
+                                        }
+                                }
 
-			//build additionnal conditions:
-			$additionalConditions = array();
-			if(!is_null($pattern)){
-				if(is_string($pattern)){ 
-					$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
-					$additionalConditions[] = ' ("property_value" '.$searchPattern.' OR "property_foreign_uri" '.$searchPattern.') ';
-				}else if(is_array($pattern)){
-					if(count($pattern) > 0){
-						$multiCondition =  "(";
-						foreach($pattern as $i => $patternToken){
-							$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
-							if($i > 0) $multiCondition .= " OR ";
-							$multiCondition .= ' ("property_value" '.$searchPattern.' OR "property_foreign_uri" '.$searchPattern.') ';
-						}
-						$additionalConditions[] = "{$multiCondition}) ";
-					}
-				}
-			}
-				
-			foreach($additionalConditions as $i => $additionalCondition){
-				$query .= " AND ( {$additionalCondition} ) ";
-			}
-				
-			$result	= $dbWrapper->execSql($query);
-			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardsql_Exception("Unable to delete property values (multiple) for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
-			} else {
-				//var_dump($dbWrapper->dbConnector->Affected_Rows());
-				$returnValue = true;
-			}
+                                foreach($additionalConditions as $i => $additionalCondition){
+                                        $query .= " AND ( {$additionalCondition} ) ";
+                                }
+
+                                $result	= $dbWrapper->execSql($query);
+                                if($dbWrapper->dbConnector->errorNo() !== 0){
+                                        throw new core_kernel_persistence_hardsql_Exception("Unable to delete property values (multiple) for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+                                } else {
+                                        //var_dump($dbWrapper->dbConnector->Affected_Rows());
+                                        $returnValue = true;
+                                }
+                        
+                        }
 		}
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 end
@@ -843,15 +845,18 @@ class core_kernel_persistence_hardsql_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 begin
 
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
-		if(empty($tableName)){
-			return $returnValue;
-		}
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
+        if(empty($tableName)){
+                return $returnValue;
+        }
 
-		$uri = $resource->uriResource;
+        $uri = $resource->uriResource;
 
-		/*
+        $resourceId = core_kernel_persistence_hardapi_Utils::getResourceIdByTable($resource, $tableName);
+        if($resourceId){
+                
+                /*
 		 * Delete all the references of the resource first, before the resource is delete of course,
 		 * if the parameter $deleteReference is true
 		 */
@@ -937,15 +942,13 @@ class core_kernel_persistence_hardsql_Resource
 				}
 			}
 		}
-
+                
+                $queries = array();
 		// Delete records in the main table 
-		$queries[] = 'DELETE FROM "'.$tableName.'Props"
-			WHERE "instance_id" IN (
-				SELECT "id" FROM "'.$tableName.'"
-					WHERE "uri" = ?
-			);';
+		$queries[] = 'DELETE FROM "'.$tableName.'" WHERE "id" = \''.$resourceId.'\'';
 		// Delete records in the properties table
-		$queries[] = 'DELETE FROM "'.$tableName.'" WHERE "uri" = ?';
+                $queries[] = 'DELETE FROM "'.$tableName.'Props" WHERE "instance_id" = \''.$resourceId.'\'';
+		
 		foreach ($queries as $query) {
 			$result = $dbWrapper->execSql($query, array($uri));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
@@ -961,7 +964,7 @@ class core_kernel_persistence_hardsql_Resource
 
 		// Unreference the resource
 		core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unReferenceResource($resource);
-
+        }
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 end
 
         return (bool) $returnValue;

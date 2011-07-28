@@ -720,17 +720,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
                 $dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
                 //select id to be removed:
-                $selectQuery = 'SELECT "resource_to_table"."id" FROM "resource_to_table" WHERE "resource_to_table"."uri" = \''.$resource->uriResource.'\' LIMIT 1;';
-                $selectResult = $dbWrapper->execSql($selectQuery);
-                if($dbWrapper->dbConnector->errorNo() !== 0){
-                        throw new core_kernel_persistence_hardsql_Exception("Unable to get the id of the resource {$resource->uriResource} to be deleted in 'resource_to_table: ' " .$dbWrapper->dbConnector->errorMsg());
-                }
-                $resourceId = 0;
-                while (!$selectResult->EOF){
-                        $resourceId = $selectResult->fields['id'];
-                        break;
-                }
-
+                $resourceId = core_kernel_persistence_hardapi_Utils::getResourceIdByTable($resource, 'resource_to_table');
                 if($resourceId){
                         $queries[] = 'DELETE FROM "resource_has_class" WHERE "resource_has_class"."resource_id" = \'' . $resourceId . '\';';
                         $queries[] = 'DELETE FROM "resource_to_table" WHERE "resource_to_table"."id" = \'' . $resourceId . '\';';

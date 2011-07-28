@@ -260,6 +260,37 @@ class core_kernel_persistence_hardapi_Utils
         return (string) $returnValue;
     }
 
+    /**
+     * Short description of method getResourceIdByTable
+     *
+     * @access public
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  Resource resource
+     * @param  string tableName
+     * @return int
+     */
+    public static function getResourceIdByTable( core_kernel_classes_Resource $resource, $tableName)
+    {
+        $returnValue = (int) 0;
+
+        // section 127-0-1-1--4d72422d:1316c1e6091:-8000:000000000000162E begin
+        
+        $selectQuery = 'SELECT id FROM "' . $tableName . '" WHERE uri = \'' . $resource->uriResource . '\' LIMIT 1;';
+        
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $selectResult = $dbWrapper->execSql($selectQuery);
+        if ($dbWrapper->dbConnector->errorNo() !== 0) {
+                throw new core_kernel_persistence_hardsql_Exception("Unable to get the id of the resource {$resource->uriResource} in the table '{$tableName}': " . $dbWrapper->dbConnector->errorMsg());
+        }
+        while (!$selectResult->EOF) {
+                $returnValue = $selectResult->fields['id'];
+                break;
+        }
+        // section 127-0-1-1--4d72422d:1316c1e6091:-8000:000000000000162E end
+
+        return (int) $returnValue;
+    }
+
 } /* end of class core_kernel_persistence_hardapi_Utils */
 
 ?>
