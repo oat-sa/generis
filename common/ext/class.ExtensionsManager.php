@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 28.01.2011, 10:45:10 with ArgoUML PHP module 
+ * Automatically generated on 29.07.2011, 14:45:38 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -68,7 +68,7 @@ class common_ext_ExtensionsManager
      * Short description of method getInstalledExtensions
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return array
      */
     public function getInstalledExtensions()
@@ -110,7 +110,7 @@ class common_ext_ExtensionsManager
      * Short description of method addExtension
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string id
      * @param  string extensionsZipPath
      * @return mixed
@@ -130,7 +130,7 @@ class common_ext_ExtensionsManager
      * remove Extension from the database, filesystem is not change
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  extension
      * @return mixed
      */
@@ -149,7 +149,7 @@ class common_ext_ExtensionsManager
      * Load all extensions that have to be loaded
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return mixed
      */
     public function loadExtensions()
@@ -180,7 +180,7 @@ class common_ext_ExtensionsManager
      * Short description of method singleton
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return common_ext_ExtensionsManager
      */
     public static function singleton()
@@ -202,7 +202,7 @@ class common_ext_ExtensionsManager
      * Short description of method __construct
      *
      * @access private
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return mixed
      */
     private function __construct()
@@ -216,7 +216,7 @@ class common_ext_ExtensionsManager
      * Call a service to retrieve list of extensions that may be installed
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return mixed
      */
     public function getAvailableExtensions()
@@ -233,7 +233,7 @@ class common_ext_ExtensionsManager
      * modify the configuration
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  array configurationArray array(extensionid =>configuration)
      * @return mixed
      */
@@ -259,7 +259,7 @@ class common_ext_ExtensionsManager
      * Reset the manager in order to take into account current extensions states
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return mixed
      */
     public function reset()
@@ -273,7 +273,7 @@ class common_ext_ExtensionsManager
      * Short description of method getModelsToLoad
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return array
      */
     public function getModelsToLoad()
@@ -296,7 +296,7 @@ class common_ext_ExtensionsManager
      * Get all the extension dependancies for a given extension
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  SimpleExtension extension
      * @return array
      */
@@ -321,6 +321,46 @@ class common_ext_ExtensionsManager
         }
         
         // section 127-0-1-1--34c6d20a:12dcbf5c5e2:-8000:00000000000014AE end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method getUpdatableModels
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @return array
+     */
+    public function getUpdatableModels()
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1--450598c3:13175ea282e:-8000:0000000000003C45 begin
+        
+    	foreach ($this->getInstalledExtensions() as $ext) {
+			if(isset ($ext->modelsRight) && count($ext->modelsRight) > 0){
+				if (isset($ext->modelsRight)){
+					/*
+					 * 
+					 * TODO
+					 * We manage update, add read, delete ..
+					 * if the variable exist, the model is updatable!
+					 * use a code in the next investigation, such as unix right
+					 * 
+					 */
+					foreach ($ext->modelsRight as $model=>$right){
+						$ns = common_ext_NamespaceManager::singleton()->getNamespace ($model.'#');
+						$modelId = $ns->getModelId();
+						if (!isset($returnValue[$modelId])){
+							$returnValue[$modelId] = $model;
+						}
+					}
+				}
+			}
+		}
+        
+        // section 127-0-1-1--450598c3:13175ea282e:-8000:0000000000003C45 end
 
         return (array) $returnValue;
     }

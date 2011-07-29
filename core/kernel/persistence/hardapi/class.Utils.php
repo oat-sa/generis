@@ -120,8 +120,8 @@ class core_kernel_persistence_hardapi_Utils
     		if (isset(self::$shortNames[$resource->uriResource])){
     			$returnValue = self::$shortNames[$resource->uriResource];
     		} else {
-    			$nsUri = substr($resource->uriResource, 0, strpos($resource->uriResource, '#')+1);
-				$returnValue = str_replace($nsUri, self::getNamespaceId($nsUri), $resource->uriResource);
+    			$pos = strpos($resource->uriResource, '#');
+				$returnValue = self::getNamespaceId(substr($resource->uriResource, 0, $pos+1)) . substr($resource->uriResource, $pos+1);
 				self::$shortNames[$resource->uriResource] = $returnValue;
     		}
 		}

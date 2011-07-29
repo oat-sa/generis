@@ -503,25 +503,30 @@ class core_kernel_persistence_smoothsql_Resource
 			$query .= " AND ( {$additionalCondition} ) ";
 		}
         
+		//be sure the property we try to remove is included in an updatable model
+    	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
+		$query .= ' AND "modelID" IN ('.$modelIds.')';
+		
         if($property->isLgDependent()){
+        	
         	$session = core_kernel_classes_Session::singleton();
-        	
         	$query .=  ' AND ("l_language" = \'\' OR "l_language" = ?) ';
-        	
-        	$returnValue	= $dbWrapper->execSql($query,array(
+        	$returnValue = $dbWrapper->execSql($query,array(
 	        		$resource->uriResource,
 	        		$property->uriResource,
 	        		($session->getLg() != '') ? $session->getLg() : $session->defaultLg
 	        ));
-	        
         }
         else{
         	
-        	$returnValue	= $dbWrapper->execSql($query,array(
+        	$returnValue = $dbWrapper->execSql($query,array(
 	        		$resource->uriResource,
 	        		$property->uriResource
-	        ));
-	        
+	        ));   
+        }
+        
+        if (!$dbWrapper->getAffectedRows()){
+        	$returnValue = false;
         }
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD end
@@ -547,13 +552,20 @@ class core_kernel_persistence_smoothsql_Resource
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 begin
         
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sqlQuery = 'DELETE FROM "statements" WHERE "subject" = ? and "predicate" = ? and "l_language" = ?;';
-        $sqlResult = $dbWrapper->execSql($sqlQuery, array (
+        $sqlQuery = 'DELETE FROM "statements" WHERE "subject" = ? and "predicate" = ? and "l_language" = ?';
+        //be sure the property we try to remove is included in an updatable model
+    	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
+		$sqlQuery .= ' AND "modelID" IN ('.$modelIds.')';
+        
+        $returnValue = $dbWrapper->execSql($sqlQuery, array (
         	$resource->uriResource,
         	$property->uriResource,
         	$lg
         ));
-        $returnValue = $sqlResult->EOF;
+        
+    	if (!$dbWrapper->getAffectedRows()){
+        	$returnValue = false;
+        }
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 end
 
@@ -656,12 +668,14 @@ class core_kernel_persistence_smoothsql_Resource
     	if($collection->count() > 0){
     		
     		$session = core_kernel_classes_Session::singleton();
+    		$localNs = common_ext_NamespaceManager::singleton()->getLocalNamespace();
+	       	$modelId = $localNs->getModelId();
     		$user = $session->getUser();
     		
 	    	$insert = 'INSERT INTO "statements" ("modelID", "subject", "predicate", "object", "l_language", "author", "stread", "stedit", "stdelete") VALUES ';
     		foreach($collection->getIterator() as $triple){
     			if(!in_array($triple->predicate, $excludedProperties)){
-	    			$insert .= "(8, '$newUri', '{$triple->predicate}', '{$triple->object}',  '{$triple->lg}', '{$user}', '{$triple->readPrivileges}', '{$triple->editPrivileges}', '{$triple->deletePrivileges}'),"; 
+	    			$insert .= "({$modelId}, '$newUri', '{$triple->predicate}', '{$triple->object}',  '{$triple->lg}', '{$user}', '{$triple->readPrivileges}', '{$triple->editPrivileges}', '{$triple->deletePrivileges}'),"; 
 	    		}
 	    	}
 	    	$insert = substr($insert, 0, strlen($insert) -1);
@@ -694,10 +708,16 @@ class core_kernel_persistence_smoothsql_Resource
         
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
-		$query = 'DELETE FROM "statements" WHERE "subject" = ?';
+    	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
+		$query = 'DELETE FROM "statements" WHERE "subject" = ? AND "modelID" IN ('.$modelIds.')';
         $returnValue = $dbWrapper->execSql($query, array($resource->uriResource));
-    	if($deleteReference){
-        	$sqlQuery = 'DELETE FROM "statements" WHERE "object" = ?';
+        
+        //if no rows affected return false
+        if (!$dbWrapper->getAffectedRows()){
+        	$returnValue = false;
+        } 
+        else if($deleteReference){
+        	$sqlQuery = 'DELETE FROM "statements" WHERE "object" = ? AND "modelID" IN ('.$modelIds.')';
         	$returnValue = $dbWrapper->execSql($sqlQuery, array ($resource->uriResource)) && $returnValue;
         }
         
@@ -908,6 +928,10 @@ class core_kernel_persistence_smoothsql_Resource
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $query =  'DELETE FROM "statements" 
 		    		WHERE "subject" = ? AND "predicate" = ? AND "object" = ?';
+        
+        //be sure the property we try to remove is included in an updatable model
+    	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
+		$query .= ' AND "modelID" IN ('.$modelIds.')';
         
         $returnValue = $dbWrapper->execSql($query,array(
         	$resource->uriResource,

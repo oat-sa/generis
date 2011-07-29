@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 /**
  * Enables you to manage the module namespaces
  *
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package common
  * @subpackage ext
  */
@@ -17,7 +17,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include common_ext_Namespace
  *
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
 require_once('common/ext/class.Namespace.php');
 
@@ -33,7 +33,7 @@ require_once('common/ext/class.Namespace.php');
  * Enables you to manage the module namespaces
  *
  * @access public
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package common
  * @subpackage ext
  */
@@ -66,7 +66,7 @@ class common_ext_NamespaceManager
      * Private constructor to force the use of the singleton
      *
      * @access private
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return mixed
      */
     private function __construct()
@@ -79,7 +79,7 @@ class common_ext_NamespaceManager
      * Main entry point to retrieve the unique NamespaceManager instance
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return common_ext_NamespaceManager
      */
     public static function singleton()
@@ -103,7 +103,7 @@ class common_ext_NamespaceManager
      * Get the list of all module's namespaces
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return array
      */
     public function getAllNamespaces()
@@ -137,7 +137,7 @@ class common_ext_NamespaceManager
      * Conveniance method to retrieve the local Namespace
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return common_ext_Namespace
      */
     public function getLocalNamespace()
@@ -164,11 +164,11 @@ class common_ext_NamespaceManager
     }
 
     /**
-     * Get a namesapce identified by the modelId
+     * Get a namesapce identified by the modelId or modelUri
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
-     * @param  int modelID
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  modelID
      * @return common_ext_Namespace
      */
     public function getNamespace($modelID)
@@ -176,11 +176,18 @@ class common_ext_NamespaceManager
         $returnValue = null;
 
         // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001599 begin
+    
+        if(count($this->namespaces) == 0){
+        	$this->getAllNamespaces();	//load the namespaces attribute 
+       	}
         
-        if(is_int($modelID)){
-        	if(count($this->namespaces) == 0){
-        		$this->getAllNamespaces();	//load the namespaces attribute 
-        	}
+        //get modelId from modelUri
+        if(is_string($modelID)){
+        	$modelID = array_search($modelID, $this->namespaces);
+        }
+        
+    	//get namespace from modelId
+    	if(is_int($modelID)){
         	if(isset($this->namespaces[$modelID])){
         		$returnValue = new common_ext_Namespace($modelID, $this->namespaces[$modelID]);
         	}

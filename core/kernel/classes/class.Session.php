@@ -85,13 +85,21 @@ class core_kernel_classes_Session
      */
     protected $loadedModels = array();
 
+    /**
+     * Short description of attribute updatableModels
+     *
+     * @access protected
+     * @var array
+     */
+    protected $updatableModels = array();
+
     // --- OPERATIONS ---
 
     /**
      * Short description of method singleton
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string uri
      * @param  string module
      * @return core_kernel_classes_Session
@@ -116,7 +124,7 @@ class core_kernel_classes_Session
      * Short description of method __construct
      *
      * @access private
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string uri
      * @param  string module
      * @return string
@@ -136,10 +144,15 @@ class core_kernel_classes_Session
 		foreach ($extensionManager->getModelsToLoad() as $model){
 			$this->loadModel($model);
 		}
+		
+		//load local model
 		$this->loadModel(LOCAL_NAMESPACE);
 		
+		//get updatable models
+		$this->updatableModels = $extensionManager->getUpdatableModels ();
+		
+		//set default language
 		$this->defaultLg = DEFAULT_LANG;
-
 		
         // section 10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000AE7 end
 
@@ -150,7 +163,7 @@ class core_kernel_classes_Session
      * Short description of method setLg
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string lg
      * @return boolean
      */
@@ -173,7 +186,7 @@ class core_kernel_classes_Session
      * Short description of method getLg
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return string
      */
     public function getLg()
@@ -191,7 +204,7 @@ class core_kernel_classes_Session
      * Short description of method getNameSpace
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return string
      */
     public function getNameSpace()
@@ -209,7 +222,7 @@ class core_kernel_classes_Session
      * Returns array of languages in which data is defined into this module
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return array
      */
     public function getLanguages()
@@ -226,7 +239,7 @@ class core_kernel_classes_Session
      * Short description of method getUser
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return string
      */
     public function getUser()
@@ -244,7 +257,7 @@ class core_kernel_classes_Session
      * Short description of method setUser
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string login
      * @return mixed
      */
@@ -261,7 +274,7 @@ class core_kernel_classes_Session
      * Short description of method loadModel
      *
      * @access protected
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string model
      * @return boolean
      */
@@ -295,7 +308,7 @@ class core_kernel_classes_Session
      * Short description of method getLoadedModels
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return array
      */
     public function getLoadedModels()
@@ -317,7 +330,7 @@ class core_kernel_classes_Session
      * the singleton in the php session then wilol restore it for further http
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Session staticInstance
      * @return void
      */
@@ -326,6 +339,24 @@ class core_kernel_classes_Session
         // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 begin
 		self::$instance = $staticInstance;
         // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 end
+    }
+
+    /**
+     * Short description of method getUpdatableModels
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @return array
+     */
+    public function getUpdatableModels()
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1--450598c3:13175ea282e:-8000:0000000000003C47 begin
+        $returnValue = $this->updatableModels;        
+        // section 127-0-1-1--450598c3:13175ea282e:-8000:0000000000003C47 end
+
+        return (array) $returnValue;
     }
 
 } /* end of class core_kernel_classes_Session */

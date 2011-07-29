@@ -187,6 +187,9 @@ class common_ext_SimpleExtension
 					$this->model = $manifestArray['additional']['models'];	
 				}
 			}
+			if(isset($manifestArray['additional']['modelsRight']) && !empty ($manifestArray['additional']['modelsRight'])) {
+				$this->modelsRight = $manifestArray['additional']['modelsRight'];
+			}
 			if(isset($manifestArray['additional']['install']) && is_array($manifestArray['additional']['install'])) {
 				$this->installFiles = $manifestArray['additional']['install'];
 			}

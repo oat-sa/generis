@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.07.2011, 08:42:00 with ArgoUML PHP module 
+ * Automatically generated on 29.07.2011, 18:30:52 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -204,6 +204,17 @@ interface core_kernel_persistence_ClassInterface
      * @return array
      */
     public function getInstancesPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $propertyFilters = array(), $options = array());
+
+    /**
+     * Short description of method unsetProperty
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @param  Property property
+     * @return boolean
+     */
+    public function unsetProperty( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property);
 
 } /* end of interface core_kernel_persistence_ClassInterface */
 

@@ -201,21 +201,21 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Short description of method getLastInsertId
+     * Short description of method getAffectedRows
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return Integer
      */
-    public function getLastInsertId()
+    public function getAffectedRows()
     {
         $returnValue = null;
 
-        // section 127-0-1-1--642cfc1e:13160cfbaf5:-8000:0000000000001628 begin
+        // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:000000000000163A begin
         
-        $returnValue = $this->dbConnector->Insert_ID();
+        $returnValue = $this->dbConnector->Affected_Rows();
         
-        // section 127-0-1-1--642cfc1e:13160cfbaf5:-8000:0000000000001628 end
+        // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:000000000000163A end
 
         return $returnValue;
     }

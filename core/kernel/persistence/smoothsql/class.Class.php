@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.07.2011, 08:42:00 with ArgoUML PHP module 
+ * Automatically generated on 29.07.2011, 18:30:52 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -719,6 +719,30 @@ class core_kernel_persistence_smoothsql_Class
         // section 127-0-1-1--120bf54f:13142fdf597:-8000:000000000000312D end
 
         return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method unsetProperty
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @param  Property property
+     * @return boolean
+     */
+    public function unsetProperty( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:00000000000031F8 begin
+        
+		$domain = new core_kernel_classes_Property(RDF_DOMAIN,__METHOD__);
+		$instanceProperty = new core_kernel_classes_Resource($property->uriResource,__METHOD__);
+		$returnValue = $instanceProperty->removePropertyValues($domain, array('pattern' => $resource->uriResource));
+        
+        // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:00000000000031F8 end
+
+        return (bool) $returnValue;
     }
 
     /**

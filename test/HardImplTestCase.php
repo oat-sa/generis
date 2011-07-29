@@ -167,11 +167,8 @@ class HardImplTestCase extends UnitTestCase {
 			
 			$props = $instance->getPropertyValuesByLg (new core_kernel_classes_Property(RDFS_LABEL), 'FR');
 			$this->assertEqual (count($props), 1);
+			$this->assertTrue ($props[0] instanceof core_kernel_classes_Literal);
 			$this->assertEqual ((string)$props[0], 'LABEL FR');
-			foreach ($props as $prop){
-				
-				$this->assertTrue ($prop instanceof core_kernel_classes_Literal);
-			}		
 		}
 	}
 	
