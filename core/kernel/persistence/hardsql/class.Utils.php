@@ -62,12 +62,12 @@ class core_kernel_persistence_hardsql_Utils
         
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
     	$table = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
-    	$query = 'SELECT "id" FROM "'.$table.'" WHERE uri= ? ';
+    	$query = 'SELECT "id" FROM "'.$table.'" WHERE uri= ? LIMIT 1';
     	$result = $dbWrapper->execSql($query, array ($resource->uriResource));
     	if($dbWrapper->dbConnector->errorNo() !== 0){
 			throw new core_kernel_persistence_hardsql_Exception("Unable to find the resource {$resource->uriResource} in {$table} : " .$dbWrapper->dbConnector->errorMsg());
 		}
-    	if (!$result->EOF){
+    	if(!$result->EOF){
     		$returnValue = $result->fields['id'];
     	}
         
