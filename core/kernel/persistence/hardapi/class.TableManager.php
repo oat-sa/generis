@@ -203,12 +203,15 @@ class core_kernel_persistence_hardapi_TableManager
 			self::$_tables[] = "{$this->name}Props";
 			
 			// Create multiples properties table indexes
-			$query = 'CREATE INDEX "idx'.$this->name.'props_property_uri" ON "'.$this->name.'Props" ("property_uri");';
-			$query .= 'CREATE INDEX "idx'.$this->name.'props_foreign_property_uri" ON "'.$this->name.'Props" ("property_foreign_uri");';
-			$dbWrapper->execSql($query);
-			if($dbWrapper->dbConnector->errorNo() > 0){
-				//the user may not have the right to create the table index
-				throw new core_kernel_persistence_hardapi_Exception("Unable to create the multiples properties table indexes  {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
+			$indexQueries = array();
+			$indexQueries[] = 'CREATE INDEX "idx'.$this->name.'props_property_uri" ON "'.$this->name.'Props" ("property_uri");';
+			$indexQueries[] = 'CREATE INDEX "idx'.$this->name.'props_foreign_property_uri" ON "'.$this->name.'Props" ("property_foreign_uri");';
+			foreach ($indexQueries as $indexQuery){
+				$dbWrapper->execSql($indexQuery);
+				if($dbWrapper->dbConnector->errorNo() > 0){
+					//the user may not have the right to create the table index
+					throw new core_kernel_persistence_hardapi_Exception("Unable to create the multiples properties table indexes  {$this->name} : " .$dbWrapper->dbConnector->errorMsg());
+				}
 			}
 			
 			//auto reference
