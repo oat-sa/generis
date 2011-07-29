@@ -569,7 +569,9 @@ class core_kernel_persistence_hardsql_Resource
 				$query .= " AND ( {$additionalCondition} ) ";
 			}
 			
-			$query .= " LIMIT 1 ";
+			// Not supported by postgresql
+			//$query .= " LIMIT 1";
+			
 			//slow!!!
 			$result	= $dbWrapper->execSql($query, array(
 				$resource->uriResource
@@ -945,14 +947,14 @@ class core_kernel_persistence_hardsql_Resource
 			}
 		}
                 
-                $queries = array();
+        $queries = array();
 		// Delete records in the main table 
 		$queries[] = 'DELETE FROM "'.$tableName.'" WHERE "id" = \''.$resourceId.'\'';
 		// Delete records in the properties table
-                $queries[] = 'DELETE FROM "'.$tableName.'Props" WHERE "instance_id" = \''.$resourceId.'\'';
+        $queries[] = 'DELETE FROM "'.$tableName.'Props" WHERE "instance_id" = \''.$resourceId.'\'';
 		
 		foreach ($queries as $query) {
-			$result = $dbWrapper->execSql($query, array($uri));
+			$result = $dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardsql_Exception("Unable to delete resource ({$resource->uriResource}) ;".$dbWrapper->dbConnector->errorMsg());
 			}
