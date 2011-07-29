@@ -568,9 +568,11 @@ class core_kernel_persistence_hardsql_Resource
 			foreach($additionalConditions as $i => $additionalCondition){
 				$query .= " AND ( {$additionalCondition} ) ";
 			}
-				
+			
+			$query .= " LIMIT 1 ";
+			//slow!!!
 			$result	= $dbWrapper->execSql($query, array(
-			$resource->uriResource
+				$resource->uriResource
 			));
 			if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardsql_Exception("Unable to delete property values (single) for the instance {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
