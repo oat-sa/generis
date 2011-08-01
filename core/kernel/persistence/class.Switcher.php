@@ -137,10 +137,25 @@ class core_kernel_persistence_Switcher
 		$instancePackSize = 100;
 		$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
 		$count = count($instances);
+		$existingInstances = array ();
 		do{
 			//reset timeout:
 			set_time_limit(30);
 
+			// lionel did that :d le salop
+			core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
+			foreach ($instances as $uri=>$instance){
+				if ($instance->exists()){
+					core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_HARD);
+					$instance->delete();
+					core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
+					unset($instances[$uri]);
+					$existingInstances[] = $uri;
+				}
+			}
+			core_kernel_persistence_PersistenceProxy::resetMode();
+			
+			
 			foreach ($instances as $instance) {
 
 				// Get table name where the resource is located
@@ -238,6 +253,10 @@ class core_kernel_persistence_Switcher
 
 			//update instance array and count value
 			$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
+			foreach ($existingInstances as $uri){
+				unset($instances[$uri]);
+			}
+
 			$count = count($instances);
 
 		}while($count > 0);
@@ -421,6 +440,7 @@ class core_kernel_persistence_Switcher
 		$instancePackSize = 100;
 		$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
 		$count = count($instances);
+		$notDeletedInstances = array ();
 		do{
 			//reset timeout:
 			set_time_limit('30');
@@ -452,7 +472,9 @@ class core_kernel_persistence_Switcher
 
 				if($rmSources){
 					//remove exported resources in smooth sql, if required:
-					$resource->delete();
+					if (!$resource->delete()){
+						$notDeletedInstances[] = $resource->uriResource;
+					}
 				}
 			}
 
@@ -470,6 +492,9 @@ class core_kernel_persistence_Switcher
 
 			//update instance array and count value
 			$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
+			foreach($notDeletedInstances as $uri){
+				unset($instances[$uri]);
+			}
 			$count = count($instances);
 
 		} while($count> 0);
