@@ -818,25 +818,25 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         
     	if(count(self::$_properties) == 0 || $force){
     		
-                //file where is the data saved
-                $file = GENERIS_CACHE_PATH . 'hard-api-property.cache';
+			//file where is the data saved
+			$file = realpath(GENERIS_CACHE_PATH) . '/hard-api-property.cache';
 				
     		if(!$force && $this->cacheModes['property'] == self::CACHE_FILE){
     			
-    			//if the properties are cached in the file, we load it
-                        if(file_exists($file)){
-                                if(!is_readable($file)){
-                                throw new core_kernel_persistence_hardapi_Exception("Cache file $file must have read/write permissions");
-                        }
-                                $properties = @unserialize(file_get_contents($file));
-                                if($properties !== false && is_array($properties) && count($properties) > 0){
-                                        self::$_properties = $properties;
-                                        return;
-                                }
-                        }
-                }
-    		
-                //get all the compiled tables
+			//if the properties are cached in the file, we load it
+					if(file_exists($file)){
+							if(!is_readable($file)){
+							throw new core_kernel_persistence_hardapi_Exception("Cache file $file must have read/write permissions");
+					}
+							$properties = @unserialize(file_get_contents($file));
+							if($properties !== false && is_array($properties) && count($properties) > 0){
+									self::$_properties = $properties;
+									return;
+							}
+					}
+			}
+
+			//get all the compiled tables
     		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
     		$tables = array();
     		$query = 'SELECT DISTINCT "table" FROM "class_to_table"';
@@ -885,7 +885,10 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 		
     		//saving the properties in the cache file
     		if($this->cacheModes['property'] == self::CACHE_FILE){
-    			file_put_contents($file, serialize(self::$_properties));
+    			$returnValue = file_put_contents($file, serialize(self::$_properties));
+				if(!$returnValue){
+					throw new core_kernel_persistence_hardapi_Exception("cannot write the required property cache file in the location ".$file);
+				}
     		}
     	}
     	

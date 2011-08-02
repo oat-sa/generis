@@ -205,10 +205,12 @@ class core_kernel_persistence_hardsql_Resource
 				$returnValue[] = $result->fields['property_value'] != null ? $result->fields['property_value'] : $result->fields['property_foreign_uri'];
 				$result->moveNext();
 			}
+			
 		}
-
 		// Select in the main table of the class
 		else{
+			
+		
 			$query =  'SELECT "'.$propertyAlias.'" as "propertyValue" FROM "'.$table.'" WHERE "uri" = ?';
 			$result	= $dbWrapper->execSql($query, array(
 			$resource->uriResource
@@ -228,6 +230,8 @@ class core_kernel_persistence_hardsql_Resource
 					$result->moveNext();
 				}
 			}
+			
+			
 
 		}
 
@@ -256,7 +260,7 @@ class core_kernel_persistence_hardsql_Resource
 		}
 
 		$returnValue = new core_kernel_classes_ContainerCollection($resource);
-		$values = $this->_getPropertyValues ($resource, $property);
+		$values = $this->getPropertyValues($resource, $property);
 			
 		foreach ($values as $value){
 			if(DEBUG_MODE){
@@ -1220,9 +1224,10 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = array();
 
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000153E begin
-
+		
 		$propertyValues = $this->getPropertyValues($resource, $property, $options);
-
+		
+		
 		// Format output data
 		foreach ($propertyValues as $propertyValue){
 			if(!common_Utils::isUri($propertyValue)) {
