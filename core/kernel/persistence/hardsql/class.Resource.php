@@ -1050,30 +1050,29 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 begin
-
-		$classToTableId = core_kernel_persistence_hardsql_Utils::getClassId ($class, $resource);
-		$resourceLocation = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
-
+		
+		$classToTableId = core_kernel_persistence_hardsql_Utils::getClassId($class, $resource);
+		$resourceLocation = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
+		
 		// If classToTableId is null
 		// !!!!!!!!!!!! BE CARREFULL !!!!!!!!!!!!!!
 		// We reference it in class_to_table, setType function is used to mark resources with classes (like a tag system)
 		// If the class has not been hardified and contains instances, the function will throw an exception
 		if ($classToTableId==null){
-			 
+			
 			/*
-			 *
 			 * @todo Write a class hasInstance function
 			 */
 			$instances = $class->getInstances();
 			if (!core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($class) && !empty($instances)) {
 				throw new core_kernel_persistence_hardsql_Exception("Try to set a type ({$class->getLabel()}), which has not been hardified and has instances, to a resource ({$resource->getLabel()})");
 			}
-			 
-			core_kernel_persistence_hardapi_ResourceReferencer::singleton()->referenceClass($class, $resourceLocation);
+			
+			$returnValue = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->referenceClass($class, array('table'=>$resourceLocation));//use default top class
 			$classToTableId = core_kernel_persistence_hardsql_Utils::getClassId ($class, $resource);
 		}
 
-		// Check if the resource is yet associated with the class
+		// Check if the resource is already associated with the class
 		if ($resource->hasType($class)){
 			return true;
 		}
