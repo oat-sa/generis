@@ -97,7 +97,7 @@ class core_kernel_classes_Property
      * Short description of method __construct
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string uri
      * @param  string debug
      * @return void
@@ -115,7 +115,7 @@ class core_kernel_classes_Property
      * Short description of method feed
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return void
      */
     public function feed()
@@ -135,7 +135,7 @@ class core_kernel_classes_Property
      * Short description of method getSubProperties
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  boolean recursive
      * @return array
      */
@@ -156,7 +156,7 @@ class core_kernel_classes_Property
      * Short description of method setSubPropertyOf
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Property property
      * @return boolean
      */
@@ -175,7 +175,7 @@ class core_kernel_classes_Property
      * return classes that are described by this property
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return core_kernel_classes_ContainerCollection
      */
     public function getDomain()
@@ -200,7 +200,7 @@ class core_kernel_classes_Property
      * Short description of method setDomain
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -235,7 +235,7 @@ class core_kernel_classes_Property
      * Short description of method getRange
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return core_kernel_classes_ContainerCollection
      */
     public function getRange()
@@ -264,7 +264,7 @@ class core_kernel_classes_Property
      * Short description of method setRange
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -286,7 +286,7 @@ class core_kernel_classes_Property
      * Short description of method getWidget
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return core_kernel_classes_Property
      */
     public function getWidget()
@@ -308,7 +308,7 @@ class core_kernel_classes_Property
      * Is the property translatable?
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return boolean
      */
     public function isLgDependent()
@@ -342,7 +342,7 @@ class core_kernel_classes_Property
      * Set mannually if a property can be translated
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  boolean isLgDependent
      * @return mixed
      */
@@ -363,7 +363,7 @@ class core_kernel_classes_Property
      * Check if a property can have multiple values.
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return boolean
      */
     public function isMultiple()
@@ -397,7 +397,7 @@ class core_kernel_classes_Property
      * Usefull on just created property.
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  boolean isMultiple
      * @return mixed
      */
@@ -412,6 +412,27 @@ class core_kernel_classes_Property
         }
     	
         // section 127-0-1-1-2ada041a:12fde2cecc0:-8000:00000000000016F8 end
+    }
+
+    /**
+     * Short description of method delete
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  boolean deleteReference
+     * @return boolean
+     */
+    public function delete($deleteReference = false)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001646 begin
+        
+        $returnValue = core_kernel_persistence_PropertyProxy::singleton()->delete($this, $deleteReference);
+        
+        // section 127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001646 end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class core_kernel_classes_Property */

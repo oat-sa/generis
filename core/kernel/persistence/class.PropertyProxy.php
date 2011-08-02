@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.07.2011, 08:42:00 with ArgoUML PHP module 
+ * Automatically generated on 02.08.2011, 15:58:02 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -169,20 +169,20 @@ class core_kernel_persistence_PropertyProxy
         $multipleProperty = new core_kernel_classes_Property(PROPERTY_MULTIPLE,__METHOD__);
         $multiple = null;
         
-	$delegate = $this->getImpToDelegateTo($resource);
+		$delegate = $this->getImpToDelegateTo($resource);
         if($delegate instanceof core_kernel_persistence_hardsql_Property){
-                // Use the smooth sql implementation to get this information
-		// Or find the right way to treat this case
-                $multiple = core_kernel_persistence_smoothsql_Resource::singleton()->getOnePropertyValue($resource, $multipleProperty);
-        }else{
-                $multiple = $delegate->getOnePropertyValue($resource, $multipleProperty);
+            // Use the smooth sql implementation to get this information
+			// Or find the right way to treat this case
+			$multiple = core_kernel_persistence_smoothsql_Resource::singleton()->getOnePropertyValue($resource, $multipleProperty);
+        } else {
+			$multiple = $delegate->getOnePropertyValue($resource, $multipleProperty);
         }
         
         if(is_null($multiple)){
-                $returnValue = false;
+			$returnValue = false;
         }
         else{
-                $returnValue = ($multiple->uriResource == GENERIS_TRUE);
+			$returnValue = ($multiple->uriResource == GENERIS_TRUE);
         }
         // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014DD end
 
@@ -207,7 +207,7 @@ class core_kernel_persistence_PropertyProxy
         
         $delegate = $this->getImpToDelegateTo($resource);
         if($delegate instanceof core_kernel_persistence_hardsql_Property){
-                // Use the smooth sql implementation to get this information
+        // Use the smooth sql implementation to get this information
 		// Or find the right way to treat this case
                 $rangeValues = core_kernel_persistence_smoothsql_Resource::singleton()->getPropertyValues($resource, $rangeProperty);
         }else{
@@ -221,6 +221,29 @@ class core_kernel_persistence_PropertyProxy
         // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001539 end
 
         return $returnValue;
+    }
+
+    /**
+     * Short description of method delete
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @param  boolean deleteReference
+     * @return boolean
+     */
+    public function delete( core_kernel_classes_Resource $resource, $deleteReference = false)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001641 begin
+        
+    	$delegate = $this->getImpToDelegateTo($resource);
+		$returnValue = $delegate->delete($resource, $deleteReference);
+        
+        // section 127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001641 end
+
+        return (bool) $returnValue;
     }
 
     /**
@@ -306,14 +329,14 @@ class core_kernel_persistence_PropertyProxy
 
         $impls = $this->getAvailableImpl(); 
         if(isset($impls[$context]) && $impls[$context]){
-                var_dump($context);
+            
         	$implClass = "core_kernel_persistence_{$context}_Property";
         	$reflectionMethod = new ReflectionMethod($implClass, 'singleton');
                 $singleton = $reflectionMethod->invoke(null);
                 try{
-                        $returnValue = $singleton->isValidContext($resource);
+                	$returnValue = $singleton->isValidContext($resource);
                 }catch(Exception $e){
-                        echo 'error*';
+                	echo 'error*';
                 }
         }
         
