@@ -255,17 +255,10 @@ class core_kernel_persistence_hardsql_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F begin
 
-		if(DEBUG_MODE){
-			$returnValue->debug = __METHOD__;
-		}
-
 		$returnValue = new core_kernel_classes_ContainerCollection($resource);
-		$values = $this->getPropertyValues($resource, $property);
+		$values = $this->_getPropertyValues($resource, $property);
 			
 		foreach ($values as $value){
-			if(DEBUG_MODE){
-				$value->debug = __METHOD__ .'|' . $property->debug;
-			}
 			$returnValue->add($value);
 		}
 
