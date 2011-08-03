@@ -10,6 +10,9 @@ class HardifyTestCase extends UnitTestCase {
 	}
 	
 	public function testHardify(){
+		        
+    	ob_start(); // catch the output and drop it
+    	
 		$wfEngineHardifier = new wfEngine_scripts_HardifyWfEngine (array(
 			'min'		=> 1,
 			'required'	=> array(
@@ -39,7 +42,9 @@ class HardifyTestCase extends UnitTestCase {
 				)
 			)
 		), array ('argv'=>array('-c -i', '-c', '-i')));
-		set_time_limit(900);
+    	
+    	ob_end_clean();
+		set_time_limit(900); // because the script update the time limit
 	}
 }
 
