@@ -13,8 +13,8 @@ Bootstrap::loadConstants ('wfEngine');
 Bootstrap::loadConstants ('taoDelivery');
 
 $testSuite = new TestSuite('Hardened unit test case');Bootstrap::loadConstants ('tao');
-$testSuite->addFile('HardifyTestCase.php');
 $testSuite->addFile(dirname(__FILE__) . '/../../../tao/test/dataTest/MassInsertTestCase.php');
+$testSuite->addFile(dirname(__FILE__) . '/HardifyTestCase.php');
 
 //load generis test case
 $testSuite->addFile(dirname(__FILE__) . '/../CollectionTestCase.php');
@@ -42,8 +42,8 @@ foreach($tests as $i => $testCase){
 	$testSuite->addFile($testCase);
 }
    
+$testSuite->addFile(dirname(__FILE__) . '/UnhardifyTestCase.php');
 $testSuite->addFile(dirname(__FILE__) . '/../../../tao/test/dataTest/CleanMassInsertTestCase.php');
-$testSuite->addFile('UnhardifyTestCase.php');
 
 //add the reporter regarding the context
 if(PHP_SAPI == 'cli'){
