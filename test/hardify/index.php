@@ -12,7 +12,7 @@ Bootstrap::loadConstants ('taoResults');
 Bootstrap::loadConstants ('wfEngine');
 Bootstrap::loadConstants ('taoDelivery');
 
-$testSuite = new TestSuite('Hardened unit test case');Bootstrap::loadConstants ('tao');
+$testSuite = new TestSuite('Hardify Unit Test Case');
 $testSuite->addFile(dirname(__FILE__) . '/../../../tao/test/dataTest/MassInsertTestCase.php');
 $testSuite->addFile(dirname(__FILE__) . '/HardifyTestCase.php');
 
