@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 29.07.2011, 18:30:52 with ArgoUML PHP module 
+ * Automatically generated on 03.08.2011, 11:24:00 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -456,16 +456,17 @@ class core_kernel_persistence_virtuoso_Class
      * @param  Resource resource
      * @param  string label
      * @param  string comment
+     * @param  string uri
      * @return core_kernel_classes_Class
      */
-    public function createSubClass( core_kernel_classes_Resource $resource, $label = '', $comment = '')
+    public function createSubClass( core_kernel_classes_Resource $resource, $label = '', $comment = '', $uri = '')
     {
         $returnValue = null;
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 begin
         
         $class = new core_kernel_classes_Class(RDF_CLASS,__METHOD__);
-        $intance = $class->createInstance($label,$comment);
+        $intance = $class->createInstance($label, $comment, $uri);
         $returnValue = new core_kernel_classes_Class($intance->uriResource);
         $returnValue->setSubClassOf($resource);
         

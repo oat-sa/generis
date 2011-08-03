@@ -92,7 +92,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jul 29 18:30:54 CEST 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Aug 03 11:24:01 CEST 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -1941,8 +1941,8 @@ The method returns the new resource. </UML:TaggedValue.dataValue>
                             <UML:Parameter xmi.id = '10-13-1--99-3835caab:11e45736d24:-8000:0000000000000F2D'
                               name = 'label' isSpecification = 'false'>
                               <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '10-13-1--99-3835caab:11e45736d24:-8000:0000000000000F2F'
-                                  language = '' body = '&apos;&apos;'/>
+                                <UML:Expression xmi.id = '127-0-1-1--780fc930:1318ef3894e:-8000:000000000000164A'
+                                  language = 'UML 1.4' body = '&apos;&apos;'/>
                               </UML:Parameter.defaultValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
@@ -1951,8 +1951,18 @@ The method returns the new resource. </UML:TaggedValue.dataValue>
                             <UML:Parameter xmi.id = '10-13-1--99-3835caab:11e45736d24:-8000:0000000000000F30'
                               name = 'comment' isSpecification = 'false'>
                               <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '10-13-1--99-3835caab:11e45736d24:-8000:0000000000000F32'
-                                  language = '' body = '&apos;&apos;'/>
+                                <UML:Expression xmi.id = '127-0-1-1--780fc930:1318ef3894e:-8000:000000000000164B'
+                                  language = 'UML 1.4' body = '&apos;&apos;'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--780fc930:1318ef3894e:-8000:000000000000164C'
+                              name = 'uri' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--780fc930:1318ef3894e:-8000:000000000000164D'
+                                  language = 'UML 1.4' body = '&quot;&quot;'/>
                               </UML:Parameter.defaultValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
@@ -2519,6 +2529,29 @@ Usefull on just created property. </UML:TaggedValue.dataValue>
                               name = 'return' isSpecification = 'false' kind = 'return'/>
                             <UML:Parameter xmi.id = '127-0-1-1-2ada041a:12fde2cecc0:-8000:00000000000016FA'
                               name = 'isMultiple' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001646'
+                          name = 'delete' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001647'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001648'
+                              name = 'deleteReference' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001649'
+                                  language = 'UML 1.4' body = 'false'/>
+                              </UML:Parameter.defaultValue>
                               <UML:Parameter.type>
                                 <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
@@ -10586,7 +10619,7 @@ like funcions. It should be good to refactor.</UML:TaggedValue.dataValue>
                             <UML:Parameter xmi.id = '127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F35'
                               name = 'label' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F36'
+                                <UML:Expression xmi.id = '127-0-1-1--780fc930:1318ef3894e:-8000:000000000000164E'
                                   language = 'UML 1.4' body = '&apos;&apos;'/>
                               </UML:Parameter.defaultValue>
                               <UML:Parameter.type>
@@ -10596,7 +10629,17 @@ like funcions. It should be good to refactor.</UML:TaggedValue.dataValue>
                             <UML:Parameter xmi.id = '127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F37'
                               name = 'comment' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F38'
+                                <UML:Expression xmi.id = '127-0-1-1--780fc930:1318ef3894e:-8000:000000000000164F'
+                                  language = 'UML 1.4' body = '&apos;&apos;'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--780fc930:1318ef3894e:-8000:0000000000001650'
+                              name = 'uri' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--780fc930:1318ef3894e:-8000:0000000000001651'
                                   language = 'UML 1.4' body = '&apos;&apos;'/>
                               </UML:Parameter.defaultValue>
                               <UML:Parameter.type>
@@ -10870,6 +10913,35 @@ like funcions. It should be good to refactor.</UML:TaggedValue.dataValue>
                               name = 'resource' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001641'
+                          name = 'delete' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001642'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001643'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001644'
+                              name = 'deleteReference' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001645'
+                                  language = 'UML 1.4' body = 'false'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -19273,7 +19345,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
         bold="false"
         textsize="10"
         justification="Left"
-      >createSubClass(label : string = &apos;&apos;,comment : string = &apos;&apos;) : Class</text>
+      >createSubClass(label : string = &apos;&apos;,comment : string = &apos;&apos;,uri : string = &quot;&quot;) : Class</text>
       <text name="Fig5.6.13"
         x="977"
         y="2134"
@@ -19443,7 +19515,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       strokecolor="black"
     />
     <group name="Fig6.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[641, 1903, 303, 94]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[641, 1903, 303, 87]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769"
          fill="0"
          fillcolor="200 200 255"
@@ -19457,7 +19529,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
         x="641"
         y="1903"
         width="303"
-        height="94"
+        height="87"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -19546,7 +19618,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
     </group>
     <rectangle name="Fig6.5"
       x="640"
-      y="1997"
+      y="1990"
       width="305"
       height="1"
       fill="1"
@@ -19555,7 +19627,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       strokecolor="black"
     />
     <group name="Fig6.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[641, 1998, 303, 206]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[641, 1991, 303, 213]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769"
          fill="0"
          fillcolor="200 200 255"
@@ -19567,9 +19639,9 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       
       <rectangle name="Fig6.6.0"
         x="641"
-        y="1998"
+        y="1991"
         width="303"
-        height="206"
+        height="213"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -19577,7 +19649,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       />
       <text name="Fig6.6.1"
         x="641"
-        y="1998"
+        y="1991"
         width="303"
         height="14"
         fill="0"
@@ -19593,7 +19665,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >__construct(uri : string,debug : string = &apos;&apos;) : void</text>
       <text name="Fig6.6.2"
         x="641"
-        y="2012"
+        y="2005"
         width="303"
         height="14"
         fill="0"
@@ -19609,7 +19681,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >feed() : void</text>
       <text name="Fig6.6.3"
         x="641"
-        y="2026"
+        y="2019"
         width="303"
         height="14"
         fill="0"
@@ -19625,7 +19697,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >getSubProperties(recursive : boolean = false) : array</text>
       <text name="Fig6.6.4"
         x="641"
-        y="2040"
+        y="2033"
         width="303"
         height="14"
         fill="0"
@@ -19641,7 +19713,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >setSubPropertyOf(property : Property) : boolean</text>
       <text name="Fig6.6.5"
         x="641"
-        y="2054"
+        y="2047"
         width="303"
         height="14"
         fill="0"
@@ -19657,7 +19729,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >getDomain() : ContainerCollection</text>
       <text name="Fig6.6.6"
         x="641"
-        y="2068"
+        y="2061"
         width="303"
         height="14"
         fill="0"
@@ -19673,7 +19745,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >setDomain(class : Class) : boolean</text>
       <text name="Fig6.6.7"
         x="641"
-        y="2082"
+        y="2075"
         width="303"
         height="14"
         fill="0"
@@ -19689,7 +19761,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >getRange() : ContainerCollection</text>
       <text name="Fig6.6.8"
         x="641"
-        y="2096"
+        y="2089"
         width="303"
         height="14"
         fill="0"
@@ -19705,7 +19777,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >setRange(class : Class) : boolean</text>
       <text name="Fig6.6.9"
         x="641"
-        y="2110"
+        y="2103"
         width="303"
         height="14"
         fill="0"
@@ -19721,7 +19793,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >getWidget() : Property</text>
       <text name="Fig6.6.10"
         x="641"
-        y="2124"
+        y="2117"
         width="303"
         height="14"
         fill="0"
@@ -19737,7 +19809,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >isLgDependent() : boolean</text>
       <text name="Fig6.6.11"
         x="641"
-        y="2138"
+        y="2131"
         width="303"
         height="14"
         fill="0"
@@ -19753,7 +19825,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >setLgDependent(isLgDependent : boolean)</text>
       <text name="Fig6.6.12"
         x="641"
-        y="2152"
+        y="2145"
         width="303"
         height="14"
         fill="0"
@@ -19769,7 +19841,23 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >isMultiple() : boolean</text>
       <text name="Fig6.6.13"
         x="641"
-        y="2166"
+        y="2159"
+        width="303"
+        height="14"
+        fill="0"
+        fillcolor="200 200 255"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setMultiple(isMultiple : boolean)</text>
+      <text name="Fig6.6.14"
+        x="641"
+        y="2173"
         width="303"
         height="20"
         fill="0"
@@ -19782,7 +19870,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
         bold="false"
         textsize="10"
         justification="Left"
-      >setMultiple(isMultiple : boolean)</text>
+      >delete(deleteReference : boolean = false) : boolean</text>
     </group>
   </group>
   <group name="Fig7"
@@ -35551,7 +35639,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
         bold="false"
         textsize="10"
         justification="Left"
-      >createSubClass(label : string = &apos;&apos;,comment : string = &apos;&apos;) : Class</text>
+      >createSubClass(label : string = &apos;&apos;,comment : string = &apos;&apos;,uri : string = &quot;&quot;) : Class</text>
       <text name="Fig0.6.13"
         x="961"
         y="668"
@@ -36384,7 +36472,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
     </group>
   </group>
   <group name="Fig2"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[88, 408, 291, 325]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[88, 408, 291, 360]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769"
        fill="1"
        fillcolor="white"
@@ -36398,7 +36486,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       x="88"
       y="408"
       width="291"
-      height="325"
+      height="360"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -36454,7 +36542,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       strokecolor="black"
     />
     <group name="Fig2.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[89, 431, 289, 94]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[89, 431, 289, 104]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769"
          fill="0"
          fillcolor="white"
@@ -36468,7 +36556,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
         x="89"
         y="431"
         width="289"
-        height="94"
+        height="104"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -36557,7 +36645,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
     </group>
     <rectangle name="Fig2.5"
       x="88"
-      y="525"
+      y="535"
       width="291"
       height="1"
       fill="1"
@@ -36566,7 +36654,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       strokecolor="black"
     />
     <group name="Fig2.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[89, 526, 289, 206]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[89, 536, 289, 230]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769"
          fill="0"
          fillcolor="white"
@@ -36578,9 +36666,9 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       
       <rectangle name="Fig2.6.0"
         x="89"
-        y="526"
+        y="536"
         width="289"
-        height="206"
+        height="230"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -36588,7 +36676,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       />
       <text name="Fig2.6.1"
         x="89"
-        y="526"
+        y="536"
         width="289"
         height="14"
         fill="0"
@@ -36604,7 +36692,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >__construct(uri : string,debug : string = &apos;&apos;) : void</text>
       <text name="Fig2.6.2"
         x="89"
-        y="540"
+        y="550"
         width="289"
         height="14"
         fill="0"
@@ -36620,7 +36708,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >feed() : void</text>
       <text name="Fig2.6.3"
         x="89"
-        y="554"
+        y="564"
         width="289"
         height="14"
         fill="0"
@@ -36636,7 +36724,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >getSubProperties(recursive : boolean = false) : array</text>
       <text name="Fig2.6.4"
         x="89"
-        y="568"
+        y="578"
         width="289"
         height="14"
         fill="0"
@@ -36652,7 +36740,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >setSubPropertyOf(property : Property) : boolean</text>
       <text name="Fig2.6.5"
         x="89"
-        y="582"
+        y="592"
         width="289"
         height="14"
         fill="0"
@@ -36668,7 +36756,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >getDomain() : ContainerCollection</text>
       <text name="Fig2.6.6"
         x="89"
-        y="596"
+        y="606"
         width="289"
         height="14"
         fill="0"
@@ -36684,7 +36772,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >setDomain(class : Class) : boolean</text>
       <text name="Fig2.6.7"
         x="89"
-        y="610"
+        y="620"
         width="289"
         height="14"
         fill="0"
@@ -36700,7 +36788,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >getRange() : ContainerCollection</text>
       <text name="Fig2.6.8"
         x="89"
-        y="624"
+        y="634"
         width="289"
         height="14"
         fill="0"
@@ -36716,7 +36804,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >setRange(class : Class) : boolean</text>
       <text name="Fig2.6.9"
         x="89"
-        y="638"
+        y="648"
         width="289"
         height="14"
         fill="0"
@@ -36732,7 +36820,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >getWidget() : Property</text>
       <text name="Fig2.6.10"
         x="89"
-        y="652"
+        y="662"
         width="289"
         height="14"
         fill="0"
@@ -36748,7 +36836,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >isLgDependent() : boolean</text>
       <text name="Fig2.6.11"
         x="89"
-        y="666"
+        y="676"
         width="289"
         height="14"
         fill="0"
@@ -36764,7 +36852,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >setLgDependent(isLgDependent : boolean)</text>
       <text name="Fig2.6.12"
         x="89"
-        y="680"
+        y="690"
         width="289"
         height="14"
         fill="0"
@@ -36780,7 +36868,23 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       >isMultiple() : boolean</text>
       <text name="Fig2.6.13"
         x="89"
-        y="694"
+        y="704"
+        width="289"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setMultiple(isMultiple : boolean)</text>
+      <text name="Fig2.6.14"
+        x="89"
+        y="718"
         width="289"
         height="20"
         fill="0"
@@ -36793,7 +36897,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
         bold="false"
         textsize="10"
         justification="Left"
-      >setMultiple(isMultiple : boolean)</text>
+      >delete(deleteReference : boolean = false) : boolean</text>
     </group>
   </group>
   <group name="Fig3"
@@ -41161,7 +41265,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
     </path>
   </group>
   <group name="Fig17"
-       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[1672, 384, 406, 112]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[1672, 384, 406, 117]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A0"
        fill="1"
        fillcolor="200 255 255"
@@ -41175,7 +41279,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       x="1672"
       y="384"
       width="406"
-      height="112"
+      height="117"
       fill="1"
       fillcolor="200 255 255"
       stroke="1"
@@ -41246,7 +41350,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       strokecolor="black"
     />
     <group name="Fig17.4"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1673, 423, 404, 72]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1673, 423, 404, 78]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A0"
          fill="0"
          fillcolor="200 255 255"
@@ -41260,7 +41364,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
         x="1673"
         y="423"
         width="404"
-        height="72"
+        height="78"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -41318,7 +41422,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
         x="1673"
         y="465"
         width="404"
-        height="20"
+        height="14"
         fill="0"
         fillcolor="200 255 255"
         stroke="0"
@@ -41330,6 +41434,22 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
         textsize="10"
         justification="Left"
       >getRange(resource : Resource) : Class</text>
+      <text name="Fig17.4.5"
+        x="1673"
+        y="479"
+        width="404"
+        height="20"
+        fill="0"
+        fillcolor="200 255 255"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >delete(resource : Resource,deleteReference : boolean = false) : boolean</text>
     </group>
   </group>
   <group name="Fig18"
@@ -41597,7 +41717,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
         bold="false"
         textsize="10"
         justification="Left"
-      >createSubClass(resource : Resource,label : string = &apos;&apos;,comment : string = &apos;&apos;) : Class</text>
+      >createSubClass(resource : Resource,label : string = &apos;&apos;,comment : string = &apos;&apos;,uri : string = &apos;&apos;) : Class</text>
       <text name="Fig18.4.11"
         x="889"
         y="555"
@@ -41668,7 +41788,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
         width="676"
         height="20"
         fill="0"
-        fillcolor="white"
+        fillcolor="200 255 255"
         stroke="0"
         strokecolor="black"
         textcolor="black"
@@ -42161,7 +42281,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       <lineto x="1840"
               y="776" />
       <lineto x="1840"
-              y="496" />
+              y="501" />
     </path>
   </group>
   <group name="Fig25"
@@ -42194,7 +42314,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       <lineto x="1840"
               y="928" />
       <lineto x="1840"
-              y="496" />
+              y="501" />
     </path>
   </group>
   <group name="Fig26"
@@ -42227,7 +42347,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       <lineto x="1840"
               y="1184" />
       <lineto x="1840"
-              y="496" />
+              y="501" />
     </path>
   </group>
   <group name="Fig27"
@@ -44166,7 +44286,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       <lineto x="1840"
               y="1384" />
       <lineto x="1840"
-              y="496" />
+              y="501" />
     </path>
   </group>
   <group name="Fig45"
@@ -45633,7 +45753,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
       <lineto x="1840"
               y="1576" />
       <lineto x="1840"
-              y="496" />
+              y="501" />
     </path>
   </group>
 </pgml>

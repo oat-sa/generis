@@ -333,15 +333,16 @@ class core_kernel_classes_Class
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string label
      * @param  string comment
+     * @param  string uri
      * @return core_kernel_classes_Class
      */
-    public function createSubClass($label = '', $comment = '')
+    public function createSubClass($label = '', $comment = '', $uri = "")
     {
         $returnValue = null;
 
         // section 10-13-1--99-3835caab:11e45736d24:-8000:0000000000000F2A begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->createSubClass ($this, $label, $comment);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->createSubClass ($this, $label, $comment, $uri);
         
         // section 10-13-1--99-3835caab:11e45736d24:-8000:0000000000000F2A end
 
