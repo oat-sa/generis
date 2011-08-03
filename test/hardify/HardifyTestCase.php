@@ -39,6 +39,7 @@ class HardifyTestCase extends UnitTestCase {
 				)
 			)
 		), array ('argv'=>array('-c -i', '-c', '-i')));
+		set_time_limit(900);
 	}
 }
 
