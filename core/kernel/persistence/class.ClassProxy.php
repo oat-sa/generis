@@ -401,11 +401,11 @@ class core_kernel_persistence_ClassProxy
         
     	$delegate = $this->getImpToDelegateTo($resource);
         if($delegate instanceof core_kernel_persistence_hardsql_Class){
-                // Use the smooth sql implementation to get this information
+        // Use the smooth sql implementation to get this information
 		// Or find the right way to treat this case
-                $returnValue = core_kernel_persistence_smoothsql_Class::singleton()->createProperty($label, $label, $comment, $isLgDependent);
+        	$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->createProperty($resource, $label, $comment, $isLgDependent);
         }else{
-                $returnValue = $delegate->createProperty($resource, $label, $comment, $isLgDependent);
+            $returnValue = $delegate->createProperty($resource, $label, $comment, $isLgDependent);
         }
         
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F3C end
