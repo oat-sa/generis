@@ -429,7 +429,7 @@ class core_kernel_persistence_ClassProxy
 
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 begin
         
-	$delegate = $this->getImpToDelegateTo($resource);
+		$delegate = $this->getImpToDelegateTo($resource);
         $returnValue = $delegate->searchInstances($resource, $propertyFilters, $options);
         
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end

@@ -551,81 +551,81 @@ class core_kernel_persistence_virtuoso_Class
                 
                 $conditions = array();
                 foreach($propertyFilters as $propertyUri => $pattern){
-                        
-                        list($propNS, $propID) = explode('#', $propertyUri);
-                        if(!empty($propID)){
-                                
-                                if(!isset($prefixes[$propNS])){
-                                        $prefixes[$propNS] = 'NS'.count($prefixes);
-                                }
-                                        
-                                if (is_string($pattern)) {
-                                        if (!empty($pattern)) {
-                                                $o = '?o'.count($objects);
-                                                $objects[] = $o;
-                                                
-                                                $object = trim($pattern);
-                                                
-                                                if(common_Utils::isUri($object)){
-                                                        //if it is a uri, ignore "like" and "lang" options:
-                                                        list($objectNS, $objectID) = explode('#', $object);
-                                                        if(!empty($objectID)){
-                                                                if(!isset($prefixes[$objectNS])){
-                                                                        $prefixes[$objectNS] = 'NS'.count($prefixes);
-                                                                }
-                                                                $conditions[] = $prefixes[$propNS].':'.$propID.' '.$prefixes[$objectNS].':'.$objectID.' ; '; 
-                                                        }
-                                                }else{
-                                                        if ($like) {
-                                                                $filters[] = 'regex(str('.$o.'), "'.$virtuoso->escapeRegex($object, 'regex').'")';
-                                                                if (!empty($lg)) {//&& !common_Utils::isUri($object)
-                                                                        $filters[] = 'langMatches(lang(' . $o . '),"' . $lg . '")';
-                                                                }
-                                                                $conditions[] = $prefixes[$propNS].':'.$propID.' '.$o.' ; ';
-                                                        }else{
-                                                                $object = '"'.$virtuoso->escape($object).'"';
-                                                                $object .= empty($lg)?'':'@'.$lg;
-                                                                $conditions[] = $prefixes[$propNS].':'.$propID.' '.$object.' ; ';
-                                                        }
-                                                }
-                                        }
-                                } else if (is_array($pattern)) {
-                                        if (count($pattern) > 0) {
-                                                $o = '?o'.count($objects);
-                                                $objects[] = $o;
-                                                
-                                                $validLanguageMatching = true;
-                                                $multiCondition = '(';
-                                                foreach ($pattern as $i => $patternToken) {
-                                                        if ($i > 0) {
-                                                                $multiCondition .= " || ";
-                                                        }
-                                                        
-                                                        $object = trim($patternToken);
-                                                        
-                                                        if(!$validLanguageMatching && common_Utils::isUri($object)) $validLanguageMatching = false;//no resource available for language dependent check
-                                                        
-                                                        if (!$like) {
-                                                                $object = preg_match('/^\^/', $object)? $object : '^'.$object;
-                                                                $object = preg_match('/\$$/', $object)? $object : $object.'$';
-                                                        }
-                                                
-                                                        $multiCondition .= 'regex(str('.$o.'), "'.$virtuoso->escapeRegex($object, 'regex').'")';
-                                                }
-                                                
-                                                if(!empty($lg) && $validLanguageMatching){
-                                                        $filters[] = 'langMatches(lang('.$o.'),'.$lg.')';
-                                                }
-                                                
-                                                $filters[] = $multiCondition.')';
-                                                
-                                                $conditions[] = $prefixes[$propNS].':'.$propID.' '.$o.' ; ';
-                                        }
-                                }
-                        }
+
+					list($propNS, $propID) = explode('#', $propertyUri);
+					if(!empty($propID)){
+
+						if(!isset($prefixes[$propNS])){
+								$prefixes[$propNS] = 'NS'.count($prefixes);
+						}
+
+						if (is_string($pattern)) {
+							if (!empty($pattern)) {
+								$o = '?o'.count($objects);
+								$objects[] = $o;
+
+								$object = trim($pattern);
+
+								if(common_Utils::isUri($object)){
+										//if it is a uri, ignore "like" and "lang" options:
+										list($objectNS, $objectID) = explode('#', $object);
+										if(!empty($objectID)){
+												if(!isset($prefixes[$objectNS])){
+														$prefixes[$objectNS] = 'NS'.count($prefixes);
+												}
+												$conditions[] = $prefixes[$propNS].':'.$propID.' '.$prefixes[$objectNS].':'.$objectID.' ; '; 
+										}
+								}else{
+										if ($like) {
+												$filters[] = 'regex(str('.$o.'), "'.$virtuoso->escapeRegex($object, 'regex').'")';
+												if (!empty($lg)) {//&& !common_Utils::isUri($object)
+														$filters[] = 'langMatches(lang(' . $o . '),"' . $lg . '")';
+												}
+												$conditions[] = $prefixes[$propNS].':'.$propID.' '.$o.' ; ';
+										}else{
+												$object = '"'.$virtuoso->escape($object).'"';
+												$object .= empty($lg)?'':'@'.$lg;
+												$conditions[] = $prefixes[$propNS].':'.$propID.' '.$object.' ; ';
+										}
+								}
+						}
+					} else if (is_array($pattern)) {
+						if (count($pattern) > 0) {
+								$o = '?o'.count($objects);
+								$objects[] = $o;
+
+								$validLanguageMatching = true;
+								$multiCondition = '(';
+								foreach ($pattern as $i => $patternToken) {
+										if ($i > 0) {
+												$multiCondition .= " || ";
+										}
+
+										$object = trim($patternToken);
+
+										if(!$validLanguageMatching && common_Utils::isUri($object)) $validLanguageMatching = false;//no resource available for language dependent check
+
+										if (!$like) {
+												$object = preg_match('/^\^/', $object)? $object : '^'.$object;
+												$object = preg_match('/\$$/', $object)? $object : $object.'$';
+										}
+
+										$multiCondition .= 'regex(str('.$o.'), "'.$virtuoso->escapeRegex($object, 'regex').'")';
+								}
+
+								if(!empty($lg) && $validLanguageMatching){
+										$filters[] = 'langMatches(lang('.$o.'),'.$lg.')';
+								}
+
+								$filters[] = $multiCondition.')';
+
+								$conditions[] = $prefixes[$propNS].':'.$propID.' '.$o.' ; ';
+							}
+						}
+					}
                 }
                 if(count($conditions) == 0){
-                        return $returnValue;
+					return $returnValue;
                 }
                 
                 //start building query:
@@ -633,8 +633,8 @@ class core_kernel_persistence_virtuoso_Class
                 
                 //insert prefixes:
                 foreach($prefixes as $ns => $alias){
-                        $query .= '
-                                PREFIX '.$alias.':<'.$ns.'#> ';
+					$query .= '
+						PREFIX '.$alias.':<'.$ns.'#> ';
                 }
                 
                 $from = '';
@@ -646,59 +646,59 @@ class core_kernel_persistence_virtuoso_Class
 //                }
                 
                 $query .= '
-                        SELECT ?s '.$from.' WHERE {?s ';
+					SELECT ?s '.$from.' WHERE {?s ';
                 
                 //append conditions:
                 foreach($conditions as $condition){
-                        $query .= ' '.$condition;
+					$query .= ' '.$condition;
                 }
                 $query = substr_replace($query, '.', -2);//close conditions
                 
                 //add filters:
                 $intersect = true;
                 if(isset($options['chaining'])){
-                        if(strtolower($options['chaining']) == 'or'){
-                                $intersect = false;
-                        }
+					if(strtolower($options['chaining']) == 'or'){
+						$intersect = false;
+					}
                 }
                 if($intersect){
-                        foreach($filters as $filter){
-                                $query .='
-                                        FILTER '.$filter;
-                        }
+					foreach($filters as $filter){
+						$query .='
+								FILTER '.$filter;
+					}
                 }else{
-                        $query .='
-                                FILTER (';
-                        $i = 0;
-                        foreach($filters as $filter){
-                                if($i>0) $query .= ' || ';
-                                $query .= $filter;
-                                $i++;
-                        }
+					$query .='
+							FILTER (';
+					$i = 0;
+					foreach($filters as $filter){
+						if($i>0) $query .= ' || ';
+						$query .= $filter;
+						$i++;
+					}
                 }
                 $query .= '}';
                 
                 $resultArray = $virtuoso->execQuery($query);
                 $count = count($resultArray);
                 for($i=0; $i<$count; $i++){
-                        if (isset($resultArray[$i][0])) {
-                                $instanceUri = $resultArray[$i][0];
-                                $returnValue[$instanceUri] = new core_kernel_classes_Resource($instanceUri);
-                        }
+					if (isset($resultArray[$i][0])) {
+						$instanceUri = $resultArray[$i][0];
+						$returnValue[$instanceUri] = new core_kernel_classes_Resource($instanceUri);
+					}
                 }
                 
                 //Check in the subClasses recurslively.
                 // Be carefull, it can be perf consuming with large data set and subclasses
-                (isset($options['recursive'])) ? $recursive = (bool)$options['recursive'] : $recursive = false;
+                (isset($options['recursive'])) ? $recursive = intval($options['recursive']) : $recursive = 0;
                 if($recursive){
-                        //the recusivity depth is set to one level
-                        foreach($resource->getSubClasses(true) as $subClass){
-                                unset($propertyFilters[RDF_TYPE]);//reset the RDF_TYPE filter for recursive searching!!!
-                                $returnValue = array_merge(
-                                        $returnValue, 
-                                        $subClass->searchInstances($propertyFilters, array_merge($options, array('recursive' => true)))
-                                );
-                        }
+					$recursive--;
+					foreach($resource->getSubClasses(true) as $subClass){
+						unset($propertyFilters[RDF_TYPE]);//reset the RDF_TYPE filter for recursive searching!!!
+						$returnValue = array_merge(
+								$returnValue, 
+								$subClass->searchInstances($propertyFilters, array_merge($options, array('recursive' => $recursive)))
+						);
+					}
                 }
         }
         

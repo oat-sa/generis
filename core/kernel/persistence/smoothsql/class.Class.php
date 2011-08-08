@@ -500,6 +500,13 @@ class core_kernel_persistence_smoothsql_Class
         $returnValue = array();
 
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 begin
+		/*
+		options lists:
+		like			: (bool) 	true/false (default: true)
+		chaining		: (string) 	'or'/'and' (default: 'and')
+		recursive		: (int) 	recursivity depth (default: 0)
+		lang			: (string) 	e.g. 'EN', 'FR' (default: '') for all properties!
+		*/
 		
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		
@@ -612,14 +619,15 @@ class core_kernel_persistence_smoothsql_Class
 		
 		//Check in the subClasses recurslively.
 		// Be carefull, it can be perf consuming with large data set and subclasses
-		(isset($options['recursive'])) ? $recursive = (bool)$options['recursive'] : $recursive = false;
+		(isset($options['recursive'])) ? $recursive = intval($options['recursive']) : $recursive = 0;
 		if($recursive){
 			//the recusivity depth is set to one level
 			foreach($resource->getSubClasses(true) as $subClass){
+				$recursive--;
 				unset($propertyFilters[RDF_TYPE]);//reset the RDF_TYPE filter for recursive searching!
 				$returnValue = array_merge(
 					$returnValue, 
-					$subClass->searchInstances($propertyFilters, array_merge($options, array('recursive' => false)))
+					$subClass->searchInstances($propertyFilters, array_merge($options, array('recursive' => $recursive)))
 				);
 			}
 		}

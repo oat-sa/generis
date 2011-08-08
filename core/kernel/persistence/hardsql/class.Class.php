@@ -420,9 +420,10 @@ class core_kernel_persistence_hardsql_Class
 		options lists:
 		like			: (bool) 	true/false (default: true)
 		chaining		: (string) 	'or'/'and' (default: 'and')
-		recursive		: (bool) 	true/false (default: true)
-		lang			: (string) 	e.g. 'EN', 'FR' (default: '')
+		recursive		: (int) 	recursivity depth (default: 0)
+		lang			: (string) 	e.g. 'EN', 'FR' (default: '') for all properties!
 		*/
+		
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
 
 		$like = true;
@@ -573,13 +574,13 @@ class core_kernel_persistence_hardsql_Class
 
 		//Check in the subClasses recurslively.
 		// Be carefull, it can be perf consuming with large data set and subclasses
-		(isset($options['recursive'])) ? $recursive = (bool)$options['recursive'] : $recursive = false;
+		(isset($options['recursive'])) ? $recursive = intval($options['recursive']) : $recursive = 0;
 		if($recursive){
-			//the recusivity depth is set to one level
+			$recursive--;
 			foreach($resource->getSubClasses(true) as $subclass){
 				$returnValue = array_merge(
 				$returnValue,
-				$subclass->searchInstances($propertyFilters, array_merge($options, array('recursive' => false)))
+				$subclass->searchInstances($propertyFilters, array_merge($options, array('recursive' => $recursive)))
 				);
 			}
 		}

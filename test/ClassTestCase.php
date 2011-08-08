@@ -276,7 +276,7 @@ class ClassTestCase extends UnitTestCase {
 		$propertyFilter = array(
 			PROPERTY_IS_LG_DEPENDENT => GENERIS_TRUE
 		);
-		$options = array('like' => false, 'recursive' => false);
+		$options = array('like' => false, 'recursive' => 0);
 		$languagesDependantProp = $propertyClass->searchInstances($propertyFilter, $options);
 		
 		$found = count($languagesDependantProp);
@@ -305,7 +305,7 @@ class ClassTestCase extends UnitTestCase {
 			$propertyFilter = array(
 				RDFS_LABEL => 'EN'
 			);
-			$options = array('like' => false, 'recursive' => false);
+			$options = array('like' => false, 'recursive' => 0);
 					
 			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
 			
@@ -339,7 +339,7 @@ class ClassTestCase extends UnitTestCase {
 				'http://www.tao.lu/Ontologies/generis.rdf#login' => 's1',
 				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'e10adc3949ba59abbe56e057f20f883e'
 			);
-			$options = array('like' => false, 'recursive' => false);
+			$options = array('like' => false, 'recursive' => 0);
 			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
 			$nfound = count($languagesDependantProp);
 			$this->assertTrue($nfound > 0);
@@ -349,7 +349,7 @@ class ClassTestCase extends UnitTestCase {
 				'http://www.tao.lu/Ontologies/generis.rdf#login' => '%s1',
 				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'e10adc3949ba59abbe56e057f20f883e'
 			);
-			$options = array('like' => true, 'recursive' => false);
+			$options = array('like' => true, 'recursive' => 0);
 			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
 			$likeFound = count($languagesDependantProp);
 			$this->assertTrue($likeFound > 0);

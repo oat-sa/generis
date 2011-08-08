@@ -98,7 +98,7 @@ class core_kernel_users_Service
         }
         $users = $class->searchInstances(
         	array(PROPERTY_USER_LOGIN => $login), 
-        	array('like' => true, 'recursive' => true)
+        	array('like' => true, 'recursive' => 1)
         );
         if(count($users) > 0){
         	$returnValue = true;
@@ -234,7 +234,7 @@ class core_kernel_users_Service
 				), 
 				array(
 					'like' 		=> false,
-					'recursive'	=> true
+					'recursive'	=> 1
 				)
 			);
 			$user = null;
@@ -303,7 +303,7 @@ class core_kernel_users_Service
         
     	$users = $class->searchInstances(
     		array(PROPERTY_USER_LOGIN => $login), 
-    		array('like' => false, 'recursive' => true)
+    		array('like' => false, 'recursive' => 1)
     	);
     	foreach($users as $user){
     		$returnValue = $user;
