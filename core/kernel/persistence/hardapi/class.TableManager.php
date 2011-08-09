@@ -155,7 +155,7 @@ class core_kernel_persistence_hardapi_TableManager
 					}
 				}
 			}
-			$query .= ');';
+			$query .= ')/*!DEFAULT CHARSET=utf8*/;';
 
 			$dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() > 0){
@@ -191,7 +191,7 @@ class core_kernel_persistence_hardapi_TableManager
 				REFERENCES {$this->name}(id)";
             */
                                 
-			$query .= ");";
+			$query .= ")/*!DEFAULT CHARSET=utf8*/;";
 				
 			$dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() !== 0){
