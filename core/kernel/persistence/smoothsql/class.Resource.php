@@ -385,12 +385,12 @@ class core_kernel_persistence_smoothsql_Resource
 	       		$query = 'INSERT INTO "statements" ("modelID","subject","predicate","object","l_language","author","stread","stedit","stdelete","epoch") VALUES ';
 	       		
 	       		foreach($properties as $propertyUri => $value){
-	       			
+	       			/*
 	       			if(!common_Utils::isUri($propertyUri)){
 	       				$label = $resource->getLabel();
 	       				throw new common_Exception("setPropertiesValues' argument must contains property uris as keys, 
 	       												in {$label} ({$resource->uriResource})");
-	       			}
+	       			}*/
 	       			$property = new core_kernel_classes_Property($propertyUri);
 	       			$object = $dbWrapper->dbConnector->escape($value);
 	       			$lang 	= ($property->isLgDependent() ? ( $session->getLg() != '' ? $session->getLg() : $session->defaultLg) : '');

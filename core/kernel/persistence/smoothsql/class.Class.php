@@ -591,6 +591,9 @@ class core_kernel_persistence_smoothsql_Class
 			foreach($conditions as $condition){
 				$tmpMatchingUris = array();
 				$result = $dbWrapper->execSql($query . $condition);
+				if($dbWrapper->dbConnector->errorNo() !== 0){
+					throw new core_kernel_persistence_smoothsql_Exception($dbWrapper->dbConnector->errorMsg());
+				}
 				while (!$result->EOF){
 					$foundInstancesUri = $result->fields['subject'];
 					$tmpMatchingUris[$foundInstancesUri] = $foundInstancesUri;
@@ -687,13 +690,15 @@ class core_kernel_persistence_smoothsql_Class
 
         // section 127-0-1-1--120bf54f:13142fdf597:-8000:000000000000312D begin
         
-    $distinct = isset($options['distinct']) ? $options['distinct'] : false;
-        
+    	$distinct = isset($options['distinct']) ? $options['distinct'] : false;
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $uris = '';
+        $searchInstancesOptions = array (
+        	'recursive' 	=> isset($options['recursive']) ? $options['recursive'] : false
+        );
         
         // Search all instances for the property filters paramter
-        $instances = $resource->searchInstances($propertyFilters);
+        $instances = $resource->searchInstances($propertyFilters, $searchInstancesOptions);
         if ($instances){
 	        foreach ($instances as $instance){
 	        	$uris .= '\''.$instance->uriResource.'\',';
@@ -713,7 +718,7 @@ class core_kernel_persistence_smoothsql_Class
 	    	if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_smoothsql_Exception('Unable to get instances\' property values : '.$dbWrapper->dbConnector->errorMsg());
 			}
-			if ($sqlResult->EOF)throw new Exception($query.' > '.$property->uriResource);
+			
 			while (!$sqlResult->EOF){
 				if(!common_Utils::isUri($sqlResult->fields['object'])) {
 	                $returnValue[] = new core_kernel_classes_Literal($sqlResult->fields['object']);
