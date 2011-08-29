@@ -48,7 +48,7 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 		if(!empty($this->myUserUri)){
 			//try login with the given user.
 			$myUser = new core_kernel_classes_Resource($this->myUserUri);
-			if(wfEngine_helpers_ProcessUtil::checkType($myUser, new core_kernel_classes_Class(CLASS_ROLE_WORKFLOWUSERROLE))){
+			if($myUser->hasType( new core_kernel_classes_Class(CLASS_ROLE_WORKFLOWUSERROLE))){
 				$login = (string) $myUser->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_LOGIN));
 				$md5pass = (string) $myUser->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD));
 			}
@@ -273,7 +273,7 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 		if(!empty($this->processDefinitionUri) && !empty($this->executionNumber)){
 		
 			$deliveryProcess = new core_kernel_classes_Resource($this->processDefinitionUri);
-			if(wfEngine_helpers_ProcessUtil::checkType($deliveryProcess, new core_kernel_classes_Class(CLASS_PROCESS))){
+			if($deliveryProcess->hasType(new core_kernel_classes_Class(CLASS_PROCESS))){
 				$activityNumber = 0;
 				$processAuthoringService = tao_models_classes_ServiceFactory::get('wfEngine_models_classes_ProcessAuthoringService');
 				$activityNumber = count($processAuthoringService->getActivitiesByProcess($deliveryProcess));
