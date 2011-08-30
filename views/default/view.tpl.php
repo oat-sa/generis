@@ -3,7 +3,7 @@
 	<head>
 		<title>Generis Extensions Manager</title>
 		<style type="text/css">
-			@import	url(../../views/<?php echo $GLOBALS['dir_theme'];?>css/tab.css);
+			@import	url(<?php echo BASE_URL; ?><?php echo $GLOBALS['dir_theme'];?>css/tab.css);
 		</style>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta http-equiv="Content-Script-Type" content="text/javascript" />

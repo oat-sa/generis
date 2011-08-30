@@ -222,7 +222,15 @@ class common_ext_ExtensionsManager
     public function getAvailableExtensions()
     {
         // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002364 begin
-		$result = require GENERIS_BASE_PATH.'/extensionsList.php';
+		$result = array( 
+		'testExtension' => array ( 
+				'zip' => dirname(__FILE__).'/test/common/testExtension.zip',
+				'author' => 'CRP Henri Tudor',
+				'name' => 'testExtensionZip',
+				'description' => 'Sample Test Extension to test Ext Mechanism',
+				'version' => '0.25'
+				)
+		);
 		$returnValue = array_diff_key($result,$this->getInstalledExtensions());
 		 
 		return $returnValue;

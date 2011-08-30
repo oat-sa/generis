@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(E_ALL);
+
 /**
  * default action
  * must be in the actions folder
@@ -21,7 +23,7 @@ class generis_actions_ExtensionsManager extends Module {
 		$availlableExtArray = $extensionManager->getAvailableExtensions();
 		$this->setData('installedExtArray',$installedExtArray);
 		$this->setData('availlableExtArray',$availlableExtArray);
-		$this->setView('view.tpl.php');
+		$this->setView('default/view.tpl.php');
 
 	}
 
