@@ -91,8 +91,9 @@ class core_kernel_persistence_hardsql_Resource
     		INNER JOIN "resource_to_table" ON "resource_to_table"."id" = "resource_has_class"."resource_id"
     		WHERE "resource_to_table"."uri" = ?';
 		$result	= $dbWrapper->execSql($query, array(
-			$resource->uriResource
-		));
+				$resource->uriResource
+			)
+		);
 		if($dbWrapper->dbConnector->errorNo() !== 0){
 			throw new core_kernel_persistence_hardsql_Exception("Unable to getType of the resource {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
 		} else {
@@ -519,7 +520,9 @@ class core_kernel_persistence_hardsql_Resource
                                                         $multiCondition =  "(";
                                                         foreach($pattern as $i => $patternToken){
                                                                 $searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
-                                                                if($i > 0) $multiCondition .= " OR ";
+                                                                if($i > 0){
+                                                                	$multiCondition .= " OR ";
+                                                                }
                                                                 $multiCondition .= ' ("property_value" '.$searchPattern.' OR "property_foreign_uri" '.$searchPattern.') ';
                                                         }
                                                         $additionalConditions[] = "{$multiCondition}) ";
@@ -554,7 +557,9 @@ class core_kernel_persistence_hardsql_Resource
 						$multiCondition =  "(";
 						foreach($pattern as $i => $patternToken){
 							$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
-							if($i > 0) $multiCondition .= " OR ";
+							if($i > 0){
+								$multiCondition .= " OR ";
+							}
 							$multiCondition .= ' ("'.$tableName.'"."'.$propertyName.'" '.$searchPattern.') ';
 						}
 						$additionalConditions[] = "{$multiCondition}) ";
@@ -632,7 +637,9 @@ class core_kernel_persistence_hardsql_Resource
                                                         $multiCondition =  "(";
                                                         foreach($pattern as $i => $patternToken){
                                                                 $searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
-                                                                if($i > 0) $multiCondition .= " OR ";
+                                                                if($i > 0){
+                                                                	$multiCondition .= " OR ";
+                                                                }
                                                                 $multiCondition .= ' ("property_value" '.$searchPattern.' OR "property_foreign_uri" '.$searchPattern.') ';
                                                         }
                                                         $additionalConditions[] = "{$multiCondition}) ";
