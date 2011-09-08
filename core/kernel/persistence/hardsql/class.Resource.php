@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 22.07.2011, 15:07:09 with ArgoUML PHP module 
+ * Automatically generated on 06.09.2011, 17:31:17 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardsql
  */
@@ -24,14 +24,14 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_persistence_PersistenceImpl
  *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
 require_once('core/kernel/persistence/class.PersistenceImpl.php');
 
 /**
  * include core_kernel_persistence_ResourceInterface
  *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
 require_once('core/kernel/persistence/interface.ResourceInterface.php');
 
@@ -47,7 +47,7 @@ require_once('core/kernel/persistence/interface.ResourceInterface.php');
  * Short description of class core_kernel_persistence_hardsql_Resource
  *
  * @access public
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardsql
  */
@@ -74,7 +74,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getType
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return array
      */
@@ -96,10 +96,9 @@ class core_kernel_persistence_hardsql_Resource
 		);
 		if($dbWrapper->dbConnector->errorNo() !== 0){
 			throw new core_kernel_persistence_hardsql_Exception("Unable to getType of the resource {$resource->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
-		} else {
-				
+		} 
+		else {	
 			while (!$result->EOF){
-
 				$returnValue[] = new core_kernel_classes_Class ($result->fields['uri']);
 				$result->moveNext();
 			}
@@ -114,18 +113,18 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getPropertyValues
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
-     * @param  array option
+     * @param  array options
      * @return array
      */
-    public function getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $option = array())
+    public function getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $options = array())
     {
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
-                
+        
 		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
 		$table = $referencer->resourceLocation($resource);
 		if(empty($table)){
@@ -136,10 +135,6 @@ class core_kernel_persistence_hardsql_Resource
 		if(empty($table)){
 			return $returnValue;
 		}
-
-		$one = isset($options['one']) && $options['one'] == true ? true : false;
-		$last = isset($options['last']) && $options['last'] == true ? true : false;
-                $forceDefaultLg = isset($options['forceDefaultLg']) && $options['forceDefaultLg'] == true ? true : false;
 		 
 		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
 		$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
@@ -148,42 +143,45 @@ class core_kernel_persistence_hardsql_Resource
 		// Select in the properties table of the class
 		if (in_array("{$table}Props", $propertyLocation)
 		|| ! $referencer->isPropertyReferenced($property)){
-				
+			
+			// Check if we have to return first or last entry
+			$one = isset($options['one']) && $options['one'] == true ? true : false;
+			$last = isset($options['last']) && $options['last'] == true ? true : false;
+			
 			$tableProps = $table."Props";
-			$session 	= core_kernel_classes_Session::singleton();
+			$session = core_kernel_classes_Session::singleton();
 			// Define language if required
 			$lang = '';
-                        $defaultLg = '';
-			if (isset($option['lg'])){
-				$lang = $option['lg'];
+			$defaultLg = '';
+			if (isset($options['lg'])){
+				$lang = $options['lg'];
 			}
 			else{
 				($session->getLg() != '') ? $lang = $session->getLg() : $lang = $session->defaultLg;
-                                $defaultLg = ' OR "l_language" = \''.$session->defaultLg.'\' ';
+				$defaultLg = ' OR "l_language" = \''.$session->defaultLg.'\' ';
 			}
-                        
+            
 			$query = 'SELECT "property_value", "property_foreign_uri"
 				FROM "'.$table.'"
 				INNER JOIN "'.$tableProps.'" on "'.$table.'"."id" = "'.$tableProps.'"."instance_id"
 			   	WHERE "'.$table.'"."uri" = ?
 				AND "'.$tableProps.'"."property_uri" = ?
 				AND ( "l_language" = ? OR "l_language" = \'\' '.$defaultLg.')';
-//			
+			
 			// Select first
 			if ($one) {
-                                
 				$result	= $dbWrapper->dbConnector->selectLimit($query, 1, -1, array(
-				$resource->uriResource
-				, $property->uriResource
-				, $lang
+					$resource->uriResource
+					, $property->uriResource
+					, $lang
 				));
 			}
 			// Select Last
 			else if ($last) {
 				$result	= $dbWrapper->execSql($query, array(
-				$resource->uriResource
-				, $property->uriResource
-				, $lang
+					$resource->uriResource
+					, $property->uriResource
+					, $lang
 				));
 				if (!$result->EOF){
 					$result->moveLast();
@@ -191,11 +189,10 @@ class core_kernel_persistence_hardsql_Resource
 			}
 			// Select All
 			else {
-
 				$result	= $dbWrapper->execSql($query, array(
-				$resource->uriResource
-				, $property->uriResource
-				, $lang
+					$resource->uriResource
+					, $property->uriResource
+					, $lang
 				));
 			}
 				
@@ -211,7 +208,6 @@ class core_kernel_persistence_hardsql_Resource
 		// Select in the main table of the class
 		else{
 			
-		
 			$query =  'SELECT "'.$propertyAlias.'" as "propertyValue" FROM "'.$table.'" WHERE "uri" = ?';
 			$result	= $dbWrapper->execSql($query, array(
 			$resource->uriResource
@@ -232,8 +228,6 @@ class core_kernel_persistence_hardsql_Resource
 				}
 			}
 			
-			
-
 		}
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B end
@@ -245,7 +239,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getPropertyValuesCollection
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return core_kernel_classes_ContainerCollection
@@ -257,7 +251,7 @@ class core_kernel_persistence_hardsql_Resource
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F begin
 
 		$returnValue = new core_kernel_classes_ContainerCollection($resource);
-		$values = $this->_getPropertyValues($resource, $property);
+		$values = $resource->getAllPropertyValues($property);
 			
 		foreach ($values as $value){
 			$returnValue->add($value);
@@ -272,7 +266,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getOnePropertyValue
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  boolean last
@@ -284,15 +278,16 @@ class core_kernel_persistence_hardsql_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
 
-		$options = array();
-                $options['forceDefaultLg'] = true;  
+		$options = array(
+			'forceDefaultLg' => true
+		);  
 		if($last){
 			$options['last'] = true;
 		}else{
 			$options['one'] = true;
 		}
 
-		$value = $this->_getPropertyValues($resource, $property, $options);
+		$value = $resource->getAllPropertyValues($property, $options);
 		if (count($value)){
 			$returnValue = $value[0];
 		}
@@ -306,7 +301,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getPropertyValuesByLg
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string lg
@@ -319,7 +314,7 @@ class core_kernel_persistence_hardsql_Resource
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 begin
 
 		$options = array('lg'=>$lg);
-		$returnValue = $this->_getPropertyValues ($resource, $property, $options);
+		$returnValue = $resource->getAllPropertyValues ($property, $options);
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 end
 
@@ -330,7 +325,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method setPropertyValue
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string object
@@ -429,7 +424,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method setPropertiesValues
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  array properties
      * @return boolean
@@ -449,7 +444,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method setPropertyValueByLg
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string value
@@ -473,7 +468,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method removePropertyValues
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  array options
@@ -594,7 +589,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method removePropertyValueByLg
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string lg
@@ -671,7 +666,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getRdfTriples
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return core_kernel_classes_ContainerCollection
      */
@@ -690,7 +685,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getUsedLanguages
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return array
@@ -725,7 +720,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method duplicate
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  array excludedProperties
      * @return core_kernel_classes_Resource
@@ -842,7 +837,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method delete
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  boolean deleteReference
      * @return boolean
@@ -982,7 +977,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getLastModificationDate
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return core_kernel_persistence_doc_date
@@ -1002,7 +997,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getLastModificationUser
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return string
      */
@@ -1021,7 +1016,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getPropertiesValue
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  array properties
      * @param  boolean last
@@ -1035,7 +1030,7 @@ class core_kernel_persistence_hardsql_Resource
         
 		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         
-		// section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 end
+        // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 end
 
         return (array) $returnValue;
     }
@@ -1044,7 +1039,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method setType
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Class class
      * @return boolean
@@ -1124,7 +1119,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method removeType
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Class class
      * @return boolean
@@ -1164,7 +1159,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method singleton
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return core_kernel_classes_Resource
      */
     public static function singleton()
@@ -1187,7 +1182,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method isValidContext
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -1204,42 +1199,6 @@ class core_kernel_persistence_hardsql_Resource
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5A end
 
         return (bool) $returnValue;
-    }
-
-    /**
-     * Similar to getPropertyValues but return an array of 
-     * Resources. GetPropertyValues does not have the 
-     * same behavior than other getPropertyValues 
-     * like funcions. It should be good to refactor.
-     *
-     * @access private
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  array options
-     * @return array
-     */
-    private function _getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $options = array())
-    {
-        $returnValue = array();
-
-        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000153E begin
-		
-		$propertyValues = $this->getPropertyValues($resource, $property, $options);
-		
-		
-		// Format output data
-		foreach ($propertyValues as $propertyValue){
-			if(!common_Utils::isUri($propertyValue)) {
-				$returnValue[] = new core_kernel_classes_Literal($propertyValue);
-			} else {
-				$returnValue[] = new core_kernel_classes_Resource($propertyValue);
-			}
-		}
-
-        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000153E end
-
-        return (array) $returnValue;
     }
 
 } /* end of class core_kernel_persistence_hardsql_Resource */

@@ -201,7 +201,6 @@ class ResourceTestCase extends UnitTestCase{
 		$this->assertTrue($collectionEn->get(0)->literal == 'true');
 		$instance->delete();
 		$seeAlso->delete();
-
 	}
 
 	public function testSetPropertyValueByLg(){

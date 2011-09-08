@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 22.07.2011, 15:14:40 with ArgoUML PHP module 
+ * Automatically generated on 06.09.2011, 17:31:17 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -24,35 +24,35 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_persistence_PersistenceProxy
  *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
 require_once('core/kernel/persistence/class.PersistenceProxy.php');
 
 /**
  * include core_kernel_persistence_hardsql_Resource
  *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
 require_once('core/kernel/persistence/hardsql/class.Resource.php');
 
 /**
  * include core_kernel_persistence_ResourceInterface
  *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
 require_once('core/kernel/persistence/interface.ResourceInterface.php');
 
 /**
  * include core_kernel_persistence_smoothsql_Resource
  *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
 require_once('core/kernel/persistence/smoothsql/class.Resource.php');
 
 /**
  * include core_kernel_persistence_subscription_Resource
  *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
 require_once('core/kernel/persistence/subscription/class.Resource.php');
 
@@ -68,7 +68,7 @@ require_once('core/kernel/persistence/subscription/class.Resource.php');
  * Short description of class core_kernel_persistence_ResourceProxy
  *
  * @access public
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -103,7 +103,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method getType
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return array
      */
@@ -125,24 +125,24 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method getPropertyValues
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
-     * @param  array option
+     * @param  array options
      * @return array
      */
-    public function getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $option = array())
+    public function getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $options = array())
     {
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
 
 		$delegate = $this->getImpToDelegateTo($resource);
-		$returnValue = $delegate->getPropertyValues($resource, $property);
+		$returnValue = $delegate->getPropertyValues($resource, $property, $options);
 
 		if($this->isValidContext('subscription', $resource)){
 			$delegate = core_kernel_persistence_subscription_Resource::singleton();
-			$subscriptionValue = $delegate->getPropertyValues($resource, $property);
+			$subscriptionValue = $delegate->getPropertyValues($resource, $property, $options);
 			$returnValue = array_merge($returnValue, $subscriptionValue);
 		}
 
@@ -155,7 +155,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method getPropertyValuesCollection
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return core_kernel_classes_ContainerCollection
@@ -184,7 +184,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method getOnePropertyValue
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  boolean last
@@ -208,7 +208,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method getPropertyValuesByLg
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string lg
@@ -232,7 +232,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method setPropertyValue
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string object
@@ -257,7 +257,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method setPropertiesValues
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  array properties
      * @return boolean
@@ -280,7 +280,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method setPropertyValueByLg
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string value
@@ -305,7 +305,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method removePropertyValues
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  array options
@@ -329,7 +329,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method removePropertyValueByLg
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string lg
@@ -354,7 +354,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method getRdfTriples
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return core_kernel_classes_ContainerCollection
      */
@@ -376,7 +376,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method getUsedLanguages
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return array
@@ -399,7 +399,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method duplicate
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  array excludedProperties
      * @return core_kernel_classes_Resource
@@ -422,7 +422,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method delete
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  boolean deleteReference
      * @return boolean
@@ -445,7 +445,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method getLastModificationDate
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return core_kernel_persistence_doc_date
@@ -468,7 +468,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method getLastModificationUser
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return string
      */
@@ -490,7 +490,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method getPropertiesValue
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  array properties
      * @param  boolean last
@@ -514,7 +514,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method setType
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Class class
      * @return boolean
@@ -537,7 +537,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method removeType
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Class class
      * @return boolean
@@ -560,7 +560,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method singleton
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return core_kernel_persistence_PersistanceProxy
      */
     public static function singleton()
@@ -583,7 +583,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method getImpToDelegateTo
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  array params
      * @return core_kernel_persistence_ResourceInterface
@@ -637,7 +637,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of method isValidContext
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string context
      * @param  Resource resource
      * @return boolean
@@ -663,6 +663,39 @@ class core_kernel_persistence_ResourceProxy
         // section 127-0-1-1--499759bc:12f72c12020:-8000:0000000000001558 end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method getAllPropertyValues
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Resource resource
+     * @param  Property property
+     * @param  array options
+     * @return array
+     */
+    public function getAllPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $options = array())
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1-3b11b49e:1323ea85daa:-8000:0000000000003DBC begin
+        
+        $propertyValues = $this->getPropertyValues($resource, $property, $options);
+		
+		// Format output data
+        
+    	foreach ($propertyValues as $propertyValue){
+			if(!common_Utils::isUri($propertyValue)) {
+				$returnValue[] = new core_kernel_classes_Literal($propertyValue);
+			} else {
+				$returnValue[] = new core_kernel_classes_Resource($propertyValue);
+			}
+		}
+		
+        // section 127-0-1-1-3b11b49e:1323ea85daa:-8000:0000000000003DBC end
+
+        return (array) $returnValue;
     }
 
 } /* end of class core_kernel_persistence_ResourceProxy */

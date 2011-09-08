@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 22.07.2011, 15:07:09 with ArgoUML PHP module 
+ * Automatically generated on 06.09.2011, 17:31:17 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_smoothsql
  */
@@ -24,14 +24,14 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_persistence_PersistenceImpl
  *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
 require_once('core/kernel/persistence/class.PersistenceImpl.php');
 
 /**
  * include core_kernel_persistence_ResourceInterface
  *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  */
 require_once('core/kernel/persistence/interface.ResourceInterface.php');
 
@@ -47,7 +47,7 @@ require_once('core/kernel/persistence/interface.ResourceInterface.php');
  * Short description of class core_kernel_persistence_smoothsql_Resource
  *
  * @access public
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_smoothsql
  */
@@ -74,7 +74,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method getType
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return array
      */
@@ -105,36 +105,86 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method getPropertyValues
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
-     * @param  array option
+     * @param  array options
      * @return array
      */
-    public function getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $option = array())
+    public function getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $options = array())
     {
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
         
+        $one = isset($options['one']) && $options['one'] == true ? true : false;
+		$last = isset($options['last']) && $options['last'] == true ? true : false;
+		$session = core_kernel_classes_Session::singleton();
+		
+    	// Define language if required
+		$lang = '';
+		$defaultLg = '';
+		if (isset($options['lg'])){
+			$lang = $options['lg'];
+		}
+		else{
+			($session->getLg() != '') ? $lang = $session->getLg() : $lang = $session->defaultLg;
+			$defaultLg = ' OR "l_language" = \''.$session->defaultLg.'\' ';
+		}
+		
         $session = core_kernel_classes_Session::singleton();
        	$modelIds = implode(',',array_keys($session->getLoadedModels()));
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $query =  'SELECT "object", "l_language" 
+    	//$sqlQuery = 'SELECT "object" FROM "statements" WHERE "subject" = ? AND "predicate" = ? AND "l_language" = ?;';
+        $query =  'SELECT "object", "l_language"
         			FROM "statements" 
 		    		WHERE "subject" = ? 
 		    		AND "predicate" = ?
-		    		AND ("l_language" = \'\' OR "l_language" = ? OR "l_language" = ?)
+					AND ( "l_language" = ? OR "l_language" = \'\' '.$defaultLg.')
 		    		AND "modelID" IN ('.$modelIds.')';
-    	
-        $result	= $dbWrapper->execSql($query, array(
-        	$resource->uriResource,
-        	$property->uriResource,
-        	$session->defaultLg,
-        	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
-        ));
         
-        $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage($result, 'l_language');
+    	// Select first
+		if ($one) {
+			$result	= $dbWrapper->dbConnector->selectLimit($query, 1, -1, array(
+				$resource->uriResource
+				, $property->uriResource
+				, $lang
+			));
+		}
+		// Select Last
+		else if ($last) {
+			$result	= $dbWrapper->execSql($query, array(
+				$resource->uriResource
+				, $property->uriResource
+				, $lang
+			));
+			if (!$result->EOF){
+				$result->moveLast();
+			}
+		}
+		// Select All
+		else {
+			$result	= $dbWrapper->execSql($query, array(
+				$resource->uriResource
+				, $property->uriResource
+				, $lang
+			));
+		}
+        
+		// Treat the query result
+        if ($result) {
+        	// If a language has been defined, do not filter result by language
+        	if(isset($options['lg'])){
+		    	while (!$result->EOF){
+					$returnValue[] = $result->fields['object'];
+					$result->moveNext();
+				}
+        	} 
+        	// Filter result by language and return one set of values (User language in top priority, default language in second and the fallback language (null) in third)
+        	else {
+        		 $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage($result, 'l_language');
+        	}
+        }
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B end
 
@@ -145,7 +195,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method getPropertyValuesCollection
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return core_kernel_classes_ContainerCollection
@@ -156,41 +206,9 @@ class core_kernel_persistence_smoothsql_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F begin
         
-    	if(DEBUG_MODE){
-        	$returnValue->debug = __METHOD__;
-        }
         $returnValue = new core_kernel_classes_ContainerCollection($resource);
-        
-    	$session = core_kernel_classes_Session::singleton();
-    	$modelIds	= implode(',',array_keys($session->getLoadedModels()));
-    	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $query =  'SELECT "object", "l_language" 
-        			FROM "statements" 
-		    		WHERE "subject" = ? AND "predicate" = ?
-		    		AND ("l_language" = \'\' OR "l_language" = ? OR "l_language" = ?)
-		    		AND "modelID" IN ('.$modelIds.')';
-        $result	= $dbWrapper->execSql($query, array(
-        	$resource->uriResource,
-        	$property->uriResource,
-        	$session->defaultLg,
-        	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
-        ));
-      	
-        $propertiesValues = core_kernel_persistence_smoothsql_Utils::filterByLanguage($result, 'l_language');
-        
-        foreach ($propertiesValues as $value){
-            if(!common_Utils::isUri($value)) {
-                $container = new core_kernel_classes_Literal($value);
-            }
-            else {
-                $container = new core_kernel_classes_Resource($value);
-            }
-
-            if(DEBUG_MODE){
-            	$container->debug = __METHOD__ .'|' . $property->debug;
-            }
-            $returnValue->add($container);
-        }
+        $propertiesValues = $resource->getAllPropertyValues($property);
+        $returnValue->sequence = $propertiesValues;
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F end
 
@@ -201,7 +219,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method getOnePropertyValue
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  boolean last
@@ -213,43 +231,19 @@ class core_kernel_persistence_smoothsql_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
         
-    	$session 	= core_kernel_classes_Session::singleton();
-    	$modelIds	= implode(',',array_keys($session->getLoadedModels()));
-    	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-        $query =  'SELECT "object", "l_language" FROM "statements" 
-        			WHERE "subject" = ? AND "predicate" = ?
-		    		AND ("l_language" = \'\' OR "l_language" = ? OR "l_language" = ?) 
-		    		AND "modelID" IN ('.$modelIds.')';
-        
-        $params = array(
-        	$resource->uriResource,
-        	$property->uriResource,
-        	$session->defaultLg,
-        	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
-        );
+    	$options = array(
+			'forceDefaultLg' => true
+		);  
+		if($last){
+			$options['last'] = true;
+		}else{
+			$options['one'] = true;
+		}
 
-        $result = $dbWrapper->execSql($query, $params);
-        $propertyValues = core_kernel_persistence_smoothsql_Utils::filterByLanguage($result, 'l_language');
-        $finalResult = null;
-        
-    	if($last && count($propertyValues > 0)){
-    		$finalResult = $propertyValues[count($propertyValues) - 1];
-    	}
-    	else if (count($propertyValues) > 0){
-	        $finalResult = $propertyValues[0];
-    	}
-    	
-    	if($finalResult !== null){
-    		
-        	if(!common_Utils::isUri($finalResult)) {
-        		  
-                $returnValue = new core_kernel_classes_Literal($finalResult);
-	         }
-	         else {
-                $returnValue = new core_kernel_classes_Resource($finalResult);
-            }
-          
-    	}
+		$value = $resource->getAllPropertyValues($property, $options);
+		if (count($value)){
+			$returnValue = $value[0];
+		}
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 end
 
@@ -260,7 +254,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method getPropertyValuesByLg
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string lg
@@ -272,27 +266,13 @@ class core_kernel_persistence_smoothsql_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 begin
         
-		$returnValue = new core_kernel_classes_ContainerCollection($resource);
-        $sqlQuery = 'SELECT "object" FROM "statements" WHERE "subject" = ? AND "predicate" = ? AND "l_language" = ?;';
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sqlResult = $dbWrapper->execSql($sqlQuery, array (
-        	$resource->uriResource
-        	, $property->uriResource
-        	, $lg
-        ));
-    	if($dbWrapper->dbConnector->errorNo() !== 0){
-			throw new core_kernel_persistence_smoothsql_Exception($dbWrapper->dbConnector->errorMsg());
-		}
-        while (!$sqlResult-> EOF){
-        	if(!common_Utils::isUri($sqlResult->fields['object'])) {
-                $container = new core_kernel_classes_Literal($sqlResult->fields['object']);
-            }
-            else {
-                $container = new core_kernel_classes_Resource($sqlResult->fields['object']);
-            }
-            $returnValue->add($container);
-            $sqlResult->MoveNext();
-        }    
+        $options = array (
+        	'lg' => $lg
+        );
+        
+        $returnValue = new core_kernel_classes_ContainerCollection($resource);
+        $propertiesValues = $resource->getAllPropertyValues($property, $options);
+        $returnValue->sequence = $propertiesValues;
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 end
 
@@ -303,7 +283,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method setPropertyValue
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string object
@@ -360,7 +340,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method setPropertiesValues
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  array properties
      * @return boolean
@@ -415,7 +395,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method setPropertyValueByLg
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string value
@@ -460,7 +440,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method removePropertyValues
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  array options
@@ -538,7 +518,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method removePropertyValueByLg
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string lg
@@ -576,7 +556,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method getRdfTriples
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return core_kernel_classes_ContainerCollection
      */
@@ -620,7 +600,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method getUsedLanguages
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return array
@@ -651,7 +631,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method duplicate
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  array excludedProperties
      * @return core_kernel_classes_Resource
@@ -695,7 +675,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method delete
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  boolean deleteReference
      * @return boolean
@@ -730,7 +710,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method getLastModificationDate
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return core_kernel_persistence_doc_date
@@ -778,7 +758,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method getLastModificationUser
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return string
      */
@@ -805,7 +785,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method getPropertiesValue
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  array properties
      * @param  boolean last
@@ -892,7 +872,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method setType
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Class class
      * @return boolean
@@ -914,7 +894,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method removeType
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @param  Class class
      * @return boolean
@@ -953,7 +933,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method singleton
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return core_kernel_classes_Resource
      */
     public static function singleton()
@@ -976,7 +956,7 @@ class core_kernel_persistence_smoothsql_Resource
      * Short description of method isValidContext
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
