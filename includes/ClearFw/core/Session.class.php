@@ -12,22 +12,22 @@ class Session
 		if (!isset($_SESSION[SESSION_NAMESPACE])) $_SESSION[SESSION_NAMESPACE] = array();
 	}
 	
-	public function hasAttribute($name)
+	public static function hasAttribute($name)
 	{
 		return isset($_SESSION[SESSION_NAMESPACE][$name]);
 	}
 	
-	public function getAttribute($name)
+	public static function getAttribute($name)
 	{
 		return $_SESSION[SESSION_NAMESPACE][$name];
 	}
 	
-	public function setAttribute($name, $value)
+	public static function setAttribute($name, $value)
 	{
 		$_SESSION[SESSION_NAMESPACE][$name] = $value;
 	}
 	
-	public function removeAttribute($name)
+	public static function removeAttribute($name)
 	{
 		if(isset($_SESSION[SESSION_NAMESPACE][$name])){
 			
@@ -35,12 +35,12 @@ class Session
 		}
 	}
 	
-	public function getAttributeNames()
+	public static function getAttributeNames()
 	{
 		return array_keys($_SESSION[SESSION_NAMESPACE]);
 	}
 	
-	public function clear($global)
+	public static function clear($global)
 	{
 		if ($global)
 			session_unset();

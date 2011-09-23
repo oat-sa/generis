@@ -818,7 +818,7 @@ class core_kernel_persistence_hardsql_Resource
 						$dbWrapper->execSql($insertPropForeignQuery, array($propUri, $propForeign, $proplang, $duplicateInstanceId));
 					}
 					else{
-						$dbWrapper->execSql($insertPropEmptyQuery, array($propUri, $proplang, $duplicateInstanceId));
+						$dbWrapper->execSql($insertPropEmptyQuery, array($propUri, $proplang, $duplicateInstanceId));//costly to insert NULL values
 					}
 						
 					$propsResult->moveNext();
