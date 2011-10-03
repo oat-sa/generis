@@ -40,7 +40,7 @@
   <rdf:Description rdf:about="http://www.w3.org/2000/01/rdf-schema#comment">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
     <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2000/01/rdf-schema#"/>
-    <rdfs:label><![CDATA[comment]]></rdfs:label>
+    <rdfs:label><![CDATA[Comment]]></rdfs:label>
     <rdfs:comment><![CDATA[A description of the subject resource.]]></rdfs:comment>
     <rdfs:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
@@ -48,7 +48,7 @@
   <rdf:Description rdf:about="http://www.w3.org/2000/01/rdf-schema#label">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
     <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2000/01/rdf-schema#"/>
-    <rdfs:label><![CDATA[label]]></rdfs:label>
+    <rdfs:label><![CDATA[Label]]></rdfs:label>
     <rdfs:comment><![CDATA[A human-readable name for the subject.]]></rdfs:comment>
     <rdfs:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
