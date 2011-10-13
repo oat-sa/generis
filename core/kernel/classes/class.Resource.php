@@ -513,10 +513,10 @@ class core_kernel_classes_Resource
         $this->removePropertyValues($property);
         if(is_array($object)){
             foreach($object as $value){
-                $returnValue = $this->setPropertyValue($property, (string) $value);
+                $returnValue = $this->setPropertyValue($property, $value);
             }
         }else{
-            $returnValue = $this->setPropertyValue($property, (string) $object);
+            $returnValue = $this->setPropertyValue($property, $object);
         }
 
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:00000000000009D5 end

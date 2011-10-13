@@ -346,7 +346,7 @@ class core_kernel_persistence_hardsql_Resource
 		}
 
 		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-		$object  = !is_string($object) && $object instanceof core_kernel_classes_Resource ? $object->uriResource : $object;
+		$object  = $object instanceof core_kernel_classes_Resource ? $object->uriResource : (string) $object;
 		$instanceId = null;
 		$propertyValue = null;
 		$propertyForeignUri = null;
