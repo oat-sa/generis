@@ -606,9 +606,6 @@ class core_kernel_persistence_smoothsql_Class
 					$tmpMatchingUris[$foundInstancesUri] = $foundInstancesUri;
 					$result->MoveNext();
 				}
-				if(array_key_exists(PROPERTY_CONNECTORS_NEXTACTIVITIES, $propertyFilters)){
-//					var_dump('sql:', $query . $condition, $tmpMatchingUris);
-				}
 				
 				if($intersect){
 					//EXCLUSIVES CONDITIONS
