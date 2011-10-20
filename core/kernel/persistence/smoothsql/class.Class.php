@@ -553,7 +553,7 @@ class core_kernel_persistence_smoothsql_Class
 			}
 			else if(is_array($pattern)){
 				if(count($pattern) > 0){
-					$multiCondition =  ' ("predicate" = \''.$propUri.'\' AND  ';
+					$multiCondition =  '';
 					foreach($pattern as $i => $patternToken){
 						
 						$patternToken = $dbWrapper->dbConnector->escape($patternToken);
@@ -568,9 +568,13 @@ class core_kernel_persistence_smoothsql_Class
 						if(!preg_match("/%$/", $object)){
 							$object = $object."%";
 						}
-						$multiCondition .= ' "object" LIKE \''.$object.'\' ';
+						if($like){
+							$multiCondition .= ' "object" LIKE \''.$object.'\' ';
+						}else{
+							$multiCondition .= ' "object" = \''.$object.'\' ';
+						}
 					}
-					$conditions[] = "{$multiCondition} {$langToken} ) ";
+					$conditions[] = " (\"predicate\" = '{$propUri}' AND ({$multiCondition}) {$langToken} ) ";
 				}
 			}
 		}
@@ -634,7 +638,7 @@ class core_kernel_persistence_smoothsql_Class
 				);
 			}
 		}
-
+		
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
 
         return (array) $returnValue;

@@ -237,12 +237,9 @@ class core_kernel_users_Service
 					'recursive'	=> 1
 				)
 			);
-			$user = null;
-			foreach($users as $foundUser){
-				$user = $foundUser;
-				break;
-			}
-			if(is_null($user)){
+			$user = reset($users);
+			
+			if(!$user || !$user instanceof core_kernel_classes_Resource){
 				$this->logout();
 				throw new core_kernel_users_Exception('Authentication failed',core_kernel_users_Exception::BAD_LOGIN );
 			}
