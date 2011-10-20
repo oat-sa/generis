@@ -561,17 +561,18 @@ class core_kernel_persistence_smoothsql_Class
 						if($i > 0){
 							$multiCondition .= " OR ";
 						}
-						$object = trim(str_replace('*', '%', $patternToken));
-						if(!preg_match("/^%/", $object)){
-							$object = "%".$object;
-						}
-						if(!preg_match("/%$/", $object)){
-							$object = $object."%";
-						}
+						
 						if($like){
+							$object = trim(str_replace('*', '%', $patternToken));
+							if(!preg_match("/^%/", $object)){
+								$object = "%".$object;
+							}
+							if(!preg_match("/%$/", $object)){
+								$object = $object."%";
+							}
 							$multiCondition .= ' "object" LIKE \''.$object.'\' ';
 						}else{
-							$multiCondition .= ' "object" = \''.$object.'\' ';
+							$multiCondition .= ' "object" = \''.$patternToken.'\' ';
 						}
 					}
 					$conditions[] = " (\"predicate\" = '{$propUri}' AND ({$multiCondition}) {$langToken} ) ";
@@ -598,11 +599,17 @@ class core_kernel_persistence_smoothsql_Class
 				if($dbWrapper->dbConnector->errorNo() !== 0){
 					throw new core_kernel_persistence_smoothsql_Exception($dbWrapper->dbConnector->errorMsg());
 				}
+				
+				
 				while (!$result->EOF){
 					$foundInstancesUri = $result->fields['subject'];
 					$tmpMatchingUris[$foundInstancesUri] = $foundInstancesUri;
 					$result->MoveNext();
 				}
+				if(array_key_exists(PROPERTY_CONNECTORS_NEXTACTIVITIES, $propertyFilters)){
+//					var_dump('sql:', $query . $condition, $tmpMatchingUris);
+				}
+				
 				if($intersect){
 					//EXCLUSIVES CONDITIONS
 					if($i == 0){
