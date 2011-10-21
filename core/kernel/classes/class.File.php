@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 05.11.2010, 14:01:25 with ArgoUML PHP module 
+ * Automatically generated on 17.10.2011, 13:15:44 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
@@ -43,7 +43,7 @@ require_once('core/kernel/classes/class.Resource.php');
  * Short description of class core_kernel_classes_File
  *
  * @access public
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
@@ -61,7 +61,7 @@ class core_kernel_classes_File
      * Short description of method getAbsolutePath
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return string
      */
     public function getAbsolutePath()
@@ -69,7 +69,7 @@ class core_kernel_classes_File
         $returnValue = (string) '';
 
         // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001367 begin
-         $filePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
+        $filePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
 	    $fileNameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
 	    $filePath = $this->getOnePropertyValue($filePathProp);
 	    $fileName = $this->getOnePropertyValue($fileNameProp);
@@ -87,26 +87,36 @@ class core_kernel_classes_File
      * be optionnal)
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string fileName
      * @param  string filePath
+     * @param  string uri
      * @return core_kernel_classes_File
      */
-    public static function create($fileName, $filePath = null)
+    public static function create($fileName, $filePath = null, $uri = "")
     {
         $returnValue = null;
 
         // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:000000000000136C begin
-        if($filePath == null){
+        
+        // Default file path if not defined
+      	if(is_null($filePath)){
             $filePath = GENERIS_FILES_PATH; 
         }
+        // If the file does not exist in the file system => create it
+       	/*if(!file_exists($filePath.$fileName)){
+        	fclose(fopen($filePath.$fileName,"x"));
+       	}*/
+
         $clazz = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
-	    $instance = $clazz->createInstance('File : ' . $filePath. $fileName,'File : ' . $filePath. $fileName);
+	    $instance = $clazz->createInstance('File : ' . $filePath. $fileName, 'File : ' . $filePath. $fileName, $uri);
 	    $filePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
 	    $fileNameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
-	    $instance->setPropertyValue($filePathProp,$filePath);
-	    $instance->setPropertyValue($fileNameProp,$fileName);
+	    $instance->setPropertyValue($filePathProp, $filePath);
+	    $instance->setPropertyValue($fileNameProp, $fileName);
+	    
 	    $returnValue = new core_kernel_classes_File($instance->uriResource);
+        
         // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:000000000000136C end
 
         return $returnValue;
@@ -116,7 +126,7 @@ class core_kernel_classes_File
      * Short description of method isFile
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -126,8 +136,7 @@ class core_kernel_classes_File
 
         // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001370 begin
         $resourceType = $resource->getType();
-        $returnValue =  array_key_exists(CLASS_GENERIS_FILE,$resourceType);
-
+        $returnValue =  array_key_exists(CLASS_GENERIS_FILE, $resourceType);        
         // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001370 end
 
         return (bool) $returnValue;
@@ -137,13 +146,16 @@ class core_kernel_classes_File
      * Short description of method getFileContent
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
-     * @return SplFileInfo
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @return mixed
      */
     public function getFileContent()
     {
         // section 127-0-1-1--77b1997d:12bf34c2951:-8000:0000000000001386 begin
-    	return new SplFileInfo($this->getAbsolutePath());
+        if (!file_exists($this->getAbsolutePath())){
+        	throw new Exception(__('File not found '.$this->getAbsolutePath()));
+        }
+    	return @file_get_contents($this->getAbsolutePath());
         // section 127-0-1-1--77b1997d:12bf34c2951:-8000:0000000000001386 end
     }
 
@@ -151,9 +163,9 @@ class core_kernel_classes_File
      * Short description of method getFile
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  Resource resource
-     * @return SplFileInfo , false
+     * @return mixed
      */
     public static function getFile( core_kernel_classes_Resource $resource)
     {
@@ -164,6 +176,112 @@ class core_kernel_classes_File
         }
         return false;
         // section 127-0-1-1--77b1997d:12bf34c2951:-8000:0000000000001388 end
+    }
+
+    /**
+     * Short description of method delete
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @return boolean
+     */
+    public function delete()
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001672 begin
+        /*if(file_exists($this->getAbsolutePath())){
+        	if (!@unlink($this->getAbsolutePath())){
+        		throw new Exception(__('Unable to remove the file '.$this->getAbsolutePath()));
+        	}
+        }*/
+        parent::delete();
+        $returnValue = true;
+        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001672 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method move
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @return boolean
+     */
+    public function move()
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001674 begin
+        throw new Exception(__('The function is not implemented yet'));
+        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001674 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method getFileInfo
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @return mixed
+     */
+    public function getFileInfo()
+    {
+        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001671 begin
+    	return new SplFileInfo($this->getAbsolutePath());
+        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001671 end
+    }
+
+    /**
+     * Short description of method setContent
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  string content
+     * @return boolean
+     */
+    public function setContent($content)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001675 begin
+        
+        $filePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
+        $filePath = $this->getOnePropertyValue($filePathProp);
+        $path = explode('/', $filePath);
+        $breadCrumb = '';
+        foreach($path as $bread){
+        	$breadCrumb .= '/'.$bread;
+        	if(!file_exists($breadCrumb)){
+        		mkdir($breadCrumb);
+        	}
+        }
+        
+        $returnValue = !file_put_contents($this->getAbsolutePath(), $content) ? false : true;
+                
+        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001675 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method fileExists
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @return boolean
+     */
+    public function fileExists()
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016EB begin
+        $returnValue = file_exists($this->getAbsolutePath());        
+        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016EB end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class core_kernel_classes_File */
