@@ -413,7 +413,9 @@ class core_kernel_persistence_smoothsql_Class
 		}
 
 		$returnValue = new core_kernel_classes_Resource($subject,__METHOD__);
-		$returnValue->setType($resource);
+		if(!$returnValue->hasType($resource)){
+			$returnValue->setType($resource);
+		}
 
 		if ($label != '') {
 			$returnValue->setLabel($label);
