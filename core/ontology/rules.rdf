@@ -169,7 +169,7 @@
     <rdfs:domain rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Expression"/>
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#asLogicalOperator">
+  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#HasLogicalOperator">
     <rdfs:range rdf:resource="http://www.tao.lu/middleware/Rules.rdf#LogicalOperator"/>
     <rdfs:label xml:lang="EN"><![CDATA[hasLogicalOperator]]></rdfs:label>
     <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox"/>
@@ -313,7 +313,7 @@
   <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#True">
     <rdf:type rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Expression"/>
     <rule:TerminalExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Empty"/>
-    <rule:asLogicalOperator rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Exists"/>
+    <rule:HasLogicalOperator rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Exists"/>
     <rule:Debug xml:lang="EN"/>
     <rule:FirstExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#True"/>
     <rule:SecondExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#True"/>
@@ -327,7 +327,7 @@
   <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#False">
     <rdf:type rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Expression"/>
     <rule:TerminalExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Empty"/>
-    <rule:asLogicalOperator rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Exists"/>
+    <rule:HasLogicalOperator rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Exists"/>
     <rule:Debug xml:lang="EN"/>
     <rule:FirstExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#True"/>
     <rule:SecondExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#True"/>
