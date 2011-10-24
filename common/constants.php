@@ -45,6 +45,20 @@ define('PROPERTY_FILE_FILENAME' , 				GENERIS_NS . '#FileName' , true) ;
 define('PROPERTY_FILE_FILEPATH' , 				GENERIS_NS . '#FilePath' , true) ;
 define('PROPERTY_MULTIPLE',						GENERIS_NS . '#Multiple' , true) ;
 
+#versioned file
+define('CLASS_GENERIS_VERSIONEDFILE' , 			GENERIS_NS . '#VersionedFile' , true) ;
+define('PROPERTY_VERSIONEDFILE_VERSION' , 		GENERIS_NS . '#VersionedFileVersion' , true) ;
+define('PROPERTY_VERSIONEDFILE_REPOSITORY' ,	GENERIS_NS . '#VersionedFileRepository' , true) ;
+define('PROPERTY_VERSIONEDFILE_FILEPATH' , 		GENERIS_NS . '#VersionedFilePath' , true) ;
+
+#Versioned Repository
+define('CLASS_GENERIS_VERSIONEDREPOSITORY' ,	GENERIS_NS . '#VersionedRepository' , true) ;
+define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL' , 	GENERIS_NS . '#VersionedRepositoryUrl' , true) ;
+define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH' , 	GENERIS_NS . '#VersionedRepositoryPath' , true) ;
+define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE' , 	GENERIS_NS . '#VersionedRepositoryType' , true) ;
+define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN' , 	GENERIS_NS . '#VersionedRepositoryLogin' , true) ;
+define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_PASSWORD' , 	GENERIS_NS . '#VersionedRepositoryPassword' , true) ;
+
 #user
 define('CLASS_ROLE', 							'http://www.tao.lu/middleware/wfEngine.rdf#ClassRole',true);
 define('PROPERTY_USER_LOGIN' , 					GENERIS_NS . '#login' , true) ;

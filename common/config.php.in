@@ -94,13 +94,23 @@ define('SMTP_AUTH', false);
 define('SMTP_USER', '');
 define('SMTP_PASS', '');
 
-#genris paths
-define('GENERIS_BASE_PATH' , dirname(__FILE__).'/..');									
+#generis paths
+define('GENERIS_BASE_PATH' , realpath(dirname(__FILE__).'/..'));									
 define('INCLUDES_PATH' , GENERIS_BASE_PATH.'/includes');
 define('EXTENSION_PATH' , GENERIS_BASE_PATH.'/..');
 define('MANIFEST_NAME' , 'manifest.php');
 define('GENERIS_FILES_PATH' , GENERIS_BASE_PATH.'/data/');
 define('GENERIS_CACHE_PATH', GENERIS_FILES_PATH.'cache/');
+
+#Versioning
+define('GENERIS_VERSIONING_ENABLED' , false);
+define('GENERIS_VERSIONED_REPOSITORY_LOGIN' , 'cedric');
+define('GENERIS_VERSIONED_REPOSITORY_PASSWORD' , 'cedric');
+define('GENERIS_VERSIONED_REPOSITORY_TYPE' , 'svn');
+define('GENERIS_VERSIONED_REPOSITORY_URL' , 'svn://localhost/taoVersioning/');
+define('GENERIS_VERSIONED_REPOSITORY_PATH' , GENERIS_FILES_PATH.'/versioning/DEFAULT');
+define('GENERIS_VERSIONED_REPOSITORY_LABEL' , 'Tao default versioned repository');
+define('GENERIS_VERSIONED_REPOSITORY_COMMENT' , '');
 
 define('ENABLE_SUBSCRIPTION', false);
 

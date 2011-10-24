@@ -10,26 +10,20 @@ $tests = array_merge(
 );
 
 //create the test sutie
-
 foreach($tests as $i => $testCase){
+
+	if(strpos($testCase, 'VersioningTestCase.php')){
+		// get the default repository
+		if(GENERIS_VERSIONING_ENABLED){
+			$testSuite->addFile($testCase);
+		}
+    }
     //TODO disable for release, remove after
-    if(strpos($testCase, 'VirtuosoImplTestCase.php')== false){
+    else if(strpos($testCase, 'VirtuosoImplTestCase.php')== false){
        $testSuite->addFile($testCase);
     }
     
 }
-
-//$testSuite->addFile('PersistenceSwitcherTestCase.php');
-//$testSuite->addFile('HardApiTestCase.php');
-//$testSuite->addFile('smoothApiTestCase.php');
-//$testSuite->addFile('ApiModelTestCase.php');
-//$testSuite->addFile('ResourceTestCase.php');
-//$testSuite->addFile('PropertyTestCase.php');
-//$testSuite->addFile('UserServiceTestCase.php');
-//$testSuite->addFile('SubscriptionsServiceTestCase.php');
-//$testSuite->addFile('CollectionTestCase.php');
-//$testSuite->addFile('ClassTestCase.php');
-//$testSuite->addFile('ApiSearchTestCase.php');
 
 //add the reporter regarding the context
 if(PHP_SAPI == 'cli'){

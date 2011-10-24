@@ -126,7 +126,7 @@ class ClassTestCase extends UnitTestCase {
 
 	
  	public function testGetInstances(){
- 		$class = new core_kernel_classes_Class(CLASS_WIDGET,__METHOD__);
+ 		$class = new core_kernel_classes_Class(CLASS_WIDGET);
  		$plop = $class->createInstance('test','comment');
  		$instances = $class->getInstances();
 		$subclass = $class->createSubClass('subTest Class', 'subTest Class');

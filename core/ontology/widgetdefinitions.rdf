@@ -167,6 +167,12 @@
     <rdfs:comment xml:lang="EN"><![CDATA[Open a tool to edit special content]]></rdfs:comment>
     <widget:rangeConstraint rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#rangeConstraint-Resource"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#VersionedFile">
+    <rdf:type rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetClass"/>
+    <rdfs:label xml:lang="EN"><![CDATA[VersionedFile]]></rdfs:label>
+    <rdfs:comment xml:lang="EN"><![CDATA[Manage your versioned file]]></rdfs:comment>
+    <widget:rangeConstraint rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#rangeConstraint-Resource"/>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#Readonly">
     <rdf:type rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetClass"/>
     <rdfs:label xml:lang="EN"><![CDATA[Readonly]]></rdfs:label>
