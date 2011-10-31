@@ -100,7 +100,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Oct 21 16:23:24 CEST 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Oct 28 13:53:51 CEST 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -13133,6 +13133,22 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
                           name = 'commit' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025FB'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025FD'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>core_kernel_versioning_File::commit()</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008CF'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165B'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -13164,6 +13180,22 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
                           name = 'update' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025FE'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>core_kernel_versioning_File::update()</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008CF'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:0000000000002607'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165D'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -13199,6 +13231,22 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
                           name = 'revert' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025FF'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>core_kernel_versioning_File::revert()</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008CF'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:0000000000002608'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165F'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -13238,6 +13286,22 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
                           name = 'delete' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:0000000000002600'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>core_kernel_versioning_File::delete()</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008CF'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:0000000000002609'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001679'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -13263,6 +13327,22 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
                           name = 'getVersion' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:0000000000002601'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>core_kernel_versioning_File::getVersion()</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008CF'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:000000000000260A'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:00000000000024D3'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -13282,6 +13362,22 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
                           name = 'add' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:0000000000002602'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>core_kernel_versioning_File::add()</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008CF'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:000000000000260B'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F2'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -13307,6 +13403,22 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
                           name = 'isVersioned' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:0000000000002603'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>core_kernel_versioning_File::isVersioned()</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008CF'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:000000000000260C'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-13a27439:132dd89c261:-8000:00000000000016FB'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -13332,6 +13444,22 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
                           name = 'isUnversioned' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:0000000000002604'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>core_kernel_versioning_File::isUnversioned()</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008CF'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:000000000000260D'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F1'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -13357,6 +13485,22 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
                           name = 'getHistory' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:0000000000002605'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>core_kernel_versioning_File::gethistory()</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008CF'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:000000000000260E'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016FC'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -13382,6 +13526,22 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
                           name = 'hasLocalChanges' visibility = 'public' isSpecification = 'false'
                           ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
                           isLeaf = 'false' isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:0000000000002606'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>core_kernel_versioning_File::hasLocalChanges()</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008CF'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:000000000000260F'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1--485428cc:133267d2802:-8000:0000000000001733'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -13958,9 +14118,18 @@ system.</UML:TaggedValue.dataValue>
                           <UML:ModelElement.taggedValue>
                             <UML:TaggedValue xmi.id = '127-0-1-1--485428cc:133267d2802:-8000:0000000000001721'
                               isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>Commit changes to the remote repository</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.dataValue>Commit changes to the remote repository
+Throw a core_kernel_versioning_VersioningDisabledException 
+if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025FC'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008CF'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
@@ -13990,7 +14159,9 @@ system.</UML:TaggedValue.dataValue>
                           <UML:ModelElement.taggedValue>
                             <UML:TaggedValue xmi.id = '127-0-1-1--485428cc:133267d2802:-8000:0000000000001722'
                               isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>Update changes from the remote repository</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.dataValue>Update changes from the remote repository
+Throw a core_kernel_versioning_VersioningDisabledException 
+if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
@@ -14022,7 +14193,9 @@ system.</UML:TaggedValue.dataValue>
                           <UML:ModelElement.taggedValue>
                             <UML:TaggedValue xmi.id = '127-0-1-1--485428cc:133267d2802:-8000:0000000000001723'
                               isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>Revert changes</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.dataValue>Revert changes
+Throw a core_kernel_versioning_VersioningDisabledException 
+if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
@@ -14119,7 +14292,9 @@ system.</UML:TaggedValue.dataValue>
                           <UML:ModelElement.taggedValue>
                             <UML:TaggedValue xmi.id = '127-0-1-1--485428cc:133267d2802:-8000:0000000000001727'
                               isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>Add the resource to the remote repository</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.dataValue>Add the resource to the remote repository
+Throw a core_kernel_versioning_VersioningDisabledException 
+if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
@@ -14163,7 +14338,9 @@ system.</UML:TaggedValue.dataValue>
                           <UML:ModelElement.taggedValue>
                             <UML:TaggedValue xmi.id = '127-0-1-1--485428cc:133267d2802:-8000:0000000000001729'
                               isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>Return the history of the resource as an associative array</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.dataValue>Return the history of the resource as an associative array
+Throw a core_kernel_versioning_VersioningDisabledException 
+if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
@@ -14208,7 +14385,9 @@ system.</UML:TaggedValue.dataValue>
                             <UML:TaggedValue xmi.id = '127-0-1-1--485428cc:133267d2802:-8000:000000000000172B'
                               isSpecification = 'false'>
                               <UML:TaggedValue.dataValue>Check if the content of the local version is different
-from the remote version of the file.</UML:TaggedValue.dataValue>
+from the remote version of the file.
+Throw a core_kernel_versioning_VersioningDisabledException 
+if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
@@ -14237,13 +14416,6 @@ from the remote version of the file.</UML:TaggedValue.dataValue>
                     <UML:Class xmi.id = '127-0-1-1-13a27439:132dd89c261:-8000:00000000000016D4'
                       name = 'path' visibility = 'public' isSpecification = 'false' isRoot = 'false'
                       isLeaf = 'false' isAbstract = 'false' isActive = 'false'/>
-                    <UML:Class xmi.id = '127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016ED'
-                      name = 'Exception' visibility = 'public' isSpecification = 'false' isRoot = 'false'
-                      isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
-                      <UML:GeneralizableElement.generalization>
-                        <UML:Generalization xmi.idref = '127-0-1-1--7768bf54:133205ee7ba:-8000:0000000000001714'/>
-                      </UML:GeneralizableElement.generalization>
-                    </UML:Class>
                     <UML:Generalization xmi.id = '127-0-1-1--7768bf54:133205ee7ba:-8000:0000000000001714'
                       isSpecification = 'false'>
                       <UML:Generalization.child>
@@ -14253,6 +14425,20 @@ from the remote version of the file.</UML:TaggedValue.dataValue>
                         <UML:Class xmi.idref = '127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC9'/>
                       </UML:Generalization.parent>
                     </UML:Generalization>
+                    <UML:Class xmi.id = '127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016ED'
+                      name = 'Exception' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                      <UML:GeneralizableElement.generalization>
+                        <UML:Generalization xmi.idref = '127-0-1-1--7768bf54:133205ee7ba:-8000:0000000000001714'/>
+                      </UML:GeneralizableElement.generalization>
+                    </UML:Class>
+                    <UML:Class xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025F9'
+                      name = 'VersioningDisabledException' visibility = 'public' isSpecification = 'false'
+                      isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                      <UML:GeneralizableElement.generalization>
+                        <UML:Generalization xmi.idref = '127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025FA'/>
+                      </UML:GeneralizableElement.generalization>
+                    </UML:Class>
                   </UML:Namespace.ownedElement>
                 </UML:Package>
               </UML:Namespace.ownedElement>
@@ -18128,6 +18314,15 @@ from the remote version of the file.</UML:TaggedValue.dataValue>
         <UML:DataType xmi.id = '127-0-1-1--18467de:13108b1b06a:-8000:00000000000015D9'
           name = 'resource' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
           isAbstract = 'false'/>
+        <UML:Generalization xmi.id = '127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025FA'
+          isSpecification = 'false'>
+          <UML:Generalization.child>
+            <UML:Class xmi.idref = '127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025F9'/>
+          </UML:Generalization.child>
+          <UML:Generalization.parent>
+            <UML:Class xmi.idref = '127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016ED'/>
+          </UML:Generalization.parent>
+        </UML:Generalization>
       </UML:Namespace.ownedElement>
     </UML:Model>
     <UML:Expression xmi.id = '127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015B8'
@@ -53092,6 +53287,162 @@ from the remote version of the file.</UML:TaggedValue.dataValue>
               y="192" />
       <lineto x="888"
               y="144" />
+    </path>
+  </group>
+  <group name="Fig21"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1072, 144, 280, 65]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       href="127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025F9"
+       fill="1"
+       fillcolor="255 200 255"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+    </private>
+    
+    <rectangle name="Fig21.0"
+      x="1072"
+      y="144"
+      width="280"
+      height="65"
+      fill="1"
+      fillcolor="255 200 255"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig21.1"
+      x="1073"
+      y="145"
+      width="278"
+      height="21"
+      fill="0"
+      fillcolor="255 200 255"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >core::kernel::versioning::VersioningDisabledException</text>
+    <group name="Fig21.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1073, 145, 64, 0]"
+         href="127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025F9"
+         fill="0"
+         fillcolor="255 200 255"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig21.2.0"
+        x="1073"
+        y="145"
+        width="64"
+        height="0"
+        fill="0"
+        fillcolor="255 200 255"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig21.3"
+      x="1072"
+      y="166"
+      width="280"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig21.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1073, 167, 278, 21]"
+         href="127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025F9"
+         fill="0"
+         fillcolor="255 200 255"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig21.4.0"
+        x="1073"
+        y="167"
+        width="278"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig21.5"
+      x="1072"
+      y="187"
+      width="280"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig21.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1073, 188, 278, 21]"
+         href="127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025F9"
+         fill="0"
+         fillcolor="255 200 255"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig21.6.0"
+        x="1073"
+        y="188"
+        width="278"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+  </group>
+  <group name="Fig22"
+       description="org.argouml.uml.diagram.ui.FigGeneralization"
+       href="127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025FA"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+      sourcePortFig="Fig21.0"
+      destPortFig="Fig17.0"
+      sourceFigNode="Fig21"
+      destFigNode="Fig17"
+      <argouml:pathitem figname="Fig22.1"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
+                        ownerhref="127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025FA"
+                        angle="-95.0"
+                        offset="31" />
+    </private>
+    <path name="Fig22.0"
+      description="org.tigris.gef.presentation.FigPoly"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    >
+      <moveto x="1176"
+              y="144" />
+      <lineto x="1176"
+              y="113" />
     </path>
   </group>
 </pgml>

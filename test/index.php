@@ -12,16 +12,12 @@ $tests = array_merge(
 //create the test sutie
 foreach($tests as $i => $testCase){
 
-	if(strpos($testCase, 'VersioningTestCase.php')){
-		// get the default repository
-		if(GENERIS_VERSIONING_ENABLED){
-			$testSuite->addFile($testCase);
-		}
-    }
     //TODO disable for release, remove after
-    else if(strpos($testCase, 'VirtuosoImplTestCase.php')== false){
+    if(strpos($testCase, 'VirtuosoImplTestCase.php')== false){
        $testSuite->addFile($testCase);
     }
+    
+    $testSuite->addFile((dirname(__FILE__).'versioning/VersioningDisabledTestCase.php');
     
 }
 

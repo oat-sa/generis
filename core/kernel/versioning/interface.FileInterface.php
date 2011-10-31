@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 21.10.2011, 16:23:23 with ArgoUML PHP module 
+ * Automatically generated on 28.10.2011, 10:53:06 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -52,6 +52,7 @@ interface core_kernel_versioning_FileInterface
      * @param  string message
      * @param  string path
      * @return boolean
+     * @see core_kernel_versioning_File::commit()
      */
     public function commit( core_kernel_classes_File $resource, $message, $path);
 
@@ -64,6 +65,7 @@ interface core_kernel_versioning_FileInterface
      * @param  string path
      * @param  int revision
      * @return boolean
+     * @see core_kernel_versioning_File::update()
      */
     public function update( core_kernel_classes_File $resource, $path, $revision = null);
 
@@ -76,6 +78,7 @@ interface core_kernel_versioning_FileInterface
      * @param  int revision
      * @param  string msg
      * @return boolean
+     * @see core_kernel_versioning_File::revert()
      */
     public function revert( core_kernel_classes_File $resource, $revision = null, $msg = "");
 
@@ -87,6 +90,7 @@ interface core_kernel_versioning_FileInterface
      * @param  File resource
      * @param  string path
      * @return boolean
+     * @see core_kernel_versioning_File::delete()
      */
     public function delete( core_kernel_classes_File $resource, $path);
 
@@ -97,6 +101,7 @@ interface core_kernel_versioning_FileInterface
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  File resource
      * @return string
+     * @see core_kernel_versioning_File::getVersion()
      */
     public function getVersion( core_kernel_versioning_File $resource);
 
@@ -108,6 +113,7 @@ interface core_kernel_versioning_FileInterface
      * @param  File resource
      * @param  string path
      * @return boolean
+     * @see core_kernel_versioning_File::add()
      */
     public function add( core_kernel_classes_File $resource, $path);
 
@@ -119,6 +125,7 @@ interface core_kernel_versioning_FileInterface
      * @param  File resource
      * @param  string path
      * @return boolean
+     * @see core_kernel_versioning_File::isVersioned()
      */
     public function isVersioned( core_kernel_classes_File $resource, $path);
 
@@ -130,6 +137,7 @@ interface core_kernel_versioning_FileInterface
      * @param  File resource
      * @param  string path
      * @return boolean
+     * @see core_kernel_versioning_File::isUnversioned()
      */
     public function isUnversioned( core_kernel_classes_File $resource, $path);
 
@@ -141,6 +149,7 @@ interface core_kernel_versioning_FileInterface
      * @param  File resource
      * @param  string path
      * @return array
+     * @see core_kernel_versioning_File::gethistory()
      */
     public function getHistory( core_kernel_classes_File $resource, $path);
 
@@ -152,6 +161,7 @@ interface core_kernel_versioning_FileInterface
      * @param  File resource
      * @param  string path
      * @return boolean
+     * @see core_kernel_versioning_File::hasLocalChanges()
      */
     public function hasLocalChanges( core_kernel_classes_File $resource, $path);
 

@@ -143,6 +143,8 @@ class core_kernel_versioning_File
 
     /**
      * Commit changes to the remote repository
+     * Throw a core_kernel_versioning_VersioningDisabledException 
+     * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -154,6 +156,10 @@ class core_kernel_versioning_File
         $returnValue = (bool) false;
 
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F5 begin
+    
+        if(!GENERIS_VERSIONING_ENABLED){
+        	throw new core_kernel_versioning_VersioningDisabledException();
+        }
         
         if($this->getRepository()->authenticate()){
         	//if($this->localContentHasChanged() || !$this->isVersioned()){
@@ -168,6 +174,8 @@ class core_kernel_versioning_File
 
     /**
      * Update changes from the remote repository
+     * Throw a core_kernel_versioning_VersioningDisabledException 
+     * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -180,6 +188,10 @@ class core_kernel_versioning_File
 
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F7 begin
         
+        if(!GENERIS_VERSIONING_ENABLED){
+        	throw new core_kernel_versioning_VersioningDisabledException();
+        }
+        
         $returnValue = core_kernel_versioning_FileProxy::singleton()->update($this, $this->getAbsolutePath(), $revision);
         
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F7 end
@@ -189,6 +201,8 @@ class core_kernel_versioning_File
 
     /**
      * Revert changes
+     * Throw a core_kernel_versioning_VersioningDisabledException 
+     * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -201,6 +215,10 @@ class core_kernel_versioning_File
         $returnValue = (bool) false;
 
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F9 begin
+        
+        if(!GENERIS_VERSIONING_ENABLED){
+        	throw new core_kernel_versioning_VersioningDisabledException();
+        }
         
         if($this->fileExists()){
         	if($this->isVersioned()){
@@ -228,14 +246,15 @@ class core_kernel_versioning_File
 
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032FC begin
         
-        if($this->fileExists()){
+        if(GENERIS_VERSIONING_ENABLED && $this->fileExists()){
         	$filePath = $this->getAbsolutePath();
         	$returnValue = core_kernel_versioning_FileProxy::singleton()->delete($this, $filePath);
         	if($this->isVersioned()){
 		        $this->commit(__('delete the file').' '.$filePath);
         	}
-	        parent::delete();
         }
+	    
+        parent::delete();
         
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032FC end
 
@@ -267,6 +286,8 @@ class core_kernel_versioning_File
 
     /**
      * Add the resource to the remote repository
+     * Throw a core_kernel_versioning_VersioningDisabledException 
+     * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -277,6 +298,10 @@ class core_kernel_versioning_File
         $returnValue = (bool) false;
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F5 begin
+        
+        if(!GENERIS_VERSIONING_ENABLED){
+        	throw new core_kernel_versioning_VersioningDisabledException();
+        }
         
 	    if($this->getRepository()->authenticate()){
         
@@ -330,7 +355,10 @@ class core_kernel_versioning_File
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F8 begin
 	    
-        if(!is_null($this->getRepository()) && $this->getRepository()->authenticate()){
+        if(!GENERIS_VERSIONING_ENABLED){
+        	$returnValue = false;
+        }
+        else if(!is_null($this->getRepository()) && $this->getRepository()->authenticate()){
         	$returnValue = core_kernel_versioning_FileProxy::singleton()->isVersioned($this, $this->getAbsolutePath());
 	    }
 	    
@@ -341,6 +369,8 @@ class core_kernel_versioning_File
 
     /**
      * Return the history of the resource as an associative array
+     * Throw a core_kernel_versioning_VersioningDisabledException 
+     * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -351,6 +381,10 @@ class core_kernel_versioning_File
         $returnValue = array();
 
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F9 begin
+    
+        if(!GENERIS_VERSIONING_ENABLED){
+        	throw new core_kernel_versioning_VersioningDisabledException();
+        }
         
         $returnValue = core_kernel_versioning_FileProxy::singleton()->gethistory($this, $this->getAbsolutePath());
         
@@ -383,6 +417,8 @@ class core_kernel_versioning_File
     /**
      * Check if the content of the local version is different
      * from the remote version of the file.
+     * Throw a core_kernel_versioning_VersioningDisabledException 
+     * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -393,6 +429,10 @@ class core_kernel_versioning_File
         $returnValue = (bool) false;
 
         // section 127-0-1-1-50a804cb:13317e3246f:-8000:0000000000001712 begin
+    
+        if(!GENERIS_VERSIONING_ENABLED){
+        	throw new core_kernel_versioning_VersioningDisabledException();
+        }
         
         $returnValue = core_kernel_versioning_FileProxy::singleton()->hasLocalChanges($this, $this->getAbsolutePath());
         
