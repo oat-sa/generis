@@ -322,7 +322,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		$this->assertTrue($file->setContent('updated'));
 		$this->assertTrue($file->commit());
 		$this->assertTrue($repository2->delete(true));
-		tao_helpers_File::remove(GENERIS_FILES_PATH.'/versioning/TMP_TEST_CASE_REPOSITORY');
+		tao_helpers_File::remove(GENERIS_FILES_PATH.'/versioning/TMP_TEST_CASE_REPOSITORY', true);
 	    
 		// Test the file has been updated in the first repository
 		$this->assertTrue($instance->update());
@@ -331,6 +331,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	    $instance->delete(true);
 	}
 	
+	//test the versioning function revert without parameter (revert local change)
 	public function testRevert()
 	{
 		$instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository());
@@ -369,6 +370,21 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	    $instance->delete(true);
 	}
 	
+	public function testVersion()
+	{
+		$instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository());
+	    $instance->setContent('my content');
+	    $instance->add();
+	    $instance->commit('commit message 1');
+	    $this->assertEqual($instance->getVersion(), 1);
+	    
+	    $instance->setContent('my content 2');
+	    $instance->commit('commit message 2');
+	    $this->assertEqual($instance->getVersion(), 2);
+	    
+	    $instance->delete(true);
+	}
+	
 	public function testRevertTo()
 	{
 		$instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository(), "", array(
@@ -380,29 +396,33 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	    $this->assertTrue($instance->commit('commit message 1'));
 	    $this->assertTrue($instance->isVersioned());
 		$this->assertEqual($instance->getFileContent(), 'my content 1');
+	    $this->assertEqual($instance->getVersion(), 1);
 		
 	    $this->assertTrue($instance->setContent('my content 2'));
 		$this->assertTrue($this->assertEqual($instance->getFileContent(), 'my content 2'));
 	    $this->assertTrue($instance->commit('commit message 2'));
+	    $this->assertEqual($instance->getVersion(), 2);
 	    
 	    $this->assertTrue($instance->setContent('my content 3'));
 		$this->assertTrue($this->assertEqual($instance->getFileContent(), 'my content 3'));
 	    $this->assertTrue($instance->commit('commit message 3'));
+	    $this->assertEqual($instance->getVersion(), 3);
 	    
 	    $history = $instance->getHistory();
 	    
 	    // Revert to first revision
-	    $revision = $history[2]['rev'];
-	    $instance->revert($revision);
+	    $instance->revert(1);
 	    $this->assertTrue($instance->fileExists());
 	    $this->assertTrue($instance->isVersioned());
 		$this->assertEqual($instance->getFileContent(), 'my content 1');
+	    $this->assertEqual($instance->getVersion(), 4);
 	    
 		// Revert to second revision
-	    $revision = $history[1]['rev'];
-	    $instance->revert($revision);
+	    $instance->revert(2);
+	    $this->assertTrue($instance->fileExists());
 	    $this->assertTrue($instance->isVersioned());
 		$this->assertEqual($instance->getFileContent(), 'my content 2');
+	    $this->assertEqual($instance->getVersion(), 5);
 		
 		$instance->delete(true);
 	}

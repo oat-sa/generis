@@ -376,7 +376,7 @@ class core_kernel_versioning_File
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return array
      */
-    public function gethistory()
+    public function getHistory()
     {
         $returnValue = array();
 
@@ -439,6 +439,27 @@ class core_kernel_versioning_File
         // section 127-0-1-1-50a804cb:13317e3246f:-8000:0000000000001712 end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method getVersion
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @return int
+     */
+    public function getVersion()
+    {
+        $returnValue = (int) 0;
+
+        // section 127-0-1-1-750fdd52:133644e7bdd:-8000:0000000000001740 begin
+        
+        $history = $this->getHistory();
+        $returnValue = count($history);
+        
+        // section 127-0-1-1-750fdd52:133644e7bdd:-8000:0000000000001740 end
+
+        return (int) $returnValue;
     }
 
 } /* end of class core_kernel_versioning_File */

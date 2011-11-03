@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 10.10.2011, 17:45:16 with ArgoUML PHP module 
+ * Automatically generated on 03.11.2011, 12:30:28 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -137,7 +137,7 @@ class core_kernel_versioning_subversion_Repository
 		}
 		$returnValue = self::$instance;
         
-		// section 127-0-1-1--548d6005:132d344931b:-8000:000000000000250B end
+        // section 127-0-1-1--548d6005:132d344931b:-8000:000000000000250B end
 
         return $returnValue;
     }

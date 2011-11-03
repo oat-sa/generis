@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 28.10.2011, 10:53:06 with ArgoUML PHP module 
+ * Automatically generated on 03.11.2011, 12:30:28 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -95,17 +95,6 @@ interface core_kernel_versioning_FileInterface
     public function delete( core_kernel_classes_File $resource, $path);
 
     /**
-     * Short description of method getVersion
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  File resource
-     * @return string
-     * @see core_kernel_versioning_File::getVersion()
-     */
-    public function getVersion( core_kernel_versioning_File $resource);
-
-    /**
      * Short description of method add
      *
      * @access public
@@ -128,18 +117,6 @@ interface core_kernel_versioning_FileInterface
      * @see core_kernel_versioning_File::isVersioned()
      */
     public function isVersioned( core_kernel_classes_File $resource, $path);
-
-    /**
-     * Short description of method isUnversioned
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  File resource
-     * @param  string path
-     * @return boolean
-     * @see core_kernel_versioning_File::isUnversioned()
-     */
-    public function isUnversioned( core_kernel_classes_File $resource, $path);
 
     /**
      * Short description of method getHistory

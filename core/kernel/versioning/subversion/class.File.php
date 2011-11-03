@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 21.10.2011, 16:23:23 with ArgoUML PHP module 
+ * Automatically generated on 03.11.2011, 12:30:28 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -71,6 +71,7 @@ class core_kernel_versioning_subversion_File
      * @param  string message
      * @param  string path
      * @return boolean
+     * @see core_kernel_versioning_File::commit()
      */
     public function commit( core_kernel_classes_File $resource, $message, $path)
     {
@@ -94,6 +95,7 @@ class core_kernel_versioning_subversion_File
      * @param  string path
      * @param  int revision
      * @return boolean
+     * @see core_kernel_versioning_File::update()
      */
     public function update( core_kernel_classes_File $resource, $path, $revision = null)
     {
@@ -117,6 +119,7 @@ class core_kernel_versioning_subversion_File
      * @param  int revision
      * @param  string msg
      * @return boolean
+     * @see core_kernel_versioning_File::revert()
      */
     public function revert( core_kernel_classes_File $resource, $revision = null, $msg = "")
     {
@@ -133,10 +136,17 @@ class core_kernel_versioning_subversion_File
         	
         	$path = realpath($resource->getAbsolutePath());
         	
+        	//get the svn revision number
+        	var_dump('go to '.$revision);
+        	$log = svn_log($path);
+        	var_dump($log);
+        	$svnRevision = $log[count($log) - $revision];
+        	$svnRevisionNumber = $svnRevision['rev'];
+        	
         	//destroy the existing version
         	unlink($path);
         	//replace with the target revision
-        	$resource->update($revision);
+        	$resource->update($svnRevisionNumber);
         	//get old content
         	$content = $resource->getFileContent();
         	//update to the current version
@@ -190,6 +200,7 @@ class core_kernel_versioning_subversion_File
      * @param  File resource
      * @param  string path
      * @return boolean
+     * @see core_kernel_versioning_File::delete()
      */
     public function delete( core_kernel_classes_File $resource, $path)
     {
@@ -205,24 +216,6 @@ class core_kernel_versioning_subversion_File
     }
 
     /**
-     * Short description of method getVersion
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  File resource
-     * @return string
-     */
-    public function getVersion( core_kernel_versioning_File $resource)
-    {
-        $returnValue = (string) '';
-
-        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:00000000000024D2 begin
-        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:00000000000024D2 end
-
-        return (string) $returnValue;
-    }
-
-    /**
      * Short description of method add
      *
      * @access public
@@ -230,6 +223,7 @@ class core_kernel_versioning_subversion_File
      * @param  File resource
      * @param  string path
      * @return boolean
+     * @see core_kernel_versioning_File::add()
      */
     public function add( core_kernel_classes_File $resource, $path)
     {
@@ -252,6 +246,7 @@ class core_kernel_versioning_subversion_File
      * @param  File resource
      * @param  string path
      * @return boolean
+     * @see core_kernel_versioning_File::isVersioned()
      */
     public function isVersioned( core_kernel_classes_File $resource, $path)
     {
@@ -285,31 +280,6 @@ class core_kernel_versioning_subversion_File
     }
 
     /**
-     * Short description of method isUnversioned
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  File resource
-     * @param  string path
-     * @return boolean
-     */
-    public function isUnversioned( core_kernel_classes_File $resource, $path)
-    {
-        $returnValue = (bool) false;
-
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F0 begin
-        
-        $status = svn_status($path);
-        if(is_array($status) && isset($status['text_status']) && $status['text_status']=='SVN_WC_STATUS_UNVERSIONED'){
-        	$returnValue = true;
-        }
-        
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F0 end
-
-        return (bool) $returnValue;
-    }
-
-    /**
      * Short description of method getHistory
      *
      * @access public
@@ -317,6 +287,7 @@ class core_kernel_versioning_subversion_File
      * @param  File resource
      * @param  string path
      * @return array
+     * @see core_kernel_versioning_File::gethistory()
      */
     public function getHistory( core_kernel_classes_File $resource, $path)
     {
@@ -339,6 +310,7 @@ class core_kernel_versioning_subversion_File
      * @param  File resource
      * @param  string path
      * @return boolean
+     * @see core_kernel_versioning_File::hasLocalChanges()
      */
     public function hasLocalChanges( core_kernel_classes_File $resource, $path)
     {
@@ -385,5 +357,21 @@ class core_kernel_versioning_subversion_File
     }
 
 } /* end of class core_kernel_versioning_subversion_File */
+
+/* lost code following: 
+    // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:00000000000024D2 begin
+        
+        
+        
+    // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:00000000000024D2 end
+    // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F0 begin
+        
+        $status = svn_status($path);
+        if(is_array($status) && isset($status['text_status']) && $status['text_status']=='SVN_WC_STATUS_UNVERSIONED'){
+        	$returnValue = true;
+        }
+        
+    // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F0 end
+*/
 
 ?>
