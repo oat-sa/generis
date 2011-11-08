@@ -17,7 +17,7 @@ foreach($tests as $i => $testCase){
        $testSuite->addFile($testCase);
     }
     
-    $testSuite->addFile((dirname(__FILE__).'versioning/VersioningDisabledTestCase.php');
+    $testSuite->addFile(dirname(__FILE__).'versioning/VersioningDisabledTestCase.php');
     
 }
 
