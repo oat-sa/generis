@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Versioning</activediagram>
+      <activediagram>Generis Core Kernel</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -100,7 +100,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Nov 03 12:42:18 CET 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Nov 04 17:59:44 CET 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -20635,7 +20635,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
     </group>
   </group>
   <group name="Fig5"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[976, 1896, 659, 357]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1048, 1984, 659, 357]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767"
        fill="1"
        fillcolor="200 200 255"
@@ -20646,8 +20646,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
     </private>
     
     <rectangle name="Fig5.0"
-      x="976"
-      y="1896"
+      x="1048"
+      y="1984"
       width="659"
       height="357"
       fill="1"
@@ -20656,8 +20656,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       strokecolor="black"
     />
     <text name="Fig5.1"
-      x="977"
-      y="1897"
+      x="1049"
+      y="1985"
       width="657"
       height="21"
       fill="0"
@@ -20672,7 +20672,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       justification="Center"
     >core::kernel::classes::Class</text>
     <group name="Fig5.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[977, 1897, 657, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1049, 1985, 657, 0]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767"
          fill="0"
          fillcolor="200 200 255"
@@ -20684,8 +20684,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       </private>
       
       <rectangle name="Fig5.2.0"
-        x="977"
-        y="1897"
+        x="1049"
+        y="1985"
         width="657"
         height="0"
         fill="0"
@@ -20695,8 +20695,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       />
     </group>
     <rectangle name="Fig5.3"
-      x="976"
-      y="1918"
+      x="1048"
+      y="2006"
       width="659"
       height="1"
       fill="1"
@@ -20705,7 +20705,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       strokecolor="black"
     />
     <group name="Fig5.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[977, 1919, 657, 46]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1049, 2007, 657, 46]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767"
          fill="0"
          fillcolor="200 200 255"
@@ -20716,8 +20716,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       </private>
       
       <rectangle name="Fig5.4.0"
-        x="977"
-        y="1919"
+        x="1049"
+        y="2007"
         width="657"
         height="46"
         fill="0"
@@ -20727,8 +20727,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       />
     </group>
     <rectangle name="Fig5.5"
-      x="976"
-      y="1965"
+      x="1048"
+      y="2053"
       width="659"
       height="1"
       fill="1"
@@ -20737,7 +20737,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       strokecolor="black"
     />
     <group name="Fig5.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[977, 1966, 657, 285]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1049, 2054, 657, 285]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767"
          fill="0"
          fillcolor="200 200 255"
@@ -20748,8 +20748,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       </private>
       
       <rectangle name="Fig5.6.0"
-        x="977"
-        y="1966"
+        x="1049"
+        y="2054"
         width="657"
         height="285"
         fill="0"
@@ -20758,8 +20758,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         strokecolor="black"
       />
       <text name="Fig5.6.1"
-        x="977"
-        y="1966"
+        x="1049"
+        y="2054"
         width="657"
         height="14"
         fill="0"
@@ -20774,8 +20774,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >getSubClasses(recursive : boolean = false) : array</text>
       <text name="Fig5.6.2"
-        x="977"
-        y="1980"
+        x="1049"
+        y="2068"
         width="657"
         height="14"
         fill="0"
@@ -20790,8 +20790,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >isSubClassOf(parentClass : Class) : boolean</text>
       <text name="Fig5.6.3"
-        x="977"
-        y="1994"
+        x="1049"
+        y="2082"
         width="657"
         height="14"
         fill="0"
@@ -20806,8 +20806,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >getParentClasses(recursive : boolean = false) : array</text>
       <text name="Fig5.6.4"
-        x="977"
-        y="2008"
+        x="1049"
+        y="2096"
         width="657"
         height="14"
         fill="0"
@@ -20822,8 +20822,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >getProperties(recursive : boolean = false) : array</text>
       <text name="Fig5.6.5"
-        x="977"
-        y="2022"
+        x="1049"
+        y="2110"
         width="657"
         height="14"
         fill="0"
@@ -20838,8 +20838,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >getInstances(recursive : boolean = false,params : array) : array</text>
       <text name="Fig5.6.6"
-        x="977"
-        y="2036"
+        x="1049"
+        y="2124"
         width="657"
         height="14"
         fill="0"
@@ -20854,8 +20854,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >setInstance(instance : Resource) : Resource</text>
       <text name="Fig5.6.7"
-        x="977"
-        y="2050"
+        x="1049"
+        y="2138"
         width="657"
         height="14"
         fill="0"
@@ -20870,8 +20870,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >setSubClassOf(iClass : Class) : boolean</text>
       <text name="Fig5.6.8"
-        x="977"
-        y="2064"
+        x="1049"
+        y="2152"
         width="657"
         height="14"
         fill="0"
@@ -20886,8 +20886,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >setProperty(property : Property) : boolean</text>
       <text name="Fig5.6.9"
-        x="977"
-        y="2078"
+        x="1049"
+        y="2166"
         width="657"
         height="14"
         fill="0"
@@ -20902,8 +20902,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >__construct(uri : string,debug : string = &apos;&apos;) : void</text>
       <text name="Fig5.6.10"
-        x="977"
-        y="2092"
+        x="1049"
+        y="2180"
         width="657"
         height="14"
         fill="0"
@@ -20918,8 +20918,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >createHyperClass()</text>
       <text name="Fig5.6.11"
-        x="977"
-        y="2106"
+        x="1049"
+        y="2194"
         width="657"
         height="14"
         fill="0"
@@ -20934,8 +20934,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >createInstance(label : string = &apos;&apos;,comment : string = &apos;&apos;,uri : string = &apos;&apos;) : Resource</text>
       <text name="Fig5.6.12"
-        x="977"
-        y="2120"
+        x="1049"
+        y="2208"
         width="657"
         height="14"
         fill="0"
@@ -20950,8 +20950,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >createSubClass(label : string = &apos;&apos;,comment : string = &apos;&apos;,uri : string = &quot;&quot;) : Class</text>
       <text name="Fig5.6.13"
-        x="977"
-        y="2134"
+        x="1049"
+        y="2222"
         width="657"
         height="14"
         fill="0"
@@ -20966,8 +20966,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >createProperty(label : string = &apos;&apos;,comment : string = &apos;&apos;,isLgDependent : boolean = false) : Property</text>
       <text name="Fig5.6.14"
-        x="977"
-        y="2148"
+        x="1049"
+        y="2236"
         width="657"
         height="14"
         fill="0"
@@ -20982,8 +20982,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >getMethodes() : array</text>
       <text name="Fig5.6.15"
-        x="977"
-        y="2162"
+        x="1049"
+        y="2250"
         width="657"
         height="14"
         fill="0"
@@ -20998,8 +20998,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >searchInstances(propertyFilters : array = array(),options : array = array()) : array</text>
       <text name="Fig5.6.16"
-        x="977"
-        y="2176"
+        x="1049"
+        y="2264"
         width="657"
         height="14"
         fill="0"
@@ -21014,8 +21014,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >countInstances() : Integer</text>
       <text name="Fig5.6.17"
-        x="977"
-        y="2190"
+        x="1049"
+        y="2278"
         width="657"
         height="14"
         fill="0"
@@ -21030,8 +21030,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >getInstancesPropertyValues(property : Property,propertyFilters : array = array(),options : array = array()) : array</text>
       <text name="Fig5.6.18"
-        x="977"
-        y="2204"
+        x="1049"
+        y="2292"
         width="657"
         height="20"
         fill="0"
@@ -52822,7 +52822,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       visibility="0"
     />
     <group name="Fig15.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[-32, -32, 0, 0]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[0, 0, 0, 0]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765"
          fill="0"
          fillcolor="white"
@@ -52857,7 +52857,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       visibility="0"
     />
     <group name="Fig15.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[-32, -32, 0, 0]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[0, 0, 0, 0]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765"
          fill="0"
          fillcolor="white"
@@ -53146,7 +53146,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       visibility="0"
     />
     <group name="Fig18.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[-32, -32, 0, 0]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[0, 0, 0, 0]"
          href="127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001365"
          fill="0"
          fillcolor="white"
