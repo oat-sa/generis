@@ -72,7 +72,7 @@ class core_kernel_classes_Class
 
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000772 begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getSubClasses ($this, $recursive);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getSubClasses($this, $recursive);
 
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000772 end
 
@@ -93,7 +93,7 @@ class core_kernel_classes_Class
 
         // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000AF2 begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->isSubClassOf ($this, $parentClass);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->isSubClassOf($this, $parentClass);
 		
         // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000AF2 end
 
@@ -114,7 +114,7 @@ class core_kernel_classes_Class
 
         // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B20 begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getParentClasses ($this, $recursive);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getParentClasses($this, $recursive);
 		
         // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B20 end
 
@@ -135,7 +135,7 @@ class core_kernel_classes_Class
 
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:000000000000094B begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getProperties ($this, $recursive);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getProperties($this, $recursive);
 
 		
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:000000000000094B end
@@ -158,7 +158,7 @@ class core_kernel_classes_Class
 
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000958 begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getInstances ($this, $recursive, $params);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getInstances($this, $recursive, $params);
 
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000958 end
 
@@ -180,7 +180,7 @@ class core_kernel_classes_Class
 
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000978 begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->setInstance ($this, $instance);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->setInstance($this, $instance);
         
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000978 end
 
@@ -202,7 +202,7 @@ class core_kernel_classes_Class
 
         // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AB0 begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->setSubClassOf ($this, $iClass);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->setSubClassOf($this, $iClass);
         
         // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AB0 end
 
@@ -224,7 +224,7 @@ class core_kernel_classes_Class
 
         // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AC1 begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->setProperty ($this, $property);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->setProperty($this, $property);
         
         // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AC1 end
 
@@ -243,7 +243,7 @@ class core_kernel_classes_Class
     public function __construct($uri, $debug = '')
     {
         // section 10-5-2-6-d9cdd2e:11b0c43cdd8:-8000:0000000000000D4D begin
-		parent::__construct($uri,$debug);
+		parent::__construct($uri, $debug);
         // section 10-5-2-6-d9cdd2e:11b0c43cdd8:-8000:0000000000000D4D end
     }
 
@@ -319,7 +319,7 @@ class core_kernel_classes_Class
 
         // section 10-13-1--99-5d680c37:11e406b020f:-8000:0000000000000F23 begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->createInstance ($this, $label, $comment, $uri);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->createInstance($this, $label, $comment, $uri);
 
         // section 10-13-1--99-5d680c37:11e406b020f:-8000:0000000000000F23 end
 
@@ -342,7 +342,7 @@ class core_kernel_classes_Class
 
         // section 10-13-1--99-3835caab:11e45736d24:-8000:0000000000000F2A begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->createSubClass ($this, $label, $comment, $uri);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->createSubClass($this, $label, $comment, $uri);
         
         // section 10-13-1--99-3835caab:11e45736d24:-8000:0000000000000F2A end
 
@@ -365,7 +365,7 @@ class core_kernel_classes_Class
 
         // section 10-13-1--99--47c96501:11e4ab45b34:-8000:0000000000000F34 begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->createProperty ($this, $label, $comment, $isLgDependent);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->createProperty($this, $label, $comment, $isLgDependent);
         
         // section 10-13-1--99--47c96501:11e4ab45b34:-8000:0000000000000F34 end
 
@@ -404,7 +404,7 @@ class core_kernel_classes_Class
         $returnValue = array();
 
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:0000000000001503 begin
-		$returnValue = core_kernel_persistence_ClassProxy::singleton()->searchInstances ($this, $propertyFilters, $options);
+		$returnValue = core_kernel_persistence_ClassProxy::singleton()->searchInstances($this, $propertyFilters, $options);
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:0000000000001503 end
 
         return (array) $returnValue;
@@ -422,7 +422,7 @@ class core_kernel_classes_Class
         $returnValue = null;
 
         // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159B begin
-		$returnValue = core_kernel_persistence_ClassProxy::singleton()->countInstances ($this);
+		$returnValue = core_kernel_persistence_ClassProxy::singleton()->countInstances($this);
         // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159B end
 
         return $returnValue;
@@ -444,7 +444,7 @@ class core_kernel_classes_Class
         $returnValue = array();
 
         // section 127-0-1-1--120bf54f:13142fdf597:-8000:0000000000003137 begin
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getInstancesPropertyValues ($this, $property, $propertyFilters, $options);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getInstancesPropertyValues($this, $property, $propertyFilters, $options);
         // section 127-0-1-1--120bf54f:13142fdf597:-8000:0000000000003137 end
 
         return (array) $returnValue;
@@ -463,7 +463,7 @@ class core_kernel_classes_Class
         $returnValue = null;
 
         // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:000000000000163C begin
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->unsetProperty ($this, $property);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->unsetProperty($this, $property);
         // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:000000000000163C end
 
         return $returnValue;
