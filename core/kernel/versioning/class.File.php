@@ -385,8 +385,9 @@ class core_kernel_versioning_File
         if(!GENERIS_VERSIONING_ENABLED){
         	throw new core_kernel_versioning_VersioningDisabledException();
         }
-        
-        $returnValue = core_kernel_versioning_FileProxy::singleton()->gethistory($this, $this->getAbsolutePath());
+        else if(!is_null($this->getRepository()) && $this->getRepository()->authenticate()){
+        	$returnValue = core_kernel_versioning_FileProxy::singleton()->gethistory($this, $this->getAbsolutePath());
+        }
         
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F9 end
 
