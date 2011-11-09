@@ -87,7 +87,7 @@ class core_kernel_persistence_smoothsql_Class
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$sqlQuery = 'SELECT "subject" FROM "statements" WHERE "predicate" = ? and "object" = ?';
-		$sqlResult = $dbWrapper->execSql($sqlQuery, array (
+		$sqlResult = $dbWrapper->execSql($sqlQuery, array(
 			RDF_SUBCLASSOF,
 			$resource->uriResource
 		));
@@ -96,7 +96,7 @@ class core_kernel_persistence_smoothsql_Class
 			$returnValue[$subClass->uriResource] = $subClass;
 			if($recursive == true ){
 				$plop = $subClass->getSubClasses(true);
-				$returnValue = array_merge($returnValue , $plop);
+				$returnValue = array_merge($returnValue, $plop);
 			}
 			$sqlResult->MoveNext();
 		}
@@ -186,7 +186,7 @@ class core_kernel_persistence_smoothsql_Class
 			$returnValue[$parentClass->uriResource] = $parentClass ;
 			if($recursive == true && $parentClass->uriResource != RDF_CLASS && $parentClass->uriResource != RDF_RESOURCE){
 				$plop = $parentClass->getParentClasses(true);
-				$returnValue = array_merge($returnValue,$plop);
+				$returnValue = array_merge($returnValue, $plop);
 			}
 			$sqlResult->MoveNext();
 		}
@@ -228,7 +228,7 @@ class core_kernel_persistence_smoothsql_Class
 			$parentClasses = $resource->getParentClasses(true);
 			foreach ($parentClasses as $parent) {
 				if($parent->uriResource != RDF_CLASS) {
-					$returnValue = array_merge($returnValue,$parent->getProperties(true));
+					$returnValue = array_merge($returnValue, $parent->getProperties(true));
 				}
 			}
 		}
@@ -301,7 +301,7 @@ class core_kernel_persistence_smoothsql_Class
 		if($recursive == true){
 			$subClasses = $resource->getSubClasses(true);
 			foreach ($subClasses as $subClass){
-				$returnValue = array_merge($returnValue,$subClass->getInstances(true));
+				$returnValue = array_merge($returnValue, $subClass->getInstances(true));
 			}
 		}
 
@@ -351,7 +351,7 @@ class core_kernel_persistence_smoothsql_Class
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000150F begin
 
 		$subClassOf = new core_kernel_classes_Property(RDF_SUBCLASSOF);
-		$returnValue = $resource->setPropertyValue($subClassOf,$iClass->uriResource);
+		$returnValue = $resource->setPropertyValue($subClassOf, $iClass->uriResource);
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000150F end
 
@@ -373,8 +373,8 @@ class core_kernel_persistence_smoothsql_Class
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 begin
 
-		$domain = new core_kernel_classes_Property(RDF_DOMAIN,__METHOD__);
-		$instanceProperty = new core_kernel_classes_Resource($property->uriResource,__METHOD__);
+		$domain = new core_kernel_classes_Property(RDF_DOMAIN, __METHOD__);
+		$instanceProperty = new core_kernel_classes_Resource($property->uriResource, __METHOD__);
 		$returnValue = $instanceProperty->setPropertyValue($domain, $resource->uriResource);
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 end
@@ -412,7 +412,7 @@ class core_kernel_persistence_smoothsql_Class
 			}
 		}
 
-		$returnValue = new core_kernel_classes_Resource($subject,__METHOD__);
+		$returnValue = new core_kernel_classes_Resource($subject, __METHOD__);
 		if(!$returnValue->hasType($resource)){
 			$returnValue->setType($resource);
 		}
@@ -446,7 +446,7 @@ class core_kernel_persistence_smoothsql_Class
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 begin
         
-        $class = new core_kernel_classes_Class(RDF_CLASS,__METHOD__);
+        $class = new core_kernel_classes_Class(RDF_CLASS, __METHOD__);
 		$intance = $class->createInstance($label, $comment, $uri);
 		$returnValue = new core_kernel_classes_Class($intance->uriResource);
 		$returnValue->setSubClassOf($resource);
@@ -473,9 +473,9 @@ class core_kernel_persistence_smoothsql_Class
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F3C begin
         
-    	$property = new core_kernel_classes_Class(RDF_PROPERTY,__METHOD__);
+    	$property = new core_kernel_classes_Class(RDF_PROPERTY, __METHOD__);
 		$propertyInstance = $property->createInstance($label,$comment);
-		$returnValue = new core_kernel_classes_Property($propertyInstance->uriResource,__METHOD__);
+		$returnValue = new core_kernel_classes_Property($propertyInstance->uriResource, __METHOD__);
 		$returnValue->setLgDependent($isLgDependent);
 
 		if (!$resource->setProperty($returnValue)){
@@ -701,10 +701,11 @@ class core_kernel_persistence_smoothsql_Class
         // section 127-0-1-1--120bf54f:13142fdf597:-8000:000000000000312D begin
         
     	$distinct = isset($options['distinct']) ? $options['distinct'] : false;
+    	$recursive = isset($options['recursive']) ? $options['recursive'] : false;
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $uris = '';
         $searchInstancesOptions = array (
-        	'recursive' 	=> isset($options['recursive']) ? $options['recursive'] : false
+        	'recursive' 	=> $recursive
         );
         
         // Search all instances for the property filters paramter
@@ -717,7 +718,9 @@ class core_kernel_persistence_smoothsql_Class
 	        
 	        // Get all the available property values in the subset of instances
 	        $query = 'SELECT';
-	        if ($distinct) $query .= ' DISTINCT';
+	        if($distinct){
+	        	$query .= ' DISTINCT';
+	        }
 	        $query .= ' "object" FROM "statements"
 	        	WHERE "predicate" = ?
 	        	AND "subject" IN ('.$uris.')';
@@ -760,8 +763,8 @@ class core_kernel_persistence_smoothsql_Class
 
         // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:00000000000031F8 begin
         
-		$domain = new core_kernel_classes_Property(RDF_DOMAIN,__METHOD__);
-		$instanceProperty = new core_kernel_classes_Resource($property->uriResource,__METHOD__);
+		$domain = new core_kernel_classes_Property(RDF_DOMAIN, __METHOD__);
+		$instanceProperty = new core_kernel_classes_Resource($property->uriResource, __METHOD__);
 		$returnValue = $instanceProperty->removePropertyValues($domain, array('pattern' => $resource->uriResource));
         
         // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:00000000000031F8 end
