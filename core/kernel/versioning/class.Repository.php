@@ -208,11 +208,11 @@ class core_kernel_versioning_Repository
         	$returnValue = true;
         } else {
         	
-	        $VersioningRepositoryTypeProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN);
-			$login = (string)$this->getOnePropertyValue($VersioningRepositoryTypeProp);
+	        $VersioningRepositoryLoginProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN);
+			$login = (string) $this->getOnePropertyValue($VersioningRepositoryLoginProp);
 			
-			$VersioningRepositoryTypeProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PASSWORD);
-			$password = (string)$this->getOnePropertyValue($VersioningRepositoryTypeProp); 
+			$VersioningRepositoryPasswordProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PASSWORD);
+			$password = (string) $this->getOnePropertyValue($VersioningRepositoryPasswordProp); 
 			
 			$returnValue = $this->authenticated = core_kernel_versioning_RepositoryProxy::singleton()->authenticate($this, $login, $password);
         }
