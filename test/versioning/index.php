@@ -4,7 +4,7 @@ require_once dirname(__FILE__) . '/../../../tao/test/TestRunner.php';
 
 $testSuite = new TestSuite('Versioning unit tests');
 $testSuite->addFile(dirname(__FILE__).'/VersioningEnabledTestCase.php');
-$testSuite->addFile(dirname(__FILE__).'/../../../wfEngine/TranslationProcessExecutionTestCase.php');
+$testSuite->addFile(dirname(__FILE__).'/../../../wfEngine/test/TranslationProcessExecutionTestCase.php');
 
 //add the reporter regarding the context
 if(PHP_SAPI == 'cli'){
