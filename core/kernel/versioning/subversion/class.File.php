@@ -137,9 +137,7 @@ class core_kernel_versioning_subversion_File
         	$path = realpath($resource->getAbsolutePath());
         	
         	//get the svn revision number
-        	var_dump('go to '.$revision);
         	$log = svn_log($path);
-        	var_dump($log);
         	$svnRevision = $log[count($log) - $revision];
         	$svnRevisionNumber = $svnRevision['rev'];
         	
