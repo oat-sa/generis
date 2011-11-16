@@ -144,7 +144,8 @@ class core_kernel_persistence_smoothsql_Resource
 		    		AND "modelID" IN ('.$modelIds.')';
         
     	// Select first
-		if ($one) {
+		if($one){
+			
 			$result	= $dbWrapper->dbConnector->selectLimit($query, 1, -1, array(
 				$resource->uriResource
 				, $property->uriResource
@@ -152,7 +153,8 @@ class core_kernel_persistence_smoothsql_Resource
 			));
 		}
 		// Select Last
-		else if ($last) {
+		else if($last){
+			
 			$result	= $dbWrapper->execSql($query, array(
 				$resource->uriResource
 				, $property->uriResource
@@ -163,7 +165,8 @@ class core_kernel_persistence_smoothsql_Resource
 			}
 		}
 		// Select All
-		else {
+		else{
+			
 			$result	= $dbWrapper->execSql($query, array(
 				$resource->uriResource
 				, $property->uriResource
