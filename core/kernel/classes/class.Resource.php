@@ -313,7 +313,7 @@ class core_kernel_classes_Resource
 
         // section 127-0-0-1-71ce5466:11938f47d30:-8000:0000000000000A99 begin
     	
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getPropertyValues ($this, $property, $options);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getPropertyValues($this, $property, $options);
 
         // section 127-0-0-1-71ce5466:11938f47d30:-8000:0000000000000A99 end
 
@@ -334,7 +334,7 @@ class core_kernel_classes_Resource
 
         // section 10-13-1--99--32cd3c54:11be55033bf:-8000:0000000000000D79 begin
     	
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getPropertyValuesCollection ($this, $property);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getPropertyValuesCollection($this, $property);
         
         // section 10-13-1--99--32cd3c54:11be55033bf:-8000:0000000000000D79 end
 
@@ -396,7 +396,7 @@ class core_kernel_classes_Resource
 
         // section -87--2--3--76-51a982f1:1278aabc987:-8000:0000000000008925 begin
         
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getOnePropertyValue ($this, $property, $last);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getOnePropertyValue($this, $property, $last);
       
         // section -87--2--3--76-51a982f1:1278aabc987:-8000:0000000000008925 end
 
@@ -418,7 +418,7 @@ class core_kernel_classes_Resource
 
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A4 begin
         
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getPropertyValuesByLg ($this, $property, $lg);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getPropertyValuesByLg($this, $property, $lg);
         
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A4 end
 
@@ -442,7 +442,7 @@ class core_kernel_classes_Resource
 
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:00000000000007AC begin
         
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->setPropertyValue ($this, $property, $object);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->setPropertyValue($this, $property, $object);
         
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:00000000000007AC end
 
@@ -464,7 +464,7 @@ class core_kernel_classes_Resource
 
         // section 127-0-1-1-44e4845c:12f4ef0414d:-8000:0000000000001437 begin
         
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->setPropertiesValues ($this, $propertiesValues);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->setPropertiesValues($this, $propertiesValues);
         
         // section 127-0-1-1-44e4845c:12f4ef0414d:-8000:0000000000001437 end
 
@@ -487,7 +487,7 @@ class core_kernel_classes_Resource
 
         // section -87--2--3--76-2d6cca2d:12579c74420:-8000:0000000000001831 begin
         
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->setPropertyValueByLg ($this, $property, $value, $lg);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->setPropertyValueByLg($this, $property, $value, $lg);
         
         // section -87--2--3--76-2d6cca2d:12579c74420:-8000:0000000000001831 end
 
@@ -539,8 +539,8 @@ class core_kernel_classes_Resource
         $returnValue = (bool) false;
 
         // section -87--2--3--76-18452630:1270a514a71:-8000:00000000000023F0 begin
-        $returnValue = $this->removePropertyValueByLg($prop,$lg);
-        $returnValue &= $this->setPropertyValueByLg($prop,$value,$lg);
+        $returnValue = $this->removePropertyValueByLg($prop, $lg);
+        $returnValue &= $this->setPropertyValueByLg($prop, $value, $lg);
         // section -87--2--3--76-18452630:1270a514a71:-8000:00000000000023F0 end
 
         return (bool) $returnValue;
@@ -561,7 +561,7 @@ class core_kernel_classes_Resource
 
         // section 10-13-1--31--64270bf:11918ad765e:-8000:000000000000097C begin
 
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->removePropertyValues ($this, $property, $options);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->removePropertyValues($this, $property, $options);
         
         // section 10-13-1--31--64270bf:11918ad765e:-8000:000000000000097C end
 
@@ -584,7 +584,7 @@ class core_kernel_classes_Resource
 
         // section -87--2--3--76-18452630:1270a514a71:-8000:00000000000023EC begin
        
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->removePropertyValueByLg ($this, $prop, $lg, $options);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->removePropertyValueByLg($this, $prop, $lg, $options);
         
         // section -87--2--3--76-18452630:1270a514a71:-8000:00000000000023EC end
 
@@ -606,7 +606,7 @@ class core_kernel_classes_Resource
 
         // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B29 begin
         
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getRdfTriples ($this);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getRdfTriples($this);
         
         // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B29 end
 
@@ -627,7 +627,7 @@ class core_kernel_classes_Resource
 
         // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B13 begin
         
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getUsedLanguages ($this, $property);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getUsedLanguages($this, $property);
 
         // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B13 end
 
@@ -650,7 +650,7 @@ class core_kernel_classes_Resource
 
         // section 127-0-1-1-440a1f14:12e71f49661:-8000:000000000000141E begin
         
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->duplicate ($this, $excludedProperties);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->duplicate($this, $excludedProperties);
         
         // section 127-0-1-1-440a1f14:12e71f49661:-8000:000000000000141E end
 
@@ -671,7 +671,7 @@ class core_kernel_classes_Resource
 
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000976 begin
         
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->delete ($this, $deleteReference);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->delete($this, $deleteReference);
         
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000976 end
 
@@ -714,7 +714,7 @@ class core_kernel_classes_Resource
 
         // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000235D begin
         
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getLastModificationDate ($this, $property);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getLastModificationDate($this, $property);
         
         // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000235D end
 
@@ -802,7 +802,7 @@ class core_kernel_classes_Resource
 
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014CD begin
         
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getPropertiesValue ($this, $properties, $last);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getPropertiesValue($this, $properties, $last);
         
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014CD end
 
@@ -823,7 +823,7 @@ class core_kernel_classes_Resource
 
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001550 begin
         
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->setType ($this, $type);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->setType($this, $type);
         
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001550 end
 
@@ -844,7 +844,7 @@ class core_kernel_classes_Resource
 
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001553 begin
         
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->removeType ($this, $type);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->removeType($this, $type);
         
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001553 end
 
@@ -865,7 +865,7 @@ class core_kernel_classes_Resource
 
         // section 127-0-1-1--72f5bf1f:12fd500f94d:-8000:0000000000001552 begin
         
-    	foreach ($this->getType () as $type){
+    	foreach($this->getType() as $type){
         	if ($class->uriResource == $type->uriResource){
         		$returnValue = true;
         		break;
@@ -890,9 +890,10 @@ class core_kernel_classes_Resource
 
         // section 127-0-1-1-7c36bc99:13092a153cd:-8000:0000000000001599 begin
         try{
-                $returnValue = count($this->getType())?true:false;
-        }catch(Exception $e){
-                //return false by default
+        	$returnValue = count($this->getType())?true:false;
+        }
+        catch(Exception $e){
+        	;//return false by default
         }
                
         // section 127-0-1-1-7c36bc99:13092a153cd:-8000:0000000000001599 end
@@ -915,7 +916,7 @@ class core_kernel_classes_Resource
 
         // section 127-0-1-1-3b11b49e:1323ea85daa:-8000:0000000000003DB0 begin
         
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getAllPropertyValues ($this, $property, $options);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getAllPropertyValues($this, $property, $options);
         
         // section 127-0-1-1-3b11b49e:1323ea85daa:-8000:0000000000003DB0 end
 
