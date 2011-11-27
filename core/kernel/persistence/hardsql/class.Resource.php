@@ -126,16 +126,12 @@ class core_kernel_persistence_hardsql_Resource
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
         
 		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
-		$table = $referencer->resourceLocation($resource);
-		if(empty($table)){
-			return $returnValue;
-		}
-		 
+		// hmmmm ! Perplexe
 		$table = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
 		if(empty($table)){
 			return $returnValue;
 		}
-		 
+		
 		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
 		$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
 		$propertyLocation = $referencer->propertyLocation($property);

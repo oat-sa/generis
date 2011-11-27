@@ -639,7 +639,124 @@ class core_kernel_persistence_hardsql_Class
 
         // section 127-0-1-1--120bf54f:13142fdf597:-8000:000000000000312D begin
         
-        throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        //throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+	        
+    	$distinct = isset($options['distinct']) ? $options['distinct'] : false;
+    	$recursive = isset($options['recursive']) ? $options['recursive'] : false;
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+        $uris = '';
+        $searchInstancesOptions = array (
+        	'recursive' 	=> $recursive
+        );
+        
+        // Search all instances for the property filters paramter
+        if(!empty($propertyFilters)){
+        	$instances = $resource->searchInstances($propertyFilters, $searchInstancesOptions);
+        }else{
+        	$instances = $resource->getInstances($recursive);
+        }
+        
+        if ($instances){
+        	$tables = array();
+	        foreach ($instances as $instance){
+	        	$uris .= '\''.$instance->uriResource.'\',';
+	        	array_push($tables, core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($instance));
+	        } 
+	        $tables = array_unique($tables);
+	        $uris = substr($uris, 0, strlen($uris)-1);
+	        
+	        // Get all the available property values in the subset of instances
+	        
+	        $table = $tables[0];
+			if(empty($table)){
+				return $returnValue;
+			}
+			$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
+			$propertyLocation = $referencer->propertyLocation($property);
+	
+			// Select in the properties table of the class
+			if (in_array("{$table}Props", $propertyLocation)
+			|| ! $referencer->isPropertyReferenced($property)){
+				
+				$tableProps = $table."Props";
+				$session = core_kernel_classes_Session::singleton();
+				// Define language if required
+				$lang = '';
+				$defaultLg = '';
+				if (isset($options['lg'])){
+					$lang = $options['lg'];
+				}
+				else{
+					($session->getLg() != '') ? $lang = $session->getLg() : $lang = $session->defaultLg;
+					$defaultLg = ' OR "l_language" = \''.$session->defaultLg.'\' ';
+				}
+	            
+				$query = 'SELECT '.$distinct.' "property_value", "property_foreign_uri"
+					FROM "'.$table.'"
+					INNER JOIN "'.$tableProps.'" on "'.$table.'"."id" = "'.$tableProps.'"."instance_id"
+				   	WHERE "'.$table.'"."uri" IN ('.$uris.')
+					AND "'.$tableProps.'"."property_uri" = ?
+					AND ( "l_language" = ? OR "l_language" = \'\' '.$defaultLg.')';
+				
+				
+				$result	= $dbWrapper->execSql($query, array(
+					$property->uriResource
+					, $lang
+				));
+				if($dbWrapper->dbConnector->errorNo() !== 0){
+					throw new core_kernel_persistence_hardsql_Exception("Unable to get property (multiple) values for {$resource->uriResource} in {$table} : " .$dbWrapper->dbConnector->errorMsg());
+				}
+				while (!$result->EOF){
+					$returnValue[] = $result->fields['property_value'] != null ? $result->fields['property_value'] : $result->fields['property_foreign_uri'];
+					$result->moveNext();
+				}
+				
+			}
+			// Select in the main table of the class
+			else{
+				
+				$query =  'SELECT '.($distinct?'DISTINCT':'').' "'.$propertyAlias.'" as "propertyValue" FROM "'.$table.'" WHERE "uri" IN ('.$uris.')';
+				$result	= $dbWrapper->execSql($query);
+				
+				if ($dbWrapper->dbConnector->errorNo() == 1054) {
+					// Column doesn't exists is not an error. Try to get a property which does not exist is allowed
+				}
+				else if ($dbWrapper->dbConnector->errorNo() !== 0){ 
+					throw new core_kernel_persistence_hardsql_Exception("Unable to get property (single) values for {$resource->uriResource} in {$table} : " .$dbWrapper->dbConnector->errorMsg());
+				} 
+				else {
+					while (!$result->EOF){
+						if ($result->fields['propertyValue']!=null){
+							$returnValue[] = $result->fields['propertyValue'];
+						}
+						$result->moveNext();
+					}
+				}
+				
+			}
+	        
+	        
+	        
+	        
+	        
+	        
+	        
+	    	
+	    	/*if($dbWrapper->dbConnector->errorNo() !== 0){
+				throw new core_kernel_persistence_smoothsql_Exception('Unable to get instances\' property values : '.$dbWrapper->dbConnector->errorMsg());
+			}
+			
+			while (!$sqlResult->EOF){
+				if(!common_Utils::isUri($sqlResult->fields['object'])) {
+	                $returnValue[] = new core_kernel_classes_Literal($sqlResult->fields['object']);
+	            }
+	            else {
+	                $returnValue[] = new core_kernel_classes_Resource($sqlResult->fields['object']);
+	            }
+				$sqlResult->moveNext();
+			}*/
+        }
         
         // section 127-0-1-1--120bf54f:13142fdf597:-8000:000000000000312D end
 
