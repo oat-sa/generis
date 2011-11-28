@@ -322,7 +322,7 @@ class core_kernel_versioning_File
 	        
 	        //the file was already versioned -> EXCEPTION
 	        if($this->isVersioned()){
-	        	throw new core_kernel_versioning_Exception(__('the resource has already been versioned'));
+	        	throw new core_kernel_versioning_Exception(__('the resource has already been versioned : '.$filePath));
 	        }
 	        
 	        //the file does not exist -> EXCEPTION

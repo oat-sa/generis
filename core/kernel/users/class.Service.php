@@ -224,6 +224,19 @@ class core_kernel_users_Service
 		
         if(!empty($role)){
 	        
+			if(!is_string($login)){
+				throw new core_kernel_users_Exception('The login must be of "string" type');
+				return $returnValue;
+			}
+			if(empty(trim($login))){
+				throw new core_kernel_users_Exception('The login cannot be empty');
+				return $returnValue;
+			}
+			if(!is_string($password)){
+				throw new core_kernel_users_Exception('The password must be of "string" type');
+				return $returnValue;
+			}
+			
         	$userClass = new core_kernel_classes_Class(CLASS_GENERIS_USER);
 	        
 	        //check login
@@ -256,7 +269,7 @@ class core_kernel_users_Service
 					$returnValue = true;
 				}else if($userRole->isSubClassOf($acceptedRoleClass)){
 					$returnValue = true;
-				}else if($userRole->isSubClassOf(new core_kernel_classes_Class(CLASS_GENERIS_USER))){
+				}else if($userRole->isSubClassOf($userClass)){
 					foreach ($userRole->getType() as $userRoleType){
 						if($userRoleType->uriResource == $acceptedRoleClass->uriResource || $userRoleType->isSubClassOf($acceptedRoleClass)){
 							$returnValue = true;
@@ -270,6 +283,8 @@ class core_kernel_users_Service
 
 		if(!$returnValue) {
 			$this->logout();
+			$user->getLabel();
+			var_dump('login failed', $login, $password, count($users), $user, $this->userResource->getType());
 			throw new core_kernel_users_Exception('Authentication failed : Role do not match',core_kernel_users_Exception::BAD_PASSWORD );
 		}
 		
