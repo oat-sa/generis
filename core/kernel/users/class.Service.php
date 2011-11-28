@@ -228,7 +228,8 @@ class core_kernel_users_Service
 				throw new core_kernel_users_Exception('The login must be of "string" type');
 				return $returnValue;
 			}
-			if(empty(trim($login))){
+			$login = trim($login);
+			if(empty($login)){
 				throw new core_kernel_users_Exception('The login cannot be empty');
 				return $returnValue;
 			}
