@@ -42,7 +42,7 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 		error_reporting(E_ALL);
 		
 		if(is_null($this->userService)){
-			$this->userService = tao_models_classes_ServiceFactory::get('wfEngine_models_classes_UserService');
+			$this->userService = wfEngine_models_classes_UserService::singleton();
 		}
 		
 		if(!empty($this->myUserUri)){
@@ -74,8 +74,8 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 			$this->currentUser = $this->userService->getCurrentUser();
 		}
 		
-		$this->subjectsService = tao_models_classes_ServiceFactory::get('Subjects');
-		$this->service = tao_models_classes_ServiceFactory::get('wfEngine_models_classes_TokenService');
+		$this->subjectsService = taoSubjects_models_classes_SubjectsService::singleton();
+		$this->service = wfEngine_models_classes_TokenService::singleton();
 	}
 	
 	public function testCreateSubjects(){
@@ -138,9 +138,9 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 		
 		try{
 
-			$authoringService = tao_models_classes_ServiceFactory::get('wfEngine_models_classes_ProcessAuthoringService');
-			$processExecutionService = tao_models_classes_ServiceFactory::get('wfEngine_models_classes_ProcessExecutionService');
-			$activityExecutionService = tao_models_classes_ServiceFactory::get('wfEngine_models_classes_ActivityExecutionService');
+			$authoringService = wfEngine_models_classes_ProcessAuthoringService::singleton();
+			$processExecutionService = wfEngine_models_classes_ProcessExecutionService::singleton();
+			$activityExecutionService = wfEngine_models_classes_ActivityExecutionService::singleton();
 
 
 			//create a new process def
@@ -275,7 +275,7 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 			$deliveryProcess = new core_kernel_classes_Resource($this->processDefinitionUri);
 			if($deliveryProcess->hasType(new core_kernel_classes_Class(CLASS_PROCESS))){
 				$activityNumber = 0;
-				$processAuthoringService = tao_models_classes_ServiceFactory::get('wfEngine_models_classes_ProcessAuthoringService');
+				$processAuthoringService = wfEngine_models_classes_ProcessAuthoringService::singleton();
 				$activityNumber = count($processAuthoringService->getActivitiesByProcess($deliveryProcess));
 				
 				if($activityNumber){
@@ -284,9 +284,9 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 					$this->currentUser->removeType($roleSubjectClass);
 					$this->currentUser->setType($roleSubjectClass);
 					
-					$authoringService = tao_models_classes_ServiceFactory::get('wfEngine_models_classes_ProcessAuthoringService');
-					$processExecutionService = tao_models_classes_ServiceFactory::get('wfEngine_models_classes_ProcessExecutionService');
-					$activityExecutionService = tao_models_classes_ServiceFactory::get('wfEngine_models_classes_ActivityExecutionService');
+					$authoringService = wfEngine_models_classes_ProcessAuthoringService::singleton();
+					$processExecutionService = wfEngine_models_classes_ProcessExecutionService::singleton();
+					$activityExecutionService = wfEngine_models_classes_ActivityExecutionService::singleton();
 			
 					// $executionCount=0;
 					// var_dump($this);exit;
