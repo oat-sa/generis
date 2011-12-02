@@ -67,8 +67,7 @@ class common_ext_ExtensionLoader
     public function load()
     {
         // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017AD begin
-		$logger = new common_Logger('Extension Loader', Logger::debug_level);
-		$logger->debug('Loading extension ' . $this->extension->id ,__FILE__,__LINE__);
+        common_Logger::t('Loading extension ' . $this->extension->id);
 
 		if(isset($this->extension->configFile)) {
 			require_once $this->extension->configFile;

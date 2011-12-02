@@ -28,18 +28,6 @@ if(function_exists("date_default_timezone_set") && defined('TIME_ZONE')){
 	date_default_timezone_set(TIME_ZONE);
 }
 
-#log
-#	 debug_level 	= 0;
-#	 info_level 	= 1;
-#	 warning_level 	= 2;
-#	 error_level	= 3;
-#	 fatal_level 	= 4;
-$GLOBALS['config_log'] 		= array(
-array(	'nom' => 'FileAppender', 
-		'level' =>  0 , 		
-		'config' => dirname(__FILE__).'/../log/log.txt'),
-
-);
 //used for backward compat
 $GLOBALS['default_lang']	= 'EN';
 
