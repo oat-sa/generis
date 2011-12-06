@@ -165,7 +165,10 @@ class common_Logger
     {
         // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432A begin
     	if ($this->enabled) {
-    		$this->implementor->log(new LogItem('', time(), $message, $level));
+    		$stack = debug_backtrace();
+    		array_shift($stack);
+    		$caller = array_shift($stack);
+    		$this->implementor->log(new LogItem('', time(), $message, $level, $caller['file'], $caller['line']));
     	};
         // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432A end
     }
@@ -211,7 +214,7 @@ class common_Logger
     {
         // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004333 begin
     	if (count(self::singleton()->stateStack) > 0) {
-    		$this->enabled = array_pop(self::singleton()->stateStack);
+    		self::singleton()->enabled = array_pop(self::singleton()->stateStack);
     	} else {
     		self::e("Tried to restore Log state that was never changed");
     	}
