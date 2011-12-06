@@ -157,14 +157,12 @@ class core_kernel_rules_Operation
     public function evaluate($variable = array())
     {
         // section 10-13-1--99-1a35566c:11edfbb4d4b:-8000:0000000000000F3A begin
-        $logger = new common_Logger('Generis Operation', Logger::debug_level);
-		$logger->info('Evaluating Operation uri : '. $this->uriResource , __FILE__, __LINE__);
-		$logger->info('Evaluating Operation name : '. $this->getLabel() , __FILE__, __LINE__);
+        common_Logger::i('Evaluating Operation uri : '. $this->uriResource, array('Generis Operation'));
+        common_Logger::i('Evaluating Operation name : '. $this->getLabel(), array('Generis Operation'));
         
         $operator = $this->getOperator();
-    	$logger->debug('Operator uri: '. $operator->uriResource , __FILE__, __LINE__);
-      	$logger->debug('Operator name: '. $operator->getLabel() , __FILE__, __LINE__);
-         
+        common_Logger::d('Operator uri: '. $operator->uriResource, array('Generis Operation'));
+        common_Logger::d('Operator name: '. $operator->getLabel(), array('Generis Operation'));         
 
 	    $firstPart = $this->getFirstOperation()->evaluate($variable);
 	    $secondPart = $this->getSecondOperation()->evaluate($variable);
@@ -206,10 +204,10 @@ class core_kernel_rules_Operation
 			}
     	}
 
-    	$logger->debug('First Part : '. $firstPart , __FILE__, __LINE__);
-    	$logger->debug('Second Part : '. $secondPart , __FILE__, __LINE__);
+    	common_Logger::d('First Part : ', array('Generis Operation'));
+    	common_Logger::d('Second Part : '. $secondPart, array('Generis Operation'));
     	$returnValue = $this->evaluateOperation($firstPart,$secondPart,$operator);
-    	$logger->info('Operation value: '. $returnValue , __FILE__, __LINE__);
+    	common_Logger::i('Operation value: '. $returnValue, array('Generis Operation'));
     	
     	return $returnValue;
         // section 10-13-1--99-1a35566c:11edfbb4d4b:-8000:0000000000000F3A end

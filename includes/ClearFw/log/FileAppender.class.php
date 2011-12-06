@@ -26,9 +26,15 @@
 
 class FileAppender extends Appender
 {
+	private $handle;
+	
+	public function __construct($level, $config) {
+		parent::__construct($level, $config);
+		$this->handle = @fopen($this->config, 'a');
+	}
+	
 	public function write($logitem)
 	{
-		
 		if ($logitem->fichier == '') {
 			$logitem->fichier = '-';	
 		}
@@ -39,10 +45,11 @@ class FileAppender extends Appender
 		
 		$str = '['.$logitem->module.'] '. date('Y-m-d H:i:s',$logitem->datetime).' \''.$logitem->description. '\' '.$this->getLevel($logitem->gravite). ' '.$logitem->fichier.' '.$logitem->no_ligne."\r\n";
 	
-		$f = @fopen($this->config, 'a');
-		@fwrite($f, $str);
-		@fclose($f);
+		@fwrite($this->handle, $str);
+	}
 	
+	function __destruct() {
+		@fclose($this->handle);
 	}
 }
 ?>

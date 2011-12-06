@@ -68,11 +68,10 @@ class core_kernel_rules_Term
     public function evaluate($variable = array())
     {
         // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DBD begin
-      	$logger = new common_Logger('Generis Term', Logger::debug_level);
-		$logger->info('Evaluating Term uri : '. $this->uriResource , __FILE__, __LINE__);
-		$logger->info('Evaluating Term name : '. $this->getLabel() , __FILE__, __LINE__);
+      	common_Logger::i('Evaluating Term uri : '. $this->uriResource, array('Generis Term'));
+      	common_Logger::i('Evaluating Term name : '. $this->getLabel(), array('Generis Term'));
 		$termType = $this->getUniquePropertyValue(new core_kernel_classes_Property('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'));
-		$logger->debug('Term s type : '. $termType->uriResource , __FILE__, __LINE__);
+		common_Logger::d('Term s type : '. $termType->uriResource, array('Generis Term'));
 		switch($termType->uriResource) {
     		case CLASS_TERM : {
 				throw new common_Exception("Forbidden Type of Term");
@@ -149,16 +148,15 @@ class core_kernel_rules_Term
     protected function evaluateSPX($variable = array())
     {
         // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015BC begin
-    	$logger = new common_Logger('Generis Term evaluateSPX');
-		$logger->debug('SPX TYPE' , __FILE__, __LINE__);
+    	common_Logger::d('SPX TYPE', array('Generis Term evaluateSPX'));
     	$resource = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_TERM_SPX_SUBJET));
     	if($resource instanceof core_kernel_classes_Resource){
     		if(array_key_exists($resource->uriResource,$variable)) {
-    			$logger->debug('Variable uri : ' .  $resource->uriResource . ' found' , __FILE__, __LINE__);
-    			$logger->debug('Variable name : ' .  $resource->getLabel() . ' found' , __FILE__, __LINE__);
+    			common_Logger::d('Variable uri : ' .  $resource->uriResource . ' found', array('Generis Term evaluateSPX'));
+    			common_Logger::d('Variable name : ' .  $resource->getLabel() . ' found', array('Generis Term evaluateSPX'));
     			$resource = new core_kernel_classes_Resource($variable[$resource->uriResource]);
-    			$logger->debug('Variable repaced uri : ' .  $resource->uriResource , __FILE__, __LINE__);
-				$logger->debug('Variable repaced name : ' .  $resource->getLabel() , __FILE__, __LINE__);
+    			common_Logger::d('Variable repaced uri : ' .  $resource->uriResource, array('Generis Term evaluateSPX'));
+    			common_Logger::d('Variable repaced name : ' .  $resource->getLabel(), array('Generis Term evaluateSPX'));
     		}
     		
     		try
@@ -179,16 +177,16 @@ class core_kernel_rules_Term
 //    			$logger->debug('Variable repaced name : ' .  $propertyInstance->getLabel() , __FILE__, __LINE__);
 //    	    }
     		$property = new core_kernel_classes_Property($propertyInstance->uriResource);
-    		$logger->debug('Property uri ' . $property->uriResource, __FILE__, __LINE__);
-    		$logger->debug('Property name ' . $property->getLabel(), __FILE__, __LINE__);
+    		common_Logger::d('Property uri ' . $property->uriResource, array('Generis Term evaluateSPX'));
+    		common_Logger::d('Property name ' . $property->getLabel(), array('Generis Term evaluateSPX'));
        		$returnValue = $resource->getPropertyValuesCollection($property);
        		$returnValue->debug = __METHOD__;
-       		$logger->debug( $returnValue->count() . ' values returned ', __FILE__, __LINE__);
+       		common_Logger::d($returnValue->count() . ' values returned ', array('Generis Term evaluateSPX'));
 
        		if($returnValue->isEmpty()) {
        			$newEmptyTerm = new core_kernel_rules_Term(INSTANCE_TERM_IS_NULL,__METHOD__);
-       			$logger->warning('Empty Term Created',__FILE__,__LINE__);
-				$property = new core_kernel_classes_Property(PROPERTY_TERM_VALUE);
+       			common_Logger::d('Empty Term Created', array('Generis Term evaluateSPX'));
+       			$property = new core_kernel_classes_Property(PROPERTY_TERM_VALUE);
        			$returnValue = $newEmptyTerm->getUniquePropertyValue($property);	
        		}
        		else {
@@ -213,8 +211,7 @@ class core_kernel_rules_Term
     protected function evaluateXPO()
     {
         // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015BF begin
-        $logger = new common_Logger('Generis Term evaluateXPO');
-		$logger->debug('XPO TYPE' , __FILE__, __LINE__);
+        common_Logger::d('XPO TYPE', array('Generis Term evaluateXPO'));
 		$classTerm = new core_kernel_classes_Class(CLASS_TERM_X_PREDICATE_OBJECT);
 		$obj = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_TERM_XPO_OBJECT));
 		$pred = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_TERM_XPO_PREDICATE));
@@ -246,8 +243,7 @@ class core_kernel_rules_Term
     protected function evaluateSet()
     {
         // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015C1 begin
-        $logger = new common_Logger('Generis Term evaluateSet');
-		$logger->debug('Constructed Set TYPE' , __FILE__, __LINE__);
+        common_Logger::d('Constructed Set TYPE', array('Generis Term evaluateSet'));
     	$operator = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_SET_OPERATOR));
     	$subSets = $this->getPropertyValuesCollection(new core_kernel_classes_Property(PROPERTY_SUBSET));
     	$returnValue = new core_kernel_classes_ContainerCollection($this);
@@ -287,8 +283,7 @@ class core_kernel_rules_Term
     protected function evaluateConst()
     {
         // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015C3 begin
-        $logger = new common_Logger('Generis Term evaluateConst');
-		$logger->debug('CONSTANTE TYPE' , __FILE__, __LINE__);
+        common_Logger::d('CONSTANTE TYPE', array('Generis Term evaluateConst'));
 	    $property = new core_kernel_classes_Property(PROPERTY_TERM_VALUE);
 	    return $this->getUniquePropertyValue($property); 
         // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015C3 end
@@ -305,8 +300,7 @@ class core_kernel_rules_Term
     protected function evaluateOperation($variable = array())
     {
         // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015C5 begin
-        $logger = new common_Logger('Generis Term evaluateOperation');
-		$logger->debug('OPERATION TYPE' , __FILE__, __LINE__);
+        common_Logger::d('OPERATION TYPE', array('Generis Term evaluateOperation'));
     	return $this->evaluateArithmOperation($variable);
         // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015C5 end
     }

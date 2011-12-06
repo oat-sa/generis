@@ -95,9 +95,8 @@ class core_kernel_rules_Expression
 
         // section 10-13-1--99-6bb5697e:11bda1bbfa6:-8000:0000000000001349 begin
         
-        $logger = new common_Logger('Generis Expression', Logger::debug_level);
-		$logger->info('Evaluating Expression uri: '. $this->uriResource , __FILE__, __LINE__);
-		$logger->info('Evaluating Expression name: '. $this->getLabel() , __FILE__, __LINE__);
+        common_Logger::i('Evaluating Expression uri: '. $this->uriResource, array('Generis Expression'));
+        common_Logger::i('Evaluating Expression name: '. $this->getLabel(), array('Generis Expression'));
 		if ($this->uriResource == INSTANCE_EXPRESSION_TRUE) {
 			return true;
 		}
@@ -106,7 +105,7 @@ class core_kernel_rules_Expression
 		}
 		$returnValue = $this->expEval($variable);
 		$logValue = $returnValue ? ' TRUE ' : ' FALSE ';
-		$logger->info('Value : '. $logValue , __FILE__, __LINE__,'Generis Expression');
+		common_Logger::i('Value : '. $logValue, array('Generis Expression'));
         // section 10-13-1--99-6bb5697e:11bda1bbfa6:-8000:0000000000001349 end
 
         return (bool) $returnValue;
@@ -233,8 +232,7 @@ class core_kernel_rules_Expression
     public function expEval($variable = array())
     {
         // section 10-13-1--99-70c2c3a5:11c28370080:-8000:0000000000000E4D begin
-		$logger = new common_Logger('Generis Expression', Logger::debug_level);
-    	$terminalExpression = $this->getTerminalExpression();
+		$terminalExpression = $this->getTerminalExpression();
 		
 
     	if ($terminalExpression->uriResource == INSTANCE_EMPTY_TERM_URI){
@@ -242,14 +240,14 @@ class core_kernel_rules_Expression
 			
 			if($this->getLogicalOperator()->uriResource == INSTANCE_AND_OPERATOR) {
 				if ($firstPart == false) {
-					$logger->info('CUT : first Expression == FALSE and OPERATOR = AND' , __FILE__,__LINE__);
+					common_Logger::i('CUT : first Expression == FALSE and OPERATOR = AND', array('Generis Expression'));
 					return false;
 				}
 			}
 			if($this->getLogicalOperator()->uriResource == INSTANCE_OR_OPERATOR) {
 
 				if ($firstPart == true) {
-					$logger->info('CUT : first Expression == TRUE and OPERATOR = OR' , __FILE__,__LINE__);
+					common_Logger::i('CUT : first Expression == TRUE and OPERATOR = OR', array('Generis Expression'));
 					return true;
 				}
 			}
@@ -258,7 +256,7 @@ class core_kernel_rules_Expression
 			//if both part are simple value
 			if($firstPart instanceof core_kernel_classes_Container 
 				&& $secondPart instanceof core_kernel_classes_Container) {
-					$logger->debug('Both Part are Container', __FILE__,__LINE__);
+					common_Logger::d('Both Part are Container', array('Generis Expression'));
 					$returnValue = $this->operatorEval($firstPart,$secondPart);	
 
 			}
@@ -292,7 +290,7 @@ class core_kernel_rules_Expression
 					&& ($secondPart instanceof core_kernel_classes_Container )) {
 				$tempResult = false;
 				foreach ($firstPart->getIterator() as $container) {
-					$logger->debug('FirstPart Part is ContainerCollection Second is Container' , __FILE__,__LINE__);
+					common_Logger::d('FirstPart Part is ContainerCollection Second is Container', array('Generis Expression'));
 					//TODO For now consider that if only  one value of the table return true, 
 					
 					//TODO exist unique need to be added
@@ -320,8 +318,8 @@ class core_kernel_rules_Expression
 			else if (($firstPart instanceof core_kernel_classes_Container) 
 					&& ($secondPart instanceof core_kernel_classes_ContainerCollection )) {
 				foreach ($secondPart->getIterator() as $container) {
-					$logger->debug('FirstPart Part Container is  Second is ContainerCollection' , __FILE__,__LINE__);
-			
+					common_Logger::d('FirstPart Part Container is  Second is ContainerCollection', array('Generis Expression'));
+					
 					//TODO For now consider that all value of the table need to be equal to return true, , 
 					//TODO exist unique need to be added
 					$tempResult = $tempResult && $this->operatorEval($firstPart,$container);
@@ -331,7 +329,7 @@ class core_kernel_rules_Expression
 			}
 			//case we compare boolean
 			else {
-				$logger->debug('Both part are boolean' , __FILE__,__LINE__);
+				common_Logger::d('Both part are boolean', array('Generis Expression'));
 			
 				switch($this->getLogicalOperator()->uriResource) {
 					case INSTANCE_OR_OPERATOR : {
@@ -352,9 +350,9 @@ class core_kernel_rules_Expression
 		}
 		else {
 			if ($terminalExpression != null) {
-				$logger->debug('Evaluating Terminal Expression',__FILE__,__LINE__);
+				common_Logger::d('Evaluating Terminal Expression', array('Generis Expression'));
 				$returnValue = $terminalExpression->evaluate($variable);
-				$logger->debug('Result : ' . $returnValue ,__FILE__,__LINE__);
+				common_Logger::d('Result : ' . $returnValue, array('Generis Expression'));
 			}
 			else {
 				throw new common_Exception('terminal expression is null');
@@ -512,16 +510,15 @@ class core_kernel_rules_Expression
         $returnValue = (bool) false;
 
         // section 10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EA0 begin
-        $logger = new common_Logger('Generis Expression Operator Eval', Logger::debug_level);
         if ($firstPart instanceof core_kernel_classes_Resource ) {
         	$firstPart = new core_kernel_classes_Literal($firstPart->uriResource);
 		}
         if ($secondPart instanceof core_kernel_classes_Resource ) {
        		$secondPart = new core_kernel_classes_Literal($secondPart->uriResource);
         }
-        $logger->debug('First Value : '. $firstPart->literal , __FILE__, __LINE__);
-        $logger->debug('Second Value : '. $secondPart->literal , __FILE__, __LINE__);
-        $logger->debug('Operator : '. $this->getLogicalOperator()->getLabel() , __FILE__, __LINE__);
+        common_Logger::d('First Value : '. $firstPart->literal, array('Generis Expression'));
+        common_Logger::d('Second Value : '. $secondPart->literal, array('Generis Expression'));
+        common_Logger::d('Operator : '. $this->getLogicalOperator()->getLabel(), array('Generis Expression'));
         
         switch($this->getLogicalOperator()->uriResource) {
 			case INSTANCE_EQUALS_OPERATOR_URI : {
@@ -557,7 +554,7 @@ class core_kernel_rules_Expression
 		}
 		
 		$logValue = $returnValue ? ' TRUE ' : ' FALSE ';
-		$logger->debug('Expression Value : '. $logValue , __FILE__, __LINE__);
+		common_Logger::d('Expression Value : '. $logValue, array('Generis Expression'));
         // section 10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EA0 end
 
         return (bool) $returnValue;

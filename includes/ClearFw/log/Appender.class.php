@@ -48,15 +48,17 @@ abstract class Appender
 	public function getLevel($i)
 	{
 		 switch ($i) {
-			case Logger::debug_level:
+		 	case common_Logger::TRACE_LEVEL:
+		 		return "TRACE";
+			case common_Logger::DEBUG_LEVEL:
 				return "DEBUG";
-			case Logger::info_level:
+			case common_Logger::INFO_LEVEL:
 				return "INFO";
-			case Logger::warning_level:
+			case common_Logger::WARNING_LEVEL:
 				return "WARNING";
-			case Logger::error_level:
+			case common_Logger::ERROR_LEVEL:
 				return "ERROR";
-			case Logger::fatal_level:
+			case common_Logger::FATAL_LEVEL:
 				return "FATAL";	 	
 		 } 
 	}

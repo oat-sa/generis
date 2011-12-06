@@ -25,60 +25,55 @@
  */
  
 /*
- *  exemple d'utilisation : 
- * 
- * 	$logger = new Logger('module1', Logger::debug_level);
- *	$logger->debug('test log', __FILE__, __LINE__, 'module1');
+ * Deprecated, see common_Logger
  *
  */
 
 class Logger
 {
-	const debug_level 	= 0;
-	const info_level 	= 1;
-	const warning_level = 2;
-	const error_level	= 3;
-	const fatal_level 	= 4;
+	const debug_level 	= common_Logger::DEBUG_LEVEL;
+	const info_level 	= common_Logger::INFO_LEVEL;
+	const warning_level = common_Logger::WARNING_LEVEL;
+	const error_level	= common_Logger::ERROR_LEVEL;
+	const fatal_level 	= common_Logger::FATAL_LEVEL;
 	
-	private $manager;
 	private $module;
 	private $min_level;
 	
 	
-	public function __construct($module, $min_level = Logger::debug_level) {
-		$this->manager = LogManager::getInstance();
+	public function __construct($module, $min_level = common_Logger::DEBUG_LEVEL) {
 		$this->module = $module;
 		$this->min_level = $min_level;
-	}	
+	}
 	
-	public function log($level, $msg, $fichier = '', $no_ligne = '', $module = '') {
-		if ($module === '') {
-			$module = $this->module;
+	public function debug($msg, $fichier = '', $no_ligne = '', $module = '') {
+		if ($this->min_level >= common_Logger::DEBUG_LEVEL) {
+			common_Logger::d($msg.' - '.$fichier.' - '.$no_ligne, array($module == '' ? $this->module : $module));
 		}
-		if ($level >= $this->min_level) {
-			$item = new LogItem($module, time(), $msg, $level, $fichier, $no_ligne);
-			$this->manager->log($item);	
-		}	
-	} 
-	
-	public function debug($msg, $fichier = '', $no_ligne = '', $module = '') {		
-		$this->log(Logger::debug_level, $msg, $fichier, $no_ligne, $module);
 	}
 	
 	public function info($msg, $fichier = '', $no_ligne = '', $module = '') {
-		$this->log(Logger::info_level, $msg, $fichier, $no_ligne, $module);
+		if ($this->min_level >= common_Logger::INFO_LEVEL) {
+			common_Logger::i($msg.' - '.$fichier.' - '.$no_ligne, array($module == '' ? $this->module : $module));
+		}
 	}
 	
 	public function warning($msg, $fichier = '', $no_ligne = '', $module = '') {
-		$this->log(Logger::warning_level, $msg, $fichier, $no_ligne, $module);
+		if ($this->min_level >= common_Logger::WARNING_LEVEL) {
+			common_Logger::w($msg.' - '.$fichier.' - '.$no_ligne, array($module == '' ? $this->module : $module));
+		}
 	}
 	
 	public function error($msg, $fichier = '', $no_ligne = '', $module = '') {
-		$this->log(Logger::error_level, $msg, $fichier, $no_ligne, $module);	
+		if ($this->min_level >= common_Logger::ERROR_LEVEL) {
+			common_Logger::e($msg.' - '.$fichier.' - '.$no_ligne, array($module == '' ? $this->module : $module));
+		}
 	}
 	
 	public function fatal($msg, $fichier = '', $no_ligne = '', $module = '') {
-		$this->log(Logger::fatal_level, $msg, $fichier, $no_ligne, $module);
+		if ($this->min_level >= common_Logger::FATAL_LEVEL) {
+			common_Logger::f($msg.' - '.$fichier.' - '.$no_ligne, array($module == '' ? $this->module : $module));
+		}
 	}
 				
 }

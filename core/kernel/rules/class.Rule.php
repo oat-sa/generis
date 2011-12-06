@@ -77,9 +77,8 @@ class core_kernel_rules_Rule
         $returnValue = null;
 
         // section 10-13-1--99--2ca656b4:11c9ebb5ddd:-8000:0000000000000ED7 begin
-        $logger = new common_Logger('Generis Rule', Logger::debug_level);
-		$logger->info('Evaluating Rule uri: '. $this->uriResource , __FILE__, __LINE__);
-		$logger->info('Evaluating Rule name: '. $this->getLabel() , __FILE__, __LINE__);
+		common_Logger::i('Evaluating Rule uri: '. $this->uriResource, array('Generis Rule'));
+		common_Logger::i('Evaluating Rule name: '. $this->getLabel(), array('Generis Rule'));
          if(empty($this->expression)){
          	$property = new core_kernel_classes_Property(PROPERTY_RULE_IF);
          	$this->expression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->uriResource ,__METHOD__);
