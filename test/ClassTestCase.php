@@ -291,6 +291,28 @@ class ClassTestCase extends UnitTestCase {
 		$this->assertTrue($nfound > 0);
 		$this->assertEqual($found, $nfound);
 		
+		$userClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#User');
+        $user1 = $userClass->createInstance('user1');
+        $user1->setPropertyValue(new core_kernel_classes_Property('prop1'), 'toto');
+        $user1->setPropertyValue(new core_kernel_classes_Property('prop2'), 'titi');
+		$user2 = $userClass->createInstance('user2');
+        $user2->setPropertyValue(new core_kernel_classes_Property('prop1'), 'toto');
+        $user2->setPropertyValue(new core_kernel_classes_Property('prop1'), 'titi');
+		$user3 = $userClass->createInstance('user3');
+        $user3->setPropertyValue(new core_kernel_classes_Property('prop1'), 'toto');
+        $user3->setPropertyValue(new core_kernel_classes_Property('prop1'), 'titi');
+
+		$propertyFilter = array(
+			'prop1'			=> 'toto'
+		);
+		$options = array('like' => false, 'recursive' => 0, 'limit_start' => 1, 'limit_length' => 2); //User 2 & 3
+		$languagesDependantProp = $userClass->searchInstances($propertyFilter, $options);
+		$nfound = count($languagesDependantProp);
+		$this->assertEqual($nfound, 2);
+		
+		$user1->delete();
+		$user2->delete();
+		$user3->delete();
 	}
 	
 	public function testSearchInstancesHard($hard = true){

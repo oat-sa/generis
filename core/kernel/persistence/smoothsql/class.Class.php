@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.08.2011, 11:24:00 with ArgoUML PHP module 
+ * Automatically generated on 06.12.2011, 15:05:57 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author firstname and lastname of author, <author@example.org>
  * @package core
  * @subpackage kernel_persistence_smoothsql
  */
@@ -24,14 +24,14 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_persistence_PersistenceImpl
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author firstname and lastname of author, <author@example.org>
  */
 require_once('core/kernel/persistence/class.PersistenceImpl.php');
 
 /**
  * include core_kernel_persistence_ClassInterface
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author firstname and lastname of author, <author@example.org>
  */
 require_once('core/kernel/persistence/interface.ClassInterface.php');
 
@@ -47,7 +47,7 @@ require_once('core/kernel/persistence/interface.ClassInterface.php');
  * Short description of class core_kernel_persistence_smoothsql_Class
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author firstname and lastname of author, <author@example.org>
  * @package core
  * @subpackage kernel_persistence_smoothsql
  */
@@ -74,7 +74,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method getSubClasses
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -110,7 +110,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method isSubClassOf
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  Class parentClass
      * @return boolean
@@ -156,7 +156,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method getParentClasses
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -200,7 +200,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method getProperties
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -242,7 +242,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method getInstances
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  boolean recursive
      * @param  array params
@@ -314,7 +314,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method setInstance
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  Resource instance
      * @return core_kernel_classes_Resource
@@ -339,7 +339,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method setSubClassOf
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  Class iClass
      * @return boolean
@@ -362,7 +362,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method setProperty
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  Property property
      * @return boolean
@@ -386,7 +386,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method createInstance
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  string label
      * @param  string comment
@@ -433,7 +433,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method createSubClass
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  string label
      * @param  string comment
@@ -460,7 +460,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method createProperty
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  string label
      * @param  string comment
@@ -491,7 +491,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method searchInstances
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  array propertyFilters
      * @param  array options
@@ -502,19 +502,251 @@ class core_kernel_persistence_smoothsql_Class
         $returnValue = array();
 
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 begin
-		/*
+
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$query = $this->getFilteredQuery($resource, $propertyFilters, $options);
+		$result = $dbWrapper->execSql($query);
+		if($dbWrapper->dbConnector->errorNo() !== 0){
+			throw new core_kernel_persistence_smoothsql_Exception($dbWrapper->dbConnector->errorMsg());
+		}
+		
+		
+		while (!$result->EOF){
+			$foundInstancesUri = $result->fields['subject'];
+			$returnValue[$foundInstancesUri] = new core_kernel_classes_Resource($foundInstancesUri);
+			$result->MoveNext();
+		}
+	
+        // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method countInstances
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  Resource resource
+     * @param  array propertyFilters
+     * @param  array options
+     * @return Integer
+     */
+    public function countInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array())
+    {
+        $returnValue = null;
+
+        // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159D begin
+
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+
+		if (isset($propertyFilters) && count($propertyFilters)) {
+			if (isset($options['limit_start'])) unset($options['limit_start']);
+			if (isset($options['limit_length'])) unset($options['limit_length']);
+			$query = $this->getFilteredQuery($resource, $propertyFilters, $options);
+			$sqlResult = $dbWrapper->execSql($query);
+			$returnValue = $sqlResult->RecordCount();
+		}
+		else {
+			$sqlQuery = 'SELECT count("subject") as count FROM "statements"
+							WHERE "predicate" = ?  
+								AND "object" = ? ';
+			
+			$sqlResult = $dbWrapper->execSql($sqlQuery, array(
+				RDF_TYPE,
+				$resource->uriResource
+			));
+
+			if (!$sqlResult->EOF) {
+				$returnValue = $sqlResult->fields['count'];
+			}
+		}
+
+        
+        // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159D end
+
+        return $returnValue;
+    }
+
+    /**
+     * Short description of method getInstancesPropertyValues
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  Resource resource
+     * @param  Property property
+     * @param  array propertyFilters
+     * @param  array options
+     * @return array
+     */
+    public function getInstancesPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $propertyFilters = array(), $options = array())
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1--120bf54f:13142fdf597:-8000:000000000000312D begin
+        
+    	$distinct = isset($options['distinct']) ? $options['distinct'] : false;
+    	$recursive = isset($options['recursive']) ? $options['recursive'] : false;
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $uris = '';
+        $searchInstancesOptions = array (
+        	'recursive' 	=> $recursive
+        );
+        
+        // Search all instances for the property filters paramter
+        $instances = $resource->searchInstances($propertyFilters, $searchInstancesOptions);
+        if ($instances){
+	        foreach ($instances as $instance){
+	        	$uris .= '\''.$instance->uriResource.'\',';
+	        } 
+	        $uris = substr($uris, 0, strlen($uris)-1);
+	        
+	        // Get all the available property values in the subset of instances
+	        $query = 'SELECT';
+	        if($distinct){
+	        	$query .= ' DISTINCT';
+	        }
+	        $query .= ' "object" FROM "statements"
+	        	WHERE "predicate" = ?
+	        	AND "subject" IN ('.$uris.')';
+			$sqlResult = $dbWrapper->execSql($query, array(
+				$property->uriResource
+			));
+	    	
+	    	if($dbWrapper->dbConnector->errorNo() !== 0){
+				throw new core_kernel_persistence_smoothsql_Exception('Unable to get instances\' property values : '.$dbWrapper->dbConnector->errorMsg());
+			}
+			
+			while (!$sqlResult->EOF){
+				if(!common_Utils::isUri($sqlResult->fields['object'])) {
+	                $returnValue[] = new core_kernel_classes_Literal($sqlResult->fields['object']);
+	            }
+	            else {
+	                $returnValue[] = new core_kernel_classes_Resource($sqlResult->fields['object']);
+	            }
+				$sqlResult->moveNext();
+			}
+        }
+        
+        // section 127-0-1-1--120bf54f:13142fdf597:-8000:000000000000312D end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method unsetProperty
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  Resource resource
+     * @param  Property property
+     * @return boolean
+     */
+    public function unsetProperty( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:00000000000031F8 begin
+        
+		$domain = new core_kernel_classes_Property(RDF_DOMAIN, __METHOD__);
+		$instanceProperty = new core_kernel_classes_Resource($property->uriResource, __METHOD__);
+		$returnValue = $instanceProperty->removePropertyValues($domain, array('pattern' => $resource->uriResource));
+        
+        // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:00000000000031F8 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method singleton
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return core_kernel_classes_Resource
+     */
+    public static function singleton()
+    {
+        $returnValue = null;
+
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001493 begin
+        
+        if (core_kernel_persistence_smoothsql_Class::$instance == null){
+        	core_kernel_persistence_smoothsql_Class::$instance = new core_kernel_persistence_smoothsql_Class();
+        }
+        $returnValue = core_kernel_persistence_smoothsql_Class::$instance;
+        
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001493 end
+
+        return $returnValue;
+    }
+
+    /**
+     * Short description of method isValidContext
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  Resource resource
+     * @return boolean
+     */
+    public function isValidContext( core_kernel_classes_Resource $resource)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F4E begin
+        
+        $returnValue = true;
+        
+        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F4E end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method getFilteredQuery
+     *
+     * @access public
+     * @author Jehan Bihin
+     * @param  Resource resource
+     * @param  array propertyFilters
+     * @param  array options
+     * @return string
+     * @version 1.0
+     */
+    public function getFilteredQuery( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array())
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CC begin
+				/*
 		options lists:
 		like			: (bool) 	true/false (default: true)
 		chaining		: (string) 	'or'/'and' (default: 'and')
 		recursive		: (int) 	recursivity depth (default: 0)
 		lang			: (string) 	e.g. 'EN', 'FR' (default: '') for all properties!
+		limit_start		: default 0
+		limit_length	: default select all
 		*/
-		
+
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		
 		//add the type check to the filters
-		$propertyFilters[RDF_TYPE] = $resource->uriResource;
-		
+		if (isset($propertyFilters[RDF_TYPE])) {
+			if (!is_array($propertyFilters[RDF_TYPE])) $propertyFilters[RDF_TYPE] = array($propertyFilters[RDF_TYPE], $resource->uriResource);
+			else $propertyFilters[RDF_TYPE] = array_merge($propertyFilters[RDF_TYPE], array($resource->uriResource));
+		}
+		else $propertyFilters[RDF_TYPE] = $resource->uriResource;
+
+		//Check in the subClasses recurslively.
+		if ($options['recursive']) {
+			$rdftypes = $propertyFilters[RDF_TYPE];
+			if (!is_array($rdftypes)) $rdftypes = array($rdftypes);
+			$subclasses = $this->getSubClasses($resource, $options['recursive']);
+			foreach($subclasses as $sc) {
+			    $rdftypes[] = $sc->uriResource;
+			}
+			$propertyFilters[RDF_TYPE] = $rdftypes;
+		}
+
 		$langToken = '';
 		if(isset($options['lang'])){
 			if(preg_match('/^[a-zA-Z]{2,4}$/', $options['lang'])){
@@ -591,229 +823,31 @@ class core_kernel_persistence_smoothsql_Class
 				$intersect = false;
 			}
 		}
-		
-		$matchingUris = array();
-		if(count($conditions) > 0){
-			$i = 0;
-			foreach($conditions as $condition){
-				$tmpMatchingUris = array();
-				$result = $dbWrapper->execSql($query . $condition);
-				if($dbWrapper->dbConnector->errorNo() !== 0){
-					throw new core_kernel_persistence_smoothsql_Exception($dbWrapper->dbConnector->errorMsg());
-				}
-				
-				
-				while (!$result->EOF){
-					$foundInstancesUri = $result->fields['subject'];
-					$tmpMatchingUris[$foundInstancesUri] = $foundInstancesUri;
-					$result->MoveNext();
-				}
-				
-				if($intersect){
-					//EXCLUSIVES CONDITIONS
-					if($i == 0){
-						$matchingUris = $tmpMatchingUris;
-					}else{
-						$matchingUris = array_intersect($matchingUris, $tmpMatchingUris);
-					}
-				}
-				else{
-					//INCLUSIVES CONDITIONS
-					$matchingUris = array_merge($matchingUris, $tmpMatchingUris);
-				}
-				$i++;
-			}
+
+		$limit = "";
+		if (isset($options['limit_start'])){
+		  $limit = intval($options['limit_start']);
 		}
-		
-		foreach($matchingUris as $matchingUri){
-			$returnValue[$matchingUri] = new core_kernel_classes_Resource($matchingUri);
+		if (isset($options['limit_length'])){
+		  if (isset($options['limit_start'])) $limit .= ', '.intval($options['limit_length']);
+		  else $limit = '0, '.intval($options['limit_length']);
 		}
-		
-		
-		//Check in the subClasses recurslively.
-		// Be carefull, it can be perf consuming with large data set and subclasses
-		(isset($options['recursive'])) ? $recursive = intval($options['recursive']) : $recursive = 0;
-		if($recursive){
-			//the recusivity depth is set to one level
-			foreach($resource->getSubClasses(true) as $subClass){
-				$recursive--;
-				unset($propertyFilters[RDF_TYPE]);//reset the RDF_TYPE filter for recursive searching!
-				$returnValue = array_merge(
-					$returnValue, 
-					$subClass->searchInstances($propertyFilters, array_merge($options, array('recursive' => $recursive)))
-				);
+		if (isset($options['limit_start']) || isset($options['limit_length'])) $limit = ' ORDER BY "id" LIMIT '.$limit;
+
+		$q = '';
+		if ($intersect) {
+			foreach ($conditions as $condition) {
+				if (!strlen($q)) $q = $query . $condition;
+				else $q = $query . $condition . ' AND "subject" IN (' . $q . ')';
 			}
+			$query = $q;
 		}
-		
-        // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
+		else $query = join('OR', $conditions);
 
-        return (array) $returnValue;
-    }
+		$returnValue = $query . $limit;
+        // section 127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CC end
 
-    /**
-     * Short description of method countInstances
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  Resource resource
-     * @return Integer
-     */
-    public function countInstances( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159D begin
-
-    	$sqlQuery = 'SELECT count("subject") as count FROM "statements"
-						WHERE "predicate" = ?  
-							AND "object" = ? ';
-		
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->execSql($sqlQuery, array(
-			RDF_TYPE,
-			$resource->uriResource
-		));
-
-		if (!$sqlResult-> EOF){
-			$returnValue = $sqlResult->fields['count'];
-		}
-        
-        // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159D end
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method getInstancesPropertyValues
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  array propertyFilters
-     * @param  array options
-     * @return array
-     */
-    public function getInstancesPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $propertyFilters = array(), $options = array())
-    {
-        $returnValue = array();
-
-        // section 127-0-1-1--120bf54f:13142fdf597:-8000:000000000000312D begin
-        
-    	$distinct = isset($options['distinct']) ? $options['distinct'] : false;
-    	$recursive = isset($options['recursive']) ? $options['recursive'] : false;
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $uris = '';
-        $searchInstancesOptions = array (
-        	'recursive' 	=> $recursive
-        );
-        
-        // Search all instances for the property filters paramter
-        $instances = $resource->searchInstances($propertyFilters, $searchInstancesOptions);
-        if ($instances){
-	        foreach ($instances as $instance){
-	        	$uris .= '\''.$instance->uriResource.'\',';
-	        } 
-	        $uris = substr($uris, 0, strlen($uris)-1);
-	        
-	        // Get all the available property values in the subset of instances
-	        $query = 'SELECT';
-	        if($distinct){
-	        	$query .= ' DISTINCT';
-	        }
-	        $query .= ' "object" FROM "statements"
-	        	WHERE "predicate" = ?
-	        	AND "subject" IN ('.$uris.')';
-			$sqlResult = $dbWrapper->execSql($query, array(
-				$property->uriResource
-			));
-	    	
-	    	if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_smoothsql_Exception('Unable to get instances\' property values : '.$dbWrapper->dbConnector->errorMsg());
-			}
-			
-			while (!$sqlResult->EOF){
-				if(!common_Utils::isUri($sqlResult->fields['object'])) {
-	                $returnValue[] = new core_kernel_classes_Literal($sqlResult->fields['object']);
-	            }
-	            else {
-	                $returnValue[] = new core_kernel_classes_Resource($sqlResult->fields['object']);
-	            }
-				$sqlResult->moveNext();
-			}
-        }
-        
-        // section 127-0-1-1--120bf54f:13142fdf597:-8000:000000000000312D end
-
-        return (array) $returnValue;
-    }
-
-    /**
-     * Short description of method unsetProperty
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return boolean
-     */
-    public function unsetProperty( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
-    {
-        $returnValue = (bool) false;
-
-        // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:00000000000031F8 begin
-        
-		$domain = new core_kernel_classes_Property(RDF_DOMAIN, __METHOD__);
-		$instanceProperty = new core_kernel_classes_Resource($property->uriResource, __METHOD__);
-		$returnValue = $instanceProperty->removePropertyValues($domain, array('pattern' => $resource->uriResource));
-        
-        // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:00000000000031F8 end
-
-        return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method singleton
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @return core_kernel_classes_Resource
-     */
-    public static function singleton()
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001493 begin
-        
-        if (core_kernel_persistence_smoothsql_Class::$instance == null){
-        	core_kernel_persistence_smoothsql_Class::$instance = new core_kernel_persistence_smoothsql_Class();
-        }
-        $returnValue = core_kernel_persistence_smoothsql_Class::$instance;
-        
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001493 end
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method isValidContext
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  Resource resource
-     * @return boolean
-     */
-    public function isValidContext( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = (bool) false;
-
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F4E begin
-        
-        $returnValue = true;
-        
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F4E end
-
-        return (bool) $returnValue;
+        return (string) $returnValue;
     }
 
 } /* end of class core_kernel_persistence_smoothsql_Class */

@@ -170,7 +170,7 @@ class core_kernel_classes_Class
      * which simply link the previously created ressource with this class
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource instance
      * @return core_kernel_classes_Resource
      */
@@ -235,7 +235,7 @@ class core_kernel_classes_Class
      * Short description of method __construct
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string uri
      * @param  string debug
      * @return void
@@ -251,7 +251,7 @@ class core_kernel_classes_Class
      * Creates the hyperClass related to a class
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return mixed
      */
     public function createHyperClass()
@@ -307,7 +307,7 @@ class core_kernel_classes_Class
      * Short description of method createInstance
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string label
      * @param  string comment
      * @param  string uri
@@ -330,7 +330,7 @@ class core_kernel_classes_Class
      * Short description of method createSubClass
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string label
      * @param  string comment
      * @param  string uri
@@ -353,7 +353,7 @@ class core_kernel_classes_Class
      * Short description of method createProperty
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string label
      * @param  string comment
      * @param  boolean isLgDependent
@@ -376,7 +376,7 @@ class core_kernel_classes_Class
      * Short description of method getMethodes
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return array
      */
     public function getMethodes()
@@ -394,7 +394,7 @@ class core_kernel_classes_Class
      * Short description of method searchInstances
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  array propertyFilters
      * @param  array options
      * @return array
@@ -414,15 +414,17 @@ class core_kernel_classes_Class
      * Short description of method countInstances
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  array propertyFilters
+     * @param  array options
      * @return Integer
      */
-    public function countInstances()
+    public function countInstances($propertyFilters = array(), $options = array())
     {
         $returnValue = null;
 
         // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159B begin
-		$returnValue = core_kernel_persistence_ClassProxy::singleton()->countInstances($this);
+		$returnValue = core_kernel_persistence_ClassProxy::singleton()->countInstances($this, $propertyFilters, $options);
         // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159B end
 
         return $returnValue;
@@ -433,7 +435,7 @@ class core_kernel_classes_Class
      * The instances can be filtered.
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Property property
      * @param  array propertyFilters
      * @param  array options
@@ -454,19 +456,15 @@ class core_kernel_classes_Class
      * Short description of method unsetProperty
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Property property
-     * @return core_kernel_classes_false
+     * @return mixed
      */
     public function unsetProperty( core_kernel_classes_Property $property)
     {
-        $returnValue = null;
-
         // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:000000000000163C begin
         $returnValue = core_kernel_persistence_ClassProxy::singleton()->unsetProperty($this, $property);
         // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:000000000000163C end
-
-        return $returnValue;
     }
 
 } /* end of class core_kernel_classes_Class */

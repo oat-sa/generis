@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Generis Core Kernel</activediagram>
+      <activediagram>Persistence</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -100,7 +100,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Dec 02 16:49:54 CET 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Dec 06 15:36:19 CET 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -2118,6 +2118,26 @@ The method returns the new resource. </UML:TaggedValue.dataValue>
                               name = 'return' isSpecification = 'false' kind = 'return'>
                               <UML:Parameter.type>
                                 <UML:DataType href = 'http://argouml.org/profiles/uml14/default-uml14.xmi#-84-17--56-5-43645a83:11466542d86:-8000:000000000000087C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017AA'
+                              name = 'propertyFilters' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017BB'
+                                  language = '' body = 'array()'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017AB'
+                              name = 'options' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017B2'
+                                  language = '' body = 'array()'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -9084,6 +9104,61 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                                 </UML:Parameter>
                               </UML:BehavioralFeature.parameter>
                             </UML:Operation>
+                            <UML:Operation xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CC'
+                              name = 'getFilteredQuery' visibility = 'public' isSpecification = 'false'
+                              ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                              isLeaf = 'false' isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017DE'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Jehan Bihin</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                                <UML:TaggedValue xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017DF'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>1.0</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C1'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
+                              <UML:BehavioralFeature.parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CD'
+                                  name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017E0'
+                                  name = 'resource' isSpecification = 'false' kind = 'in'>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CE'
+                                  name = 'propertyFilters' isSpecification = 'false' kind = 'in'>
+                                  <UML:Parameter.defaultValue>
+                                    <UML:Expression xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017D5'
+                                      language = '' body = 'array()'/>
+                                  </UML:Parameter.defaultValue>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017D6'
+                                  name = 'options' isSpecification = 'false' kind = 'in'>
+                                  <UML:Parameter.defaultValue>
+                                    <UML:Expression xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017DD'
+                                      language = '' body = 'array()'/>
+                                  </UML:Parameter.defaultValue>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                              </UML:BehavioralFeature.parameter>
+                            </UML:Operation>
                           </UML:Classifier.feature>
                         </UML:Class>
                         <UML:Class xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139A'
@@ -10889,6 +10964,26 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                               name = 'resource' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017BC'
+                              name = 'propertyFilters' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017C3'
+                                  language = '' body = 'array()'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017C4'
+                              name = 'options' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CB'
+                                  language = '' body = 'array()'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -21641,7 +21736,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         bold="false"
         textsize="10"
         justification="Left"
-      >countInstances() : Integer</text>
+      >countInstances(propertyFilters : array = array(),options : array = array()) : Integer</text>
       <text name="Fig5.6.17"
         x="1049"
         y="2278"
@@ -37935,7 +38030,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         bold="false"
         textsize="10"
         justification="Left"
-      >countInstances() : Integer</text>
+      >countInstances(propertyFilters : array = array(),options : array = array()) : Integer</text>
       <text name="Fig0.6.17"
         x="961"
         y="724"
@@ -41216,7 +41311,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
     </path>
   </group>
   <group name="Fig17"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[48, 592, 288, 347]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[48, 592, 288, 363]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7"
        fill="1"
        fillcolor="white"
@@ -41230,7 +41325,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       x="48"
       y="592"
       width="288"
-      height="347"
+      height="363"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -41286,7 +41381,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       strokecolor="black"
     />
     <group name="Fig17.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[49, 615, 286, 148]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[49, 615, 286, 155]"
          href="127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7"
          fill="0"
          fillcolor="white"
@@ -41300,7 +41395,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         x="49"
         y="615"
         width="286"
-        height="148"
+        height="155"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -41469,7 +41564,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
     </group>
     <rectangle name="Fig17.5"
       x="48"
-      y="762"
+      y="770"
       width="288"
       height="1"
       fill="1"
@@ -41478,7 +41573,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       strokecolor="black"
     />
     <group name="Fig17.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[49, 763, 286, 176]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[49, 771, 286, 183]"
          href="127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7"
          fill="0"
          fillcolor="white"
@@ -41490,9 +41585,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       
       <rectangle name="Fig17.6.0"
         x="49"
-        y="763"
+        y="771"
         width="286"
-        height="176"
+        height="183"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -41500,7 +41595,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       />
       <text name="Fig17.6.1"
         x="49"
-        y="763"
+        y="771"
         width="286"
         height="14"
         fill="0"
@@ -41516,7 +41611,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       >singleton() : Logger</text>
       <text name="Fig17.6.2"
         x="49"
-        y="777"
+        y="785"
         width="286"
         height="14"
         fill="0"
@@ -41532,7 +41627,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       >«create» __construct()</text>
       <text name="Fig17.6.3"
         x="49"
-        y="791"
+        y="799"
         width="286"
         height="14"
         fill="0"
@@ -41548,7 +41643,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       >log(level : int,message : string,tags : array)</text>
       <text name="Fig17.6.4"
         x="49"
-        y="805"
+        y="813"
         width="286"
         height="14"
         fill="0"
@@ -41564,7 +41659,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       >enable()</text>
       <text name="Fig17.6.5"
         x="49"
-        y="819"
+        y="827"
         width="286"
         height="14"
         fill="0"
@@ -41580,7 +41675,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       >disable()</text>
       <text name="Fig17.6.6"
         x="49"
-        y="833"
+        y="841"
         width="286"
         height="14"
         fill="0"
@@ -41596,7 +41691,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       >restore()</text>
       <text name="Fig17.6.7"
         x="49"
-        y="847"
+        y="855"
         width="286"
         height="14"
         fill="0"
@@ -41612,7 +41707,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       >t(message : string,tags : array = array())</text>
       <text name="Fig17.6.8"
         x="49"
-        y="861"
+        y="869"
         width="286"
         height="14"
         fill="0"
@@ -41628,7 +41723,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       >d(message : string,tags : array = array())</text>
       <text name="Fig17.6.9"
         x="49"
-        y="875"
+        y="883"
         width="286"
         height="14"
         fill="0"
@@ -41644,7 +41739,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       >i(message : string,tags : array = array())</text>
       <text name="Fig17.6.10"
         x="49"
-        y="889"
+        y="897"
         width="286"
         height="14"
         fill="0"
@@ -41660,7 +41755,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       >w(message : string,tags : array = array())</text>
       <text name="Fig17.6.11"
         x="49"
-        y="903"
+        y="911"
         width="286"
         height="14"
         fill="0"
@@ -41676,9 +41771,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       >e(message : string,tags : array = array())</text>
       <text name="Fig17.6.12"
         x="49"
-        y="917"
+        y="925"
         width="286"
-        height="20"
+        height="33"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -43617,7 +43712,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
     </path>
   </group>
   <group name="Fig11"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1360, 896, 259, 85]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1360, 896, 525, 95]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001399"
        fill="1"
        fillcolor="white"
@@ -43631,8 +43726,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
     <rectangle name="Fig11.0"
       x="1360"
       y="896"
-      width="259"
-      height="85"
+      width="525"
+      height="95"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -43641,7 +43736,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
     <text name="Fig11.1"
       x="1361"
       y="897"
-      width="257"
+      width="523"
       height="21"
       fill="0"
       fillcolor="white"
@@ -43680,7 +43775,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
     <rectangle name="Fig11.3"
       x="1360"
       y="918"
-      width="259"
+      width="525"
       height="1"
       fill="1"
       fillcolor="black"
@@ -43688,7 +43783,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       strokecolor="black"
     />
     <group name="Fig11.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1361, 919, 257, 23]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1361, 919, 523, 22]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001399"
          fill="0"
          fillcolor="white"
@@ -43701,8 +43796,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       <rectangle name="Fig11.4.0"
         x="1361"
         y="919"
-        width="257"
-        height="23"
+        width="523"
+        height="22"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -43711,7 +43806,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       <text name="Fig11.4.1"
         x="1361"
         y="919"
-        width="257"
+        width="523"
         height="20"
         fill="0"
         fillcolor="white"
@@ -43727,8 +43822,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
     </group>
     <rectangle name="Fig11.5"
       x="1360"
-      y="942"
-      width="259"
+      y="940"
+      width="525"
       height="1"
       fill="1"
       fillcolor="black"
@@ -43736,7 +43831,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       strokecolor="black"
     />
     <group name="Fig11.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1361, 943, 257, 37]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1361, 941, 523, 50]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001399"
          fill="0"
          fillcolor="white"
@@ -43748,9 +43843,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       
       <rectangle name="Fig11.6.0"
         x="1361"
-        y="943"
-        width="257"
-        height="37"
+        y="941"
+        width="523"
+        height="50"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -43758,8 +43853,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       />
       <text name="Fig11.6.1"
         x="1361"
-        y="943"
-        width="257"
+        y="941"
+        width="523"
         height="14"
         fill="0"
         fillcolor="white"
@@ -43774,9 +43869,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       >singleton() : Resource</text>
       <text name="Fig11.6.2"
         x="1361"
-        y="957"
-        width="257"
-        height="20"
+        y="955"
+        width="523"
+        height="14"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -43788,6 +43883,22 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         textsize="10"
         justification="Left"
       >isValidContext(resource : Resource) : boolean</text>
+      <text name="Fig11.6.3"
+        x="1361"
+        y="969"
+        width="523"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getFilteredQuery(resource : Resource,propertyFilters : array = array(),options : array = array()) : string</text>
     </group>
   </group>
   <group name="Fig12"
@@ -44945,7 +45056,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         bold="false"
         textsize="10"
         justification="Left"
-      >countInstances(resource : Resource) : Integer</text>
+      >countInstances(resource : Resource,propertyFilters : array = array(),options : array = array()) : Integer</text>
       <text name="Fig18.4.14"
         x="889"
         y="597"
@@ -45748,7 +45859,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       strokecolor="black"
     >
       <moveto x="1512"
-              y="981" />
+              y="991" />
       <lineto x="1512"
               y="1040" />
       <lineto x="160"
@@ -46337,7 +46448,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       <text name="Fig36.6.3"
         x="2201"
         y="1176"
-        width="267"
+        width="268"
         height="20"
         fill="0"
         fillcolor="255 204 51"
@@ -46974,7 +47085,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       <text name="Fig40.6.2"
         x="1353"
         y="1579"
-        width="235"
+        width="236"
         height="20"
         fill="0"
         fillcolor="white"
@@ -47148,7 +47259,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       <text name="Fig41.6.2"
         x="1873"
         y="1587"
-        width="235"
+        width="236"
         height="20"
         fill="0"
         fillcolor="white"

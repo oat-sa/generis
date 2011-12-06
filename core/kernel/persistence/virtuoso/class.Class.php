@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.08.2011, 11:24:00 with ArgoUML PHP module 
+ * Automatically generated on 06.12.2011, 12:10:02 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author firstname and lastname of author, <author@example.org>
  * @package core
  * @subpackage kernel_persistence_virtuoso
  */
@@ -24,14 +24,14 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_persistence_PersistenceImpl
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author firstname and lastname of author, <author@example.org>
  */
 require_once('core/kernel/persistence/class.PersistenceImpl.php');
 
 /**
  * include core_kernel_persistence_ClassInterface
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author firstname and lastname of author, <author@example.org>
  */
 require_once('core/kernel/persistence/interface.ClassInterface.php');
 
@@ -47,7 +47,7 @@ require_once('core/kernel/persistence/interface.ClassInterface.php');
  * Short description of class core_kernel_persistence_virtuoso_Class
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author firstname and lastname of author, <author@example.org>
  * @package core
  * @subpackage kernel_persistence_virtuoso
  */
@@ -74,7 +74,7 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method getSubClasses
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -116,7 +116,7 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method isSubClassOf
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  Class parentClass
      * @return boolean
@@ -158,7 +158,7 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method getParentClasses
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -199,7 +199,7 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method getProperties
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -245,7 +245,7 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method getInstances
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  boolean recursive
      * @param  array params
@@ -320,7 +320,7 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method setInstance
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  Resource instance
      * @return core_kernel_classes_Resource
@@ -348,7 +348,7 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method setSubClassOf
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  Class iClass
      * @return boolean
@@ -371,7 +371,7 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method setProperty
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  Property property
      * @return boolean
@@ -395,7 +395,7 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method createInstance
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  string label
      * @param  string comment
@@ -452,7 +452,7 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method createSubClass
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  string label
      * @param  string comment
@@ -479,7 +479,7 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method createProperty
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  string label
      * @param  string comment
@@ -510,7 +510,7 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method searchInstances
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  array propertyFilters
      * @param  array options
@@ -712,11 +712,13 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method countInstances
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
+     * @param  array propertyFilters
+     * @param  array options
      * @return Integer
      */
-    public function countInstances( core_kernel_classes_Resource $resource)
+    public function countInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array())
     {
         $returnValue = null;
 
@@ -741,7 +743,7 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method getInstancesPropertyValues
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  Property property
      * @param  array propertyFilters
@@ -763,7 +765,7 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method unsetProperty
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @param  Property property
      * @return boolean
@@ -787,7 +789,7 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method singleton
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return core_kernel_classes_Resource
      */
     public static function singleton()
@@ -810,7 +812,7 @@ class core_kernel_persistence_virtuoso_Class
      * Short description of method isValidContext
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  Resource resource
      * @return boolean
      */
