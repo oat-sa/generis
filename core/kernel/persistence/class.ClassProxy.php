@@ -454,7 +454,7 @@ class core_kernel_persistence_ClassProxy
         // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159D begin
         
 		$delegate = $this->getImpToDelegateTo($resource);
-        $returnValue = $delegate->countInstances($resource);
+        $returnValue = $delegate->countInstances($resource, $propertyFilters, $options);
         
         // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159D end
 
