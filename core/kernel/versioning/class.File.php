@@ -161,11 +161,7 @@ class core_kernel_versioning_File
         	throw new core_kernel_versioning_VersioningDisabledException();
         }
         
-        if($this->getRepository()->authenticate()){
-        	//if($this->localContentHasChanged() || !$this->isVersioned()){
-        		$returnValue = core_kernel_versioning_FileProxy::singleton()->commit($this, $message, $this->getAbsolutePath());
-        	//}
-        }
+        $returnValue = core_kernel_versioning_FileProxy::singleton()->commit($this, $message, $this->getAbsolutePath());
         
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F5 end
 
@@ -303,38 +299,32 @@ class core_kernel_versioning_File
         	throw new core_kernel_versioning_VersioningDisabledException();
         }
         
-	    if($this->getRepository()->authenticate()){
+        //Check if the path is versioned
+        $filePath = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_FILEPATH));
+        $filePathExploded = explode('/', $filePath);
+        $breadCrumb = $this->getRepository()->getPath();
+        foreach ($filePathExploded as $bread){
+        	
+        	if(empty($bread)) continue;
+        	
+        	$breadCrumb .= '/'.$bread;
+        	if(!core_kernel_versioning_FileProxy::singleton()->isVersioned($this, $breadCrumb)){
+        		core_kernel_versioning_FileProxy::singleton()->add($this, $breadCrumb);
+        		core_kernel_versioning_FileProxy::singleton()->commit($this, "[sys] Add directory to the repository", $breadCrumb);
+        	}
+        }
         
-	        //Check if the path is versioned
-	        $filePath = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_FILEPATH));
-	        $filePathExploded = explode('/', $filePath);
-	        $breadCrumb = $this->getRepository()->getPath();
-	        foreach ($filePathExploded as $bread){
-	        	
-	        	if(empty($bread)) continue;
-	        	
-	        	$breadCrumb .= '/'.$bread;
-	        	if(!core_kernel_versioning_FileProxy::singleton()->isVersioned($this, $breadCrumb)){
-	        		core_kernel_versioning_FileProxy::singleton()->add($this, $breadCrumb);
-	        		core_kernel_versioning_FileProxy::singleton()->commit($this, "[sys] Add directory to the repository", $breadCrumb);
-	        	}
-	        }
-	        
-	        //the file was already versioned -> EXCEPTION
-	        if($this->isVersioned()){
-	        	throw new core_kernel_versioning_Exception(__('the resource has already been versioned : '.$filePath));
-	        }
-	        
-	        //the file does not exist -> EXCEPTION
-	        if($this->fileExists()){
-		        $returnValue = core_kernel_versioning_FileProxy::singleton()->add($this, $this->getAbsolutePath());
-	        }
-	        else{
-		        throw new core_kernel_versioning_Exception(__('Unable to add a file ('.$this->getAbsolutePath().'). The file does not exist.'));
-	        }
-	    }
+        //the file was already versioned -> EXCEPTION
+        if($this->isVersioned()){
+        	throw new core_kernel_versioning_Exception(__('the resource has already been versioned : '.$filePath));
+        }
+        
+        //the file does not exist -> EXCEPTION
+        if($this->fileExists()){
+	        $returnValue = core_kernel_versioning_FileProxy::singleton()->add($this, $this->getAbsolutePath());
+        }
         else{
-        	throw new core_kernel_versioning_Exception(__('Unable to authenticate.'));
+	        throw new core_kernel_versioning_Exception(__('Unable to add a file ('.$this->getAbsolutePath().'). The file does not exist.'));
         }
         
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F5 end

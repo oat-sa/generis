@@ -8,26 +8,59 @@ require_once INCLUDES_PATH.'/simpletest/autorun.php';
 class ResourceTestCase extends UnitTestCase{
 
 	protected $object;
-
-	public function setUp(){
+	
+	public function setUp()
+	{
 		TestRunner::initTest();
 
 		$this->object = new core_kernel_classes_Resource(GENERIS_BOOLEAN);
+		
+		//create test class
+		$clazz = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
+		$this->clazz = $clazz->createSubClass($clazz);
 	}
 
-	public function testGetPropertyValuesCollection(){
-
+	function tearDown()
+	{
+        $this->clazz->delete();
+    }
+    
+	/*
+	 * 
+	 * TOOLS FUNCTIONS
+	 * 
+	 */
+	
+	private function createTestResource()
+	{
+		return $this->clazz->createInstance();
+	}
+	
+	private function createTestProperty()
+	{
+		return $this->clazz->createProperty('ResourceTestCaseProperty '.common_Utils::getNewUri());
+	}
+	
+	
+	/*
+	 * 
+	 * TEST CASE FUNCTIONS
+	 * 
+	 */
+	
+	public function testGetPropertyValuesCollection()
+	{
 		$session = core_kernel_classes_Session::singleton();
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = new core_kernel_classes_Property(RDFS_SEEALSO,__METHOD__);
 		$api = core_kernel_impl_ApiModelOO::singleton();
-		$api->setStatement($instance->uriResource,RDFS_SEEALSO,GENERIS_TRUE,'');
-		$api->setStatement($instance->uriResource,RDFS_SEEALSO,GENERIS_FALSE,'');
-		$api->setStatement($instance->uriResource,RDFS_SEEALSO,'plop','');
-		$api->setStatement($instance->uriResource,RDFS_SEEALSO,'plup','FR');
-		$api->setStatement($instance->uriResource,RDFS_SEEALSO,'plip','FR');
-		$api->setStatement($instance->uriResource,RDFS_SEEALSO,GENERIS_TRUE,'FR');
+		$api->setStatement($instance->uriResource, RDFS_SEEALSO, GENERIS_TRUE, '');
+		$api->setStatement($instance->uriResource, RDFS_SEEALSO, GENERIS_FALSE, '');
+		$api->setStatement($instance->uriResource, RDFS_SEEALSO, 'plop', '');
+		$api->setStatement($instance->uriResource, RDFS_SEEALSO, 'plup', 'FR');
+		$api->setStatement($instance->uriResource, RDFS_SEEALSO, 'plip', 'FR');
+		$api->setStatement($instance->uriResource, RDFS_SEEALSO, GENERIS_TRUE, 'FR');
 
 		// Default language is EN (English) so that we should get a collection
 		// containing 3 triples because we will receive the ones with no language
@@ -82,10 +115,53 @@ class ResourceTestCase extends UnitTestCase{
 		$instance->delete();
 	}
 
-	public function testGetRdfTriples(){
+	/**
+	 * Test the function Resource:getPropertiesValues();
+	 */
+	public function testGetPropertiesValues()
+	{
+		//create test resource
+		$resource = $this->createTestResource();
+		$property1 = $this->createTestProperty();
+		$property2 = $this->createTestProperty();
+		$property3 = $this->createTestProperty();
+		$resource->setPropertyValue($property1, 'prop1');
+		$resource->setPropertyValue($property2, 'prop2');
+		$resource->setPropertyValue($property3, 'prop3');
+		
+		//test that the get properties values is getting an array as parameter, if the parameter is not an array, the function will return an exception
+		try{
+			$resource->getPropertiesValue($property1);
+			$this->assertTrue(false);
+		}catch(Exception $e){
+			$this->assertTrue(true);
+		}
+		
+		//test with one property
+		$result = $resource->getPropertiesValue(array($property1));
+		$this->assertTrue(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->uriResource]));
+		//test with an other one
+		$result = $resource->getPropertiesValue(array($property2));
+		$this->assertTrue(in_array('prop2', $result[$property2->uriResource]));
+		
+		//test with several properties
+		$result = $resource->getPropertiesValue(array($property1, $property2, $property3));
+		$this->assertTrue(in_array('prop1', $result[$property1->uriResource]));
+		$this->assertTrue(in_array('prop2', $result[$property2->uriResource]));
+		$this->assertTrue(in_array('prop3', $result[$property3->uriResource]));
+		
+		//clean all
+		$property1->delete();
+		$property2->delete();
+		$property3->delete();
+		$resource->delete();
+	}
+	
+	public function testGetRdfTriples()
+	{
 		$collectionTriple = $this->object->getRdfTriples();
 
-		$this->assertTrue($collectionTriple instanceof common_Collection );
+		$this->assertTrue($collectionTriple instanceof common_Collection);
 		foreach ($collectionTriple->getIterator() as $triple){
 			$this->assertTrue( $triple instanceof core_kernel_classes_Triple );
 			$this->assertEqual($triple->subject, GENERIS_BOOLEAN );
@@ -101,7 +177,8 @@ class ResourceTestCase extends UnitTestCase{
 
 	}
 
-	public function testDelete(){
+	public function testDelete()
+	{
 
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 
@@ -128,7 +205,8 @@ class ResourceTestCase extends UnitTestCase{
 	}
 
 
-	public function testSetPropertyValue(){
+	public function testSetPropertyValue()
+	{
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test', 'test');
 		$seeAlso = new core_kernel_classes_Property(RDFS_SEEALSO,__METHOD__);
@@ -148,7 +226,8 @@ class ResourceTestCase extends UnitTestCase{
 		$instance->delete(true);
 	}
 
-	public function testSetPropertiesValues(){
+	public function testSetPropertiesValues()
+	{
 
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN );
 		$instance = $class->createInstance('a label', 'a comment');
@@ -168,7 +247,8 @@ class ResourceTestCase extends UnitTestCase{
 		$instance->delete(true);
 	}
 
-	public function testGetUsedLanguages(){
+	public function testGetUsedLanguages()
+	{
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = $class->createProperty('seeAlso','multilingue',true);
@@ -183,7 +263,8 @@ class ResourceTestCase extends UnitTestCase{
 		$instance->delete();
 	}
 
-	public function testGetPropertyValuesByLg(){
+	public function testGetPropertyValuesByLg()
+	{
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = $class->createProperty('seeAlso','multilingue',true);
@@ -203,7 +284,8 @@ class ResourceTestCase extends UnitTestCase{
 		$seeAlso->delete();
 	}
 
-	public function testSetPropertyValueByLg(){
+	public function testSetPropertyValueByLg()
+	{
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = $class->createProperty('seeAlso','multilingue',true);
@@ -223,7 +305,8 @@ class ResourceTestCase extends UnitTestCase{
 		$seeAlso->delete();
 	}
 
-	public function testRemovePropertyValueByLg(){
+	public function testRemovePropertyValueByLg()
+	{
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = $class->createProperty('seeAlso','multilingue',true);
@@ -243,7 +326,8 @@ class ResourceTestCase extends UnitTestCase{
 		$seeAlso->delete();
 	}
 	
-	public function testRemovePropertyValues(){
+	public function testRemovePropertyValues()
+	{
 		$session = core_kernel_classes_Session::singleton();
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test', 'test');
@@ -299,7 +383,8 @@ class ResourceTestCase extends UnitTestCase{
 		$instance2->delete();
 	}
 
-	public function testEditPropertyValueByLg(){
+	public function testEditPropertyValueByLg()
+	{
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = $class->createProperty('seeAlso','multilingue',true);
@@ -317,7 +402,8 @@ class ResourceTestCase extends UnitTestCase{
 		$seeAlso->delete();
 	}
 
-	public function testGetOnePropertyValue(){
+	public function testGetOnePropertyValue()
+	{
 		$session = core_kernel_classes_Session::singleton();
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
@@ -363,7 +449,8 @@ class ResourceTestCase extends UnitTestCase{
 		$instance->delete();
 	}
 
-	public function testGetComment(){
+	public function testGetComment()
+	{
 		$inst = new core_kernel_classes_Resource(CLASS_GENERIS_RESOURCE);
 		$this->assertFalse($inst->label == 'generis_Ressource');
 		$this->assertTrue($inst->getLabel()== 'generis_Ressource');
@@ -374,7 +461,8 @@ class ResourceTestCase extends UnitTestCase{
 		$this->assertTrue($inst->comment == 'generis_Ressource');
 	}
 	
-	public function testGetLastModificationDate(){
+	public function testGetLastModificationDate()
+	{
 	    $itemClass = new core_kernel_classes_Class(GENERIS_BOOLEAN);
 
 	    $newInstance = $itemClass->createInstance('date','date' );

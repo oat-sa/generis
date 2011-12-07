@@ -264,6 +264,10 @@ class core_kernel_versioning_FileProxy
         {
         	case 'http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversion':
         		$implClass = 'core_kernel_versioning_subversion_File';
+        		break;
+        	case 'http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversionWindows':
+        		$implClass = 'core_kernel_versioning_subversionWindows_File';
+        		break;
         }
 
         // If an implementation has been found

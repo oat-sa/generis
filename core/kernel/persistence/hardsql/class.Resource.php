@@ -1018,7 +1018,7 @@ class core_kernel_persistence_hardsql_Resource
      * @param  boolean last
      * @return array
      */
-    public function getPropertiesValue( core_kernel_classes_Resource $resource, $properties, $last)
+    public function getPropertiesValue( core_kernel_classes_Resource $resource, $properties/*, $last*/)
     {
         $returnValue = array();
 

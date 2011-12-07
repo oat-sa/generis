@@ -236,7 +236,7 @@ interface core_kernel_persistence_ResourceInterface
      * @param  boolean last
      * @return array
      */
-    public function getPropertiesValue( core_kernel_classes_Resource $resource, $properties, $last);
+    public function getPropertiesValue( core_kernel_classes_Resource $resource, $properties/*, $last*/);
 
     /**
      * Short description of method setType

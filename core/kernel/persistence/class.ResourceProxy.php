@@ -496,14 +496,14 @@ class core_kernel_persistence_ResourceProxy
      * @param  boolean last
      * @return array
      */
-    public function getPropertiesValue( core_kernel_classes_Resource $resource, $properties, $last)
+    public function getPropertiesValue( core_kernel_classes_Resource $resource, $properties/*, $last*/)
     {
         $returnValue = array();
 
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 begin
         
 		$delegate = $this->getImpToDelegateTo($resource);
-		$returnValue = $delegate->getPropertiesValue($resource, $properties, $last);
+		$returnValue = $delegate->getPropertiesValue($resource, $properties/*, $last*/);
         
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 end
 
