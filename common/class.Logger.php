@@ -46,18 +46,18 @@ class common_Logger
     /**
      * a history of past states, to allow a restoration of the previous state
      *
-     * @access public
+     * @access private
      * @var array
      */
-    public $stateStack = array();
+    private $stateStack = array();
 
     /**
      * instance of the class Logger, to implement the singleton pattern
      *
-     * @access public
+     * @access private
      * @var Logger
      */
-    public static $instance = null;
+    private static $instance = null;
 
     /**
      * The implementation of the Logger
@@ -120,11 +120,11 @@ class common_Logger
     /**
      * returns the existing Logger instance or instantiates a new one
      *
-     * @access private
+     * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @return common_Logger
      */
-    private static function singleton()
+    public static function singleton()
     {
         $returnValue = null;
 
@@ -140,35 +140,34 @@ class common_Logger
     /**
      * Short description of method __construct
      *
-     * @access public
+     * @access private
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
-    public function __construct()
+    private function __construct()
     {
         // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004362 begin
-        $this->implementor = LogManager::getInstance();
+        $this->implementor = common_log_Dispatcher::singleton();
         // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004362 end
     }
 
     /**
      * Short description of method log
      *
-     * @access private
+     * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  int level
      * @param  string message
      * @param  array tags
      * @return mixed
      */
-    private function log($level, $message, $tags)
+    public function log($level, $message, $tags)
     {
         // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432A begin
-    	if ($this->enabled) {
+    	if ($this->enabled && $this->implementor->getLogThreshold() <= $level) {
     		$stack = debug_backtrace();
     		array_shift($stack);
-    		$caller = array_shift($stack);
-    		$this->implementor->log(new LogItem('', time(), $message, $level, $caller['file'], $caller['line']));
+    		$this->implementor->log(new common_log_Item($message, $level, time(), $stack, $tags));
     	};
         // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432A end
     }
@@ -316,6 +315,29 @@ class common_Logger
         // section 127-0-1-1--5509896f:133feddcac3:-8000:00000000000043A1 begin
     	self::singleton()->log(self::FATAL_LEVEL, $message, $tags);
         // section 127-0-1-1--5509896f:133feddcac3:-8000:00000000000043A1 end
+    }
+
+    /**
+     * Short description of method handlerPHPErrors
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  int errno
+     * @param  string errstr
+     * @param  string errfile
+     * @param  int errline
+     * @param  array errcontext
+     * @return boolean
+     */
+    public static function handlerPHPErrors($errno, $errstr, $errfile = null, $errline = null, $errcontext = array())
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001848 begin
+        self::e('Caught PHP Error');
+        // section 127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001848 end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class common_Logger */

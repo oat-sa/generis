@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 02.12.2011, 15:41:41 with ArgoUML PHP module 
+ * Automatically generated on 07.12.2011, 15:51:22 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -52,6 +52,25 @@ interface common_log_Appender
      * @return mixed
      */
     public function log( common_log_Item $item);
+
+    /**
+     * Short description of method getLogThreshold
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return int
+     */
+    public function getLogThreshold();
+
+    /**
+     * Short description of method init
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  array configuration
+     * @return mixed
+     */
+    public function init($configuration);
 
 } /* end of interface common_log_Appender */
 

@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Persistence</activediagram>
+      <activediagram>Generis Core Kernel</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -100,7 +100,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Dec 06 15:36:19 CET 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Dec 07 18:17:01 CET 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -18287,7 +18287,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
               </UML:ModelElement.taggedValue>
               <UML:Classifier.feature>
                 <UML:Operation xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004328'
-                  name = 'singleton' visibility = 'private' isSpecification = 'false' ownerScope = 'classifier'
+                  name = 'singleton' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
                   isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                   isAbstract = 'false'>
                   <UML:ModelElement.taggedValue>
@@ -18337,7 +18337,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
                   </UML:StructuralFeature.type>
                 </UML:Attribute>
                 <UML:Operation xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004362'
-                  name = '__construct' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                  name = '__construct' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
                   isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                   isAbstract = 'false'>
                   <UML:ModelElement.stereotype>
@@ -18349,7 +18349,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
                   </UML:BehavioralFeature.parameter>
                 </UML:Operation>
                 <UML:Attribute xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004322'
-                  name = 'stateStack' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                  name = 'stateStack' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
                   changeability = 'changeable' targetScope = 'instance'>
                   <UML:StructuralFeature.multiplicity>
                     <UML:Multiplicity xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004323'>
@@ -18373,7 +18373,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
                   </UML:StructuralFeature.type>
                 </UML:Attribute>
                 <UML:Attribute xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004325'
-                  name = 'instance' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                  name = 'instance' visibility = 'private' isSpecification = 'false' ownerScope = 'classifier'
                   changeability = 'changeable' targetScope = 'instance'>
                   <UML:StructuralFeature.multiplicity>
                     <UML:Multiplicity xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004326'>
@@ -18397,7 +18397,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
                   </UML:StructuralFeature.type>
                 </UML:Attribute>
                 <UML:Operation xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:000000000000432A'
-                  name = 'log' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                  name = 'log' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                   isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                   isAbstract = 'false'>
                   <UML:BehavioralFeature.parameter>
@@ -18873,6 +18873,61 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
                     </UML:Parameter>
                   </UML:BehavioralFeature.parameter>
                 </UML:Operation>
+                <UML:Operation xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001848'
+                  name = 'handlerPHPErrors' visibility = 'public' isSpecification = 'false'
+                  ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                  isLeaf = 'false' isAbstract = 'false'>
+                  <UML:BehavioralFeature.parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001849'
+                      name = 'return' isSpecification = 'false' kind = 'return'>
+                      <UML:Parameter.type>
+                        <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:000000000000184A'
+                      name = 'errno' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.type>
+                        <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:000000000000184B'
+                      name = 'errstr' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:000000000000184C'
+                      name = 'errfile' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.defaultValue>
+                        <UML:Expression xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:000000000000186B'
+                          language = '' body = 'null'/>
+                      </UML:Parameter.defaultValue>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:000000000000184D'
+                      name = 'errline' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.defaultValue>
+                        <UML:Expression xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001863'
+                          language = '' body = 'null'/>
+                      </UML:Parameter.defaultValue>
+                      <UML:Parameter.type>
+                        <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:000000000000184E'
+                      name = 'errcontext' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.defaultValue>
+                        <UML:Expression xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:000000000000185F'
+                          language = '' body = 'array()'/>
+                      </UML:Parameter.defaultValue>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                  </UML:BehavioralFeature.parameter>
+                </UML:Operation>
               </UML:Classifier.feature>
             </UML:Class>
             <UML:Class xmi.id = '127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003ECA'
@@ -18898,9 +18953,275 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
                 <UML:Class xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:000000000000435B'
                   name = 'Item' visibility = 'public' isSpecification = 'false' isRoot = 'false'
                   isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
-                  <UML:GeneralizableElement.generalization>
-                    <UML:Generalization xmi.idref = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004361'/>
-                  </UML:GeneralizableElement.generalization>
+                  <UML:Classifier.feature>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DA'
+                      name = '__construct' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:ModelElement.stereotype>
+                        <UML:Stereotype xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000AF1'/>
+                      </UML:ModelElement.stereotype>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DB'
+                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017ED'
+                          name = 'description' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017EE'
+                          name = 'severity' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001804'
+                          name = 'datetime' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017EF'
+                          name = 'backtrace' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.defaultValue>
+                            <UML:Expression xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017FA'
+                              language = '' body = 'array()'/>
+                          </UML:Parameter.defaultValue>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017FB'
+                          name = 'tags' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.defaultValue>
+                            <UML:Expression xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001802'
+                              language = '' body = 'array()'/>
+                          </UML:Parameter.defaultValue>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001803'
+                          name = 'request' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.defaultValue>
+                            <UML:Expression xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001806'
+                              language = '' body = '&quot;&quot;'/>
+                          </UML:Parameter.defaultValue>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017C8'
+                      name = 'getDateTime' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017C9'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017CB'
+                      name = 'getDescription' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017CC'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017CD'
+                      name = 'getSeverity' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017CE'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000723'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017CF'
+                      name = 'getBacktrace' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D0'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D1'
+                      name = 'getRequest' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D2'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Attribute xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D3'
+                      name = 'datetime' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D4'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D5'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D6'
+                      name = 'getCallerFile' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D7'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D8'
+                      name = 'getCallerLine' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D9'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DC'
+                      name = 'getTags' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DD'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Attribute xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DE'
+                      name = 'description' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DF'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017E0'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017E1'
+                      name = 'severity' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017E2'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017E3'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017E4'
+                      name = 'backtrace' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017E5'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017E6'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017E7'
+                      name = 'request' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017E8'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017E9'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017EA'
+                      name = 'tags' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017EB'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017EC'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Operation xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001846'
+                      name = 'getSeverityDescriptionString' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001847'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                  </UML:Classifier.feature>
                 </UML:Class>
                 <UML:Interface xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:000000000000435C'
                   name = 'Appender' visibility = 'public' isSpecification = 'false' isRoot = 'false'
@@ -18921,15 +19242,292 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
                         </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017C6'
+                      name = 'getLogThreshold' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017C7'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000183B'
+                      name = 'init' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000183C'
+                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000183D'
+                          name = 'configuration' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
                   </UML:Classifier.feature>
                 </UML:Interface>
-                <UML:Generalization xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004361'
+                <UML:Class xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001808'
+                  name = 'Dispatcher' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+                  isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                  <UML:ModelElement.clientDependency>
+                    <UML:Dependency xmi.idref = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001809'/>
+                    <UML:Abstraction xmi.idref = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001827'/>
+                  </UML:ModelElement.clientDependency>
+                  <UML:ModelElement.stereotype>
+                    <UML:Stereotype xmi.idref = '10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000968'/>
+                  </UML:ModelElement.stereotype>
+                  <UML:Namespace.ownedElement>
+                    <UML:Dependency xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001809'
+                      isSpecification = 'false'>
+                      <UML:Dependency.client>
+                        <UML:Class xmi.idref = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001808'/>
+                      </UML:Dependency.client>
+                      <UML:Dependency.supplier>
+                        <UML:Interface xmi.idref = '127-0-1-1--5509896f:133feddcac3:-8000:000000000000435C'/>
+                      </UML:Dependency.supplier>
+                    </UML:Dependency>
+                  </UML:Namespace.ownedElement>
+                  <UML:Classifier.feature>
+                    <UML:Attribute xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000180F'
+                      name = 'minLevel' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001810'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001811'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:Attribute.initialValue>
+                        <UML:Expression xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000181E'
+                          language = '' body = 'null&#10;'/>
+                      </UML:Attribute.initialValue>
+                      <UML:StructuralFeature.type>
+                        <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001820'
+                      name = 'addAppender' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001821'
+                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001832'
+                          name = 'appender' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Interface xmi.idref = '127-0-1-1--5509896f:133feddcac3:-8000:000000000000435C'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Attribute xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001824'
+                      name = 'appenders' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001825'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001826'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001829'
+                      name = '__construct' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:ModelElement.stereotype>
+                        <UML:Stereotype xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000AF1'/>
+                      </UML:ModelElement.stereotype>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000182A'
+                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000182B'
+                      name = 'singleton' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000182C'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001808'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Attribute xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000182F'
+                      name = 'instance' visibility = 'private' isSpecification = 'false' ownerScope = 'classifier'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001830'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001831'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001808'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                  </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Stereotype xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000180B'
+                  name = 'realize' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
+                  isAbstract = 'false'>
+                  <UML:Stereotype.baseClass>Abstraction</UML:Stereotype.baseClass>
+                </UML:Stereotype>
+                <UML:Abstraction xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001827'
+                  isSpecification = 'false'>
+                  <UML:ModelElement.stereotype>
+                    <UML:Stereotype xmi.idref = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000180B'/>
+                  </UML:ModelElement.stereotype>
+                  <UML:Dependency.client>
+                    <UML:Class xmi.idref = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001808'/>
+                  </UML:Dependency.client>
+                  <UML:Dependency.supplier>
+                    <UML:Interface xmi.idref = '127-0-1-1--5509896f:133feddcac3:-8000:000000000000435C'/>
+                  </UML:Dependency.supplier>
+                </UML:Abstraction>
+                <UML:Class xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001843'
+                  name = 'SingleFileAppender' visibility = 'public' isSpecification = 'false'
+                  isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                  <UML:GeneralizableElement.generalization>
+                    <UML:Generalization xmi.idref = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000185D'/>
+                  </UML:GeneralizableElement.generalization>
+                  <UML:Classifier.feature>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001855'
+                      name = 'init' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001856'
+                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001857'
+                          name = 'configuration' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Attribute xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000184A'
+                      name = 'filename' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000184B'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000184C'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000184D'
+                      name = 'filehandle' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000184E'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000184F'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:DataType xmi.idref = '127-0-1-1--18467de:13108b1b06a:-8000:00000000000015D9'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001852'
+                      name = 'log' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001853'
+                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001854'
+                          name = 'item' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '127-0-1-1--5509896f:133feddcac3:-8000:000000000000435B'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001850'
+                      name = '__destruct' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:ModelElement.stereotype>
+                        <UML:Stereotype xmi.idref = '10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000957'/>
+                      </UML:ModelElement.stereotype>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001851'
+                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Attribute xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001813'
+                      name = 'format' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001814'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001815'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:Attribute.initialValue>
+                        <UML:Expression xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:000000000000183E'
+                          language = '' body = '%d &apos;%m&apos; %s %f %l'/>
+                      </UML:Attribute.initialValue>
+                      <UML:ModelElement.taggedValue>
+                        <UML:TaggedValue xmi.id = '127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001829'
+                          isSpecification = 'false'>
+                          <UML:TaggedValue.dataValue>%d datestring
+%m description(message)
+%s severity
+%b backtrace
+%r request
+%f file from which the log was called
+%l line from which the log was called
+%t timestamp</UML:TaggedValue.dataValue>
+                          <UML:TaggedValue.type>
+                            <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                          </UML:TaggedValue.type>
+                        </UML:TaggedValue>
+                      </UML:ModelElement.taggedValue>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                  </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000185C'
+                  name = 'BaseAppender' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+                  isLeaf = 'false' isAbstract = 'false' isActive = 'false'/>
+                <UML:Generalization xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000185D'
                   isSpecification = 'false'>
                   <UML:Generalization.child>
-                    <UML:Class xmi.idref = '127-0-1-1--5509896f:133feddcac3:-8000:000000000000435B'/>
+                    <UML:Class xmi.idref = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001843'/>
                   </UML:Generalization.child>
                   <UML:Generalization.parent>
-                    <UML:Class xmi.idref = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004360'/>
+                    <UML:Class xmi.idref = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000185C'/>
                   </UML:Generalization.parent>
                 </UML:Generalization>
               </UML:Namespace.ownedElement>
@@ -18984,6 +19582,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         <UML:Class xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004360'
           name = 'LogItem' visibility = 'public' isSpecification = 'false' isRoot = 'false'
           isLeaf = 'false' isAbstract = 'false' isActive = 'false'/>
+        <UML:Package xmi.id = '127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001859'
+          isSpecification = 'false' isRoot = 'false' isLeaf = 'false' isAbstract = 'false'/>
       </UML:Namespace.ownedElement>
     </UML:Model>
     <UML:Expression xmi.id = '127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015B8'
@@ -41311,7 +41911,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
     </path>
   </group>
   <group name="Fig17"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[48, 592, 288, 363]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[16, 1016, 607, 376]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7"
        fill="1"
        fillcolor="white"
@@ -41322,19 +41922,19 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
     </private>
     
     <rectangle name="Fig17.0"
-      x="48"
-      y="592"
-      width="288"
-      height="363"
+      x="16"
+      y="1016"
+      width="607"
+      height="376"
       fill="1"
       fillcolor="white"
       stroke="1"
       strokecolor="black"
     />
     <text name="Fig17.1"
-      x="49"
-      y="593"
-      width="286"
+      x="17"
+      y="1017"
+      width="605"
       height="21"
       fill="0"
       fillcolor="white"
@@ -41348,7 +41948,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       justification="Center"
     >common::Logger</text>
     <group name="Fig17.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[49, 593, 286, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[17, 1017, 286, 0]"
          href="127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7"
          fill="0"
          fillcolor="white"
@@ -41360,8 +41960,8 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       </private>
       
       <rectangle name="Fig17.2.0"
-        x="49"
-        y="593"
+        x="17"
+        y="1017"
         width="286"
         height="0"
         fill="0"
@@ -41371,9 +41971,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       />
     </group>
     <rectangle name="Fig17.3"
-      x="48"
-      y="614"
-      width="288"
+      x="16"
+      y="1038"
+      width="607"
       height="1"
       fill="1"
       fillcolor="black"
@@ -41381,7 +41981,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       strokecolor="black"
     />
     <group name="Fig17.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[49, 615, 286, 155]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[17, 1039, 605, 154]"
          href="127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7"
          fill="0"
          fillcolor="white"
@@ -41392,19 +41992,19 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       </private>
       
       <rectangle name="Fig17.4.0"
-        x="49"
-        y="615"
-        width="286"
-        height="155"
+        x="17"
+        y="1039"
+        width="605"
+        height="154"
         fill="0"
         fillcolor="white"
         stroke="0"
         strokecolor="black"
       />
       <text name="Fig17.4.1"
-        x="49"
-        y="615"
-        width="286"
+        x="17"
+        y="1039"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41418,9 +42018,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >enabled : boolean  = true</text>
       <text name="Fig17.4.2"
-        x="49"
-        y="629"
-        width="286"
+        x="17"
+        y="1053"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41434,9 +42034,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >stateStack : array</text>
       <text name="Fig17.4.3"
-        x="49"
-        y="643"
-        width="286"
+        x="17"
+        y="1067"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41450,9 +42050,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >instance : Logger</text>
       <text name="Fig17.4.4"
-        x="49"
-        y="657"
-        width="286"
+        x="17"
+        y="1081"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41466,9 +42066,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >implementor : Appender</text>
       <text name="Fig17.4.5"
-        x="49"
-        y="671"
-        width="286"
+        x="17"
+        y="1095"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41482,9 +42082,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >TRACE_LEVEL : int  = 0</text>
       <text name="Fig17.4.6"
-        x="49"
-        y="685"
-        width="286"
+        x="17"
+        y="1109"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41498,9 +42098,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >DEBUG_LEVEL : int  = 1</text>
       <text name="Fig17.4.7"
-        x="49"
-        y="699"
-        width="286"
+        x="17"
+        y="1123"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41514,9 +42114,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >INFO_LEVEL : int  = 2</text>
       <text name="Fig17.4.8"
-        x="49"
-        y="713"
-        width="286"
+        x="17"
+        y="1137"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41530,9 +42130,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >WARNING_LEVEL : int  = 3</text>
       <text name="Fig17.4.9"
-        x="49"
-        y="727"
-        width="286"
+        x="17"
+        y="1151"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41546,9 +42146,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >ERROR_LEVEL : int  = 4</text>
       <text name="Fig17.4.10"
-        x="49"
-        y="741"
-        width="286"
+        x="17"
+        y="1165"
+        width="605"
         height="20"
         fill="0"
         fillcolor="white"
@@ -41563,9 +42163,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       >FATAL_LEVEL : int  = 5</text>
     </group>
     <rectangle name="Fig17.5"
-      x="48"
-      y="770"
-      width="288"
+      x="16"
+      y="1193"
+      width="607"
       height="1"
       fill="1"
       fillcolor="black"
@@ -41573,7 +42173,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       strokecolor="black"
     />
     <group name="Fig17.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[49, 771, 286, 183]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[17, 1194, 605, 196]"
          href="127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7"
          fill="0"
          fillcolor="white"
@@ -41584,19 +42184,19 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       </private>
       
       <rectangle name="Fig17.6.0"
-        x="49"
-        y="771"
-        width="286"
-        height="183"
+        x="17"
+        y="1194"
+        width="605"
+        height="196"
         fill="0"
         fillcolor="white"
         stroke="0"
         strokecolor="black"
       />
       <text name="Fig17.6.1"
-        x="49"
-        y="771"
-        width="286"
+        x="17"
+        y="1194"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41610,9 +42210,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >singleton() : Logger</text>
       <text name="Fig17.6.2"
-        x="49"
-        y="785"
-        width="286"
+        x="17"
+        y="1208"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41626,9 +42226,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >«create» __construct()</text>
       <text name="Fig17.6.3"
-        x="49"
-        y="799"
-        width="286"
+        x="17"
+        y="1222"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41642,9 +42242,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >log(level : int,message : string,tags : array)</text>
       <text name="Fig17.6.4"
-        x="49"
-        y="813"
-        width="286"
+        x="17"
+        y="1236"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41658,9 +42258,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >enable()</text>
       <text name="Fig17.6.5"
-        x="49"
-        y="827"
-        width="286"
+        x="17"
+        y="1250"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41674,9 +42274,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >disable()</text>
       <text name="Fig17.6.6"
-        x="49"
-        y="841"
-        width="286"
+        x="17"
+        y="1264"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41690,9 +42290,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >restore()</text>
       <text name="Fig17.6.7"
-        x="49"
-        y="855"
-        width="286"
+        x="17"
+        y="1278"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41706,9 +42306,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >t(message : string,tags : array = array())</text>
       <text name="Fig17.6.8"
-        x="49"
-        y="869"
-        width="286"
+        x="17"
+        y="1292"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41722,9 +42322,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >d(message : string,tags : array = array())</text>
       <text name="Fig17.6.9"
-        x="49"
-        y="883"
-        width="286"
+        x="17"
+        y="1306"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41738,9 +42338,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >i(message : string,tags : array = array())</text>
       <text name="Fig17.6.10"
-        x="49"
-        y="897"
-        width="286"
+        x="17"
+        y="1320"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41754,9 +42354,9 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >w(message : string,tags : array = array())</text>
       <text name="Fig17.6.11"
-        x="49"
-        y="911"
-        width="286"
+        x="17"
+        y="1334"
+        width="605"
         height="14"
         fill="0"
         fillcolor="white"
@@ -41770,10 +42370,10 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >e(message : string,tags : array = array())</text>
       <text name="Fig17.6.12"
-        x="49"
-        y="925"
-        width="286"
-        height="33"
+        x="17"
+        y="1348"
+        width="605"
+        height="14"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -41786,6 +42386,22 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
         justification="Left"
       >f(message : string,tags : array = array()
 )</text>
+      <text name="Fig17.6.13"
+        x="17"
+        y="1362"
+        width="605"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >handlerPHPErrors(errno : int,errstr : string,errfile : string = null,errline : int = null,errcontext : array = array()) : boolean</text>
     </group>
   </group>
 </pgml>
@@ -43750,7 +44366,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       justification="Center"
     >core::kernel::persistence::smoothsql::Class</text>
     <group name="Fig11.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1361, 897, 257, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1361, 897, 523, 0]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001399"
          fill="0"
          fillcolor="white"
@@ -43764,7 +44380,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       <rectangle name="Fig11.2.0"
         x="1361"
         y="897"
-        width="257"
+        width="523"
         height="0"
         fill="0"
         fillcolor="white"
@@ -46448,7 +47064,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       <text name="Fig36.6.3"
         x="2201"
         y="1176"
-        width="268"
+        width="267"
         height="20"
         fill="0"
         fillcolor="255 204 51"
@@ -47085,7 +47701,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       <text name="Fig40.6.2"
         x="1353"
         y="1579"
-        width="236"
+        width="235"
         height="20"
         fill="0"
         fillcolor="white"
@@ -47259,7 +47875,7 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
       <text name="Fig41.6.2"
         x="1873"
         y="1587"
-        width="236"
+        width="235"
         height="20"
         fill="0"
         fillcolor="white"
