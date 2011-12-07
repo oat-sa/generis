@@ -737,7 +737,7 @@ class core_kernel_persistence_smoothsql_Class
 		else $propertyFilters[RDF_TYPE] = $resource->uriResource;
 
 		//Check in the subClasses recurslively.
-		if ($options['recursive']) {
+		if (isset($options['recursive']) && $options['recursive']) {
 			$rdftypes = $propertyFilters[RDF_TYPE];
 			if (!is_array($rdftypes)) $rdftypes = array($rdftypes);
 			$subclasses = $this->getSubClasses($resource, $options['recursive']);
@@ -769,9 +769,9 @@ class core_kernel_persistence_smoothsql_Class
 				if(!empty($pattern)){
 
 					$pattern = $dbWrapper->dbConnector->escape($pattern);
+					$object = trim(str_replace('*', '%', $pattern));
 					
-					if($like){
-						$object = trim(str_replace('*', '%', $pattern));
+					if ($like) {
 						if(!preg_match("/^%/", $object)){
 							$object = "%".$object;
 						}
@@ -780,8 +780,9 @@ class core_kernel_persistence_smoothsql_Class
 						}
 						$conditions[] = ' ("predicate" = \''.$propUri.'\' AND "object" LIKE \''.$object.'\' '.$langToken.' ) ';
 					}
-					else{
-						$conditions[] = ' ("predicate" = \''.$propUri.'\' AND "object" = \''.$pattern.'\' '.$langToken.' ) ';
+					else {
+						if (strpos($object, '%') !== false) $conditions[] = ' ("predicate" = \''.$propUri.'\' AND "object" LIKE \''.$object.'\' '.$langToken.' ) ';
+						else $conditions[] = ' ("predicate" = \''.$propUri.'\' AND "object" = \''.$pattern.'\' '.$langToken.' ) ';
 					}
 				}
 			}
@@ -795,9 +796,9 @@ class core_kernel_persistence_smoothsql_Class
 						if($i > 0){
 							$multiCondition .= " OR ";
 						}
+						$object = trim(str_replace('*', '%', $patternToken));
 						
 						if($like){
-							$object = trim(str_replace('*', '%', $patternToken));
 							if(!preg_match("/^%/", $object)){
 								$object = "%".$object;
 							}
@@ -805,8 +806,10 @@ class core_kernel_persistence_smoothsql_Class
 								$object = $object."%";
 							}
 							$multiCondition .= ' "object" LIKE \''.$object.'\' ';
-						}else{
-							$multiCondition .= ' "object" = \''.$patternToken.'\' ';
+						}
+						else {
+							if (strpos($object, '%') !== false) $multiCondition .= ' "object" LIKE \''.$object.'\' ';
+							else $multiCondition .= ' "object" = \''.$patternToken.'\' ';
 						}
 					}
 					$conditions[] = " (\"predicate\" = '{$propUri}' AND ({$multiCondition}) {$langToken} ) ";
