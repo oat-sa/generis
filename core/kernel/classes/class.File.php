@@ -253,7 +253,7 @@ class core_kernel_classes_File
         $path = explode('/', $filePath);
         $breadCrumb = '';
         foreach($path as $bread){
-        	$breadCrumb .= '/'.$bread;
+        	$breadCrumb .= $bread.'/';
         	if(!file_exists($breadCrumb)){
         		mkdir($breadCrumb);
         	}

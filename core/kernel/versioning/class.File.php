@@ -348,10 +348,15 @@ class core_kernel_versioning_File
         if(!GENERIS_VERSIONING_ENABLED){
         	$returnValue = false;
         }
-        else if(!is_null($this->getRepository()) && $this->getRepository()->authenticate()){
+        else if(is_null($this->getRepository())){
+            $returnValue = false;
+        }
+        else{
+//        else if(!is_null($this->getRepository()) && $this->getRepository()->authenticate()){
         	$returnValue = core_kernel_versioning_FileProxy::singleton()->isVersioned($this, $this->getAbsolutePath());
-	    }
-	    
+//	    }
+        }
+        
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F8 end
 
         return (bool) $returnValue;

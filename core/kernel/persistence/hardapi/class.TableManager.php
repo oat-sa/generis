@@ -143,7 +143,7 @@ class core_kernel_persistence_hardapi_TableManager
 
 						//currently disable the foreign key constraint management:
 						/*
-						$myTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
+						$myTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']); 
 						if($myTableMgr->exists()){
 						$query .= " VARCHAR(255),";
 						$query .= " CONSTRAINT fk_{$column['name']} FOREIGN KEY ({$column['name']}) REFERENCES {$column['foreign']}(uri)";
@@ -155,7 +155,7 @@ class core_kernel_persistence_hardapi_TableManager
 					}
 				}
 			}
-			$query .= ')/*!DEFAULT CHARSET=utf8*/;';
+			$query .= ')/*!ENGINE = MYISAM, DEFAULT CHARSET=utf8*/;';
 
 			$dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() > 0){
@@ -191,7 +191,7 @@ class core_kernel_persistence_hardapi_TableManager
 				REFERENCES {$this->name}(id)";
             */
                                 
-			$query .= ")/*!DEFAULT CHARSET=utf8*/;";
+			$query .= ")/*!ENGINE = MYISAM, DEFAULT CHARSET=utf8*/;";
 				
 			$dbWrapper->execSql($query);
 			if($dbWrapper->dbConnector->errorNo() !== 0){

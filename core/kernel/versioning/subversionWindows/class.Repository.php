@@ -73,16 +73,15 @@ class core_kernel_versioning_subversionWindows_Repository
      * @param  int revision
      * @return boolean
      */
-    public function checkout( core_kernel_versioning_subversion_Repository $vcs, $url, $path, $revision = null)
+    public function checkout( core_kernel_versioning_Repository $vcs, $url, $path, $revision = null)
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002503 begin
         
         try {
-        	
-        	$url = $vcs->getOnePropertyValue(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL);
-        	$path = $vcs->getOnePropertyValue(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH);
+        	$url = $vcs->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL));
+        	$path = $vcs->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH));
         	
         	if (empty($url)){
         		throw new Exception(__CLASS__ . ' -> ' . __FUNCTION__ . '() : the url must be specified');

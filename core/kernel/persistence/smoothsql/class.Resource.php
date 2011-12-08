@@ -812,7 +812,7 @@ class core_kernel_persistence_smoothsql_Resource
     	}
     	
         $session 	= core_kernel_classes_Session::singleton();
-    	$modelIds	= implode(',',array_keys($session->getLoadedModels()));
+    	$modelIds	= implode(',', array_keys($session->getLoadedModels()));
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
  
     	//the unique sql query

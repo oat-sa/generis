@@ -141,9 +141,9 @@ class core_kernel_versioning_Repository
 		$VersioningRepositoryPathProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH);
 		$path = (string)$this->getOnePropertyValue($VersioningRepositoryPathProp);
 		
-        if ($this->authenticate()){
+//        if ($this->authenticate()){
         	$returnValue = core_kernel_versioning_RepositoryProxy::singleton()->checkout($this, $url, $path, $revision);
-        }
+//        }
         
         // section 127-0-1-1--548d6005:132d344931b:-8000:000000000000251A end
 
@@ -238,12 +238,12 @@ class core_kernel_versioning_Repository
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F7 begin
         
         $path = $this->getPath();
-        if(is_dir($path)){
+        //if(is_dir($path)){
         	// Remove the local directory
         	//var_dump('DETELETE repo');
         	//tao_helpers_File::remove($path, true);
-        	$returnValue = parent::delete(true);
-        }
+        	$returnValue = parent::delete();
+        //}
         
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F7 end
 

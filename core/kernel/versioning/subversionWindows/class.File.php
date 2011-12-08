@@ -80,7 +80,7 @@ class core_kernel_versioning_subversionWindows_File
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A begin
         
         try {
-        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'commit ' . $path);
+        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'commit ' . $path . ' -m "'. $message . '"');
         }
         catch (Exception $e) {
         	die('Error code `svn_error_commit` in ' . $e->getMessage());
@@ -222,9 +222,9 @@ class core_kernel_versioning_subversionWindows_File
         // If the file has a status, check the status is not unversioned or added
         if(!empty($status)){
         	
-        	$text_status = $status[0]['text_status'];
-        	if($text_status		!= SVN_WC_STATUS_UNVERSIONED	// 2. FILE UNVERSIONED
-        		&& $text_status	!= SVN_WC_STATUS_ADDED			// 4. JUST ADDED FILE
+        	$text_status = substr($status, 0, 1);
+        	if($text_status		!= '?'	// 2. FILE UNVERSIONED
+        		&& $text_status	!= 'A'			// 4. JUST ADDED FILE
         	){
         		// 6. SVN_WC_STATUS_DELETED
         		// 7. SVN_WC_STATUS_REPLACED

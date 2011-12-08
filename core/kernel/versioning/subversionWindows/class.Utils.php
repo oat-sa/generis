@@ -64,16 +64,16 @@ class core_kernel_versioning_subversionWindows_Utils
         $username = "";
         $password = "";
         $repository = null;
-         
+        
         try{
-        	if(empty($command_)){
+        	if(empty($command)){
         		throw new Exception(__CLASS__ . ' -> ' . __FUNCTION__ . '() : $command_ must be specified');
         	}
         	
 			//get context variables
-			if($resource instanceof core_kernel_classes_File){
-				$repository = getRepository();
-			}else if($resource instanceof core_kernel_classes_File){
+			if($resource instanceof core_kernel_versioning_File){
+				$repository = $resource->getRepository();
+			}else if($resource instanceof core_kernel_versioning_Repository){
 				$repository = $resource;
 			}else{
 				throw new Exception('The first parameter (resource) should be a File or a Repository');
