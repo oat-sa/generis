@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 07.12.2011, 15:51:22 with ArgoUML PHP module 
+ * Automatically generated on 08.12.2011, 14:00:00 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -20,6 +20,13 @@ error_reporting(E_ALL);
 if (0 > version_compare(PHP_VERSION, '5')) {
     die('This file was generated for PHP 5');
 }
+
+/**
+ * include common_log_Dispatcher
+ *
+ * @author Joel Bout, <joel.bout@tudor.lu>
+ */
+require_once('common/log/class.Dispatcher.php');
 
 /* user defined includes */
 // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000435C-includes begin

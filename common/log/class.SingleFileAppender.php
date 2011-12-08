@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 07.12.2011, 17:57:27 with ArgoUML PHP module 
+ * Automatically generated on 08.12.2011, 16:08:09 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -77,11 +77,20 @@ class common_log_SingleFileAppender
      * %f file from which the log was called
      * %l line from which the log was called
      * %t timestamp
+     * %u user
      *
-     * @access public
+     * @access private
      * @var string
      */
-    public $format = '%d \'%m\' %s %f %l';
+    private $format = '%d [%s] \'%m\' %f %l';
+
+    /**
+     * maximum size of the logfile in bytes
+     *
+     * @access private
+     * @var int
+     */
+    private $maxFileSize = 1048576;
 
     // --- OPERATIONS ---
 
@@ -98,34 +107,58 @@ class common_log_SingleFileAppender
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001855 begin
     	if (isset($configuration['file'])) {
     		$this->filename = $configuration['file'];
-    		unset($configuration['file']);
-    	} elseif (isset($configuration['config'])) {
-    		// backward compatibility
-    		$this->filename = $configuration['config'];
-    		unset($configuration['config']);
-    	}
+    	} 
     	
     	if (isset($configuration['format'])) {
     		$this->format = $configuration['format'];
-    		unset($configuration['format']);
+    	}
+    	
+    	if (isset($configuration['max_file_size'])) {
+    		$this->maxFileSize = $configuration['max_file_size'];
     	}
     	parent::init($configuration);
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001855 end
     }
 
     /**
-     * Short description of method log
+     * initialisez the logfile, and checks whenever the file require prunning
+     *
+     * @access private
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return mixed
+     */
+    private function initFile()
+    {
+        // section 127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001828 begin
+        if ($this->maxFileSize > 0 && file_exists($this->filename) && filesize($this->filename) > $this->maxFileSize) {
+        	
+        	// need to reduce the file size
+        	$start = microtime(true);
+        	$file = file($this->filename);
+        	$file = array_splice($file, count($file) / 2);
+        	$this->filehandle = @fopen($this->filename, 'w');
+        	foreach ($file as $line) {
+        		@fwrite($this->filehandle, $line);
+        	}
+        } else {
+    		$this->filehandle = @fopen($this->filename, 'a');
+        }
+        // section 127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001828 end
+    }
+
+    /**
+     * Short description of method dolog
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Item item
      * @return mixed
      */
-    public function log( common_log_Item $item)
+    public function dolog( common_log_Item $item)
     {
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001852 begin
     	if (is_null($this->filehandle)) {
-    		$this->filehandle = @fopen($this->filename, 'a');
+    		$this->initFile();
     	}
     	
     	$map = array(
@@ -136,6 +169,7 @@ class common_log_SingleFileAppender
     			'%r' => $item->getRequest(),
     			'%f' => $item->getCallerFile(),
     			'%l' => $item->getCallerLine(),
+    			'%u' => $item->getUser()
     	);
     	
     	if (strpos($this->format, '%b')) {

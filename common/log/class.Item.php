@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 07.12.2011, 17:53:29 with ArgoUML PHP module 
+ * Automatically generated on 08.12.2011, 11:20:36 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -92,6 +92,14 @@ class common_log_Item
      */
     public $tags = array();
 
+    /**
+     * Short description of attribute authentifiedUser
+     *
+     * @access public
+     * @var string
+     */
+    public $authentifiedUser = '';
+
     // --- OPERATIONS ---
 
     /**
@@ -102,20 +110,22 @@ class common_log_Item
      * @param  string description
      * @param  int severity
      * @param  int datetime
+     * @param  string user
      * @param  array backtrace
      * @param  array tags
      * @param  string request
      * @return mixed
      */
-    public function __construct($description, $severity, $datetime, $backtrace = array(), $tags = array(), $request = "")
+    public function __construct($description, $severity, $datetime, $user = null, $backtrace = array(), $tags = array(), $request = "")
     {
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DA begin
-        $this->description	= $description;
-        $this->severity		= $severity;
-        $this->datetime		= $datetime;
-        $this->backtrace	= $backtrace;
-        $this->tags			= $tags;
-        $this->request		= $request;
+        $this->description		= $description;
+        $this->severity			= $severity;
+        $this->datetime			= $datetime;
+        $this->backtrace		= $backtrace;
+        $this->tags				= $tags;
+        $this->request			= $request;
+        $this->authentifiedUser	= $user;
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DA end
     }
 
@@ -223,7 +233,8 @@ class common_log_Item
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D6 begin
         if (count($this->backtrace) > 0) {
         	$keys = array_keys($this->backtrace);
-        	$returnValue = $this->backtrace[$keys[0]]['file'];
+        	if (isset($this->backtrace[$keys[0]]['file']))
+        		$returnValue = $this->backtrace[$keys[0]]['file'];
         }
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D6 end
 
@@ -244,7 +255,8 @@ class common_log_Item
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D8 begin
         if (count($this->backtrace) > 0) {
 	        $keys = array_keys($this->backtrace);
-	        $returnValue = $this->backtrace[$keys[0]]['line'];
+	        if (isset($this->backtrace[$keys[0]]['file']))
+	        	$returnValue = $this->backtrace[$keys[0]]['line'];
         }
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D8 end
 
@@ -298,6 +310,24 @@ class common_log_Item
         		$returnValue = "UNKNOWN";
         }
         // section 127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001846 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * returns the user that was authentified while this item was created
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return string
+     */
+    public function getUser()
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001832 begin
+        $returnValue = $this->authentifiedUser;
+        // section 127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001832 end
 
         return (string) $returnValue;
     }

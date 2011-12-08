@@ -64,16 +64,27 @@ $GLOBALS["EVENTLOG"]["AUTO_SAVE_FILE_SUFFIX"] = ".log"; // prefix for the saved 
 
 
 #log
-#	 debug_level 	= 0;
-#	 info_level 	= 1;
-#	 warning_level 	= 2;
-#	 error_level	= 3;
-#	 fatal_level 	= 4;
-$GLOBALS['config_log'] 		= array(
-									array(	'nom' => 'FileAppender', 
-											'level' =>  0 , 		
-											'config' => dirname(__FILE__).'/../log/log.txt'),
-									);	
+#	 trace_level 	= 0;
+#	 debug_level 	= 1;
+#	 info_level 	= 2;
+#	 warning_level 	= 3;
+#	 error_level	= 4;
+#	 fatal_level 	= 5;
+$GLOBALS['COMMON_LOGGER_CONFIG'] = array(
+	array(
+		'class'		=> 'SingleFileAppender', 
+		'threshold'	=> 1 , 		
+		'file'		=> dirname(__FILE__).'/../../log/debug.txt'
+	),
+/*		array(
+		'class'			=> 'SingleFileAppender', 
+		'threshold'		=> 4 , 		
+		'file'			=> dirname(__FILE__).'/../../log/error.txt',
+		'format'		=> '%m',
+		'max_file_size'	=> 10000000
+	),
+*/
+);	
 
 # constants definition
 define('HTTP_GET', 		'GET');

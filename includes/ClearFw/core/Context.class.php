@@ -63,7 +63,7 @@ class Context
 	 * Get the singleton instance of the Context
 	 * @return Context
 	 */
-	public function getInstance()
+	public static function getInstance()
 	{
 		if (!self::$instance)
 		{	

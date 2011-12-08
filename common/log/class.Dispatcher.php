@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 07.12.2011, 15:51:22 with ArgoUML PHP module 
+ * Automatically generated on 08.12.2011, 14:00:00 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -48,17 +48,9 @@ class common_log_Dispatcher
         implements common_log_Appender
 {
     // --- ASSOCIATIONS ---
-
+    // generateAssociationEnd : 
 
     // --- ATTRIBUTES ---
-
-    /**
-     * Short description of attribute minLevel
-     *
-     * @access private
-     * @var int
-     */
-    private $minLevel = null;
 
     /**
      * Short description of attribute appenders
@@ -67,6 +59,14 @@ class common_log_Dispatcher
      * @var array
      */
     private $appenders = array();
+
+    /**
+     * Short description of attribute minLevel
+     *
+     * @access private
+     * @var int
+     */
+    private $minLevel = null;
 
     /**
      * Short description of attribute instance
@@ -125,61 +125,24 @@ class common_log_Dispatcher
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000183B begin
     	$this->appenders = array();
     	$this->minLevel = null;
-    	
-    	foreach ($GLOBALS['config_log'] as $appenderConfig) {
-    		$classname = null;
+    	foreach ($configuration as $appenderConfig) {
     		if (isset($appenderConfig['class'])) {
+    			
     			$classname = $appenderConfig['class'];
-    			unset($appenderConfig['class']);
-    		} elseif (isset($appenderConfig['nom'])) {
-    			// backward compatibility
-    			$classname = $appenderConfig['nom'];
-    			unset($appenderConfig['nom']);
-    			if ($classname == 'FileAppender') {
-    				$classname = 'common_log_SingleFileAppender';
-    			}
-    		}
-    	
-    		if (!is_null($classname) && is_subclass_of($classname, 'common_log_Appender')) {
-    			$appender = new $classname();
-    			if (!is_null($appender)) {
-    				$appender->init($appenderConfig);
-    				$this->addAppender($appender);
-    			}
+    			if (!class_exists($classname))
+    				$classname = 'common_log_'.$classname;
+    			
+    			if (class_exists($classname) && is_subclass_of($classname, 'common_log_Appender')) {
+    				$appender = new $classname();
+    				if (!is_null($appender)) {
+    					$appender->init($appenderConfig);
+    					$this->addAppender($appender);
+    				}
+    			} else
+    				echo(is_subclass_of($classname, 'common_log_Appender') ? 't' : 'f');
     		}
     	}
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000183B end
-    }
-
-    /**
-     * Short description of method addAppender
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Appender appender
-     * @return mixed
-     */
-    public function addAppender( common_log_Appender $appender)
-    {
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001820 begin
-        $this->appenders[] = $appender;
-        if (is_null($this->minLevel) || $this->minLevel > $appender->getLogThreshold())
-        	$this->minLevel = $appender->getLogThreshold();
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001820 end
-    }
-
-    /**
-     * Short description of method __construct
-     *
-     * @access private
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return mixed
-     */
-    private function __construct()
-    {
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001829 begin
-        $this->init($GLOBALS['config_log']);
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001829 end
     }
 
     /**
@@ -200,6 +163,59 @@ class common_log_Dispatcher
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000182B end
 
         return $returnValue;
+    }
+
+    /**
+     * Short description of method __construct
+     *
+     * @access private
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return mixed
+     */
+    private function __construct()
+    {
+        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001829 begin
+    	if (isset($GLOBALS['COMMON_LOGGER_CONFIG'])) {
+    		$this->init($GLOBALS['COMMON_LOGGER_CONFIG']);
+    	} elseif (isset($GLOBALS['config_log'])) {
+    		
+    		// import old config
+    		$config = array();
+    		foreach ($GLOBALS['config_log'] as $appenderConfig) {
+    			if (isset($appenderConfig['nom'])
+    					&& $appenderConfig['nom'] == 'FileAppender'
+    					&& isset($appenderConfig['config'])
+    					&& isset($appenderConfig['level'])
+    				) {
+    				$config[] = array(
+    						'class' 	=> 'common_log_SingleFileAppender',
+    						'file'		=> $appenderConfig['config'],
+    						'threshold'	=> $appenderConfig['level'] + 1
+    						);
+    			}
+    		}
+    		$this->init($config);
+        } else {
+        	$this->init(array());
+        }
+        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001829 end
+    }
+
+    /**
+     * Short description of method addAppender
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  Appender appender
+     * @return mixed
+     */
+    public function addAppender( common_log_Appender $appender)
+    {
+        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001820 begin
+        $this->appenders[] = $appender;
+        if (is_null($this->minLevel) || $this->minLevel > $appender->getLogThreshold())
+        	$this->minLevel = $appender->getLogThreshold();
+        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001820 end
     }
 
 } /* end of class common_log_Dispatcher */
