@@ -109,12 +109,12 @@ class common_log_UDPAppender
      * @param  Item item
      * @return mixed
      */
-    public function doLog( common_log_Item $item)
+    public function doLog(common_log_Item $item)
     {
         // section 127-0-1-1--508f6d44:1341e7d80d4:-8000:000000000000184D begin
         if (is_null($this->resource)) {
-        	$this->resource = fsockopen('udp://'.$this->host, $this->port );
-        	//stream_set_timeout($this->resource, 30);
+        	$this->resource  = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+        	socket_set_nonblock($this->resource);
         }
         if ($this->resource !== false) {
         	
@@ -124,8 +124,7 @@ class common_log_UDPAppender
         		't' => $item->getTags(),
         		'b' => $item->getBacktrace()
         	));
-        	fwrite($this->resource, $message );
-        	
+        	socket_sendto($this->resource, $message, strlen($message), 0, $this->host, $this->port);
         }
         // section 127-0-1-1--508f6d44:1341e7d80d4:-8000:000000000000184D end
     }
@@ -141,7 +140,7 @@ class common_log_UDPAppender
     {
         // section 127-0-1-1--508f6d44:1341e7d80d4:-8000:000000000000184F begin
         if (!is_null($this->resource) && $this->resource !== false)
-    		fclose($this->resource);
+    		socket_close($this->resource);
         // section 127-0-1-1--508f6d44:1341e7d80d4:-8000:000000000000184F end
     }
 
