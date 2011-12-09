@@ -843,9 +843,9 @@ class core_kernel_persistence_smoothsql_Class
 				if (!strlen($q)) $q = $query . $condition;
 				else $q = $query . $condition . ' AND "subject" IN (' . $q . ')';
 			}
-			$query = $q;
+			$query .= $q;
 		}
-		else $query = join('OR', $conditions);
+		else $query .= join('OR', $conditions);
 
 		$returnValue = $query . $limit;
         // section 127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CC end
