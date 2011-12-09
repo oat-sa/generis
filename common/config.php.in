@@ -71,17 +71,24 @@ $GLOBALS["EVENTLOG"]["AUTO_SAVE_FILE_SUFFIX"] = ".log"; // prefix for the saved 
 #	 error_level	= 4;
 #	 fatal_level 	= 5;
 $GLOBALS['COMMON_LOGGER_CONFIG'] = array(
+/*
 	array(
-		'class'		=> 'SingleFileAppender', 
-		'threshold'	=> 1 , 		
-		'file'		=> dirname(__FILE__).'/../../log/debug.txt'
-	),
-/*		array(
 		'class'			=> 'SingleFileAppender', 
 		'threshold'		=> 4 , 		
 		'file'			=> dirname(__FILE__).'/../../log/error.txt',
-		'format'		=> '%m',
+		'format'		=> '%m'
+	),
+	array(
+		'class'			=> 'ArchiveFileAppender', 
+		'mask'			=> 62 , // 111110 		
+		'file'			=> '/var/log/tao/debug.txt',
+		'directory'		=> '/var/log/tao/',
 		'max_file_size'	=> 10000000
+	),
+	array(
+		'class'			=> 'UDPAppender',
+		'host'			=> '127.0.0.1',
+		'port'			=> 5775
 	),
 */
 );	

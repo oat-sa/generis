@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 08.12.2011, 14:07:03 with ArgoUML PHP module 
+ * Automatically generated on 09.12.2011, 11:42:37 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -68,16 +68,22 @@ class common_log_XMLAppender
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  array configuration
-     * @return mixed
+     * @return boolean
      */
     public function init($configuration)
     {
+        $returnValue = (bool) false;
+
         // section 127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001851 begin
     	if (isset($configuration['file'])) {
     		$this->filename = $configuration['file'];
+    		$returnValue = parent::init($configuration);
+    	} else {
+    		$returnValue = false;
     	}
-    	parent::init($configuration);
         // section 127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001851 end
+
+        return (bool) $returnValue;
     }
 
     /**

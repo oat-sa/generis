@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 08.12.2011, 11:20:36 with ArgoUML PHP module 
+ * Automatically generated on 09.12.2011, 14:07:22 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -47,58 +47,74 @@ class common_log_Item
     /**
      * Short description of attribute datetime
      *
-     * @access public
+     * @access private
      * @var int
      */
-    public $datetime = 0;
+    private $datetime = 0;
 
     /**
      * Short description of attribute description
      *
-     * @access public
+     * @access private
      * @var string
      */
-    public $description = '';
+    private $description = '';
 
     /**
      * Short description of attribute severity
      *
-     * @access public
+     * @access private
      * @var int
      */
-    public $severity = 0;
+    private $severity = 0;
 
     /**
      * Short description of attribute backtrace
      *
-     * @access public
+     * @access private
      * @var array
      */
-    public $backtrace = array();
+    private $backtrace = array();
 
     /**
      * Short description of attribute request
      *
-     * @access public
+     * @access private
      * @var string
      */
-    public $request = '';
+    private $request = '';
 
     /**
      * Short description of attribute tags
      *
-     * @access public
+     * @access private
      * @var array
      */
-    public $tags = array();
+    private $tags = array();
 
     /**
      * Short description of attribute authentifiedUser
      *
-     * @access public
+     * @access private
      * @var string
      */
-    public $authentifiedUser = '';
+    private $authentifiedUser = '';
+
+    /**
+     * Short description of attribute errorFile
+     *
+     * @access private
+     * @var string
+     */
+    private $errorFile = '';
+
+    /**
+     * Short description of attribute errorLine
+     *
+     * @access private
+     * @var int
+     */
+    private $errorLine = 0;
 
     // --- OPERATIONS ---
 
@@ -114,9 +130,11 @@ class common_log_Item
      * @param  array backtrace
      * @param  array tags
      * @param  string request
+     * @param  string errorFile
+     * @param  int errorLine
      * @return mixed
      */
-    public function __construct($description, $severity, $datetime, $user = null, $backtrace = array(), $tags = array(), $request = "")
+    public function __construct($description, $severity, $datetime, $user = null, $backtrace = array(), $tags = array(), $request = "", $errorFile = '', $errorLine = 0)
     {
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DA begin
         $this->description		= $description;
@@ -126,6 +144,8 @@ class common_log_Item
         $this->tags				= $tags;
         $this->request			= $request;
         $this->authentifiedUser	= $user;
+        $this->errorFile		= $errorFile;
+        $this->errorLine		= $errorLine;
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DA end
     }
 
@@ -231,11 +251,7 @@ class common_log_Item
         $returnValue = (string) '';
 
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D6 begin
-        if (count($this->backtrace) > 0) {
-        	$keys = array_keys($this->backtrace);
-        	if (isset($this->backtrace[$keys[0]]['file']))
-        		$returnValue = $this->backtrace[$keys[0]]['file'];
-        }
+        $returnValue = $this->errorFile;
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D6 end
 
         return (string) $returnValue;
@@ -253,11 +269,7 @@ class common_log_Item
         $returnValue = (int) 0;
 
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D8 begin
-        if (count($this->backtrace) > 0) {
-	        $keys = array_keys($this->backtrace);
-	        if (isset($this->backtrace[$keys[0]]['file']))
-	        	$returnValue = $this->backtrace[$keys[0]]['line'];
-        }
+        $returnValue = $this->errorLine;
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D8 end
 
         return (int) $returnValue;

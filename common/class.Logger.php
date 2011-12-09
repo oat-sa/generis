@@ -160,16 +160,27 @@ class common_Logger
      * @param  int level
      * @param  string message
      * @param  array tags
+     * @param  string errorFile
+     * @param  int errorLine
      * @return mixed
      */
-    public function log($level, $message, $tags)
+    public function log($level, $message, $tags, $errorFile = '', $errorLine = 0)
     {
         // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432A begin
 		if ($this->enabled && $this->implementor->getLogThreshold() <= $level) {
 			$stack = debug_backtrace();
 			array_shift($stack);
 			$user = core_kernel_classes_Session::singleton()->getUser();
-			$this->implementor->log(new common_log_Item($message, $level, time(), $user, $stack, $tags));
+			if ($errorFile == '') {
+				$keys = array_keys($stack);
+				$current = $stack[$keys[0]];
+				if (isset($current['file']) && isset($current['line'])) {
+					$errorFile = $current['file'];
+					$errorLine = $current['line'];
+				}
+			}
+			$requestURI = Context::getInstance()->getRequest()->getRequestURI();
+			$this->implementor->log(new common_log_Item($message, $level, time(), $user, $stack, $tags, $requestURI, $errorFile, $errorLine));
 		};
         // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432A end
     }
@@ -320,23 +331,38 @@ class common_Logger
     }
 
     /**
+     * Short description of method handleException
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  Exception exception
+     * @return mixed
+     */
+    public static function handleException( Exception $exception)
+    {
+        // section 127-0-1-1-7b882644:1342260c2b6:-8000:000000000000186D begin
+        self::singleton()->log(self::INFO_LEVEL, $exception->getMessage(), array(get_class($exception)), $exception->getFile(), $exception->getLine());
+        // section 127-0-1-1-7b882644:1342260c2b6:-8000:000000000000186D end
+    }
+
+    /**
      * a handler for php errors, should never be called manually
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  int errno
-     * @param  string errstr
-     * @param  string errfile
-     * @param  int errline
-     * @param  array errcontext
+     * @param  int errorNumber
+     * @param  string errorString
+     * @param  string errorFile
+     * @param  int errorLine
+     * @param  array errorContext
      * @return boolean
      */
-    public static function handlePHPErrors($errno, $errstr, $errfile = null, $errline = null, $errcontext = array())
+    public static function handlePHPErrors($errorNumber, $errorString, $errorFile = null, $errorLine = null, $errorContext = array())
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001848 begin
-		switch ($errno) {
+		switch ($errorNumber) {
 			case E_USER_ERROR :
 			case E_RECOVERABLE_ERROR :
 				$severity = self::FATAL_LEVEL;
@@ -355,11 +381,11 @@ class common_Logger
 				$severity = self::DEBUG_LEVEL;
 				break;
 	   		default :
-	   			self::d('Unsuported PHP error type: '.$errno, 'common_Logger');
+	   			self::d('Unsuported PHP error type: '.$errorNumber, 'common_Logger');
 				$severity = self::ERROR_LEVEL;
 				break;
 		}
-		self::singleton()->log($severity, 'php error('.$errno.'): '.$errstr, array('php_error'));
+		self::singleton()->log($severity, 'php error('.$errorNumber.'): '.$errorString, array('php_error'), $errorFile, $errorLine);
         // section 127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001848 end
 
         return (bool) $returnValue;
@@ -378,7 +404,11 @@ class common_Logger
         // section 127-0-1-1-56e04748:1341d1d0e41:-8000:000000000000182B begin
     	$error = error_get_last();
     	if (($error['type'] & (E_COMPILE_ERROR | E_ERROR | E_PARSE | E_CORE_ERROR)) != 0) {
-    		self::singleton()->log(self::FATAL_LEVEL, 'php error('.$error['type'].'): '.$error['message'], array('php_error'));
+    		if (isset($error['file']) && isset($error['line'])) {
+    			self::singleton()->log(self::FATAL_LEVEL, 'php error('.$error['type'].'): '.$error['message'], array('php_error'), $error['file'], $error['line']);
+    		} else {
+    			self::singleton()->log(self::FATAL_LEVEL, 'php error('.$error['type'].'): '.$error['message'], array('php_error'));
+    		}
     	}
         // section 127-0-1-1-56e04748:1341d1d0e41:-8000:000000000000182B end
     }

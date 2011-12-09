@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 08.12.2011, 17:35:49 with ArgoUML PHP module 
+ * Automatically generated on 09.12.2011, 11:42:37 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -84,13 +84,13 @@ class common_log_UDPAppender
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  array configuration
-     * @return mixed
+     * @return boolean
      */
     public function init($configuration)
     {
+        $returnValue = (bool) false;
+
         // section 127-0-1-1--508f6d44:1341e7d80d4:-8000:0000000000001859 begin
-    	parent::init($configuration);
-    	
     	if (isset($configuration['host'])) {
     		$this->host = $configuration['host'];
     	}
@@ -98,7 +98,11 @@ class common_log_UDPAppender
     	if (isset($configuration['port'])) {
     		$this->port = $configuration['port'];
     	}
+    	
+    	$returnValue = parent::init($configuration);
         // section 127-0-1-1--508f6d44:1341e7d80d4:-8000:0000000000001859 end
+
+        return (bool) $returnValue;
     }
 
     /**
@@ -109,7 +113,7 @@ class common_log_UDPAppender
      * @param  Item item
      * @return mixed
      */
-    public function doLog(common_log_Item $item)
+    public function doLog( common_log_Item $item)
     {
         // section 127-0-1-1--508f6d44:1341e7d80d4:-8000:000000000000184D begin
         if (is_null($this->resource)) {
@@ -117,7 +121,6 @@ class common_log_UDPAppender
         	socket_set_nonblock($this->resource);
         }
         if ($this->resource !== false) {
-        	
         	$message = json_encode(array(
         		's' => $item->getSeverity(),
         		'd' => $item->getDescription(),

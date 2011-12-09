@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 08.12.2011, 16:08:09 with ArgoUML PHP module 
+ * Automatically generated on 09.12.2011, 12:01:13 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -55,18 +55,18 @@ class common_log_SingleFileAppender
     /**
      * Short description of attribute filename
      *
-     * @access private
+     * @access protected
      * @var string
      */
-    private $filename = '';
+    protected $filename = '';
 
     /**
      * Short description of attribute filehandle
      *
-     * @access private
+     * @access protected
      * @var resource
      */
-    private $filehandle = null;
+    protected $filehandle = null;
 
     /**
      * %d datestring
@@ -79,18 +79,18 @@ class common_log_SingleFileAppender
      * %t timestamp
      * %u user
      *
-     * @access private
+     * @access protected
      * @var string
      */
-    private $format = '%d [%s] \'%m\' %f %l';
+    protected $format = '%d [%s] \'%m\' %f %l';
 
     /**
      * maximum size of the logfile in bytes
      *
-     * @access private
+     * @access protected
      * @var int
      */
-    private $maxFileSize = 1048576;
+    protected $maxFileSize = 1048576;
 
     // --- OPERATIONS ---
 
@@ -100,14 +100,16 @@ class common_log_SingleFileAppender
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  array configuration
-     * @return mixed
+     * @return boolean
      */
     public function init($configuration)
     {
+        $returnValue = (bool) false;
+
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001855 begin
     	if (isset($configuration['file'])) {
     		$this->filename = $configuration['file'];
-    	} 
+    	}
     	
     	if (isset($configuration['format'])) {
     		$this->format = $configuration['format'];
@@ -116,24 +118,29 @@ class common_log_SingleFileAppender
     	if (isset($configuration['max_file_size'])) {
     		$this->maxFileSize = $configuration['max_file_size'];
     	}
-    	parent::init($configuration);
+    	
+    	if (!empty($this->filename))
+    		$returnValue = parent::init($configuration);
+    	else
+    		$returnValue = false;
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001855 end
+
+        return (bool) $returnValue;
     }
 
     /**
      * initialisez the logfile, and checks whenever the file require prunning
      *
-     * @access private
+     * @access protected
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
-    private function initFile()
+    protected function initFile()
     {
         // section 127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001828 begin
-        if ($this->maxFileSize > 0 && file_exists($this->filename) && filesize($this->filename) > $this->maxFileSize) {
+        if ($this->maxFileSize > 0 && file_exists($this->filename) && filesize($this->filename) >= $this->maxFileSize) {
         	
         	// need to reduce the file size
-        	$start = microtime(true);
         	$file = file($this->filename);
         	$file = array_splice($file, count($file) / 2);
         	$this->filehandle = @fopen($this->filename, 'w');
@@ -161,24 +168,26 @@ class common_log_SingleFileAppender
     		$this->initFile();
     	}
     	
-    	$map = array(
-    			'%d' => date('Y-m-d H:i:s',$item->getDateTime()),
-    			'%m' => $item->getDescription(),
-    			'%s' => $item->getSeverityDescriptionString(),
-    			'%t' => $item->getDateTime(),
-    			'%r' => $item->getRequest(),
-    			'%f' => $item->getCallerFile(),
-    			'%l' => $item->getCallerLine(),
-    			'%u' => $item->getUser()
-    	);
-    	
-    	if (strpos($this->format, '%b')) {
-    		$map['%b'] = 'Backtrace not yet supported';
+    	if ($this->filehandle !== false) {
+	    	$map = array(
+	    			'%d' => date('Y-m-d H:i:s',$item->getDateTime()),
+	    			'%m' => $item->getDescription(),
+	    			'%s' => $item->getSeverityDescriptionString(),
+	    			'%t' => $item->getDateTime(),
+	    			'%r' => $item->getRequest(),
+	    			'%f' => $item->getCallerFile(),
+	    			'%l' => $item->getCallerLine(),
+	    			'%u' => $item->getUser()
+	    	);
+	    	
+	    	if (strpos($this->format, '%b')) {
+	    		$map['%b'] = 'Backtrace not yet supported';
+	    	}
+	    	
+	    	$str = strtr($this->format, $map)."\n";
+	    	
+	    	@fwrite($this->filehandle, $str);
     	}
-    	
-    	$str = strtr($this->format, $map)."\n";
-    	
-    	@fwrite($this->filehandle, $str);
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001852 end
     }
 
@@ -192,7 +201,7 @@ class common_log_SingleFileAppender
     public function __destruct()
     {
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001850 begin
-    	if (!is_null($this->filehandle)) {
+    	if (!is_null($this->filehandle) && $this->filehandle !== false) {
     		@fclose($this->filehandle);
     	}
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001850 end
