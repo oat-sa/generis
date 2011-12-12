@@ -143,7 +143,7 @@ class common_log_XMLAppender
 		$event_element->appendChild($user);
 		
 		$doc->documentElement->appendChild($event_element);
-		$doc->save($this->filename);
+		@$doc->save($this->filename);
         // section 127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001854 end
     }
 
