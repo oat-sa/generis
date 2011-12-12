@@ -106,7 +106,7 @@ class common_log_XMLAppender
 
 		$event_element = $doc->createElement("event");
 
-		$message = $doc->createElement("message");
+		$message = $doc->createElement("description");
 		$message->appendChild(
 				$doc->createCDATASection($item->getDescription())
 		);

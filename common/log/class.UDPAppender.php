@@ -125,6 +125,8 @@ class common_log_UDPAppender
         		's' => $item->getSeverity(),
         		'd' => $item->getDescription(),
         		't' => $item->getTags(),
+        		'f' => $item->getCallerFile(),
+        		'l' => $item->getCallerLine(),
         		'b' => $item->getBacktrace()
         	));
         	socket_sendto($this->resource, $message, strlen($message), 0, $this->host, $this->port);
