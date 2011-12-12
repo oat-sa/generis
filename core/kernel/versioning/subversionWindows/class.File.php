@@ -80,7 +80,7 @@ class core_kernel_versioning_subversionWindows_File
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A begin
         
         try {
-        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'commit ' . $path . ' -m "'. $message . '"');
+        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'commit ' . $path . ' --non-recursive -m "'. $message . '"');
         }
         catch (Exception $e) {
         	die('Error code `svn_error_commit` in ' . $e->getMessage());
@@ -190,7 +190,7 @@ class core_kernel_versioning_subversionWindows_File
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 begin
         
         try {
-        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'add ' . $path);
+        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'add --non-recursive ' . $path);
         } 
         catch (Exception $e) {
         	die('Error code `svn_error_add` in ' . $e->getMessage());
@@ -219,18 +219,29 @@ class core_kernel_versioning_subversionWindows_File
         
         $status = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'status ' . $path);
         
+        
         // If the file has a status, check the status is not unversioned or added
         if(!empty($status)){
-        	
-        	$text_status = substr($status, 0, 1);
-        	if($text_status		!= '?'	// 2. FILE UNVERSIONED
-        		&& $text_status	!= 'A'			// 4. JUST ADDED FILE
-        	){
-        		// 6. SVN_WC_STATUS_DELETED
-        		// 7. SVN_WC_STATUS_REPLACED
-        		// 8. SVN_WC_STATUS_MODIFIED
-        		$returnValue = true;
-        	}
+        	$resourceStatus = null;
+                $lines = explode("\n", $status);
+                foreach ($lines as $line) {
+                    //if(preg_match('#^.*'.preg_quote($path).'$#', $line)){
+                    if(strstr($line, realpath($path)) !== false){
+                        $resourceStatus = $line;
+                    }
+                }
+                if(!is_null($resourceStatus)){
+                    $text_status = substr($resourceStatus, 0, 1);
+                    if($text_status		!= '?'	// 2. FILE UNVERSIONED
+                            && $text_status	!= 'A'	// 4. JUST ADDED FILE
+                            && $text_status	!= 'D'	// 4. JUST DELETED FILE
+                    ){
+                            // 6. SVN_WC_STATUS_DELETED
+                            // 7. SVN_WC_STATUS_REPLACED
+                            // 8. SVN_WC_STATUS_MODIFIED
+                            $returnValue = true;
+                    }
+                }
         } 
         else {
         	if (file_exists($path)){
