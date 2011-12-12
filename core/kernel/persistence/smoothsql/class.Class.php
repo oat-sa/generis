@@ -509,14 +509,13 @@ class core_kernel_persistence_smoothsql_Class
 		if($dbWrapper->dbConnector->errorNo() !== 0){
 			throw new core_kernel_persistence_smoothsql_Exception($dbWrapper->dbConnector->errorMsg());
 		}
-		
-		
+
 		while (!$result->EOF){
 			$foundInstancesUri = $result->fields['subject'];
 			$returnValue[$foundInstancesUri] = new core_kernel_classes_Resource($foundInstancesUri);
 			$result->MoveNext();
 		}
-	
+
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
 
         return (array) $returnValue;
@@ -730,21 +729,22 @@ class core_kernel_persistence_smoothsql_Class
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		
 		//add the type check to the filters
-		if (isset($propertyFilters[RDF_TYPE])) {
+		/*if (isset($propertyFilters[RDF_TYPE])) {
 			if (!is_array($propertyFilters[RDF_TYPE])) $propertyFilters[RDF_TYPE] = array($propertyFilters[RDF_TYPE], $resource->uriResource);
 			else $propertyFilters[RDF_TYPE] = array_merge($propertyFilters[RDF_TYPE], array($resource->uriResource));
 		}
-		else $propertyFilters[RDF_TYPE] = $resource->uriResource;
+		else $propertyFilters[RDF_TYPE] = $resource->uriResource;*/
 
 		//Check in the subClasses recurslively.
+		$rdftypes = array();
 		if (isset($options['recursive']) && $options['recursive']) {
-			$rdftypes = $propertyFilters[RDF_TYPE];
-			if (!is_array($rdftypes)) $rdftypes = array($rdftypes);
+			/*$rdftypes = $propertyFilters[RDF_TYPE];
+			if (!is_array($rdftypes)) $rdftypes = array($rdftypes);*/
 			$subclasses = $this->getSubClasses($resource, $options['recursive']);
 			foreach($subclasses as $sc) {
 			    $rdftypes[] = $sc->uriResource;
 			}
-			$propertyFilters[RDF_TYPE] = $rdftypes;
+			//$propertyFilters[RDF_TYPE] = $rdftypes;
 		}
 
 		$langToken = '';
@@ -821,17 +821,15 @@ class core_kernel_persistence_smoothsql_Class
 		}
 
 		$intersect = true;
-		if(isset($options['chaining'])){
-			if($options['chaining'] == 'or'){
-				$intersect = false;
-			}
+		if (isset($options['chaining']) && $options['chaining'] == 'or') {
+			$intersect = false;
 		}
 
 		$limit = "";
-		if (isset($options['limit_start'])){
+		if (isset($options['limit_start'])) {
 		  $limit = intval($options['limit_start']);
 		}
-		if (isset($options['limit_length'])){
+		if (isset($options['limit_length'])) {
 		  if (isset($options['limit_start'])) $limit .= ', '.intval($options['limit_length']);
 		  else $limit = '0, '.intval($options['limit_length']);
 		}
@@ -845,7 +843,11 @@ class core_kernel_persistence_smoothsql_Class
 			}
 			$query = $q;
 		}
-		else $query .= join('OR', $conditions);
+		else $query .= join(' OR ', $conditions);
+
+		$preprdftypes = array();
+		foreach ($rdftypes as $type) $preprdftypes[] = '"object" = \''.$type.'\'';
+		if (count($preprdftypes)) $query .= ' AND "subject" IN (SELECT "subject" FROM "statements" WHERE "predicate" = \''.RDF_TYPE.'\' AND ('.join(' OR ', $preprdftypes).'))';
 
 		$returnValue = $query . $limit;
         // section 127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CC end
