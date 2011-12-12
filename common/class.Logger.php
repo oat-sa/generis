@@ -179,7 +179,7 @@ class common_Logger
 					$errorLine = $current['line'];
 				}
 			}
-			$requestURI = $_SERVER['REQUEST_URI'];
+			$requestURI = $_SERVER['QUERY_STRING'];
 			$this->implementor->log(new common_log_Item($message, $level, time(), $user, $stack, $tags, $requestURI, $errorFile, $errorLine));
 		};
         // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432A end
