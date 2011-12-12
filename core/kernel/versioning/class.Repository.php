@@ -135,6 +135,10 @@ class core_kernel_versioning_Repository
 
         // section 127-0-1-1--548d6005:132d344931b:-8000:000000000000251A begin
 		
+        if(!GENERIS_VERSIONING_ENABLED){
+        	throw new core_kernel_versioning_VersioningDisabledException();
+        }
+        
         $VersioningRepositoryUrlProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL);
 		$url = (string)$this->getOnePropertyValue($VersioningRepositoryUrlProp);
 		
@@ -202,6 +206,10 @@ class core_kernel_versioning_Repository
         $returnValue = (bool) false;
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016EB begin
+    
+        if(!GENERIS_VERSIONING_ENABLED){
+        	throw new core_kernel_versioning_VersioningDisabledException();
+        }
         
         if($this->authenticated){
         	
@@ -238,12 +246,12 @@ class core_kernel_versioning_Repository
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F7 begin
         
         $path = $this->getPath();
-        //if(is_dir($path)){
-        	// Remove the local directory
-        	//var_dump('DETELETE repo');
-        	//tao_helpers_File::remove($path, true);
-        	$returnValue = parent::delete();
-        //}
+        if(is_dir($path)){
+        	// Remove the local copy
+        	tao_helpers_File::remove($path, true);
+        }
+        
+        $returnValue = parent::delete();
         
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F7 end
 
