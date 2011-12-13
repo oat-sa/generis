@@ -803,31 +803,33 @@ class core_kernel_persistence_smoothsql_Resource
  
     	$predicatesQuery = '';
     	//build the predicate query
+       // $predicatesQuery = implode(',', $properties);
     	for ($i = 0; $i < count($properties); $i++){
-    		$predicatesQuery .= "'" . $properties[$i]->uriResource . "'";
-    		
-    		if ($i < count($properties)- 1){
-    			$predicatesQuery .= ',';
-    		}
+            $predicatesQuery .= ", '" . $properties[$i]->uriResource . "'";
     	}
-    	
+    	$predicatesQuery=substr($predicatesQuery, 1);
+        
         $session 	= core_kernel_classes_Session::singleton();
     	$modelIds	= implode(',', array_keys($session->getLoadedModels()));
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
  
     	//the unique sql query
-        $query =  "SELECT predicate, object, l_language FROM statements 
-        			WHERE subject = ? AND predicate IN ({$predicatesQuery})
-		    		AND (l_language = '' OR l_language = ? OR l_language = ?) 
-		    		AND modelID IN ({$modelIds})
-		    		ORDER BY predicate";
-
-        $params = array(
-        	$resource->uriResource,
-        	$session->defaultLg, 
-        	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
-        );
-        $result	= $dbWrapper->execSql($query, $params);
+        $query =  'SELECT "predicate", "object", "l_language" 
+            FROM "statements" 
+            WHERE 
+                "subject" = \''.$resource->uriResource.'\' 
+                AND "predicate" IN ('.$predicatesQuery.')
+                AND ("l_language" = \'\' 
+                    OR "l_language" = \''.$session->defaultLg.'\' 
+                    OR "l_language" = \''.(($session->getLg() != '') ? $session->getLg() : $session->defaultLg).'\') 
+                AND "modelID" IN ('.$modelIds.')
+            ORDER BY "predicate"';
+        
+        $result	= $dbWrapper->execSql($query);
+    	if($dbWrapper->dbConnector->errorNo() !== 0){
+                throw new core_kernel_persistence_smoothsql_Exception("Unable to get properties values " .$dbWrapper->dbConnector->errorMsg());
+        }
+        
         $sortedByLg = core_kernel_persistence_smoothsql_Utils::sortByLanguage($result, 'l_language');
         $identifiedLg = core_kernel_persistence_smoothsql_Utils::identifyFirstLanguage($sortedByLg);
 

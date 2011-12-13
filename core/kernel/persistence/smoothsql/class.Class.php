@@ -540,8 +540,8 @@ class core_kernel_persistence_smoothsql_Class
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
 		if (isset($propertyFilters) && count($propertyFilters)) {
-			if (isset($options['limit_start'])) unset($options['limit_start']);
-			if (isset($options['limit_length'])) unset($options['limit_length']);
+			if (isset($options['offset'])) unset($options['offset']);
+			if (isset($options['limit'])) unset($options['limit']);
 			$query = $this->getFilteredQuery($resource, $propertyFilters, $options);
 			$sqlResult = $dbWrapper->execSql($query);
 			$returnValue = $sqlResult->RecordCount();
@@ -722,8 +722,8 @@ class core_kernel_persistence_smoothsql_Class
 		chaining		: (string) 	'or'/'and' (default: 'and')
 		recursive		: (int) 	recursivity depth (default: 0)
 		lang			: (string) 	e.g. 'EN', 'FR' (default: '') for all properties!
-		limit_start		: default 0
-		limit_length	: default select all
+		offset  		: default 0
+		limit           	: default select all
 		*/
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
@@ -746,6 +746,9 @@ class core_kernel_persistence_smoothsql_Class
 			}
 			//$propertyFilters[RDF_TYPE] = $rdftypes;
 		}
+                if(!in_array($resource->uriResource, $rdftypes)){
+                    $rdftypes[] = $resource->uriResource;
+                }
 
 		$langToken = '';
 		if(isset($options['lang'])){
@@ -816,15 +819,28 @@ class core_kernel_persistence_smoothsql_Class
 				}
 			}
 		}
-		if(count($conditions) == 0){
+		/*if(count($conditions) == 0){
 			return $returnValue;
-		}
+		}*/ 
 
 		$intersect = true;
 		if (isset($options['chaining']) && $options['chaining'] == 'or') {
 			$intersect = false;
 		}
 
+		$queryLimit = "";
+                if(isset($options['limit'])){
+                    $offset = 0;
+                    $limit = intval($options['limit']);
+                    if ($limit==0){
+                            $limit = 1000000;
+                    }
+                    if(isset($options['offset'])){
+                            $offset = intval($options['offset']);
+                    }
+                    $queryLimit .= ' ORDER BY "id" LIMIT '.$limit.' OFFSET '.$offset.'';
+		}
+                /*
 		$limit = "";
 		if (isset($options['limit_start'])) {
 		  $limit = intval($options['limit_start']);
@@ -834,22 +850,30 @@ class core_kernel_persistence_smoothsql_Class
 		  else $limit = '0, '.intval($options['limit_length']);
 		}
 		if (isset($options['limit_start']) || isset($options['limit_length'])) $limit = ' ORDER BY "id" LIMIT '.$limit;
-
-		$q = '';
+                */
+		
+                $q = '';
 		if ($intersect) {
 			foreach ($conditions as $condition) {
 				if (!strlen($q)) $q = $query . $condition;
 				else $q = $query . $condition . ' AND "subject" IN (' . $q . ')';
 			}
-			$query = $q;
+                        if(!empty($q)){
+                            $query = $q;
+                        }
 		}
 		else $query .= join(' OR ', $conditions);
 
 		$preprdftypes = array();
 		foreach ($rdftypes as $type) $preprdftypes[] = '"object" = \''.$type.'\'';
-		if (count($preprdftypes)) $query .= ' AND "subject" IN (SELECT "subject" FROM "statements" WHERE "predicate" = \''.RDF_TYPE.'\' AND ('.join(' OR ', $preprdftypes).'))';
-
-		$returnValue = $query . $limit;
+		if (count($preprdftypes)){
+                    if(!empty($conditions)){
+                        $query .= 'AND';
+                    }
+                    $query .= ' "subject" IN (SELECT "subject" FROM "statements" WHERE "predicate" = \''.RDF_TYPE.'\' AND ('.join(' OR ', $preprdftypes).'))';
+                }
+		$returnValue = $query . $queryLimit;
+                
         // section 127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CC end
 
         return (string) $returnValue;
