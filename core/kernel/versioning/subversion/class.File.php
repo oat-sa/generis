@@ -231,7 +231,7 @@ class core_kernel_versioning_subversion_File
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 begin
         
-	    if($this->getRepository()->authenticate()){
+	    if($resource->getRepository()->authenticate()){
         	$returnValue = svn_add($path, false);
 	    }
         
