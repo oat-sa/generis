@@ -121,6 +121,24 @@ class core_kernel_classes_Session
     }
 
     /**
+     * This function is used to reset the static context to the instance, if
+     * the instance was created in another execution context
+     * (frontcontroller will store the singleton in the php session then
+     * will restore it for further http requests)
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  Session staticInstance
+     * @return void
+     */
+    public static function reset( core_kernel_classes_Session $staticInstance = null)
+    {
+        // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 begin
+		self::$instance = $staticInstance;
+        // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 end
+    }
+
+    /**
      * Short description of method __construct
      *
      * @access private
@@ -322,23 +340,6 @@ class core_kernel_classes_Session
         // section 127-0-1-1--14f68f95:12f59b39209:-8000:0000000000001438 end
 
         return (array) $returnValue;
-    }
-
-    /**
-     * This function is used to reset the static context to the instance , if
-     * instance was created in another execution context (frontcontroller will
-     * the singleton in the php session then wilol restore it for further http
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  Session staticInstance
-     * @return void
-     */
-    public function reset( core_kernel_classes_Session $staticInstance = null)
-    {
-        // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 begin
-		self::$instance = $staticInstance;
-        // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 end
     }
 
     /**
