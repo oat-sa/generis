@@ -141,7 +141,8 @@ class core_kernel_persistence_smoothsql_Resource
 		    		WHERE "subject" = ? 
 		    		AND "predicate" = ?
 					AND ( "l_language" = ? OR "l_language" = \'\' '.$defaultLg.')
-		    		AND "modelID" IN ('.$modelIds.')';
+		    		AND "modelID" IN ('.$modelIds.')
+                    ORDER BY "id" DESC';
         
     	// Select first
 		if($one){
