@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 04.05.2011, 15:31:32 with ArgoUML PHP module 
+ * Automatically generated on 14.12.2011, 15:42:05 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_users
  */
@@ -33,7 +33,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class core_kernel_users_Service
  *
  * @access public
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_users
  */
@@ -68,21 +68,13 @@ class core_kernel_users_Service
      */
     const AUTH_TOKEN_KEY = 'auth_id';
 
-    /**
-     * Short description of attribute module
-     *
-     * @access private
-     * @var string
-     */
-    private $module = '';
-
     // --- OPERATIONS ---
 
     /**
      * Short description of method loginExists
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string login
      * @param  Class class
      * @return boolean
@@ -114,7 +106,7 @@ class core_kernel_users_Service
      * Short description of method addRole
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string label
      * @param  string comment
      * @param  string parentRole
@@ -141,7 +133,7 @@ class core_kernel_users_Service
      * Short description of method removeRole
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource role
      * @return boolean
      */
@@ -160,7 +152,7 @@ class core_kernel_users_Service
      * Short description of method addUser
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string login
      * @param  string password
      * @param  Resource role
@@ -191,7 +183,7 @@ class core_kernel_users_Service
      * Short description of method removeUser
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource user
      * @return boolean
      */
@@ -210,7 +202,7 @@ class core_kernel_users_Service
      * Short description of method login
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string login
      * @param  string password
      * @param  string role
@@ -299,7 +291,7 @@ class core_kernel_users_Service
      * Short description of method getOneUser
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string login
      * @param  Class class
      * @return core_kernel_classes_Resource
@@ -332,19 +324,17 @@ class core_kernel_users_Service
      * Short description of method __construct
      *
      * @access private
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
     private function __construct()
     {
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:000000000000183B begin
-        $this->module = DATABASE_NAME;
-        
          if(!$this->isASessionOpened()) { 
          	
          	//init a fake session to do the 1st cheks
-		    core_kernel_classes_Session::singleton(true, $this->module);
-		    $this->db = core_kernel_classes_DbWrapper::singleton($this->module);
+		    core_kernel_classes_Session::singleton();
+		    $this->db = core_kernel_classes_DbWrapper::singleton();
          }
 		    
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:000000000000183B end
@@ -354,7 +344,7 @@ class core_kernel_users_Service
      * Short description of method singleton
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return core_kernel_users_Service
      */
     public static function singleton()
@@ -376,7 +366,7 @@ class core_kernel_users_Service
      * Short description of method loginApi
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string uri
      * @return boolean
      */
@@ -390,7 +380,7 @@ class core_kernel_users_Service
         	//re-init the objects from the session
         	
         	core_kernel_classes_Session::reset(Session::getAttribute('generis_session'));
-			core_kernel_classes_DbWrapper::singleton(Session::getAttribute('generis_module'));
+			core_kernel_classes_DbWrapper::singleton();
 			$returnValue = true ;
         }
         
@@ -403,12 +393,11 @@ class core_kernel_users_Service
 			       		
 	       		//Initialize the real generis session 
 	       		core_kernel_classes_Session::reset();
-		        $session = core_kernel_classes_Session::singleton($uri, $this->module);
+		        $session = core_kernel_classes_Session::singleton();
 		       	
 		       
 		        //save the current generis session
 				Session::setAttribute('generis_session', $session);
-				Session::setAttribute('generis_module',  $this->module);
 	        	
 				//get the login of the user
 				$this->userResource = new core_kernel_classes_Resource($uri);
@@ -421,7 +410,6 @@ class core_kernel_users_Service
         		core_kernel_classes_Session::reset();
         		Session::removeAttribute(self::AUTH_TOKEN_KEY);
         		Session::removeAttribute('generis_session');
-        		Session::removeAttribute('generis_module');
         		return false;	
         	}
         	$returnValue = true ;
@@ -437,7 +425,7 @@ class core_kernel_users_Service
      * Short description of method isASessionOpened
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return boolean
      */
     public function isASessionOpened()
@@ -457,7 +445,7 @@ class core_kernel_users_Service
      * Short description of method logout
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return boolean
      */
     public function logout()

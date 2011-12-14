@@ -70,7 +70,7 @@ class common_ext_ExtensionInstaller
 
 		try{
 			
-			$db = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
+			$db = core_kernel_classes_DbWrapper::singleton();
 			//check dependances
 			if($this->checkRequiredExtensions()){
 

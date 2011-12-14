@@ -6,7 +6,7 @@ error_reporting(E_ALL);
  * Simple utility class that allow you to wrap the database connector.
  * You can retrieve an instance evreywhere using the singleton.
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
@@ -29,7 +29,7 @@ require_once('includes/adodb5/adodb.inc.php');
  * You can retrieve an instance evreywhere using the singleton.
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
@@ -63,18 +63,16 @@ class core_kernel_classes_DbWrapper
      * Enables you to retrieve staticly the DbWrapper instance
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  string database
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return core_kernel_classes_DbWrapper
      */
-    public static function singleton($database = "")
+    public static function singleton()
     {
         $returnValue = null;
 
         // section 10-13-1--31--647ec317:119141cd117:-8000:00000000000008F3 begin
 		if (!isset(self::$instance)) {
-            $c = __CLASS__;
-            self::$instance = new $c($database);
+            self::$instance = new self();
 
         }
         $returnValue = self::$instance;
@@ -88,15 +86,14 @@ class core_kernel_classes_DbWrapper
      * Initialize the storage engine connection
      *
      * @access private
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  string database
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return void
      */
-    private function __construct($database)
+    private function __construct()
     {
         // section 10-13-1--31-6e1b148f:1192d5c62ab:-8000:00000000000009A7 begin
 		$this->dbConnector = NewADOConnection(SGBD_DRIVER);
-		$this->dbConnector->Connect(DATABASE_URL, DATABASE_LOGIN, DATABASE_PASS, $database);
+		$this->dbConnector->Connect(DATABASE_URL, DATABASE_LOGIN, DATABASE_PASS, DATABASE_NAME);
         $this->dbConnector->debug = false;
 	
         if(defined('GENERIS_CACHE_PATH')){

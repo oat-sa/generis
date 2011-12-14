@@ -144,7 +144,7 @@ class core_kernel_impl_ApiSearchI
 			return $returnValue;
 		}
 		
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
 		$langToken = '';
 		if(isset($options['lang'])){
@@ -288,7 +288,7 @@ class core_kernel_impl_ApiSearchI
 			return $returnValue;
 		}
 		
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
 		// Get the models | Will be stored in Session, or it is yet
 		$models = array ();

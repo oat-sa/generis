@@ -239,7 +239,7 @@ class core_kernel_persistence_hardapi_Utils
         $returnValue = (string) '';
 
         // section 10-13-1--128-743691ae:12fc0ed9381:-8000:000000000000152E begin
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$pattern = $dbWrapper->dbConnector->escape($pattern);
 		
 		if($like){

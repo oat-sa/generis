@@ -17,7 +17,7 @@ require_once INCLUDES_PATH.'/simpletest/autorun.php';
 class ExtensionManagerTestCase extends UnitTestCase {
 	
 	public function testGetInstalledExtensions(){
-		$db = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
+		$db = core_kernel_classes_DbWrapper::singleton();
 		$fakeExtensionSql = 'INSERT INTO "extensions" ("id", "name", "version", "loaded", "loadAtStartUp") '.
 							"VALUES ('testExtension', 'test', '0.1', 1, 1);";
 		

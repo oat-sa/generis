@@ -424,7 +424,7 @@ class core_kernel_persistence_hardsql_Class
 		lang			: (string) 	e.g. 'EN', 'FR' (default: '') for all properties!
 		*/
 		
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
 		$like = true;
 		if(isset($options['like'])){

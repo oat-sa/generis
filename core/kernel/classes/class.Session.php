@@ -99,19 +99,16 @@ class core_kernel_classes_Session
      * Short description of method singleton
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  string uri
-     * @param  string module
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return core_kernel_classes_Session
      */
-    public static function singleton($uri = "", $module = '')
+    public static function singleton()
     {
         $returnValue = null;
 
         // section 10-13-1--31--7858878e:119b84cada6:-8000:0000000000000AE0 begin
 		if (!isset(self::$instance) || is_null(self::$instance)) {
-			$c = __CLASS__;
-			self::$instance = new $c($uri,$module);
+			self::$instance = new self();
 		}
 		$returnValue = self::$instance;
 
@@ -142,20 +139,11 @@ class core_kernel_classes_Session
      * Short description of method __construct
      *
      * @access private
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  string uri
-     * @param  string module
-     * @return string
+     * @author Joel Bout, <joel.bout@tudor.lu>
      */
-    private function __construct($uri, $module)
+    private function __construct()
     {
-        $returnValue = (string) '';
-
         // section 10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000AE7 begin
-	   
-       	//initialize the dbWrapper
-		core_kernel_classes_DbWrapper::singleton($module);
-		
 		
 		//active  models needed by extension
     	$extensionManager = common_ext_ExtensionsManager::singleton();
@@ -173,8 +161,6 @@ class core_kernel_classes_Session
 		$this->defaultLg = DEFAULT_LANG;
 		
         // section 10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000AE7 end
-
-        return (string) $returnValue;
     }
 
     /**

@@ -216,7 +216,7 @@ class common_ext_SimpleExtension
 
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A0 begin
         if($this->configuration == null) {
-        	$db = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
+        	$db = core_kernel_classes_DbWrapper::singleton();
 			$query = "SELECT loaded,\"loadAtStartUp\",ghost FROM extensions WHERE id ='".$this->id."';";
 			$result = $db->execSql($query);
 			$loaded = $result->fields["loaded"] == 1;

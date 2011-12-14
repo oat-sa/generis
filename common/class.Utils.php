@@ -341,7 +341,7 @@ class common_Utils
                     $ch = $ch.$line;
                 }
             }
-            $db = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
+            $db = core_kernel_classes_DbWrapper::singleton();
             $requests = explode(";", $ch);
             unset($requests[count($requests)-1]);
             foreach($requests as $request){

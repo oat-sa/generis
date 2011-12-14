@@ -78,7 +78,7 @@ class common_ext_ExtensionsManager
         // section -87--2--3--76-e9002fe:123ebbb9fa8:-8000:000000000000179E begin
 		if(empty($this->extensions)){
 
-			$db = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
+			$db = core_kernel_classes_DbWrapper::singleton();
 			$query = 'SELECT * FROM "extensions";';
 			$result = $db->execSql($query);
 			if($db->dbConnector->errorNo() !== 0){

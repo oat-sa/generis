@@ -105,7 +105,7 @@ class common_ext_ExtensionConfiguration
     public function save( common_ext_SimpleExtension $extension)
     {
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002396 begin
-        $db = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
+        $db = core_kernel_classes_DbWrapper::singleton();
 		if($this->loaded){
 			$set1 = "loaded = '1'";
 		}

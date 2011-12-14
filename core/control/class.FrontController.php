@@ -28,7 +28,6 @@ class core_control_FrontController
 			if($apiModelOo->logIn($login, $password, $module, CLASS_ROLE_TAOMANAGER)){
 				$session = core_kernel_classes_Session::singleton();
 				$_SESSION["generis_session"] = $session;
-				$_SESSION["generis_module"] = $module;
 				
 				$status =true;	
 			}
@@ -37,7 +36,7 @@ class core_control_FrontController
 			if (self::isConnected()) {
 				$status =true;
 				core_kernel_classes_Session::reset($_SESSION["generis_session"]);
-				core_kernel_classes_DbWrapper::singleton($_SESSION["generis_module"]);
+				core_kernel_classes_DbWrapper::singleton();
 			}
 			return $status;
 		}

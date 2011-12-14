@@ -113,7 +113,7 @@ class common_ext_NamespaceManager
         // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001595 begin
         
         if(count($this->namespaces) == 0){
-        	$db = core_kernel_classes_DbWrapper::singleton(DATABASE_NAME);
+        	$db = core_kernel_classes_DbWrapper::singleton();
         	$query = 'SELECT "modelID", "baseURI" FROM "models"';
 			$result = $db->execSql($query);
 			while (!$result-> EOF){
