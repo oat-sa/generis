@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Design generis API oo</activediagram>
+      <activediagram>Users</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -100,7 +100,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Dec 13 09:49:50 CET 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Dec 14 15:54:16 CET 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -2652,6 +2652,15 @@ You can retrieve an instance evreywhere using the singleton.
                               </UML:Multiplicity.range>
                             </UML:Multiplicity>
                           </UML:StructuralFeature.multiplicity>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-914d16a:1343cb7ea69:-8000:0000000000001892'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Cédric Alfonsi, &lt;cedric.alfonsi@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:StructuralFeature.type>
                             <UML:Class xmi.idref = '10-13-1--31-6e1b148f:1192d5c62ab:-8000:000000000000099F'/>
                           </UML:StructuralFeature.type>
@@ -2669,22 +2678,19 @@ Enables you to retrieve staticly the DbWrapper instance</UML:TaggedValue.dataVal
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-914d16a:1343cb7ea69:-8000:0000000000001894'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Joel Bout, &lt;joel.bout@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '10-13-1--31--647ec317:119141cd117:-8000:00000000000008F4'
                               name = 'return' isSpecification = 'false' kind = 'return'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                            <UML:Parameter xmi.id = '10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000B26'
-                              name = 'database' isSpecification = 'false'>
-                              <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '10-13-1--31--86a648e:11985da1cd8:-8000:0000000000000ADE'
-                                  language = '' body = '&quot;&quot;'/>
-                              </UML:Parameter.defaultValue>
-                              <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -2700,6 +2706,15 @@ Enables you to retrieve staticly the DbWrapper instance</UML:TaggedValue.dataVal
                               </UML:Multiplicity.range>
                             </UML:Multiplicity>
                           </UML:StructuralFeature.multiplicity>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-914d16a:1343cb7ea69:-8000:0000000000001891'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Cédric Alfonsi, &lt;cedric.alfonsi@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:StructuralFeature.type>
                             <UML:Class xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB'/>
                           </UML:StructuralFeature.type>
@@ -2719,18 +2734,19 @@ Enables you to retrieve staticly the DbWrapper instance</UML:TaggedValue.dataVal
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-914d16a:1343cb7ea69:-8000:0000000000001895'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Joel Bout, &lt;joel.bout@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '10-13-1--31-6e1b148f:1192d5c62ab:-8000:00000000000009A8'
                               name = 'return' isSpecification = 'false' kind = 'return'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000074F'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                            <UML:Parameter xmi.id = '10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000B25'
-                              name = 'database' isSpecification = 'false'>
-                              <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -2750,6 +2766,13 @@ Enables you to retrieve staticly the DbWrapper instance</UML:TaggedValue.dataVal
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-914d16a:1343cb7ea69:-8000:0000000000001893'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Cédric Alfonsi, &lt;cedric.alfonsi@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-35ccf597:12f4de46ade:-8000:0000000000001424'
@@ -2760,6 +2783,15 @@ Enables you to retrieve staticly the DbWrapper instance</UML:TaggedValue.dataVal
                           name = '__clone' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-914d16a:1343cb7ea69:-8000:0000000000001890'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Cédric Alfonsi, &lt;cedric.alfonsi@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-0-1-71ce5466:11938f47d30:-8000:0000000000000AA3'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -2789,6 +2821,13 @@ Enables you to retrieve staticly the DbWrapper instance</UML:TaggedValue.dataVal
 The second argument is used only for prepared like statements</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-914d16a:1343cb7ea69:-8000:000000000000188F'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Cédric Alfonsi, &lt;cedric.alfonsi@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
@@ -2830,6 +2869,15 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                           name = 'getSetting' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-914d16a:1343cb7ea69:-8000:000000000000188E'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Cédric Alfonsi, &lt;cedric.alfonsi@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76--148ee98a:12452773959:-8000:000000000000235B'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -2849,6 +2897,15 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                           name = 'getAffectedRows' visibility = 'public' isSpecification = 'false'
                           ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
                           isLeaf = 'false' isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-914d16a:1343cb7ea69:-8000:000000000000188D'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Cédric Alfonsi, &lt;cedric.alfonsi@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-4f08ff91:131764e4b1f:-8000:000000000000163B'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -2887,7 +2944,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                           <UML:ModelElement.taggedValue>
                             <UML:TaggedValue xmi.id = '127-0-1-1-6f89815f:13436987c80:-8000:000000000000187B'
                               isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>Cédric Alfonsi, &lt;cedric.alfonsi@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.dataValue>Joel Bout, &lt;joel.bout@tudor.lu&gt;</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
@@ -2898,26 +2955,6 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                               name = 'return' isSpecification = 'false' kind = 'return'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000071F'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                            <UML:Parameter xmi.id = '10-13-1--31--7858878e:119b84cada6:-8000:0000000000000AE2'
-                              name = 'uri' isSpecification = 'false'>
-                              <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '10-13-1--31--7858878e:119b84cada6:-8000:0000000000000AFF'
-                                  language = 'UML 1.4' body = '&quot;&quot;'/>
-                              </UML:Parameter.defaultValue>
-                              <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                            <UML:Parameter xmi.id = '10-13-1--31--7858878e:119b84cada6:-8000:0000000000000AE4'
-                              name = 'module' isSpecification = 'false'>
-                              <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EB1'
-                                  language = '' body = ''/>
-                              </UML:Parameter.defaultValue>
-                              <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -3012,32 +3049,12 @@ will restore it for further http requests)</UML:TaggedValue.dataValue>
                           <UML:ModelElement.taggedValue>
                             <UML:TaggedValue xmi.id = '127-0-1-1-6f89815f:13436987c80:-8000:000000000000187C'
                               isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>Cédric Alfonsi, &lt;cedric.alfonsi@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.dataValue>Joel Bout, &lt;joel.bout@tudor.lu&gt;</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
-                          <UML:BehavioralFeature.parameter>
-                            <UML:Parameter xmi.id = '10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000AE8'
-                              name = 'return' isSpecification = 'false' kind = 'return'>
-                              <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                            <UML:Parameter xmi.id = '10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000AE9'
-                              name = 'uri' isSpecification = 'false'>
-                              <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                            <UML:Parameter xmi.id = '10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000AEB'
-                              name = 'module' isSpecification = 'false'>
-                              <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                          </UML:BehavioralFeature.parameter>
                         </UML:Operation>
                         <UML:Operation xmi.id = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000752'
                           name = 'setLg' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
@@ -7117,21 +7134,6 @@ will restore it for further http requests)</UML:TaggedValue.dataValue>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
-                          <UML:StructuralFeature.type>
-                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                          </UML:StructuralFeature.type>
-                        </UML:Attribute>
-                        <UML:Attribute xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EB2'
-                          name = 'module' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
-                          changeability = 'changeable' targetScope = 'instance'>
-                          <UML:StructuralFeature.multiplicity>
-                            <UML:Multiplicity xmi.id = '127-0-1-1--788c0ad2:12dccd3fa69:-8000:000000000000150A'>
-                              <UML:Multiplicity.range>
-                                <UML:MultiplicityRange xmi.id = '127-0-1-1--788c0ad2:12dccd3fa69:-8000:0000000000001509'
-                                  lower = '1' upper = '1'/>
-                              </UML:Multiplicity.range>
-                            </UML:Multiplicity>
-                          </UML:StructuralFeature.multiplicity>
                           <UML:StructuralFeature.type>
                             <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                           </UML:StructuralFeature.type>
@@ -21269,7 +21271,7 @@ should never be called manually</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >singleton(uri : string = &quot;&quot;,module : string) : Session</text>
+      >singleton() : Session</text>
       <text name="Fig0.6.2"
         x="1073"
         y="159"
@@ -21301,7 +21303,7 @@ should never be called manually</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >__construct(uri : string,module : string) : string</text>
+      >__construct()</text>
       <text name="Fig0.6.4"
         x="1073"
         y="187"
@@ -24135,7 +24137,7 @@ should never be called manually</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >singleton(database : string = &quot;&quot;) : DbWrapper</text>
+      >singleton() : DbWrapper</text>
       <text name="Fig9.6.2"
         x="1073"
         y="409"
@@ -24151,7 +24153,7 @@ should never be called manually</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >«create» __construct(database : string) : void</text>
+      >«create» __construct() : void</text>
       <text name="Fig9.6.3"
         x="1073"
         y="423"
@@ -43160,7 +43162,7 @@ should never be called manually</UML:TaggedValue.dataValue>
         x="17"
         y="1348"
         width="704"
-        height="14"
+        height="27"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -54722,7 +54724,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     ></text>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[48, 48, 480, 293]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[48, 48, 472, 272]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
        fill="1"
        fillcolor="white"
@@ -54736,8 +54738,8 @@ should never be called manually</UML:TaggedValue.dataValue>
     <rectangle name="Fig1.0"
       x="48"
       y="48"
-      width="480"
-      height="293"
+      width="472"
+      height="272"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -54746,7 +54748,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     <text name="Fig1.1"
       x="49"
       y="49"
-      width="478"
+      width="470"
       height="21"
       fill="0"
       fillcolor="white"
@@ -54785,7 +54787,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     <rectangle name="Fig1.3"
       x="48"
       y="70"
-      width="480"
+      width="472"
       height="1"
       fill="1"
       fillcolor="black"
@@ -54793,7 +54795,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[49, 71, 478, 78]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[49, 71, 470, 60]"
          href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
          fill="0"
          fillcolor="white"
@@ -54806,8 +54808,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig1.4.0"
         x="49"
         y="71"
-        width="478"
-        height="78"
+        width="470"
+        height="60"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -54816,7 +54818,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <text name="Fig1.4.1"
         x="49"
         y="71"
-        width="478"
+        width="470"
         height="14"
         fill="0"
         fillcolor="white"
@@ -54832,7 +54834,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <text name="Fig1.4.2"
         x="49"
         y="85"
-        width="478"
+        width="470"
         height="14"
         fill="0"
         fillcolor="white"
@@ -54848,23 +54850,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <text name="Fig1.4.3"
         x="49"
         y="99"
-        width="478"
-        height="14"
-        fill="0"
-        fillcolor="white"
-        stroke="0"
-        strokecolor="black"
-        textcolor="black"
-        font="Dialog"
-        italic="false"
-        bold="false"
-        textsize="10"
-        justification="Left"
-      >AUTH_TOKEN_KEY : string  = auth_id</text>
-      <text name="Fig1.4.4"
-        x="49"
-        y="113"
-        width="478"
+        width="470"
         height="20"
         fill="0"
         fillcolor="white"
@@ -54876,12 +54862,12 @@ should never be called manually</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >module : string</text>
+      >AUTH_TOKEN_KEY : string  = auth_id</text>
     </group>
     <rectangle name="Fig1.5"
       x="48"
-      y="149"
-      width="480"
+      y="131"
+      width="472"
       height="1"
       fill="1"
       fillcolor="black"
@@ -54889,7 +54875,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[49, 150, 478, 190]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[49, 132, 470, 186]"
          href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
          fill="0"
          fillcolor="white"
@@ -54901,9 +54887,9 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig1.6.0"
         x="49"
-        y="150"
-        width="478"
-        height="190"
+        y="132"
+        width="470"
+        height="186"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -54911,8 +54897,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig1.6.1"
         x="49"
-        y="150"
-        width="478"
+        y="132"
+        width="470"
         height="14"
         fill="0"
         fillcolor="white"
@@ -54927,8 +54913,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >loginExists(login : string,class : Class = null) : boolean</text>
       <text name="Fig1.6.2"
         x="49"
-        y="164"
-        width="478"
+        y="146"
+        width="470"
         height="14"
         fill="0"
         fillcolor="white"
@@ -54943,8 +54929,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >addRole(label : string = &apos;&apos;,comment : string = &apos;&apos;,parentRole : string = null) : Class</text>
       <text name="Fig1.6.3"
         x="49"
-        y="178"
-        width="478"
+        y="160"
+        width="470"
         height="14"
         fill="0"
         fillcolor="white"
@@ -54959,8 +54945,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >removeRole(role : Resource) : boolean</text>
       <text name="Fig1.6.4"
         x="49"
-        y="192"
-        width="478"
+        y="174"
+        width="470"
         height="14"
         fill="0"
         fillcolor="white"
@@ -54975,8 +54961,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >addUser(login : string,password : string,role : Resource) : Resource</text>
       <text name="Fig1.6.5"
         x="49"
-        y="206"
-        width="478"
+        y="188"
+        width="470"
         height="14"
         fill="0"
         fillcolor="white"
@@ -54991,8 +54977,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >removeUser(user : Resource) : boolean</text>
       <text name="Fig1.6.6"
         x="49"
-        y="220"
-        width="478"
+        y="202"
+        width="470"
         height="14"
         fill="0"
         fillcolor="white"
@@ -55007,8 +54993,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >login(login : string,password : string,role : string) : boolean</text>
       <text name="Fig1.6.7"
         x="49"
-        y="234"
-        width="478"
+        y="216"
+        width="470"
         height="14"
         fill="0"
         fillcolor="white"
@@ -55023,8 +55009,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >getOneUser(login : string,class : Class = null) : Resource</text>
       <text name="Fig1.6.8"
         x="49"
-        y="248"
-        width="478"
+        y="230"
+        width="470"
         height="14"
         fill="0"
         fillcolor="white"
@@ -55039,8 +55025,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >«create» __construct()</text>
       <text name="Fig1.6.9"
         x="49"
-        y="262"
-        width="478"
+        y="244"
+        width="470"
         height="14"
         fill="0"
         fillcolor="white"
@@ -55055,8 +55041,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >singleton() : Service</text>
       <text name="Fig1.6.10"
         x="49"
-        y="276"
-        width="478"
+        y="258"
+        width="470"
         height="14"
         fill="0"
         fillcolor="white"
@@ -55071,8 +55057,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >loginApi(uri : string) : boolean</text>
       <text name="Fig1.6.11"
         x="49"
-        y="290"
-        width="478"
+        y="272"
+        width="470"
         height="14"
         fill="0"
         fillcolor="white"
@@ -55087,8 +55073,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >isASessionOpened() : boolean</text>
       <text name="Fig1.6.12"
         x="49"
-        y="304"
-        width="478"
+        y="286"
+        width="470"
         height="20"
         fill="0"
         fillcolor="white"
