@@ -505,6 +505,7 @@ class core_kernel_persistence_smoothsql_Class
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$query = $this->getFilteredQuery($resource, $propertyFilters, $options);
+        
 		$result = $dbWrapper->execSql($query);
 		if($dbWrapper->dbConnector->errorNo() !== 0){
 			throw new core_kernel_persistence_smoothsql_Exception($dbWrapper->dbConnector->errorMsg());
@@ -735,21 +736,22 @@ class core_kernel_persistence_smoothsql_Class
 		}
 		else $propertyFilters[RDF_TYPE] = $resource->uriResource;*/
 
-		//Check in the subClasses recurslively.
 		$rdftypes = array();
+        //If recursive, get the subclasses of the given class
 		if (isset($options['recursive']) && $options['recursive']) {
-			/*$rdftypes = $propertyFilters[RDF_TYPE];
-			if (!is_array($rdftypes)) $rdftypes = array($rdftypes);*/
-			$subclasses = $this->getSubClasses($resource, $options['recursive']);
-			foreach($subclasses as $sc) {
-			    $rdftypes[] = $sc->uriResource;
-			}
-			//$propertyFilters[RDF_TYPE] = $rdftypes;
+            foreach($this->getSubClasses($resource, $options['recursive']) as $subClass){
+                $rdftypes[] = $subClass->uriResource;
+            }
 		}
-                if(!in_array($resource->uriResource, $rdftypes)){
-                    $rdftypes[] = $resource->uriResource;
-                }
-
+        //If additionalClasses are required
+        if(isset($options['additionalClasses'])){
+            $rdftypes = array_merge($rdftypes, $options['additionalClasses']);
+        }
+        //Add the class type of the given class
+        if(!in_array($resource->uriResource, $rdftypes)){
+            $rdftypes[] = $resource->uriResource;
+        }
+           
 		$langToken = '';
 		if(isset($options['lang'])){
 			if(preg_match('/^[a-zA-Z]{2,4}$/', $options['lang'])){
