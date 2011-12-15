@@ -100,7 +100,7 @@ class common_Utils
         // section 10-13-1--31--3b304a1e:11b08118c60:-8000:0000000000000D10 begin
         $uri = trim($strarg);
         if(!empty($uri)){
-        	if( (preg_match("/^(http|https|file|ftp):\/\/[\/.A-Za-z0-9_-]+#[A-Za-z0-9]+$/", $uri) && strpos($uri,'#')>0) || strpos($uri,"#")===0){
+        	if( (preg_match("/^(http|https|file|ftp):\/\/[\/:.A-Za-z0-9_-]+#[A-Za-z0-9]+$/", $uri) && strpos($uri,'#')>0) || strpos($uri,"#")===0){
         		$returnValue = true;
         	}
         }

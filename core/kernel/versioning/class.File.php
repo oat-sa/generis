@@ -89,7 +89,7 @@ class core_kernel_versioning_File
 		);
         $sameNameFiles = $clazz->searchInstances($propertyFilter, $options);
         if(!empty($sameNameFiles)){
-        	throw new core_kernel_versioning_Exception(__('A file with the name "'.$fileName.'" exists yet at the location '.$repositoryPath.$filePath));
+        	throw new core_kernel_versioning_Exception(__('A file with the name "'.$fileName.'" already exists at the location '.$repositoryPath.$filePath));
         }   
         
         // If the file does not exist, create it
