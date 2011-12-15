@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 07.12.2011, 16:39:56 with ArgoUML PHP module 
+ * Automatically generated on 15.12.2011, 11:55:25 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -29,12 +29,12 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 require_once('core/kernel/versioning/interface.RepositoryInterface.php');
 
 /* user defined includes */
-// section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018B9-includes begin
-// section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018B9-includes end
+// section 127-0-1-1-a831e14:134415460c1:-8000:0000000000001890-includes begin
+// section 127-0-1-1-a831e14:134415460c1:-8000:0000000000001890-includes end
 
 /* user defined constants */
-// section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018B9-constants begin
-// section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018B9-constants end
+// section 127-0-1-1-a831e14:134415460c1:-8000:0000000000001890-constants begin
+// section 127-0-1-1-a831e14:134415460c1:-8000:0000000000001890-constants end
 
 /**
  * Short description of class
@@ -133,14 +133,12 @@ class core_kernel_versioning_subversionWindows_Repository
     {
         $returnValue = null;
 
-        // section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018C6 begin
-        
-        if (core_kernel_versioning_subversionWindows_Repository::$instance == null){
-			core_kernel_versioning_subversionWindows_Repository::$instance = new core_kernel_versioning_subversionWindows_Repository();
+        // section 127-0-1-1-a831e14:134415460c1:-8000:0000000000001894 begin
+        if (self::$instance == null){
+			self::$instance = new self();
 		}
-		$returnValue = core_kernel_versioning_subversionWindows_Repository::$instance;
-        
-		// section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018C6 end
+		$returnValue = self::$instance;
+        // section 127-0-1-1-a831e14:134415460c1:-8000:0000000000001894 end
 
         return $returnValue;
     }

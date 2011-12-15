@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 07.12.2011, 16:39:56 with ArgoUML PHP module 
+ * Automatically generated on 15.12.2011, 11:55:25 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -29,12 +29,12 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 require_once('core/kernel/versioning/interface.FileInterface.php');
 
 /* user defined includes */
-// section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018B8-includes begin
-// section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018B8-includes end
+// section 127-0-1-1-a831e14:134415460c1:-8000:000000000000188A-includes begin
+// section 127-0-1-1-a831e14:134415460c1:-8000:000000000000188A-includes end
 
 /* user defined constants */
-// section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018B8-constants begin
-// section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018B8-constants end
+// section 127-0-1-1-a831e14:134415460c1:-8000:000000000000188A-constants begin
+// section 127-0-1-1-a831e14:134415460c1:-8000:000000000000188A-constants end
 
 /**
  * Short description of class core_kernel_versioning_subversionWindows_File
@@ -275,7 +275,7 @@ class core_kernel_versioning_subversionWindows_File
         return (array) $returnValue;
     }
 
-    /**$local_path_
+    /**
      * Short description of method hasLocalChanges
      *
      * @access public
@@ -307,14 +307,14 @@ class core_kernel_versioning_subversionWindows_File
     {
         $returnValue = null;
 
-        // section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018C1 begin
+        // section 127-0-1-1-a831e14:134415460c1:-8000:000000000000188E begin
         
-        if (core_kernel_versioning_subversionWindows_File::$instance == null){
-			core_kernel_versioning_subversionWindows_File::$instance = new core_kernel_versioning_subversionWindows_File();
+        if (self::$instance == null){
+			self::$instance = new self();
 		}
-		$returnValue = core_kernel_versioning_subversionWindows_File::$instance;
+		$returnValue = self::$instance;
         
-        // section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018C1 end
+        // section 127-0-1-1-a831e14:134415460c1:-8000:000000000000188E end
 
         return $returnValue;
     }

@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 07.12.2011, 16:42:06 with ArgoUML PHP module 
+ * Automatically generated on 15.12.2011, 11:55:25 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -22,12 +22,12 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 }
 
 /* user defined includes */
-// section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018D2-includes begin
-// section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018D2-includes end
+// section 127-0-1-1-a831e14:134415460c1:-8000:000000000000189C-includes begin
+// section 127-0-1-1-a831e14:134415460c1:-8000:000000000000189C-includes end
 
 /* user defined constants */
-// section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018D2-constants begin
-// section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018D2-constants end
+// section 127-0-1-1-a831e14:134415460c1:-8000:000000000000189C-constants begin
+// section 127-0-1-1-a831e14:134415460c1:-8000:000000000000189C-constants end
 
 /**
  * Short description of class core_kernel_versioning_subversionWindows_Utils
@@ -51,16 +51,15 @@ class core_kernel_versioning_subversionWindows_Utils
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  array resource
+     * @param  Resource resource
      * @param  string command
      * @return string
      */
-    public static function exec($resource, $command)
+    public static function exec( core_kernel_classes_Resource $resource, $command)
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018D3 begin
-
+        // section 127-0-1-1-a831e14:134415460c1:-8000:000000000000189D begin
         $username = "";
         $password = "";
         $repository = null;
@@ -91,8 +90,7 @@ class core_kernel_versioning_subversionWindows_Utils
         catch (Exception $e){
         	die('Error code `svn_error_command` in ' . $e->getMessage());
         }
-        
-        // section 127-0-1-1--6f35df64:13418ffe5d0:-8000:00000000000018D3 end
+        // section 127-0-1-1-a831e14:134415460c1:-8000:000000000000189D end
 
         return (string) $returnValue;
     }
