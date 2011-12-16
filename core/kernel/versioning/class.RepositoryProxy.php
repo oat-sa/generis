@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.11.2011, 12:30:28 with ArgoUML PHP module 
+ * Automatically generated on 16.12.2011, 16:56:37 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -95,7 +95,7 @@ class core_kernel_versioning_RepositoryProxy
      * @param  string password
      * @return boolean
      */
-    public function authenticate( core_kernel_versioning_Repository $vcs, $login, $password)
+    public function authenticate( core_kernel_versioning_subversion_Repository $vcs, $login, $password)
     {
         $returnValue = (bool) false;
 
@@ -105,6 +105,73 @@ class core_kernel_versioning_RepositoryProxy
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E6 end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method export
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Repository vcs
+     * @param  string src
+     * @param  string target
+     * @param  int revision
+     * @return boolean
+     */
+    public function export( core_kernel_versioning_subversion_Repository $vcs, $src, $target = null, $revision = null)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C begin
+        $delegate = $this->getImplementationToDelegateTo($vcs);
+        $returnValue = $delegate->export($vcs, $src, $target, $revision);
+        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method import
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Repository vcs
+     * @param  string src
+     * @param  string target
+     * @return boolean
+     */
+    public function import( core_kernel_versioning_subversion_Repository $vcs, $src, $target)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 begin
+        $delegate = $this->getImplementationToDelegateTo($vcs);
+        $returnValue = $delegate->import($vcs, $src, $target);
+        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method listContent
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Repository vcs
+     * @param  string path
+     * @param  int revision
+     * @return array
+     */
+    public function listContent( core_kernel_versioning_subversion_Repository $vcs, $path, $revision = null)
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 begin
+        $delegate = $this->getImplementationToDelegateTo($vcs);
+        $returnValue = $delegate->listContent($vcs, $path, $revision);
+        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 end
+
+        return (array) $returnValue;
     }
 
     /**

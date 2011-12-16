@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.11.2011, 12:30:28 with ArgoUML PHP module 
+ * Automatically generated on 16.12.2011, 16:56:37 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -66,7 +66,44 @@ interface core_kernel_versioning_RepositoryInterface
      * @param  string password
      * @return boolean
      */
-    public function authenticate( core_kernel_versioning_Repository $vcs, $login, $password);
+    public function authenticate( core_kernel_versioning_subversion_Repository $vcs, $login, $password);
+
+    /**
+     * Short description of method export
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Repository vcs
+     * @param  string src
+     * @param  string target
+     * @param  int revision
+     * @return boolean
+     */
+    public function export( core_kernel_versioning_subversion_Repository $vcs, $src, $target = null, $revision = null);
+
+    /**
+     * Short description of method import
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Repository vcs
+     * @param  string src
+     * @param  string target
+     * @return boolean
+     */
+    public function import( core_kernel_versioning_subversion_Repository $vcs, $src, $target);
+
+    /**
+     * Short description of method listContent
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  Repository vcs
+     * @param  string path
+     * @param  int revision
+     * @return array
+     */
+    public function listContent( core_kernel_versioning_subversion_Repository $vcs, $path, $revision = null);
 
 } /* end of interface core_kernel_versioning_RepositoryInterface */
 

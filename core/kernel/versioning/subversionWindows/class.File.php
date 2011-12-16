@@ -108,7 +108,7 @@ class core_kernel_versioning_subversionWindows_File
 
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165C begin
         try {
-        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'update ' . $path);
+        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'update "' . $path .'"');
         } 
         catch (Exception $e) {
         	die('Error code `svn_error_update` in ' . $e->getMessage());
@@ -135,7 +135,7 @@ class core_kernel_versioning_subversionWindows_File
 
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165E begin
         try {
-        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'revert ' . $path);
+        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'revert "' . $path.'"');
         }
         catch (Exception $e) {
         	die('Error code `svn_error_revert` in ' . $e->getMessage());
@@ -162,7 +162,7 @@ class core_kernel_versioning_subversionWindows_File
         // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 begin
         
         try {
-        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'delete ' . $path);
+        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'delete "' . $path.'"');
         }
         catch (Exception $e) {
         	die('Error code `svn_error_delete` in ' . $e->getMessage());
@@ -190,7 +190,7 @@ class core_kernel_versioning_subversionWindows_File
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 begin
         
         try {
-        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'add --non-recursive ' . $path);
+        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'add --non-recursive "' . $path .'"');
         } 
         catch (Exception $e) {
         	die('Error code `svn_error_add` in ' . $e->getMessage());
@@ -217,7 +217,7 @@ class core_kernel_versioning_subversionWindows_File
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016FA begin
         
-        $status = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'status ' . $path);
+        $status = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'status "' . $path .'"');
         
         
         // If the file has a status, check the status is not unversioned or added

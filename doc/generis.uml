@@ -100,7 +100,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Dec 15 14:10:20 CET 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Dec 16 16:56:40 CET 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -14050,6 +14050,95 @@ system.</UML:TaggedValue.dataValue>
                             <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                           </UML:StructuralFeature.type>
                         </UML:Attribute>
+                        <UML:Operation xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:00000000000028FD'
+                          name = 'export' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:00000000000028FE'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:00000000000028FF'
+                              name = 'src' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002900'
+                              name = 'target' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002901'
+                              name = 'revision' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290B'
+                                  language = 'UML 1.4' body = 'null'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000723'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002904'
+                          name = 'import' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002905'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002906'
+                              name = 'src' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002907'
+                              name = 'target' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002908'
+                          name = 'listContent' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002909'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290A'
+                              name = 'path' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000291D'
+                              name = 'revision' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000291F'
+                                  language = 'UML 1.4' body = 'null'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000723'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
                       </UML:Classifier.feature>
                     </UML:Class>
                     <UML:Interface xmi.id = '127-0-1-1--548d6005:132d344931b:-8000:0000000000002502'
@@ -14111,7 +14200,7 @@ system.</UML:TaggedValue.dataValue>
                             <UML:Parameter xmi.id = '127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E8'
                               name = 'vcs' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.type>
-                                <UML:Class xmi.idref = '127-0-1-1--548d6005:132d344931b:-8000:0000000000002519'/>
+                                <UML:Class xmi.idref = '127-0-1-1--548d6005:132d344931b:-8000:0000000000002500'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E9'
@@ -14124,6 +14213,117 @@ system.</UML:TaggedValue.dataValue>
                               name = 'password' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C'
+                          name = 'export' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290D'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290E'
+                              name = 'vcs' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '127-0-1-1--548d6005:132d344931b:-8000:0000000000002500'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290F'
+                              name = 'src' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002910'
+                              name = 'target' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002911'
+                                  language = 'UML 1.4' body = 'null'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002919'
+                              name = 'revision' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000291A'
+                                  language = 'UML 1.4' body = 'null'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000723'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912'
+                          name = 'import' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002913'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002914'
+                              name = 'vcs' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '127-0-1-1--548d6005:132d344931b:-8000:0000000000002500'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002915'
+                              name = 'src' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000291B'
+                              name = 'target' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916'
+                          name = 'listContent' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002917'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002918'
+                              name = 'vcs' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '127-0-1-1--548d6005:132d344931b:-8000:0000000000002500'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000291C'
+                              name = 'path' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002920'
+                              name = 'revision' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002921'
+                                  language = 'UML 1.4' body = 'null'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000723'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -56020,7 +56220,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::versioning::subversion::Repository</text>
     <group name="Fig6.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[481, 1025, 235, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[481, 1025, 247, 0]"
          href="127-0-1-1--548d6005:132d344931b:-8000:0000000000002500"
          fill="0"
          fillcolor="white"
@@ -56034,7 +56234,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig6.2.0"
         x="481"
         y="1025"
-        width="235"
+        width="247"
         height="0"
         fill="0"
         fillcolor="white"
@@ -56313,7 +56513,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig8"
-       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[96, 616, 409, 75]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[72, 600, 438, 117]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
        href="127-0-1-1--548d6005:132d344931b:-8000:0000000000002502"
        fill="1"
        fillcolor="white"
@@ -56324,19 +56524,19 @@ should never be called manually</UML:TaggedValue.dataValue>
     </private>
     
     <rectangle name="Fig8.0"
-      x="96"
-      y="616"
-      width="409"
-      height="75"
+      x="72"
+      y="600"
+      width="438"
+      height="117"
       fill="1"
       fillcolor="white"
       stroke="1"
       strokecolor="black"
     />
     <text name="Fig8.1"
-      x="97"
-      y="617"
-      width="407"
+      x="73"
+      y="601"
+      width="436"
       height="37"
       fill="0"
       fillcolor="white"
@@ -56350,7 +56550,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::versioning::RepositoryInterface</text>
     <group name="Fig8.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[97, 617, 407, 17]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[73, 601, 436, 17]"
          href="127-0-1-1--548d6005:132d344931b:-8000:0000000000002502"
          fill="0"
          fillcolor="white"
@@ -56361,9 +56561,9 @@ should never be called manually</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig8.2.0"
-        x="97"
-        y="617"
-        width="407"
+        x="73"
+        y="601"
+        width="436"
         height="17"
         fill="0"
         fillcolor="white"
@@ -56371,9 +56571,9 @@ should never be called manually</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
       <text name="Fig8.2.1"
-        x="97"
-        y="617"
-        width="407"
+        x="73"
+        y="601"
+        width="436"
         height="15"
         fill="0"
         fillcolor="white"
@@ -56388,9 +56588,9 @@ should never be called manually</UML:TaggedValue.dataValue>
       >«interface»</text>
     </group>
     <rectangle name="Fig8.3"
-      x="96"
-      y="654"
-      width="409"
+      x="72"
+      y="638"
+      width="438"
       height="1"
       fill="1"
       fillcolor="black"
@@ -56398,7 +56598,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig8.4"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[97, 655, 407, 36]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[73, 639, 436, 78]"
          href="127-0-1-1--548d6005:132d344931b:-8000:0000000000002502"
          fill="0"
          fillcolor="white"
@@ -56409,19 +56609,19 @@ should never be called manually</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig8.4.0"
-        x="97"
-        y="655"
-        width="407"
-        height="36"
+        x="73"
+        y="639"
+        width="436"
+        height="78"
         fill="0"
         fillcolor="white"
         stroke="0"
         strokecolor="black"
       />
       <text name="Fig8.4.1"
-        x="97"
-        y="655"
-        width="407"
+        x="73"
+        y="639"
+        width="436"
         height="14"
         fill="0"
         fillcolor="white"
@@ -56435,10 +56635,10 @@ should never be called manually</UML:TaggedValue.dataValue>
         justification="Left"
       >checkout(vcs : Repository,url : string,path : string,revision : int = null) : boolean</text>
       <text name="Fig8.4.2"
-        x="97"
-        y="669"
-        width="407"
-        height="20"
+        x="73"
+        y="653"
+        width="436"
+        height="14"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -56450,6 +56650,54 @@ should never be called manually</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >authenticate(vcs : Repository,login : string,password : string) : boolean</text>
+      <text name="Fig8.4.3"
+        x="73"
+        y="667"
+        width="436"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >export(vcs : Repository,src : string,target : string = null,revision : int = null) : boolean</text>
+      <text name="Fig8.4.4"
+        x="73"
+        y="681"
+        width="436"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >import(vcs : Repository,src : string,target : string) : boolean</text>
+      <text name="Fig8.4.5"
+        x="73"
+        y="695"
+        width="436"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >listContent(vcs : Repository,path : string,revision : int = null) : array</text>
     </group>
   </group>
   <group name="Fig9"
@@ -56483,7 +56731,7 @@ should never be called manually</UML:TaggedValue.dataValue>
               y="856" />
       <lineto x="776"
               y="672" />
-      <lineto x="505"
+      <lineto x="510"
               y="672" />
     </path>
   </group>
@@ -56518,12 +56766,12 @@ should never be called manually</UML:TaggedValue.dataValue>
               y="1072" />
       <lineto x="776"
               y="672" />
-      <lineto x="505"
+      <lineto x="510"
               y="672" />
     </path>
   </group>
   <group name="Fig11"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[96, 16, 584, 234]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[96, 0, 584, 234]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001668"
        fill="1"
        fillcolor="white"
@@ -56535,7 +56783,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig11.0"
       x="96"
-      y="16"
+      y="0"
       width="584"
       height="234"
       fill="1"
@@ -56545,7 +56793,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     />
     <text name="Fig11.1"
       x="97"
-      y="17"
+      y="1"
       width="582"
       height="21"
       fill="0"
@@ -56560,7 +56808,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::versioning::File</text>
     <group name="Fig11.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[97, 17, 582, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[97, 1, 582, 0]"
          href="127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001668"
          fill="0"
          fillcolor="white"
@@ -56573,7 +56821,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig11.2.0"
         x="97"
-        y="17"
+        y="1"
         width="582"
         height="0"
         fill="0"
@@ -56584,7 +56832,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig11.3"
       x="96"
-      y="38"
+      y="22"
       width="584"
       height="1"
       fill="1"
@@ -56593,7 +56841,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig11.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[97, 39, 582, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[97, 23, 582, 21]"
          href="127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001668"
          fill="0"
          fillcolor="white"
@@ -56605,7 +56853,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig11.4.0"
         x="97"
-        y="39"
+        y="23"
         width="582"
         height="21"
         fill="0"
@@ -56616,7 +56864,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig11.5"
       x="96"
-      y="59"
+      y="43"
       width="584"
       height="1"
       fill="1"
@@ -56625,7 +56873,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig11.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[97, 60, 582, 190]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[97, 44, 582, 190]"
          href="127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001668"
          fill="0"
          fillcolor="white"
@@ -56637,7 +56885,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig11.6.0"
         x="97"
-        y="60"
+        y="44"
         width="582"
         height="190"
         fill="0"
@@ -56647,7 +56895,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig11.6.1"
         x="97"
-        y="60"
+        y="44"
         width="582"
         height="14"
         fill="0"
@@ -56663,7 +56911,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >create(fileName : string,filePath : string = null,repository : Resource,uri : string = &quot;&quot;,options : array = array()) : File</text>
       <text name="Fig11.6.2"
         x="97"
-        y="74"
+        y="58"
         width="582"
         height="14"
         fill="0"
@@ -56679,7 +56927,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >isVersionedFile(resource : Resource) : boolean</text>
       <text name="Fig11.6.3"
         x="97"
-        y="88"
+        y="72"
         width="582"
         height="14"
         fill="0"
@@ -56695,7 +56943,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >commit(message : string = &quot;&quot;) : boolean</text>
       <text name="Fig11.6.4"
         x="97"
-        y="102"
+        y="86"
         width="582"
         height="14"
         fill="0"
@@ -56711,7 +56959,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >update(revision : int = null) : boolean</text>
       <text name="Fig11.6.5"
         x="97"
-        y="116"
+        y="100"
         width="582"
         height="14"
         fill="0"
@@ -56727,7 +56975,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >revert(revision : int = null,msg : string = &quot;&quot;) : boolean</text>
       <text name="Fig11.6.6"
         x="97"
-        y="130"
+        y="114"
         width="582"
         height="14"
         fill="0"
@@ -56743,7 +56991,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >delete() : boolean</text>
       <text name="Fig11.6.7"
         x="97"
-        y="144"
+        y="128"
         width="582"
         height="14"
         fill="0"
@@ -56759,7 +57007,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >getRepository() : Repository</text>
       <text name="Fig11.6.8"
         x="97"
-        y="158"
+        y="142"
         width="582"
         height="14"
         fill="0"
@@ -56775,7 +57023,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >add() : boolean</text>
       <text name="Fig11.6.9"
         x="97"
-        y="172"
+        y="156"
         width="582"
         height="14"
         fill="0"
@@ -56791,7 +57039,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >isVersioned() : boolean</text>
       <text name="Fig11.6.10"
         x="97"
-        y="186"
+        y="170"
         width="582"
         height="14"
         fill="0"
@@ -56807,7 +57055,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >getHistory() : array</text>
       <text name="Fig11.6.11"
         x="97"
-        y="200"
+        y="184"
         width="582"
         height="14"
         fill="0"
@@ -56823,7 +57071,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >getPath() : string</text>
       <text name="Fig11.6.12"
         x="97"
-        y="214"
+        y="198"
         width="582"
         height="14"
         fill="0"
@@ -56839,7 +57087,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >hasLocalChanges() : boolean</text>
       <text name="Fig11.6.13"
         x="97"
-        y="228"
+        y="212"
         width="582"
         height="20"
         fill="0"
@@ -56891,7 +57139,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </path>
   </group>
   <group name="Fig13"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[96, 272, 694, 137]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[96, 240, 694, 179]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--548d6005:132d344931b:-8000:0000000000002519"
        fill="1"
        fillcolor="white"
@@ -56903,9 +57151,9 @@ should never be called manually</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig13.0"
       x="96"
-      y="272"
+      y="240"
       width="694"
-      height="137"
+      height="179"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -56913,7 +57161,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     />
     <text name="Fig13.1"
       x="97"
-      y="273"
+      y="241"
       width="692"
       height="21"
       fill="0"
@@ -56928,7 +57176,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::versioning::Repository</text>
     <group name="Fig13.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[97, 273, 692, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[97, 241, 692, 0]"
          href="127-0-1-1--548d6005:132d344931b:-8000:0000000000002519"
          fill="0"
          fillcolor="white"
@@ -56941,7 +57189,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig13.2.0"
         x="97"
-        y="273"
+        y="241"
         width="692"
         height="0"
         fill="0"
@@ -56952,7 +57200,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig13.3"
       x="96"
-      y="294"
+      y="262"
       width="694"
       height="1"
       fill="1"
@@ -56961,7 +57209,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig13.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[97, 295, 692, 22]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[97, 263, 692, 22]"
          href="127-0-1-1--548d6005:132d344931b:-8000:0000000000002519"
          fill="0"
          fillcolor="white"
@@ -56973,7 +57221,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig13.4.0"
         x="97"
-        y="295"
+        y="263"
         width="692"
         height="22"
         fill="0"
@@ -56983,7 +57231,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig13.4.1"
         x="97"
-        y="295"
+        y="263"
         width="692"
         height="20"
         fill="0"
@@ -57000,7 +57248,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig13.5"
       x="96"
-      y="316"
+      y="284"
       width="694"
       height="1"
       fill="1"
@@ -57009,7 +57257,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig13.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[97, 317, 692, 92]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[97, 285, 692, 134]"
          href="127-0-1-1--548d6005:132d344931b:-8000:0000000000002519"
          fill="0"
          fillcolor="white"
@@ -57021,9 +57269,9 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig13.6.0"
         x="97"
-        y="317"
+        y="285"
         width="692"
-        height="92"
+        height="134"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -57031,7 +57279,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig13.6.1"
         x="97"
-        y="317"
+        y="285"
         width="692"
         height="14"
         fill="0"
@@ -57047,7 +57295,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >create(type : Resource,url : string,login : string,password : string,path : string,label : string,comment : string,uri : string = &apos;&apos;) : Repository</text>
       <text name="Fig13.6.2"
         x="97"
-        y="331"
+        y="299"
         width="692"
         height="14"
         fill="0"
@@ -57063,7 +57311,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >checkout(revision : int = null) : boolean</text>
       <text name="Fig13.6.3"
         x="97"
-        y="345"
+        y="313"
         width="692"
         height="14"
         fill="0"
@@ -57079,7 +57327,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >getType() : Resource</text>
       <text name="Fig13.6.4"
         x="97"
-        y="359"
+        y="327"
         width="692"
         height="14"
         fill="0"
@@ -57095,7 +57343,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >getPath() : string</text>
       <text name="Fig13.6.5"
         x="97"
-        y="373"
+        y="341"
         width="692"
         height="14"
         fill="0"
@@ -57111,7 +57359,55 @@ should never be called manually</UML:TaggedValue.dataValue>
       >authenticate() : boolean</text>
       <text name="Fig13.6.6"
         x="97"
-        y="387"
+        y="355"
+        width="692"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >delete() : boolean</text>
+      <text name="Fig13.6.7"
+        x="97"
+        y="369"
+        width="692"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >export(src : string,target : string,revision : int = null) : boolean</text>
+      <text name="Fig13.6.8"
+        x="97"
+        y="383"
+        width="692"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >import(src : string,target : string) : boolean</text>
+      <text name="Fig13.6.9"
+        x="97"
+        y="397"
         width="692"
         height="20"
         fill="0"
@@ -57124,7 +57420,7 @@ should never be called manually</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >delete() : boolean</text>
+      >listContent(path : string,revision : int = null) : array</text>
     </group>
   </group>
   <group name="Fig14"
@@ -57940,7 +58236,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::versioning::subversionWindows::File</text>
     <group name="Fig24.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[129, 1209, 64, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[129, 1209, 257, 0]"
          href="127-0-1-1-a831e14:134415460c1:-8000:000000000000188A"
          fill="0"
          fillcolor="white"
@@ -57954,7 +58250,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig24.2.0"
         x="129"
         y="1209"
-        width="64"
+        width="257"
         height="0"
         fill="0"
         fillcolor="white"
@@ -58098,7 +58394,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::versioning::subversionWindows::Repository</text>
     <group name="Fig25.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[465, 1209, 239, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[465, 1209, 293, 0]"
          href="127-0-1-1-a831e14:134415460c1:-8000:0000000000001890"
          fill="0"
          fillcolor="white"
@@ -58112,7 +58408,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig25.2.0"
         x="465"
         y="1209"
-        width="239"
+        width="293"
         height="0"
         fill="0"
         fillcolor="white"
@@ -58236,7 +58532,7 @@ should never be called manually</UML:TaggedValue.dataValue>
                         offset="255" />
     </private>
     <path name="Fig26.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -58275,7 +58571,7 @@ should never be called manually</UML:TaggedValue.dataValue>
                         offset="277" />
     </private>
     <path name="Fig27.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -58287,7 +58583,7 @@ should never be called manually</UML:TaggedValue.dataValue>
               y="1232" />
       <lineto x="776"
               y="672" />
-      <lineto x="505"
+      <lineto x="510"
               y="672" />
     </path>
   </group>
@@ -58330,7 +58626,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::versioning::subversionWindows::Utils</text>
     <group name="Fig28.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[833, 1209, 260, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[833, 1209, 266, 0]"
          href="127-0-1-1-a831e14:134415460c1:-8000:000000000000189C"
          fill="0"
          fillcolor="white"
@@ -58344,7 +58640,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig28.2.0"
         x="833"
         y="1209"
-        width="260"
+        width="266"
         height="0"
         fill="0"
         fillcolor="white"
@@ -58418,7 +58714,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <text name="Fig28.6.1"
         x="833"
         y="1252"
-        width="266"
+        width="267"
         height="20"
         fill="0"
         fillcolor="white"

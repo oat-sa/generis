@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 21.10.2011, 16:17:46 with ArgoUML PHP module 
+ * Automatically generated on 16.12.2011, 16:56:37 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -256,6 +256,67 @@ class core_kernel_versioning_Repository
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F7 end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method export
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  string src
+     * @param  string target
+     * @param  int revision
+     * @return boolean
+     */
+    public function export($src, $target, $revision = null)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:00000000000028FD begin
+        $returnValue = core_kernel_versioning_RepositoryProxy::singleton()->export($this, $src, $target, $revision);
+        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:00000000000028FD end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method import
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  string src
+     * @param  string target
+     * @return boolean
+     */
+    public function import($src, $target)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002904 begin
+        $returnValue = core_kernel_versioning_RepositoryProxy::singleton()->import($this, $src, $target);
+        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002904 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method listContent
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  string path
+     * @param  int revision
+     * @return array
+     */
+    public function listContent($path, $revision = null)
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002908 begin
+        $returnValue = core_kernel_versioning_RepositoryProxy::singleton()->listContent($this, $path, $revision);
+        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002908 end
+
+        return (array) $returnValue;
     }
 
 } /* end of class core_kernel_versioning_Repository */
