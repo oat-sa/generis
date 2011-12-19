@@ -140,12 +140,17 @@ class common_log_Item
         $this->description		= $description;
         $this->severity			= $severity;
         $this->datetime			= $datetime;
-        $this->backtrace		= $backtrace;
         $this->tags				= $tags;
         $this->request			= $request;
         $this->authentifiedUser	= $user;
         $this->errorFile		= $errorFile;
         $this->errorLine		= $errorLine;
+        
+        foreach ($backtrace as $key => $row) {
+        	if (isset($backtrace[$key]['object']))
+        		unset($backtrace[$key]['object']);
+        }
+        $this->backtrace		= $backtrace;
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DA end
     }
 
