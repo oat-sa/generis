@@ -181,8 +181,26 @@ class core_kernel_versioning_subversionWindows_Repository
         $returnValue = array();
 
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 begin
+        
         $r=!is_null($revision)?' -r '.$revision:'';
-        $returnValue = core_kernel_versioning_subversionWindows_Utils::exec($vcs, 'list "' . $path.'"'.$r);
+        $xmlStr = core_kernel_versioning_subversionWindows_Utils::exec($vcs, 'list --xml "' . $path.'"'.$r);
+        
+        $dom = new DOMDocument();
+        @$dom->loadXML($xmlStr);
+
+        $xpath = new DOMXPath($dom);
+        $entries = $xpath->query("//entry");
+
+        foreach ($entries as $entry) {
+            $returnValue[] = array(
+                 'name'         => $entry->getElementsByTagName('name')->item(0)->nodeValue
+                 , 'type'       => $entry->getAttribute('kind')
+                 , 'revision'   => $entry->getElementsByTagName('commit')->item(0)->getAttribute('revision')
+                 , 'author'     => $entry->getElementsByTagName('commit')->item(0)->getElementsByTagName('author')->item(0)->nodeValue
+                 , 'time'       => strtotime($entry->getElementsByTagName('commit')->item(0)->getElementsByTagName('date')->item(0)->nodeValue)
+            );
+        }
+
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 end
 
         return (array) $returnValue;
