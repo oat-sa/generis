@@ -100,7 +100,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Dec 16 17:32:14 CET 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Dec 21 10:55:12 CET 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -14200,7 +14200,7 @@ system.</UML:TaggedValue.dataValue>
                             <UML:Parameter xmi.id = '127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E8'
                               name = 'vcs' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.type>
-                                <UML:Class xmi.idref = '127-0-1-1--548d6005:132d344931b:-8000:0000000000002500'/>
+                                <UML:Class xmi.idref = '127-0-1-1--548d6005:132d344931b:-8000:0000000000002519'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E9'
@@ -14231,7 +14231,7 @@ system.</UML:TaggedValue.dataValue>
                             <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290E'
                               name = 'vcs' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.type>
-                                <UML:Class xmi.idref = '127-0-1-1--548d6005:132d344931b:-8000:0000000000002500'/>
+                                <UML:Class xmi.idref = '127-0-1-1--548d6005:132d344931b:-8000:0000000000002519'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290F'
@@ -14276,7 +14276,7 @@ system.</UML:TaggedValue.dataValue>
                             <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002914'
                               name = 'vcs' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.type>
-                                <UML:Class xmi.idref = '127-0-1-1--548d6005:132d344931b:-8000:0000000000002500'/>
+                                <UML:Class xmi.idref = '127-0-1-1--548d6005:132d344931b:-8000:0000000000002519'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002915'
@@ -14307,7 +14307,7 @@ system.</UML:TaggedValue.dataValue>
                             <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002918'
                               name = 'vcs' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.type>
-                                <UML:Class xmi.idref = '127-0-1-1--548d6005:132d344931b:-8000:0000000000002500'/>
+                                <UML:Class xmi.idref = '127-0-1-1--548d6005:132d344931b:-8000:0000000000002519'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000291C'
@@ -43510,7 +43510,7 @@ should never be called manually</UML:TaggedValue.dataValue>
         x="17"
         y="1348"
         width="704"
-        height="27"
+        height="14"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -58714,7 +58714,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <text name="Fig28.6.1"
         x="833"
         y="1252"
-        width="267"
+        width="266"
         height="20"
         fill="0"
         fillcolor="white"
