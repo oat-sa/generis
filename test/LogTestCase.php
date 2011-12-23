@@ -4,7 +4,7 @@ require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
 require_once INCLUDES_PATH.'/simpletest/autorun.php';
 
 
-class LogTestCase extends UnitTestCase {
+class LogTestCase extends TaoTestCase {
 	
 	const RUNS = 1000;
     
@@ -15,13 +15,10 @@ class LogTestCase extends UnitTestCase {
 	
 	public function testFileAppender()
 	{
-		$tfile = GENERIS_FILES_PATH.'trace.log';
-		$dfile = GENERIS_FILES_PATH.'debug.log';
-		$efile = GENERIS_FILES_PATH.'error.log';
+		$tfile = $this->createFile();
+		$dfile = $this->createFile();
+		$efile = $this->createFile();
 
-		@unlink($tfile);
-		@unlink($dfile);
-		@unlink($efile);
 		common_log_Dispatcher::singleton()->init(array(
 			array(
 				'class'			=> 'SingleFileAppender',
@@ -71,9 +68,6 @@ class LogTestCase extends UnitTestCase {
 		$this->assertEntriesInFile($efile, 1);
 		
 		common_Logger::restore();
-		$tfile = GENERIS_FILES_PATH.'trace.log';
-		$dfile = GENERIS_FILES_PATH.'debug.log';
-		$efile = GENERIS_FILES_PATH.'error.log';
 	}
 	
 	public function assertEntriesInFile($pFile, $pCount) {
