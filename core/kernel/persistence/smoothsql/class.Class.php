@@ -521,7 +521,7 @@ class core_kernel_persistence_smoothsql_Class
 
         return (array) $returnValue;
     }
-
+    
     /**
      * Short description of method countInstances
      *
