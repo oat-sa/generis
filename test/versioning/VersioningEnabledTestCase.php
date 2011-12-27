@@ -17,7 +17,10 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	private $repositoryPassword = GENERIS_VERSIONED_REPOSITORY_PASSWORD;
 	private $repositoryLabel = GENERIS_VERSIONED_REPOSITORY_LABEL;
 	private $repositoryComment = GENERIS_VERSIONED_REPOSITORY_COMMENT;
-	
+	private $envName = 'VERSIONING_TEST_CASE_ENV';
+    private $envDeep = 1;
+    private $envNbFiles = 0;
+    
 	public function __construct()
 	{
 		parent::__construct();
@@ -33,7 +36,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	 -------------- */
 
 	// Get the default repository of the TAO instance
-	public function getDefaultRepository ()
+	protected function getDefaultRepository ()
 	{
 		$versioningRepositoryClass = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDREPOSITORY);
 		$repositories = $versioningRepositoryClass->getInstances();
@@ -50,7 +53,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	}
 	
 	// Create repository by creating triples
-	public function createRepository_byTriple()
+	protected function createRepository_byTriple()
 	{
 		$versioningRepositoryClass = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDREPOSITORY);
 		$repository = $versioningRepositoryClass->createInstance($this->repositoryLabel, $this->repositoryComment);
@@ -74,7 +77,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	}
 	
 	// Create repository by using generis API
-	public function createRepository()
+	protected function createRepository()
 	{
 		return core_kernel_versioning_Repository::create(
 			new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversion'),
@@ -89,7 +92,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	
 	
 	// Create version file sample by creating triples
-	public function createVersionedFile_byTriple()
+	protected function createVersionedFile_byTriple()
 	{
 		$clazz = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDFILE);
 	    $instance = $clazz->createInstance('myVersionedFile');
@@ -115,11 +118,48 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	    return $instance;
 	}
 	
+    // Create env folder with some folders and files
+    protected function createEnvTest($rootPath=null, $dirName=null, $deep=null)
+    {
+        $rootPath = !is_null($rootPath) ? $rootPath : $this->getDefaultRepository()->getPath();
+        $deep =     !is_null($deep)     ? $deep     : $this->envDeep;
+        $dirName =  !is_null($dirName)  ? $dirName  : $this->envName;
+        $dirPath = $rootPath.'/'.$dirName;
 
+        //create the folder
+        mkdir($dirPath);
+        $relativePath = substr($dirPath, strlen($this->getDefaultRepository()->getPath()));
+        $instance = core_kernel_versioning_File::create('', $relativePath, $this->getDefaultRepository());
+        /*if($instance->isVersioned()){
+            $instance->delete();
+            $instance->commit();
+        }*/
+        $isVersioned=$instance->isVersioned()?'true':'false';
+        $instance->add();
+        $isVersioned=$instance->isVersioned()?'true':'false';
+        $instance->commit();
+        $isVersioned=$instance->isVersioned()?'true':'false';
+        
+	    /*$instance->setContent('test');
+	    $instance->add();
+	    $instance->delete(true);*/
+        
+        $this->assertTrue(is_dir($dirPath));
+        for($i=0;$i<$this->envNbFiles;$i++){
+            $tempnam = tempnam($dirPath, '');
+            $this->assertTrue(is_file($tempnam));
+        }
+        if($deep > 0){
+            $this->createEnvTest($dirPath, 'DIR_'.$deep, $deep-1);
+        }
+        
+        return $instance;
+    }
+    
 	/* --------------
 	 * UNIT TEST CASE - REPOSITORY
 	 -------------- */
-	
+    
 	public function testModel()
 	{	
 		$this->assertTrue(defined('CLASS_GENERIS_VERSIONEDFILE'));
@@ -219,6 +259,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	    $instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository());
 	    $this->assertFalse($instance->isVersioned()); //the file is not yet versioned
 	    $this->assertFalse($instance->fileExists()); //the file does not exist in file system
+	    $this->assertFalse($instance->fileExists()); //the file is not yet versioned
 	    $this->assertFalse(file_exists($instance->getAbsolutePath()));
 	    $instance->delete(true);
 	}
@@ -226,6 +267,8 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	// Test the versioned file proxy
 	public function testVersioningProxy()
 	{
+        // @todo This test is dedicated to the subversion implementation, be carrefull!!!
+         
 	    $instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository());
 	    $implementationToDelegateTo = core_kernel_versioning_FileProxy::singleton()->getImplementationToDelegateTo($instance);
 	    $this->assertTrue($implementationToDelegateTo instanceof core_kernel_versioning_subversion_File);
@@ -237,6 +280,8 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	{
 	    $instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository());
 	    $instance->setContent('test');
+	    $this->assertFalse($instance->isVersioned()); //the file is not yet versioned
+	    $this->assertTrue($instance->fileExists()); //the file does not exist in file system
 	    $instance->add();
 	    $instance->delete(true);
 	}
@@ -250,7 +295,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	    $instance->commit();
 	    $instance->delete(true);
 	}
-	
+    
 	// Test if the resource has local changes
 	public function testHasLocalChanges()
 	{
@@ -264,7 +309,6 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	    $this->assertTrue($instance->hasLocalChanges());
 	    $instance->delete(true);
 	}
-	
 	
 	public function testIsVersioned()
 	{
@@ -306,6 +350,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	    $instance->setContent('test');
 	    $instance->add();
 	    $instance->commit();
+        $this->assertTrue($instance->isVersioned());
 	    
 	    // Update the file from another repository
 	    $repository2 = core_kernel_versioning_Repository::create(
@@ -317,7 +362,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 			'TMP Repository',
 			'TMP Repository'
 		);
-		$repository2->checkout();
+		$this->assertTrue($repository2->checkout());
 		$file = core_kernel_versioning_File::create('file_test_case.txt', '/', $repository2);
 		$this->assertTrue($file->setContent('updated'));
 		$this->assertTrue($file->commit());
@@ -432,4 +477,15 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	{
 		//$this->getDefaultRepository()->delete();
 	}
+    
+    /*
+    //Test list content
+    public function testListContentRepository()
+    {
+        //create the env test
+        $rootFile = $this->createEnvTest();
+        //remove the env test
+        var_dump('DELETE');
+        $rootFile->delete();
+    }*/
 }

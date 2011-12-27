@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 15.12.2011, 11:55:25 with ArgoUML PHP module 
+ * Automatically generated on 27.12.2011, 08:47:52 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -70,17 +70,19 @@ class core_kernel_versioning_subversionWindows_File
      * @param  File resource
      * @param  string message
      * @param  string path
+     * @param  boolean recursive
      * @return boolean
      * @see core_kernel_versioning_File::commit()
      */
-    public function commit( core_kernel_classes_File $resource, $message, $path)
+    public function commit( core_kernel_classes_File $resource, $message, $path, $recursive = false)
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A begin
         
         try {
-        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'commit ' . $path . ' --non-recursive -m "'. $message . '"');
+            $rStr = !$recursive ? '--non-recursive' : '';
+        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'commit ' . $path . ' -m "'. $message . '" '.$rStr);
         }
         catch (Exception $e) {
         	die('Error code `svn_error_commit` in ' . $e->getMessage());
@@ -219,7 +221,6 @@ class core_kernel_versioning_subversionWindows_File
         
         $status = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'status "' . $path .'"');
         
-        
         // If the file has a status, check the status is not unversioned or added
         if(!empty($status)){
         	$resourceStatus = null;
@@ -232,9 +233,9 @@ class core_kernel_versioning_subversionWindows_File
                 }
                 if(!is_null($resourceStatus)){
                     $text_status = substr($resourceStatus, 0, 1);
-                    if($text_status		!= '?'	// 2. FILE UNVERSIONED
-                            && $text_status	!= 'A'	// 4. JUST ADDED FILE
-                            && $text_status	!= 'D'	// 4. JUST DELETED FILE
+                    if($text_status		!= '?'	// FILE UNVERSIONED
+                            && $text_status	!= 'A'	// JUST ADDED FILE
+                            && $text_status	!= 'D'	// JUST DELETED FILE
                     ){
                             // 6. SVN_WC_STATUS_DELETED
                             // 7. SVN_WC_STATUS_REPLACED
@@ -244,9 +245,11 @@ class core_kernel_versioning_subversionWindows_File
                 }
         } 
         else {
-        	if (file_exists($path)){
-        		$returnValue = true;
-        	}
+            //the file is maybe inside an unversioned folder (status null, info null)
+        	$info = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'info "' . $path .'"');
+            if (!empty($info) && file_exists($path)){
+                $returnValue = true;
+            }
         }
         
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016FA end

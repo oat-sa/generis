@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.11.2011, 12:30:28 with ArgoUML PHP module 
+ * Automatically generated on 27.12.2011, 08:47:52 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -70,16 +70,17 @@ class core_kernel_versioning_FileProxy
      * @param  File resource
      * @param  string message
      * @param  string path
+     * @param  boolean recursive
      * @return boolean
      * @see core_kernel_versioning_File::commit()
      */
-    public function commit( core_kernel_classes_File $resource, $message, $path)
+    public function commit( core_kernel_classes_File $resource, $message, $path, $recursive = false)
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A begin
         $delegate = $this->getImplementationToDelegateTo($resource);
-		$returnValue = $delegate->commit($resource, $message, $path);
+		$returnValue = $delegate->commit($resource, $message, $path, $recursive);
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A end
 
         return (bool) $returnValue;

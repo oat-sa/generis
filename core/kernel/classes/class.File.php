@@ -259,8 +259,12 @@ class core_kernel_classes_File
         	}
         }
         
-        $returnValue = !file_put_contents($this->getAbsolutePath(), $content) ? false : true;
-                
+        if(file_put_contents($this->getAbsolutePath(), $content)===false){
+            $returnValue = false;
+        }else{
+            $returnValue = true;
+        }
+        
         // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001675 end
 
         return (bool) $returnValue;

@@ -177,7 +177,20 @@ class core_kernel_versioning_subversion_Repository
         $returnValue = array();
 
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 begin
-        throw new core_kernel_versioning_Exception("The function (".__METHOD__.") is not available in this versioning implementation (".__CLASS__.")");
+        
+        if($vcs->authenticate()){
+            $svnList = svn_ls ((string)$vcs->getOnePropertyValue(new core_kernel_classes_property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL)), $revision);
+            foreach($svnList as $svnEntry){
+                $returnValue[] = array(
+                     'name'         => $svnEntry['name']
+                     , 'type'       => $svnEntry['type']
+                     , 'revision'   => $svnEntry['created_rev']
+                     , 'author'     => $svnEntry['last_author']
+                     , 'time'       => $svnEntry['time_t']
+                );
+            }
+        }
+        
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 end
 
         return (array) $returnValue;

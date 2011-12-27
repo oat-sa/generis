@@ -60,13 +60,13 @@ class core_kernel_versioning_File
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string fileName
-     * @param  string filePath
+     * @param  string relativeFilePath
      * @param  Resource repository
      * @param  string uri
      * @param  array options
      * @return core_kernel_classes_File
      */
-    public static function create($fileName, $filePath = null,  core_kernel_classes_Resource $repository = null, $uri = "", $options = array())
+    public static function create($fileName, $relativeFilePath = null,  core_kernel_classes_Resource $repository = null, $uri = "", $options = array())
     {
         $returnValue = null;
 
@@ -76,8 +76,13 @@ class core_kernel_versioning_File
         $commit = isset($option['commit']) ? $option['commit'] : false;
         //$create = isset($option['create']) ? $option['create'] : false;
         
-        $repositoryPath = $repository->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH));
-        $filePath = count($filePath)&&$filePath[0]!='/' ? '/'.$filePath : $filePath;
+        $repositoryPath = $repository->getPath();
+        //add a slash at the end of the repository path if it does not exist
+        $repositoryPath = substr($repositoryPath,strlen($repositoryPath)-1,1)=='/' ? $repositoryPath : $repositoryPath.'/';
+        //remove the slash of the file relative path if it exists
+        $relativeFilePath = count($relativeFilePath)&&$relativeFilePath[0]=='/' ? substr($relativeFilePath,1) : $relativeFilePath;
+        //build the file path
+        $filePath = $repositoryPath.$relativeFilePath;
         
         //check if a resource with the same path exists yet in the repository
         $clazz = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDFILE);
@@ -96,12 +101,12 @@ class core_kernel_versioning_File
         /*if(!file_exists($repositoryPath.$filePath.'/'.$fileName)){
         	$create = true;
     	}*/
-        $instance = parent::create($fileName, $repositoryPath.$filePath, $uri);
+        $instance = parent::create($fileName, $filePath, $uri);
         $returnValue = new core_kernel_versioning_File($instance->uriResource);
         
         // Add versioned file path, path of the file in the repository
 	    $versionedFilePathProp = new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_FILEPATH);
-	    $instance->setPropertyValue($versionedFilePathProp, $filePath);
+	    $instance->setPropertyValue($versionedFilePathProp, $relativeFilePath);
 	    
 	    // Add repository
 	    $versionedFileRepositoryProp = new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_REPOSITORY);
@@ -149,9 +154,10 @@ class core_kernel_versioning_File
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string message
+     * @param  boolean recursive
      * @return boolean
      */
-    public function commit($message = "")
+    public function commit($message = "", $recursive = false)
     {
         $returnValue = (bool) false;
 
@@ -161,7 +167,7 @@ class core_kernel_versioning_File
         	throw new core_kernel_versioning_VersioningDisabledException();
         }
         
-        $returnValue = core_kernel_versioning_FileProxy::singleton()->commit($this, $message, $this->getAbsolutePath());
+        $returnValue = core_kernel_versioning_FileProxy::singleton()->commit($this, $message, $this->getAbsolutePath(), $recursive);
         
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F5 end
 
@@ -246,8 +252,9 @@ class core_kernel_versioning_File
         	$filePath = $this->getAbsolutePath();
         	$returnValue = core_kernel_versioning_FileProxy::singleton()->delete($this, $filePath);
         	if($this->isVersioned()){
-		        $this->commit(__('delete the file').' '.$filePath);
-        	}
+		        $this->commit(__('delete the file').' '.$filePath, true);
+        	}else{
+            }
         }
 	    
         parent::delete();
@@ -300,14 +307,20 @@ class core_kernel_versioning_File
         }
         
         //Check if the path is versioned
-        $filePath = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_FILEPATH));
-        $filePathExploded = explode('/', $filePath);
-        $breadCrumb = $this->getRepository()->getPath();
-        foreach ($filePathExploded as $bread){
-        	
-        	if(empty($bread)) continue;
-        	
-        	$breadCrumb .= '/'.$bread;
+        $relativePath = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_FILEPATH));
+        $filePath = realpath($this->getRepository()->getPath().'/'.$relativePath);
+        $relativeFilePathExploded = explode('/', $relativePath);
+        $breadCrumb = realpath($this->getRepository()->getPath());
+        foreach ($relativeFilePathExploded as $bread){
+            
+        	$breadCrumb = realpath($breadCrumb.'/'.$bread);
+        	if(empty($bread)){
+                continue;
+            }else if ($breadCrumb == $filePath){
+                continue;
+            }
+            
+            $isVersioned = core_kernel_versioning_FileProxy::singleton()->isVersioned($this, $breadCrumb)?'true':'false';
         	if(!core_kernel_versioning_FileProxy::singleton()->isVersioned($this, $breadCrumb)){
         		core_kernel_versioning_FileProxy::singleton()->add($this, $breadCrumb);
         		core_kernel_versioning_FileProxy::singleton()->commit($this, "[sys] Add directory to the repository", $breadCrumb);
@@ -352,9 +365,7 @@ class core_kernel_versioning_File
             $returnValue = false;
         }
         else{
-//        else if(!is_null($this->getRepository()) && $this->getRepository()->authenticate()){
         	$returnValue = core_kernel_versioning_FileProxy::singleton()->isVersioned($this, $this->getAbsolutePath());
-//	    }
         }
         
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F8 end
