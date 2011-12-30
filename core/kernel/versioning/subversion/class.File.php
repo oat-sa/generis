@@ -81,6 +81,7 @@ class core_kernel_versioning_subversion_File
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A begin
         
         if($resource->getRepository()->authenticate()){
+            common_Logger::t('commit '.$path);
         	$returnValue = svn_commit($message, array($path))===false ? false : true;
         }
         
@@ -269,32 +270,36 @@ class core_kernel_versioning_subversion_File
             //Status of the target
             $status = null;
             //Get a list of statuses
-            $statuses = svn_status($path, SVN_NON_RECURSIVE);
+            $statuses = @svn_status($path, SVN_NON_RECURSIVE);
             
-            //Extract required status
-            foreach($statuses as $s){
-                if($s['path'] == $path){
-                    $status = $s;
+            //An error occured
+            // * An explanation could be that the file is in a non working copy directory, it occured when we create a folders structure
+            if($statuses !== false){
+                //Extract required status
+                foreach($statuses as $s){
+                    if($s['path'] == $path){
+                        $status = $s;
+                    }
                 }
-            }
-            // If the file has a status, check the status is not unversioned or added
-            if(!is_null($status)){
-                    
-                $text_status = $status['text_status'];
-                if($text_status		!= SVN_WC_STATUS_UNVERSIONED	// 2. FILE UNVERSIONED
-                    && $text_status	!= SVN_WC_STATUS_ADDED			// 4. JUST ADDED FILE
-                ){
-                    // 6. SVN_WC_STATUS_DELETED
-                    // 7. SVN_WC_STATUS_REPLACED
-                    // 8. SVN_WC_STATUS_MODIFIED
-                    $returnValue = true;
-                }
-            } 
-            else {
-                if(!file_exists(realpath($path))){
-                    $returnValue = false;
-                }else {
-                    $returnValue = true;
+                // If the file has a status, check the status is not unversioned or added
+                if(!is_null($status)){
+
+                    $text_status = $status['text_status'];
+                    if($text_status		!= SVN_WC_STATUS_UNVERSIONED	// 2. FILE UNVERSIONED
+                        && $text_status	!= SVN_WC_STATUS_ADDED			// 4. JUST ADDED FILE
+                    ){
+                        // 6. SVN_WC_STATUS_DELETED
+                        // 7. SVN_WC_STATUS_REPLACED
+                        // 8. SVN_WC_STATUS_MODIFIED
+                        $returnValue = true;
+                    }
+                } 
+                else {
+                    if(!file_exists(realpath($path))){
+                        $returnValue = false;
+                    }else {
+                        $returnValue = true;
+                    }
                 }
             }
         }
