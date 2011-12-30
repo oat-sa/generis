@@ -738,13 +738,6 @@ class core_kernel_persistence_hardsql_Class
 				
 			}
 	        
-	        
-	        
-	        
-	        
-	        
-	        
-	    	
 	    	/*if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_smoothsql_Exception('Unable to get instances\' property values : '.$dbWrapper->dbConnector->errorMsg());
 			}
