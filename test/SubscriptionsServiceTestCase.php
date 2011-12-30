@@ -70,7 +70,7 @@ class SubscriptionsServiceTestCase extends UnitTestCase {
     	$items = $itemClass->getInstances();
     	
     	foreach ($items as $item){
-    		var_dump($item->getPropertyValues($labelProp));
+//    		var_dump($item->getPropertyValues($labelProp));
 //    		var_dump($item->getPropertyValuesCollection($labelProp));
     	}
     	

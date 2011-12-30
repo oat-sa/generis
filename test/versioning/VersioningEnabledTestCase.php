@@ -130,10 +130,11 @@ class VersioningEnabledTestCase extends UnitTestCase {
         mkdir($dirPath);
         $relativePath = substr($dirPath, strlen($this->getDefaultRepository()->getPath()));
         $instance = core_kernel_versioning_File::create('', $relativePath, $this->getDefaultRepository());
-        /*if($instance->isVersioned()){
+        if($instance->isVersioned()){
             $instance->delete();
             $instance->commit();
-        }*/
+        }
+        
         $isVersioned=$instance->isVersioned()?'true':'false';
         $instance->add();
         $isVersioned=$instance->isVersioned()?'true':'false';
@@ -159,7 +160,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	/* --------------
 	 * UNIT TEST CASE - REPOSITORY
 	 -------------- */
-    
+    /*
 	public function testModel()
 	{	
 		$this->assertTrue(defined('CLASS_GENERIS_VERSIONEDFILE'));
@@ -477,15 +478,13 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	{
 		//$this->getDefaultRepository()->delete();
 	}
-    
-    /*
+    */
     //Test list content
     public function testListContentRepository()
     {
         //create the env test
         $rootFile = $this->createEnvTest();
         //remove the env test
-        var_dump('DELETE');
         $rootFile->delete();
-    }*/
+    }
 }
