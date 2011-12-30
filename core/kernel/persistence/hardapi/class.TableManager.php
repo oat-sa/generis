@@ -204,9 +204,9 @@ class core_kernel_persistence_hardapi_TableManager
 			
 			// Create multiples properties table indexes
 			$indexQueries = array();
-			$indexQueries[] = 'CREATE INDEX "idx'.$this->name.'props_property_uri" ON "'.$this->name.'Props" ("property_uri");';
-			$indexQueries[] = 'CREATE INDEX "idx'.$this->name.'props_foreign_property_uri" ON "'.$this->name.'Props" ("property_foreign_uri");';
-			$indexQueries[] = 'CREATE INDEX "idx'.$this->name.'props_instance_id" ON "'.$this->name.'Props" ("instance_id");';
+			$indexQueries[] = 'CREATE INDEX "idx_props_property_uri" ON "'.$this->name.'Props" ("property_uri");';
+			$indexQueries[] = 'CREATE INDEX "idx_props_foreign_property_uri" ON "'.$this->name.'Props" ("property_foreign_uri");';
+			$indexQueries[] = 'CREATE INDEX "idx_props_instance_id" ON "'.$this->name.'Props" ("instance_id");';
 			foreach ($indexQueries as $indexQuery){
 				$dbWrapper->execSql($indexQuery);
 				if($dbWrapper->dbConnector->errorNo() > 0){
