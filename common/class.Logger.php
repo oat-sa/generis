@@ -168,6 +168,7 @@ class common_Logger
     {
         // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432A begin
 		if ($this->enabled && $this->implementor->getLogThreshold() <= $level) {
+			$this->disable();
 			$stack = debug_backtrace();
 			array_shift($stack);
 			$user = core_kernel_classes_Session::singleton()->getUser();
@@ -185,6 +186,7 @@ class common_Logger
 				$requestURI = implode(' ', $_SERVER['argv']);
 			}
 			$this->implementor->log(new common_log_Item($message, $level, time(), $user, $stack, $tags, $requestURI, $errorFile, $errorLine));
+			$this->restore();
 		};
         // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432A end
     }

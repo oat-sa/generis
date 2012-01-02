@@ -146,9 +146,21 @@ class common_log_Item
         $this->errorFile		= $errorFile;
         $this->errorLine		= $errorLine;
         
+        // limit backtrace
+        if (count($backtrace) > 50) {
+        	$backtrace = array_slice($backtrace, -50);
+        }
+        
         foreach ($backtrace as $key => $row) {
-        	if (isset($backtrace[$key]['object']))
+        	if (isset($backtrace[$key]['object'])) {
         		unset($backtrace[$key]['object']);
+        	}
+        	
+        	if (isset($backtrace[$key]['args']))
+	        	foreach ($backtrace[$key]['args'] as $k => $v)
+	        		$backtrace[$key]['args'][$k] = 
+        				is_object($v) ? get_class($v) : 
+        					is_array($v) ? 'ARRAY['.count($v).']' : $v;
         }
         $this->backtrace		= $backtrace;
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DA end
