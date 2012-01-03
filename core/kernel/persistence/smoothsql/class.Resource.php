@@ -828,7 +828,7 @@ class core_kernel_persistence_smoothsql_Resource
         
         $result	= $dbWrapper->execSql($query);
     	if($dbWrapper->dbConnector->errorNo() !== 0){
-                throw new core_kernel_persistence_smoothsql_Exception("Unable to get properties values " .$dbWrapper->dbConnector->errorMsg());
+            throw new core_kernel_persistence_smoothsql_Exception("Unable to get properties values " .$dbWrapper->dbConnector->errorMsg());
         }
         
         $sortedByLg = core_kernel_persistence_smoothsql_Utils::sortByLanguage($result, 'l_language');

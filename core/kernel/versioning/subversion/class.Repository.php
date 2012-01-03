@@ -180,7 +180,7 @@ class core_kernel_versioning_subversion_Repository
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 begin
         
         if($vcs->authenticate()){
-            $svnList = svn_ls ((string)$vcs->getOnePropertyValue(new core_kernel_classes_property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL)), $revision);
+            $svnList = svn_ls ($path, $revision);
             foreach($svnList as $svnEntry){
                 $returnValue[] = array(
                      'name'         => $svnEntry['name']

@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 27.12.2011, 08:47:52 with ArgoUML PHP module 
+ * Automatically generated on 03.01.2012, 19:01:49 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -147,6 +147,9 @@ class core_kernel_versioning_FileProxy
         $returnValue = (bool) false;
 
         // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 begin
+        //update before delete, else we get an out of date exception
+        $resource->update();
+        //and delete
         $delegate = $this->getImplementationToDelegateTo($resource);
 		$returnValue = $delegate->delete($resource, $path);
         // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 end
@@ -161,16 +164,17 @@ class core_kernel_versioning_FileProxy
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  File resource
      * @param  string path
+     * @param  boolean recursive
      * @return boolean
      * @see core_kernel_versioning_File::add()
      */
-    public function add( core_kernel_classes_File $resource, $path)
+    public function add( core_kernel_classes_File $resource, $path, $recursive = false)
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 begin
         $delegate = $this->getImplementationToDelegateTo($resource);
-		$returnValue = $delegate->add($resource, $path);
+		$returnValue = $delegate->add($resource, $path, $recursive);
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 end
 
         return (bool) $returnValue;

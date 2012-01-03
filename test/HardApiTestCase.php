@@ -198,7 +198,8 @@ class HardApiTestCase extends UnitTestCase {
 		$cacheFile = GENERIS_CACHE_PATH . 'hard-api-property.cache';
 		$this->assertTrue(file_exists($cacheFile));
 		
-		$cacheContent = @unserialize(file_get_contents($cacheFile));
+        var_dump(file_get_contents($cacheFile));
+		$cacheContent = unserialize(file_get_contents($cacheFile));
 		if($cacheContent === false){
 			$this->fail('wrong cache content');
 		}

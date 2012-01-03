@@ -252,8 +252,9 @@ class core_kernel_versioning_File
         	$filePath = $this->getAbsolutePath();
         	$returnValue = core_kernel_versioning_FileProxy::singleton()->delete($this, $filePath);
         	if($this->isVersioned()){
-		        $this->commit(__('delete the file').' '.$filePath, true);
+		        $this->commit(__('delete the file').' '.$filePath, false);
         	}else{
+                //throw an exception, the file is not versioned, it is impossible actually ...
             }
         }
 	    
@@ -294,9 +295,10 @@ class core_kernel_versioning_File
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  boolean recursive
      * @return boolean
      */
-    public function add()
+    public function add($recursive = false)
     {
         $returnValue = (bool) false;
 
@@ -334,7 +336,7 @@ class core_kernel_versioning_File
         
         //the file does not exist -> EXCEPTION
         if($this->fileExists()){
-	        $returnValue = core_kernel_versioning_FileProxy::singleton()->add($this, $this->getAbsolutePath());
+	        $returnValue = core_kernel_versioning_FileProxy::singleton()->add($this, $this->getAbsolutePath(), $recursive);
         }
         else{
 	        throw new core_kernel_versioning_Exception(__('Unable to add a file ('.$this->getAbsolutePath().'). The file does not exist.'));

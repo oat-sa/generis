@@ -18,8 +18,8 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	private $repositoryLabel = GENERIS_VERSIONED_REPOSITORY_LABEL;
 	private $repositoryComment = GENERIS_VERSIONED_REPOSITORY_COMMENT;
 	private $envName = 'VERSIONING_TEST_CASE_ENV';
-    private $envDeep = 1;
-    private $envNbFiles = 0;
+    private $envDeep = 2;
+    private $envNbFiles = 12;
     
 	public function __construct()
 	{
@@ -127,29 +127,27 @@ class VersioningEnabledTestCase extends UnitTestCase {
         $dirPath = $rootPath.'/'.$dirName;
 
         //create the folder
-        mkdir($dirPath);
         $relativePath = substr($dirPath, strlen($this->getDefaultRepository()->getPath()));
         $instance = core_kernel_versioning_File::create('', $relativePath, $this->getDefaultRepository());
+        //if is already versioned, delete the path
         if($instance->isVersioned()){
             $instance->delete();
-            $instance->commit();
+            $instance = core_kernel_versioning_File::create('', $relativePath, $this->getDefaultRepository());
         }
         
-        $isVersioned=$instance->isVersioned()?'true':'false';
-        $instance->add();
-        $isVersioned=$instance->isVersioned()?'true':'false';
-        $instance->commit();
-        $isVersioned=$instance->isVersioned()?'true':'false';
-        
-	    /*$instance->setContent('test');
-	    $instance->add();
-	    $instance->delete(true);*/
+        //create the dir
+        mkdir($dirPath);
         
         $this->assertTrue(is_dir($dirPath));
         for($i=0;$i<$this->envNbFiles;$i++){
             $tempnam = tempnam($dirPath, '');
             $this->assertTrue(is_file($tempnam));
         }
+        
+        //add & commit the directory
+        $instance->add(true);
+        $instance->commit();
+        
         if($deep > 0){
             $this->createEnvTest($dirPath, 'DIR_'.$deep, $deep-1);
         }
@@ -160,7 +158,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	/* --------------
 	 * UNIT TEST CASE - REPOSITORY
 	 -------------- */
-    
+
 	public function testModel()
 	{	
 		$this->assertTrue(defined('CLASS_GENERIS_VERSIONEDFILE'));
@@ -478,14 +476,31 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	{
 		//$this->getDefaultRepository()->delete();
 	}
-    /*
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    //  MANAGE FOLDER WITH THE VERSIONING API
+    ///////////////////////////////////////////////////////////////////////////
+    
     //Test list content
     public function testListContentRepository()
     {
         //create the env test
         $rootFile = $this->createEnvTest();
+        $filePathName = '';
+        //list folder content
+        $repository = $this->getDefaultRepository();
+        //file path
+	    $versionedFilePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
+	    $filePath = (string)$rootFile->getOnePropertyValue($versionedFilePathProp);
+	    //file name
+	    $versionedFilenameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
+	    $fileName= (string)$rootFile->getOnePropertyValue($versionedFilenameProp);
+        //build file path
+        $filePathName = $filePath.$fileName;
+        //list folder content
+        $list = $repository->listContent($filePathName);
         //remove the env test
-        $rootFile->delete();
+        //$rootFile->delete();
     }
-     */
 }
