@@ -160,7 +160,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	/* --------------
 	 * UNIT TEST CASE - REPOSITORY
 	 -------------- */
-    /*
+    
 	public function testModel()
 	{	
 		$this->assertTrue(defined('CLASS_GENERIS_VERSIONEDFILE'));
@@ -478,7 +478,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	{
 		//$this->getDefaultRepository()->delete();
 	}
-    */
+    /*
     //Test list content
     public function testListContentRepository()
     {
@@ -487,4 +487,5 @@ class VersioningEnabledTestCase extends UnitTestCase {
         //remove the env test
         $rootFile->delete();
     }
+     */
 }
