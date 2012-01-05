@@ -82,7 +82,7 @@ class core_kernel_versioning_subversionWindows_File
         
         try {
             $rStr = !$recursive ? '--non-recursive' : '';
-        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'commit ' . $path . ' -m "'. $message . '" '.$rStr);
+        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'commit "' . $path . '" -m "'. $message . '" '.$rStr);
         }
         catch (Exception $e) {
         	die('Error code `svn_error_commit` in ' . $e->getMessage());
