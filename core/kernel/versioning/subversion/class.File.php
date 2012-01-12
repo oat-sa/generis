@@ -277,9 +277,7 @@ class core_kernel_versioning_subversion_File
             //Status of the target
             $status = null;
             //Get a list of statuses
-            $statuses = @svn_status($path, SVN_NON_RECURSIVE);
-            
-            //An error occured
+            $statuses = svn_status($path, SVN_NON_RECURSIVE);
             // * An explanation could be that the file is in a non working copy directory, it occured when we create a folders structure
             if($statuses !== false){
                 //Extract required status
@@ -300,7 +298,8 @@ class core_kernel_versioning_subversion_File
                         // 8. SVN_WC_STATUS_MODIFIED
                         $returnValue = true;
                     }
-                } 
+                }
+                //No status can provide the following information, the file has been versioned & no changes have been made
                 else {
                     if(!file_exists(realpath($path))){
                         $returnValue = false;
@@ -310,6 +309,7 @@ class core_kernel_versioning_subversion_File
                 }
             }
         }
+        
         common_Logger::i("isVersioned ".$path.' = '.($returnValue?'true':'false'));
             
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016FA end

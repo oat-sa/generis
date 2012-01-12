@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.01.2012, 10:56:46 with ArgoUML PHP module 
+ * Automatically generated on 11.01.2012, 12:08:47 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -280,24 +280,33 @@ class core_kernel_versioning_Repository
     }
 
     /**
-     * Short description of method import
+     * @exception core_kernel_versioning_ResourceAlreadyExistsException
+     * @exception common_exception_fileAlreadyExists
+     * @param options.saveResource {boolean} Save the resource in the onthology
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string src
      * @param  string target
      * @param  string message
-     * @return boolean
+     * @param  array options
+     * @return core_kernel_versioning_File
      */
-    public function import($src, $target, $message = "")
+    public function import($src, $target, $message = "", $options = array())
     {
-        $returnValue = (bool) false;
+        $returnValue = null;
 
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002904 begin
-        $returnValue = core_kernel_versioning_RepositoryProxy::singleton()->import($this, $src, $target, $message);
+        //the src has to be a folder for the moment
+        if(!is_dir($src)){
+            throw new core_kernel_versioning_Exception('The first parameter has to be a valid folder');
+        }
+        if($this->authenticate()){
+            $returnValue = core_kernel_versioning_RepositoryProxy::singleton()->import($this, $src, $target, $message, $options);
+        }
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002904 end
 
-        return (bool) $returnValue;
+        return $returnValue;
     }
 
     /**

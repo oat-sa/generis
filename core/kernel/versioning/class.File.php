@@ -72,15 +72,17 @@ class core_kernel_versioning_File
 
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:000000000000249D begin
         
-        $add = isset($option['add']) ? $option['add'] : false;
-        $commit = isset($option['commit']) ? $option['commit'] : false;
+//        $add = isset($option['add']) ? $option['add'] : false;
+//        $commit = isset($option['commit']) ? $option['commit'] : false;
         //$create = isset($option['create']) ? $option['create'] : false;
         
         $repositoryPath = $repository->getPath();
         //add a slash at the end of the repository path if it does not exist
-        $repositoryPath = substr($repositoryPath,strlen($repositoryPath)-1,1)=='/' ? $repositoryPath : $repositoryPath.'/';
-        //remove the slash of the file relative path if it exists
-        $relativeFilePath = count($relativeFilePath)&&$relativeFilePath[0]=='/' ? substr($relativeFilePath,1) : $relativeFilePath;
+        $repositoryPath = substr($repositoryPath,strlen($repositoryPath)-1,1)==DIRECTORY_SEPARATOR ? $repositoryPath : $repositoryPath.DIRECTORY_SEPARATOR;
+        //remove the first slash of the relative path if it exists
+        $relativeFilePath = count($relativeFilePath) && $relativeFilePath[0]==DIRECTORY_SEPARATOR ? substr($relativeFilePath,1) : $relativeFilePath;
+        //add a slash at the end of the relative file path unless the relative file path is empty
+        $relativeFilePath = empty($relativeFilePath) || substr($relativeFilePath,strlen($relativeFilePath)-1,1)==DIRECTORY_SEPARATOR ? $relativeFilePath : $relativeFilePath.DIRECTORY_SEPARATOR;
         //build the file path
         $filePath = $repositoryPath.$relativeFilePath;
         
@@ -113,12 +115,12 @@ class core_kernel_versioning_File
 	    $instance->setPropertyValue($versionedFileRepositoryProp, $repository);
         
         // Auto-commit the file ?
-        if($add){
-        	$returnValue->add();
-        }
-        if($commit){
-        	$returnValue->commit();
-        }
+//        if($add){
+//        	$returnValue->add();
+//        }
+//        if($commit){
+//        	$returnValue->commit();
+//        }
         
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:000000000000249D end
 
@@ -248,10 +250,14 @@ class core_kernel_versioning_File
 
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032FC begin
         
-        if(GENERIS_VERSIONING_ENABLED && $this->fileExists()){
+        if(!GENERIS_VERSIONING_ENABLED){
+        	throw new core_kernel_versioning_VersioningDisabledException();
+        }
+        
+        if($this->fileExists()){
         	$filePath = $this->getAbsolutePath();
         	$returnValue = core_kernel_versioning_FileProxy::singleton()->delete($this, $filePath);
-        	if($this->isVersioned()){
+        	if($returnValue && $this->isVersioned()){
 		        $this->commit(__('delete the file').' '.$filePath, false);
         	}else{
                 //throw an exception, the file is not versioned, it is impossible actually ...
@@ -314,6 +320,7 @@ class core_kernel_versioning_File
         $filePath = realpath($this->getRepository()->getPath() . '/' . $relativePath);
         $relativeFilePathExploded = explode('/', $relativePath);
         $breadCrumb = realpath($this->getRepository()->getPath());
+        
         foreach ($relativeFilePathExploded as $bread) {
             $breadCrumb = realpath($breadCrumb . '/' . $bread);
             if (empty($bread)) {

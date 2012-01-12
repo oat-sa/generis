@@ -197,7 +197,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryLoginProp), $this->repositoryLogin);
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryPasswordProp), $this->repositoryPassword);
 		
-		$repository->delete(true);
+		$repository->delete(true); 
 	}
 	
 	// Test the repository's type
@@ -207,7 +207,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	    $type = $repository->getType();
 	    $this->assertTrue($type->uriResource, 'http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversion');
 	}
-	
+
 	public function testRepositoryAuthenticate()
 	{
 		$repository = $this->getDefaultRepository();
@@ -224,9 +224,87 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	{
 		$repository = $this->getDefaultRepository();
 		$path = $repository->getPath();
-		$repository->checkout();
+		$this->assertTrue($repository->checkout());
 	}
 
+    //Test the import function on the repository
+	public function testRespositoryImport()
+	{
+		$repository = $this->getDefaultRepository();
+        $tmpFolder = sys_get_temp_dir().'/TAO_TEST_CASE_TEST_RESPOSITORY_IMPORT';
+        $importedFolder = null;
+        //create tmp folder with some folders & files
+        mkdir($tmpFolder);
+        
+        //import the tmp folder in the TAO repository & save the resource
+        $importedFolder = $repository->import($tmpFolder, '/', 'Import test case message', array('saveResource'=>true));
+        $path = $importedFolder->getAbsolutePath().'/';
+        $this->assertNotNull($importedFolder);
+        $this->assertTrue($importedFolder instanceof core_kernel_versioning_File);
+        //check the resource exists
+        $searchedFile = helpers_File::getResource($path);
+        $this->assertNotNull($searchedFile);
+        $this->assertEqual($importedFolder->uriResource, $searchedFile->uriResource);
+        //delete the imported folder
+        $this->assertTrue($importedFolder->delete(true));
+        //check the resource does not exist
+        $this->assertFalse(helpers_File::resourceExists($path));
+        $this->assertFalse(file_Exists($path));
+        
+        //import the tmp folder in the TAO repository & do not save the resource
+        $importedFolder = $repository->import($tmpFolder, '/', 'Import test case message');
+        $this->assertNull($importedFolder);
+        //check the resource has not been saved
+        $this->assertFalse(helpers_File::resourceExists($path));
+        //create it
+        $importedFolder = core_kernel_versioning_File::create('', '/TAO_TEST_CASE_TEST_RESPOSITORY_IMPORT',  $repository);
+        $this->assertTrue($importedFolder instanceof core_kernel_versioning_File);
+        //check the resource exists
+        $searchedFile = helpers_File::getResource($path);
+        $this->assertNotNull($searchedFile);
+        $this->assertEqual($importedFolder->uriResource, $searchedFile->uriResource);
+        //delete the imported folder
+        $this->assertTrue($importedFolder->delete(true));
+        //check the resource does not exist
+        $this->assertFalse(helpers_File::resourceExists($path));
+        $this->assertFalse(file_exists($path));
+        
+        //delete the imported folder
+        $this->assertFalse(helpers_File::resourceExists($path));
+       
+		//delete the tmp folder
+        tao_helpers_File::remove($tmpFolder, true);
+        
+	}
+
+    //test the export function on the repository
+    public function testRepositoryExport()
+    {
+        $rootFile = $this->createEnvTest();
+        $repository = $this->getDefaultRepository();
+        $list = $repository->listContent($rootFile->getAbsolutePath());
+        $this->assertEqual(count($list), (1*$this->envNbFiles)+($this->envDeep>0?1:0));
+        $exportPath = sys_get_temp_dir().DIRECTORY_SEPARATOR.'testRepositoryExport/';
+        $repository->export($rootFile->getAbsolutePath(), $exportPath);
+        
+        $listPath = $exportPath;
+        for($i=0;$i<$this->envDeep;$i++){
+            $listExport = tao_helpers_File::scandir($listPath);
+            $this->assertEqual(count($listExport), (1*$this->envNbFiles)+($this->envDeep>0?1:0));
+            $listExportDir = tao_helpers_File::scandir($listPath, array('only'=>tao_helpers_File::$DIR));
+            $this->assertEqual(count($listExportDir), 1);
+            $listExportFile = tao_helpers_File::scandir($listPath, array('only'=>tao_helpers_File::$FILE));
+            $this->assertEqual(count($listExportFile), $this->envNbFiles);
+            foreach($listExportDir as $file){
+                $listPath = $file;
+            }
+        }
+        
+        $this->assertTrue(tao_helpers_File::remove($exportPath, true));
+        $rootFile->delete(true);
+    }
+    
+    
 	// --------------
 	// UNIT TEST CASE - FILE
 	// -------------- 
@@ -372,7 +450,11 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		$this->assertTrue($instance->update());
 		$this->assertEqual($instance->getFileContent(), 'updated');
 		
-	    $instance->delete(true);
+        $filePath = $instance->getAbsolutePath();
+        
+        $this->assertTrue(helpers_File::resourceExists($filePath));
+	    $this->assertTrue($instance->delete(true));
+        $this->assertFalse(helpers_File::resourceExists($filePath));
 	}
 	
 	//test the versioning function revert without parameter (revert local change)
@@ -389,9 +471,9 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	    $this->assertTrue($instance->revert());
 		$this->assertEqual($instance->getFileContent(), 'my content');
 	    
-	    $instance->delete(true);
+	    $this->assertTrue($instance->delete(true));
 	}
-	
+
 	public function testHistory()
 	{
 		$instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository());
@@ -500,7 +582,11 @@ class VersioningEnabledTestCase extends UnitTestCase {
         $filePathName = $filePath.$fileName;
         //list folder content
         $list = $repository->listContent($filePathName);
+        //Check the number of listed files
+        //$this->assertEqual(count($list), $this->envDeep*$this->envNbFiles+$this->envDeep);
+        $this->assertEqual(count($list), (1*$this->envNbFiles)+($this->envDeep>0?1:0));
         //remove the env test
-        //$rootFile->delete();
+        $rootFile->delete();
     }
+
 }

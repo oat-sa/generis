@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.01.2012, 11:19:51 with ArgoUML PHP module 
+ * Automatically generated on 11.01.2012, 15:16:55 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -90,9 +90,10 @@ interface core_kernel_versioning_RepositoryInterface
      * @param  string src
      * @param  string target
      * @param  string message
-     * @return boolean
+     * @param  array options
+     * @return core_kernel_classes_File
      */
-    public function import( core_kernel_versioning_Repository $vcs, $src, $target, $message = "");
+    public function import( core_kernel_versioning_Repository $vcs, $src, $target, $message = "", $options = array());
 
     /**
      * Short description of method listContent

@@ -771,7 +771,7 @@ class core_kernel_persistence_smoothsql_Class
 			$propUri = $dbWrapper->dbConnector->escape($propUri);
 			
 			if(is_string($pattern)){
-				if(!empty($pattern)){
+				//if(!empty($pattern)){
 
 					$pattern = $dbWrapper->dbConnector->escape($pattern);
 					$object = trim(str_replace('*', '%', $pattern));
@@ -789,7 +789,7 @@ class core_kernel_persistence_smoothsql_Class
 						if (strpos($object, '%') !== false) $conditions[] = ' ("predicate" = \''.$propUri.'\' AND "object" LIKE \''.$object.'\' '.$langToken.' ) ';
 						else $conditions[] = ' ("predicate" = \''.$propUri.'\' AND "object" = \''.$pattern.'\' '.$langToken.' ) ';
 					}
-				}
+				//}
 			}
 			else if(is_array($pattern)){
 				if(count($pattern) > 0){

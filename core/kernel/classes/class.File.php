@@ -71,12 +71,19 @@ class core_kernel_classes_File
         // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001367 begin
         $filePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
 	    $fileNameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
-	    $filePath = $this->getOnePropertyValue($filePathProp);
-	    $fileName = $this->getOnePropertyValue($fileNameProp);
+	    $filePath = (string) $this->getOnePropertyValue($filePathProp);
+	    $fileName = (string) $this->getOnePropertyValue($fileNameProp);
+        
         if($filePath == null){
             $filePath = GENERIS_FILES_PATH; 
         }
+        
+        //IF the resource is a folder resource, the absolute filepath should respect a specific format without slash as last char
+        if(empty($fileName) && substr($filePath, strlen($returnValue)-1, 1) == DIRECTORY_SEPARATOR){
+            $filePath = substr($filePath, 0, strlen($filePath)-1);
+        }
         $returnValue = $filePath . $fileName;
+        
         // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001367 end
 
         return (string) $returnValue;

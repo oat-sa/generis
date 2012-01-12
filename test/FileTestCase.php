@@ -9,8 +9,8 @@ class FileTestCase extends UnitTestCase {
     public function setUp()
     {
 	    TestRunner::initTest();
-	}
-	
+    }
+    
 	public function testIsFile()
 	{
 	    $clazz = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
@@ -84,6 +84,30 @@ class FileTestCase extends UnitTestCase {
 	    $fileContent = $file->getFileContent();
 	    $this->assertTrue($file->delete());
 	}
+    
+    //The the resource file exists function
+    public function testResourceFileExists()
+    {
+        $path = sys_get_temp_dir().'/FileTestCase_testResourceFileExists';
+        $this->assertFalse(helpers_File::resourceExists($path));
+        $file = core_kernel_classes_File::create('FileTestCase_testResourceFileExists', sys_get_temp_dir().'/', 'FileTestCase_testResourceFileExists_URI');
+        $this->assertTrue(helpers_File::resourceExists($path));
+        $file->delete();
+        $this->assertFalse(helpers_File::resourceExists($path));
+    }
+    
+    //The the resource file exists function
+    public function testGetResourceFile()
+    {
+        $path = sys_get_temp_dir().'/FileTestCase_testResourceFileExists';
+        $this->assertNull(helpers_File::getResource($path));
+        $file = core_kernel_classes_File::create('FileTestCase_testResourceFileExists', sys_get_temp_dir().'/', 'FileTestCase_testResourceFileExists_URI');
+        $searchedFile = helpers_File::getResource($path);
+        $this->assertNotNull($searchedFile);
+        $this->assertTrue($searchedFile instanceof core_kernel_classes_File);
+        $file->delete();
+        $this->assertNull(helpers_File::getResource($path));
+    }
     
 }
 	

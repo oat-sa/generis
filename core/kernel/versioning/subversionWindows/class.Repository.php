@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.01.2012, 11:19:51 with ArgoUML PHP module 
+ * Automatically generated on 11.01.2012, 12:05:46 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -84,10 +84,10 @@ class core_kernel_versioning_subversionWindows_Repository
         	$path = $vcs->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH));
         	
         	if (empty($url)){
-        		throw new Exception(__CLASS__ . ' -> ' . __FUNCTION__ . '() : the url must be specified');
+        		throw new common_Exception(__CLASS__ . ' -> ' . __FUNCTION__ . '() : the url must be specified');
         	}
         	if (empty($path)){
-        		throw new Exception(__CLASS__ . ' -> ' . __FUNCTION__ . '() : the path must be specified');
+        		throw new common_Exception(__CLASS__ . ' -> ' . __FUNCTION__ . '() : the path must be specified');
         	}
 
         	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($vcs, 'checkout ' . $url . ' "' . $path .'"');
@@ -154,17 +154,29 @@ class core_kernel_versioning_subversionWindows_Repository
      * @param  string src
      * @param  string target
      * @param  string message
-     * @return boolean
+     * @param  array options
+     * @return core_kernel_classes_File
      */
-    public function import( core_kernel_versioning_Repository $vcs, $src, $target, $message = "")
+    public function import( core_kernel_versioning_Repository $vcs, $src, $target, $message = "", $options = array())
     {
-        $returnValue = (bool) false;
+        $returnValue = null;
 
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 begin
-        $returnValue = core_kernel_versioning_subversionWindows_Utils::exec($vcs, 'import -m "'.stripslashes($message).'" "' . $src . '" "' . $target.'"');
+        
+        $saveResource = isset($options['saveResource']) && $options['saveResource'] ? true : false;
+        $result = core_kernel_versioning_subversionWindows_Utils::exec($vcs, 'import -m "'.stripslashes($message).'" "' . $src . '" "' . $target.'"');
+        
+        //Save a resource
+        if($saveResource){
+            $folderName = basename($src);
+            $relativePath = $target.$folderName;
+            $folder = core_kernel_versioning_File::create('', $relativePath, $vcs);
+            $returnValue = $folder;
+        }
+        
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 end
 
-        return (bool) $returnValue;
+        return $returnValue;
     }
 
     /**

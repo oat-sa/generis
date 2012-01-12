@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.01.2012, 11:19:51 with ArgoUML PHP module 
+ * Automatically generated on 11.01.2012, 12:05:46 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -139,18 +139,19 @@ class core_kernel_versioning_RepositoryProxy
      * @param  string src
      * @param  string target
      * @param  string message
-     * @return boolean
+     * @param  array options
+     * @return core_kernel_classes_File
      */
-    public function import( core_kernel_versioning_Repository $vcs, $src, $target, $message = "")
+    public function import( core_kernel_versioning_Repository $vcs, $src, $target, $message = "", $options = array())
     {
-        $returnValue = (bool) false;
+        $returnValue = null;
 
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 begin
         $delegate = $this->getImplementationToDelegateTo($vcs);
-        $returnValue = $delegate->import($vcs, $src, $target, $message);
+        $returnValue = $delegate->import($vcs, $src, $target, $message, $options);
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 end
 
-        return (bool) $returnValue;
+        return $returnValue;
     }
 
     /**

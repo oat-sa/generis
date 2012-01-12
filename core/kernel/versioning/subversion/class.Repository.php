@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.01.2012, 11:19:51 with ArgoUML PHP module 
+ * Automatically generated on 11.01.2012, 12:05:46 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -79,7 +79,9 @@ class core_kernel_versioning_subversion_Repository
 
         // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002503 begin
         
-        $returnValue = svn_checkout($url, $path, $revision);
+        if($vcs->authenticate()){
+            $returnValue = svn_checkout($url, $path, $revision);
+        }
         
         // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002503 end
 
@@ -135,7 +137,13 @@ class core_kernel_versioning_subversion_Repository
         $returnValue = (bool) false;
 
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C begin
-        throw new core_kernel_versioning_Exception("The function (".__METHOD__.") is not available in this versioning implementation (".__CLASS__.")");
+        
+        $revision = is_null($revision) ? -1 : $revision;
+        
+        if($vcs->authenticate()){
+            $returnValue = svn_export($src, $target, true, $revision);
+        }
+
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C end
 
         return (bool) $returnValue;
@@ -150,17 +158,54 @@ class core_kernel_versioning_subversion_Repository
      * @param  string src
      * @param  string target
      * @param  string message
-     * @return boolean
+     * @param  array options
+     * @return core_kernel_classes_File
      */
-    public function import( core_kernel_versioning_Repository $vcs, $src, $target, $message = "")
+    public function import( core_kernel_versioning_Repository $vcs, $src, $target, $message = "", $options = array())
     {
-        $returnValue = (bool) false;
+        $returnValue = null;
 
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 begin
-        throw new core_kernel_versioning_Exception("The function (".__METHOD__.") is not available in this versioning implementation (".__CLASS__.")");
+        //Does not work in the current version of php (try later) https://bugs.php.net/bug.php?id=60293
+        //$returnValue = svn_import($src, $target, true);
+        
+        $saveResource = isset($options['saveResource']) && $options['saveResource'] ? true : false;
+        
+        if($vcs->authenticate()){
+            $src = realpath($src);
+            //extract folder name
+            $folderName = basename($src);
+            $relativePath = $target.$folderName;
+            $absolutePath = $vcs->getPath().$folderName;
+
+            //check if the file exists in the onthology
+            if(helpers_File::resourceExists($absolutePath)){
+                throw new core_kernel_versioning_ResourceAlreadyExistsException('The folder ('.$absolutePath.') already exists in the repository ('.$vcs->getPath().')');
+            }else if(file_exists($absolutePath)){
+                throw new common_exception_fileAlreadyExists($absolutePath);
+            }
+
+            //Copy the src folder to the target destination
+            tao_helpers_File::copy($src, $vcs->getPath());
+            //Create the resource (it should be an option, deleted if not required)
+            $folder = core_kernel_versioning_File::create('', $relativePath, $vcs);
+            //Add & commit
+            if($folder->add(true) && $folder->commit($message, true)){
+                if($saveResource){
+                    $returnValue = $folder;
+                }else{
+                    $resourceToDelete = new core_kernel_classes_Resource($folder->uriResource);
+                    $resourceToDelete->delete();
+                }
+            }
+            else{
+                throw new core_kernel_versioning_Exception('unable to add & commit the folder ('.$src.') to the destination ('.$target.')');
+            }
+        }
+        
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 end
 
-        return (bool) $returnValue;
+        return $returnValue;
     }
 
     /**
@@ -180,7 +225,7 @@ class core_kernel_versioning_subversion_Repository
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 begin
         
         if($vcs->authenticate()){
-            $svnList = svn_ls ($path, $revision);
+            $svnList = svn_ls($path, $revision);
             foreach($svnList as $svnEntry){
                 $returnValue[] = array(
                      'name'         => $svnEntry['name']
