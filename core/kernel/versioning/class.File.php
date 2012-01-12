@@ -250,11 +250,7 @@ class core_kernel_versioning_File
 
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032FC begin
         
-        if(!GENERIS_VERSIONING_ENABLED){
-        	throw new core_kernel_versioning_VersioningDisabledException();
-        }
-        
-        if($this->fileExists()){
+        if($this->fileExists() && GENERIS_VERSIONING_ENABLED){
         	$filePath = $this->getAbsolutePath();
         	$returnValue = core_kernel_versioning_FileProxy::singleton()->delete($this, $filePath);
         	if($returnValue && $this->isVersioned()){
