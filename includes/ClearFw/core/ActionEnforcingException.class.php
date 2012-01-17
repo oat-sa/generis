@@ -3,9 +3,9 @@
  * ActionEnforcingException class
  * TODO ActionEnforcingException class documentation.
  * 
- * @author Jérôme Bogaerts <jerome.bogaerts@tudor.lu> <jerome.bogaerts@gmail.com>
+ * @author Jï¿½rï¿½me Bogaerts <jerome.bogaerts@tudor.lu> <jerome.bogaerts@gmail.com>
  */
-class ActionEnforcingException extends Exception
+class ActionEnforcingException extends common_Exception
 {
 	private $moduleName;
 	private $actionName;

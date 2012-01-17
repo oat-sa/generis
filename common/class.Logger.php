@@ -347,7 +347,8 @@ class common_Logger
     public static function handleException( Exception $exception)
     {
         // section 127-0-1-1-7b882644:1342260c2b6:-8000:000000000000186D begin
-        self::singleton()->log(self::INFO_LEVEL, $exception->getMessage(), array(get_class($exception)), $exception->getFile(), $exception->getLine());
+        $severity = method_exists($exception, 'getSeverity') ? $exception->getSeverity() : self::INFO_LEVEL;
+        self::singleton()->log($severity, $exception->getMessage(), array(get_class($exception)), $exception->getFile(), $exception->getLine());
         // section 127-0-1-1-7b882644:1342260c2b6:-8000:000000000000186D end
     }
 
