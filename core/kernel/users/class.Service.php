@@ -277,7 +277,7 @@ class core_kernel_users_Service
 		if(!$returnValue) {
 			$this->logout();
 			$user->getLabel();
-			var_dump('login failed', $login, $password, count($users), $user, $this->userResource->getType());
+
 			throw new core_kernel_users_Exception('Authentication failed : Role do not match',core_kernel_users_Exception::BAD_PASSWORD );
 		}
 		
