@@ -121,6 +121,7 @@ class ActionEnforcer implements IExecutable
 
     		// Action method is invoked, passing request parameters as
     		// method parameters.
+    		common_Logger::d('Invoking '.get_class($moduleInstance).'::'.$action, ARRAY('GENERIS', 'CLEARRFW'));
     		call_user_func_array(array($moduleInstance, $action), $tabParam);
     		
     		// Render the view if selected.

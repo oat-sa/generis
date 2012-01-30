@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 29.12.2011, 12:05:08 with ArgoUML PHP module 
+ * Automatically generated on 30.01.2012, 16:44:05 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package common
  * @subpackage exception
  */
@@ -22,11 +22,11 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 }
 
 /**
- * include common_Exception
+ * include common_exception_Error
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  */
-require_once('common/class.Exception.php');
+require_once('common/exception/class.Error.php');
 
 /* user defined includes */
 // section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FA-includes begin
@@ -40,12 +40,12 @@ require_once('common/class.Exception.php');
  * Short description of class common_exception_InvalidArgumentType
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package common
  * @subpackage exception
  */
 class common_exception_InvalidArgumentType
-    extends common_Exception
+    extends common_exception_Error
 {
     // --- ASSOCIATIONS ---
 
@@ -58,7 +58,7 @@ class common_exception_InvalidArgumentType
      * Short description of method __construct
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string class
      * @param  string function
      * @param  int position

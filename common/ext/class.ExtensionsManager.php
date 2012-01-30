@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 27.01.2012, 16:33:49 with ArgoUML PHP module 
+ * Automatically generated on 30.01.2012, 16:33:25 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -140,10 +140,10 @@ class common_ext_ExtensionsManager
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-ce17b64:1351fc5f295:-8000:00000000000018F9 begin
+        // section 127-0-1-1--15445bbd:1352f3a7eb2:-8000:0000000000001902 begin
         $extensions = $this->getInstalledExtensions();
         $returnValue = isset($extensions[$extension]);
-        // section 127-0-1-1-ce17b64:1351fc5f295:-8000:00000000000018F9 end
+        // section 127-0-1-1--15445bbd:1352f3a7eb2:-8000:0000000000001902 end
 
         return (bool) $returnValue;
     }
