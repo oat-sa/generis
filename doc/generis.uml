@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Common</activediagram>
+      <activediagram>Versioning</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -108,7 +108,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Jan 30 16:46:53 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Jan 30 16:54:00 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -13716,6 +13716,16 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1-1f947910:1352f50f92b:-8000:000000000000190D'
+                              name = 'options' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1-1f947910:1352f50f92b:-8000:000000000000190E'
+                                  language = 'UML 1.4' body = 'array()'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
                         <UML:Operation xmi.id = '127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921'
@@ -14903,6 +14913,16 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
                               name = 'return' isSpecification = 'false' kind = 'return'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000723'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1-1f947910:1352f50f92b:-8000:000000000000190B'
+                              name = 'options' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1-1f947910:1352f50f92b:-8000:000000000000190C'
+                                  language = 'UML 1.4' body = 'array()'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -53532,7 +53552,7 @@ should never be called manually</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getStatus(resource : File,path : string) : int</text>
+      >getStatus(resource : File,path : string,options : array = array()) : int</text>
       <text name="Fig0.4.8"
         x="49"
         y="689"
@@ -54793,7 +54813,7 @@ should never be called manually</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getStatus() : int</text>
+      >getStatus(options : array = array()) : int</text>
       <text name="Fig9.6.15"
         x="97"
         y="296"
@@ -58888,7 +58908,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <text name="Fig11.6.1"
         x="257"
         y="865"
-        width="173"
+        width="182"
         height="14"
         fill="0"
         fillcolor="white"
@@ -59097,7 +59117,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <text name="Fig13.4.3"
         x="449"
         y="843"
-        width="196"
+        width="197"
         height="14"
         fill="0"
         fillcolor="white"
@@ -60366,7 +60386,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <lineto x="928"
               y="456" />
       <lineto x="928"
-              y="421" />
+              y="413" />
     </path>
   </group>
   <group name="Fig26"
@@ -60642,7 +60662,7 @@ should never be called manually</UML:TaggedValue.dataValue>
                         offset="25" />
     </private>
     <path name="Fig28.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -60675,7 +60695,7 @@ should never be called manually</UML:TaggedValue.dataValue>
                         offset="-10" />
     </private>
     <path name="Fig29.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -60708,7 +60728,7 @@ should never be called manually</UML:TaggedValue.dataValue>
                         offset="-10" />
     </private>
     <path name="Fig30.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
