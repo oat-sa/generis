@@ -33,9 +33,10 @@ class core_control_FrontController
 			}
 		}
 		else{
-			if (self::isConnected()) {
-				$status =true;
-				core_kernel_classes_Session::reset($_SESSION["generis_session"]);
+			if (self::isConnected()){
+				$status = true;
+				$session = core_kernel_classes_Session::singleton();
+				$session->reset($_SESSION['generis_session']);
 				core_kernel_classes_DbWrapper::singleton();
 			}
 			return $status;

@@ -379,7 +379,7 @@ class core_kernel_users_Service
     	if(Session::hasAttribute('generis_session')){	
         	//re-init the objects from the session
         	
-        	core_kernel_classes_Session::reset(Session::getAttribute('generis_session'));
+        	core_kernel_classes_Session::singleton()->reset(Session::getAttribute('generis_session'));
 			core_kernel_classes_DbWrapper::singleton();
 			$returnValue = true ;
         }
@@ -392,7 +392,7 @@ class core_kernel_users_Service
 	        	Session::setAttribute(self::AUTH_TOKEN_KEY,	$uri);
 			       		
 	       		//Initialize the real generis session 
-	       		core_kernel_classes_Session::reset();
+	       		core_kernel_classes_Session::singleton()->reset();
 		        $session = core_kernel_classes_Session::singleton();
 		       	
 		       
@@ -407,7 +407,7 @@ class core_kernel_users_Service
         	}
         	catch(common_Exception $ce){
         		//the login must be unique
-        		core_kernel_classes_Session::reset();
+        		core_kernel_classes_Session::singleton()->reset();
         		Session::removeAttribute(self::AUTH_TOKEN_KEY);
         		Session::removeAttribute('generis_session');
         		return false;	
@@ -453,7 +453,7 @@ class core_kernel_users_Service
         $returnValue = (bool) false;
 
         // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EB5 begin
-        core_kernel_classes_Session::reset();
+        core_kernel_classes_Session::singleton()->reset();
         Session::removeAttribute(self::AUTH_TOKEN_KEY);
         $returnValue = true;
         // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EB5 end
