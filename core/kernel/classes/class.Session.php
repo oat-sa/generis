@@ -135,8 +135,7 @@ class core_kernel_classes_Session
 			self::$instance = $staticInstance;
         }
         else{
-        	self::$instance = null;
-        	$this = self::singleton();
+        	self::$instance = self::singleton();
         }
         // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 end
     }
