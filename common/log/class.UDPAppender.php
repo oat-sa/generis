@@ -129,7 +129,8 @@ class common_log_UDPAppender
         		'l' => $item->getCallerLine(),
         		'b' => $item->getBacktrace()
         	));
-        	socket_sendto($this->resource, $message, strlen($message), 0, $this->host, $this->port);
+        	@socket_sendto($this->resource, $message, strlen($message), 0, $this->host, $this->port);
+        	//ignore errors, socket might already be closed because php is shutting down
         }
         // section 127-0-1-1--508f6d44:1341e7d80d4:-8000:000000000000184D end
     }
