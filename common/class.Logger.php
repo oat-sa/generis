@@ -37,22 +37,6 @@ class common_Logger
     // --- ATTRIBUTES ---
 
     /**
-     * whenever or not the Logger is enabled
-     *
-     * @access private
-     * @var boolean
-     */
-    private $enabled = true;
-
-    /**
-     * a history of past states, to allow a restoration of the previous state
-     *
-     * @access private
-     * @var array
-     */
-    private $stateStack = array();
-
-    /**
      * instance of the class Logger, to implement the singleton pattern
      *
      * @access private
@@ -61,12 +45,13 @@ class common_Logger
     private static $instance = null;
 
     /**
-     * The implementation of the Logger
+     * Short description of attribute ACCEPTABLE_WARNINGS
      *
      * @access private
-     * @var Appender
+     * @var array
      */
-    private $implementor = null;
+    private static $ACCEPTABLE_WARNINGS = array("/Declaration of .* should be compatible with that of /",
+"/Static function .* should not be abstract/");
 
     /**
      * the lowest level of events representing the finest-grained processes
@@ -115,6 +100,30 @@ class common_Logger
      * @var int
      */
     const FATAL_LEVEL = 5;
+
+    /**
+     * The implementation of the Logger
+     *
+     * @access private
+     * @var Appender
+     */
+    private $implementor = null;
+
+    /**
+     * a history of past states, to allow a restoration of the previous state
+     *
+     * @access private
+     * @var array
+     */
+    private $stateStack = array();
+
+    /**
+     * whenever or not the Logger is enabled
+     *
+     * @access private
+     * @var boolean
+     */
+    private $enabled = true;
 
     // --- OPERATIONS ---
 
@@ -369,6 +378,13 @@ class common_Logger
         $returnValue = (bool) false;
 
         // section 127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001848 begin
+        if ($errorNumber == E_STRICT) {
+	    	foreach (self::$ACCEPTABLE_WARNINGS as $pattern) {
+				if (preg_match($pattern, $errorString) > 0)
+					return false;
+			}
+        }
+			
 		switch ($errorNumber) {
 			case E_USER_ERROR :
 			case E_RECOVERABLE_ERROR :

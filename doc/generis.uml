@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Versioning</activediagram>
+      <activediagram>Common</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -99,7 +99,7 @@
               diagramclass="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram"
               diagramname="Generis Helpers" />
       <member type="pgml"
-              name="generis_Diagrammedeclasses.pgml"
+              name="generis_Helpers.pgml"
               diagramclass="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram"
               diagramname="Helpers" />
       <member type="todo"
@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Feb 06 14:01:08 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Feb 06 16:02:58 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -19028,92 +19028,6 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
                 </UML:TaggedValue>
               </UML:ModelElement.taggedValue>
               <UML:Classifier.feature>
-                <UML:Operation xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004328'
-                  name = 'singleton' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
-                  isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
-                  isAbstract = 'false'>
-                  <UML:ModelElement.taggedValue>
-                    <UML:TaggedValue xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:00000000000043B3'
-                      isSpecification = 'false'>
-                      <UML:TaggedValue.dataValue>returns the existing Logger instance or instantiates a new one</UML:TaggedValue.dataValue>
-                      <UML:TaggedValue.type>
-                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
-                      </UML:TaggedValue.type>
-                    </UML:TaggedValue>
-                  </UML:ModelElement.taggedValue>
-                  <UML:BehavioralFeature.parameter>
-                    <UML:Parameter xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004329'
-                      name = 'return' isSpecification = 'false' kind = 'return'>
-                      <UML:Parameter.type>
-                        <UML:Class xmi.idref = '127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7'/>
-                      </UML:Parameter.type>
-                    </UML:Parameter>
-                  </UML:BehavioralFeature.parameter>
-                </UML:Operation>
-                <UML:Attribute xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:000000000000431F'
-                  name = 'enabled' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
-                  changeability = 'changeable' targetScope = 'instance'>
-                  <UML:StructuralFeature.multiplicity>
-                    <UML:Multiplicity xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004320'>
-                      <UML:Multiplicity.range>
-                        <UML:MultiplicityRange xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004321'
-                          lower = '1' upper = '1'/>
-                      </UML:Multiplicity.range>
-                    </UML:Multiplicity>
-                  </UML:StructuralFeature.multiplicity>
-                  <UML:Attribute.initialValue>
-                    <UML:Expression xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004356'
-                      language = '' body = 'true'/>
-                  </UML:Attribute.initialValue>
-                  <UML:ModelElement.taggedValue>
-                    <UML:TaggedValue xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004394'
-                      isSpecification = 'false'>
-                      <UML:TaggedValue.dataValue>whenever or not the Logger is enabled</UML:TaggedValue.dataValue>
-                      <UML:TaggedValue.type>
-                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
-                      </UML:TaggedValue.type>
-                    </UML:TaggedValue>
-                  </UML:ModelElement.taggedValue>
-                  <UML:StructuralFeature.type>
-                    <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
-                  </UML:StructuralFeature.type>
-                </UML:Attribute>
-                <UML:Operation xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004362'
-                  name = '__construct' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
-                  isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
-                  isAbstract = 'false'>
-                  <UML:ModelElement.stereotype>
-                    <UML:Stereotype xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000AF1'/>
-                  </UML:ModelElement.stereotype>
-                  <UML:BehavioralFeature.parameter>
-                    <UML:Parameter xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004363'
-                      name = 'return' isSpecification = 'false' kind = 'return'/>
-                  </UML:BehavioralFeature.parameter>
-                </UML:Operation>
-                <UML:Attribute xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004322'
-                  name = 'stateStack' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
-                  changeability = 'changeable' targetScope = 'instance'>
-                  <UML:StructuralFeature.multiplicity>
-                    <UML:Multiplicity xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004323'>
-                      <UML:Multiplicity.range>
-                        <UML:MultiplicityRange xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004324'
-                          lower = '1' upper = '1'/>
-                      </UML:Multiplicity.range>
-                    </UML:Multiplicity>
-                  </UML:StructuralFeature.multiplicity>
-                  <UML:ModelElement.taggedValue>
-                    <UML:TaggedValue xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004395'
-                      isSpecification = 'false'>
-                      <UML:TaggedValue.dataValue>a history of past states, to allow a restoration of the previous state</UML:TaggedValue.dataValue>
-                      <UML:TaggedValue.type>
-                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
-                      </UML:TaggedValue.type>
-                    </UML:TaggedValue>
-                  </UML:ModelElement.taggedValue>
-                  <UML:StructuralFeature.type>
-                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
-                  </UML:StructuralFeature.type>
-                </UML:Attribute>
                 <UML:Attribute xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004325'
                   name = 'instance' visibility = 'private' isSpecification = 'false' ownerScope = 'classifier'
                   changeability = 'changeable' targetScope = 'instance'>
@@ -19138,6 +19052,59 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
                     <UML:Class xmi.idref = '127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7'/>
                   </UML:StructuralFeature.type>
                 </UML:Attribute>
+                <UML:Attribute xmi.id = '127-0-1-1--51a44f5c:1355327f9b2:-8000:000000000000192B'
+                  name = 'ACCEPTABLE_WARNINGS' visibility = 'private' isSpecification = 'false'
+                  ownerScope = 'classifier' changeability = 'changeable' targetScope = 'instance'>
+                  <UML:StructuralFeature.multiplicity>
+                    <UML:Multiplicity xmi.id = '127-0-1-1--51a44f5c:1355327f9b2:-8000:000000000000192C'>
+                      <UML:Multiplicity.range>
+                        <UML:MultiplicityRange xmi.id = '127-0-1-1--51a44f5c:1355327f9b2:-8000:000000000000192D'
+                          lower = '1' upper = '1'/>
+                      </UML:Multiplicity.range>
+                    </UML:Multiplicity>
+                  </UML:StructuralFeature.multiplicity>
+                  <UML:Attribute.initialValue>
+                    <UML:Expression xmi.id = '127-0-1-1--51a44f5c:1355327f9b2:-8000:0000000000001941'
+                      language = '' body = '&quot;/Declaration of .* should be compatible with that of /&quot;,&#10;&quot;/Static function .* should not be abstract/&quot;&#10;'/>
+                  </UML:Attribute.initialValue>
+                  <UML:StructuralFeature.type>
+                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                  </UML:StructuralFeature.type>
+                </UML:Attribute>
+                <UML:Operation xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004328'
+                  name = 'singleton' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                  isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                  isAbstract = 'false'>
+                  <UML:ModelElement.taggedValue>
+                    <UML:TaggedValue xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:00000000000043B3'
+                      isSpecification = 'false'>
+                      <UML:TaggedValue.dataValue>returns the existing Logger instance or instantiates a new one</UML:TaggedValue.dataValue>
+                      <UML:TaggedValue.type>
+                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                      </UML:TaggedValue.type>
+                    </UML:TaggedValue>
+                  </UML:ModelElement.taggedValue>
+                  <UML:BehavioralFeature.parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004329'
+                      name = 'return' isSpecification = 'false' kind = 'return'>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                  </UML:BehavioralFeature.parameter>
+                </UML:Operation>
+                <UML:Operation xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004362'
+                  name = '__construct' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                  isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                  isAbstract = 'false'>
+                  <UML:ModelElement.stereotype>
+                    <UML:Stereotype xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000AF1'/>
+                  </UML:ModelElement.stereotype>
+                  <UML:BehavioralFeature.parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004363'
+                      name = 'return' isSpecification = 'false' kind = 'return'/>
+                  </UML:BehavioralFeature.parameter>
+                </UML:Operation>
                 <UML:Operation xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:000000000000432A'
                   name = 'log' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                   isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
@@ -19409,30 +19376,6 @@ if the constant GENERIS_VERSIONING_ENABLED is set to false</UML:TaggedValue.data
                     </UML:Parameter>
                   </UML:BehavioralFeature.parameter>
                 </UML:Operation>
-                <UML:Attribute xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004357'
-                  name = 'implementor' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
-                  changeability = 'changeable' targetScope = 'instance'>
-                  <UML:StructuralFeature.multiplicity>
-                    <UML:Multiplicity xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004358'>
-                      <UML:Multiplicity.range>
-                        <UML:MultiplicityRange xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004359'
-                          lower = '1' upper = '1'/>
-                      </UML:Multiplicity.range>
-                    </UML:Multiplicity>
-                  </UML:StructuralFeature.multiplicity>
-                  <UML:ModelElement.taggedValue>
-                    <UML:TaggedValue xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004397'
-                      isSpecification = 'false'>
-                      <UML:TaggedValue.dataValue>The implementation of the Logger</UML:TaggedValue.dataValue>
-                      <UML:TaggedValue.type>
-                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
-                      </UML:TaggedValue.type>
-                    </UML:TaggedValue>
-                  </UML:ModelElement.taggedValue>
-                  <UML:StructuralFeature.type>
-                    <UML:Interface xmi.idref = '127-0-1-1--5509896f:133feddcac3:-8000:000000000000435C'/>
-                  </UML:StructuralFeature.type>
-                </UML:Attribute>
                 <UML:Attribute xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004364'
                   name = 'TRACE_LEVEL' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                   changeability = 'frozen' targetScope = 'instance'>
@@ -19733,6 +19676,82 @@ should never be called manually</UML:TaggedValue.dataValue>
                       name = 'return' isSpecification = 'false' kind = 'return'/>
                   </UML:BehavioralFeature.parameter>
                 </UML:Operation>
+                <UML:Attribute xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004357'
+                  name = 'implementor' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                  changeability = 'changeable' targetScope = 'instance'>
+                  <UML:StructuralFeature.multiplicity>
+                    <UML:Multiplicity xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004358'>
+                      <UML:Multiplicity.range>
+                        <UML:MultiplicityRange xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004359'
+                          lower = '1' upper = '1'/>
+                      </UML:Multiplicity.range>
+                    </UML:Multiplicity>
+                  </UML:StructuralFeature.multiplicity>
+                  <UML:ModelElement.taggedValue>
+                    <UML:TaggedValue xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004397'
+                      isSpecification = 'false'>
+                      <UML:TaggedValue.dataValue>The implementation of the Logger</UML:TaggedValue.dataValue>
+                      <UML:TaggedValue.type>
+                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                      </UML:TaggedValue.type>
+                    </UML:TaggedValue>
+                  </UML:ModelElement.taggedValue>
+                  <UML:StructuralFeature.type>
+                    <UML:Interface xmi.idref = '127-0-1-1--5509896f:133feddcac3:-8000:000000000000435C'/>
+                  </UML:StructuralFeature.type>
+                </UML:Attribute>
+                <UML:Attribute xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004322'
+                  name = 'stateStack' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                  changeability = 'changeable' targetScope = 'instance'>
+                  <UML:StructuralFeature.multiplicity>
+                    <UML:Multiplicity xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004323'>
+                      <UML:Multiplicity.range>
+                        <UML:MultiplicityRange xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004324'
+                          lower = '1' upper = '1'/>
+                      </UML:Multiplicity.range>
+                    </UML:Multiplicity>
+                  </UML:StructuralFeature.multiplicity>
+                  <UML:ModelElement.taggedValue>
+                    <UML:TaggedValue xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004395'
+                      isSpecification = 'false'>
+                      <UML:TaggedValue.dataValue>a history of past states, to allow a restoration of the previous state</UML:TaggedValue.dataValue>
+                      <UML:TaggedValue.type>
+                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                      </UML:TaggedValue.type>
+                    </UML:TaggedValue>
+                  </UML:ModelElement.taggedValue>
+                  <UML:StructuralFeature.type>
+                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                  </UML:StructuralFeature.type>
+                </UML:Attribute>
+                <UML:Attribute xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:000000000000431F'
+                  name = 'enabled' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                  changeability = 'changeable' targetScope = 'instance'>
+                  <UML:StructuralFeature.multiplicity>
+                    <UML:Multiplicity xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004320'>
+                      <UML:Multiplicity.range>
+                        <UML:MultiplicityRange xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004321'
+                          lower = '1' upper = '1'/>
+                      </UML:Multiplicity.range>
+                    </UML:Multiplicity>
+                  </UML:StructuralFeature.multiplicity>
+                  <UML:Attribute.initialValue>
+                    <UML:Expression xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004356'
+                      language = '' body = 'true'/>
+                  </UML:Attribute.initialValue>
+                  <UML:ModelElement.taggedValue>
+                    <UML:TaggedValue xmi.id = '127-0-1-1--5509896f:133feddcac3:-8000:0000000000004394'
+                      isSpecification = 'false'>
+                      <UML:TaggedValue.dataValue>whenever or not the Logger is enabled</UML:TaggedValue.dataValue>
+                      <UML:TaggedValue.type>
+                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                      </UML:TaggedValue.type>
+                    </UML:TaggedValue>
+                  </UML:ModelElement.taggedValue>
+                  <UML:StructuralFeature.type>
+                    <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                  </UML:StructuralFeature.type>
+                </UML:Attribute>
               </UML:Classifier.feature>
             </UML:Class>
             <UML:Class xmi.id = '127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003ECA'
@@ -54656,7 +54675,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::versioning::File</text>
     <group name="Fig9.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[97, 57, 652, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[97, 57, 623, 0]"
          href="127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001668"
          fill="0"
          fillcolor="white"
@@ -54670,7 +54689,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig9.2.0"
         x="97"
         y="57"
-        width="652"
+        width="623"
         height="0"
         fill="0"
         fillcolor="white"
@@ -55072,7 +55091,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::versioning::Repository</text>
     <group name="Fig11.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[97, 337, 731, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[97, 337, 726, 0]"
          href="127-0-1-1--548d6005:132d344931b:-8000:0000000000002519"
          fill="0"
          fillcolor="white"
@@ -55086,7 +55105,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig11.2.0"
         x="97"
         y="337"
-        width="731"
+        width="726"
         height="0"
         fill="0"
         fillcolor="white"
@@ -56828,7 +56847,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::versioning::exception::ResourceAlreadyExistsException</text>
     <group name="Fig28.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1161, 145, 319, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1161, 145, 352, 0]"
          href="127-0-1-1-230c2fdc:134c1fedff4:-8000:00000000000018E9"
          fill="0"
          fillcolor="255 200 255"
@@ -56842,7 +56861,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig28.2.0"
         x="1161"
         y="145"
-        width="319"
+        width="352"
         height="0"
         fill="0"
         fillcolor="255 200 255"
@@ -56853,7 +56872,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     <rectangle name="Fig28.3"
       x="1160"
       y="166"
-      width="286"
+      width="339"
       height="1"
       fill="1"
       fillcolor="black"
@@ -56862,7 +56881,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig28.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1161, 167, 284, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1161, 167, 337, 21]"
          href="127-0-1-1-230c2fdc:134c1fedff4:-8000:00000000000018E9"
          fill="0"
          fillcolor="255 200 255"
@@ -56876,7 +56895,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig28.4.0"
         x="1161"
         y="167"
-        width="284"
+        width="337"
         height="21"
         fill="0"
         fillcolor="white"
@@ -56888,7 +56907,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     <rectangle name="Fig28.5"
       x="1160"
       y="187"
-      width="286"
+      width="339"
       height="1"
       fill="1"
       fillcolor="black"
@@ -56897,7 +56916,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig28.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1161, 188, 284, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1161, 188, 337, 21]"
          href="127-0-1-1-230c2fdc:134c1fedff4:-8000:00000000000018E9"
          fill="0"
          fillcolor="255 200 255"
@@ -56911,7 +56930,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig28.6.0"
         x="1161"
         y="188"
-        width="284"
+        width="337"
         height="21"
         fill="0"
         fillcolor="white"
@@ -56960,7 +56979,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::versioning::exception::VersioningDisabledException</text>
     <group name="Fig29.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1161, 177, 302, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1161, 177, 335, 0]"
          href="127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025F9"
          fill="0"
          fillcolor="255 200 255"
@@ -56974,7 +56993,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig29.2.0"
         x="1161"
         y="177"
-        width="302"
+        width="335"
         height="0"
         fill="0"
         fillcolor="255 200 255"
@@ -56985,7 +57004,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     <rectangle name="Fig29.3"
       x="1160"
       y="198"
-      width="266"
+      width="319"
       height="1"
       fill="1"
       fillcolor="black"
@@ -56994,7 +57013,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig29.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1161, 199, 264, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1161, 199, 317, 21]"
          href="127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025F9"
          fill="0"
          fillcolor="255 200 255"
@@ -57008,7 +57027,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig29.4.0"
         x="1161"
         y="199"
-        width="264"
+        width="317"
         height="21"
         fill="0"
         fillcolor="white"
@@ -57020,7 +57039,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     <rectangle name="Fig29.5"
       x="1160"
       y="219"
-      width="266"
+      width="319"
       height="1"
       fill="1"
       fillcolor="black"
@@ -57029,7 +57048,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig29.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1161, 220, 264, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1161, 220, 317, 21]"
          href="127-0-1-1-3e5703c9:13349a3788f:-8000:00000000000025F9"
          fill="0"
          fillcolor="255 200 255"
@@ -57043,7 +57062,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig29.6.0"
         x="1161"
         y="220"
-        width="264"
+        width="317"
         height="21"
         fill="0"
         fillcolor="white"
@@ -57117,7 +57136,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     <rectangle name="Fig30.3"
       x="1160"
       y="230"
-      width="229"
+      width="282"
       height="1"
       fill="1"
       fillcolor="black"
@@ -57126,7 +57145,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig30.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1161, 231, 227, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1161, 231, 280, 21]"
          href="127-0-1-1--47e0a302:1351972edf2:-8000:000000000000190A"
          fill="0"
          fillcolor="255 200 255"
@@ -57140,7 +57159,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig30.4.0"
         x="1161"
         y="231"
-        width="227"
+        width="280"
         height="21"
         fill="0"
         fillcolor="white"
@@ -57152,7 +57171,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     <rectangle name="Fig30.5"
       x="1160"
       y="251"
-      width="229"
+      width="282"
       height="1"
       fill="1"
       fillcolor="black"
@@ -57161,7 +57180,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig30.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1161, 252, 227, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1161, 252, 280, 21]"
          href="127-0-1-1--47e0a302:1351972edf2:-8000:000000000000190A"
          fill="0"
          fillcolor="255 200 255"
@@ -57175,7 +57194,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig30.6.0"
         x="1161"
         y="252"
-        width="227"
+        width="280"
         height="21"
         fill="0"
         fillcolor="white"
@@ -57224,7 +57243,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::versioning::exception::FileRemainsInConflictException</text>
     <group name="Fig31.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1161, 241, 314, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1161, 241, 346, 0]"
          href="127-0-1-1--47e0a302:1351972edf2:-8000:000000000000190C"
          fill="0"
          fillcolor="255 200 255"
@@ -57238,7 +57257,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig31.2.0"
         x="1161"
         y="241"
-        width="314"
+        width="346"
         height="0"
         fill="0"
         fillcolor="255 200 255"
@@ -57249,7 +57268,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     <rectangle name="Fig31.3"
       x="1160"
       y="262"
-      width="279"
+      width="332"
       height="1"
       fill="1"
       fillcolor="black"
@@ -57258,7 +57277,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig31.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1161, 263, 277, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1161, 263, 330, 21]"
          href="127-0-1-1--47e0a302:1351972edf2:-8000:000000000000190C"
          fill="0"
          fillcolor="255 200 255"
@@ -57272,7 +57291,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig31.4.0"
         x="1161"
         y="263"
-        width="277"
+        width="330"
         height="21"
         fill="0"
         fillcolor="white"
@@ -57284,7 +57303,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     <rectangle name="Fig31.5"
       x="1160"
       y="283"
-      width="279"
+      width="332"
       height="1"
       fill="1"
       fillcolor="black"
@@ -57293,7 +57312,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig31.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1161, 284, 277, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1161, 284, 330, 21]"
          href="127-0-1-1--47e0a302:1351972edf2:-8000:000000000000190C"
          fill="0"
          fillcolor="255 200 255"
@@ -57307,7 +57326,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig31.6.0"
         x="1161"
         y="284"
-        width="277"
+        width="330"
         height="21"
         fill="0"
         fillcolor="white"
@@ -57356,7 +57375,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::versioning::exception::Exception</text>
     <group name="Fig32.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1017, -159, 189, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[985, 65, 239, 0]"
          href="127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016ED"
          fill="0"
          fillcolor="255 200 255"
@@ -57368,9 +57387,9 @@ should never be called manually</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig32.2.0"
-        x="1017"
-        y="-159"
-        width="189"
+        x="985"
+        y="65"
+        width="239"
         height="0"
         fill="0"
         fillcolor="255 200 255"
@@ -57379,9 +57398,9 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig32.3"
-      x="1016"
-      y="-138"
-      width="175"
+      x="984"
+      y="86"
+      width="228"
       height="1"
       fill="1"
       fillcolor="black"
@@ -57390,7 +57409,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig32.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1017, -137, 173, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[985, 87, 226, 21]"
          href="127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016ED"
          fill="0"
          fillcolor="255 200 255"
@@ -57402,9 +57421,9 @@ should never be called manually</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig32.4.0"
-        x="1017"
-        y="-137"
-        width="173"
+        x="985"
+        y="87"
+        width="226"
         height="21"
         fill="0"
         fillcolor="white"
@@ -57414,9 +57433,9 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig32.5"
-      x="1016"
-      y="-117"
-      width="175"
+      x="984"
+      y="107"
+      width="228"
       height="1"
       fill="1"
       fillcolor="black"
@@ -57425,7 +57444,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig32.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1017, -116, 173, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[985, 108, 226, 21]"
          href="127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016ED"
          fill="0"
          fillcolor="255 200 255"
@@ -57437,9 +57456,9 @@ should never be called manually</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig32.6.0"
-        x="1017"
-        y="-116"
-        width="173"
+        x="985"
+        y="108"
+        width="226"
         height="21"
         fill="0"
         fillcolor="white"
@@ -57590,7 +57609,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       name="Common"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[40, 16, 744, 432]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[40, 16, 706, 432]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7"
        fill="1"
        fillcolor="white"
@@ -57603,7 +57622,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     <rectangle name="Fig0.0"
       x="40"
       y="16"
-      width="744"
+      width="706"
       height="432"
       fill="1"
       fillcolor="white"
@@ -57613,7 +57632,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     <text name="Fig0.1"
       x="41"
       y="17"
-      width="742"
+      width="704"
       height="21"
       fill="0"
       fillcolor="white"
@@ -57652,7 +57671,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     <rectangle name="Fig0.3"
       x="40"
       y="38"
-      width="744"
+      width="706"
       height="1"
       fill="1"
       fillcolor="black"
@@ -57660,7 +57679,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig0.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[41, 39, 742, 168]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[41, 39, 704, 175]"
          href="127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7"
          fill="0"
          fillcolor="white"
@@ -57673,8 +57692,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig0.4.0"
         x="41"
         y="39"
-        width="742"
-        height="168"
+        width="704"
+        height="175"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -57683,39 +57702,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <text name="Fig0.4.1"
         x="41"
         y="39"
-        width="742"
-        height="14"
-        fill="0"
-        fillcolor="white"
-        stroke="0"
-        strokecolor="black"
-        textcolor="black"
-        font="Dialog"
-        italic="false"
-        bold="false"
-        textsize="10"
-        justification="Left"
-      >enabled : boolean  = true</text>
-      <text name="Fig0.4.2"
-        x="41"
-        y="53"
-        width="742"
-        height="14"
-        fill="0"
-        fillcolor="white"
-        stroke="0"
-        strokecolor="black"
-        textcolor="black"
-        font="Dialog"
-        italic="false"
-        bold="false"
-        textsize="10"
-        justification="Left"
-      >stateStack : array</text>
-      <text name="Fig0.4.3"
-        x="41"
-        y="67"
-        width="742"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -57728,10 +57715,10 @@ should never be called manually</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >instance : Logger</text>
-      <text name="Fig0.4.4"
+      <text name="Fig0.4.2"
         x="41"
-        y="81"
-        width="742"
+        y="53"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -57743,11 +57730,12 @@ should never be called manually</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >implementor : Appender</text>
-      <text name="Fig0.4.5"
+      >ACCEPTABLE_WARNINGS : array  = &quot;/Declaration of .* should be compatible with that of /&quot;,
+&quot;/Static function .* should not be abstract/&quot;</text>
+      <text name="Fig0.4.3"
         x="41"
-        y="95"
-        width="742"
+        y="67"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -57760,10 +57748,10 @@ should never be called manually</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >TRACE_LEVEL : int  = 0</text>
-      <text name="Fig0.4.6"
+      <text name="Fig0.4.4"
         x="41"
-        y="109"
-        width="742"
+        y="81"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -57776,10 +57764,10 @@ should never be called manually</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >DEBUG_LEVEL : int  = 1</text>
-      <text name="Fig0.4.7"
+      <text name="Fig0.4.5"
         x="41"
-        y="123"
-        width="742"
+        y="95"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -57792,10 +57780,10 @@ should never be called manually</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >INFO_LEVEL : int  = 2</text>
-      <text name="Fig0.4.8"
+      <text name="Fig0.4.6"
         x="41"
-        y="137"
-        width="742"
+        y="109"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -57808,10 +57796,10 @@ should never be called manually</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >WARNING_LEVEL : int  = 3</text>
-      <text name="Fig0.4.9"
+      <text name="Fig0.4.7"
         x="41"
-        y="151"
-        width="742"
+        y="123"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -57824,11 +57812,11 @@ should never be called manually</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >ERROR_LEVEL : int  = 4</text>
-      <text name="Fig0.4.10"
+      <text name="Fig0.4.8"
         x="41"
-        y="165"
-        width="742"
-        height="20"
+        y="137"
+        width="704"
+        height="14"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -57840,11 +57828,59 @@ should never be called manually</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >FATAL_LEVEL : int  = 5</text>
+      <text name="Fig0.4.9"
+        x="41"
+        y="151"
+        width="704"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >implementor : Appender</text>
+      <text name="Fig0.4.10"
+        x="41"
+        y="165"
+        width="704"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >stateStack : array</text>
+      <text name="Fig0.4.11"
+        x="41"
+        y="179"
+        width="704"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >enabled : boolean  = true</text>
     </group>
     <rectangle name="Fig0.5"
       x="40"
-      y="207"
-      width="744"
+      y="214"
+      width="706"
       height="1"
       fill="1"
       fillcolor="black"
@@ -57852,7 +57888,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig0.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[41, 208, 742, 238]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[41, 215, 704, 231]"
          href="127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7"
          fill="0"
          fillcolor="white"
@@ -57864,9 +57900,9 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig0.6.0"
         x="41"
-        y="208"
-        width="742"
-        height="238"
+        y="215"
+        width="704"
+        height="231"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -57874,8 +57910,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig0.6.1"
         x="41"
-        y="208"
-        width="742"
+        y="215"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -57890,8 +57926,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >singleton() : Logger</text>
       <text name="Fig0.6.2"
         x="41"
-        y="222"
-        width="742"
+        y="229"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -57906,8 +57942,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >«create» __construct()</text>
       <text name="Fig0.6.3"
         x="41"
-        y="236"
-        width="742"
+        y="243"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -57922,8 +57958,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >log(level : int,message : string,tags : array,errorFile : string = &apos;&apos;,errorLine : int = 0)</text>
       <text name="Fig0.6.4"
         x="41"
-        y="250"
-        width="742"
+        y="257"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -57938,8 +57974,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >enable()</text>
       <text name="Fig0.6.5"
         x="41"
-        y="264"
-        width="742"
+        y="271"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -57954,8 +57990,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >disable()</text>
       <text name="Fig0.6.6"
         x="41"
-        y="278"
-        width="742"
+        y="285"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -57970,8 +58006,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >restore()</text>
       <text name="Fig0.6.7"
         x="41"
-        y="292"
-        width="742"
+        y="299"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -57986,8 +58022,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >t(message : string,tags : array = array())</text>
       <text name="Fig0.6.8"
         x="41"
-        y="306"
-        width="742"
+        y="313"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -58002,8 +58038,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >d(message : string,tags : array = array())</text>
       <text name="Fig0.6.9"
         x="41"
-        y="320"
-        width="742"
+        y="327"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -58018,8 +58054,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >i(message : string,tags : array = array())</text>
       <text name="Fig0.6.10"
         x="41"
-        y="334"
-        width="742"
+        y="341"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -58034,8 +58070,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >w(message : string,tags : array = array())</text>
       <text name="Fig0.6.11"
         x="41"
-        y="348"
-        width="742"
+        y="355"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -58050,8 +58086,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >e(message : string,tags : array = array())</text>
       <text name="Fig0.6.12"
         x="41"
-        y="362"
-        width="742"
+        y="369"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -58067,8 +58103,8 @@ should never be called manually</UML:TaggedValue.dataValue>
 )</text>
       <text name="Fig0.6.13"
         x="41"
-        y="376"
-        width="742"
+        y="383"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -58083,8 +58119,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >handleException(exception : Exception)</text>
       <text name="Fig0.6.14"
         x="41"
-        y="390"
-        width="742"
+        y="397"
+        width="704"
         height="14"
         fill="0"
         fillcolor="white"
@@ -58099,8 +58135,8 @@ should never be called manually</UML:TaggedValue.dataValue>
       >handlePHPErrors(errorNumber : int,errorString : string,errorFile : string = null,errorLine : int = null,errorContext : array = array()) : boolean</text>
       <text name="Fig0.6.15"
         x="41"
-        y="404"
-        width="742"
+        y="411"
+        width="704"
         height="20"
         fill="0"
         fillcolor="white"
@@ -58116,7 +58152,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[40, 424, 744, 672]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
+       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[40, 472, 744, 672]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
        href="127-0-1-1--5509896f:133feddcac3:-8000:000000000000435A"
        fill="1"
        fillcolor="white"
@@ -58128,7 +58164,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig1.0"
       x="40"
-      y="424"
+      y="472"
       width="744"
       height="672"
       fill="0"
@@ -58144,23 +58180,23 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="40"
-              y="424" />
+              y="472" />
       <lineto x="734"
-              y="424" />
+              y="472" />
       <lineto x="734"
-              y="445" />
+              y="493" />
       <lineto x="783"
-              y="445" />
+              y="493" />
       <lineto x="783"
-              y="1095" />
+              y="1143" />
       <lineto x="40"
-              y="1095" />
+              y="1143" />
       <lineto x="40"
-              y="424" />
+              y="472" />
     </path>
     <text name="Fig1.2"
       x="40"
-      y="424"
+      y="472"
       width="695"
       height="22"
       fill="0"
@@ -58175,7 +58211,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Left"
     >common::log</text>
     <group name="Fig1.3"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[40, 424, 694, 1]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[40, 472, 694, 1]"
          href="127-0-1-1--5509896f:133feddcac3:-8000:000000000000435A"
          fill="1"
          fillcolor="white"
@@ -58188,7 +58224,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig1.3.0"
         x="40"
-        y="424"
+        y="472"
         width="694"
         height="1"
         fill="1"
@@ -58199,7 +58235,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <text name="Fig1.4"
       x="40"
-      y="445"
+      y="493"
       width="744"
       height="651"
       fill="0"
@@ -58215,7 +58251,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     ></text>
   </group>
   <group name="Fig2"
-       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[112, 472, 192, 96]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[112, 520, 192, 96]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
        href="127-0-1-1--5509896f:133feddcac3:-8000:000000000000435C"
        fill="1"
        fillcolor="white"
@@ -58228,7 +58264,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig2.0"
       x="112"
-      y="472"
+      y="520"
       width="192"
       height="96"
       fill="1"
@@ -58238,7 +58274,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     />
     <text name="Fig2.1"
       x="113"
-      y="473"
+      y="521"
       width="190"
       height="37"
       fill="0"
@@ -58253,7 +58289,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >common::log::Appender</text>
     <group name="Fig2.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[113, 473, 190, 17]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[113, 521, 190, 17]"
          href="127-0-1-1--5509896f:133feddcac3:-8000:000000000000435C"
          fill="0"
          fillcolor="white"
@@ -58265,7 +58301,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig2.2.0"
         x="113"
-        y="473"
+        y="521"
         width="190"
         height="17"
         fill="0"
@@ -58275,7 +58311,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig2.2.1"
         x="113"
-        y="473"
+        y="521"
         width="190"
         height="15"
         fill="0"
@@ -58292,7 +58328,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig2.3"
       x="112"
-      y="510"
+      y="558"
       width="192"
       height="1"
       fill="1"
@@ -58301,7 +58337,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig2.4"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[113, 511, 190, 56]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[113, 559, 190, 56]"
          href="127-0-1-1--5509896f:133feddcac3:-8000:000000000000435C"
          fill="0"
          fillcolor="white"
@@ -58313,7 +58349,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig2.4.0"
         x="113"
-        y="511"
+        y="559"
         width="190"
         height="56"
         fill="0"
@@ -58323,7 +58359,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig2.4.1"
         x="113"
-        y="511"
+        y="559"
         width="190"
         height="14"
         fill="0"
@@ -58339,7 +58375,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >log(item : Item)</text>
       <text name="Fig2.4.2"
         x="113"
-        y="525"
+        y="573"
         width="190"
         height="14"
         fill="0"
@@ -58355,7 +58391,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >getLogThreshold() : int</text>
       <text name="Fig2.4.3"
         x="113"
-        y="539"
+        y="587"
         width="190"
         height="20"
         fill="0"
@@ -58372,7 +58408,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig3"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[400, 472, 204, 159]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[400, 520, 204, 159]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001808"
        fill="1"
        fillcolor="white"
@@ -58385,7 +58421,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig3.0"
       x="400"
-      y="472"
+      y="520"
       width="204"
       height="159"
       fill="1"
@@ -58395,7 +58431,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     />
     <text name="Fig3.1"
       x="401"
-      y="473"
+      y="521"
       width="202"
       height="37"
       fill="0"
@@ -58410,7 +58446,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >common::log::Dispatcher</text>
     <group name="Fig3.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[401, 473, 202, 17]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[401, 521, 202, 17]"
          href="127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001808"
          fill="0"
          fillcolor="white"
@@ -58422,7 +58458,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig3.2.0"
         x="401"
-        y="473"
+        y="521"
         width="202"
         height="17"
         fill="0"
@@ -58432,7 +58468,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig3.2.1"
         x="401"
-        y="473"
+        y="521"
         width="202"
         height="15"
         fill="0"
@@ -58449,7 +58485,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig3.3"
       x="400"
-      y="510"
+      y="558"
       width="204"
       height="1"
       fill="1"
@@ -58458,7 +58494,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig3.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[401, 511, 202, 59]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[401, 559, 202, 59]"
          href="127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001808"
          fill="0"
          fillcolor="white"
@@ -58470,7 +58506,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig3.4.0"
         x="401"
-        y="511"
+        y="559"
         width="202"
         height="59"
         fill="0"
@@ -58480,7 +58516,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig3.4.1"
         x="401"
-        y="511"
+        y="559"
         width="202"
         height="14"
         fill="0"
@@ -58496,7 +58532,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >appenders : array</text>
       <text name="Fig3.4.2"
         x="401"
-        y="525"
+        y="573"
         width="202"
         height="14"
         fill="0"
@@ -58512,7 +58548,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >minLevel : int  = null</text>
       <text name="Fig3.4.3"
         x="401"
-        y="539"
+        y="587"
         width="202"
         height="20"
         fill="0"
@@ -58529,7 +58565,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig3.5"
       x="400"
-      y="570"
+      y="618"
       width="204"
       height="1"
       fill="1"
@@ -58538,7 +58574,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig3.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[401, 571, 202, 59]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[401, 619, 202, 59]"
          href="127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001808"
          fill="0"
          fillcolor="white"
@@ -58550,7 +58586,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig3.6.0"
         x="401"
-        y="571"
+        y="619"
         width="202"
         height="59"
         fill="0"
@@ -58560,7 +58596,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig3.6.1"
         x="401"
-        y="571"
+        y="619"
         width="202"
         height="14"
         fill="0"
@@ -58576,7 +58612,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >singleton() : Dispatcher</text>
       <text name="Fig3.6.2"
         x="401"
-        y="585"
+        y="633"
         width="202"
         height="14"
         fill="0"
@@ -58592,7 +58628,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >«create» __construct()</text>
       <text name="Fig3.6.3"
         x="401"
-        y="599"
+        y="647"
         width="202"
         height="20"
         fill="0"
@@ -58634,9 +58670,9 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="400"
-              y="552" />
+              y="600" />
       <lineto x="304"
-              y="552" />
+              y="600" />
     </path>
   </group>
   <group name="Fig5"
@@ -58665,9 +58701,9 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="400"
-              y="528" />
+              y="576" />
       <lineto x="304"
-              y="528" />
+              y="576" />
     </path>
   </group>
   <group name="Fig6"
@@ -58722,13 +58758,13 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="400"
-              y="504" />
+              y="552" />
       <lineto x="304"
-              y="504" />
+              y="552" />
     </path>
   </group>
   <group name="Fig7"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[120, 608, 190, 75]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[120, 656, 190, 75]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000185C"
        fill="1"
        fillcolor="white"
@@ -58741,7 +58777,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig7.0"
       x="120"
-      y="608"
+      y="656"
       width="190"
       height="75"
       fill="1"
@@ -58751,7 +58787,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     />
     <text name="Fig7.1"
       x="121"
-      y="609"
+      y="657"
       width="188"
       height="21"
       fill="0"
@@ -58766,7 +58802,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >common::log::BaseAppender</text>
     <group name="Fig7.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[121, 609, 188, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[121, 657, 188, 0]"
          href="127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000185C"
          fill="0"
          fillcolor="white"
@@ -58779,7 +58815,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig7.2.0"
         x="121"
-        y="609"
+        y="657"
         width="188"
         height="0"
         fill="0"
@@ -58790,7 +58826,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig7.3"
       x="120"
-      y="630"
+      y="678"
       width="190"
       height="1"
       fill="1"
@@ -58799,7 +58835,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig7.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[121, 631, 188, 25]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[121, 679, 188, 25]"
          href="127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000185C"
          fill="0"
          fillcolor="white"
@@ -58811,7 +58847,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig7.4.0"
         x="121"
-        y="631"
+        y="679"
         width="188"
         height="25"
         fill="0"
@@ -58821,7 +58857,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig7.4.1"
         x="121"
-        y="631"
+        y="679"
         width="188"
         height="20"
         fill="0"
@@ -58838,7 +58874,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig7.5"
       x="120"
-      y="656"
+      y="704"
       width="190"
       height="1"
       fill="1"
@@ -58847,7 +58883,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig7.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[121, 657, 188, 25]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[121, 705, 188, 25]"
          href="127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000185C"
          fill="0"
          fillcolor="white"
@@ -58859,7 +58895,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig7.6.0"
         x="121"
-        y="657"
+        y="705"
         width="188"
         height="25"
         fill="0"
@@ -58869,7 +58905,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig7.6.1"
         x="121"
-        y="657"
+        y="705"
         width="188"
         height="20"
         fill="0"
@@ -58911,13 +58947,13 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="200"
-              y="608" />
+              y="656" />
       <lineto x="200"
-              y="568" />
+              y="616" />
     </path>
   </group>
   <group name="Fig9"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[56, 760, 192, 85]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[56, 808, 192, 85]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001846"
        fill="1"
        fillcolor="white"
@@ -58930,7 +58966,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig9.0"
       x="56"
-      y="760"
+      y="808"
       width="192"
       height="85"
       fill="1"
@@ -58940,7 +58976,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     />
     <text name="Fig9.1"
       x="57"
-      y="761"
+      y="809"
       width="190"
       height="21"
       fill="0"
@@ -58955,7 +58991,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >common::log::XMLAppender</text>
     <group name="Fig9.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[57, 761, 190, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[57, 809, 190, 0]"
          href="127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001846"
          fill="0"
          fillcolor="white"
@@ -58968,7 +59004,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig9.2.0"
         x="57"
-        y="761"
+        y="809"
         width="190"
         height="0"
         fill="0"
@@ -58979,7 +59015,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig9.3"
       x="56"
-      y="782"
+      y="830"
       width="192"
       height="1"
       fill="1"
@@ -58988,7 +59024,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig9.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[57, 783, 190, 23]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[57, 831, 190, 23]"
          href="127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001846"
          fill="0"
          fillcolor="white"
@@ -59000,7 +59036,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig9.4.0"
         x="57"
-        y="783"
+        y="831"
         width="190"
         height="23"
         fill="0"
@@ -59010,7 +59046,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig9.4.1"
         x="57"
-        y="783"
+        y="831"
         width="190"
         height="20"
         fill="0"
@@ -59027,7 +59063,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig9.5"
       x="56"
-      y="806"
+      y="854"
       width="192"
       height="1"
       fill="1"
@@ -59036,7 +59072,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig9.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[57, 807, 190, 37]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[57, 855, 190, 37]"
          href="127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001846"
          fill="0"
          fillcolor="white"
@@ -59048,7 +59084,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig9.6.0"
         x="57"
-        y="807"
+        y="855"
         width="190"
         height="37"
         fill="0"
@@ -59058,7 +59094,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig9.6.1"
         x="57"
-        y="807"
+        y="855"
         width="190"
         height="14"
         fill="0"
@@ -59074,7 +59110,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >init(configuration : array) : boolean</text>
       <text name="Fig9.6.2"
         x="57"
-        y="821"
+        y="869"
         width="190"
         height="20"
         fill="0"
@@ -59116,17 +59152,17 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="152"
-              y="760" />
+              y="808" />
       <lineto x="152"
-              y="744" />
+              y="792" />
       <lineto x="208"
-              y="744" />
+              y="792" />
       <lineto x="208"
-              y="683" />
+              y="731" />
     </path>
   </group>
   <group name="Fig11"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[256, 760, 192, 132]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[256, 808, 192, 132]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--508f6d44:1341e7d80d4:-8000:000000000000184C"
        fill="1"
        fillcolor="white"
@@ -59139,7 +59175,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig11.0"
       x="256"
-      y="760"
+      y="808"
       width="192"
       height="132"
       fill="1"
@@ -59149,7 +59185,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     />
     <text name="Fig11.1"
       x="257"
-      y="761"
+      y="809"
       width="190"
       height="21"
       fill="0"
@@ -59164,7 +59200,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >common::log::UDPAppender</text>
     <group name="Fig11.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[257, 761, 190, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[257, 809, 190, 0]"
          href="127-0-1-1--508f6d44:1341e7d80d4:-8000:000000000000184C"
          fill="0"
          fillcolor="white"
@@ -59177,7 +59213,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig11.2.0"
         x="257"
-        y="761"
+        y="809"
         width="190"
         height="0"
         fill="0"
@@ -59188,7 +59224,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig11.3"
       x="256"
-      y="782"
+      y="830"
       width="192"
       height="1"
       fill="1"
@@ -59197,7 +59233,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig11.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[257, 783, 190, 53]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[257, 831, 190, 53]"
          href="127-0-1-1--508f6d44:1341e7d80d4:-8000:000000000000184C"
          fill="0"
          fillcolor="white"
@@ -59209,7 +59245,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig11.4.0"
         x="257"
-        y="783"
+        y="831"
         width="190"
         height="53"
         fill="0"
@@ -59219,7 +59255,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig11.4.1"
         x="257"
-        y="783"
+        y="831"
         width="190"
         height="14"
         fill="0"
@@ -59235,7 +59271,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >host : string  = 127.0.0.1</text>
       <text name="Fig11.4.2"
         x="257"
-        y="797"
+        y="845"
         width="190"
         height="14"
         fill="0"
@@ -59251,7 +59287,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >port : int  = 5775</text>
       <text name="Fig11.4.3"
         x="257"
-        y="811"
+        y="859"
         width="190"
         height="20"
         fill="0"
@@ -59268,7 +59304,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig11.5"
       x="256"
-      y="836"
+      y="884"
       width="192"
       height="1"
       fill="1"
@@ -59277,7 +59313,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig11.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[257, 837, 190, 53]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[257, 885, 190, 53]"
          href="127-0-1-1--508f6d44:1341e7d80d4:-8000:000000000000184C"
          fill="0"
          fillcolor="white"
@@ -59289,7 +59325,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig11.6.0"
         x="257"
-        y="837"
+        y="885"
         width="190"
         height="53"
         fill="0"
@@ -59299,7 +59335,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig11.6.1"
         x="257"
-        y="837"
+        y="885"
         width="190"
         height="14"
         fill="0"
@@ -59315,7 +59351,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >init(configuration : array) : boolean</text>
       <text name="Fig11.6.2"
         x="257"
-        y="851"
+        y="899"
         width="190"
         height="14"
         fill="0"
@@ -59331,7 +59367,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >doLog(item : Item)</text>
       <text name="Fig11.6.3"
         x="257"
-        y="865"
+        y="913"
         width="190"
         height="20"
         fill="0"
@@ -59373,17 +59409,17 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="344"
-              y="760" />
+              y="808" />
       <lineto x="344"
-              y="744" />
+              y="792" />
       <lineto x="208"
-              y="744" />
+              y="792" />
       <lineto x="208"
-              y="683" />
+              y="731" />
     </path>
   </group>
   <group name="Fig13"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[448, 760, 206, 164]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[448, 808, 206, 164]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001843"
        fill="1"
        fillcolor="white"
@@ -59396,7 +59432,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig13.0"
       x="448"
-      y="760"
+      y="808"
       width="206"
       height="164"
       fill="1"
@@ -59406,7 +59442,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     />
     <text name="Fig13.1"
       x="449"
-      y="761"
+      y="809"
       width="204"
       height="21"
       fill="0"
@@ -59421,7 +59457,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >common::log::SingleFileAppender</text>
     <group name="Fig13.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[449, 761, 204, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[449, 809, 204, 0]"
          href="127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001843"
          fill="0"
          fillcolor="white"
@@ -59434,7 +59470,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig13.2.0"
         x="449"
-        y="761"
+        y="809"
         width="204"
         height="0"
         fill="0"
@@ -59445,7 +59481,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig13.3"
       x="448"
-      y="782"
+      y="830"
       width="206"
       height="1"
       fill="1"
@@ -59454,7 +59490,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig13.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[449, 783, 204, 69]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[449, 831, 204, 69]"
          href="127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001843"
          fill="0"
          fillcolor="white"
@@ -59466,7 +59502,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig13.4.0"
         x="449"
-        y="783"
+        y="831"
         width="204"
         height="69"
         fill="0"
@@ -59476,7 +59512,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig13.4.1"
         x="449"
-        y="783"
+        y="831"
         width="204"
         height="14"
         fill="0"
@@ -59492,7 +59528,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >filename : string</text>
       <text name="Fig13.4.2"
         x="449"
-        y="797"
+        y="845"
         width="204"
         height="14"
         fill="0"
@@ -59508,7 +59544,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >filehandle : resource</text>
       <text name="Fig13.4.3"
         x="449"
-        y="811"
+        y="859"
         width="204"
         height="14"
         fill="0"
@@ -59524,7 +59560,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >format : string  = %d [%s] &apos;%m&apos; %f %l</text>
       <text name="Fig13.4.4"
         x="449"
-        y="825"
+        y="873"
         width="204"
         height="20"
         fill="0"
@@ -59541,7 +59577,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig13.5"
       x="448"
-      y="852"
+      y="900"
       width="206"
       height="1"
       fill="1"
@@ -59550,7 +59586,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig13.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[449, 853, 204, 69]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[449, 901, 204, 69]"
          href="127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001843"
          fill="0"
          fillcolor="white"
@@ -59562,7 +59598,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig13.6.0"
         x="449"
-        y="853"
+        y="901"
         width="204"
         height="69"
         fill="0"
@@ -59572,7 +59608,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig13.6.1"
         x="449"
-        y="853"
+        y="901"
         width="204"
         height="14"
         fill="0"
@@ -59588,7 +59624,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >init(configuration : array) : boolean</text>
       <text name="Fig13.6.2"
         x="449"
-        y="867"
+        y="915"
         width="204"
         height="14"
         fill="0"
@@ -59604,7 +59640,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >initFile()</text>
       <text name="Fig13.6.3"
         x="449"
-        y="881"
+        y="929"
         width="204"
         height="14"
         fill="0"
@@ -59620,7 +59656,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >dolog(item : Item)</text>
       <text name="Fig13.6.4"
         x="449"
-        y="895"
+        y="943"
         width="204"
         height="20"
         fill="0"
@@ -59662,17 +59698,17 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="560"
-              y="760" />
+              y="808" />
       <lineto x="560"
-              y="744" />
+              y="792" />
       <lineto x="208"
-              y="744" />
+              y="792" />
       <lineto x="208"
-              y="683" />
+              y="731" />
     </path>
   </group>
   <group name="Fig15"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[448, 944, 222, 148]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[448, 992, 222, 148]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1-7b882644:1342260c2b6:-8000:0000000000001861"
        fill="1"
        fillcolor="white"
@@ -59685,7 +59721,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig15.0"
       x="448"
-      y="944"
+      y="992"
       width="222"
       height="148"
       fill="1"
@@ -59695,7 +59731,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     />
     <text name="Fig15.1"
       x="449"
-      y="945"
+      y="993"
       width="220"
       height="21"
       fill="0"
@@ -59710,7 +59746,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >common::log::ArchiveFileAppender</text>
     <group name="Fig15.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[449, 945, 220, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[449, 993, 220, 0]"
          href="127-0-1-1-7b882644:1342260c2b6:-8000:0000000000001861"
          fill="0"
          fillcolor="white"
@@ -59723,7 +59759,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig15.2.0"
         x="449"
-        y="945"
+        y="993"
         width="220"
         height="0"
         fill="0"
@@ -59734,7 +59770,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig15.3"
       x="448"
-      y="966"
+      y="1014"
       width="222"
       height="1"
       fill="1"
@@ -59743,7 +59779,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig15.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[449, 967, 220, 68]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[449, 1015, 220, 68]"
          href="127-0-1-1-7b882644:1342260c2b6:-8000:0000000000001861"
          fill="0"
          fillcolor="white"
@@ -59755,7 +59791,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig15.4.0"
         x="449"
-        y="967"
+        y="1015"
         width="220"
         height="68"
         fill="0"
@@ -59765,7 +59801,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig15.4.1"
         x="449"
-        y="967"
+        y="1015"
         width="220"
         height="14"
         fill="0"
@@ -59781,7 +59817,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >COMPRESSION_ZIP : string  = zip</text>
       <text name="Fig15.4.2"
         x="449"
-        y="981"
+        y="1029"
         width="220"
         height="14"
         fill="0"
@@ -59797,7 +59833,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >COMPRESSION_NONE : string  = none</text>
       <text name="Fig15.4.3"
         x="449"
-        y="995"
+        y="1043"
         width="220"
         height="14"
         fill="0"
@@ -59813,7 +59849,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >directory : string</text>
       <text name="Fig15.4.4"
         x="449"
-        y="1009"
+        y="1057"
         width="220"
         height="20"
         fill="0"
@@ -59830,7 +59866,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig15.5"
       x="448"
-      y="1035"
+      y="1083"
       width="222"
       height="1"
       fill="1"
@@ -59839,7 +59875,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig15.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[449, 1036, 220, 54]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[449, 1084, 220, 54]"
          href="127-0-1-1-7b882644:1342260c2b6:-8000:0000000000001861"
          fill="0"
          fillcolor="white"
@@ -59851,7 +59887,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig15.6.0"
         x="449"
-        y="1036"
+        y="1084"
         width="220"
         height="54"
         fill="0"
@@ -59861,7 +59897,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig15.6.1"
         x="449"
-        y="1036"
+        y="1084"
         width="220"
         height="14"
         fill="0"
@@ -59877,7 +59913,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >init(configuration : array) : boolean</text>
       <text name="Fig15.6.2"
         x="449"
-        y="1050"
+        y="1098"
         width="220"
         height="14"
         fill="0"
@@ -59893,7 +59929,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       >initFile()</text>
       <text name="Fig15.6.3"
         x="449"
-        y="1064"
+        y="1112"
         width="220"
         height="20"
         fill="0"
@@ -59935,9 +59971,9 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="560"
-              y="944" />
+              y="1000" />
       <lineto x="560"
-              y="924" />
+              y="980" />
     </path>
   </group>
   <group name="Fig17"
@@ -60973,7 +61009,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig27"
-       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[624, 472, 157, 64]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[624, 520, 157, 64]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
        href="127-0-1-1--15445bbd:1352f3a7eb2:-8000:0000000000001906"
        fill="1"
        fillcolor="white"
@@ -60986,7 +61022,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig27.0"
       x="624"
-      y="472"
+      y="520"
       width="157"
       height="64"
       fill="1"
@@ -60996,7 +61032,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     />
     <text name="Fig27.1"
       x="625"
-      y="473"
+      y="521"
       width="155"
       height="37"
       fill="0"
@@ -61011,7 +61047,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >common::log::SeverityLevel</text>
     <group name="Fig27.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[625, 473, 155, 17]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[625, 521, 155, 17]"
          href="127-0-1-1--15445bbd:1352f3a7eb2:-8000:0000000000001906"
          fill="0"
          fillcolor="white"
@@ -61023,7 +61059,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig27.2.0"
         x="625"
-        y="473"
+        y="521"
         width="155"
         height="17"
         fill="0"
@@ -61033,7 +61069,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig27.2.1"
         x="625"
-        y="473"
+        y="521"
         width="155"
         height="15"
         fill="0"
@@ -61050,7 +61086,7 @@ should never be called manually</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig27.3"
       x="624"
-      y="510"
+      y="558"
       width="157"
       height="1"
       fill="1"
@@ -61059,7 +61095,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig27.4"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[625, 511, 155, 24]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[625, 559, 155, 24]"
          href="127-0-1-1--15445bbd:1352f3a7eb2:-8000:0000000000001906"
          fill="0"
          fillcolor="white"
@@ -61071,7 +61107,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig27.4.0"
         x="625"
-        y="511"
+        y="559"
         width="155"
         height="24"
         fill="0"
@@ -61081,7 +61117,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       />
       <text name="Fig27.4.1"
         x="625"
-        y="511"
+        y="559"
         width="155"
         height="20"
         fill="0"
@@ -61127,7 +61163,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <lineto x="760"
               y="184" />
       <lineto x="760"
-              y="472" />
+              y="520" />
     </path>
   </group>
   <group name="Fig29"
@@ -61497,7 +61533,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       justification="Center"
     >helpers::Time</text>
     <group name="Fig0.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[57, 65, 82, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[57, 65, 470, 0]"
          href="127-0-1-1--51e2e300:1355214e1e7:-8000:00000000000047C7"
          fill="0"
          fillcolor="216 216 236"
@@ -61511,7 +61547,7 @@ should never be called manually</UML:TaggedValue.dataValue>
       <rectangle name="Fig0.2.0"
         x="57"
         y="65"
-        width="82"
+        width="470"
         height="0"
         fill="0"
         fillcolor="216 216 236"
