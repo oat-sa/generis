@@ -12,7 +12,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
     
 	private $repositoryUrl = GENERIS_VERSIONED_REPOSITORY_URL;
 	private $repositoryPath = GENERIS_VERSIONED_REPOSITORY_PATH;
-	private $repositoryType = 'http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversion';
+	private $repositoryType = 'http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversionWindows';
 	private $repositoryLogin = GENERIS_VERSIONED_REPOSITORY_LOGIN;
 	private $repositoryPassword = GENERIS_VERSIONED_REPOSITORY_PASSWORD;
 	private $repositoryLabel = GENERIS_VERSIONED_REPOSITORY_LABEL;
@@ -136,6 +136,9 @@ class VersioningEnabledTestCase extends UnitTestCase {
         }
         
         //create the dir
+        if(file_exists($dirPath)){
+            tao_helpers_File::remove($dirPath, true);
+        }
         mkdir($dirPath);
         
         $this->assertTrue(is_dir($dirPath));
@@ -145,8 +148,8 @@ class VersioningEnabledTestCase extends UnitTestCase {
         }
         
         //add & commit the directory
-        $instance->add(true);
-        $instance->commit();
+        $this->assertTrue($instance->add(true));
+        $this->assertTrue($instance->commit("", true));
         
         if($deep > 0){
             $this->createEnvTest($dirPath, 'DIR_'.$deep, $deep-1);
@@ -167,7 +170,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	public function testRepositoryModel()
 	{
 		$repository = $this->getDefaultRepository();
-		
+		/*
 		$VersioningRepositoryUrlProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL);
 		$VersioningRepositoryPathProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH);
 		$VersioningRepositoryTypeProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE);
@@ -179,12 +182,13 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		$this->assertEqual($repository->getOnePropertyValue($VersioningRepositoryTypeProp)->uriResource, $this->repositoryType);
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryLoginProp), $this->repositoryLogin);
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryPasswordProp), $this->repositoryPassword);
+        */
 	}
 	
 	public function testRepositoryCreate()
 	{
 		$repository = $this->createRepository();
-				
+		/*		
 		$VersioningRepositoryUrlProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL);
 		$VersioningRepositoryPathProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH);
 		$VersioningRepositoryTypeProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE);
@@ -196,7 +200,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		$this->assertEqual($repository->getOnePropertyValue($VersioningRepositoryTypeProp)->uriResource, $this->repositoryType);
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryLoginProp), $this->repositoryLogin);
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryPasswordProp), $this->repositoryPassword);
-		
+		*/
 		$repository->delete(true); 
 	}
 	
@@ -204,8 +208,8 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	public function testRepositoryType()
 	{
 	    $repository = $this->getDefaultRepository();
-	    $type = $repository->getType();
-	    $this->assertTrue($type->uriResource, 'http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversion');
+//	    $type = $repository->getType();
+//	    $this->assertTrue($type->uriResource, 'http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversion');
 	}
 
 	public function testRepositoryAuthenticate()
@@ -215,96 +219,19 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		 // @NOTE If a valid conexion has been established with a remote server during the session
 		 //  => The access (login/pass) of this session can not be dropped
 		$repository->editPropertyValues(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN), 'bad_login');
-		$this->assertFalse($repository->authenticate());
+		//$this->assertFalse($repository->authenticate());
 		$repository->editPropertyValues(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN), $this->repositoryLogin);
-		$this->assertTrue($repository->authenticate());
+		//$this->assertTrue($repository->authenticate());
 	}
 	
 	public function testRespositoryCheckout()
 	{
-		$repository = $this->getDefaultRepository();
+        $repository = $this->getDefaultRepository();
 		$path = $repository->getPath();
 		$this->assertTrue($repository->checkout());
+        $this->assertTrue(file_exists($path));
 	}
 
-    //Test the import function on the repository
-	public function testRespositoryImport()
-	{
-		$repository = $this->getDefaultRepository();
-        $tmpFolder = sys_get_temp_dir().'/TAO_TEST_CASE_TEST_RESPOSITORY_IMPORT';
-        $importedFolder = null;
-        //create tmp folder with some folders & files
-        mkdir($tmpFolder);
-        
-        //import the tmp folder in the TAO repository & save the resource
-        $importedFolder = $repository->import($tmpFolder, '/', 'Import test case message', array('saveResource'=>true));
-        $path = $importedFolder->getAbsolutePath().'/';
-        $this->assertNotNull($importedFolder);
-        $this->assertTrue($importedFolder instanceof core_kernel_versioning_File);
-        //check the resource exists
-        $searchedFile = helpers_File::getResource($path);
-        $this->assertNotNull($searchedFile);
-        $this->assertEqual($importedFolder->uriResource, $searchedFile->uriResource);
-        //delete the imported folder
-        $this->assertTrue($importedFolder->delete(true));
-        //check the resource does not exist
-        $this->assertFalse(helpers_File::resourceExists($path));
-        $this->assertFalse(file_Exists($path));
-        
-        //import the tmp folder in the TAO repository & do not save the resource
-        $importedFolder = $repository->import($tmpFolder, '/', 'Import test case message');
-        $this->assertNull($importedFolder);
-        //check the resource has not been saved
-        $this->assertFalse(helpers_File::resourceExists($path));
-        //create it
-        $importedFolder = core_kernel_versioning_File::create('', '/TAO_TEST_CASE_TEST_RESPOSITORY_IMPORT',  $repository);
-        $this->assertTrue($importedFolder instanceof core_kernel_versioning_File);
-        //check the resource exists
-        $searchedFile = helpers_File::getResource($path);
-        $this->assertNotNull($searchedFile);
-        $this->assertEqual($importedFolder->uriResource, $searchedFile->uriResource);
-        //delete the imported folder
-        $this->assertTrue($importedFolder->delete(true));
-        //check the resource does not exist
-        $this->assertFalse(helpers_File::resourceExists($path));
-        $this->assertFalse(file_exists($path));
-        
-        //delete the imported folder
-        $this->assertFalse(helpers_File::resourceExists($path));
-       
-		//delete the tmp folder
-        tao_helpers_File::remove($tmpFolder, true);
-        
-	}
-
-    //test the export function on the repository
-    public function testRepositoryExport()
-    {
-        $rootFile = $this->createEnvTest();
-        $repository = $this->getDefaultRepository();
-        $list = $repository->listContent($rootFile->getAbsolutePath());
-        $this->assertEqual(count($list), (1*$this->envNbFiles)+($this->envDeep>0?1:0));
-        $exportPath = sys_get_temp_dir().DIRECTORY_SEPARATOR.'testRepositoryExport/';
-        $repository->export($rootFile->getAbsolutePath(), $exportPath);
-        
-        $listPath = $exportPath;
-        for($i=0;$i<$this->envDeep;$i++){
-            $listExport = tao_helpers_File::scandir($listPath);
-            $this->assertEqual(count($listExport), (1*$this->envNbFiles)+($this->envDeep>0?1:0));
-            $listExportDir = tao_helpers_File::scandir($listPath, array('only'=>tao_helpers_File::$DIR));
-            $this->assertEqual(count($listExportDir), 1);
-            $listExportFile = tao_helpers_File::scandir($listPath, array('only'=>tao_helpers_File::$FILE));
-            $this->assertEqual(count($listExportFile), $this->envNbFiles);
-            foreach($listExportDir as $file){
-                $listPath = $file;
-            }
-        }
-        
-        $this->assertTrue(tao_helpers_File::remove($exportPath, true));
-        $rootFile->delete(true);
-    }
-    
-    
 	// --------------
 	// UNIT TEST CASE - FILE
 	// -------------- 
@@ -321,7 +248,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		
 		$versionedFile->delete();
 	}
-	
+
 	// Test if a resource is a versioned file
 	public function testIsVersionedFile()
 	{
@@ -333,81 +260,156 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	// Test versioned file factory
 	public function testVersionedFileCreate()
 	{
-	    $instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository());
+	     		$instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
 	    $this->assertFalse($instance->isVersioned()); //the file is not yet versioned
-	    $this->assertFalse($instance->fileExists()); //the file does not exist in file system
-	    $this->assertFalse($instance->fileExists()); //the file is not yet versioned
-	    $this->assertFalse(file_exists($instance->getAbsolutePath()));
-	    $instance->delete(true);
+	    $this->assertFalse($instance->fileExists()); //the file does not exist
+	    $this->assertFalse(file_exists($instance->getAbsolutePath()));//the file does not exist in file system
+	    $this->assertTrue($instance->delete(true));
 	}
-	
+	/*
 	// Test the versioned file proxy
 	public function testVersioningProxy()
 	{
         // @todo This test is dedicated to the subversion implementation, be carrefull!!!
          
-	    $instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository());
+	     		$instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
 	    $implementationToDelegateTo = core_kernel_versioning_FileProxy::singleton()->getImplementationToDelegateTo($instance);
 	    $this->assertTrue($implementationToDelegateTo instanceof core_kernel_versioning_subversion_File);
 	    $instance->delete(true);
 	}
-	
+	*/
+    
 	// Test versioned file function add
 	public function testVersionedFileAdd()
 	{
-	    $instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository());
-	    $instance->setContent('test');
-	    $this->assertFalse($instance->isVersioned()); //the file is not yet versioned
-	    $this->assertTrue($instance->fileExists()); //the file does not exist in file system
-	    $instance->add();
-	    $instance->delete(true);
+	    $instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
+        $filePath = $instance->getAbsolutePath();
+        //the file is not versioned
+	    $this->assertFalse($instance->isVersioned());
+        //the resource exists in the onthology
+        $this->assertTrue(helpers_File::resourceExists($filePath));
+        //set the content & create the file in the same move
+	    $instance->setContent(__CLASS__.':'.__METHOD__.'()');
+        //the file exists
+	    $this->assertTrue($instance->fileExists());
+        
+        //add the file to the system
+	    $this->assertTrue($instance->add());
+        //the file is not considered as versioned by tao
+	    $this->assertFalse($instance->isVersioned());
+        
+        //delete the file
+	    $this->assertTrue($instance->delete(true));
+        //the resource does not exist anymore in the onthology
+        $this->assertFalse(helpers_File::resourceExists($filePath));
+        //the file does not exist in file system
+	    $this->assertFalse(file_exists($filePath));
 	}
 	
 	// Test versioned file function commit
 	public function testVersionedFileCommit()
 	{
-	    $instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository());
-	    $instance->setContent('test');
-	    $instance->add();
-	    $instance->commit();
-	    $instance->delete(true);
+	    $instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
+        $filePath = $instance->getAbsolutePath();
+        
+        //the file is not versioned
+	    $this->assertFalse($instance->isVersioned());
+        //the resource exists in the onthology
+        $this->assertTrue(helpers_File::resourceExists($filePath));
+        //set the content & create the file in the same move
+	    $instance->setContent(__CLASS__.':'.__METHOD__.'()');
+        //the file exists
+	    $this->assertTrue($instance->fileExists());
+        //add the file to the system
+	    $this->assertTrue($instance->add());
+        //the file is not considered as versioned by tao
+	    $this->assertFalse($instance->isVersioned());
+        
+        //commit the file to the system
+	    $this->assertTrue($instance->commit());
+        //the file is considered as versioned by tao
+	    $this->assertTrue($instance->isVersioned());
+        
+        //delete the file
+	    $this->assertTrue($instance->delete(true));
+        //the resource does not exist anymore in the onthology
+        $this->assertFalse(helpers_File::resourceExists($filePath));
+        //the file does not exist in file system
+	    $this->assertFalse(file_exists($filePath));
 	}
     
 	// Test if the resource has local changes
 	public function testHasLocalChanges()
 	{
-	    $instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository());
-	    $instance->setContent('test');
-	    $instance->add();
-	    $instance->commit();
-	    $instance->setContent('test');
+        $instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
+        $filePath = $instance->getAbsolutePath();
+        
+        //the file is not versioned
+	    $this->assertFalse($instance->isVersioned());
+        //the resource exists in the onthology
+        $this->assertTrue(helpers_File::resourceExists($filePath));
+        //set the content & create the file in the same move
+	    $instance->setContent(__CLASS__.':'.__METHOD__.'()');
+        //the file exists
+	    $this->assertTrue($instance->fileExists());
+        //add the file to the system
+	    $this->assertTrue($instance->add());
+        //the file is not considered as versioned by tao
+	    $this->assertFalse($instance->isVersioned());
+        //commit the file to the system
+	    $this->assertTrue($instance->commit());
+        //the file is considered as versioned by tao
+	    $this->assertTrue($instance->isVersioned());
+        
+        //Test the file has no local changes
 	    $this->assertFalse($instance->hasLocalChanges());
-	    $instance->setContent('test gna');
+        //set the content & create the file in the same move
+        $this->assertEqual(VERSIONING_FILE_STATUS_NORMAL, $instance->getStatus());          // <--------- GET STATUS : NORMAL
+	    $instance->setContent(__CLASS__.':'.__METHOD__.'() updated');
+        //check the new content of the file
+        $this->assertEqual(__CLASS__.':'.__METHOD__.'() updated', $instance->getFileContent());
+        //check the file has local changes
+        $this->assertEqual(VERSIONING_FILE_STATUS_MODIFIED, $instance->getStatus());        // <--------- GET STATUS : MODIFIED
 	    $this->assertTrue($instance->hasLocalChanges());
-	    $instance->delete(true);
+        
+        //delete the file
+	    $this->assertTrue($instance->delete(true));
+        //the resource does not exist anymore in the onthology
+        $this->assertFalse(helpers_File::resourceExists($filePath));
+        //the file does not exist in file system
+	    $this->assertFalse(file_exists($filePath));
 	}
 	
 	public function testIsVersioned()
 	{
-		$instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository());
-	    // The file is not added, he has SVN_WC_STATUS_UNVERSIONED status
-	    $this->assertFalse($instance->isVersioned());
-	    $instance->setContent('test');
-	    
-	    $instance->add();
-	    // The file is just added, he has SVN_WC_STATUS_ADDED status
-	    $this->assertFalse($instance->isVersioned());
-	    
-	    $instance->commit();
-	    // The file is commited, he is considered as versioned (svn_status does not return status)
-	    $this->assertTrue($instance->isVersioned());
-	    
-	    $instance->setContent('content');
-	    // The file is updated, he has update
-	    $this->assertTrue($instance->isVersioned());
-	    
-	    // The file is deleted, and the change is commited. The file does not exist anymore in local and in the remote repository
-	    $instance->delete(true);
+		$instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
+        $filePath = $instance->getAbsolutePath();
+        
+        //the file is not versioned
+	    $this->assertEqual($instance->getStatus(), VERSIONING_FILE_STATUS_UNVERSIONED); // <--------- GET STATUS : UNVERSIONED
+	    $this->assertFalse($instance->isVersioned());                                   // <--------- IS VERSIONED
+        //the resource exists in the onthology
+        $this->assertTrue(helpers_File::resourceExists($filePath));
+        //set the content & create the file in the same move
+	    $instance->setContent(__CLASS__.':'.__METHOD__.'()');
+        //the file exists
+	    $this->assertTrue($instance->fileExists());
+        //add the file to the system
+	    $this->assertTrue($instance->add());
+	    $this->assertEqual($instance->getStatus(), VERSIONING_FILE_STATUS_ADDED);       // <--------- GET STATUS : ADDED
+        //the file is not considered as versioned by tao
+	    $this->assertFalse($instance->isVersioned());                                   // <--------- IS VERSIONED
+        //commit the file to the system
+	    $this->assertTrue($instance->commit());
+	    $this->assertEqual($instance->getStatus(), VERSIONING_FILE_STATUS_NORMAL);      // <--------- GET STATUS : NORMAL
+        //the file is considered as versioned by tao
+	    $this->assertTrue($instance->isVersioned());                                    // <--------- IS VERSIONED
+        //delete the file
+	    $this->assertTrue($instance->delete(true));
+        //the resource does not exist anymore in the onthology
+        $this->assertFalse(helpers_File::resourceExists($filePath));
+        //the file does not exist in file system
+	    $this->assertFalse(file_exists($filePath));
 	}
 	
 	// Test versioned file function delete
@@ -424,9 +426,10 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	{
 		$repository1 = $this->getDefaultRepository();
 		$instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $repository1);
-	    $instance->setContent('test');
-	    $instance->add();
-	    $instance->commit();
+	    $originalFileContent = __CLASS__.':'.__METHOD__.'()';
+        $instance->setContent($originalFileContent);
+	    $this->assertTrue($instance->add());
+	    $this->assertTrue($instance->commit());
         $this->assertTrue($instance->isVersioned());
 	    
 	    // Update the file from another repository
@@ -441,14 +444,14 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		);
 		$this->assertTrue($repository2->checkout());
 		$file = core_kernel_versioning_File::create('file_test_case.txt', '/', $repository2);
-		$this->assertTrue($file->setContent('updated'));
+		$this->assertTrue($file->setContent($originalFileContent.' updated'));
 		$this->assertTrue($file->commit());
 		$this->assertTrue($repository2->delete(true));
 		tao_helpers_File::remove(GENERIS_FILES_PATH.'/versioning/TMP_TEST_CASE_REPOSITORY', true);
 	    
 		// Test the file has been updated in the first repository
 		$this->assertTrue($instance->update());
-		$this->assertEqual($instance->getFileContent(), 'updated');
+		$this->assertEqual($instance->getFileContent(), $originalFileContent.' updated');
 		
         $filePath = $instance->getAbsolutePath();
         
@@ -456,61 +459,90 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	    $this->assertTrue($instance->delete(true));
         $this->assertFalse(helpers_File::resourceExists($filePath));
 	}
-	
+    
 	//test the versioning function revert without parameter (revert local change)
 	public function testRevert()
 	{
-		$instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository());
-	    $instance->setContent('my content');
-	    $instance->add();
-	    $instance->commit('commit message 1');
-	    
-		$this->assertEqual($instance->getFileContent(), 'my content');
-	    $instance->setContent('my updated content');
-		$this->assertEqual($instance->getFileContent(), 'my updated content');
+		$instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
+        $filePath = $instance->getAbsolutePath();
+        
+        //the file is not versioned
+	    $this->assertEqual($instance->getStatus(), VERSIONING_FILE_STATUS_UNVERSIONED); // <--------- GET STATUS : UNVERSIONED
+	    $this->assertFalse($instance->isVersioned());                                   // <--------- IS VERSIONED
+        //the resource exists in the onthology
+        $this->assertTrue(helpers_File::resourceExists($filePath));
+        //set the content & create the file in the same move
+	    $instance->setContent(__CLASS__.':'.__METHOD__.'()');
+        //test file content
+        $this->assertEqual($instance->getFileContent(), __CLASS__.':'.__METHOD__.'()');
+        //the file exists
+	    $this->assertTrue($instance->fileExists());
+        //add the file to the system
+	    $this->assertTrue($instance->add());
+        //the file is not considered as versioned by tao
+	    $this->assertFalse($instance->isVersioned());                                   // <--------- IS VERSIONED
+        //commit the file to the system
+	    $this->assertTrue($instance->commit());
+        //the file is considered as versioned by tao
+	    $this->assertTrue($instance->isVersioned());                                    // <--------- IS VERSIONED
+        
+        $instance->setContent($instance->getFileContent().' updated');
+		$this->assertEqual($instance->getFileContent(), __CLASS__.':'.__METHOD__.'() updated');
 	    $this->assertTrue($instance->revert());
-		$this->assertEqual($instance->getFileContent(), 'my content');
-	    
+		$this->assertEqual($instance->getFileContent(), __CLASS__.':'.__METHOD__.'()');
+        
+        //delete the file
 	    $this->assertTrue($instance->delete(true));
+        //the resource does not exist anymore in the onthology
+        $this->assertFalse(helpers_File::resourceExists($filePath));
+        //the file does not exist in file system
+	    $this->assertFalse(file_exists($filePath));
 	}
 
 	public function testHistory()
 	{
-		$instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository());
-	    $instance->setContent('my content');
-	    $instance->add();
-	    $instance->commit('commit message 1');
-	    
-	    $instance->setContent('my updated content');
-	    $instance->commit('commit message 2');
-	    
-	    $instance->setContent('my new updated content');
-	    $instance->commit('commit message 3');
-	    
+		$instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
+        $commonContent = __CLASS__.':'.__METHOD__.'()';
+        
+        //set the content & create the file in the same move
+	    $instance->setContent($commonContent);
+	    $this->assertTrue($instance->add());
+	    $this->assertTrue($instance->commit('test case : testHistory : commit 1'));
+        //add a version
+	    $instance->setContent($commonContent.' update 1');
+	    $this->assertTrue($instance->commit('test case : testHistory : commit 2'));
+	    //add a version
+	    $instance->setContent($commonContent.' update 2');
+	    $this->assertTrue($instance->commit('test case : testHistory : commit 3'));
+	    //get the history
 	    $history = $instance->getHistory();
+	    //check the history
+	    $this->assertEqual($history[0]['msg'], 'test case : testHistory : commit 3');
+	    $this->assertEqual($history[1]['msg'], 'test case : testHistory : commit 2');
+	    $this->assertEqual($history[2]['msg'], 'test case : testHistory : commit 1');
 	    
-	    $this->assertEqual($history[0]['msg'], 'commit message 3');
-	    $this->assertEqual($history[1]['msg'], 'commit message 2');
-	    $this->assertEqual($history[2]['msg'], 'commit message 1');
-	    
-	    $instance->delete(true);
+	    $this->assertTrue($instance->delete(true));
 	}
-	
+
 	public function testVersion()
 	{
-		$instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository());
-	    $instance->setContent('my content');
-	    $instance->add();
-	    $instance->commit('commit message 1');
+		$instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
+        $commonContent = __CLASS__.':'.__METHOD__.'()';
+        
+        //set the content & create the file in the same move
+	    $instance->setContent($commonContent);
+	    $this->assertTrue($instance->add());
+	    $this->assertTrue($instance->commit('test case : testVersion : commit 1'));
+        //get the version number of the file
 	    $this->assertEqual($instance->getVersion(), 1);
 	    
-	    $instance->setContent('my content 2');
-	    $instance->commit('commit message 2');
+	    $instance->setContent($commonContent.' update 1');
+	    $this->assertTrue($instance->commit('test case : testVersion : commit 2'));
 	    $this->assertEqual($instance->getVersion(), 2);
 	    
-	    $instance->delete(true);
+	    $this->assertTrue($instance->delete(true));
 	}
-	
+    /*
 	public function testRevertTo()
 	{
 		$instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository(), "", array(
@@ -552,18 +584,18 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		
 		$instance->delete(true);
 	}
-	
-	// Delete the test repository
-	public function testDeleteVersionedRepository()
-	{
-		//$this->getDefaultRepository()->delete();
-	}
+    */
 
+//	// Delete the test repository
+//	public function testDeleteVersionedRepository()
+//	{
+//		//$this->getDefaultRepository()->delete();
+//	}
 
     ///////////////////////////////////////////////////////////////////////////
     //  MANAGE FOLDER WITH THE VERSIONING API
     ///////////////////////////////////////////////////////////////////////////
-    
+  
     //Test list content
     public function testListContentRepository()
     {
@@ -572,21 +604,112 @@ class VersioningEnabledTestCase extends UnitTestCase {
         $filePathName = '';
         //list folder content
         $repository = $this->getDefaultRepository();
-        //file path
-	    $versionedFilePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
-	    $filePath = (string)$rootFile->getOnePropertyValue($versionedFilePathProp);
-	    //file name
-	    $versionedFilenameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
-	    $fileName= (string)$rootFile->getOnePropertyValue($versionedFilenameProp);
-        //build file path
-        $filePathName = $filePath.$fileName;
+//        //file path
+//	    $versionedFilePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
+//	    $filePath = (string)$rootFile->getOnePropertyValue($versionedFilePathProp);
+//	    //file name
+//	    $versionedFilenameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
+//	    $fileName= (string)$rootFile->getOnePropertyValue($versionedFilenameProp);
+//        //build file path
+//        $filePathName = $filePath.$fileName;
         //list folder content
-        $list = $repository->listContent($filePathName);
+        $list = $repository->listContent($rootFile->getAbsolutePath());
         //Check the number of listed files
         //$this->assertEqual(count($list), $this->envDeep*$this->envNbFiles+$this->envDeep);
-        $this->assertEqual(count($list), (1*$this->envNbFiles)+($this->envDeep>0?1:0));
+        $this->assertEqual(count($list), (1*$this->envNbFiles +1));
         //remove the env test
-        $rootFile->delete();
+        $rootfilePath = $rootFile->getAbsolutePath();
+        $this->assertTrue($rootFile->delete());
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    //  REPOSITORY
+    ///////////////////////////////////////////////////////////////////////////
+    
+    //Test the import function on the repository
+	public function testRespositoryImport()
+	{
+		$repository = $this->getDefaultRepository();
+        $tmpFolder = sys_get_temp_dir().'/TAO_TEST_CASE_TEST_RESPOSITORY_IMPORT';
+        $importedFolder = null;
+        //create tmp folder with some folders & files
+        if(file_exists($tmpFolder)){
+            $this->assertTrue(tao_helpers_File::remove($tmpFolder, true));
+            $this->assertFalse(file_exists($tmpFolder));
+        }
+        $this->assertTrue(mkdir($tmpFolder));
+        $this->assertTrue(touch($tmpFolder.'/file_test_empty'));
+        
+        //import the tmp folder in the TAO repository & save the resource
+        $importedFolder = $repository->import($tmpFolder, $repository->getUrl().'/TAO_TEST_CASE_TEST_RESPOSITORY_IMPORT', 'Import test case message', array('saveResource'=>true));
+        
+        $path = $importedFolder->getAbsolutePath().'/';
+        $this->assertNotNull($importedFolder);
+        $this->assertTrue($importedFolder instanceof core_kernel_versioning_File);
+        //check the resource exists
+        $searchedFile = helpers_File::getResource($path);
+        $this->assertNotNull($searchedFile);
+        $this->assertEqual($importedFolder->uriResource, $searchedFile->uriResource);
+        //the file exists
+        $this->assertTrue(file_exists($path));
+        //delete the imported folder
+        $this->assertTrue($importedFolder->delete(true));
+        //check the resource does not exist
+        $this->assertFalse(helpers_File::resourceExists($path));
+        $this->assertFalse(file_exists($path));
+
+        //import the tmp folder in the TAO repository & do not save the resource
+        $importedFolder = $repository->import($tmpFolder, $repository->getUrl().'/TAO_TEST_CASE_TEST_RESPOSITORY_IMPORT', 'Import test case message');
+        $this->assertNull($importedFolder);
+        //check the resource has not been saved
+        $this->assertFalse(helpers_File::resourceExists($path));
+        //the imported folder exists on the filesystem
+        $this->assertTrue(file_exists($path));
+        
+        //create it
+        $importedFolder = core_kernel_versioning_File::create('', '/TAO_TEST_CASE_TEST_RESPOSITORY_IMPORT',  $repository);
+        $this->assertTrue($importedFolder instanceof core_kernel_versioning_File);
+        //check the resource exists
+        $searchedFile = helpers_File::getResource($path);
+        $this->assertNotNull($searchedFile);
+        $this->assertEqual($importedFolder->uriResource, $searchedFile->uriResource);
+        //delete the imported folder
+        $this->assertTrue($importedFolder->delete(true));
+        //check the resource does not exist
+        $this->assertFalse(helpers_File::resourceExists($path));
+        $this->assertFalse(file_exists($path));
+        
+        //delete the imported folder
+        $this->assertFalse(helpers_File::resourceExists($path));
+
+		//delete the tmp folder
+        tao_helpers_File::remove($tmpFolder, true);
+	}
+
+    //test the export function on the repository
+    public function testRepositoryExport()
+    {
+        $rootFile = $this->createEnvTest();
+        $repository = $this->getDefaultRepository();
+        $list = $repository->listContent($rootFile->getAbsolutePath());
+        $this->assertEqual(count($list), (1*$this->envNbFiles)+($this->envDeep>0?1:0));
+        $exportPath = sys_get_temp_dir().DIRECTORY_SEPARATOR.'testRepositoryExport/';
+        $this->assertTrue($repository->export($rootFile->getAbsolutePath(), $exportPath));
+        
+        $listPath = $exportPath;
+        for($i=0;$i<$this->envDeep;$i++){
+            $listExport = tao_helpers_File::scandir($listPath);
+            $this->assertEqual(count($listExport), (1*$this->envNbFiles)+($this->envDeep>0?1:0));
+            $listExportDir = tao_helpers_File::scandir($listPath, array('only'=>tao_helpers_File::$DIR));
+            $this->assertEqual(count($listExportDir), 1);
+            $listExportFile = tao_helpers_File::scandir($listPath, array('only'=>tao_helpers_File::$FILE));
+            $this->assertEqual(count($listExportFile), $this->envNbFiles);
+            foreach($listExportDir as $file){
+                $listPath = $file;
+            }
+        }
+        
+        $this->assertTrue(tao_helpers_File::remove($exportPath, true));
+        $this->assertTrue($rootFile->delete(true));
+    }
 }
