@@ -135,6 +135,7 @@ class core_kernel_classes_Session
 			self::$instance = $staticInstance;
         }
         else{
+        	self::$instance = null;
         	self::$instance = self::singleton();
         }
         // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 end
@@ -172,7 +173,7 @@ class core_kernel_classes_Session
      * Short description of method setLg
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string lg
      * @return boolean
      */
@@ -195,7 +196,7 @@ class core_kernel_classes_Session
      * Short description of method getLg
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return string
      */
     public function getLg()
@@ -213,7 +214,7 @@ class core_kernel_classes_Session
      * Short description of method getNameSpace
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return string
      */
     public function getNameSpace()
@@ -231,7 +232,7 @@ class core_kernel_classes_Session
      * Returns array of languages in which data is defined into this module
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return array
      */
     public function getLanguages()
@@ -248,7 +249,7 @@ class core_kernel_classes_Session
      * Short description of method getUser
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return string
      */
     public function getUser()
@@ -266,7 +267,7 @@ class core_kernel_classes_Session
      * Short description of method setUser
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string login
      * @return mixed
      */
@@ -283,7 +284,7 @@ class core_kernel_classes_Session
      * Short description of method loadModel
      *
      * @access protected
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string model
      * @return boolean
      */
@@ -317,7 +318,7 @@ class core_kernel_classes_Session
      * Short description of method getLoadedModels
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return array
      */
     public function getLoadedModels()
@@ -337,7 +338,7 @@ class core_kernel_classes_Session
      * Short description of method getUpdatableModels
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return array
      */
     public function getUpdatableModels()
