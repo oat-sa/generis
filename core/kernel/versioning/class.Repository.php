@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 11.01.2012, 12:08:47 with ArgoUML PHP module 
+ * Automatically generated on 18.01.2012, 10:30:37 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -93,7 +93,8 @@ class core_kernel_versioning_Repository
 
         // section 127-0-1-1--548d6005:132d344931b:-8000:000000000000251D begin
         
-        //var_dump(debug_backtrace());
+        //add directory separator at the end of the repository path
+        $path = substr($path,strlen($path)-1,1)==DIRECTORY_SEPARATOR ? $path : $path.DIRECTORY_SEPARATOR;
         
         $versioningRepositoryClass = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDREPOSITORY);
         
@@ -136,7 +137,7 @@ class core_kernel_versioning_Repository
         // section 127-0-1-1--548d6005:132d344931b:-8000:000000000000251A begin
 		
         if(!GENERIS_VERSIONING_ENABLED){
-        	throw new core_kernel_versioning_VersioningDisabledException();
+        	throw new core_kernel_versioning_exception_VersioningDisabledException();
         }
         
         $VersioningRepositoryUrlProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL);
@@ -187,7 +188,7 @@ class core_kernel_versioning_Repository
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016D9 begin
         
-        $returnValue = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH));
+        $returnValue = (string) $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH));
         
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016D9 end
 
@@ -208,7 +209,7 @@ class core_kernel_versioning_Repository
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016EB begin
     
         if(!GENERIS_VERSIONING_ENABLED){
-        	throw new core_kernel_versioning_VersioningDisabledException();
+        	throw new core_kernel_versioning_exception_VersioningDisabledException();
         }
         
         if($this->authenticated){
@@ -246,10 +247,11 @@ class core_kernel_versioning_Repository
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F7 begin
         
         $path = $this->getPath();
+        /* remove the resource implies other consequence, do not remove 
         if(is_dir($path)){
         	// Remove the local copy
         	tao_helpers_File::remove($path, true);
-        }
+        }*/
         
         $returnValue = parent::delete();
         
@@ -280,7 +282,7 @@ class core_kernel_versioning_Repository
     }
 
     /**
-     * @exception core_kernel_versioning_ResourceAlreadyExistsException
+     * @exception core_kernel_versioning_exception_ResourceAlreadyExistsException
      * @exception common_exception_fileAlreadyExists
      * @param options.saveResource {boolean} Save the resource in the onthology
      *
@@ -299,11 +301,16 @@ class core_kernel_versioning_Repository
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002904 begin
         //the src has to be a folder for the moment
         if(!is_dir($src)){
-            throw new core_kernel_versioning_Exception('The first parameter has to be a valid folder');
+            throw new core_kernel_versioning_exception_Exception('The first parameter has to be a valid folder');
         }
-        if($this->authenticate()){
-            $returnValue = core_kernel_versioning_RepositoryProxy::singleton()->import($this, $src, $target, $message, $options);
+        
+        $repositoryUrl = $this->getUrl();
+        if(strstr($target, $repositoryUrl) === false){
+            throw new core_kernel_versioning_exception_Exception('The parameter target ('.$target.') does not match the repository url ('.$repositoryUrl.')');
         }
+        
+        $returnValue = core_kernel_versioning_RepositoryProxy::singleton()->import($this, $src, $target, $message, $options);
+        
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002904 end
 
         return $returnValue;
@@ -327,6 +334,26 @@ class core_kernel_versioning_Repository
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002908 end
 
         return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method getUrl
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @return string
+     */
+    public function getUrl()
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1-6006a946:134f026c0e2:-8000:00000000000018FF begin
+        
+        $returnValue = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL));
+        
+        // section 127-0-1-1-6006a946:134f026c0e2:-8000:00000000000018FF end
+
+        return (string) $returnValue;
     }
 
 } /* end of class core_kernel_versioning_Repository */

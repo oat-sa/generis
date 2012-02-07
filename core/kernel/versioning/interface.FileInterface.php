@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.01.2012, 19:01:49 with ArgoUML PHP module 
+ * Automatically generated on 02.02.2012, 16:53:22 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -103,22 +103,11 @@ interface core_kernel_versioning_FileInterface
      * @param  File resource
      * @param  string path
      * @param  boolean recursive
+     * @param  boolean force
      * @return boolean
      * @see core_kernel_versioning_File::add()
      */
-    public function add( core_kernel_classes_File $resource, $path, $recursive = false);
-
-    /**
-     * Short description of method isVersioned
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  File resource
-     * @param  string path
-     * @return boolean
-     * @see core_kernel_versioning_File::isVersioned()
-     */
-    public function isVersioned( core_kernel_classes_File $resource, $path);
+    public function add( core_kernel_classes_File $resource, $path, $recursive = false, $force = false);
 
     /**
      * Short description of method getHistory
@@ -133,16 +122,28 @@ interface core_kernel_versioning_FileInterface
     public function getHistory( core_kernel_classes_File $resource, $path);
 
     /**
-     * Short description of method hasLocalChanges
+     * Short description of method getStatus
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  File resource
      * @param  string path
-     * @return boolean
-     * @see core_kernel_versioning_File::hasLocalChanges()
+     * @param  array options
+     * @return int
      */
-    public function hasLocalChanges( core_kernel_classes_File $resource, $path);
+    public function getStatus( core_kernel_classes_File $resource, $path, $options = array());
+
+    /**
+     * Short description of method resolve
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  File resource
+     * @param  string path
+     * @param  string version
+     * @return boolean
+     */
+    public function resolve( core_kernel_classes_File $resource, $path, $version);
 
 } /* end of interface core_kernel_versioning_FileInterface */
 

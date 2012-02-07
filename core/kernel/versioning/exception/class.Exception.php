@@ -3,18 +3,18 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - core/kernel/versioning/class.Exception.php
+ * Generis Object Oriented API -
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.10.2011, 10:12:12 with ArgoUML PHP module 
+ * Automatically generated on 06.02.2012, 11:57:55 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
- * @subpackage kernel_versioning
+ * @subpackage kernel_versioning_exception
  */
 
 if (0 > version_compare(PHP_VERSION, '5')) {
@@ -37,14 +37,14 @@ require_once('class.Exception.php');
 // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016ED-constants end
 
 /**
- * Short description of class core_kernel_versioning_Exception
+ * Short description of class core_kernel_versioning_exception_Exception
  *
  * @access public
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package core
- * @subpackage kernel_versioning
+ * @subpackage kernel_versioning_exception
  */
-class core_kernel_versioning_Exception
+class core_kernel_versioning_exception_Exception
     extends Exception
 {
     // --- ASSOCIATIONS ---
@@ -54,6 +54,6 @@ class core_kernel_versioning_Exception
 
     // --- OPERATIONS ---
 
-} /* end of class core_kernel_versioning_Exception */
+} /* end of class core_kernel_versioning_exception_Exception */
 
 ?>

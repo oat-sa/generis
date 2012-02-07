@@ -60,6 +60,12 @@ class core_kernel_versioning_subversion_Repository
      */
     private static $instance = null;
 
+    /**
+     * Authenticated server
+     * @var type array
+     */
+    private static $authenticatedRepositories = array();
+    
     // --- OPERATIONS ---
 
     /**
@@ -79,9 +85,12 @@ class core_kernel_versioning_subversion_Repository
 
         // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002503 begin
         
+        $startTime = helpers_Time::getMicroTime();
         if($vcs->authenticate()){
             $returnValue = svn_checkout($url, $path, $revision);
         }
+        $endTime = helpers_Time::getMicroTime();
+        common_Logger::i("svn_checkout (".$url.' -> '.$path.') -> '.($endTime-$startTime).'s');
         
         // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002503 end
 
@@ -104,17 +113,25 @@ class core_kernel_versioning_subversion_Repository
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E6 begin
         
-		svn_auth_set_parameter(PHP_SVN_AUTH_PARAM_IGNORE_SSL_VERIFY_ERRORS, true); // <--- Important for certificate issues!
-		svn_auth_set_parameter(SVN_AUTH_PARAM_NON_INTERACTIVE, true);
-		svn_auth_set_parameter(SVN_AUTH_PARAM_NO_AUTH_CACHE, true);
-		svn_auth_set_parameter(SVN_AUTH_PARAM_DONT_STORE_PASSWORDS, true);
-		
-        svn_auth_set_parameter(SVN_AUTH_PARAM_DEFAULT_USERNAME, $login);
-        svn_auth_set_parameter(SVN_AUTH_PARAM_DEFAULT_PASSWORD, $password);
-        
-        if(@svn_info((string)$vcs->getOnePropertyValue(new core_kernel_classes_property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL))) !== false){
-        	$returnValue = true;
+        //if the system has already do its authentication to the repository, return the negociation result
+        if(isset(self::$authenticatedRepositories[$vcs->uriResource])){
+            $returnValue = self::$authenticatedRepositories[$vcs->uriResource];
         }
+        //authenticate the system to the repository
+        else{
+            svn_auth_set_parameter(PHP_SVN_AUTH_PARAM_IGNORE_SSL_VERIFY_ERRORS, true); // <--- Important for certificate issues!
+            svn_auth_set_parameter(SVN_AUTH_PARAM_NON_INTERACTIVE, true);
+            svn_auth_set_parameter(SVN_AUTH_PARAM_NO_AUTH_CACHE, true);
+            svn_auth_set_parameter(SVN_AUTH_PARAM_DONT_STORE_PASSWORDS, true);
+
+            svn_auth_set_parameter(SVN_AUTH_PARAM_DEFAULT_USERNAME, $login);
+            svn_auth_set_parameter(SVN_AUTH_PARAM_DEFAULT_PASSWORD, $password);
+
+            if(@svn_info((string) $vcs->getOnePropertyValue(new core_kernel_classes_property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL))) !== false){
+                $returnValue = true;
+            }
+        }
+        self::$authenticatedRepositories[$vcs->uriResource] = $returnValue;
         
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E6 end
 
@@ -138,11 +155,14 @@ class core_kernel_versioning_subversion_Repository
 
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C begin
         
+        $startTime = helpers_Time::getMicroTime();
         $revision = is_null($revision) ? -1 : $revision;
         
         if($vcs->authenticate()){
             $returnValue = svn_export($src, $target, true, $revision);
         }
+        $endTime = helpers_Time::getMicroTime();
+        common_Logger::i("svn_export (".$src.' -> '.$target.') -> '.($endTime-$startTime).'s');
 
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C end
 
@@ -169,39 +189,97 @@ class core_kernel_versioning_subversion_Repository
         //Does not work in the current version of php (try later) https://bugs.php.net/bug.php?id=60293
         //$returnValue = svn_import($src, $target, true);
         
+        $startTime = helpers_Time::getMicroTime();
         $saveResource = isset($options['saveResource']) && $options['saveResource'] ? true : false;
         
         if($vcs->authenticate()){
-            $src = realpath($src);
-            //extract folder name
-            $folderName = basename($src);
-            $relativePath = $target.$folderName;
-            $absolutePath = $vcs->getPath().$folderName;
+            $importFolderAlreadyExists = false;
+            $repositoryUrl = $vcs->getUrl();
+            $relativePath = substr($target, strlen($repositoryUrl));
+            $absolutePath = $vcs->getPath().$relativePath;
 
-            //check if the file exists in the onthology
+            /*
+            // The resource could already exist, this is not a problem
+            //check if the resource already exist
             if(helpers_File::resourceExists($absolutePath)){
-                throw new core_kernel_versioning_ResourceAlreadyExistsException('The folder ('.$absolutePath.') already exists in the repository ('.$vcs->getPath().')');
-            }else if(file_exists($absolutePath)){
+                throw new core_kernel_versioning_exception_ResourceAlreadyExistsException('The folder ('.$absolutePath.') already exists in the repository ('.$vcs->getPath().')');
+            }
+            // Same thing here
+            //check if the file already exist
+            else if(file_exists($absolutePath)){
                 throw new common_exception_fileAlreadyExists($absolutePath);
             }
+            */
 
             //Copy the src folder to the target destination
-            tao_helpers_File::copy($src, $vcs->getPath());
-            //Create the resource (it should be an option, deleted if not required)
-            $folder = core_kernel_versioning_File::create('', $relativePath, $vcs);
-            //Add & commit
-            if($folder->add(true) && $folder->commit($message, true)){
-                if($saveResource){
-                    $returnValue = $folder;
+            tao_helpers_File::copy($src, $absolutePath);
+            
+            //Get the resource folder if it already exists in the onthology     
+            $importFolder = helpers_File::getResource($absolutePath);
+            if(is_null($importFolder)){
+                //else create it
+                $importFolder = core_kernel_versioning_File::create('', $relativePath, $vcs);
                 }else{
-                    $resourceToDelete = new core_kernel_classes_Resource($folder->uriResource);
-                    $resourceToDelete->delete();
+                $importFolderAlreadyExists = true;
                 }
+            
+//            //Get status of the imported folder
+//            $importFolderStatus = $importFolder->getStatus(array('SHOW_UPDATES'=>false));
+//            $importFolderYetCommited = true;
+//            if($importFolderStatus == VERSIONING_FILE_STATUS_ADDED || $importFolderStatus == VERSIONING_FILE_STATUS_UNVERSIONED){
+//                $importFolderYetCommited = false;
+//            }
+//            
+//            //If the import folder has been yet commited, commit its content
+//            if($importFolderYetCommited){
+//                $filesToCommit = tao_helpers_File::scandir($importFolder->getAbsolutePath());
+//                $pathsFilesToCommit = array();
+//                foreach($filesToCommit as $fileToCommit){
+//                    $pathFileToCommit = $fileToCommit->getAbsolutePath();
+//                    $pathsFilesToCommit[] = $pathFileToCommit;
+//                    //Add content of the folder if it is not versioned or partially not versioned
+//                    if(!core_kernel_versioning_FileProxy::add($importFolder, $pathFileToCommit, true, true)){
+//                        throw new core_kernel_versioning_exception_Exception('unable to import the folder ('.$src.') to the destination ('.$target.'). The add step encountered a problem');
+//                    }
+//                }
+//                //Commit all the files in one commit operation
+//                if(!core_kernel_versioning_FileProxy::commit($VersionedUnitFolderInstance, $pathsFilesToCommit)){
+//                    throw new core_kernel_versioning_exception_Exception('unable to import the folder ('.$src.') to the destination ('.$target.'). The commit step encountered a problem');
+//                }
+//            }
+//            //Else commit itself
+//            else{
+//                //Add the folder
+//                if(!$importFolder->add(true, true)){
+//                    throw new core_kernel_versioning_exception_Exception('unable to import the folder ('.$src.') to the destination ('.$target.'). The add step encountered a problem');
+//                }
+//                //And commit it
+//                if(!$importFolder->commit($message, true)){
+//                    throw new core_kernel_versioning_exception_Exception('unable to import the folder ('.$src.') to the destination ('.$target.'). The commit step encountered a problem');
+//                }
+//            }
+            
+            //Add the folder
+            if(!$importFolder->add(true, true)){
+                throw new core_kernel_versioning_exception_Exception('unable to import the folder ('.$src.') to the destination ('.$target.'). The add step encountered a problem');
+            }
+            //And commit it
+            if(!$importFolder->commit($message, true)){
+                throw new core_kernel_versioning_exception_Exception('unable to import the folder ('.$src.') to the destination ('.$target.'). The commit step encountered a problem');
+            }
+            
+            //Delete the resource if the developer does not want to keep a reference in the onthology
+            if($saveResource){
+                $returnValue = $importFolder;
             }
             else{
-                throw new core_kernel_versioning_Exception('unable to add & commit the folder ('.$src.') to the destination ('.$target.')');
+                $resourceToDelete = new core_kernel_classes_Resource($importFolder->uriResource);
+                $resourceToDelete->delete();
             }
         }
+        
+        $endTime = helpers_Time::getMicroTime();
+        common_Logger::i("svn_import (".$src.' -> '.$target.') -> '.($endTime-$startTime).'s');
         
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 end
 
@@ -224,6 +302,7 @@ class core_kernel_versioning_subversion_Repository
 
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 begin
         
+        $startTime = helpers_Time::getMicroTime();
         if($vcs->authenticate()){
             $svnList = svn_ls($path, $revision);
             foreach($svnList as $svnEntry){
@@ -236,6 +315,8 @@ class core_kernel_versioning_subversion_Repository
                 );
             }
         }
+        $endTime = helpers_Time::getMicroTime();
+        common_Logger::i("svn_listContent (".$path.') -> '.($endTime-$startTime).'s');
         
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 end
 

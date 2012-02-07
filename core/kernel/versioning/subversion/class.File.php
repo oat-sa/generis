@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.01.2012, 19:01:49 with ArgoUML PHP module 
+ * Automatically generated on 02.02.2012, 16:53:22 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -80,10 +80,14 @@ class core_kernel_versioning_subversion_File
 
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A begin
         
-        common_Logger::i('svn_commit '.$path.' msg='.$message.' recursive='.($recursive==true?'true':'false'));
+        $startTime = helpers_Time::getMicroTime();
         if($resource->getRepository()->authenticate()){
-        	$returnValue = svn_commit($message, array($path), !$recursive)===false ? false : true;
+            $paths = is_array($path) ? $path : array($path);
+        	$returnValue = svn_commit($message, $paths/*, !$recursive*/);
+            $returnValue = $returnValue===false ? false : true;
         }
+        $endTime = helpers_Time::getMicroTime();
+        common_Logger::i("svn_commit (".$path.') recursive='.($recursive==true?'true':'false').'-> '.($endTime-$startTime).'s');
         
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A end
 
@@ -217,10 +221,12 @@ class core_kernel_versioning_subversion_File
 
         // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 begin
         
-        common_Logger::i("svn_delete ".$path);
+        $startTime = helpers_Time::getMicroTime();
         if($resource->getRepository()->authenticate()){
             $returnValue = svn_delete($path, true); //force the delete
         }
+        $endTime =  helpers_Time::getMicroTime();
+        common_Logger::i("svn_delete (".$path.') ->'.($endTime - $startTime).'s');
         
         // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 end
 
@@ -235,84 +241,26 @@ class core_kernel_versioning_subversion_File
      * @param  File resource
      * @param  string path
      * @param  boolean recursive
+     * @param  boolean force
      * @return boolean
      * @see core_kernel_versioning_File::add()
      */
-    public function add( core_kernel_classes_File $resource, $path, $recursive = false)
+    public function add( core_kernel_classes_File $resource, $path, $recursive = false, $force = false)
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 begin
         
-        common_Logger::i("svn_add ".$path.' recursive='.($recursive?'true':'false'));
+        $startTime = helpers_Time::getMicroTime();
 	    if($resource->getRepository()->authenticate()){
-        	$returnValue = svn_add($path, $recursive);
+        	$returnValue = svn_add($path, $recursive, $force);
 	    }else{
             //throw an Exception
         }
+        $endTime = helpers_Time::getMicroTime();
+        common_Logger::i("svn_add (".$path.') recursive='.($recursive?'true':'false').' -> '.($endTime-$startTime).'s');
         
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 end
-
-        return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method isVersioned
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  File resource
-     * @param  string path
-     * @return boolean
-     * @see core_kernel_versioning_File::isVersioned()
-     */
-    public function isVersioned( core_kernel_classes_File $resource, $path)
-    {
-        $returnValue = (bool) false;
-
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016FA begin
-                
-        if($resource->getRepository()->authenticate()){
-            
-            //Status of the target
-            $status = null;
-            //Get a list of statuses
-            $statuses = svn_status($path, SVN_NON_RECURSIVE);
-            // * An explanation could be that the file is in a non working copy directory, it occured when we create a folders structure
-            if($statuses !== false){
-                //Extract required status
-                foreach($statuses as $s){
-                    if($s['path'] == $path){
-                        $status = $s;
-                    }
-                }
-                // If the file has a status, check the status is not unversioned or added
-                if(!is_null($status)){
-
-                    $text_status = $status['text_status'];
-                    if($text_status		!= SVN_WC_STATUS_UNVERSIONED	// 2. FILE UNVERSIONED
-                        && $text_status	!= SVN_WC_STATUS_ADDED			// 4. JUST ADDED FILE
-                    ){
-                        // 6. SVN_WC_STATUS_DELETED
-                        // 7. SVN_WC_STATUS_REPLACED
-                        // 8. SVN_WC_STATUS_MODIFIED
-                        $returnValue = true;
-                    }
-                }
-                //No status can provide the following information, the file has been versioned & no changes have been made
-                else {
-                    if(!file_exists(realpath($path))){
-                        $returnValue = false;
-                    }else {
-                        $returnValue = true;
-                    }
-                }
-            }
-        }
-        
-        common_Logger::i("isVersioned ".$path.' = '.($returnValue?'true':'false'));
-            
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016FA end
 
         return (bool) $returnValue;
     }
@@ -333,10 +281,12 @@ class core_kernel_versioning_subversion_File
 
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016FB begin
         
-        common_Logger::i("getHistory ".$path);
+        $startTime = helpers_Time::getMicroTime();
         if($resource->getRepository()->authenticate()){
             $returnValue = svn_log($path);
         }
+        $endTime = helpers_Time::getMicroTime();
+        common_Logger::i('svn_getHistory ('.$path.') -> '.($endTime-$startTime).'s');
         
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016FB end
 
@@ -344,35 +294,100 @@ class core_kernel_versioning_subversion_File
     }
 
     /**
-     * Short description of method hasLocalChanges
+     * Short description of method getStatus
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  File resource
      * @param  string path
-     * @return boolean
-     * @see core_kernel_versioning_File::hasLocalChanges()
+     * @param  array options
+     * @return int
      */
-    public function hasLocalChanges( core_kernel_classes_File $resource, $path)
+    public function getStatus( core_kernel_classes_File $resource, $path, $options = array())
     {
-        $returnValue = (bool) false;
+        $returnValue = (int) 0;
 
-        // section 127-0-1-1--485428cc:133267d2802:-8000:0000000000001732 begin
-    
-        common_Logger::i("hasLocalChanges ".$path);
+        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001902 begin
+        
+        $startTime = helpers_Time::getMicroTime();
+        
         if($resource->getRepository()->authenticate()){
-            $status = svn_status($path);
-            // If the file has a status, check the status is not unversioned or added
-            if(!empty($status)){
-
-                $text_status = $status[0]['text_status'];
-                if($text_status		== SVN_WC_STATUS_MODIFIED){	// 8. SVN_WC_STATUS_MODIFIED
-                    $returnValue = true;
+            
+            //Status of the target
+            $status = null;
+            //Get a list of statuses
+            $svnStatusOptions = SVN_NON_RECURSIVE;
+            if($options['SHOW_UPDATES']){
+                $svnStatusOptions = $svnStatusOptions|SVN_SHOW_UPDATES;
+            }
+            
+            $statuses = @svn_status($path, $svnStatusOptions);
+            
+            // * An explanation could be that the file is in a non working copy directory, it occured when we create a folders structure
+            if($statuses !== false){
+                //Extract required status
+                foreach($statuses as $s){
+                    if($s['path'] == $path){
+                        $status = $s;
+                    }
                 }
+                // If the file has a status, check the status is not unversioned or added
+                if(!is_null($status)){
+                    if($status['locked']){
+                        $returnValue = VERSIONING_FILE_STATUS_LOCKED;
+                    }
+                    else if($status['repos_text_status'] == VERSIONING_FILE_STATUS_MODIFIED){
+                        $returnValue = VERSIONING_FILE_STATUS_REMOTELY_MODIFIED;
+                    }
+                    else{
+                        $returnValue = $status['text_status'];
+                    }
+                }
+                //No status can provide the following information, the file has been versioned & no changes have been made
+                else {
+                    if(!file_exists($path)){
+                        $returnValue = VERSIONING_FILE_STATUS_UNVERSIONED;
+                    }
+                    else {
+                        $returnValue = VERSIONING_FILE_STATUS_NORMAL;
+                    }
+                }
+            }
+            //the return of the request is false
+            else{
+                $returnValue = VERSIONING_FILE_STATUS_UNVERSIONED;
             }
         }
         
-        // section 127-0-1-1--485428cc:133267d2802:-8000:0000000000001732 end
+        $endTime =  helpers_Time::getMicroTime();
+        common_Logger::i("svn_getStatus ('.$path.') '.$returnValue.' -> ".($endTime - $startTime).'s');
+        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001902 end
+
+        return (int) $returnValue;
+    }
+
+    /**
+     * Short description of method resolve
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  File resource
+     * @param  string path
+     * @param  string version
+     * @return boolean
+     */
+    public function resolve( core_kernel_classes_File $resource, $path, $version)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 begin
+        
+        $startTime = helpers_Time::getMicroTime();
+        core_kernel_versioning_subversionWindows_File::singleton()->resolve($resource, $path, $version);
+        $endTime =  helpers_Time::getMicroTime();
+        common_Logger::i("svn_resolve ('.$path.' : '.$version.') -> ".($endTime - $startTime).'s');
+        
+        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 end
 
         return (bool) $returnValue;
     }

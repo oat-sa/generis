@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 11.01.2012, 12:05:46 with ArgoUML PHP module 
+ * Automatically generated on 25.01.2012, 15:55:00 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -80,8 +80,9 @@ class core_kernel_versioning_subversionWindows_Repository
         // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002503 begin
         
         try {
-        	$url = $vcs->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL));
-        	$path = $vcs->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH));
+        	$url = (string) $vcs->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL));
+        	$path = (string) $vcs->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH));
+        	$path = ($path[strlen($path)-1] == DIRECTORY_SEPARATOR) ? substr($path, 0, strlen($path)-1) : $path;
         	
         	if (empty($url)){
         		throw new common_Exception(__CLASS__ . ' -> ' . __FUNCTION__ . '() : the url must be specified');
@@ -116,7 +117,7 @@ class core_kernel_versioning_subversionWindows_Repository
         $returnValue = (bool) false;
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E6 begin
-        throw new core_kernel_versioning_Exception("The function (".__METHOD__.") is not available in this versioning implementation (".__CLASS__.")");
+        throw new core_kernel_versioning_exception_Exception("The function (".__METHOD__.") is not available in this versioning implementation (".__CLASS__.")");
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E6 end
 
         return (bool) $returnValue;
@@ -139,7 +140,7 @@ class core_kernel_versioning_subversionWindows_Repository
 
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C begin
         $r=!is_null($revision)?' -r '.$revision:'';
-        $returnValue = core_kernel_versioning_subversionWindows_Utils::exec($vcs, 'export "' . $src . '" "' . $target.'"'.$r);
+        $returnValue = core_kernel_versioning_subversionWindows_Utils::exec($vcs, 'export --force "' . $src . '" "' . $target.'"'.$r);
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C end
 
         return (bool) $returnValue;

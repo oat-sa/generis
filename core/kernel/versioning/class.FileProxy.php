@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.01.2012, 19:01:49 with ArgoUML PHP module 
+ * Automatically generated on 02.02.2012, 16:53:22 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -165,39 +165,18 @@ class core_kernel_versioning_FileProxy
      * @param  File resource
      * @param  string path
      * @param  boolean recursive
+     * @param  boolean force
      * @return boolean
      * @see core_kernel_versioning_File::add()
      */
-    public function add( core_kernel_classes_File $resource, $path, $recursive = false)
+    public function add( core_kernel_classes_File $resource, $path, $recursive = false, $force = false)
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 begin
         $delegate = $this->getImplementationToDelegateTo($resource);
-		$returnValue = $delegate->add($resource, $path, $recursive);
+		$returnValue = $delegate->add($resource, $path, $recursive, $force);
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 end
-
-        return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method isVersioned
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  File resource
-     * @param  string path
-     * @return boolean
-     * @see core_kernel_versioning_File::isVersioned()
-     */
-    public function isVersioned( core_kernel_classes_File $resource, $path)
-    {
-        $returnValue = (bool) false;
-
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016FA begin
-        $delegate = $this->getImplementationToDelegateTo($resource);
-		$returnValue = $delegate->isVersioned($resource, $path);
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016FA end
 
         return (bool) $returnValue;
     }
@@ -225,23 +204,45 @@ class core_kernel_versioning_FileProxy
     }
 
     /**
-     * Short description of method hasLocalChanges
+     * Short description of method getStatus
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  File resource
      * @param  string path
-     * @return boolean
-     * @see core_kernel_versioning_File::hasLocalChanges()
+     * @param  array options
+     * @return int
      */
-    public function hasLocalChanges( core_kernel_classes_File $resource, $path)
+    public function getStatus( core_kernel_classes_File $resource, $path, $options = array())
+    {
+        $returnValue = (int) 0;
+
+        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001902 begin
+        $delegate = $this->getImplementationToDelegateTo($resource);
+		$returnValue = $delegate->getStatus($resource, $path, $options);
+        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001902 end
+
+        return (int) $returnValue;
+    }
+
+    /**
+     * Short description of method resolve
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  File resource
+     * @param  string path
+     * @param  string version
+     * @return boolean
+     */
+    public function resolve( core_kernel_classes_File $resource, $path, $version)
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--485428cc:133267d2802:-8000:0000000000001732 begin
+        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 begin
         $delegate = $this->getImplementationToDelegateTo($resource);
-		$returnValue = $delegate->hasLocalChanges($resource, $path);
-        // section 127-0-1-1--485428cc:133267d2802:-8000:0000000000001732 end
+		$returnValue = $delegate->resolve($resource, $path, $version);
+        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 end
 
         return (bool) $returnValue;
     }

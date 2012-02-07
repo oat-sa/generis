@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.01.2012, 19:01:49 with ArgoUML PHP module 
+ * Automatically generated on 02.02.2012, 16:53:22 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -136,6 +136,13 @@ class core_kernel_versioning_subversionWindows_File
         $returnValue = (bool) false;
 
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165E begin
+        
+        /**
+         * @todo make all the functions coherent
+         * Sometimes u pass a path sometimes not, the resource is enough
+         * if we use just the resource, the only way to use svn will be to use generis ... so ... 6
+         */
+        $path = $resource->getAbsolutePath();
         try {
         	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'revert "' . $path.'"');
         }
@@ -164,7 +171,7 @@ class core_kernel_versioning_subversionWindows_File
         // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 begin
         
         try {
-        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'delete "' . $path.'"');
+        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'delete "' . $path.'" --force');
         }
         catch (Exception $e) {
         	die('Error code `svn_error_delete` in ' . $e->getMessage());
@@ -183,77 +190,25 @@ class core_kernel_versioning_subversionWindows_File
      * @param  File resource
      * @param  string path
      * @param  boolean recursive
+     * @param  boolean force
      * @return boolean
      * @see core_kernel_versioning_File::add()
      */
-    public function add( core_kernel_classes_File $resource, $path, $recursive = false)
+    public function add( core_kernel_classes_File $resource, $path, $recursive = false, $force = false)
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 begin
         
         try {
-        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'add --non-recursive "' . $path .'"');
+            $rStr = !$recursive ? '--non-recursive' : '';
+        	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'add "' . $path .'" '.$rStr);
         } 
         catch (Exception $e) {
         	die('Error code `svn_error_add` in ' . $e->getMessage());
         }
         
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 end
-
-        return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method isVersioned
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  File resource
-     * @param  string path
-     * @return boolean
-     * @see core_kernel_versioning_File::isVersioned()
-     */
-    public function isVersioned( core_kernel_classes_File $resource, $path)
-    {
-        $returnValue = (bool) false;
-
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016FA begin
-        
-        $status = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'status "' . $path .'"');
-        
-        // If the file has a status, check the status is not unversioned or added
-        if(!empty($status)){
-        	$resourceStatus = null;
-                $lines = explode("\n", $status);
-                foreach ($lines as $line) {
-                    //if(preg_match('#^.*'.preg_quote($path).'$#', $line)){
-                    if(strstr($line, realpath($path)) !== false){
-                        $resourceStatus = $line;
-                    }
-                }
-                if(!is_null($resourceStatus)){
-                    $text_status = substr($resourceStatus, 0, 1);
-                    if($text_status		!= '?'	// FILE UNVERSIONED
-                            && $text_status	!= 'A'	// JUST ADDED FILE
-                            && $text_status	!= 'D'	// JUST DELETED FILE
-                    ){
-                            // 6. SVN_WC_STATUS_DELETED
-                            // 7. SVN_WC_STATUS_REPLACED
-                            // 8. SVN_WC_STATUS_MODIFIED
-                            $returnValue = true;
-                    }
-                }
-        } 
-        else {
-            //the file is maybe inside an unversioned folder (status null, info null)
-        	$info = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'info "' . $path .'"');
-            if (!empty($info) && file_exists($path)){
-                $returnValue = true;
-            }
-        }
-        
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016FA end
 
         return (bool) $returnValue;
     }
@@ -273,29 +228,121 @@ class core_kernel_versioning_subversionWindows_File
         $returnValue = array();
 
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016FB begin
-        throw new core_kernel_versioning_subversionWindows_Repository("The function (".__METHOD__.") is not available in this versioning implementation (".__CLASS__.")");
+        
+        $xmlStr = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'log "' . $path .'" --xml');
+        //$xmlStr = implode('', $arrayLog);
+        
+        $dom = new DOMDocument();
+        @$dom->loadXML($xmlStr);
+
+        $xpath = new DOMXPath($dom);
+        $entries = $xpath->query("//logentry");
+
+        foreach ($entries as $entry) {
+            $returnValue[] = array(
+                 'revision'   => $entry->getAttribute('revision')
+                 , 'author'     => $entry->getElementsByTagName('author')->item(0)->nodeValue
+                 , 'time'       => strtotime($entry->getElementsByTagName('date')->item(0)->nodeValue)
+                 , 'msg'        => $entry->getElementsByTagName('msg')->item(0)->nodeValue
+            );
+        }
+        
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016FB end
 
         return (array) $returnValue;
     }
 
     /**
-     * Short description of method hasLocalChanges
+     * Short description of method getStatus
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  File resource
      * @param  string path
-     * @return boolean
-     * @see core_kernel_versioning_File::hasLocalChanges()
+     * @param  array options
+     * @return int
      */
-    public function hasLocalChanges( core_kernel_classes_File $resource, $path)
+    public function getStatus( core_kernel_classes_File $resource, $path, $options = array())
+    {
+        $returnValue = (int) 0;
+
+        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001902 begin
+        
+        $returnValue = null;
+        $resourceStatus = null;
+        
+        $statuses = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'status "' . $path .'" --show-updates');
+        $lines = explode("\n", $statuses);
+                foreach ($lines as $line) {
+                    //if(preg_match('#^.*'.preg_quote($path).'$#', $line)){
+                    $pattern = '@'.preg_quote($path).'$@';
+                    if(preg_match($pattern, $line) != 0){
+                        $resourceStatus = $line;
+                        break;
+                    }
+                }
+                
+        // If the file has a status, check the status is not unversioned or added
+        if (!is_null($resourceStatus)) {
+                
+                    $text_status = substr($resourceStatus, 0, 1);
+            switch ($text_status) {
+                        case '?':
+                            $returnValue = VERSIONING_FILE_STATUS_UNVERSIONED;
+                            break;
+                        case 'A':
+                            $returnValue = VERSIONING_FILE_STATUS_ADDED;
+                            break;
+                        case 'A':
+                            $returnValue = VERSIONING_FILE_STATUS_DELETED;
+                            break;
+                        case 'C':
+                            $returnValue = VERSIONING_FILE_STATUS_CONFLICTED;
+                            break;
+                        case 'M':
+                            $returnValue = VERSIONING_FILE_STATUS_MODIFIED;
+                            break;
+                        case 'R':
+                            $returnValue = VERSIONING_FILE_STATUS_REPLACED;
+                            break;
+                        case ' ':
+                            $returnValue = VERSIONING_FILE_STATUS_REMOTELY_MODIFIED;
+                            break;
+                    }
+        } else {
+            //the file is maybe inside an unversioned folder (status null, info null)
+            $info = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'info "' . $path . '"');
+            if (!empty($info) && file_exists($path)) {
+                $returnValue = VERSIONING_FILE_STATUS_NORMAL;
+            } else {
+                $returnValue = VERSIONING_FILE_STATUS_UNVERSIONED;
+        }
+        }
+        
+        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001902 end
+
+        return (int) $returnValue;
+    }
+
+    /**
+     * Short description of method resolve
+     *
+     * @access public
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @param  File resource
+     * @param  string path
+     * @param  string version
+     * @return boolean
+     */
+    public function resolve( core_kernel_classes_File $resource, $path, $version)
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--485428cc:133267d2802:-8000:0000000000001732 begin
-        throw new core_kernel_versioning_subversionWindows_Repository("The function (".__METHOD__.") is not available in this versioning implementation (".__CLASS__.")");
-        // section 127-0-1-1--485428cc:133267d2802:-8000:0000000000001732 end
+        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 begin
+        
+        $returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'resolve --accept '.$version.' "' . $path .'"');
+        
+        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 end
 
         return (bool) $returnValue;
     }
