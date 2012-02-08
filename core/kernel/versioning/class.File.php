@@ -38,12 +38,14 @@ require_once('core/kernel/versioning/class.FileProxy.php');
 const VERSIONING_FILE_STATUS_UNVERSIONED        = 2;
 const VERSIONING_FILE_STATUS_NORMAL             = 3;
 const VERSIONING_FILE_STATUS_ADDED              = 4;
+const VERSIONING_FILE_STATUS_MISSING            = 5;
 const VERSIONING_FILE_STATUS_DELETED            = 6;
 const VERSIONING_FILE_STATUS_REPLACED           = 7;
 const VERSIONING_FILE_STATUS_MODIFIED           = 8;
 const VERSIONING_FILE_STATUS_CONFLICTED         = 10;
 const VERSIONING_FILE_STATUS_REMOTELY_MODIFIED  = 15;
 const VERSIONING_FILE_STATUS_REMOTELY_LOCKED    = 16;
+const VERSIONING_FILE_STATUS_REMOTELY_DELETED   = 17;
 
 const VERSIONING_FILE_VERSION_MINE              = 'mine-full';
 const VERSIONING_FILE_VERSION_THEIRS            = 'theirs-full';
@@ -236,12 +238,14 @@ class core_kernel_versioning_File
         
         $status = $this->getStatus();
         
-        //If the remote version has been modified 
+        //if a revision has been given
+        //or the remote version has been modified 
         //or the local working copy does not exist 
         //or the target is a directory
-        if(is_dir($this->getAbsolutePath()) || (
-            $status      == VERSIONING_FILE_STATUS_REMOTELY_MODIFIED 
-            &&              $this->fileExists()
+        if( !is_null($revision)
+            || is_dir($this->getAbsolutePath()) || (
+            $status == VERSIONING_FILE_STATUS_REMOTELY_MODIFIED 
+            && $this->fileExists()
         )){
             $returnValue = core_kernel_versioning_FileProxy::singleton()->update($this, $this->getAbsolutePath(), $revision);
         }
@@ -304,14 +308,35 @@ class core_kernel_versioning_File
         
         if($this->fileExists() && GENERIS_VERSIONING_ENABLED){
         	$filePath = $this->getAbsolutePath();
-            //delete the svn resource
-            $isVersioned = $this->isVersioned();
-        	$returnValue = core_kernel_versioning_FileProxy::singleton()->delete($this, $filePath, true);
-        	//commit the svn delete
-            if($returnValue && $isVersioned){
+            //check if the file is up to date
+            
+            /**
+             * @todo this code won't work in shell implentation
+             */
+            //If the file has yet been deleted remotly => udpate it
+            if($this->getStatus() == VERSIONING_FILE_STATUS_REMOTELY_DELETED){
+                $returnValue = $this->update();
+                /**
+                 * @todo check the file is now well deleted locally
+                 */
+            }
+            //else delete it
+            else{
+                //check if the resource is versioned before the delete
+                $isVersioned = $this->isVersioned();
+                //if in conflict solve before the problem by using our version of the file
+                if($this->isInConflict()){
+                    $this->resolve(VERSIONING_FILE_VERSION_MINE);
+                }
                 //delete the svn resource
-		        $returnValue = $this->commit(__('delete the file').' '.$filePath, is_dir($filePath));
-        	}
+                $returnValue = core_kernel_versioning_FileProxy::singleton()->delete($this, $filePath, true);
+                //commit the svn delete
+                if($returnValue && $isVersioned){
+                    //delete the svn resource
+                    $returnValue = $this->commit(__('delete the file').' '.$filePath, is_dir($filePath));
+                }
+            }
+            
         }
         else{
             $returnValue = true;
