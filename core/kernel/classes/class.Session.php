@@ -135,8 +135,9 @@ class core_kernel_classes_Session
 			self::$instance = $staticInstance;
         }
         else{
-        	self::$instance = null;
-        	self::$instance = self::singleton();
+        	$this->defaultLg = DEFAULT_LANG;
+        	$this->setLg('');
+        	$this->setUser('');
         }
         // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 end
     }
