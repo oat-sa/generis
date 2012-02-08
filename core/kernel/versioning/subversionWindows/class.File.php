@@ -285,7 +285,7 @@ class core_kernel_versioning_subversionWindows_File
         // If the file has a status, check the status is not unversioned or added
         if (!is_null($resourceStatus)) {
                 
-                    $text_status = substr($resourceStatus, 0, 1);
+            $text_status = substr($resourceStatus, 0, 1);
             switch ($text_status) {
                         case '?':
                             $returnValue = VERSIONING_FILE_STATUS_UNVERSIONED;

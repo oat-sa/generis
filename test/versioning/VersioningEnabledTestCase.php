@@ -40,14 +40,17 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	{
 		$versioningRepositoryClass = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDREPOSITORY);
 		$repositories = $versioningRepositoryClass->getInstances();
-		
-		// If the default repository does not exists, create it
-		if(!count($repositories)){
-			$repository = $this->createRepository();
-		}else{
-			$repository = array_pop($repositories);
-			$repository = new core_kernel_versioning_Repository($repository->uriResource);
-		}
+		$repository = null;
+        
+        foreach($repositories as $r){
+            if((string) $r->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH)) == $this->repositoryPath){
+                $repository = new core_kernel_versioning_Repository($r->uriResource);
+                break;
+            }
+        }
+        if(is_null($repository)){
+            $repository = $this->createRepository();
+        }
 		
 		return $repository;
 	}
@@ -542,49 +545,49 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	    
 	    $this->assertTrue($instance->delete(true));
 	}
-    /*
+    
 	public function testRevertTo()
 	{
-		$instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository(), "", array(
-	    	'add'		=>true,
-	    	'commit'	=>true
-	    ));
-	    $this->assertTrue($instance->setContent('my content 1'));
+		$instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $this->getDefaultRepository(), "");
+        $commonContent = __CLASS__.':'.__METHOD__.'()';
+        
+	    $this->assertTrue($instance->setContent($commonContent));
 	    $this->assertTrue($instance->add());
-	    $this->assertTrue($instance->commit('commit message 1'));
+	    $this->assertTrue($instance->commit('test case : testRevertTo : commit 1'));
 	    $this->assertTrue($instance->isVersioned());
-		$this->assertEqual($instance->getFileContent(), 'my content 1');
+		$this->assertEqual($instance->getFileContent(), $commonContent);
 	    $this->assertEqual($instance->getVersion(), 1);
 		
-	    $this->assertTrue($instance->setContent('my content 2'));
-		$this->assertTrue($this->assertEqual($instance->getFileContent(), 'my content 2'));
-	    $this->assertTrue($instance->commit('commit message 2'));
+	    $this->assertTrue($instance->setContent($commonContent.' update 1'));
+		$this->assertTrue($this->assertEqual($instance->getFileContent(), $commonContent.' update 1'));
+	    $this->assertTrue($instance->commit('test case : testRevertTo : commit 2'));
 	    $this->assertEqual($instance->getVersion(), 2);
 	    
-	    $this->assertTrue($instance->setContent('my content 3'));
-		$this->assertTrue($this->assertEqual($instance->getFileContent(), 'my content 3'));
-	    $this->assertTrue($instance->commit('commit message 3'));
+	    $this->assertTrue($instance->setContent($commonContent.' update 2'));
+		$this->assertTrue($this->assertEqual($instance->getFileContent(), $commonContent.' update 2'));
+	    $this->assertTrue($instance->commit('test case : testRevertTo : commit 3'));
 	    $this->assertEqual($instance->getVersion(), 3);
 	    
+        //get the versioned file history
 	    $history = $instance->getHistory();
-	    
+	    $this->assertNotNull($history);
+        
 	    // Revert to first revision
-	    $instance->revert(1);
+	    $this->assertTrue($instance->revert(2));
 	    $this->assertTrue($instance->fileExists());
 	    $this->assertTrue($instance->isVersioned());
-		$this->assertEqual($instance->getFileContent(), 'my content 1');
+		$this->assertEqual($instance->getFileContent(), $commonContent.' update 1');
 	    $this->assertEqual($instance->getVersion(), 4);
 	    
 		// Revert to second revision
-	    $instance->revert(2);
+	    $this->assertTrue($instance->revert(3));
 	    $this->assertTrue($instance->fileExists());
 	    $this->assertTrue($instance->isVersioned());
-		$this->assertEqual($instance->getFileContent(), 'my content 2');
+		$this->assertEqual($instance->getFileContent(), $commonContent.' update 2');
 	    $this->assertEqual($instance->getVersion(), 5);
 		
-		$instance->delete(true);
+		$this->assertTrue($instance->delete(true));
 	}
-    */
 
 //	// Delete the test repository
 //	public function testDeleteVersionedRepository()
@@ -592,6 +595,94 @@ class VersioningEnabledTestCase extends UnitTestCase {
 //		//$this->getDefaultRepository()->delete();
 //	}
 
+    //test file conflict
+    public function testVersionedFileConflict()
+    {
+        $repository1 = $this->getDefaultRepository();
+		$instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $repository1);
+	    $originalFileContent = __CLASS__.':'.__METHOD__.'()';
+        $instance->setContent($originalFileContent);
+	    $this->assertTrue($instance->add());
+	    $this->assertTrue($instance->commit());
+        $this->assertTrue($instance->isVersioned());
+	    
+	    // Update the file from another repository
+	    $repository2 = core_kernel_versioning_Repository::create(
+			new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversion'),
+			$this->repositoryUrl,
+			$this->repositoryLogin,
+			$this->repositoryPassword,
+			GENERIS_FILES_PATH.'/versioning/TMP_TEST_CASE_REPOSITORY',
+			'TMP Repository',
+			'TMP Repository'
+		);
+		$this->assertTrue($repository2->checkout());
+		$repository2Instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $repository2);
+		$this->assertTrue($repository2Instance->setContent($originalFileContent.' remote update 1'));
+        $this->assertTrue($repository2Instance->getFileContent(), $originalFileContent.' remote update 1');
+		$this->assertTrue($repository2Instance->commit());
+	    
+		//Test the file has been updated in the first repository
+        $this->assertEqual($instance->getStatus(), VERSIONING_FILE_STATUS_REMOTELY_MODIFIED);           // <--------- GET STATUS : REMOTELY MODIFIED
+        
+        //USE MINE VERSION
+        //Write a change before update to make a conflict
+        $instance->setContent($originalFileContent.' update 2');
+		$this->assertTrue($instance->update());
+        $this->assertEqual($instance->getStatus(), VERSIONING_FILE_STATUS_CONFLICTED);                  // <--------- GET STATUS : CONFLICTED
+        try{
+            $instance->commit();
+            //The following code should not be executed
+            $this->assertFalse(true);
+        }
+        catch(core_kernel_versioning_exception_FileRemainsInConflictException $e){
+            $this->assertTrue(true);
+            //resolve the conflict by using mine version of the file
+            $this->assertTrue($instance->resolve(VERSIONING_FILE_VERSION_MINE));
+            $this->assertTrue($instance->commit());
+            $this->assertEqual($instance->getStatus(), VERSIONING_FILE_STATUS_NORMAL);                  // <--------- GET STATUS : NORMAL
+            $this->assertEqual($instance->getFileContent(), $originalFileContent.' update 2');
+        }
+		
+        //USE THEIRS VERSION
+		$this->assertTrue($repository2Instance->update());
+		$this->assertTrue($repository2Instance->setContent($originalFileContent.' remote update 2'));
+		try{
+            $this->assertTrue($repository2Instance->commit());
+        }catch(Exception $e){
+            var_dump($e);
+        }
+        $instance->setContent($originalFileContent.' update 3');
+		$this->assertTrue($instance->update());
+        $this->assertEqual($instance->getStatus(), VERSIONING_FILE_STATUS_CONFLICTED);                  // <--------- GET STATUS : CONFLICTED
+        try{
+            $instance->commit();
+            //The following code should not be executed
+            $this->assertFalse(true);
+        }
+        catch(core_kernel_versioning_exception_FileRemainsInConflictException $e){
+            $this->assertTrue(true);
+            //resolve the conflict by using the incoming version of the file
+            $this->assertTrue($instance->resolve(VERSIONING_FILE_VERSION_THEIRS));
+            $this->assertTrue($instance->commit());
+            $this->assertEqual($instance->getStatus(), VERSIONING_FILE_STATUS_NORMAL);                  // <--------- GET STATUS : NORMAL
+            $this->assertEqual($instance->getFileContent(), $originalFileContent.' remote update 2');
+        }
+        
+        //Delete the repository 2 resources
+		$this->assertTrue($repository2Instance->update());
+		$this->assertTrue($repository2Instance->delete());
+		$this->assertTrue($repository2->delete(true));
+		tao_helpers_File::remove(GENERIS_FILES_PATH.'/versioning/TMP_TEST_CASE_REPOSITORY', true);
+        
+        //Clean
+        $filePath = $instance->getAbsolutePath();
+        $this->assertTrue(helpers_File::resourceExists($filePath));
+	    $this->assertTrue($instance->update());
+	    $this->assertTrue($instance->delete(true));
+        $this->assertFalse(helpers_File::resourceExists($filePath));
+    }
+    
     ///////////////////////////////////////////////////////////////////////////
     //  MANAGE FOLDER WITH THE VERSIONING API
     ///////////////////////////////////////////////////////////////////////////

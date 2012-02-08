@@ -111,7 +111,7 @@ class core_kernel_versioning_subversion_File
 
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165C begin
         
-        common_Logger::i('svn_update '.$path);
+        common_Logger::i('svn_update '.$path. ' revision='.$revision);
         if($resource->getRepository()->authenticate()){
             $returnValue = svn_update($path, $revision)===false ? false : true;
         }
@@ -142,11 +142,9 @@ class core_kernel_versioning_subversion_File
         
             //no revision, revert local change
             if (is_null($revision)){
-
                 $returnValue = svn_revert($resource->getAbsolutePath());
             }
             else{
-
                 $path = realpath($resource->getAbsolutePath());
                 common_Logger::i('svn_revert '.$path);
 
@@ -158,45 +156,28 @@ class core_kernel_versioning_subversion_File
                 //destroy the existing version
                 unlink($path);
                 //replace with the target revision
-                $resource->update($svnRevisionNumber);
-                //get old content
-                $content = $resource->getFileContent();
-                //update to the current version
-                $resource->update();
-                //set the new content
-                $resource->setContent($content);
-                //commit the change
-                $resource->commit($msg);
-
-                /*
-                $repository = $resource->getRepository();
-                $repositoryUrl = $repository->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL));
-                $repositoryLogin = $repository->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN));
-                $repositoryPassword = $repository->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PASSWORD));
-                $defaultRespositoryPath = GENERIS_FILES_PATH.'/versioning/TMP_REVERT_REPOSITORY';
-
-                $fileName = $resource->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_FILE_FILENAME));
-                $filePath = (string) $resource->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_FILEPATH));
-
-                $tmpRepository = core_kernel_versioning_Repository::create(
-                    new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversion'),
-                    $repositoryUrl.$filePath.$fileName,
-                    $repositoryLogin,
-                    $repositoryPassword,
-                    $defaultRespositoryPath,
-                    'TMP Revert Repository',
-                    'TMP Revert Repository'
-                );
-                $tmpRepository->checkout($revision);
-
-                $instance = core_kernel_versioning_File::create($fileName, $resource->getPath(), $tmpRepository);
-                $content = $instance->getFileContent();
-
-                $resource->setContent($content);
-                $resource->commit($msg);
-
-                $instance->delete();
-                //$tmpRepository->delete();  */
+                if($resource->update($svnRevisionNumber)){
+                    //get old content
+                    $content = $resource->getFileContent();
+                    //update to the current version
+                    $resource->update();
+                    //set the new content
+                    $resource->setContent($content);
+                    //commit the change
+                    if($resource->commit($msg)){
+                        $returnValue = true;
+                    }
+                    //restablish the head version
+                    else{
+                        @unlink($path);
+                        $resource->update();
+                    }
+                }
+                //restablish the head version
+                else{
+                    @unlink($path);
+                    $resource->update();
+                }
             }
         }
         
@@ -331,11 +312,21 @@ class core_kernel_versioning_subversion_File
                         $status = $s;
                     }
                 }
+                
                 // If the file has a status, check the status is not unversioned or added
                 if(!is_null($status)){
                     if($status['locked']){
                         $returnValue = VERSIONING_FILE_STATUS_LOCKED;
                     }
+                    /**
+                     * @todo implement this in the shell implementation
+                     */
+                    else if($status['repos_text_status'] == VERSIONING_FILE_STATUS_DELETED){
+                        $returnValue = VERSIONING_FILE_STATUS_REMOTELY_DELETED;
+                    }
+                    /**
+                     * @todo implement this in the shell implementation
+                     */
                     else if($status['repos_text_status'] == VERSIONING_FILE_STATUS_MODIFIED){
                         $returnValue = VERSIONING_FILE_STATUS_REMOTELY_MODIFIED;
                     }
@@ -383,7 +374,42 @@ class core_kernel_versioning_subversion_File
         // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 begin
         
         $startTime = helpers_Time::getMicroTime();
-        core_kernel_versioning_subversionWindows_File::singleton()->resolve($resource, $path, $version);
+        $listParentFolder = tao_helpers_File::scandir(dirname($path));
+        
+        switch($version){
+            case VERSIONING_FILE_VERSION_MINE:
+                //use our version of the file before the update we made the conflict
+                $resource->setContent(file_get_contents($path.'.mine'));
+        
+                //delete the noisy files (mine, r***)
+                foreach($listParentFolder as $file) {
+                    if(preg_match('@^' . preg_quote($path) . '\.@', $file)) {
+                        unlink($file);
+                    }
+                }
+                
+                $returnValue = true;
+                break;
+                
+            case VERSIONING_FILE_VERSION_THEIRS:
+                //use the incoming version of the file
+                if($resource->revert()
+                   && $resource->update()){
+                    $returnValue = true;
+                }
+                break;
+                
+            case VERSIONING_FILE_VERSION_WORKING:
+                //nothing to do, we keep the current version of the file
+                $returnValue = true;
+                break;
+            
+            default:
+                //@todo change with invalid argument exception
+                throw new common_Exception('invalid argument version');
+        }
+        
+        //$returnValue = core_kernel_versioning_subversionWindows_File::singleton()->resolve($resource, $path, $version);
         $endTime =  helpers_Time::getMicroTime();
         common_Logger::i("svn_resolve ('.$path.' : '.$version.') -> ".($endTime - $startTime).'s');
         
