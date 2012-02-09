@@ -532,6 +532,7 @@ class core_kernel_persistence_hardsql_Class
 		$sqlQuery = 'SELECT "uri" FROM ';
 
 		$i = 0;
+		$tableNames = array_unique($tableNames);
 		foreach($tableNames as $tableIdentifier => $tableName){
 			if($i > 0){
 				$sqlQuery .= ", ";
