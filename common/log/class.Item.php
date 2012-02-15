@@ -157,10 +157,23 @@ class common_log_Item
         	}
         	
         	if (isset($backtrace[$key]['args']))
-	        	foreach ($backtrace[$key]['args'] as $k => $v)
-	        		$backtrace[$key]['args'][$k] = 
-        				is_object($v) ? get_class($v) : 
-        					is_array($v) ? 'ARRAY['.count($v).']' : $v;
+	        	foreach ($backtrace[$key]['args'] as $k => $v) {
+	        		switch (gettype($v)) {
+	        			case 'boolean' :
+	        			case 'integer' :
+	        			case 'double' :
+	        				$backtrace[$key]['args'][$k] = (string)$v;
+	        				break;
+	        			case 'string' :
+	        				$backtrace[$key]['args'][$k] = strlen($v) > 128 ? 'string('.strlen($v).')' : $v;
+	        				break;
+	        			case 'class' :
+	        				$backtrace[$key]['args'][$k] = (string)$v;
+	        				break;
+	        			default:
+	        				$backtrace[$key]['args'][$k] = gettype($v);
+	        		}
+	        	}
         }
         $this->backtrace		= $backtrace;
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DA end
