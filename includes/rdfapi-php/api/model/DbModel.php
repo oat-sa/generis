@@ -353,7 +353,7 @@ class DbModel extends Model{
            WHERE "modelID" = ' .$this->modelID;
 		$sql .= $this->_createDynSqlPart_SPO($statement->subj, $statement->pred, $statement->obj);
 		
-		$res =& $this->dbConn->getOne($sql);
+		$res = $this->dbConn->getOne($sql);
 
 		if (!$res)
 		return FALSE;

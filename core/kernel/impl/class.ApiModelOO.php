@@ -292,6 +292,7 @@ class core_kernel_impl_ApiModelOO
         // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C4 begin
         
         require_once(RDFAPI_INCLUDE_DIR . "RdfAPI.php");
+        $session = core_kernel_classes_Session::singleton();
         
 	     if(!preg_match("/#$/", $targetNameSpace)){
 		 	$targetNameSpace .= '#';
@@ -304,7 +305,7 @@ class core_kernel_impl_ApiModelOO
 		 
 		$memModel 	= ModelFactory::getMemModel();
 		$dbModel	= ModelFactory::getDefaultDbModel($targetNameSpace);
-		$dbModel->getDbConn()->execute('SET NAMES utf8');
+		$dbModel->getDbConn()->execute("SET NAMES 'UTF8'");
 		
 		// Load and parse document
 		$memModel->load($fileLocation);
@@ -315,7 +316,7 @@ class core_kernel_impl_ApiModelOO
 		$size = $memModel->size();
 		while ($it->hasNext()) {
 			$statement = $it->next();
-			if($dbModel->add($statement) === true){
+			if($dbModel->add($statement, $session->getUser()) === true){
 				$added++;
 			}
 		}
