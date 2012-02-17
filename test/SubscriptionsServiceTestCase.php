@@ -39,14 +39,14 @@ class SubscriptionsServiceTestCase extends UnitTestCase {
 		$this->subcriptionInst->setPropertyValue(new core_kernel_classes_Property(PROPERTY_SUBCRIPTION_URL),$this->subscriptionUrl);
 		$this->subcriptionInst->setPropertyValue(new core_kernel_classes_Property(PROPERTY_SUBCRIPTION_MASK),$this->maskInst->uriResource);
 		$subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions(null,new core_kernel_classes_Property(RDF_TYPE),$object);
-		var_dump($subcriptions);
+
 		$this->assertTrue(in_array($this->subcriptionInst->uriResource,$subcriptions));
 
 
 	}
 	 
 	public function testGetInstancesFromSubscription(){
-		$object = new core_kernel_classes_Resource($this->subscriptionResoourceUrl);
+		$object = new core_kernel_classes_Class($this->subscriptionResoourceUrl);
 		$instances = core_kernel_subscriptions_Service::singleton()->getInstancesFromSubscription($this->subcriptionInst,$object);
 		var_dump($instances);
 		$this->fail('not imp yet');
