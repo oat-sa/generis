@@ -151,29 +151,37 @@ class common_log_Item
         	$backtrace = array_slice($backtrace, -50);
         }
         
+        $cleanbacktrace = array();
         foreach ($backtrace as $key => $row) {
+        	
         	if (isset($backtrace[$key]['object'])) {
         		unset($backtrace[$key]['object']);
         	}
-        	
-        	if (isset($backtrace[$key]['args']))
+
+        	// WARNING
+			// do NOT modify the variables in the backtrace directly or
+	        // objects passed by reference will be modified aswell
+        	if (isset($backtrace[$key]['args'])) {
+	        	$vars = array();
 	        	foreach ($backtrace[$key]['args'] as $k => $v) {
-	        		switch (gettype($v)) {
+		        	switch (gettype($v)) {
 	        			case 'boolean' :
 	        			case 'integer' :
 	        			case 'double' :
-	        				$backtrace[$key]['args'][$k] = (string)$v;
+	        				$vars[$k] = (string)$v;
 	        				break;
 	        			case 'string' :
-	        				$backtrace[$key]['args'][$k] = strlen($v) > 128 ? 'string('.strlen($v).')' : $v;
+	        				$vars[$k] = strlen($v) > 128 ? 'string('.strlen($v).')' : $v;
 	        				break;
 	        			case 'class' :
-	        				$backtrace[$key]['args'][$k] = (string)$v;
+	        				$vars[$k] = get_class($v);
 	        				break;
 	        			default:
-	        				$backtrace[$key]['args'][$k] = gettype($v);
+	        				$vars[$k] = gettype($v);
 	        		}
-	        	}
+		        }
+	        	$backtrace[$key]['args'] = $vars;
+        	}
         }
         $this->backtrace		= $backtrace;
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DA end

@@ -20,6 +20,11 @@ require_once('common/log/class.Item.php');
 
 /* user defined constants */
 // section 127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7-constants begin
+define('ADODB_OUTP', 'adoodb_errorlog'); 
+function adoodb_errorlog($msg, $newline) {
+	$nohtml = str_replace("\"", "", html_entity_decode(strip_tags($msg), ENT_QUOTES, 'UTF-8'));
+	common_Logger::w($nohtml, array('ADODB'));
+}
 // section 127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7-constants end
 
 /**
