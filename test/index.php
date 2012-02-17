@@ -13,7 +13,8 @@ $tests = array_merge(
 foreach($tests as $i => $testCase){
 
     //TODO disable for release, remove after
-    if(strpos($testCase, 'VirtuosoImplTestCase.php')== false){
+    if(strpos($testCase, 'VirtuosoImplTestCase.php')== false 
+    		&& strpos($testCase, 'SubscriptionsServiceTestCase.php') == false){
        $testSuite->addFile($testCase);
     }
 }
