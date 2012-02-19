@@ -243,8 +243,8 @@ class DbStore extends Object
                                             (modelID, modelURI, baseURI)
                                             VALUES (?,?,?)', array (
       	$modelID,
-      	$this->dbConn->qstr($modelURI),
-      	$this->dbConn->qstr($baseURI)
+      	$modelURI,
+      	$baseURI
       ));
 
       if (!$rs)
