@@ -581,6 +581,7 @@ class core_kernel_persistence_smoothsql_Resource
 	     $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
 	     while($statement = $result->fetchRow()){
 	     	$triple = new core_kernel_classes_Triple();
+	     	$triple->modelID = $statement["modelID"];
 	     	$triple->subject = $statement["subject"];
 	     	$triple->predicate = $statement["predicate"];
 	     	$triple->object = $statement["object"];

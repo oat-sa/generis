@@ -3,14 +3,14 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - core\kernel\classes\class.Triple.php
+ * Generis Object Oriented API - core/kernel/classes/class.Triple.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 24.03.2010, 14:36:15 with ArgoUML PHP module 
- * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
+ * Automatically generated on 21.02.2012, 16:41:35 with ArgoUML PHP module 
+ * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author patrick.plichart@tudor.lu
  * @package core
@@ -51,6 +51,14 @@ class core_kernel_classes_Triple
 
 
     // --- ATTRIBUTES ---
+
+    /**
+     * Short description of attribute modelID
+     *
+     * @access public
+     * @var int
+     */
+    public $modelID = 0;
 
     /**
      * Short description of attribute subject
