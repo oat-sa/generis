@@ -82,9 +82,9 @@ class ClassTestCase extends UnitTestCase {
 		
 		$directParentClass = $class->getParentClasses(); 
 		$this->assertTrue(count($directParentClass) == 1);
-		foreach ($indirectParentClasses  as $parentClass) {
+		foreach ($directParentClass  as $parentClass) {
 			$this->assertIsA($parentClass,'core_kernel_classes_Class');	
-			$parentClass->uriResource = RDF_RESOURCE; 
+			$this->assertEqual($parentClass->uriResource, CLASS_GENERIS_RESOURCE); 
 		}
 
 	}
