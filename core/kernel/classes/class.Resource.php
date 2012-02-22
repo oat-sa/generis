@@ -81,7 +81,7 @@ class core_kernel_classes_Resource
      * create the object
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string uri
      * @param  string debug
      * @return void
@@ -109,7 +109,7 @@ class core_kernel_classes_Resource
      * Conveniance method to duplicate a resource using the clone keyword
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return core_kernel_classes_Resource
      */
     public function __clone()
@@ -182,7 +182,7 @@ class core_kernel_classes_Resource
      * Short description of method getType
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return array
      */
     public function getType()
@@ -252,7 +252,7 @@ class core_kernel_classes_Resource
      * Short description of method getComment
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return string
      */
     public function getComment()
@@ -302,7 +302,7 @@ class core_kernel_classes_Resource
      * use the function getAllPropertyValues
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property property uriProperty is string and may be short in the case of a locally defined property (module namespace), or long uri
      * @param  array options
      * @return array
@@ -324,7 +324,7 @@ class core_kernel_classes_Resource
      * Short description of method getPropertyValuesCollection
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property property
      * @return core_kernel_classes_ContainerCollection
      */
@@ -345,7 +345,7 @@ class core_kernel_classes_Resource
      * Short description of method getUniquePropertyValue
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property property
      * @return core_kernel_classes_Container
      */
@@ -385,7 +385,7 @@ class core_kernel_classes_Resource
      * Short description of method getOnePropertyValue
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property property
      * @param  boolean last
      * @return core_kernel_classes_Container
@@ -407,7 +407,7 @@ class core_kernel_classes_Resource
      * Short description of method getPropertyValuesByLg
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property property
      * @param  string lg
      * @return core_kernel_classes_ContainerCollection
@@ -454,7 +454,7 @@ class core_kernel_classes_Resource
      * Conveniance method isntead of adding the property values one by one.
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  array propertiesValues
      * @return boolean
      */
@@ -475,7 +475,7 @@ class core_kernel_classes_Resource
      * Short description of method setPropertyValueByLg
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property property
      * @param  string value
      * @param  string lg
@@ -500,7 +500,7 @@ class core_kernel_classes_Resource
      * triple) shouldbe made using triple management
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property property
      * @param  string object
      * @return boolean
@@ -528,7 +528,7 @@ class core_kernel_classes_Resource
      * Short description of method editPropertyValueByLg
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property prop
      * @param  string value
      * @param  string lg
@@ -550,7 +550,7 @@ class core_kernel_classes_Resource
      * remove all triples with this subject and predicate
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property property
      * @param  array options
      * @return boolean
@@ -572,7 +572,7 @@ class core_kernel_classes_Resource
      * Short description of method removePropertyValueByLg
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property prop
      * @param  string lg
      * @param  array options
@@ -597,7 +597,7 @@ class core_kernel_classes_Resource
      * on statements
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return core_kernel_classes_ContainerCollection
      */
     public function getRdfTriples()
@@ -640,7 +640,7 @@ class core_kernel_classes_Resource
      * The method returns the new resource.
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  array excludedProperties
      * @return core_kernel_classes_Resource
      */
@@ -682,7 +682,7 @@ class core_kernel_classes_Resource
      * Short description of method getPrivileges
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return array
      */
     public function getPrivileges()
@@ -704,7 +704,7 @@ class core_kernel_classes_Resource
      * Short description of method getLastModificationDate
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property property
      * @return doc_date
      */
@@ -725,7 +725,7 @@ class core_kernel_classes_Resource
      * Short description of method getLastModificationUser
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return string
      */
     public function getLastModificationUser()
@@ -745,7 +745,7 @@ class core_kernel_classes_Resource
      * Short description of method toHtml
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return string
      */
     public function toHtml()
@@ -773,7 +773,7 @@ class core_kernel_classes_Resource
      * Short description of method __toString
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return string
      */
     public function __toString()
@@ -791,12 +791,12 @@ class core_kernel_classes_Resource
      * Short description of method getPropertiesValue
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  array properties
      * @param  boolean last
      * @return array
      */
-    public function getPropertiesValue($properties/**, $last*/)
+    public function getPropertiesValue($properties, $last)
     {
         $returnValue = array();
 
@@ -816,7 +816,7 @@ class core_kernel_classes_Resource
      * Short description of method setType
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Class type
      * @return boolean
      */
@@ -837,7 +837,7 @@ class core_kernel_classes_Resource
      * Short description of method removeType
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Class type
      * @return boolean
      */
@@ -858,7 +858,7 @@ class core_kernel_classes_Resource
      * Short description of method hasType
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -884,7 +884,7 @@ class core_kernel_classes_Resource
      * Short description of method exists
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return boolean
      */
     public function exists()
@@ -908,7 +908,7 @@ class core_kernel_classes_Resource
      * Short description of method getAllPropertyValues
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property property
      * @param  array options
      * @return array
@@ -924,6 +924,24 @@ class core_kernel_classes_Resource
         // section 127-0-1-1-3b11b49e:1323ea85daa:-8000:0000000000003DB0 end
 
         return (array) $returnValue;
+    }
+
+    /**
+     * returns the full URI as string (including namespace)
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return string
+     */
+    public function getUri()
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1--9a19b46:135a440c85f:-8000:0000000000001BD6 begin
+        $returnValue = $this->uriResource;
+        // section 127-0-1-1--9a19b46:135a440c85f:-8000:0000000000001BD6 end
+
+        return (string) $returnValue;
     }
 
 } /* end of class core_kernel_classes_Resource */
