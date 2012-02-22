@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Design generis API oo</activediagram>
+      <activediagram>Persistence</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Feb 22 14:26:35 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Feb 22 16:40:47 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -1438,7 +1438,7 @@ The method returns the new resource. </UML:TaggedValue.dataValue>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
                         <UML:Operation xmi.id = '127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014CD'
-                          name = 'getPropertiesValue' visibility = 'public' isSpecification = 'false'
+                          name = 'getPropertiesValues' visibility = 'public' isSpecification = 'false'
                           ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
                           isLeaf = 'false' isAbstract = 'false'>
                           <UML:BehavioralFeature.parameter>
@@ -1452,12 +1452,6 @@ The method returns the new resource. </UML:TaggedValue.dataValue>
                               name = 'properties' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                            <UML:Parameter xmi.id = '127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D0'
-                              name = 'last' isSpecification = 'false' kind = 'in'>
-                              <UML:Parameter.type>
-                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -8729,7 +8723,7 @@ will restore it for further http requests)</UML:TaggedValue.dataValue>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
                         <UML:Operation xmi.id = '127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1'
-                          name = 'getPropertiesValue' visibility = 'public' isSpecification = 'false'
+                          name = 'getPropertiesValues' visibility = 'public' isSpecification = 'false'
                           ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
                           isLeaf = 'false' isAbstract = 'false'>
                           <UML:BehavioralFeature.parameter>
@@ -8749,12 +8743,6 @@ will restore it for further http requests)</UML:TaggedValue.dataValue>
                               name = 'properties' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                            <UML:Parameter xmi.id = '127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D5'
-                              name = 'last' isSpecification = 'false' kind = 'in'>
-                              <UML:Parameter.type>
-                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -23647,7 +23635,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getPropertiesValue(properties : array,last : boolean) : array</text>
+      >getPropertiesValues(properties : array) : array</text>
       <text name="Fig4.6.32"
         x="753"
         y="1786"
@@ -23734,7 +23722,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         width="517"
         height="20"
         fill="0"
-        fillcolor="white"
+        fillcolor="200 200 255"
         stroke="0"
         strokecolor="black"
         textcolor="black"
@@ -41151,7 +41139,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getPropertiesValue(properties : array,last : boolean) : array</text>
+      >getPropertiesValues(properties : array) : array</text>
       <text name="Fig1.6.32"
         x="409"
         y="667"
@@ -44098,7 +44086,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getPropertiesValue(resource : Resource,properties : array,last : boolean) : array</text>
+      >getPropertiesValues(resource : Resource,properties : array) : array</text>
       <text name="Fig0.4.18"
         x="761"
         y="285"
@@ -55629,7 +55617,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="737"
         y="177"
         width="436"
-        height="512"
+        height="526"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -58089,7 +58077,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="41"
         y="342"
         width="704"
-        height="27"
+        height="14"
         fill="0"
         fillcolor="white"
         stroke="0"

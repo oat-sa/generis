@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 06.09.2011, 17:31:17 with ArgoUML PHP module 
+ * Automatically generated on 22.02.2012, 16:37:20 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardsql
  */
@@ -24,14 +24,14 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_persistence_PersistenceImpl
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  */
 require_once('core/kernel/persistence/class.PersistenceImpl.php');
 
 /**
  * include core_kernel_persistence_ResourceInterface
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  */
 require_once('core/kernel/persistence/interface.ResourceInterface.php');
 
@@ -47,7 +47,7 @@ require_once('core/kernel/persistence/interface.ResourceInterface.php');
  * Short description of class core_kernel_persistence_hardsql_Resource
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardsql
  */
@@ -74,7 +74,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getType
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @return array
      */
@@ -113,7 +113,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getPropertyValues
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  array options
@@ -235,7 +235,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getPropertyValuesCollection
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return core_kernel_classes_ContainerCollection
@@ -262,7 +262,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getOnePropertyValue
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  boolean last
@@ -297,7 +297,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getPropertyValuesByLg
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string lg
@@ -321,7 +321,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method setPropertyValue
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string object
@@ -420,7 +420,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method setPropertiesValues
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  array properties
      * @return boolean
@@ -440,7 +440,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method setPropertyValueByLg
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string value
@@ -464,7 +464,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method removePropertyValues
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  array options
@@ -585,7 +585,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method removePropertyValueByLg
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string lg
@@ -662,7 +662,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getRdfTriples
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @return core_kernel_classes_ContainerCollection
      */
@@ -681,7 +681,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getUsedLanguages
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return array
@@ -716,7 +716,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method duplicate
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  array excludedProperties
      * @return core_kernel_classes_Resource
@@ -833,7 +833,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method delete
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  boolean deleteReference
      * @return boolean
@@ -973,7 +973,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getLastModificationDate
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return core_kernel_persistence_doc_date
@@ -993,7 +993,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method getLastModificationUser
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @return string
      */
@@ -1009,16 +1009,15 @@ class core_kernel_persistence_hardsql_Resource
     }
 
     /**
-     * Short description of method getPropertiesValue
+     * Short description of method getPropertiesValues
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  array properties
-     * @param  boolean last
      * @return array
      */
-    public function getPropertiesValue( core_kernel_classes_Resource $resource, $properties/*, $last*/)
+    public function getPropertiesValues( core_kernel_classes_Resource $resource, $properties)
     {
         $returnValue = array();
 
@@ -1035,7 +1034,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method setType
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Class class
      * @return boolean
@@ -1115,7 +1114,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method removeType
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Class class
      * @return boolean
@@ -1155,7 +1154,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method singleton
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return core_kernel_classes_Resource
      */
     public static function singleton()
@@ -1178,7 +1177,7 @@ class core_kernel_persistence_hardsql_Resource
      * Short description of method isValidContext
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */

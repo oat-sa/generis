@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 06.09.2011, 17:31:17 with ArgoUML PHP module 
+ * Automatically generated on 22.02.2012, 16:36:35 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -33,7 +33,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class core_kernel_persistence_ResourceInterface
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -47,7 +47,7 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method getType
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @return array
      */
@@ -57,7 +57,7 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method getPropertyValues
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  array options
@@ -69,7 +69,7 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method getPropertyValuesCollection
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return core_kernel_classes_ContainerCollection
@@ -80,7 +80,7 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method getOnePropertyValue
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  boolean last
@@ -92,7 +92,7 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method getPropertyValuesByLg
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string lg
@@ -104,7 +104,7 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method setPropertyValue
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string object
@@ -117,7 +117,7 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method setPropertiesValues
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  array properties
      * @return boolean
@@ -128,7 +128,7 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method setPropertyValueByLg
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string value
@@ -141,7 +141,7 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method removePropertyValues
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  array options
@@ -153,7 +153,7 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method removePropertyValueByLg
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  string lg
@@ -166,7 +166,7 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method getRdfTriples
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @return core_kernel_classes_ContainerCollection
      */
@@ -176,7 +176,7 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method getUsedLanguages
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return array
@@ -187,7 +187,7 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method duplicate
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  array excludedProperties
      * @return core_kernel_classes_Resource
@@ -198,7 +198,7 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method delete
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  boolean deleteReference
      * @return boolean
@@ -209,7 +209,7 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method getLastModificationDate
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return core_kernel_persistence_doc_date
@@ -220,29 +220,28 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method getLastModificationUser
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @return string
      */
     public function getLastModificationUser( core_kernel_classes_Resource $resource);
 
     /**
-     * Short description of method getPropertiesValue
+     * Short description of method getPropertiesValues
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  array properties
-     * @param  boolean last
      * @return array
      */
-    public function getPropertiesValue( core_kernel_classes_Resource $resource, $properties/*, $last*/);
+    public function getPropertiesValues( core_kernel_classes_Resource $resource, $properties);
 
     /**
      * Short description of method setType
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Class class
      * @return boolean
@@ -253,7 +252,7 @@ interface core_kernel_persistence_ResourceInterface
      * Short description of method removeType
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  Class class
      * @return boolean

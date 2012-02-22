@@ -131,21 +131,21 @@ class ResourceTestCase extends UnitTestCase{
 		
 		//test that the get properties values is getting an array as parameter, if the parameter is not an array, the function will return an exception
 		try{
-			$resource->getPropertiesValue($property1);
+			$resource->getPropertiesValues($property1);
 			$this->assertTrue(false);
 		}catch(Exception $e){
 			$this->assertTrue(true);
 		}
 		
 		//test with one property
-		$result = $resource->getPropertiesValue(array($property1));
+		$result = $resource->getPropertiesValues(array($property1));
 		$this->assertTrue(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->uriResource]));
 		//test with an other one
-		$result = $resource->getPropertiesValue(array($property2));
+		$result = $resource->getPropertiesValues(array($property2));
 		$this->assertTrue(in_array('prop2', $result[$property2->uriResource]));
 		
 		//test with several properties
-		$result = $resource->getPropertiesValue(array($property1, $property2, $property3));
+		$result = $resource->getPropertiesValues(array($property1, $property2, $property3));
 		$this->assertTrue(in_array('prop1', $result[$property1->uriResource]));
 		$this->assertTrue(in_array('prop2', $result[$property2->uriResource]));
 		$this->assertTrue(in_array('prop3', $result[$property3->uriResource]));

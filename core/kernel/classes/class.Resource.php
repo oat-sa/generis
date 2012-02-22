@@ -788,15 +788,14 @@ class core_kernel_classes_Resource
     }
 
     /**
-     * Short description of method getPropertiesValue
+     * Short description of method getPropertiesValues
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  array properties
-     * @param  boolean last
      * @return array
      */
-    public function getPropertiesValue($properties, $last)
+    public function getPropertiesValues($properties)
     {
         $returnValue = array();
 
@@ -805,7 +804,7 @@ class core_kernel_classes_Resource
         if(!is_array($properties)){
 			throw new Exception('The parameter properties has to be an array');
         }
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getPropertiesValue($this, $properties/*, $last*/);
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getPropertiesValues($this, $properties/*, $last*/);
         
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014CD end
 
