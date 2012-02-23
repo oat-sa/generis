@@ -138,7 +138,20 @@ class core_kernel_classes_Session
         	$this->defaultLg = DEFAULT_LANG;
         	$this->setLg('');
         	$this->setUser('');
-        }
+        	
+        	$this->loadedModels = array();
+	        $extensionManager = common_ext_ExtensionsManager::singleton();
+	        common_ext_NamespaceManager::singleton()->reset();
+			foreach ($extensionManager->getModelsToLoad() as $model){
+				$this->loadModel($model);
+			}
+			
+			//load local model
+			$this->loadModel(LOCAL_NAMESPACE);
+			
+			//get updatable models
+			$this->updatableModels = $extensionManager->getUpdatableModels ();
+	    }
         // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 end
     }
 
@@ -299,7 +312,7 @@ class core_kernel_classes_Session
         	$model .= '#';
         }
         if(in_array($model, $this->loadedModels)){
-        	$resturnValue = true;
+        	$returnValue = true;
         }
         else{
         	$nsManager = common_ext_NamespaceManager::singleton();
@@ -367,9 +380,9 @@ class core_kernel_classes_Session
         $returnValue = (bool) false;
 
         // section 10-13-1-85--3885cdb:135aa86a412:-8000:0000000000001941 begin
-        for ($i = 0; $i < count($this->loadedModels); $i++){
-        	if ($this->loadedModels[$i] == $model){
-        		unset($this->loadedModels[$i]);
+        foreach ($this->loadedModels as $loadedModel){
+        	if ($loadedModel == $model){
+        		unset($loadedModel);
         		$returnValue = true;
         		break;
         	}
