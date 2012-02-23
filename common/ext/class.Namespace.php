@@ -3,16 +3,16 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - common/ext/class.Namespace.php
+ * Generis Object Oriented API - common\ext\class.Namespace.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 25.01.2011, 15:25:15 with ArgoUML PHP module 
+ * Automatically generated on 23.02.2012, 13:38:58 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package common
  * @subpackage ext
  */
@@ -24,7 +24,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * Enables you to manage the module namespaces
  *
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  */
 require_once('common/ext/class.NamespaceManager.php');
 
@@ -40,7 +40,7 @@ require_once('common/ext/class.NamespaceManager.php');
  * Short description of class common_ext_Namespace
  *
  * @access public
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package common
  * @subpackage ext
  */
@@ -73,7 +73,7 @@ class common_ext_Namespace
      * Create a namespace instance
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  int id
      * @param  string uri
      * @return mixed
@@ -96,7 +96,7 @@ class common_ext_Namespace
      * Get the identifier of the namespace instance
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return int
      */
     public function getModelId()
@@ -116,7 +116,7 @@ class common_ext_Namespace
      * Get the namespace URI
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
      */
     public function getUri()
@@ -136,7 +136,7 @@ class common_ext_Namespace
      * Magic method, return the Namespace URI
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
      */
     public function __toString()
@@ -150,6 +150,24 @@ class common_ext_Namespace
         // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:00000000000015B8 end
 
         return (string) $returnValue;
+    }
+
+    /**
+     * Remove a namespace from the ontology. All triples bound to the model will
+     * be removed.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return boolean
+     */
+    public function remove()
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1-85--11334893:135aa33a460:-8000:000000000000193A begin
+        // section 10-13-1-85--11334893:135aa33a460:-8000:000000000000193A end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class common_ext_Namespace */
