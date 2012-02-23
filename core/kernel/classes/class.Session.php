@@ -128,7 +128,7 @@ class core_kernel_classes_Session
      * @param  Session staticInstance
      * @return void
      */
-    public static function reset( core_kernel_classes_Session $staticInstance = null)
+    public function reset( core_kernel_classes_Session $staticInstance = null)
     {
         // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 begin
 		if ($staticInstance !== null){
