@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.07.2011, 08:42:00 with ArgoUML PHP module 
+ * Automatically generated on 23.02.2012, 11:48:10 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_smoothsql
  */
@@ -22,11 +22,11 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 }
 
 /**
- * include Exception
+ * include core_kernel_persistence_Exception
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  */
-require_once('class.Exception.php');
+require_once('core/kernel/persistence/class.Exception.php');
 
 /* user defined includes */
 // section 127-0-1-1--18467de:13108b1b06a:-8000:00000000000015EB-includes begin
@@ -40,12 +40,12 @@ require_once('class.Exception.php');
  * Short description of class core_kernel_persistence_smoothsql_Exception
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_smoothsql
  */
 class core_kernel_persistence_smoothsql_Exception
-    extends Exception
+    extends core_kernel_persistence_Exception
 {
     // --- ASSOCIATIONS ---
 
