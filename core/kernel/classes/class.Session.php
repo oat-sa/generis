@@ -128,7 +128,7 @@ class core_kernel_classes_Session
      * @param  Session staticInstance
      * @return void
      */
-    public function reset( core_kernel_classes_Session $staticInstance = null)
+    public static function reset( core_kernel_classes_Session $staticInstance = null)
     {
         // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 begin
 		if ($staticInstance !== null){
@@ -174,7 +174,7 @@ class core_kernel_classes_Session
      * Short description of method setLg
      *
      * @access public
-     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string lg
      * @return boolean
      */
@@ -197,7 +197,7 @@ class core_kernel_classes_Session
      * Short description of method getLg
      *
      * @access public
-     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return string
      */
     public function getLg()
@@ -215,7 +215,7 @@ class core_kernel_classes_Session
      * Short description of method getNameSpace
      *
      * @access public
-     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return string
      */
     public function getNameSpace()
@@ -233,7 +233,7 @@ class core_kernel_classes_Session
      * Returns array of languages in which data is defined into this module
      *
      * @access public
-     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return array
      */
     public function getLanguages()
@@ -250,7 +250,7 @@ class core_kernel_classes_Session
      * Short description of method getUser
      *
      * @access public
-     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return string
      */
     public function getUser()
@@ -268,7 +268,7 @@ class core_kernel_classes_Session
      * Short description of method setUser
      *
      * @access public
-     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string login
      * @return mixed
      */
@@ -285,7 +285,7 @@ class core_kernel_classes_Session
      * Short description of method loadModel
      *
      * @access protected
-     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string model
      * @return boolean
      */
@@ -306,6 +306,7 @@ class core_kernel_classes_Session
         	foreach($nsManager->getAllNamespaces() as $namespace){
         		if($namespace->getUri() == $model){
         			$this->loadedModels[$namespace->getModelId()] = $model;
+        			$returnValue = true;
         			break;
         		}
         	}
@@ -319,7 +320,7 @@ class core_kernel_classes_Session
      * Short description of method getLoadedModels
      *
      * @access public
-     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return array
      */
     public function getLoadedModels()
@@ -339,7 +340,7 @@ class core_kernel_classes_Session
      * Short description of method getUpdatableModels
      *
      * @access public
-     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return array
      */
     public function getUpdatableModels()
@@ -351,6 +352,31 @@ class core_kernel_classes_Session
         // section 127-0-1-1--450598c3:13175ea282e:-8000:0000000000003C47 end
 
         return (array) $returnValue;
+    }
+
+    /**
+     * Unload a model from the current session.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string model The model URI.
+     * @return boolean
+     */
+    public function unloadModel($model)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1-85--3885cdb:135aa86a412:-8000:0000000000001941 begin
+        for ($i = 0; $i < count($this->loadedModels); $i++){
+        	if ($this->loadedModels[$i] == $model){
+        		unset($this->loadedModels[$i]);
+        		$returnValue = true;
+        		break;
+        	}
+        }
+        // section 10-13-1-85--3885cdb:135aa86a412:-8000:0000000000001941 end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class core_kernel_classes_Session */
