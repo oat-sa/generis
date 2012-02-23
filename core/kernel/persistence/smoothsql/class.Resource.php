@@ -797,6 +797,10 @@ class core_kernel_persistence_smoothsql_Resource
         $returnValue = array();
 
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 begin
+        // check whenever or not properties is empty
+        if (count($properties) == 0) {
+        	return array();
+        }
         
         /*foreach($properties as $property){
         	$returnValue[$property->uriResource] = $this->getPropertyValues($resource, $property);
@@ -804,10 +808,10 @@ class core_kernel_persistence_smoothsql_Resource
  
     	$predicatesQuery = '';
     	//build the predicate query
-       // $predicatesQuery = implode(',', $properties);
-    	for ($i = 0; $i < count($properties); $i++){
-            $predicatesQuery .= ", '" . $properties[$i]->uriResource . "'";
-    	}
+       	//$predicatesQuery = implode(',', $properties);
+		foreach ($properties as $property) {
+			$predicatesQuery .= ", '" . $property->getUri() . "'";
+		}
     	$predicatesQuery=substr($predicatesQuery, 1);
         
         $session 	= core_kernel_classes_Session::singleton();
