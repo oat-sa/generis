@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 /**
  * Enables you to manage the module namespaces
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package common
  * @subpackage ext
  */
@@ -17,7 +17,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include common_ext_Namespace
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  */
 require_once('common/ext/class.Namespace.php');
 
@@ -33,7 +33,7 @@ require_once('common/ext/class.Namespace.php');
  * Enables you to manage the module namespaces
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package common
  * @subpackage ext
  */
@@ -66,7 +66,7 @@ class common_ext_NamespaceManager
      * Private constructor to force the use of the singleton
      *
      * @access private
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return mixed
      */
     private function __construct()
@@ -79,7 +79,7 @@ class common_ext_NamespaceManager
      * Main entry point to retrieve the unique NamespaceManager instance
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return common_ext_NamespaceManager
      */
     public static function singleton()
@@ -103,7 +103,7 @@ class common_ext_NamespaceManager
      * Get the list of all module's namespaces
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return array
      */
     public function getAllNamespaces()
@@ -137,7 +137,7 @@ class common_ext_NamespaceManager
      * Conveniance method to retrieve the local Namespace
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return common_ext_Namespace
      */
     public function getLocalNamespace()
@@ -167,7 +167,7 @@ class common_ext_NamespaceManager
      * Get a namesapce identified by the modelId or modelUri
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  modelID
      * @return common_ext_Namespace
      */
@@ -196,6 +196,20 @@ class common_ext_NamespaceManager
         // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001599 end
 
         return $returnValue;
+    }
+
+    /**
+     * Reset the current NamespaceManager instance.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return void
+     */
+    public function reset()
+    {
+        // section 10-13-1-85--470bb007:135aad37aa4:-8000:0000000000001944 begin
+        $this->namespaces = array();
+        // section 10-13-1-85--470bb007:135aad37aa4:-8000:0000000000001944 end
     }
 
 } /* end of class common_ext_NamespaceManager */
