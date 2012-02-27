@@ -269,7 +269,7 @@ class core_kernel_persistence_Switcher
 
 			foreach($properties as $property){
 				$range = $property->getRange();
-				if (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($range)){
+				if (!is_null($range) && core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($range)){
 					$this->unhardify($range, $options);
 				}
 			}
