@@ -430,8 +430,106 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3 begin
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3 end
+		if (is_array($properties)) {
+			if (count($properties) > 0) {
+
+				// Get the table name
+				$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+				$tableName = $referencer->resourceLocation($resource);
+				if (empty($tableName)) {
+					return $returnValue;
+				}
+
+				$instanceId = core_kernel_persistence_hardsql_Utils::getInstanceId($resource);
+				$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+				$session = core_kernel_classes_Session::singleton();
+
+				$queryProps = '';
+				$hardPropertyNames = array();
+
+				foreach ($properties as $propertyUri => $value) {
+
+					$property = new core_kernel_classes_Property($propertyUri);
+					$propertyLocation = $referencer->propertyLocation($property);
+
+					if (in_array("{$tableName}Props", $propertyLocation)
+						|| !$referencer->isPropertyReferenced($property)) {
+
+						$propertyRange = $property->getRange();
+						$lang = ($property->isLgDependent() ? ( $session->getLg() != '' ? $session->getLg() : $session->defaultLg) : '');
+						$formatedValues = array();
+						if ($value instanceof core_kernel_classes_Resource) {
+							$formatedValues[] = $value->uriResource;
+						} else if (is_array($value)) {
+							foreach ($value as $val) {
+								if ($val instanceof core_kernel_classes_Resource) {
+									$formatedValues[] = $val->uriResource;
+								} else {
+									$formatedValues[] = $dbWrapper->dbConnector->escape($val);
+								}
+							}
+						} else {
+							$formatedValues[] = $dbWrapper->dbConnector->escape($value);
+						}
+
+						if ($propertyRange->uriResource == RDFS_LITERAL) {
+							foreach ($formatedValues as $formatedValue) {
+								$queryProps .= " ({$instanceId}, '{$property->uriResource}', '{$formatedValue}', null, '{$lang}'),";
+							}
+						} else {
+							foreach ($formatedValues as $formatedValue) {
+								$queryProps .= " ({$instanceId}, '{$property->uriResource}', null, '{$formatedValue}', '{$lang}'),";
+							}
+						}
+					} else {
+
+						$propertyName = core_kernel_persistence_hardapi_Utils::getShortName($property);
+						if ($value instanceof core_kernel_classes_Resource) {
+							$value = $value->uriResource;
+						} else if (is_array($value)) {
+							throw new core_kernel_persistence_hardsql_Exception("try setting multivalue for the non multiple property {$property->getLabel()} ({$property->uriResource})");
+						} else {
+							$value = $dbWrapper->dbConnector->escape($value);
+						}
+
+						$hardPropertyNames[$propertyName] = $value;
+					}
+				}
+
+				if (!empty($queryProps)) {
+					$query = 'INSERT INTO "' . $tableName . 'Props" ("instance_id", "property_uri", "property_value", "property_foreign_uri", "l_language") VALUES ' . $queryProps;
+					$query = substr($query, 0, strlen($query) - 1);
+					$result = $dbWrapper->execSql($query);
+					if ($dbWrapper->dbConnector->errorNo() !== 0) {
+						throw new core_kernel_persistence_hardsql_Exception("Unable to set properties (multiple) Value for the instance {$resource->uriResource} in {$tableName} : " . $dbWrapper->dbConnector->errorMsg());
+					} else {
+						$returnValue = true;
+					}
+				}
+
+				if (!empty($hardPropertyNames)) {
+					$variables = array();
+					$query = 'UPDATE "' . $tableName . '" SET ';
+					$i = 0;
+					foreach ($hardPropertyNames as $hardPropertyName => $value) {
+						if ($i) {
+							$query .= ', ';
+						}
+						$query .= '"' . $hardPropertyName . '" = ?';
+						$variables[] = $value;
+					}
+					$variables[] = $instanceId;
+					$result = $dbWrapper->execSql($query, $variables);
+					if ($dbWrapper->dbConnector->errorNo() !== 0) {
+						throw new core_kernel_persistence_hardsql_Exception("Unable to set properties (single) Value for the instance {$resource->uriResource} in {$tableName} : " . $dbWrapper->dbConnector->errorMsg());
+					} else {
+						$returnValue = true;
+					}
+				}
+			}
+		}
+
+		// section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3 end
 
         return (bool) $returnValue;
     }
@@ -1022,9 +1120,109 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = array();
 
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 begin
-        
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        
+        $referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+		$table = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
+		if (empty($table)) {
+			return $returnValue;
+		}
+		$tableProps = $table . 'Props';
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$propertiesMain = '';
+		$propertiesProps = '';
+		$propertyIndexes = array();
+		$propertyIndex = 0;
+		foreach ($properties as $property) {
+
+			$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
+			$propertyLocation = $referencer->propertyLocation($property);
+
+			if (in_array($tableProps, $propertyLocation)
+				|| !$referencer->isPropertyReferenced($property)) {
+				if (!empty($propertiesProps)) {
+					$propertiesProps .= ", ";
+				}
+				$propertiesProps .= "'" . $property->uriResource . "'";
+			} else {
+				if (!empty($propertiesMain)) {
+					$propertiesMain .= ', ';
+				}
+				$propertiesMain .= '"' . $propertyAlias . '" as "propertyValue' . $propertyIndex . '"';
+
+				$propertyIndexes[$propertyIndex] = $property;
+				$propertyIndex++;
+			}
+		}
+
+		if (!empty($propertiesProps)) {
+
+			$session = core_kernel_classes_Session::singleton();
+			$session = core_kernel_classes_Session::singleton();
+			// Define language if required
+			$lang = '';
+			$defaultLg = '';
+			$options = array(); //@TODO: option to be implemented
+			if (isset($options['lg'])) {
+				$lang = $options['lg'];
+			} else {
+				($session->getLg() != '') ? $lang = $session->getLg() : $lang = $session->defaultLg;
+				$defaultLg = ' OR "l_language" = \'' . $session->defaultLg . '\' ';
+			}
+
+			$query = 'SELECT "property_uri", "property_value", "property_foreign_uri"
+				FROM "' . $table . '"
+				INNER JOIN "' . $tableProps . '" on "' . $table . '"."id" = "' . $tableProps . '"."instance_id"
+			   	WHERE "' . $table . '"."uri" = ?
+					AND "' . $tableProps . '"."property_uri" IN (' . $propertiesProps . ')
+					AND ( "l_language" = ? OR "l_language" = \'\' ' . $defaultLg . ')
+				ORDER BY "property_uri"';
+
+			$result = $dbWrapper->execSql($query, array(
+				$resource->uriResource
+				, $property->uriResource
+				, $lang
+				));
+
+			if ($dbWrapper->dbConnector->errorNo() !== 0) {
+				throw new core_kernel_persistence_hardsql_Exception("Unable to get property (multiple) values for {$resource->uriResource} in {$table} : " . $dbWrapper->dbConnector->errorMsg());
+			}
+			$currentPredicate = null;
+			while (!$result->EOF) {
+
+				if ($currentPredicate != $result->fields['property_uri']) {
+					$currentPredicate = $result->fields['property_uri'];
+					$returnValue[$currentPredicate] = array();
+				}
+
+				$value = $result->fields['property_value'] != null ? $result->fields['property_value'] : $result->fields['property_foreign_uri'];
+				$returnValue[$currentPredicate][] = common_Utils::isUri($value) ? new core_kernel_classes_Resource($value) : new core_kernel_classes_Literal($value);
+
+				$result->moveNext();
+			}
+		}
+
+		if (!empty($propertiesMain)) {
+			$query = 'SELECT ' . $propertiesMain . ' FROM "' . $table . '" WHERE "uri" = ?';
+			$result = $dbWrapper->execSql($query, array(
+				$resource->uriResource
+				));
+
+			if ($dbWrapper->dbConnector->errorNo() == 1054) {
+				// Column doesn't exists is not an error. Try to get a property which does not exist is allowed
+			} else if ($dbWrapper->dbConnector->errorNo() !== 0) {
+				throw new core_kernel_persistence_hardsql_Exception("Unable to get property (single) values for {$resource->uriResource} in {$table} : " . $dbWrapper->dbConnector->errorMsg());
+			} else {
+				while (!$result->EOF) {
+					foreach ($propertyIndexes as $propertyIndex => $property) {
+						$returnValue[$property->uriResource] = array();
+						if ($result->fields['propertyValue' . $propertyIndex] != null) {
+							$value = $result->fields['propertyValue' . $propertyIndex];
+							$returnValue[$property->uriResource][] = common_Utils::isUri($value) ? new core_kernel_classes_Resource($value) : new core_kernel_classes_Literal($value);
+						}
+					}
+					$result->moveNext();
+				}
+			}
+		}
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 end
 
         return (array) $returnValue;

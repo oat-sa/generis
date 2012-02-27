@@ -233,12 +233,12 @@ class ResourceTestCase extends UnitTestCase{
 		$instance = $class->createInstance('a label', 'a comment');
 		$this->assertIsA($instance, 'core_kernel_classes_Resource' );
 
-		$instance->setPropertiesValues(array(
-		RDFS_SEEALSO	=> "&plop n'\"; plop'\' plop",
-		RDFS_LABEL		=> 'new label',
-		RDFS_COMMENT 	=> 'new comment'
+			$instance->setPropertiesValues(array(
+			RDFS_SEEALSO	=> "&plop n'\"; plop'\' plop",
+			RDFS_LABEL		=> array('new label', 'another label', 'yet a last one'),
+			RDFS_COMMENT 	=> 'new comment'
 		));
-
+			
 		$seeAlso = $instance->getOnePropertyValue(new core_kernel_classes_Property(RDFS_SEEALSO));
 		$this->assertNotNull($seeAlso);
 		$this->assertIsA($seeAlso, 'core_kernel_classes_Literal');

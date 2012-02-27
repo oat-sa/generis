@@ -373,10 +373,26 @@ class core_kernel_persistence_smoothsql_Resource
 	       												in {$label} ({$resource->uriResource})");
 	       			}*/
 	       			$property = new core_kernel_classes_Property($propertyUri);
-	       			$object = $dbWrapper->dbConnector->escape($value);
 	       			$lang 	= ($property->isLgDependent() ? ( $session->getLg() != '' ? $session->getLg() : $session->defaultLg) : '');
-	       			
-	       			$query .= " ($modelId, '{$resource->uriResource}', '{$property->uriResource}', '{$object}', '{$lang}', '{$user}', '{$mask}','{$mask}','{$mask}', CURRENT_TIMESTAMP),";
+					
+					$formatedValues = array();
+					if($value instanceof core_kernel_classes_Resource){
+						$formatedValues[] = $value->uriResource;
+					}else if(is_array($value)){
+						foreach($value as $val){
+							if($val instanceof core_kernel_classes_Resource){
+								$formatedValues[] = $val->uriResource;
+							}else{
+								$formatedValues[] = $dbWrapper->dbConnector->escape($val);
+							}
+						}
+					}else{
+						$formatedValues[] = $dbWrapper->dbConnector->escape($value);
+					}
+					
+					foreach($formatedValues as $object){
+						$query .= " ($modelId, '{$resource->uriResource}', '{$property->uriResource}', '{$object}', '{$lang}', '{$user}', '{$mask}','{$mask}','{$mask}', CURRENT_TIMESTAMP),";
+					}
 	       		}
 	       		
 	       		$query = substr($query, 0, strlen($query) -1);
