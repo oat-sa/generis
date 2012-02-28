@@ -413,7 +413,7 @@ class common_Logger
 				$severity = self::ERROR_LEVEL;
 				break;
 		}
-		self::singleton()->log($severity, 'php error('.$errorNumber.'): '.$errorString, array('php_error'), $errorFile, $errorLine);
+		self::singleton()->log($severity, 'php error('.$errorNumber.'): '.$errorString, array('PHPERROR'), $errorFile, $errorLine);
         // section 127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001848 end
 
         return (bool) $returnValue;
@@ -433,9 +433,9 @@ class common_Logger
     	$error = error_get_last();
     	if (($error['type'] & (E_COMPILE_ERROR | E_ERROR | E_PARSE | E_CORE_ERROR)) != 0) {
     		if (isset($error['file']) && isset($error['line'])) {
-    			self::singleton()->log(self::FATAL_LEVEL, 'php error('.$error['type'].'): '.$error['message'], array('php_error'), $error['file'], $error['line']);
+    			self::singleton()->log(self::FATAL_LEVEL, 'php error('.$error['type'].'): '.$error['message'], array('PHPERROR'), $error['file'], $error['line']);
     		} else {
-    			self::singleton()->log(self::FATAL_LEVEL, 'php error('.$error['type'].'): '.$error['message'], array('php_error'));
+    			self::singleton()->log(self::FATAL_LEVEL, 'php error('.$error['type'].'): '.$error['message'], array('PHPERROR'));
     		}
     	}
         // section 127-0-1-1-56e04748:1341d1d0e41:-8000:000000000000182B end

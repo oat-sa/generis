@@ -140,7 +140,7 @@ class common_log_Item
         $this->description		= $description;
         $this->severity			= $severity;
         $this->datetime			= $datetime;
-        $this->tags				= $tags;
+        $this->tags				= is_array($tags) ? $tags : array();
         $this->request			= $request;
         $this->authentifiedUser	= $user;
         $this->errorFile		= $errorFile;
