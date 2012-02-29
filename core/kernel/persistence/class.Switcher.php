@@ -97,17 +97,21 @@ class core_kernel_persistence_Switcher
 	public function unhardify (core_kernel_classes_Class $class, $options = array ()) {
 
 		$returnValue = (bool) false;
-
+        
+        $classLabel = $class->getLabel();
+        common_Logger::d("Uhnardifying class ${classLabel}");
+        
 		if (defined ("DEBUG_PERSISTENCE") && DEBUG_PERSISTENCE){
 			var_dump('unhardify '.$class->uriResource);
 		}
 
 		// Check if the class has been hardened
 		if (!core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($class)){
-			throw new core_kernel_persistence_hardapi_Exception("Try to unhardify the class {$class->uriResource} which has not been hardened");
+			common_Logger::d("Class ${classLabel} could not be unhardened");
+			return false;
 		}
 
-		//if defined, we took all the properties of the class and it's parents till the topclass
+		//if defined, we take all the properties of the class and it's parents till the topclass
 		$classLocations = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($class);
 		$topClass = null;
 		if (count($classLocations)>1){
@@ -197,7 +201,6 @@ class core_kernel_persistence_Switcher
 						$property->uriResource
 						));
 						if ($dbWrapper->dbConnector->errorNo() !== 0) {
-							var_dump($sqlQuery);
 							throw new core_kernel_persistence_hardapi_Exception("unable to unhardify : " . $dbWrapper->dbConnector->errorMsg());
 						}
 
@@ -270,6 +273,7 @@ class core_kernel_persistence_Switcher
 			foreach($properties as $property){
 				$range = $property->getRange();
 				if (!is_null($range) && core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($range)){
+					
 					$this->unhardify($range, $options);
 				}
 			}
@@ -306,6 +310,8 @@ class core_kernel_persistence_Switcher
 		$returnValue = (bool) false;
 
 		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 begin
+        $classLabel = $class->getLabel();
+        common_Logger::d("Hardifying class ${classLabel}");
 
 		if (defined ("DEBUG_PERSISTENCE") && DEBUG_PERSISTENCE){
 			if (in_array($class->uriResource, self::$debug_tables)){
@@ -351,6 +357,7 @@ class core_kernel_persistence_Switcher
 		$myTableMgr = new core_kernel_persistence_hardapi_TableManager($tableName);
 
 		if($allOrNothing && $myTableMgr->exists() && !$class->countInstances()){
+		    common_Logger::d("Class ${classLabel} not hardified");
 			return $returnValue;
 		}
 
