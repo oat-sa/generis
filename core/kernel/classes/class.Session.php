@@ -139,18 +139,7 @@ class core_kernel_classes_Session
         	$this->setLg('');
         	$this->setUser('');
         	
-        	$this->loadedModels = array();
-	        $extensionManager = common_ext_ExtensionsManager::singleton();
-	        common_ext_NamespaceManager::singleton()->reset();
-			foreach ($extensionManager->getModelsToLoad() as $model){
-				$this->loadModel($model);
-			}
-			
-			//load local model
-			$this->loadModel(LOCAL_NAMESPACE);
-			
-			//get updatable models
-			$this->updatableModels = $extensionManager->getUpdatableModels ();
+        	$this->update();
 	    }
         // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 end
     }
@@ -390,6 +379,46 @@ class core_kernel_classes_Session
         // section 10-13-1-85--3885cdb:135aa86a412:-8000:0000000000001941 end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Updates the session by reloading references to models.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return void
+     */
+    public function update()
+    {
+        // section 10-13-1-85-91f6d5e:135c7e94b2b:-8000:0000000000002A48 begin
+        $this->loadedModels = array();
+        $extensionManager = common_ext_ExtensionsManager::singleton();
+        common_ext_NamespaceManager::singleton()->reset();
+		foreach ($extensionManager->getModelsToLoad() as $model){
+			$this->loadModel($model);
+		}
+		
+		//load local model
+		$this->loadModel(LOCAL_NAMESPACE);
+		
+		//get updatable models
+		$this->updatableModels = array();
+		$this->updatableModels = $extensionManager->getUpdatableModels ();
+        // section 10-13-1-85-91f6d5e:135c7e94b2b:-8000:0000000000002A48 end
+    }
+
+    /**
+     * Behaviour to adopt at PHP __wakup time.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return void
+     */
+    public function __wakeup()
+    {
+        // section 10-13-1-85-91f6d5e:135c7e94b2b:-8000:0000000000002A4B begin
+        $this->update();
+        // section 10-13-1-85-91f6d5e:135c7e94b2b:-8000:0000000000002A4B end
     }
 
 } /* end of class core_kernel_classes_Session */
