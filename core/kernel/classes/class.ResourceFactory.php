@@ -61,7 +61,10 @@ class core_kernel_classes_ResourceFactory
         $returnValue = null;
 
         // section 10-13-1--99--2e5efe17:11fffe7b282:-8000:0000000000001519 begin
-        $returnValue = $type->createInstance($label,$comment);
+		$returnValue = $type->createInstanceWithProperties(array(
+			RDFS_LABEL		=> $label,
+			RDFS_COMMENT	=> $comment
+		));
         // section 10-13-1--99--2e5efe17:11fffe7b282:-8000:0000000000001519 end
 
         return $returnValue;

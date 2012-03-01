@@ -170,7 +170,7 @@ class core_kernel_classes_Class
      * which simply link the previously created ressource with this class
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource instance
      * @return core_kernel_classes_Resource
      */
@@ -235,7 +235,7 @@ class core_kernel_classes_Class
      * Short description of method __construct
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string uri
      * @param  string debug
      * @return void
@@ -251,7 +251,7 @@ class core_kernel_classes_Class
      * Creates the hyperClass related to a class
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
     public function createHyperClass()
@@ -304,10 +304,11 @@ class core_kernel_classes_Class
     }
 
     /**
-     * Short description of method createInstance
+     * Should not be called by application code, please use
+     * core_kernel_classes_ResourceFactory::create() instead
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string label
      * @param  string comment
      * @param  string uri
@@ -330,7 +331,7 @@ class core_kernel_classes_Class
      * Short description of method createSubClass
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string label
      * @param  string comment
      * @param  string uri
@@ -353,7 +354,7 @@ class core_kernel_classes_Class
      * Short description of method createProperty
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string label
      * @param  string comment
      * @param  boolean isLgDependent
@@ -376,7 +377,7 @@ class core_kernel_classes_Class
      * Short description of method getMethodes
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return array
      */
     public function getMethodes()
@@ -394,7 +395,7 @@ class core_kernel_classes_Class
      * Short description of method searchInstances
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  array propertyFilters
      * @param  array options
      * @return array
@@ -414,7 +415,7 @@ class core_kernel_classes_Class
      * Short description of method countInstances
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  array propertyFilters
      * @param  array options
      * @return Integer
@@ -435,7 +436,7 @@ class core_kernel_classes_Class
      * The instances can be filtered.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property property
      * @param  array propertyFilters
      * @param  array options
@@ -456,7 +457,7 @@ class core_kernel_classes_Class
      * Short description of method unsetProperty
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property property
      * @return mixed
      */
@@ -465,6 +466,47 @@ class core_kernel_classes_Class
         // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:000000000000163C begin
         $returnValue = core_kernel_persistence_ClassProxy::singleton()->unsetProperty($this, $property);
         // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:000000000000163C end
+    }
+
+    /**
+     * please use core_kernel_classes_ResourceFactory::create()
+     * instead of this function whenever possible
+     *
+     * Creates a new instance using the properties provided.
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  array properties May contain additional types
+     * @return core_kernel_classes_Resource
+     * @see core_kernel_classes_ResourceFactory
+     */
+    public function createInstanceWithProperties($properties)
+    {
+        $returnValue = null;
+
+        // section 127-0-1-1--49b11f4f:135c41c62e3:-8000:0000000000001951 begin
+        // remove the additional types, because they might be implemented differently
+        
+        $additonalTypes = array();
+        if (isset($properties[RDF_TYPE])) {
+        	$types = is_array($properties[RDF_TYPE]) ? $properties[RDF_TYPE] : array($properties[RDF_TYPE]);
+        	foreach ($types as $candidate) {
+        		if ($type->getUri() != $candidate->getUri()) {
+        			$additonalTypes[] = $candidate;
+        		}
+        	}
+        	unset($properties[RDF_TYPE]);
+        }
+        
+        // create the instance
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->createInstanceWithProperties($this, $properties);
+        
+        foreach ($additonalTypes as $type) {
+        	$returnValue->setType($type);
+        }
+        // section 127-0-1-1--49b11f4f:135c41c62e3:-8000:0000000000001951 end
+
+        return $returnValue;
     }
 
 } /* end of class core_kernel_classes_Class */
