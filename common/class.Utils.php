@@ -3,14 +3,14 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - common\class.Utils.php
+ * Generis Object Oriented API - common/class.Utils.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 24.03.2010, 14:38:36 with ArgoUML PHP module
- * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
+ * Automatically generated on 02.03.2012, 15:29:21 with ArgoUML PHP module 
+ * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
  * @package common
@@ -89,7 +89,7 @@ class common_Utils
      * Short description of method isUri
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string strarg
      * @return boolean
      */
@@ -113,7 +113,7 @@ class common_Utils
      * Short description of method getLongUri
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string strarg
      * @return string
      */
@@ -133,11 +133,11 @@ class common_Utils
      * Short description of method getShortUri
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string strarg
      * @return string
      */
-    public static function getShortUri($strarg)
+    public function getShortUri($strarg)
     {
         $returnValue = (string) '';
 
@@ -155,11 +155,11 @@ class common_Utils
      * Removes starting/ending spaces, strip html tags out, remove any \r and \n
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string strarg
      * @return string
      */
-    public function fullTrim($strarg)
+    public static function fullTrim($strarg)
     {
         $returnValue = (string) '';
 
@@ -174,7 +174,7 @@ class common_Utils
      * Short description of method startTimer
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  int id
      * @return void
      */
@@ -188,7 +188,7 @@ class common_Utils
      * Short description of method endTimer
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  int id
      * @return string
      */
@@ -207,7 +207,7 @@ class common_Utils
      * triming, etc.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string toFormat
      * @param  string separator
      * @return string
@@ -229,7 +229,7 @@ class common_Utils
      * Short description of method hyperMask
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  int withVariables
      * @return void
      */
@@ -253,7 +253,7 @@ class common_Utils
      * Short description of method getNewUri
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return string
      */
     public static function getNewUri()
@@ -289,7 +289,7 @@ class common_Utils
      * Short description of method get
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return core_kernel_classes_Container
      */
     public static function get()
@@ -306,7 +306,7 @@ class common_Utils
      * Short description of method xmlEntityDecode
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string string
      * @return string
      */
@@ -324,7 +324,7 @@ class common_Utils
      * Short description of method loadSqlFile
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string file
      * @return mixed
      */
@@ -360,7 +360,7 @@ class common_Utils
      * Short description of method registerAutoload
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string pClassName
      * @return mixed
      */
