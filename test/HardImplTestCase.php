@@ -81,7 +81,7 @@ class HardImplTestCase extends UnitTestCase {
 		$this->assertTrue ($impl instanceof core_kernel_persistence_smoothsql_Class);
 		$this->assertEqual (count($this->targetSubjectClass->getInstances ()), 1);
 		$this->assertEqual (count($this->targetSubjectSubClass->getInstances ()), 1);
-		core_kernel_persistence_PersistenceProxy::resetMode ();
+		core_kernel_persistence_PersistenceProxy::restoreImplementation();
 		$this->assertTrue (core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectClass) instanceof core_kernel_persistence_hardsql_Class);
 		$this->assertTrue (core_kernel_persistence_ResourceProxy::singleton()->getImpToDelegateTo($this->subject1) instanceof core_kernel_persistence_hardsql_Resource);
 	}
@@ -166,9 +166,9 @@ class HardImplTestCase extends UnitTestCase {
 		foreach ($this->targetSubjectClass->getInstances() as $instance){	
 			
 			$props = $instance->getPropertyValuesByLg (new core_kernel_classes_Property(RDFS_LABEL), 'FR');
-			$this->assertEqual (count($props), 1);
-			$this->assertTrue ($props[0] instanceof core_kernel_classes_Literal);
-			$this->assertEqual ((string)$props[0], 'LABEL FR');
+			$this->assertEqual ($props->count(), 1);
+			$this->assertTrue ($props->get(0) instanceof core_kernel_classes_Literal);
+			$this->assertEqual ((string)$props->get(0), 'LABEL FR');
 		}
 	}
 	

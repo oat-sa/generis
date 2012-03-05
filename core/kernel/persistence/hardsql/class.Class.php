@@ -801,13 +801,110 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = null;
 
         // section 127-0-1-1--49b11f4f:135c41c62e3:-8000:0000000000001947 begin
+        
+        common_Logger::d('creating with proprties '.implode(',', array_keys($properties)));
         if (isset($properties[RDF_TYPE])) {
         	throw new core_kernel_persistence_Exception('Additional types in createInstanceWithProperties not permited');
         }
         
-        $properties[RDF_TYPE] = $type;
-		$returnValue = new core_kernel_classes_Resource(common_Utils::getNewUri(), __METHOD__);
-		$returnValue->setPropertiesValues($properties);
+        $uri == common_Utils::getNewUri();
+        $table = '_'.core_kernel_persistence_hardapi_Utils::getShortName ($type);
+        
+        // prepare properties
+        $hardPropertyNames = array("uri" => $uri);
+        
+        if (is_array($properties)) {
+			if (count($properties) > 0) {
+
+				// Get the table name
+				$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+				
+				$instanceId = core_kernel_persistence_hardsql_Utils::getInstanceId($resource);
+				$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+				$session = core_kernel_classes_Session::singleton();
+
+				$queryProps = '';
+
+				foreach ($properties as $propertyUri => $value) {
+
+					$property = new core_kernel_classes_Property($propertyUri);
+					$propertyLocation = $referencer->propertyLocation($property);
+
+					if (in_array("{$table}Props", $propertyLocation)
+						|| !$referencer->isPropertyReferenced($property)) {
+
+						$propertyRange = $property->getRange();
+						$lang = ($property->isLgDependent() ? ( $session->getLg() != '' ? $session->getLg() : $session->defaultLg) : '');
+						$formatedValues = array();
+						if ($value instanceof core_kernel_classes_Resource) {
+							$formatedValues[] = $value->uriResource;
+						} else if (is_array($value)) {
+							foreach ($value as $val) {
+								if ($val instanceof core_kernel_classes_Resource) {
+									$formatedValues[] = $val->uriResource;
+								} else {
+									$formatedValues[] = $dbWrapper->dbConnector->escape($val);
+								}
+							}
+						} else {
+							$formatedValues[] = $dbWrapper->dbConnector->escape($value);
+						}
+
+						if ($propertyRange->uriResource == RDFS_LITERAL) {
+							foreach ($formatedValues as $formatedValue) {
+								$queryProps .= " ({$instanceId}, '{$property->uriResource}', '{$formatedValue}', null, '{$lang}'),";
+							}
+						} else {
+							foreach ($formatedValues as $formatedValue) {
+								$queryProps .= " ({$instanceId}, '{$property->uriResource}', null, '{$formatedValue}', '{$lang}'),";
+							}
+						}
+					} else {
+
+						$propertyName = core_kernel_persistence_hardapi_Utils::getShortName($property);
+						if ($value instanceof core_kernel_classes_Resource) {
+							$value = $value->uriResource;
+						} else if (is_array($value)) {
+							throw new core_kernel_persistence_hardsql_Exception("try setting multivalue for the non multiple property {$property->getLabel()} ({$property->uriResource})");
+						} else {
+							$value = $dbWrapper->dbConnector->escape($value);
+						}
+
+						$hardPropertyNames[$propertyName] = $value;
+					}
+				}
+			}
+		}
+        
+        
+        
+        // spawn
+        
+        
+		$returnValue = new core_kernel_classes_Resource($uri,__METHOD__);
+
+		$varnames = '"'.implode('","', array_keys($hardPropertyNames)).'"';
+		
+		$query = 'INSERT INTO "'.$table.'" ('.$varnames.') VALUES (?)';
+		$result = $dbWrapper->execSql($query, array_values($hardPropertyNames));
+			
+		if($dbWrapper->dbConnector->errorNo() !== 0){
+			throw new core_kernel_persistence_hardsql_Exception("Unable to create instance for the class {$type->uriResource} in the table {$table} : " .$dbWrapper->dbConnector->errorMsg());
+		} else {
+			// reference the newly created instance
+			core_kernel_persistence_hardapi_ResourceReferencer::singleton()->referenceResource($returnValue, $table, array($type), true);
+		}
+		
+		if (!empty($queryProps)) {
+			$query = 'INSERT INTO "' . $table . 'Props" ("instance_id", "property_uri", "property_value", "property_foreign_uri", "l_language") VALUES ' . $queryProps;
+			$query = substr($query, 0, strlen($query) - 1);
+			$result = $dbWrapper->execSql($query);
+			if ($dbWrapper->dbConnector->errorNo() !== 0) {
+				throw new core_kernel_persistence_hardsql_Exception("Unable to set properties (multiple) Value for the instance {$resource->uriResource} in {$tableName} : " . $dbWrapper->dbConnector->errorMsg());
+			} else {
+				$returnValue = true;
+			}
+		}
         // section 127-0-1-1--49b11f4f:135c41c62e3:-8000:0000000000001947 end
 
         return $returnValue;

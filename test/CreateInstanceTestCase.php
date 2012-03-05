@@ -16,15 +16,20 @@ require_once INCLUDES_PATH.'/simpletest/autorun.php';
 
 
 class CreateInstanceTestCase extends UnitTestCase {
-	protected $object;
+	protected $class;
 	
 	public function setUp(){
 
 	    TestRunner::initTest();
+	    $classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDF_CLASS), 'TestClass');
+	    $this->class = new core_kernel_classes_Class($classres->getUri());
+	    $this->assertIsA($this->class, 'core_kernel_classes_Class');
+	    $this->assertTrue($this->class->hasType(new core_kernel_classes_Class(RDF_CLASS)));
+	    common_Logger::i('using class '.$this->class->getLabel().' for Create instance Tests');
 	}
 	
 	public function testCreateInstance(){
-		$class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#Boolean');
+		$class = $this->class;
 		$instance = $class->createInstance('toto' , 'tata');
 		$this->assertEqual($instance->getLabel(), 'toto');
 		$this->assertEqual($instance->getComment(), 'tata');
@@ -35,7 +40,7 @@ class CreateInstanceTestCase extends UnitTestCase {
 	}
 	
 	public function testCreateInstanceViaFactory(){
-		$class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#Boolean');
+		$class = $this->class;
 		$instance = core_kernel_classes_ResourceFactory::create($class, 'testlabel', 'testcomment');
 		$this->assertTrue($instance->hasType($class));
 		$this->assertEqual($instance->getLabel(), 'testlabel');
@@ -50,9 +55,8 @@ class CreateInstanceTestCase extends UnitTestCase {
 	public function testCreateInstanceWithProperties(){
 		
 		// simple case, without params
-		$resClass	= core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDF_CLASS));
-		$this->assertTrue($resClass->hasType(new core_kernel_classes_Class(RDF_CLASS)));
-		$class		= new core_kernel_classes_Class($resClass->getUri());
+
+		$class		= $class = $this->class;
 		$property	= new core_kernel_classes_Property(core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDF_PROPERTY))->getUri());
 		
 		$instance = $class->createInstanceWithProperties(array());
@@ -113,9 +117,40 @@ class CreateInstanceTestCase extends UnitTestCase {
 		
 		$propInst->delete();
 		$propInst2->delete();
-		$class->delete();
 		$property->delete();
+		
 	}
 	
+	public function testCreateInstanceHardified() {
+		
+		$rr = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+		$this->assertFalse($rr->isClassReferenced($this->class));
+		$softinstance = core_kernel_classes_ResourceFactory::create($this->class);
+		$this->assertFalse($rr->isResourceReferenced($softinstance));
+		
+		$switcher = new core_kernel_persistence_Switcher();
+		$switcher->hardify($this->class, array(
+			'topClass'		=> $this->class,
+		));
+		
+		$this->assertTrue($rr->isClassReferenced($this->class));
+		common_Logger::i('creating hardified');
+		$hardinstance = core_kernel_classes_ResourceFactory::create($this->class);
+		$this->assertTrue($rr->isResourceReferenced($hardinstance), 'Instance created from harmode class was added in softmode');
+		
+		$this->testCreateInstance();
+		$this->testCreateInstanceViaFactory();
+		$this->testCreateInstanceWithProperties();
+		
+		$softinstance->delete();
+		$hardinstance->delete();
+		
+		$switcher->unhardify($this->class);
+	}
+	
+	public function after($pMethode) {
+		$this->class->delete();
+		parent::after($pMethode);
+	}
 }
 ?>

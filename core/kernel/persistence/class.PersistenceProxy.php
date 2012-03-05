@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.07.2011, 08:42:00 with ArgoUML PHP module 
+ * Automatically generated on 05.03.2012, 14:46:51 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -34,7 +34,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  *
  * @abstract
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -48,18 +48,26 @@ abstract class core_kernel_persistence_PersistenceProxy
     /**
      * Short description of attribute impls
      *
-     * @access public
+     * @access protected
      * @var array
      */
-    public $impls = array();
+    protected $impls = array();
 
     /**
-     * Short description of attribute mode
+     * Short description of attribute current
      *
-     * @access public
+     * @access private
      * @var string
      */
-    public static $mode = '';
+    private static $current = '';
+
+    /**
+     * Short description of attribute implementationHistory
+     *
+     * @access private
+     * @var array
+     */
+    private static $implementationHistory = array();
 
     // --- OPERATIONS ---
 
@@ -68,7 +76,7 @@ abstract class core_kernel_persistence_PersistenceProxy
      *
      * @abstract
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  array params
      * @return core_kernel_persistence_ResourceInterface
@@ -80,7 +88,7 @@ abstract class core_kernel_persistence_PersistenceProxy
      *
      * @abstract
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return core_kernel_persistence_PersistanceProxy
      */
     public static abstract function singleton();
@@ -89,7 +97,7 @@ abstract class core_kernel_persistence_PersistenceProxy
      * Short description of method getAvailableImpl
      *
      * @access protected
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  array params
      * @return array
      */
@@ -108,7 +116,7 @@ abstract class core_kernel_persistence_PersistenceProxy
         
         if (self::isForcedMode()){
         	$returnValue = array (
-        		self::$mode => true
+        		self::$current => true
         	);
         } else if (count ($params)){
         	$returnValue = array_merge($returnValue, $params);
@@ -123,7 +131,7 @@ abstract class core_kernel_persistence_PersistenceProxy
      *
      * @abstract
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string context
      * @param  Resource resource
      * @return boolean
@@ -131,21 +139,23 @@ abstract class core_kernel_persistence_PersistenceProxy
     public abstract function isValidContext($context,  core_kernel_classes_Resource $resource);
 
     /**
-     * Short description of method forceMode
+     * Force the use of a specific implementation
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  string mode
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  string implementation
      * @return mixed
      */
-    public static function forceMode($mode)
+    public static function forceMode($implementation)
     {
         // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:000000000000153C begin
-        
-    	if (isset($mode) && !empty($mode)){
-    		self::$mode = $mode;
+        if (!empty($implementation)){
+    		self::$implementationHistory[] = self::$current;
+    		self::$current = $implementation;
+    		common_Logger::d('Forced persistence "'.self::$current.'"');
+    	} else {
+    		throw new common_exception_Error("forceMode called without implementation");
     	}
-    	
         // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:000000000000153C end
     }
 
@@ -153,19 +163,19 @@ abstract class core_kernel_persistence_PersistenceProxy
      * Short description of method isForcedMode
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  string mode
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  string implementation
      * @return boolean
      */
-    public static function isForcedMode($mode = '')
+    public static function isForcedMode($implementation = '')
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:000000000000153F begin
         
-        if (!empty(self::$mode)){
-			if(!empty($mode)){
-				$returnValue = ($mode == self::$mode);
+        if (!empty(self::$current)){
+			if(!empty($implementation)){
+				$returnValue = ($implementation == self::$current);
 			}else{
 				$returnValue = true;
 			}
@@ -177,19 +187,39 @@ abstract class core_kernel_persistence_PersistenceProxy
     }
 
     /**
-     * Short description of method resetMode
+     * Deprecated, please use restoreMode() instead
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @deprecated
      * @return mixed
      */
     public function resetMode()
     {
         // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001545 begin
-   	
-   		self::$mode = "";
+		common_Logger::w('Deprecated function PersistenceProxy::resetMode() called');   	
+   		self::$current = "";
     		
         // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001545 end
+    }
+
+    /**
+     * resores the previsous implementation
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return mixed
+     */
+    public static function restoreImplementation()
+    {
+        // section 127-0-1-1-6b2ff0f2:135e313546a:-8000:0000000000001967 begin
+        if (count(self::$implementationHistory) > 0) {
+        	self::$current = array_pop(self::$implementationHistory);
+        	common_Logger::d('Restored persistence "'.self::$current.'"');
+        } else {
+        	throw new common_exception_Error("PersistencyProxy::restoreImplementation() called without forcing an implementation first");
+        }
+        // section 127-0-1-1-6b2ff0f2:135e313546a:-8000:0000000000001967 end
     }
 
 } /* end of abstract class core_kernel_persistence_PersistenceProxy */

@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Design generis API oo</activediagram>
+      <activediagram>Persistence</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Mar 02 15:32:18 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Mar 05 16:05:02 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -10360,7 +10360,7 @@ will restore it for further http requests)</UML:TaggedValue.dataValue>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
                         <UML:Attribute xmi.id = '127-0-1-1--499759bc:12f72c12020:-8000:00000000000014EB'
-                          name = 'impls' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          name = 'impls' visibility = 'protected' isSpecification = 'false' ownerScope = 'instance'
                           changeability = 'changeable' targetScope = 'instance'>
                           <UML:StructuralFeature.multiplicity>
                             <UML:Multiplicity xmi.id = '127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001544'>
@@ -10405,7 +10405,7 @@ will restore it for further http requests)</UML:TaggedValue.dataValue>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
                         <UML:Attribute xmi.id = '127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001510'
-                          name = 'mode' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                          name = 'current' visibility = 'private' isSpecification = 'false' ownerScope = 'classifier'
                           changeability = 'changeable' targetScope = 'instance'>
                           <UML:StructuralFeature.multiplicity>
                             <UML:Multiplicity xmi.id = '127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001538'>
@@ -10427,11 +10427,20 @@ will restore it for further http requests)</UML:TaggedValue.dataValue>
                           name = 'forceMode' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-6b2ff0f2:135e313546a:-8000:000000000000196A'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Force the use of a specific implementation</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-7a0c731b:12fbfab7535:-8000:000000000000153D'
                               name = 'return' isSpecification = 'false' kind = 'return'/>
                             <UML:Parameter xmi.id = '127-0-1-1-7a0c731b:12fbfab7535:-8000:000000000000153E'
-                              name = 'mode' isSpecification = 'false' kind = 'in'>
+                              name = 'implementation' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
@@ -10450,7 +10459,7 @@ will restore it for further http requests)</UML:TaggedValue.dataValue>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '10-13-1--128--497eb3f9:1302667dfd7:-8000:000000000000158E'
-                              name = 'mode' isSpecification = 'false' kind = 'in'>
+                              name = 'implementation' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.defaultValue>
                                 <UML:Expression xmi.id = '10-13-1--128--497eb3f9:1302667dfd7:-8000:0000000000001590'
                                   language = '' body = '&apos;&apos;'/>
@@ -10465,8 +10474,57 @@ will restore it for further http requests)</UML:TaggedValue.dataValue>
                           name = 'resetMode' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-6b2ff0f2:135e313546a:-8000:0000000000001965'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>true</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '127-0-1-1--ded7727:12f59911cd7:-8000:0000000000001436'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-6b2ff0f2:135e313546a:-8000:0000000000001966'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Deprecated, please use restoreMode() instead</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001546'
+                              name = 'return' isSpecification = 'false' kind = 'return'/>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Attribute xmi.id = '127-0-1-1-6b2ff0f2:135e313546a:-8000:0000000000001962'
+                          name = 'implementationHistory' visibility = 'private' isSpecification = 'false'
+                          ownerScope = 'classifier' changeability = 'changeable' targetScope = 'instance'>
+                          <UML:StructuralFeature.multiplicity>
+                            <UML:Multiplicity xmi.id = '127-0-1-1-6b2ff0f2:135e313546a:-8000:0000000000001963'>
+                              <UML:Multiplicity.range>
+                                <UML:MultiplicityRange xmi.id = '127-0-1-1-6b2ff0f2:135e313546a:-8000:0000000000001964'
+                                  lower = '1' upper = '1'/>
+                              </UML:Multiplicity.range>
+                            </UML:Multiplicity>
+                          </UML:StructuralFeature.multiplicity>
+                          <UML:StructuralFeature.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:StructuralFeature.type>
+                        </UML:Attribute>
+                        <UML:Operation xmi.id = '127-0-1-1-6b2ff0f2:135e313546a:-8000:0000000000001967'
+                          name = 'restoreImplementation' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1-6b2ff0f2:135e313546a:-8000:0000000000001969'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>resores the previsous implementation</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1-6b2ff0f2:135e313546a:-8000:0000000000001968'
                               name = 'return' isSpecification = 'false' kind = 'return'/>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
@@ -44554,7 +44612,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[80, 336, 480, 192]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[80, 336, 480, 193]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E4"
        fill="1"
        fillcolor="white"
@@ -44568,7 +44626,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       x="80"
       y="336"
       width="480"
-      height="192"
+      height="193"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -44624,7 +44682,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[81, 359, 478, 48]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[81, 359, 478, 50]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E4"
          fill="0"
          fillcolor="white"
@@ -44638,7 +44696,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="81"
         y="359"
         width="478"
-        height="48"
+        height="50"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -44664,6 +44722,22 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="81"
         y="373"
         width="478"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >current : string</text>
+      <text name="Fig1.4.3"
+        x="81"
+        y="387"
+        width="478"
         height="20"
         fill="0"
         fillcolor="white"
@@ -44675,11 +44749,11 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >mode : string</text>
+      >implementationHistory : array</text>
     </group>
     <rectangle name="Fig1.5"
       x="80"
-      y="407"
+      y="408"
       width="480"
       height="1"
       fill="1"
@@ -44688,7 +44762,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[81, 408, 478, 118]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[81, 409, 478, 120]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012E4"
          fill="0"
          fillcolor="white"
@@ -44700,9 +44774,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig1.6.0"
         x="81"
-        y="408"
+        y="409"
         width="478"
-        height="118"
+        height="120"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -44710,7 +44784,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
       <text name="Fig1.6.1"
         x="81"
-        y="408"
+        y="409"
         width="478"
         height="14"
         fill="0"
@@ -44726,7 +44800,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getImpToDelegateTo(resource : Resource,params : array = array()) : ResourceInterface</text>
       <text name="Fig1.6.2"
         x="81"
-        y="422"
+        y="423"
         width="478"
         height="14"
         fill="0"
@@ -44742,7 +44816,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >singleton() : PersistanceProxy</text>
       <text name="Fig1.6.3"
         x="81"
-        y="436"
+        y="437"
         width="478"
         height="14"
         fill="0"
@@ -44758,7 +44832,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getAvailableImpl(params : array = array()) : array</text>
       <text name="Fig1.6.4"
         x="81"
-        y="450"
+        y="451"
         width="478"
         height="14"
         fill="0"
@@ -44774,7 +44848,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >isValidContext(context : string,resource : Resource) : boolean</text>
       <text name="Fig1.6.5"
         x="81"
-        y="464"
+        y="465"
         width="478"
         height="14"
         fill="0"
@@ -44787,10 +44861,10 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >forceMode(mode : string)</text>
+      >forceMode(implementation : string)</text>
       <text name="Fig1.6.6"
         x="81"
-        y="478"
+        y="479"
         width="478"
         height="14"
         fill="0"
@@ -44803,10 +44877,26 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >isForcedMode(mode : string = &apos;&apos;) : boolean</text>
+      >isForcedMode(implementation : string = &apos;&apos;) : boolean</text>
       <text name="Fig1.6.7"
         x="81"
-        y="492"
+        y="493"
+        width="478"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >resetMode()</text>
+      <text name="Fig1.6.8"
+        x="81"
+        y="507"
         width="478"
         height="20"
         fill="0"
@@ -44819,7 +44909,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >resetMode()</text>
+      >restoreImplementation()</text>
     </group>
   </group>
   <group name="Fig2"
@@ -45898,7 +45988,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig11.6.3"
         x="1361"
         y="971"
-        width="523"
+        width="524"
         height="20"
         fill="0"
         fillcolor="white"
@@ -58838,7 +58928,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="41"
         y="353"
         width="704"
-        height="14"
+        height="27"
         fill="0"
         fillcolor="white"
         stroke="0"

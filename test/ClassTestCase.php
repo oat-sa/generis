@@ -422,7 +422,7 @@ class ClassTestCase extends UnitTestCase {
 			
 		}
 		
-		core_kernel_persistence_PersistenceProxy::resetMode();
+		core_kernel_persistence_PersistenceProxy::restoreImplementation();
 		
 	}
 	

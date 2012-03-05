@@ -73,7 +73,7 @@ class core_kernel_persistence_Switcher
 	}
 
 	public function __destruct(){
-		core_kernel_persistence_PersistenceProxy::resetMode();
+		core_kernel_persistence_PersistenceProxy::restoreImplementation();
 		core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo = array();
 		core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo = array();
 		core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo = array();
@@ -99,7 +99,7 @@ class core_kernel_persistence_Switcher
 		$returnValue = (bool) false;
         
         $classLabel = $class->getLabel();
-        common_Logger::d("Uhnardifying class ${classLabel}");
+        common_Logger::i("Unhardifying class ${classLabel}", 'GENERIS');
         
 		if (defined ("DEBUG_PERSISTENCE") && DEBUG_PERSISTENCE){
 			var_dump('unhardify '.$class->uriResource);
@@ -107,7 +107,7 @@ class core_kernel_persistence_Switcher
 
 		// Check if the class has been hardened
 		if (!core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($class)){
-			common_Logger::d("Class ${classLabel} could not be unhardened");
+			common_Logger::w("Class ${classLabel} could not be unhardened");
 			return false;
 		}
 
@@ -157,7 +157,7 @@ class core_kernel_persistence_Switcher
 					$existingInstances[] = $uri;
 				}
 			}
-			core_kernel_persistence_PersistenceProxy::resetMode();
+			core_kernel_persistence_PersistenceProxy::restoreImplementation();
 			
 			
 			foreach ($instances as $instance) {
@@ -178,7 +178,7 @@ class core_kernel_persistence_Switcher
 						$instance->setType($type);
 					}
 				}
-				core_kernel_persistence_PersistenceProxy::resetMode();
+				core_kernel_persistence_PersistenceProxy::restoreImplementation();
 
 				// Export properties of the instance
 				foreach ($columns as $column) {
@@ -225,7 +225,7 @@ class core_kernel_persistence_Switcher
 							$sqlResult->MoveNext();
 						}
 						/// EXIT HARD SQL MODE
-						core_kernel_persistence_PersistenceProxy::resetMode();
+						core_kernel_persistence_PersistenceProxy::restoreImplementation();
 					}
 					// Single property
 					else {
@@ -233,7 +233,7 @@ class core_kernel_persistence_Switcher
 						if ($value != null) {
 							core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
 							$instance->setPropertyValue($property, $value);
-							core_kernel_persistence_PersistenceProxy::resetMode();
+							core_kernel_persistence_PersistenceProxy::restoreImplementation();
 						}
 					}
 				}
@@ -311,7 +311,7 @@ class core_kernel_persistence_Switcher
 
 		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 begin
         $classLabel = $class->getLabel();
-        common_Logger::d("Hardifying class ${classLabel}");
+        common_Logger::i("Hardifying class ${classLabel}", array("GENERIS"));
 
 		if (defined ("DEBUG_PERSISTENCE") && DEBUG_PERSISTENCE){
 			if (in_array($class->uriResource, self::$debug_tables)){
@@ -522,7 +522,7 @@ class core_kernel_persistence_Switcher
 		//reset cache:
 		$referencer->resetCache($additionalProperties);
 		// EXIT SMOOTH SQL MODE
-		core_kernel_persistence_PersistenceProxy::resetMode();
+		core_kernel_persistence_PersistenceProxy::restoreImplementation();
 
 		if (defined ("DEBUG_PERSISTENCE") && DEBUG_PERSISTENCE){
 			$this->unhardify($class, array_merge($options, array(
