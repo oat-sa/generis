@@ -343,10 +343,12 @@ class ClassTestCase extends UnitTestCase {
         $this->assertTrue(array_key_exists($sub2ClazzInstance->uriResource, $instances));
         $this->assertTrue(array_key_exists($sub3ClazzInstance->uriResource, $instances));
         
+        common_Logger::d('starting hardify');
         //Test the search instances on the hard impl
         $switcher = new core_kernel_persistence_Switcher();
         $switcher->hardify($sub1Clazz, $options);
         unset ($switcher); //Required to update cache data
+        common_Logger::d('done hardify');
         
         $propertyFilter = array(
             RDFS_LABEL => 'test case instance'
@@ -359,7 +361,6 @@ class ClassTestCase extends UnitTestCase {
         $switcher = new core_kernel_persistence_Switcher();
         $switcher->unhardify($sub1Clazz, $options);
         unset ($switcher); //Required to update cache data
-        
         //Test the search instances on a shared model (smooth + hard)
         //Disable recursivity on hardify, and hardify the sub2Clazz
         

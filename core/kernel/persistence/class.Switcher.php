@@ -73,7 +73,7 @@ class core_kernel_persistence_Switcher
 	}
 
 	public function __destruct(){
-		core_kernel_persistence_PersistenceProxy::restoreImplementation();
+		//core_kernel_persistence_PersistenceProxy::restoreImplementation();
 		core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo = array();
 		core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo = array();
 		core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo = array();
@@ -152,7 +152,7 @@ class core_kernel_persistence_Switcher
 				if ($instance->exists()){
 					core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_HARD);
 					$instance->delete();
-					core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
+					core_kernel_persistence_PersistenceProxy::restoreImplementation();
 					unset($instances[$uri]);
 					$existingInstances[] = $uri;
 				}
@@ -411,7 +411,7 @@ class core_kernel_persistence_Switcher
 		}
 
 		// important! need to force the mode again to "smooth" after foreign classes (ranges) compilation
-		core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
+		//core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
 
 		if(!$append || ($append && !$myTableMgr->exists())){
 
@@ -458,7 +458,7 @@ class core_kernel_persistence_Switcher
 				if($referencer->isResourceReferenced($resource)){
 					core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_HARD);
 					$resource->delete();
-					core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
+					core_kernel_persistence_PersistenceProxy::restoreImplementation();
 					//unset($instances[$index]);
 					//continue;
 				}

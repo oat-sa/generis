@@ -624,7 +624,7 @@ class core_kernel_persistence_ResourceProxy
 				}
 				$i++;
 			}
-			throw new Exception($errorMessage);
+			throw new core_kernel_persistence_Exception($errorMessage);
 		}
 		
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F5D end
