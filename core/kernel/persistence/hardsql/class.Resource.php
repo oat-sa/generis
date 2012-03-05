@@ -310,8 +310,10 @@ class core_kernel_persistence_hardsql_Resource
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 begin
 
 		$options = array('lg'=>$lg);
-		$returnValue = $resource->getAllPropertyValues ($property, $options);
-
+		$returnValue = new core_kernel_classes_ContainerCollection($resource);
+        $propertiesValues = $resource->getAllPropertyValues($property, $options);
+        $returnValue->sequence = $propertiesValues;
+        
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 end
 
         return $returnValue;
