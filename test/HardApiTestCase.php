@@ -146,7 +146,7 @@ class HardApiTestCase extends UnitTestCase {
 		$referencer->setPropertyCache(core_kernel_persistence_hardapi_ResourceReferencer::CACHE_FILE);
 		$cacheFile = GENERIS_CACHE_PATH . 'hard-api-property.cache';
 		if(file_exists($cacheFile)){
-			unlink($cacheFile);
+			$referencer->resetCache();
 		}
 		
 		$class = new core_kernel_classes_Class(CLASS_GENERIS_USER);
@@ -198,7 +198,6 @@ class HardApiTestCase extends UnitTestCase {
 		$cacheFile = GENERIS_CACHE_PATH . 'hard-api-property.cache';
 		$this->assertTrue(file_exists($cacheFile));
 		
-        var_dump(file_get_contents($cacheFile));
 		$cacheContent = unserialize(file_get_contents($cacheFile));
 		if($cacheContent === false){
 			$this->fail('wrong cache content');
