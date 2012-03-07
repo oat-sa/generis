@@ -18,18 +18,18 @@ return array(
 				'http://www.tao.lu/middleware/Rules.rdf',
 				'http://www.tao.lu/Ontologies/generis.rdf'
 			),
-		'install' => array( 
+		'install' => array(
 			'php' => dirname(__FILE__). '/install/install.php',
 			'rdf' => array(
-				dirname(__FILE__). '/core/ontology/22-rdf-syntax-ns.rdf',
-				dirname(__FILE__). '/core/ontology/rdf-schema.rdf',
-				dirname(__FILE__). '/core/ontology/widgetdefinitions.rdf',
-				dirname(__FILE__). '/core/ontology/rules.rdf',
-				dirname(__FILE__). '/core/ontology/widgetdefinitions.rdf',
-				dirname(__FILE__). '/core/ontology/generis.rdf'
+					array('ns' => 'http://www.w3.org/1999/02/22-rdf-syntax-ns', 'file' => dirname(__FILE__). '/core/ontology/22-rdf-syntax-ns.rdf'),
+					array('ns' => 'http://www.w3.org/2000/01/rdf-schema', 'file' => dirname(__FILE__). '/core/ontology/rdf-schema.rdf'),
+					array('ns' => 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf', 'file' => dirname(__FILE__). '/core/ontology/widgetdefinitions.rdf'),
+					array('ns' => 'http://www.tao.lu/middleware/Rules.rdf', 'file' => dirname(__FILE__). '/core/ontology/rules.rdf'),
+					array('ns' => 'http://www.tao.lu/Ontologies/generis.rdf', 'file' => dirname(__FILE__). '/core/ontology/generis.rdf'),
+					array('ns' => 'http://www.tao.lu/Ontologies/taoFuncACL.rdf', 'file' => dirname(__FILE__). '/models/ontology/funcacl.rdf')
 			)
 		),
-		'classLoaderPackages' => array( 
+		'classLoaderPackages' => array(
 			dirname(__FILE__).'/actions/'
 		 )
 	)
