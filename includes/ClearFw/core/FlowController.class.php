@@ -31,7 +31,7 @@ class FlowController
 	}
 	
 	// HTTP 303 : The response to the request can be found under a different URI
-	public function redirect($url, $statusCode = 303)
+	public function redirect($url, $statusCode = 302)
 	{
 		$context = Context::getInstance();
 		
