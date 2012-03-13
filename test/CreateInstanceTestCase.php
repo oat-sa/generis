@@ -25,7 +25,7 @@ class CreateInstanceTestCase extends UnitTestCase {
 	    $this->class = new core_kernel_classes_Class($classres->getUri());
 	    $this->assertIsA($this->class, 'core_kernel_classes_Class');
 	    $this->assertTrue($this->class->hasType(new core_kernel_classes_Class(RDF_CLASS)));
-	    common_Logger::i('using class '.$this->class->getLabel().' for Create instance Tests');
+	    common_Logger::i('using class '.$this->class->getUri().' for Create instance Tests');
 	}
 	
 	public function testCreateInstance(){
@@ -56,8 +56,9 @@ class CreateInstanceTestCase extends UnitTestCase {
 		
 		// simple case, without params
 
-		$class		= $class = $this->class;
-		$property	= new core_kernel_classes_Property(core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDF_PROPERTY))->getUri());
+		$class			= $this->class;
+		$litproperty	= new core_kernel_classes_Property(core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDF_PROPERTY))->getUri());
+		$property		= new core_kernel_classes_Property(core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDF_PROPERTY))->getUri());
 		
 		$instance = $class->createInstanceWithProperties(array());
 		$this->assertTrue($instance->hasType($class));
@@ -74,14 +75,14 @@ class CreateInstanceTestCase extends UnitTestCase {
 		
 		// multiple literal properties
 		$instance2 = $class->createInstanceWithProperties(array(
-			RDFS_LABEL		=> 'testlabel',
-			RDFS_COMMENT	=> array('testcomment1', 'testcomment2')
+			RDFS_LABEL				=> 'testlabel',
+			$litproperty->getUri()	=> array('testlit1', 'testlit2')
 		));
 		$this->assertTrue($instance2->hasType($class));
 		$this->assertEqual($instance2->getLabel(), 'testlabel');
-		$comments = $instance2->getPropertyValues(new core_kernel_classes_Property(RDFS_COMMENT));
+		$comments = $instance2->getPropertyValues($litproperty);
 		sort($comments);
-		$this->assertEqual($comments, array('testcomment1', 'testcomment2'));
+		$this->assertEqual($comments, array('testlit1', 'testlit2'));
 		
 		// single ressource properties
 		$propInst = core_kernel_classes_ResourceFactory::create($class);				
@@ -118,7 +119,7 @@ class CreateInstanceTestCase extends UnitTestCase {
 		$propInst->delete();
 		$propInst2->delete();
 		$property->delete();
-		
+		$litproperty->delete();
 	}
 	
 	public function testCreateInstanceHardified() {
@@ -132,6 +133,7 @@ class CreateInstanceTestCase extends UnitTestCase {
 		$switcher->hardify($this->class, array(
 			'topClass'		=> $this->class,
 		));
+		unset($switcher);
 		
 		$this->assertTrue($rr->isClassReferenced($this->class));
 		common_Logger::i('creating hardified');
@@ -145,10 +147,13 @@ class CreateInstanceTestCase extends UnitTestCase {
 		$softinstance->delete();
 		$hardinstance->delete();
 		
+		$switcher = new core_kernel_persistence_Switcher();
 		$switcher->unhardify($this->class);
+		unset($switcher);
 	}
 	
 	public function after($pMethode) {
+		common_Logger::i('Cleaning up class '.$this->class->getUri().' for Create instance Tests');
 		$this->class->delete();
 		parent::after($pMethode);
 	}

@@ -785,6 +785,8 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 						if (!$result->EOF){
 							$returnValue = $result->fields['table'];
 							self::$_resources[$resource->uriResource] = $result->fields['table'];
+						} else {
+							common_Logger::w("Unable to find table for ressource " .$resource->getUri(), "GENERIS");
 						}
 					}
 			        break;
@@ -796,6 +798,8 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 						break;
 					}
 			   break;
+			   default:
+					common_Logger::w('Unexpected cacheMode: '.$this->cacheModes['instance'], array('GENERIS'));
 			}
 		}
         // section 127-0-1-1-56674b31:12fbf31d598:-8000:0000000000001505 end
