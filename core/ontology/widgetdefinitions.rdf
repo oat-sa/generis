@@ -155,8 +155,8 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#Calendar">
     <rdf:type rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetClass"/>
-    <rdfs:label xml:lang="en"><![CDATA[Calendar]]></rdfs:label>
-    <rdfs:comment xml:lang="en"><![CDATA[Dynamic Calendar for easy date selecting]]></rdfs:comment>
+    <rdfs:label xml:lang="EN"><![CDATA[Calendar]]></rdfs:label>
+    <rdfs:comment xml:lang="EN"><![CDATA[Dynamic Calendar for easy date selecting]]></rdfs:comment>
     <widget:rangeConstraint rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#rangeConstraint-Literal"/>
     <widget:textHeight><![CDATA[1]]></widget:textHeight>
     <widget:textLength><![CDATA[3]]></widget:textLength>
