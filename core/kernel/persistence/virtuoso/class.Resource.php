@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 22.02.2012, 16:37:40 with ArgoUML PHP module 
+ * Automatically generated on 14.03.2012, 16:36:04 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -71,10 +71,11 @@ class core_kernel_persistence_virtuoso_Resource
     // --- OPERATIONS ---
 
     /**
-     * Short description of method getType
+     * Please use getTypes instead
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
+     * @deprecated
      * @param  Resource resource
      * @return array
      */
@@ -83,7 +84,25 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 begin
-        
+        throw new core_kernel_persistence_ProhibitedFunctionException('getType() called, RessourceProxy should have delegated this to getTypes()');
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * returns an array of types the ressource has
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  Resource resource
+     * @return array
+     */
+    public function getTypes( core_kernel_classes_Resource $resource)
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1--1ee05ee5:13611d6d34c:-8000:000000000000196B begin
         list($NS, $ID) = explode('#', $resource->uriResource);
         if(isset($ID) && !empty($ID)){
                 
@@ -102,8 +121,7 @@ class core_kernel_persistence_virtuoso_Resource
                 }
                 
         }
-        
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 end
+        // section 127-0-1-1--1ee05ee5:13611d6d34c:-8000:000000000000196B end
 
         return (array) $returnValue;
     }
