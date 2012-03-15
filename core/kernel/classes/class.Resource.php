@@ -179,10 +179,11 @@ class core_kernel_classes_Resource
     }
 
     /**
-     * Short description of method getType
+     * please use getTypes() instead
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
+     * @deprecated
      * @return array
      */
     public function getType()
@@ -190,10 +191,27 @@ class core_kernel_classes_Resource
         $returnValue = array();
 
         // section 127-0-1-1-62cf85dc:12bab18dc39:-8000:000000000000135F begin
-        
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getType($this);
-        
+        common_Logger::d('Use of deprecated function getType() please use getTypes().', 'DEPRECATED');
+        $returnValue = $this->getTypes();
         // section 127-0-1-1-62cf85dc:12bab18dc39:-8000:000000000000135F end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Returns all the types of the ressource
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return array
+     */
+    public function getTypes()
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1--7529374:136154ebbc3:-8000:0000000000001971 begin
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getTypes($this);
+        // section 127-0-1-1--7529374:136154ebbc3:-8000:0000000000001971 end
 
         return (array) $returnValue;
     }
