@@ -139,7 +139,7 @@ class core_kernel_classes_Resource
 
         // section 10-13-1--31--647ec317:119141cd117:-8000:0000000000000913 begin
         
-        foreach($this->getType() as $type){
+        foreach($this->getTypes() as $type){
         	if($type->uriResource == RDF_CLASS){
         		$returnValue = true;
         		break;
@@ -166,7 +166,7 @@ class core_kernel_classes_Resource
 
         // section 10-13-1--31--647ec317:119141cd117:-8000:0000000000000915 begin
         
-        foreach($this->getType() as $type){
+        foreach($this->getTypes() as $type){
         	if($type->uriResource == RDF_PROPERTY){
         		$returnValue = true;
         		break;
@@ -885,7 +885,7 @@ class core_kernel_classes_Resource
 
         // section 127-0-1-1--72f5bf1f:12fd500f94d:-8000:0000000000001552 begin
         
-    	foreach($this->getType() as $type){
+    	foreach($this->getTypes() as $type){
         	if ($class->uriResource == $type->uriResource){
         		$returnValue = true;
         		break;
@@ -910,7 +910,7 @@ class core_kernel_classes_Resource
 
         // section 127-0-1-1-7c36bc99:13092a153cd:-8000:0000000000001599 begin
         try{
-        	$returnValue = count($this->getType())?true:false;
+        	$returnValue = count($this->getTypes())?true:false;
         }
         catch(Exception $e){
         	;//return false by default
