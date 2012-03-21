@@ -62,6 +62,24 @@ class common_uri_MicrotimeRandUriProvider
         $returnValue = (string) '';
 
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:000000000000199E begin
+        $modelUri = core_kernel_classes_Session::singleton()->getNameSpace();
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$uriExist = false;
+		do{
+			list($usec, $sec) = explode(" ", microtime());
+        	$uri = $modelUri .'#i'. (str_replace(".","",$sec."".$usec)) . rand(0, 1000);
+			$sqlResult = $dbWrapper->execSql(
+				"select count(subject) as num from statements where subject = '".$uri."'"
+			);
+			if (!$sqlResult-> EOF){
+				$found = (int)$sqlResult->fields['num'];
+				if($found > 0){
+					$uriExist = true;
+				}
+			}
+		}while($uriExist);
+		
+		$returnValue = $uri;
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:000000000000199E end
 
         return (string) $returnValue;
