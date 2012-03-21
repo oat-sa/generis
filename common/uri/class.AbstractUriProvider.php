@@ -31,12 +31,13 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * avoid collisions. The AbstractUriProvider::provide method must be implemented
  * subclasses to return a valid URI.
  *
+ * @abstract
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package common
  * @subpackage uri
  */
-class common_uri_AbstractUriProvider
+abstract class common_uri_AbstractUriProvider
 {
     // --- ASSOCIATIONS ---
 
@@ -112,6 +113,6 @@ class common_uri_AbstractUriProvider
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:0000000000001983 end
     }
 
-} /* end of class common_uri_AbstractUriProvider */
+} /* end of abstract class common_uri_AbstractUriProvider */
 
 ?>
