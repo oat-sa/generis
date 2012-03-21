@@ -66,6 +66,7 @@ class common_uri_AbstractUriProvider
         $returnValue = (string) '';
 
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:000000000000197C begin
+        $returnValue = $this->driver;
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:000000000000197C end
 
         return (string) $returnValue;
@@ -82,6 +83,7 @@ class common_uri_AbstractUriProvider
     public function setDriver($driver)
     {
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:000000000000197E begin
+        $this->driver = $driver;
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:000000000000197E end
     }
 
@@ -106,6 +108,7 @@ class common_uri_AbstractUriProvider
     public function __construct($driver)
     {
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:0000000000001983 begin
+        $this->setDriver($driver);
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:0000000000001983 end
     }
 
