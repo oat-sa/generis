@@ -261,25 +261,9 @@ class common_Utils
         $returnValue = (string) '';
 
         // section 10-13-1--99-5d680c37:11e406b020f:-8000:0000000000000F21 begin
-        $modelUri = core_kernel_classes_Session::singleton()->getNameSpace();
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$uriExist = false;
-		do{
-			list($usec, $sec) = explode(" ", microtime());
-        	$uri = $modelUri .'#i'. (str_replace(".","",$sec."".$usec));
-			$sqlResult = $dbWrapper->execSql(
-				"select count(subject) as num from statements where subject = '".$uri."'"
-			);
-			if (!$sqlResult-> EOF){
-				$found = (int)$sqlResult->fields['num'];
-				if($found > 0){
-					$uriExist = true;
-				}
-			}
-		}while($uriExist);
-		
-		$returnValue = $uri;
-        
+		$uriProviderClassName = 'common_uri_' . GENERIS_URI_PROVIDER;
+		$uriProvider = new $uriProviderClassName(SGBD_DRIVER);
+		$returnValue = $uriProvider->provide();
         // section 10-13-1--99-5d680c37:11e406b020f:-8000:0000000000000F21 end
 
         return (string) $returnValue;

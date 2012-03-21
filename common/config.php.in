@@ -123,7 +123,7 @@ define('MANIFEST_NAME' , 'manifest.php');
 define('GENERIS_FILES_PATH' , GENERIS_BASE_PATH.'/data/');
 define('GENERIS_CACHE_PATH', GENERIS_FILES_PATH.'cache/');
 
-#Versioning
+# versioning
 define('GENERIS_VERSIONING_ENABLED' , false);
 define('GENERIS_VERSIONED_REPOSITORY_LOGIN' , '');
 define('GENERIS_VERSIONED_REPOSITORY_PASSWORD' , '');
@@ -133,9 +133,13 @@ define('GENERIS_VERSIONED_REPOSITORY_PATH' , GENERIS_FILES_PATH.'versioning/DEFA
 define('GENERIS_VERSIONED_REPOSITORY_LABEL' , 'Tao default versioned repository');
 define('GENERIS_VERSIONED_REPOSITORY_COMMENT' , 'The default repository used to manage versioned files');
 
+# modules subscription
 define('ENABLE_SUBSCRIPTION', false);
 
-#path to RDFAPI-PHP
+# uri providers
+define('GENERIS_URI_PROVIDER', 'MicrotimeUriProvider');
+
+# path to RDFAPI-PHP
 define('RDFAPI_INCLUDE_DIR', INCLUDES_PATH.'/rdfapi-php/api/');
 
 # core directory
