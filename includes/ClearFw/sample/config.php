@@ -16,7 +16,7 @@ define("DIR_MODELS"			, dirname(__FILE__). "/../models/");
 define('DIR_PLUGINS'		, dirname(__FILE__).'/../plugins/');
 
 # views directory
-define("DIR_VIEWS"			, "views/");
+define("DIR_VIEWS"			, dirname(__FILE__).'/../views/');
 
 # helpers directory
 define("DIR_HELPERS"		, dirname(__FILE__) . "/../helpers/");

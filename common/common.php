@@ -53,9 +53,6 @@ define('BASE_PATH', ROOT_PATH . '/generis');
 #BASE URL (usually the domain root)
 define('BASE_URL', ROOT_URL. '/generis');
 
-#BASE WWW the web resources path
-define('BASE_WWW', BASE_URL . '/' . DIR_VIEWS);							
-
 # theme directory
 $GLOBALS['dir_theme']		= "/";
 

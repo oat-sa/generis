@@ -137,10 +137,10 @@ class DefaultFC implements FrontController {
      * @return	string							Tpl file path
      */
     static function getView($pView) {
-    	if (is_file(dirname(__FILE__). "/../../". DIR_VIEWS . $GLOBALS['dir_theme'] .$pView)) {
-    		return dirname(__FILE__). "/../../". DIR_VIEWS . $GLOBALS['dir_theme'] .$pView;
-    	} else if (is_file(dirname(__FILE__). "/../../". DIR_VIEWS . "default/" .$pView)) {
-    		return dirname(__FILE__). "/../../". DIR_VIEWS . "default/" .$pView;
+    	if (is_file(DIR_VIEWS . $GLOBALS['dir_theme'] .$pView)) {
+    		return DIR_VIEWS . $GLOBALS['dir_theme'] .$pView;
+    	} else if (is_file(DIR_VIEWS . "default/" .$pView)) {
+    		return DIR_VIEWS . "default/" .$pView;
     	} else {
     		throw new Exception(__("Error load view : ". $pView));
     	}
