@@ -84,7 +84,7 @@ abstract class common_uri_AbstractUriProvider
     public function setDriver($driver)
     {
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:000000000000197E begin
-        $this->driver = $driver;
+        $this->driver = strtolower($driver);
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:000000000000197E end
     }
 

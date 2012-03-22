@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Mar 21 12:56:25 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Mar 22 16:34:06 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -21999,6 +21999,22 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                   </UML:Generalization.child>
                   <UML:Generalization.parent>
                     <UML:Class xmi.idref = '10-13-1-85--341437fc:13634d84b3e:-8000:0000000000001978'/>
+                  </UML:Generalization.parent>
+                </UML:Generalization>
+                <UML:Class xmi.id = '10-13-1-85-64a2a233:1363b04b140:-8000:00000000000019A4'
+                  name = 'UriProviderException' visibility = 'public' isSpecification = 'false'
+                  isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                  <UML:GeneralizableElement.generalization>
+                    <UML:Generalization xmi.idref = '10-13-1-85-64a2a233:1363b04b140:-8000:00000000000019A5'/>
+                  </UML:GeneralizableElement.generalization>
+                </UML:Class>
+                <UML:Generalization xmi.id = '10-13-1-85-64a2a233:1363b04b140:-8000:00000000000019A5'
+                  isSpecification = 'false'>
+                  <UML:Generalization.child>
+                    <UML:Class xmi.idref = '10-13-1-85-64a2a233:1363b04b140:-8000:00000000000019A4'/>
+                  </UML:Generalization.child>
+                  <UML:Generalization.parent>
+                    <UML:Class xmi.idref = '127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003ECA'/>
                   </UML:Generalization.parent>
                 </UML:Generalization>
               </UML:Namespace.ownedElement>
@@ -63728,6 +63744,165 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
               y="728" />
       <lineto x="1358"
               y="689" />
+    </path>
+  </group>
+  <group name="Fig43"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[928, 584, 176, 66]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       href="10-13-1-85-64a2a233:1363b04b140:-8000:00000000000019A4"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+      enclosingFig="Fig35"
+    </private>
+    
+    <rectangle name="Fig43.0"
+      x="928"
+      y="584"
+      width="176"
+      height="66"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig43.1"
+      x="929"
+      y="585"
+      width="174"
+      height="21"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >common::uri::UriProviderException</text>
+    <group name="Fig43.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[929, 585, 174, 0]"
+         href="10-13-1-85-64a2a233:1363b04b140:-8000:00000000000019A4"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig43.2.0"
+        x="929"
+        y="585"
+        width="174"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig43.3"
+      x="928"
+      y="606"
+      width="176"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig43.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[929, 607, 174, 21]"
+         href="10-13-1-85-64a2a233:1363b04b140:-8000:00000000000019A4"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig43.4.0"
+        x="929"
+        y="607"
+        width="174"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig43.5"
+      x="928"
+      y="627"
+      width="176"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig43.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[929, 628, 174, 21]"
+         href="10-13-1-85-64a2a233:1363b04b140:-8000:00000000000019A4"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig43.6.0"
+        x="929"
+        y="628"
+        width="174"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+  </group>
+  <group name="Fig44"
+       description="org.argouml.uml.diagram.ui.FigGeneralization"
+       href="10-13-1-85-64a2a233:1363b04b140:-8000:00000000000019A5"
+       stroke="1"
+       strokecolor="51 51 153"
+  >
+    <private>
+      sourcePortFig="Fig43.0"
+      destPortFig="Fig18.0"
+      sourceFigNode="Fig43"
+      destFigNode="Fig18"
+      <argouml:pathitem figname="Fig44.1"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
+                        ownerhref="10-13-1-85-64a2a233:1363b04b140:-8000:00000000000019A5"
+                        angle="270.0"
+                        offset="-10" />
+    </private>
+    <path name="Fig44.0"
+      description="org.tigris.gef.presentation.FigPoly"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="51 51 153"
+    >
+      <moveto x="928"
+              y="592" />
+      <lineto x="848"
+              y="592" />
+      <lineto x="848"
+              y="39" />
     </path>
   </group>
 </pgml>

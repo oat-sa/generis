@@ -56,12 +56,32 @@ class common_uri_DatabaseSerialUriProvider
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
+     * @throws common_UriProviderException
      */
     public function provide()
     {
         $returnValue = (string) '';
 
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:00000000000019A5 begin
+        $driver = $this->getDriver();
+        switch ($driver){
+        	case 'mysql':
+        		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        		$modelUri = core_kernel_classes_Session::singleton()->getNameSpace() . '#';
+        		
+        		if ($dbWrapper->execSql("CALL generis_proc_sequence_uri_provider('${modelUri}', @generis_uri)")){
+        			$result = $dbWrapper->execSql("SELECT @generis_uri");
+        			$returnValue = $result->Fields(0);
+        		}
+        		else{
+        			throw new common_UriProviderException("An error occured while calling the stored procedure.");	
+        		}
+        	break;
+        	default:
+        		// @todo create a common_uri_UriProviderException.
+        		throw new common_UriProviderException("Unknown database driver.");
+        	break;
+        }
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:00000000000019A5 end
 
         return (string) $returnValue;
