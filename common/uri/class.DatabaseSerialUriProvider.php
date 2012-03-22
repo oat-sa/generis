@@ -69,8 +69,7 @@ class common_uri_DatabaseSerialUriProvider
         		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
         		$modelUri = core_kernel_classes_Session::singleton()->getNameSpace() . '#';
         		
-        		if ($dbWrapper->execSql("CALL generis_proc_sequence_uri_provider('${modelUri}', @generis_uri)")){
-        			$result = $dbWrapper->execSql("SELECT @generis_uri");
+        		if (($result = $dbWrapper->execSql("SELECT generis_sequence_uri_provider(?)", array($modelUri))) !== false){
         			$returnValue = $result->Fields(0);
         		}
         		else{
@@ -78,7 +77,6 @@ class common_uri_DatabaseSerialUriProvider
         		}
         	break;
         	default:
-        		// @todo create a common_uri_UriProviderException.
         		throw new common_UriProviderException("Unknown database driver.");
         	break;
         }
