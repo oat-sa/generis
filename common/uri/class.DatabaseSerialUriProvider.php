@@ -73,11 +73,14 @@ class common_uri_DatabaseSerialUriProvider
         			$returnValue = $result->Fields(0);
         		}
         		else{
-        			throw new common_UriProviderException("An error occured while calling the stored procedure.");	
+        			throw new common_uri_UriProviderException("An error occured while calling the stored procedure.");	
         		}
         	break;
+            case 'postgres':
+                throw new common_uri_UriProviderException("Posgres SQL Uri Provider not yet implemented.");
+            break;
         	default:
-        		throw new common_UriProviderException("Unknown database driver.");
+        		throw new common_uri_UriProviderException("Unknown database driver.");
         	break;
         }
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:00000000000019A5 end
