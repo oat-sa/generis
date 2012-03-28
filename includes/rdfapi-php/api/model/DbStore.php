@@ -239,8 +239,9 @@ class DbStore extends Object
 				$baseURI .= '#';
 			}
 		}
-      $rs =& $this->dbConn->execute('INSERT INTO models
-                                            (modelID, modelURI, baseURI)
+		
+      	$rs =& $this->dbConn->execute('INSERT INTO models
+                                            ("modelID", "modelURI", "baseURI")
                                             VALUES (?,?,?)', array (
       	$modelID,
       	$modelURI,
