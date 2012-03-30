@@ -302,9 +302,11 @@ class core_kernel_impl_ApiModelOO
 		if (version_compare(phpversion(), '5.3.0', '>=')) {
 			error_reporting(E_ALL & ~E_DEPRECATED);
 		}
-		 
-		$memModel 	= ModelFactory::getMemModel();
-		$dbModel	= ModelFactory::getDefaultDbModel($targetNameSpace);
+
+		// Init RDF API for PHP
+		$modFactory = new ModelFactory();
+		$memModel 	= $modFactory->getMemModel();
+		$dbModel	= $modFactory->getDefaultDbModel($targetNameSpace);
 		$dbModel->getDbConn()->execute("SET NAMES 'UTF8'");
 		
 		// Load and parse document
