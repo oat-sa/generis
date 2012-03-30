@@ -73,11 +73,20 @@ class common_uri_DatabaseSerialUriProvider
         			$returnValue = $result->Fields(0);
         		}
         		else{
-        			throw new common_uri_UriProviderException("An error occured while calling the stored procedure.");	
+        			throw new common_uri_UriProviderException("An error occured while calling the stored procedure for mysql.");	
         		}
         	break;
-            case 'postgres':
-                throw new common_uri_UriProviderException("Posgres SQL Uri Provider not yet implemented.");
+            case 'postgres8':
+                $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+                $modelUri = core_kernel_classes_Session::singleton()->getNameSpace() . '#';
+                
+        		if (($result = $dbWrapper->execSql("SELECT * FROM generis_sequence_uri_provider(?)", array($modelUri))) !== false){
+        			$returnValue = $result->Fields(0);
+        		}
+        		else{
+        			throw new common_uri_UriProviderException("An error occured while calling the stored procedure for postgresql.");	
+        		}
+                
             break;
         	default:
         		throw new common_uri_UriProviderException("Unknown database driver.");
