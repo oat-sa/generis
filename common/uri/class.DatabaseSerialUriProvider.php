@@ -65,18 +65,10 @@ class common_uri_DatabaseSerialUriProvider
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:00000000000019A5 begin
         $driver = $this->getDriver();
         switch ($driver){
-        	case 'mysql':
-        		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        		$modelUri = core_kernel_classes_Session::singleton()->getNameSpace() . '#';
-        		
-        		if (($result = $dbWrapper->execSql("SELECT generis_sequence_uri_provider(?)", array($modelUri))) !== false){
-        			$returnValue = $result->Fields(0);
-        		}
-        		else{
-        			throw new common_uri_UriProviderException("An error occured while calling the stored procedure for mysql.");	
-        		}
-        	break;
+            case 'postgres':
+            case 'postgres7':
             case 'postgres8':
+            case 'mysql':
                 $dbWrapper = core_kernel_classes_DbWrapper::singleton();
                 $modelUri = core_kernel_classes_Session::singleton()->getNameSpace() . '#';
                 
@@ -84,7 +76,7 @@ class common_uri_DatabaseSerialUriProvider
         			$returnValue = $result->Fields(0);
         		}
         		else{
-        			throw new common_uri_UriProviderException("An error occured while calling the stored procedure for postgresql.");	
+        			throw new common_uri_UriProviderException("An error occured while calling the stored procedure for driver '${driver}'.");	
         		}
                 
             break;

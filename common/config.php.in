@@ -136,8 +136,8 @@ define('GENERIS_VERSIONED_REPOSITORY_COMMENT' , 'The default repository used to 
 # modules subscription
 define('ENABLE_SUBSCRIPTION', false);
 
-# uri providers (MicrotimeUriProvider|MicrotimeRandUriProvider|DatabaseSerialUriProvider)
-define('GENERIS_URI_PROVIDER', 'MicrotimeUriProvider');
+# uri providers ('MicrotimeUriProvider'|'MicrotimeRandUriProvider'|'DatabaseSerialUriProvider')
+define('GENERIS_URI_PROVIDER', 'DatabaseSerialUriProvider');
 
 # path to RDFAPI-PHP
 define('RDFAPI_INCLUDE_DIR', INCLUDES_PATH.'/rdfapi-php/api/');

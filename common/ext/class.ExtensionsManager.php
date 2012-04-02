@@ -101,7 +101,7 @@ class common_ext_ExtensionsManager
 		if(empty($this->extensions)){
 
 			$db = core_kernel_classes_DbWrapper::singleton();
-			$query = 'SELECT * FROM "extensions";';
+			$query = "SELECT * FROM extensions;";
 			$result = $db->execSql($query);
 			if($db->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception($db->dbConnector->errorMsg());
