@@ -71,7 +71,7 @@ class common_uri_DatabaseSerialUriProvider
             case 'mysql':
                 $dbWrapper = core_kernel_classes_DbWrapper::singleton();
                 $modelUri = core_kernel_classes_Session::singleton()->getNameSpace() . '#';
-                $dbWrapper->dbConnector->debug = true;
+                
         		if (($result = $dbWrapper->execSql("SELECT generis_sequence_uri_provider(?)", array($modelUri))) !== false){
         			$returnValue = $result->Fields(0);
         		}
