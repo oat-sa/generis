@@ -41,6 +41,14 @@ class core_kernel_classes_DbWrapper
     // --- ATTRIBUTES ---
 
     /**
+     * Short description of attribute instance
+     *
+     * @access private
+     * @var DbWrapper
+     */
+    private static $instance = null;
+
+    /**
      * Short description of attribute dbConnector
      *
      * @access public
@@ -49,12 +57,12 @@ class core_kernel_classes_DbWrapper
     public $dbConnector = null;
 
     /**
-     * Short description of attribute instance
+     * Short description of attribute nrQueries
      *
      * @access private
-     * @var DbWrapper
+     * @var int
      */
-    private static $instance = null;
+    private $nrQueries = 0;
 
     // --- OPERATIONS ---
 
@@ -171,6 +179,7 @@ class core_kernel_classes_DbWrapper
 
         // section 10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000B1F begin
         $returnValue = $this->dbConnector->Execute($sqlQuery, $parameters);	
+        $this->nrQueries++;
         // section 10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000B1F end
 
         return $returnValue;
@@ -181,6 +190,7 @@ class core_kernel_classes_DbWrapper
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @deprecated
      * @param  string name
      * @return string
      */
@@ -215,6 +225,24 @@ class core_kernel_classes_DbWrapper
         // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:000000000000163A end
 
         return $returnValue;
+    }
+
+    /**
+     * Returns the ammount of queries executed sofar
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return int
+     */
+    public function getNrOfQueries()
+    {
+        $returnValue = (int) 0;
+
+        // section 127-0-1-1-4275bef6:136722a6279:-8000:00000000000019AA begin
+        $returnValue = $this->nrQueries;
+        // section 127-0-1-1-4275bef6:136722a6279:-8000:00000000000019AA end
+
+        return (int) $returnValue;
     }
 
 } /* end of class core_kernel_classes_DbWrapper */

@@ -828,11 +828,14 @@ class core_kernel_persistence_smoothsql_Class
 			else if(is_array($pattern)){
 				if(count($pattern) > 0){
 					$multiCondition =  '';
-					foreach($pattern as $i => $patternToken){
+					foreach($pattern as $patternToken){
 						
-						$patternToken = $dbWrapper->dbConnector->escape($patternToken);
+						if (!is_string($patternToken) && !is_numeric($patternToken) && !$patternToken instanceof core_kernel_classes_Resource) {
+							throw new common_Exception("Unsupported type for searchinstance array: ".gettype($patternToken));
+						}
+						$patternToken = $dbWrapper->dbConnector->escape($patternToken instanceof core_kernel_classes_Resource ? $patternToken->getUri() : $patternToken);
 						
-						if($i > 0){
+						if($multiCondition != ''){
 							$multiCondition .= " OR ";
 						}
 						$object = trim(str_replace('*', '%', $patternToken));
