@@ -55,10 +55,14 @@ class XmlReporter extends SimpleReporter {
      *    @access public
      */
     function toParsedXml($text) {
-        return str_replace(
+         $returnValue = str_replace(
                 array('&', '<', '>', '"', '\''),
                 array('&amp;', '&lt;', '&gt;', '&quot;', '&apos;'),
                 $text);
+         //hack remove special char to keep xml correct
+        $returnValue =  preg_replace('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $returnValue);
+		return $returnValue;
+
     }
 
     /**
