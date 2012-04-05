@@ -10,14 +10,14 @@
  */
 
 #RDF
-define('RDF_TYPE',								'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',true);	
+define('RDF_TYPE',								'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',true);
 define('RDF_CLASS',								'http://www.w3.org/2000/01/rdf-schema#Class',true);
 define('RDF_PROPERTY',							'http://www.w3.org/1999/02/22-rdf-syntax-ns#Property',true);
-define('RDF_SUBCLASSOF',						'http://www.w3.org/2000/01/rdf-schema#subClassOf',true);		
+define('RDF_SUBCLASSOF',						'http://www.w3.org/2000/01/rdf-schema#subClassOf',true);
 define('RDF_DOMAIN',							'http://www.w3.org/2000/01/rdf-schema#domain',true);
 define('RDF_VALUE',								'http://www.w3.org/1999/02/22-rdf-syntax-ns#value',true);
 define('RDFS_RANGE',							'http://www.w3.org/2000/01/rdf-schema#range',true);
-define('RDF_RESOURCE',							'http://www.w3.org/2000/01/rdf-schema#Resource',true);	
+define('RDF_RESOURCE',							'http://www.w3.org/2000/01/rdf-schema#Resource',true);
 
 define('RDF_FIRST',								'http://www.w3.org/1999/02/22-rdf-syntax-ns#first', true);
 define('RDF_REST',								'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest', true);
@@ -72,6 +72,8 @@ define('PROPERTY_USER_LASTNAME' , 				GENERIS_NS . '#userLastName' , true) ;
 define('CLASS_ROLE_TAOMANAGER',					'http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole', true) ;
 define('CLASS_ROLE_BACKOFFICE',					'http://www.tao.lu/Ontologies/TAO.rdf#BackOffice', true) ;
 define('CLASS_ROLE_FRONTOFFICE',				'http://www.tao.lu/Ontologies/TAO.rdf#FrontOffice', true) ;
+define('CLASS_ACL_MODULE', 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Module', true) ;
+define('CLASS_ACL_ACTION', 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Action', true) ;
 
 define('CLASS_SUBCRIPTION', 					GENERIS_NS . '#Subscription' , true) ;
 define('PROPERTY_SUBCRIPTION_URL', 				GENERIS_NS . '#SubscriptionUrl' , true) ;
@@ -122,7 +124,7 @@ define('PROPERTY_ASSIGNMENT_VARIABLE', 			RULES_NS.'#Variable',true);
 define('PROPERTY_ASSIGNMENT_VALUE', 			RULES_NS.'#Value',true);
 define('CLASS_ASSIGNMENT',						RULES_NS.'#Assignment',true);
 
-define('CLASS_EXPRESSION',						RULES_NS.'#Expression',true);	
+define('CLASS_EXPRESSION',						RULES_NS.'#Expression',true);
 define('PROPERTY_FIRST_EXPRESSION',				RULES_NS.'#FirstExpression',true);
 define('PROPERTY_SECOND_EXPRESSION',			RULES_NS.'#SecondExpression',true);
 define('PROPERTY_HASLOGICALOPERATOR',			RULES_NS.'#HasLogicalOperator',true);
