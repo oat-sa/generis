@@ -185,7 +185,11 @@ class common_Logger
 			$this->disable();
 			$stack = debug_backtrace();
 			array_shift($stack);
-			$user = core_kernel_classes_Session::singleton()->getUser();
+			// if session has not been started, no user can be involved yet
+			// else logging fails during install
+			$user = class_exists('core_kernel_classes_Session', false)
+				? core_kernel_classes_Session::singleton()->getUser()
+				: null;
 			if ($errorFile == '') {
 				$keys = array_keys($stack);
 				$current = $stack[$keys[0]];

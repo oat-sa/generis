@@ -91,9 +91,10 @@ $GLOBALS['COMMON_LOGGER_CONFIG'] = array(
 	array(
 		'class'			=> 'UDPAppender',
 		'host'			=> '127.0.0.1',
-		'port'			=> 5775
+		'port'			=> 5775,
+		'threshold'		=> 1
 	),
-*/
+/**/
 );	
 
 # constants definition
