@@ -653,7 +653,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         $returnValue = (bool) false;
 
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:000000000000165E begin
-        $types = !is_null($types) ? $types : $resource->getType();
+        $types = !is_null($types) ? $types : $resource->getTypes();
         $rows = array ();
         if(!$this->isResourceReferenced($resource)){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();

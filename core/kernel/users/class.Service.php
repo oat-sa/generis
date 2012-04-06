@@ -257,13 +257,13 @@ class core_kernel_users_Service
 			
 			//check Role
 			$acceptedRoleClass = new core_kernel_classes_Class($role);
-			foreach ($this->userResource->getType() as $userRole){
+			foreach ($this->userResource->getTypes() as $userRole){
 				if($userRole->uriResource == $acceptedRoleClass->uriResource){
 					$returnValue = true;
 				}else if($userRole->isSubClassOf($acceptedRoleClass)){
 					$returnValue = true;
 				}else if($userRole->isSubClassOf($userClass)){
-					foreach ($userRole->getType() as $userRoleType){
+					foreach ($userRole->getTypes() as $userRoleType){
 						if($userRoleType->uriResource == $acceptedRoleClass->uriResource || $userRoleType->isSubClassOf($acceptedRoleClass)){
 							$returnValue = true;
 							break;
