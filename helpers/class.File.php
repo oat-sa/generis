@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 11.01.2012, 09:39:10 with ArgoUML PHP module 
+ * Automatically generated on 04.04.2012, 16:58:18 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package helpers
  */
 
@@ -32,7 +32,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class helpers_File
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package helpers
  */
 class helpers_File
@@ -48,7 +48,7 @@ class helpers_File
      * Short description of method resourceExists
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string path
      * @return boolean
      */
@@ -58,26 +58,11 @@ class helpers_File
 
         // section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018E9 begin
         
-        //if we are working on a directory
-//        if(substr($path, strlen($path)-1, 1)==DIRECTORY_SEPARATOR){
-//            $path = substr($path, 0, strlen($path)-1);
-//        }
-//        var_dump('resourceExists '.$path);
-        
-        $lastDirSep = strrpos($path, DIRECTORY_SEPARATOR);
-        $filePath = substr($path, 0, $lastDirSep+1);
-        $fileName = substr($path, $lastDirSep+1);
-        
-        $clazz = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
-        $propertyFilters = array(
-            PROPERTY_FILE_FILEPATH      =>$filePath
-            , PROPERTY_FILE_FILENAME    =>$fileName
-        );
-        $instances = $clazz->searchInstances($propertyFilters, array('recursive'=>true, 'like'=>false));
+		$instances = self::searchResourcesFromPath($path);
         if(!empty($instances)){
             $returnValue = true;
         }
-        
+		
         // section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018E9 end
 
         return (bool) $returnValue;
@@ -87,7 +72,7 @@ class helpers_File
      * Short description of method getResource
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string path
      * @return core_kernel_classes_File
      */
@@ -97,12 +82,30 @@ class helpers_File
 
         // section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018ED begin
         
-//        //if we are working on a directory
-//        if(substr($path, strlen($path)-1, 1)==DIRECTORY_SEPARATOR){
-//            $path = substr($path, 0, strlen($path)-1);
-//        }
+        $instances = self::searchResourcesFromPath($path);
+        if(!empty($instances)){
+            $returnValue = current($instances);
+        }
         
-        $lastDirSep = strrpos($path, DIRECTORY_SEPARATOR);
+        // section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018ED end
+
+        return $returnValue;
+    }
+
+    /**
+     * Short description of method searchResourcesFromPath
+     *
+     * @access public
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  string path
+     * @return array
+     */
+    public static function searchResourcesFromPath($path = "")
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1-6a191a88:1367c838c77:-8000:0000000000002A0F begin
+		$lastDirSep = strrpos($path, DIRECTORY_SEPARATOR);
         $filePath = substr($path, 0, $lastDirSep+1);
         $fileName = substr($path, $lastDirSep+1);
         
@@ -111,21 +114,18 @@ class helpers_File
             PROPERTY_FILE_FILEPATH      =>$filePath
             , PROPERTY_FILE_FILENAME    =>$fileName
         );
-        $instances = $clazz->searchInstances($propertyFilters, array('recursive'=>true));
-        if(!empty($instances)){
-            //use the first ressource found
-            $resource = current($instances);
-            if(core_kernel_versioning_File::isVersionedFile($resource)){
-                $returnValue = new core_kernel_versioning_File($resource->uriResource);
-            }
-            else if(core_kernel_versioning_File::isFile($resource)){
-                $returnValue = new core_kernel_classes_File($resource->uriResource);
-            }
-        }
-        
-        // section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018ED end
+        $resources = $clazz->searchInstances($propertyFilters, array('recursive'=>true, 'like'=>false));
+		foreach($resources as $resource){
+			if (core_kernel_versioning_File::isVersionedFile($resource)) {
+				$returnValue[$resource->uriResource] = new core_kernel_versioning_File($resource->uriResource);
+			} else if (core_kernel_versioning_File::isFile($resource)) {
+				$returnValue[$resource->uriResource] = new core_kernel_classes_File($resource->uriResource);
+			}
+		}
+		
+        // section 127-0-1-1-6a191a88:1367c838c77:-8000:0000000000002A0F end
 
-        return $returnValue;
+        return (array) $returnValue;
     }
 
 } /* end of class helpers_File */

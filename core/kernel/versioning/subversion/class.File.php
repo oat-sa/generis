@@ -375,15 +375,19 @@ class core_kernel_versioning_subversion_File
         
         $startTime = helpers_Time::getMicroTime();
         $listParentFolder = tao_helpers_File::scandir(dirname($path));
-        
+		return core_kernel_versioning_subversionWindows_File::singleton()->resolve($resource, $path, $version);
+		
+        var_dump('resolving');
         switch($version){
             case VERSIONING_FILE_VERSION_MINE:
                 //use our version of the file before the update we made the conflict
                 $resource->setContent(file_get_contents($path.'.mine'));
         
                 //delete the noisy files (mine, r***)
+				var_dump($listParentFolder,$path,  preg_quote($path), '@^' . preg_quote($path) . '\.@');
                 foreach($listParentFolder as $file) {
                     if(preg_match('@^' . preg_quote($path) . '\.@', $file)) {
+						var_dump('deleted noisy file '.$path);
                         unlink($file);
                     }
                 }
