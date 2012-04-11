@@ -139,7 +139,7 @@ class core_kernel_versioning_subversion_File
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165E begin
         
         if($resource->getRepository()->authenticate()){
-        
+			
             //no revision, revert local change
             if (is_null($revision)){
                 $returnValue = svn_revert($resource->getAbsolutePath());
@@ -150,34 +150,40 @@ class core_kernel_versioning_subversion_File
 
                 //get the svn revision number
                 $log = svn_log($path);
-                $svnRevision = $log[count($log) - $revision];
-                $svnRevisionNumber = $svnRevision['rev'];
+				$oldRevision = count($log) - $revision;
+				
+				if(isset($log[$oldRevision])){
+					
+					$svnRevision = $log[$oldRevision];
+					$svnRevisionNumber = $svnRevision['rev'];
 
-                //destroy the existing version
-                unlink($path);
-                //replace with the target revision
-                if($resource->update($svnRevisionNumber)){
-                    //get old content
-                    $content = $resource->getFileContent();
-                    //update to the current version
-                    $resource->update();
-                    //set the new content
-                    $resource->setContent($content);
-                    //commit the change
-                    if($resource->commit($msg)){
-                        $returnValue = true;
-                    }
-                    //restablish the head version
-                    else{
-                        @unlink($path);
-                        $resource->update();
-                    }
-                }
-                //restablish the head version
-                else{
-                    @unlink($path);
-                    $resource->update();
-                }
+					//destroy the existing version
+					unlink($path);
+					//replace with the target revision
+					if ($resource->update($svnRevisionNumber)) {
+						//get old content
+						$content = $resource->getFileContent();
+						//update to the current version
+						$resource->update();
+						//set the new content
+						$resource->setContent($content);
+						//commit the change
+						if ($resource->commit($msg)) {
+							$returnValue = true;
+						}
+						//restablish the head version
+						else {
+							@unlink($path);
+							$resource->update();
+						}
+					}
+					//restablish the head version
+					else {
+						@unlink($path);
+						$resource->update();
+					}
+				}
+                
             }
         }
         
