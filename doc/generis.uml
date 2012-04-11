@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Apr 10 14:58:12 CEST 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Apr 11 10:00:14 CEST 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -12807,12 +12807,8 @@ of the resource referencer.</UML:TaggedValue.dataValue>
                                   </UML:Multiplicity.range>
                                 </UML:Multiplicity>
                               </UML:StructuralFeature.multiplicity>
-                              <UML:Attribute.initialValue>
-                                <UML:Expression xmi.id = '127-0-1-1--5eb6294b:1369c3f7e95:-8000:00000000000019B8'
-                                  language = '' body = 'null'/>
-                              </UML:Attribute.initialValue>
                               <UML:StructuralFeature.type>
-                                <UML:DataType xmi.idref = '127-0-1-1--5eb6294b:1369c3f7e95:-8000:00000000000019BD'/>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
                               </UML:StructuralFeature.type>
                             </UML:Attribute>
                             <UML:Operation xmi.id = '127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001652'
@@ -13032,25 +13028,6 @@ of the resource referencer.</UML:TaggedValue.dataValue>
                                 </UML:Parameter>
                               </UML:BehavioralFeature.parameter>
                             </UML:Operation>
-                            <UML:Attribute xmi.id = '127-0-1-1-78ed0233:12fde709f61:-8000:000000000000170A'
-                              name = '_properties' visibility = 'private' isSpecification = 'false' ownerScope = 'classifier'
-                              changeability = 'changeable' targetScope = 'instance'>
-                              <UML:StructuralFeature.multiplicity>
-                                <UML:Multiplicity xmi.id = '127-0-1-1-78ed0233:12fde709f61:-8000:000000000000170B'>
-                                  <UML:Multiplicity.range>
-                                    <UML:MultiplicityRange xmi.id = '127-0-1-1-78ed0233:12fde709f61:-8000:000000000000170C'
-                                      lower = '1' upper = '1'/>
-                                  </UML:Multiplicity.range>
-                                </UML:Multiplicity>
-                              </UML:StructuralFeature.multiplicity>
-                              <UML:Attribute.initialValue>
-                                <UML:Expression xmi.id = '127-0-1-1--5eb6294b:1369c3f7e95:-8000:00000000000019BC'
-                                  language = '' body = 'null'/>
-                              </UML:Attribute.initialValue>
-                              <UML:StructuralFeature.type>
-                                <UML:DataType xmi.idref = '127-0-1-1--5eb6294b:1369c3f7e95:-8000:00000000000019BD'/>
-                              </UML:StructuralFeature.type>
-                            </UML:Attribute>
                             <UML:Operation xmi.id = '127-0-1-1-78ed0233:12fde709f61:-8000:0000000000001723'
                               name = 'loadProperties' visibility = 'private' isSpecification = 'false'
                               ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
@@ -13144,6 +13121,25 @@ of the resource referencer.</UML:TaggedValue.dataValue>
                                 </UML:Parameter>
                               </UML:BehavioralFeature.parameter>
                             </UML:Operation>
+                            <UML:Attribute xmi.id = '127-0-1-1--64338aa:1369b89eee1:-8000:0000000000005B9B'
+                              name = '_resources_loaded' visibility = 'private' isSpecification = 'false'
+                              ownerScope = 'classifier' changeability = 'changeable' targetScope = 'instance'>
+                              <UML:StructuralFeature.multiplicity>
+                                <UML:Multiplicity xmi.id = '127-0-1-1--64338aa:1369b89eee1:-8000:0000000000005B9C'>
+                                  <UML:Multiplicity.range>
+                                    <UML:MultiplicityRange xmi.id = '127-0-1-1--64338aa:1369b89eee1:-8000:0000000000005B9D'
+                                      lower = '1' upper = '1'/>
+                                  </UML:Multiplicity.range>
+                                </UML:Multiplicity>
+                              </UML:StructuralFeature.multiplicity>
+                              <UML:Attribute.initialValue>
+                                <UML:Expression xmi.id = '127-0-1-1--64338aa:1369b89eee1:-8000:0000000000005BA2'
+                                  language = '' body = 'false'/>
+                              </UML:Attribute.initialValue>
+                              <UML:StructuralFeature.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:StructuralFeature.type>
+                            </UML:Attribute>
                             <UML:Operation xmi.id = '10-13-1--128-7c4fbea6:12fe371c06a:-8000:0000000000001573'
                               name = 'resetCache' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                               isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
@@ -13161,6 +13157,24 @@ of the resource referencer.</UML:TaggedValue.dataValue>
                                     <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
                                   </UML:Parameter.type>
                                 </UML:Parameter>
+                              </UML:BehavioralFeature.parameter>
+                            </UML:Operation>
+                            <UML:Operation xmi.id = '127-0-1-1--770b92db:136a03f38fa:-8000:00000000000019B8'
+                              name = 'clearCaches' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                              isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                              isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '127-0-1-1--770b92db:136a03f38fa:-8000:00000000000019BA'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Clears the caches without immediately recalculating them</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
+                              <UML:BehavioralFeature.parameter>
+                                <UML:Parameter xmi.id = '127-0-1-1--770b92db:136a03f38fa:-8000:00000000000019B9'
+                                  name = 'return' isSpecification = 'false' kind = 'return'/>
                               </UML:BehavioralFeature.parameter>
                             </UML:Operation>
                             <UML:Operation xmi.id = '127-0-1-1--642cfc1e:13160cfbaf5:-8000:000000000000162A'
@@ -13192,6 +13206,25 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
                                 </UML:Parameter>
                               </UML:BehavioralFeature.parameter>
                             </UML:Operation>
+                            <UML:Attribute xmi.id = '127-0-1-1-78ed0233:12fde709f61:-8000:000000000000170A'
+                              name = '_properties' visibility = 'private' isSpecification = 'false' ownerScope = 'classifier'
+                              changeability = 'changeable' targetScope = 'instance'>
+                              <UML:StructuralFeature.multiplicity>
+                                <UML:Multiplicity xmi.id = '127-0-1-1-78ed0233:12fde709f61:-8000:000000000000170B'>
+                                  <UML:Multiplicity.range>
+                                    <UML:MultiplicityRange xmi.id = '127-0-1-1-78ed0233:12fde709f61:-8000:000000000000170C'
+                                      lower = '1' upper = '1'/>
+                                  </UML:Multiplicity.range>
+                                </UML:Multiplicity>
+                              </UML:StructuralFeature.multiplicity>
+                              <UML:Attribute.initialValue>
+                                <UML:Expression xmi.id = '127-0-1-1--5eb6294b:1369c3f7e95:-8000:00000000000019BC'
+                                  language = '' body = 'null'/>
+                              </UML:Attribute.initialValue>
+                              <UML:StructuralFeature.type>
+                                <UML:DataType xmi.idref = '127-0-1-1--5eb6294b:1369c3f7e95:-8000:00000000000019BD'/>
+                              </UML:StructuralFeature.type>
+                            </UML:Attribute>
                           </UML:Classifier.feature>
                         </UML:Class>
                       </UML:Namespace.ownedElement>
@@ -54097,10 +54130,26 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >_resources : mixed  = null</text>
+      >_resources : array</text>
       <text name="Fig10.4.9"
         x="801"
         y="543"
+        width="661"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="200 60 60"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >_resources_loaded : boolean  = false</text>
+      <text name="Fig10.4.10"
+        x="801"
+        y="557"
         width="661"
         height="20"
         fill="0"
@@ -54485,6 +54534,22 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig10.6.22"
         x="801"
         y="874"
+        width="661"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >clearCaches()</text>
+      <text name="Fig10.6.23"
+        x="801"
+        y="888"
         width="661"
         height="20"
         fill="0"
@@ -59534,7 +59599,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="41"
         y="353"
         width="704"
-        height="27"
+        height="14"
         fill="0"
         fillcolor="white"
         stroke="0"
