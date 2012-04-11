@@ -358,6 +358,7 @@ class core_kernel_persistence_Switcher
 
 		if($allOrNothing && $myTableMgr->exists() && !$class->countInstances()){
 		    common_Logger::d("Class ${classLabel} not hardified");
+		    core_kernel_persistence_PersistenceProxy::restoreImplementation();
 			return $returnValue;
 		}
 
@@ -371,6 +372,7 @@ class core_kernel_persistence_Switcher
 
 		//init the count value in hardened classes:
 		if(isset($this->hardenedClasses[$class->uriResource])){
+		    core_kernel_persistence_PersistenceProxy::restoreImplementation();
 			return true;//already being compiled
 		}else{
 			$this->hardenedClasses[$class->uriResource] = 0;
@@ -520,7 +522,7 @@ class core_kernel_persistence_Switcher
 		}
 
 		//reset cache:
-		$referencer->resetCache($additionalProperties);
+		$referencer->clearCaches();
 		// EXIT SMOOTH SQL MODE
 		core_kernel_persistence_PersistenceProxy::restoreImplementation();
 
