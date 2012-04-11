@@ -452,9 +452,9 @@ class core_kernel_versioning_File
         }
         
         $status = $this->getStatus(array('SHOW_UPDATES'=>false));
-        if($status      != VERSIONING_FILE_STATUS_UNVERSIONED
-           && $status   != VERSIONING_FILE_STATUS_ADDED)
-        {
+        if($status
+			&& $status	!= VERSIONING_FILE_STATUS_UNVERSIONED
+			&& $status	!= VERSIONING_FILE_STATUS_ADDED){
             $returnValue = true;
         }
         
@@ -574,12 +574,15 @@ class core_kernel_versioning_File
         	throw new core_kernel_versioning_exception_VersioningDisabledException();
         }
         
-        $svnStatusOptions = array();
-        $defaultSvnStatusOptions = array('SHOW_UPDATES' => true);
-        $svnStatusOptions = array_merge($defaultSvnStatusOptions, $options);
-        
-        $returnValue = core_kernel_versioning_FileProxy::singleton()->getStatus($this, $this->getAbsolutePath(), $svnStatusOptions);
-        
+		try{
+		
+			$svnStatusOptions = array();
+			$defaultSvnStatusOptions = array('SHOW_UPDATES' => true);
+			$svnStatusOptions = array_merge($defaultSvnStatusOptions, $options);
+
+			$returnValue = core_kernel_versioning_FileProxy::singleton()->getStatus($this, $this->getAbsolutePath(), $svnStatusOptions);
+		
+		}catch(core_kernel_versioning_exception_FileUnversionedException $e){}
         // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001900 end
 
         return (int) $returnValue;

@@ -261,27 +261,32 @@ class core_kernel_versioning_FileProxy
 
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032E2 begin
         
-        $type = $resource->getRepository()->getType();
-        $implClass = '';
-        
-        // Function of the repository type, define the implementation to attack
+		$repository = $resource->getRepository();
+		if(!is_null($repository)){
+			
+			$type = $repository->getType();
+			$implClass = '';
 
-        switch ($type->uriResource)
-        {
-        	case 'http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversion':
-        		$implClass = 'core_kernel_versioning_subversion_File';
-        		break;
-        	case 'http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversionWindows':
-        		$implClass = 'core_kernel_versioning_subversionWindows_File';
-        		break;
-        }
+			// Function of the repository type, define the implementation to attack
+			switch ($type->uriResource) {
+				case 'http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversion':
+					$implClass = 'core_kernel_versioning_subversion_File';
+					break;
+				case 'http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversionWindows':
+					$implClass = 'core_kernel_versioning_subversionWindows_File';
+					break;
+			}
 
-        // If an implementation has been found
-        if(!empty($implClass)){
-			$reflectionMethod = new ReflectionMethod($implClass, 'singleton');
-			$delegate = $reflectionMethod->invoke(null);
-			$returnValue = $delegate;
-        }
+			// If an implementation has been found
+			if (!empty($implClass)) {
+				$reflectionMethod = new ReflectionMethod($implClass, 'singleton');
+				$delegate = $reflectionMethod->invoke(null);
+				$returnValue = $delegate;
+			}
+			
+		}else{
+			throw new core_kernel_versioning_exception_FileUnversionedException('no repository associated to the aledged versioned file');
+		}
 
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032E2 end
 
