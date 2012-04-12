@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  * By default, the classes reference is cached in memory
  * and the instances are not cached
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -34,7 +34,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * and the instances are not cached
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -97,9 +97,9 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of attribute _classes
      *
      * @access private
-     * @var array
+     * @var mixed
      */
-    private static $_classes = array();
+    private static $_classes = null;
 
     /**
      * Short description of attribute _resources
@@ -110,12 +110,20 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     private static $_resources = array();
 
     /**
+     * Short description of attribute _resources_loaded
+     *
+     * @access private
+     * @var boolean
+     */
+    private static $_resources_loaded = false;
+
+    /**
      * Short description of attribute _properties
      *
      * @access private
-     * @var array
+     * @var mixed
      */
-    private static $_properties = array();
+    private static $_properties = null;
 
     // --- OPERATIONS ---
 
@@ -123,7 +131,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method __construct
      *
      * @access private
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
     private function __construct()
@@ -144,7 +152,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method singleton
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return core_kernel_persistence_hardapi_ResourceReferencer
      */
     public static function singleton()
@@ -168,7 +176,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setCache
      *
      * @access protected
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string type
      * @param  int mode
      * @return mixed
@@ -194,7 +202,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setClassCache
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  int mode
      * @return mixed
      */
@@ -211,7 +219,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setInstanceCache
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  int mode
      * @return mixed
      */
@@ -228,14 +236,14 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method setPropertyCache
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  int mode
      * @return mixed
      */
     public function setPropertyCache($mode)
     {
         // section 127-0-1-1-78ed0233:12fde709f61:-8000:0000000000001711 begin
-        
+
     	$this->setCache('property', $mode);
     	
         // section 127-0-1-1-78ed0233:12fde709f61:-8000:0000000000001711 end
@@ -245,7 +253,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method loadClasses
      *
      * @access private
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  boolean force
      * @return mixed
      */
@@ -253,13 +261,14 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     {
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001666 begin
         
-    	if(count(self::$_classes) == 0 || $force){
+    	if(is_null(self::$_classes) || $force){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			$result = $dbWrapper->execSql('SELECT "id", "uri", "table", "topClass" FROM "class_to_table"');
     		if($dbWrapper->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception($dbWrapper->dbConnector->errorMsg());
 			}
-			 while (!$result->EOF) {
+			self::$_classes = array();
+			while (!$result->EOF) {
 	        	self::$_classes[$result->fields['uri']] = array(
 	        		'id'	=> $result->fields['id'],
 	        		'uri' 	=> $result->fields['uri'],
@@ -277,7 +286,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method isClassReferenced
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Class class
      * @param  string table
      * @return boolean
@@ -351,7 +360,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method referenceClass
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Class class
      * @param  array options
      * @return boolean
@@ -361,6 +370,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         $returnValue = (bool) false;
 
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001655 begin
+        common_logger::d('Referencing: '.$class->getUri());
         
         // Get optional parameters
         $table = isset($options['table']) ? $options['table'] : '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
@@ -412,7 +422,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			if($result !== false){
 				
 				$returnValue = true;
-				if($this->cacheModes['class'] == self::CACHE_MEMORY){
+				if($this->cacheModes['class'] == self::CACHE_MEMORY && !is_null(self::$_classes)){
 					$memQuery = 'SELECT "id", "uri", "table", "topClass" 
 						FROM "class_to_table" 
 						WHERE "uri" = ? 
@@ -440,7 +450,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method unReferenceClass
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -491,7 +501,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				// delete table associated to the class
 				$tm->remove();
 				// remove class from the cache
-				if($this->cacheModes['class'] == self::CACHE_MEMORY){
+				if($this->cacheModes['class'] == self::CACHE_MEMORY && is_array(self::$_classes)){
 					foreach(self::$_classes as $index => $aClass){
 						if($aClass['uri'] == $class->uriResource){
 							unset(self::$_classes[$index]);
@@ -514,7 +524,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method classLocations
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Class class
      * @return array
      */
@@ -568,7 +578,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method loadResources
      *
      * @access private
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  boolean force
      * @return mixed
      */
@@ -576,13 +586,14 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     {
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:000000000000166E begin
         
-    	if(count(self::$_resources) == 0 || $force){
+    	if(!self::$_resources_loaded || $force){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			$result = $dbWrapper->execSql('SELECT "uri", "table" FROM "resource_to_table"');
 			while (!$result->EOF) {
 	        	self::$_resources[$result->fields['uri']] = $result->fields['table'];
 	        	$result->moveNext();
 	        }
+	        self::$_resources_loaded = true;
 		}
     	
     	
@@ -593,7 +604,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method isResourceReferenced
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -641,7 +652,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method referenceResource
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @param  string table
      * @param  array types
@@ -705,7 +716,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method unReferenceResource
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -754,7 +765,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method resourceLocation
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @return string
      */
@@ -811,7 +822,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method loadProperties
      *
      * @access private
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  boolean force
      * @param  array additionalProperties
      * @return mixed
@@ -819,25 +830,24 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     private function loadProperties($force = false, $additionalProperties = array())
     {
         // section 127-0-1-1-78ed0233:12fde709f61:-8000:0000000000001723 begin
-        
-    	if(count(self::$_properties) == 0 || $force){
+    	if(is_null(self::$_properties) || $force){
     		
 			//file where is the data saved
 			$file = realpath(GENERIS_CACHE_PATH) . '/hard-api-property.cache';
 				
     		if(!$force && $this->cacheModes['property'] == self::CACHE_FILE){
     			
-			//if the properties are cached in the file, we load it
-					if(file_exists($file)){
-							if(!is_readable($file)){
-							throw new core_kernel_persistence_hardapi_Exception("Cache file $file must have read/write permissions");
+				//if the properties are cached in the file, we load it
+				if(file_exists($file)){
+					if(!is_readable($file)){
+						throw new core_kernel_persistence_hardapi_Exception("Cache file $file must have read/write permissions");
 					}
-							$properties = @unserialize(file_get_contents($file));
-							if($properties !== false && is_array($properties) && count($properties) > 0){
-									self::$_properties = $properties;
-									return;
-							}
+					$properties = @unserialize(file_get_contents($file));
+					if($properties !== false && is_array($properties) && count($properties) > 0){
+						self::$_properties = $properties;
+						return;
 					}
+				}
 			}
 
 			//get all the compiled tables
@@ -851,6 +861,9 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     		}
     		
     		//retrieve each property by table
+			$this->loadClasses();
+			    		
+    		self::$_properties = array();
     		foreach($tables as $table){
 				
     			$classUri = core_kernel_persistence_hardapi_Utils::getLongName($table);
@@ -889,6 +902,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 		
     		//saving the properties in the cache file
     		if($this->cacheModes['property'] == self::CACHE_FILE){
+    			
     			$returnValue = file_put_contents($file, serialize(self::$_properties));
 				if(!$returnValue){
 					throw new core_kernel_persistence_hardapi_Exception("cannot write the required property cache file in the location ".$file);
@@ -903,7 +917,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method isPropertyReferenced
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property property
      * @param  inClass
      * @return boolean
@@ -960,7 +974,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method propertyLocation
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property property
      * @return array
      */
@@ -981,6 +995,8 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 						$returnValue = self::$_properties[$property->uriResource];
 					}
 					break;
+				default:
+					throw new common_Exception('Unexpected cache-mode '.$this->cacheModes['property'].' for propertyLocation()');
 			}
 		}
         
@@ -993,7 +1009,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * Short description of method referenceInstanceTypes
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Class class
      * @return boolean
      */
@@ -1033,19 +1049,42 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     }
 
     /**
-     * Short description of method resetCache
+     * please use clearCaches() instead
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @deprecated
      * @param  array additionalProperties
      * @return mixed
      */
     public function resetCache($additionalProperties = array())
     {
         // section 10-13-1--128-7c4fbea6:12fe371c06a:-8000:0000000000001573 begin
-        $this->loadClasses(true);
+    	$this->loadClasses(true);
         $this->loadProperties(true, $additionalProperties);
         // section 10-13-1--128-7c4fbea6:12fe371c06a:-8000:0000000000001573 end
+    }
+
+    /**
+     * Clears the caches without immediately recalculating them
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return mixed
+     */
+    public function clearCaches()
+    {
+        // section 127-0-1-1--770b92db:136a03f38fa:-8000:00000000000019B8 begin
+    	self::$_properties	= null;
+    	
+    	self::$_classes		= null;
+    	
+    	self::$_resources			= array();
+    	self::$_resources_loaded	= false;
+    	
+        $cachefile = realpath(GENERIS_CACHE_PATH) . '/hard-api-property.cache';
+    	@unlink($cachefile);
+        // section 127-0-1-1--770b92db:136a03f38fa:-8000:00000000000019B8 end
     }
 
     /**
@@ -1053,7 +1092,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
      * This function is usefull specially during unhardening
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Class clazz
      * @return array
      */

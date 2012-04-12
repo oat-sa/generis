@@ -144,14 +144,12 @@ class HardApiTestCase extends UnitTestCase {
 		$this->assertIsA($referencer, 'core_kernel_persistence_hardapi_ResourceReferencer');
 		
 		$referencer->setPropertyCache(core_kernel_persistence_hardapi_ResourceReferencer::CACHE_FILE);
-		$cacheFile = GENERIS_CACHE_PATH . 'hard-api-property.cache';
-		if(file_exists($cacheFile)){
-			$referencer->resetCache();
-		}
+		$referencer->clearCaches();
 		
 		$class = new core_kernel_classes_Class(CLASS_GENERIS_USER);
 		$table = '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
 		
+		// this part simulates a hardifying of the Userclass
 		$myUserTblMgr = new core_kernel_persistence_hardapi_TableManager($table);
 		$this->assertFalse($myUserTblMgr->exists());
 		$this->assertTrue($myUserTblMgr->create(array(
@@ -164,10 +162,11 @@ class HardApiTestCase extends UnitTestCase {
 			array('name' => '07userLastName')
 		)));
 		$this->assertTrue($myUserTblMgr->exists());
-		
 		$referencer->referenceClass($class);
 		$this->assertTrue($referencer->isClassReferenced($class));
-
+		
+		// test start on the cache containing the simulated data
+		// in case of a  fallback to the real sata (class_to_table) the tests fail
 		
 		$labelProperty = new core_kernel_classes_Property(RDFS_LABEL);
 		$this->assertTrue($referencer->isPropertyReferenced($labelProperty));
