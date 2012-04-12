@@ -310,7 +310,7 @@ class common_ext_ExtensionsManager
 
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001840 begin
 		foreach ($this->getInstalledExtensions() as $ext) {
-			if(count($ext->model) > 0){
+			if(isset($ext->model) && count($ext->model) > 0){
 				$returnValue = array_merge($returnValue, $ext->model);
 			}
 		}
