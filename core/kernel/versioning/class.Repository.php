@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 18.01.2012, 10:30:37 with ArgoUML PHP module 
+ * Automatically generated on 12.04.2012, 14:05:54 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_versioning
  */
@@ -34,7 +34,7 @@ require_once('core/kernel/classes/class.Resource.php');
 /**
  * include core_kernel_versioning_RepositoryProxy
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  */
 require_once('core/kernel/versioning/class.RepositoryProxy.php');
 
@@ -50,7 +50,7 @@ require_once('core/kernel/versioning/class.RepositoryProxy.php');
  * Short description of class core_kernel_versioning_Repository
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_versioning
  */
@@ -76,7 +76,7 @@ class core_kernel_versioning_Repository
      * Repository factory
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource type
      * @param  string url
      * @param  string login
@@ -126,7 +126,7 @@ class core_kernel_versioning_Repository
      * Checkout the remote repository to a local directory
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  int revision
      * @return boolean
      */
@@ -159,7 +159,7 @@ class core_kernel_versioning_Repository
      * Get the repository type
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return core_kernel_classes_Resource
      */
     public function getType()
@@ -179,7 +179,7 @@ class core_kernel_versioning_Repository
      * Get path of the local repository
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return string
      */
     public function getPath()
@@ -199,7 +199,7 @@ class core_kernel_versioning_Repository
      * Get authenticated with the remote repository
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return boolean
      */
     public function authenticate()
@@ -237,10 +237,11 @@ class core_kernel_versioning_Repository
      * system.
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  boolean deleteReference
      * @return boolean
      */
-    public function delete()
+    public function delete($deleteReference = false)
     {
         $returnValue = (bool) false;
 
@@ -264,7 +265,7 @@ class core_kernel_versioning_Repository
      * Short description of method export
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string src
      * @param  string target
      * @param  int revision
@@ -282,12 +283,12 @@ class core_kernel_versioning_Repository
     }
 
     /**
-     * @exception core_kernel_versioning_exception_ResourceAlreadyExistsException
+     * @exception core_kernel_versioning_ResourceAlreadyExistsException
      * @exception common_exception_fileAlreadyExists
      * @param options.saveResource {boolean} Save the resource in the onthology
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string src
      * @param  string target
      * @param  string message
@@ -320,7 +321,7 @@ class core_kernel_versioning_Repository
      * Short description of method listContent
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string path
      * @param  int revision
      * @return array
@@ -340,7 +341,7 @@ class core_kernel_versioning_Repository
      * Short description of method getUrl
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return string
      */
     public function getUrl()

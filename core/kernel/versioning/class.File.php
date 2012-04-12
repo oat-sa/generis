@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 /**
  * Manage your versioned files as resources in TAO
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_versioning
  */
@@ -17,14 +17,14 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_classes_File
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  */
 require_once('core/kernel/classes/class.File.php');
 
 /**
  * include core_kernel_versioning_FileProxy
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  */
 require_once('core/kernel/versioning/class.FileProxy.php');
 
@@ -58,7 +58,7 @@ const VERSIONING_FILE_VERSION_BASE              = 'base';
  * Manage your versioned files as resources in TAO
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_versioning
  */
@@ -76,7 +76,7 @@ class core_kernel_versioning_File
      * Resources factory
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string fileName
      * @param  string relativeFilePath
      * @param  Resource repository
@@ -147,7 +147,7 @@ class core_kernel_versioning_File
      * Check if a resource is a versioned file resource
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -167,18 +167,18 @@ class core_kernel_versioning_File
     /**
      * Commit changes to the remote repository
      *
-     * Throw a core_kernel_versioning_exception_VersioningDisabledException 
+     * Throw a core_kernel_versioning_VersioningDisabledException 
      * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
-     * Throw a core_kernel_versioning_exception_FileRemainsInConflictException 
+     * Throw a core_kernel_versioning_FileRemainsInConflictException 
      * if  the local working copy of the resource remains in conflict
      *
-     * Throw a core_kernel_versioning_exception_OutOfDateException 
+     * Throw a core_kernel_versioning_OutOfDateException 
      * if the local working copy of the resource is out of date (and 
      * requires an update)
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string message
      * @param  boolean recursive
      * @return boolean
@@ -219,11 +219,11 @@ class core_kernel_versioning_File
 
     /**
      * Update changes from the remote repository
-     * Throw a core_kernel_versioning_exception_VersioningDisabledException 
+     * Throw a core_kernel_versioning_VersioningDisabledException 
      * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  int revision
      * @return boolean
      */
@@ -262,11 +262,11 @@ class core_kernel_versioning_File
 
     /**
      * Revert changes
-     * Throw a core_kernel_versioning_exception_VersioningDisabledException 
+     * Throw a core_kernel_versioning_VersioningDisabledException 
      * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  int revision If a revision is given revert changes from this revision. Else revert local changes.
      * @param  string msg
      * @return boolean
@@ -293,15 +293,16 @@ class core_kernel_versioning_File
     }
 
     /**
-     * Delete the resource from the ontology.
-     * Be carrefull, the function does not delete the file in the file 
-     * system.
+     * Delete the file from the file system.
+     * If the versioned file is in conflict solve the problem
+     * and delete it.
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  boolean deleteReference
      * @return boolean
      */
-    public function delete()
+    public function delete($deleteReference = false)
     {
         $returnValue = (bool) false;
 
@@ -344,7 +345,7 @@ class core_kernel_versioning_File
         }
 	    
         //delete the tao resource
-        $returnValue &= parent::delete();
+        $returnValue &= parent::delete($deleteReference);
         
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032FC end
 
@@ -355,7 +356,7 @@ class core_kernel_versioning_File
      * Get the repository which is associated to the resource
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return core_kernel_versioning_subversion_Repository
      */
     public function getRepository()
@@ -376,11 +377,11 @@ class core_kernel_versioning_File
 
     /**
      * Add the resource to the remote repository
-     * Throw a core_kernel_versioning_exception_VersioningDisabledException 
+     * Throw a core_kernel_versioning_VersioningDisabledException 
      * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  boolean recursive
      * @param  boolean force
      * @return boolean
@@ -439,7 +440,7 @@ class core_kernel_versioning_File
      * Check if the resource is versioned
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return boolean
      */
     public function isVersioned()
@@ -466,11 +467,11 @@ class core_kernel_versioning_File
 
     /**
      * Return the history of the resource as an associative array
-     * Throw a core_kernel_versioning_exception_VersioningDisabledException 
+     * Throw a core_kernel_versioning_VersioningDisabledException 
      * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return array
      */
     public function getHistory()
@@ -496,7 +497,7 @@ class core_kernel_versioning_File
      * Get the relative path of the resource in the repository
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return string
      */
     public function getPath()
@@ -516,11 +517,11 @@ class core_kernel_versioning_File
     /**
      * Check if the content of the local version is different
      * from the remote version of the file.
-     * Throw a core_kernel_versioning_exception_VersioningDisabledException 
+     * Throw a core_kernel_versioning_VersioningDisabledException 
      * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return boolean
      */
     public function hasLocalChanges()
@@ -540,7 +541,7 @@ class core_kernel_versioning_File
      * Short description of method getVersion
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return int
      */
     public function getVersion()
@@ -561,7 +562,7 @@ class core_kernel_versioning_File
      * Short description of method getStatus
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  array options
      * @return int
      */
@@ -593,7 +594,7 @@ class core_kernel_versioning_File
      * Short description of method resolve
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string version
      * @return boolean
      */
@@ -628,7 +629,7 @@ class core_kernel_versioning_File
      * Short description of method isInConflict
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return boolean
      */
     public function isInConflict()

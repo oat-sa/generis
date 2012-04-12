@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 17.10.2011, 13:15:44 with ArgoUML PHP module 
+ * Automatically generated on 12.04.2012, 14:06:10 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
@@ -43,7 +43,7 @@ require_once('core/kernel/classes/class.Resource.php');
  * Short description of class core_kernel_classes_File
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
@@ -61,7 +61,7 @@ class core_kernel_classes_File
      * Short description of method getAbsolutePath
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return string
      */
     public function getAbsolutePath()
@@ -94,7 +94,7 @@ class core_kernel_classes_File
      * be optionnal)
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string fileName
      * @param  string filePath
      * @param  string uri
@@ -133,7 +133,7 @@ class core_kernel_classes_File
      * Short description of method isFile
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -153,7 +153,7 @@ class core_kernel_classes_File
      * Short description of method getFileContent
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return mixed
      */
     public function getFileContent()
@@ -170,7 +170,7 @@ class core_kernel_classes_File
      * Short description of method getFile
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  Resource resource
      * @return mixed
      */
@@ -189,10 +189,11 @@ class core_kernel_classes_File
      * Short description of method delete
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @param  boolean deleteReference
      * @return boolean
      */
-    public function delete()
+    public function delete($deleteReference = false)
     {
         $returnValue = (bool) false;
 
@@ -202,7 +203,7 @@ class core_kernel_classes_File
         		throw new Exception(__('Unable to remove the file '.$this->getAbsolutePath()));
         	}
         }*/
-        parent::delete();
+        parent::delete($deleteReference);
         $returnValue = true;
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001672 end
 
@@ -213,7 +214,7 @@ class core_kernel_classes_File
      * Short description of method move
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return boolean
      */
     public function move()
@@ -231,7 +232,7 @@ class core_kernel_classes_File
      * Short description of method getFileInfo
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return mixed
      */
     public function getFileInfo()
@@ -245,7 +246,7 @@ class core_kernel_classes_File
      * Short description of method setContent
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @param  string content
      * @return boolean
      */
@@ -281,7 +282,7 @@ class core_kernel_classes_File
      * Short description of method fileExists
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
      * @return boolean
      */
     public function fileExists()

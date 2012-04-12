@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Hard Database API</activediagram>
+      <activediagram>Generis Core Kernel</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Apr 11 16:39:32 CEST 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Apr 12 14:07:02 CEST 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -1334,8 +1334,8 @@ The method returns the new resource. </UML:TaggedValue.dataValue>
                             <UML:Parameter xmi.id = '127-0-1-1-440a1f14:12e71f49661:-8000:0000000000001417'
                               name = 'deleteReference' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '127-0-1-1-440a1f14:12e71f49661:-8000:000000000000142A'
-                                  language = '' body = 'false'/>
+                                <UML:Expression xmi.id = '127-0-1-1--cbcb708:136a66f938d:-8000:00000000000019BD'
+                                  language = 'UML 1.4' body = 'false'/>
                               </UML:Parameter.defaultValue>
                               <UML:ModelElement.taggedValue>
                                 <UML:TaggedValue xmi.id = '127-0-1-1-440a1f14:12e71f49661:-8000:000000000000141D'
@@ -4362,6 +4362,16 @@ will restore it for further http requests)</UML:TaggedValue.dataValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001673'
                               name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--cbcb708:136a66f938d:-8000:00000000000019BE'
+                              name = 'deleteReference' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--cbcb708:136a66f938d:-8000:00000000000019C0'
+                                  language = 'UML 1.4' body = 'false'/>
+                              </UML:Parameter.defaultValue>
                               <UML:Parameter.type>
                                 <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
@@ -14569,6 +14579,16 @@ system.</UML:TaggedValue.dataValue>
                                 <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--cbcb708:136a66f938d:-8000:00000000000019C3'
+                              name = 'deleteReference' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--cbcb708:136a66f938d:-8000:00000000000019C4'
+                                  language = 'UML 1.4' body = 'false'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
                         <UML:Attribute xmi.id = '127-0-1-1--33cecc33:132fbb6bd64:-8000:0000000000004E04'
@@ -15273,6 +15293,16 @@ and delete it.</UML:TaggedValue.dataValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032FD'
                               name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--cbcb708:136a66f938d:-8000:00000000000019C1'
+                              name = 'deleteReference' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1--cbcb708:136a66f938d:-8000:00000000000019C2'
+                                  language = 'UML 1.4' body = 'false'/>
+                              </UML:Parameter.defaultValue>
                               <UML:Parameter.type>
                                 <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
@@ -44112,7 +44142,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </path>
   </group>
   <group name="Fig11"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[424, 800, 376, 202]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[352, 856, 376, 202]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001365"
        fill="1"
        fillcolor="white"
@@ -44123,8 +44153,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </private>
     
     <rectangle name="Fig11.0"
-      x="424"
-      y="800"
+      x="352"
+      y="856"
       width="376"
       height="202"
       fill="1"
@@ -44133,8 +44163,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <text name="Fig11.1"
-      x="425"
-      y="801"
+      x="353"
+      y="857"
       width="374"
       height="21"
       fill="0"
@@ -44149,7 +44179,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::classes::File</text>
     <group name="Fig11.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[425, 801, 374, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[353, 857, 374, 0]"
          href="127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001365"
          fill="0"
          fillcolor="white"
@@ -44161,8 +44191,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig11.2.0"
-        x="425"
-        y="801"
+        x="353"
+        y="857"
         width="374"
         height="0"
         fill="0"
@@ -44172,8 +44202,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig11.3"
-      x="424"
-      y="822"
+      x="352"
+      y="878"
       width="376"
       height="1"
       fill="1"
@@ -44182,7 +44212,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig11.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[425, 823, 374, 25]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[353, 879, 374, 25]"
          href="127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001365"
          fill="0"
          fillcolor="white"
@@ -44193,8 +44223,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig11.4.0"
-        x="425"
-        y="823"
+        x="353"
+        y="879"
         width="374"
         height="25"
         fill="0"
@@ -44204,8 +44234,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig11.5"
-      x="424"
-      y="848"
+      x="352"
+      y="904"
       width="376"
       height="1"
       fill="1"
@@ -44214,7 +44244,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig11.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[425, 849, 374, 152]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[353, 905, 374, 152]"
          href="127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001365"
          fill="0"
          fillcolor="white"
@@ -44225,8 +44255,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig11.6.0"
-        x="425"
-        y="849"
+        x="353"
+        y="905"
         width="374"
         height="152"
         fill="0"
@@ -44235,8 +44265,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
       <text name="Fig11.6.1"
-        x="425"
-        y="849"
+        x="353"
+        y="905"
         width="374"
         height="14"
         fill="0"
@@ -44251,8 +44281,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >getAbsolutePath() : string</text>
       <text name="Fig11.6.2"
-        x="425"
-        y="863"
+        x="353"
+        y="919"
         width="374"
         height="14"
         fill="0"
@@ -44267,8 +44297,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >create(fileName : string,filePath : string = null,uri : string = &quot;&quot;) : File</text>
       <text name="Fig11.6.3"
-        x="425"
-        y="877"
+        x="353"
+        y="933"
         width="374"
         height="14"
         fill="0"
@@ -44283,8 +44313,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >isFile(resource : Resource) : boolean</text>
       <text name="Fig11.6.4"
-        x="425"
-        y="891"
+        x="353"
+        y="947"
         width="374"
         height="14"
         fill="0"
@@ -44299,8 +44329,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >getFileContent()</text>
       <text name="Fig11.6.5"
-        x="425"
-        y="905"
+        x="353"
+        y="961"
         width="374"
         height="14"
         fill="0"
@@ -44315,8 +44345,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >getFile(resource : Resource)</text>
       <text name="Fig11.6.6"
-        x="425"
-        y="919"
+        x="353"
+        y="975"
         width="374"
         height="14"
         fill="0"
@@ -44329,10 +44359,10 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >delete() : boolean</text>
+      >delete(deleteReference : boolean = false) : boolean</text>
       <text name="Fig11.6.7"
-        x="425"
-        y="933"
+        x="353"
+        y="989"
         width="374"
         height="14"
         fill="0"
@@ -44347,8 +44377,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >move() : boolean</text>
       <text name="Fig11.6.8"
-        x="425"
-        y="947"
+        x="353"
+        y="1003"
         width="374"
         height="14"
         fill="0"
@@ -44363,8 +44393,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >getFileInfo()</text>
       <text name="Fig11.6.9"
-        x="425"
-        y="961"
+        x="353"
+        y="1017"
         width="374"
         height="14"
         fill="0"
@@ -44379,8 +44409,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >setContent(content : string) : boolean</text>
       <text name="Fig11.6.10"
-        x="425"
-        y="975"
+        x="353"
+        y="1031"
         width="374"
         height="20"
         fill="0"
@@ -44422,9 +44452,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="616"
-              y="800" />
+              y="856" />
       <lineto x="616"
-              y="800" />
+              y="814" />
     </path>
   </group>
   <group name="Fig13"
@@ -55289,7 +55319,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig0.4.5"
         x="49"
         y="647"
-        width="470"
+        width="472"
         height="14"
         fill="0"
         fillcolor="white"
@@ -56470,7 +56500,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >delete() : boolean</text>
+      >delete(deleteReference : boolean = false) : boolean</text>
       <text name="Fig9.6.7"
         x="97"
         y="176"
@@ -56902,7 +56932,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >delete() : boolean</text>
+      >delete(deleteReference : boolean = false) : boolean</text>
       <text name="Fig11.6.7"
         x="97"
         y="470"
