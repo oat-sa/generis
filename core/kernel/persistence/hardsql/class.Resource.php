@@ -891,7 +891,7 @@ class core_kernel_persistence_hardsql_Resource
 
 				//duplicated data
 				$duplicatedResource = new core_kernel_classes_Resource($newUri);
-				$referencer->referenceResource($duplicatedResource, $tableName, $resource->getType(), true);
+				$referencer->referenceResource($duplicatedResource, $tableName, $resource->getTypes(), true);
 
 				$duplicateInstanceId = core_kernel_persistence_hardsql_Utils::getInstanceId($duplicatedResource);
 
@@ -983,7 +983,7 @@ class core_kernel_persistence_hardsql_Resource
 				
 			//get the resource classes (type)
 			$types = '';
-			foreach($resource->getType() as $type){
+			foreach($resource->getTypes() as $type){
 				$properties[$type->uriResource] = array();
 				$types = "'".$type->uriResource."',";
 			}

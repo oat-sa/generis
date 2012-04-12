@@ -166,7 +166,7 @@ class core_kernel_persistence_Switcher
 				$tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($instance);
 
 				// Get Instance type
-				$types = $instance->getType();
+				$types = $instance->getTypes();
 
 				// Create instance in the smooth implementation
 				core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
