@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Apr 11 10:00:14 CEST 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Apr 11 16:39:32 CEST 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -13144,6 +13144,22 @@ of the resource referencer.</UML:TaggedValue.dataValue>
                               name = 'resetCache' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                               isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                               isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '127-0-1-1--c096bda:136a1c224cb:-8000:00000000000019BB'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>true</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '127-0-1-1--ded7727:12f59911cd7:-8000:0000000000001436'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                                <UML:TaggedValue xmi.id = '127-0-1-1--c096bda:136a1c224cb:-8000:00000000000019BC'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>please use clearCaches() instead</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:BehavioralFeature.parameter>
                                 <UML:Parameter xmi.id = '10-13-1--128-7c4fbea6:12fe371c06a:-8000:0000000000001574'
                                   name = 'return' isSpecification = 'false' kind = 'return'/>
@@ -54539,7 +54555,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="200 60 60"
         textcolor="black"
         font="Dialog"
         italic="false"
