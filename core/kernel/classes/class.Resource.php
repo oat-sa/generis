@@ -376,10 +376,7 @@ class core_kernel_classes_Resource
         $collection = $this->getPropertyValuesCollection($property);
 
         if($collection->isEmpty()){
-        	$propLabel = $property->getLabel();
-        	$label = $this->getLabel();
-            throw new common_Exception("Property {$propLabel} ({$property->uriResource}) of resource {$label} ({$this->uriResource})
-            							 should not be empty");
+        	throw new common_exception_EmptyProperty($this, $property);
         }
         if($collection->count() == 1 ) {
             $returnValue= $collection->get(0);
