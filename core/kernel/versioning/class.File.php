@@ -127,6 +127,7 @@ class core_kernel_versioning_File
         /*if(!file_exists($repositoryPath.$filePath.DIRECTORY_SEPARATOR.$fileName)){
         	$create = true;
     	}*/
+		//@TODO: wrong parent method "create" call here : the rdf type will be set to CLASS_GENERIS_FILE, instead of CLASS_GENERIS_VERSIONEDFILE !!!
         $instance = parent::create($fileName, $filePath, $uri);
         $returnValue = new core_kernel_versioning_File($instance->uriResource);
         

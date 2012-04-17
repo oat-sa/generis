@@ -143,7 +143,7 @@ class core_kernel_classes_File
 
         // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001370 begin
         $resourceType = $resource->getTypes();
-        $returnValue =  array_key_exists(CLASS_GENERIS_FILE, $resourceType);        
+        $returnValue =  array_key_exists(CLASS_GENERIS_FILE, $resourceType)||array_key_exists(CLASS_GENERIS_VERSIONEDFILE, $resourceType);        
         // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001370 end
 
         return (bool) $returnValue;
