@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Apr 16 11:16:47 CEST 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Apr 24 18:08:20 CEST 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -1611,6 +1611,25 @@ The method returns the new resource. </UML:TaggedValue.dataValue>
                               name = 'return' isSpecification = 'false' kind = 'return'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--1f554305:136e33138a4:-8000:0000000000001DA5'
+                          name = 'equals' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--1f554305:136e33138a4:-8000:0000000000001DA6'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--1f554305:136e33138a4:-8000:0000000000001DA7'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -21865,6 +21884,37 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                     <UML:Class xmi.idref = '127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003ECA'/>
                   </UML:Generalization.parent>
                 </UML:Generalization>
+                <UML:Class xmi.id = '127-0-1-1-118e77b:136e5136795:-8000:0000000000001D9C'
+                  name = 'InconsistentData' visibility = 'public' isSpecification = 'false'
+                  isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                  <UML:ModelElement.clientDependency>
+                    <UML:Abstraction xmi.idref = '127-0-1-1-118e77b:136e5136795:-8000:0000000000001DA5'/>
+                  </UML:ModelElement.clientDependency>
+                  <UML:GeneralizableElement.generalization>
+                    <UML:Generalization xmi.idref = '127-0-1-1-118e77b:136e5136795:-8000:0000000000001DA4'/>
+                  </UML:GeneralizableElement.generalization>
+                </UML:Class>
+                <UML:Generalization xmi.id = '127-0-1-1-118e77b:136e5136795:-8000:0000000000001DA4'
+                  isSpecification = 'false'>
+                  <UML:Generalization.child>
+                    <UML:Class xmi.idref = '127-0-1-1-118e77b:136e5136795:-8000:0000000000001D9C'/>
+                  </UML:Generalization.child>
+                  <UML:Generalization.parent>
+                    <UML:Class xmi.idref = '127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003ECA'/>
+                  </UML:Generalization.parent>
+                </UML:Generalization>
+                <UML:Abstraction xmi.id = '127-0-1-1-118e77b:136e5136795:-8000:0000000000001DA5'
+                  isSpecification = 'false'>
+                  <UML:ModelElement.stereotype>
+                    <UML:Stereotype xmi.idref = '10-13-1--31-5c77d5ee:119187ec9d2:-8000:000000000000096A'/>
+                  </UML:ModelElement.stereotype>
+                  <UML:Dependency.client>
+                    <UML:Class xmi.idref = '127-0-1-1-118e77b:136e5136795:-8000:0000000000001D9C'/>
+                  </UML:Dependency.client>
+                  <UML:Dependency.supplier>
+                    <UML:Interface xmi.idref = '127-0-1-1--15445bbd:1352f3a7eb2:-8000:0000000000001906'/>
+                  </UML:Dependency.supplier>
+                </UML:Abstraction>
               </UML:Namespace.ownedElement>
             </UML:Package>
             <UML:Class xmi.id = '127-0-1-1-641a0ff0:1359a3da29e:-8000:0000000000001B1E'
@@ -24163,7 +24213,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig4.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[753, 1287, 517, 69]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[753, 1287, 517, 62]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765"
          fill="0"
          fillcolor="200 200 255"
@@ -24177,7 +24227,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="753"
         y="1287"
         width="517"
-        height="69"
+        height="62"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -24234,7 +24284,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig4.5"
       x="752"
-      y="1356"
+      y="1349"
       width="519"
       height="1"
       fill="1"
@@ -24243,7 +24293,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig4.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[753, 1357, 517, 559]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[753, 1350, 517, 566]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765"
          fill="0"
          fillcolor="200 200 255"
@@ -24255,9 +24305,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig4.6.0"
         x="753"
-        y="1357"
+        y="1350"
         width="517"
-        height="559"
+        height="566"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -24265,7 +24315,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
       <text name="Fig4.6.1"
         x="753"
-        y="1357"
+        y="1350"
         width="517"
         height="14"
         fill="0"
@@ -24281,7 +24331,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >«create» __construct(uri : string,debug : string = &apos;&apos;) : void</text>
       <text name="Fig4.6.2"
         x="753"
-        y="1371"
+        y="1364"
         width="517"
         height="14"
         fill="0"
@@ -24297,7 +24347,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >__clone() : Resource</text>
       <text name="Fig4.6.3"
         x="753"
-        y="1385"
+        y="1378"
         width="517"
         height="14"
         fill="0"
@@ -24313,7 +24363,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >isClass() : boolean</text>
       <text name="Fig4.6.4"
         x="753"
-        y="1399"
+        y="1392"
         width="517"
         height="14"
         fill="0"
@@ -24329,7 +24379,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >isProperty() : boolean</text>
       <text name="Fig4.6.5"
         x="753"
-        y="1413"
+        y="1406"
         width="517"
         height="14"
         fill="0"
@@ -24345,7 +24395,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getType() : array</text>
       <text name="Fig4.6.6"
         x="753"
-        y="1427"
+        y="1420"
         width="517"
         height="14"
         fill="0"
@@ -24361,7 +24411,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getTypes() : array</text>
       <text name="Fig4.6.7"
         x="753"
-        y="1441"
+        y="1434"
         width="517"
         height="14"
         fill="0"
@@ -24377,7 +24427,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getLabel() : string</text>
       <text name="Fig4.6.8"
         x="753"
-        y="1455"
+        y="1448"
         width="517"
         height="14"
         fill="0"
@@ -24393,7 +24443,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setLabel(label : string) : boolean</text>
       <text name="Fig4.6.9"
         x="753"
-        y="1469"
+        y="1462"
         width="517"
         height="14"
         fill="0"
@@ -24409,7 +24459,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getComment() : string</text>
       <text name="Fig4.6.10"
         x="753"
-        y="1483"
+        y="1476"
         width="517"
         height="14"
         fill="0"
@@ -24425,7 +24475,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setComment(comment : string) : boolean</text>
       <text name="Fig4.6.11"
         x="753"
-        y="1497"
+        y="1490"
         width="517"
         height="14"
         fill="0"
@@ -24441,7 +24491,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getPropertyValues(property : Property,options : array = array()) : array</text>
       <text name="Fig4.6.12"
         x="753"
-        y="1511"
+        y="1504"
         width="517"
         height="14"
         fill="0"
@@ -24457,7 +24507,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getPropertyValuesCollection(property : Property) : ContainerCollection</text>
       <text name="Fig4.6.13"
         x="753"
-        y="1525"
+        y="1518"
         width="517"
         height="14"
         fill="0"
@@ -24473,7 +24523,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getUniquePropertyValue(property : Property) : Container</text>
       <text name="Fig4.6.14"
         x="753"
-        y="1539"
+        y="1532"
         width="517"
         height="14"
         fill="0"
@@ -24489,7 +24539,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getOnePropertyValue(property : Property,last : boolean = false) : Container</text>
       <text name="Fig4.6.15"
         x="753"
-        y="1553"
+        y="1546"
         width="517"
         height="14"
         fill="0"
@@ -24505,7 +24555,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getPropertyValuesByLg(property : Property,lg : string) : ContainerCollection</text>
       <text name="Fig4.6.16"
         x="753"
-        y="1567"
+        y="1560"
         width="517"
         height="14"
         fill="0"
@@ -24521,7 +24571,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setPropertyValue(property : Property,object : string) : boolean</text>
       <text name="Fig4.6.17"
         x="753"
-        y="1581"
+        y="1574"
         width="517"
         height="14"
         fill="0"
@@ -24537,7 +24587,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setPropertiesValues(propertiesValues : array) : boolean</text>
       <text name="Fig4.6.18"
         x="753"
-        y="1595"
+        y="1588"
         width="517"
         height="14"
         fill="0"
@@ -24553,7 +24603,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setPropertyValueByLg(property : Property,value : string,lg : string) : boolean</text>
       <text name="Fig4.6.19"
         x="753"
-        y="1609"
+        y="1602"
         width="517"
         height="14"
         fill="0"
@@ -24569,7 +24619,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >editPropertyValues(property : Property,object : string) : boolean</text>
       <text name="Fig4.6.20"
         x="753"
-        y="1623"
+        y="1616"
         width="517"
         height="14"
         fill="0"
@@ -24585,7 +24635,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >editPropertyValueByLg(prop : Property,value : string,lg : string) : boolean</text>
       <text name="Fig4.6.21"
         x="753"
-        y="1637"
+        y="1630"
         width="517"
         height="14"
         fill="0"
@@ -24601,7 +24651,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >removePropertyValues(property : Property,options : array = array()) : boolean</text>
       <text name="Fig4.6.22"
         x="753"
-        y="1651"
+        y="1644"
         width="517"
         height="14"
         fill="0"
@@ -24617,7 +24667,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >removePropertyValueByLg(prop : Property,lg : string,options : array = array()) : boolean</text>
       <text name="Fig4.6.23"
         x="753"
-        y="1665"
+        y="1658"
         width="517"
         height="14"
         fill="0"
@@ -24633,7 +24683,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getRdfTriples() : ContainerCollection</text>
       <text name="Fig4.6.24"
         x="753"
-        y="1679"
+        y="1672"
         width="517"
         height="14"
         fill="0"
@@ -24649,7 +24699,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getUsedLanguages(property : Property) : array</text>
       <text name="Fig4.6.25"
         x="753"
-        y="1693"
+        y="1686"
         width="517"
         height="14"
         fill="0"
@@ -24665,7 +24715,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >duplicate(excludedProperties : array = array()) : Resource</text>
       <text name="Fig4.6.26"
         x="753"
-        y="1707"
+        y="1700"
         width="517"
         height="14"
         fill="0"
@@ -24681,7 +24731,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >delete(deleteReference : boolean = false) : boolean</text>
       <text name="Fig4.6.27"
         x="753"
-        y="1721"
+        y="1714"
         width="517"
         height="14"
         fill="0"
@@ -24697,7 +24747,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getPrivileges() : array</text>
       <text name="Fig4.6.28"
         x="753"
-        y="1735"
+        y="1728"
         width="517"
         height="14"
         fill="0"
@@ -24713,7 +24763,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getLastModificationDate(property : Property = null) : date</text>
       <text name="Fig4.6.29"
         x="753"
-        y="1749"
+        y="1742"
         width="517"
         height="14"
         fill="0"
@@ -24729,7 +24779,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getLastModificationUser() : string</text>
       <text name="Fig4.6.30"
         x="753"
-        y="1763"
+        y="1756"
         width="517"
         height="14"
         fill="0"
@@ -24745,7 +24795,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >toHtml() : string</text>
       <text name="Fig4.6.31"
         x="753"
-        y="1777"
+        y="1770"
         width="517"
         height="14"
         fill="0"
@@ -24761,7 +24811,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >__toString() : string</text>
       <text name="Fig4.6.32"
         x="753"
-        y="1791"
+        y="1784"
         width="517"
         height="14"
         fill="0"
@@ -24777,7 +24827,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getPropertiesValues(properties : array) : array</text>
       <text name="Fig4.6.33"
         x="753"
-        y="1805"
+        y="1798"
         width="517"
         height="14"
         fill="0"
@@ -24793,7 +24843,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setType(type : Class) : boolean</text>
       <text name="Fig4.6.34"
         x="753"
-        y="1819"
+        y="1812"
         width="517"
         height="14"
         fill="0"
@@ -24809,7 +24859,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >removeType(type : Class) : boolean</text>
       <text name="Fig4.6.35"
         x="753"
-        y="1833"
+        y="1826"
         width="517"
         height="14"
         fill="0"
@@ -24825,7 +24875,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >hasType(class : Class) : boolean</text>
       <text name="Fig4.6.36"
         x="753"
-        y="1847"
+        y="1840"
         width="517"
         height="14"
         fill="0"
@@ -24841,7 +24891,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >exists() : boolean</text>
       <text name="Fig4.6.37"
         x="753"
-        y="1861"
+        y="1854"
         width="517"
         height="14"
         fill="0"
@@ -24857,7 +24907,23 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getAllPropertyValues(property : Property,options : array = array()) : array</text>
       <text name="Fig4.6.38"
         x="753"
-        y="1875"
+        y="1868"
+        width="517"
+        height="14"
+        fill="0"
+        fillcolor="200 200 255"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getUri() : string</text>
+      <text name="Fig4.6.39"
+        x="753"
+        y="1882"
         width="517"
         height="20"
         fill="0"
@@ -24870,7 +24936,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getUri() : string</text>
+      >equals(resource : Resource) : boolean</text>
     </group>
   </group>
   <group name="Fig5"
@@ -41779,7 +41845,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[409, 183, 454, 69]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[409, 183, 454, 62]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765"
          fill="0"
          fillcolor="white"
@@ -41793,7 +41859,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="409"
         y="183"
         width="454"
-        height="69"
+        height="62"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -41850,7 +41916,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig1.5"
       x="408"
-      y="252"
+      y="245"
       width="456"
       height="1"
       fill="1"
@@ -41859,7 +41925,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[409, 253, 454, 559]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[409, 246, 454, 566]"
          href="10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765"
          fill="0"
          fillcolor="white"
@@ -41871,9 +41937,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig1.6.0"
         x="409"
-        y="253"
+        y="246"
         width="454"
-        height="559"
+        height="566"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -41881,7 +41947,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
       <text name="Fig1.6.1"
         x="409"
-        y="253"
+        y="246"
         width="454"
         height="14"
         fill="0"
@@ -41897,7 +41963,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >«create» __construct(uri : string,debug : string = &apos;&apos;) : void</text>
       <text name="Fig1.6.2"
         x="409"
-        y="267"
+        y="260"
         width="454"
         height="14"
         fill="0"
@@ -41913,7 +41979,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >__clone() : Resource</text>
       <text name="Fig1.6.3"
         x="409"
-        y="281"
+        y="274"
         width="454"
         height="14"
         fill="0"
@@ -41929,7 +41995,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >isClass() : boolean</text>
       <text name="Fig1.6.4"
         x="409"
-        y="295"
+        y="288"
         width="454"
         height="14"
         fill="0"
@@ -41945,7 +42011,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >isProperty() : boolean</text>
       <text name="Fig1.6.5"
         x="409"
-        y="309"
+        y="302"
         width="454"
         height="14"
         fill="0"
@@ -41961,7 +42027,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getType() : array</text>
       <text name="Fig1.6.6"
         x="409"
-        y="323"
+        y="316"
         width="454"
         height="14"
         fill="0"
@@ -41977,7 +42043,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getTypes() : array</text>
       <text name="Fig1.6.7"
         x="409"
-        y="337"
+        y="330"
         width="454"
         height="14"
         fill="0"
@@ -41993,7 +42059,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getLabel() : string</text>
       <text name="Fig1.6.8"
         x="409"
-        y="351"
+        y="344"
         width="454"
         height="14"
         fill="0"
@@ -42009,7 +42075,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setLabel(label : string) : boolean</text>
       <text name="Fig1.6.9"
         x="409"
-        y="365"
+        y="358"
         width="454"
         height="14"
         fill="0"
@@ -42025,7 +42091,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getComment() : string</text>
       <text name="Fig1.6.10"
         x="409"
-        y="379"
+        y="372"
         width="454"
         height="14"
         fill="0"
@@ -42041,7 +42107,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setComment(comment : string) : boolean</text>
       <text name="Fig1.6.11"
         x="409"
-        y="393"
+        y="386"
         width="454"
         height="14"
         fill="0"
@@ -42057,7 +42123,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getPropertyValues(property : Property,options : array = array()) : array</text>
       <text name="Fig1.6.12"
         x="409"
-        y="407"
+        y="400"
         width="454"
         height="14"
         fill="0"
@@ -42073,7 +42139,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getPropertyValuesCollection(property : Property) : ContainerCollection</text>
       <text name="Fig1.6.13"
         x="409"
-        y="421"
+        y="414"
         width="454"
         height="14"
         fill="0"
@@ -42089,7 +42155,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getUniquePropertyValue(property : Property) : Container</text>
       <text name="Fig1.6.14"
         x="409"
-        y="435"
+        y="428"
         width="454"
         height="14"
         fill="0"
@@ -42105,7 +42171,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getOnePropertyValue(property : Property,last : boolean = false) : Container</text>
       <text name="Fig1.6.15"
         x="409"
-        y="449"
+        y="442"
         width="454"
         height="14"
         fill="0"
@@ -42121,7 +42187,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getPropertyValuesByLg(property : Property,lg : string) : ContainerCollection</text>
       <text name="Fig1.6.16"
         x="409"
-        y="463"
+        y="456"
         width="454"
         height="14"
         fill="0"
@@ -42137,7 +42203,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setPropertyValue(property : Property,object : string) : boolean</text>
       <text name="Fig1.6.17"
         x="409"
-        y="477"
+        y="470"
         width="454"
         height="14"
         fill="0"
@@ -42153,7 +42219,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setPropertiesValues(propertiesValues : array) : boolean</text>
       <text name="Fig1.6.18"
         x="409"
-        y="491"
+        y="484"
         width="454"
         height="14"
         fill="0"
@@ -42169,7 +42235,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setPropertyValueByLg(property : Property,value : string,lg : string) : boolean</text>
       <text name="Fig1.6.19"
         x="409"
-        y="505"
+        y="498"
         width="454"
         height="14"
         fill="0"
@@ -42185,7 +42251,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >editPropertyValues(property : Property,object : string) : boolean</text>
       <text name="Fig1.6.20"
         x="409"
-        y="519"
+        y="512"
         width="454"
         height="14"
         fill="0"
@@ -42201,7 +42267,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >editPropertyValueByLg(prop : Property,value : string,lg : string) : boolean</text>
       <text name="Fig1.6.21"
         x="409"
-        y="533"
+        y="526"
         width="454"
         height="14"
         fill="0"
@@ -42217,7 +42283,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >removePropertyValues(property : Property,options : array = array()) : boolean</text>
       <text name="Fig1.6.22"
         x="409"
-        y="547"
+        y="540"
         width="454"
         height="14"
         fill="0"
@@ -42233,7 +42299,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >removePropertyValueByLg(prop : Property,lg : string,options : array = array()) : boolean</text>
       <text name="Fig1.6.23"
         x="409"
-        y="561"
+        y="554"
         width="454"
         height="14"
         fill="0"
@@ -42249,7 +42315,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getRdfTriples() : ContainerCollection</text>
       <text name="Fig1.6.24"
         x="409"
-        y="575"
+        y="568"
         width="454"
         height="14"
         fill="0"
@@ -42265,7 +42331,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getUsedLanguages(property : Property) : array</text>
       <text name="Fig1.6.25"
         x="409"
-        y="589"
+        y="582"
         width="454"
         height="14"
         fill="0"
@@ -42281,7 +42347,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >duplicate(excludedProperties : array = array()) : Resource</text>
       <text name="Fig1.6.26"
         x="409"
-        y="603"
+        y="596"
         width="454"
         height="14"
         fill="0"
@@ -42297,7 +42363,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >delete(deleteReference : boolean = false) : boolean</text>
       <text name="Fig1.6.27"
         x="409"
-        y="617"
+        y="610"
         width="454"
         height="14"
         fill="0"
@@ -42313,7 +42379,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getPrivileges() : array</text>
       <text name="Fig1.6.28"
         x="409"
-        y="631"
+        y="624"
         width="454"
         height="14"
         fill="0"
@@ -42329,7 +42395,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getLastModificationDate(property : Property = null) : date</text>
       <text name="Fig1.6.29"
         x="409"
-        y="645"
+        y="638"
         width="454"
         height="14"
         fill="0"
@@ -42345,7 +42411,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getLastModificationUser() : string</text>
       <text name="Fig1.6.30"
         x="409"
-        y="659"
+        y="652"
         width="454"
         height="14"
         fill="0"
@@ -42361,7 +42427,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >toHtml() : string</text>
       <text name="Fig1.6.31"
         x="409"
-        y="673"
+        y="666"
         width="454"
         height="14"
         fill="0"
@@ -42377,7 +42443,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >__toString() : string</text>
       <text name="Fig1.6.32"
         x="409"
-        y="687"
+        y="680"
         width="454"
         height="14"
         fill="0"
@@ -42393,7 +42459,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getPropertiesValues(properties : array) : array</text>
       <text name="Fig1.6.33"
         x="409"
-        y="701"
+        y="694"
         width="454"
         height="14"
         fill="0"
@@ -42409,7 +42475,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setType(type : Class) : boolean</text>
       <text name="Fig1.6.34"
         x="409"
-        y="715"
+        y="708"
         width="454"
         height="14"
         fill="0"
@@ -42425,7 +42491,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >removeType(type : Class) : boolean</text>
       <text name="Fig1.6.35"
         x="409"
-        y="729"
+        y="722"
         width="454"
         height="14"
         fill="0"
@@ -42441,7 +42507,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >hasType(class : Class) : boolean</text>
       <text name="Fig1.6.36"
         x="409"
-        y="743"
+        y="736"
         width="454"
         height="14"
         fill="0"
@@ -42457,7 +42523,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >exists() : boolean</text>
       <text name="Fig1.6.37"
         x="409"
-        y="757"
+        y="750"
         width="454"
         height="14"
         fill="0"
@@ -42473,7 +42539,23 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getAllPropertyValues(property : Property,options : array = array()) : array</text>
       <text name="Fig1.6.38"
         x="409"
-        y="771"
+        y="764"
+        width="454"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getUri() : string</text>
+      <text name="Fig1.6.39"
+        x="409"
+        y="778"
         width="454"
         height="20"
         fill="0"
@@ -42486,7 +42568,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getUri() : string</text>
+      >equals(resource : Resource) : boolean</text>
     </group>
   </group>
   <group name="Fig2"
@@ -57248,7 +57330,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="737"
         y="177"
         width="436"
-        height="540"
+        height="554"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -62535,7 +62617,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </path>
   </group>
   <group name="Fig26"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1552, 168, 528, 44]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=false;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1552, 168, 528, 45]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=false;"
        href="127-0-1-1--15445bbd:1352f3a7eb2:-8000:0000000000001905"
        fill="1"
        fillcolor="255 200 255"
@@ -62550,7 +62632,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       x="1552"
       y="168"
       width="528"
-      height="44"
+      height="45"
       fill="1"
       fillcolor="255 200 255"
       stroke="1"
@@ -62884,7 +62966,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <lineto x="1568"
               y="256" />
       <lineto x="1568"
-              y="212" />
+              y="213" />
     </path>
   </group>
   <group name="Fig31"
@@ -64265,7 +64347,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       justification="Center"
     >common::exception::EmptyProperty</text>
     <group name="Fig45.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1561, 385, 121, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1561, 385, 274, 0]"
          href="127-0-1-1--4a441dc4:135c963290f:-8000:0000000000001960"
          fill="0"
          fillcolor="255 200 255"
@@ -64279,7 +64361,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <rectangle name="Fig45.2.0"
         x="1561"
         y="385"
-        width="121"
+        width="274"
         height="0"
         fill="0"
         fillcolor="255 200 255"
@@ -64324,7 +64406,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         width="274"
         height="14"
         fill="0"
-        fillcolor="white"
+        fillcolor="255 200 255"
         stroke="0"
         strokecolor="black"
         textcolor="black"
@@ -64340,7 +64422,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         width="274"
         height="20"
         fill="0"
-        fillcolor="white"
+        fillcolor="255 200 255"
         stroke="0"
         strokecolor="black"
         textcolor="black"
@@ -64388,7 +64470,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         width="274"
         height="14"
         fill="0"
-        fillcolor="white"
+        fillcolor="255 200 255"
         stroke="0"
         strokecolor="black"
         textcolor="black"
@@ -64404,7 +64486,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         width="274"
         height="14"
         fill="0"
-        fillcolor="white"
+        fillcolor="255 200 255"
         stroke="0"
         strokecolor="black"
         textcolor="black"
@@ -64420,7 +64502,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         width="274"
         height="20"
         fill="0"
-        fillcolor="white"
+        fillcolor="255 200 255"
         stroke="0"
         strokecolor="black"
         textcolor="black"
@@ -64451,7 +64533,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                         offset="-10" />
     </private>
     <path name="Fig46.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"

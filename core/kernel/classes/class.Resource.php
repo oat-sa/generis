@@ -958,6 +958,28 @@ class core_kernel_classes_Resource
         return (string) $returnValue;
     }
 
+    /**
+     * Short description of method equals
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  Resource resource
+     * @return boolean
+     */
+    public function equals( core_kernel_classes_Resource $resource)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--1f554305:136e33138a4:-8000:0000000000001DA5 begin
+        if (is_null($resource)) {
+        	throw new common_exception_Error('Null parameter in equals call on ressource '.$this->getUri());
+        }
+        $returnValue = $this->getUri() == $resource->getUri();
+        // section 127-0-1-1--1f554305:136e33138a4:-8000:0000000000001DA5 end
+
+        return (bool) $returnValue;
+    }
+
 } /* end of class core_kernel_classes_Resource */
 
 ?>
