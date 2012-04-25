@@ -416,14 +416,10 @@ class core_kernel_versioning_File
 
             if(core_kernel_versioning_FileProxy::singleton()->getStatus($this, $breadCrumb, array('SHOW_UPDATES'=>false)) == VERSIONING_FILE_STATUS_UNVERSIONED){
                 core_kernel_versioning_FileProxy::singleton()->add($this, $breadCrumb, null, true);
+				core_kernel_versioning_FileProxy::singleton()->commit($this, "[sys] Added the directory ".$bread, $breadCrumb);
             }
-            core_kernel_versioning_FileProxy::singleton()->commit($this, "[sys] Add directory to the repository", $breadCrumb);
+            
         }
-
-        //the file was already versioned -> EXCEPTION
-        /*if($this->isVersioned()){
-            throw new core_kernel_versioning_exception_Exception(__('the resource has already been versioned : ' . $filePath));
-        }*/
 
         //the file does not exist -> EXCEPTION
         if (!$this->fileExists()){

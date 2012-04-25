@@ -145,6 +145,7 @@ class core_kernel_versioning_subversion_File
                 $returnValue = svn_revert($resource->getAbsolutePath());
             }
             else{
+				
                 $path = realpath($resource->getAbsolutePath());
                 common_Logger::i('svn_revert '.$path);
 
@@ -154,32 +155,105 @@ class core_kernel_versioning_subversion_File
 				
 				if(isset($log[$oldRevision])){
 					
+					function rmLocalCopy($path){
+						
+						$returnValue = false;
+						$recursive = true;
+						
+						if (is_file($path)) {
+							if(preg_match('/^\//', $path)){
+								$returnValue = @unlink($path);
+							}
+						} else if ($recursive) {
+							if (is_dir($path)) {
+								$iterator = new DirectoryIterator($path);
+								foreach ($iterator as $fileinfo) {
+									if (!$fileinfo->isDot()) {
+										rmLocalCopy($fileinfo->getPathname(), true);
+									}
+									unset($fileinfo);
+								}
+								unset($iterator);
+								$returnValue = @rmdir($path);
+							}
+						}
+						
+						return $returnValue;
+					}
+					
+					function cpLocalCopy($source, $destination, $recursive = true, $ignoreSystemFiles = true){
+						
+						$returnValue = (bool) false;
+
+						if(file_exists($source)){
+							if(is_dir($source) && $recursive){
+								foreach(scandir($source) as $file){
+									if($file != '.' && $file != '..' && $file != '.svn'){
+										if(!$ignoreSystemFiles && $file[0] == '.'){
+											continue;
+										}else{
+											cpLocalCopy($source.'/'.$file, $destination.'/'.$file, true, $ignoreSystemFiles);
+										}
+									}
+								}
+							}
+							else {
+								if(is_dir(dirname($destination))){
+									$returnValue = copy($source, $destination);
+								}else if($recursive){
+									if(mkdir(dirname($destination), 0775, true)){
+										$returnValue = cpLocalCopy($source, $destination, false, $ignoreSystemFiles);
+									}
+								}
+							}
+						}
+						return (bool) $returnValue;
+					}
+	
 					$svnRevision = $log[$oldRevision];
 					$svnRevisionNumber = $svnRevision['rev'];
 
 					//destroy the existing version
-					unlink($path);
+					rmLocalCopy($path);
+					
 					//replace with the target revision
 					if ($resource->update($svnRevisionNumber)) {
-						//get old content
-						$content = $resource->getFileContent();
-						//update to the current version
-						$resource->update();
-						//set the new content
-						$resource->setContent($content);
-						//commit the change
+						
+						if(is_file($path)){
+							//get old content
+							$content = $resource->getFileContent();
+							//update to the current version
+							$resource->update();
+							//set the new content
+							$resource->setContent($content);
+							//commit the change
+						}
+						
+						if(is_dir($path)){
+							$i = 10;
+							do{
+								$tmpDir = sys_getloadavg().DIRECTORY_SEPARATOR.uniqid('versionedFolder');
+								$exists = file_exists($tmpDir);
+								$i--;
+							}while($exists || !$i);
+							
+							cpLocalCopy($path, $tmpDir);
+							$resource->update();
+							cpLocalCopy($tmpDir, $path);
+						}
+						
 						if ($resource->commit($msg)) {
 							$returnValue = true;
 						}
 						//restablish the head version
 						else {
-							@unlink($path);
+							@rmLocalCopy($path);
 							$resource->update();
 						}
 					}
 					//restablish the head version
 					else {
-						@unlink($path);
+						@rmLocalCopy($path);
 						$resource->update();
 					}
 				}

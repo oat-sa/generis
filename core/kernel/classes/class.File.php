@@ -258,10 +258,10 @@ class core_kernel_classes_File
         
         $filePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
         $filePath = $this->getOnePropertyValue($filePathProp);
-        $path = explode('/', $filePath);
+        $path = explode(DIRECTORY_SEPARATOR, $filePath);
         $breadCrumb = '';
         foreach($path as $bread){
-        	$breadCrumb .= $bread.'/';
+        	$breadCrumb .= $bread.DIRECTORY_SEPARATOR;
         	if(!file_exists($breadCrumb)){
         		mkdir($breadCrumb);
         	}
