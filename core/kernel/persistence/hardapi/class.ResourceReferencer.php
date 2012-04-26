@@ -853,28 +853,43 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			//get all the compiled tables
     		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
     		$tables = array();
-    		$query = 'SELECT DISTINCT "table" FROM "class_to_table"';
+    		$query = 'SELECT DISTINCT "id","table" FROM "class_to_table"';
     		$result = $dbWrapper->execSql($query);
     		while(!$result->EOF){
-    			$tables[] = $result->fields['table'];
+    			$tables[$result->fields['id']] = $result->fields['table'];
     			$result->moveNext();
     		}
     		
+    		$additionalPropertiesTable = array();
+    		$query = 'SELECT DISTINCT "class_id","property_uri" FROM "class_additional_properties"';
+    		$result = $dbWrapper->execSql($query);
+    		while(!$result->EOF){
+    			$additionalPropertiesTable[$result->fields['class_id']][] = new core_kernel_classes_Property($result->fields['property_uri']);
+    			$result->moveNext();
+    		}
     		//retrieve each property by table
 			$this->loadClasses();
 			    		
     		self::$_properties = array();
-    		foreach($tables as $table){
-				
+    		
+    		foreach($tables as $classId => $table){
+
+    			//check in $additionalPropertiesTable if current table is concerned by additionnal properties
+    			if(isset($additionalPropertiesTable[$classId])){
+	   				$additionalProperties = $additionalPropertiesTable[$classId];
+    				
+    			}
+    			else{
+    				$additionalProperties = array();
+    			}
+    			
     			$classUri = core_kernel_persistence_hardapi_Utils::getLongName($table);
     			$class = new core_kernel_classes_Class($classUri);
     			$topClassUri = self::$_classes[$classUri]['topClass'];
     			$topClass = new core_kernel_classes_Class($topClassUri);
                         $ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
                         $properties = $ps->getProperties($additionalProperties);
-                        
                         foreach ($properties as $property){
-
                                 $propertyUri = $property->uriResource;
                                 if ($property->isMultiple() || $property->isLgDependent()){
 
@@ -887,7 +902,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
                                         } 
 
                                 } else {
-
+									
                                         if(isset(self::$_properties[$propertyUri])) {
                                                 if (!in_array("{$table}", self::$_properties[$propertyUri])){
                                                         self::$_properties[$propertyUri][] = "{$table}";
@@ -896,10 +911,13 @@ class core_kernel_persistence_hardapi_ResourceReferencer
                                                 self::$_properties[$propertyUri] = array("{$table}");
                                         } 
                                 }
+                          
+            
 
                         }
+         
     		}
-		
+
     		//saving the properties in the cache file
     		if($this->cacheModes['property'] == self::CACHE_FILE){
     			

@@ -180,7 +180,7 @@ class core_kernel_persistence_hardapi_TableManager
 				"property_uri" VARCHAR(255),
 				"property_value" TEXT,
 				"property_foreign_uri" VARCHAR(255),
-				"l_language" VARCHAR(4),
+				"l_language" VARCHAR(5),
 				"instance_id" int NOT NULL ,
 				PRIMARY KEY ("id")';
                         
