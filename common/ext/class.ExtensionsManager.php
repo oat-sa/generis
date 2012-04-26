@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 30.01.2012, 16:33:25 with ArgoUML PHP module 
+ * Automatically generated on 26.04.2012, 12:06:24 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -144,6 +144,31 @@ class common_ext_ExtensionsManager
         $extensions = $this->getInstalledExtensions();
         $returnValue = isset($extensions[$extension]);
         // section 127-0-1-1--15445bbd:1352f3a7eb2:-8000:0000000000001902 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method isExtensionEnabled
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  string extension
+     * @return boolean
+     */
+    public function isExtensionEnabled($extension)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1-4e48a7c:136ee1b3246:-8000:00000000000019D8 begin
+        $extensions = $this->getInstalledExtensions();
+        if (isset($extensions[$extension])) {
+        	$conf = $extensions[$extension]->getConfiguration();
+        	if (!$conf->ghost) {
+        		$returnValue = true;
+        	}
+        }
+        // section 127-0-1-1-4e48a7c:136ee1b3246:-8000:00000000000019D8 end
 
         return (bool) $returnValue;
     }
