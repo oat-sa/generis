@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.07.2011, 08:42:00 with ArgoUML PHP module 
+ * Automatically generated on 27.04.2012, 08:21:21 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardsql
  */
@@ -33,7 +33,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class core_kernel_persistence_hardsql_Utils
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardsql
  */
@@ -50,11 +50,11 @@ class core_kernel_persistence_hardsql_Utils
      * Short description of method getInstanceId
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @return string
      */
-    public function getInstanceId( core_kernel_classes_Resource $resource)
+    public static function getInstanceId( core_kernel_classes_Resource $resource)
     {
         $returnValue = (string) '';
 
@@ -80,11 +80,11 @@ class core_kernel_persistence_hardsql_Utils
      * Short description of method getResourceToTableId
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource resource
      * @return string
      */
-    public function getResourceToTableId( core_kernel_classes_Resource $resource)
+    public static function getResourceToTableId( core_kernel_classes_Resource $resource)
     {
         $returnValue = (string) '';
 
@@ -110,12 +110,12 @@ class core_kernel_persistence_hardsql_Utils
      * Short description of method getClassId
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Class class
      * @param  Resource resource
      * @return string
      */
-    public function getClassId( core_kernel_classes_Class $class,  core_kernel_classes_Resource $resource)
+    public static function getClassId( core_kernel_classes_Class $class,  core_kernel_classes_Resource $resource)
     {
         $returnValue = (string) '';
 
