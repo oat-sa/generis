@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Persistence</activediagram>
+      <activediagram>Generis Helpers</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Apr 27 08:22:11 CEST 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Apr 27 11:50:48 CEST 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -22468,6 +22468,80 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                       </UML:Parameter.defaultValue>
                       <UML:Parameter.type>
                         <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                  </UML:BehavioralFeature.parameter>
+                </UML:Operation>
+                <UML:Operation xmi.id = '127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B36'
+                  name = 'rmWorkingCopy' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                  isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                  isAbstract = 'false'>
+                  <UML:BehavioralFeature.parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B37'
+                      name = 'return' isSpecification = 'false' kind = 'return'>
+                      <UML:Parameter.type>
+                        <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B38'
+                      name = 'path' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B4C'
+                      name = 'recursive' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.defaultValue>
+                        <UML:Expression xmi.id = '127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B4D'
+                          language = 'UML 1.4' body = 'true'/>
+                      </UML:Parameter.defaultValue>
+                      <UML:Parameter.type>
+                        <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                  </UML:BehavioralFeature.parameter>
+                </UML:Operation>
+                <UML:Operation xmi.id = '127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B39'
+                  name = 'cpWorkingCopy' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                  isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                  isAbstract = 'false'>
+                  <UML:BehavioralFeature.parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B3A'
+                      name = 'return' isSpecification = 'false' kind = 'return'>
+                      <UML:Parameter.type>
+                        <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B3B'
+                      name = 'source' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B3C'
+                      name = 'destination' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B3D'
+                      name = 'recursive' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.defaultValue>
+                        <UML:Expression xmi.id = '127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B47'
+                          language = '' body = 'true'/>
+                      </UML:Parameter.defaultValue>
+                      <UML:Parameter.type>
+                        <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B3E'
+                      name = 'ignoreSystemFiles' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.defaultValue>
+                        <UML:Expression xmi.id = '127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B4B'
+                          language = '' body = 'true'/>
+                      </UML:Parameter.defaultValue>
+                      <UML:Parameter.type>
+                        <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                       </UML:Parameter.type>
                     </UML:Parameter>
                   </UML:BehavioralFeature.parameter>
@@ -49460,7 +49534,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig36.6.3"
         x="2201"
         y="1177"
-        width="268"
+        width="267"
         height="20"
         fill="0"
         fillcolor="255 204 51"
@@ -59854,7 +59928,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="41"
         y="353"
         width="704"
-        height="14"
+        height="27"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -64587,7 +64661,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       name="Generis Helpers"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[24, 24, 312, 248]pathVisible=false;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
+       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[24, 24, 664, 424]pathVisible=false;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
        href="127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001859"
        fill="1"
        fillcolor="white"
@@ -64600,8 +64674,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <rectangle name="Fig0.0"
       x="24"
       y="24"
-      width="312"
-      height="248"
+      width="664"
+      height="424"
       fill="0"
       fillcolor="white"
       stroke="0"
@@ -64616,23 +64690,23 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     >
       <moveto x="24"
               y="24" />
-      <lineto x="286"
+      <lineto x="638"
               y="24" />
-      <lineto x="286"
+      <lineto x="638"
               y="45" />
-      <lineto x="335"
+      <lineto x="687"
               y="45" />
-      <lineto x="335"
-              y="271" />
+      <lineto x="687"
+              y="447" />
       <lineto x="24"
-              y="271" />
+              y="447" />
       <lineto x="24"
               y="24" />
     </path>
     <text name="Fig0.2"
       x="24"
       y="24"
-      width="263"
+      width="615"
       height="22"
       fill="0"
       fillcolor="white"
@@ -64646,7 +64720,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       justification="Left"
     >helpers</text>
     <group name="Fig0.3"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[24, 24, 262, 1]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[24, 24, 614, 1]"
          href="127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001859"
          fill="1"
          fillcolor="white"
@@ -64660,7 +64734,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <rectangle name="Fig0.3.0"
         x="24"
         y="24"
-        width="262"
+        width="614"
         height="1"
         fill="1"
         fillcolor="white"
@@ -64671,8 +64745,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <text name="Fig0.4"
       x="24"
       y="45"
-      width="312"
-      height="227"
+      width="664"
+      height="403"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -64857,6 +64931,180 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >searchResourcesFromPath(path : string = &quot;&quot;) : array</text>
+    </group>
+  </group>
+  <group name="Fig2"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[40, 184, 627, 128]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       href="127-0-1-1--3ab6260f:13542827269:-8000:0000000000001921"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+      enclosingFig="Fig0"
+    </private>
+    
+    <rectangle name="Fig2.0"
+      x="40"
+      y="184"
+      width="627"
+      height="128"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig2.1"
+      x="41"
+      y="185"
+      width="625"
+      height="21"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >helpers::VersionedFile</text>
+    <group name="Fig2.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[41, 185, 294, 0]"
+         href="127-0-1-1--3ab6260f:13542827269:-8000:0000000000001921"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig2.2.0"
+        x="41"
+        y="185"
+        width="294"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig2.3"
+      x="40"
+      y="206"
+      width="627"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig2.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[41, 207, 625, 37]"
+         href="127-0-1-1--3ab6260f:13542827269:-8000:0000000000001921"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig2.4.0"
+        x="41"
+        y="207"
+        width="625"
+        height="37"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig2.5"
+      x="40"
+      y="244"
+      width="627"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig2.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[41, 245, 625, 66]"
+         href="127-0-1-1--3ab6260f:13542827269:-8000:0000000000001921"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig2.6.0"
+        x="41"
+        y="245"
+        width="625"
+        height="66"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig2.6.1"
+        x="41"
+        y="245"
+        width="625"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >deleteFiles(files : array = array()) : boolean</text>
+      <text name="Fig2.6.2"
+        x="41"
+        y="259"
+        width="625"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >rmWorkingCopy(path : string,recursive : boolean = true) : boolean</text>
+      <text name="Fig2.6.3"
+        x="41"
+        y="273"
+        width="625"
+        height="20"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >cpWorkingCopy(source : string,destination : string,recursive : boolean = true,ignoreSystemFiles : boolean = true) : boolean</text>
     </group>
   </group>
 </pgml>

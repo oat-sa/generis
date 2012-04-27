@@ -638,7 +638,14 @@ class core_kernel_persistence_hardsql_Resource
                                                 }
                                         }
                                 }
-
+								
+								//@TODO : if the property is language dependent, add the language condition !!
+//								if($property->isLgDependent()){
+//									$session = core_kernel_classes_Session::singleton();
+//									$lang = ($session->getLg() != '') ? $session->getLg() : $session->defaultLg;
+//									$query .= ' AND ("l_language" = \'\' OR "l_language" = \''.$lang.'\') ';
+//								}
+		
                                 foreach($additionalConditions as $i => $additionalCondition){
                                         $query .= " AND ( {$additionalCondition} ) ";
                                 }

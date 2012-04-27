@@ -155,66 +155,11 @@ class core_kernel_versioning_subversion_File
 				
 				if(isset($log[$oldRevision])){
 					
-					function rmLocalCopy($path){
-						
-						$returnValue = false;
-						$recursive = true;
-						
-						if (is_file($path)) {
-							if(preg_match('/^\//', $path)){
-								$returnValue = @unlink($path);
-							}
-						} else if ($recursive) {
-							if (is_dir($path)) {
-								$iterator = new DirectoryIterator($path);
-								foreach ($iterator as $fileinfo) {
-									if (!$fileinfo->isDot()) {
-										rmLocalCopy($fileinfo->getPathname(), true);
-									}
-									unset($fileinfo);
-								}
-								unset($iterator);
-								$returnValue = @rmdir($path);
-							}
-						}
-						
-						return $returnValue;
-					}
-					
-					function cpLocalCopy($source, $destination, $recursive = true, $ignoreSystemFiles = true){
-						
-						$returnValue = (bool) false;
-
-						if(file_exists($source)){
-							if(is_dir($source) && $recursive){
-								foreach(scandir($source) as $file){
-									if($file != '.' && $file != '..' && $file != '.svn'){
-										if(!$ignoreSystemFiles && $file[0] == '.'){
-											continue;
-										}else{
-											cpLocalCopy($source.'/'.$file, $destination.'/'.$file, true, $ignoreSystemFiles);
-										}
-									}
-								}
-							}
-							else {
-								if(is_dir(dirname($destination))){
-									$returnValue = copy($source, $destination);
-								}else if($recursive){
-									if(mkdir(dirname($destination), 0775, true)){
-										$returnValue = cpLocalCopy($source, $destination, false, $ignoreSystemFiles);
-									}
-								}
-							}
-						}
-						return (bool) $returnValue;
-					}
-	
 					$svnRevision = $log[$oldRevision];
 					$svnRevisionNumber = $svnRevision['rev'];
 
 					//destroy the existing version
-					rmLocalCopy($path);
+					helpers_VersionedFile::rmWorkingCopy($path);
 					
 					//replace with the target revision
 					if ($resource->update($svnRevisionNumber)) {
@@ -232,14 +177,16 @@ class core_kernel_versioning_subversion_File
 						if(is_dir($path)){
 							$i = 10;
 							do{
-								$tmpDir = sys_getloadavg().DIRECTORY_SEPARATOR.uniqid('versionedFolder');
+								$tmpDir = sys_get_temp_dir().DIRECTORY_SEPARATOR.uniqid('versionedFolder');
+								common_Logger::i(__LINE__.' '.$tmpDir);
 								$exists = file_exists($tmpDir);
 								$i--;
 							}while($exists || !$i);
 							
-							cpLocalCopy($path, $tmpDir);
+							helpers_VersionedFile::cpWorkingCopy($path, $tmpDir);
 							$resource->update();
-							cpLocalCopy($tmpDir, $path);
+							//@TODO: empty the current folder $path, to delete no longer versioned files
+							helpers_VersionedFile::cpWorkingCopy($tmpDir, $path);
 						}
 						
 						if ($resource->commit($msg)) {
@@ -247,13 +194,13 @@ class core_kernel_versioning_subversion_File
 						}
 						//restablish the head version
 						else {
-							@rmLocalCopy($path);
+							@helpers_VersionedFile::rmWorkingCopy($path);
 							$resource->update();
 						}
 					}
 					//restablish the head version
 					else {
-						@rmLocalCopy($path);
+						@helpers_VersionedFile::rmWorkingCopy($path);
 						$resource->update();
 					}
 				}
