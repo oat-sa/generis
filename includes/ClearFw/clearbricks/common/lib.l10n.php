@@ -140,8 +140,8 @@ class l10n
 		
 		$res = array();
 		
-		$matched = preg_match_all('/(msgid\s+("([^"]|\\\\")*?"\s*)+)\s+'.
-		'(msgstr\s+("([^"]|\\\\")*?(?<!\\\)"\s*)+)/',
+		$matched = preg_match_all('/(msgid\s+(".*?"\s*)+)\s+'.
+		'(msgstr\s+(".*?(?<!\\\)"\s*)+)/',
 		$fc, $matches);
 		
 		if (!$matched) {
@@ -151,7 +151,7 @@ class l10n
 		for ($i=0; $i<$matched; $i++)
 		{
 			$msgid = preg_replace('/\s*msgid\s*"(.*)"\s*/s','\\1',$matches[1][$i]);
-			$msgstr= preg_replace('/\s*msgstr\s*"(.*)"\s*/s','\\1',$matches[4][$i]);
+			$msgstr= preg_replace('/\s*msgstr\s*"(.*)"\s*/s','\\1',$matches[3][$i]);
 			
 			$msgstr = self::poString($msgstr);
 			
