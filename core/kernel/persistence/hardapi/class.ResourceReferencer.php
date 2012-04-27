@@ -1101,7 +1101,9 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     	self::$_resources_loaded	= false;
     	
         $cachefile = realpath(GENERIS_CACHE_PATH) . '/hard-api-property.cache';
-    	@unlink($cachefile);
+        if (file_exists($cachefile)) {
+        	unlink($cachefile);
+        }
         // section 127-0-1-1--770b92db:136a03f38fa:-8000:00000000000019B8 end
     }
 
