@@ -72,8 +72,16 @@ define('PROPERTY_USER_LASTNAME' , 				GENERIS_NS . '#userLastName' , true) ;
 define('CLASS_ROLE_TAOMANAGER',					'http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole', true) ;
 define('CLASS_ROLE_BACKOFFICE',					'http://www.tao.lu/Ontologies/TAO.rdf#BackOffice', true) ;
 define('CLASS_ROLE_FRONTOFFICE',				'http://www.tao.lu/Ontologies/TAO.rdf#FrontOffice', true) ;
-define('CLASS_ACL_MODULE', 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Module', true) ;
-define('CLASS_ACL_ACTION', 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Action', true) ;
+
+define('CLASS_ACL_MODULE',								'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Module', true);
+define('PROPERTY_ACL_MODULE_ID',					'http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleIdentifier', true);
+define('PROPERTY_ACL_MODULE_EXTENSION',		'http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleExtension', true);
+define('PROPERTY_ACL_MODULE_GRANTACCESS',	'http://www.tao.lu/Ontologies/taoFuncACL.rdf#grantAccessModule', true);
+
+define('CLASS_ACL_ACTION',								'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Action', true);
+define('PROPERTY_ACL_ACTION_ID',					'http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionIdentifier', true);
+define('PROPERTY_ACL_ACTION_MEMBEROF',		'http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionMemberOf', true);
+define('PROPERTY_ACL_ACTION_GRANTACCESS',	'http://www.tao.lu/Ontologies/taoFuncACL.rdf#grantAccessAction', true);
 
 define('CLASS_SUBCRIPTION', 					GENERIS_NS . '#Subscription' , true) ;
 define('PROPERTY_SUBCRIPTION_URL', 				GENERIS_NS . '#SubscriptionUrl' , true) ;
