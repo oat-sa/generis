@@ -480,5 +480,46 @@ class ResourceTestCase extends UnitTestCase{
 	    $this->assertTrue($now ==  $typeChnge);
 	    $newInstance->delete();
 	}
+	
+	public function testIsInstanceOf()
+	{
+		$baseClass = new core_kernel_classes_Class(RDF_CLASS);
+		$level1a = $baseClass->createSubClass('level1a');
+		$level1b = $baseClass->createSubClass('level1b');
+		$level2a = $level1a->createSubClass('level2a');
+		$level2b = $level1b->createSubClass('level2b');
+		
+		// single type
+		$instance = $level2a->createInstance('test Instance');
+		$this->assertTrue($instance->isInstanceOf($level2a));
+		$this->assertTrue($instance->isInstanceOf($level1a));
+		$this->assertTrue($instance->isInstanceOf($baseClass));
+		$this->assertFalse($instance->isInstanceOf($level1b));
+		$this->assertFalse($instance->isInstanceOf($level2b));
+		
+		// multiple types
+		$instance->setType($level2b);
+		$this->assertTrue($instance->isInstanceOf($level2a));
+		$this->assertTrue($instance->isInstanceOf($level1a));
+		$this->assertTrue($instance->isInstanceOf($baseClass));
+		$this->assertTrue($instance->isInstanceOf($level1b));
+		$this->assertTrue($instance->isInstanceOf($level2b));
+
+		// ensure no reverse inheritence
+		$instance2 = $level1b->createInstance('test Instance2');
+		$this->assertFalse($instance2->isInstanceOf($level2a));
+		$this->assertFalse($instance2->isInstanceOf($level1a));
+		$this->assertTrue($instance2->isInstanceOf($baseClass));
+		$this->assertTrue($instance2->isInstanceOf($level1b));
+		$this->assertFalse($instance2->isInstanceOf($level2b));
+		
+		$instance2->delete();
+		$instance->delete();
+		$level2b->delete();
+		$level2a->delete();
+		$level1b->delete();
+		$level1a->delete();
+	}
+	
 }
 ?>

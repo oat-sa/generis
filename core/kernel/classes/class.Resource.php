@@ -881,14 +881,12 @@ class core_kernel_classes_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--72f5bf1f:12fd500f94d:-8000:0000000000001552 begin
-        
     	foreach($this->getTypes() as $type){
         	if ($class->uriResource == $type->uriResource){
         		$returnValue = true;
         		break;
         	}
         }
-        
         // section 127-0-1-1--72f5bf1f:12fd500f94d:-8000:0000000000001552 end
 
         return (bool) $returnValue;
@@ -976,6 +974,30 @@ class core_kernel_classes_Resource
         }
         $returnValue = $this->getUri() == $resource->getUri();
         // section 127-0-1-1--1f554305:136e33138a4:-8000:0000000000001DA5 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method isInstanceOf
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  Class class
+     * @return boolean
+     */
+    public function isInstanceOf( core_kernel_classes_Class $class)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1-4723dbde:1373bc88899:-8000:00000000000019E8 begin
+        foreach($this->getTypes() as $type){
+        	if ($class->uriResource == $type->uriResource || $type->isSubClassOf($class)){
+        		$returnValue = true;
+        		break;
+        	}
+        }
+        // section 127-0-1-1-4723dbde:1373bc88899:-8000:00000000000019E8 end
 
         return (bool) $returnValue;
     }
