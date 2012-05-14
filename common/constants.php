@@ -72,6 +72,7 @@ define('PROPERTY_USER_LASTNAME' , 				GENERIS_NS . '#userLastName' , true) ;
 define('CLASS_ROLE_TAOMANAGER',					'http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole', true) ;
 define('CLASS_ROLE_BACKOFFICE',					'http://www.tao.lu/Ontologies/TAO.rdf#BackOffice', true) ;
 define('CLASS_ROLE_FRONTOFFICE',				'http://www.tao.lu/Ontologies/TAO.rdf#FrontOffice', true) ;
+define('CLASS_ROLE_BASEACCESS',					'http://www.tao.lu/Ontologies/taoFuncACL.rdf#BaseAccessRole', true) ;
 
 define('CLASS_ACL_MODULE',								'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Module', true);
 define('PROPERTY_ACL_MODULE_ID',					'http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleIdentifier', true);
