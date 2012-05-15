@@ -105,6 +105,7 @@ define('WIDGET_CHECK',							'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#
 define('WIDGET_FTE',							'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox',true);
 define('WIDGET_TIMER',							'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#Timer',true);
 define('WIDGET_TREEVIEW',						'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TreeView',true);
+define('WIDGET_LABEL',							'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#Label',true);
 define('WIDGET_CONSTRAINT_TYPE',				'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#rangeConstraintTypes',true);
 
 #Rules
