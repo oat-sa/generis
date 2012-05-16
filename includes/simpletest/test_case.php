@@ -556,6 +556,7 @@ class TestSuite {
             if (is_string($this->test_cases[$i])) {
                 $class = $this->test_cases[$i];
                 $test = new $class();
+                common_Logger::d('running '.$class);
                 $test->run($reporter);
                 unset($test);
             } else {
