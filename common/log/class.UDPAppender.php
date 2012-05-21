@@ -145,8 +145,13 @@ class common_log_UDPAppender
     public function __destruct()
     {
         // section 127-0-1-1--508f6d44:1341e7d80d4:-8000:000000000000184F begin
-        if (!is_null($this->resource) && $this->resource !== false)
+        // don't close since we might still need it
+        /*
+        if (!is_null($this->resource) && $this->resource !== false) {
     		socket_close($this->resource);
+        }
+        parent::__destruct();
+        */
         // section 127-0-1-1--508f6d44:1341e7d80d4:-8000:000000000000184F end
     }
 
