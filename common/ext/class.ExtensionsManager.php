@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 26.04.2012, 12:06:24 with ArgoUML PHP module 
+ * Automatically generated on 21.05.2012, 15:38:03 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -53,6 +53,14 @@ class common_ext_ExtensionsManager
      * @var array
      */
     private $extensions = array();
+
+    /**
+     * Short description of attribute currentExtensionName
+     *
+     * @access public
+     * @var string
+     */
+    public $currentExtensionName = '';
 
     /**
      * Short description of attribute instance
@@ -416,6 +424,37 @@ class common_ext_ExtensionsManager
         // section 127-0-1-1--450598c3:13175ea282e:-8000:0000000000003C45 end
 
         return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method setCurrentExtension
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  string extensionName
+     * @return mixed
+     */
+    public function setCurrentExtension($extensionName)
+    {
+        // section 127-0-1-1--70d5c85c:1376f987523:-8000:0000000000004C09 begin
+        // section 127-0-1-1--70d5c85c:1376f987523:-8000:0000000000004C09 end
+    }
+
+    /**
+     * Short description of method getCurrentExtensionName
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return string
+     */
+    public function getCurrentExtensionName()
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1--70d5c85c:1376f987523:-8000:0000000000004C0C begin
+        // section 127-0-1-1--70d5c85c:1376f987523:-8000:0000000000004C0C end
+
+        return (string) $returnValue;
     }
 
 } /* end of class common_ext_ExtensionsManager */
