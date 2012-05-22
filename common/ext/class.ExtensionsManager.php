@@ -261,8 +261,12 @@ class common_ext_ExtensionsManager
     private function __construct()
     {
         // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000233D begin
-				$resolver = new Resolver();
-				$this->currentExtensionName = $resolver->getExtensionFromURL();
+				if (PHP_SAPI == 'cli') {
+					$this->currentExtensionName = 'tao';
+				} else {
+					$resolver = new Resolver();
+					$this->currentExtensionName = $resolver->getExtensionFromURL();
+				}
         // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000233D end
     }
 
