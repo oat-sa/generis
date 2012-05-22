@@ -16,7 +16,7 @@ class Resolver {
 	 * @var Sring The extension (extension name) requested
 	 */
 	protected $extension;
-	
+
 	/**
 	 * @var Sring The module (classe name) requested
 	 */
@@ -108,8 +108,8 @@ class Resolver {
     	}else{
     		$cleanUrl = $this->url;
     	}
-		
-		
+
+
     	$this->resolveRequest($this->url);
     }
 
@@ -135,10 +135,14 @@ class Resolver {
 		for($i=0;$i<$n;$i++)
 			$tab[$i] = urldecode($tab[$i]);
 
-		if($n>2){
-			
+		if($n>3){
 			$this->action = $tab[count($tab) - 1];
 			$this->module = $tab[count($tab) - 2];
+			if (isset($_GET['extension'])) {
+				$this->extension = $_GET['extension'];
+			} else {
+				$this->extension = $tab[count($tab) - 3];
+			}
 		}
 	}
 }

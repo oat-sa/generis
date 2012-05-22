@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 21.05.2012, 15:38:03 with ArgoUML PHP module 
+ * Automatically generated on 21.05.2012, 15:38:03 with ArgoUML PHP module
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -114,7 +114,7 @@ class common_ext_ExtensionsManager
 			if($db->dbConnector->errorNo() !== 0){
 				throw new core_kernel_persistence_hardapi_Exception($db->dbConnector->errorMsg());
 			}
-			
+
 			while (!$result-> EOF){
 				$id = $result->fields["id"];
 				$extension = new common_ext_SimpleExtension($id);
@@ -230,13 +230,13 @@ class common_ext_ExtensionsManager
     public function loadExtensions()
     {
         // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017B4 begin
-		
+
 		if(count($this->extensions) == 0){
 			$this->getInstalledExtensions(); //init at first load;
 		}
 		foreach($this->extensions as $extension) {
 			$extensionLoader = new common_ext_ExtensionLoader($extension);
-				
+
 			//handle dependances requirement
 			foreach ($extension->requiredExtensionsList as $ext) {
 				if(!array_key_exists($ext, $this->extensions) && $ext != 'generis') {
@@ -261,7 +261,8 @@ class common_ext_ExtensionsManager
     private function __construct()
     {
         // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000233D begin
-
+				$resolver = new Resolver();
+				$this->currentExtensionName = $resolver->getExtensionFromURL();
         // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000233D end
     }
 
@@ -275,8 +276,8 @@ class common_ext_ExtensionsManager
     public function getAvailableExtensions()
     {
         // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002364 begin
-		$result = array( 
-		'testExtension' => array ( 
+		$result = array(
+		'testExtension' => array (
 				'zip' => dirname(__FILE__).'/test/common/testExtension.zip',
 				'author' => 'CRP Henri Tudor',
 				'name' => 'testExtensionZip',
@@ -285,7 +286,7 @@ class common_ext_ExtensionsManager
 				)
 		);
 		$returnValue = array_diff_key($result,$this->getInstalledExtensions());
-		 
+
 		return $returnValue;
         // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002364 end
     }
@@ -312,7 +313,7 @@ class common_ext_ExtensionsManager
 			$configuration->save($ext);
 
 		}
-		 
+
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002383 end
     }
 
@@ -366,21 +367,21 @@ class common_ext_ExtensionsManager
         $returnValue = array();
 
         // section 127-0-1-1--34c6d20a:12dcbf5c5e2:-8000:00000000000014AE begin
-        
-        
+
+
         if(is_array($extension->requiredExtensionsList)){
 	        if(count($this->extensions) == 0){
 				$this->getInstalledExtensions(); //init at first load;
 			}
         	$returnValue = $extension->requiredExtensionsList;
-        	
+
         	foreach($extension->requiredExtensionsList as $dependance){
         		if(isset($this->extensions[$dependance]) && $this->extensions[$dependance] instanceof common_ext_SimpleExtension){
         			$returnValue = array_merge($returnValue, $this->getDependancies($this->extensions[$dependance]));
         		}
         	}
         }
-        
+
         // section 127-0-1-1--34c6d20a:12dcbf5c5e2:-8000:00000000000014AE end
 
         return (array) $returnValue;
@@ -398,17 +399,17 @@ class common_ext_ExtensionsManager
         $returnValue = array();
 
         // section 127-0-1-1--450598c3:13175ea282e:-8000:0000000000003C45 begin
-        
+
     	foreach ($this->getInstalledExtensions() as $ext) {
 			if(isset ($ext->modelsRight) && count($ext->modelsRight) > 0){
 				if (isset($ext->modelsRight)){
 					/*
-					 * 
+					 *
 					 * TODO
 					 * We manage update, add read, delete ..
 					 * if the variable exist, the model is updatable!
 					 * use a code in the next investigation, such as unix right
-					 * 
+					 *
 					 */
 					foreach ($ext->modelsRight as $model=>$right){
 						$ns = common_ext_NamespaceManager::singleton()->getNamespace ($model.'#');
@@ -420,7 +421,7 @@ class common_ext_ExtensionsManager
 				}
 			}
 		}
-        
+
         // section 127-0-1-1--450598c3:13175ea282e:-8000:0000000000003C45 end
 
         return (array) $returnValue;
@@ -437,6 +438,7 @@ class common_ext_ExtensionsManager
     public function setCurrentExtension($extensionName)
     {
         // section 127-0-1-1--70d5c85c:1376f987523:-8000:0000000000004C09 begin
+				$this->currentExtensionName = $extensionName;
         // section 127-0-1-1--70d5c85c:1376f987523:-8000:0000000000004C09 end
     }
 
@@ -452,6 +454,7 @@ class common_ext_ExtensionsManager
         $returnValue = (string) '';
 
         // section 127-0-1-1--70d5c85c:1376f987523:-8000:0000000000004C0C begin
+				$returnValue = $this->currentExtensionName;
         // section 127-0-1-1--70d5c85c:1376f987523:-8000:0000000000004C0C end
 
         return (string) $returnValue;
