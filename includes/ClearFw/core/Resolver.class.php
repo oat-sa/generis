@@ -13,6 +13,11 @@ class Resolver {
 	protected $url;
 
 	/**
+	 * @var Sring The extension (extension name) requested
+	 */
+	protected $extension;
+	
+	/**
 	 * @var Sring The module (classe name) requested
 	 */
 	protected $module;
@@ -50,6 +55,13 @@ class Resolver {
     }
 
     /**
+     * @return	String The module name
+     */
+    public function getExtensionFromURL() {
+    	return $this->extension;
+    }
+
+	/**
      * @return	String The module name
      */
     public function getModule() {
