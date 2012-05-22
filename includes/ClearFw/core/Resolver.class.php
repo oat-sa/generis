@@ -135,7 +135,7 @@ class Resolver {
 		for($i=0;$i<$n;$i++)
 			$tab[$i] = urldecode($tab[$i]);
 
-		if($n>3){
+		if($n>=3){
 			$this->action = $tab[count($tab) - 1];
 			$this->module = $tab[count($tab) - 2];
 			if (isset($_GET['extension'])) {
@@ -144,6 +144,7 @@ class Resolver {
 				$this->extension = $tab[count($tab) - 3];
 			}
 		}
+		//var_dump($this->module, $this->action);
 	}
 }
 ?>
