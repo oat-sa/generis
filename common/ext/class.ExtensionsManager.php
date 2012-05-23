@@ -417,6 +417,9 @@ class common_ext_ExtensionsManager
 					 */
 					foreach ($ext->modelsRight as $model=>$right){
 						$ns = common_ext_NamespaceManager::singleton()->getNamespace ($model.'#');
+						if ($ns == null) {
+							throw new common_ext_ExtensionException("Session Expired, could not get namespace");
+						}
 						$modelId = $ns->getModelId();
 						if (!isset($returnValue[$modelId])){
 							$returnValue[$modelId] = $model;

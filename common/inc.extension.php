@@ -20,7 +20,7 @@ if(PHP_SAPI == 'cli'){
 	$_SERVER['DOCUMENT_ROOT'] = dirname(__FILE__).'/../..';
 }
 
-require_once  dirname(__FILE__). '/config.php';
+require_once  dirname(__FILE__). '/configLoader.php';
 require_once  dirname(__FILE__). '/constants.php';
 
 //set the time zone
