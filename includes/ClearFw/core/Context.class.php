@@ -14,8 +14,11 @@ class Context
 	private $request;
 	private $response;
 	private $session;
+	
+	private $extensionName;
 	private $moduleName;
 	private $actionName;
+	
 	private $viewData;
 	private $behaviors;
 	
@@ -43,20 +46,24 @@ class Context
 	 * @param string $moduleName
 	 * @param string $actionName
 	 */
-	private function __construct(Request $request,
-								Response $response,
-								Session $session,
-								$moduleName = null, 
-								$actionName = null)
-	{
-		$this->request			= $request;
-		$this->response			= $response;
-		$this->session 			= $session;
-		$this->moduleName 		= $moduleName;
-		$this->actionName 		= $actionName;
+	private function __construct() {
 		
-		$this->viewData = array();
-		$this->behaviors = array();
+		$this->request			= new Request();
+		$this->response			= new Response();
+		$this->session 			= new Session();
+		
+		$this->viewData			= array();
+		$this->behaviors		= array();
+		
+		if (PHP_SAPI == 'cli') {
+			$this->currentExtensionName = 'tao';
+		} else {
+			$resolver = new Resolver();
+			$this->extensionName	= $resolver->getExtensionFromURL();
+			$this->moduleName 		= $resolver->getModule();
+			$this->actionName 		= $resolver->getAction();
+		}
+		
 	}
 	
 	/**
@@ -65,19 +72,10 @@ class Context
 	 */
 	public static function getInstance()
 	{
-		if (!self::$instance)
-		{	
-			$request = new Request();
-			$response = new Response();
-			$session = new Session();
-			
-			self::$instance = new Context($request, $response, $session);
-			return self::$instance;
+		if (!self::$instance) {	
+			self::$instance = new Context();
 		}
-		else
-		{
-			return self::$instance;
-		}
+		return self::$instance;
 	}
 	
 	public function getRequest()
@@ -95,6 +93,16 @@ class Context
 		return $this->session;
 	}
 	
+	public function setExtensionName($extensionName)
+	{
+		$this->extensionName = $extensionName;
+	}
+	
+	public function getExtensionName()
+	{
+		return $this->extensionName;
+	}
+
 	public function setModuleName($moduleName)
 	{
 		$this->moduleName = $moduleName;

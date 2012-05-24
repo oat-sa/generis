@@ -14,12 +14,7 @@ class AdvancedFC extends DefaultFC
 
 	public function loadModule()
 	{
-		$resolver = new Resolver();
-		$action	= $resolver->getAction();
-		$module	= $resolver->getModule();
-
 		$enforcer = new ActionEnforcer();
-
 		try
 		{
 			$enforcer->execute();
