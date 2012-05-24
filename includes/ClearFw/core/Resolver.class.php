@@ -139,7 +139,8 @@ class Resolver {
 			$this->action = $tab[count($tab) - 1];
 			$this->module = $tab[count($tab) - 2];
 			if (isset($_GET['extension'])) {
-				$this->extension = $_GET['extension'];
+				common_Logger::i('deprecated parameter extension(\''.$_GET['extension'].'\') used coming from '.$_SERVER['HTTP_REFERER']);
+				$this->extension = $_GET['extension'] == 'none' ? 'tao' : $_GET['extension'];
 			} else {
 				$this->extension = $tab[count($tab) - 3];
 			}
