@@ -32,3 +32,16 @@ define('CACHE_MAX_SIZE', 64000);
 define('USE_HTTP_AUTH', false);
 define('USE_HTTP_USER', '');
 define('USE_HTTP_PASS', '');
+
+#generis paths
+define('INCLUDES_PATH' , GENERIS_BASE_PATH.'/includes');
+define('EXTENSION_PATH' , GENERIS_BASE_PATH.'/..');
+define('MANIFEST_NAME' , 'manifest.php');
+define('GENERIS_FILES_PATH' , GENERIS_BASE_PATH.'/data/');
+define('GENERIS_CACHE_PATH', GENERIS_FILES_PATH.'cache/');
+
+# uri providers ('MicrotimeUriProvider'|'MicrotimeRandUriProvider'|'DatabaseSerialUriProvider')
+define('GENERIS_URI_PROVIDER', 'DatabaseSerialUriProvider');
+
+# path to RDFAPI-PHP
+define('RDFAPI_INCLUDE_DIR', INCLUDES_PATH.'/rdfapi-php/api/');

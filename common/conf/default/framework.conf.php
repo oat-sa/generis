@@ -1,19 +1,7 @@
 <?php
 
-#Generis framework config 
+#framework config 
 
-#generis paths
-define('INCLUDES_PATH' , GENERIS_BASE_PATH.'/includes');
-define('EXTENSION_PATH' , GENERIS_BASE_PATH.'/..');
-define('MANIFEST_NAME' , 'manifest.php');
-define('GENERIS_FILES_PATH' , GENERIS_BASE_PATH.'/data/');
-define('GENERIS_CACHE_PATH', GENERIS_FILES_PATH.'cache/');
-
-# uri providers ('MicrotimeUriProvider'|'MicrotimeRandUriProvider'|'DatabaseSerialUriProvider')
-define('GENERIS_URI_PROVIDER', 'DatabaseSerialUriProvider');
-
-# path to RDFAPI-PHP
-define('RDFAPI_INCLUDE_DIR', INCLUDES_PATH.'/rdfapi-php/api/');
 
 # session namespace
 define('SESSION_NAMESPACE', 'ClearFw');
