@@ -22,12 +22,12 @@ class Context
 	private $viewData;
 	private $behaviors;
 	
-	/**
-	 * The specifiers are a list of <i>sub context</i> that specialize the global context.
-	 * 
-	 * @var array
-	 */
-	private $specifiers = array();
+//	/**
+//	 * The specifiers are a list of <i>sub context</i> that specialize the global context.
+//	 * 
+//	 * @var array
+//	 */
+//	private $specifiers = array();
 	
 	/**
 	 * store the current instance
