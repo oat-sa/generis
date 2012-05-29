@@ -50,21 +50,21 @@ class Renderer
 		$viewData = $context->getDataCollection();
 		foreach ($viewData as $key => $value)
 			$$key = $value;
-			
-		//check if there is a specified context first
-		if(count($context->getSpecifiers()) > 0){
-			foreach($context->getSpecifiers() as $specifier){
-			
-				$expectedPath = $this->getViewPath() . $specifier . '/' . $view;
 
-				//if we find the view in the specialized context, we load it  
-				if (file_exists($expectedPath)){
-					include ($expectedPath);
-					return;
-				}
-			}
-		}
-		//if there is none, we look at the global context	
+//		//check if there is a specified context first
+//		if(count($context->getSpecifiers()) > 0){
+//			foreach($context->getSpecifiers() as $specifier){
+//			
+//				$expectedPath = $this->getViewPath() . $specifier . '/' . $view;
+//
+//				//if we find the view in the specialized context, we load it  
+//				if (file_exists($expectedPath)){
+//					include ($expectedPath);
+//					return;
+//				}
+//			}
+//		}
+//		//if there is none, we look at the global context
 		
 		$expectedPath = $this->getViewPath() . $view;
 		if (file_exists($expectedPath))

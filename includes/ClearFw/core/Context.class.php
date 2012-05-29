@@ -138,21 +138,21 @@ class Context
 		return $this->viewData;
 	}
 	
-	/**
-	 * set the context specifiers
-	 * @param array $specifiers
-	 */
-	public function setSpecifiers(array $specifiers){
-		$this->specifiers = $specifiers;
-	}
-	
-	/**
-	 * get the context specifiers
-	 * @return array
-	 */
-	public function getSpecifiers(){
-		return $this->specifiers;
-	}
+//	/**
+//	 * set the context specifiers
+//	 * @param array $specifiers
+//	 */
+//	public function setSpecifiers(array $specifiers){
+//		$this->specifiers = $specifiers;
+//	}
+//	
+//	/**
+//	 * get the context specifiers
+//	 * @return array
+//	 */
+//	public function getSpecifiers(){
+//		return $this->specifiers;
+//	}
 	
 	/// @name Behaviors methods
 	//@{

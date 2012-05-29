@@ -44,24 +44,24 @@ class ActionEnforcer implements IExecutable
     	// if module exist include the class
     	if ($module !== null) {
     		
-    		//check if there is a specified context first
-			$isSpecificContext = false;
-    		if(count($context->getSpecifiers()) > 0){
-				foreach($context->getSpecifiers() as $specifier){
-				
-					$expectedPath = DIR_ACTIONS . $specifier . '/class.' . $module . '.php';
-					
-					//if we find the view in the specialized context, we load it  
-					if (file_exists($expectedPath)){
-						require_once ($expectedPath);
-						$isSpecificContext = true;
-						break;
-					}
-				}
-			}
-			
-			//if there is none, we look at the global context	
-			if(!$isSpecificContext){	
+//    		//check if there is a specified context first
+//			$isSpecificContext = false;
+//    		if(count($context->getSpecifiers()) > 0){
+//				foreach($context->getSpecifiers() as $specifier){
+//				
+//					$expectedPath = DIR_ACTIONS . $specifier . '/class.' . $module . '.php';
+//					
+//					//if we find the view in the specialized context, we load it  
+//					if (file_exists($expectedPath)){
+//						require_once ($expectedPath);
+//						$isSpecificContext = true;
+//						break;
+//					}
+//				}
+//			}
+//			
+//			//if there is none, we look at the global context	
+//			if(!$isSpecificContext){	
 	    		$exptectedPath = DIR_ACTIONS . 'class.'. $module . '.php';
 	    		
 	    		if (file_exists($exptectedPath)) {
@@ -71,7 +71,7 @@ class ActionEnforcer implements IExecutable
 												   	   $context->getModuleName(),
 												       $context->getActionName());
 	    		}
-			}
+//			}
 			
 			if(defined('ROOT_PATH')){
 				$root = realpath(ROOT_PATH);
