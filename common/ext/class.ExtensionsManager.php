@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 24.05.2012, 15:25:09 with ArgoUML PHP module 
+ * Automatically generated on 30.05.2012, 11:28:14 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -109,7 +109,7 @@ class common_ext_ExtensionsManager
 
 			while (!$result-> EOF){
 				$id = $result->fields["id"];
-				$extension = new common_ext_SimpleExtension($id);
+				$extension = new common_ext_Extension($id);
 
 				$extension->configuration = new common_ext_ExtensionConfiguration(
 					($result->fields["loaded"] == 1),
@@ -418,6 +418,30 @@ class common_ext_ExtensionsManager
         // section 127-0-1-1--450598c3:13175ea282e:-8000:0000000000003C45 end
 
         return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method getExtensionById
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  string id
+     * @return common_ext_Extension
+     */
+    public function getExtensionById($id)
+    {
+        $returnValue = null;
+
+        // section 127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DC3 begin
+        $extensions = $this->getInstalledExtensions();
+        if (isset($extensions[$id])) {
+        	return $extensions[$id];
+        } else {
+        	throw new common_Exception('No extension with id \''.$id.'\' found');
+        }
+        // section 127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DC3 end
+
+        return $returnValue;
     }
 
 } /* end of class common_ext_ExtensionsManager */

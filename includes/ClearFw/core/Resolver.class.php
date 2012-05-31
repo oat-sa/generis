@@ -109,7 +109,6 @@ class Resolver {
     		$cleanUrl = $this->url;
     	}
 
-
     	$this->resolveRequest($this->url);
     }
 
@@ -128,6 +127,11 @@ class Resolver {
 		if($request[0] == '/')
 			$request = substr($request, 1);
 
+		// dropping file extension
+		if(strpos($request, '.') !== false){
+			$request = substr($request, 0, strrpos($request, '.'));
+		}
+		
 		# Resolve
 		$tab = explode('/', $request);
 		$n = count($tab);

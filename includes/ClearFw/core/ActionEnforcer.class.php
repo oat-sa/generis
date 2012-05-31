@@ -7,17 +7,21 @@
  */
 class ActionEnforcer implements IExecutable
 {
+/**
+	 * the context to execute
+	 * @var Context
+	 */
+	protected $context;
 	
-	public function __construct()
+	public function __construct($context)
 	{
-
+		$this->context = $context;
 	}
 	
 	public function execute()
 	{
-		$context = Context::getInstance();
-		$module = $context->getModuleName();
-		$action = $context->getActionName();
+		$module = $this->context->getModuleName();
+		$action = $this->context->getActionName();
 		
 		if (!$module && !$action) 
 		{
@@ -46,8 +50,8 @@ class ActionEnforcer implements IExecutable
     		
 //    		//check if there is a specified context first
 //			$isSpecificContext = false;
-//    		if(count($context->getSpecifiers()) > 0){
-//				foreach($context->getSpecifiers() as $specifier){
+//    		if(count($this->context->getSpecifiers()) > 0){
+//				foreach($this->context->getSpecifiers() as $specifier){
 //				
 //					$expectedPath = DIR_ACTIONS . $specifier . '/class.' . $module . '.php';
 //					
@@ -68,8 +72,8 @@ class ActionEnforcer implements IExecutable
 	    			require_once $exptectedPath;
 	    		} else {
 	    			throw new ActionEnforcingException("Module '" . Camelizer::firstToUpper($module) . "' does not exist in $exptectedPath.",
-												   	   $context->getModuleName(),
-												       $context->getActionName());
+												   	   $this->context->getModuleName(),
+												       $this->context->getActionName());
 	    		}
 //			}
 			
@@ -93,20 +97,20 @@ class ActionEnforcer implements IExecutable
 			$className = $relPath . '_' . $module;
 			if(!class_exists($className)){
 				throw new ActionEnforcingException("Unable to load  $className in $exptectedPath",
-												   	   $context->getModuleName(),
-												       $context->getActionName());
+												   	   $this->context->getModuleName(),
+												       $this->context->getActionName());
 			}
 			
     		// File gracefully loaded.
-    		$context->setModuleName($module);
-    		$context->setActionName($action);
+    		$this->context->setModuleName($module);
+    		$this->context->setActionName($action);
     		
     		$moduleInstance	= new $className();
     		
     	} else {
     		throw new ActionEnforcingException("No Module file matching requested module.",
-											   $context->getModuleName(),
-											   $context->getActionName());
+											   $this->context->getModuleName(),
+											   $this->context->getActionName());
     	}
 
     	// if the method related to the specified action exists, call it
@@ -117,7 +121,7 @@ class ActionEnforcer implements IExecutable
 
     		$tabParam 	= array();
     		foreach($parameters as $param)
-    			$tabParam[$param->getName()] = $context->getRequest()->getParameter($param->getName());
+    			$tabParam[$param->getName()] = $this->context->getRequest()->getParameter($param->getName());
 
     		// Action method is invoked, passing request parameters as
     		// method parameters.
@@ -133,8 +137,8 @@ class ActionEnforcer implements IExecutable
     	} 
     	else {
     		throw new ActionEnforcingException("Unable to find the appropriate action for Module '${module}'.",
-											   $context->getModuleName(),
-											   $context->getActionName());
+											   $this->context->getModuleName(),
+											   $this->context->getActionName());
     	}
 	}
 }

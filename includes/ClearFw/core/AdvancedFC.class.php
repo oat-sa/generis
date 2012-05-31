@@ -14,7 +14,7 @@ class AdvancedFC extends DefaultFC
 
 	public function loadModule()
 	{
-		$enforcer = new ActionEnforcer();
+		$enforcer = new GenerisActionEnforcer(Context::getInstance());
 		try
 		{
 			$enforcer->execute();

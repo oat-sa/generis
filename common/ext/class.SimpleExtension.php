@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 31.01.2011, 12:00:38 with ArgoUML PHP module 
+ * Automatically generated on 30.05.2012, 11:01:57 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -143,13 +143,21 @@ class common_ext_SimpleExtension
      */
     public $configuration = null;
 
+    /**
+     * Short description of attribute parent
+     *
+     * @access public
+     * @var SimpleExtension
+     */
+    public $parent = null;
+
     // --- OPERATIONS ---
 
     /**
      * Short description of method __construct
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string id
      * @return mixed
      */
@@ -163,6 +171,12 @@ class common_ext_SimpleExtension
 			$this->author = $manifestArray['additional']['author'];
 			$this->name = $manifestArray['name'];
 			$this->version = $manifestArray['additional']['version'];
+			if(isset($manifestArray['additional']['extends'])) {
+				$this->parent = common_ext_ExtensionsManager::singleton()->getExtensionById($manifestArray['additional']['extends']);
+			}
+			if(isset($manifestArray['additional']['install']) && is_array($manifestArray['additional']['install'])) {
+				$this->installFiles = $manifestArray['additional']['install'];
+			}
 			if(isset($manifestArray['additional']['registerToClassLoader'])){
 				$this->registerToClassLoader =$manifestArray['additional']['registerToClassLoader'];
 			}
@@ -207,7 +221,7 @@ class common_ext_SimpleExtension
      * Short description of method getConfiguration
      *
      * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return common_ext_ExtensionConfiguration
      */
     public function getConfiguration()
