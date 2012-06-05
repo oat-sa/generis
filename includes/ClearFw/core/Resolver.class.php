@@ -126,7 +126,7 @@ class Resolver {
 		}
 		
 		$matches = array();
-		preg_match ('/([^\/]*)\/\/([^\/]*)(\/.*)?/' , ROOT_URL, $matches);
+		preg_match ('/^([^\/]*)\/\/([^\/]*)(\/.*)?$/' , ROOT_URL, $matches);
 		$request = isset($matches[3]) ? substr($request, strlen($matches[3])) : $request;
 		$request = trim($request, '/');
 		
@@ -138,8 +138,8 @@ class Resolver {
 
 		if (count($tab) > 0) {
 			$this->extension	= $tab[0];
-			$this->module		= isset($tab[1]) ? $tab[1] : DEFAULT_MODULE_NAME;
-			$this->action		= isset($tab[2]) ? $tab[2] : DEFAULT_ACTION_NAME;
+			$this->module		= isset($tab[1]) ? $tab[1] : '';
+			$this->action		= isset($tab[2]) ? $tab[2] : '';
 		} else {
 			throw new common_exception_Error('Empty request Uri '.$request.' reached resolver');
 		}
