@@ -124,32 +124,31 @@ class Resolver {
 		if(strpos($request, '?') !== false){
 			$request = substr($request, 0, strpos($request, '?'));
 		}
-		if($request[0] == '/')
-			$request = substr($request, 1);
-
-		// dropping file extension
-		if(strpos($request, '.') !== false){
-			$request = substr($request, 0, strrpos($request, '.'));
-		}
+		
+		$matches = array();
+		preg_match ('/([^\/]*)\/\/([^\/]*)(\/.*)?/' , ROOT_URL, $matches);
+		$request = isset($matches[3]) ? substr($request, strlen($matches[3])) : $request;
+		$request = trim($request, '/');
 		
 		# Resolve
 		$tab = explode('/', $request);
-		$n = count($tab);
 		# Decode the URL
-		for($i=0;$i<$n;$i++)
+		for($i=0;$i<count($tab);$i++)
 			$tab[$i] = urldecode($tab[$i]);
 
-		if($n>=3){
-			$this->action = $tab[count($tab) - 1];
-			$this->module = $tab[count($tab) - 2];
-			if (isset($_GET['extension'])) {
-				common_Logger::i('deprecated parameter extension(\''.$_GET['extension'].'\') used coming from '.$_SERVER['HTTP_REFERER']);
-				$this->extension = $_GET['extension'] == 'none' ? 'tao' : $_GET['extension'];
-			} else {
-				$this->extension = $tab[count($tab) - 3];
-			}
+		if (count($tab) > 0) {
+			$this->extension	= $tab[0];
+			$this->module		= isset($tab[1]) ? $tab[1] : DEFAULT_MODULE_NAME;
+			$this->action		= isset($tab[2]) ? $tab[2] : DEFAULT_ACTION_NAME;
+		} else {
+			throw new common_exception_Error('Empty request Uri '.$request.' reached resolver');
 		}
-		//var_dump($this->module, $this->action);
+		
+		//legacy
+		if (isset($_GET['extension'])) {
+			common_Logger::i('deprecated parameter extension(\''.$_GET['extension'].'\') used coming from '.$_SERVER['HTTP_REFERER']);
+			$this->extension = $_GET['extension'] == 'none' ? 'tao' : $_GET['extension'];
+		}
 	}
 }
 ?>
