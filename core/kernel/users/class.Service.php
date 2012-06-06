@@ -476,14 +476,13 @@ class core_kernel_users_Service
         $returnValue = (bool) false;
 
         // section 127-0-1-1--dd65dd6:137c0b39408:-8000:00000000000019FE begin
-        common_Logger::d('called ispassword with: '.$password.','.$user);
 		if(!is_string($password)){
 			throw new core_kernel_users_Exception('The password must be of "string" type');
 			return $returnValue;
 		}
 		
 		$userPass = $user->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD));
-		$returnValue = md5($user) == $userPass;
+		$returnValue = md5($password) == $userPass;
         // section 127-0-1-1--dd65dd6:137c0b39408:-8000:00000000000019FE end
 
         return (bool) $returnValue;
