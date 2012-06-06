@@ -61,7 +61,7 @@ class Context
 			$resolver = new Resolver();
 			$this->extensionName	= $resolver->getExtensionFromURL();
 			$this->moduleName 		= Camelizer::firstToUpper($resolver->getModule());
-			$this->actionName 		= Camelizer::firstToUpper($resolver->getAction());
+			$this->actionName 		= Camelizer::firstToLower($resolver->getAction());
 		}
 		
 	}
