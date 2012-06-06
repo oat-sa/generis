@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Extension Management</activediagram>
+      <activediagram>Users</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed May 30 11:59:55 CEST 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Jun 06 10:10:13 CEST 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -7475,6 +7475,50 @@ will restore it for further http requests)</UML:TaggedValue.dataValue>
                               name = 'return' isSpecification = 'false' kind = 'return'>
                               <UML:Parameter.type>
                                 <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '127-0-1-1--dd65dd6:137c0b39408:-8000:00000000000019FE'
+                          name = 'isPasswordValid' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '127-0-1-1--dd65dd6:137c0b39408:-8000:0000000000001A02'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>used in conjunction with the callback validator
+to test the pasword entered</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--dd65dd6:137c0b39408:-8000:00000000000019FF'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--dd65dd6:137c0b39408:-8000:0000000000001A00'
+                              name = 'password' isSpecification = 'false' kind = 'in'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '127-0-1-1--dd65dd6:137c0b39408:-8000:0000000000001A03'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>raw password, unencrypted</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1--dd65dd6:137c0b39408:-8000:0000000000001A01'
+                              name = 'user' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -40159,7 +40203,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       justification="Center"
     >common::ext::Extension</text>
     <group name="Fig13.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[937, 473, 129, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[937, 473, 159, 0]"
          href="127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DC5"
          fill="0"
          fillcolor="white"
@@ -40173,7 +40217,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <rectangle name="Fig13.2.0"
         x="937"
         y="473"
-        width="129"
+        width="159"
         height="0"
         fill="0"
         fillcolor="white"
@@ -40329,7 +40373,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                         offset="-10" />
     </private>
     <path name="Fig14.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -55557,7 +55601,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[49, 71, 470, 60]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[49, 71, 470, 53]"
          href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
          fill="0"
          fillcolor="white"
@@ -55571,7 +55615,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="49"
         y="71"
         width="470"
-        height="60"
+        height="53"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -55628,7 +55672,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig1.5"
       x="48"
-      y="131"
+      y="124"
       width="472"
       height="1"
       fill="1"
@@ -55637,7 +55681,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[49, 132, 470, 186]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[49, 125, 470, 193]"
          href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
          fill="0"
          fillcolor="white"
@@ -55649,9 +55693,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig1.6.0"
         x="49"
-        y="132"
+        y="125"
         width="470"
-        height="186"
+        height="193"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -55659,7 +55703,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
       <text name="Fig1.6.1"
         x="49"
-        y="132"
+        y="125"
         width="470"
         height="14"
         fill="0"
@@ -55675,7 +55719,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >loginExists(login : string,class : Class = null) : boolean</text>
       <text name="Fig1.6.2"
         x="49"
-        y="146"
+        y="139"
         width="470"
         height="14"
         fill="0"
@@ -55691,7 +55735,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >addRole(label : string = &apos;&apos;,comment : string = &apos;&apos;,parentRole : string = null) : Class</text>
       <text name="Fig1.6.3"
         x="49"
-        y="160"
+        y="153"
         width="470"
         height="14"
         fill="0"
@@ -55707,7 +55751,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >removeRole(role : Resource) : boolean</text>
       <text name="Fig1.6.4"
         x="49"
-        y="174"
+        y="167"
         width="470"
         height="14"
         fill="0"
@@ -55723,7 +55767,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >addUser(login : string,password : string,role : Resource) : Resource</text>
       <text name="Fig1.6.5"
         x="49"
-        y="188"
+        y="181"
         width="470"
         height="14"
         fill="0"
@@ -55739,7 +55783,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >removeUser(user : Resource) : boolean</text>
       <text name="Fig1.6.6"
         x="49"
-        y="202"
+        y="195"
         width="470"
         height="14"
         fill="0"
@@ -55755,7 +55799,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >login(login : string,password : string,role : string) : boolean</text>
       <text name="Fig1.6.7"
         x="49"
-        y="216"
+        y="209"
         width="470"
         height="14"
         fill="0"
@@ -55771,7 +55815,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getOneUser(login : string,class : Class = null) : Resource</text>
       <text name="Fig1.6.8"
         x="49"
-        y="230"
+        y="223"
         width="470"
         height="14"
         fill="0"
@@ -55787,7 +55831,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >«create» __construct()</text>
       <text name="Fig1.6.9"
         x="49"
-        y="244"
+        y="237"
         width="470"
         height="14"
         fill="0"
@@ -55803,7 +55847,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >singleton() : Service</text>
       <text name="Fig1.6.10"
         x="49"
-        y="258"
+        y="251"
         width="470"
         height="14"
         fill="0"
@@ -55819,7 +55863,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >loginApi(uri : string) : boolean</text>
       <text name="Fig1.6.11"
         x="49"
-        y="272"
+        y="265"
         width="470"
         height="14"
         fill="0"
@@ -55835,7 +55879,23 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >isASessionOpened() : boolean</text>
       <text name="Fig1.6.12"
         x="49"
-        y="286"
+        y="279"
+        width="470"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >logout() : boolean</text>
+      <text name="Fig1.6.13"
+        x="49"
+        y="293"
         width="470"
         height="20"
         fill="0"
@@ -55848,7 +55908,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >logout() : boolean</text>
+      >isPasswordValid(password : string,user : Resource) : boolean</text>
     </group>
   </group>
 </pgml>

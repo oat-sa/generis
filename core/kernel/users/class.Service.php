@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 14.12.2011, 15:42:05 with ArgoUML PHP module 
+ * Automatically generated on 06.06.2012, 10:05:06 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -457,6 +457,34 @@ class core_kernel_users_Service
         Session::removeAttribute(self::AUTH_TOKEN_KEY);
         $returnValue = true;
         // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EB5 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * used in conjunction with the callback validator
+     * to test the pasword entered
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  string password
+     * @param  Resource user
+     * @return boolean
+     */
+    public function isPasswordValid($password,  core_kernel_classes_Resource $user)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1--dd65dd6:137c0b39408:-8000:00000000000019FE begin
+        common_Logger::d('called ispassword with: '.$password.','.$user);
+		if(!is_string($password)){
+			throw new core_kernel_users_Exception('The password must be of "string" type');
+			return $returnValue;
+		}
+		
+		$userPass = $user->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD));
+		$returnValue = md5($user) == $userPass;
+        // section 127-0-1-1--dd65dd6:137c0b39408:-8000:00000000000019FE end
 
         return (bool) $returnValue;
     }
