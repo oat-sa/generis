@@ -60,8 +60,8 @@ class Context
 		} else {
 			$resolver = new Resolver();
 			$this->extensionName	= $resolver->getExtensionFromURL();
-			$this->moduleName 		= $resolver->getModule();
-			$this->actionName 		= $resolver->getAction();
+			$this->moduleName 		= Camelizer::firstToUpper($resolver->getModule());
+			$this->actionName 		= Camelizer::firstToUpper($resolver->getAction());
 		}
 		
 	}
