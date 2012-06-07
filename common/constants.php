@@ -60,7 +60,8 @@ define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN' , 	GENERIS_NS . '#VersionedR
 define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_PASSWORD' , 	GENERIS_NS . '#VersionedRepositoryPassword' , true) ;
 
 #user
-define('CLASS_ROLE',											'http://www.tao.lu/middleware/wfEngine.rdf#ClassRole',true);
+define('CLASS_ROLE',											'http://www.tao.lu/Ontologies/TAO.rdf#ClassRole',true);
+define('PROPERTY_ROLE_ISSYSTEM',											'http://www.tao.lu/Ontologies/TAO.rdf#IsSystem',true);
 define('PROPERTY_USER_LOGIN' ,						GENERIS_NS . '#login' , true) ;
 define('PROPERTY_USER_PASSWORD' , 				GENERIS_NS . '#password' , true) ;
 define('PROPERTY_USER_UILG' ,							GENERIS_NS . '#userUILg' , true) ;
