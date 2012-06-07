@@ -70,6 +70,11 @@ function generis_extension_autoload($pClassName) {
 			require_once GENERIS_BASE_PATH .$filePath;
 			return;
 		}
+		$filePath = '/' . $path . 'interface.'.$tokens[$size-1] . '.php';
+		if (file_exists(GENERIS_BASE_PATH .$filePath)){
+			require_once GENERIS_BASE_PATH .$filePath;
+			return;
+		}
 		if (file_exists(ROOT_PATH .$filePath)){
 			require_once ROOT_PATH .$filePath;
 			return;
