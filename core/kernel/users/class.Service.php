@@ -245,16 +245,17 @@ class core_kernel_users_Service
         
 		if (count($users) != 1) {
 			$this->logout();
-			throw new core_kernel_users_Exception('Authentication failed',core_kernel_users_Exception::BAD_LOGIN );
+		} else {
+			$returnValue = true;
 		}
 		
-		$this->userResource = reset($users);
-			
-		core_kernel_classes_Session::singleton()->reset();
-		$session = core_kernel_classes_Session::singleton();
-		$session->setUser($login, $this->userResource->getUri());
-
-		$returnValue = true;
+		if ($returnValue) {
+			$this->userResource = reset($users);
+				
+			core_kernel_classes_Session::singleton()->reset();
+			$session = core_kernel_classes_Session::singleton();
+			$session->setUser($login, $this->userResource->getUri());
+		}
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001834 end
 
         return (bool) $returnValue;
