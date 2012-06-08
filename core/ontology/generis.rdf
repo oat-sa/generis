@@ -127,8 +127,8 @@
     <rdfs:range rdf:resource="http://www.tao.lu/Ontologies/TAO.rdf#Languages"/>
     <generis:is_language_dependent rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#False"/>
     <rdf:value xml:lang="EN"/>
-    <rdfs:comment xml:lang="EN"><![CDATA[User Default Language]]></rdfs:comment>
-    <rdfs:label xml:lang="EN"><![CDATA[Default Language]]></rdfs:label>
+    <rdfs:comment xml:lang="EN"><![CDATA[User Data Language]]></rdfs:comment>
+    <rdfs:label xml:lang="EN"><![CDATA[Data Language]]></rdfs:label>
     <rdfs:seeAlso xml:lang="EN"/>
     <rdfs:isDefinedBy xml:lang="EN"/>
     <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox"/>
