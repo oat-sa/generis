@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Design generis API oo</activediagram>
+      <activediagram>Users</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jun 07 18:28:02 CEST 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jun 08 14:55:19 CEST 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -3235,10 +3235,7 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                           <UML:ModelElement.taggedValue>
                             <UML:TaggedValue xmi.id = '10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D66'
                               isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>This function is used to reset the static context to the instance, if
-the instance was created in another execution context
-(frontcontroller will store the singleton in the php session then
-will restore it for further http requests)</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.dataValue>This function is used to reset the session</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
@@ -3249,16 +3246,6 @@ will restore it for further http requests)</UML:TaggedValue.dataValue>
                               name = 'return' isSpecification = 'false' kind = 'return'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000074F'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                            <UML:Parameter xmi.id = '10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D65'
-                              name = 'staticInstance' isSpecification = 'false'>
-                              <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '127-0-1-1-6b35acc2:12fbb20ecfe:-8000:00000000000016B1'
-                                  language = '' body = 'null'/>
-                              </UML:Parameter.defaultValue>
-                              <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000071F'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -3532,6 +3519,16 @@ will restore it for further http requests)</UML:TaggedValue.dataValue>
                               name = 'return' isSpecification = 'false' kind = 'return'/>
                             <UML:Parameter xmi.id = '127-0-1-1--14f68f95:12f59b39209:-8000:000000000000143C'
                               name = 'login' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1-60e7004a:137cb47bb76:-8000:0000000000001A14'
+                              name = 'uri' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1-60e7004a:137cb47bb76:-8000:0000000000001A18'
+                                  language = '' body = 'null'/>
+                              </UML:Parameter.defaultValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
@@ -7498,25 +7495,6 @@ will restore it for further http requests)</UML:TaggedValue.dataValue>
                             <UML:Class xmi.idref = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815'/>
                           </UML:StructuralFeature.type>
                         </UML:Attribute>
-                        <UML:Operation xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E9B'
-                          name = 'loginApi' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
-                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
-                          isAbstract = 'false'>
-                          <UML:BehavioralFeature.parameter>
-                            <UML:Parameter xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E9C'
-                              name = 'return' isSpecification = 'false' kind = 'return'>
-                              <UML:Parameter.type>
-                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                            <UML:Parameter xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E9F'
-                              name = 'uri' isSpecification = 'false'>
-                              <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                          </UML:BehavioralFeature.parameter>
-                        </UML:Operation>
                         <UML:Operation xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E9D'
                           name = 'isASessionOpened' visibility = 'public' isSpecification = 'false'
                           ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
@@ -7530,34 +7508,6 @@ will restore it for further http requests)</UML:TaggedValue.dataValue>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
-                        <UML:Attribute xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EA2'
-                          name = 'AUTH_TOKEN_KEY' visibility = 'public' isSpecification = 'false'
-                          ownerScope = 'instance' changeability = 'frozen' targetScope = 'instance'>
-                          <UML:StructuralFeature.multiplicity>
-                            <UML:Multiplicity xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EA3'>
-                              <UML:Multiplicity.range>
-                                <UML:MultiplicityRange xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EA4'
-                                  lower = '1' upper = '1'/>
-                              </UML:Multiplicity.range>
-                            </UML:Multiplicity>
-                          </UML:StructuralFeature.multiplicity>
-                          <UML:Attribute.initialValue>
-                            <UML:Expression xmi.id = '127-0-1-1-6b35acc2:12fbb20ecfe:-8000:00000000000016B3'
-                              language = '' body = 'auth_id'/>
-                          </UML:Attribute.initialValue>
-                          <UML:ModelElement.taggedValue>
-                            <UML:TaggedValue xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EA7'
-                              isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue> the key to retrieve the authentication token in the presistent session</UML:TaggedValue.dataValue>
-                              <UML:TaggedValue.type>
-                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
-                              </UML:TaggedValue.type>
-                            </UML:TaggedValue>
-                          </UML:ModelElement.taggedValue>
-                          <UML:StructuralFeature.type>
-                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                          </UML:StructuralFeature.type>
-                        </UML:Attribute>
                         <UML:Operation xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EB5'
                           name = 'logout' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
@@ -23718,7 +23668,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="false"
@@ -23750,7 +23700,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="false"
@@ -23869,7 +23819,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >reset(staticInstance : Session = null) : void</text>
+      >reset() : void</text>
       <text name="Fig0.6.3"
         x="1073"
         y="179"
@@ -23958,7 +23908,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="false"
@@ -23981,7 +23931,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >setUser(login : string)</text>
+      >setUser(login : string,uri : string = null)</text>
       <text name="Fig0.6.10"
         x="1073"
         y="277"
@@ -24086,7 +24036,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="false"
@@ -24102,7 +24052,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="false"
@@ -24118,7 +24068,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="false"
@@ -24134,7 +24084,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="false"
@@ -55813,22 +55763,6 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="49"
         y="85"
         width="470"
-        height="14"
-        fill="0"
-        fillcolor="white"
-        stroke="0"
-        strokecolor="black"
-        textcolor="black"
-        font="Dialog"
-        italic="false"
-        bold="false"
-        textsize="10"
-        justification="Left"
-      >instance : Service</text>
-      <text name="Fig1.4.3"
-        x="49"
-        y="99"
-        width="470"
         height="20"
         fill="0"
         fillcolor="white"
@@ -55840,7 +55774,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >AUTH_TOKEN_KEY : string  = auth_id</text>
+      >instance : Service</text>
     </group>
     <rectangle name="Fig1.5"
       x="48"
@@ -56032,7 +55966,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >loginApi(uri : string) : boolean</text>
+      >isASessionOpened() : boolean</text>
       <text name="Fig1.6.11"
         x="49"
         y="265"
@@ -56048,26 +55982,10 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >isASessionOpened() : boolean</text>
+      >logout() : boolean</text>
       <text name="Fig1.6.12"
         x="49"
         y="279"
-        width="470"
-        height="14"
-        fill="0"
-        fillcolor="white"
-        stroke="0"
-        strokecolor="black"
-        textcolor="black"
-        font="Dialog"
-        italic="false"
-        bold="false"
-        textsize="10"
-        justification="Left"
-      >logout() : boolean</text>
-      <text name="Fig1.6.13"
-        x="49"
-        y="293"
         width="470"
         height="20"
         fill="0"

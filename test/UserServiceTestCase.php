@@ -62,8 +62,8 @@ class UserServiceTestCase extends UnitTestCase {
 	}
 	
 	
-	public function testLoginApi(){
-		$this->assertTrue($this->service->loginApi('http://www.tao.lu/Ontologies/TAO.rdf#installator'));
+	public function testConnectApi(){
+		$this->assertTrue($this->service->connectApi('http://www.tao.lu/Ontologies/TAO.rdf#installator'));
 	}
 	
 }

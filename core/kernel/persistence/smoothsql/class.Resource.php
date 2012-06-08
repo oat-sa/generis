@@ -146,7 +146,7 @@ class core_kernel_persistence_smoothsql_Resource
 			$lang = $options['lg'];
 		}
 		else{
-			($session->getLg() != '') ? $lang = $session->getLg() : $lang = $session->defaultLg;
+			$lang = $session->getDataLanguage();
 			$defaultLg = ' OR "l_language" = \''.$session->defaultLg.'\' ';
 		}
 		
@@ -328,10 +328,8 @@ class core_kernel_persistence_smoothsql_Resource
         if ($property->isLgDependent()){
         	if ($lg!=null){
         		$lang = $lg;
-        	} else if ($session->getLg() != ''){
-        		$lang = $session->getLg();
         	} else {
-        		$lang = $session->defaultLg;
+        		$lang = $session->getDataLanguage();
         	}
         }
         
@@ -344,7 +342,7 @@ class core_kernel_persistence_smoothsql_Resource
        		$property->uriResource,
        		$object,
        		$lang,
-       		$session->getUser(),
+       		$session->getUserLogin(),
        		$mask,
        		$mask,
        		$mask
@@ -379,7 +377,7 @@ class core_kernel_persistence_smoothsql_Resource
 	        	$localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
 	       		$modelId	= $localNs->getModelId();
 	        	$mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
-	        	$user		= $session->getUser();
+	        	$user		= $session->getUserLogin();
 	       		
 	       		$query = 'INSERT INTO "statements" ("modelID","subject","predicate","object","l_language","author","stread","stedit","stdelete","epoch") VALUES ';
 	       		
@@ -391,7 +389,7 @@ class core_kernel_persistence_smoothsql_Resource
 	       												in {$label} ({$resource->uriResource})");
 	       			}*/
 	       			$property = new core_kernel_classes_Property($propertyUri);
-	       			$lang 	= ($property->isLgDependent() ? ( $session->getLg() != '' ? $session->getLg() : $session->defaultLg) : '');
+	       			$lang 	= ($property->isLgDependent() ? $session->getDataLanguage() : '');
 					
 					$formatedValues = array();
 					if($value instanceof core_kernel_classes_Resource){
@@ -457,7 +455,7 @@ class core_kernel_persistence_smoothsql_Resource
        		$property->uriResource,
        		$value,
        		($property->isLgDependent() ? $lg : ''),
-       		$session->getUser(),
+       		$session->getUserLogin(),
        		$mask,
        		$mask,
        		$mask
@@ -529,7 +527,7 @@ class core_kernel_persistence_smoothsql_Resource
         	$returnValue = $dbWrapper->execSql($query,array(
 	        		$resource->uriResource,
 	        		$property->uriResource,
-	        		($session->getLg() != '') ? $session->getLg() : $session->defaultLg
+	        		$session->getDataLanguage()
 	        ));
         }
         else{
@@ -686,7 +684,7 @@ class core_kernel_persistence_smoothsql_Resource
     		$session = core_kernel_classes_Session::singleton();
     		$localNs = common_ext_NamespaceManager::singleton()->getLocalNamespace();
 	       	$modelId = $localNs->getModelId();
-    		$user = $session->getUser();
+    		$user = $session->getUserLogin();
     		
 	    	$insert = 'INSERT INTO "statements" ("modelID", "subject", "predicate", "object", "l_language", "author", "stread", "stedit", "stdelete") VALUES ';
     		foreach($collection->getIterator() as $triple){
@@ -860,7 +858,7 @@ class core_kernel_persistence_smoothsql_Resource
                 AND "predicate" IN ('.$predicatesQuery.')
                 AND ("l_language" = \'\' 
                     OR "l_language" = \''.$session->defaultLg.'\' 
-                    OR "l_language" = \''.(($session->getLg() != '') ? $session->getLg() : $session->defaultLg).'\') 
+                    OR "l_language" = \''.$session->getDataLanguage().'\') 
                 AND "modelID" IN ('.$modelIds.')
             ORDER BY "predicate"';
         

@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 06.06.2012, 10:05:06 with ArgoUML PHP module 
+ * Automatically generated on 08.06.2012, 14:25:42 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -59,14 +59,6 @@ class core_kernel_users_Service
      * @var Service
      */
     private static $instance = null;
-
-    /**
-     * the key to retrieve the authentication token in the presistent session
-     *
-     * @access public
-     * @var string
-     */
-    const AUTH_TOKEN_KEY = 'auth_id';
 
     // --- OPERATIONS ---
 
@@ -214,74 +206,55 @@ class core_kernel_users_Service
 
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001834 begin
 		
-        if(!empty($role)){
-	        
-			if(!is_string($login)){
-				throw new core_kernel_users_Exception('The login must be of "string" type');
-				return $returnValue;
-			}
-			$login = trim($login);
-			if(empty($login)){
-				throw new core_kernel_users_Exception('The login cannot be empty');
-				return $returnValue;
-			}
-			if(!is_string($password)){
-				throw new core_kernel_users_Exception('The password must be of "string" type');
-				return $returnValue;
-			}
-			
-        	$userClass = new core_kernel_classes_Class(CLASS_GENERIS_USER);
-	        
-	        //check login
-			$users = $userClass->searchInstances(
-				array(
-					PROPERTY_USER_LOGIN 	=> $login,
-					PROPERTY_USER_PASSWORD	=> $password
-				), 
-				array(
-					'like' 		=> false,
-					'recursive'	=> 1
-				)
-			);
-			$user = reset($users);
-			
-			if(!$user || !$user instanceof core_kernel_classes_Resource){
-				$this->logout();
-				throw new core_kernel_users_Exception('Authentication failed',core_kernel_users_Exception::BAD_LOGIN );
-			}
-			
-			$this->loginApi($user->uriResource);
-			
-			//assign user
-			$this->userResource = $user;
-			
-			//check Role
-			$acceptedRoleClass = new core_kernel_classes_Class($role);
-			foreach ($this->userResource->getTypes() as $userRole){
-				if($userRole->uriResource == $acceptedRoleClass->uriResource){
-					$returnValue = true;
-				}else if($userRole->isSubClassOf($acceptedRoleClass)){
-					$returnValue = true;
-				}else if($userRole->isSubClassOf($userClass)){
-					foreach ($userRole->getTypes() as $userRoleType){
-						if($userRoleType->uriResource == $acceptedRoleClass->uriResource || $userRoleType->isSubClassOf($acceptedRoleClass)){
-							$returnValue = true;
-							break;
-						}
-					}
-				}
-				if($returnValue) break;
-			}
+        if(empty($role)){
+        	throw new common_Exception('no role provided for login');
         }
-
-		if(!$returnValue) {
+	        
+		if(!is_string($login)){
+			throw new core_kernel_users_Exception('The login must be of "string" type');
+			return $returnValue;
+		}
+		$login = trim($login);
+		if(empty($login)){
+			throw new core_kernel_users_Exception('The login cannot be empty');
+			return $returnValue;
+		}
+		if(!is_string($password)){
+			throw new core_kernel_users_Exception('The password must be of "string" type');
+			return $returnValue;
+		}
+			
+		// get all the concrete roles
+		$roleClass = new core_kernel_classes_Class($role);
+		$userClasses = $roleClass->getInstances(true);
+		
+        //check login
+        $pip = array_shift($userClasses);
+		$pipclass = new core_kernel_classes_Class($pip->getUri());
+        $users = $pipclass->searchInstances(
+			array(
+				PROPERTY_USER_LOGIN 	=> $login,
+				PROPERTY_USER_PASSWORD	=> $password
+			), 
+			array(
+				'like' 				=> false,
+				'recursive'			=> 1,
+				'additionalClasses'	=> $userClasses
+			)
+		);
+        
+		if (count($users) != 1) {
 			$this->logout();
-			$user->getLabel();
-
-			throw new core_kernel_users_Exception('Authentication failed : Role do not match',core_kernel_users_Exception::BAD_PASSWORD );
+			throw new core_kernel_users_Exception('Authentication failed',core_kernel_users_Exception::BAD_LOGIN );
 		}
 		
-		
+		$this->userResource = reset($users);
+			
+		core_kernel_classes_Session::singleton()->reset();
+		$session = core_kernel_classes_Session::singleton();
+		$session->setUser($login, $this->userResource->getUri());
+
+		$returnValue = true;
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001834 end
 
         return (bool) $returnValue;
@@ -363,65 +336,6 @@ class core_kernel_users_Service
     }
 
     /**
-     * Short description of method loginApi
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  string uri
-     * @return boolean
-     */
-    public function loginApi($uri)
-    {
-        $returnValue = (bool) false;
-
-        // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E9B begin
-        
-    	if(Session::hasAttribute('generis_session')){	
-        	//re-init the objects from the session
-        	
-        	core_kernel_classes_Session::singleton()->reset(Session::getAttribute('generis_session'));
-			core_kernel_classes_DbWrapper::singleton();
-			$returnValue = true ;
-        }
-        
-    	//check if the URI of the user exists
-        if(!$this->isASessionOpened()) { 
-        	
-        	try{
-        		
-	        	Session::setAttribute(self::AUTH_TOKEN_KEY,	$uri);
-			       		
-	       		//Initialize the real generis session 
-	       		core_kernel_classes_Session::singleton()->reset();
-		        $session = core_kernel_classes_Session::singleton();
-		       	
-		       
-		        //save the current generis session
-				Session::setAttribute('generis_session', $session);
-	        	
-				//get the login of the user
-				$this->userResource = new core_kernel_classes_Resource($uri);
-        		$login = $this->userResource->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_LOGIN));
-        		$session->setUser($login->literal);
-        		
-        	}
-        	catch(common_Exception $ce){
-        		//the login must be unique
-        		core_kernel_classes_Session::singleton()->reset();
-        		Session::removeAttribute(self::AUTH_TOKEN_KEY);
-        		Session::removeAttribute('generis_session');
-        		return false;	
-        	}
-        	$returnValue = true ;
-        }
-        
-    	 
-        // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E9B end
-
-        return (bool) $returnValue;
-    }
-
-    /**
      * Short description of method isASessionOpened
      *
      * @access public
@@ -433,9 +347,8 @@ class core_kernel_users_Service
         $returnValue = (bool) false;
 
         // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E9D begin
-		if(Session::hasAttribute(self::AUTH_TOKEN_KEY)) {
-        	$returnValue = true;
-        }
+        $userUri = core_kernel_classes_Session::singleton()->getUserUri();
+        $returnValue = !is_null($userUri);
         // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E9D end
 
         return (bool) $returnValue;
@@ -454,7 +367,6 @@ class core_kernel_users_Service
 
         // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EB5 begin
         core_kernel_classes_Session::singleton()->reset();
-        Session::removeAttribute(self::AUTH_TOKEN_KEY);
         $returnValue = true;
         // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EB5 end
 
@@ -467,7 +379,7 @@ class core_kernel_users_Service
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  string password
+     * @param  string password raw password, unencrypted
      * @param  Resource user
      * @return boolean
      */

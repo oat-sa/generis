@@ -61,7 +61,7 @@ class core_kernel_persistence_smoothsql_Utils
 
         // section 10-13-1-85-61dcfc6d:1301cc5c657:-8000:000000000000190E begin
         $session = core_kernel_classes_Session::singleton(); 
-    	$selectedLanguage = ($session->getLg() != '') ? $session->getLg() : $session->defaultLg;
+    	$selectedLanguage = $session->getDataLanguage();
     	$defaultLanguage = $session->defaultLg;
     	$fallbackLanguage = '';
     					  

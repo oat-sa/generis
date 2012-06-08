@@ -26,17 +26,12 @@ class core_control_FrontController
 			
 			$apiModelOo = core_kernel_impl_ApiModelOO::singleton();
 			if($apiModelOo->logIn($login, $password, $module, CLASS_ROLE_TAOMANAGER)){
-				$session = core_kernel_classes_Session::singleton();
-				$_SESSION["generis_session"] = $session;
-				
 				$status =true;	
 			}
 		}
 		else{
 			if (self::isConnected()){
 				$status = true;
-				$session = core_kernel_classes_Session::singleton();
-				$session->reset($_SESSION['generis_session']);
 				core_kernel_classes_DbWrapper::singleton();
 			}
 			return $status;

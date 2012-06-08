@@ -692,7 +692,7 @@ class core_kernel_persistence_hardsql_Class
 					$lang = $options['lg'];
 				}
 				else{
-					($session->getLg() != '') ? $lang = $session->getLg() : $lang = $session->defaultLg;
+					$lang = $session->getDataLanguage();
 					$defaultLg = ' OR "l_language" = \''.$session->defaultLg.'\' ';
 				}
 	            
@@ -832,7 +832,7 @@ class core_kernel_persistence_hardsql_Class
 						|| !$referencer->isPropertyReferenced($property)) {
 
 						$propertyRange = $property->getRange();
-						$lang = ($property->isLgDependent() ? ( $session->getLg() != '' ? $session->getLg() : $session->defaultLg) : '');
+						$lang = ($property->isLgDependent() ? $session->getDataLanguage() : '');
 						$formatedValues = array();
 						if ($value instanceof core_kernel_classes_Resource) {
 							$formatedValues[] = $value->uriResource;

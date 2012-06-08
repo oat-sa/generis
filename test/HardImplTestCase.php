@@ -275,7 +275,7 @@ class HardImplTestCase extends UnitTestCase {
         	GENERIS_TRUE,
         	RDFS_SEEALSO,
         	$session->defaultLg,
-        	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
+        	$session->getDataLanguage()
         ));
         
         $sorted = core_kernel_persistence_smoothsql_Utils::sortByLanguage($result, 'l_language');
@@ -284,12 +284,12 @@ class HardImplTestCase extends UnitTestCase {
         $this->assertTrue(count($filtered) == 1 && $filtered[0] == 'testing');
        
         // Second test is based on a particular language.
-        $session->setLg('FR');
+        $session->setDataLanguage('FR');
         $result	= $dbWrapper->execSql($query, array(
         	GENERIS_TRUE,
         	RDFS_SEEALSO,
         	$session->defaultLg,
-        	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
+        	$session->getDataLanguage()
         ));
         
         $sorted = core_kernel_persistence_smoothsql_Utils::sortByLanguage($result, 'l_language');
@@ -301,18 +301,18 @@ class HardImplTestCase extends UnitTestCase {
 		// No japanese values here, but default language set to EN.
 		// Here we use the function filterByLanguage which aggregates sortByLanguage
 		// and getFirstLanguage.
-		$session->setLg('JA');
+		$session->setDataLanguage('JA');
         $result	= $dbWrapper->execSql($query, array(
         	GENERIS_TRUE,
         	RDFS_SEEALSO,
         	$session->defaultLg,
-        	($session->getLg() != '') ? $session->getLg() : $session->defaultLg
+        	$session->getDataLanguage()
         ));
         
         $filtered = core_kernel_persistence_smoothsql_Utils::filterByLanguage($result, 'l_language');
         $this->assertTrue(count($filtered) == 1 && $filtered[0] == 'testing');
 		
-		$session->setLg('');
+		$session->setDataLanguage('');
 		
 		// Set back ontology to normal.
 		$this->object->removeStatement($true->uriResource,RDFS_SEEALSO,'test1', '');

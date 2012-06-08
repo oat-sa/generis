@@ -38,28 +38,44 @@ class core_kernel_classes_Session
     // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute lg
+     * Short description of attribute instance
+     *
+     * @access private
+     * @var Session
+     */
+    private static $instance = null;
+
+    /**
+     * Short description of attribute dataLanguage
      *
      * @access private
      * @var string
      */
-    private $lg = '';
+    private $dataLanguage = '';
 
     /**
-     * Short description of attribute user
+     * Short description of attribute interfaceLanguage
      *
      * @access private
      * @var string
      */
-    private $user = '';
+    private $interfaceLanguage = '';
 
     /**
-     * Short description of attribute isAdmin
+     * Short description of attribute userLogin
      *
      * @access private
-     * @var boolean
+     * @var string
      */
-    private $isAdmin = false;
+    private $userLogin = '';
+
+    /**
+     * Short description of attribute userUri
+     *
+     * @access private
+     * @var string
+     */
+    private $userUri = '';
 
     /**
      * Short description of attribute defaultLg
@@ -68,14 +84,6 @@ class core_kernel_classes_Session
      * @var string
      */
     public $defaultLg = '';
-
-    /**
-     * Short description of attribute instance
-     *
-     * @access private
-     * @var Session
-     */
-    private static $instance = null;
 
     /**
      * Short description of attribute loadedModels
@@ -108,7 +116,12 @@ class core_kernel_classes_Session
 
         // section 10-13-1--31--7858878e:119b84cada6:-8000:0000000000000AE0 begin
 		if (!isset(self::$instance) || is_null(self::$instance)) {
-			self::$instance = new self();
+			if (Session::hasAttribute('generis_session')) {
+				self::$instance = Session::getAttribute('generis_session');
+			} else {
+				self::$instance = new self();
+				Session::setAttribute('generis_session', self::$instance);
+			}
 		}
 		$returnValue = self::$instance;
 
@@ -118,29 +131,23 @@ class core_kernel_classes_Session
     }
 
     /**
-     * This function is used to reset the static context to the instance, if
-     * the instance was created in another execution context
-     * (frontcontroller will store the singleton in the php session then
-     * will restore it for further http requests)
+     * This function is used to reset the session
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Session staticInstance
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return void
      */
-    public function reset( core_kernel_classes_Session $staticInstance = null)
+    public function reset()
     {
         // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 begin
-		if ($staticInstance !== null){
-			self::$instance = $staticInstance;
-        }
-        else{
-        	$this->defaultLg = DEFAULT_LANG;
-        	$this->setLg('');
-        	$this->setUser('');
-        	
-        	$this->update();
-	    }
+		common_Logger::d('resetting session');
+		$this->defaultLg = DEFAULT_LANG;
+		$this->setDataLanguage('');
+		$this->setInterfaceLanguage('');
+
+		$this->userLogin = '';
+		$this->userUri = null;
+		$this->update();
         // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 end
     }
 
@@ -167,16 +174,19 @@ class core_kernel_classes_Session
 		$this->updatableModels = $extensionManager->getUpdatableModels ();
 		
 		//set default language
-		$this->defaultLg = DEFAULT_LANG;
+		$this->defaultLg			= DEFAULT_LANG;
+		$this->interfaceLanguage	= '';
+		$this->dataLanguage			= '';
 		
         // section 10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000AE7 end
     }
 
     /**
-     * Short description of method setLg
+     * please use setDataLanguage() instead
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author CÃ©dric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @deprecated
      * @param  string lg
      * @return boolean
      */
@@ -185,21 +195,18 @@ class core_kernel_classes_Session
         $returnValue = (bool) false;
 
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000752 begin
-        if(empty($lg)){
-                //if lg null lg is set to defaultLG
-                $lg=$this->defaultLg;
-        }
-        $this->lg = $lg;
+        $returnValue = $this->setDataLanguage($lg);
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000752 end
 
         return (bool) $returnValue;
     }
 
     /**
-     * Short description of method getLg
+     * please use getDataLanguage() instead
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author CÃ©dric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @deprecated
      * @return string
      */
     public function getLg()
@@ -207,7 +214,7 @@ class core_kernel_classes_Session
         $returnValue = (string) '';
 
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000754 begin
-		$returnValue=$this->lg;
+        $returnValue = $this->getDataLanguage();
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000754 end
 
         return (string) $returnValue;
@@ -217,7 +224,7 @@ class core_kernel_classes_Session
      * Short description of method getNameSpace
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author CÃ©dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return string
      */
     public function getNameSpace()
@@ -232,36 +239,37 @@ class core_kernel_classes_Session
     }
 
     /**
-     * Returns array of languages in which data is defined into this module
+     * Short description of method getUserLogin
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @return array
-     */
-    public function getLanguages()
-    {
-        $returnValue = array();
-
-        // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B18 begin
-        // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B18 end
-
-        return (array) $returnValue;
-    }
-
-    /**
-     * Short description of method getUser
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author CÃ©dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return string
      */
-    public function getUser()
+    public function getUserLogin()
     {
         $returnValue = (string) '';
 
         // section 10-13-1--31-42d46662:11bb6ef4845:-8000:0000000000000D59 begin
-	$returnValue = $this->user;
+	$returnValue = $this->userLogin;
         // section 10-13-1--31-42d46662:11bb6ef4845:-8000:0000000000000D59 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method getUserUri
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return string
+     */
+    public function getUserUri()
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A07 begin
+        return $this->userUri;
+        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A07 end
 
         return (string) $returnValue;
     }
@@ -270,16 +278,16 @@ class core_kernel_classes_Session
      * Short description of method setUser
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author CÃ©dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string login
+     * @param  string uri
      * @return mixed
      */
-    public function setUser($login)
+    public function setUser($login, $uri = null)
     {
         // section 127-0-1-1--14f68f95:12f59b39209:-8000:000000000000143A begin
-        
-    	$this->user = $login;
-    	
+    	$this->userLogin	= $login;
+    	$this->userUri		= $uri;
         // section 127-0-1-1--14f68f95:12f59b39209:-8000:000000000000143A end
     }
 
@@ -287,7 +295,7 @@ class core_kernel_classes_Session
      * Short description of method loadModel
      *
      * @access protected
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author CÃ©dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string model
      * @return boolean
      */
@@ -322,7 +330,7 @@ class core_kernel_classes_Session
      * Short description of method getLoadedModels
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author CÃ©dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return array
      */
     public function getLoadedModels()
@@ -342,7 +350,7 @@ class core_kernel_classes_Session
      * Short description of method getUpdatableModels
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author CÃ©dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return array
      */
     public function getUpdatableModels()
@@ -360,7 +368,7 @@ class core_kernel_classes_Session
      * Unload a model from the current session.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string model The model URI.
      * @return boolean
      */
@@ -385,7 +393,7 @@ class core_kernel_classes_Session
      * Updates the session by reloading references to models.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return void
      */
     public function update()
@@ -411,7 +419,7 @@ class core_kernel_classes_Session
      * Behaviour to adopt at PHP __wakup time.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return void
      */
     public function __wakeup()
@@ -419,6 +427,82 @@ class core_kernel_classes_Session
         // section 10-13-1-85-91f6d5e:135c7e94b2b:-8000:0000000000002A4B begin
         $this->update();
         // section 10-13-1-85-91f6d5e:135c7e94b2b:-8000:0000000000002A4B end
+    }
+
+    /**
+     * Short description of method setDataLanguage
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  string language
+     * @return mixed
+     */
+    public function setDataLanguage($language)
+    {
+        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A13 begin
+        if (empty($language)) {
+        	$this->dataLanguage = '';
+        } else {
+        	$this->dataLanguage = $language;
+        }
+	    common_Logger::d('Set data language to '.$language, array('GENERIS', 'I18N'));
+        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A13 end
+    }
+
+    /**
+     * returns the language code to use for data
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return string
+     */
+    public function getDataLanguage()
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A0E begin
+        $returnValue = empty($this->dataLanguage) ? $this->defaultLg : $this->dataLanguage;
+        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A0E end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method setInterfaceLanguage
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  string language
+     * @return mixed
+     */
+    public function setInterfaceLanguage($language)
+    {
+        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A15 begin
+		if (empty($language)) {
+        	$this->interfaceLanguage = '';
+        } else {
+        	$this->interfaceLanguage = $language;
+        }
+	    common_Logger::d('Set interface language to '.$language, array('GENERIS', 'I18N'));
+        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A15 end
+    }
+
+    /**
+     * returns the language code associated with user interactions
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return string
+     */
+    public function getInterfaceLanguage()
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A0C begin
+		$returnValue = empty($this->interfaceLanguage) ? $this->defaultLg : $this->interfaceLanguage;
+        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A0C end
+
+        return (string) $returnValue;
     }
 
 } /* end of class core_kernel_classes_Session */

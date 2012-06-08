@@ -81,7 +81,7 @@ class ResourceTestCase extends UnitTestCase{
 
 		// We now explicitly change the current language to EN (English), we should
 		// get exactly the same behaviour.
-		$session->setLg('EN');
+		$session->setDataLanguage('EN');
 		$collection = $instance->getPropertyValuesCollection($seeAlso);
 		$this->assertTrue($collection->count() == 3);
 		foreach ($collection->getIterator() as $value) {
@@ -96,7 +96,7 @@ class ResourceTestCase extends UnitTestCase{
 
 		// We now go to FR (French). we should receive a collection of 3 values:
 		// a Generis True, 'plup'@fr, 'plip'@fr.
-		$session->setLg('FR');
+		$session->setDataLanguage('FR');
 		$collection = $instance->getPropertyValuesCollection($seeAlso);
 		$this->assertTrue($collection->count() == 3);
 		foreach ($collection->getIterator() as $value) {
@@ -110,7 +110,7 @@ class ResourceTestCase extends UnitTestCase{
 		}
 		
 		// Back to normal.
-		$session->setLg('');
+		$session->setDataLanguage('');
 
 		$instance->delete();
 	}
@@ -360,19 +360,19 @@ class ResourceTestCase extends UnitTestCase{
 		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 0);
 		
 		// We now switch to Swedish language and remove the values in the language.
-		$session->setLg('SE');
+		$session->setDataLanguage('SE');
 		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 2);
 		$this->assertTrue($instance->removePropertyValues($prop2));
 		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 0);
 		
 		// Same as above with Japanese language.
-		$session->setLg('JA');
+		$session->setDataLanguage('JA');
 		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 1);
 		$this->assertTrue($instance->removePropertyValues($prop2));
 		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 0);
 		
 		// And now final check in French language.
-		$session->setLg('FR');
+		$session->setDataLanguage('FR');
 		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 2);
 		$this->assertTrue($instance->removePropertyValues($prop2));
 		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 0);
@@ -430,12 +430,12 @@ class ResourceTestCase extends UnitTestCase{
 		$this->assertEqual($one->literal, 'plip');*/
 
 		// We now go multilingual.
-		$session->setLg('FR');
+		$session->setDataLanguage('FR');
 		$instance->setPropertyValue($seeAlso, 'plopFR');
 		$one = $instance->getPropertyValuesByLg($seeAlso, 'FR');
 		
 		// Back to default language.
-		$session->setLg('');
+		$session->setDataLanguage('');
 
 		$instance->delete();
 	}

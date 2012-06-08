@@ -171,7 +171,7 @@ class core_kernel_persistence_hardsql_Resource
 				$lang = $options['lg'];
 			}
 			else{
-				($session->getLg() != '') ? $lang = $session->getLg() : $lang = $session->defaultLg;
+				$lang = $session->getDataLanguage();
 				$defaultLg = ' OR "l_language" = \''.$session->defaultLg.'\' ';
 			}
             
@@ -394,10 +394,8 @@ class core_kernel_persistence_hardsql_Resource
 			if ($property->isLgDependent()){
 				if ($lg!=null){
 					$lang = $lg;
-				} else if ($session->getLg() != ''){
-					$lang = $session->getLg();
 				} else {
-					$lang = $session->defaultLg;
+					$lang = $session->getDataLanguage();
 				}
 			}
 
@@ -476,7 +474,7 @@ class core_kernel_persistence_hardsql_Resource
 						|| !$referencer->isPropertyReferenced($property)) {
 
 						$propertyRange = $property->getRange();
-						$lang = ($property->isLgDependent() ? ( $session->getLg() != '' ? $session->getLg() : $session->defaultLg) : '');
+						$lang = ($property->isLgDependent() ? $session->getdataLG() : '');
 						$formatedValues = array();
 						if ($value instanceof core_kernel_classes_Resource) {
 							$formatedValues[] = $value->uriResource;
@@ -642,7 +640,7 @@ class core_kernel_persistence_hardsql_Resource
 								//@TODO : if the property is language dependent, add the language condition !!
 //								if($property->isLgDependent()){
 //									$session = core_kernel_classes_Session::singleton();
-//									$lang = ($session->getLg() != '') ? $session->getLg() : $session->defaultLg;
+//									$lang = $session->getDataLanguage();
 //									$query .= ' AND ("l_language" = \'\' OR "l_language" = \''.$lang.'\') ';
 //								}
 		
@@ -1191,7 +1189,7 @@ class core_kernel_persistence_hardsql_Resource
 			if (isset($options['lg'])) {
 				$lang = $options['lg'];
 			} else {
-				($session->getLg() != '') ? $lang = $session->getLg() : $lang = $session->defaultLg;
+				$lang = $session->getDataLanguage();
 				$defaultLg = ' OR "l_language" = \'' . $session->defaultLg . '\' ';
 			}
 

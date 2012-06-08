@@ -390,7 +390,7 @@ class core_kernel_persistence_virtuoso_Resource
                                 if(!empty($propID)){
                                         $property = new core_kernel_classes_Property($propertyUri);
                                         try{
-                                                $lg = ($property->exists() && $property->isLgDependent()) ? ( $session->getLg() != '' ? $virtuoso->filterLanguageValue($session->getLg()) : $session->defaultLg) : '';
+                                                $lg = ($property->exists() && $property->isLgDependent()) ? $virtuoso->filterLanguageValue($session->getDataLanguage()) : '';
                                         }catch(Exception $e){
                                                 //leave the lg empty, to prevent
                                         }
@@ -651,7 +651,7 @@ class core_kernel_persistence_virtuoso_Resource
     	if($collection->count() > 0 && !empty($ID)){
     		
 //    		$session = core_kernel_classes_Session::singleton();
-//    		$user = $session->getUser();
+//    		$user = $session->getUserLogin();
     		
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
                 $prefixes =  array($NS => 'resourceNS');

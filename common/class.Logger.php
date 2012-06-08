@@ -188,7 +188,7 @@ class common_Logger
 			// if session has not been started, no user can be involved yet
 			// else logging fails during install
 			$user = class_exists('core_kernel_classes_Session', false)
-				? core_kernel_classes_Session::singleton()->getUser()
+				? core_kernel_classes_Session::singleton()->getUserLogin()
 				: null;
 			if ($errorFile == '') {
 				$keys = array_keys($stack);

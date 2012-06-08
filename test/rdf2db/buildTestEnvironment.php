@@ -70,7 +70,6 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 		
 		core_kernel_users_Service::logout();
 		if($this->userService->loginUser($login, md5($pass))){
-			$this->userService->connectCurrentUser();
 			$this->currentUser = $this->userService->getCurrentUser();
 		}
 		
