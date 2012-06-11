@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 08.06.2012, 14:25:42 with ArgoUML PHP module 
+ * Automatically generated on 11.06.2012, 16:30:02 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -201,7 +201,7 @@ class core_kernel_users_Service
      * @param  string role
      * @return boolean
      */
-    public function login($login, $password, core_kernel_classes_Class $role)
+    public function login($login, $password, $role)
     {
         $returnValue = (bool) false;
 
@@ -255,7 +255,7 @@ class core_kernel_users_Service
 		if ($returnValue) {
 			$this->userResource = reset($users);
 			
-			$roles = tao_models_classes_UserService::singleton()->getUserRoles($this->userResource);
+			$roles = core_kernel_users_Service::singleton()->getUserRoles($this->userResource);
 				
 			core_kernel_classes_Session::singleton()->reset();
 			$session = core_kernel_classes_Session::singleton();
@@ -404,6 +404,27 @@ class core_kernel_users_Service
         // section 127-0-1-1--dd65dd6:137c0b39408:-8000:00000000000019FE end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method getUserRoles
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  Resource user
+     * @return array
+     */
+    public function getUserRoles( core_kernel_classes_Resource $user)
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1-1c7cc2b7:137dbf1ddb6:-8000:0000000000002BC2 begin
+    	if (!is_null($user)) {
+			$returnValue = $user->getTypes();
+		}
+        // section 127-0-1-1-1c7cc2b7:137dbf1ddb6:-8000:0000000000002BC2 end
+
+        return (array) $returnValue;
     }
 
 } /* end of class core_kernel_users_Service */
