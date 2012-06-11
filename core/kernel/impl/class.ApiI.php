@@ -66,7 +66,7 @@ class core_kernel_impl_ApiI
 
         // section 10-13-1--31--1e8cf08b:11927b92513:-8000:00000000000009AF begin
         if($role === true) {
-        	$role = CLASS_ROLE_TAOMANAGER;
+        	$role = new core_kernel_classes_Class(CLASS_ROLE_TAOMANAGER);
         }
        
         core_kernel_users_Service::singleton()->login($login, $password, $role);

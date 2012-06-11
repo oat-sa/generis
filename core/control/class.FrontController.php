@@ -25,7 +25,7 @@ class core_control_FrontController
 
 			
 			$apiModelOo = core_kernel_impl_ApiModelOO::singleton();
-			if($apiModelOo->logIn($login, $password, $module, CLASS_ROLE_TAOMANAGER)){
+			if($apiModelOo->logIn($login, $password, $module, new core_kernel_classes_Class(CLASS_ROLE_TAOMANAGER))) {
 				$status =true;	
 			}
 		}

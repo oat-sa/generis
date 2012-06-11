@@ -112,8 +112,9 @@ class core_kernel_users_Service
 
         $roleUri = $parentRole != null ? $parentRole->uriResource :  CLASS_ROLE;
 
-        $classRole =  new core_kernel_classes_Class($roleUri);
-        $returnValue = $classRole->createInstance($label,$comment);
+        $classRole		=  new core_kernel_classes_Class($roleUri);
+        $newRole		= $classRole->createInstance($label,$comment);
+        $returnValue	= new core_kernel_classes_Class($newRole->getUri());
         $returnValue->setPropertyValue(new core_kernel_classes_Property(RDF_SUBCLASSOF),CLASS_GENERIS_USER);
 
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001819 end
@@ -200,7 +201,7 @@ class core_kernel_users_Service
      * @param  string role
      * @return boolean
      */
-    public function login($login, $password, $role)
+    public function login($login, $password, core_kernel_classes_Class $role)
     {
         $returnValue = (bool) false;
 
@@ -224,14 +225,16 @@ class core_kernel_users_Service
 			return $returnValue;
 		}
 			
-		// get all the concrete roles
+		/* get all the concrete roles
+		
 		$roleClass = new core_kernel_classes_Class($role);
 		$userClasses = $roleClass->getInstances(true);
 		
         //check login
         $pip = array_shift($userClasses);
 		$pipclass = new core_kernel_classes_Class($pip->getUri());
-        $users = $pipclass->searchInstances(
+		*/
+		$users = $role->searchInstances(
 			array(
 				PROPERTY_USER_LOGIN 	=> $login,
 				PROPERTY_USER_PASSWORD	=> $password
@@ -239,7 +242,7 @@ class core_kernel_users_Service
 			array(
 				'like' 				=> false,
 				'recursive'			=> 1,
-				'additionalClasses'	=> $userClasses
+//				'additionalClasses'	=> $userClasses
 			)
 		);
         
