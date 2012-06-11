@@ -61,9 +61,4 @@ class UserServiceTestCase extends UnitTestCase {
 		$role1->delete();
 	}
 	
-	
-	public function testConnectApi(){
-		$this->assertTrue($this->service->connectApi('http://www.tao.lu/Ontologies/TAO.rdf#installator'));
-	}
-	
 }
