@@ -101,6 +101,14 @@ class core_kernel_classes_Session
      */
     protected $updatableModels = array();
 
+    /**
+     * Short description of attribute userRoles
+     *
+     * @access private
+     * @var array
+     */
+    private $userRoles = array();
+
     // --- OPERATIONS ---
 
     /**
@@ -145,8 +153,9 @@ class core_kernel_classes_Session
 		$this->setDataLanguage('');
 		$this->setInterfaceLanguage('');
 
-		$this->userLogin = '';
-		$this->userUri = null;
+		$this->userLogin	= '';
+		$this->userUri		= null;
+		$this->userRoles	= array();
 		$this->update();
         // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 end
     }
@@ -281,13 +290,15 @@ class core_kernel_classes_Session
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @param  string login
      * @param  string uri
+     * @param  array roles
      * @return mixed
      */
-    public function setUser($login, $uri = null)
+    public function setUser($login, $uri = null, $roles = array())
     {
         // section 127-0-1-1--14f68f95:12f59b39209:-8000:000000000000143A begin
     	$this->userLogin	= $login;
     	$this->userUri		= $uri;
+    	$this->userRoles	= $roles;
         // section 127-0-1-1--14f68f95:12f59b39209:-8000:000000000000143A end
     }
 
@@ -503,6 +514,24 @@ class core_kernel_classes_Session
         // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A0C end
 
         return (string) $returnValue;
+    }
+
+    /**
+     * returns the roles of the current user
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return array
+     */
+    public function getUserRoles()
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1--67a0c37:137dbbe2925:-8000:0000000000001A0F begin
+        return $this->userRoles;
+        // section 127-0-1-1--67a0c37:137dbbe2925:-8000:0000000000001A0F end
+
+        return (array) $returnValue;
     }
 
 } /* end of class core_kernel_classes_Session */

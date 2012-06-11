@@ -254,10 +254,12 @@ class core_kernel_users_Service
 		
 		if ($returnValue) {
 			$this->userResource = reset($users);
+			
+			$roles = tao_models_classes_UserService::singleton()->getUserRoles($this->userResource);
 				
 			core_kernel_classes_Session::singleton()->reset();
 			$session = core_kernel_classes_Session::singleton();
-			$session->setUser($login, $this->userResource->getUri());
+			$session->setUser($login, $this->userResource->getUri(), $roles);
 		}
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001834 end
 
