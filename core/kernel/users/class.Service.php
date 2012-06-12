@@ -419,9 +419,22 @@ class core_kernel_users_Service
         $returnValue = array();
 
         // section 127-0-1-1-1c7cc2b7:137dbf1ddb6:-8000:0000000000002BC2 begin
-    	if (!is_null($user)) {
-			$returnValue = $user->getTypes();
-		}
+    	if (is_null($user)) {
+    		throw new common_exception_InvalidArgumentType(__CLASS__, __METHOD__, 1, 'core_kernel_classes_Resource');
+    	}
+    	$uris = array();
+        foreach ($user->getTypes() as $baseType) {
+        	$uris[] = $baseType->getUri();
+        	foreach ($baseType->getParentClasses(true) as $type) {
+        		$uris[] = $type->getUri();
+        	}
+        }
+        foreach (array_unique($uris) as $typeUri) {
+        	$type = new core_kernel_classes_Class($typeUri);
+        	if ($type->isInstanceOf(new core_kernel_classes_Class(CLASS_ROLE))) {
+        		$returnValue[$type->getUri()] = $type;
+        	}
+        }
         // section 127-0-1-1-1c7cc2b7:137dbf1ddb6:-8000:0000000000002BC2 end
 
         return (array) $returnValue;
