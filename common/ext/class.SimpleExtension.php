@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 30.05.2012, 11:01:57 with ArgoUML PHP module 
+ * Automatically generated on 13.06.2012, 14:53:24 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -144,12 +144,12 @@ class common_ext_SimpleExtension
     public $configuration = null;
 
     /**
-     * Short description of attribute parent
+     * Short description of attribute parentID
      *
-     * @access public
-     * @var SimpleExtension
+     * @access protected
+     * @var string
      */
-    public $parent = null;
+    protected $parentID = '';
 
     // --- OPERATIONS ---
 
@@ -171,9 +171,7 @@ class common_ext_SimpleExtension
 			$this->author = $manifestArray['additional']['author'];
 			$this->name = $manifestArray['name'];
 			$this->version = $manifestArray['additional']['version'];
-			if(isset($manifestArray['additional']['extends'])) {
-				$this->parent = common_ext_ExtensionsManager::singleton()->getExtensionById($manifestArray['additional']['extends']);
-			}
+			
 			if(isset($manifestArray['additional']['install']) && is_array($manifestArray['additional']['install'])) {
 				$this->installFiles = $manifestArray['additional']['install'];
 			}
@@ -187,6 +185,13 @@ class common_ext_SimpleExtension
 			foreach ($list as $ext) {
 				$this->requiredExtensionsList[] = $ext;
 			}
+			if(isset($manifestArray['additional']['extends'])) {
+				$this->parentID = $manifestArray['additional']['extends'];
+				if (!in_array($this->parentID, $this->requiredExtensionsList)) {
+	        		$this->requiredExtensionsList[] = $this->parentID;
+				} 
+	        }
+			
 			if(isset($manifestArray['additional']['classLoaderPackages'])) {
 				$this->classLoaderPackages = $manifestArray['additional']['classLoaderPackages'];	
 			}
@@ -243,6 +248,24 @@ class common_ext_SimpleExtension
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A0 end
 
         return $returnValue;
+    }
+
+    /**
+     * Short description of method getID
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return string
+     */
+    public function getID()
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A17 begin
+        return $this->id;
+        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A17 end
+
+        return (string) $returnValue;
     }
 
 } /* end of class common_ext_SimpleExtension */

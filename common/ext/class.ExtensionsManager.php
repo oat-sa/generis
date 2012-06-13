@@ -266,17 +266,32 @@ class common_ext_ExtensionsManager
     public function getAvailableExtensions()
     {
         // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002364 begin
-		$result = array(
-		'testExtension' => array (
-				'zip' => dirname(__FILE__).'/test/common/testExtension.zip',
-				'author' => 'CRP Henri Tudor',
-				'name' => 'testExtensionZip',
-				'description' => 'Sample Test Extension to test Ext Mechanism',
-				'version' => '0.25'
-				)
-		);
+        $result = array();
+        
+		$dir = new DirectoryIterator(ROOT_PATH);
+		foreach ($dir as $fileinfo) {
+			if ($fileinfo->isDir() && !$fileinfo->isDot()) {
+				$extId = $fileinfo->getBasename();
+				try {
+					$result[$extId] = new common_ext_Extension($extId);
+				} catch (common_ext_ExtensionException $exception) {
+					common_Logger::d($extId.' is not an extension');
+				}
+			}
+		}
+		// remove installed extensions
 		$returnValue = array_diff_key($result,$this->getInstalledExtensions());
-
+		
+		// sort by dependencies
+		uasort($returnValue,function ($a, $b) {
+			if (in_array($a->getID(), $b->getDependencies())) {
+				return -1;
+			}
+			if (in_array($b->getID(), $a->getDependencies())) {
+				return 1;
+			}
+			return 0;
+		});
 		return $returnValue;
         // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002364 end
     }
@@ -434,11 +449,11 @@ class common_ext_ExtensionsManager
 
         // section 127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DC3 begin
         $extensions = $this->getInstalledExtensions();
-        if (isset($extensions[$id])) {
-        	return $extensions[$id];
-        } else {
-        	throw new common_Exception('No extension with id \''.$id.'\' found');
+        if (!isset($extensions[$id])) {
+        	$this->extensions[$id] = new common_ext_Extension($id);
+        	//throw new common_Exception('No extension with id \''.$id.'\' found');
         }
+        $returnValue = $this->extensions[$id];
         // section 127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DC3 end
 
         return $returnValue;

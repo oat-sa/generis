@@ -44,7 +44,7 @@ abstract class common_ext_ExtensionHandler
      * Short description of attribute extension
      *
      * @access public
-     * @var SimpleExtension
+     * @var Extension
      */
     public $extension = null;
 
@@ -54,11 +54,11 @@ abstract class common_ext_ExtensionHandler
      * Short description of method __construct
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  SimpleExtension extension
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  Extension extension
      * @return mixed
      */
-    public function __construct( common_ext_SimpleExtension $extension)
+    public function __construct( common_ext_Extension $extension)
     {
         // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017C6 begin
 		$this->extension = $extension;

@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 30.05.2012, 11:59:44 with ArgoUML PHP module 
+ * Automatically generated on 13.06.2012, 15:56:01 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -53,6 +53,14 @@ class common_ext_Extension
 
     // --- ATTRIBUTES ---
 
+    /**
+     * Short description of attribute parent
+     *
+     * @access private
+     * @var Extension
+     */
+    private $parent = null;
+
     // --- OPERATIONS ---
 
     /**
@@ -79,8 +87,9 @@ class common_ext_Extension
 				}
 			}
 		}
-		if (!is_null($this->parent)) {
-			$returnValue = array_merge($this->parent->getAllModules(), $returnValue);
+		if (!empty($this->parentID)) {
+			$parent = common_ext_ExtensionsManager::singleton()->getExtensionById($this->parentID);
+			$returnValue = array_merge($parent->getAllModules(), $returnValue);
 		}
         // section 127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DCA end
 
@@ -103,8 +112,9 @@ class common_ext_Extension
     	$className = $this->id.'_actions_'.$id;
 		if(class_exists($className)) {
 			$returnValue = new $className;
-		} elseif (!is_null($this->parent)) {
-			$returnValue = $this->parent->getModule($id);
+		} elseif (!empty($this->parentID)) {
+			$parent = common_ext_ExtensionsManager::singleton()->getExtensionById($this->parentID);
+			$returnValue = $parent->getModule($id);
 		}
         // section 127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DCC end
 
@@ -125,12 +135,13 @@ class common_ext_Extension
         // section 127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DCF begin
     	if(is_array($this->requiredExtensionsList)) {
         	$returnValue = $this->requiredExtensionsList;
-
+        	
         	foreach($this->requiredExtensionsList as $id){
         		$dependence = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
         		$returnValue = array_merge($returnValue, $dependence->getDependencies());
         	}
         }
+        $returnValue = array_unique($returnValue);
         // section 127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DCF end
 
         return (array) $returnValue;
@@ -148,9 +159,53 @@ class common_ext_Extension
         $returnValue = (bool) false;
 
         // section 127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DD2 begin
+        if ($this->isInstalled()) {
+        	$returnValue = !$this->getConfiguration()->ghost;
+        }
         // section 127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DD2 end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method isInstalled
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return boolean
+     */
+    public function isInstalled()
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A1D begin
+        foreach (common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $ext) {
+        	if ($ext->getID() == $this->getID()) {
+        		$returnValue = true;
+        		break;
+        	}
+        }
+        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A1D end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method getDir
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return string
+     */
+    public function getDir()
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A2A begin
+        $returnValue = EXTENSION_PATH .'/'.$this->getID().'/';
+        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A2A end
+
+        return (string) $returnValue;
     }
 
 } /* end of class common_ext_Extension */
