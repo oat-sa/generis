@@ -86,7 +86,9 @@ class common_ext_ExtensionInstaller
 				$this->installCustomScript();
 				$this->installWriteConfig();
 				$this->installOntology();
-				$this->installLocalData();
+                if ($this->getLocalData() == true){
+                    $this->installLocalData();
+                }
 				$this->installWriteConfig();
 				$this->installRegisterExt();
 			}
