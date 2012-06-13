@@ -3,13 +3,13 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - common/ext/class.ExtensionInstaller.php
+ * Generis Object Oriented API - common\ext\class.ExtensionInstaller.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 13.06.2012, 16:10:11 with ArgoUML PHP module 
+ * Automatically generated on 13.06.2012, 16:51:45 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -55,13 +55,21 @@ class common_ext_ExtensionInstaller
 
     // --- ATTRIBUTES ---
 
+    /**
+     * States if local data must be installed or not.
+     *
+     * @access private
+     * @var boolean
+     */
+    private $localData = false;
+
     // --- OPERATIONS ---
 
     /**
      * install an extension
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return mixed
      */
     public function install()
@@ -95,7 +103,7 @@ class common_ext_ExtensionInstaller
      * check required extensions are not missing
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return boolean
      */
     protected function checkRequiredExtensions()
@@ -120,7 +128,7 @@ class common_ext_ExtensionInstaller
      * Short description of method installLocalData
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return mixed
      */
     protected function installLocalData()
@@ -139,7 +147,7 @@ class common_ext_ExtensionInstaller
      * Short description of method installOntology
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return mixed
      */
     protected function installOntology()
@@ -169,7 +177,7 @@ class common_ext_ExtensionInstaller
      * Short description of method installWriteConfig
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return mixed
      */
     protected function installWriteConfig()
@@ -196,7 +204,7 @@ class common_ext_ExtensionInstaller
      * Short description of method installRegisterExt
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return mixed
      */
     protected function installRegisterExt()
@@ -219,7 +227,7 @@ class common_ext_ExtensionInstaller
      * Short description of method installCustomScript
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return mixed
      */
     protected function installCustomScript()
@@ -230,7 +238,57 @@ class common_ext_ExtensionInstaller
 			common_Logger::d('Running custom install script '.$manifestArray['additional']['install']['php'].' for ext '.$this->extension->getID(), 'INSTALL');
 			require_once $manifestArray['additional']['install']['php'];
 		}
-    	// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A2C end
+        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A2C end
+    }
+
+    /**
+     * Instantiate a new ExtensionInstaller for a given Extension.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Extension extension The extension to install
+     * @param  boolean localData Import local data or not.
+     * @return mixed
+     */
+    public function __construct( common_ext_Extension $extension, $localData = true)
+    {
+        // section -64--88-56-1--cf3e319:137e64d7097:-8000:0000000000001A2B begin
+        parent::__construct($extension);
+        $this->setLocalData($localData);
+        // section -64--88-56-1--cf3e319:137e64d7097:-8000:0000000000001A2B end
+    }
+
+    /**
+     * Sets localData field.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  boolean value
+     * @return mixed
+     */
+    public function setLocalData($value)
+    {
+        // section -64--88-56-1--cf3e319:137e64d7097:-8000:0000000000001A3A begin
+        $this->localData = $value;
+        // section -64--88-56-1--cf3e319:137e64d7097:-8000:0000000000001A3A end
+    }
+
+    /**
+     * Retrieve localData field
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return boolean
+     */
+    public function getLocalData()
+    {
+        $returnValue = (bool) false;
+
+        // section -64--88-56-1--cf3e319:137e64d7097:-8000:0000000000001A3D begin
+        $returnValue = $this->localData;
+        // section -64--88-56-1--cf3e319:137e64d7097:-8000:0000000000001A3D end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class common_ext_ExtensionInstaller */
