@@ -280,21 +280,8 @@ class common_ext_ExtensionsManager
 			}
 		}
 		// remove installed extensions
-		$toAssign = array_diff_key($result,$this->getInstalledExtensions());
+		$returnValue = array_diff_key($result,$this->getInstalledExtensions());
 		
-		// sort by dependencies
-		$returnValue = array();
-		$loadedDeps = array_keys($this->getInstalledExtensions());
-		while (!empty($toAssign)) {
-			foreach ($toAssign as $key => $extension) {
-				// if all dependencies are installed
-				if (count(array_diff($extension->getDependencies(), $loadedDeps)) == 0) {
-					$returnValue[] = $extension;
-					$loadedDeps[] = $extension->getID();
-					unset($toAssign[$key]);
-				}
-			}
-		}
 		return $returnValue;
         // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002364 end
     }
