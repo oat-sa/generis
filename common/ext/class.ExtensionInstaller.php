@@ -3,13 +3,13 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - common\ext\class.ExtensionInstaller.php
+ * Generis Object Oriented API - common/ext/class.ExtensionInstaller.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 13.06.2012, 16:51:45 with ArgoUML PHP module 
+ * Automatically generated on 14.06.2012, 11:31:45 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -69,7 +69,7 @@ class common_ext_ExtensionInstaller
      * install an extension
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
     public function install()
@@ -83,14 +83,15 @@ class common_ext_ExtensionInstaller
 			//check dependances
 			if($this->checkRequiredExtensions()){
 
-				$this->installCustomScript();
 				$this->installWriteConfig();
 				$this->installOntology();
-                if ($this->getLocalData() == true){
+				$this->installOntologyTranslation();
+				$this->installModuleModel();
+				$this->installRegisterExt();
+				$this->installCustomScript();
+				if ($this->getLocalData() == true){
                     $this->installLocalData();
                 }
-				$this->installWriteConfig();
-				$this->installRegisterExt();
 			}
 				
 				
@@ -102,84 +103,10 @@ class common_ext_ExtensionInstaller
     }
 
     /**
-     * check required extensions are not missing
+     * writes the config based on the config.sample
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return boolean
-     */
-    protected function checkRequiredExtensions()
-    {
-        $returnValue = (bool) false;
-
-        // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A2 begin
-		$extensionManager = common_ext_ExtensionsManager::singleton();
-		$installedExtArray = $extensionManager->getInstalledExtensions();
-        foreach ($this->extension->requiredExtensionsList as $requiredExt) {
-			if(!array_key_exists($requiredExt,$installedExtArray)){
-				throw new common_ext_ExtensionException('Extension '. $requiredExt . ' missing');
-			}
-		}
-		$returnValue = true;
-        // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A2 end
-
-        return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method installLocalData
-     *
-     * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return mixed
-     */
-    protected function installLocalData()
-    {
-        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A22 begin
-		$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
-    	$localData = $this->extension->getDir().'/models/ontology/local.rdf';
-		if(file_exists($localData)){
-			common_Logger::d('Inserting localdata for '.$this->extension->getID(), 'INSTALL');
-			$modelCreator->insertLocalModelFile($localData);
-		}
-        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A22 end
-    }
-
-    /**
-     * Short description of method installOntology
-     *
-     * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return mixed
-     */
-    protected function installOntology()
-    {
-        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A24 begin
-        // insert model
-		$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
-    	$models = tao_install_utils_ModelCreator::getModelsFromExtensions(array($this->extension));
-		foreach ($models as $ns => $modelFiles){
-			foreach ($modelFiles as $file) {
-				common_Logger::d('Inserting for NS '.$ns.' model '.basename($file), 'INSTALL');
-				$modelCreator->insertModelFile($ns, $file);
-			}
-		}
-		// insert translated models
-		$models = tao_install_utils_ModelCreator::getTranslationModelsFromExtension($this->extension);
-		foreach($models as $ns => $modelFile){
-			foreach($modelFile as $mF) {
-				common_Logger::d('Inserting translation of model ' . basename($mF) . ' for extension '.$this->extension->getID(), 'INSTALL');
-				$modelCreator->insertModelFile($ns, $mF);
-			}
-		}
-        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A24 end
-    }
-
-    /**
-     * Short description of method installWriteConfig
-     *
-     * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
     protected function installWriteConfig()
@@ -203,10 +130,70 @@ class common_ext_ExtensionInstaller
     }
 
     /**
-     * Short description of method installRegisterExt
+     * inserts the datamodels
+     * specified in the Manifest
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return mixed
+     */
+    protected function installOntology()
+    {
+        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A24 begin
+        // insert model
+		$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
+    	$models = tao_install_utils_ModelCreator::getModelsFromExtensions(array($this->extension));
+		foreach ($models as $ns => $modelFiles){
+			foreach ($modelFiles as $file) {
+				common_Logger::d('Inserting for NS '.$ns.' model '.basename($file), 'INSTALL');
+				$modelCreator->insertModelFile($ns, $file);
+			}
+		}
+        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A24 end
+    }
+
+    /**
+     * inserts the translation of the datamodel
+     *
+     * @access protected
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return mixed
+     */
+    protected function installOntologyTranslation()
+    {
+        // section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A42 begin
+		// insert translated models
+		$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
+    	$models = tao_install_utils_ModelCreator::getTranslationModelsFromExtension($this->extension);
+		foreach($models as $ns => $modelFile){
+			foreach($modelFile as $mF) {
+				common_Logger::d('Inserting translation of model ' . basename($mF) . ' for extension '.$this->extension->getID(), 'INSTALL');
+				$modelCreator->insertModelFile($ns, $mF);
+			}
+		}
+        // section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A42 end
+    }
+
+    /**
+     * creates a model of all callable modules and actions
+     * for the funcACL
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return mixed
+     */
+    public function installModuleModel()
+    {
+        // section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A44 begin
+        tao_helpers_funcACL_ActionModelCreator::spawnExtensionModel($this->extension);
+        // section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A44 end
+    }
+
+    /**
+     * Registers the Extension with the extensionManager
+     *
+     * @access protected
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
     protected function installRegisterExt()
@@ -226,10 +213,11 @@ class common_ext_ExtensionInstaller
     }
 
     /**
-     * Short description of method installCustomScript
+     * Executes custom install scripts 
+     * specified in the Manifest
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
     protected function installCustomScript()
@@ -244,10 +232,54 @@ class common_ext_ExtensionInstaller
     }
 
     /**
+     * Installs example files and other non essential content
+     *
+     * @access protected
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return mixed
+     */
+    protected function installLocalData()
+    {
+        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A22 begin
+		$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
+    	$localData = $this->extension->getDir().'/models/ontology/local.rdf';
+		if(file_exists($localData)){
+			common_Logger::d('Inserting localdata for '.$this->extension->getID(), 'INSTALL');
+			$modelCreator->insertLocalModelFile($localData);
+		}
+        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A22 end
+    }
+
+    /**
+     * check required extensions are not missing
+     *
+     * @access protected
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return boolean
+     */
+    protected function checkRequiredExtensions()
+    {
+        $returnValue = (bool) false;
+
+        // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A2 begin
+		$extensionManager = common_ext_ExtensionsManager::singleton();
+		$installedExtArray = $extensionManager->getInstalledExtensions();
+        foreach ($this->extension->requiredExtensionsList as $requiredExt) {
+			if(!array_key_exists($requiredExt,$installedExtArray)){
+				throw new common_ext_ExtensionException('Extension '. $requiredExt . ' missing');
+			}
+		}
+		$returnValue = true;
+        // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A2 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
      * Instantiate a new ExtensionInstaller for a given Extension.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Extension extension The extension to install
      * @param  boolean localData Import local data or not.
      * @return mixed
@@ -264,7 +296,7 @@ class common_ext_ExtensionInstaller
      * Sets localData field.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  boolean value
      * @return mixed
      */
@@ -279,7 +311,7 @@ class common_ext_ExtensionInstaller
      * Retrieve localData field
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return boolean
      */
     public function getLocalData()

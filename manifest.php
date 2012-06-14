@@ -26,7 +26,6 @@ return array(
 					array('ns' => 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf', 'file' => dirname(__FILE__). '/core/ontology/widgetdefinitions.rdf'),
 					array('ns' => 'http://www.tao.lu/middleware/Rules.rdf', 'file' => dirname(__FILE__). '/core/ontology/rules.rdf'),
 					array('ns' => 'http://www.tao.lu/Ontologies/generis.rdf', 'file' => dirname(__FILE__). '/core/ontology/generis.rdf'),
-					array('ns' => 'http://www.tao.lu/Ontologies/taoFuncACL.rdf', 'file' => dirname(__FILE__). '/models/ontology/funcacl.rdf')
 			)
 		),
 		'classLoaderPackages' => array(
