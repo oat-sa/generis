@@ -8,7 +8,7 @@ return array(
 	'name' => 'generis',
 	'description' => 'Core extension, provide the low level framework and an API to manage ontologies',
 	'additional' => array(
-		'version' => '2.0',
+		'version' => '2.3',
 		'author' => 'CRP Henry Tudor',
 		'dependances' 	=> array(),
 		'models' => array(
