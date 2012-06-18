@@ -115,6 +115,8 @@ class common_ext_Extension
 		} elseif (!empty($this->parentID)) {
 			$parent = common_ext_ExtensionsManager::singleton()->getExtensionById($this->parentID);
 			$returnValue = $parent->getModule($id);
+		} else {
+			common_Logger::e('could not load '.$className);
 		}
         // section 127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DCC end
 
@@ -179,12 +181,7 @@ class common_ext_Extension
         $returnValue = (bool) false;
 
         // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A1D begin
-        foreach (common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $ext) {
-        	if ($ext->getID() == $this->getID()) {
-        		$returnValue = true;
-        		break;
-        	}
-        }
+        $returnValue = $this->installed;
         // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A1D end
 
         return (bool) $returnValue;

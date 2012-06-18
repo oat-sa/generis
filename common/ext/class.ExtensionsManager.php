@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 30.05.2012, 11:28:14 with ArgoUML PHP module 
+ * Automatically generated on 15.06.2012, 18:11:54 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -77,8 +77,7 @@ class common_ext_ExtensionsManager
 
         // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000233B begin
 		if (!isset(self::$instance)) {
-			$c = __CLASS__;
-			self::$instance = new $c();
+			self::$instance = new self();
 		}
 		$returnValue = self::$instance;
         // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000233B end
@@ -98,31 +97,11 @@ class common_ext_ExtensionsManager
         $returnValue = array();
 
         // section -87--2--3--76-e9002fe:123ebbb9fa8:-8000:000000000000179E begin
-		if(empty($this->extensions)){
-
-			$db = core_kernel_classes_DbWrapper::singleton();
-			$query = "SELECT * FROM extensions;";
-			$result = $db->execSql($query);
-			if($db->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception($db->dbConnector->errorMsg());
-			}
-
-			while (!$result-> EOF){
-				$id = $result->fields["id"];
-				$extension = new common_ext_Extension($id);
-
-				$extension->configuration = new common_ext_ExtensionConfiguration(
-					($result->fields["loaded"] == 1),
-					($result->fields["loadAtStartUp"] == 1),
-					($result->fields["ghost"] == 1),
-					$result->fields["version"]
-				);
-
-				$this->extensions[$id] = $extension;
-				$result->MoveNext();
-			}
-		}
-		$returnValue = $this->extensions;
+        foreach ($this->extensions as $ext) {
+        	if ($ext->isInstalled()) {
+        		$returnValue[$ext->getID()] = $ext;
+        	}
+        }
         // section -87--2--3--76-e9002fe:123ebbb9fa8:-8000:000000000000179E end
 
         return (array) $returnValue;
@@ -187,7 +166,7 @@ class common_ext_ExtensionsManager
         // section -87--2--3--76-e9002fe:123ebbb9fa8:-8000:00000000000017A0 begin
 		$fileUnzip = new fileUnzip($package_zip);
 		$fileUnzip->unzipAll(EXTENSION_PATH);
-		$newExt = new common_ext_SimpleExtension($id);
+		$newExt = $this->getExtensionById($id);
 		$extInstaller = new common_ext_ExtensionInstaller($newExt);
 		$extInstaller->install();
         // section -87--2--3--76-e9002fe:123ebbb9fa8:-8000:00000000000017A0 end
@@ -222,10 +201,6 @@ class common_ext_ExtensionsManager
     public function loadExtensions()
     {
         // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017B4 begin
-
-		if(count($this->extensions) == 0){
-			$this->getInstalledExtensions(); //init at first load;
-		}
 		foreach($this->extensions as $extension) {
 			$extensionLoader = new common_ext_ExtensionLoader($extension);
 
@@ -253,6 +228,7 @@ class common_ext_ExtensionsManager
     private function __construct()
     {
         // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000233D begin
+		$this->loadInstalledExtensions();
         // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000233D end
     }
 
@@ -266,21 +242,21 @@ class common_ext_ExtensionsManager
     public function getAvailableExtensions()
     {
         // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002364 begin
-        $result = array();
-        
+        $returnValue = array();
 		$dir = new DirectoryIterator(ROOT_PATH);
 		foreach ($dir as $fileinfo) {
-			if ($fileinfo->isDir() && !$fileinfo->isDot()) {
+			if ($fileinfo->isDir() && !$fileinfo->isDot() && substr($fileinfo->getBasename(), 0, 1) != '.') {
 				$extId = $fileinfo->getBasename();
 				try {
-					$result[$extId] = new common_ext_Extension($extId);
+					$ext = $this->getExtensionById($extId);
+					if (!$ext->isInstalled()) {
+						$returnValue[] = $ext;
+					}
 				} catch (common_ext_ExtensionException $exception) {
 					common_Logger::d($extId.' is not an extension');
 				}
 			}
 		}
-		// remove installed extensions
-		$returnValue = array_diff_key($result,$this->getInstalledExtensions());
 		
 		return $returnValue;
         // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002364 end
@@ -298,7 +274,7 @@ class common_ext_ExtensionsManager
     {
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002383 begin
 		foreach ($configurationArray as $id => $configuration) {
-			$ext = new common_ext_SimpleExtension($id);
+			$ext = $this->getExtensionById($id);
 //			TODO var_dump($ext->requiredExtensionsList);
 			foreach ($ext->requiredExtensionsList as $id) {
 //				var_dump($configurationArray[$id]);
@@ -322,7 +298,7 @@ class common_ext_ExtensionsManager
     public function reset()
     {
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:000000000000239B begin
-		$this->extensions = array();
+		$this->loadInstalledExtensions();
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:000000000000239B end
     }
 
@@ -438,15 +414,52 @@ class common_ext_ExtensionsManager
         $returnValue = null;
 
         // section 127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DC3 begin
-        $extensions = $this->getInstalledExtensions();
-        if (!isset($extensions[$id])) {
-        	$this->extensions[$id] = new common_ext_Extension($id);
-        	//throw new common_Exception('No extension with id \''.$id.'\' found');
+        if (empty($id)) {
+        	throw new common_exception_Error('No id specified for getExtensionById()');
+        }
+        if (!isset($this->extensions[$id])) {
+        	$this->extensions[$id] = new common_ext_Extension($id, false);
         }
         $returnValue = $this->extensions[$id];
         // section 127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DC3 end
 
         return $returnValue;
+    }
+
+    /**
+     * Short description of method loadInstalledExtensions
+     *
+     * @access private
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return mixed
+     */
+    private function loadInstalledExtensions()
+    {
+        // section 127-0-1-1--1d51cc99:137f05120f0:-8000:0000000000001A59 begin
+        $this->extensions = array();
+        
+    	$db = core_kernel_classes_DbWrapper::singleton();
+		$query = "SELECT * FROM extensions;";
+		$result = $db->execSql($query);
+		if($db->dbConnector->errorNo() !== 0){
+			throw new core_kernel_persistence_hardapi_Exception($db->dbConnector->errorMsg());
+		}
+
+		while (!$result-> EOF){
+			$id = $result->fields["id"];
+			$extension = new common_ext_Extension($id, true);
+
+			$extension->configuration = new common_ext_ExtensionConfiguration(
+				($result->fields["loaded"] == 1),
+				($result->fields["loadAtStartUp"] == 1),
+				($result->fields["ghost"] == 1),
+				$result->fields["version"]
+			);
+
+			$this->extensions[$id] = $extension;
+			$result->MoveNext();
+		}
+        // section 127-0-1-1--1d51cc99:137f05120f0:-8000:0000000000001A59 end
     }
 
 } /* end of class common_ext_ExtensionsManager */

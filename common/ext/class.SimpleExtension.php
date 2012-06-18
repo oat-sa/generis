@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 13.06.2012, 14:53:24 with ArgoUML PHP module 
+ * Automatically generated on 15.06.2012, 17:34:52 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -151,21 +151,31 @@ class common_ext_SimpleExtension
      */
     protected $parentID = '';
 
+    /**
+     * Short description of attribute installed
+     *
+     * @access public
+     * @var boolean
+     */
+    public $installed = false;
+
     // --- OPERATIONS ---
 
     /**
-     * Short description of method __construct
+     * Should not be called directly, please use ExtensionsManager
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string id
+     * @param  boolean installed
      * @return mixed
      */
-    public function __construct($id)
+    public function __construct($id, $installed = false)
     {
         // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002320 begin
-		$this->manifest = EXTENSION_PATH.'/'.$id.'/'.MANIFEST_NAME;
+    	$this->manifest = EXTENSION_PATH.'/'.$id.'/'.MANIFEST_NAME;
 		$this->id = $id;
+		$this->installed = $installed;
 		if(is_file($this->manifest)){
 			$manifestArray = require $this->manifest;
 			$this->author = $manifestArray['additional']['author'];

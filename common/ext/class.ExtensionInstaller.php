@@ -79,19 +79,23 @@ class common_ext_ExtensionInstaller
     	common_Logger::i('Installing '.$this->extension->getID(), 'INSTALL');
     	
 		try{
-			
+			// not yet installed? 
+			if ($this->extension->isInstalled()) {
+				throw new common_ext_ExtensionException(__('Problem installing extension '). $this->extension->id .' : '. 'Already installed');
+			}
 			//check dependances
-			if($this->checkRequiredExtensions()){
-
-				$this->installWriteConfig();
-				$this->installOntology();
-				$this->installOntologyTranslation();
-				$this->installModuleModel();
-				$this->installRegisterExt();
-				$this->installCustomScript();
-				if ($this->getLocalData() == true){
-                    $this->installLocalData();
-                }
+			if(!$this->checkRequiredExtensions()){
+				// unreachable code
+			}
+			
+			$this->installWriteConfig();
+			$this->installOntology();
+			$this->installOntologyTranslation();
+			$this->installRegisterExt();
+			$this->installModuleModel();
+			$this->installCustomScript();
+			if ($this->getLocalData() == true){
+				$this->installLocalData();
 			}
 				
 				
@@ -264,7 +268,7 @@ class common_ext_ExtensionInstaller
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A2 begin
 		$extensionManager = common_ext_ExtensionsManager::singleton();
 		$installedExtArray = $extensionManager->getInstalledExtensions();
-        foreach ($this->extension->requiredExtensionsList as $requiredExt) {
+        foreach ($this->extension->getDependencies() as $requiredExt) {
 			if(!array_key_exists($requiredExt,$installedExtArray)){
 				throw new common_ext_ExtensionException('Extension '. $requiredExt . ' missing');
 			}

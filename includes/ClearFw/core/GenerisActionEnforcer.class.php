@@ -17,7 +17,7 @@ class GenerisActionEnforcer extends ActionEnforcer
 		$moduleName = $this->context->getModuleName() ? Camelizer::firstToUpper($this->context->getModuleName()) : DEFAULT_MODULE_NAME;
 		$module		= $extension->getModule($moduleName);
 		if (is_null($module)) {
-			throw new ActionEnforcingException("Module could not be loaded.",
+			throw new ActionEnforcingException('Module "'.$moduleName.'" could not be loaded.',
 											   	   $this->context->getModuleName(),
 											       $this->context->getActionName());
 		}
