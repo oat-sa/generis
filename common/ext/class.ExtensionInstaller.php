@@ -78,6 +78,10 @@ class common_ext_ExtensionInstaller
 		
     	common_Logger::i('Installing '.$this->extension->getID(), 'INSTALL');
     	
+    	if ($this->extension->getID() == 'generis') {
+    		throw new common_ext_ExtensionException('Tried to install generis using the ExtensionInstaller');
+    	}
+    	
 		try{
 			// not yet installed? 
 			if ($this->extension->isInstalled()) {
@@ -97,7 +101,9 @@ class common_ext_ExtensionInstaller
 			if ($this->getLocalData() == true){
 				$this->installLocalData();
 			}
-				
+			// clear filecache
+			tao_models_classes_cache_FileCache::singleton()->purge();
+			
 				
 		}catch (common_ext_ExtensionException $e){
 			throw new common_ext_ExtensionException(__('Problem installing extension '). $this->extension->id .' : '. $e->getMessage());

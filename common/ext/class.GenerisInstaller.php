@@ -65,6 +65,9 @@ class common_ext_GenerisInstaller
     public function install()
     {
         // section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A40 begin
+    	if ($this->extension->getID() != 'generis') {
+    		throw new common_ext_ExtensionException('Tried to install a non generis extension using the GenerisInstaller');
+    	}
         //$this->installCustomScript();
 		//$this->installWriteConfig();
 		$this->installOntology();
