@@ -17,6 +17,7 @@ $GLOBALS['COMMON_LOGGER_CONFIG'] = array(
 array(
 		'class'			=> 'ArchiveFileAppender',
 		'mask'			=> 62 , // 111110
+		'tags'			=> array('GENERIS', 'TAO')
 		'file'			=> '/var/log/tao/debug.txt',
 		'directory'		=> '/var/log/tao/',
 		'max_file_size'	=> 10000000

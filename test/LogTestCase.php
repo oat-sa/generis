@@ -70,6 +70,40 @@ class LogTestCase extends TaoTestCase {
 		common_Logger::restore();
 	}
 	
+	public function testLogTags()
+	{
+		$tfile = $this->createFile();
+		$this->assertEntriesInFile($tfile, 0);
+		
+		common_log_Dispatcher::singleton()->init(array(
+			array(
+				'class'			=> 'SingleFileAppender',
+				'threshold'		=> common_Logger::TRACE_LEVEL,
+				'file'			=> $tfile,
+				'tags'			=> 'CORRECTTAG'
+			)
+		));
+		common_Logger::enable();
+		
+		common_Logger::t('message');
+		$this->assertEntriesInFile($tfile, 0);
+		
+		common_Logger::t('message', 'WRONGTAG');
+		$this->assertEntriesInFile($tfile, 0);
+		
+		common_Logger::t('message', 'CORRECTTAG');
+		$this->assertEntriesInFile($tfile, 1);
+		
+		common_Logger::t('message', array('WRONGTAG', 'CORRECTTAG'));
+		$this->assertEntriesInFile($tfile, 2);
+		
+		common_Logger::t('message', array('WRONGTAG', 'WRONGTAG2'));
+		$this->assertEntriesInFile($tfile, 2);
+		
+		common_Logger::restore();
+		
+	}
+	
 	public function assertEntriesInFile($pFile, $pCount) {
 		if (file_exists($pFile)) {
 			$count = count(file($pFile));

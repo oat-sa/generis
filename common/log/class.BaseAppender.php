@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 09.12.2011, 14:52:57 with ArgoUML PHP module 
+ * Automatically generated on 19.06.2012, 10:30:40 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -62,20 +62,31 @@ abstract class common_log_BaseAppender
      */
     private $mask = null;
 
+    /**
+     * an array of tags of which one must be present
+     * for the logItem to be logged
+     *
+     * @access public
+     * @var array
+     */
+    public $tags = array();
+
     // --- OPERATIONS ---
 
     /**
-     * Short description of method log
+     * decides whenever the Item should be logged by doLog
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Item item
      * @return mixed
+     * @see doLog
      */
     public function log( common_log_Item $item)
     {
         // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000435D begin
-    	if ((1<<$item->getSeverity() & $this->mask) > 0) {
+    	if ((1<<$item->getSeverity() & $this->mask) > 0
+    		&& (empty($this->tags) || count(array_intersect($item->getTags(), $this->tags))) > 0) {
         	$this->doLog($item);
     	}
         // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000435D end
@@ -127,6 +138,9 @@ abstract class common_log_BaseAppender
     		$this->mask = (1<<common_Logger::FATAL_LEVEL + 1) - 1;
     	}
     	
+    	if (isset($configuration['tags'])) {
+    		$this->tags = is_array($configuration['tags']) ? $configuration['tags'] : array($configuration['tags']);
+    	}
     	$returnValue = true;
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000183B end
 
@@ -134,7 +148,7 @@ abstract class common_log_BaseAppender
     }
 
     /**
-     * Short description of method doLog
+     * Logs the item
      *
      * @abstract
      * @access public
