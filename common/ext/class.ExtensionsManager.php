@@ -415,7 +415,7 @@ class common_ext_ExtensionsManager
 
         // section 127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DC3 begin
         if (empty($id)) {
-        	throw new common_exception_Error('No id specified for getExtensionById()');
+        	throw new common_ext_ExtensionException('No id specified for getExtensionById()');
         }
         if (!isset($this->extensions[$id])) {
         	$this->extensions[$id] = new common_ext_Extension($id, false);
