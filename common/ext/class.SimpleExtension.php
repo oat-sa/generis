@@ -226,7 +226,7 @@ class common_ext_SimpleExtension
 		else {
 			//Here the extension is set unvalided to not be displayed by the view
 			$this->id = null;
-			throw new common_ext_ExtensionException("Extension Manifest not found for extension '${id}'.");
+			throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '${id}'.", $id);
 		}
 
         // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002320 end
