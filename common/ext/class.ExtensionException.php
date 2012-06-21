@@ -3,14 +3,7 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - common\ext\class.ExtensionException.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 24.03.2010, 14:38:36 with ArgoUML PHP module 
- * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
+ * Any exception related to extensions should inherit this class.
  *
  * @author lionel.lecaque@tudor.lu
  * @package common
@@ -31,7 +24,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002342-constants end
 
 /**
- * Short description of class common_ext_ExtensionException
+ * Any exception related to extensions should inherit this class.
  *
  * @access public
  * @author lionel.lecaque@tudor.lu
@@ -46,7 +39,65 @@ class common_ext_ExtensionException extends Exception
 
     // --- ATTRIBUTES ---
 
+    /**
+     * The extension ID related to the exception.
+     *
+     * @access private
+     * @var Integer
+     */
+    private $extensionId = null;
+
     // --- OPERATIONS ---
+
+    /**
+     * Sets the extension ID related to the exception.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string extensionId An extension ID.
+     * @return mixed
+     */
+    public function setExtensionId($extensionId)
+    {
+        // section -64--88-56-1--5ed7f181:1380f260043:-8000:0000000000001A65 begin
+        $this->extensionId = $extensionId;
+        // section -64--88-56-1--5ed7f181:1380f260043:-8000:0000000000001A65 end
+    }
+
+    /**
+     * Get the extension ID related to the exception
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return string
+     */
+    public function getExtensionId()
+    {
+        $returnValue = (string) '';
+
+        // section -64--88-56-1--5ed7f181:1380f260043:-8000:0000000000001A6B begin
+        $returnValue = $this->extensionId;
+        // section -64--88-56-1--5ed7f181:1380f260043:-8000:0000000000001A6B end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Creates a new instance of ExtensionException.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string message
+     * @param  string extensionId
+     * @return mixed
+     */
+    public function __construct($message, $extensionId = 'unknown')
+    {
+        // section -64--88-56-1--5ed7f181:1380f260043:-8000:0000000000001A6F begin
+        parent::__construct($message);
+        $this->setExtensionId($extensionId);
+        // section -64--88-56-1--5ed7f181:1380f260043:-8000:0000000000001A6F end
+    }
 
 } /* end of class common_ext_ExtensionException */
 
