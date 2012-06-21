@@ -106,7 +106,8 @@ class common_ext_ExtensionInstaller
 			
 				
 		}catch (common_ext_ExtensionException $e){
-			throw new common_ext_ExtensionException('Problem installing extension ' . $this->extension->id .' : '. $e->getMessage());
+			// Rethrow
+			throw $e;
 		}
 
         // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017C4 end
