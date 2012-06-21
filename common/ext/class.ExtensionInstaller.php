@@ -85,7 +85,7 @@ class common_ext_ExtensionInstaller
 		try{
 			// not yet installed? 
 			if ($this->extension->isInstalled()) {
-				throw new common_ext_ExtensionException(__('Problem installing extension '). $this->extension->id .' : '. 'Already installed');
+				throw new common_ext_ExtensionException('Problem installing extension ' . $this->extension->id .' : '. 'Already installed');
 			}
 			//check dependances
 			if(!$this->checkRequiredExtensions()){
@@ -106,7 +106,7 @@ class common_ext_ExtensionInstaller
 			
 				
 		}catch (common_ext_ExtensionException $e){
-			throw new common_ext_ExtensionException(__('Problem installing extension '). $this->extension->id .' : '. $e->getMessage());
+			throw new common_ext_ExtensionException('Problem installing extension ' . $this->extension->id .' : '. $e->getMessage());
 		}
 
         // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017C4 end
