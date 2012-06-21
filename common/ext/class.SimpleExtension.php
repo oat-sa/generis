@@ -225,7 +225,6 @@ class common_ext_SimpleExtension
 		}
 		else {
 			//Here the extension is set unvalided to not be displayed by the view
-			$this->id = null;
 			throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '${id}'.", $id);
 		}
 
