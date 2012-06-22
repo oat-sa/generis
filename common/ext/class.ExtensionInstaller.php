@@ -79,13 +79,15 @@ class common_ext_ExtensionInstaller
     	common_Logger::i('Installing '.$this->extension->getID(), 'INSTALL');
     	
     	if ($this->extension->getID() == 'generis') {
-    		throw new common_ext_ExtensionException('Tried to install generis using the ExtensionInstaller');
+    		throw new common_ext_ForbiddenActionException('Tried to install generis using the ExtensionInstaller',
+                                                          $this->extension->getID());
     	}
     	
 		try{
 			// not yet installed? 
 			if ($this->extension->isInstalled()) {
-				throw new common_ext_ExtensionException('Problem installing extension ' . $this->extension->id .' : '. 'Already installed');
+				throw new common_ext_AlreadyInstalledException('Problem installing extension ' . $this->extension->id .' : '. 'Already installed',
+                                                               $this->extension->getID());
 			}
 			//check dependances
 			if(!$this->checkRequiredExtensions()){
@@ -277,7 +279,8 @@ class common_ext_ExtensionInstaller
 		$installedExtArray = $extensionManager->getInstalledExtensions();
         foreach ($this->extension->getDependencies() as $requiredExt) {
 			if(!array_key_exists($requiredExt,$installedExtArray)){
-				throw new common_ext_ExtensionException('Extension '. $requiredExt . ' missing');
+				throw new common_ext_MissingExtensionException('Extension '. $requiredExt . ' is needed by the extension to be installed but is missing.',
+                                                               $requiredExt);
 			}
 		}
 		$returnValue = true;
