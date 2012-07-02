@@ -160,8 +160,9 @@ class common_log_Dispatcher
         $returnValue = null;
 
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000182B begin
-        if (is_null(self::$instance))
+        if (is_null(self::$instance)) {
         	self::$instance = new common_log_Dispatcher();
+        }
         $returnValue = self::$instance;
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000182B end
 
@@ -216,8 +217,9 @@ class common_log_Dispatcher
     {
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001820 begin
         $this->appenders[] = $appender;
-        if (is_null($this->minLevel) || $this->minLevel > $appender->getLogThreshold())
+        if (is_null($this->minLevel) || $this->minLevel > $appender->getLogThreshold()) {
         	$this->minLevel = $appender->getLogThreshold();
+        }
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001820 end
     }
 
