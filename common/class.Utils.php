@@ -27,45 +27,6 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 
 /* user defined constants */
 // section 10-13-1--31--3b304a1e:11b08118c60:-8000:0000000000000D0E-constants begin
-$GLOBALS["HYPER_MASK"] = array();
-/*
- Request to get all theses words:
- mysql -hHOST -uLOGIN -pPASS -e "SELECT object FROM statements where object like '%#%#%'" interview|egrep --only-matching "#.+#" | sort|uniq
- mysql -hHOST -uLOGIN -pPASS -e "SELECT object FROM statements where object like '%{%}%'" interview|egrep --only-matching "{.+}" | sort|uniq
- mysql -hHOST -uLOGIN -pPASS -e "SELECT object FROM statements where object like '%[%]%'" interview|egrep --only-matching "\[.+\]" | sort|uniq
- */
-$GLOBALS["HYPER_MASK"][0][] = array("#insert test language#", "german");
-$GLOBALS["HYPER_MASK"][0][] = array("#insert country name#", "France");
-$GLOBALS["HYPER_MASK"][0][] = array("{NAME}", "Bond");
-$GLOBALS["HYPER_MASK"][0][] = array("{SURVEY INSTITUTE}", "CRP Henri Tudor");
-$GLOBALS["HYPER_MASK"][0][] = array("{SPONSOR}", "STATICA");
-
-$GLOBALS["HYPER_MASK"][1][] = array("#are/were#", "are");
-$GLOBALS["HYPER_MASK"][1][] = array("#can/could#", "can");
-$GLOBALS["HYPER_MASK"][1][] = array("#do/did#", "do");
-$GLOBALS["HYPER_MASK"][1][] = array("#does/did#", "does");
-$GLOBALS["HYPER_MASK"][1][] = array("#Does/did#", "Does");
-$GLOBALS["HYPER_MASK"][1][] = array("#insert calculated hourly wage#", "50â‚¬");
-$GLOBALS["HYPER_MASK"][1][] = array("#insert country#", "France");
-$GLOBALS["HYPER_MASK"][1][] = array("#insert country name#", "France");
-$GLOBALS["HYPER_MASK"][1][] = array("#insert highest program level completed according to (B5c-p)#", "High graduate");
-$GLOBALS["HYPER_MASK"][1][] = array("# insert month and year #", "november 2008");
-$GLOBALS["HYPER_MASK"][1][] = array("# insert month and year#", "november 2008");
-$GLOBALS["HYPER_MASK"][1][] = array("#insert period in D22a#", "beginning");
-$GLOBALS["HYPER_MASK"][1][] = array("#insert test language#", "french");
-$GLOBALS["HYPER_MASK"][1][] = array("#is/was#", "is");
-$GLOBALS["HYPER_MASK"][1][] = array("#Is/Was#", "Is");
-$GLOBALS["HYPER_MASK"][1][] = array("#last 12 months/12 months before you left the job#", "last 12 months");
-$GLOBALS["HYPER_MASK"][1][] = array("#month and year#", "november 2008");
-$GLOBALS["HYPER_MASK"][1][] = array("#this change/these changes#", "this change");
-$GLOBALS["HYPER_MASK"][1][] = array("#country#", "France");
-
-$GLOBALS["HYPER_MASK"][1][] = array('{, and you will be paid \$xx for your participation}', ", and you will be paid 10\$ for your participation");
-$GLOBALS["HYPER_MASK"][1][] = array('\[ALL RESPONDENTS:\]', "");
-$GLOBALS["HYPER_MASK"][1][] = array("\[IF BQ RESPONDENT IS NOT THE SAME AS SCREENER RESPONDENT:\]", "");
-$GLOBALS["HYPER_MASK"][1][] = array("{SURVEY INSTITUTE}", "CRP Henri Tudor");
-$GLOBALS["HYPER_MASK"][1][] = array("{NAME}", "Jerome");
-$GLOBALS["HYPER_MASK"][1][] = array("{SPONSOR}", "FNR");
 // section 10-13-1--31--3b304a1e:11b08118c60:-8000:0000000000000D0E-constants end
 
 /**
