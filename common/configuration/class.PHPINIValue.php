@@ -110,6 +110,8 @@ class common_configuration_PHPINIValue
             $validity = common_configuration_Report::UNKNOWN;
             $message = "PHP Configuration Option '${name}' is unknown.";
         }
+
+        $returnValue = new common_configuration_Report($validity, $message);
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ADD end
 
         return $returnValue;
