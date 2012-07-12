@@ -66,6 +66,55 @@ class common_configuration_PHPExtension
         $returnValue = null;
 
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ADB begin
+        $name = $this->getName();
+        $min = $this->getMin();
+        $max = $this->getMax();
+        $validity = null;
+        $message = null;
+        
+        if (extension_loaded($name)){
+            $current = phpversion($name);
+            
+            if (!empty($min) && !empty($max)){
+                // Both min and max are specified.
+                if (version_compare($current, $min, '>=') == 0 && version_compare($current, $max, '<=')){
+                    $validity = common_configuration_Report::VALID;
+                    $message = "PHP Extension '${name}' version (${current}) is between ${min} and ${max}.";
+                }
+                else{
+                    $validity = common_configuration_Report::INVALID;
+                    $message = "PHP Extension '${name}' version (${current}) is not between ${min} and ${max}.";
+                }
+            }
+            else if (!empty($min) && empty($max)){
+                // Only min is specified.
+                if (version_compare($current, $min, '>=') == 0){
+                    $validity = common_configuration_Report::VALID;
+                    $message = "PHP Extension '${name}' version (${current}) is greater or equal to ${min}.";
+                }
+                else{
+                    $validity = common_configuration_Report::INVALID;
+                    $message = "PHP Extension '${name}' version (${current}) is lesser than ${min}.";
+                }
+            }
+            else if (empty($min) && !empty($max)){
+                // Only max is specified.
+                if (version_compare($current, $max, '<=') == 0){
+                    $validity = common_configuration_Report::VALID;
+                    $message = "PHP Extension '${name}' version (${current}) is lesser or equal to ${max}.";
+                }
+                else{
+                    $validity = common_configuration_Report::INVALID;
+                    $message = "PHP Extension '${name}' version (${current}) is greater than ${max}.";
+                }
+            }
+        }
+        else{
+            $validity = common_configuration_Report::UNKNOWN;
+            $message = "PHP Extension '${name}' could not be found.";
+        }
+
+        $returnValue = new common_configuration_Report($validity, $message);
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ADB end
 
         return $returnValue;

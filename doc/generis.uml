@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jul 12 15:00:40 CEST 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jul 12 16:33:35 CEST 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -23691,7 +23691,11 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                         <UML:Parameter xmi.id = '-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B43'
                           name = 'return' isSpecification = 'false' kind = 'return'/>
                         <UML:Parameter xmi.id = '-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B54'
-                          name = 'expectedValue' isSpecification = 'false' kind = 'in'/>
+                          name = 'expectedValue' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
                         <UML:Parameter xmi.id = '-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B44'
                           name = 'name' isSpecification = 'false' kind = 'in'>
                           <UML:Parameter.defaultValue>
@@ -23731,7 +23735,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                       name = 'expectedValue' visibility = 'private' isSpecification = 'false'
                       ownerScope = 'instance' changeability = 'changeable' targetScope = 'instance'>
                       <UML:StructuralFeature.type>
-                        <UML:DataType xmi.idref = '-64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0B'/>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                       </UML:StructuralFeature.type>
                     </UML:Attribute>
                     <UML:Operation xmi.id = '-64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0C'
@@ -23740,7 +23744,11 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                       isLeaf = 'false' isAbstract = 'false'>
                       <UML:BehavioralFeature.parameter>
                         <UML:Parameter xmi.id = '-64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0D'
-                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
                     <UML:Operation xmi.id = '-64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0E'
@@ -23751,7 +23759,11 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                         <UML:Parameter xmi.id = '-64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0F'
                           name = 'return' isSpecification = 'false' kind = 'return'/>
                         <UML:Parameter xmi.id = '-64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B10'
-                          name = 'expectedValue' isSpecification = 'false' kind = 'in'/>
+                          name = 'expectedValue' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
                   </UML:Classifier.feature>
@@ -63495,7 +63507,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="41"
         y="362"
         width="704"
-        height="15"
+        height="29"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -69142,7 +69154,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >expectedValue</text>
+      >expectedValue : string</text>
     </group>
     <rectangle name="Fig51.5"
       x="520"
@@ -69190,7 +69202,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >«create» __construct(expectedValue,name : string = &apos;unknown&apos;,optional : boolean = false)</text>
+      >«create» __construct(expectedValue : string,name : string = &apos;unknown&apos;,optional : boolean = false)</text>
       <text name="Fig51.6.2"
         x="521"
         y="1669"
@@ -69222,7 +69234,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getExpectedValue()</text>
+      >getExpectedValue() : string</text>
       <text name="Fig51.6.4"
         x="521"
         y="1699"
@@ -69238,7 +69250,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >setExpectedValue(expectedValue)</text>
+      >setExpectedValue(expectedValue : string)</text>
     </group>
   </group>
   <group name="Fig52"

@@ -187,6 +187,32 @@ abstract class common_configuration_FileSystemComponent
         $returnValue = null;
 
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B95 begin
+        $expectedRights = $this->getExpectedRights();
+        $location = $this->getLocation();
+        
+        if (!$this->exists()){
+            return new common_configuration_Report(common_configuration_Report::UNKNOWN,
+                                                   "File system component '${location}' could not be found.");
+        }
+        else{
+            if (strpos($expectedRights, 'r') !== false && !is_readable($location)){
+                return new common_configuration_Report(common_configuration_Report::INVALID,
+                                                       "File system component '${location}' is not readable.");
+            }
+            
+            if (strpos($expectedRights, 'w') !== false && !is_writable($location)){
+                return new common_configuration_Report(common_configuration_Report::INVALID,
+                                                       "File system component '${location}' is not writable.");
+            }
+
+            if (strpos($expectedRights, 'x') !== false && !is_executable($location)){
+                return new common_configuration_Report(common_configuration_Report::INVALID,
+                                                       "File system component '${location}' is not executable.");
+            }
+            
+            return new common_configuration_Report(common_configuration_Report::VALID,
+                                                   "File system component '${location} is compliant with expected rights (${expectedRights}).'");
+        } 
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B95 end
 
         return $returnValue;

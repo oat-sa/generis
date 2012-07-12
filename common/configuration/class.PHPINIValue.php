@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 12.07.2012, 14:57:03 with ArgoUML PHP module 
+ * Automatically generated on 12.07.2012, 15:21:07 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -56,8 +56,9 @@ class common_configuration_PHPINIValue
      * Short description of attribute expectedValue
      *
      * @access private
+     * @var string
      */
-    private $expectedValue = null;
+    private $expectedValue = '';
 
     // --- OPERATIONS ---
 
@@ -66,7 +67,7 @@ class common_configuration_PHPINIValue
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  expectedValue
+     * @param  string expectedValue
      * @param  string name
      * @param  boolean optional
      * @return mixed
@@ -91,6 +92,24 @@ class common_configuration_PHPINIValue
         $returnValue = null;
 
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ADD begin
+        $validity = null;
+        $name = $this->getName();
+        if (($value = ini_get($name)) !== false){
+            // The ini value exists for this name.
+            if ($value == $this->getExpectedValue()){
+                $validity = common_configuration_Report::VALID;
+                $message = "PHP Configuration Option '${name}' = '${value}' has an expected value.";
+            }
+            else {
+                $validity = common_configuration_Report::INVALID;
+                $message = "PHP Configuration Option '${name}' = '${value}' has an unexpected value.";
+            }
+        }
+        else {
+            // Unknown ini value name.
+            $validity = common_configuration_Report::UNKNOWN;
+            $message = "PHP Configuration Option '${name}' is unknown.";
+        }
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ADD end
 
         return $returnValue;
@@ -101,13 +120,17 @@ class common_configuration_PHPINIValue
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return mixed
+     * @return string
      */
     public function getExpectedValue()
     {
+        $returnValue = (string) '';
+
         // section -64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0C begin
         return $this->expectedValue;
         // section -64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0C end
+
+        return (string) $returnValue;
     }
 
     /**
@@ -115,7 +138,7 @@ class common_configuration_PHPINIValue
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  expectedValue
+     * @param  string expectedValue
      * @return mixed
      */
     public function setExpectedValue($expectedValue)

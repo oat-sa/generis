@@ -66,6 +66,45 @@ class common_configuration_PHPRuntime
         $returnValue = null;
 
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AD9 begin
+        $validity = null;
+        $message = null;
+        $min = $this->getMin();
+        $max = $this->getMax();
+        $current = phpversion();
+        
+        if (!empty($min) && !empty($max)){
+            // min & max are specifed.
+            if (version_compare($current, $min, '>=') == 0 && version_compare($current, $max, '<=') == 0){
+                $validity = common_configuration_Report::VALID;
+                $message = "PHP Version (${current}) is between ${min} and ${max}.";
+            }
+            else {
+                $validity = common_configuration_Report::INVALID;
+                $message = "PHP Version (${current} is not between ${min} and ${max}.)";
+            }
+        }
+        else if (!empty($min) && empty($max)){
+            if (version_compare($current, $min, '>=') == 0){
+                $validity = common_configuration_Report::VALID;
+                $message = "PHP Version (${current}) is higher or equal to ${min}.";
+            }
+            else{
+                $validity = common_configuration_Report::INVALID;
+                $message = "PHP Version (${current}) is lower than ${min}.";
+            } 
+        }
+        else if (empty($min) && !empty($max)){
+            if (version_compare($current, $max, '<=') == 0){
+                $validity = common_configuration_Report::VALID;
+                $message = "PHP Version (${current}) is lesser than ${max}.";
+            }
+            else{
+                $validity = common_configuration_Report::INVALID;
+                $message = "PHP Version (${current}) is greater than ${max}.";
+            }
+        }
+        
+        $returnValue = new common_configuration_Report($validity, $message);
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AD9 end
 
         return $returnValue;
