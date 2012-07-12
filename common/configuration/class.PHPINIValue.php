@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 12.07.2012, 14:22:10 with ArgoUML PHP module 
+ * Automatically generated on 12.07.2012, 14:57:03 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -56,7 +56,6 @@ class common_configuration_PHPINIValue
      * Short description of attribute expectedValue
      *
      * @access private
-     * @var mixed
      */
     private $expectedValue = null;
 
@@ -67,14 +66,16 @@ class common_configuration_PHPINIValue
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  mixed expectedValue
+     * @param  expectedValue
      * @param  string name
      * @param  boolean optional
      * @return mixed
      */
-    public function __construct( mixed $expectedValue, $name = 'unknown', $optional = false)
+    public function __construct($expectedValue, $name = 'unknown', $optional = false)
     {
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B42 begin
+        parent::__construct($name, $optional);
+        $this->setExpectedValue($expectedValue);
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B42 end
     }
 
@@ -93,6 +94,35 @@ class common_configuration_PHPINIValue
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ADD end
 
         return $returnValue;
+    }
+
+    /**
+     * Short description of method getExpectedValue
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return mixed
+     */
+    public function getExpectedValue()
+    {
+        // section -64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0C begin
+        return $this->expectedValue;
+        // section -64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0C end
+    }
+
+    /**
+     * Short description of method setExpectedValue
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  expectedValue
+     * @return mixed
+     */
+    public function setExpectedValue($expectedValue)
+    {
+        // section -64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0E begin
+        $this->expectedValue = $expectedValue;
+        // section -64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0E end
     }
 
 } /* end of class common_configuration_PHPINIValue */

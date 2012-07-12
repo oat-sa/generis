@@ -98,6 +98,8 @@ class common_configuration_Report
     public function __construct($status, $message)
     {
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ABF begin
+        $this->setStatus($status);
+        $this->setMessage($message);
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ABF end
     }
 
@@ -113,6 +115,7 @@ class common_configuration_Report
         $returnValue = (int) 0;
 
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AC3 begin
+        $returnValue = $this->status;
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AC3 end
 
         return (int) $returnValue;
@@ -129,6 +132,7 @@ class common_configuration_Report
     public function setStatus($status)
     {
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AC5 begin
+        $this->status = $status;
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AC5 end
     }
 
@@ -144,6 +148,7 @@ class common_configuration_Report
         $returnValue = (string) '';
 
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AC8 begin
+        $returnValue = $this->message;
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AC8 end
 
         return (string) $returnValue;
@@ -160,6 +165,7 @@ class common_configuration_Report
     public function setMessage($message)
     {
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ACA begin
+        $this->message = $message;
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ACA end
     }
 
