@@ -90,5 +90,74 @@ class LogTestCase extends TaoTestCase {
         $php->setMax('5.2');
         $report = $php->check();
         $this->assertEqual($report->getStatus(), common_configuration_Report::INVALID);
+    }
+
+    function testPHPExtension(){
+        // Testing PHPExtension existence and version is quite hard to do. Indeed,
+        // it depends what the installed extensions are on the computers running the tests.
+        // Thus, I decided to use the DOM extension as a test. I've never seen a PHP installation
+        // without the DOM extension. It comes built-in except if you compile PHP with the
+        // --disable-dom directive.
+        
+        // core tests.
+        $ext = new common_configuration_PHPExtension(null, null, 'dom');
+        $this->assertEqual($ext->getMin(), null);
+        $this->assertEqual($ext->getMax(), null);
+        $this->assertEqual($ext->getName(), 'dom');
+        $this->assertEqual($ext->isOptional(), false);
+        
+        $ext->setMin('1.0');
+        $this->assertEqual($ext->getMin(), '1.0');
+        
+        $ext->setMax('2.0');
+        $this->assertEqual($ext->getMax(), '2.0');
+        
+        $ext->setName('foobar');
+        $this->assertEqual($ext->getName(), 'foobar');
+        
+        // test with an extension that has no version information (hash) that
+        // contains hash functions such as md5().
+        // We consider that if there is no version information but the extension
+        // is loaded, the report is always valid even if min and/or max version(s)
+        // are specified.
+        $ext = new common_configuration_PHPExtension(null, null, 'hash');
+        $report = $ext->check();
+        $this->assertEqual($report->getStatus(), common_configuration_Report::VALID);
+        
+        $ext->setMin('1.0');
+        $report = $ext->check();
+        $this->assertEqual($report->getStatus(), common_configuration_Report::VALID);
+        
+        $ext->setMax('2.0');
+        $report = $ext->check();
+        $this->assertEqual($report->getStatus(), common_configuration_Report::VALID);
+        
+        $ext->setMin(null);
+        $report = $ext->check();
+        $this->assertEqual($report->getStatus(), common_configuration_Report::VALID);
+        
+        // test with the dom extension that has version information.
+        $ext = new common_configuration_PHPExtension('19851127', '20090601', 'dom');
+        $report = $ext->check();
+        $this->assertEqual($report->getStatus(), common_configuration_Report::VALID);
+        
+        $ext->setMin('20050112');
+        $report = $ext->check();
+        $this->assertEqual($report->getStatus(), common_configuration_Report::INVALID);
+        
+        $ext->setMin(null);
+        $ext->setMax('20020423');
+        $report = $ext->check();
+        $this->assertEqual($report->getStatus(), common_configuration_Report::INVALID);
+        
+        $ext->setMin('20010731');
+        $ext->setMax(null);
+        $report = $ext->check();
+        $this->assertEqual($report->getStatus(), common_configuration_Report::VALID);
+        
+        // Unexisting extension.
+        $ext = new common_configuration_PHPExtension('1.0', '1.4', 'foobar');
+        $report = $ext->check();
+        $this->assertEqual($report->getStatus(), common_configuration_Report::UNKNOWN);
     }  
 }

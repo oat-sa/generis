@@ -108,6 +108,12 @@ class common_configuration_PHPExtension
                     $message = "PHP Extension '${name}' version (${current}) is greater than ${max}.";
                 }
             }
+            else{
+                // No min and max are provided, we just check the
+                // existence of the extension (already done).
+                $validity = common_configuration_Report::VALID;
+                $message = "PHP Extension '${name}' is loaded.";
+            }
         }
         else{
             $validity = common_configuration_Report::UNKNOWN;
