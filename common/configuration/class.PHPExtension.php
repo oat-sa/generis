@@ -77,7 +77,7 @@ class common_configuration_PHPExtension
             
             if (!empty($min) && !empty($max)){
                 // Both min and max are specified.
-                if (version_compare($current, $min, '>=') == 0 && version_compare($current, $max, '<=')){
+                if (version_compare($current, $min, '>=') && version_compare($current, $max, '<=')){
                     $validity = common_configuration_Report::VALID;
                     $message = "PHP Extension '${name}' version (${current}) is between ${min} and ${max}.";
                 }
@@ -88,7 +88,7 @@ class common_configuration_PHPExtension
             }
             else if (!empty($min) && empty($max)){
                 // Only min is specified.
-                if (version_compare($current, $min, '>=') == 0){
+                if (version_compare($current, $min, '>=')){
                     $validity = common_configuration_Report::VALID;
                     $message = "PHP Extension '${name}' version (${current}) is greater or equal to ${min}.";
                 }
@@ -99,7 +99,7 @@ class common_configuration_PHPExtension
             }
             else if (empty($min) && !empty($max)){
                 // Only max is specified.
-                if (version_compare($current, $max, '<=') == 0){
+                if (version_compare($current, $max, '<=')){
                     $validity = common_configuration_Report::VALID;
                     $message = "PHP Extension '${name}' version (${current}) is lesser or equal to ${max}.";
                 }

@@ -74,7 +74,7 @@ class common_configuration_PHPRuntime
         
         if (!empty($min) && !empty($max)){
             // min & max are specifed.
-            if (version_compare($current, $min, '>=') == 0 && version_compare($current, $max, '<=') == 0){
+            if (version_compare($current, $min, '>=') && version_compare($current, $max, '<=')){
                 $validity = common_configuration_Report::VALID;
                 $message = "PHP Version (${current}) is between ${min} and ${max}.";
             }
@@ -84,7 +84,7 @@ class common_configuration_PHPRuntime
             }
         }
         else if (!empty($min) && empty($max)){
-            if (version_compare($current, $min, '>=') == 0){
+            if (version_compare($current, $min, '>=')){
                 $validity = common_configuration_Report::VALID;
                 $message = "PHP Version (${current}) is higher or equal to ${min}.";
             }
@@ -94,7 +94,7 @@ class common_configuration_PHPRuntime
             } 
         }
         else if (empty($min) && !empty($max)){
-            if (version_compare($current, $max, '<=') == 0){
+            if (version_compare($current, $max, '<=')){
                 $validity = common_configuration_Report::VALID;
                 $message = "PHP Version (${current}) is lesser than ${max}.";
             }
