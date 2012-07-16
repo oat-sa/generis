@@ -4,7 +4,7 @@ require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
 require_once INCLUDES_PATH.'/simpletest/autorun.php';
 
 
-class LogTestCase extends TaoTestCase {
+class ConfigurationTestCase extends TaoTestCase {
     
     public function setUp()
     {
