@@ -479,13 +479,13 @@ class ClassTestCase extends UnitTestCase {
 		$class = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
 		$subClass = $class->createSubClass('GetInstancesPropertyValuesClass', 'GetInstancesPropertyValues_Class');
 		// create a first property for this class
-		$p1 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property1', 'GetInstancesPropertyValues_Property1', false, "P1");
+		$p1 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property1', 'GetInstancesPropertyValues_Property1', false, LOCAL_NAMESPACE. "#P1");
 		$p1->setRange(new core_kernel_classes_Class(RDFS_LITERAL));
 		// create a second property for this class
-		$p2 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property2', 'GetInstancesPropertyValues_Property2', false, "P2");
+		$p2 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property2', 'GetInstancesPropertyValues_Property2', false, LOCAL_NAMESPACE."#P2");
 		$p2->setRange(new core_kernel_classes_Class(RDFS_LITERAL));
 		// create a second property for this class
-		$p3 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property3', 'GetInstancesPropertyValues_Property3', false, "P3");
+		$p3 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property3', 'GetInstancesPropertyValues_Property3', false, LOCAL_NAMESPACE."#P3");
 		$p2->setRange(new core_kernel_classes_Class(RDFS_LITERAL));
 		// $i1
 		$i1 = $subClass->createInstance("i1", "i1");
@@ -503,7 +503,7 @@ class ClassTestCase extends UnitTestCase {
 		// Search * P1 for P1=P11 litteral
 		// Expected 2 results, but 1 possibility
 		$propertyFilters = array (
-			"P1" => "p11 litteral"
+			LOCAL_NAMESPACE. "#P1" => "p11 litteral"
 		);
 		$result = $subClass->getInstancesPropertyValues($p1, $propertyFilters);
 		$this->assertEqual(count($result), 2);
@@ -512,7 +512,7 @@ class ClassTestCase extends UnitTestCase {
 		// Search * P1 for P1=P11 litteral WITH DISTINCT options
 		// Expected 1 results, and 1 possibility
 		$propertyFilters = array (
-			"P1" => "p11 litteral"
+			LOCAL_NAMESPACE. "#P1" => "p11 litteral"
 		);
 		$result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 1);
@@ -521,7 +521,7 @@ class ClassTestCase extends UnitTestCase {
 		// Search * P2 for P1=P11 litteral WITH DISTINCT options
 		// Expected 2 results, and 2 possibilities
 		$propertyFilters = array (
-			"P1" => "p11 litteral"
+			LOCAL_NAMESPACE. "#P1" => "p11 litteral"
 		);
 		$result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 2);
@@ -531,7 +531,7 @@ class ClassTestCase extends UnitTestCase {
 		// Search * P2 for P1=P12 litteral WITH DISTINCT options
 		// Expected 0 results, and 0 possibilities
 		$propertyFilters = array (
-			"P1" => "p12 litteral"
+			LOCAL_NAMESPACE. "#P1" => "p12 litteral"
 		);
 		$result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 0);
@@ -539,7 +539,7 @@ class ClassTestCase extends UnitTestCase {
 		// Search * P1 for P2=P21 litteral WITH DISTINCT options
 		// Expected 1 results, and 1 possibilities
 		$propertyFilters = array (
-			"P2" => "p21 litteral"
+			LOCAL_NAMESPACE. "#P2" => "p21 litteral"
 		);
 		$result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 1);
@@ -548,7 +548,7 @@ class ClassTestCase extends UnitTestCase {
 		// Search * P1 for P2=P22 litteral WITH DISTINCT options
 		// Expected 1 results, and 1 possibilities
 		$propertyFilters = array (
-			"P2" => "p22 litteral"
+			LOCAL_NAMESPACE. "#P2" => "p22 litteral"
 		);
 		$result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 1);
@@ -557,8 +557,8 @@ class ClassTestCase extends UnitTestCase {
 		// Search * P3 for P1=P11 & P2=P21 litteral WITH DISTINCT options
 		// Expected 1 results, and 1 possibilities
 		$propertyFilters = array (
-			"P1" => "p11 litteral"
-			, "P2" => "p21 litteral"
+			LOCAL_NAMESPACE. "#P1" => "p11 litteral"
+			, LOCAL_NAMESPACE. "#P2" => "p21 litteral"
 		);
 		$result = $subClass->getInstancesPropertyValues($p3, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 1);
@@ -567,8 +567,8 @@ class ClassTestCase extends UnitTestCase {
 		// Search * P2 for P1=P11 & P3=P31 litteral WITH DISTINCT options
 		// Expected 2 results, and 2 possibilities
 		$propertyFilters = array (
-			"P1" => "p11 litteral"
-			, "P3" => "p31 litteral"
+			LOCAL_NAMESPACE. "#P1" => "p11 litteral"
+			, LOCAL_NAMESPACE. "#P3" => "p31 litteral"
 		);
 		$result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 2);
@@ -592,13 +592,13 @@ class ClassTestCase extends UnitTestCase {
 		$class = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
 		$subClass = $class->createSubClass('GetInstancesPropertyValuesClass', 'GetInstancesPropertyValues_Class');
 		// create a first property for this class
-		$p1 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property1', 'GetInstancesPropertyValues_Property1', false, "P1");
+		$p1 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property1', 'GetInstancesPropertyValues_Property1', false, LOCAL_NAMESPACE. "#P1");
 		$p1->setRange(new core_kernel_classes_Class(GENERIS_BOOLEAN));
 		// create a second property for this class
-		$p2 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property2', 'GetInstancesPropertyValues_Property2', false, "P2");
+		$p2 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property2', 'GetInstancesPropertyValues_Property2', false, LOCAL_NAMESPACE. "#P2");
 		$p1->setRange(new core_kernel_classes_Class(GENERIS_BOOLEAN));
 		// create a second property for this class
-		$p3 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property3', 'GetInstancesPropertyValues_Property3', false, "P3");
+		$p3 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property3', 'GetInstancesPropertyValues_Property3', false, LOCAL_NAMESPACE. "#P3");
 		$p1->setRange(new core_kernel_classes_Class(RDFS_LITERAL));
 		// $i1
 		$i1 = $subClass->createInstance("i1", "i1");
@@ -616,7 +616,7 @@ class ClassTestCase extends UnitTestCase {
 		// Search * P1 for P1=GENERIS_TRUE
 		// Expected 2 results, but 1 possibility
 		$propertyFilters = array (
-			"P1" => GENERIS_TRUE
+			LOCAL_NAMESPACE. "#P1" => GENERIS_TRUE
 		);
 		$result = $subClass->getInstancesPropertyValues($p1, $propertyFilters);
 		$this->assertEqual(count($result), 2);
@@ -626,7 +626,7 @@ class ClassTestCase extends UnitTestCase {
 		// Search * P1 for P1=GENERIS_TRUE WITH DISTINCT options
 		// Expected 1 results, and 1 possibility
 		$propertyFilters = array (
-			"P1" => GENERIS_TRUE
+			LOCAL_NAMESPACE. "#P1" => GENERIS_TRUE
 		);
 		$result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 1);
@@ -635,7 +635,7 @@ class ClassTestCase extends UnitTestCase {
 		// Search * P2 for P1=GENERIS_TRUE WITH DISTINCT options
 		// Expected 2 results, and 2 possibilities
 		$propertyFilters = array (
-			"P1" => GENERIS_TRUE
+			LOCAL_NAMESPACE. "#P1" => GENERIS_TRUE
 		);
 		$result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 2);
@@ -646,7 +646,7 @@ class ClassTestCase extends UnitTestCase {
 		// Search * P2 for P1=NotExistingProperty litteral WITH DISTINCT options
 		// Expected 1 results, and 1 possibilities
 		$propertyFilters = array (
-			"P1" => "NotExistingProperty"
+			LOCAL_NAMESPACE. "#P1" => "NotExistingProperty"
 		);
 		$result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 0);
@@ -654,7 +654,7 @@ class ClassTestCase extends UnitTestCase {
 		// Search * P1 for P2=GENERIS_TRUE litteral WITH DISTINCT options
 		// Expected 1 results, and 1 possibilities
 		$propertyFilters = array (
-			"P2" => GENERIS_TRUE
+			LOCAL_NAMESPACE. "#P2" => GENERIS_TRUE
 		);
 		$result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 1);
@@ -663,7 +663,7 @@ class ClassTestCase extends UnitTestCase {
 		// Search * P1 for P2=GENERIS_FALSE WITH DISTINCT options
 		// Expected 1 results, and 1 possibilities
 		$propertyFilters = array (
-			"P2" => GENERIS_FALSE
+			LOCAL_NAMESPACE. "#P2" => GENERIS_FALSE
 		);
 		$result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 1);
@@ -672,8 +672,8 @@ class ClassTestCase extends UnitTestCase {
 		// Search * P3 for P1=GENERIS_TRUE & P2=GENERIS_TRUE litteral WITH DISTINCT options
 		// Expected 1 results, and 1 possibilities
 		$propertyFilters = array (
-			"P1" => GENERIS_TRUE
-			, "P2" => GENERIS_TRUE
+			LOCAL_NAMESPACE. "#P1" => GENERIS_TRUE
+			, LOCAL_NAMESPACE. "#P2" => GENERIS_TRUE
 		);
 		$result = $subClass->getInstancesPropertyValues($p3, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 1);
@@ -682,8 +682,8 @@ class ClassTestCase extends UnitTestCase {
 		// Search * P2 for P1=P11 & P3=P31 litteral WITH DISTINCT options
 		// Expected 2 results, and 2 possibilities
 		$propertyFilters = array (
-			"P1" => GENERIS_TRUE
-			, "P3" => "p31 litteral"
+			LOCAL_NAMESPACE. "#P1" => GENERIS_TRUE
+			, LOCAL_NAMESPACE. "#P3" => "p31 litteral"
 		);
 		$result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 2);
