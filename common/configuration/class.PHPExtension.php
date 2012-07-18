@@ -120,7 +120,7 @@ class common_configuration_PHPExtension
             $message = "PHP Extension '${name}' could not be found.";
         }
 
-        $returnValue = new common_configuration_Report($validity, $message);
+        $returnValue = new common_configuration_Report($validity, $message, $this);
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ADB end
 
         return $returnValue;

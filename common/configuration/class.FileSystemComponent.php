@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 12.07.2012, 14:24:53 with ArgoUML PHP module 
+ * Automatically generated on 18.07.2012, 10:10:48 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -39,13 +39,12 @@ require_once('common/configuration/class.Component.php');
 /**
  * Short description of class common_configuration_FileSystemComponent
  *
- * @abstract
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package common
  * @subpackage configuration
  */
-abstract class common_configuration_FileSystemComponent
+class common_configuration_FileSystemComponent
     extends common_configuration_Component
 {
     // --- ASSOCIATIONS ---
@@ -171,7 +170,12 @@ abstract class common_configuration_FileSystemComponent
     public function setExpectedRights($expectedRights)
     {
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B29 begin
-        $this->expectedRights = $expectedRights;
+        if (!empty($expectedRights) && preg_match('/^r*w*x*$/', $expectedRights) !== 0){
+            $this->expectedRights = $expectedRights;    
+        }
+        else{
+            throw new common_configuration_MalformedRightsException("Malformed rights. Expected format is r|rw|rwx.");
+        }
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B29 end
     }
 
@@ -192,32 +196,91 @@ abstract class common_configuration_FileSystemComponent
         
         if (!$this->exists()){
             return new common_configuration_Report(common_configuration_Report::UNKNOWN,
-                                                   "File system component '${location}' could not be found.");
+                                                   "File system component '${location}' could not be found.",
+                                                   $this);
         }
         else{
             if (strpos($expectedRights, 'r') !== false && !is_readable($location)){
                 return new common_configuration_Report(common_configuration_Report::INVALID,
-                                                       "File system component '${location}' is not readable.");
+                                                       "File system component '${location}' is not readable.",
+                                                       $this);
             }
             
             if (strpos($expectedRights, 'w') !== false && !is_writable($location)){
                 return new common_configuration_Report(common_configuration_Report::INVALID,
-                                                       "File system component '${location}' is not writable.");
+                                                       "File system component '${location}' is not writable.",
+                                                       $this);
             }
 
             if (strpos($expectedRights, 'x') !== false && !is_executable($location)){
                 return new common_configuration_Report(common_configuration_Report::INVALID,
-                                                       "File system component '${location}' is not executable.");
+                                                       "File system component '${location}' is not executable.",
+                                                       $this);
             }
             
             return new common_configuration_Report(common_configuration_Report::VALID,
-                                                   "File system component '${location} is compliant with expected rights (${expectedRights}).'");
+                                                   "File system component '${location} is compliant with expected rights (${expectedRights}).'",
+                                                   $this);
         } 
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B95 end
 
         return $returnValue;
     }
 
-} /* end of abstract class common_configuration_FileSystemComponent */
+    /**
+     * Short description of method isReadable
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return boolean
+     */
+    public function isReadable()
+    {
+        $returnValue = (bool) false;
+
+        // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B1B begin
+        $returnValue = @is_readable($this->getLocation());
+        // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B1B end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method isWritable
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return boolean
+     */
+    public function isWritable()
+    {
+        $returnValue = (bool) false;
+
+        // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B1D begin
+        $returnValue = @is_writable($this->getLocation());
+        // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B1D end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method isExecutable
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return boolean
+     */
+    public function isExecutable()
+    {
+        $returnValue = (bool) false;
+
+        // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B1F begin
+        $returnValue = @is_executable($this->getLocation());
+        // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B1F end
+
+        return (bool) $returnValue;
+    }
+
+} /* end of class common_configuration_FileSystemComponent */
 
 ?>
