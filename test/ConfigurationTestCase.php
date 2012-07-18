@@ -160,4 +160,16 @@ class ConfigurationTestCase extends TaoTestCase {
         $report = $ext->check();
         $this->assertEqual($report->getStatus(), common_configuration_Report::UNKNOWN);
     }  
+
+    public function testFileSystemComponent(){
+        $f = new common_configuration_FileSystemComponent(__FILE__, 'r', 'This file');
+        $this->assertEqual($f->getLocation(), __FILE__);
+        $this->assertEqual($f->getExpectedRights(), 'r');
+        $this->assertEqual($f->getName(), 'This file');
+        $this->assertFalse($f->isOptional());
+        $this->assertTrue($f->isReadable());
+        
+        $this->expectException(new common_configuration_MalformedRightsException("Malformed rights. Expected format is r|rw|rwx."));
+        $f->setExpectedRights('fail');
+    }
 }
