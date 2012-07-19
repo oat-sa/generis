@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 12.07.2012, 15:21:07 with ArgoUML PHP module 
+ * Automatically generated on 19.07.2012, 15:25:58 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -148,6 +148,24 @@ class common_configuration_PHPINIValue
         // section -64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0E begin
         $this->expectedValue = $expectedValue;
         // section -64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0E end
+    }
+
+    /**
+     * Short description of method getValue
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return string
+     */
+    public function getValue()
+    {
+        $returnValue = (string) '';
+
+        // section -64--88-56-1-5ea63367:1389f6907aa:-8000:0000000000001B2A begin
+        $returnValue = ini_get($this->getName());
+        // section -64--88-56-1-5ea63367:1389f6907aa:-8000:0000000000001B2A end
+
+        return (string) $returnValue;
     }
 
 } /* end of class common_configuration_PHPINIValue */
