@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jul 19 15:26:01 CEST 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jul 19 16:31:48 CEST 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -23760,6 +23760,19 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                         </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-56-1-1c6f58d0:1389fa4346a:-8000:0000000000001B2E'
+                      name = 'getValue' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-56-1-1c6f58d0:1389fa4346a:-8000:0000000000001B2F'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
                   </UML:Classifier.feature>
                 </UML:Class>
                 <UML:Class xmi.id = '-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ACF'
@@ -23886,6 +23899,19 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                           name = 'return' isSpecification = 'false' kind = 'return'>
                           <UML:Parameter.type>
                             <UML:Class xmi.idref = '-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AA0'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-56-1-1c6f58d0:1389fa4346a:-8000:0000000000001B30'
+                      name = 'getValue' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-56-1-1c6f58d0:1389fa4346a:-8000:0000000000001B31'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                           </UML:Parameter.type>
                         </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
@@ -24039,6 +24065,19 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                       isAbstract = 'false'>
                       <UML:BehavioralFeature.parameter>
                         <UML:Parameter xmi.id = '-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B0D'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-56-1-1c6f58d0:1389fa4346a:-8000:0000000000001B2C'
+                      name = 'getValue' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'true'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-56-1-1c6f58d0:1389fa4346a:-8000:0000000000001B2D'
                           name = 'return' isSpecification = 'false' kind = 'return'>
                           <UML:Parameter.type>
                             <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
@@ -69167,7 +69206,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig50"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[56, 1680, 191, 67]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[56, 1680, 175, 61]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=false;"
        href="-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ACD"
        fill="1"
        fillcolor="white"
@@ -69181,8 +69220,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <rectangle name="Fig50.0"
       x="56"
       y="1680"
-      width="191"
-      height="67"
+      width="175"
+      height="61"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -69191,7 +69230,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <text name="Fig50.1"
       x="57"
       y="1681"
-      width="189"
+      width="173"
       height="21"
       fill="0"
       fillcolor="white"
@@ -69236,6 +69275,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       fillcolor="black"
       stroke="1"
       strokecolor="black"
+      visibility="0"
     />
     <group name="Fig50.4"
          description="org.argouml.uml.diagram.ui.FigAttributesCompartment[57, 1703, 189, 21]"
@@ -69244,6 +69284,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
          fillcolor="white"
          stroke="0"
          strokecolor="black"
+         visibility="0"
     >
       <private>
       </private>
@@ -69257,12 +69298,13 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         fillcolor="white"
         stroke="0"
         strokecolor="black"
+        visibility="0"
       />
     </group>
     <rectangle name="Fig50.5"
       x="56"
-      y="1723"
-      width="191"
+      y="1702"
+      width="175"
       height="1"
       fill="1"
       fillcolor="black"
@@ -69270,7 +69312,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig50.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[57, 1724, 189, 23]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[57, 1703, 173, 38]"
          href="-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ACD"
          fill="0"
          fillcolor="white"
@@ -69282,9 +69324,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig50.6.0"
         x="57"
-        y="1724"
-        width="189"
-        height="23"
+        y="1703"
+        width="173"
+        height="38"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -69292,9 +69334,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
       <text name="Fig50.6.1"
         x="57"
-        y="1724"
-        width="189"
-        height="21"
+        y="1703"
+        width="173"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -69306,6 +69348,22 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >check() : Report</text>
+      <text name="Fig50.6.2"
+        x="57"
+        y="1718"
+        width="173"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getValue() : string</text>
     </group>
   </group>
   <group name="Fig51"
@@ -69531,7 +69589,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig52"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[280, 1680, 198, 67]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[280, 1680, 181, 61]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=false;"
        href="-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AD1"
        fill="1"
        fillcolor="white"
@@ -69545,8 +69603,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <rectangle name="Fig52.0"
       x="280"
       y="1680"
-      width="198"
-      height="67"
+      width="181"
+      height="61"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -69555,7 +69613,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <text name="Fig52.1"
       x="281"
       y="1681"
-      width="196"
+      width="179"
       height="21"
       fill="0"
       fillcolor="white"
@@ -69600,6 +69658,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       fillcolor="black"
       stroke="1"
       strokecolor="black"
+      visibility="0"
     />
     <group name="Fig52.4"
          description="org.argouml.uml.diagram.ui.FigAttributesCompartment[281, 1703, 196, 21]"
@@ -69608,6 +69667,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
          fillcolor="white"
          stroke="0"
          strokecolor="black"
+         visibility="0"
     >
       <private>
       </private>
@@ -69621,12 +69681,13 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         fillcolor="white"
         stroke="0"
         strokecolor="black"
+        visibility="0"
       />
     </group>
     <rectangle name="Fig52.5"
       x="280"
-      y="1723"
-      width="198"
+      y="1702"
+      width="181"
       height="1"
       fill="1"
       fillcolor="black"
@@ -69634,7 +69695,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig52.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[281, 1724, 196, 23]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[281, 1703, 179, 38]"
          href="-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AD1"
          fill="0"
          fillcolor="white"
@@ -69646,9 +69707,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig52.6.0"
         x="281"
-        y="1724"
-        width="196"
-        height="23"
+        y="1703"
+        width="179"
+        height="38"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -69656,9 +69717,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
       <text name="Fig52.6.1"
         x="281"
-        y="1724"
-        width="196"
-        height="21"
+        y="1703"
+        width="179"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -69670,6 +69731,22 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >check() : Report</text>
+      <text name="Fig52.6.2"
+        x="281"
+        y="1718"
+        width="179"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getValue() : string</text>
     </group>
   </group>
   <group name="Fig53"
@@ -70028,7 +70105,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </path>
   </group>
   <group name="Fig55"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[72, 1408, 487, 144]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[72, 1408, 487, 159]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AE5"
        fill="1"
        fillcolor="white"
@@ -70043,7 +70120,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       x="72"
       y="1408"
       width="487"
-      height="144"
+      height="159"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -70163,7 +70240,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig55.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[73, 1469, 485, 83]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[73, 1469, 485, 98]"
          href="-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AE5"
          fill="0"
          fillcolor="white"
@@ -70177,7 +70254,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="73"
         y="1469"
         width="485"
-        height="83"
+        height="98"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -70251,7 +70328,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="73"
         y="1529"
         width="485"
-        height="21"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -70263,6 +70340,22 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getMax() : string</text>
+      <text name="Fig55.6.6"
+        x="73"
+        y="1544"
+        width="485"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="true"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getValue() : string</text>
     </group>
   </group>
   <group name="Fig56"
@@ -70324,7 +70417,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <moveto x="158"
               y="1680" />
       <lineto x="158"
-              y="1551" />
+              y="1566" />
     </path>
   </group>
   <group name="Fig58"
@@ -70355,7 +70448,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <moveto x="305"
               y="1680" />
       <lineto x="305"
-              y="1551" />
+              y="1566" />
     </path>
   </group>
   <group name="Fig59"
