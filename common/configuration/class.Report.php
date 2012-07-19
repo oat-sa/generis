@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 18.07.2012, 10:14:49 with ArgoUML PHP module 
+ * Automatically generated on 19.07.2012, 14:34:48 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -154,6 +154,36 @@ class common_configuration_Report
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AC5 begin
         $this->status = $status;
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AC5 end
+    }
+
+    /**
+     * Short description of method getStatusAsString
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return string
+     */
+    public function getStatusAsString()
+    {
+        $returnValue = (string) '';
+
+        // section -64--88-56-1-339f972e:1389f397ef8:-8000:0000000000001B28 begin
+        switch ($this->getStatus()){
+            case self::INVALID:
+                $returnValue = 'invalid';
+            break;
+            
+            case self::UNKNOWN:
+                $returnValue = 'unknown';
+            break;
+            
+            case self::VALID:
+                $returnValue = 'valid';
+            break;
+        }
+        // section -64--88-56-1-339f972e:1389f397ef8:-8000:0000000000001B28 end
+
+        return (string) $returnValue;
     }
 
     /**

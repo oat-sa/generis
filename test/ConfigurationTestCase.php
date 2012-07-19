@@ -31,14 +31,17 @@ class ConfigurationTestCase extends TaoTestCase {
         ini_set($ini->getName(), 'text/html');
         $report = $ini->check();
         $this->assertEqual($report->getStatus(), common_configuration_Report::VALID);
+        $this->assertEqual($report->getStatusAsString(), 'valid');
         
         ini_set($ini->getName(), 'text/xml');
         $report = $ini->check();
         $this->assertEqual($report->getStatus(), common_configuration_Report::INVALID);
+        $this->assertEqual($report->getStatusAsString(), 'invalid');
         
         $ini->setName('foobar');
         $report = $ini->check();
         $this->assertEqual($report->getStatus(), common_configuration_Report::UNKNOWN);
+        $this->assertEqual($report->getStatusAsString(), 'unknown');
         
         ini_set($ini->getName(), $oldIniValue);
     }
@@ -171,5 +174,13 @@ class ConfigurationTestCase extends TaoTestCase {
         
         $this->expectException(new common_configuration_MalformedRightsException("Malformed rights. Expected format is r|rw|rwx."));
         $f->setExpectedRights('fail');
+        
+        try{
+            $f->setExpectedRights('rw');
+            $this->pass();
+        }
+        catch (common_configuration_MalformedRightsException $e){
+            $this->fail();
+        }
     }
 }
