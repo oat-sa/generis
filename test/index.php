@@ -7,6 +7,7 @@ $testSuite = new TestSuite('Generis unit tests');
 $tests = array_merge(
 	TestRunner::getTests(array('generis'))
 	,TestRunner::findTest(dirname(__FILE__).'/common')
+	,TestRunner::findTest(dirname(__FILE__).'/rules')
 );
 
 //create the test sutie
