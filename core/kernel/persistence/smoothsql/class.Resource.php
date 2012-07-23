@@ -842,7 +842,7 @@ class core_kernel_persistence_smoothsql_Resource
     	//build the predicate query
        	//$predicatesQuery = implode(',', $properties);
 		foreach ($properties as $property) {
-			$predicatesQuery .= ", '" . $property->getUri() . "'";
+			$predicatesQuery .= ", '" . (is_string($property) ? $property : $property->getUri()) . "'";
 		}
     	$predicatesQuery=substr($predicatesQuery, 1);
         
