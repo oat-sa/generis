@@ -253,7 +253,7 @@ class core_kernel_rules_Operation
         	}
         	             	
         	default : {
-        		throw new common_Exception('problem evaluating operation');
+        		throw new common_Exception('problem evaluating operation, operator do not match with operands');
         	}
         		
         }
