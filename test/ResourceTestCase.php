@@ -440,10 +440,10 @@ class ResourceTestCase extends UnitTestCase{
 		$instance->delete();
 	}
 
-	public function testGetType(){
+	public function testGetTypes(){
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
-		$typeUri = array_keys($instance->getType());
+		$typeUri = array_keys($instance->getTypes());
 		$this->assertEqual($typeUri[0],GENERIS_BOOLEAN);
 		$this->assertTrue(count($typeUri) == 1);
 		$instance->delete();
