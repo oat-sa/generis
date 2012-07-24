@@ -6,7 +6,8 @@ $testSuite = new TestSuite('Generis unit tests');
 //get the test into each extensions
 $tests = array_merge(
 	TestRunner::getTests(array('generis'))
-	,TestRunner::findTest(dirname(__FILE__).'/../common')
+	,TestRunner::findTest(dirname(__FILE__).'/../common')	
+	,TestRunner::findTest(dirname(__FILE__).'/../rules')
 );
 
 //create the test sutie
