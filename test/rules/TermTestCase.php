@@ -55,6 +55,15 @@ class TermTestCase extends UnitTestCase {
 		$result = $operationTerm->evaluate();
 		$this->assertEqual($result->literal,'17');
 		
+		
+		$fakeTerm = new core_kernel_rules_Term($maybe->getUri());
+		try {
+			$fakeTerm->evaluate();
+			$this->fail('should raise exception : Forbidden type');	
+		} catch (common_Exception $e) {
+			$this->assertEqual($e->getMessage(),'problem evaluating Term');
+		}
+		
 		$badTermResource->delete();
 		$constant5->delete();
 		$constant12->delete();
