@@ -75,6 +75,7 @@ class OperationTestCase extends UnitTestCase {
 		
 		try {
 			$operation->evaluate();
+			$this->fail('should raise exception : problem evaluating operation, operator do not match with operands');
 		} catch (common_Exception $e) {
 			$this->assertEqual($e->getMessage(),'problem evaluating operation, operator do not match with operands');
 		}
