@@ -34,7 +34,7 @@ else{
 
 require_once  PHPCOVERAGE_HOME. "CoverageRecorder.php";
 require_once PHPCOVERAGE_HOME . "reporter/HtmlCoverageReporter.php";
-$includePaths = array(ROOT_PATH.'core',ROOT_PATH.'generis/common',ROOT_PATH.'helpers');
+$includePaths = array(ROOT_PATH.'generis/core',ROOT_PATH.'generis/common',ROOT_PATH.'generis/helpers');
 $excludePaths = array(ROOT_PATH.'generis/common/conf',ROOT_PATH.'common/exception');
 $covReporter = new HtmlCoverageReporter("Code Coverage Report Generis", "", PHPCOVERAGE_REPORTS."generis/");
 $cov = new CoverageRecorder($includePaths, $excludePaths, $covReporter);
