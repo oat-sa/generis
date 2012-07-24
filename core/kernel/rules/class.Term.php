@@ -68,10 +68,10 @@ class core_kernel_rules_Term
     public function evaluate($variable = array())
     {
         // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DBD begin
-      	common_Logger::i('Evaluating Term uri : '. $this->uriResource, array('Generis Term'));
+      	common_Logger::i('Evaluating Term uri : '. $this->getUri(), array('Generis Term'));
       	common_Logger::i('Evaluating Term name : '. $this->getLabel(), array('Generis Term'));
 		$termType = $this->getUniquePropertyValue(new core_kernel_classes_Property(RDF_TYPE));
-		common_Logger::d('Term s type : '. $termType->uriResource, array('Generis Term'));
+		common_Logger::d('Term s type : '. $termType->getUri(), array('Generis Term'));
 		switch($termType->getUri()) {
     		case CLASS_TERM : {
 				throw new common_Exception("Forbidden Type of Term");
@@ -99,7 +99,6 @@ class core_kernel_rules_Term
       			break;
     		}
     		default :
-    			var_dump($this);
     			throw new common_Exception('problem evaluating Term');
     	}
     	
