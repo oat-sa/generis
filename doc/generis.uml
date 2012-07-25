@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Jul 25 16:30:26 CEST 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Jul 25 16:44:20 CEST 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -24369,6 +24369,37 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                   </UML:Generalization.child>
                   <UML:Generalization.parent>
                     <UML:Class xmi.idref = '127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003ECA'/>
+                  </UML:Generalization.parent>
+                </UML:Generalization>
+                <UML:Class xmi.id = '-64--88-56-1--4c174f22:138be969f09:-8000:0000000000001B32'
+                  name = 'PHPDatabaseDriver' visibility = 'public' isSpecification = 'false'
+                  isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                  <UML:GeneralizableElement.generalization>
+                    <UML:Generalization xmi.idref = '-64--88-56-1--4c174f22:138be969f09:-8000:0000000000001B33'/>
+                  </UML:GeneralizableElement.generalization>
+                  <UML:Classifier.feature>
+                    <UML:Operation xmi.id = '-64--88-56-1--4c174f22:138be969f09:-8000:0000000000001B34'
+                      name = 'check' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-56-1--4c174f22:138be969f09:-8000:0000000000001B35'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AA0'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                  </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Generalization xmi.id = '-64--88-56-1--4c174f22:138be969f09:-8000:0000000000001B33'
+                  isSpecification = 'false'>
+                  <UML:Generalization.child>
+                    <UML:Class xmi.idref = '-64--88-56-1--4c174f22:138be969f09:-8000:0000000000001B32'/>
+                  </UML:Generalization.child>
+                  <UML:Generalization.parent>
+                    <UML:Class xmi.idref = '-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AD1'/>
                   </UML:Generalization.parent>
                 </UML:Generalization>
               </UML:Namespace.ownedElement>
@@ -70706,6 +70737,186 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
               y="864" />
       <lineto x="848"
               y="39" />
+    </path>
+  </group>
+  <group name="Fig63"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[176, 1800, 219, 46]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=false;"
+       href="-64--88-56-1--4c174f22:138be969f09:-8000:0000000000001B32"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+      enclosingFig="Fig47"
+    </private>
+    
+    <rectangle name="Fig63.0"
+      x="176"
+      y="1800"
+      width="219"
+      height="46"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig63.1"
+      x="177"
+      y="1801"
+      width="217"
+      height="21"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >common::configuration::PHPDatabaseDriver</text>
+    <group name="Fig63.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[177, 1801, 217, 0]"
+         href="-64--88-56-1--4c174f22:138be969f09:-8000:0000000000001B32"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig63.2.0"
+        x="177"
+        y="1801"
+        width="217"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig63.3"
+      x="176"
+      y="1822"
+      width="219"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+      visibility="0"
+    />
+    <group name="Fig63.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[177, 1823, 217, 21]"
+         href="-64--88-56-1--4c174f22:138be969f09:-8000:0000000000001B32"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig63.4.0"
+        x="177"
+        y="1823"
+        width="217"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        visibility="0"
+      />
+    </group>
+    <rectangle name="Fig63.5"
+      x="176"
+      y="1822"
+      width="219"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig63.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[177, 1823, 217, 23]"
+         href="-64--88-56-1--4c174f22:138be969f09:-8000:0000000000001B32"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig63.6.0"
+        x="177"
+        y="1823"
+        width="217"
+        height="23"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig63.6.1"
+        x="177"
+        y="1823"
+        width="217"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >check() : Report</text>
+    </group>
+  </group>
+  <group name="Fig64"
+       description="org.argouml.uml.diagram.ui.FigGeneralization"
+       href="-64--88-56-1--4c174f22:138be969f09:-8000:0000000000001B33"
+       stroke="1"
+       strokecolor="51 51 153"
+  >
+    <private>
+      sourcePortFig="Fig63.0"
+      destPortFig="Fig52.0"
+      sourceFigNode="Fig63"
+      destFigNode="Fig52"
+      <argouml:pathitem figname="Fig64.1"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
+                        ownerhref="-64--88-56-1--4c174f22:138be969f09:-8000:0000000000001B33"
+                        angle="-90.0"
+                        offset="32" />
+    </private>
+    <path name="Fig64.0"
+      description="org.tigris.gef.presentation.FigPoly"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="51 51 153"
+    >
+      <moveto x="320"
+              y="1800" />
+      <lineto x="320"
+              y="1760" />
+      <lineto x="448"
+              y="1760" />
+      <lineto x="448"
+              y="1708" />
     </path>
   </group>
 </pgml>
