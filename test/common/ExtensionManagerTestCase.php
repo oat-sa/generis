@@ -23,12 +23,14 @@ class ExtensionManagerTestCase extends UnitTestCase {
 		
 		$this->assertTrue($db->execSql($fakeExtensionSql));
 		$extensionManager = common_ext_ExtensionsManager::singleton();
+		
 		try{
+			$extensionManager->reset();
 			$ext = $extensionManager->getInstalledExtensions();
 			$this->fail('should raise exception');
 		}
-		catch(common_ext_ExtensionException $ee){
-			$this->assertEqual('Extension Manifest not found : <b>testExtension</b>', $ee->getMessage());
+		catch(common_ext_ManifestNotFoundException $ee){
+			$this->assertEqual("Extension Manifest not found for extension 'testExtension'.", $ee->getMessage());
 		}
 		
 		mkdir(EXTENSION_PATH.'/testExtension');
