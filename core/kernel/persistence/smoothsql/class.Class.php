@@ -803,41 +803,13 @@ class core_kernel_persistence_smoothsql_Class
 		foreach($propertyFilters as $propUri => $pattern){
 			
 			$propUri = $dbWrapper->dbConnector->escape($propUri);
-			
-			if(is_string($pattern)){
-				//if(!empty($pattern)){
-
-					$pattern = $dbWrapper->dbConnector->escape($pattern);
-					$object = trim(str_replace('*', '%', $pattern));
-					
-					if ($like) {
-						if(!preg_match("/^%/", $object)){
-							$object = "%".$object;
-						}
-						if(!preg_match("/%$/", $object)){
-							$object = $object."%";
-						}
-						$conditions[] = ' ("predicate" = \''.$propUri.'\' AND "object" LIKE \''.$object.'\' '.$langToken.' ) ';
-					}
-					else {
-						if (strpos($object, '%') !== false) $conditions[] = ' ("predicate" = \''.$propUri.'\' AND "object" LIKE \''.$object.'\' '.$langToken.' ) ';
-						else $conditions[] = ' ("predicate" = \''.$propUri.'\' AND "object" = \''.$pattern.'\' '.$langToken.' ) ';
-					}
-				//}
-			}
-			else if(is_array($pattern)){
-				if(count($pattern) > 0){
-					$multiCondition =  '';
-					foreach($pattern as $patternToken){
-						
-						if (!is_string($patternToken) && !is_numeric($patternToken) && !$patternToken instanceof core_kernel_classes_Resource) {
-							throw new common_Exception("Unsupported type for searchinstance array: ".gettype($patternToken));
-						}
-						$patternToken = $dbWrapper->dbConnector->escape($patternToken instanceof core_kernel_classes_Resource ? $patternToken->getUri() : $patternToken);
-						
-						if($multiCondition != ''){
-							$multiCondition .= " OR ";
-						}
+			$values = is_array($pattern) ? $pattern : array($pattern);
+			$sub = array();
+			foreach ($values as $value) {
+				switch (gettype($value)) {
+					case 'string' :
+					case 'numeric':
+						$patternToken = $dbWrapper->dbConnector->escape($value);
 						$object = trim(str_replace('*', '%', $patternToken));
 						
 						if($like){
@@ -847,20 +819,30 @@ class core_kernel_persistence_smoothsql_Class
 							if(!preg_match("/%$/", $object)){
 								$object = $object."%";
 							}
-							$multiCondition .= ' "object" LIKE \''.$object.'\' ';
+							$sub[] .= ' "object" LIKE \''.$object.'\' ';
 						}
 						else {
-							if (strpos($object, '%') !== false) $multiCondition .= ' "object" LIKE \''.$object.'\' ';
-							else $multiCondition .= ' "object" = \''.$patternToken.'\' ';
+							$sub[] = (strpos($object, '%') !== false)
+								? ' "object" LIKE \''.$object.'\' '
+								: ' "object" = \''.$patternToken.'\' ';
 						}
-					}
-					$conditions[] = " (\"predicate\" = '{$propUri}' AND ({$multiCondition}) {$langToken} ) ";
+					break;
+					
+					case 'object' :
+						if($value instanceof core_kernel_classes_Resource) {
+							$sub[] = '"object" = \''.$value->getUri().'\'';
+						} else {
+							common_Logger::w('non ressource as search parameter: '.get_class($value), 'GENERIS');
+						}
+					break;
+
+					default:
+						throw new common_Exception("Unsupported type for searchinstance array: ".gettype($value));
+						
 				}
 			}
+			$conditions[] = " (\"predicate\" = '{$propUri}' AND (".implode(" OR ", $sub).") {$langToken} ) ";
 		}
-		/*if(count($conditions) == 0){
-			return $returnValue;
-		}*/ 
 
 		$intersect = true;
 		if (isset($options['chaining']) && $options['chaining'] == 'or') {
