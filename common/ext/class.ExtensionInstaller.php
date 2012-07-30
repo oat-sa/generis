@@ -198,7 +198,7 @@ class common_ext_ExtensionInstaller
     public function installModuleModel()
     {
         // section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A44 begin
-        tao_helpers_funcACL_ActionModelCreator::spawnExtensionModel($this->extension);
+        tao_helpers_funcACL_ActionModel::spawnExtensionModel($this->extension);
         // section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A44 end
     }
 

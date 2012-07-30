@@ -60,39 +60,39 @@ define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN' , 	GENERIS_NS . '#VersionedR
 define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_PASSWORD' , 	GENERIS_NS . '#VersionedRepositoryPassword' , true) ;
 
 #user
-define('CLASS_ROLE',											'http://www.tao.lu/Ontologies/TAO.rdf#ClassRole',true);
-define('PROPERTY_ROLE_ISSYSTEM',											'http://www.tao.lu/Ontologies/TAO.rdf#IsSystem',true);
-define('PROPERTY_USER_LOGIN' ,						GENERIS_NS . '#login' , true) ;
+define('CLASS_ROLE',							'http://www.tao.lu/Ontologies/TAO.rdf#ClassRole',true);
+define('PROPERTY_ROLE_ISSYSTEM',				'http://www.tao.lu/Ontologies/TAO.rdf#IsSystem',true);
+define('PROPERTY_USER_LOGIN' ,					GENERIS_NS . '#login' , true) ;
 define('PROPERTY_USER_PASSWORD' , 				GENERIS_NS . '#password' , true) ;
-define('PROPERTY_USER_UILG' ,							GENERIS_NS . '#userUILg' , true) ;
-define('PROPERTY_USER_DEFLG' ,						GENERIS_NS . '#userDefLg' , true) ;
-define('PROPERTY_USER_MAIL' ,							GENERIS_NS . '#userMail' , true) ;
+define('PROPERTY_USER_UILG' ,					GENERIS_NS . '#userUILg' , true) ;
+define('PROPERTY_USER_DEFLG' ,					GENERIS_NS . '#userDefLg' , true) ;
+define('PROPERTY_USER_MAIL' ,					GENERIS_NS . '#userMail' , true) ;
 define('PROPERTY_USER_FIRTNAME' , 				GENERIS_NS . '#userFirstName' , true) ;
 define('PROPERTY_USER_LASTNAME' , 				GENERIS_NS . '#userLastName' , true) ;
 
-define('CLASS_ROLE_TAOMANAGER',						'http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole', true) ;
-define('CLASS_ROLE_BACKOFFICE',						'http://www.tao.lu/Ontologies/TAO.rdf#BackOffice', true) ;
-define('CLASS_ROLE_FRONTOFFICE',					'http://www.tao.lu/Ontologies/TAO.rdf#FrontOffice', true) ;
+define('CLASS_ROLE_TAOMANAGER',					'http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole', true) ;
+define('CLASS_ROLE_BACKOFFICE',					'http://www.tao.lu/Ontologies/TAO.rdf#BackOffice', true) ;
+define('CLASS_ROLE_FRONTOFFICE',				'http://www.tao.lu/Ontologies/TAO.rdf#FrontOffice', true) ;
 
-define('FUNCACL_NS',											'http://www.tao.lu/Ontologies/taoFuncACL.rdf', true);
-define('CLASS_ROLE_BASEACCESS',						FUNCACL_NS.'#BaseAccessRole', true) ;
+define('FUNCACL_NS',							'http://www.tao.lu/Ontologies/taoFuncACL.rdf', true);
+define('CLASS_ROLE_BASEACCESS',					FUNCACL_NS.'#BaseAccessRole', true) ;
 
-define('CLASS_ACL_MODULE',								FUNCACL_NS.'#Module', true);
-define('PROPERTY_ACL_MODULE_ID',					FUNCACL_NS.'#moduleIdentifier', true);
-define('PROPERTY_ACL_MODULE_EXTENSION',		FUNCACL_NS.'#moduleExtension', true);
-define('PROPERTY_ACL_MODULE_GRANTACCESS',	FUNCACL_NS.'#grantAccessModule', true);
+define('CLASS_ACL_MODULE',						FUNCACL_NS.'#Module', true);
+define('PROPERTY_ACL_MODULE_ID',				FUNCACL_NS.'#moduleIdentifier', true);
+define('PROPERTY_ACL_MODULE_EXTENSION',			FUNCACL_NS.'#moduleExtension', true);
+define('PROPERTY_ACL_MODULE_GRANTACCESS',		FUNCACL_NS.'#grantAccessModule', true);
 
-define('CLASS_ACL_ACTION',								FUNCACL_NS.'#Action', true);
-define('PROPERTY_ACL_ACTION_ID',					FUNCACL_NS.'#actionIdentifier', true);
-define('PROPERTY_ACL_ACTION_MEMBEROF',		FUNCACL_NS.'#actionMemberOf', true);
-define('PROPERTY_ACL_ACTION_GRANTACCESS',	FUNCACL_NS.'#grantAccessAction', true);
+define('CLASS_ACL_ACTION',						FUNCACL_NS.'#Action', true);
+define('PROPERTY_ACL_ACTION_ID',				FUNCACL_NS.'#actionIdentifier', true);
+define('PROPERTY_ACL_ACTION_MEMBEROF',			FUNCACL_NS.'#actionMemberOf', true);
+define('PROPERTY_ACL_ACTION_GRANTACCESS',		FUNCACL_NS.'#grantAccessAction', true);
 
-define('CLASS_SUBCRIPTION',								GENERIS_NS . '#Subscription' , true) ;
+define('CLASS_SUBCRIPTION',						GENERIS_NS . '#Subscription' , true) ;
 define('PROPERTY_SUBCRIPTION_URL', 				GENERIS_NS . '#SubscriptionUrl' , true) ;
 define('PROPERTY_SUBCRIPTION_MASK', 			GENERIS_NS . '#SubscriptionMask' , true) ;
 
-define('CLASS_MASK',											GENERIS_NS . '#Mask' , true) ;
-define('PROPERTY_MASK_SUBJECT',						GENERIS_NS . '#MaskSubject' , true) ;
+define('CLASS_MASK',							GENERIS_NS . '#Mask' , true) ;
+define('PROPERTY_MASK_SUBJECT',					GENERIS_NS . '#MaskSubject' , true) ;
 define('PROPERTY_MASK_PREDICATE', 				GENERIS_NS . '#MaskPredicate' , true) ;
 define('PROPERTY_MASK_OBJECT', 				    GENERIS_NS . '#MaskObject' , true) ;
 
