@@ -108,11 +108,11 @@ class helpers_File
 		$lastDirSep = strrpos($path, DIRECTORY_SEPARATOR);
         $filePath = substr($path, 0, $lastDirSep+1);
         $fileName = substr($path, $lastDirSep+1);
-        
+        $fileNameStr = $fileName != false ? $fileName : '';
         $clazz = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
         $propertyFilters = array(
             PROPERTY_FILE_FILEPATH      =>$filePath
-            , PROPERTY_FILE_FILENAME    =>$fileName
+            , PROPERTY_FILE_FILENAME    =>$fileNameStr
         );
         $resources = $clazz->searchInstances($propertyFilters, array('recursive'=>true, 'like'=>false));
 		foreach($resources as $resource){
