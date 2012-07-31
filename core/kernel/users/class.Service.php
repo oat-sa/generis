@@ -395,7 +395,7 @@ class core_kernel_users_Service
 
         // section 127-0-1-1--dd65dd6:137c0b39408:-8000:00000000000019FE begin
 		if(!is_string($password)){
-			throw new core_kernel_users_Exception('The password must be of "string" type');
+			throw new core_kernel_users_Exception('The password must be of "string" type, got '.gettype($password));
 		}
 		
 		$userPass = $user->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD));
@@ -418,7 +418,7 @@ class core_kernel_users_Service
     {
         // section 127-0-1-1-2ec10bd7:138702395c4:-8000:0000000000004D72 begin
         if(!is_string($password)){
-			throw new core_kernel_users_Exception('The password must be of "string" type');
+			throw new core_kernel_users_Exception('The password must be of "string" type, got '.gettype($password));
 		}
 		
 		$user->editPropertyValues(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD),md5($password));
