@@ -758,7 +758,9 @@ class core_kernel_persistence_smoothsql_Class
 		recursive		: (int) 	recursivity depth (default: 0)
 		lang			: (string) 	e.g. 'EN', 'FR' (default: '') for all properties!
 		offset  		: default 0
-		limit           	: default select all
+		limit           : default select all
+		order			: property to order by
+		orderdir		: direction of order (default: 'ASC')
 		*/
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
@@ -859,21 +861,10 @@ class core_kernel_persistence_smoothsql_Class
                     if(isset($options['offset'])){
                             $offset = intval($options['offset']);
                     }
-                    $queryLimit .= ' ORDER BY "id" LIMIT '.$limit.' OFFSET '.$offset.'';
+                    $queryLimit .= ' LIMIT '.$limit.' OFFSET '.$offset.'';
 		}
-                /*
-		$limit = "";
-		if (isset($options['limit_start'])) {
-		  $limit = intval($options['limit_start']);
-		}
-		if (isset($options['limit_length'])) {
-		  if (isset($options['limit_start'])) $limit .= ', '.intval($options['limit_length']);
-		  else $limit = '0, '.intval($options['limit_length']);
-		}
-		if (isset($options['limit_start']) || isset($options['limit_length'])) $limit = ' ORDER BY "id" LIMIT '.$limit;
-                */
 		
-                $q = '';
+		$q = '';
 		if ($intersect) {
 			foreach ($conditions as $condition) {
 				if (!strlen($q)) $q = $query . $condition;
@@ -885,16 +876,24 @@ class core_kernel_persistence_smoothsql_Class
 		}
 		else $query .= join(' OR ', $conditions);
 
-		$preprdftypes = array();
-		foreach ($rdftypes as $type) $preprdftypes[] = '"object" = \''.$type.'\'';
-		if (count($preprdftypes)){
-                    if(!empty($conditions)){
-                        $query .= 'AND';
-                    }
-                    $query .= ' "subject" IN (SELECT "subject" FROM "statements" WHERE "predicate" = \''.RDF_TYPE.'\' AND ('.join(' OR ', $preprdftypes).'))';
-                }
-		$returnValue = $query . $queryLimit;
-                
+		if(!empty($conditions)){
+			$query .= 'AND';
+		}
+		$query .= ' "subject" IN (SELECT "subject" FROM "statements" WHERE "predicate" = \''.RDF_TYPE.'\' AND "object" in (\''.implode('\',\'', $rdftypes).'\'))';
+
+		// sorting
+        if (isset($options['order']) && !empty($options['order'])) {
+        	$orderUri = $options['order'];
+        	$orderDir = isset($options['orderdir']) && strtoupper($options['orderdir']) == 'DESC' ? 'DESC' : 'ASC';
+        	$orderQuery = 'SELECT "subject","object" FROM "statements" WHERE "predicate" = \''.$orderUri.'\'';
+			$query = 'SELECT "mainq"."subject" from ('.$query.') AS mainq'
+						.' LEFT JOIN ('.$orderQuery.') AS orderq ON "mainq"."subject" = "orderq"."subject"'
+						.' ORDER BY "orderq"."object" '.$orderDir;
+        } else if (isset($options['limit'])) {
+        	$query .= ' ORDER BY "id"';
+        }
+         
+        $returnValue = $query . $queryLimit;
         // section 127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CC end
 
         return (string) $returnValue;
