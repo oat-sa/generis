@@ -545,8 +545,17 @@ class core_kernel_persistence_smoothsql_Class
 			if (isset($options['offset'])) unset($options['offset']);
 			if (isset($options['limit'])) unset($options['limit']);
 			$query = $this->getFilteredQuery($resource, $propertyFilters, $options);
-			$sqlResult = $dbWrapper->execSql($query);
-			$returnValue = $sqlResult->RecordCount();
+			if (substr($query, 0, strlen('SELECT "subject"')) == 'SELECT "subject"') {
+				$query = 'SELECT count(*) as count'.substr($query, strlen('SELECT "subject"'));
+				$sqlResult = $dbWrapper->execSql($query);
+				if (!$sqlResult->EOF) {
+					$returnValue = $sqlResult->fields['count'];
+				}
+			} else {
+				common_Logger::w('getFilteredQuery was updated, please update countInstances as well');
+				$sqlResult = $dbWrapper->execSql($query);
+				$returnValue = $sqlResult->RecordCount();
+			}
 		}
 		else {
 			$sqlQuery = 'SELECT count("subject") as count FROM "statements"
