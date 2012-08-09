@@ -895,7 +895,7 @@ class core_kernel_persistence_smoothsql_Class
         	$orderUri = $options['order'];
         	$orderDir = isset($options['orderdir']) && strtoupper($options['orderdir']) == 'DESC' ? 'DESC' : 'ASC';
         	$orderQuery = 'SELECT "subject","object" FROM "statements" WHERE "predicate" = \''.$orderUri.'\'';
-			$query = 'SELECT "mainq"."subject" from ('.$query.') AS mainq'
+			$query = 'SELECT DISTINCT "mainq"."subject" from ('.$query.') AS mainq'
 						.' LEFT JOIN ('.$orderQuery.') AS orderq ON "mainq"."subject" = "orderq"."subject"'
 						.' ORDER BY "orderq"."object" '.$orderDir;
         } else if (isset($options['limit'])) {
