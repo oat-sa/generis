@@ -907,7 +907,6 @@ class core_kernel_persistence_smoothsql_Class
         }
          
         $returnValue = $query . $queryLimit;
-        common_Logger::i($returnValue);
         // section 127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CC end
 
         return (string) $returnValue;
