@@ -800,7 +800,7 @@ class core_kernel_persistence_smoothsql_Class
 		$langToken = '';
 		if(isset($options['lang'])){
 			if(preg_match('/^[a-zA-Z]{2,4}$/', $options['lang'])){
-				$langToken = ' AND ("l_language" = \'\' OR "l_language" = \''.$options['lang'].'\') ';
+				$langToken = ' AND ("l_language" = \'\' OR "l_language" = \''.$options['lang'].'\')';
 			}
 		}
 		$like = true;
@@ -830,12 +830,12 @@ class core_kernel_persistence_smoothsql_Class
 							if(!preg_match("/%$/", $object)){
 								$object = $object."%";
 							}
-							$sub[] .= ' "object" LIKE \''.$object.'\' ';
+							$sub[] .= '"object" LIKE \''.$object.'\'';
 						}
 						else {
 							$sub[] = (strpos($object, '%') !== false)
-								? ' "object" LIKE \''.$object.'\' '
-								: ' "object" = \''.$patternToken.'\' ';
+								? '"object" LIKE \''.$object.'\''
+								: '"object" = \''.$patternToken.'\'';
 						}
 					break;
 					
@@ -852,7 +852,11 @@ class core_kernel_persistence_smoothsql_Class
 						
 				}
 			}
-			$conditions[] = " (\"predicate\" = '{$propUri}' AND (".implode(" OR ", $sub).") {$langToken} ) ";
+			if (empty($sub)) {
+				$conditions[] = "(\"predicate\" = '{$propUri}'{$langToken})";
+			} else {
+				$conditions[] = "(\"predicate\" = '{$propUri}' AND (".implode(" OR ", $sub)."){$langToken})";
+			}
 		}
 
 		$intersect = true;
@@ -886,7 +890,7 @@ class core_kernel_persistence_smoothsql_Class
 		else $query .= join(' OR ', $conditions);
 
 		if(!empty($conditions)){
-			$query .= 'AND';
+			$query .= ' AND';
 		}
 		$query .= ' "subject" IN (SELECT "subject" FROM "statements" WHERE "predicate" = \''.RDF_TYPE.'\' AND "object" in (\''.implode('\',\'', $rdftypes).'\'))';
 
@@ -903,6 +907,7 @@ class core_kernel_persistence_smoothsql_Class
         }
          
         $returnValue = $query . $queryLimit;
+        common_Logger::i($returnValue);
         // section 127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CC end
 
         return (string) $returnValue;
