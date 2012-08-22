@@ -65,7 +65,7 @@ class Resolver {
      * @return	String The module name
      */
     public function getModule() {
-    	return $this->module;
+    	return is_null($this->module) ? DEFAULT_MODULE_NAME : $this->module;
     }
 
     /**
@@ -73,7 +73,7 @@ class Resolver {
      * @return String The action name
      */
     public function getAction() {
-    	return $this->action;
+    	return is_null($this->action) ? DEFAULT_ACTION_NAME : $this->action;
     }
 
     /**
@@ -138,8 +138,8 @@ class Resolver {
 
 		if (count($tab) > 0) {
 			$this->extension	= $tab[0];
-			$this->module		= isset($tab[1]) ? $tab[1] : '';
-			$this->action		= isset($tab[2]) ? $tab[2] : '';
+			$this->module		= isset($tab[1]) ? $tab[1] : null;
+			$this->action		= isset($tab[2]) ? $tab[2] : null;
 		} else {
 			throw new common_exception_Error('Empty request Uri '.$request.' reached resolver');
 		}

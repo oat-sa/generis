@@ -23,29 +23,7 @@ class ActionEnforcer implements IExecutable
 		$module = $this->context->getModuleName();
 		$action = $this->context->getActionName();
 		
-		if (!$module && !$action) 
-		{
-			# Configure default module
-    		$action = DEFAULT_ACTION_NAME;
-    		$module = DEFAULT_MODULE_NAME;
-    	}
-    	else if (!$module)
-    	{
-    		throw new ActionEnforcingException("No module specified in request");	
-    	}
-    	else if (!$action)
-    	{
-    		$action = DEFAULT_ACTION_NAME;
-    		$module = Camelizer::firstToLower($module);
-    	}
-    	else
-    	{
-    		# Configure expected module
-			$action = Camelizer::firstToLower($action);
-			$module = Camelizer::firstToUpper($module);
-    	}
-    	
-    	// if module exist include the class
+		// if module exist include the class
     	if ($module !== null) {
     		
 //    		//check if there is a specified context first
