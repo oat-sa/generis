@@ -76,7 +76,7 @@ class common_uri_DatabaseSerialUriProvider
         			$returnValue = $result->Fields(0);
         		}
         		else{
-        			throw new common_uri_UriProviderException("An error occured while calling the stored procedure for driver '${driver}'.");	
+        			throw new common_uri_UriProviderException("An error occured while calling the stored procedure for driver '${driver}': " . $dbWrapper->dbConnector->ErrorMsg() . ".");	
         		}
                 
             break;
