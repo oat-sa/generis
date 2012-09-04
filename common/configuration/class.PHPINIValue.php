@@ -96,7 +96,7 @@ class common_configuration_PHPINIValue
         $name = $this->getName();
         if (($value = ini_get($name)) !== false){
             // The ini value exists for this name.
-            if ($value == $this->getExpectedValue()){
+            if ((($value == '') ? '0' : $value) == $this->getExpectedValue()){
                 $validity = common_configuration_Report::VALID;
                 $message = "PHP Configuration Option '${name}' = '${value}' has an expected value.";
             }
