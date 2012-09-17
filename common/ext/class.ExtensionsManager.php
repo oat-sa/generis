@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 15.06.2012, 18:11:54 with ArgoUML PHP module 
+ * Automatically generated on 14.09.2012, 14:14:13 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -86,6 +86,24 @@ class common_ext_ExtensionsManager
     }
 
     /**
+     * Short description of method getCurrentExtension
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return common_ext_Extension
+     */
+    public static function getCurrentExtension()
+    {
+        $returnValue = null;
+
+        // section 127-0-1-1--2fd5728f:139c4b1eaee:-8000:0000000000001B39 begin
+        $returnValue = self::singleton()->getExtensionById(Context::getInstance()->getExtensionName());
+        // section 127-0-1-1--2fd5728f:139c4b1eaee:-8000:0000000000001B39 end
+
+        return $returnValue;
+    }
+
+    /**
      * Short description of method getInstalledExtensions
      *
      * @access public
@@ -120,8 +138,7 @@ class common_ext_ExtensionsManager
         $returnValue = (bool) false;
 
         // section 127-0-1-1--15445bbd:1352f3a7eb2:-8000:0000000000001902 begin
-        $extensions = $this->getInstalledExtensions();
-        $returnValue = isset($extensions[$extension]);
+        throw new Exception('deprecated function '.__FUNCTION__);
         // section 127-0-1-1--15445bbd:1352f3a7eb2:-8000:0000000000001902 end
 
         return (bool) $returnValue;
@@ -140,13 +157,7 @@ class common_ext_ExtensionsManager
         $returnValue = (bool) false;
 
         // section 127-0-1-1-4e48a7c:136ee1b3246:-8000:00000000000019D8 begin
-        $extensions = $this->getInstalledExtensions();
-        if (isset($extensions[$extension])) {
-        	$conf = $extensions[$extension]->getConfiguration();
-        	if (!$conf->ghost) {
-        		$returnValue = true;
-        	}
-        }
+        throw new Exception('deprecated function '.__FUNCTION__);
         // section 127-0-1-1-4e48a7c:136ee1b3246:-8000:00000000000019D8 end
 
         return (bool) $returnValue;

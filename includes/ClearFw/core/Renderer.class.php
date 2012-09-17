@@ -34,7 +34,7 @@ class Renderer
 	 * @return string the view directory for the current theme
 	 */
 	protected function getViewPath(){
-		return self::$viewsBasePath . $GLOBALS['dir_theme'];
+		return self::$viewsBasePath . 'templates/';
 	}
 	
 	/**

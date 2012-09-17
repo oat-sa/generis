@@ -94,7 +94,8 @@ class common_ext_ExtensionInstaller
 				// unreachable code
 			}
 			
-			$this->installWriteConfig();
+			// no longer required
+			//$this->installWriteConfig();
 			$this->installOntology();
 			$this->installOntologyTranslation();
 			$this->installRegisterExt();
@@ -117,10 +118,12 @@ class common_ext_ExtensionInstaller
 
     /**
      * writes the config based on the config.sample
+     * This is no longer a required step
      *
      * @access protected
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
+     * @deprecated
      */
     protected function installWriteConfig()
     {

@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 13.06.2012, 15:56:01 with ArgoUML PHP module 
+ * Automatically generated on 17.09.2012, 12:16:09 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -75,7 +75,7 @@ class common_ext_Extension
         $returnValue = array();
 
         // section 127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DCA begin
-        $dir = new DirectoryIterator(ROOT_PATH.$this->id.'/actions');
+        $dir = new DirectoryIterator(ROOT_PATH.$this->id.DIRECTORY_SEPARATOR.'actions');
 	    foreach ($dir as $fileinfo) {
 			if(preg_match('/^class\.[^.]*\.php$/', $fileinfo->getFilename())) {
 				$module = substr($fileinfo->getFilename(), 6, -4);
@@ -203,6 +203,32 @@ class common_ext_Extension
         // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A2A end
 
         return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method getConstant
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  string key
+     * @return mixed
+     */
+    public function getConstant($key)
+    {
+        $returnValue = null;
+
+        // section 127-0-1-1-2b8db8b3:139bf77daa1:-8000:0000000000001B36 begin
+        if (isset($this->constants[$key])) {
+        	$returnValue = $this->constants[$key];
+        } elseif (defined($key)) {
+        	common_logger::w('constant outside of extension called: '.$key);
+        	$returnValue = constant($key);
+        } else {
+        	throw new common_exception_Error('Unknown constant \''.$key.'\'');
+        }
+        // section 127-0-1-1-2b8db8b3:139bf77daa1:-8000:0000000000001B36 end
+
+        return $returnValue;
     }
 
 } /* end of class common_ext_Extension */

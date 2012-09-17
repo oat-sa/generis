@@ -137,8 +137,8 @@ class DefaultFC implements FrontController {
      * @return	string							Tpl file path
      */
     static function getView($pView) {
-    	if (is_file(DIR_VIEWS . $GLOBALS['dir_theme'] .$pView)) {
-    		return DIR_VIEWS . $GLOBALS['dir_theme'] .$pView;
+    	if (is_file(DIR_VIEWS . 'templates' .$pView)) {
+    		return DIR_VIEWS . 'templates' .$pView;
     	} else if (is_file(DIR_VIEWS . "default/" .$pView)) {
     		return DIR_VIEWS . "default/" .$pView;
     	} else {

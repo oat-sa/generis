@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 15.06.2012, 17:34:52 with ArgoUML PHP module 
+ * Automatically generated on 17.09.2012, 12:18:46 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -33,13 +33,14 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * Short description of class common_ext_SimpleExtension
  *
+ * @abstract
  * @access public
  * @author lionel.lecaque@tudor.lu
  * @package common
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
  * @subpackage ext
  */
-class common_ext_SimpleExtension
+abstract class common_ext_SimpleExtension
 {
     // --- ASSOCIATIONS ---
 
@@ -159,6 +160,14 @@ class common_ext_SimpleExtension
      */
     public $installed = false;
 
+    /**
+     * Short description of attribute constants
+     *
+     * @access public
+     * @var array
+     */
+    public $constants = array();
+
     // --- OPERATIONS ---
 
     /**
@@ -178,50 +187,53 @@ class common_ext_SimpleExtension
 		$this->installed = $installed;
 		if(is_file($this->manifest)){
 			$manifestArray = require $this->manifest;
-			$this->author = $manifestArray['additional']['author'];
+			$this->author = $manifestArray['author'];
 			$this->name = $manifestArray['name'];
-			$this->version = $manifestArray['additional']['version'];
+			$this->version = $manifestArray['version'];
 			
-			if(isset($manifestArray['additional']['install']) && is_array($manifestArray['additional']['install'])) {
-				$this->installFiles = $manifestArray['additional']['install'];
+			if(isset($manifestArray['install']) && is_array($manifestArray['install'])) {
+				$this->installFiles = $manifestArray['install'];
 			}
-			if(isset($manifestArray['additional']['registerToClassLoader'])){
-				$this->registerToClassLoader =$manifestArray['additional']['registerToClassLoader'];
+			if(isset($manifestArray['registerToClassLoader'])){
+				$this->registerToClassLoader =$manifestArray['registerToClassLoader'];
 			}
-			$list = $manifestArray['additional']['dependances'];
+			$list = $manifestArray['dependances'];
 			if(!is_array($list) && !empty($list)){
 				$list = array($list);
 			}
 			foreach ($list as $ext) {
 				$this->requiredExtensionsList[] = $ext;
 			}
-			if(isset($manifestArray['additional']['extends'])) {
-				$this->parentID = $manifestArray['additional']['extends'];
+			if(isset($manifestArray['extends'])) {
+				$this->parentID = $manifestArray['extends'];
 				if (!in_array($this->parentID, $this->requiredExtensionsList)) {
 	        		$this->requiredExtensionsList[] = $this->parentID;
 				} 
 	        }
 			
-			if(isset($manifestArray['additional']['classLoaderPackages'])) {
-				$this->classLoaderPackages = $manifestArray['additional']['classLoaderPackages'];	
+			if(isset($manifestArray['classLoaderPackages'])) {
+				$this->classLoaderPackages = $manifestArray['classLoaderPackages'];	
 			}
-	    	if(isset($manifestArray['additional']['configFile'])) {
-				$this->configFile = $manifestArray['additional']['configFile'];	
+	    	if(isset($manifestArray['configFile'])) {
+				$this->configFile = $manifestArray['configFile'];	
 			}
-			if(isset($manifestArray['additional']['models'])) {
-				if(!is_array($manifestArray['additional']['models']) && !empty($manifestArray['additional']['models'])){
-					$this->model = array($manifestArray['additional']['models']);
+			if(isset($manifestArray['models'])) {
+				if(!is_array($manifestArray['models']) && !empty($manifestArray['models'])){
+					$this->model = array($manifestArray['models']);
 				}
 				else{
-					$this->model = $manifestArray['additional']['models'];	
+					$this->model = $manifestArray['models'];	
 				}
 			}
-			if(isset($manifestArray['additional']['modelsRight']) && !empty ($manifestArray['additional']['modelsRight'])) {
-				$this->modelsRight = $manifestArray['additional']['modelsRight'];
+			if(isset($manifestArray['modelsRight']) && !empty ($manifestArray['modelsRight'])) {
+				$this->modelsRight = $manifestArray['modelsRight'];
 			}
-			if(isset($manifestArray['additional']['install']) && is_array($manifestArray['additional']['install'])) {
-				$this->installFiles = $manifestArray['additional']['install'];
+			if(isset($manifestArray['install']) && is_array($manifestArray['install'])) {
+				$this->installFiles = $manifestArray['install'];
 			}
+			$this->constants = (isset($manifestArray['constants']) && is_array($manifestArray['constants']))
+				? $manifestArray['constants']
+				: array();
 		}
 		else {
 			//Here the extension is set unvalided to not be displayed by the view
@@ -277,6 +289,24 @@ class common_ext_SimpleExtension
         return (string) $returnValue;
     }
 
-} /* end of class common_ext_SimpleExtension */
+    /**
+     * Short description of method getConstants
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return array
+     */
+    public function getConstants()
+    {
+        $returnValue = array();
+
+        // section 127-0-1-1--52d0f243:139d3b5b89e:-8000:0000000000001B39 begin
+        $returnValue = $this->constants;
+        // section 127-0-1-1--52d0f243:139d3b5b89e:-8000:0000000000001B39 end
+
+        return (array) $returnValue;
+    }
+
+} /* end of abstract class common_ext_SimpleExtension */
 
 ?>
