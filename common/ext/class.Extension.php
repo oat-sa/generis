@@ -80,10 +80,14 @@ class common_ext_Extension
 			if(preg_match('/^class\.[^.]*\.php$/', $fileinfo->getFilename())) {
 				$module = substr($fileinfo->getFilename(), 6, -4);
 				$class = $this->id.'_actions_'.$module;
-				if (is_subclass_of($class, 'Module')) {
-					$returnValue[$module] = $class;
+				if (class_exists($class)) {
+					if (is_subclass_of($class, 'Module')) {
+						$returnValue[$module] = $class;
+					} else {
+						common_Logger::w($class.' does not inherit Module');
+					}
 				} else {
-					common_Logger::w($fileinfo->getFilename().' does not inherit Module');
+					common_Logger::w($class.' not found for file \''.$fileinfo->getFilename().'\'');
 				}
 			}
 		}

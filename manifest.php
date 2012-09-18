@@ -9,7 +9,7 @@ return array(
 	'description' => 'Core extension, provide the low level framework and an API to manage ontologies',
 	'version' => '2.3',
 	'author' => 'CRP Henry Tudor',
-	'dependances' 	=> array(),
+	'dependencies' 	=> array(),
 	'models' => array(
 			'http://www.w3.org/1999/02/22-rdf-syntax-ns',
 			'http://www.w3.org/2000/01/rdf-schema',

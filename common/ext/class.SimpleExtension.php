@@ -197,7 +197,8 @@ abstract class common_ext_SimpleExtension
 			if(isset($manifestArray['registerToClassLoader'])){
 				$this->registerToClassLoader =$manifestArray['registerToClassLoader'];
 			}
-			$list = $manifestArray['dependances'];
+			$list = isset($manifestArray['dependencies']) ? $manifestArray['dependencies']
+				: (isset($manifestArray['dependances']) ? $manifestArray['dependances'] : array());
 			if(!is_array($list) && !empty($list)){
 				$list = array($list);
 			}
