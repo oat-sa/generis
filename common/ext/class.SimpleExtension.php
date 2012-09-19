@@ -187,9 +187,17 @@ abstract class common_ext_SimpleExtension
 		$this->installed = $installed;
 		if(is_file($this->manifest)){
 			$manifestArray = require $this->manifest;
-			$this->author = $manifestArray['author'];
 			$this->name = $manifestArray['name'];
-			$this->version = $manifestArray['version'];
+			if(isset($manifestArray['version'])) {
+				$this->version = $manifestArray['version'];
+			} else {
+				common_Logger::w('Manifest of \''.$id.'\' is missing version');
+			}
+			if(isset($manifestArray['author'])) {
+				$this->author = $manifestArray['author'];
+			} else {
+				common_Logger::w('Manifest of \''.$id.'\' is missing author');
+			}
 			
 			if(isset($manifestArray['install']) && is_array($manifestArray['install'])) {
 				$this->installFiles = $manifestArray['install'];
