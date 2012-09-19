@@ -39,21 +39,23 @@ class ExtensionManagerTestCase extends UnitTestCase {
 				return array(
 					'name' => 'Test Extension',
 					'description' => 'Test Extension',
-					'additional' => array(
-						'version' => '0.25',
-						'author' => 'CRP Henry Tudor',
-						'dependances' => array('test01'),
-						'models' => array(),
-						'install' => array( 
-							'sql' => dirname(__FILE__). '/install/db/testExtension.sql',
-							'php' => dirname(__FILE__). '/install/install.php'
-						),
-						'registerToClassLoader' => true,
-						'configFile' => dirname(__FILE__). '/includes/common.php',
-						'classLoaderPackages' => array( 
-							dirname(__FILE__).'/actions/' , 
-							dirname(__FILE__).'/models/',
-						)
+					'version' => '0.25',
+					'author' => 'CRP Henry Tudor',
+					'dependances' => array('test01'),
+					'models' => array(),
+					'install' => array( 
+						'sql' => dirname(__FILE__). '/install/db/testExtension.sql',
+						'php' => dirname(__FILE__). '/install/install.php'
+					),
+					'registerToClassLoader' => true,
+					'configFile' => dirname(__FILE__). '/includes/common.php',
+					'classLoaderPackages' => array( 
+						dirname(__FILE__).'/actions/' , 
+						dirname(__FILE__).'/models/',
+					),
+					'constants' => array(
+						'example1' => 1,
+						'example2' => array('a', 'b')
 					)
 				);
 			?>
@@ -68,6 +70,18 @@ class ExtensionManagerTestCase extends UnitTestCase {
 		$this->assertEqual($ext['testExtension']->author, 'CRP Henry Tudor');
 		$this->assertEqual($ext['testExtension']->name, 'Test Extension');
 		$this->assertEqual($ext['testExtension']->version, '0.25');
+		
+		$ext = common_ext_ExtensionsManager::singleton()->getExtensionById('testExtension');
+		$this->assertIsA($ext, 'common_ext_Extension');
+		$this->assertEqual($ext->getConstant('example1'), 1);
+		$this->assertEqual($ext->getConstant('example2'), array('a', 'b'));
+		
+		try {
+			$ext->getConstant('unknown_constant');
+			$this->fail('No exception on unknown constant');
+		} catch (common_Exception $e) {
+			$this->assertIsA($e, 'common_exception_Error');
+		}
 		
 		unlink(EXTENSION_PATH.'/testExtension/'.MANIFEST_NAME);
 		rmdir(EXTENSION_PATH.'/testExtension');
