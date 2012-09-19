@@ -77,14 +77,17 @@ class l10n
 		{
 			$GLOBALS['__l10n_files'][] = $po_file;
 			$GLOBALS['__l10n'] = array_merge($GLOBALS['__l10n'],$tmp);
+			common_Logger::d('loaded PO file '.$po_file);
 		}
 		elseif (($tmp = self::getLangFile($lang_file)) !== false)
 		{
 			$GLOBALS['__l10n_files'][] = $lang_file;
 			$GLOBALS['__l10n'] = array_merge($GLOBALS['__l10n'],$tmp);
+			common_Logger::d('loaded lang file '.$lang_file);
 		}
 		else
 		{
+			common_Logger::w('loaded NO i18n file '.$file);
 			return false;
 		}
 	}
