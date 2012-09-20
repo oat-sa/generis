@@ -187,6 +187,14 @@ abstract class common_ext_SimpleExtension
 		$this->installed = $installed;
 		if(is_file($this->manifest)){
 			$manifestArray = require $this->manifest;
+			// adapt legacy manifests
+			if (isset($manifestArray['additional']) && is_array($manifestArray['additional'])) {
+				foreach ($manifestArray['additional'] as $key => $val) {
+					$manifestArray[$key] = $val;
+				}
+				unset($manifestArray['additional']);
+			}
+			
 			$this->name = $manifestArray['name'];
 			if(isset($manifestArray['version'])) {
 				$this->version = $manifestArray['version'];

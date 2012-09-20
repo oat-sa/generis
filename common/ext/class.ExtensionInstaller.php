@@ -94,8 +94,9 @@ class common_ext_ExtensionInstaller
 				// unreachable code
 			}
 			
-			// no longer required
-			//$this->installWriteConfig();
+			// deprecated, but might still be used
+			$this->installWriteConfig();
+			
 			$this->installOntology();
 			$this->installOntologyTranslation();
 			$this->installRegisterExt();
@@ -123,7 +124,6 @@ class common_ext_ExtensionInstaller
      * @access protected
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
-     * @deprecated
      */
     protected function installWriteConfig()
     {
@@ -131,16 +131,18 @@ class common_ext_ExtensionInstaller
 		$sampleFile	= $this->extension->getDir().'includes/config.php.sample';
 		$finalFile	= $this->extension->getDir().'/includes/config.php';
 		
-    	common_Logger::d('Writing config '.$finalFile.' for '.$this->extension->getID(), 'INSTALL');
-		$myConfigWriter = new tao_install_utils_ConfigWriter(
-			$sampleFile,
-			$finalFile
-		);
-		$myConfigWriter->createConfig();
-		
-		// @todo solve this
-		if ($this->extension->getID() == 'tao') {
-			require_once($finalFile);
+		if (file_exists($sampleFile)) {
+	    	common_Logger::d('Writing config '.$finalFile.' for '.$this->extension->getID(), 'INSTALL');
+			$myConfigWriter = new tao_install_utils_ConfigWriter(
+				$sampleFile,
+				$finalFile
+			);
+			$myConfigWriter->createConfig();
+			
+			// @todo solve this
+			if ($this->extension->getID() == 'tao') {
+				require_once($finalFile);
+			}
 		}
         // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A26 end
     }
