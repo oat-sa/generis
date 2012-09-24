@@ -47,11 +47,11 @@ define('DEFAULT_MODULE_NAME', 'ExtensionsManager');
 define('DEFAULT_ACTION_NAME', 'index');
 
 #BASE PATH: the root path in the file system (usually the document root)
-define('BASE_PATH', ROOT_PATH . 'generis');
+define('BASE_PATH', ROOT_PATH . 'generis'.DIRECTORY_SEPARATOR);
 
 
 #BASE URL (usually the domain root)
-define('BASE_URL', ROOT_URL. 'generis');
+define('BASE_URL', ROOT_URL. 'generis/');
 
 # theme directory
 $GLOBALS['dir_theme']		= "/";
