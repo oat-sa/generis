@@ -8,7 +8,7 @@ return array(
 	'name' => 'generis',
 	'description' => 'Core extension, provide the low level framework and an API to manage ontologies',
 	'version' => '2.3',
-	'author' => 'CRP Henry Tudor',
+	'author' => 'CRP Henri Tudor',
 	'dependencies' 	=> array(),
 	'models' => array(
 			'http://www.w3.org/1999/02/22-rdf-syntax-ns',
