@@ -242,9 +242,13 @@ class common_ext_ExtensionInstaller
     {
         // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A2C begin
 		//install script
-		if(isset($manifestArray['additional']['install']['php'])){
-			common_Logger::d('Running custom install script '.$manifestArray['additional']['install']['php'].' for ext '.$this->extension->getID(), 'INSTALL');
-			require_once $manifestArray['additional']['install']['php'];
+		if(isset($this->extension->installFiles['php'])){
+			$scripts = $this->extension->installFiles['php'];
+			$scripts = is_array($scripts) ? $scripts : array($scripts);
+			foreach ($scripts as $script) {
+				common_Logger::d('Running custom install script '.$script.' for ext '.$this->extension->getID(), 'INSTALL');
+				require_once $script;
+			}
 		}
         // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A2C end
     }
