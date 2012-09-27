@@ -247,6 +247,9 @@ class core_kernel_users_Service
 		);
         
 		if (count($users) != 1) {
+			if (count($users) > 1) {
+				common_Logger::w('Multiple Users found with the same password for login '.$login, 'GENERIS');
+			}			
 			$this->logout();
 		} else {
 			$returnValue = true;
