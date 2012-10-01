@@ -3,14 +3,14 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - common\ext\class.ClassLoader.php
+ * Generis Object Oriented API - common/ext/class.ClassLoader.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 24.03.2010, 14:38:37 with ArgoUML PHP module 
- * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
+ * Automatically generated on 01.10.2012, 09:53:19 with ArgoUML PHP module 
+ * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
  * @package common
@@ -62,13 +62,55 @@ class common_ext_ClassLoader
      */
     private $files = array();
 
+    /**
+     * Short description of attribute singleton
+     *
+     * @access private
+     * @var ClassLoader
+     */
+    private static $singleton = null;
+
     // --- OPERATIONS ---
+
+    /**
+     * Short description of method singleton
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return common_ext_ClassLoader
+     */
+    public static function singleton()
+    {
+        $returnValue = null;
+
+        // section 10-30-1--78--3a1a6c41:13a1b46a114:-8000:0000000000001B40 begin
+        if (is_null(self::$singleton)) {
+        	self::$singleton = new self();
+        }
+        $returnValue = self::$singleton;
+        // section 10-30-1--78--3a1a6c41:13a1b46a114:-8000:0000000000001B40 end
+
+        return $returnValue;
+    }
+
+    /**
+     * Short description of method __construct
+     *
+     * @access private
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return mixed
+     */
+    private function __construct()
+    {
+        // section 10-30-1--78--3a1a6c41:13a1b46a114:-8000:0000000000001B42 begin
+        // section 10-30-1--78--3a1a6c41:13a1b46a114:-8000:0000000000001B42 end
+    }
 
     /**
      * add folder to the classLoader
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string package
      * @return mixed
      */
@@ -99,7 +141,7 @@ class common_ext_ClassLoader
      * return all files the classloader will have to autoload
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
     public function getFiles()
@@ -113,7 +155,7 @@ class common_ext_ClassLoader
      * return all packages the classloader will have to autoload
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
     public function getPackages()
@@ -127,7 +169,7 @@ class common_ext_ClassLoader
      * set an array[class => files] the classloader have to autoload
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  array files
      * @return mixed
      */
@@ -142,7 +184,7 @@ class common_ext_ClassLoader
      * set an array[folder] the classloader have to autoload
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  array packages
      * @return mixed
      */
@@ -151,6 +193,67 @@ class common_ext_ClassLoader
         // section -87--2--3--76-f244745:1240028df28:-8000:00000000000017D1 begin
 		$this->packages = $packages;
         // section -87--2--3--76-f244745:1240028df28:-8000:00000000000017D1 end
+    }
+
+    /**
+     * Short description of method register
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return mixed
+     */
+    public function register()
+    {
+        // section 10-30-1--78--3a1a6c41:13a1b46a114:-8000:0000000000001B48 begin
+        spl_autoload_register(array($this, 'autoload'));
+        // section 10-30-1--78--3a1a6c41:13a1b46a114:-8000:0000000000001B48 end
+    }
+
+    /**
+     * Short description of method autoload
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  string className
+     * @return mixed
+     */
+    public function autoload($className)
+    {
+        // section 10-30-1--78--3a1a6c41:13a1b46a114:-8000:0000000000001B3E begin
+		$files = $this->getFiles();
+        if(!empty($files) && is_array($files)){
+            if(isset($files[$className])){
+                require_once ($files[$className]);
+                return;
+            }
+        }
+        $packages = $this->getPackages();
+
+        if(!empty($packages) && is_array($packages)){
+            foreach($packages as $path) {
+
+                if (file_exists($path. $className . '.class.php')) {
+                    require_once $path . $className . '.class.php';
+                    return;
+                }
+                if (file_exists($path. 'class.'.$className . '.php')) {
+                    require_once $path . 'class.'. $className . '.php';
+                    return;
+                }
+            }
+        }
+        $split = explode("_",$className);
+        $path = GENERIS_BASE_PATH.'/../';
+        for ( $i = 0 ; $i<sizeof($split)-1 ; $i++){
+            $path .= $split[$i].'/';
+        }
+        $filePath = $path . 'class.'.$split[sizeof($split)-1] . '.php';
+
+        if (file_exists($filePath)){
+            require_once $filePath;
+            return;
+        }
+        // section 10-30-1--78--3a1a6c41:13a1b46a114:-8000:0000000000001B3E end
     }
 
 } /* end of class common_ext_ClassLoader */

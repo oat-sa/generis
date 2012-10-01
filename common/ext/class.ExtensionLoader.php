@@ -75,14 +75,14 @@ class common_ext_ExtensionLoader
     	
 
 	
-		global $__classLoader;
+		$classLoader = common_ext_ClassLoader::singleton();
 		if(isset($this->extension->classLoaderPackages)) {
 			foreach($this->extension->classLoaderPackages as $package) {
-				$__classLoader->addPackage($package);
+				$classLoader->addPackage($package);
 			}
 		}
 
-		spl_autoload_register('common_Utils::registerAutoload');
+		$classLoader->register();
         // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017AD end
     }
 

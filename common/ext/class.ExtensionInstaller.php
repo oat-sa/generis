@@ -159,14 +159,26 @@ class common_ext_ExtensionInstaller
     {
         // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A24 begin
         // insert model
-		$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
-    	$models = tao_install_utils_ModelCreator::getModelsFromExtensions(array($this->extension));
-		foreach ($models as $ns => $modelFiles){
-			foreach ($modelFiles as $file) {
-				common_Logger::d('Inserting for NS '.$ns.' model '.basename($file), 'INSTALL');
-				$modelCreator->insertModelFile($ns, $file);
-			}
-		}
+    	if(isset($this->extension->installFiles['rdf'])){
+    		$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
+    		foreach ($this->extension->installFiles['rdf'] as $row) {
+    			if (is_string($row)) {
+    				$rdfpath = $row;
+    			} elseif (is_array($row) && isset($row['file'])) {
+    				$rdfpath = $row['file'];
+    			} else {
+					throw new common_Exception('Error in definition of model to add into the ontology for '.$this->extension->getID(), 'INSTALL');
+    			}
+    			$xml = simplexml_load_file($rdfpath);
+				$attrs = $xml->attributes('xml', true);
+				if(!isset($attrs['base']) || empty($attrs['base'])){
+					throw new common_Exception('The namespace of '.$rdfpath.' has to be defined with the "xml:base" attribute of the ROOT node');
+				}
+				$ns = (string) $attrs['base'];
+				//import the model in the ontology
+				$modelCreator->insertModelFile($ns, $rdfpath);
+    		}
+    	}
         // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A24 end
     }
 
