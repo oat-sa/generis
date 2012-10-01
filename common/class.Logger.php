@@ -42,6 +42,22 @@ class common_Logger
     // --- ATTRIBUTES ---
 
     /**
+     * whenever or not the Logger is enabled
+     *
+     * @access private
+     * @var boolean
+     */
+    private $enabled = true;
+
+    /**
+     * a history of past states, to allow a restoration of the previous state
+     *
+     * @access private
+     * @var array
+     */
+    private $stateStack = array();
+
+    /**
      * instance of the class Logger, to implement the singleton pattern
      *
      * @access private
@@ -50,13 +66,12 @@ class common_Logger
     private static $instance = null;
 
     /**
-     * Short description of attribute ACCEPTABLE_WARNINGS
+     * The implementation of the Logger
      *
      * @access private
-     * @var array
+     * @var Appender
      */
-    private static $ACCEPTABLE_WARNINGS = array("/Declaration of .* should be compatible with that of /",
-"/Static function .* should not be abstract/");
+    private $implementor = null;
 
     /**
      * the lowest level of events representing the finest-grained processes
@@ -107,28 +122,14 @@ class common_Logger
     const FATAL_LEVEL = 5;
 
     /**
-     * The implementation of the Logger
-     *
-     * @access private
-     * @var Appender
-     */
-    private $implementor = null;
-
-    /**
-     * a history of past states, to allow a restoration of the previous state
+     * Warnings that are acceptable in our projects
+     * invoked by the way generis/tao use abstract functions
      *
      * @access private
      * @var array
      */
-    private $stateStack = array();
-
-    /**
-     * whenever or not the Logger is enabled
-     *
-     * @access private
-     * @var boolean
-     */
-    private $enabled = true;
+    private $ACCEPTABLE_WARNINGS = array("/Declaration of .* should be compatible with that of /",
+"/Static function .* should not be abstract/");
 
     // --- OPERATIONS ---
 
@@ -164,6 +165,26 @@ class common_Logger
         // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004362 begin
 		$this->implementor = common_log_Dispatcher::singleton();
         // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004362 end
+    }
+
+    /**
+     * register the logger as errorhandler
+     * and shutdown function
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return mixed
+     */
+    public function register()
+    {
+        // section 10-30-1--78--3a1a6c41:13a1b46a114:-8000:0000000000001B4A begin
+        
+		// initialize the logger here to prevent fatal errors that occure if:
+		// while autoloading any class, an error gets thrown
+		// the logger initializes to handle this error,  and failes to autoload his files
+        set_error_handler(array($this, 'handlePHPErrors'));
+		register_shutdown_function(array($this, 'handlePHPShutdown'));
+        // section 10-30-1--78--3a1a6c41:13a1b46a114:-8000:0000000000001B4A end
     }
 
     /**
@@ -216,11 +237,11 @@ class common_Logger
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
-    public static function enable()
+    public function enable()
     {
         // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432F begin
-		self::singleton()->stateStack[] = self::singleton()->enabled;
-		self::singleton()->enabled = true;
+		$this->stateStack[] = self::singleton()->enabled;
+		$this->enabled = true;
         // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432F end
     }
 
@@ -231,11 +252,11 @@ class common_Logger
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
-    public static function disable()
+    public function disable()
     {
         // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004331 begin
-		self::singleton()->stateStack[] = self::singleton()->enabled;
-		self::singleton()->enabled = false;
+		$this->stateStack[] = self::singleton()->enabled;
+		$this->enabled = false;
         // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004331 end
     }
 
@@ -246,11 +267,11 @@ class common_Logger
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
-    public static function restore()
+    public function restore()
     {
         // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004333 begin
-		if (count(self::singleton()->stateStack) > 0) {
-			self::singleton()->enabled = array_pop(self::singleton()->stateStack);
+		if (count($this->stateStack) > 0) {
+			$this->enabled = array_pop($this->stateStack);
 		} else {
 			self::e("Tried to restore Log state that was never changed");
 		}
@@ -362,7 +383,7 @@ class common_Logger
      * @param  Exception exception
      * @return mixed
      */
-    public static function handleException( Exception $exception)
+    public function handleException( Exception $exception)
     {
         // section 127-0-1-1-7b882644:1342260c2b6:-8000:000000000000186D begin
         $severity = method_exists($exception, 'getSeverity') ? $exception->getSeverity() : self::INFO_LEVEL;
@@ -382,13 +403,13 @@ class common_Logger
      * @param  array errorContext
      * @return boolean
      */
-    public static function handlePHPErrors($errorNumber, $errorString, $errorFile = null, $errorLine = null, $errorContext = array())
+    public function handlePHPErrors($errorNumber, $errorString, $errorFile = null, $errorLine = null, $errorContext = array())
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001848 begin
         if ($errorNumber == E_STRICT) {
-	    	foreach (self::$ACCEPTABLE_WARNINGS as $pattern) {
+	    	foreach ($this->ACCEPTABLE_WARNINGS as $pattern) {
 				if (preg_match($pattern, $errorString) > 0)
 					return false;
 			}
@@ -431,7 +452,7 @@ class common_Logger
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
-    public static function handlePHPShutdown()
+    public function handlePHPShutdown()
     {
         // section 127-0-1-1-56e04748:1341d1d0e41:-8000:000000000000182B begin
     	$error = error_get_last();

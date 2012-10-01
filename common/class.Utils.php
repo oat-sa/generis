@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 02.03.2012, 15:29:21 with ArgoUML PHP module 
+ * Automatically generated on 01.10.2012, 10:05:57 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -299,56 +299,6 @@ class common_Utils
             die("File not found ".$file);
         }
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000001824 end
-    }
-
-    /**
-     * Short description of method registerAutoload
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  string pClassName
-     * @return mixed
-     */
-    public static function registerAutoload($pClassName)
-    {
-        // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002379 begin
-        global $__classLoader;
-
-
-        $files = $__classLoader->getFiles();
-        if(!empty($files) && is_array($files)){
-            if(isset($files[$pClassName])){
-                require_once ($files[$pClassName]);
-                return;
-            }
-        }
-        $packages = $__classLoader->getPackages();
-
-        if(!empty($packages) && is_array($packages)){
-            foreach($packages as $path) {
-
-                if (file_exists($path. $pClassName . '.class.php')) {
-                    require_once $path . $pClassName . '.class.php';
-                    return;
-                }
-                if (file_exists($path. 'class.'.$pClassName . '.php')) {
-                    require_once $path . 'class.'. $pClassName . '.php';
-                    return;
-                }
-            }
-        }
-        $split = explode("_",$pClassName);
-        $path = GENERIS_BASE_PATH.'/../';
-        for ( $i = 0 ; $i<sizeof($split)-1 ; $i++){
-            $path .= $split[$i].'/';
-        }
-        $filePath = $path . 'class.'.$split[sizeof($split)-1] . '.php';
-
-        if (file_exists($filePath)){
-            require_once $filePath;
-            return;
-        }
-        // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002379 end
     }
 
 } /* end of class common_Utils */

@@ -36,7 +36,7 @@ class LogTestCase extends TaoTestCase {
 				'file'			=> $efile,
 			)
 		));
-		common_Logger::enable();
+		common_Logger::singleton()->enable();
 		
 		common_Logger::t('message');
 		$this->assertEntriesInFile($tfile, 1);
@@ -53,21 +53,21 @@ class LogTestCase extends TaoTestCase {
 		$this->assertEntriesInFile($dfile, 1);
 		$this->assertEntriesInFile($efile, 1);
 		
-		common_Logger::disable();
+		common_Logger::singleton()->disable();
 		
 		common_Logger::d('message');
 		$this->assertEntriesInFile($tfile, 3);
 		$this->assertEntriesInFile($dfile, 1);
 		$this->assertEntriesInFile($efile, 1);
 		
-		common_Logger::restore();
+		common_Logger::singleton()->restore();
 		
 		common_Logger::d('message');
 		$this->assertEntriesInFile($tfile, 4);
 		$this->assertEntriesInFile($dfile, 2);
 		$this->assertEntriesInFile($efile, 1);
 		
-		common_Logger::restore();
+		common_Logger::singleton()->restore();
 	}
 	
 	public function testLogTags()
@@ -83,7 +83,7 @@ class LogTestCase extends TaoTestCase {
 				'tags'			=> 'CORRECTTAG'
 			)
 		));
-		common_Logger::enable();
+		common_Logger::singleton()->enable();
 		
 		common_Logger::t('message');
 		$this->assertEntriesInFile($tfile, 0);
@@ -100,7 +100,7 @@ class LogTestCase extends TaoTestCase {
 		common_Logger::t('message', array('WRONGTAG', 'WRONGTAG2'));
 		$this->assertEntriesInFile($tfile, 2);
 		
-		common_Logger::restore();
+		common_Logger::singleton()->restore();
 		
 	}
 	
@@ -116,7 +116,7 @@ class LogTestCase extends TaoTestCase {
 	
 	public function analyseLogPerformance()
 	{
-		common_Logger::enable();
+		common_Logger::singleton()->enable();
 		$start = microtime(true);
 		for ($i = 0; $i < self::RUNS; $i++) {
 			// nothing
@@ -138,16 +138,16 @@ class LogTestCase extends TaoTestCase {
 		$infoTime = microtime(true) - $start;
 		echo "Info run: ".$infoTime."<br />";
 		
-		common_Logger::restore();
+		common_Logger::singleton()->restore();
 		
-		common_Logger::disable();
+		common_Logger::singleton()->disable();
 		$start = microtime(true);
 		for ($i = 0; $i < self::RUNS; $i++) {
 			common_Logger::i('a disabled test message');
 		}
 		$disabledTime = microtime(true) - $start;
 		echo "Disabled run: ".$disabledTime."<br />";
-		common_Logger::restore();
+		common_Logger::singleton()->restore();
 		
 		$start = microtime(true);
 		sleep(1);

@@ -39,13 +39,12 @@ $__generis_autoload['fileZip']				= INCLUDES_PATH.'/ClearFw/clearbricks/zip/clas
 $__generis_autoload['fileUnzip']			= INCLUDES_PATH.'/ClearFw/clearbricks/zip/class.unzip.php';
 
 
-global $__classLoader;
-$__classLoader = new common_ext_ClassLoader();
-$__classLoader->setFiles($__generis_autoload);
-$__classLoader->addPackage( INCLUDES_PATH.'/ClearFw/log/');
-$__classLoader->addPackage(DIR_CORE);
-$__classLoader->addPackage(DIR_CORE_HELPERS);
-$__classLoader->addPackage(DIR_CORE_UTILS);
+$classLoader = common_ext_ClassLoader::singleton();
+$classLoader->setFiles($__generis_autoload);
+$classLoader->addPackage( INCLUDES_PATH.'/ClearFw/log/');
+$classLoader->addPackage(DIR_CORE);
+$classLoader->addPackage(DIR_CORE_HELPERS);
+$classLoader->addPackage(DIR_CORE_UTILS);
 
 /**
  * @function generis_autoload
@@ -55,7 +54,7 @@ $__classLoader->addPackage(DIR_CORE_UTILS);
 
 function generis_extension_autoload($pClassName) {
 	
-	global $__classLoader;
+	$classLoader = common_ext_ClassLoader::singleton();
 	
 	
 	if(strpos($pClassName, '_') !== false){
@@ -81,12 +80,12 @@ function generis_extension_autoload($pClassName) {
 		}
 	}
 	else{
-		$files = $__classLoader->getFiles();
+		$files = $classLoader->getFiles();
 		if(isset($files[$pClassName])){
 			require_once ($files[$pClassName]);
 			return;
 		}
-		foreach($__classLoader->getPackages() as $path) {
+		foreach($classLoader->getPackages() as $path) {
 			if (file_exists($path. $pClassName . '.class.php')) {
 				require_once $path . $pClassName . '.class.php';	
 				return;

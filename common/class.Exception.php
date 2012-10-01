@@ -22,7 +22,7 @@ class common_Exception extends Exception{
             throw new $this('Unknown '. get_class($this));
         }
         parent::__construct($message, $code);
-        common_Logger::handleException($this);
+        common_Logger::singleton()->handleException($this);
     }
 	
 	public function __toString()
