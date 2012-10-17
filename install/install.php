@@ -152,6 +152,8 @@ function install($param){
 	writeConfigValue('DATABASE_URL', $param["dbhost"],$config);
 	writeConfigValue('SGBD_DRIVER', $param["dbdriver"],$config);
 	writeConfigValue('DATABASE_NAME', $param["moduleName"],$config);
+	writeConfigValue('GENERIS_INSTANCE_NAME', $param["moduleName"],$config);
+	writeConfigValue('GENERIS_SESSION_NAME', 'generis_' . rand(1000, 9999));
 
 
 	//TODO

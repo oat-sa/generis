@@ -2,6 +2,10 @@
 # local namespace
 define('LOCAL_NAMESPACE', '');
 
+# platform identification
+define('GENERIS_INSTANCE_NAME', '');
+define('GENERIS_SESSION_NAME', '');
+
 # paths
 define('ROOT_PATH', '');
 define('ROOT_URL',  '');
@@ -25,8 +29,6 @@ define("TIME_ZONE", 'Europe/Paris');
 
 # Cache
 define('CACHE_MAX_SIZE', 64000);
-
-
 
 #if there is a .htaccess with an http auth, used for Curl request or virtual http requests
 define('USE_HTTP_AUTH', false);
