@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Oct 22 11:45:58 CEST 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Oct 22 12:06:31 CEST 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -3167,30 +3167,6 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
-                        <UML:Attribute xmi.id = '10-13-1-85-631905e3:13a87d71b36:-8000:0000000000001B40'
-                          name = 'lastStatement' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
-                          changeability = 'changeable' targetScope = 'instance'>
-                          <UML:StructuralFeature.multiplicity>
-                            <UML:Multiplicity xmi.id = '10-13-1-85-631905e3:13a87d71b36:-8000:0000000000001B41'>
-                              <UML:Multiplicity.range>
-                                <UML:MultiplicityRange xmi.id = '10-13-1-85-631905e3:13a87d71b36:-8000:0000000000001B42'
-                                  lower = '1' upper = '1'/>
-                              </UML:Multiplicity.range>
-                            </UML:Multiplicity>
-                          </UML:StructuralFeature.multiplicity>
-                          <UML:ModelElement.taggedValue>
-                            <UML:TaggedValue xmi.id = '10-13-1-85-631905e3:13a87d71b36:-8000:0000000000001B43'
-                              isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>The last PDO statement that was executed by the active PDO object.</UML:TaggedValue.dataValue>
-                              <UML:TaggedValue.type>
-                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
-                              </UML:TaggedValue.type>
-                            </UML:TaggedValue>
-                          </UML:ModelElement.taggedValue>
-                          <UML:StructuralFeature.type>
-                            <UML:DataType xmi.idref = '10-13-1-85-631905e3:13a87d71b36:-8000:0000000000001B3F'/>
-                          </UML:StructuralFeature.type>
-                        </UML:Attribute>
                       </UML:Classifier.feature>
                     </UML:Class>
                     <UML:Class xmi.id = '10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000071F'
@@ -28770,7 +28746,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="192 192 192"
     />
     <group name="Fig9.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1073, 471, 314, 68]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1073, 471, 314, 59]"
          href="10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB"
          fill="0"
          fillcolor="white"
@@ -28784,7 +28760,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="1073"
         y="471"
         width="314"
-        height="68"
+        height="59"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -28826,7 +28802,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="1073"
         y="501"
         width="314"
-        height="15"
+        height="21"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -28838,26 +28814,10 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >nrQueries : int  = 0</text>
-      <text name="Fig9.4.4"
-        x="1073"
-        y="516"
-        width="314"
-        height="21"
-        fill="0"
-        fillcolor="white"
-        stroke="0"
-        strokecolor="black"
-        textcolor="black"
-        font="Dialog"
-        italic="false"
-        bold="false"
-        textsize="10"
-        justification="Left"
-      >lastStatement : PDOStatement</text>
     </group>
     <rectangle name="Fig9.5"
       x="1072"
-      y="538"
+      y="530"
       width="316"
       height="1"
       fill="1"
@@ -28866,7 +28826,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="192 192 192"
     />
     <group name="Fig9.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1073, 539, 314, 128]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1073, 531, 314, 134]"
          href="10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB"
          fill="0"
          fillcolor="white"
@@ -28878,9 +28838,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig9.6.0"
         x="1073"
-        y="539"
+        y="531"
         width="314"
-        height="128"
+        height="134"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -28888,7 +28848,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
       <text name="Fig9.6.1"
         x="1073"
-        y="539"
+        y="531"
         width="314"
         height="15"
         fill="0"
@@ -28904,7 +28864,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >singleton() : DbWrapper</text>
       <text name="Fig9.6.2"
         x="1073"
-        y="554"
+        y="546"
         width="314"
         height="15"
         fill="0"
@@ -28920,7 +28880,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >«create» __construct() : void</text>
       <text name="Fig9.6.3"
         x="1073"
-        y="569"
+        y="561"
         width="314"
         height="15"
         fill="0"
@@ -28936,7 +28896,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >«destroy» __destruct()</text>
       <text name="Fig9.6.4"
         x="1073"
-        y="584"
+        y="576"
         width="314"
         height="15"
         fill="0"
@@ -28952,7 +28912,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >__clone() : DbWrapper</text>
       <text name="Fig9.6.5"
         x="1073"
-        y="599"
+        y="591"
         width="314"
         height="15"
         fill="0"
@@ -28968,7 +28928,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >execSql(sqlQuery : string,parameters : array = false) : Object</text>
       <text name="Fig9.6.6"
         x="1073"
-        y="614"
+        y="606"
         width="314"
         height="15"
         fill="0"
@@ -28984,7 +28944,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getSetting(name : string) : string</text>
       <text name="Fig9.6.7"
         x="1073"
-        y="629"
+        y="621"
         width="314"
         height="15"
         fill="0"
@@ -29000,7 +28960,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getAffectedRows() : Integer</text>
       <text name="Fig9.6.8"
         x="1073"
-        y="644"
+        y="636"
         width="314"
         height="21"
         fill="0"
