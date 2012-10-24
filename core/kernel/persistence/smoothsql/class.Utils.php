@@ -69,7 +69,7 @@ class core_kernel_persistence_smoothsql_Utils
     						   $defaultLanguage => array(),
     						   $fallbackLanguage => array());
     					  
-    	while ($row = $dataset->FetchRow()) {
+    	foreach ($dataset as $row) {
     		$sortedResults[$row[$langColname]][] = array('value' => $row['object'], 
     													 'language' => $row[$langColname]);
     	}
@@ -77,8 +77,6 @@ class core_kernel_persistence_smoothsql_Utils
     	$returnValue = array_merge($sortedResults[$selectedLanguage], 
     							   (count($sortedResults) > 2) ? $sortedResults[$defaultLanguage] : array(),
     							   $sortedResults[$fallbackLanguage]);
-    							   
-   		$dataset->moveFirst();
         // section 10-13-1-85-61dcfc6d:1301cc5c657:-8000:000000000000190E end
 
         return (array) $returnValue;

@@ -21,7 +21,7 @@ class ExtensionManagerTestCase extends UnitTestCase {
 		$fakeExtensionSql = 'INSERT INTO "extensions" ("id", "name", "version", "loaded", "loadAtStartUp") '.
 							"VALUES ('testExtension', 'test', '0.1', 1, 1);";
 		
-		$this->assertTrue($db->execSql($fakeExtensionSql));
+		$this->assertTrue($db->exec($fakeExtensionSql));
 		$extensionManager = common_ext_ExtensionsManager::singleton();
 		
 		try{
@@ -89,7 +89,7 @@ class ExtensionManagerTestCase extends UnitTestCase {
 		$this->assertFalse(file_exists(EXTENSION_PATH.'/testExtension/'.MANIFEST_NAME));
 		
 		$fakeExtensionSql = 'DELETE FROM "extensions" where "id" = \'testExtension\'';
-		$this->assertTrue($db->execSql($fakeExtensionSql));
+		$this->assertTrue($db->exec($fakeExtensionSql));
 	}
 	
 

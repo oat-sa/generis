@@ -132,20 +132,20 @@ class core_kernel_impl_ApiModelOO
 			if(!preg_match("/\#$/", $namespace)){
 				$namespace .= "#";
 			}
-			$result = $dbWrapper->execSql('SELECT * FROM "models"  WHERE "modelURI" = ? OR "baseURI" = ?', array(
+			$result = $dbWrapper->query('SELECT * FROM "models"  WHERE "modelURI" = ? OR "baseURI" = ?', array(
 				$namespace,
 				$namespace
 			));
-			if (!$result->EOF){
-				$models[] = $result->fields;
+			if ($row = $result->fetch(PDO::FETCH_ASSOC)){
+				$models[] = $row;
+				$result->closeCursor();
 			}
 		}
 		
 		$allModels = array();
-		$result = $dbWrapper->execSql("SELECT * FROM `models`");
-		while(!$result->EOF){
-			$allModels[] = $result->fields;
-			$result->moveNext();
+		$result = $dbWrapper->query("SELECT * FROM `models`");
+		while($row = $result->fetch(PDO::FETCH_ASSOC)){
+			$allModels[] = $row;
 		}
 		
 		
@@ -193,21 +193,20 @@ class core_kernel_impl_ApiModelOO
 					$modelUri = $model['modelURI'];
 					
 					$subjects = array();
-					$result = $dbWrapper->execSql("SELECT DISTINCT `subject` FROM `statements` WHERE `modelID`=$modelId");
-					while(!$result->EOF){
-						$subjects[] = $result->fields['subject'];
-						$result->moveNext();
+					$result = $dbWrapper->query("SELECT DISTINCT `subject` FROM `statements` WHERE `modelID`=$modelId");
+					while($r = $result->fetch()){
+						$subjects[] = $r['subject'];
 					}
 					foreach($subjects as $subject){
 						$description = $dom->createElement('rdf:Description');
 						$description->setAttribute('rdf:about', $subject);
 						
-							$result = $dbWrapper->execSql("SELECT * FROM `statements` WHERE `subject`= '{$subject}'");
-							while(!$result->EOF){
+							$result = $dbWrapper->query("SELECT * FROM `statements` WHERE `subject`= '{$subject}'");
+							while($t = $result->fetch()){
 								
-								$predicate 	= trim($result->fields['predicate']);
-								$object 	= trim($result->fields['object']);
-								$lang 		= trim($result->fields['l_language']);
+								$predicate 	= trim($t['predicate']);
+								$object 	= trim($t['object']);
+								$lang 		= trim($t['l_language']);
 								
 								$nodeName = null;
 								
@@ -259,7 +258,6 @@ class core_kernel_impl_ApiModelOO
 										//print $de;
 									}
 								}
-								$result->moveNext();
 							}
 						$root->appendChild($description);
 					}
@@ -397,24 +395,25 @@ class core_kernel_impl_ApiModelOO
 					);
 		
 		
-		$result = $dbWrapper->execSql("SELECT `models`.`modelID`, `models`.`modelURI` FROM `models` INNER JOIN `statements` ON `statements`.`modelID` = `models`.`modelID`
+		$result = $dbWrapper->query("SELECT `models`.`modelID`, `models`.`modelURI` FROM `models` INNER JOIN `statements` ON `statements`.`modelID` = `models`.`modelID`
 											WHERE `statements`.`subject`= '{$subject}' LIMIT 1");
-		if(!$result->EOF){
-			$modelId  = $result->fields['modelID'];
-			$modelUri =  $result->fields['modelURI'];
+		if($row = $result->fetch()){
+			$modelId  = $row['modelID'];
+			$modelUri =  $row['modelURI'];
 			if(!preg_match("/#$/", $modelUri)){
 				$modelUri .= '#';
 			}
+			
+			$result->closeCursor();
 		}
 		$currentNs = array("xmlns:ns{$modelId}" => $modelUri);
 		$currentNs = array_merge($baseNs, $currentNs);
 		
 		
 		$allModels = array();
-		$result = $dbWrapper->execSql("SELECT * FROM `models`");
-		while(!$result->EOF){
-			$allModels[] = $result->fields;
-			$result->moveNext();
+		$result = $dbWrapper->query("SELECT * FROM `models`");
+		while($row = $result->fetch(PDO::FETCH_ASSOC)){
+			$allModels[] = $row;
 		}
 		
 		$allNs = array();
@@ -440,73 +439,72 @@ class core_kernel_impl_ApiModelOO
 			$description = $dom->createElement('rdf:Description');
 			$description->setAttribute('rdf:about', $subject);
 			
-				$result = $dbWrapper->execSql("SELECT * FROM `statements` WHERE `subject`= '{$subject}'");
-				while(!$result->EOF){
-					
-					$predicate 	= trim($result->fields['predicate']);
-					$object 	= trim($result->fields['object']);
-					$lang 		= trim($result->fields['l_language']);
-					
-					$nodeName = null;
-					
-					foreach($allNs as $namespaceId => $namespaceUri){
-						if($namespaceId == 'xml:base') continue;
-						if(preg_match("/^".preg_quote($namespaceUri, '/')."/", $predicate)){
-							if(!array_key_exists($namespaceId, $currentNs)){
-								$currentNs[$namespaceId] = $namespaceUri;
-								$root->setAttribute($namespaceId, $namespaceUri);
-							}
-							$nodeName = str_replace('xmlns:', '', $namespaceId).':'.str_replace($namespaceUri, '', $predicate);
-							break;
+			$result = $dbWrapper->query("SELECT * FROM `statements` WHERE `subject`= '{$subject}'");
+			while($row = $result->fetch()){
+				
+				$predicate 	= trim($row['predicate']);
+				$object 	= trim($row['object']);
+				$lang 		= trim($row['l_language']);
+				
+				$nodeName = null;
+				
+				foreach($allNs as $namespaceId => $namespaceUri){
+					if($namespaceId == 'xml:base') continue;
+					if(preg_match("/^".preg_quote($namespaceUri, '/')."/", $predicate)){
+						if(!array_key_exists($namespaceId, $currentNs)){
+							$currentNs[$namespaceId] = $namespaceUri;
+							$root->setAttribute($namespaceId, $namespaceUri);
 						}
+						$nodeName = str_replace('xmlns:', '', $namespaceId).':'.str_replace($namespaceUri, '', $predicate);
+						break;
 					}
-					
-					$resourceValue = false;
-					foreach($allNs as $namespaceId => $namespaceUri){
-						if( preg_match("/^".preg_quote($namespaceUri, '/')."/", $object) || 
-							preg_match("/^http\:\/\/(.*)\#[a-zA-Z1-9]*/", $object)){
-							$resourceValue = true;
-							break;
-						}
-					}
-					if(!is_null($nodeName)){
-						try{
-							$node = $dom->createElement($nodeName);
-							if(!empty($lang)){
-								$node->setAttribute('xml:lang', $lang);
-							}
-							
-							if($resourceValue){
-									$node->setAttribute('rdf:resource', $object);
-							}
-							else{
-								if(!empty($object) && !is_null($object)){
-									
-									/**
-									 * Replace the CDATA section inside XML fields by a replacement tag:
-									 * <![CDATA[ ]]> to <CDATA></CDATA>
-									 * @todo check if this behavior is the right
-									 */
-									$object = str_replace('<![CDATA[', '<CDATA>', $object);
-									$object = str_replace(']]>', '</CDATA>', $object);
-
-									$node->appendChild($dom->createCDATASection($object));
-								}
-							}
-							$description->appendChild($node);
-						}
-						catch(DOMException $de){
-							//print $de;
-						}
-					}
-					$result->moveNext();
 				}
-				$root->appendChild($description);
-				$returnValue = $dom->saveXml();
+				
+				$resourceValue = false;
+				foreach($allNs as $namespaceId => $namespaceUri){
+					if( preg_match("/^".preg_quote($namespaceUri, '/')."/", $object) || 
+						preg_match("/^http\:\/\/(.*)\#[a-zA-Z1-9]*/", $object)){
+						$resourceValue = true;
+						break;
+					}
+				}
+				if(!is_null($nodeName)){
+					try{
+						$node = $dom->createElement($nodeName);
+						if(!empty($lang)){
+							$node->setAttribute('xml:lang', $lang);
+						}
+						
+						if($resourceValue){
+								$node->setAttribute('rdf:resource', $object);
+						}
+						else{
+							if(!empty($object) && !is_null($object)){
+								
+								/**
+								 * Replace the CDATA section inside XML fields by a replacement tag:
+								 * <![CDATA[ ]]> to <CDATA></CDATA>
+								 * @todo check if this behavior is the right
+								 */
+								$object = str_replace('<![CDATA[', '<CDATA>', $object);
+								$object = str_replace(']]>', '</CDATA>', $object);
+
+								$node->appendChild($dom->createCDATASection($object));
+							}
+						}
+						$description->appendChild($node);
+					}
+					catch(DOMException $de){
+						//print $de;
+					}
+				}
 			}
-			catch(DomException $e){
-				print $e;
-			}
+			$root->appendChild($description);
+			$returnValue = $dom->saveXml();
+		}
+		catch(DomException $e){
+			print $e;
+		}
         
         
         // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009CD end
@@ -556,13 +554,13 @@ class core_kernel_impl_ApiModelOO
         
         $query =  "SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) 
         			AND subject NOT IN (SELECT subject FROM statements WHERE predicate = ?)";
-    	$result	= $dbWrapper->execSql($query, array(
+    	$result	= $dbWrapper->query($query, array(
         	RDF_TYPE,
         	RDF_CLASS,
         	RDF_SUBCLASSOF
         ));
         
-        while ($row = $result->FetchRow()) {
+        while ($row = $result->fetch()) {
        		$returnValue->add(new core_kernel_classes_Class($row['subject']));
         }
 		
@@ -594,7 +592,7 @@ class core_kernel_impl_ApiModelOO
         $query = 'INSERT INTO "statements" ("modelID","subject","predicate","object","l_language","author","stread","stedit","stdelete","epoch")
         			VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP);';
 
-        $returnValue = $dbWrapper->execSql($query, array(
+        $returnValue = $dbWrapper->exec($query, array(
        		$localNs->getModelId(),
        		$subject,
        		$predicate,
@@ -606,7 +604,7 @@ class core_kernel_impl_ApiModelOO
        		$mask
         ));
         
-    	if($dbWrapper->dbConnector->errorNo() !== 0){
+    	if($dbWrapper->errorCode() !== '00000'){
 			throw new common_Exception ("Unable to setStatement (SPO) {$subject}, {$predicate}, {$object} : " .$dbWrapper->dbConnector->errorMsg());
 		}
         
@@ -659,13 +657,13 @@ class core_kernel_impl_ApiModelOO
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
         $query =  "SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) OR predicate = ?";
-    	$result	= $dbWrapper->execSql($query, array(
+    	$result	= $dbWrapper->query($query, array(
         	RDF_TYPE,
         	RDF_CLASS,
         	RDF_SUBCLASSOF
         ));
         
-        while ($row = $result->FetchRow()) {
+        while ($row = $result->fetch()) {
         	$returnValue->add(new core_kernel_classes_Class($row['subject']));
         }
 		
@@ -691,16 +689,15 @@ class core_kernel_impl_ApiModelOO
 		
 		$sqlQuery = "SELECT subject FROM statements WHERE predicate = ? AND object= ? ";
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->execSql($sqlQuery, array (
+		$sqlResult = $dbWrapper->query($sqlQuery, array (
 			$predicate,
 			$object
 		));
 		$returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
-		while (!$sqlResult-> EOF){
-			$container = new core_kernel_classes_Resource($sqlResult->fields['subject'], __METHOD__);
+		while ($row = $sqlResult->fetch()){
+			$container = new core_kernel_classes_Resource($row['subject'], __METHOD__);
 			$container->debug = __METHOD__ ;
 			$returnValue->add($container);
-			$sqlResult->MoveNext();
 		}
 
         // section 10-13-1--99--65c50b00:11c66591411:-8000:0000000000000E9A end
@@ -730,7 +727,7 @@ class core_kernel_impl_ApiModelOO
         			AND predicate = ? AND object = ?
         			AND (l_language = ? OR l_language = '')";
 
-        $returnValue = $dbWrapper->execSql($query, array(
+        $returnValue = $dbWrapper->exec($query, array(
        		$subject,
        		$predicate,
        		$object,
@@ -756,16 +753,16 @@ class core_kernel_impl_ApiModelOO
         $returnValue = null;
 
         // section -87--2--3--76-51a982f1:1278aabc987:-8000:000000000000891E begin
-    	$sqlQuery = "select object from statements where subject = ? and predicate = ? ";
+    	$sqlQuery = "SELECT object FROM statements WHERE subject = ? AND predicate = ?";
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->execSql($sqlQuery, array (
+		$sqlResult = $dbWrapper->query($sqlQuery, array (
 			$subject,
 			$predicate
 		));
 		$returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
-		while (!$sqlResult-> EOF){
+		while ($row = $sqlResult->fetch()){
 			
-			$value = $sqlResult->fields['object'];
+			$value = $row['object'];
 			if(!common_Utils::isUri($value)) {
 				$container = new core_kernel_classes_Literal($value);
 			}
@@ -774,7 +771,6 @@ class core_kernel_impl_ApiModelOO
 			}
 			$container->debug = __METHOD__ ;
 			$returnValue->add($container);
-			$sqlResult->MoveNext();
 		}
         // section -87--2--3--76-51a982f1:1278aabc987:-8000:000000000000891E end
 

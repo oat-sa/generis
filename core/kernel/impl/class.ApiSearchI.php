@@ -83,11 +83,11 @@ class core_kernel_impl_ApiSearchI
         
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
-       	$keyword = $dbWrapper->dbConnector->escape($keyword);
+       	$keyword = trim($dbWrapper->dbConnector->quote($keyword), "'\"");
         $query =  "SELECT DISTINCT subject FROM statements WHERE object LIKE '%{$keyword}%'";
-    	$result	= $dbWrapper->execSql($query);
+    	$result	= $dbWrapper->query($query);
         
-        while ($row = $result->FetchRow()) {
+        while ($row = $result->fetch()) {
        		$returnValue->add(new core_kernel_classes_Resource($row['subject']));
         }
         
@@ -162,12 +162,12 @@ class core_kernel_impl_ApiSearchI
 		$conditions = array();
 		foreach($propertyFilters as $propUri => $pattern){
 			
-			$propUri = $dbWrapper->dbConnector->escape($propUri);
+			$propUri = trim($dbWrapper->dbConnector->quote($propUri), "'\"");
 			
 			if(is_string($pattern)){
 				if(!empty($pattern)){
 
-					$pattern = $dbWrapper->dbConnector->escape($pattern);
+					$pattern = trim($dbWrapper->dbConnector->quote($pattern), "'\"");
 					
 					if($like){
 						$object = trim(str_replace('*', '%', $pattern));
@@ -189,7 +189,7 @@ class core_kernel_impl_ApiSearchI
 					$multiCondition =  " (`predicate` = '{$propUri}' AND  ";
 					foreach($pattern as $i => $patternToken){
 						
-						$patternToken = $dbWrapper->dbConnector->escape($patternToken);
+						$patternToken = trim($dbWrapper->dbConnector->escape($patternToken), "'\"");
 						
 						if($i > 0){
 							$multiCondition .= " OR ";
@@ -223,10 +223,9 @@ class core_kernel_impl_ApiSearchI
 			$i = 0;
 			foreach($conditions as $condition){
 				$tmpMatchingUris = array();
-				$result = $dbWrapper->execSql($query . $condition);
-				while (!$result->EOF){
-					$tmpMatchingUris[] = $result->fields['subject'];
-					$result->MoveNext();
+				$result = $dbWrapper->query($query . $condition);
+				while ($row = $result->fetch()){
+					$tmpMatchingUris[] = $row['subject'];
 				}
 				if($intersect){
 					//EXCLUSIVES CONDITIONS
@@ -293,19 +292,17 @@ class core_kernel_impl_ApiSearchI
 		// Get the models | Will be stored in Session, or it is yet
 		$models = array ();
 		$queryModels = "SELECT * FROM `models`";
-		$result = $dbWrapper->execSql($queryModels);
-		while (!$result->EOF){
-			$models[$result->fields['baseURI']] = $result->fields['modelID'];
-			$result->MoveNext();
+		$result = $dbWrapper->query($queryModels);
+		while ($row = $result->fetch()){
+			$models[$row['baseURI']] = $row['modelID'];
 		}
 		
 		// Get the Class to Table data | Will be stored in session
 		$classToTable = array ();
     	$queryC2T = "SELECT * FROM `class_to_table`";
-		$result = $dbWrapper->execSql($queryC2T);
-		while (!$result->EOF){
-			$classToTable[$result->fields['uri']] = $result->fields['table'];
-			$result->MoveNext();
+		$result = $dbWrapper->query($queryC2T);
+		while ($row = $result->fetch()){
+			$classToTable[$row['uri']] = $row['table'];
 		}
 		
 		// Define the target table
@@ -327,10 +324,9 @@ class core_kernel_impl_ApiSearchI
 			array_push ($conditions, $condition);
 		}
 		
-		$result = $dbWrapper->execSql($query . implode('AND ', $conditions));
-   		while (!$result->EOF){
-   			$returnValue[] = new core_kernel_classes_Resource ($result->fields['uri']);
-			$result->MoveNext();
+		$result = $dbWrapper->query($query . implode('AND ', $conditions));
+   		while ($row = $result->fetch()){
+   			$returnValue[] = new core_kernel_classes_Resource ($row['uri']);
 		}
 		
         // section -87--2--3--76-51a982f1:1278aabc987:-8000:00000000000088FC end

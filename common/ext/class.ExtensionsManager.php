@@ -451,24 +451,23 @@ class common_ext_ExtensionsManager
         
     	$db = core_kernel_classes_DbWrapper::singleton();
 		$query = "SELECT * FROM extensions;";
-		$result = $db->execSql($query);
-		if($db->dbConnector->errorNo() !== 0){
-			throw new core_kernel_persistence_hardapi_Exception($db->dbConnector->errorMsg());
+		$result = $db->query($query);
+		if($result->errorCode() != '00000'){
+			throw new core_kernel_persistence_hardapi_Exception($db->errorMessage());
 		}
 
-		while (!$result-> EOF){
-			$id = $result->fields["id"];
+		while ($row = $result->fetch()){
+			$id = $row["id"];
 			$extension = new common_ext_Extension($id, true);
 
 			$extension->configuration = new common_ext_ExtensionConfiguration(
-				($result->fields["loaded"] == 1),
-				($result->fields["loadAtStartUp"] == 1),
-				($result->fields["ghost"] == 1),
-				$result->fields["version"]
+				($row['loaded'] == 1),
+				($row['loadAtStartUp'] == 1),
+				($row['ghost'] == 1),
+				$row['version']
 			);
 
 			$this->extensions[$id] = $extension;
-			$result->MoveNext();
 		}
         // section 127-0-1-1--1d51cc99:137f05120f0:-8000:0000000000001A59 end
     }

@@ -17,8 +17,9 @@ class HardDbSubjectTestCase extends UnitTestCase {
 
 	private function countStatements (){
 		$query =  "SELECT count(*) FROM statements";
-		$result = core_kernel_classes_DbWrapper::singleton()->execSql($query);
-		return $result->fields[0];
+		$result = core_kernel_classes_DbWrapper::singleton()->query($query);
+		$row = $result->fetch();
+		return $row[0];
 	}
 	
 	public function testCreateContextOfThetest(){

@@ -94,7 +94,8 @@ class core_kernel_versioning_Repository
         // section 127-0-1-1--548d6005:132d344931b:-8000:000000000000251D begin
         
         //add directory separator at the end of the repository path
-        $path = substr($path,strlen($path)-1,1)==DIRECTORY_SEPARATOR ? $path : $path.DIRECTORY_SEPARATOR;
+        
+        $path = rtrim($path, "\\/") . DIRECTORY_SEPARATOR;
         
         $versioningRepositoryClass = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDREPOSITORY);
         

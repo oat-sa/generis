@@ -86,17 +86,16 @@ class core_kernel_persistence_smoothsql_Property
         // section 127-0-1-1-7b8668ff:12f77d22c39:-8000:000000000000144D begin
         
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlQuery = "select subject from statements where predicate = 'http://www.w3.org/2000/01/rdf-schema#subPropertyOf' and object = '".$resource->uriResource."'";
+		$sqlQuery = "SELECT subject FROM statements WHERE predicate = '" . RDF_SUBPROPERTYOF . "' AND object = '".$resource->uriResource."'";
 		$returnValue = array();
-		$sqlResult = $dbWrapper->execSql($sqlQuery);
-		while (!$sqlResult-> EOF){
-			$property = new core_kernel_classes_Property($sqlResult->fields['subject']);
+		$sqlResult = $dbWrapper->query($sqlQuery);
+		while ($row = $sqlResult->fetch()){
+			$property = new core_kernel_classes_Property($row['subject']);
 			$returnValue[$property->uriResource] = $property;
 
 			if($recursive == true) {
 				$returnValue = array_merge($returnValue,$property->getSubProperties(true));
 			}
-			$sqlResult->MoveNext();
 		}
         
         // section 127-0-1-1-7b8668ff:12f77d22c39:-8000:000000000000144D end
@@ -186,7 +185,7 @@ class core_kernel_persistence_smoothsql_Property
 	        
 	    	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
 			$query = 'DELETE FROM "statements" WHERE "predicate" = ? AND "modelID" IN ('.$modelIds.')';
-	        $returnValue = $dbWrapper->execSql($query, array($resource->uriResource));
+	        $returnValue = $dbWrapper->exec($query, array($resource->uriResource));
         }
         $returnValue = core_kernel_persistence_smoothsql_Resource::singleton()->delete($resource, $deleteReference);
         

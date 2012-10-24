@@ -274,13 +274,17 @@ abstract class common_ext_SimpleExtension
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A0 begin
         if($this->configuration == null) {
         	$db = core_kernel_classes_DbWrapper::singleton();
-			$query = "SELECT loaded,\"loadAtStartUp\",ghost FROM extensions WHERE id ='".$this->id."';";
-			$result = $db->execSql($query);
-			$loaded = $result->fields["loaded"] == 1;
-			$loadedAtStartUp = $result->fields["loadAtStartUp"] == 1;
-			$ghost = $result->fields["ghost"] == 1;
-			$this->configuration = new common_ext_ExtensionConfiguration($loaded,$loadedAtStartUp, $ghost);
-
+			$query = "SELECT loaded,\"loadAtStartUp\",ghost FROM extensions WHERE id = ?";
+			$sth = $db->prepare($query);
+			$result = $sth->execute(array($this->id));
+			
+			if ($row = $result->fetch()){
+				$loaded = $row['loaded'] == 1;
+				$loadedAtStartUp = $row['loadAtStartUp'] == 1;
+				$ghost = $row['ghost'] == 1;
+				$this->configuration = new common_ext_ExtensionConfiguration($loaded,$loadedAtStartUp, $ghost);
+				$result->closeCursor();	
+			}
         }
         return $this->configuration;
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A0 end

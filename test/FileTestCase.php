@@ -88,20 +88,27 @@ class FileTestCase extends UnitTestCase {
     //The the resource file exists function
     public function testResourceFileExists()
     {
-        $path = sys_get_temp_dir().'/FileTestCase_testResourceFileExists';
+    	// Create a correct path...
+    	$file = 'FileTestCase_testResourceFileExists';
+    	$dir = rtrim(sys_get_temp_dir(), "\\/") . DIRECTORY_SEPARATOR;
+    	$path = $dir . $file;
+    	
         $this->assertFalse(helpers_File::resourceExists($path));
-        $file = core_kernel_classes_File::create('FileTestCase_testResourceFileExists', sys_get_temp_dir().'/', 'FileTestCase_testResourceFileExists_URI');
+        $file = core_kernel_classes_File::create($file, $dir, 'FileTestCase_testResourceFileExists_URI');
         $this->assertTrue(helpers_File::resourceExists($path));
+        $this->assertFalse(helpers_File::resourceExists('test'));
         $file->delete();
-        $this->assertFalse(helpers_File::resourceExists($path));
     }
     
-    //The the resource file exists function
+    //The the resource get resource file function
     public function testGetResourceFile()
     {
-        $path = sys_get_temp_dir().'/FileTestCase_testResourceFileExists';
+    	$file = 'FileTestCase_testResourceFileExists'; 
+    	$dir = rtrim(sys_get_temp_dir(), "\\/") . DIRECTORY_SEPARATOR;
+    	$path = $dir . $file;
+    	
         $this->assertNull(helpers_File::getResource($path));
-        $file = core_kernel_classes_File::create('FileTestCase_testResourceFileExists', sys_get_temp_dir().'/', 'FileTestCase_testResourceFileExists_URI');
+        $file = core_kernel_classes_File::create($file, $dir, 'FileTestCase_testResourceFileExists_URI');
         $searchedFile = helpers_File::getResource($path);
         $this->assertNotNull($searchedFile);
         $this->assertTrue($searchedFile instanceof core_kernel_classes_File);

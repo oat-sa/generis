@@ -71,12 +71,14 @@ class common_uri_DatabaseSerialUriProvider
             case 'mysql':
                 $dbWrapper = core_kernel_classes_DbWrapper::singleton();
                 $modelUri = core_kernel_classes_Session::singleton()->getNameSpace() . '#';
-                
-        		if (($result = $dbWrapper->execSql("SELECT generis_sequence_uri_provider(?)", array($modelUri))) !== false){
-        			$returnValue = $result->Fields(0);
+                $sth = $dbWrapper->prepare("SELECT generis_sequence_uri_provider(?)");
+        		if ($sth->execute(array($modelUri)) !== false){
+        			$row = $sth->fetch();
+        			$returnValue = $row[0];
+        			$sth->closeCursor();
         		}
         		else{
-        			throw new common_uri_UriProviderException("An error occured while calling the stored procedure for driver '${driver}': " . $dbWrapper->dbConnector->ErrorMsg() . ".");	
+        			throw new common_uri_UriProviderException("An error occured while calling the stored procedure for driver '${driver}': " . $dbWrapper->errorMessage() . ".");	
         		}
                 
             break;

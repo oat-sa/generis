@@ -68,14 +68,15 @@ class common_uri_MicrotimeUriProvider
 		do{
 			list($usec, $sec) = explode(" ", microtime());
         	$uri = $modelUri .'#i'. (str_replace(".","",$sec."".$usec));
-			$sqlResult = $dbWrapper->execSql(
-				"select count(subject) as num from statements where subject = '".$uri."'"
-			);
-			if (!$sqlResult-> EOF){
-				$found = (int)$sqlResult->fields['num'];
+			$sqlResult = $dbWrapper->query("SELECT COUNT(subject) AS num FROM statements WHERE subject = '".$uri."'");
+			
+			if ($row = $sqlResult->fetch()){
+				$found = (int)$row['num'];
 				if($found > 0){
 					$uriExist = true;
 				}
+				
+				$sqlResult->closeCursor();
 			}
 		}while($uriExist);
 		

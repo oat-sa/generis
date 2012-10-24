@@ -10,7 +10,7 @@ class HardifyTestCase extends UnitTestCase {
 	}
 	
 	public function testHardify(){
-		        
+		try{        
     	ob_start(); // catch the output and drop it
     	
 		$wfEngineHardifier = new wfEngine_scripts_HardifyWfEngine (array(
@@ -45,6 +45,9 @@ class HardifyTestCase extends UnitTestCase {
     	
     	ob_end_clean();
 		set_time_limit(900); // because the script update the time limit
+		}catch(PDOException $e){
+			var_dump($e);
+		}
 	}
 }
 

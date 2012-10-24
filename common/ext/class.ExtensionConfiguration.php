@@ -126,7 +126,7 @@ class common_ext_ExtensionConfiguration
 		}
 
 		$sql = "UPDATE extensions SET " . $set1 ." , ". $set2 . ", ". $set3 . " WHERE id ='". $extension->id."';";
-		$db->execSql($sql);
+		$db->exec($sql);
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002396 end
     }
 

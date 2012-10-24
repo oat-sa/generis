@@ -81,8 +81,9 @@ class core_kernel_persistence_Switcher
 
 	private function countStatements (){
 		$query =  "SELECT count(*) FROM statements";
-		$result = core_kernel_classes_DbWrapper::singleton()->execSql($query);
-		return $result->fields[0];
+		$result = core_kernel_classes_DbWrapper::singleton()->query($query);
+		$row = $result->fetch();
+		return $row[0];
 	}
 
 	/**
@@ -196,33 +197,31 @@ class core_kernel_persistence_Switcher
 							WHERE "'.$tableName.'"."uri" = ? 
 								AND "'.$tableName.'Props"."property_uri" = ?';
 						$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-						$sqlResult = $dbWrapper->execSql($sqlQuery, array(
+						$sqlResult = $dbWrapper->query($sqlQuery, array(
 						$instance->uriResource,
 						$property->uriResource
 						));
-						if ($dbWrapper->dbConnector->errorNo() !== 0) {
-							throw new core_kernel_persistence_hardapi_Exception("unable to unhardify : " . $dbWrapper->dbConnector->errorMsg());
+						if ($sqlResult->errorCode() !== '00000') {
+							throw new core_kernel_persistence_hardapi_Exception("unable to unhardify : " . $dbWrapper->errorMessage());
 						}
 
 						// ENTER IN SMOOTH SQL MODE
 						core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
 
-						while (!$sqlResult->EOF) {
+						while ($row = $sqlResult->fetch()) {
 							$value = null;
-							if (!empty($sqlResult->fields['property_value'])) {
-								$value = $sqlResult->fields['property_value'];
+							if (!empty($row['property_value'])) {
+								$value = $row['property_value'];
 							} else {
-								$value = $sqlResult->fields['property_foreign_uri'];
+								$value = $row['property_foreign_uri'];
 							}
 
-							$lg = $sqlResult->fields['l_language'];
+							$lg = $row['l_language'];
 							if (!empty($lg)) {
 								$instance->setPropertyValueByLg($property, $value, $lg);
 							} else {
 								$instance->setPropertyValue($property, $value);
 							}
-
-							$sqlResult->MoveNext();
 						}
 						/// EXIT HARD SQL MODE
 						core_kernel_persistence_PersistenceProxy::restoreImplementation();
@@ -238,7 +237,9 @@ class core_kernel_persistence_Switcher
 					}
 				}
 				// delete instance in the hard implementation
-				if($rmSources) $instance->delete();
+				if($rmSources) {
+					$instance->delete();
+				}
 			}
 
 
@@ -432,16 +433,6 @@ class core_kernel_persistence_Switcher
 			if($referencesAllTypes){
 				$referencer->referenceInstanceTypes($class);
 			}
-
-			//currently disable the foreign key constraint management:
-			//when the table is created, check if it is a missing range (i.e. column) of a foreign key:
-			/*if(isset($this->foreignPropertiesWaitingList[$tableName])){
-				$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-				foreach($this->foreignPropertiesWaitingList[$tableName] as $sourceTable => $sourceColumn){
-					$alterForeignKeyQuery = "ALTER TABLE {$sourceTable} ADD fk_{$sourceColumn} FOREIGN KEY ({$sourceColumn}) REFERENCES {$tableName};";
-					$dbWrapper->execSql($alterForeignKeyQuery);
-				}
-			}*/
 		}
 
 		//insert the resources
@@ -557,7 +548,7 @@ class core_kernel_persistence_Switcher
 			$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
 			foreach($referencer->propertyLocation($property) as $table){
 				if(!preg_match("/Props$/", $table) && preg_match("/^_[0-9]{2,}/", $table)){
-					$dbWrapper->execSql('ALTER TABLE "'.$table.'" ADD INDEX "idx_'.$propertyAlias.'" ("'.$propertyAlias.'"( 255 ))');
+					$dbWrapper->exec('ALTER TABLE "'.$table.'" ADD INDEX "idx_'.$propertyAlias.'" ("'.$propertyAlias.'"( 255 ))');
 				}
 			}
 		}
@@ -574,8 +565,8 @@ class core_kernel_persistence_Switcher
 				$percent = '0'.$percent;
 			}
 
-			$dbWrapper->execSql('OPTIMIZE TABLE "'.$tables[$i].'"');
-			$dbWrapper->execSql('FLUSH TABLE "'.$tables[$i].'"');
+			$dbWrapper->exec('OPTIMIZE TABLE "'.$tables[$i].'"');
+			$dbWrapper->exec('FLUSH TABLE "'.$tables[$i].'"');
 
 			$i++;
 		}

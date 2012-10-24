@@ -110,10 +110,6 @@ class core_kernel_classes_File
       	if(is_null($filePath)){
             $filePath = GENERIS_FILES_PATH; 
         }
-        // If the file does not exist in the file system => create it
-       	/*if(!file_exists($filePath.$fileName)){
-        	fclose(fopen($filePath.$fileName,"x"));
-       	}*/
 
         $clazz = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
 	    $instance = $clazz->createInstance('File : ' . $filePath. $fileName, 'File : ' . $filePath. $fileName, $uri);

@@ -263,19 +263,18 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         
     	if(is_null(self::$_classes) || $force){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-			$result = $dbWrapper->execSql('SELECT "id", "uri", "table", "topClass" FROM "class_to_table"');
-    		if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception($dbWrapper->dbConnector->errorMsg());
+			$result = $dbWrapper->query('SELECT "id", "uri", "table", "topClass" FROM "class_to_table"');
+    		if($result->errorCode() !== '00000'){
+				throw new core_kernel_persistence_hardapi_Exception($dbWrapper->errorMessage());
 			}
 			self::$_classes = array();
-			while (!$result->EOF) {
-	        	self::$_classes[$result->fields['uri']] = array(
-	        		'id'	=> $result->fields['id'],
-	        		'uri' 	=> $result->fields['uri'],
-	        		'table' => $result->fields['table'],
-	        		'topClass' => $result->fields['topClass']
+			while ($row = $result->fetch()) {
+	        	self::$_classes[$row['uri']] = array(
+	        		'id'	=> $row['id'],
+	        		'uri' 	=> $row['uri'],
+	        		'table' => $row['table'],
+	        		'topClass' => $row['topClass']
 	        	);
-	        	$result->moveNext();
 	        }
 	}
     	
@@ -303,19 +302,19 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				case self::CACHE_NONE:
 					$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 					if(is_null($table)){
-						$result = $dbWrapper->execSql('SELECT "id" FROM "class_to_table" WHERE "uri" = ?', array($class->uriResource));
-						if($dbWrapper->dbConnector->errorNo() !== 0){
-							throw new core_kernel_persistence_hardapi_Exception($dbWrapper->dbConnector->errorMsg());
+						$result = $dbWrapper->query('SELECT "id" FROM "class_to_table" WHERE "uri" = ?', array($class->uriResource));
+						if($result->errorCode() !== '00000'){
+							throw new core_kernel_persistence_hardapi_Exception($dbWrapper->errorMessage());
 						}
 					}
 					else{
-						$result = $dbWrapper->execSql('SELECT "id" FROM "class_to_table" WHERE "uri" = ? AND "table" = ?', array($class->uriResource, $table));
-						if($dbWrapper->dbConnector->errorNo() !== 0){
-							throw new core_kernel_persistence_hardapi_Exception($dbWrapper->dbConnector->errorMsg());
+						$result = $dbWrapper->query('SELECT "id" FROM "class_to_table" WHERE "uri" = ? AND "table" = ?', array($class->uriResource, $table));
+						if($result->errorCode() !== '00000'){
+							throw new core_kernel_persistence_hardapi_Exception($dbWrapper->errorMessage());
 						}
 					}
 					
-					if($result->RecordCount() > 0){
+					if($row = $result->fetch()){
 						$returnValue = true;
 					}
 					break;
@@ -385,23 +384,24 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
 			$query = 'INSERT INTO "class_to_table" ("uri", "table", "topClass") VALUES (?,?,?)';
-			$result = $dbWrapper->execSql($query, array(
+			$result = $dbWrapper->exec($query, array(
 				$class->uriResource, 
 				$table,
 				$topClassUri
 			));
-			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to reference the class {$class->uriResource} in {$table}: " .$dbWrapper->dbConnector->errorMsg());
+			if($dbWrapper->errorCode() !== '00000'){
+				throw new core_kernel_persistence_hardapi_Exception("Unable to reference the class {$class->uriResource} in {$table}: " .$dbWrapper->errorMessage());
 			} 
 			
 			// Get last inserted id
 			$query = 'SELECT "id" FROM "class_to_table" WHERE "uri" = ? AND "table" = ?';
-			$result = $dbWrapper->execSql($query, array(
+			$result = $dbWrapper->query($query, array(
 				$class->uriResource, 
 				$table
 			));
-			if (!$result->EOF){
-				$classId = $result->fields['id'];
+			if ($row = $result->fetch()){
+				$classId = $row['id'];
+				$result->closeCursor();
 			} else {
 				throw new core_kernel_persistence_hardapi_Exception("Unable to retrieve the class Id of the referenced class {$class->uriResource}");
 			}
@@ -412,9 +412,9 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				foreach ($additionalProperties as $additionalProperty){
 					$query .= " ('{$classId}', '{$additionalProperty->uriResource}')";
 				}
-				$result = $dbWrapper->execSql($query);
-				if($dbWrapper->dbConnector->errorNo() !== 0){
-					throw new core_kernel_persistence_hardapi_Exception("Unable to reference the additional properties of the class {$class->uriResource} in class_additional_properties: " .$dbWrapper->dbConnector->errorMsg());
+				$result = $dbWrapper->exec($query);
+				if($dbWrapper->errorCode() !== '00000'){
+					throw new core_kernel_persistence_hardapi_Exception("Unable to reference the additional properties of the class {$class->uriResource} in class_additional_properties: " .$dbWrapper->errorMessage());
 				}
 			} 		
 			
@@ -427,15 +427,14 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 						FROM "class_to_table" 
 						WHERE "uri" = ? 
 						AND "table" = ?';
-					$memResult = $dbWrapper->execSql($memQuery, array($class->uriResource, $table));
-					while(!$memResult->EOF){
-						self::$_classes[$memResult->fields['uri']] = array(
-			        		'id'		=> $memResult->fields['id'],
-			        		'uri' 		=> $memResult->fields['uri'],
-			        		'table' 	=> $memResult->fields['table'],
-							'topClass' 	=> $memResult->fields['topClass']
+					$memResult = $dbWrapper->query($memQuery, array($class->uriResource, $table));
+					while($row = $memResult->fetch()){
+						self::$_classes[$row['uri']] = array(
+			        		'id'		=> $row['id'],
+			        		'uri' 		=> $row['uri'],
+			        		'table' 	=> $row['table'],
+							'topClass' 	=> $row['topClass']
 			        	);
-						$memResult->moveNext();
 					}
 				}
 			}
@@ -488,9 +487,9 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			
 			$returnValue = true;
 			foreach ($queries as $query){
-				$result = $dbWrapper->execSql($query);
-                                if($dbWrapper->dbConnector->errorNo() !== 0){
-					throw new core_kernel_persistence_hardapi_Exception("Unable to unreference class {$class->uriResource} : " .$dbWrapper->dbConnector->errorMsg());
+				$result = $dbWrapper->exec($query);
+                if($dbWrapper->errorCode() !== '00000'){
+					throw new core_kernel_persistence_hardapi_Exception("Unable to unreference class {$class->uriResource} : " .$dbWrapper->errorMessage());
 				}
 				if ($result===false){
 					$returnValue = false;
@@ -541,19 +540,18 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			        
 			        $query = "SELECT id, uri, table, topClass FROM class_to_table WHERE uri=? ";
-			    	$result = $dbWrapper->execSql($query, array ($class->uriResource));
-					if($dbWrapper->dbConnector->errorNo() !== 0){
-						throw new core_kernel_persistence_hardapi_Exception("Unable to define where is the hardified resource: " .$dbWrapper->dbConnector->errorMsg());
+			    	$result = $dbWrapper->query($query, array ($class->uriResource));
+					if($result->errorCode() !== '00000'){
+						throw new core_kernel_persistence_hardapi_Exception("Unable to define where is the hardified resource: " .$dbWrapper->errorMessage());
 					} 
 					else {
-						while(!$result->EOF){
-							$returnValue[$result->fields['uri']] = array(
-								'id'	=> $result->fields['id'],
-				        		'uri' 	=> $result->fields['uri'],
-				        		'table' => $result->fields['table'],
-				        		'topClass' => $result->fields['topClass']
+						while($row = $result->fetch()){
+							$returnValue[$row['uri']] = array(
+								'id'	=> $row['id'],
+				        		'uri' 	=> $row['uri'],
+				        		'table' => $row['table'],
+				        		'topClass' => $row['topClass']
 							);
-							$result->moveNext();
 						}
 					}
 			        break;
@@ -588,10 +586,9 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         
     	if(!self::$_resources_loaded || $force){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-			$result = $dbWrapper->execSql('SELECT "uri", "table" FROM "resource_to_table"');
-			while (!$result->EOF) {
-	        	self::$_resources[$result->fields['uri']] = $result->fields['table'];
-	        	$result->moveNext();
+			$result = $dbWrapper->query('SELECT "uri", "table" FROM "resource_to_table"');
+			while ($row = $result->fetch()) {
+	        	self::$_resources[$row['uri']] = $row['table'];
 	        }
 	        self::$_resources_loaded = true;
 		}
@@ -624,12 +621,15 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 					}
 					
 					$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-					$result = $dbWrapper->execSql('SELECT "table" FROM "resource_to_table" WHERE "uri" = ?', array($resource->uriResource));
-					if($result->RecordCount() > 0){
-						self::$_resources[$resource->uriResource] = $result->fields['table'];
+					$result = $dbWrapper->query('SELECT "table" FROM "resource_to_table" WHERE "uri" = ?', array($resource->uriResource));
+					$fetch = $result->fetchAll();
+					if(count($fetch) > 0){
+						self::$_resources[$resource->uriResource] = $fetch[0]['table'];
 						$returnValue = true;
-					}
-					break;
+					}	
+					
+					$result->closeCursor();
+				break;
 					
 				case self::CACHE_MEMORY:
 					
@@ -670,14 +670,14 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
 			$query = 'INSERT INTO "resource_to_table" ("uri", "table") VALUES (?,?)';
-			$insertResult = $dbWrapper->execSql($query, array($resource->uriResource, $table));
-			if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to reference the resource : {$resource->uriResource} / {$table} : " .$dbWrapper->dbConnector->errorMsg());
+			$insertResult = $dbWrapper->exec($query, array($resource->uriResource, $table));
+			if($dbWrapper->errorCode() !== '00000'){
+				throw new core_kernel_persistence_hardapi_Exception("Unable to reference the resource : {$resource->uriResource} / {$table} : " .$dbWrapper->errorMessage());
 			}
 			if($referenceClassLink && $insertResult !== false){
 				$query = 'SELECT * FROM "resource_to_table" WHERE "uri" = ? AND "table" = ?';
-				$result = $dbWrapper->execSql($query, array($resource->uriResource, $table));
-				while($row = $result->fetchRow()){
+				$result = $dbWrapper->query($query, array($resource->uriResource, $table));
+				while($row = $result->fetch(PDO::FETCH_ASSOC)){
 					$rows[] = $row;
 				}
 			}
@@ -695,7 +695,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 							
 							foreach($rows as $row){
 								$query = "INSERT INTO resource_has_class (resource_id, class_id) VALUES (?,?)";
-								$dbWrapper->execSql($query, array($row['id'], $classLocation['id']));
+								$dbWrapper->exec($query, array($row['id'], $classLocation['id']));
 							}
 						}
 					}
@@ -738,9 +738,9 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 
                         $returnValue = true;
                         foreach ($queries as $query) {
-                                $result = $dbWrapper->execSql($query);
-                                if ($dbWrapper->dbConnector->errorNo() !== 0) {
-                                        throw new core_kernel_persistence_hardapi_Exception("Unable to unreference resource {$resource->uriResource} : " . $dbWrapper->dbConnector->errorMsg());
+                                $result = $dbWrapper->exec($query);
+                                if ($dbWrapper->errorCode() !== '00000') {
+                                        throw new core_kernel_persistence_hardapi_Exception("Unable to unreference resource {$resource->uriResource} : " . $dbWrapper->errorMessage());
                                 }
                                 if ($result === false) {
                                         $returnValue = false;
@@ -787,15 +787,16 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			        
 			        $query = 'SELECT "table" FROM "resource_to_table" WHERE uri=?';
-			    	$result = $dbWrapper->execSql($query, array ($resource->uriResource));
-					if($dbWrapper->dbConnector->errorNo() !== 0){
+			    	$result = $dbWrapper->query($query, array ($resource->uriResource));
+					if($result->errorCode() !== '00000'){
 						
-						throw new core_kernel_persistence_hardapi_Exception("Unable to define where is the hardified resource: " .$dbWrapper->dbConnector->errorMsg());
+						throw new core_kernel_persistence_hardapi_Exception("Unable to define where is the hardified resource: " .$dbWrapper->errorMessage());
 					} 
 					else {
-						if (!$result->EOF){
-							$returnValue = $result->fields['table'];
-							self::$_resources[$resource->uriResource] = $result->fields['table'];
+						if ($row = $result->fetch()){
+							$returnValue = $row['table'];
+							self::$_resources[$resource->uriResource] = $row['table'];
+							$result->closeCursor();
 						} else {
 							common_Logger::w("Unable to find table for ressource " .$resource->getUri(), "GENERIS");
 						}
@@ -854,18 +855,16 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
     		$tables = array();
     		$query = 'SELECT DISTINCT "id","table" FROM "class_to_table"';
-    		$result = $dbWrapper->execSql($query);
-    		while(!$result->EOF){
-    			$tables[$result->fields['id']] = $result->fields['table'];
-    			$result->moveNext();
+    		$result = $dbWrapper->query($query);
+    		while($row = $result->fetch()){
+    			$tables[$row['id']] = $row['table'];
     		}
     		
     		$additionalPropertiesTable = array();
     		$query = 'SELECT DISTINCT "class_id","property_uri" FROM "class_additional_properties"';
-    		$result = $dbWrapper->execSql($query);
-    		while(!$result->EOF){
-    			$additionalPropertiesTable[$result->fields['class_id']][] = new core_kernel_classes_Property($result->fields['property_uri']);
-    			$result->moveNext();
+    		$result = $dbWrapper->query($query);
+    		while($row = $result->fetch()){
+    			$additionalPropertiesTable[$row['class_id']][] = new core_kernel_classes_Property($row['property_uri']);
     		}
     		//retrieve each property by table
 			$this->loadClasses();
@@ -1045,14 +1044,13 @@ class core_kernel_persistence_hardapi_ResourceReferencer
          			AND subject IN (SELECT subject FROM statements 
         						WHERE predicate = '".RDF_TYPE."' 
         						AND object='{$class->uriResource}')";
-        $result = $dbWrapper->execSql($query);
-        if($dbWrapper->dbConnector->errorNo() !== 0){
-        	throw new core_kernel_persistence_hardapi_Exception("Error by retrieving the other types of class {$class->uriResource}: " .$dbWrapper->dbConnector->errorMsg());
+        $result = $dbWrapper->query($query);
+        if($result->errorCode() !== '00000'){
+        	throw new core_kernel_persistence_hardapi_Exception("Error by retrieving the other types of class {$class->uriResource}: " .$dbWrapper->errorMessage());
 		} 
 		$types = array();
-        while(!$result->EOF){
-        	$types[] = $result->fields['object'];
-        	$result->moveNext();
+        while($row = $result->fetch()){
+        	$types[] = $row['object'];
         }
         
         $tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
@@ -1128,15 +1126,14 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			FROM class_additional_properties, class_to_table 
 			WHERE class_additional_properties.class_id = class_to_table.id
 			AND class_to_table.uri = ?";
-		$result = $dbWrapper->execSql($query, array($clazz->uriResource));
+		$result = $dbWrapper->query($query, array($clazz->uriResource));
 		
-		if($dbWrapper->dbConnector->errorNo() !== 0){
-        	throw new core_kernel_persistence_hardapi_Exception("Error by retrieving the additional properties of the class {$clazz->uriResource}: " .$dbWrapper->dbConnector->errorMsg());
+		if($result->errorCode() !== '00000'){
+        	throw new core_kernel_persistence_hardapi_Exception("Error by retrieving the additional properties of the class {$clazz->uriResource}: " .$dbWrapper->errorMessage());
 		} 
 		
-   		while(!$result->EOF){
-			$returnValue[] = new core_kernel_classes_Property($result->fields['property_uri']);
-			$result->moveNext();
+   		while($row = $result->fetch()){
+			$returnValue[] = new core_kernel_classes_Property($row['property_uri']);
 		}
         
         // section 127-0-1-1--642cfc1e:13160cfbaf5:-8000:000000000000162A end

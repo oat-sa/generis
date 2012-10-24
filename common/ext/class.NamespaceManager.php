@@ -115,12 +115,11 @@ class common_ext_NamespaceManager
         if(count($this->namespaces) == 0){
         	$db = core_kernel_classes_DbWrapper::singleton();
         	$query = 'SELECT "modelID", "baseURI" FROM "models"';
-			$result = $db->execSql($query);
-			while (!$result-> EOF){
-				$id 	= $result->fields['modelID'];
-				$uri 	= $result->fields['baseURI'];
+			$result = $db->query($query);
+			while ($row = $result->fetch()){
+				$id 	= $row['modelID'];
+				$uri 	= $row['baseURI'];
 				$this->namespaces[$id] = $uri;
-				$result->MoveNext();
 			}
         }
         

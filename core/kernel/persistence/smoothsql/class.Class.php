@@ -87,18 +87,15 @@ class core_kernel_persistence_smoothsql_Class
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$sqlQuery = 'SELECT "subject" FROM "statements" WHERE "predicate" = ? and "object" = ?';
-		$sqlResult = $dbWrapper->execSql($sqlQuery, array(
-			RDF_SUBCLASSOF,
-			$resource->uriResource
-		));
-		while (!$sqlResult-> EOF){
-			$subClass = new core_kernel_classes_Class($sqlResult->fields['subject']);
+		$sqlResult = $dbWrapper->query($sqlQuery, array(RDF_SUBCLASSOF, $resource->uriResource));
+		
+		while ($row = $sqlResult->fetch()){
+			$subClass = new core_kernel_classes_Class($row['subject']);
 			$returnValue[$subClass->uriResource] = $subClass;
 			if($recursive == true ){
 				$plop = $subClass->getSubClasses(true);
 				$returnValue = array_merge($returnValue, $plop);
 			}
-			$sqlResult->MoveNext();
 		}
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014EB end
@@ -126,15 +123,14 @@ class core_kernel_persistence_smoothsql_Class
 		$query = 'SELECT "object" FROM "statements"
 					WHERE "subject" = ?
 					AND "predicate" = ? AND "object" = ?';
-		$result = $dbWrapper->execSql($query, array(
+		$result = $dbWrapper->query($query, array(
 			$resource->uriResource,
 			RDF_SUBCLASSOF,
 			$parentClass->uriResource
 		));
-		while(!$result-> EOF){
+		while($row = $result->fetch()){
 			
 			$returnValue =  true;
-			$result->moveNext();
 			break;
 		}
 		if(!$returnValue){
@@ -173,22 +169,17 @@ class core_kernel_persistence_smoothsql_Class
         			AND ("predicate" = ? OR "predicate" = ?)';
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->execSql($sqlQuery, array (
-			$resource->uriResource,
-			RDF_SUBCLASSOF,
-			RDF_TYPE
-		));
+		$sqlResult = $dbWrapper->query($sqlQuery, array($resource->uriResource, RDF_SUBCLASSOF, RDF_TYPE));
 
-		while (!$sqlResult-> EOF){
+		while ($row = $sqlResult->fetch()){
 
-			$parentClass = new core_kernel_classes_Class($sqlResult->fields['object']);
+			$parentClass = new core_kernel_classes_Class($row['object']);
 
 			$returnValue[$parentClass->uriResource] = $parentClass ;
 			if($recursive == true && $parentClass->uriResource != RDF_CLASS && $parentClass->uriResource != RDF_RESOURCE){
 				$plop = $parentClass->getParentClasses(true);
 				$returnValue = array_merge($returnValue, $plop);
 			}
-			$sqlResult->MoveNext();
 		}
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F5 end
@@ -214,15 +205,14 @@ class core_kernel_persistence_smoothsql_Class
 			WHERE "predicate" = ? 
 			AND "object" = ?';
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->execSql($sqlQuery, array(
+		$sqlResult = $dbWrapper->query($sqlQuery, array(
 			RDF_DOMAIN,
 			$resource->uriResource
 		));
 
-		while (!$sqlResult-> EOF){
-			$property = new core_kernel_classes_Property($sqlResult->fields['subject']);
+		while ($row = $sqlResult->fetch()){
+			$property = new core_kernel_classes_Property($row['subject']);
 			$returnValue[$property->uriResource] = $property;
-			$sqlResult->MoveNext();
 		}
 		if($recursive == true) {
 			$parentClasses = $resource->getParentClasses(true);
@@ -270,24 +260,23 @@ class core_kernel_persistence_smoothsql_Class
 		}
 		
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->execSql($sqlQuery, array (
+		$sqlResult = $dbWrapper->query($sqlQuery, array (
 			RDF_TYPE,
 			$resource->uriResource
 		));
-    	if($dbWrapper->dbConnector->errorNo() !== 0){
-			throw new core_kernel_persistence_smoothsql_Exception('Unable to get instances of a class ('.$resource->uriResource.') : '.$dbWrapper->dbConnector->errorMsg());
+    	if($sqlResult->errorCode() !== '00000'){
+			throw new core_kernel_persistence_smoothsql_Exception('Unable to get instances of a class ('.$resource->uriResource.') : '.$dbWrapper->errorMessage());
 		}
 
-		while (!$sqlResult-> EOF){
+		while ($row = $sqlResult->fetch()){
 
-			$instance = new core_kernel_classes_Resource($sqlResult->fields['subject']);
-
-			$returnValue[$instance->uriResource] = $instance ;
+			$instance = new core_kernel_classes_Resource($row['subject']);
+			$returnValue[$instance->uriResource] = $instance;
 
 			//In case of a meta class, subclasses of instances may be returned*/
-			if (($instance->uriResource!=RDF_CLASS)
+			if (($instance->uriResource != RDF_CLASS)
 			&& ($resource->uriResource == RDF_CLASS)
-			&& ($instance->uriResource!=RDF_RESOURCE)) {
+			&& ($instance->uriResource != RDF_RESOURCE)) {
 
 				$instanceClass = new core_kernel_classes_Class($instance->uriResource);
 				$subClasses = $instanceClass->getSubClasses(true);
@@ -296,7 +285,6 @@ class core_kernel_persistence_smoothsql_Class
 					$returnValue[$subClass->uriResource] = $subClass;
 				}
 			}
-			$sqlResult->MoveNext();
 		}
 		if($recursive == true){
 			$subClasses = $resource->getSubClasses(true);
@@ -507,15 +495,14 @@ class core_kernel_persistence_smoothsql_Class
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$query = $this->getFilteredQuery($resource, $propertyFilters, $options);
         
-		$result = $dbWrapper->execSql($query);
-		if($dbWrapper->dbConnector->errorNo() !== 0){
-			throw new core_kernel_persistence_smoothsql_Exception($dbWrapper->dbConnector->errorMsg());
+		$result = $dbWrapper->query($query);
+		if($result->errorCode() !== '00000'){
+			throw new core_kernel_persistence_smoothsql_Exception($dbWrapper->errorMessage());
 		}
 
-		while (!$result->EOF){
-			$foundInstancesUri = $result->fields['subject'];
+		while ($row = $result->fetch()){
+			$foundInstancesUri = $row['subject'];
 			$returnValue[$foundInstancesUri] = new core_kernel_classes_Resource($foundInstancesUri);
-			$result->MoveNext();
 		}
 
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
@@ -547,14 +534,15 @@ class core_kernel_persistence_smoothsql_Class
 			$query = $this->getFilteredQuery($resource, $propertyFilters, $options);
 			if (substr($query, 0, strlen('SELECT "subject"')) == 'SELECT "subject"') {
 				$query = 'SELECT count(*) as count'.substr($query, strlen('SELECT "subject"'));
-				$sqlResult = $dbWrapper->execSql($query);
-				if (!$sqlResult->EOF) {
-					$returnValue = $sqlResult->fields['count'];
+				$sqlResult = $dbWrapper->query($query);
+				if ($row = $sqlResult->fetch()) {
+					$returnValue = $row['count'];
+					$sqlResult->closeCursor();
 				}
 			} else {
 				common_Logger::w('getFilteredQuery was updated, please update countInstances as well');
-				$sqlResult = $dbWrapper->execSql($query);
-				$returnValue = $sqlResult->RecordCount();
+				$sqlResult = $dbWrapper->query($query);
+				$returnValue = count($sqlResult->fetchAll());
 			}
 		}
 		else {
@@ -562,13 +550,14 @@ class core_kernel_persistence_smoothsql_Class
 							WHERE "predicate" = ?  
 								AND "object" = ? ';
 			
-			$sqlResult = $dbWrapper->execSql($sqlQuery, array(
+			$sqlResult = $dbWrapper->query($sqlQuery, array(
 				RDF_TYPE,
 				$resource->uriResource
 			));
 
-			if (!$sqlResult->EOF) {
-				$returnValue = $sqlResult->fields['count'];
+			if ($row = $sqlResult->fetch()) {
+				$returnValue = $row['count'];
+				$sqlResult->closeCursor();
 			}
 		}
 
@@ -619,22 +608,21 @@ class core_kernel_persistence_smoothsql_Class
 	        $query .= ' "object" FROM "statements"
 	        	WHERE "predicate" = ?
 	        	AND "subject" IN ('.$uris.')';
-			$sqlResult = $dbWrapper->execSql($query, array(
+			$sqlResult = $dbWrapper->query($query, array(
 				$property->uriResource
 			));
 	    	
-	    	if($dbWrapper->dbConnector->errorNo() !== 0){
-				throw new core_kernel_persistence_smoothsql_Exception('Unable to get instances\' property values : '.$dbWrapper->dbConnector->errorMsg());
+	    	if($sqlResult->errorCode() !== '00000'){
+				throw new core_kernel_persistence_smoothsql_Exception('Unable to get instances\' property values : '.$dbWrapper->errorMessage());
 			}
 			
-			while (!$sqlResult->EOF){
-				if(!common_Utils::isUri($sqlResult->fields['object'])) {
-	                $returnValue[] = new core_kernel_classes_Literal($sqlResult->fields['object']);
+			while ($row = $sqlResult->fetch()){
+				if(!common_Utils::isUri($row['object'])) {
+	                $returnValue[] = new core_kernel_classes_Literal($row['object']);
 	            }
 	            else {
-	                $returnValue[] = new core_kernel_classes_Resource($sqlResult->fields['object']);
+	                $returnValue[] = new core_kernel_classes_Resource($row['object']);
 	            }
-				$sqlResult->moveNext();
 			}
         }
         
@@ -813,14 +801,14 @@ class core_kernel_persistence_smoothsql_Class
 		$conditions = array();
 		foreach($propertyFilters as $propUri => $pattern){
 			
-			$propUri = $dbWrapper->dbConnector->escape($propUri);
+			$propUri = trim($dbWrapper->dbConnector->quote($propUri), "'\"");
 			$values = is_array($pattern) ? $pattern : array($pattern);
 			$sub = array();
 			foreach ($values as $value) {
 				switch (gettype($value)) {
 					case 'string' :
 					case 'numeric':
-						$patternToken = $dbWrapper->dbConnector->escape($value);
+						$patternToken = trim($dbWrapper->dbConnector->quote($value), "'\"");
 						$object = trim(str_replace('*', '%', $patternToken));
 						
 						if($like){

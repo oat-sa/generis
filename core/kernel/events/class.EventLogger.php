@@ -188,11 +188,15 @@ class core_kernel_events_EventLogger
 		} else {
 			// get the database currently used by the Generis module
 			$generisConnector = core_kernel_classes_DbWrapper::singleton();
-			$generisDatabase = $generisConnector->execSql("select database()")->fields[0];
-			//echo "[eventLogger.php '$generisDatabase']";
-			if (empty($generisDatabase))
-			$this->database = EVENTLOGGER_DEFAULT_DATABASE;
-			else // keep the default value yet set at the variable declaration
+			$generisResult = $generisConnector->query("SELECT database()");
+			if ($row = $generisResult->fetch()){
+				$generisDatabase = $row[0];
+				$generisResult->closeCursor();
+			}
+			else{
+				$generisDatabase = EVENTLOGGER_DEFAULT_DATABASE;
+			}
+			
 			$this->database = $generisDatabase;
 		}
 

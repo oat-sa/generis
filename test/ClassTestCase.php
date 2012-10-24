@@ -403,7 +403,7 @@ class ClassTestCase extends UnitTestCase {
 		if(core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($class)){
 		
 			$propertyFilter = array(
-				RDFS_LABEL => 'EN'
+				RDFS_LABEL => 'English'
 			);
 			$options = array('like' => false, 'recursive' => 0);
 					
@@ -413,8 +413,8 @@ class ClassTestCase extends UnitTestCase {
 			$this->assertTrue($found > 0);
 			
 			$propertyFilter = array(
-				RDFS_LABEL	=> 'EN',
-				'http://www.tao.lu/Ontologies/TAO.rdf#level'	=> '1'
+				RDF_VALUE => 'EN',
+				RDF_TYPE	=> 'http://www.tao.lu/Ontologies/TAO.rdf#Languages'
 			);
 			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
 			$nfound = count($languagesDependantProp);

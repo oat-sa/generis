@@ -240,7 +240,7 @@ class core_kernel_persistence_hardapi_Utils
 
         // section 10-13-1--128-743691ae:12fc0ed9381:-8000:000000000000152E begin
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$pattern = $dbWrapper->dbConnector->escape($pattern);
+		$pattern = trim($dbWrapper->dbConnector->quote($pattern), "'\"");
 		
 		if($like){
 			$object = trim(str_replace('*', '%', $pattern));
@@ -278,12 +278,12 @@ class core_kernel_persistence_hardapi_Utils
         $selectQuery = 'SELECT id FROM "' . $tableName . '" WHERE uri = \'' . $resource->uriResource . '\' LIMIT 1;';
         
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $selectResult = $dbWrapper->execSql($selectQuery);
-        if ($dbWrapper->dbConnector->errorNo() !== 0) {
-                throw new core_kernel_persistence_hardsql_Exception("Unable to get the id of the resource {$resource->uriResource} in the table '{$tableName}': " . $dbWrapper->dbConnector->errorMsg());
+        $selectResult = $dbWrapper->query($selectQuery);
+        if ($selectResult->errorCode() !== '00000') {
+                throw new core_kernel_persistence_hardsql_Exception("Unable to get the id of the resource {$resource->uriResource} in the table '{$tableName}': " . $dbWrapper->errorMessage());
         }
-        while (!$selectResult->EOF) {
-                $returnValue = $selectResult->fields['id'];
+        while ($row = $selectResult->fetch()) {
+                $returnValue = $row['id'];
                 break;
         }
         // section 127-0-1-1--4d72422d:1316c1e6091:-8000:000000000000162E end

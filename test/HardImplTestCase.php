@@ -271,12 +271,14 @@ class HardImplTestCase extends UnitTestCase {
 		    		AND (l_language = '' OR l_language = ? OR l_language = ?)
 		    		AND modelID IN ({$modelIds})";
 		    		
-        $result	= $dbWrapper->execSql($query, array(
+        $result	= $dbWrapper->query($query, array(
         	GENERIS_TRUE,
         	RDFS_SEEALSO,
         	$session->defaultLg,
         	$session->getDataLanguage()
         ));
+        
+        $result = $result->fetchAll();
         
         $sorted = core_kernel_persistence_smoothsql_Utils::sortByLanguage($result, 'l_language');
         $filtered = core_kernel_persistence_smoothsql_Utils::getFirstLanguage($sorted);
@@ -285,12 +287,14 @@ class HardImplTestCase extends UnitTestCase {
        
         // Second test is based on a particular language.
         $session->setDataLanguage('FR');
-        $result	= $dbWrapper->execSql($query, array(
+        $result	= $dbWrapper->query($query, array(
         	GENERIS_TRUE,
         	RDFS_SEEALSO,
         	$session->defaultLg,
         	$session->getDataLanguage()
         ));
+        
+        $result = $result->fetchAll();
         
         $sorted = core_kernel_persistence_smoothsql_Utils::sortByLanguage($result, 'l_language');
         $filtered = core_kernel_persistence_smoothsql_Utils::getFirstLanguage($sorted);
@@ -302,12 +306,14 @@ class HardImplTestCase extends UnitTestCase {
 		// Here we use the function filterByLanguage which aggregates sortByLanguage
 		// and getFirstLanguage.
 		$session->setDataLanguage('JA');
-        $result	= $dbWrapper->execSql($query, array(
+        $result	= $dbWrapper->query($query, array(
         	GENERIS_TRUE,
         	RDFS_SEEALSO,
         	$session->defaultLg,
         	$session->getDataLanguage()
         ));
+        
+        $result = $result->fetchAll();
         
         $filtered = core_kernel_persistence_smoothsql_Utils::filterByLanguage($result, 'l_language');
         $this->assertTrue(count($filtered) == 1 && $filtered[0] == 'testing');

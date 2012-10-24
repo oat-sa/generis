@@ -290,7 +290,7 @@ class common_Utils
             $requests = explode(";", $ch);
             unset($requests[count($requests)-1]);
             foreach($requests as $request){
-                $db->execSql($request);
+                $db->exec($request);
             }
 
             fclose($fileStream);

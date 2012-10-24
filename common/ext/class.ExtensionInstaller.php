@@ -96,7 +96,6 @@ class common_ext_ExtensionInstaller
 			
 			// deprecated, but might still be used
 			$this->installWriteConfig();
-			
 			$this->installOntology();
 			$this->installOntologyTranslation();
 			$this->installRegisterExt();
@@ -234,10 +233,13 @@ class common_ext_ExtensionInstaller
 		//add extension to db
 		$db = core_kernel_classes_DbWrapper::singleton();
 		$sql = "INSERT INTO extensions (id, name, version, loaded, \"loadAtStartUp\") VALUES ('".$this->extension->id."', '".$this->extension->name."', '".$this->extension->version."', 1, 1);";
-		$db->execSql($sql);
+		$db->exec($sql);
+		
+		common_Logger::d($this->extension->getID() . ' registered', 'INSTALL');
 		
 		//flush Manager
 		common_ext_ExtensionsManager::singleton()->reset();
+		common_Logger::d('Extension manager flush');
 		
         // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A28 end
     }

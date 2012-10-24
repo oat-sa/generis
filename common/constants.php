@@ -18,6 +18,7 @@ define('RDF_DOMAIN',							'http://www.w3.org/2000/01/rdf-schema#domain',true);
 define('RDF_VALUE',								'http://www.w3.org/1999/02/22-rdf-syntax-ns#value',true);
 define('RDFS_RANGE',							'http://www.w3.org/2000/01/rdf-schema#range',true);
 define('RDF_RESOURCE',							'http://www.w3.org/2000/01/rdf-schema#Resource',true);
+define('RDF_SUBPROPERTYOF',						'http://www.w3.org/2000/01/rdf-schema#subPropertyOf', true);
 
 define('RDF_FIRST',								'http://www.w3.org/1999/02/22-rdf-syntax-ns#first', true);
 define('RDF_REST',								'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest', true);
