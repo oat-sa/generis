@@ -88,6 +88,22 @@ class core_kernel_classes_DbWrapper
      */
     public $statements = array();
 
+    /**
+     * Short description of attribute nrHits
+     *
+     * @access private
+     * @var int
+     */
+    private $nrHits = 0;
+
+    /**
+     * Short description of attribute nrMisses
+     *
+     * @access private
+     * @var int
+     */
+    private $nrMisses = 0;
+
     // --- OPERATIONS ---
 
     /**
@@ -264,7 +280,7 @@ class core_kernel_classes_DbWrapper
         }
         
         $returnValue = $sth;
-        $this->nrQueries++;
+        $this->incrementNrOfQueries();
         // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B41 end
 
         return $returnValue;
@@ -296,7 +312,7 @@ class core_kernel_classes_DbWrapper
         	$returnValue = $this->dbConnector->exec($statement);
         }
         
-        $this->nrQueries++;
+        $this->incrementNrOfQueries();
         // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B50 end
 
         return (int) $returnValue;
@@ -317,7 +333,7 @@ class core_kernel_classes_DbWrapper
         // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B5B begin
         $this->preparedExec = false;
         $returnValue = $this->getStatement($statement);
-        $this->nrQueries++;
+        $this->incrementNrOfQueries();
         // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B5B end
 
         return $returnValue;
@@ -450,6 +466,84 @@ class core_kernel_classes_DbWrapper
         // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B60 end
 
         return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method incrementNrOfQueries
+     *
+     * @access protected
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return void
+     */
+    protected function incrementNrOfQueries()
+    {
+        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B58 begin
+        $this->nrQueries++;
+        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B58 end
+    }
+
+    /**
+     * Short description of method incrementNrOfHits
+     *
+     * @access protected
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return void
+     */
+    protected function incrementNrOfHits()
+    {
+        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B5E begin
+        $this->nrHits++;
+        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B5E end
+    }
+
+    /**
+     * Short description of method getNrOfHits
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return int
+     */
+    public function getNrOfHits()
+    {
+        $returnValue = (int) 0;
+
+        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B60 begin
+        $returnValue = $this->nrHits;
+        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B60 end
+
+        return (int) $returnValue;
+    }
+
+    /**
+     * Short description of method incrementNrOfMisses
+     *
+     * @access protected
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return void
+     */
+    protected function incrementNrOfMisses()
+    {
+        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B66 begin
+        $this->nrMisses++;
+        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B66 end
+    }
+
+    /**
+     * Short description of method getNrOfMisses
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return int
+     */
+    public function getNrOfMisses()
+    {
+        $returnValue = (int) 0;
+
+        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B6B begin
+        $returnValue = $this->nrMisses;
+        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B6B end
+
+        return (int) $returnValue;
     }
 
 } /* end of class core_kernel_classes_DbWrapper */
