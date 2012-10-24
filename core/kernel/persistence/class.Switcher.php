@@ -554,7 +554,7 @@ class core_kernel_persistence_Switcher
 		}
 
 		//Need to OPTIMIZE / FLUSH the tables in order to rebuild the indexes
-		$tables = $dbWrapper->dbConnector->MetaTables('TABLES');
+		$tables = $dbWrapper->getTables();
 
 		$size = count($tables);
 		$i = 0;
