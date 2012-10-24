@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Oct 22 13:37:50 CEST 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Oct 24 16:29:51 CEST 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -3014,61 +3014,6 @@ Enables you to retrieve staticly the DbWrapper instance</UML:TaggedValue.dataVal
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
-                        <UML:Operation xmi.id = '10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000B1F'
-                          name = 'execSql' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
-                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
-                          isAbstract = 'false'>
-                          <UML:ModelElement.taggedValue>
-                            <UML:TaggedValue xmi.id = '127-0-1-1--4f926aee:12f4a8a6bc0:-8000:0000000000001426'
-                              isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>Execute an SQL query.
-The second argument is used only for prepared like statements</UML:TaggedValue.dataValue>
-                              <UML:TaggedValue.type>
-                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
-                              </UML:TaggedValue.type>
-                            </UML:TaggedValue>
-                            <UML:TaggedValue xmi.id = '127-0-1-1-914d16a:1343cb7ea69:-8000:000000000000188F'
-                              isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>Cédric Alfonsi, &lt;cedric.alfonsi@tudor.lu&gt;</UML:TaggedValue.dataValue>
-                              <UML:TaggedValue.type>
-                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
-                              </UML:TaggedValue.type>
-                            </UML:TaggedValue>
-                          </UML:ModelElement.taggedValue>
-                          <UML:BehavioralFeature.parameter>
-                            <UML:Parameter xmi.id = '10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000B20'
-                              name = 'return' isSpecification = 'false' kind = 'return'>
-                              <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31--86a648e:11985da1cd8:-8000:0000000000000ACE'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                            <UML:Parameter xmi.id = '10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000B21'
-                              name = 'sqlQuery' isSpecification = 'false'>
-                              <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                            <UML:Parameter xmi.id = '127-0-1-1--4f926aee:12f4a8a6bc0:-8000:000000000000141E'
-                              name = 'parameters' isSpecification = 'false' kind = 'in'>
-                              <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '127-0-1-1--4f926aee:12f4a8a6bc0:-8000:0000000000001423'
-                                  language = '' body = 'false'/>
-                              </UML:Parameter.defaultValue>
-                              <UML:ModelElement.taggedValue>
-                                <UML:TaggedValue xmi.id = '127-0-1-1--4f926aee:12f4a8a6bc0:-8000:0000000000001424'
-                                  isSpecification = 'false'>
-                                  <UML:TaggedValue.dataValue>query parameters in the order the ? are found</UML:TaggedValue.dataValue>
-                                  <UML:TaggedValue.type>
-                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
-                                  </UML:TaggedValue.type>
-                                </UML:TaggedValue>
-                              </UML:ModelElement.taggedValue>
-                              <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                          </UML:BehavioralFeature.parameter>
-                        </UML:Operation>
                         <UML:Operation xmi.id = '-87--2--3--76--148ee98a:12452773959:-8000:000000000000235A'
                           name = 'getSetting' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
@@ -3100,28 +3045,6 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                               name = 'name' isSpecification = 'false'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                          </UML:BehavioralFeature.parameter>
-                        </UML:Operation>
-                        <UML:Operation xmi.id = '127-0-1-1-4f08ff91:131764e4b1f:-8000:000000000000163A'
-                          name = 'getAffectedRows' visibility = 'public' isSpecification = 'false'
-                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
-                          isLeaf = 'false' isAbstract = 'false'>
-                          <UML:ModelElement.taggedValue>
-                            <UML:TaggedValue xmi.id = '127-0-1-1-914d16a:1343cb7ea69:-8000:000000000000188D'
-                              isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>Cédric Alfonsi, &lt;cedric.alfonsi@tudor.lu&gt;</UML:TaggedValue.dataValue>
-                              <UML:TaggedValue.type>
-                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
-                              </UML:TaggedValue.type>
-                            </UML:TaggedValue>
-                          </UML:ModelElement.taggedValue>
-                          <UML:BehavioralFeature.parameter>
-                            <UML:Parameter xmi.id = '127-0-1-1-4f08ff91:131764e4b1f:-8000:000000000000163B'
-                              name = 'return' isSpecification = 'false' kind = 'return'>
-                              <UML:Parameter.type>
-                                <UML:DataType href = 'http://argouml.org/profiles/uml14/default-uml14.xmi#-84-17--56-5-43645a83:11466542d86:-8000:000000000000087C'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -3237,6 +3160,128 @@ The second argument is used only for prepared like statements</UML:TaggedValue.d
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '10-13-1-85--1639374a:13a883294da:-8000:0000000000001B5D'
+                              name = 'statement' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Attribute xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B4E'
+                          name = 'preparedExec' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          changeability = 'changeable' targetScope = 'instance'>
+                          <UML:StructuralFeature.multiplicity>
+                            <UML:Multiplicity xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B4F'>
+                              <UML:Multiplicity.range>
+                                <UML:MultiplicityRange xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B50'
+                                  lower = '1' upper = '1'/>
+                              </UML:Multiplicity.range>
+                            </UML:Multiplicity>
+                          </UML:StructuralFeature.multiplicity>
+                          <UML:StructuralFeature.type>
+                            <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                          </UML:StructuralFeature.type>
+                        </UML:Attribute>
+                        <UML:Attribute xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B51'
+                          name = 'lastPreparedExecStatement' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' changeability = 'changeable' targetScope = 'instance'>
+                          <UML:StructuralFeature.multiplicity>
+                            <UML:Multiplicity xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B52'>
+                              <UML:Multiplicity.range>
+                                <UML:MultiplicityRange xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B53'
+                                  lower = '1' upper = '1'/>
+                              </UML:Multiplicity.range>
+                            </UML:Multiplicity>
+                          </UML:StructuralFeature.multiplicity>
+                          <UML:StructuralFeature.type>
+                            <UML:DataType xmi.idref = '10-13-1-85-631905e3:13a87d71b36:-8000:0000000000001B3F'/>
+                          </UML:StructuralFeature.type>
+                        </UML:Attribute>
+                        <UML:Attribute xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B54'
+                          name = 'statements' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          changeability = 'changeable' targetScope = 'instance'>
+                          <UML:StructuralFeature.multiplicity>
+                            <UML:Multiplicity xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B55'>
+                              <UML:Multiplicity.range>
+                                <UML:MultiplicityRange xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B56'
+                                  lower = '1' upper = '1'/>
+                              </UML:Multiplicity.range>
+                            </UML:Multiplicity>
+                          </UML:StructuralFeature.multiplicity>
+                          <UML:StructuralFeature.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:StructuralFeature.type>
+                        </UML:Attribute>
+                        <UML:Operation xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B57'
+                          name = 'errorCode' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B58'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B59'
+                          name = 'errorMessage' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B5A'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B5B'
+                          name = 'getTables' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B5C'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B5D'
+                          name = 'getStatement' visibility = 'protected' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B5E'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1-85-631905e3:13a87d71b36:-8000:0000000000001B3F'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B5F'
+                              name = 'statement' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B60'
+                          name = 'getStatementKey' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B61'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B62'
                               name = 'statement' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
@@ -28753,7 +28798,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig9"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1072, 388, 316, 249]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1072, 308, 316, 354]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB"
        fill="1"
        fillcolor="white"
@@ -28765,9 +28810,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig9.0"
       x="1072"
-      y="388"
+      y="308"
       width="316"
-      height="249"
+      height="354"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -28775,7 +28820,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     />
     <text name="Fig9.1"
       x="1073"
-      y="389"
+      y="309"
       width="314"
       height="21"
       fill="0"
@@ -28790,7 +28835,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::classes::DbWrapper</text>
     <group name="Fig9.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1073, 389, 314, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1073, 309, 314, 0]"
          href="10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB"
          fill="0"
          fillcolor="white"
@@ -28803,7 +28848,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig9.2.0"
         x="1073"
-        y="389"
+        y="309"
         width="314"
         height="0"
         fill="0"
@@ -28814,7 +28859,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig9.3"
       x="1072"
-      y="410"
+      y="330"
       width="316"
       height="1"
       fill="1"
@@ -28823,7 +28868,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="192 192 192"
     />
     <group name="Fig9.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1073, 411, 314, 53]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1073, 331, 314, 104]"
          href="10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB"
          fill="0"
          fillcolor="white"
@@ -28835,9 +28880,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig9.4.0"
         x="1073"
-        y="411"
+        y="331"
         width="314"
-        height="53"
+        height="104"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -28845,7 +28890,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
       <text name="Fig9.4.1"
         x="1073"
-        y="411"
+        y="331"
         width="314"
         height="15"
         fill="0"
@@ -28861,7 +28906,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >instance : DbWrapper</text>
       <text name="Fig9.4.2"
         x="1073"
-        y="426"
+        y="346"
         width="314"
         height="15"
         fill="0"
@@ -28877,9 +28922,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >dbConnector : PDO</text>
       <text name="Fig9.4.3"
         x="1073"
-        y="441"
+        y="361"
         width="314"
-        height="21"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -28891,10 +28936,58 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >nrQueries : int  = 0</text>
+      <text name="Fig9.4.4"
+        x="1073"
+        y="376"
+        width="314"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >preparedExec : boolean</text>
+      <text name="Fig9.4.5"
+        x="1073"
+        y="391"
+        width="314"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >lastPreparedExecStatement : PDOStatement</text>
+      <text name="Fig9.4.6"
+        x="1073"
+        y="406"
+        width="314"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >statements : array</text>
     </group>
     <rectangle name="Fig9.5"
       x="1072"
-      y="463"
+      y="435"
       width="316"
       height="1"
       fill="1"
@@ -28903,7 +28996,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="192 192 192"
     />
     <group name="Fig9.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1073, 464, 314, 173]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1073, 436, 314, 224]"
          href="10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB"
          fill="0"
          fillcolor="white"
@@ -28915,9 +29008,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig9.6.0"
         x="1073"
-        y="464"
+        y="436"
         width="314"
-        height="173"
+        height="224"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -28925,7 +29018,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
       <text name="Fig9.6.1"
         x="1073"
-        y="464"
+        y="436"
         width="314"
         height="15"
         fill="0"
@@ -28941,7 +29034,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >singleton() : DbWrapper</text>
       <text name="Fig9.6.2"
         x="1073"
-        y="479"
+        y="451"
         width="314"
         height="15"
         fill="0"
@@ -28957,7 +29050,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >«create» __construct() : void</text>
       <text name="Fig9.6.3"
         x="1073"
-        y="494"
+        y="466"
         width="314"
         height="15"
         fill="0"
@@ -28973,7 +29066,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >«destroy» __destruct()</text>
       <text name="Fig9.6.4"
         x="1073"
-        y="509"
+        y="481"
         width="314"
         height="15"
         fill="0"
@@ -28989,23 +29082,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >__clone() : DbWrapper</text>
       <text name="Fig9.6.5"
         x="1073"
-        y="524"
-        width="314"
-        height="15"
-        fill="0"
-        fillcolor="white"
-        stroke="0"
-        strokecolor="192 192 192"
-        textcolor="black"
-        font="Dialog"
-        italic="false"
-        bold="false"
-        textsize="10"
-        justification="Left"
-      >execSql(sqlQuery : string,parameters : array = false) : Object</text>
-      <text name="Fig9.6.6"
-        x="1073"
-        y="539"
+        y="496"
         width="314"
         height="15"
         fill="0"
@@ -29019,25 +29096,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getSetting(name : string) : string</text>
-      <text name="Fig9.6.7"
+      <text name="Fig9.6.6"
         x="1073"
-        y="554"
-        width="314"
-        height="15"
-        fill="0"
-        fillcolor="white"
-        stroke="0"
-        strokecolor="192 192 192"
-        textcolor="black"
-        font="Dialog"
-        italic="false"
-        bold="false"
-        textsize="10"
-        justification="Left"
-      >getAffectedRows() : Integer</text>
-      <text name="Fig9.6.8"
-        x="1073"
-        y="569"
+        y="511"
         width="314"
         height="15"
         fill="0"
@@ -29051,9 +29112,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getNrOfQueries() : int</text>
-      <text name="Fig9.6.9"
+      <text name="Fig9.6.7"
         x="1073"
-        y="584"
+        y="526"
         width="314"
         height="15"
         fill="0"
@@ -29067,9 +29128,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >query(statement : string,params : array = array()) : PDOStatement</text>
-      <text name="Fig9.6.10"
+      <text name="Fig9.6.8"
         x="1073"
-        y="599"
+        y="541"
         width="314"
         height="15"
         fill="0"
@@ -29083,11 +29144,11 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >exec(statement : string,params : array = array()) : int</text>
-      <text name="Fig9.6.11"
+      <text name="Fig9.6.9"
         x="1073"
-        y="614"
+        y="556"
         width="314"
-        height="21"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -29099,6 +29160,86 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >prepare(statement : string) : PDOStatement</text>
+      <text name="Fig9.6.10"
+        x="1073"
+        y="571"
+        width="314"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >errorCode() : string</text>
+      <text name="Fig9.6.11"
+        x="1073"
+        y="586"
+        width="314"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >errorMessage() : string</text>
+      <text name="Fig9.6.12"
+        x="1073"
+        y="601"
+        width="314"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getTables() : array</text>
+      <text name="Fig9.6.13"
+        x="1073"
+        y="616"
+        width="314"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getStatement(statement : string) : PDOStatement</text>
+      <text name="Fig9.6.14"
+        x="1073"
+        y="631"
+        width="314"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getStatementKey(statement : string) : string</text>
     </group>
   </group>
   <group name="Fig10"

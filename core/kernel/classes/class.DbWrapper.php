@@ -63,12 +63,30 @@ class core_kernel_classes_DbWrapper
      * @var int
      */
     private $nrQueries = 0;
-    
-    protected $preparedExec = false;
-    
-    protected $lastPreparedExecStatement = null;
-    
-    protected $statements = array();
+
+    /**
+     * Short description of attribute preparedExec
+     *
+     * @access public
+     * @var boolean
+     */
+    public $preparedExec = false;
+
+    /**
+     * Short description of attribute lastPreparedExecStatement
+     *
+     * @access public
+     * @var PDOStatement
+     */
+    public $lastPreparedExecStatement = null;
+
+    /**
+     * Short description of attribute statements
+     *
+     * @access public
+     * @var array
+     */
+    public $statements = array();
 
     // --- OPERATIONS ---
 
@@ -182,28 +200,6 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Execute an SQL query.
-     * The second argument is used only for prepared like statements
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  string sqlQuery
-     * @param  array parameters query parameters in the order the ? are found
-     * @return common_Object
-     */
-    /* --- TO DELETE ---public function execSql($sqlQuery, $parameters = false)
-    {
-        $returnValue = null;
-
-        // section 10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000B1F begin
-        $returnValue = $this->dbConnector->Execute($sqlQuery, $parameters);	
-        $this->nrQueries++;
-        // section 10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000B1F end
-
-        return $returnValue;
-    }*/
-
-    /**
      * Short description of method getSetting
      *
      * @access public
@@ -224,31 +220,6 @@ class core_kernel_classes_DbWrapper
 
         return (string) $returnValue;
     }
-
-    /**
-     * Short description of method getAffectedRows
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @return Integer
-     */
-    /* --- TO DELETE --- public function getAffectedRows()
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:000000000000163A begin
-        
-        if (!empty($this->lastStatement)){
-        	$returnValue = $this->;
-        }
-        else{
-        	$returnValue = 0;
-        }
-        
-        // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:000000000000163A end
-
-        return $returnValue;
-    }*/
 
     /**
      * Returns the ammount of queries executed sofar
@@ -293,6 +264,7 @@ class core_kernel_classes_DbWrapper
         }
         
         $returnValue = $sth;
+        $this->nrQueries++;
         // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B41 end
 
         return $returnValue;
@@ -323,6 +295,8 @@ class core_kernel_classes_DbWrapper
         	$this->preparedExec = false;
         	$returnValue = $this->dbConnector->exec($statement);
         }
+        
+        $this->nrQueries++;
         // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B50 end
 
         return (int) $returnValue;
@@ -342,23 +316,49 @@ class core_kernel_classes_DbWrapper
 
         // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B5B begin
         $this->preparedExec = false;
-        return $this->getStatement($statement);
+        $returnValue = $this->getStatement($statement);
+        $this->nrQueries++;
         // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B5B end
 
         return $returnValue;
     }
-    
-    public function errorCode(){
+
+    /**
+     * Short description of method errorCode
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return string
+     */
+    public function errorCode()
+    {
+        $returnValue = (string) '';
+
+        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B57 begin
     	if ($this->preparedExec == false){
-    		return $this->dbConnector->errorCode();
+    		$returnValue = $this->dbConnector->errorCode();
     	}
     	else{
-    		return $this->lastPreparedExecStatement->errorCode();
+    		$returnValue = $this->lastPreparedExecStatement->errorCode();
     	}
+        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B57 end
+
+        return (string) $returnValue;
     }
-    
-    public function errorMessage(){
-    	if ($this->preparedExec == false){
+
+    /**
+     * Short description of method errorMessage
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return string
+     */
+    public function errorMessage()
+    {
+        $returnValue = (string) '';
+
+        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B59 begin
+        if ($this->preparedExec == false){
     		$info = $this->dbConnector->errorInfo();
     	}
     	else{
@@ -366,28 +366,57 @@ class core_kernel_classes_DbWrapper
     	}
     	
     	if (!empty($info[2])){
-    		return $info[2];
+    		$returnValue = $info[2];
     	}
     	else if (!empty($info[1])){
-    		return 'Driver error: ' . $info[1];
+    		$returnValue = 'Driver error: ' . $info[1];
     	}
     	else if (!empty($info[0])){
-    		return 'SQLSTATE: ' . $info[0];
+    		$returnValue = 'SQLSTATE: ' . $info[0];
     	}
     	
-    	return 'No error message to display.';
+    	$returnValue = 'No error message to display.';
+        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B59 end
+
+        return (string) $returnValue;
     }
-    
-    public function getTables(){
-    	$result = $this->query('SHOW TABLES');
+
+    /**
+     * Short description of method getTables
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return array
+     */
+    public function getTables()
+    {
+        $returnValue = array();
+
+        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B5B begin
+        $result = $this->query('SHOW TABLES');
     	$returnValue = array();
     	while ($row = $result->fetch(PDO::FETCH_NUM)){
     		$returnValue[] = $row[0];
     	}
+        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B5B end
+
+        return (array) $returnValue;
     }
-    
-    protected function getStatement($statement){
-    	$key = $this->getStatementKey($statement);
+
+    /**
+     * Short description of method getStatement
+     *
+     * @access protected
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string statement
+     * @return PDOStatement
+     */
+    protected function getStatement($statement)
+    {
+        $returnValue = null;
+
+        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B5D begin
+        $key = $this->getStatementKey($statement);
     	$sth = null;
     	
     	if (!empty($this->statements[$key])){
@@ -398,12 +427,29 @@ class core_kernel_classes_DbWrapper
     		$this->statements[$key] = $sth;
     	}
     	
-    	return $sth;
+    	$returnValue = $sth;
+        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B5D end
+
+        return $returnValue;
     }
-    
-    protected function getStatementKey($statement){
-    	$key = hash('crc32b', $statement);
-    	return $key;
+
+    /**
+     * Short description of method getStatementKey
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string statement
+     * @return string
+     */
+    public function getStatementKey($statement)
+    {
+        $returnValue = (string) '';
+
+        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B60 begin
+        $returnValue = hash('crc32b', $statement);
+        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B60 end
+
+        return (string) $returnValue;
     }
 
 } /* end of class core_kernel_classes_DbWrapper */
