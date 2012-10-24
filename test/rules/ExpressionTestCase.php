@@ -13,6 +13,12 @@ class ExpressionTestCase extends UnitTestCase {
         $constantResource12 = core_kernel_rules_TermFactory::createConst('12');
         $constantResource12b = core_kernel_rules_TermFactory::createConst('12');
 
+        $true = new core_kernel_rules_Expression(INSTANCE_EXPRESSION_TRUE);
+        $this->assertTrue($true->evaluate());
+
+        $false = new core_kernel_rules_Expression(INSTANCE_EXPRESSION_FALSE);
+        $this->assertFalse($false->evaluate());
+
         $terminalExpression1 = core_kernel_rules_ExpressionFactory::createTerminalExpression($constantResource1);
         $terminalExpression2 = core_kernel_rules_ExpressionFactory::createTerminalExpression($constantResource2);
 

@@ -318,9 +318,11 @@
     <rule:FirstExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#True"/>
     <rule:SecondExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#True"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#i12339287061376">
+  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#TrueExpression">
+   <rdfs:label xml:lang="EN"><![CDATA[True]]></rdfs:label>
     <rdfs:comment xml:lang="EN"><![CDATA[Expression that is always True]]></rdfs:comment>
-    <rdfs:label xml:lang="EN"><![CDATA[True]]></rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#FalseExpression">
     <rdfs:comment xml:lang="EN"><![CDATA[Expression that is always False]]></rdfs:comment>
     <rdfs:label xml:lang="EN"><![CDATA[False]]></rdfs:label>
   </rdf:Description>

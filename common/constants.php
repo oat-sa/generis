@@ -18,7 +18,6 @@ define('RDF_DOMAIN',							'http://www.w3.org/2000/01/rdf-schema#domain',true);
 define('RDF_VALUE',								'http://www.w3.org/1999/02/22-rdf-syntax-ns#value',true);
 define('RDFS_RANGE',							'http://www.w3.org/2000/01/rdf-schema#range',true);
 define('RDF_RESOURCE',							'http://www.w3.org/2000/01/rdf-schema#Resource',true);
-define('RDF_SUBPROPERTYOF',						'http://www.w3.org/2000/01/rdf-schema#subPropertyOf', true);
 
 define('RDF_FIRST',								'http://www.w3.org/1999/02/22-rdf-syntax-ns#first', true);
 define('RDF_REST',								'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest', true);
@@ -145,8 +144,8 @@ define('PROPERTY_HASLOGICALOPERATOR',			RULES_NS.'#HasLogicalOperator',true);
 define('INSTANCE_OR_OPERATOR' , 				RULES_NS.'#Or', true);
 define('INSTANCE_AND_OPERATOR' , 				RULES_NS.'#And', true);
 
-define('INSTANCE_EXPRESSION_TRUE' , 			RULES_NS.'#i12339287061376', true);
-define('INSTANCE_EXPRESSION_FALSE' , 			RULES_NS.'#i12339287061376', true);
+define('INSTANCE_EXPRESSION_TRUE' , 			RULES_NS.'#TrueExpression', true);
+define('INSTANCE_EXPRESSION_FALSE' , 			RULES_NS.'#FalseExpression', true);
 
 define('PROPERTY_TERMINAL_EXPRESSION' , 		RULES_NS.'#TerminalExpression', true);
 define('CLASS_DYNAMICTEXT',						RULES_NS.'#DynamicText',true);
