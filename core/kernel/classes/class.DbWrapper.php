@@ -104,6 +104,14 @@ class core_kernel_classes_DbWrapper
      */
     private $nrMisses = 0;
 
+    /**
+     * Short description of attribute debug
+     *
+     * @access public
+     * @var boolean
+     */
+    public $debug = false;
+
     // --- OPERATIONS ---
 
     /**
@@ -271,6 +279,8 @@ class core_kernel_classes_DbWrapper
         // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B41 begin
         $this->preparedExec = false;
         
+        $this->debug($statement);
+        
         if (count($params) > 0){
         	$sth = $this->dbConnector->prepare($statement);
         	$sth->execute($params);
@@ -300,6 +310,8 @@ class core_kernel_classes_DbWrapper
         $returnValue = (int) 0;
 
         // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B50 begin
+        $this->debug($statement);
+        
         if (count($params) > 0){
         	$sth = $this->dbConnector->prepare($statement);
         	$this->preparedExec = true;
@@ -332,6 +344,8 @@ class core_kernel_classes_DbWrapper
 
         // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B5B begin
         $this->preparedExec = false;
+        $this->debug($statement);
+        
         $returnValue = $this->getStatement($statement);
         $this->incrementNrOfQueries();
         // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B5B end
@@ -544,6 +558,23 @@ class core_kernel_classes_DbWrapper
         // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B6B end
 
         return (int) $returnValue;
+    }
+
+    /**
+     * Short description of method debug
+     *
+     * @access protected
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string statement
+     * @return void
+     */
+    protected function debug($statement)
+    {
+        // section 10-13-1-85-c41ef28:13a98403690:-8000:0000000000001B6D begin
+        if ($this->debug){
+        	common_Logger::w($statement);
+        }
+        // section 10-13-1-85-c41ef28:13a98403690:-8000:0000000000001B6D end
     }
 
 } /* end of class core_kernel_classes_DbWrapper */
