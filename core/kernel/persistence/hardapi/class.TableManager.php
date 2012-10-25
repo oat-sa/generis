@@ -207,8 +207,10 @@ class core_kernel_persistence_hardapi_TableManager
 			$indexQueries[] = 'CREATE INDEX "idx_props_foreign_property_uri" ON "'.$this->name.'Props" ("property_foreign_uri");';
 			$indexQueries[] = 'CREATE INDEX "idx_props_instance_id" ON "'.$this->name.'Props" ("instance_id");';
 			foreach ($indexQueries as $indexQuery){
-				$dbWrapper->exec($indexQuery);
-				if($dbWrapper->errorCode() > '00000'){
+				// Silent call because it might result in an error.
+				// An exception will be thrown is such a case.
+				@$dbWrapper->exec($indexQuery);
+				if(substr($dbWrapper->errorCode(), 0, 2) != '42' && $dbWrapper->errorCode() != '00000'){
 					//the user may not have the right to create the table index
 					throw new core_kernel_persistence_hardapi_Exception("Unable to create the multiples properties table indexes  {$this->name} : " .$dbWrapper->errorMessage());
 				}

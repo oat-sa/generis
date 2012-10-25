@@ -548,7 +548,7 @@ class core_kernel_persistence_Switcher
 			$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
 			foreach($referencer->propertyLocation($property) as $table){
 				if(!preg_match("/Props$/", $table) && preg_match("/^_[0-9]{2,}/", $table)){
-					$dbWrapper->exec('ALTER TABLE "'.$table.'" ADD INDEX "idx_'.$propertyAlias.'" ("'.$propertyAlias.'"( 255 ))');
+					@$dbWrapper->exec('ALTER TABLE "'.$table.'" ADD INDEX "idx_'.$propertyAlias.'" ("'.$propertyAlias.'"( 255 ))');
 				}
 			}
 		}
