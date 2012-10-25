@@ -565,8 +565,8 @@ class core_kernel_persistence_Switcher
 				$percent = '0'.$percent;
 			}
 
-			$dbWrapper->exec('OPTIMIZE TABLE "'.$tables[$i].'"');
-			$dbWrapper->exec('FLUSH TABLE "'.$tables[$i].'"');
+			$dbWrapper->query('OPTIMIZE TABLE "'.$tables[$i].'"');
+			$dbWrapper->query('FLUSH TABLE "'.$tables[$i].'"');
 
 			$i++;
 		}
