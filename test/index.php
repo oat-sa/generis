@@ -22,7 +22,7 @@ foreach($tests as $i => $testCase){
 }
 
 //add versioning disabled test case
-$testSuite->addFile(dirname(__FILE__).'/versioning/VersioningDisabledTestCase.php');
+//$testSuite->addFile(dirname(__FILE__).'/versioning/VersioningDisabledTestCase.php');
 
 
 //add the reporter regarding the context
