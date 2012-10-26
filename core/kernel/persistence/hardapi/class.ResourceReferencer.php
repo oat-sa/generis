@@ -300,10 +300,12 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				case self::CACHE_NONE:
 					$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 					if(is_null($table)){
-						$result = $dbWrapper->query('SELECT "id" FROM "class_to_table" WHERE "uri" = ?', array($class->uriResource));
+						$result = $dbWrapper->prepare('SELECT "id" FROM "class_to_table" WHERE "uri" = ?');
+						$result->execute(array($class->uriResource));
 					}
 					else{
-						$result = $dbWrapper->query('SELECT "id" FROM "class_to_table" WHERE "uri" = ? AND "table" = ?', array($class->uriResource, $table));
+						$result = $dbWrapper->prepare('SELECT "id" FROM "class_to_table" WHERE "uri" = ? AND "table" = ?');
+						$result->execute(array($class->uriResource, $table));
 					}
 					
 					if($row = $result->fetch()){
@@ -376,18 +378,14 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
 			$query = 'INSERT INTO "class_to_table" ("uri", "table", "topClass") VALUES (?,?,?)';
-			$result = $dbWrapper->exec($query, array(
-				$class->uriResource, 
-				$table,
-				$topClassUri
-			));
+			$result = $dbWrapper->prepare($query);
+			$result->execute(array($class->uriResource, $table, $topClassUri));
 			
 			// Get last inserted id
 			$query = 'SELECT "id" FROM "class_to_table" WHERE "uri" = ? AND "table" = ?';
-			$result = $dbWrapper->query($query, array(
-				$class->uriResource, 
-				$table
-			));
+			$result = $dbWrapper->prepare($query);
+			$result->execute(array($class->uriResource, $table));
+			
 			if ($row = $result->fetch()){
 				$classId = $row['id'];
 				$result->closeCursor();

@@ -188,7 +188,8 @@ class core_kernel_persistence_hardapi_RowManager
 					
 					$multiplePropertyUri = core_kernel_persistence_hardapi_Utils::getLongName($column['name']);
 					$multiQuery = 'SELECT "object", "l_language" FROM "statements" WHERE "subject" = ? AND "predicate" = ?';
-					$multiResult = $dbWrapper->query($multiQuery, array($row['uri'], $multiplePropertyUri));
+					$multiResult = $dbWrapper->prepare($multiQuery);
+					$multiResult->execute(array($row['uri'], $multiplePropertyUri));
 					
 
 					while ($t = $multiResult->fetch()){

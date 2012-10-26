@@ -452,9 +452,6 @@ class common_ext_ExtensionsManager
     	$db = core_kernel_classes_DbWrapper::singleton();
 		$query = "SELECT * FROM extensions;";
 		$result = $db->query($query);
-		if($result->errorCode() != '00000'){
-			throw new core_kernel_persistence_hardapi_Exception($db->errorMessage());
-		}
 
 		while ($row = $result->fetch()){
 			$id = $row["id"];
