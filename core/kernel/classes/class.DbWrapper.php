@@ -156,7 +156,7 @@ class core_kernel_classes_DbWrapper
 	        $dsn = $driver . ':dbname=' . DATABASE_NAME . ';host=' . DATABASE_URL . ';charset=utf8';
 	        $options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_BOTH,
 	        				 PDO::ATTR_PERSISTENT => false,
-	        				 PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING,
+	        				 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 	        				 PDO::ATTR_EMULATE_PREPARES => false);
 	        
 	       
@@ -282,13 +282,8 @@ class core_kernel_classes_DbWrapper
         $this->debug($statement);
         
         if (count($params) > 0){
-        	$sth = @$this->dbConnector->prepare($statement);
-        	if (!empty($sth)){
-        		$sth->execute($params);	
-        	}
-        	else{
-        		return false;
-        	}
+        	$sth = $this->dbConnector->prepare($statement);
+        	$sth->execute($params);
         }
         else{
         	$sth = $this->dbConnector->query($statement);

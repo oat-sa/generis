@@ -363,12 +363,6 @@ class core_kernel_persistence_smoothsql_Resource
 	       		$query = 'INSERT INTO "statements" ("modelID","subject","predicate","object","l_language","author","stread","stedit","stdelete","epoch") VALUES ';
 	       		
 	       		foreach($properties as $propertyUri => $value){
-	       			/*
-	       			if(!common_Utils::isUri($propertyUri)){
-	       				$label = $resource->getLabel();
-	       				throw new common_Exception("setPropertiesValues' argument must contains property uris as keys, 
-	       												in {$label} ({$resource->uriResource})");
-	       			}*/
 	       			$property = new core_kernel_classes_Property($propertyUri);
 	       			$lang 	= ($property->isLgDependent() ? $session->getDataLanguage() : '');
 					
@@ -394,9 +388,6 @@ class core_kernel_persistence_smoothsql_Resource
 	       		
 	       		$query = substr($query, 0, strlen($query) -1);
 	       		$returnValue = $dbWrapper->exec($query);
-	        	if($dbWrapper->errorCode() !== '00000'){
-					throw new core_kernel_persistence_smoothsql_Exception($dbWrapper->errorMessage());
-				}
         	}
         }
         
@@ -441,9 +432,6 @@ class core_kernel_persistence_smoothsql_Resource
        		$mask,
        		$mask
         ));
-    	if($dbWrapper->errorCode() !== '00000'){
-			throw new core_kernel_persistence_smoothsql_Exception($dbWrapper->errorMessage());
-		}
 		
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7 end
 
@@ -851,9 +839,6 @@ class core_kernel_persistence_smoothsql_Resource
             ORDER BY "predicate"';
         
         $result	= $dbWrapper->query($query);
-    	if($result->errorCode() !== '00000'){
-            throw new core_kernel_persistence_smoothsql_Exception("Unable to get properties values " .$dbWrapper->errorMessage());
-        }
         
         $rows = $result->fetchAll();
         $sortedByLg = core_kernel_persistence_smoothsql_Utils::sortByLanguage($rows, 'l_language');
@@ -931,11 +916,8 @@ class core_kernel_persistence_smoothsql_Resource
         	RDF_TYPE,
         	$class->uriResource
         ));
-    	if($dbWrapper->errorCode() !== '00000'){
-			throw new core_kernel_persistence_smoothsql_Exception("Unable to delete type {$property->uriResource} for the resource {$resource->uriResource} : " .$dbWrapper->errorMessage());
-		} else {
-			$returnValue = true;
-		}
+        
+        $returnValue = true;
         
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000154C end
 

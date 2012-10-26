@@ -264,9 +264,6 @@ class core_kernel_persistence_smoothsql_Class
 			RDF_TYPE,
 			$resource->uriResource
 		));
-    	if($sqlResult->errorCode() !== '00000'){
-			throw new core_kernel_persistence_smoothsql_Exception('Unable to get instances of a class ('.$resource->uriResource.') : '.$dbWrapper->errorMessage());
-		}
 
 		while ($row = $sqlResult->fetch()){
 
@@ -286,6 +283,7 @@ class core_kernel_persistence_smoothsql_Class
 				}
 			}
 		}
+		
 		if($recursive == true){
 			$subClasses = $resource->getSubClasses(true);
 			foreach ($subClasses as $subClass){
@@ -496,9 +494,6 @@ class core_kernel_persistence_smoothsql_Class
 		$query = $this->getFilteredQuery($resource, $propertyFilters, $options);
         
 		$result = $dbWrapper->query($query);
-		if($result->errorCode() !== '00000'){
-			throw new core_kernel_persistence_smoothsql_Exception($dbWrapper->errorMessage());
-		}
 
 		while ($row = $result->fetch()){
 			$foundInstancesUri = $row['subject'];
@@ -611,10 +606,6 @@ class core_kernel_persistence_smoothsql_Class
 			$sqlResult = $dbWrapper->query($query, array(
 				$property->uriResource
 			));
-	    	
-	    	if($sqlResult->errorCode() !== '00000'){
-				throw new core_kernel_persistence_smoothsql_Exception('Unable to get instances\' property values : '.$dbWrapper->errorMessage());
-			}
 			
 			while ($row = $sqlResult->fetch()){
 				if(!common_Utils::isUri($row['object'])) {
