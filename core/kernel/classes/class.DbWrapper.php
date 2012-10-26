@@ -282,8 +282,13 @@ class core_kernel_classes_DbWrapper
         $this->debug($statement);
         
         if (count($params) > 0){
-        	$sth = $this->dbConnector->prepare($statement);
-        	$sth->execute($params);
+        	$sth = @$this->dbConnector->prepare($statement);
+        	if (!empty($sth)){
+        		$sth->execute($params);	
+        	}
+        	else{
+        		return false;
+        	}
         }
         else{
         	$sth = $this->dbConnector->query($statement);

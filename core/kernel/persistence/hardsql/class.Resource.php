@@ -221,7 +221,10 @@ class core_kernel_persistence_hardsql_Resource
 			$query =  'SELECT "'.$propertyAlias.'" as "propertyValue" FROM "'.$table.'" WHERE "uri" = ?';
 			$result	= $dbWrapper->query($query, array($resource->uriResource));
 			
-			if (substr($result->errorCode(), 0, 2) == '42S') {
+			if ($result === false){
+				
+			}
+			else if (substr($result->errorCode(), 0, 2) == '42S') {
 				// Column doesn't exists is not an error. Try to get a property which does not exist is allowed
 			}
 			else if ($result->errorCode() !== '00000'){ 
