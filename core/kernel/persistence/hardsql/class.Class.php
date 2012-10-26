@@ -205,33 +205,35 @@ class core_kernel_persistence_hardsql_Class
 				}
 				$sqlQuery .= "LIMIT {$limit} OFFSET {$offset}";
 			}
-				
-			$sqlResult = $dbWrapper->query($sqlQuery);
-			if($sqlResult->errorCode() !== '00000'){
-				throw new core_kernel_persistence_hardsql_Exception("Unable to get instances for the resource {$resource->uriResource} in the table {$tableName} : " .$dbWrapper->errorMessage());
-			}
-			while ($row = $sqlResult->fetch()){
 
-				$instance = new core_kernel_classes_Resource($row['uri']);
-				$returnValue[$instance->uriResource] = $instance ;
-			}
-			if($recursive == true){
-					
-				$subClasses = $resource->getSubClasses(true);
-				foreach ($subClasses as $subClass){
-
-					if (isset($limit)){
-
-						$limit = $limit - count($returnValue);
-						if ($limit > 0){
-							$returnValue = array_merge($returnValue, $subClass->getInstances(true), array('limit'=>$limit));
-						} else {
-							break 2;
+			try{
+				$sqlResult = $dbWrapper->query($sqlQuery);
+				while ($row = $sqlResult->fetch()){
+	
+					$instance = new core_kernel_classes_Resource($row['uri']);
+					$returnValue[$instance->uriResource] = $instance ;
+				}
+				if($recursive == true){
+						
+					$subClasses = $resource->getSubClasses(true);
+					foreach ($subClasses as $subClass){
+	
+						if (isset($limit)){
+	
+							$limit = $limit - count($returnValue);
+							if ($limit > 0){
+								$returnValue = array_merge($returnValue, $subClass->getInstances(true), array('limit'=>$limit));
+							} else {
+								break 2;
+							}
+						}else{
+							$returnValue = array_merge($returnValue, $subClass->getInstances(true));
 						}
-					}else{
-						$returnValue = array_merge($returnValue, $subClass->getInstances(true));
 					}
 				}
+			}
+			catch (PDOException $e){
+				throw new core_kernel_persistence_hardsql_Exception("Unable to get instances for the resource {$resource->uriResource} in the table {$tableName} : " .$e->getMessage());
 			}
 		}
 
@@ -333,14 +335,10 @@ class core_kernel_persistence_hardsql_Class
 
 		$returnValue = new core_kernel_classes_Resource($subject,__METHOD__);
 
-		$table = '_'.core_kernel_persistence_hardapi_Utils::getShortName ($resource);
-		$query = 'INSERT INTO "'.$table.'" ("uri") VALUES (?)';
-		$result = $dbWrapper->exec($query, array($subject));
-			
-		if($dbWrapper->errorCode() !== '00000'){
-			throw new core_kernel_persistence_hardsql_Exception("Unable to create instance for the resource {$resource->uriResource} in the table {$table} : " .$dbWrapper->errorMessage());
-		} 
-		else{
+		try{
+			$table = '_'.core_kernel_persistence_hardapi_Utils::getShortName ($resource);
+			$query = 'INSERT INTO "'.$table.'" ("uri") VALUES (?)';
+			$result = $dbWrapper->exec($query, array($subject));
 
 			// reference the newly created instance
 			core_kernel_persistence_hardapi_ResourceReferencer::singleton()->referenceResource($returnValue, $table, array($resource), true);
@@ -351,6 +349,9 @@ class core_kernel_persistence_hardsql_Class
 			if (!empty($comment)){
 				$returnValue->setPropertyValue(new core_kernel_classes_Property(RDFS_COMMENT), $comment);
 			}
+		}
+		catch (PDOException $e){
+			throw new core_kernel_persistence_hardsql_Exception("Unable to create instance for the resource {$resource->uriResource} in the table {$table} : " .$e->getMessage());
 		}
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F27 end
@@ -562,27 +563,29 @@ class core_kernel_persistence_hardsql_Class
 			}
 		}
 
-		$sqlResult = $dbWrapper->query($sqlQuery);
-		if($sqlResult->errorCode() !== '00000'){
-			throw new core_kernel_persistence_hardsql_Exception("Unable to search instances for the resource {$resource->uriResource} : " .$dbWrapper->errorMessage());
-		}
-		while ($row = $sqlResult->fetch()){
-
-			$instance = new core_kernel_classes_Resource($row['uri']);
-			$returnValue[$instance->uriResource] = $instance;
-		}
-
-		//Check in the subClasses recurslively.
-		// Be carefull, it can be perf consuming with large data set and subclasses
-		(isset($options['recursive'])) ? $recursive = intval($options['recursive']) : $recursive = 0;
-		if($recursive){
-			$recursive--;
-			foreach($resource->getSubClasses(true) as $subclass){
-				$returnValue = array_merge(
-				$returnValue,
-				$subclass->searchInstances($propertyFilters, array_merge($options, array('recursive' => $recursive)))
-				);
+		try{
+			$sqlResult = $dbWrapper->query($sqlQuery);
+			while ($row = $sqlResult->fetch()){
+	
+				$instance = new core_kernel_classes_Resource($row['uri']);
+				$returnValue[$instance->uriResource] = $instance;
 			}
+	
+			//Check in the subClasses recurslively.
+			// Be carefull, it can be perf consuming with large data set and subclasses
+			(isset($options['recursive'])) ? $recursive = intval($options['recursive']) : $recursive = 0;
+			if($recursive){
+				$recursive--;
+				foreach($resource->getSubClasses(true) as $subclass){
+					$returnValue = array_merge(
+					$returnValue,
+					$subclass->searchInstances($propertyFilters, array_merge($options, array('recursive' => $recursive)))
+					);
+				}
+			}
+		}
+		catch (PDOException $e){
+			throw new core_kernel_persistence_hardsql_Exception("Unable to search instances for the resource {$resource->uriResource} : " .$e->getMessage());
 		}
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
 
@@ -701,40 +704,39 @@ class core_kernel_persistence_hardsql_Class
 				   	WHERE "'.$table.'"."uri" IN ('.$uris.')
 					AND "'.$tableProps.'"."property_uri" = ?
 					AND ( "l_language" = ? OR "l_language" = \'\' '.$defaultLg.')';
-				
-				
-				$result	= $dbWrapper->query($query, array(
-					$property->uriResource
-					, $lang
-				));
-				if($result->errorCode() !== '00000'){
-					throw new core_kernel_persistence_hardsql_Exception("Unable to get property (multiple) values for {$resource->uriResource} in {$table} : " .$dbWrapper->errorMessage());
+
+				try{
+					$result	= $dbWrapper->query($query, array($property->uriResource, $lang));
+	
+					while ($row = $result->fetch()){
+						$returnValue[] = $row['property_value'] != null ? $row['property_value'] : $row['property_foreign_uri'];
+					}
 				}
-				while ($row = $result->fetch()){
-					$returnValue[] = $row['property_value'] != null ? $row['property_value'] : $row['property_foreign_uri'];
+				catch (PDOException $e){
+					throw new core_kernel_persistence_hardsql_Exception("Unable to get property (multiple) values for {$resource->uriResource} in {$table} : " .$e->getMessage());
 				}
 				
 			}
 			// Select in the main table of the class
 			else{
-				
-				$query =  'SELECT '.($distinct?'DISTINCT':'').' "'.$propertyAlias.'" as "propertyValue" FROM "'.$table.'" WHERE "uri" IN ('.$uris.')';
-				$result	= $dbWrapper->query($query);
-				
-				if (substr($result->errorCode(), 0, 2) == '42S') {
-					// Column doesn't exists is not an error. Try to get a property which does not exist is allowed
-				}
-				else if ($dbWrapper->errorCode() !== '00000'){ 
-					throw new core_kernel_persistence_hardsql_Exception("Unable to get property (single) values for {$resource->uriResource} in {$table} : " .$dbWrapper->errorMessage());
-				} 
-				else {
+				try{
+					$query =  'SELECT '.($distinct?'DISTINCT':'').' "'.$propertyAlias.'" as "propertyValue" FROM "'.$table.'" WHERE "uri" IN ('.$uris.')';
+					$result	= $dbWrapper->query($query);
+					
 					while ($row = $result->fetch()){
 						if ($row['propertyValue'] != null){
 							$returnValue[] = $row['propertyValue'];
 						}
 					}
 				}
-				
+				catch (PDOException $e){
+					if (substr($e->getCode(), 0, 2) == '42S') {
+						// Column doesn't exists is not an error. Try to get a property which does not exist is allowed
+					}
+					else if ($e->getCode() !== '00000'){
+						throw new core_kernel_persistence_hardsql_Exception("Unable to get property (single) values for {$resource->uriResource} in {$table} : " .$e->getMessage());
+					}
+				}
 			}
         }
         
@@ -862,30 +864,34 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = new core_kernel_classes_Resource($uri,__METHOD__);
 		$varnames = '"'.implode('","', array_keys($hardPropertyNames)).'"';
 		
-		$query = 'INSERT INTO "'.$table.'" ('.$varnames.') VALUES ('.implode(',', array_fill(0, count($hardPropertyNames), '?')).')';
-		$result = $dbWrapper->exec($query, array_values($hardPropertyNames));
-		
-		if($dbWrapper->errorCode() !== '00000'){
-			throw new core_kernel_persistence_hardsql_Exception("Unable to create instance for the class {$type->uriResource} in the table {$table} : " .$dbWrapper->errorMessage());
-		} else {
+		try{
+			$query = 'INSERT INTO "'.$table.'" ('.$varnames.') VALUES ('.implode(',', array_fill(0, count($hardPropertyNames), '?')).')';
+			$result = $dbWrapper->exec($query, array_values($hardPropertyNames));
+			
 			// reference the newly created instance
 			core_kernel_persistence_hardapi_ResourceReferencer::singleton()->referenceResource($returnValue, $table, array($type), true);
+			
+			// @todo this shoould be retrievable without an aditional query
+			$instanceId = core_kernel_persistence_hardsql_Utils::getInstanceId($returnValue);
+			
+			// @todo Merge into a single query
+			if (!empty($queryProps)) {
+				$prefixed = array();
+				foreach ($queryProps as $row) {
+					$prefixed[] = ' ('.$instanceId.', '.$row.')';
+				}
+				
+				try{
+					$query = 'INSERT INTO "' . $table . 'Props" ("instance_id", "property_uri", "property_value", "property_foreign_uri", "l_language") VALUES ' . implode(',', $prefixed);
+					$result = $dbWrapper->exec($query);
+				}
+				catch (PDOException $e){
+					throw new core_kernel_persistence_hardsql_Exception("Unable to set properties (multiple) Value for the instance {$returnValue->uriResource} in {$tableName} : " . $e->getMessage());
+				}
+			}
 		}
-		
-		// @todo this shoould be retrievable without an aditional query
-		$instanceId = core_kernel_persistence_hardsql_Utils::getInstanceId($returnValue);
-		
-		// @todo Merge into a single query
-		if (!empty($queryProps)) {
-			$prefixed = array();
-			foreach ($queryProps as $row) {
-				$prefixed[] = ' ('.$instanceId.', '.$row.')';
-			}
-			$query = 'INSERT INTO "' . $table . 'Props" ("instance_id", "property_uri", "property_value", "property_foreign_uri", "l_language") VALUES ' . implode(',', $prefixed);
-			$result = $dbWrapper->exec($query);
-			if ($dbWrapper->errorCode() !== '00000') {
-				throw new core_kernel_persistence_hardsql_Exception("Unable to set properties (multiple) Value for the instance {$returnValue->uriResource} in {$tableName} : " . $dbWrapper->errorMessage());
-			}
+		catch (PDOException $e){
+			throw new core_kernel_persistence_hardsql_Exception("Unable to create instance for the class {$type->uriResource} in the table {$table} : " .$e->getMessage());
 		}
         // section 127-0-1-1--49b11f4f:135c41c62e3:-8000:0000000000001947 end
 

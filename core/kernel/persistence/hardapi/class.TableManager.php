@@ -139,15 +139,6 @@ class core_kernel_persistence_hardapi_TableManager
 					$query .= ', "'.$column['name'].'"';
 					if(isset($column['foreign']) && !empty($column['foreign'])){
 						$query .= " TEXT";
-
-						//currently disable the foreign key constraint management:
-						/*
-						$myTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']); 
-						if($myTableMgr->exists()){
-						$query .= " VARCHAR(255),";
-						$query .= " CONSTRAINT fk_{$column['name']} FOREIGN KEY ({$column['name']}) REFERENCES {$column['foreign']}(uri)";
-						}
-						*/
 					}
 					else{
 						$query .= " TEXT";
@@ -157,21 +148,10 @@ class core_kernel_persistence_hardapi_TableManager
 			$query .= ')/*!ENGINE = MYISAM, DEFAULT CHARSET=utf8*/;';
 
 			$dbWrapper->exec($query);
-			if($dbWrapper->errorCode() > '00000'){
-				if(DEBUG_MODE){
-					echo $query."<br>";
-				}
-				//the user may not have the right to create a table
-				throw new core_kernel_persistence_hardapi_Exception("Unable to create the table {$this->name} : " .$dbWrapper->errorMessage());
-			}
 			
 			// create table index
 			$query = 'CREATE INDEX "idx'.$this->name.'" ON "'.$this->name.'" ("uri");';
 			$dbWrapper->exec($query);
-			if($dbWrapper->errorCode() > '00000'){
-				//the user may not have the right to create the table index
-				throw new core_kernel_persistence_hardapi_Exception("Unable to create the table index  {$this->name} : " .$dbWrapper->errorMessage());
-			}
 				
 			//always create the multi prop table
 			$query = 'CREATE TABLE "'.$this->name.'Props" (
@@ -182,23 +162,11 @@ class core_kernel_persistence_hardapi_TableManager
 				"l_language" VARCHAR(5),
 				"instance_id" int NOT NULL ,
 				PRIMARY KEY ("id")';
-                        
-            //currently disable the foreign key constraint management:
-            /*        
-			$query. = ",CONSTRAINT fk{$this->name}_instance_id 
-				FOREIGN KEY (instance_id) 
-				REFERENCES {$this->name}(id)";
-            */
                                 
 			$query .= ")/*!ENGINE = MYISAM, DEFAULT CHARSET=utf8*/;";
 				
 			$dbWrapper->exec($query);
-			if($dbWrapper->errorCode() !== '00000'){
-				if(DEBUG_MODE){
-					echo $query."<br>";
-				}
-				throw new core_kernel_persistence_hardapi_Exception("Unable to create the table {$this->name}Props : " .$dbWrapper->errorMessage());
-			}
+
 			self::$_tables[] = "{$this->name}Props";
 			
 			// Create multiples properties table indexes
@@ -207,12 +175,14 @@ class core_kernel_persistence_hardapi_TableManager
 			$indexQueries[] = 'CREATE INDEX "idx_props_foreign_property_uri" ON "'.$this->name.'Props" ("property_foreign_uri");';
 			$indexQueries[] = 'CREATE INDEX "idx_props_instance_id" ON "'.$this->name.'Props" ("instance_id");';
 			foreach ($indexQueries as $indexQuery){
-				// Silent call because it might result in an error.
-				// An exception will be thrown is such a case.
-				@$dbWrapper->exec($indexQuery);
-				if(substr($dbWrapper->errorCode(), 0, 2) != '42' && $dbWrapper->errorCode() != '00000'){
-					//the user may not have the right to create the table index
-					throw new core_kernel_persistence_hardapi_Exception("Unable to create the multiples properties table indexes  {$this->name} : " .$dbWrapper->errorMessage());
+				try{
+					$dbWrapper->exec($indexQuery);
+				}
+				catch(PDOException $e){
+					if(substr($e->getCode(), 0, 2) != '42' && $e->getCode() != '00000'){
+						//the user may not have the right to create the table index or it already exists.
+						throw new core_kernel_persistence_hardapi_Exception("Unable to create the multiples properties table indexes  {$this->name} : " .$e->getMessage());
+					}
 				}
 			}
 			
@@ -245,26 +215,25 @@ class core_kernel_persistence_hardapi_TableManager
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
 			//remove the multi properties table
-			$dbWrapper->exec('DROP TABLE "'.$this->name.'Props"');
-			if($dbWrapper->errorCode() !== '00000'){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to remove the multiple properties table {$this->name}Props :" .$dbWrapper->errorMessage());
+			try{
+				$dbWrapper->exec('DROP TABLE "'.$this->name.'Props"');
+				$tblKey = array_search("{$this->name}Props", self::$_tables);
+				if($tblKey !== false){
+					unset(self::$_tables[$tblKey]);
+				}
+				
+				//remove the table
+				$result = $dbWrapper->exec('DROP TABLE "'.$this->name.'";');
+				$tblKey = array_search($this->name, self::$_tables);
+				if($tblKey !== false){
+					unset(self::$_tables[$tblKey]);
+				}
+				
+				$returnValue = true;
 			}
-			$tblKey = array_search("{$this->name}Props", self::$_tables);
-			if($tblKey !== false){
-				unset(self::$_tables[$tblKey]);
+			catch (PDOException $e){
+				throw new core_kernel_persistence_hardapi_Exception("Unable to remove the multiple properties table {$this->name}Props :" . $e->getMessage());
 			}
-			
-			//remove the table
-			$result = $dbWrapper->exec('DROP TABLE "'.$this->name.'";');
-        	if($dbWrapper->errorCode() !== '00000'){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to remove the table {$this->name} : " .$dbWrapper->errorMessage());
-			}
-			$tblKey = array_search($this->name, self::$_tables);
-			if($tblKey !== false){
-				unset(self::$_tables[$tblKey]);
-			}
-			
-			$returnValue = true;
 		}
 
 		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015B9 end

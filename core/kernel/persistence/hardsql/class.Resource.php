@@ -104,19 +104,21 @@ class core_kernel_persistence_hardsql_Resource
 
         // section 127-0-1-1--1ee05ee5:13611d6d34c:-8000:000000000000196B begin
 		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-		$query = 'SELECT "class_to_table"."uri"
-    		FROM "class_to_table"
-    		INNER JOIN "resource_has_class" ON "resource_has_class"."class_id" = "class_to_table"."id"
-    		INNER JOIN "resource_to_table" ON "resource_to_table"."id" = "resource_has_class"."resource_id"
-    		WHERE "resource_to_table"."uri" = ?';
-		$result	= $dbWrapper->query($query, array($resource->uriResource));
-		if($result->errorCode() !== '00000'){
-			throw new core_kernel_persistence_hardsql_Exception("Unable to getType of the resource {$resource->uriResource} : " .$dbWrapper->errorMessage());
-		} 
-		else {	
+		
+		try{
+			$query = 'SELECT "class_to_table"."uri"
+	    		FROM "class_to_table"
+	    		INNER JOIN "resource_has_class" ON "resource_has_class"."class_id" = "class_to_table"."id"
+	    		INNER JOIN "resource_to_table" ON "resource_to_table"."id" = "resource_has_class"."resource_id"
+	    		WHERE "resource_to_table"."uri" = ?';
+			$result	= $dbWrapper->query($query, array($resource->uriResource));
+	
 			while ($row = $result->fetch()){
 				$returnValue[] = new core_kernel_classes_Class($row['uri']);
 			}
+		}
+		catch (PDOException $e){
+			throw new core_kernel_persistence_hardsql_Exception("Unable to getType of the resource {$resource->uriResource} : " .$e->getMessage());
 		}
         // section 127-0-1-1--1ee05ee5:13611d6d34c:-8000:000000000000196B end
 
@@ -154,90 +156,88 @@ class core_kernel_persistence_hardsql_Resource
 		if (in_array("{$table}Props", $propertyLocation)
 		|| ! $referencer->isPropertyReferenced($property)){
 			
-			// Check if we have to return first or last entry
-			$one = isset($options['one']) && $options['one'] == true ? true : false;
-			$last = isset($options['last']) && $options['last'] == true ? true : false;
-			
-			$tableProps = $table."Props";
-			$session = core_kernel_classes_Session::singleton();
-			// Define language if required
-			$lang = '';
-			$defaultLg = '';
-			if (isset($options['lg'])){
-				$lang = $options['lg'];
-			}
-			else{
-				$lang = $session->getDataLanguage();
-				$defaultLg = ' OR "l_language" = \''.$session->defaultLg.'\' ';
-			}
-            
-			$query = 'SELECT "property_value", "property_foreign_uri"
-				FROM "'.$table.'"
-				INNER JOIN "'.$tableProps.'" on "'.$table.'"."id" = "'.$tableProps.'"."instance_id"
-			   	WHERE "'.$table.'"."uri" = ?
-				AND "'.$tableProps.'"."property_uri" = ?
-				AND ( "l_language" = ? OR "l_language" = \'\' '.$defaultLg.')';
-			
-			// Select first
-			if ($one) {
-				$query .= ' ORDER BY "' .$tableProps. '"."id" ASC LIMIT 0, 1';
+			try{
+				// Check if we have to return first or last entry
+				$one = isset($options['one']) && $options['one'] == true ? true : false;
+				$last = isset($options['last']) && $options['last'] == true ? true : false;
 				
-				$result	= $dbWrapper->query($query, array(
-					$resource->uriResource
-					, $property->uriResource
-					, $lang
-				));
-			}
-			// Select Last
-			else if ($last) {
-				$query .= ' ORDER BY "' .$tableProps. '"."id" DESC LIMIT 0, 1';
+				$tableProps = $table."Props";
+				$session = core_kernel_classes_Session::singleton();
+				// Define language if required
+				$lang = '';
+				$defaultLg = '';
+				if (isset($options['lg'])){
+					$lang = $options['lg'];
+				}
+				else{
+					$lang = $session->getDataLanguage();
+					$defaultLg = ' OR "l_language" = \''.$session->defaultLg.'\' ';
+				}
+	            
+				$query = 'SELECT "property_value", "property_foreign_uri"
+					FROM "'.$table.'"
+					INNER JOIN "'.$tableProps.'" on "'.$table.'"."id" = "'.$tableProps.'"."instance_id"
+				   	WHERE "'.$table.'"."uri" = ?
+					AND "'.$tableProps.'"."property_uri" = ?
+					AND ( "l_language" = ? OR "l_language" = \'\' '.$defaultLg.')';
 				
-				$result	= $dbWrapper->query($query, array(
-					$resource->uriResource
-					, $property->uriResource
-					, $lang
-				));
+				// Select first
+				if ($one) {
+					$query .= ' ORDER BY "' .$tableProps. '"."id" ASC LIMIT 0, 1';
+					
+					$result	= $dbWrapper->query($query, array(
+						$resource->uriResource
+						, $property->uriResource
+						, $lang
+					));
+				}
+				// Select Last
+				else if ($last) {
+					$query .= ' ORDER BY "' .$tableProps. '"."id" DESC LIMIT 0, 1';
+					
+					$result	= $dbWrapper->query($query, array(
+						$resource->uriResource
+						, $property->uriResource
+						, $lang
+					));
+				}
+				// Select All
+				else {
+					$result	= $dbWrapper->query($query, array(
+						$resource->uriResource
+						, $property->uriResource
+						, $lang
+					));
+				}
+					
+				while ($row = $result->fetch()){
+					$returnValue[] = $row['property_value'] != null ? $row['property_value'] : $row['property_foreign_uri'];
+				}
 			}
-			// Select All
-			else {
-				$result	= $dbWrapper->query($query, array(
-					$resource->uriResource
-					, $property->uriResource
-					, $lang
-				));
+			catch (PDOException $e){
+				throw new core_kernel_persistence_hardsql_Exception("Unable to get property (multiple) values for {$resource->uriResource} in {$table} : " .$e->getMessage());
 			}
-				
-			if($result->errorCode() !== '00000'){
-				throw new core_kernel_persistence_hardsql_Exception("Unable to get property (multiple) values for {$resource->uriResource} in {$table} : " .$dbWrapper->errorMessage());
-			}
-			while ($row = $result->fetch()){
-				$returnValue[] = $row['property_value'] != null ? $row['property_value'] : $row['property_foreign_uri'];
-			}
-			
 		}
 		// Select in the main table of the class
 		else{
-			
-			$query =  'SELECT "'.$propertyAlias.'" as "propertyValue" FROM "'.$table.'" WHERE "uri" = ?';
-			$result	= $dbWrapper->query($query, array($resource->uriResource));
-			
-			if ($result === false){
-				
-			}
-			else if (substr($result->errorCode(), 0, 2) == '42S') {
-				// Column doesn't exists is not an error. Try to get a property which does not exist is allowed
-			}
-			else if ($result->errorCode() !== '00000'){ 
-				throw new core_kernel_persistence_hardsql_Exception("Unable to get property (single) values for {$resource->uriResource} in {$table} : " .$dbWrapper->errorMessage());
-			} 
-			else {
+			try{
+				$query =  'SELECT "'.$propertyAlias.'" as "propertyValue" FROM "'.$table.'" WHERE "uri" = ?';
+				$result	= $dbWrapper->query($query, array($resource->uriResource));
+
 				while ($row = $result->fetch()){
 					if ($row['propertyValue'] != null){
 						$returnValue[] = $row['propertyValue'];
 					}
 				}
 			}
-			
+			catch (PDOException $e){
+				if (substr($e->getCode(), 0, 2) == '42S') {
+					// Column doesn't exists is not an error. Try to get a property which does not exist is allowed
+				}
+				else if ($e->getCode() !== '00000'){ 
+					throw new core_kernel_persistence_hardsql_Exception("Unable to get property (single) values for {$resource->uriResource} in {$table} : " .$e->getMessage());
+				}
+			}
 		}
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B end
@@ -395,33 +395,36 @@ class core_kernel_persistence_hardsql_Resource
 				}
 			}
 
-			$query = 'INSERT INTO "'.$tableName.'Props"
-        		("instance_id", "property_uri", "property_value", "property_foreign_uri", "l_language") 
-        		VALUES (?, ?, ?, ?, ?)';
-			$result	= $dbWrapper->exec($query, array(
-				$instanceId,
-				$property->uriResource,
-				$propertyValue,
-				$propertyForeignUri,
-				$lang
-			));
-			if($dbWrapper->errorCode() !== '00000'){
-				throw new core_kernel_persistence_hardsql_Exception("Unable to set property (multiple) Value for the instance {$resource->uriResource} in {$tableName} : " .$dbWrapper->errorMessage());
-			}else{
+			try{
+				$query = 'INSERT INTO "'.$tableName.'Props"
+	        		("instance_id", "property_uri", "property_value", "property_foreign_uri", "l_language") 
+	        		VALUES (?, ?, ?, ?, ?)';
+				$result	= $dbWrapper->exec($query, array(
+					$instanceId,
+					$property->uriResource,
+					$propertyValue,
+					$propertyForeignUri,
+					$lang
+				));
 				$returnValue = true;
 			}
-		} else {
-			 
-			$propertyName = core_kernel_persistence_hardapi_Utils::getShortName ($property);
-			$query = 'UPDATE "'.$tableName.'" SET "'.$propertyName.'" = ? WHERE id = ?';
-			$result	= $dbWrapper->exec($query, array(
-			$propertyValue != null ? $propertyValue : $propertyForeignUri
-			, $instanceId
-			));
-			if($dbWrapper->errorCode() !== '00000'){
-				throw new core_kernel_persistence_hardsql_Exception("Unable to set property (single) Value for the instance {$resource->uriResource} in {$tableName} : " .$dbWrapper->errorMessage());
-			}else{
+			catch (PDOException $e){
+				throw new core_kernel_persistence_hardsql_Exception("Unable to set property (multiple) Value for the instance {$resource->uriResource} in {$tableName} : " .$e->getMessage());
+			}
+		} 
+		else {
+			try{
+				$propertyName = core_kernel_persistence_hardapi_Utils::getShortName ($property);
+				$query = 'UPDATE "'.$tableName.'" SET "'.$propertyName.'" = ? WHERE id = ?';
+				$result	= $dbWrapper->exec($query, array(
+				$propertyValue != null ? $propertyValue : $propertyForeignUri
+				, $instanceId
+				));
+
 				$returnValue = true;
+			}
+			catch (PDOException $e){
+				throw new core_kernel_persistence_hardsql_Exception("Unable to set property (single) Value for the instance {$resource->uriResource} in {$tableName} : " .$e->getMessage());
 			}
 		}
 
@@ -511,13 +514,14 @@ class core_kernel_persistence_hardsql_Resource
 				}
 
 				if (!empty($queryProps)) {
-					$query = 'INSERT INTO "' . $tableName . 'Props" ("instance_id", "property_uri", "property_value", "property_foreign_uri", "l_language") VALUES ' . $queryProps;
-					$query = substr($query, 0, strlen($query) - 1);
-					$result = $dbWrapper->exec($query);
-					if ($dbWrapper->errorCode() !== '00000') {
-						throw new core_kernel_persistence_hardsql_Exception("Unable to set properties (multiple) Value for the instance {$resource->uriResource} in {$tableName} : " . $dbWrapper->errorMessage());
-					} else {
+					try{
+						$query = 'INSERT INTO "' . $tableName . 'Props" ("instance_id", "property_uri", "property_value", "property_foreign_uri", "l_language") VALUES ' . $queryProps;
+						$query = substr($query, 0, strlen($query) - 1);
+						$result = $dbWrapper->exec($query);
 						$returnValue = true;
+					}
+					catch (PDOException $e){
+						throw new core_kernel_persistence_hardsql_Exception("Unable to set properties (multiple) Value for the instance {$resource->uriResource} in {$tableName} : " . $e->getMessage());
 					}
 				}
 
@@ -533,11 +537,13 @@ class core_kernel_persistence_hardsql_Resource
 						$variables[] = $value;
 					}
 					$variables[] = $instanceId;
-					$result = $dbWrapper->exec($query, $variables);
-					if ($dbWrapper->errorCode() !== '00000') {
-						throw new core_kernel_persistence_hardsql_Exception("Unable to set properties (single) Value for the instance {$resource->uriResource} in {$tableName} : " . $dbWrapper->errorMessage());
-					} else {
+					
+					try{
+						$result = $dbWrapper->exec($query, $variables);
 						$returnValue = true;
+					}
+					catch (PDOException $e){
+						throw new core_kernel_persistence_hardsql_Exception("Unable to set properties (single) Value for the instance {$resource->uriResource} in {$tableName} : " . $e->getMessage());
 					}
 				}
 			}
@@ -644,11 +650,12 @@ class core_kernel_persistence_hardsql_Resource
                                         $query .= " AND ( {$additionalCondition} ) ";
                                 }
 
-                                $result	= $dbWrapper->exec($query);
-                                if($dbWrapper->errorCode() !== '00000'){
-                                        throw new core_kernel_persistence_hardsql_Exception("Unable to delete property values (multiple) for the instance {$resource->uriResource} : " .$dbWrapper->errorMessage());
-                                } else {
-                                        $returnValue = true;
+                                try{
+	                                $result	= $dbWrapper->exec($query);
+	                                $returnValue = true;
+                                }
+                                catch (PDOException $e){
+                                	throw new core_kernel_persistence_hardsql_Exception("Unable to delete property values (multiple) for the instance {$resource->uriResource} : " .$e->getMessage());
                                 }
                         }
 		} else {
@@ -681,17 +688,12 @@ class core_kernel_persistence_hardsql_Resource
 				$query .= " AND ( {$additionalCondition} ) ";
 			}
 			
-			// Not supported by postgresql
-			//$query .= " LIMIT 1";
-			
-			//slow!!!
-			$result	= $dbWrapper->exec($query, array(
-				$resource->uriResource
-			));
-			if($dbWrapper->errorCode() !== '00000'){
-				throw new core_kernel_persistence_hardsql_Exception("Unable to delete property values (single) for the instance {$resource->uriResource} : " .$dbWrapper->errorMessage());
-			} else {
+			try{
+				$result	= $dbWrapper->exec($query, array($resource->uriResource));
 				$returnValue = true;
+			}
+			catch (PDOException $e){
+				throw new core_kernel_persistence_hardsql_Exception("Unable to delete property values (single) for the instance {$resource->uriResource} : " .$e->getMessage());
 			}
 		}
 
@@ -761,14 +763,13 @@ class core_kernel_persistence_hardsql_Resource
                                         $query .= " AND ( {$additionalCondition} ) ";
                                 }
 
+                                try{
                                 $result	= $dbWrapper->exec($query);
-                                if($dbWrapper->errorCode() !== '00000'){
-                                        throw new core_kernel_persistence_hardsql_Exception("Unable to delete property values (multiple) for the instance {$resource->uriResource} : " .$dbWrapper->errorMessage());
-                                } else {
-                                        //var_dump($dbWrapper->dbConnector->Affected_Rows());
-                                        $returnValue = true;
+                                $returnValue = true;
                                 }
-                        
+                                catch (PDOException $e){
+                                	throw new core_kernel_persistence_hardsql_Exception("Unable to delete property values (multiple) for the instance {$resource->uriResource} : " .$e->getMessage());
+                                }
                         }
 		}
 
@@ -912,11 +913,13 @@ class core_kernel_persistence_hardsql_Resource
 				$insertPropEmptyQuery = 'INSERT INTO "'.$tableName.'Props" ("property_uri", "l_language", "instance_id") VALUES (?,?,?)';
 
 				//get the rows to duplicate
-				$propsQuery = 'SELECT * FROM "'.$tableName.'Props" WHERE "instance_id" = ? ';
-				$propsQuery .= empty($excludedPropertyList)?'':' AND "property_uri" NOT IN ('.$excludedPropertyList.') ';
-				$propsResult = $dbWrapper->query($propsQuery, array($instanceId));
-				if($propsResult->errorCode() !== '00000'){
-					throw new core_kernel_persistence_hardsql_Exception("Unable to duplicate the resource {$resource->uriResource} : " .$dbWrapper->errorMessage());
+				try{
+					$propsQuery = 'SELECT * FROM "'.$tableName.'Props" WHERE "instance_id" = ? ';
+					$propsQuery .= empty($excludedPropertyList)?'':' AND "property_uri" NOT IN ('.$excludedPropertyList.') ';
+					$propsResult = $dbWrapper->query($propsQuery, array($instanceId));
+				}
+				catch (PDOException $e){
+					throw new core_kernel_persistence_hardsql_Exception("Unable to duplicate the resource {$resource->uriResource} : " .$e->getMessage());
 				}
 				
 				while($row = $propsResult->fetch()){
@@ -1066,15 +1069,17 @@ class core_kernel_persistence_hardsql_Resource
         $queries[] = 'DELETE FROM "'.$tableName.'Props" WHERE "instance_id" = \''.$resourceId.'\'';
 		
 		foreach ($queries as $query) {
-			$result = $dbWrapper->exec($query);
-			if($dbWrapper->errorCode() !== '00000'){
-				throw new core_kernel_persistence_hardsql_Exception("Unable to delete resource ({$resource->uriResource}) ;".$dbWrapper->errorMessage());
+			try{
+				$result = $dbWrapper->exec($query);
+				if ($result === false){
+					$returnValue = false;
+					break;
+				}else{
+					$returnValue = true;
+				}
 			}
-			if ($result===false){
-				$returnValue = false;
-				break;
-			}else{
-				$returnValue = true;
+			catch (PDOException $e){
+				throw new core_kernel_persistence_hardsql_Exception("Unable to delete resource ({$resource->uriResource}) ;".$e->getMessage());
 			}
 		}
 
@@ -1195,15 +1200,13 @@ class core_kernel_persistence_hardsql_Resource
 					AND ( "l_language" = ? OR "l_language" = \'\' ' . $defaultLg . ')
 				ORDER BY "property_uri"';
 
-			$result = $dbWrapper->query($query, array(
-				$resource->uriResource
-				, $property->uriResource
-				, $lang
-				));
-
-			if ($result->errorCode() !== '00000') {
-				throw new core_kernel_persistence_hardsql_Exception("Unable to get property (multiple) values for {$resource->uriResource} in {$table} : " . $dbWrapper->errorMessage());
+			try{
+				$result = $dbWrapper->query($query, array($resource->uriResource, $property->uriResource, $lang));
 			}
+			catch (PDOException $e){
+				throw new core_kernel_persistence_hardsql_Exception("Unable to get property (multiple) values for {$resource->uriResource} in {$table} : " . $e->getMessage());
+			}
+			
 			$currentPredicate = null;
 			while ($row = $result->fetch()) {
 
@@ -1218,16 +1221,10 @@ class core_kernel_persistence_hardsql_Resource
 		}
 
 		if (!empty($propertiesMain)) {
-			$query = 'SELECT ' . $propertiesMain . ' FROM "' . $table . '" WHERE "uri" = ?';
-			$result = $dbWrapper->query($query, array(
-				$resource->uriResource
-				));
-
-			if (substr($result->errorCode(), 0, 2) == '42S') {
-				// Column doesn't exists is not an error. Try to get a property which does not exist is allowed
-			} else if ($result->errorCode() !== '00000') {
-				throw new core_kernel_persistence_hardsql_Exception("Unable to get property (single) values for {$resource->uriResource} in {$table} : " . $dbWrapper->errorMessage());
-			} else {
+			try{
+				$query = 'SELECT ' . $propertiesMain . ' FROM "' . $table . '" WHERE "uri" = ?';
+				$result = $dbWrapper->query($query, array($resource->uriResource));
+	
 				while ($row = $result->fetch()) {
 					foreach ($propertyIndexes as $propertyIndex => $property) {
 						$returnValue[$property->uriResource] = array();
@@ -1236,6 +1233,13 @@ class core_kernel_persistence_hardsql_Resource
 							$returnValue[$property->uriResource][] = common_Utils::isUri($value) ? new core_kernel_classes_Resource($value) : new core_kernel_classes_Literal($value);
 						}
 					}
+				}
+			}
+			catch (PDOException $e){
+				if (substr($e->getCode(), 0, 2) == '42S') {
+					// Column doesn't exists is not an error. Try to get a property which does not exist is allowed
+				} else if ($e->getCode() !== '00000') {
+					throw new core_kernel_persistence_hardsql_Exception("Unable to get property (single) values for {$resource->uriResource} in {$table} : " . $e->getMessage());
 				}
 			}
 		}
@@ -1289,17 +1293,15 @@ class core_kernel_persistence_hardsql_Resource
 		$resourceToTableId = core_kernel_persistence_hardsql_Utils::getResourceToTableId ($resource);
 
 		// Associate the resource with the class
-		$query = 'INSERT INTO "resource_has_class" ("resource_id", "class_id") VALUES (?,?)';
-		$result	= $dbWrapper->exec($query, array(
-		$resourceToTableId,
-		$classToTableId
-		));
-		if($dbWrapper->errorCode() !== '00000'){
-			throw new core_kernel_persistence_hardsql_Exception("Unable to associate a class {$class->uriResource} to a resource {$resource->uriResource} : " .$dbWrapper->errorMessage());
-		} else {
+		try{
+			$query = 'INSERT INTO "resource_has_class" ("resource_id", "class_id") VALUES (?,?)';
+			$result	= $dbWrapper->exec($query, array($resourceToTableId, $classToTableId));
 			$returnValue = true;
 		}
-		 
+		catch (PDOException $e){
+			throw new core_kernel_persistence_hardsql_Exception("Unable to associate a class {$class->uriResource} to a resource {$resource->uriResource} : " . $e->getMessage());
+		}
+		
 		// Check if the association class to table has not yet been referenced
 		foreach (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations ($class) as $classLocation){
 			if ($classLocation['uri'] == $class->uriResource && $classLocation['table']==$resourceLocation){
@@ -1309,16 +1311,9 @@ class core_kernel_persistence_hardsql_Resource
 
 		// Associate the class with the table
 		$query = 'INSERT INTO "class_to_table" ("uri", "table") VALUES (?,?)';
-		$result	= $dbWrapper->exec($query, array(
-		$class->uriResource,
-		$resourceLocation
-		));
-		if($dbWrapper->errorCode() !== '00000'){
-			throw new core_kernel_persistence_hardsql_Exception("Unable to associate a class {$class->uriResource} to a table {$resourceLocation} : " .$dbWrapper->errorMessage());
-		} else {
-			$returnValue = true;
-		}
-
+		$result	= $dbWrapper->exec($query, array($class->uriResource, $resourceLocation));
+		
+		$returnValue = true;
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 end
 
         return (bool) $returnValue;
@@ -1342,23 +1337,20 @@ class core_kernel_persistence_hardsql_Resource
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$instanceId = core_kernel_persistence_hardsql_Utils::getInstanceId ($resource);
 		$classId = core_kernel_persistence_hardsql_Utils::getClassId ($class, $resource);
-
-		$query = 'DELETE "resource_has_class".*
-        	FROM "resource_has_class" 
-        	INNER JOIN "class_to_table" ON "resource_has_class"."class_id" = "class_to_table"."id"
-    		INNER JOIN "resource_to_table" ON "resource_to_table"."id" = "resource_has_class"."resource_id"
-        	WHERE "resource_to_table"."uri" = ?
-        	AND "class_to_table"."uri" = ?';
-		$result	= $dbWrapper->exec($query, array(
-		$resource->uriResource,
-		$class->uriResource
-		));
-		if($dbWrapper->errorCode() !== '00000'){
-			throw new core_kernel_persistence_hardsql_Exception("Unable to remove the type {$class->uriResource} for {$resource->uriResource} : " .$dbWrapper->errorMessage());
-		} else {
+		
+		try{
+			$query = 'DELETE "resource_has_class".*
+	        	FROM "resource_has_class" 
+	        	INNER JOIN "class_to_table" ON "resource_has_class"."class_id" = "class_to_table"."id"
+	    		INNER JOIN "resource_to_table" ON "resource_to_table"."id" = "resource_has_class"."resource_id"
+	        	WHERE "resource_to_table"."uri" = ?
+	        	AND "class_to_table"."uri" = ?';
+			$result	= $dbWrapper->exec($query, array($resource->uriResource,$class->uriResource));
 			$returnValue = true;
 		}
-
+		catch (PDOException $e){
+			throw new core_kernel_persistence_hardsql_Exception("Unable to remove the type {$class->uriResource} for {$resource->uriResource} : " .$e->getMessage());
+		}
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000154C end
 
         return (bool) $returnValue;

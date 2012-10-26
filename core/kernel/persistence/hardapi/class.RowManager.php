@@ -159,9 +159,6 @@ class core_kernel_persistence_hardapi_RowManager
 
 			// Insert rows of the main table
 			$dbWrapper->exec($query);
-			if($dbWrapper->errorCode() !== '00000'){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to insert the rows : " .$dbWrapper->errorMessage());
-			}
 			
 			//get the ids of the inserted rows
 			$uriList = '';
@@ -193,9 +190,6 @@ class core_kernel_persistence_hardapi_RowManager
 					$multiQuery = 'SELECT "object", "l_language" FROM "statements" WHERE "subject" = ? AND "predicate" = ?';
 					$multiResult = $dbWrapper->query($multiQuery, array($row['uri'], $multiplePropertyUri));
 					
-					if($multiResult->errorCode() !== '00000'){
-						throw new core_kernel_persistence_hardapi_Exception("Unable to select foreign data for the property {$multiplePropertyUri} : " .$dbWrapper->errorMessage());
-					}
 
 					while ($t = $multiResult->fetch()){
 						if(!(empty($queryRows))){
@@ -218,9 +212,6 @@ class core_kernel_persistence_hardapi_RowManager
 						("instance_id", "property_uri", "property_value", "property_foreign_uri", "l_language") VALUES ' . $queryRows;
 					
 					$multiplePropertiesResult = $dbWrapper->exec($queryMultiple);
-					if($dbWrapper->errorCode() !== '00000'){
-						throw new core_kernel_persistence_hardapi_Exception("Unable to insert multiple properties for table {$this->table}Props : " .$dbWrapper->errorMessage(). "\n${queryMultiple}");
-					}
 				}
 			}
 		}
@@ -266,10 +257,7 @@ class core_kernel_persistence_hardapi_RowManager
 					$uriList = substr($uriList, 0, strlen($uriList) -1);
 				$query = 'SELECT "id", "uri" FROM "'.$column['foreign'].'" WHERE uri IN ('.$uriList.')';
 				$result = $dbWrapper->query($query);
-				if($result->errorCode() !== '00000'){
-					if(DEBUG_MODE) echo $query;
-					throw new core_kernel_persistence_hardapi_Exception("Unable to select foreign data : " .$dbWrapper->errorMessage());
-				}
+
 				$foreign = array();
 				while($r = $result->fetch()){
 					

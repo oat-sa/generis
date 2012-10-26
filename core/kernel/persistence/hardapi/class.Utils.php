@@ -279,12 +279,15 @@ class core_kernel_persistence_hardapi_Utils
         
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $selectResult = $dbWrapper->query($selectQuery);
-        if ($selectResult->errorCode() !== '00000') {
-                throw new core_kernel_persistence_hardsql_Exception("Unable to get the id of the resource {$resource->uriResource} in the table '{$tableName}': " . $dbWrapper->errorMessage());
+        try{
+	        while ($row = $selectResult->fetch()) {
+	                $returnValue = $row['id'];
+	                $selectResult->closeCursor();
+	                break;
+	        }
         }
-        while ($row = $selectResult->fetch()) {
-                $returnValue = $row['id'];
-                break;
+        catch (PDOException $e){
+        	throw new core_kernel_persistence_hardsql_Exception("Unable to get the id of the resource {$resource->uriResource} in the table '{$tableName}': " . $e->getMessage());
         }
         // section 127-0-1-1--4d72422d:1316c1e6091:-8000:000000000000162E end
 
