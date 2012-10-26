@@ -1,10 +1,7 @@
 <?php
 
 
-// require_once dirname(__FILE__).'/../common/common.php';
-require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
-require_once INCLUDES_PATH.'/simpletest/autorun.php';
-
+require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 
 /**
@@ -20,7 +17,7 @@ class CreateInstanceTestCase extends UnitTestCase {
 	
 	public function setUp(){
 
-	    TestRunner::initTest();
+        GenerisTestRunner::initTest();
 	    $classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDF_CLASS), 'TestClass');
 	    $this->class = new core_kernel_classes_Class($classres->getUri());
 	    $this->assertIsA($this->class, 'core_kernel_classes_Class');

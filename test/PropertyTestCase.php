@@ -1,7 +1,5 @@
 <?php
-
-require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
-require_once INCLUDES_PATH.'/simpletest/autorun.php';
+require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 
 class PropertyTestCase extends UnitTestCase{
@@ -9,7 +7,7 @@ class PropertyTestCase extends UnitTestCase{
 	protected $object;
 	
 	public function setUp(){
-		TestRunner::initTest();
+        GenerisTestRunner::initTest();
 		$this->object = new core_kernel_classes_Property(PROPERTY_WIDGET);
 	}
 	

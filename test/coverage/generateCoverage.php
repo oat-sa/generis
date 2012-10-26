@@ -1,13 +1,12 @@
 <?php
-require_once dirname(__FILE__) . '/../../../tao/test/TestRunner.php';
-
+require_once dirname(__FILE__) . '/../GenerisTestRunner.php';
 $testSuite = new TestSuite('Generis unit tests');
 
 //get the test into each extensions
 $tests = array_merge(
-	TestRunner::getTests(array('generis'))
-	,TestRunner::findTest(dirname(__FILE__).'/../common')	
-	,TestRunner::findTest(dirname(__FILE__).'/../rules')
+    GenerisTestRunner::findTest((dirname(__FILE__).'/../'))
+	,GenerisTestRunner::findTest(dirname(__FILE__).'/../common')
+	,GenerisTestRunner::findTest(dirname(__FILE__).'/../rules')
 );
 
 //create the test sutie

@@ -1,9 +1,7 @@
 <?php
 
 error_reporting(E_ALL);
-require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
-require_once INCLUDES_PATH.'/simpletest/autorun.php';
-
+require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 /**
  * Test class for Collection.
@@ -28,7 +26,7 @@ class CollectionTestCase extends UnitTestCase {
      *
      */
     public function setUp(){
-        TestRunner::initTest();
+        GenerisTestRunner::initTest();
 		$this->object = new common_Collection(new common_Object(__METHOD__));
 		$this->toto =  new core_kernel_classes_Literal('toto',__METHOD__);
 		$this->tata =  new core_kernel_classes_Literal('tata',__METHOD__);

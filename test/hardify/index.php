@@ -1,6 +1,6 @@
 <?php
 error_reporting(E_ALL);
-require_once dirname(__FILE__) . '/../../../tao/test/TestRunner.php';
+require_once dirname(__FILE__) . '/../../../tao/test/TaoTestRunner.php';
 include_once dirname(__FILE__) . '/../../../tao/includes/raw_start.php';
 
 Bootstrap::loadConstants ('tao');
@@ -28,15 +28,15 @@ $testSuite->addFile(dirname(__FILE__) . '/../UtilsTestCase.php');
 
 //load other extensions' test cases
 $tests = array_merge(
-	TestRunner::getTests(array('tao'))
-	, TestRunner::getTests(array('taoItems'))
-	, TestRunner::getTests(array('taoTests'))
-	, TestRunner::getTests(array('taoSubjects'))
-	, TestRunner::getTests(array('taoResults'))
-	, TestRunner::getTests(array('taoDelivery'))
-	, TestRunner::getTests(array('taoGroups'))
-	, TestRunner::getTests(array('wfEngine'))
-	, TestRunner::getTests(array('filemanager'))
+	TaoTestRunner::getTests(array('tao'))
+	, TaoTestRunner::getTests(array('taoItems'))
+	, TaoTestRunner::getTests(array('taoTests'))
+	, TaoTestRunner::getTests(array('taoSubjects'))
+	, TaoTestRunner::getTests(array('taoResults'))
+	, TaoTestRunner::getTests(array('taoDelivery'))
+	, TaoTestRunner::getTests(array('taoGroups'))
+	, TaoTestRunner::getTests(array('wfEngine'))
+	, TaoTestRunner::getTests(array('filemanager'))
 );
 foreach($tests as $i => $testCase){	
 	//TODO disable for release, remove after

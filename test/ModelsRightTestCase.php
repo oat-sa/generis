@@ -1,12 +1,11 @@
 <?php
-require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
-require_once INCLUDES_PATH.'/simpletest/autorun.php';
+require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 
 class ModelsRightTestCase extends UnitTestCase {
 	
 	public function setUp(){
-	    TestRunner::initTest();
+        GenerisTestRunner::initTest();
 	}
 	
 	public function testRightModels(){

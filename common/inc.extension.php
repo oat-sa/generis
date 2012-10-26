@@ -32,16 +32,10 @@ if(function_exists("date_default_timezone_set") && defined('TIME_ZONE')){
 $GLOBALS['default_lang']	= 'EN';
 
 require_once dirname(__FILE__)	. '/ext/class.ClassLoader.php';
-require_once INCLUDES_PATH		. '/ClearFw/clearbricks/common/_main.php';
-
-$__generis_autoload['filemanager']			= INCLUDES_PATH.'/ClearFw/clearbricks/filemanager/class.filemanager.php';
-$__generis_autoload['fileZip']				= INCLUDES_PATH.'/ClearFw/clearbricks/zip/class.zip.php';
-$__generis_autoload['fileUnzip']			= INCLUDES_PATH.'/ClearFw/clearbricks/zip/class.unzip.php';
+require_once INCLUDES_PATH		. '/ClearFw/clearbricks/common/lib.l10n.php';
 
 
 $classLoader = common_ext_ClassLoader::singleton();
-$classLoader->setFiles($__generis_autoload);
-$classLoader->addPackage( INCLUDES_PATH.'/ClearFw/log/');
 $classLoader->addPackage(DIR_CORE);
 $classLoader->addPackage(DIR_CORE_HELPERS);
 $classLoader->addPackage(DIR_CORE_UTILS);

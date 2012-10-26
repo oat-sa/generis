@@ -1,11 +1,13 @@
 <?php
 error_reporting(E_ALL);
-require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
+require_once dirname(__FILE__).'/../common/inc.extension.php';
+require_once INCLUDES_PATH.'/simpletest/autorun.php';
+require_once INCLUDES_PATH.'/ClearFw/core/simpletestRunner/_main.php';
 $testSuite = new TestSuite('Generis unit tests');
 
 //get the test into each extensions
 $tests = array_merge(
-	TestRunner::getTests(array('generis'))
+    TestRunner::findTest(dirname(__FILE__))
 	,TestRunner::findTest(dirname(__FILE__).'/common')
 	,TestRunner::findTest(dirname(__FILE__).'/rules')
 );

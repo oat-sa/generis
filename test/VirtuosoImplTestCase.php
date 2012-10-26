@@ -1,14 +1,13 @@
 <?php
 
-require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
-require_once INCLUDES_PATH.'/simpletest/autorun.php';
+require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 
 class VirtuosoImplTestCase extends UnitTestCase {
         
         public function setUp(){
-                TestRunner::initTest();
-                core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_VIRTUOSO);
+            GenerisTestRunner::initTest();
+            core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_VIRTUOSO);
 	}
         
         public function __testInstallTAO(){
@@ -26,7 +25,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
 //                }
                 
                 $extensionManager = common_ext_ExtensionsManager::singleton();
-		$extensions = $extensionManager->getInstalledExtensions();
+		        $extensions = $extensionManager->getInstalledExtensions();
                 $tmpLocalFiles = array();
                 foreach($extensions as $extensionId => $extension){
 			if($extensionId == 'generis') continue; 	//generis is the root and has been installed above 

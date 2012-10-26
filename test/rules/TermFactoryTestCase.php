@@ -1,6 +1,6 @@
 <?php
 error_reporting(E_ALL);
-require_once dirname(__FILE__) . '/../../../tao/test/TestRunner.php';
+require_once dirname(__FILE__) . '/../../../tao/test/TaoTestRunner.php';
 require_once INCLUDES_PATH.'/simpletest/autorun.php';
 
 
@@ -8,7 +8,7 @@ class TermFactoryTestCase extends UnitTestCase {
 
 
 	public function setUp(){
-		TestRunner::initTest();
+		TaoTestRunner::initTest();
 	}
 	
 	public function testCreateConst(){

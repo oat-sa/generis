@@ -1,14 +1,13 @@
 <?php
 
-require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
-require_once INCLUDES_PATH.'/simpletest/autorun.php';
+require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 
 class ExceptionTestCase extends UnitTestCase {
     
     public function setUp()
     {
-	    TestRunner::initTest();
+        GenerisTestRunner::initTest();
 	}
     
     // Method used in the testInvalidArgumentTypeException

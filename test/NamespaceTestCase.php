@@ -1,8 +1,5 @@
 <?php
-
-require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
-require_once INCLUDES_PATH.'/simpletest/autorun.php';
-
+require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 /**
  * Test of the common_ext_Namespace and common_ext_NamesapceManager
@@ -14,7 +11,7 @@ require_once INCLUDES_PATH.'/simpletest/autorun.php';
 class NamespaceTestCase extends UnitTestCase {
 	
 	public function setUp(){
-	    TestRunner::initTest();
+        GenerisTestRunner::initTest();
 	}
 
 	/**

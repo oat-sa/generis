@@ -1,12 +1,12 @@
 <?php
-require_once dirname(__FILE__) . '/../../../tao/test/TestRunner.php';
+require_once dirname(__FILE__) . '/../../../tao/test/TaoTestRunner.php';
 require_once INCLUDES_PATH.'/simpletest/autorun.php';
 
 
 class UnhardifyTestCase extends UnitTestCase {
 
 	public function setUp(){
-		TestRunner::initTest();
+		TaoTestRunner::initTest();
 	}
 
 	public function testHardify(){

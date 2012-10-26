@@ -1,7 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
-require_once INCLUDES_PATH.'/simpletest/autorun.php';
+require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 
 
@@ -11,7 +10,7 @@ class ResourceTestCase extends UnitTestCase{
 	
 	public function setUp()
 	{
-		TestRunner::initTest();
+        GenerisTestRunner::initTest();
 
 		$this->object = new core_kernel_classes_Resource(GENERIS_BOOLEAN);
 		

@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
+require_once dirname(__FILE__) . '/../../tao/test/TaoTestRunner.phpphp';
 include_once dirname(__FILE__) . '/../includes/raw_start.php';
 
 class BuildTestEnvironmentTestCase extends UnitTestCase {
@@ -37,7 +37,7 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 	
 	public function setUp(){
 		
-		TestRunner::initTest();
+		TaoTestRunner::initTest();
 		
 		error_reporting(E_ALL);
 		

@@ -1,6 +1,6 @@
 <?php
 error_reporting(E_ALL);
-require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
+require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 
 
@@ -20,7 +20,7 @@ class SubscriptionsServiceTestCase extends UnitTestCase {
 	private $subscriptionResoourceUrl = 'http://www.tao.lu/Ontologies/TAOItem.rdf#Item';
 
 	public function setUp(){
-		TestRunner::initTest();
+        GenerisTestRunner::initTest();
 
 	}
 

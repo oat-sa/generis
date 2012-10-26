@@ -2,8 +2,7 @@
 
 error_reporting(E_ALL);
 
-require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
-require_once INCLUDES_PATH.'/simpletest/autorun.php';
+require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 	
 class UserServiceTestCase extends UnitTestCase {
@@ -11,7 +10,7 @@ class UserServiceTestCase extends UnitTestCase {
 	protected $service;
 	
 	public function setUp(){
-		TestRunner::initTest();
+        GenerisTestRunner::initTest();
 		$this->service = core_kernel_users_Service::singleton();
 	}
 

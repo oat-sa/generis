@@ -1,9 +1,7 @@
 <?php
 
 
-// require_once dirname(__FILE__).'/../common/common.php';
-require_once dirname(__FILE__) . '/../../tao/test/TestRunner.php';
-require_once INCLUDES_PATH.'/simpletest/autorun.php';
+require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 
 
@@ -20,7 +18,7 @@ class ClassTestCase extends UnitTestCase {
 	
 	public function setUp(){
 
-	    TestRunner::initTest();
+        GenerisTestRunner::initTest();
 
 		$this->object = new core_kernel_classes_Class(RDF_RESOURCE);
 		$this->object->debug = __METHOD__;
