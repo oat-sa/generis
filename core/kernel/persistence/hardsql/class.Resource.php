@@ -231,7 +231,7 @@ class core_kernel_persistence_hardsql_Resource
 				}
 			}
 			catch (PDOException $e){
-				if (substr($e->getCode(), 0, 2) == '42S') {
+				if (substr($e->getCode(), 0, 3) == '42S') {
 					// Column doesn't exists is not an error. Try to get a property which does not exist is allowed
 				}
 				else if ($e->getCode() !== '00000'){ 
