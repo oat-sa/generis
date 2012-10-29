@@ -31,6 +31,10 @@ define('RDFS_LITERAL',							'http://www.w3.org/2000/01/rdf-schema#Literal', tru
 define('RDFS_SEEALSO', 							'http://www.w3.org/2000/01/rdf-schema#seeAlso', true);
 define('RDFS_DATATYPE', 						'http://www.w3.org/2000/01/rdf-schema#Datatype', true);
 define('RDFS_STATEMENT', 						'http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement', true);
+define('RDFS_CLASS',							'http://www.w3.org/2000/01/rdf-schema#Class', true);
+define('RDFS_SUBCLASSOF',						'http://www.w3.org/2000/01/rdf-schema#subClassOf', true);
+define('RDFS_DOMAIN',							'http://www.w3.org/2000/01/rdf-schema#domain', true);
+define('RDFS_RESOURCE',							'http://www.w3.org/2000/01/rdf-schema#Resource', true);
 
 #generis
 define('GENERIS_NS',							'http://www.tao.lu/Ontologies/generis.rdf', true ) ;
