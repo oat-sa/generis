@@ -682,7 +682,8 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 							
 							foreach($rows as $row){
 								$query = "INSERT INTO resource_has_class (resource_id, class_id) VALUES (?,?)";
-								$dbWrapper->exec($query, array($row['id'], $classLocation['id']));
+								$sth = $dbWrapper->prepare($query);
+								$sth->execute(array($row['id'], $classLocation['id']));
 							}
 						}
 					}
@@ -952,7 +953,6 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 						}
 					}else{
 						$returnValue = array_key_exists($property->uriResource, self::$_properties);
-//                                                var_dump($property->uriResource, $returnValue);
 					}
 					break;
 					
@@ -1020,12 +1020,13 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
         $query = "SELECT DISTINCT object FROM statements 
-        			WHERE predicate = '".RDF_TYPE."' 
-        			AND object != '{$class->uriResource}' 
+        			WHERE predicate = ? 
+        			AND object != ?
          			AND subject IN (SELECT subject FROM statements 
-        						WHERE predicate = '".RDF_TYPE."' 
-        						AND object='{$class->uriResource}')";
-        $result = $dbWrapper->query($query);
+        						WHERE predicate = ? 
+        						AND object = ?)";
+        $result = $dbWrapper->prepare($query);
+        $result->execute(array(RDF_TYPE, $class->uriResource, RDF_TYPE, $class->uriResource));
 
 		$types = array();
         while($row = $result->fetch()){
