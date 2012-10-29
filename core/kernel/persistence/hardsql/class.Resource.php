@@ -1201,7 +1201,7 @@ class core_kernel_persistence_hardsql_Resource
 				ORDER BY "property_uri"';
 
 			try{
-				$result = $dbWrapper->query($query, array($resource->uriResource, $property->uriResource, $lang));
+				$result = $dbWrapper->query($query, array($resource->uriResource, $lang));
 			}
 			catch (PDOException $e){
 				throw new core_kernel_persistence_hardsql_Exception("Unable to get property (multiple) values for {$resource->uriResource} in {$table} : " . $e->getMessage());
@@ -1209,7 +1209,6 @@ class core_kernel_persistence_hardsql_Resource
 			
 			$currentPredicate = null;
 			while ($row = $result->fetch()) {
-
 				if ($currentPredicate != $row['property_uri']) {
 					$currentPredicate = $row['property_uri'];
 					$returnValue[$currentPredicate] = array();
