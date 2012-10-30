@@ -139,7 +139,7 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 		
 		try{
 
-			$authoringService = wfEngine_models_classes_ProcessAuthoringService::singleton();
+			$authoringService = wfAuthoring_models_classes_ProcessService::singleton();
 			$processExecutionService = wfEngine_models_classes_ProcessExecutionService::singleton();
 			$activityExecutionService = wfEngine_models_classes_ActivityExecutionService::singleton();
 
@@ -276,7 +276,7 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 			$deliveryProcess = new core_kernel_classes_Resource($this->processDefinitionUri);
 			if($deliveryProcess->hasType(new core_kernel_classes_Class(CLASS_PROCESS))){
 				$activityNumber = 0;
-				$processAuthoringService = wfEngine_models_classes_ProcessAuthoringService::singleton();
+				$processAuthoringService = wfAuthoring_models_classes_ProcessService::singleton();
 				$activityNumber = count($processAuthoringService->getActivitiesByProcess($deliveryProcess));
 				
 				if($activityNumber){
@@ -285,7 +285,7 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 					$this->currentUser->removeType($roleSubjectClass);
 					$this->currentUser->setType($roleSubjectClass);
 					
-					$authoringService = wfEngine_models_classes_ProcessAuthoringService::singleton();
+					$authoringService = wfAuthoring_models_classes_ProcessService::singleton();
 					$processExecutionService = wfEngine_models_classes_ProcessExecutionService::singleton();
 					$activityExecutionService = wfEngine_models_classes_ActivityExecutionService::singleton();
 			
