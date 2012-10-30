@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Oct 30 15:44:24 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Oct 30 16:50:06 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -5278,7 +5278,7 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                       </UML:Classifier.feature>
                     </UML:Class>
                     <UML:Class xmi.id = '10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001B86'
-                      name = 'mysqlDbWrapper' visibility = 'public' isSpecification = 'false'
+                      name = 'MysqlDbWrapper' visibility = 'public' isSpecification = 'false'
                       isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
                       <UML:GeneralizableElement.generalization>
                         <UML:Generalization xmi.idref = '10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001B87'/>
@@ -34780,7 +34780,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       bold="false"
       textsize="10"
       justification="Center"
-    >core::kernel::classes::mysqlDbWrapper</text>
+    >core::kernel::classes::MysqlDbWrapper</text>
     <group name="Fig51.2"
          description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1457, 621, 376, 0]"
          href="10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001B86"
@@ -65267,7 +65267,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="41"
         y="362"
         width="704"
-        height="29"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
