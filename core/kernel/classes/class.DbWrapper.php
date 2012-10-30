@@ -137,7 +137,7 @@ abstract class core_kernel_classes_DbWrapper
 
         // section 10-13-1--31--647ec317:119141cd117:-8000:00000000000008F3 begin
 		if (!isset(self::$instance)) {
-			$className = 'core_kernel_classes_' . strtolower(SGBD_DRIVER) .'DbWrapper';
+			$className = 'core_kernel_classes_' . ucfirst(strtolower(SGBD_DRIVER)) .'DbWrapper';
             self::$instance = new $className();
 
         }
