@@ -64,7 +64,8 @@ class core_kernel_persistence_hardsql_Utils
     	$table = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource);
     	
     	try{
-	    	$query = 'SELECT "id" FROM "'.$table.'" WHERE uri= ? LIMIT 1';
+	    	$query = 'SELECT "id" FROM "'.$table.'" WHERE uri= ?';
+	    	$query = $dbWrapper->limitStatement($query, 1);
 	    	$result = $dbWrapper->query($query, array ($resource->uriResource));
 	  
 	    	if($row = $result->fetch()){

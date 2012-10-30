@@ -159,13 +159,15 @@ class core_kernel_persistence_smoothsql_Resource
         
     	// Select first
 		if($one){
-			$query .= ' ORDER BY "id" DESC LIMIT 0, 1';
+			$query .= ' ORDER BY "id" DESC';
+			$query = $dbWrapper->limitStatement($query, 0, 1);
 			$sth = $dbWrapper->prepare($query);
 			$result = $sth->execute(array($resource->uriResource, $property->uriResource, $lang));
 		}
 		// Select Last
 		else if($last){
-			$query .= ' ORDER BY "id" ASC LIMIT 0, 1';
+			$query .= ' ORDER BY "id" ASC';
+			$query = $dbWrapper->limitStatement($query, 0, 1);
 			$sth = $dbWrapper->prepare($query);
 			$result = $sth->execute(array($resource->uriResource, $property->uriResource, $lang));
 		}

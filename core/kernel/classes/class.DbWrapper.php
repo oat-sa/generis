@@ -4,7 +4,9 @@ error_reporting(E_ALL);
 
 /**
  * Simple utility class that allow you to wrap the database connector.
- * You can retrieve an instance evreywhere using the singleton.
+ * You can retrieve an instance evreywhere using the singleton method.
+ *
+ * This database wrapper uses PDO.
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
@@ -26,14 +28,17 @@ require_once('includes/adodb5/adodb.inc.php');
 
 /**
  * Simple utility class that allow you to wrap the database connector.
- * You can retrieve an instance evreywhere using the singleton.
+ * You can retrieve an instance evreywhere using the singleton method.
  *
+ * This database wrapper uses PDO.
+ *
+ * @abstract
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
-class core_kernel_classes_DbWrapper
+abstract class core_kernel_classes_DbWrapper
 {
     // --- ASSOCIATIONS ---
 
@@ -57,7 +62,7 @@ class core_kernel_classes_DbWrapper
     public $dbConnector = null;
 
     /**
-     * Short description of attribute nrQueries
+     * The number of queries executed by the wrapper since its instantiation.
      *
      * @access private
      * @var int
@@ -65,7 +70,8 @@ class core_kernel_classes_DbWrapper
     private $nrQueries = 0;
 
     /**
-     * Short description of attribute preparedExec
+     * States if the last statement executed by the wrapper was a prepared
+     * or not.
      *
      * @access public
      * @var boolean
@@ -73,7 +79,7 @@ class core_kernel_classes_DbWrapper
     public $preparedExec = false;
 
     /**
-     * Short description of attribute lastPreparedExecStatement
+     * The very last PDOStatement instance that was prepared by the wrapper.
      *
      * @access public
      * @var PDOStatement
@@ -81,7 +87,8 @@ class core_kernel_classes_DbWrapper
     public $lastPreparedExecStatement = null;
 
     /**
-     * Short description of attribute statements
+     * A prepared statement store used by the prepare() method to reuse
+     * at most.
      *
      * @access public
      * @var array
@@ -89,7 +96,8 @@ class core_kernel_classes_DbWrapper
     public $statements = array();
 
     /**
-     * Short description of attribute nrHits
+     * The number of statement reused in the statement store since the
+     * of the wrapper.
      *
      * @access private
      * @var int
@@ -97,7 +105,8 @@ class core_kernel_classes_DbWrapper
     private $nrHits = 0;
 
     /**
-     * Short description of attribute nrMisses
+     * The number of statements that could not be reused since the instantiation
+     * the wrapper.
      *
      * @access private
      * @var int
@@ -105,7 +114,7 @@ class core_kernel_classes_DbWrapper
     private $nrMisses = 0;
 
     /**
-     * Short description of attribute debug
+     * debug mode
      *
      * @access public
      * @var boolean
@@ -116,7 +125,7 @@ class core_kernel_classes_DbWrapper
 
     /**
      * Entry point.
-     * Enables you to retrieve staticly the DbWrapper instance
+     * Enables you to retrieve staticly the DbWrapper instance.
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
@@ -128,7 +137,8 @@ class core_kernel_classes_DbWrapper
 
         // section 10-13-1--31--647ec317:119141cd117:-8000:00000000000008F3 begin
 		if (!isset(self::$instance)) {
-            self::$instance = new self();
+			$className = 'core_kernel_classes_' . strtolower(SGBD_DRIVER) .'DbWrapper';
+            self::$instance = new $className();
 
         }
         $returnValue = self::$instance;
@@ -159,18 +169,12 @@ class core_kernel_classes_DbWrapper
 	        				 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 	        				 PDO::ATTR_EMULATE_PREPARES => false);
 	        
+	        $options = array_merge($options, $this->getExtraConfiguration());
+	        
 	       
 	        try{
 	        	$this->dbConnector = @new PDO($dsn, DATABASE_LOGIN, DATABASE_PASS, $options);
-	    	
-		        //specific code to execute for each sgbd
-		    	switch ($driver){
-		        	case 'mysql':
-		        		// enable ansi quotes to escape fieldname like it is mentionned in the standard with double qotes
-		       			$this->exec('SET SESSION SQL_MODE=\'ANSI_QUOTES\';');
-		       			break;
-		        }
-				
+	        	$this->afterConnect();	
 		        // We are connected. Get out of the loop.
 		        break;
 	        }
@@ -206,7 +210,7 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Short description of method __clone
+     * Will throw an exception. Singleton instances must not be cloned.
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -246,7 +250,7 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Returns the ammount of queries executed sofar
+     * Returns the ammount of queries executed so far.
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -264,7 +268,8 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Short description of method query
+     * Executes an SQL query on the storage engine. Should be used for SELECT
+     * only.
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -297,7 +302,8 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Short description of method exec
+     * Executes a query on the storage engine. Should be only used for INSERT,
+     * DELETE statements.
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -331,7 +337,7 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Short description of method prepare
+     * Creates a prepared PDOStatement.
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -354,7 +360,8 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Short description of method errorCode
+     * Returns the last error code generated by the wrapped PDO object. Please
+     * the PDOStatement::errorCode method for prepared statements.
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -377,7 +384,8 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Short description of method errorMessage
+     * Returns the last error message of the PDO object wrapped by this class.
+     * call PDOStatement::errorMessage for prepared statements.
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -412,29 +420,19 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Short description of method getTables
+     * Returns an array of string containting the names of the tables contained
+     * the currently selected database in the storage engine.
      *
+     * @abstract
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return array
      */
-    public function getTables()
-    {
-        $returnValue = array();
-
-        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B5B begin
-        $result = $this->query('SHOW TABLES');
-    	$returnValue = array();
-    	while ($row = $result->fetch(PDO::FETCH_NUM)){
-    		$returnValue[] = $row[0];
-    	}
-        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B5B end
-
-        return (array) $returnValue;
-    }
+    public abstract function getTables();
 
     /**
-     * Short description of method getStatement
+     * Get a statement in the statement store regarding the provided statement.
+     * it could not be found, NULL is returned.
      *
      * @access protected
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -464,7 +462,7 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Short description of method getStatementKey
+     * Get the key of a given statement stored in the statements store.
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -483,7 +481,7 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Short description of method incrementNrOfQueries
+     * Increments the number of queries executed so far.
      *
      * @access protected
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -497,7 +495,7 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Short description of method incrementNrOfHits
+     * Increment the number of hits in the statements store.
      *
      * @access protected
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -511,7 +509,7 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Short description of method getNrOfHits
+     * Returns the number of hits in the statements store.
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -529,7 +527,7 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Short description of method incrementNrOfMisses
+     * Increment the number of misses in the statements store.
      *
      * @access protected
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -543,7 +541,7 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Short description of method getNrOfMisses
+     * Returns the number of misses in the statements store.
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -561,7 +559,7 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Short description of method debug
+     * outputs a given statement in the logger.
      *
      * @access protected
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -577,6 +575,77 @@ class core_kernel_classes_DbWrapper
         // section 10-13-1-85-c41ef28:13a98403690:-8000:0000000000001B6D end
     }
 
-} /* end of class core_kernel_classes_DbWrapper */
+    /**
+     * Appends the correct LIMIT statement depending on the implementation of
+     * wrapper. For instance, limiting results in SQL statements are different
+     * mySQL and postgres.
+     *
+     * @abstract
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string statement The statement to limit
+     * @param  int lowerBound Limit lower bound.
+     * @param  int upperBound Limit upper bound.
+     * @return string
+     */
+    public abstract function limitStatement($statement, $lowerBound, $upperBound = 0);
+
+    /**
+     * Short description of method getExtraConfiguration
+     *
+     * @abstract
+     * @access protected
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return array
+     */
+    protected abstract function getExtraConfiguration();
+
+    /**
+     * The error code returned by PDO in when a table is not found in a query
+     * a given DBMS implementation.
+     *
+     * @abstract
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return string
+     */
+    public abstract function getTableNotFoundErrorCode();
+
+    /**
+     * Returns the error code corresponding to a column not found in a query
+     * on a given DBMS implementation.
+     *
+     * @abstract
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return string
+     */
+    public abstract function getColumnNotFoundErrorCode();
+
+    /**
+     * Should contain any instructions that must be executed right after the
+     * to a given DBMS implementation.
+     *
+     * @abstract
+     * @access protected
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return void
+     */
+    protected abstract function afterConnect();
+
+    /**
+     * Short description of method offsetStatement
+     *
+     * @abstract
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string statement
+     * @param  int limit
+     * @param  int offset
+     * @return string
+     */
+    public abstract function offsetStatement($statement, $limit, $offset);
+
+} /* end of abstract class core_kernel_classes_DbWrapper */
 
 ?>

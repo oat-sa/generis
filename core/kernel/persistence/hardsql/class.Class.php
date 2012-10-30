@@ -203,7 +203,8 @@ class core_kernel_persistence_hardsql_Class
 				if(isset($params['offset'])){
 					$offset = intval($params['offset']);
 				}
-				$sqlQuery .= "LIMIT {$limit} OFFSET {$offset}";
+				
+				$sqlQuery  = $dbWrapper->offsetStatement($sqlQuery, $limit, $offset);
 			}
 
 			try{
@@ -730,7 +731,7 @@ class core_kernel_persistence_hardsql_Class
 					}
 				}
 				catch (PDOException $e){
-					if (substr($e->getCode(), 0, 3) == '42S') {
+					if ($e->getCode() == $dbWrapper->getColumnNotFoundErrorCode()) {
 						// Column doesn't exists is not an error. Try to get a property which does not exist is allowed
 					}
 					else if ($e->getCode() !== '00000'){

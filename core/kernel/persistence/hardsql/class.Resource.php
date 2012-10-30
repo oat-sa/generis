@@ -183,7 +183,8 @@ class core_kernel_persistence_hardsql_Resource
 				
 				// Select first
 				if ($one) {
-					$query .= ' ORDER BY "' .$tableProps. '"."id" ASC LIMIT 0, 1';
+					$query .= ' ORDER BY "' .$tableProps. '"."id" ASC';
+					$query = $dbWrapper->limitStatement($query, 0, 1);
 					
 					$result	= $dbWrapper->query($query, array(
 						$resource->uriResource
@@ -193,7 +194,8 @@ class core_kernel_persistence_hardsql_Resource
 				}
 				// Select Last
 				else if ($last) {
-					$query .= ' ORDER BY "' .$tableProps. '"."id" DESC LIMIT 0, 1';
+					$query .= ' ORDER BY "' .$tableProps. '"."id" DESC';
+					$query = $dbWrapper->limitStatement($query, 0, 1);
 					
 					$result	= $dbWrapper->query($query, array(
 						$resource->uriResource
@@ -231,7 +233,7 @@ class core_kernel_persistence_hardsql_Resource
 				}
 			}
 			catch (PDOException $e){
-				if (substr($e->getCode(), 0, 3) == '42S') {
+				if ($e->getCode() == $dbWrapper->getColumnNotFoundErrorCode()) {
 					// Column doesn't exists is not an error. Try to get a property which does not exist is allowed
 				}
 				else if ($e->getCode() !== '00000'){ 
@@ -1235,7 +1237,7 @@ class core_kernel_persistence_hardsql_Resource
 				}
 			}
 			catch (PDOException $e){
-				if (substr($e->getCode(), 0, 3) == '42S') {
+				if ($e->getCode() == $dbWrapper->getColumnNotFoundErrorCode()) {
 					// Column doesn't exists is not an error. Try to get a property which does not exist is allowed
 				} else if ($e->getCode() !== '00000') {
 					throw new core_kernel_persistence_hardsql_Exception("Unable to get property (single) values for {$resource->uriResource} in {$table} : " . $e->getMessage());

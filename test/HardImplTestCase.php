@@ -1,7 +1,5 @@
 <?php
-require_once dirname(__FILE__) . '/../../tao/test/TaoTestRunner.php';
-require_once INCLUDES_PATH.'/simpletest/autorun.php';
-
+require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 class HardImplTestCase extends UnitTestCase {
 	
@@ -17,7 +15,7 @@ class HardImplTestCase extends UnitTestCase {
 	
 	public function setUp(){
 
-        TaoTestRunner::initTest();
+		GenerisTestRunner::initTest();
 
 	}
 	

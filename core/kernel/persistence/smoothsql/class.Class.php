@@ -243,7 +243,7 @@ class core_kernel_persistence_smoothsql_Class
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 begin
-		
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $sqlQuery = 'SELECT "subject" FROM "statements" 
 						WHERE "predicate" = ?  
 							AND "object" = ? ';
@@ -256,10 +256,10 @@ class core_kernel_persistence_smoothsql_Class
 			if(isset($params['offset'])){
 				$offset = intval($params['offset']);
 			}
-			$sqlQuery .= "LIMIT {$limit} OFFSET {$offset}";
+			$sqlQuery = $dbWrapper->offsetStatement($sqlQuery, $limit, $offset);
 		}
 		
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		
 		$sqlResult = $dbWrapper->query($sqlQuery, array (
 			RDF_TYPE,
 			$resource->uriResource
@@ -853,7 +853,7 @@ class core_kernel_persistence_smoothsql_Class
                     if(isset($options['offset'])){
                             $offset = intval($options['offset']);
                     }
-                    $queryLimit .= ' LIMIT '.$limit.' OFFSET '.$offset.'';
+                    $queryLimit = $dbWrapper->offsetStatement($queryLimit, $limit, $offset);
 		}
 		
 		$q = '';

@@ -394,9 +394,10 @@ class core_kernel_impl_ApiModelOO
 						'xmlns:rdfs'	=> 'http://www.w3.org/2000/01/rdf-schema#'
 					);
 		
-		
-		$result = $dbWrapper->query("SELECT `models`.`modelID`, `models`.`modelURI` FROM `models` INNER JOIN `statements` ON `statements`.`modelID` = `models`.`modelID`
-											WHERE `statements`.`subject`= '{$subject}' LIMIT 1");
+		$query = "SELECT `models`.`modelID`, `models`.`modelURI` FROM `models` INNER JOIN `statements` ON `statements`.`modelID` = `models`.`modelID`
+											WHERE `statements`.`subject`= '{$subject}'";
+		$query = $dbWrapper->limitStatement($query, 1);
+		$result = $dbWrapper->query();
 		if($row = $result->fetch()){
 			$modelId  = $row['modelID'];
 			$modelUri =  $row['modelURI'];

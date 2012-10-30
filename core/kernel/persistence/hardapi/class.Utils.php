@@ -274,10 +274,10 @@ class core_kernel_persistence_hardapi_Utils
         $returnValue = (int) 0;
 
         // section 127-0-1-1--4d72422d:1316c1e6091:-8000:000000000000162E begin
-        
-        $selectQuery = 'SELECT id FROM "' . $tableName . '" WHERE uri = \'' . $resource->uriResource . '\' LIMIT 1;';
-        
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        
+        $selectQuery = 'SELECT id FROM "' . $tableName . '" WHERE uri = \'' . $resource->uriResource . '\'';
+        $selectQuery = $dbWrapper->limitStatement($selectQuery, 1);
         $selectResult = $dbWrapper->query($selectQuery);
         try{
 	        while ($row = $selectResult->fetch()) {
