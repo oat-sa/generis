@@ -204,7 +204,7 @@ class core_kernel_persistence_hardsql_Class
 					$offset = intval($params['offset']);
 				}
 				
-				$sqlQuery  = $dbWrapper->offsetStatement($sqlQuery, $limit, $offset);
+				$sqlQuery  = $dbWrapper->limitStatement($sqlQuery, $limit, $offset);
 			}
 
 			try{

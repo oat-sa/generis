@@ -584,11 +584,11 @@ abstract class core_kernel_classes_DbWrapper
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string statement The statement to limit
-     * @param  int lowerBound Limit lower bound.
-     * @param  int upperBound Limit upper bound.
+     * @param  int limit Limit lower bound.
+     * @param  int offset Limit upper bound.
      * @return string
      */
-    public abstract function limitStatement($statement, $lowerBound, $upperBound = 0);
+    public abstract function limitStatement($statement, $limit, $offset = 0);
 
     /**
      * Short description of method getExtraConfiguration
@@ -632,19 +632,6 @@ abstract class core_kernel_classes_DbWrapper
      * @return void
      */
     protected abstract function afterConnect();
-
-    /**
-     * Short description of method offsetStatement
-     *
-     * @abstract
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  string statement
-     * @param  int limit
-     * @param  int offset
-     * @return string
-     */
-    public abstract function offsetStatement($statement, $limit, $offset);
 
 } /* end of abstract class core_kernel_classes_DbWrapper */
 

@@ -184,7 +184,7 @@ class core_kernel_persistence_hardsql_Resource
 				// Select first
 				if ($one) {
 					$query .= ' ORDER BY "' .$tableProps. '"."id" ASC';
-					$query = $dbWrapper->limitStatement($query, 0, 1);
+					$query = $dbWrapper->limitStatement($query, 1, 0);
 					
 					$result	= $dbWrapper->query($query, array(
 						$resource->uriResource
@@ -195,7 +195,7 @@ class core_kernel_persistence_hardsql_Resource
 				// Select Last
 				else if ($last) {
 					$query .= ' ORDER BY "' .$tableProps. '"."id" DESC';
-					$query = $dbWrapper->limitStatement($query, 0, 1);
+					$query = $dbWrapper->limitStatement($query, 1, 0);
 					
 					$result	= $dbWrapper->query($query, array(
 						$resource->uriResource

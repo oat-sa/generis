@@ -256,7 +256,7 @@ class core_kernel_persistence_smoothsql_Class
 			if(isset($params['offset'])){
 				$offset = intval($params['offset']);
 			}
-			$sqlQuery = $dbWrapper->offsetStatement($sqlQuery, $limit, $offset);
+			$sqlQuery = $dbWrapper->limitStatement($sqlQuery, $limit, $offset);
 		}
 		
 		
@@ -853,7 +853,7 @@ class core_kernel_persistence_smoothsql_Class
                     if(isset($options['offset'])){
                             $offset = intval($options['offset']);
                     }
-                    $queryLimit = $dbWrapper->offsetStatement($queryLimit, $limit, $offset);
+                    $queryLimit = $dbWrapper->limitStatement($queryLimit, $limit, $offset);
 		}
 		
 		$q = '';

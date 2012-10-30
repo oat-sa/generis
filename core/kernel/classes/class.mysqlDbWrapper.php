@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 30.10.2012, 13:42:59 with ArgoUML PHP module 
+ * Automatically generated on 30.10.2012, 15:44:21 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -156,45 +156,19 @@ class core_kernel_classes_mysqlDbWrapper
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string statement
-     * @param  int lowerBound
-     * @param  int upperBound
-     * @return string
-     */
-    public function limitStatement($statement, $lowerBound, $upperBound = 0)
-    {
-        $returnValue = (string) '';
-
-        // section 10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001BF2 begin
-        $statement .= " LIMIT ${lowerBound}";
-        
-        if ($upperBound != 0){
-        	$statement .= ", ${upperBound}";	
-        }
-        
-        $returnValue = $statement;
-        // section 10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001BF2 end
-
-        return (string) $returnValue;
-    }
-
-    /**
-     * Short description of method offsetStatement
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  string statement
      * @param  int limit
      * @param  int offset
      * @return string
      */
-    public function offsetStatement($statement, $limit, $offset)
+    public function limitStatement($statement, $limit, $offset = 0)
     {
         $returnValue = (string) '';
 
-        // section 10-13-1-85-6bca170a:13ab1afba9f:-8000:0000000000001BB7 begin
+        // section 10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001BF2 begin
         $statement .= " LIMIT ${limit} OFFSET ${offset}";
+        
         $returnValue = $statement;
-        // section 10-13-1-85-6bca170a:13ab1afba9f:-8000:0000000000001BB7 end
+        // section 10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001BF2 end
 
         return (string) $returnValue;
     }
