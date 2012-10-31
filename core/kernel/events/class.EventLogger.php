@@ -16,18 +16,11 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 
 /* user defined includes */
 // section 127-0-0-1-48ef8247:11bf9e06099:-8000:0000000000000D81-includes begin
-require_once(INCLUDES_PATH.'/adodb5/adodb.inc.php');
 if (!empty($_SERVER["SERVER_ADMIN"]))
 if ("che@tudor.lu" == $_SERVER["SERVER_ADMIN"]) {
-	require_once(INCLUDES_PATH.'/adodb5/adodb-exceptions.inc.php');
 	// It only works on the system of the so-called che... For testing purposes!
 	//TODO: remove this when we took decision about Exceptions
 }
-//Let this one there because the Generis' ADoDb singleton is not always called
-//TODO: the Exception managment will also be set for other code than EventLogger, should
-//this be included in the DbWrapper class ?
-//TODO: a mysql pconnect with Adodb?
-//http://phplens.com/lens/adodb/docs-adodb.htm#pconnect
 
 /* HOWTO
  * set the configuration options in config.php

@@ -277,13 +277,13 @@ $short_datatype = array(
 // @see generis/common/config.php
 // ----------------------------------------------------------------------------------
 
-if (!defined('ADODB_DB_DRIVER')) {
+if (!defined('RDFAPI_DB_DRIVER')) {
     if (defined('SGBD_DRIVER')) {
-        define('ADODB_DB_DRIVER', SGBD_DRIVER);
-        define('ADODB_DB_HOST'  , DATABASE_URL);
-        define('ADODB_DB_NAME'  , DATABASE_NAME);
-        define('ADODB_DB_USER'  , DATABASE_LOGIN);
-        define('ADODB_DB_PASSWORD', DATABASE_PASS);
+        define('RDFAPI_DB_DRIVER', SGBD_DRIVER);
+        define('RDFAPI_DB_HOST'  , DATABASE_URL);
+        define('RDFAPI_DB_NAME'  , DATABASE_NAME);
+        define('RDFAPI_DB_USER'  , DATABASE_LOGIN);
+        define('RDFAPI_DB_PASSWORD', DATABASE_PASS);
     } else {
        trigger_error("unable to configure database in {__FILE__}");
     }

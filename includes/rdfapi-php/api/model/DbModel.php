@@ -10,7 +10,7 @@ require_once RDFAPI_INCLUDE_DIR . 'model/Statement.php';
 /**
 * This class provides methods for manipulating DbModels from DbStore.
 * A DbModel is an RDF Model, which is persistently stored in a relational database.
-* This Class uses the ADOdb Database Abstraction Library for PHP (http://adodb.sourceforge.net/).
+* This Class uses the PDO Database Abstraction Library.
 *
 *
 * @version  $Id: DbModel.php 533 2007-08-16 09:32:03Z cweiske $
@@ -26,7 +26,7 @@ class DbModel extends Model{
 	/**
 	* Database connection object.
 	*
-	* @var     object ADOConnection
+	* @var     PDO
 	* @access	private
 	*/
 	var $dbConn;
@@ -58,7 +58,7 @@ class DbModel extends Model{
 	* Do not call this directly.
 	* Use the method getModel,getNewModel or putModel of the Class DbStore instead.
 	*
-	* @param   object ADOConnection  &$dbConnection
+	* @param   object PDO  &$dbConnection
 	* @param   string   $modelURI
 	* @param   string   $modelID
 	* @param   string   $baseURI
@@ -84,11 +84,13 @@ class DbModel extends Model{
 	function setBaseURI($uri) {
 
 		$this->baseURI = $this->_checkBaseURI($uri);
-
-		$rs = $this->dbConn->execute("UPDATE models SET baseURI='" .$this->baseURI ."'
-                                 WHERE modelID=" .$this->modelID);
-		if (!$rs)
-		$this->dbConn->errorMsg();
+		$bURI = $this->dbConn->quote($this->baseURI);
+		
+		$rs = $this->dbConn->exec('UPDATE "models" SET "baseURI"=' . $bURI .'
+                                 WHERE "modelID"=' .$this->modelID);
+		if (!$rs){
+			$this->dbConn->errorMsg();	
+		}
 	}
 
 
@@ -99,9 +101,11 @@ class DbModel extends Model{
 	* @access	public
 	*/
 	function size() {
-
-		$count =& $this->dbConn->getOne('SELECT COUNT(modelID) FROM statements
-                                    WHERE modelID = ' .$this->modelID);
+		$recordSet = $this->dbConn->query('SELECT COUNT(modelID) FROM "statements"
+                                    WHERE "modelID" = ' .$this->modelID);
+		$count = (int) $recordSet->fetchColumn(0);
+		$recordSet->closeCursor();
+		
 		return $count;
 	}
 
@@ -113,10 +117,7 @@ class DbModel extends Model{
 	* @access	public
 	*/
 	function isEmpty() {
-
-		if ($this->size() == 0)
-		return TRUE;
-		return FALSE;
+		return ($this->size() == 0);
 	}
 
 
@@ -143,30 +144,32 @@ class DbModel extends Model{
 			        ("modelID", "subject", "predicate", "object", "l_language", "author", "stread", "stedit", "stdelete", "epoch")
 			        VALUES
                     (' .$this->modelID .","
-			. $this->dbConn->qstr($statement->getLabelSubject()) .","
-			. $this->dbConn->qstr($statement->getLabelPredicate()) .",";
+			. $this->dbConn->quote($statement->getLabelSubject()) .","
+			. $this->dbConn->quote($statement->getLabelPredicate()) .",";
 			
 			if (is_a($statement->object(), 'Literal')) {
-				$quotedLiteral = $this->dbConn->qstr($statement->obj->getLabel());
+				$quotedLiteral = $this->dbConn->quote($statement->obj->getLabel());
 				$sql .=        $quotedLiteral .","
-				."'" .$statement->obj->getLanguage() ."',"
-				."'" .$author   ."',"
-				."'yyy[admin,administrators,authors]',"		
-				."'yyy[admin,administrators,authors]',"
-				."'yyy[admin,administrators,authors]',"
-				."NOW())";
+				. $this->dbConn->quote($statement->obj->getLanguage()) . ","
+				. $this->dbConn->quote($author). ","
+				. "'yyy[admin,administrators,authors]',"		
+				. "'yyy[admin,administrators,authors]',"
+				. "'yyy[admin,administrators,authors]',"
+				. "NOW())";
 			}else{
-				$sql .=   $this->dbConn->qstr($statement->obj->getLabel()) .","
-				."'',"
-				."'".$author."',"
+				$sql .= $this->dbConn->quote($statement->obj->getLabel()) .","
+				. "'',"
+				. $this->dbConn->quote($author) . ","
 				."'yyy[admin,administrators,authors]',"
 				."'yyy[admin,administrators,authors]',"
 				."'yyy[admin,administrators,authors]',"
 				."NOW())";
 			}
-			$rs =& $this->dbConn->execute($sql);
-			if (!$rs) {
-				return $this->dbConn->errorMsg();
+			$rs =& $this->dbConn->exec($sql);
+			if ($rs === false) {
+				$errormsg = $this->dbConn->errorInfo();
+				$errormsg = $errorMsg[0];
+				trigger_error($errmsg, E_USER_ERROR);
             } else {
                 return true;
             }
@@ -205,13 +208,16 @@ class DbModel extends Model{
 			trigger_error($errmsg, E_USER_ERROR);
 		}
 
-		$sql = 'DELETE FROM statements
-           WHERE modelID=' .$this->modelID;
+		$sql = 'DELETE FROM "statements"
+           WHERE "modelID"=' .$this->modelID;
 		$sql .= $this->_createDynSqlPart_SPO ($statement->subj, $statement->pred, $statement->obj);
 
 		$rs =& $this->dbConn->execute($sql);
-		if (!$rs)
-		$this->dbConn->errorMsg();
+		if ($rs === false){
+			$errmsg = $this->dbConn->errorInfo();
+			$errmsg = $errmsg[0];
+			trigger_error($errmsg, E_USER_ERROR);
+		}
 	}
 
 
@@ -272,7 +278,7 @@ class DbModel extends Model{
     /**
     * Returns the database connection object
     *
-    * @return ADOdb Database object
+    * @return PDO Database object
     * @access public
     */
     function &getDbConn()
@@ -353,11 +359,14 @@ class DbModel extends Model{
            WHERE "modelID" = ' .$this->modelID;
 		$sql .= $this->_createDynSqlPart_SPO($statement->subj, $statement->pred, $statement->obj);
 		
-		$res = $this->dbConn->getOne($sql);
-
-		if (!$res)
-		return FALSE;
-		return TRUE;
+		$res = $this->dbConn->query($sql);
+		$return = false;
+		if ($row = $res->fetch()){
+			$return = true; 
+		}
+		
+		$res->closeCursor();
+		return $return;
 	}
 
 
@@ -380,11 +389,10 @@ class DbModel extends Model{
 
 		elseif (is_a($model, 'DbModel')) {
 
-			$recordSet =& $this->_getRecordSet($model);
-			while (!$recordSet->EOF) {
-				if (!$this->_containsRow($recordSet->fields))
+			$recordSet = $this->_getRecordSet($model);
+			while ($row = $recordSet->fetch()) {
+				if (!$this->_containsRow($row))
 				return FALSE;
-				$recordSet->moveNext();
 			}
 			return TRUE;
 		}
@@ -413,11 +421,10 @@ class DbModel extends Model{
 
 		elseif (is_a($model, 'DbModel')) {
 
-			$recordSet =& $this->_getRecordSet($model);
-			while (!$recordSet->EOF) {
-				if ($this->_containsRow($recordSet->fields))
+			$recordSet = $this->_getRecordSet($model);
+			while ($row = $recordSet->fetch()) {
+				if ($this->_containsRow($row))
 				return TRUE;
-				$recordSet->moveNext();
 			}
 			return FALSE;
 		}
@@ -452,22 +459,25 @@ class DbModel extends Model{
 		}
 
 		// static part of the sql statement
-		$sql = 'SELECT subject, predicate, object, l_language, l_datatype, subject_is, object_is
-           FROM statements
-           WHERE modelID = ' .$this->modelID;
+		$sql = 'SELECT "subject", "predicate", "object", "l_language"
+           FROM "statements"
+           WHERE "modelID" = ' .$this->modelID;
 
 		// dynamic part of the sql statement
 		$sql .= $this->_createDynSqlPart_SPO($subject, $predicate, $object);
 
 		// execute the query
-		$recordSet =& $this->dbConn->execute($sql);
+		$recordSet = $this->dbConn->query($sql);
 
-		if (!$recordSet)
-		echo $this->dbConn->errorMsg();
-
+		if ($recordSet === false){
+			$errmsg = $this->dbConn->errorInfo();
+			$errmsg = $errmsg[0];
+			trigger_error($errmsg, E_USER_ERROR);	
+		}
 		// write the recordSet into memory Model
-		else
-		return $this->_convertRecordSetToMemModel($recordSet);
+		else{
+			return $this->_convertRecordSetToMemModel($recordSet);
+		}
 	}
 
 
@@ -513,19 +523,22 @@ class DbModel extends Model{
 	*/
 	function findVocabulary($vocabulary) {
 
-		$sql = "SELECT subject, predicate, object, l_language, l_datatype, subject_is, object_is
+		$sql = 'SELECT "subject", "predicate", "object", "l_language", "l_datatype"
            FROM statements
-           WHERE modelID = " .$this->modelID ."
-           AND predicate LIKE '" .$vocabulary ."%'";
+           WHERE modelID = ' .$this->modelID .'
+           AND predicate LIKE \'' .$vocabulary .'%\'';
 
-		$recordSet =& $this->dbConn->execute($sql);
+		$recordSet = $this->dbConn->query($sql);
 
-		if (!$recordSet)
-		echo $this->dbConn->errorMsg();
-
+		if ($recordSet === false){
+			$errmsg = $this->dbConn->errorInfo();
+			$errmsg = $errmsg[0];
+			trigger_error($errmsg, E_USER_ERROR);
+		}
 		// write the recordSet into memory Model
-		else
-		return $this->_convertRecordSetToMemModel($recordSet);
+		else{
+			return $this->_convertRecordSetToMemModel($recordSet);
+		}
 	}
 
 
@@ -554,22 +567,41 @@ class DbModel extends Model{
 			trigger_error($errmsg, E_USER_ERROR);
 		}
 
+		// first count it... thanks to PDO :/
+		$sql = 'SELECT COUNT(*) FROM "statements" WHERE "modelID" = ' . $this->modelID;
+		$sql .= $this->_createDynSqlPart_SPO($subject, $predicate, $object);
+		$sql .= " LIMIT 1";
+		if ($offset != -1){
+			$sql .= " OFFSET ${offset}";	
+		}
+		
+		$recordSet = $this->dbConn->query($sql);
+		$count = (int) $recordSet->fetchColumn(0);
+		$recordSet->closeCursor();
+		
 		// static part of the sql statement
-		$sql = 'SELECT subject, predicate, object, l_language, l_datatype, subject_is, object_is
-           FROM statements
-           WHERE modelID = ' .$this->modelID;
+		$sql = 'SELECT "subject", "predicate", "object", "l_language"
+           FROM "statements"
+           WHERE "modelID" = ' .$this->modelID;
 
 		// dynamic part of the sql statement
 		$sql .= $this->_createDynSqlPart_SPO($subject, $predicate, $object);
 
 		// execute the query
-		$recordSet =& $this->dbConn->selectLimit($sql,1,($offset));
-
-		if (!$recordSet)
-		echo $this->dbConn->errorMsg();
+		$sql .= " LIMIT 1";
+		if ($offset != -1){
+			$sql .= " OFFSET ${offset}";
+		}
+		$recordSet = $this->dbConn->query($sql);
+		
+		if ($recordSet === false){
+			$errmsg = $this->dbConn->errorInfo();
+			$errmsg = $errmsg[0];
+		}
 		else {
-			if (!$recordSet->fields)
-			return NULL;
+			if ($count == 0){
+				return NULL;
+			}
 			else {
 				$memModel = $this->_convertRecordSetToMemModel($recordSet);
 				return $memModel->triples[0];
@@ -602,19 +634,23 @@ class DbModel extends Model{
 
 		// static part of the sql statement
 		$sql = 'SELECT COUNT(*)
-           FROM statements
-           WHERE modelID = ' .$this->modelID;
+           FROM "statements"
+           WHERE "modelID" = ' .$this->modelID;
 
 		// dynamic part of the sql statement
 		$sql .= $this->_createDynSqlPart_SPO($subject, $predicate, $object);
 
 		// execute the query
-		$recordSet =& $this->dbConn->execute($sql);
+		$recordSet = $this->dbConn->query($sql);
 
-		if (!$recordSet)
-		echo $this->dbConn->errorMsg();
-		else
-		return $recordSet->fields[0];
+		if ($recordSet === false){
+			echo $this->dbConn->errorMsg();
+		}
+		else{
+			$count = $recordSet->fetchColumn(0);
+			$recordSet->closeCursor();
+			return $count;
+		}
 	}
 
 
@@ -704,34 +740,34 @@ class DbModel extends Model{
 
 			// create an update sql statement
 			$comma = '';
-			$sql = 'UPDATE statements
+			$sql = 'UPDATE "statements"
              SET ';
 			if ($subject) {
-				$sql .= " subject ='" .$replacement->getLabel() ."', "
-				." subject_is='" .$this->_getNodeFlag($replacement) ."' ";
+				$sql .= " \"subject\" ='" .$replacement->getLabel() ."' ";
 				$comma = ',';
 			}
 			if ($predicate) {
-				$sql .= $comma ." predicate='" .$replacement->getLabel() ."' ";
+				$sql .= $comma ." \"predicate\"='" .$replacement->getLabel() ."' ";
 				$comma = ',';
 			}
 			if ($object) {
-				$quotedObject = $this->dbConn->qstr($replacement->getLabel());
-				$sql .= $comma .' object=' .$quotedObject
-				.", object_is='" .$this->_getNodeFlag($replacement) ."' ";
+				$quotedObject = $this->dbConn->quote($replacement->getLabel());
+				$sql .= $comma .' "object"=' .$quotedObject. ' ';
 				if (is_a($replacement, 'Literal')) {
-					$sql .= ", l_language='" .$replacement->getLanguage() ."' "
-					.", l_datatype='" .$replacement->getDataType() ."' ";
+					$sql .= ", \"l_language\"='" .$replacement->getLanguage() ."' ";
 				}
 			}
-			$sql .= 'WHERE modelID = ' .$this->modelID;
+			$sql .= 'WHERE "modelID" = ' .$this->modelID;
 			$sql .= $this->_createDynSqlPart_SPO($subject, $predicate, $object);
 
 			// execute the query
-			$rs =& $this->dbConn->execute($sql);
+			$rs = $this->dbConn->exec($sql);
 
-			if (!$rs)
-			echo $this->dbConn->errorMsg();
+			if ($rs === false){
+				$errmsg = $this->dbConn->errorInfo();
+				$errmsg = $errmsg[0];
+				trigger_error($errmsg, E_USER_ERROR);
+			}
 		}
 	}
 
@@ -937,18 +973,24 @@ class DbModel extends Model{
 	*/
 	function delete() {
 
-		$this->dbConn->startTrans();
-		$this->dbConn->execute('DELETE FROM models
-                                  WHERE modelID=' .$this->modelID);
-		$this->dbConn->execute('DELETE FROM statements
-                                  WHERE modelID=' .$this->modelID);
-		$this->dbConn->execute('DELETE FROM namespaces
-                                  WHERE modelID=' .$this->modelID);
-
-		if (!$this->dbConn->completeTrans())
-		echo $this->dbConn->errorMsg();
-		else
-		$this->close();
+		try{
+			$this->dbConn->beginTransaction();
+			$this->dbConn->exec('DELETE FROM "models"
+	                             WHERE "modelID"=' .$this->modelID);
+			$this->dbConn->exec('DELETE FROM "statements"
+	                             WHERE "modelID"=' .$this->modelID);
+			$this->dbConn->exec('DELETE FROM "namespaces"
+	                             WHERE "modelID"=' .$this->modelID);
+	
+			$this->dbConn->commit();
+			$this->close();
+		}
+		catch (PDOException $e){
+			$this->dbConn->rollBack();
+			$errmsg = $this->dbConn->errorInfo();
+			$errmsg = $errmsg[0];
+			trigger_error($errmsg, E_USER_ERROR);
+		}
 	}
 
 
@@ -1024,32 +1066,19 @@ class DbModel extends Model{
 	function _convertRecordSetToMemModel(&$recordSet)  {
 
 		$res = new MemModel($this->baseURI);
-		while (!$recordSet->EOF) {
+		while ($row = $recordSet->fetch()) {
 
 			// subject
-			if ($recordSet->fields[5] == 'r')
-			$sub = new Resource($recordSet->fields[0]);
-			else
-			$sub = new BlankNode($recordSet->fields[0]);
+			$sub = new Resource($row[0]);
 
 			// predicate
-			$pred = new Resource($recordSet->fields[1]);
+			$pred = new Resource($row[1]);
 
 			// object
-			if ($recordSet->fields[6] == 'r')
-			$obj = new Resource($recordSet->fields[2]);
-			elseif ($recordSet->fields[6] == 'b')
-			$obj = new BlankNode($recordSet->fields[2]);
-			else {
-				$obj = new Literal($recordSet->fields[2], $recordSet->fields[3]);
-				if ($recordSet->fields[4])
-				$obj->setDatatype($recordSet->fields[4]);
-			}
+			$obj = new Literal($row[2], $row[3]);
 
 			$statement = new Statement($sub, $pred, $obj);
 			$res->add($statement);
-
-			$recordSet->moveNext();
 		}
 		$res->addParsedNamespaces($this->getParsedNamespaces());
 		return $res;
@@ -1069,19 +1098,29 @@ class DbModel extends Model{
 	function _createDynSqlPart_SPO($subject, $predicate, $object) {
 
 		// conditions derived from the parameters passed to the function
-
-		$sql='';
+		$sql = '';
 		if ($subject != NULL)
-		$sql .= " AND subject='" .$subject->getLabel() ."'";
+		{
+			$sLabel = $this->dbConn->quote($subject->getLabel());
+			$sql .= ' AND "subject"=' . $sLabel;
+		}
 		if ($predicate != NULL)
-		$sql .= " AND predicate='" .$predicate->getLabel() ."'";
+		{
+			$pLabel = $this->dbConn->quote($predicate->getLabel());
+			$sql .= ' AND "predicate"=' .$pLabel;
+		}
 		if ($object != NULL) {
 			if (is_a($object, 'Resource'))
-			$sql .= " AND object='" .$object->getLabel() ."'";
-			else  {
-				$quotedLiteral = $this->dbConn->qstr($object->getLabel());
-				$sql .= " AND object=" .$quotedLiteral ."
-                   AND l_language='" .$object->getLanguage() ."'";
+			{
+				$oLabel = $this->dbConn->quote($object->getLabel());
+				$sql .= ' AND "object"=' .$oLabel;
+			}
+			else 
+			{
+				$quotedLiteral = $this->dbConn->quote($object->getLabel());
+				$oLanguage = $this->dbConn->quote($object->getLanguage());
+				$sql .= ' AND "object"=' .$quotedLiteral .'
+                   AND "l_language"=' .$oLanguage;
 			}
 		}
 		return $sql;
@@ -1103,11 +1142,11 @@ class DbModel extends Model{
 	*/
 	function _getRecordSet (&$dbModel) {
 
-		$sql = 'SELECT subject, predicate, object, l_language, l_datatype, subject_is, object_is
-           FROM statements
-           WHERE modelID = ' .$dbModel->modelID;
+		$sql = 'SELECT "subject", "predicate", "object", "l_language"
+           FROM "statements"
+           WHERE "modelID" = ' .$dbModel->modelID;
 
-		return $recordSet =& $this->dbConn->execute($sql);
+		return $recordSet =& $this->dbConn->query($sql);
 	}
 
 
@@ -1123,26 +1162,21 @@ class DbModel extends Model{
 	*/
 	function _containsRow ($row) {
 
-		$sql = "SELECT modelID FROM statements
-           WHERE modelID = " .$this->modelID ."
-           AND subject ="   .$this->dbConn->qstr($row[0]) ."
-           AND predicate =" .$this->dbConn->qstr($row[1]) ."
-           AND object ="    .$this->dbConn->qstr($row[2]) ."
-           AND l_language=" .$this->dbConn->qstr($row[3]) ."
-           AND l_datatype=" .$this->dbConn->qstr($row[4]) ."
-           AND subject_is=" .$this->dbConn->qstr($row[5]) ."
-           AND object_is="  .$this->dbConn->qstr($row[6]);
+		$sql = 'SELECT modelID FROM statements
+           WHERE modelID = ' .$this->modelID .'
+           AND subject ='   .$this->dbConn->quote($row[0]) .'
+           AND predicate =' .$this->dbConn->quote($row[1]) .'
+           AND object ='    .$this->dbConn->quote($row[2]) .'
+           AND l_language=' .$this->dbConn->quote($row[3]);
 
-		$res =& $this->dbConn->getOne($sql);
-
-		if (!$res)
-		  return FALSE;
-		return TRUE;
+		$res = $this->dbConn->query($sql);
+		if ($row = $res->fetch()){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
-
-
-
-
 
 	/**
 	* Returns the models namespaces.
@@ -1155,8 +1189,8 @@ class DbModel extends Model{
 	* @access   public
 	*/
 	function getParsedNamespaces(){
-		$sql = "SELECT * FROM namespaces
-           WHERE modelID = " .$this->modelID;
+		$sql = 'SELECT * FROM "namespaces"
+           WHERE "modelID" = ' .$this->modelID;
 		$temp = false;
 		$res  = $this->dbConn->execute($sql);
 		if($res){
@@ -1201,20 +1235,23 @@ class DbModel extends Model{
 
 		if($nmsp != '' && $prefix !=''){
 			if($this->_checkNamespace($nmsp)){
-				$sql = "UPDATE namespaces SET prefix=".$this->dbConn->qstr($prefix)." WHERE
-				modelID=".$this->modelID." AND namespace=".$this->dbConn->qstr($nmsp);
+				$sql = 'UPDATE "namespaces" SET "prefix"='.$this->dbConn->quote($prefix).' WHERE
+				"modelID"='.$this->modelID.' AND "namespace"='.$this->dbConn->quote($nmsp);
 			}else{
-				$sql = "INSERT INTO namespaces
-                    (modelID, namespace, prefix)
+				$sql = 'INSERT INTO "namespaces"
+                    ("modelID", "namespace", "prefix")
                     VALUES
-                    (" .$this->modelID .','
-				. $this->dbConn->qstr($nmsp)   . ','
-				. $this->dbConn->qstr($prefix) . ')';
+                    (' .$this->modelID .','
+				. $this->dbConn->quote($nmsp)   . ','
+				. $this->dbConn->quote($prefix) . ')';
 			}
 
-			$rs =& $this->dbConn->execute($sql);
-			if (!$rs)
-			$this->dbConn->errorMsg();
+			$rs = $this->dbConn->exec($sql);
+			if ($rs === false){
+				$errmsg = $this->dbConn->errorInfo();
+				$errmsg = $errmsg[0];
+				trigger_error($errmsg, E_USER_ERROR);	
+			}
 		}
 	}
 
@@ -1227,19 +1264,21 @@ class DbModel extends Model{
 	*/
 	function _checkNamespace($nmsp){
 		$res = true;
-		$sql = "SELECT * FROM namespaces
-          	 WHERE modelID = " .$this->modelID." AND
-			namespace=" . $this->dbConn->qstr($nmsp);
-		$rs =& $this->dbConn->execute($sql);
-		if (!$rs){
-			$this->dbConn->errorMsg();
-		}else{
-			if($rs->fields == false)
-			$res = false;
+		$sql = 'SELECT * FROM "namespaces"
+          	 WHERE "modelID" = ' .$this->modelID.' AND
+			"namespace" = ' . $this->dbConn->quote($nmsp);
+		$rs = $this->dbConn->exec($sql);
+		if ($rs === false){
+			$errmsg = $this->dbConn->errorInfo();
+			$errmsg = $errmsg[0];
 		}
+		else{
+			if($row = $rs->fetch()){
+				$res = false;
+			}
+		}
+		
 		return $res;
-
-
 	}
 
 	/**
@@ -1267,12 +1306,14 @@ class DbModel extends Model{
 	*/
 	function removeNamespace($nmsp){
 
-        $sql = 'DELETE FROM namespaces
-           WHERE modelID=' .$this->modelID." AND namespace=". $this->dbConn->qstr($nmsp);
+        $sql = 'DELETE FROM "namespaces"
+           WHERE "modelID" = ' .$this->modelID.' AND "namespace"=' . $this->dbConn->quote($nmsp);
 
-        $rs =& $this->dbConn->execute($sql);
-        if (!$rs)
-            return $this->dbConn->errorMsg();
+        $rs = $this->dbConn->exec($sql);
+        if ($rs === false){
+            $errmsg = $this->dbConn->errorInfo();
+            $errmsg = $errmsg[0];
+		}
         else {
             return true;
         }

@@ -24,7 +24,7 @@ class IteratorAllGraphsDb
 {
 	/**
 	* Holds a reference to the associated DB resultSet
-	* @var		$dbResultSets ADODB result
+	* @var		$dbResultSets PDOStatement
 	* @access	private
 	*/
 	var $dbResultSet;
@@ -58,7 +58,7 @@ class IteratorAllGraphsDb
     * Constructor.
     *
     *
-    * @param ADODBResultSet
+    * @param PDOStatment
     * @param DatasetDb
 	* @access	public
     */
@@ -66,7 +66,8 @@ class IteratorAllGraphsDb
 	{
 		$this->dbResultSet=& $dbResultSet;
 		$this->datasetDb=& $datasetDb;
-		$this->current = $this->dbResultSet->fields[0];
+		$this->current = $this->dbResultSet->fetchColumn(0);
+		$this->key = 0;
 	}
 	
 	/**
@@ -87,7 +88,7 @@ class IteratorAllGraphsDb
     */
 	function valid()
 	{
-		return (!$this->dbResultSet->EOF);
+		return !empty($this->current);
 	}
 	
 	/**
@@ -97,8 +98,8 @@ class IteratorAllGraphsDb
     */
 	function next()
 	{
-		$this->dbResultSet->moveNext();
-		$this->current = $this->dbResultSet->fields[0];
+		$this->current = $this->dbResultSet->fetchColumn(0);
+		$this->key++;
 	}
 	
 	/**
@@ -121,7 +122,7 @@ class IteratorAllGraphsDb
     */
 	function key()
 	{
-		return $this->dbResultSet->_currentRow;
+		return $this->key;
 	}
 }
 ?>

@@ -116,8 +116,8 @@ class ModelFactory
 	* @return	object	DbStore
 	* @access	public
 	*/
-	function & getDbStore($dbDriver=ADODB_DB_DRIVER, $host=ADODB_DB_HOST, $dbName=ADODB_DB_NAME,
-                   		$user=ADODB_DB_USER, $password=ADODB_DB_PASSWORD)
+	function & getDbStore($dbDriver=RDFAPI_DB_DRIVER, $host=RDFAPI_DB_HOST, $dbName=RDFAPI_DB_NAME,
+                   		$user=RDFAPI_DB_USER, $password=RDFAPI_DB_PASSWORD)
 	{
 		$dbs = new DbStore($dbDriver, $host, $dbName,$user, $password);
 		return $dbs;

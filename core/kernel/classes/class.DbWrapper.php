@@ -19,7 +19,6 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 
 /* user defined includes */
 // section 10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB-includes begin
-require_once('includes/adodb5/adodb.inc.php');
 // section 10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB-includes end
 
 /* user defined constants */

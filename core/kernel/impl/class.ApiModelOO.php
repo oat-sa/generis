@@ -305,7 +305,6 @@ class core_kernel_impl_ApiModelOO
 		$modFactory = new ModelFactory();
 		$memModel 	= $modFactory->getMemModel();
 		$dbModel	= $modFactory->getDefaultDbModel($targetNameSpace);
-		$dbModel->getDbConn()->execute("SET NAMES 'UTF8'");
 		
 		// Load and parse document
 		$memModel->load($fileLocation);

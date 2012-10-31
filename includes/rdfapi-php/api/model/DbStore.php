@@ -1,6 +1,7 @@
 <?php
 require_once RDFAPI_INCLUDE_DIR . 'constants.php';
 require_once RDFAPI_INCLUDE_DIR . 'util/Object.php';
+require_once RDFAPI_INCLUDE_DIR . 'model/DbModel.php';
 
 // ----------------------------------------------------------------------------------
 // Class: DbStore
@@ -8,13 +9,12 @@ require_once RDFAPI_INCLUDE_DIR . 'util/Object.php';
 
 /**
  * DbStore is a persistent store of RDF data using relational database technology.
- * DbStore uses ADOdb Library for PHP V3.60 (http://php.weblogs.com/ADODB),
+ * DbStore uses PDO as a Database abstraction layer,
  * which allows to connect to multiple databases in a portable manner.
  * This class also provides methods for creating tables for MsAccess, MySQL, and MS SQL Server.
  * If you want to use other databases, you will have to create tables by yourself
  * according to the abstract database schema described in the API documentation.
  *
- * You can activate debug mode by defining ADODB_DEBUG_MODE to "1".
  *
  *
  * @version  $Id: DbStore.php 560 2008-02-29 15:24:20Z cax $
@@ -34,17 +34,14 @@ class DbStore extends Object
     * @var array
     */
     public static $arSupportedDbTypes = array(
-        "MySQL",
-        "MySQLi",
-        "MSSQL",
-        'MsAccess',
-    	'Postgres8'
+        "mysql",
+        "pgsql"
     );
 
     /**
     * Database connection object
     *
-    * @var     object ADOConnection
+    * @var     PDO
     * @access	private
     */
     var $dbConn;
@@ -74,32 +71,25 @@ class DbStore extends Object
  * @param   string   $password
  * @access	public
  */
- function DbStore ($dbDriver=ADODB_DB_DRIVER, $host=ADODB_DB_HOST, $dbName=ADODB_DB_NAME,
-                   $user=ADODB_DB_USER, $password=ADODB_DB_PASSWORD) {
+ function DbStore ($dbDriver=RDFAPI_DB_DRIVER, $host=RDFAPI_DB_HOST, $dbName=RDFAPI_DB_NAME,
+                   $user=RDFAPI_DB_USER, $password=RDFAPI_DB_PASSWORD) {
 
-   // include DBase Package
-   require_once(RDFAPI_INCLUDE_DIR.PACKAGE_DBASE);
-
-   // create a new connection object
-   $this->dbConn =& ADONewConnection($dbDriver);
-   $this->driver = $dbDriver;
-
-   //activate the ADOdb DEBUG mode
-   if (ADODB_DEBUG_MODE == '1')
-        $this->dbConn->debug = true;
-
-   // connect to database
-   $r = $this->dbConn->NConnect($host, $user, $password, $dbName);
-   if ($dbDriver == 'mysql'){
-   	$this->dbConn->execute ('SET SESSION SQL_MODE=\'ANSI_QUOTES\';');
-   }
-   if ($r !== true) {
-      throw new Exception('Could not connect to database');
-   }
-
-   // optimized for speed
-   $this->dbConn->setFetchMode(ADODB_FETCH_NUM);
-   //$ADODB_COUNTRECS = FALSE;
+	// create a new PDO object
+	$this->driver = strtolower($dbDriver);
+	$dsn = "{$this->driver}:host=${host};dbname=${dbName};charset=utf8";
+	$options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_NUM, // Best performance
+		        				 PDO::ATTR_PERSISTENT => false,
+		        				 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+		        				 PDO::ATTR_EMULATE_PREPARES => false);
+	try{
+		$this->dbConn = new PDO($dsn, $user, $password, $options);
+		if ($this->driver == 'mysql'){
+			$this->dbConn->exec("SET SESSION SQL_MODE='ANSI_QUOTES'");
+	    }
+	}
+	catch (PDOException $e){
+		throw new Exception("RDF-API: Could not connect to database with DSN '${dsn}'.");
+	}
  }
 
 
@@ -113,20 +103,22 @@ class DbStore extends Object
  */
  function listModels() {
 
-   $recordSet =& $this->dbConn->execute('SELECT "modelURI", "baseURI"
+   $recordSet = $this->dbConn->query('SELECT "modelURI", "baseURI"
                                          FROM "models"');
-   if (!$recordSet)
-      echo $this->dbConn->errorMsg();
+   if ($recordSet === false){
+      $errmsg = $this->dbConn->errorInfo();
+      $errmsg = $errmsg[0];
+      trigger_error($errmsg, E_USER_ERROR);
+   }
    else {
       $models = array();
-      $i=0;
-      while (!$recordSet->EOF) {
+      $i = 0;
+      while ($row = $recordSet->fetch()) {
 
-          $models[$i]['modelURI'] = $recordSet->fields[0];
-          $models[$i]['baseURI'] = $recordSet->fields[1];
+          $models[$i]['modelURI'] = $row[0];
+          $models[$i]['baseURI'] = $row[1];
 
-          ++$i;
-          $recordSet->moveNext();
+          ++$i; // ;) ...
       }
       return $models;
    }
@@ -144,27 +136,25 @@ class DbStore extends Object
  function modelExists($modelURI) {
 
   if(preg_match("/#$/", $modelURI)){
-  	$shortModelUri = substr($modelURI, 0, strlen($modelURI) - 1);
+  	$shortModelUri = substr($modelURI, 0, -1);
   }
   else{
   	$shortModelUri = $modelURI;
   	$modelURI .= '#';
   }
    
-   $res =& $this->dbConn->execute('SELECT COUNT(*) FROM "models" WHERE ("modelURI" = ? OR  "modelURI" = ?)', array (
-   	$modelURI,
-   	$shortModelUri
-   ));
-   if (!$res)
-      echo $this->dbConn->errorMsg();
-   else {
-      if (!$res->fields[0]) {
-          $res->Close();
-         return FALSE;
-      } else {
-          $res->Close();
-          return TRUE;
-      }
+  $sth = $this->dbConn->prepare('SELECT COUNT(*) FROM "models" WHERE ("modelURI" = ? OR "modelURI" = ?)');
+  $res = $sth->execute(array($modelURI,$shortModelUri));
+  
+  if ($res === false){
+     $errmsg = $this->dbConn->errorInfo();
+     $errmsg = $errmsg[0];
+     trigger_error($errmsg, E_USER_ERROR);
+  }
+  else {
+     $count = $sth->fetchColumn(0);
+     $sth->closeCursor();
+     return ($count > 0);
    }
  }
 
@@ -173,7 +163,7 @@ class DbStore extends Object
     /**
     * Returns the database connection object
     *
-    * @return ADOdb Database object
+    * @return PDO Database object
     * @access public
     */
     function &getDbConn()
@@ -197,21 +187,22 @@ class DbStore extends Object
       return FALSE;
    else {
 	   if(preg_match("/#$/", $modelURI)){
-	  	$shortModelUri = substr($modelURI, 0, strlen($modelURI) - 1);
+	  	$shortModelUri = substr($modelURI, 0, -1);
 	  }
 	  else{
 	  	$shortModelUri = $modelURI;
 	  	$modelURI .= '#';
 	  }
-      $modelVars =& $this->dbConn->execute('SELECT "modelURI", "modelID", "baseURI"
-                                            FROM "models"
-                                            WHERE ("modelURI" = ? OR "modelURI" = ? )', array (
-      	$modelURI,
-      	$shortModelUri 
-      ));
-
-      return new DbModel($this->dbConn, $modelVars->fields[0],
-                         $modelVars->fields[1], $modelVars->fields[2]);
+	  
+      $sth = $this->dbConn->prepare('SELECT "modelURI", "modelID", "baseURI"
+                                     FROM "models"
+                                     WHERE ("modelURI" = ? OR "modelURI" = ? )');
+	  $sth->execute(array($modelURI, $shortModelUri));
+      $row = $sth->fetch();
+      
+      $dbModel = new DbModel($this->dbConn, $row[0], $row[1], $row[2]);
+      $sth->closeCursor();
+      return $dbModel;
    }
  }
 
@@ -240,18 +231,17 @@ class DbStore extends Object
 			}
 		}
 		
-      	$rs =& $this->dbConn->execute('INSERT INTO models
-                                            ("modelID", "modelURI", "baseURI")
-                                            VALUES (?,?,?)', array (
-      	$modelID,
-      	$modelURI,
-      	$baseURI
-      ));
-
-      if (!$rs)
-         return $this->dbConn->errorMsg();
-      else
-         return new DbModel($this->dbConn, $modelURI, $modelID, $baseURI);
+      	$sth = $this->dbConn->prepare('INSERT INTO models ("modelID", "modelURI", "baseURI") VALUES (?,?,?)');
+		$res = $sth->execute(array($modelID,$modelURI,$baseURI));
+      	
+		if ($res === false){
+			$errmsg = $sth->errorInfo();
+			$errmsg = $errmsg[0];
+			trigger_error($errmsg, E_USER_ERROR);	
+		}
+		else{
+			return new DbModel($this->dbConn, $modelURI, $modelID, $baseURI);	
+		}
    }
  }
 
@@ -311,7 +301,10 @@ class DbStore extends Object
  */
  function _createUniqueModelID() {
 
-   $maxModelID =& $this->dbConn->GetOne('SELECT MAX("modelID") FROM "models"');
+   $result = $this->dbConn->query('SELECT MAX("modelID") FROM "models"');
+   $maxModelId = (int) $result->fetchColumn(0);
+   $result->closeCursor();
+   
    return ++$maxModelID;
  }
 
@@ -324,7 +317,9 @@ class DbStore extends Object
  */
  function _createUniqueDatasetID() {
 
-   $maxDatasetID =& $this->dbConn->GetOne('SELECT MAX("datasetId") FROM "datasets"');
+   $result = $this->dbConn->query('SELECT MAX("datasetId") FROM "datasets"');
+   $maxDatasetID = (int) $result->fetchColumn(0);
+   $result->closeCursor();
    return ++$maxDatasetID;
  }
 
@@ -752,14 +747,17 @@ class DbStore extends Object
    		$defaultModelUri=uniqid('http://rdfapi-php/dataset_defaultmodel_');
    		$defaultModel=$this->getNewModel($defaultModelUri);
 
-      	$rs =& $this->dbConn->execute("INSERT INTO datasets
-                                            VALUES ('" .$this->dbConn->qstr($datasetName) ."',
-                                                    '" .$this->dbConn->qstr($defaultModelUri)."')");
+      	$rs = $this->dbConn->exec('INSERT INTO "datasets"
+                                   VALUES (' .$this->dbConn->quote($datasetName) .',
+                                   		   ' .$this->dbConn->quote($defaultModelUri).')');
 
-      if (!$rs)
-         $this->dbConn->errorMsg();
+      if ($res === false){
+         $errmsg = $this->dbConn->errorInfo();
+         $errmsg = $errmsg[0];
+         trigger_error($errmsg, E_USER_ERROR);
+      }
       else
-		$return=new DatasetDb($this->dbConn, $this, $datasetName);
+		$return = new DatasetDb($this->dbConn, $this, $datasetName);
    		return ($return);
    }
  }
@@ -774,14 +772,16 @@ class DbStore extends Object
  */
 function datasetExists($datasetName) {
 
-   $res =& $this->dbConn->execute("SELECT COUNT(*) FROM datasets
-                                   WHERE datasetName = '" .$datasetName ."'");
-   if (!$res)
-      echo $this->dbConn->errorMsg();
+   $res = $this->dbConn->execute('SELECT COUNT(*) FROM "datasets"
+                                   WHERE "datasetName" = ' . $this->dbConn->quote($datasetName));
+   if ($res === false){
+      $errmsg = $this->dbConn->errorInfo();
+      $errmsg = $errmsg[0];
+      trigger_error($errmsg, E_USER_ERROR);
+   }
    else {
-      if (!$res->fields[0])
-         return FALSE;
-      return TRUE;
+   	  $count = (int) $res->fetchColumn(0);
+      return ($count > 0);
    }
  }
 
@@ -823,12 +823,15 @@ function datasetExists($datasetName) {
    if (!$this->modelExists($modelURI))
       return FALSE;
    else {
-      $modelVars =& $this->dbConn->execute("SELECT modelURI, modelID, baseURI
-                                            FROM models
-                                            WHERE modelURI='" .$modelURI ."'");
+      $modelVars = $this->dbConn->query('SELECT "modelURI", "modelID", "baseURI"
+                                            FROM "models"
+                                            WHERE "modelURI" = ' . $this->dbConn->quote($modelURI));
 
-      return new NamedGraphDb($this->dbConn, $modelVars->fields[0],
-                         $modelVars->fields[1], $graphName ,$modelVars->fields[2]);
+      $row = $modelVars->fetch();
+      $graph = new NamedGraphDb($this->dbConn, $row[0], $row[1], $graphName, $row[2]);
+      $modelVars->closeCursor();
+      
+      return $graph;
    }
  }
 
@@ -852,15 +855,18 @@ function datasetExists($datasetName) {
    else {
       $modelID = $this->_createUniqueModelID();
 
-      $rs =& $this->dbConn->execute("INSERT INTO models
-                                            (modelID, modelURI, baseURI)
-                                            VALUES (" .$modelID ."',
-                                                    " .$this->dbConn->qstr($modelURI) ."',
-                                                    " .$this->dbConn->qstr($baseURI) .")");
-      if (!$rs)
-         $this->dbConn->errorMsg();
-      else
+      $rs = $this->dbConn->exec('INSERT INTO models (modelID, modelURI, baseURI)
+                                            VALUES (' .$modelID . ','
+                                                  . $this->dbConn->quote($modelURI) . ','
+                                                  . $this->dbConn->quote($baseURI) . ')');
+      if ($rs === false){
+         $errmsg = $this->dbConn->errorInfo();
+         $errmsg = $errmsg[0];
+         trigger_error($errmsg, E_USER_ERROR);
+      }
+      else{
          return new NamedGraphDb($this->dbConn, $modelURI, $modelID, $graphName, $baseURI);
+      }
    }
  }
 
@@ -876,14 +882,18 @@ function datasetExists($datasetName) {
  */
  function removeNamedGraphDb($modelURI)
  {
-	if (!$this->modelExists($modelURI))
+	if (!$this->modelExists($modelURI)){
 		return FALSE;
-
-	$modelID = $this->dbConn->GetOne("SELECT modelID FROM models WHERE modelURI='".$modelURI."'");
-
-	$this->dbConn->execute("DELETE FROM models WHERE modelID=".$modelID);
-	$this->dbConn->execute("DELETE FROM dataset_model WHERE modelId=".$modelID);
-	$this->dbConn->execute("DELETE FROM statements WHERE modelID=".$modelID);
+	}
+	
+	$mURI = $this->dbConn->quote($modelURI);
+	$result = $this->dbConn->query('SELECT "modelID" FROM "models" WHERE "modelURI"=' . $mURI);
+	$modelID = (int) $result->fetchColumn(0);
+	$result->closeCursor();
+	
+	$this->dbConn->exec('DELETE FROM "models" WHERE modelID='.$modelID);
+	$this->dbConn->exec('DELETE FROM "dataset_model" WHERE modelId='.$modelID);
+	$this->dbConn->exec('DELETE FROM "statements" WHERE modelID='.$modelID);
 
 	return true;
  }

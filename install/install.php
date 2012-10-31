@@ -7,8 +7,6 @@ if (isset($_SERVER['CONFIG_PATH'])) {
 }
 
 require_once CONFIG_PATH.'/config.php.in';
-require_once INCLUDES_PATH.'/adodb5/adodb-exceptions.inc.php';
-require_once INCLUDES_PATH.'/adodb5/adodb.inc.php';
 
 
 if (empty($_POST))

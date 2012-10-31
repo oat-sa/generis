@@ -30,7 +30,7 @@ class NamedGraphDb extends DbModel
 	* Do not call this directly.
 	* Use the method getModel,getNewModel or putModel of the Class NamedGraphDb instead.
 	*
-	* @param   ADODBConnection
+	* @param   PDO
 	* @param   string
 	* @param   string
 	* @param   string

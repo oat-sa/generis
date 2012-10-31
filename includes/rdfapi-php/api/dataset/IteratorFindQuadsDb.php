@@ -26,7 +26,7 @@ class IteratorFindQuadsDb
 	/**
 	* Holds a reference to the associated DB resultSet.
 	*
-	* @var		$dbResultSets ADODB result
+	* @var		$dbResultSets PDOStatement
 	* @access	private
 	*/
 	var $dbResultSet;
@@ -47,6 +47,10 @@ class IteratorFindQuadsDb
 	*/
 	var $returnAsTriples;
 	
+	var $key;
+	
+	var $current;
+	
 	/**
     * Constructor.
     *
@@ -58,6 +62,8 @@ class IteratorFindQuadsDb
 		$this->dbResultSet=& $dbResultSet;
 		$this->datasetDb=& $datasetDb;
 		$this->returnAsTriples=$returnAsTriples;
+		$this->key = 0;
+		$this->current = $dbResultSet->fetch();
 	}
 	
 	/**
@@ -78,10 +84,12 @@ class IteratorFindQuadsDb
     */
 	function valid()
 	{
-		if (($this->dbResultSet ===false) OR ($this->dbResultSet->EOF) )
+		if (($this->dbResultSet === false) || (empty($this->current))){
 			return false;
-		
-		return true;
+		}
+		else{
+			return true;	
+		}
 	}
 	
 	/**
@@ -91,8 +99,10 @@ class IteratorFindQuadsDb
     */
 	function next()
 	{
-		if ($this->dbResultSet!==false)
-			$this->dbResultSet->moveNext();
+		if ($this->dbResultSet !== false){
+			$this->current = $this->dbResultSet->fetch();
+			$this->key++;
+		}
 	}
 	
 	/**
@@ -103,32 +113,39 @@ class IteratorFindQuadsDb
     */
 	function &current()
 	{
-		if ($this->dbResultSet===false)
+		if ($this->dbResultSet === false){
 			return null;
+		}
 		// subject
-		if ($this->dbResultSet->fields[5] == 'r')
-		$sub = new Resource($this->dbResultSet->fields[0]);
-		else
-		$sub = new BlankNode($this->dbResultSet->fields[0]);
-
-		// predicate
-		$pred = new Resource($this->dbResultSet->fields[1]);
-
-		// object
-		if ($this->dbResultSet->fields[6] == 'r')
-		$obj = new Resource($this->dbResultSet->fields[2]);
-		elseif ($this->dbResultSet->fields[6] == 'b')
-		$obj = new BlankNode($this->dbResultSet->fields[2]);
-		else {
-			$obj = new Literal($this->dbResultSet->fields[2], $this->dbResultSet->fields[3]);
-			if ($this->dbResultSet->fields[4])
-			$obj->setDatatype($this->dbResultSet->fields[4]);
+		if ($this->current[5] == 'r'){
+			$sub = new Resource($this->current[0]);
+		}
+		else{
+			$sub = new BlankNode($this->current[0]);
 		}
 
-		if($this->returnAsTriples)
-			return (new Statement($sub, $pred, $obj));
+		// predicate
+		$pred = new Resource($this->current[1]);
 
-		return (new Quad(new Resource($this->dbResultSet->fields[7]),$sub,$pred,$obj));
+		// object
+		if ($this->current[6] == 'r'){
+			$obj = new Resource($this->current[2]);
+		}
+		elseif ($this->current[6] == 'b'){
+			$obj = new BlankNode($this->current[2]);
+		}
+		else{
+			$obj = new Literal($this->current[2], $this->current[3]);
+			if ($this->current[4])
+			$obj->setDatatype($this->current[4]);
+		}
+
+		if($this->returnAsTriples){
+			return (new Statement($sub, $pred, $obj));
+		}
+		else{
+			return (new Quad(new Resource($this->current[7]),$sub,$pred,$obj));
+		}
 	}
 	
 	/**
@@ -139,7 +156,7 @@ class IteratorFindQuadsDb
     */
 	function key()
 	{
-		return $this->dbResultSet->_currentRow;
+		return $this->key;
 	}
 }
 ?>

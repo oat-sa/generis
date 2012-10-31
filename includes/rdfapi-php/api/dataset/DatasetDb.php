@@ -25,7 +25,7 @@ class DatasetDb extends Dataset
 	/**
 	* Reference to databse connection.
 	*
-	* @var		resource dbConnection
+	* @var		PDO dbConnection
 	* @access	private
 	*/
 	var $dbConnection;
@@ -52,7 +52,7 @@ class DatasetDb extends Dataset
     * Constructor
     * You can supply a Dataset name.
     *
-    * @param  ADODBConnection
+    * @param  PDO
     * @param  DbStore
     * @param  string
 	* @access	public
@@ -74,10 +74,12 @@ class DatasetDb extends Dataset
     */
 	function _initialize()
 	{
-		$recordSet =& $this->dbConnection->execute("SELECT defaultModelUri
-                                         FROM datasets where datasetName='".$this->setName."'");
-
-   		$this->defaultGraph=& $this->dbStore->getModel($recordSet->fields[0]);
+		$recordSet =& $this->dbConnection->query('SELECT "defaultModelUri"
+                                         FROM "datasets" WHERE "datasetName"=\''.$this->setName.'\'');
+		
+		
+   		$this->defaultGraph=& $this->dbStore->getModel($recordSet->fetchColumn(0));
+   		$recordSet->closeCursor();
 	}
 
 
@@ -93,13 +95,17 @@ class DatasetDb extends Dataset
 	function setDatasetName($datasetName)
 	{
 		if ($this->dbStore->datasetExists($datasetName))
+		{
 			return false;
+		}
 
-		$this->dbConnection->execute("UPDATE datasets SET datasetName='".$datasetName."'
-                                      where datasetName='".$this->setName."'");
+		$dsName = $this->dbConnection->quote($datasetName);
+		$sName = $this->dbConnection->quote($this->setName);
+		$this->dbConnection->exec('UPDATE "datasets" SET "datasetName"='.$dsName.'
+                                      WHERE "datasetName"='.$sName);
 
-		$this->dbConnection->execute("UPDATE dataset_model SET datasetName='".$datasetName."'
-                                      where datasetName='".$this->setName."'");
+		$this->dbConnection->exec('UPDATE "dataset_model" SET "datasetName"='.$dsName.'
+                                      WHERE "datasetName"='.$sName);
 		$this->setName=$datasetName;
 		return true;
 	}
@@ -124,10 +130,10 @@ class DatasetDb extends Dataset
 	{
 		$graphNameURI=$graph->getGraphName();
 		$this->removeNamedGraph($graphNameURI);
-		$this->dbConnection->execute('INSERT INTO dataset_model VALUES('
-		  . $this->dbConnection->qstr($this->setName) . ','
-		  . $this->dbConnection->qstr($graph->modelID) . ','
-		  . $this->dbConnection->qstr($graphNameURI) .')');
+		$this->dbConnection->exec('INSERT INTO "dataset_model" VALUES('
+		  . $this->dbConnection->quote($this->setName) . ','
+		  . $this->dbConnection->quote($graph->modelID) . ','
+		  . $this->dbConnection->quote($graphNameURI) .')');
 	}
 
 
@@ -138,9 +144,9 @@ class DatasetDb extends Dataset
 	 */
 	function setDefaultGraph(&$graph)
 	{
-		$this->dbConnection->execute('UPDATE datasets SET defaultModelUri ='
-		  . $this->dbConnection->qstr($graph->modelURI) . '  WHERE datasetName ='
-		  . $this->dbConnection->qstr($this->setName));
+		$this->dbConnection->exec('UPDATE "datasets" SET "defaultModelUri" ='
+		  . $this->dbConnection->quote($graph->modelURI) . '  WHERE "datasetName" ='
+		  . $this->dbConnection->quote($this->setName));
 	}
 
 	/**
@@ -150,7 +156,10 @@ class DatasetDb extends Dataset
 	 */
 	function & getDefaultGraph()
 	{
-		$defaultGraphURI = $this->dbConnection->GetOne("SELECT defaultModelUri FROM datasets WHERE datasetName ='".$this->setName."'");
+		$name = $this->dbConnection->quote($this->setName);
+		$result = $this->dbConnection->query('SELECT "defaultModelUri" FROM "datasets" WHERE "datasetName" ='.$name);
+		$defaultGraphURI = $result->fetchColumn(0);
+		$result->closeCursor();
 		return ($this->dbStore->getNamedGraphDb($defaultGraphURI,'http://rdfapi-php/dataset_defaultGraph_'.$this->setName));
 	}
 
@@ -172,9 +181,9 @@ class DatasetDb extends Dataset
 	 */
 	function removeNamedGraph($graphName)
 	{
-		$this->dbConnection->execute('DELETE FROM dataset_model WHERE datasetName="'
-		  . $this->dbConnection->qstr($this->setName) . '"  AND graphURI ="'
-		  . $this->dbConnection->qstr($graphName) . '"');
+		$this->dbConnection->exec('DELETE FROM "dataset_model" WHERE "datasetName"='
+		  . $this->dbConnection->quote($this->setName) . ' AND "graphURI" ='
+		  . $this->dbConnection->quote($graphName));
 	}
 
 	/**
@@ -185,8 +194,13 @@ class DatasetDb extends Dataset
 	 */
 	function containsNamedGraph($graphName)
 	{
-		$count= $this->dbConnection->GetOne('SELECT count(*) FROM dataset_model WHERE datasetName="'.$this->setName.'"  AND graphURI ="'.$graphName.'"');
-		return ($count>0);
+		$sName = $this->dbConnection->quote($this->setName);
+		$gName = $this->dbConnection->quote($graphName);
+		$result = $this->dbConnection->query("SELECT count(*) FROM dataset_model WHERE datasetName=".$sName." AND graphURI =".$gName);
+		$count = (int) $result->fetchColumn(0);
+		$result->closeCursor();
+
+		return ($count > 0);
 	}
 
 	/**
@@ -201,12 +215,16 @@ class DatasetDb extends Dataset
 		if(!$this->containsNamedGraph($graphName))
 			return null;
 
-		$modelVars =& $this->dbConnection->execute("SELECT models.modelURI, models.modelID, models.baseURI
-	                                            	FROM models, dataset_model
-	                                            	WHERE dataset_model.graphURI ='" .$graphName ."' AND dataset_model.modelId= models.modelID");
-
-		return new NamedGraphDb($this->dbConnection, $modelVars->fields[0],
-                         		$modelVars->fields[1], $graphName ,$modelVars->fields[2]);
+		$gName = $this->dbConnection->quote();
+		$modelVars =& $this->dbConnection->query('SELECT "models"."modelURI", "models"."modelID", "models"."baseURI"
+	                                             FROM "models", "dataset_model"
+	                                             WHERE "dataset_model"."graphURI" = ' .$gName .' AND "dataset_model"."modelId" = "models"."modelID"');
+		
+		$row = $modelVars->fetch();
+		$modelVars->closeCursor();
+		
+		return new NamedGraphDb($this->dbConnection, $row[0],
+                         		$row[1], $graphName ,$row[2]);
 	}
 
 	/**
@@ -216,13 +234,13 @@ class DatasetDb extends Dataset
 	 */
 	function listGraphNames()
 	{
-		$recordSet =& $this->dbConnection->execute("SELECT graphURI FROM dataset_model WHERE datasetName ='".$this->setName."'");
+		$sName = $this->dbConnection->quote($this->setName);
+		$recordSet =& $this->dbConnection->query('SELECT "graphURI" FROM "dataset_model" WHERE "datasetName" ='.$this->setName);
 
-		$return=array();
-		while (!$recordSet->EOF)
+		$return = array();
+		while ($row = $recordSet->fetch())
 		{
-		  $return[] = $recordSet->fields[0];
-		  $recordSet->moveNext();
+		  $return[] = $row[0];
 		}
 		return $return;
 	}
@@ -247,7 +265,8 @@ class DatasetDb extends Dataset
 	 */
 	function clear()
 	{
-		$this->dbConnection->execute("DELETE FROM dataset_model WHERE datasetName ='".$this->setName."'");
+		$sName = $this->dbConnection->quote($this->setName);
+		$this->dbConnection->exec('DELETE FROM "dataset_model" WHERE "datasetName" ='.$sName);
 	}
 
 	/**
@@ -257,7 +276,12 @@ class DatasetDb extends Dataset
 	 */
 	function countGraphs()
 	{
-		return ($this->dbConnection->GetOne("SELECT count(*) FROM dataset_model WHERE datasetName ='".$this->setName."'"));
+		$sName = $this->dbConnection->quote($this->setName);
+		$result = $this->dbConnection->query('SELECT count(*) FROM "dataset_model" WHERE "datasetName" ='.$sName);
+		$count = $result->fetchColumn(0);
+		$result->closeCursor();
+		
+		return $count;
 	}
 
 	/**
@@ -267,7 +291,8 @@ class DatasetDb extends Dataset
 	 */
 	function &listNamedGraphs()
 	{
-		$recordSet =& $this->dbConnection->execute("SELECT graphURI FROM dataset_model WHERE datasetName ='".$this->setName."'");
+		$sName = $this->dbConnection->quote($this->setName);
+		$recordSet =& $this->dbConnection->query('"SELECT "graphURI" FROM "dataset_model" WHERE "datasetName" ='.$sName);
 		$it = new IteratorAllGraphsDb($recordSet, $this);
 		return $it;
 	}
@@ -336,19 +361,25 @@ class DatasetDb extends Dataset
 	function containsQuad($graphName,$subject,$predicate,$object)
 	{
 		// static part of the sql statement
-		$sql = "SELECT count(*)
-          		FROM statements, dataset_model
-           		WHERE datasetName ='".$this->setName."' AND statements.modelID=dataset_model.modelId ";
+		$sName = $this->dbConnection->quote($this->setName);
+		$sql = 'SELECT count(*)
+          		FROM "statements", "dataset_model"
+           		WHERE "datasetName" ='.$sName.' AND "statements"."modelID" = "dataset_model"."modelId"';
 
 		if($graphName!=null)
 		{
-			$sql.= " AND graphURI ='".$graphName->getLabel()."'";
+			$gLabel = $this->dbConnection->quote($gLabel);
+			$sql.= ' AND "graphURI" = '.$gLabel;
 		}
 
 		// dynamic part of the sql statement
 		$sql .= DbModel::_createDynSqlPart_SPO($subject, $predicate, $object);
-
-		return (($this->dbConnection->GetOne($sql))>0);
+		
+		$result = $this->dbConnection->query($sql);
+		$count = $result->fetchColumn(0);
+		$result->closeCursor();
+		
+		return ($count > 0);
 	}
 
 	/**
@@ -360,17 +391,22 @@ class DatasetDb extends Dataset
 	{
 		$graphName=$quad->getGraphName();$graphName=$graphName->getLabel();
 		//find namedGraph IDs
-		$graphID = $this->dbConnection->GetOne("SELECT modelId FROM dataset_model WHERE graphURI ='$graphName'");
+		$gName = $this->dbConnection->quote($gName);
+		$result = $this->dbConnection->query('SELECT "modelId" FROM "dataset_model" WHERE "graphURI" = '.$gName);
+		$graphID = $result->fetchColumn(0);
+		$result->closeCursor();
 
 		// static part of the sql statement
-		$sql = "DELETE FROM statements WHERE modelID = $graphID";
+		$sql = 'DELETE FROM "statements" WHERE "modelID" = '.$graphID;
 
 		// dynamic part of the sql statement
 		$sql .= DbModel::_createDynSqlPart_SPO($quad->getSubject(), $quad->getPredicate(), $quad->getObject());
 
 		// execute the query
 		if($graphID)
-			$recordSet =& $this->dbConnection->execute($sql);
+		{
+			$this->dbConnection->exec($sql);
+		}
 	}
 
 	/**
@@ -381,11 +417,15 @@ class DatasetDb extends Dataset
 	 */
 	function countQuads()
 	{
-		$sql = "SELECT count(*)
-          		FROM statements, dataset_model
-           		WHERE datasetName ='".$this->setName."' AND statements.modelID=dataset_model.modelId ";
+		$sName = $this->dbConnection->quote();
+		$sql = 'SELECT count(*)
+          		FROM "statements", "dataset_model"
+           		WHERE "datasetName" ='.$sName.' AND "statements"."modelID"="dataset_model"."modelId"';
+		$result = $this->dbConnection->query($sql);
+		$count = $result->fetchColumn(0);
+		$result->closeCursor();
 
-		return ((int)$this->dbConnection->GetOne($sql));
+		return ((int)$count);
 	}
 
 	/**
@@ -401,21 +441,22 @@ class DatasetDb extends Dataset
 	function &findInNamedGraphs($graphName,$subject,$predicate,$object,$returnAsTriples =false )
 	{
 		// static part of the sql statement
-		$sql = "SELECT subject, predicate, object, l_language, l_datatype, subject_is, object_is, dataset_model.graphURI
-          		FROM statements, dataset_model
-           		WHERE datasetName ='".$this->setName."' AND statements.modelID=dataset_model.modelId ";
+		$sName = $this->dbConnection->quote($this->setName);
+		$sql = 'SELECT "subject", "predicate", "object", "l_language", "l_datatype", "subject_is", "object_is", "dataset_model"."graphURI"
+          		FROM "statements", "dataset_model"
+           		WHERE "datasetName" ='.$sName.' AND "statements"."modelID" = "dataset_model"."modelId"';
 
 		if($graphName!=null)
 		{
-			$sql.= " AND graphURI ='".$graphName->getLabel()."'";
+			$gName = $this->dbConnection->quote($graphName);
+			$sql.= ' AND "graphURI" ='.$gName;
 		}
 
 		// dynamic part of the sql statement
 		$sql .= DbModel::_createDynSqlPart_SPO($subject, $predicate, $object);
 
 		// execute the query
-		$recordSet =& $this->dbConnection->execute($sql);
-
+		$recordSet =& $this->dbConnection->query($sql);
 
 		$it = new IteratorFindQuadsDb($recordSet, $this, $returnAsTriples);
 		return $it;
@@ -432,17 +473,21 @@ class DatasetDb extends Dataset
 	 */
 	function &findInDefaultGraph($subject,$predicate,$object)
 	{
-		$defaultGraphID = (int)$this->dbConnection->GetOne("SELECT models.modelID FROM datasets, models WHERE datasets.datasetName ='".$this->setName."' AND datasets.defaultModelUri = models.modelURI");
+		$sName = $this->dbConnection->quote($this->setName);
+		$recordSet = $this->dbConnection->query('SELECT "models"."modelID" FROM "datasets", "models" WHERE "datasets"."datasetName" ='.$sName.' AND "datasets"."defaultModelUri" = "models"."modelURI"');
+		$defaultGraphID = $recordSet->fetchColumn(0);
+		$recordSet->closeCursor();
+		
 		// static part of the sql statement
-		$sql = "SELECT subject, predicate, object, l_language, l_datatype, subject_is, object_is
-          		FROM statements
-           		WHERE modelID ='$defaultGraphID'";
+		$sql = 'SELECT "subject", "predicate", "object", "l_language", "l_datatype", "subject_is", "object_is"
+          		FROM "statements"
+           		WHERE "modelID" ='.$defaultGraphID;
 
 		// dynamic part of the sql statement
 		$sql .= DbModel::_createDynSqlPart_SPO($subject, $predicate, $object);
 
 		// execute the query
-		$recordSet =& $this->dbConnection->execute($sql);
+		$recordSet =& $this->dbConnection->query($sql);
 
 		$it = new IteratorFindQuadsDb($recordSet, $this, true);
 		return $it;
