@@ -62,6 +62,11 @@ define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH' , 	GENERIS_NS . '#VersionedRe
 define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE' , 	GENERIS_NS . '#VersionedRepositoryType' , true) ;
 define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN' , 	GENERIS_NS . '#VersionedRepositoryLogin' , true) ;
 define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_PASSWORD' , 	GENERIS_NS . '#VersionedRepositoryPassword' , true) ;
+define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED' , 	GENERIS_NS . '#VersionedRepositoryEnabled' , true) ;
+
+define('PROPERTY_GENERIS_VCS_TYPE_SUBVERSION' ,	GENERIS_NS . '#VCSTypeSubversion' , true) ;
+define('PROPERTY_GENERIS_VCS_TYPE_SUBVERSION_WIN' ,	GENERIS_NS . '#VCSTypeSubversionWindows' , true) ;
+define('PROPERTY_GENERIS_VCS_TYPE_CVS' ,	 	GENERIS_NS . '#VCSTypeCvs' , true) ;
 
 #user
 define('CLASS_ROLE',							'http://www.tao.lu/Ontologies/TAO.rdf#ClassRole',true);

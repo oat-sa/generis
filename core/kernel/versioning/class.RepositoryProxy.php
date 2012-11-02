@@ -189,26 +189,21 @@ class core_kernel_versioning_RepositoryProxy
         $returnValue = null;
 
         // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002513 begin
-    	$type = $resource->getType();
+    	$VCStype = $resource->getVCSType();
         $implClass = '';
         
         // Function of the repository type, define the implementation to attack
 
-        switch ($type->uriResource)
+        switch ($VCStype->getUri())
         {
-        	case 'http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversion':
-        		$implClass = 'core_kernel_versioning_subversion_Repository';
+        	case PROPERTY_GENERIS_VCS_TYPE_SUBVERSION:
+        		$returnValue = core_kernel_versioning_subversion_Repository::singleton();
         		break;
-        	case 'http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversionWindows':
-        		$implClass = 'core_kernel_versioning_subversionWindows_Repository';
+        	case PROPERTY_GENERIS_VCS_TYPE_SUBVERSION_WIN:
+        		$returnValue = core_kernel_versioning_subversionWindows_Repository::singleton();
         		break;
-        }
-
-        // If an implementation has been found
-        if(!empty($implClass)){
-			$reflectionMethod = new ReflectionMethod($implClass, 'singleton');
-			$delegate = $reflectionMethod->invoke(null);
-			$returnValue = $delegate;
+        	default:
+        		throw new common_exception_Error('unknown Version Control System '.$VCStype->getLabel().'('.$VCStype.')');
         }
         // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002513 end
 

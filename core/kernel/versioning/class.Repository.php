@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 12.04.2012, 14:05:54 with ArgoUML PHP module 
+ * Automatically generated on 02.11.2012, 14:19:42 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_versioning
  */
@@ -34,7 +34,7 @@ require_once('core/kernel/classes/class.Resource.php');
 /**
  * include core_kernel_versioning_RepositoryProxy
  *
- * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  */
 require_once('core/kernel/versioning/class.RepositoryProxy.php');
 
@@ -50,7 +50,7 @@ require_once('core/kernel/versioning/class.RepositoryProxy.php');
  * Short description of class core_kernel_versioning_Repository
  *
  * @access public
- * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_versioning
  */
@@ -76,7 +76,7 @@ class core_kernel_versioning_Repository
      * Repository factory
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Resource type
      * @param  string url
      * @param  string login
@@ -127,7 +127,7 @@ class core_kernel_versioning_Repository
      * Checkout the remote repository to a local directory
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  int revision
      * @return boolean
      */
@@ -136,11 +136,6 @@ class core_kernel_versioning_Repository
         $returnValue = (bool) false;
 
         // section 127-0-1-1--548d6005:132d344931b:-8000:000000000000251A begin
-		
-        if(!GENERIS_VERSIONING_ENABLED){
-        	throw new core_kernel_versioning_exception_VersioningDisabledException();
-        }
-        
         $VersioningRepositoryUrlProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL);
 		$url = (string)$this->getOnePropertyValue($VersioningRepositoryUrlProp);
 		
@@ -160,17 +155,15 @@ class core_kernel_versioning_Repository
      * Get the repository type
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return core_kernel_classes_Resource
      */
-    public function getType()
+    public function getVCSType()
     {
         $returnValue = null;
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016D7 begin
-        
         $returnValue = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE));
-
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016D7 end
 
         return $returnValue;
@@ -180,7 +173,7 @@ class core_kernel_versioning_Repository
      * Get path of the local repository
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return string
      */
     public function getPath()
@@ -200,7 +193,7 @@ class core_kernel_versioning_Repository
      * Get authenticated with the remote repository
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return boolean
      */
     public function authenticate()
@@ -236,7 +229,7 @@ class core_kernel_versioning_Repository
      * system.
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  boolean deleteReference
      * @return boolean
      */
@@ -264,7 +257,7 @@ class core_kernel_versioning_Repository
      * Short description of method export
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string src
      * @param  string target
      * @param  int revision
@@ -287,7 +280,7 @@ class core_kernel_versioning_Repository
      * @param options.saveResource {boolean} Save the resource in the onthology
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string src
      * @param  string target
      * @param  string message
@@ -320,7 +313,7 @@ class core_kernel_versioning_Repository
      * Short description of method listContent
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string path
      * @param  int revision
      * @return array
@@ -340,7 +333,7 @@ class core_kernel_versioning_Repository
      * Short description of method getUrl
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return string
      */
     public function getUrl()
@@ -354,6 +347,58 @@ class core_kernel_versioning_Repository
         // section 127-0-1-1-6006a946:134f026c0e2:-8000:00000000000018FF end
 
         return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method enable
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return boolean
+     */
+    public function enable()
+    {
+        $returnValue = (bool) false;
+
+        // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F63 begin
+        if ($this->authenticate()) {
+        	if($this->checkout()){
+        		$this->editPropertyValues(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED), GENERIS_TRUE);
+				common_Logger::i("The remote versioning repository ".$this->getUri()." is bound to TAO.");
+        		$returnValue = true;
+        	}
+        }
+        // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F63 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method disable
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return boolean
+     */
+    public function disable()
+    {
+        $returnValue = (bool) false;
+
+        // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F65 begin
+        $classVersionedFiles = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDFILE);
+        $count = $classVersionedFiles->countInstances(array(
+        	PROPERTY_VERSIONEDFILE_REPOSITORY => $this
+        ), array('like' => false));
+        if ($count == 0) {
+			$this->editPropertyValues(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED), GENERIS_FALSE);
+			common_Logger::i("The remote versioning repository ".$this->getUri()." has been disabled");
+			$returnValue = true;
+        } else {
+			common_Logger::w("The remote versioning repository ".$this->getUri()." could not be disabled, because it is in use");
+        }
+        // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F65 end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class core_kernel_versioning_Repository */

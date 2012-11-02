@@ -269,10 +269,10 @@ class core_kernel_versioning_FileProxy
 
 			// Function of the repository type, define the implementation to attack
 			switch ($type->uriResource) {
-				case 'http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversion':
+				case PROPERTY_GENERIS_VCS_TYPE_SUBVERSION:
 					$implClass = 'core_kernel_versioning_subversion_File';
 					break;
-				case 'http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversionWindows':
+				case PROPERTY_GENERIS_VCS_TYPE_SUBVERSION_WIN:
 					$implClass = 'core_kernel_versioning_subversionWindows_File';
 					break;
 			}
