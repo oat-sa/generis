@@ -314,7 +314,7 @@ class DbStore extends Object
    $maxModelId = (int) $result->fetchColumn(0);
    $result->closeCursor();
    
-   return ++$maxModelID;
+   return ++$maxModelId;
  }
 
  /**
