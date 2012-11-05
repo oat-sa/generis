@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Nov 05 15:44:55 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Nov 05 16:25:17 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -3845,6 +3845,19 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD5'
+                          name = 'getExtraDSN' visibility = 'protected' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'true'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD6'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
                       </UML:Classifier.feature>
                     </UML:Class>
                     <UML:Class xmi.id = '10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000071F'
@@ -5428,6 +5441,19 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD7'
+                          name = 'getExtraDSN' visibility = 'protected' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD8'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
                       </UML:Classifier.feature>
                     </UML:Class>
                     <UML:Generalization xmi.id = '10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001B87'
@@ -5552,6 +5578,19 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                           isLeaf = 'false' isAbstract = 'false'>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BD7'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD9'
+                          name = 'getExtraDSN' visibility = 'protected' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BDA'
                               name = 'return' isSpecification = 'false' kind = 'return'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
@@ -29674,7 +29713,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig9"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1508, 8, 378, 564]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1508, 8, 378, 579]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB"
        fill="1"
        fillcolor="white"
@@ -29688,7 +29727,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       x="1508"
       y="8"
       width="378"
-      height="564"
+      height="579"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -29920,7 +29959,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="192 192 192"
     />
     <group name="Fig9.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1509, 174, 376, 398]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1509, 174, 376, 413]"
          href="10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB"
          fill="0"
          fillcolor="white"
@@ -29934,7 +29973,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="1509"
         y="174"
         width="376"
-        height="398"
+        height="413"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -30344,7 +30383,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="1509"
         y="549"
         width="376"
-        height="21"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -30356,6 +30395,22 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getIndexAlreadyExistsErrorCode() : string</text>
+      <text name="Fig9.6.27"
+        x="1509"
+        y="564"
+        width="376"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="true"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getExtraDSN() : string</text>
     </group>
   </group>
   <group name="Fig10"
@@ -34994,7 +35049,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </path>
   </group>
   <group name="Fig51"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1456, 620, 378, 157]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1456, 620, 378, 172]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001B86"
        fill="1"
        fillcolor="white"
@@ -35008,7 +35063,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       x="1456"
       y="620"
       width="378"
-      height="157"
+      height="172"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -35096,7 +35151,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig51.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1457, 664, 376, 113]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1457, 664, 376, 128]"
          href="10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001B86"
          fill="0"
          fillcolor="white"
@@ -35110,7 +35165,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="1457"
         y="664"
         width="376"
-        height="113"
+        height="128"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -35216,7 +35271,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="1457"
         y="754"
         width="376"
-        height="21"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -35228,6 +35283,22 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getIndexAlreadyExistsErrorCode() : string</text>
+      <text name="Fig51.6.8"
+        x="1457"
+        y="769"
+        width="376"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getExtraDSN() : string</text>
     </group>
   </group>
   <group name="Fig52"
@@ -35258,11 +35329,11 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <moveto x="1514"
               y="620" />
       <lineto x="1514"
-              y="571" />
+              y="586" />
     </path>
   </group>
   <group name="Fig53"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1904, 620, 331, 157]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1904, 620, 331, 172]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1"
        fill="1"
        fillcolor="white"
@@ -35276,7 +35347,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       x="1904"
       y="620"
       width="331"
-      height="157"
+      height="172"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -35299,7 +35370,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::classes::PgsqlDbWrapper</text>
     <group name="Fig53.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1905, 621, 186, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1905, 621, 329, 0]"
          href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1"
          fill="0"
          fillcolor="white"
@@ -35313,7 +35384,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <rectangle name="Fig53.2.0"
         x="1905"
         y="621"
-        width="186"
+        width="329"
         height="0"
         fill="0"
         fillcolor="white"
@@ -35364,7 +35435,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig53.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1905, 664, 329, 113]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1905, 664, 329, 128]"
          href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1"
          fill="0"
          fillcolor="white"
@@ -35378,7 +35449,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="1905"
         y="664"
         width="329"
-        height="113"
+        height="128"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -35484,7 +35555,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="1905"
         y="754"
         width="329"
-        height="21"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -35496,6 +35567,22 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getIndexAlreadyExistsErrorCode() : string</text>
+      <text name="Fig53.6.8"
+        x="1905"
+        y="769"
+        width="329"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getExtraDSN() : string</text>
     </group>
   </group>
   <group name="Fig54"
@@ -35517,7 +35604,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                         offset="-10" />
     </private>
     <path name="Fig54.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -35526,7 +35613,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <moveto x="1904"
               y="620" />
       <lineto x="1885"
-              y="571" />
+              y="586" />
     </path>
   </group>
 </pgml>

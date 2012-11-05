@@ -162,7 +162,7 @@ abstract class core_kernel_classes_DbWrapper
         
         while (true){
 	        $driver = strtolower(SGBD_DRIVER);
-	        $dsn = $driver . ':dbname=' . DATABASE_NAME . ';host=' . DATABASE_URL . ';charset=utf8';
+	        $dsn = $driver . ':dbname=' . DATABASE_NAME . ';host=' . DATABASE_URL . $this->getExtraDSN();
 	        $options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_BOTH,
 	        				 PDO::ATTR_PERSISTENT => false,
 	        				 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -642,6 +642,16 @@ abstract class core_kernel_classes_DbWrapper
      * @return string
      */
     public abstract function getIndexAlreadyExistsErrorCode();
+
+    /**
+     * Short description of method getExtraDSN
+     *
+     * @abstract
+     * @access protected
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return string
+     */
+    protected abstract function getExtraDSN();
 
 } /* end of abstract class core_kernel_classes_DbWrapper */
 
