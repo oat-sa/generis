@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Nov 05 15:06:00 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Nov 05 15:44:55 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -5434,6 +5434,137 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                       isSpecification = 'false'>
                       <UML:Generalization.child>
                         <UML:Class xmi.idref = '10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001B86'/>
+                      </UML:Generalization.child>
+                      <UML:Generalization.parent>
+                        <UML:Class xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB'/>
+                      </UML:Generalization.parent>
+                    </UML:Generalization>
+                    <UML:Class xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1'
+                      name = 'PgsqlDbWrapper' visibility = 'public' isSpecification = 'false'
+                      isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                      <UML:GeneralizableElement.generalization>
+                        <UML:Generalization xmi.idref = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC2'/>
+                      </UML:GeneralizableElement.generalization>
+                      <UML:Classifier.feature>
+                        <UML:Operation xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC3'
+                          name = 'getExtraConfiguration' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC4'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC5'
+                          name = 'getTableNotFoundErrorCode' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC6'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC7'
+                          name = 'getColumnNotFoundErrorCode' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC8'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC9'
+                          name = 'afterConnect' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BCA'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BCE'
+                          name = 'getTables' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BCF'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BD0'
+                          name = 'limitStatement' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BD1'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BD2'
+                              name = 'statement' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BD3'
+                              name = 'limit' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BD4'
+                              name = 'offset' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BD5'
+                                  language = '' body = '0'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BD6'
+                          name = 'getIndexAlreadyExistsErrorCode' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BD7'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                      </UML:Classifier.feature>
+                    </UML:Class>
+                    <UML:Generalization xmi.id = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC2'
+                      isSpecification = 'false'>
+                      <UML:Generalization.child>
+                        <UML:Class xmi.idref = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1'/>
                       </UML:Generalization.child>
                       <UML:Generalization.parent>
                         <UML:Class xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB'/>
@@ -30217,7 +30348,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="true"
@@ -35127,6 +35258,274 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <moveto x="1514"
               y="620" />
       <lineto x="1514"
+              y="571" />
+    </path>
+  </group>
+  <group name="Fig53"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1904, 620, 331, 157]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+    </private>
+    
+    <rectangle name="Fig53.0"
+      x="1904"
+      y="620"
+      width="331"
+      height="157"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig53.1"
+      x="1905"
+      y="621"
+      width="329"
+      height="21"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >core::kernel::classes::PgsqlDbWrapper</text>
+    <group name="Fig53.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1905, 621, 186, 0]"
+         href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig53.2.0"
+        x="1905"
+        y="621"
+        width="186"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig53.3"
+      x="1904"
+      y="642"
+      width="331"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig53.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1905, 643, 329, 21]"
+         href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig53.4.0"
+        x="1905"
+        y="643"
+        width="329"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig53.5"
+      x="1904"
+      y="663"
+      width="331"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig53.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1905, 664, 329, 113]"
+         href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig53.6.0"
+        x="1905"
+        y="664"
+        width="329"
+        height="113"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig53.6.1"
+        x="1905"
+        y="664"
+        width="329"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getExtraConfiguration() : array</text>
+      <text name="Fig53.6.2"
+        x="1905"
+        y="679"
+        width="329"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getTableNotFoundErrorCode() : string</text>
+      <text name="Fig53.6.3"
+        x="1905"
+        y="694"
+        width="329"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getColumnNotFoundErrorCode() : string</text>
+      <text name="Fig53.6.4"
+        x="1905"
+        y="709"
+        width="329"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >afterConnect() : void</text>
+      <text name="Fig53.6.5"
+        x="1905"
+        y="724"
+        width="329"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getTables() : array</text>
+      <text name="Fig53.6.6"
+        x="1905"
+        y="739"
+        width="329"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >limitStatement(statement : string,limit : int,offset : int = 0) : string</text>
+      <text name="Fig53.6.7"
+        x="1905"
+        y="754"
+        width="329"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getIndexAlreadyExistsErrorCode() : string</text>
+    </group>
+  </group>
+  <group name="Fig54"
+       description="org.argouml.uml.diagram.ui.FigGeneralization"
+       href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC2"
+       stroke="1"
+       strokecolor="51 51 153"
+  >
+    <private>
+      sourcePortFig="Fig53.0"
+      destPortFig="Fig9.0"
+      sourceFigNode="Fig53"
+      destFigNode="Fig9"
+      <argouml:pathitem figname="Fig54.1"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
+                        ownerhref="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC2"
+                        angle="270.0"
+                        offset="-10" />
+    </private>
+    <path name="Fig54.0"
+      description="org.tigris.gef.presentation.FigPoly"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="51 51 153"
+    >
+      <moveto x="1904"
+              y="620" />
+      <lineto x="1885"
               y="571" />
     </path>
   </group>
