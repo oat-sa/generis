@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 02.11.2012, 11:44:58 with ArgoUML PHP module 
+ * Automatically generated on 05.11.2012, 14:09:43 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -56,16 +56,33 @@ class helpers_Versioning
         $returnValue = (bool) false;
 
         // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F5F begin
-		$classRepository = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDREPOSITORY);
-        $repos = $classRepository->searchInstances(array(
+        $returnValue = count(self::getAvailableRepositories()) > 0;
+        // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F5F end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method getAvailableRepositories
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return array
+     */
+    public static function getAvailableRepositories()
+    {
+        $returnValue = array();
+
+        // section 10-30-1--78--774a33b7:13ad0ae6f5f:-8000:0000000000001BB9 begin
+        $classRepository = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDREPOSITORY);
+        $returnValue = $classRepository->searchInstances(array(
         	PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED => GENERIS_TRUE
         ), array(
         	'like' => false
         ));
-        $returnValue = count($repos) > 0;
-        // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F5F end
+        // section 10-30-1--78--774a33b7:13ad0ae6f5f:-8000:0000000000001BB9 end
 
-        return (bool) $returnValue;
+        return (array) $returnValue;
     }
 
 } /* end of class helpers_Versioning */

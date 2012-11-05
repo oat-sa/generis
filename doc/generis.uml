@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Nov 02 16:03:51 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Nov 05 14:11:22 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -25491,6 +25491,19 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                       name = 'return' isSpecification = 'false' kind = 'return'>
                       <UML:Parameter.type>
                         <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                  </UML:BehavioralFeature.parameter>
+                </UML:Operation>
+                <UML:Operation xmi.id = '10-30-1--78--774a33b7:13ad0ae6f5f:-8000:0000000000001BB9'
+                  name = 'getAvailableRepositories' visibility = 'public' isSpecification = 'false'
+                  ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                  isLeaf = 'false' isAbstract = 'false'>
+                  <UML:BehavioralFeature.parameter>
+                    <UML:Parameter xmi.id = '10-30-1--78--774a33b7:13ad0ae6f5f:-8000:0000000000001BBA'
+                      name = 'return' isSpecification = 'false' kind = 'return'>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
                       </UML:Parameter.type>
                     </UML:Parameter>
                   </UML:BehavioralFeature.parameter>
@@ -60986,7 +60999,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig0.4.5"
         x="49"
         y="671"
-        width="472"
+        width="470"
         height="14"
         fill="0"
         fillcolor="white"
@@ -65344,7 +65357,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="41"
         y="353"
         width="704"
-        height="14"
+        height="27"
         fill="0"
         fillcolor="white"
         stroke="0"
