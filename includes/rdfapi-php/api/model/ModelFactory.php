@@ -22,6 +22,8 @@ require_once RDFAPI_INCLUDE_DIR . 'model/DbStore.php';
 **/
 class ModelFactory
 {
+	private static $store = null;
+	
 	/**
 	* Returns a MemModel.
 	* You can supply a base URI
@@ -119,8 +121,15 @@ class ModelFactory
 	function & getDbStore($dbDriver=RDFAPI_DB_DRIVER, $host=RDFAPI_DB_HOST, $dbName=RDFAPI_DB_NAME,
                    		$user=RDFAPI_DB_USER, $password=RDFAPI_DB_PASSWORD)
 	{
-		$dbs = new DbStore($dbDriver, $host, $dbName,$user, $password);
-		return $dbs;
+		if (self::$store == null){
+			$dbs = new DbStore($dbDriver, $host, $dbName,$user, $password);
+			self::$store = $dbs;
+			return $dbs;
+		}
+		else{
+			return self::$store;
+		}
+		
 	}
 
 	/**

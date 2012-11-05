@@ -1,6 +1,7 @@
 <?php
 require_once RDFAPI_INCLUDE_DIR . 'constants.php';
 require_once RDFAPI_INCLUDE_DIR . 'util/Object.php';
+require_once RDFAPI_INCLUDE_DIR . 'util/DBConnection.php';
 require_once RDFAPI_INCLUDE_DIR . 'model/DbModel.php';
 
 // ----------------------------------------------------------------------------------
@@ -81,11 +82,19 @@ class DbStore extends Object
 		        				 PDO::ATTR_PERSISTENT => false,
 		        				 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 		        				 PDO::ATTR_EMULATE_PREPARES => false);
+
 	try{
-		$this->dbConn = new PDO($dsn, $user, $password, $options);
-		if ($this->driver == 'mysql'){
-			$this->dbConn->exec("SET SESSION SQL_MODE='ANSI_QUOTES'");
-	    }
+		// We try to load the DBConnection class specialization for the
+		// requested driver.
+		$className = ucfirst($this->driver) . 'DBConnection';
+		$classFile = RDFAPI_INCLUDE_DIR . 'util/' . $className . '.php';
+		if (file_exists($classFile)){
+			require_once($classFile);
+			$this->dbConn = new $className($dsn, $user, $password, $options);
+		}
+		else{
+			throw new Exception("RDF-API: No DBConnection class found for driver {$this->driver}.");
+		}
 	}
 	catch (PDOException $e){
 		throw new Exception("RDF-API: Could not connect to database with DSN '${dsn}'.");

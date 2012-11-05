@@ -2,6 +2,7 @@
 require_once RDFAPI_INCLUDE_DIR . 'model/Model.php';
 require_once RDFAPI_INCLUDE_DIR . 'model/Blanknode.php';
 require_once RDFAPI_INCLUDE_DIR . 'model/Statement.php';
+require_once RDFAPI_INCLUDE_DIR . 'util/DBConnection.php';
 
 // ----------------------------------------------------------------------------------
 // Class: DbModel
@@ -88,8 +89,10 @@ class DbModel extends Model{
 		
 		$rs = $this->dbConn->exec('UPDATE "models" SET "baseURI"=' . $bURI .'
                                  WHERE "modelID"=' .$this->modelID);
-		if (!$rs){
-			$this->dbConn->errorMsg();	
+		if ($rs === false){
+			$errmsg = $this->dbConn->errorInfo();
+			$errmsg = $errmsg[0];
+			trigger_error($errmsg, E_USER_ERROR);	
 		}
 	}
 
@@ -101,7 +104,7 @@ class DbModel extends Model{
 	* @access	public
 	*/
 	function size() {
-		$recordSet = $this->dbConn->query('SELECT COUNT(modelID) FROM "statements"
+		$recordSet = $this->dbConn->query('SELECT COUNT("modelID") FROM "statements"
                                     WHERE "modelID" = ' .$this->modelID);
 		$count = (int) $recordSet->fetchColumn(0);
 		$recordSet->closeCursor();
@@ -143,35 +146,50 @@ class DbModel extends Model{
 			$sql = 'INSERT INTO "statements"
 			        ("modelID", "subject", "predicate", "object", "l_language", "author", "stread", "stedit", "stdelete", "epoch")
 			        VALUES
-                    (' .$this->modelID .","
-			. $this->dbConn->quote($statement->getLabelSubject()) .","
-			. $this->dbConn->quote($statement->getLabelPredicate()) .",";
+                    (?, ?, ?,';
+			
+			$a = array($this->modelID,
+					   $statement->getLabelSubject(),
+					   $statement->getLabelPredicate());
 			
 			if (is_a($statement->object(), 'Literal')) {
-				$quotedLiteral = $this->dbConn->quote($statement->obj->getLabel());
-				$sql .=        $quotedLiteral .","
-				. $this->dbConn->quote($statement->obj->getLanguage()) . ","
-				. $this->dbConn->quote($author). ","
+				$sql .= '?, ?, ?,'
 				. "'yyy[admin,administrators,authors]',"		
 				. "'yyy[admin,administrators,authors]',"
 				. "'yyy[admin,administrators,authors]',"
 				. "NOW())";
+				
+				$a[] = $statement->obj->getLabel();
+				$a[] = ($statement->obj->getLanguage() == null) ? '' : $statement->obj->getLanguage();
+				$a[] = $author;
 			}else{
-				$sql .= $this->dbConn->quote($statement->obj->getLabel()) .","
+				$sql .= '?,'
 				. "'',"
-				. $this->dbConn->quote($author) . ","
+				. '?,'
 				."'yyy[admin,administrators,authors]',"
 				."'yyy[admin,administrators,authors]',"
 				."'yyy[admin,administrators,authors]',"
 				."NOW())";
+				
+				$a[] = $statement->obj->getLabel();
+				$a[] = $author;
 			}
-			$rs =& $this->dbConn->exec($sql);
-			if ($rs === false) {
+			
+			$sth = $this->dbConn->prepare($sql);
+			
+			if ($sth === false) {
 				$errormsg = $this->dbConn->errorInfo();
 				$errormsg = $errorMsg[0];
 				trigger_error($errmsg, E_USER_ERROR);
             } else {
-                return true;
+            	if ($sth->execute($a) === true){
+                	return true;
+            	}
+            	else{
+            		$errmsg = $sth->errorInfo();
+            		$errormsg = $errormsg[0];
+            		trigger_error($errmsg, E_USER_ERROR);	
+            	}
             }
 		} else {
 			return false;
