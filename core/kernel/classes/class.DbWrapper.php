@@ -632,6 +632,17 @@ abstract class core_kernel_classes_DbWrapper
      */
     protected abstract function afterConnect();
 
+    /**
+     * The error code returned by PDO in when an Index already exists in a table
+     * a given DBMS implementation.
+     *
+     * @abstract
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return string
+     */
+    public abstract function getIndexAlreadyExistsErrorCode();
+
 } /* end of abstract class core_kernel_classes_DbWrapper */
 
 ?>

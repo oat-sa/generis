@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 30.10.2012, 16:50:02 with ArgoUML PHP module 
+ * Automatically generated on 05.11.2012, 15:05:58 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -165,6 +165,24 @@ class core_kernel_classes_MysqlDbWrapper
         $statement .= " LIMIT ${limit} OFFSET ${offset}";
         $returnValue = $statement;
         // section 10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001BF2 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method getIndexAlreadyExistsErrorCode
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return string
+     */
+    public function getIndexAlreadyExistsErrorCode()
+    {
+        $returnValue = (string) '';
+
+        // section 10-13-1-85-189595a3:13ad0e0e3f2:-8000:0000000000001BBF begin
+        $returnValue = '42000';
+        // section 10-13-1-85-189595a3:13ad0e0e3f2:-8000:0000000000001BBF end
 
         return (string) $returnValue;
     }

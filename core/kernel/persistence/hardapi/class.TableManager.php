@@ -179,7 +179,7 @@ class core_kernel_persistence_hardapi_TableManager
 					$dbWrapper->exec($indexQuery);
 				}
 				catch(PDOException $e){
-					if(substr($e->getCode(), 0, 2) != '42' && $e->getCode() != '00000'){
+					if($e->getCode() != $dbWrapper->getIndexAlreadyExistsErrorCode() && $e->getCode() != '00000'){
 						//the user may not have the right to create the table index or it already exists.
 						throw new core_kernel_persistence_hardapi_Exception("Unable to create the multiples properties table indexes  {$this->name} : " .$e->getMessage());
 					}
