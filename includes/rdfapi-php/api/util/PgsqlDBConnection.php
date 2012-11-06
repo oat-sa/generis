@@ -1,16 +1,16 @@
 <?php
-class MysqlDBConnection extends DBConnection{
+class PgsqlDBConnection extends DBConnection{
 	
 	protected function getExtraConfiguration(){
 		return array();
 	}
 	
 	protected function afterConnect(){
-		$this->exec("SET SESSION SQL_MODE='ANSI_QUOTES'");
+		$this->exec("SET NAMES 'UTF8'");
 	}
 	
 	protected function getExtraDSN(){
-		return ';charset=utf8';
+		return '';
 	}
 }
 ?>

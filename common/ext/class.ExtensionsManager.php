@@ -450,7 +450,7 @@ class common_ext_ExtensionsManager
         $this->extensions = array();
         
     	$db = core_kernel_classes_DbWrapper::singleton();
-		$query = "SELECT * FROM extensions;";
+		$query = 'SELECT * FROM "extensions"';
 		$result = $db->query($query);
 
 		while ($row = $result->fetch()){

@@ -167,9 +167,11 @@ abstract class core_kernel_classes_DbWrapper
 	        				 PDO::ATTR_PERSISTENT => false,
 	        				 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 	        				 PDO::ATTR_EMULATE_PREPARES => false);
-	        
-	        $options = array_merge($options, $this->getExtraConfiguration());
-	        
+	        				 
+	     	
+	        foreach ($this->getExtraConfiguration() as $k => $v){
+	        	$options[$k] = $v;
+	        }
 	       
 	        try{
 	        	$this->dbConnector = @new PDO($dsn, DATABASE_LOGIN, DATABASE_PASS, $options);

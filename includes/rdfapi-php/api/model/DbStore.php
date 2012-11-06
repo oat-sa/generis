@@ -77,7 +77,7 @@ class DbStore extends Object
 
 	// create a new PDO object
 	$this->driver = strtolower($dbDriver);
-	$dsn = "{$this->driver}:host=${host};dbname=${dbName};charset=utf8";
+	$dsn = "{$this->driver}:host=${host};dbname=${dbName}";
 	$options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_NUM, // Best performance
 		        				 PDO::ATTR_PERSISTENT => false,
 		        				 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

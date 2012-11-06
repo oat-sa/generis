@@ -65,9 +65,7 @@ class common_uri_DatabaseSerialUriProvider
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:00000000000019A5 begin
         $driver = $this->getDriver();
         switch ($driver){
-            case 'postgres':
-            case 'postgres7':
-            case 'postgres8':
+            case 'pgsql':
             case 'mysql':
                 $dbWrapper = core_kernel_classes_DbWrapper::singleton();
                 $modelUri = core_kernel_classes_Session::singleton()->getNameSpace() . '#';
