@@ -150,8 +150,7 @@ class core_kernel_persistence_hardapi_TableManager
 			$dbWrapper->exec($query);
 			
 			// create table index
-			$query = 'CREATE INDEX "idx'.$this->name.'" ON "'.$this->name.'" ("uri");';
-			$dbWrapper->exec($query);
+			$dbWrapper->createIndex('idx_' . $this->name, $this->name, array('uri' => null));
 				
 			//always create the multi prop table
 			$query = 'CREATE TABLE "'.$this->name.'Props" (
@@ -170,19 +169,15 @@ class core_kernel_persistence_hardapi_TableManager
 			self::$_tables[] = "{$this->name}Props";
 			
 			// Create multiples properties table indexes
-			$indexQueries = array();
-			$indexQueries[] = 'CREATE INDEX "idx_props_property_uri" ON "'.$this->name.'Props" ("property_uri");';
-			$indexQueries[] = 'CREATE INDEX "idx_props_foreign_property_uri" ON "'.$this->name.'Props" ("property_foreign_uri");';
-			$indexQueries[] = 'CREATE INDEX "idx_props_instance_id" ON "'.$this->name.'Props" ("instance_id");';
-			foreach ($indexQueries as $indexQuery){
-				try{
-					$dbWrapper->exec($indexQuery);
-				}
-				catch(PDOException $e){
-					if($e->getCode() != $dbWrapper->getIndexAlreadyExistsErrorCode() && $e->getCode() != '00000'){
-						//the user may not have the right to create the table index or it already exists.
-						throw new core_kernel_persistence_hardapi_Exception("Unable to create the multiples properties table indexes  {$this->name} : " .$e->getMessage());
-					}
+			try{
+				$dbWrapper->createIndex('idx_props_property_uri', $this->name . 'Props', array('property_uri' => null));
+				$dbWrapper->createIndex('idx_props_foreign_property_uri', $this->name . 'Props', array('property_foreign_uri' => null));
+				$dbWrapper->createIndex('idx_props_instance_id', $this->name . 'Props', array('instance_id' => null));
+			}
+			catch(PDOException $e){
+				if($e->getCode() != $dbWrapper->getIndexAlreadyExistsErrorCode() && $e->getCode() != '00000'){
+					//the user may not have the right to create the table index or it already exists.
+					throw new core_kernel_persistence_hardapi_Exception("Unable to create the multiples properties table indexes  {$this->name} : " .$e->getMessage());
 				}
 			}
 			

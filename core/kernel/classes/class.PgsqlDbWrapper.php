@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 05.11.2012, 16:21:02 with ArgoUML PHP module 
+ * Automatically generated on 07.11.2012, 14:14:34 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -207,6 +207,64 @@ class core_kernel_classes_PgsqlDbWrapper
         // section 10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD9 end
 
         return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method createIndex
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string indexName
+     * @param  string tableName
+     * @param  array columns
+     * @return void
+     */
+    public function createIndex($indexName, $tableName, $columns)
+    {
+        // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BF7 begin
+        $sql = 'CREATE INDEX "' . $indexName . '" ON "' . $tableName . '" (';
+        $colsSql = array();
+        foreach ($columns as $n => $l){
+        	// Index lengths is not available in postgres.
+        	$colsSql[] = '"' . $n . '"';
+        }
+        
+        $colsSql = implode(',', $colsSql);
+        $sql .= $colsSql . ')';
+        
+        $this->exec($sql);
+        // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BF7 end
+    }
+
+    /**
+     * Short description of method rebuildIndexes
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string tableName
+     * @return void
+     */
+    public function rebuildIndexes($tableName)
+    {
+        // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BFB begin
+        $this->query('REINDEX TABLE "' . $tableName . '"');
+        // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BFB end
+    }
+
+    /**
+     * Short description of method flush
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string tableName
+     * @return void
+     */
+    public function flush($tableName)
+    {
+        // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BFE begin
+        // No flushing in postgres.
+        return;
+        // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BFE end
     }
 
 } /* end of class core_kernel_classes_PgsqlDbWrapper */

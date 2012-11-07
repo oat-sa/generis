@@ -655,6 +655,44 @@ abstract class core_kernel_classes_DbWrapper
      */
     protected abstract function getExtraDSN();
 
+    /**
+     * Create an index on a given table and selected columns. This method throws
+     * in case of error.
+     *
+     * @abstract
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string indexName The name of the index to create.
+     * @param  string tableName A table name
+     * @param  array columns An associative array that represents the columns on which the index applies. The keys of the array are the name of the columns, the values are the length of the data to index in the column. If there is no length limitation, set the value of the array cell to null.
+     * @return void
+     */
+    public abstract function createIndex($indexName, $tableName, $columns);
+
+    /**
+     * Rebuild the indexes of a given table. This method throws PDOExceptions in
+     * of error.
+     *
+     * @abstract
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string tableName
+     * @return void
+     */
+    public abstract function rebuildIndexes($tableName);
+
+    /**
+     * Flush a particular table (query cache, ...). This method throws
+     * in case of error.
+     *
+     * @abstract
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string tableName
+     * @return void
+     */
+    public abstract function flush($tableName);
+
 } /* end of abstract class core_kernel_classes_DbWrapper */
 
 ?>

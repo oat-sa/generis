@@ -548,7 +548,14 @@ class core_kernel_persistence_Switcher
 			$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
 			foreach($referencer->propertyLocation($property) as $table){
 				if(!preg_match("/Props$/", $table) && preg_match("/^_[0-9]{2,}/", $table)){
-					@$dbWrapper->exec('ALTER TABLE "'.$table.'" ADD INDEX "idx_'.$propertyAlias.'" ("'.$propertyAlias.'"( 255 ))');
+					try{
+						$dbWrapper->createIndex('idx_'.$propertyAlias, $table, array($propertyAlias => 255));
+					}
+					catch (PDOException $e){
+						if($e->getCode() != $dbWrapper->getIndexAlreadyExistsErrorCode() && $e->getCode() != '00000'){
+							throw new core_kernel_persistence_hardapi_Exception("Unable to create index 'idx_${propertyAlias}' for property alias '${propertyAlias}' on table '${table}': {$e->getMessage()}");
+						}
+					}
 				}
 			}
 		}
@@ -565,8 +572,8 @@ class core_kernel_persistence_Switcher
 				$percent = '0'.$percent;
 			}
 
-			$dbWrapper->query('OPTIMIZE TABLE "'.$tables[$i].'"');
-			$dbWrapper->query('FLUSH TABLE "'.$tables[$i].'"');
+			$dbWrapper->rebuildIndexes($tables[$i]);
+			$dbWrapper->flush($tables[$i]);
 
 			$i++;
 		}
