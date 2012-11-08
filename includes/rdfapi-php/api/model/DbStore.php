@@ -649,17 +649,18 @@ class DbStore extends Object
     **/
     function _isSetup_MySQL()
     {
-        $recordSet =& $this->dbConn->execute("SHOW TABLES");
-        if (!$recordSet) {
-            throw new Exception($this->dbConn->errorMsg());
+        $recordSet = $this->dbConn->query("SHOW TABLES");
+        if ($recordSet === false) {
+        	$errmsg = $this->dbConn->errorInfo();
+        	$errmsg = $errmsg[0];
+        	trigger_error($errmsg, E_USER_ERROR);
         } else {
             $tables = array();
-            while (!$recordSet->EOF) {
-                $tables[]= $recordSet->fields[0];
+            while ($row = $recordSet->fetch()) {
+                $tables[]= $row[0];
                 if (isset($i)) {
                     ++$i;
                 }
-                $recordSet->moveNext();
             }
             if (in_array("models",$tables) && in_array("statements",$tables)
              && in_array("namespaces",$tables)) {
