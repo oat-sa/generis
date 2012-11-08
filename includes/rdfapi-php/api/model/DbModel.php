@@ -1146,11 +1146,10 @@ class DbModel extends Model{
 
 
 	/**
-	* Get an ADORecordSet with array fields[] containing a representation of
+	* Get a PDOStatement with array fields[] containing a representation of
 	* the given DbModel stored in the table: statements, with an index corresponding
 	* to following table columns:
 	* [0] - subject, [1] - predicate, [2] - object, [3] - l_language,
-	* [4] - l_datatype, [5] - subject_is, [6] - object_is
 	* (This method operates on data from a DbModel without loading it into a memory model
 	*  in order to save resources and improve speed).
 	*
@@ -1210,11 +1209,10 @@ class DbModel extends Model{
 		$sql = 'SELECT * FROM "namespaces"
            WHERE "modelID" = ' .$this->modelID;
 		$temp = false;
-		$res  = $this->dbConn->execute($sql);
-		if($res){
-			while (!$res->EOF) {
-				$temp[$res->fields[1]]=$res->fields[2];
-				$res->moveNext();
+		$res  = $this->dbConn->query($sql);
+		if($res !== false){
+			while ($row = $res->fetch()) {
+				$temp[$row[1]] = $row[2];
 			}
 		}
 		return $temp;
