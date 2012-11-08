@@ -662,7 +662,9 @@ class DbModel extends Model{
 		$recordSet = $this->dbConn->query($sql);
 
 		if ($recordSet === false){
-			echo $this->dbConn->errorMsg();
+			$errmsg = $dbConn->errorInfo();
+			$errmsg = $errmsg[0];
+			trigger_error($errmsg, E_USER_ERROR);
 		}
 		else{
 			$count = $recordSet->fetchColumn(0);

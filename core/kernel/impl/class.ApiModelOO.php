@@ -592,21 +592,24 @@ class core_kernel_impl_ApiModelOO
         $query = 'INSERT INTO "statements" ("modelID","subject","predicate","object","l_language","author","stread","stedit","stdelete","epoch")
         			VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP);';
 
-        $returnValue = $dbWrapper->exec($query, array(
-       		$localNs->getModelId(),
-       		$subject,
-       		$predicate,
-       		$object,
-       		$language,
-       		$session->getUserLogin(),
-       		$mask,
-       		$mask,
-       		$mask
-        ));
-        
-    	if($dbWrapper->errorCode() !== '00000'){
-			throw new common_Exception ("Unable to setStatement (SPO) {$subject}, {$predicate}, {$object} : " .$dbWrapper->dbConnector->errorMsg());
-		}
+        try{
+	        $returnValue = $dbWrapper->exec($query, array(
+	       		$localNs->getModelId(),
+	       		$subject,
+	       		$predicate,
+	       		$object,
+	       		$language,
+	       		$session->getUserLogin(),
+	       		$mask,
+	       		$mask,
+	       		$mask
+	        ));
+        }
+        catch (PDOException $e){
+	        if($e->getCode() !== '00000'){
+				throw new common_Exception ("Unable to setStatement (SPO) {$subject}, {$predicate}, {$object} : " . $e->getMessage());
+			}
+        }
         
         // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009E8 end
 
