@@ -408,14 +408,14 @@ function _is_forbidden_rdf_node_element ($local_name)
    * @access	private
    */
 function _istalnum($val) {
-  return ereg("[A-Za-z0-9]",$val);
+  return preg_match("/[A-Za-z0-9]/u", $val);
 }
   /**
    * @param string $val
    * @access	private
    */
 function _istalpha($val) {
-  return ereg("[A-Za-z]",$val);
+  return preg_match("/[A-Za-z]/u",$val);
 }
 
   /**
@@ -2088,7 +2088,7 @@ function _character_data_handler( $parser,$s)
         if( $this->rdf_parser['top']['state'] == IN_PROPERTY_UNKNOWN_OBJECT )
         {
             /* look for non-whitespace */
-            for( $i = 0; (( $i < $len ) && (  ereg(" |\n|\t",$s{ $i }) )); $i++ );
+            for( $i = 0; (( $i < $len ) && (  preg_match("/ |\n|\t/u",$s{ $i }) )); $i++ );
             /* if we found non-whitespace, this is a literal */
             if( $i < $len )
             {

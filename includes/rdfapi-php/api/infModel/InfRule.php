@@ -111,15 +111,15 @@ class InfRule
 	{
 		//throw an error if subject, predicate, or object are neither node, 
 		//nor <s>,<p>,<o>.
-		if(!is_a($subject,'Node') && !ereg('<[spo]>', $subject)) 
+		if(!is_a($subject,'Node') && !preg_match('/<[spo]>/', $subject)) 
 			trigger_error(RDFAPI_ERROR . '(class: Infrule; method:  
 				setEntailment): $subject has to be <s>,<p>,or <o> or of class Node'
 				, E_USER_ERROR);
-		if(!is_a($predicate,'Node') && !ereg('<[spo]>', $predicate)) 
+		if(!is_a($predicate,'Node') && !preg_match('/<[spo]>/', $predicate)) 
 			trigger_error(RDFAPI_ERROR . '(class: Infrule; method: 
 				setEntailment): $predicate has to be <s>,<p>,or <o> or of class Node'
 				, E_USER_ERROR);
-		if(!is_a($object,'Node') && !ereg('<[spo]>', $object)) 
+		if(!is_a($object,'Node') && !preg_match('/<[spo]>/', $object)) 
 			trigger_error(RDFAPI_ERROR . '(class: Infrule; method: 
 				setEntailment): $object has to be <s>,<p>,or <o> or of class Node'
 				, E_USER_ERROR);

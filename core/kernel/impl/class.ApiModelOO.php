@@ -292,13 +292,8 @@ class core_kernel_impl_ApiModelOO
         require_once(RDFAPI_INCLUDE_DIR . "RdfAPI.php");
         $session = core_kernel_classes_Session::singleton();
         
-	     if(!preg_match("/#$/", $targetNameSpace)){
-		 	$targetNameSpace .= '#';
-		 }
-        
-		 //rdf-api use ereg that are deprecated since PHP5.3
-		if (version_compare(phpversion(), '5.3.0', '>=')) {
-			error_reporting(E_ALL & ~E_DEPRECATED);
+	    if(!preg_match("/#$/", $targetNameSpace)){
+			$targetNameSpace .= '#';
 		}
 
 		// Init RDF API for PHP

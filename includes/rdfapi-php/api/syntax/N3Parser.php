@@ -272,9 +272,9 @@ class N3Parser extends Object {
    **/
   function notComment($s) {
     if ($s=="") return false;
-    $N3Comment = '^[ \t]*\#';
+    $N3Comment = '/^[ \t]*\#/u';
 
-    if (ereg($N3Comment,$s)) return false;
+    if (preg_match($N3Comment, $s)) return false;
     else return true;
   }
 
