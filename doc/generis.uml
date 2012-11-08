@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Design generis API oo</activediagram>
+      <activediagram>Extension Management</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Nov 07 14:44:34 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Nov 08 22:45:56 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -21391,6 +21391,547 @@ specified in the Manifest</UML:TaggedValue.dataValue>
                     <UML:Class xmi.idref = '-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5D'/>
                   </UML:Generalization.parent>
                 </UML:Generalization>
+                <UML:Class xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02'
+                  name = 'Manifest' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+                  isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                  <UML:Classifier.feature>
+                    <UML:Attribute xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C03'
+                      name = 'filePath' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C04'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C05'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C06'
+                      name = 'name' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C07'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C08'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C09'
+                      name = 'description' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C0A'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C0B'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C0C'
+                      name = 'version' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C0D'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C0E'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C0F'
+                      name = 'dependencies' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C10'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C11'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C12'
+                      name = 'models' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C13'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C14'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C15'
+                      name = 'modelsRights' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C16'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C17'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C18'
+                      name = 'installModelFiles' visibility = 'private' isSpecification = 'false'
+                      ownerScope = 'instance' changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C19'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C1A'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C1D'
+                      name = 'installChecks' visibility = 'private' isSpecification = 'false'
+                      ownerScope = 'instance' changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C1E'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C1F'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C20'
+                      name = 'classLoaderPackages' visibility = 'private' isSpecification = 'false'
+                      ownerScope = 'instance' changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C21'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C22'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C23'
+                      name = 'constants' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C24'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C25'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C26'
+                      name = '__construct' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C27'
+                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C28'
+                          name = 'filePath' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C41'
+                      name = 'getFilePath' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C42'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C57'
+                      name = 'setFilePath' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C58'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C59'
+                          name = 'filePath' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C43'
+                      name = 'getName' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C44'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C5A'
+                      name = 'setName' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C5B'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C5C'
+                          name = 'name' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C45'
+                      name = 'getDescription' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C46'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C5D'
+                      name = 'setDescription' visibility = 'private' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C5E'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C5F'
+                          name = 'description' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C47'
+                      name = 'getVersion' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C48'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C60'
+                      name = 'setVersion' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C61'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C62'
+                          name = 'version' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C49'
+                      name = 'getDependencies' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4A'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C63'
+                      name = 'setDependencies' visibility = 'private' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C64'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C65'
+                          name = 'dependencies' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4B'
+                      name = 'getModels' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4C'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C66'
+                      name = 'setModels' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C67'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C68'
+                          name = 'models' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4D'
+                      name = 'getModelsRights' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4E'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C69'
+                      name = 'setModelsRights' visibility = 'private' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C6A'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C6B'
+                          name = 'modelsRights' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4F'
+                      name = 'getInstallModelFiles' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C50'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C6E'
+                      name = 'setInstallModelFiles' visibility = 'private' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C6F'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C70'
+                          name = 'installModelFiles' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C51'
+                      name = 'getInstallChekcs' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C52'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C71'
+                      name = 'setInstallChecks' visibility = 'private' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C72'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C73'
+                          name = 'installChecks' isSpecification = 'false' kind = 'in'>
+                          <UML:ModelElement.stereotype>
+                            <UML:Stereotype xmi.idref = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C74'/>
+                          </UML:ModelElement.stereotype>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C53'
+                      name = 'getClassLoaderPackages' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C54'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C75'
+                      name = 'setClassLoaderPackages' visibility = 'private' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C76'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C77'
+                          name = 'classLoaderPackages' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C55'
+                      name = 'getConstants' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C56'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C78'
+                      name = 'setConstants' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C79'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C7A'
+                          name = 'constants' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                  </UML:Classifier.feature>
+                </UML:Class>
               </UML:Namespace.ownedElement>
             </UML:Package>
             <UML:Class xmi.id = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BA1'
@@ -26024,6 +26565,10 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         <UML:DataType xmi.id = '10-13-1-85-631905e3:13a87d71b36:-8000:0000000000001B3F'
           name = 'PDOStatement' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
           isAbstract = 'false'/>
+        <UML:Stereotype xmi.id = '-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C74'
+          isSpecification = 'false' isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
+          <UML:Stereotype.baseClass>Parameter</UML:Stereotype.baseClass>
+        </UML:Stereotype>
       </UML:Namespace.ownedElement>
     </UML:Model>
     <UML:Expression xmi.id = '127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015B8'
@@ -30680,7 +31225,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="true"
@@ -30696,7 +31241,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="true"
@@ -30712,7 +31257,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="true"
@@ -35727,7 +36272,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::classes::PgsqlDbWrapper</text>
     <group name="Fig53.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1873, 677, 329, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1873, 677, 357, 0]"
          href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1"
          fill="0"
          fillcolor="white"
@@ -35741,7 +36286,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <rectangle name="Fig53.2.0"
         x="1873"
         y="677"
-        width="329"
+        width="357"
         height="0"
         fill="0"
         fillcolor="white"
@@ -42253,7 +42798,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       name="Extension Management"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[576, 176, 528, 309]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[672, 176, 528, 309]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-87--2--3--76-e9002fe:123ebbb9fa8:-8000:0000000000001799"
        fill="1"
        fillcolor="white"
@@ -42264,7 +42809,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </private>
     
     <rectangle name="Fig0.0"
-      x="576"
+      x="672"
       y="176"
       width="528"
       height="309"
@@ -42274,7 +42819,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <text name="Fig0.1"
-      x="577"
+      x="673"
       y="177"
       width="526"
       height="21"
@@ -42290,7 +42835,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       justification="Center"
     >ExtensionsManager</text>
     <group name="Fig0.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[577, 177, 261, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[673, 177, 261, 0]"
          href="-87--2--3--76-e9002fe:123ebbb9fa8:-8000:0000000000001799"
          fill="0"
          fillcolor="white"
@@ -42302,7 +42847,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig0.2.0"
-        x="577"
+        x="673"
         y="177"
         width="261"
         height="0"
@@ -42313,7 +42858,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig0.3"
-      x="576"
+      x="672"
       y="198"
       width="528"
       height="1"
@@ -42323,7 +42868,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig0.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[577, 199, 526, 38]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[673, 199, 526, 38]"
          href="-87--2--3--76-e9002fe:123ebbb9fa8:-8000:0000000000001799"
          fill="0"
          fillcolor="white"
@@ -42334,7 +42879,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig0.4.0"
-        x="577"
+        x="673"
         y="199"
         width="526"
         height="38"
@@ -42344,7 +42889,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
       <text name="Fig0.4.1"
-        x="577"
+        x="673"
         y="199"
         width="526"
         height="15"
@@ -42360,7 +42905,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >extensions : array</text>
       <text name="Fig0.4.2"
-        x="577"
+        x="673"
         y="214"
         width="526"
         height="21"
@@ -42377,7 +42922,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >instance : ExtensionsManager</text>
     </group>
     <rectangle name="Fig0.5"
-      x="576"
+      x="672"
       y="236"
       width="528"
       height="1"
@@ -42387,7 +42932,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig0.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[577, 237, 526, 248]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[673, 237, 526, 248]"
          href="-87--2--3--76-e9002fe:123ebbb9fa8:-8000:0000000000001799"
          fill="0"
          fillcolor="white"
@@ -42398,7 +42943,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig0.6.0"
-        x="577"
+        x="673"
         y="237"
         width="526"
         height="248"
@@ -42408,7 +42953,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
       <text name="Fig0.6.1"
-        x="577"
+        x="673"
         y="237"
         width="526"
         height="15"
@@ -42424,7 +42969,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >singleton() : ExtensionsManager</text>
       <text name="Fig0.6.2"
-        x="577"
+        x="673"
         y="252"
         width="526"
         height="15"
@@ -42440,7 +42985,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >getInstalledExtensions() : array</text>
       <text name="Fig0.6.3"
-        x="577"
+        x="673"
         y="267"
         width="526"
         height="15"
@@ -42456,7 +43001,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >isExtensionInstalled(extension : string) : boolean</text>
       <text name="Fig0.6.4"
-        x="577"
+        x="673"
         y="282"
         width="526"
         height="15"
@@ -42472,7 +43017,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >isExtensionEnabled(extension : string) : boolean</text>
       <text name="Fig0.6.5"
-        x="577"
+        x="673"
         y="297"
         width="526"
         height="15"
@@ -42488,7 +43033,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >addExtension(id : string,extensionsZipPath : string)</text>
       <text name="Fig0.6.6"
-        x="577"
+        x="673"
         y="312"
         width="526"
         height="15"
@@ -42504,7 +43049,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >removeExtension(extension)</text>
       <text name="Fig0.6.7"
-        x="577"
+        x="673"
         y="327"
         width="526"
         height="15"
@@ -42520,7 +43065,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >loadExtensions()</text>
       <text name="Fig0.6.8"
-        x="577"
+        x="673"
         y="342"
         width="526"
         height="15"
@@ -42536,7 +43081,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >__construct()</text>
       <text name="Fig0.6.9"
-        x="577"
+        x="673"
         y="357"
         width="526"
         height="15"
@@ -42552,7 +43097,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >getAvailableExtensions()</text>
       <text name="Fig0.6.10"
-        x="577"
+        x="673"
         y="372"
         width="526"
         height="15"
@@ -42568,7 +43113,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >modifyConfigurations(configurationArray : array)</text>
       <text name="Fig0.6.11"
-        x="577"
+        x="673"
         y="387"
         width="526"
         height="15"
@@ -42584,7 +43129,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >reset()</text>
       <text name="Fig0.6.12"
-        x="577"
+        x="673"
         y="402"
         width="526"
         height="15"
@@ -42600,7 +43145,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >getModelsToLoad() : array</text>
       <text name="Fig0.6.13"
-        x="577"
+        x="673"
         y="417"
         width="526"
         height="15"
@@ -42616,7 +43161,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >getDependancies(extension : SimpleExtension) : array</text>
       <text name="Fig0.6.14"
-        x="577"
+        x="673"
         y="432"
         width="526"
         height="15"
@@ -42632,7 +43177,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >getUpdatableModels() : array</text>
       <text name="Fig0.6.15"
-        x="577"
+        x="673"
         y="447"
         width="526"
         height="15"
@@ -42648,7 +43193,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >getExtensionById(id : string) : Extension</text>
       <text name="Fig0.6.16"
-        x="577"
+        x="673"
         y="462"
         width="526"
         height="21"
@@ -44230,7 +44775,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig9"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[576, 24, 528, 133]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[672, 16, 528, 133]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002388"
        fill="1"
        fillcolor="white"
@@ -44241,8 +44786,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </private>
     
     <rectangle name="Fig9.0"
-      x="576"
-      y="24"
+      x="672"
+      y="16"
       width="528"
       height="133"
       fill="1"
@@ -44251,8 +44796,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <text name="Fig9.1"
-      x="577"
-      y="25"
+      x="673"
+      y="17"
       width="526"
       height="21"
       fill="0"
@@ -44267,7 +44812,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       justification="Center"
     >ExtensionConfiguration</text>
     <group name="Fig9.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[577, 25, 457, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[673, 17, 457, 0]"
          href="-87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002388"
          fill="0"
          fillcolor="white"
@@ -44279,8 +44824,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig9.2.0"
-        x="577"
-        y="25"
+        x="673"
+        y="17"
         width="457"
         height="0"
         fill="0"
@@ -44290,8 +44835,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig9.3"
-      x="576"
-      y="46"
+      x="672"
+      y="38"
       width="528"
       height="1"
       fill="1"
@@ -44300,7 +44845,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig9.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[577, 47, 526, 69]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[673, 39, 526, 69]"
          href="-87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002388"
          fill="0"
          fillcolor="white"
@@ -44311,8 +44856,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig9.4.0"
-        x="577"
-        y="47"
+        x="673"
+        y="39"
         width="526"
         height="69"
         fill="0"
@@ -44321,8 +44866,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
       <text name="Fig9.4.1"
-        x="577"
-        y="47"
+        x="673"
+        y="39"
         width="526"
         height="15"
         fill="0"
@@ -44337,8 +44882,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >loaded : boolean</text>
       <text name="Fig9.4.2"
-        x="577"
-        y="62"
+        x="673"
+        y="54"
         width="526"
         height="15"
         fill="0"
@@ -44353,8 +44898,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >loadedAtStartUp : boolean</text>
       <text name="Fig9.4.3"
-        x="577"
-        y="77"
+        x="673"
+        y="69"
         width="526"
         height="15"
         fill="0"
@@ -44369,8 +44914,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >ghost : boolean</text>
       <text name="Fig9.4.4"
-        x="577"
-        y="92"
+        x="673"
+        y="84"
         width="526"
         height="21"
         fill="0"
@@ -44386,8 +44931,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >version : string</text>
     </group>
     <rectangle name="Fig9.5"
-      x="576"
-      y="116"
+      x="672"
+      y="108"
       width="528"
       height="1"
       fill="1"
@@ -44396,7 +44941,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig9.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[577, 117, 526, 39]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[673, 109, 526, 39]"
          href="-87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002388"
          fill="0"
          fillcolor="white"
@@ -44407,8 +44952,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig9.6.0"
-        x="577"
-        y="117"
+        x="673"
+        y="109"
         width="526"
         height="39"
         fill="0"
@@ -44417,8 +44962,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
       <text name="Fig9.6.1"
-        x="577"
-        y="117"
+        x="673"
+        y="109"
         width="526"
         height="15"
         fill="0"
@@ -44433,8 +44978,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >__construct(loaded : boolean,loadedAtStartUp : boolean,ghost : boolean = false,version : string)</text>
       <text name="Fig9.6.2"
-        x="577"
-        y="132"
+        x="673"
+        y="124"
         width="526"
         height="21"
         fill="0"
@@ -46262,6 +46807,675 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <lineto x="330"
               y="294" />
     </path>
+  </group>
+  <group name="Fig27"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[936, 704, 301, 549]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       href="-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+    </private>
+    
+    <rectangle name="Fig27.0"
+      x="936"
+      y="704"
+      width="301"
+      height="549"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig27.1"
+      x="937"
+      y="705"
+      width="299"
+      height="21"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >Manifest</text>
+    <group name="Fig27.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[937, 705, 64, 0]"
+         href="-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig27.2.0"
+        x="937"
+        y="705"
+        width="64"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig27.3"
+      x="936"
+      y="726"
+      width="301"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig27.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[937, 727, 299, 173]"
+         href="-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig27.4.0"
+        x="937"
+        y="727"
+        width="299"
+        height="173"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig27.4.1"
+        x="937"
+        y="727"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >filePath : string</text>
+      <text name="Fig27.4.2"
+        x="937"
+        y="742"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >name : string</text>
+      <text name="Fig27.4.3"
+        x="937"
+        y="757"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >description : string</text>
+      <text name="Fig27.4.4"
+        x="937"
+        y="772"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >version : string</text>
+      <text name="Fig27.4.5"
+        x="937"
+        y="787"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >dependencies : array</text>
+      <text name="Fig27.4.6"
+        x="937"
+        y="802"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >models : array</text>
+      <text name="Fig27.4.7"
+        x="937"
+        y="817"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >modelsRights : array</text>
+      <text name="Fig27.4.8"
+        x="937"
+        y="832"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >installModelFiles : array</text>
+      <text name="Fig27.4.9"
+        x="937"
+        y="847"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >installChecks : array</text>
+      <text name="Fig27.4.10"
+        x="937"
+        y="862"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >classLoaderPackages : array</text>
+      <text name="Fig27.4.11"
+        x="937"
+        y="877"
+        width="299"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >constants : array</text>
+    </group>
+    <rectangle name="Fig27.5"
+      x="936"
+      y="899"
+      width="301"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig27.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[937, 900, 299, 353]"
+         href="-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig27.6.0"
+        x="937"
+        y="900"
+        width="299"
+        height="353"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig27.6.1"
+        x="937"
+        y="900"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >__construct(filePath : string)</text>
+      <text name="Fig27.6.2"
+        x="937"
+        y="915"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getFilePath() : string</text>
+      <text name="Fig27.6.3"
+        x="937"
+        y="930"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setFilePath(filePath : string) : void</text>
+      <text name="Fig27.6.4"
+        x="937"
+        y="945"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getName() : string</text>
+      <text name="Fig27.6.5"
+        x="937"
+        y="960"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setName(name : string) : void</text>
+      <text name="Fig27.6.6"
+        x="937"
+        y="975"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getDescription() : string</text>
+      <text name="Fig27.6.7"
+        x="937"
+        y="990"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setDescription(description : string) : void</text>
+      <text name="Fig27.6.8"
+        x="937"
+        y="1005"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getVersion() : string</text>
+      <text name="Fig27.6.9"
+        x="937"
+        y="1020"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setVersion(version : string) : void</text>
+      <text name="Fig27.6.10"
+        x="937"
+        y="1035"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getDependencies() : array</text>
+      <text name="Fig27.6.11"
+        x="937"
+        y="1050"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setDependencies(dependencies : array) : void</text>
+      <text name="Fig27.6.12"
+        x="937"
+        y="1065"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getModels() : array</text>
+      <text name="Fig27.6.13"
+        x="937"
+        y="1080"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setModels(models : array) : void</text>
+      <text name="Fig27.6.14"
+        x="937"
+        y="1095"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getModelsRights() : array</text>
+      <text name="Fig27.6.15"
+        x="937"
+        y="1110"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setModelsRights(modelsRights : array) : void</text>
+      <text name="Fig27.6.16"
+        x="937"
+        y="1125"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getInstallModelFiles() : array</text>
+      <text name="Fig27.6.17"
+        x="937"
+        y="1140"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setInstallModelFiles(installModelFiles : array) : void</text>
+      <text name="Fig27.6.18"
+        x="937"
+        y="1155"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getInstallChekcs() : array</text>
+      <text name="Fig27.6.19"
+        x="937"
+        y="1170"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setInstallChecks(installChecks : array) : void</text>
+      <text name="Fig27.6.20"
+        x="937"
+        y="1185"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getClassLoaderPackages() : array</text>
+      <text name="Fig27.6.21"
+        x="937"
+        y="1200"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setClassLoaderPackages(classLoaderPackages : array) : void</text>
+      <text name="Fig27.6.22"
+        x="937"
+        y="1215"
+        width="299"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getConstants() : array</text>
+      <text name="Fig27.6.23"
+        x="937"
+        y="1230"
+        width="299"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setConstants(constants : array) : void</text>
+    </group>
   </group>
 </pgml>
 <pgml description="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram|-87--2--3--76-6391cf81:1278a3ef617:-8000:0000000000003092"

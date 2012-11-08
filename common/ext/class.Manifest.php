@@ -1,0 +1,589 @@
+<?php
+
+error_reporting(E_ALL);
+
+/**
+ * Generis Object Oriented API - common\ext\class.Manifest.php
+ *
+ * $Id$
+ *
+ * This file is part of Generis Object Oriented API.
+ *
+ * Automatically generated on 08.11.2012, 22:45:54 with ArgoUML PHP module 
+ * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
+ *
+ * @author firstname and lastname of author, <author@example.org>
+ * @package common
+ * @subpackage ext
+ */
+
+if (0 > version_compare(PHP_VERSION, '5')) {
+    die('This file was generated for PHP 5');
+}
+
+/* user defined includes */
+// section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02-includes begin
+// section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02-includes end
+
+/* user defined constants */
+// section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02-constants begin
+// section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02-constants end
+
+/**
+ * Short description of class common_ext_Manifest
+ *
+ * @access public
+ * @author firstname and lastname of author, <author@example.org>
+ * @package common
+ * @subpackage ext
+ */
+class common_ext_Manifest
+{
+    // --- ASSOCIATIONS ---
+
+
+    // --- ATTRIBUTES ---
+
+    /**
+     * Short description of attribute filePath
+     *
+     * @access private
+     * @var string
+     */
+    private $filePath = '';
+
+    /**
+     * Short description of attribute name
+     *
+     * @access private
+     * @var string
+     */
+    private $name = '';
+
+    /**
+     * Short description of attribute description
+     *
+     * @access private
+     * @var string
+     */
+    private $description = '';
+
+    /**
+     * Short description of attribute version
+     *
+     * @access private
+     * @var string
+     */
+    private $version = '';
+
+    /**
+     * Short description of attribute dependencies
+     *
+     * @access private
+     * @var array
+     */
+    private $dependencies = array();
+
+    /**
+     * Short description of attribute models
+     *
+     * @access private
+     * @var array
+     */
+    private $models = array();
+
+    /**
+     * Short description of attribute modelsRights
+     *
+     * @access private
+     * @var array
+     */
+    private $modelsRights = array();
+
+    /**
+     * Short description of attribute installModelFiles
+     *
+     * @access private
+     * @var array
+     */
+    private $installModelFiles = array();
+
+    /**
+     * Short description of attribute installChecks
+     *
+     * @access private
+     * @var array
+     */
+    private $installChecks = array();
+
+    /**
+     * Short description of attribute classLoaderPackages
+     *
+     * @access private
+     * @var array
+     */
+    private $classLoaderPackages = array();
+
+    /**
+     * Short description of attribute constants
+     *
+     * @access private
+     * @var array
+     */
+    private $constants = array();
+
+    // --- OPERATIONS ---
+
+    /**
+     * Short description of method __construct
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  string filePath
+     * @return mixed
+     */
+    public function __construct($filePath)
+    {
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C26 begin
+        
+    	// the file exists, we can refer to the $filePath.
+    	if (is_readable($filePath)){
+    		$this->setFilePath($filePath);
+    		$array = require($this->getFilePath());
+    		
+    		if (!empty($array['name'])){
+    			$this->setName($array['name']);
+    		}
+    		
+    		if (!empty($array['description'])){
+    			$this->setDescription($array['description']);
+    		}
+    		
+    		if (!empty($array['version'])){
+    			$this->setVersion($array['version']);
+    		}
+    		
+    		if (!empty($array['dependencies'])){
+    			$this->setDependencies($array['dependencies']);
+    		}
+    		
+    		if (!empty($array['models'])){
+    			$this->setModels($array['models']);
+    		}
+    		
+    		if (!empty($array['modelsRight'])){
+    			$this->setModelsRights($array['modelsRight']);
+    		}
+    		
+    		if (!empty($array['install'])){
+    			if (!empty($array['install']['rdf'])){
+    				$this->setInstallModelFiles($array['install']['rdf']);
+    			}
+    			
+    			if (!empty($array['install']['checks'])){
+    				$this->setInstallChecks($array['install']['checks']);
+    			}
+    		}
+    		
+    		if (!empty($array['classLoaderPackages'])){
+    			$this->setClassLoaderPackages($array['classLoaderPackages']);
+    		}
+    		
+    		if (!empty($array['constants'])){
+    			$this->setConstants($array['constants']);
+    		}
+    	}
+    	else{
+    		throw new common_ext_ManifestNotFoundException("The Extension Manifest file located at '${filePath}' could not be read.");
+    	}
+    	
+        $this->setFilePath($filePath);
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C26 end
+    }
+
+    /**
+     * Short description of method getFilePath
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return string
+     */
+    public function getFilePath()
+    {
+        $returnValue = (string) '';
+
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C41 begin
+        if (!empty($this->filePath)){
+        	$returnValue = $this->filePath;
+        }
+        else{
+        	$returnValue = null;
+        }
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C41 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method setFilePath
+     *
+     * @access private
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  string filePath
+     * @return void
+     */
+    private function setFilePath($filePath)
+    {
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C57 begin
+        $this->filePath = $filePath;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C57 end
+    }
+
+    /**
+     * Short description of method getName
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return string
+     */
+    public function getName()
+    {
+        $returnValue = (string) '';
+
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C43 begin
+        if (!empty($this->name)){
+        	$returnValue = $this->name;
+        }
+        else{
+        	$returnValue = null;
+        }
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C43 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method setName
+     *
+     * @access private
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  string name
+     * @return void
+     */
+    private function setName($name)
+    {
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C5A begin
+        $this->name = $name;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C5A end
+    }
+
+    /**
+     * Short description of method getDescription
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return string
+     */
+    public function getDescription()
+    {
+        $returnValue = (string) '';
+
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C45 begin
+        if (!empty($this->description)){
+        	$returnValue = $this->description;
+        }
+        else{
+        	$returnValue = null;
+        }
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C45 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method setDescription
+     *
+     * @access private
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  string description
+     * @return void
+     */
+    private function setDescription($description)
+    {
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C5D begin
+        $this->description = $description;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C5D end
+    }
+
+    /**
+     * Short description of method getVersion
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return string
+     */
+    public function getVersion()
+    {
+        $returnValue = (string) '';
+
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C47 begin
+        if (!empty($this->version)){
+        	$returnValue = $this->version;
+        }
+        else{
+        	$returnValue = null;
+        }
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C47 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method setVersion
+     *
+     * @access private
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  string version
+     * @return void
+     */
+    private function setVersion($version)
+    {
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C60 begin
+        $this->version = $version;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C60 end
+    }
+
+    /**
+     * Short description of method getDependencies
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return array
+     */
+    public function getDependencies()
+    {
+        $returnValue = array();
+
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C49 begin
+        $returnValue = $this->dependencies;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C49 end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method setDependencies
+     *
+     * @access private
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  array dependencies
+     * @return void
+     */
+    private function setDependencies($dependencies)
+    {
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C63 begin
+        $this->dependencies = $dependencies;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C63 end
+    }
+
+    /**
+     * Short description of method getModels
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return array
+     */
+    public function getModels()
+    {
+        $returnValue = array();
+
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4B begin
+        $returnValue = $this->models;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4B end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method setModels
+     *
+     * @access private
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  array models
+     * @return void
+     */
+    private function setModels($models)
+    {
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C66 begin
+        $this->models = $models;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C66 end
+    }
+
+    /**
+     * Short description of method getModelsRights
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return array
+     */
+    public function getModelsRights()
+    {
+        $returnValue = array();
+
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4D begin
+        $returnValue = $this->modelsRights;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4D end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method setModelsRights
+     *
+     * @access private
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  array modelsRights
+     * @return void
+     */
+    private function setModelsRights($modelsRights)
+    {
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C69 begin
+        $this->modelsRights = $modelsRights;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C69 end
+    }
+
+    /**
+     * Short description of method getInstallModelFiles
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return array
+     */
+    public function getInstallModelFiles()
+    {
+        $returnValue = array();
+
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4F begin
+        $returnValue = $this->installModelFiles;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4F end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method setInstallModelFiles
+     *
+     * @access private
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  array installModelFiles
+     * @return void
+     */
+    private function setInstallModelFiles($installModelFiles)
+    {
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C6E begin
+        $this->installModelFiles = $installModelFiles;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C6E end
+    }
+
+    /**
+     * Short description of method getInstallChekcs
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return array
+     */
+    public function getInstallChekcs()
+    {
+        $returnValue = array();
+
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C51 begin
+        $returnValue = $this->installChecks;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C51 end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method setInstallChecks
+     *
+     * @access private
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  array installChecks
+     * @return void
+     */
+    private function setInstallChecks($installChecks)
+    {
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C71 begin
+        $this->installChecks = $installChecks;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C71 end
+    }
+
+    /**
+     * Short description of method getClassLoaderPackages
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return array
+     */
+    public function getClassLoaderPackages()
+    {
+        $returnValue = array();
+
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C53 begin
+        $returnValue = $this->classLoaderPackages;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C53 end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method setClassLoaderPackages
+     *
+     * @access private
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  array classLoaderPackages
+     * @return void
+     */
+    private function setClassLoaderPackages($classLoaderPackages)
+    {
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C75 begin
+        $this->classLoaderPackages = $classLoaderPackages;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C75 end
+    }
+
+    /**
+     * Short description of method getConstants
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return array
+     */
+    public function getConstants()
+    {
+        $returnValue = array();
+
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C55 begin
+        $returnValue = $this->constants;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C55 end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method setConstants
+     *
+     * @access private
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  array constants
+     * @return void
+     */
+    private function setConstants($constants)
+    {
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C78 begin
+        $this->constants = $constants;
+        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C78 end
+    }
+
+} /* end of class common_ext_Manifest */
+
+?>
