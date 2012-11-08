@@ -32,7 +32,7 @@ class ModelFactory
 	* @return	object	MemModel
 	* @access	public
 	*/
-	function & getDefaultModel($baseURI = null)
+	function getDefaultModel($baseURI = null)
 	{
 		return ModelFactory::getMemModel($baseURI);
 	}
@@ -45,7 +45,7 @@ class ModelFactory
     * @param string $uri
 	* @access	public
     */
-	function & getDatasetMem($graphSetId = null)
+	function getDatasetMem($graphSetId = null)
 	{
         require_once RDFAPI_INCLUDE_DIR . 'dataset/DatasetMem.php';
 		$m = new DatasetMem($graphSetId);
@@ -60,7 +60,7 @@ class ModelFactory
 	* @return	object	MemModel
 	* @access	public
 	*/
-	function & getMemModel($baseURI = null)
+	function getMemModel($baseURI = null)
 	{
         require_once RDFAPI_INCLUDE_DIR . 'model/MemModel.php';
 		$m = new MemModel($baseURI);
@@ -78,7 +78,7 @@ class ModelFactory
 	* @return	object	DbModel
 	* @access	public
 	*/
-	function & getDefaultDbModel($baseURI = null)
+	function getDefaultDbModel($baseURI = null)
 	{
 		$dbStore = ModelFactory::getDbStore();
 		$m = ModelFactory::getDbModel($dbStore,$baseURI);
@@ -118,7 +118,7 @@ class ModelFactory
 	* @return	object	DbStore
 	* @access	public
 	*/
-	function & getDbStore($dbDriver=RDFAPI_DB_DRIVER, $host=RDFAPI_DB_HOST, $dbName=RDFAPI_DB_NAME,
+	function getDbStore($dbDriver=RDFAPI_DB_DRIVER, $host=RDFAPI_DB_HOST, $dbName=RDFAPI_DB_NAME,
                    		$user=RDFAPI_DB_USER, $password=RDFAPI_DB_PASSWORD)
 	{
 		if (self::$store == null){
@@ -142,7 +142,7 @@ class ModelFactory
 	* @return	object	MemModel
 	* @access	public
 	*/
-	function & getInfModelF($baseURI = null)
+	function getInfModelF($baseURI = null)
 	{
         require_once RDFAPI_INCLUDE_DIR . 'infModel/InfModelF.php';
 		$mod = new InfModelF($baseURI);
@@ -178,7 +178,7 @@ class ModelFactory
 	* @return	object	ResModel
 	* @access	public
 	*/
-	function & getResModel($modelType, $baseURI = null)
+	function getResModel($modelType, $baseURI = null)
 	{
 		switch ($modelType) {
 			case DBMODEL:
@@ -207,7 +207,7 @@ class ModelFactory
 	* @return	object	ResModel
 	* @access	public
 	*/
-    function &getResModelForBaseModel(&$baseModel) {
+    function getResModelForBaseModel(&$baseModel) {
         require_once RDFAPI_INCLUDE_DIR . 'resModel/ResModel.php';
         $mod = new ResModel($baseModel);
         return $mod;
@@ -227,7 +227,7 @@ class ModelFactory
 	* @return	object		OntModel
 	* @access	public
 	*/
-	function & getOntModel($modelType,$vocabulary, $baseURI = null)
+	function getOntModel($modelType,$vocabulary, $baseURI = null)
 	{
 		switch ($modelType)
 		{
@@ -261,7 +261,7 @@ class ModelFactory
 	* @return	object		OntModel
 	* @access	public
 	*/
-	function &getOntModelForBaseModel(&$baseModel, $vocabulary)
+	function getOntModelForBaseModel(&$baseModel, $vocabulary)
 	{
         require_once RDFAPI_INCLUDE_DIR . 'ontModel/OntModel.php';
 
@@ -289,7 +289,7 @@ class ModelFactory
 	* @return	SparqlClient the SparqlClient object.
 	* @access	public
 	*/
-	function & getSparqlClient($server){
+	function getSparqlClient($server){
 		$cl = new SparqlClient($server);
 		return $cl;
 	}

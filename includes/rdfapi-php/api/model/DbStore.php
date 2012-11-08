@@ -175,7 +175,7 @@ class DbStore extends Object
     * @return PDO Database object
     * @access public
     */
-    function &getDbConn()
+    function getDbConn()
     {
         return $this->dbConn;
     }
@@ -265,7 +265,7 @@ class DbStore extends Object
  * @return  boolean
  * @access	public
  */
- function putModel(&$model, $modelURI=NULL) {
+ function putModel($model, $modelURI=NULL) {
 
    if (!$modelURI) {
       if (is_a($model, 'MemModel'))
@@ -745,7 +745,7 @@ class DbStore extends Object
  * @throws  SqlError
  * @access	public
  */
- function & getNewDatasetDb($datasetName)
+ function getNewDatasetDb($datasetName)
  {
 
  	require_once(RDFAPI_INCLUDE_DIR . PACKAGE_DATASET);
