@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 08.11.2012, 22:45:54 with ArgoUML PHP module 
+ * Automatically generated on 09.11.2012, 10:51:37 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author firstname and lastname of author, <author@example.org>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package common
  * @subpackage ext
  */
@@ -33,7 +33,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class common_ext_Manifest
  *
  * @access public
- * @author firstname and lastname of author, <author@example.org>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package common
  * @subpackage ext
  */
@@ -67,6 +67,14 @@ class common_ext_Manifest
      * @var string
      */
     private $description = '';
+
+    /**
+     * Short description of attribute author
+     *
+     * @access private
+     * @var string
+     */
+    private $author = '';
 
     /**
      * Short description of attribute version
@@ -138,7 +146,7 @@ class common_ext_Manifest
      * Short description of method __construct
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string filePath
      * @return mixed
      */
@@ -157,6 +165,10 @@ class common_ext_Manifest
     		
     		if (!empty($array['description'])){
     			$this->setDescription($array['description']);
+    		}
+    		
+    		if (!empty($array['author'])){
+    			$this->setAuthor($array['author']);	
     		}
     		
     		if (!empty($array['version'])){
@@ -205,7 +217,7 @@ class common_ext_Manifest
      * Short description of method getFilePath
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
      */
     public function getFilePath()
@@ -228,7 +240,7 @@ class common_ext_Manifest
      * Short description of method setFilePath
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string filePath
      * @return void
      */
@@ -243,7 +255,7 @@ class common_ext_Manifest
      * Short description of method getName
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
      */
     public function getName()
@@ -266,7 +278,7 @@ class common_ext_Manifest
      * Short description of method setName
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string name
      * @return void
      */
@@ -281,7 +293,7 @@ class common_ext_Manifest
      * Short description of method getDescription
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
      */
     public function getDescription()
@@ -304,7 +316,7 @@ class common_ext_Manifest
      * Short description of method setDescription
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string description
      * @return void
      */
@@ -316,10 +328,43 @@ class common_ext_Manifest
     }
 
     /**
+     * Short description of method getAuthor
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return string
+     */
+    public function getAuthor()
+    {
+        $returnValue = (string) '';
+
+        // section 10-13-1-85-9f61b60:13ae4914bf6:-8000:0000000000001C62 begin
+        $returnValue = $this->author;
+        // section 10-13-1-85-9f61b60:13ae4914bf6:-8000:0000000000001C62 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method setAuthor
+     *
+     * @access private
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string author
+     * @return void
+     */
+    private function setAuthor($author)
+    {
+        // section 10-13-1-85-9f61b60:13ae4914bf6:-8000:0000000000001C64 begin
+        $this->author = $author;
+        // section 10-13-1-85-9f61b60:13ae4914bf6:-8000:0000000000001C64 end
+    }
+
+    /**
      * Short description of method getVersion
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
      */
     public function getVersion()
@@ -342,7 +387,7 @@ class common_ext_Manifest
      * Short description of method setVersion
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string version
      * @return void
      */
@@ -357,7 +402,7 @@ class common_ext_Manifest
      * Short description of method getDependencies
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return array
      */
     public function getDependencies()
@@ -375,7 +420,7 @@ class common_ext_Manifest
      * Short description of method setDependencies
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  array dependencies
      * @return void
      */
@@ -390,7 +435,7 @@ class common_ext_Manifest
      * Short description of method getModels
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return array
      */
     public function getModels()
@@ -408,7 +453,7 @@ class common_ext_Manifest
      * Short description of method setModels
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  array models
      * @return void
      */
@@ -423,7 +468,7 @@ class common_ext_Manifest
      * Short description of method getModelsRights
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return array
      */
     public function getModelsRights()
@@ -441,7 +486,7 @@ class common_ext_Manifest
      * Short description of method setModelsRights
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  array modelsRights
      * @return void
      */
@@ -456,7 +501,7 @@ class common_ext_Manifest
      * Short description of method getInstallModelFiles
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return array
      */
     public function getInstallModelFiles()
@@ -474,7 +519,7 @@ class common_ext_Manifest
      * Short description of method setInstallModelFiles
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  array installModelFiles
      * @return void
      */
@@ -489,7 +534,7 @@ class common_ext_Manifest
      * Short description of method getInstallChekcs
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return array
      */
     public function getInstallChekcs()
@@ -507,7 +552,7 @@ class common_ext_Manifest
      * Short description of method setInstallChecks
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  array installChecks
      * @return void
      */
@@ -522,7 +567,7 @@ class common_ext_Manifest
      * Short description of method getClassLoaderPackages
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return array
      */
     public function getClassLoaderPackages()
@@ -540,7 +585,7 @@ class common_ext_Manifest
      * Short description of method setClassLoaderPackages
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  array classLoaderPackages
      * @return void
      */
@@ -555,7 +600,7 @@ class common_ext_Manifest
      * Short description of method getConstants
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return array
      */
     public function getConstants()
@@ -573,7 +618,7 @@ class common_ext_Manifest
      * Short description of method setConstants
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  array constants
      * @return void
      */
