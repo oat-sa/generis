@@ -197,8 +197,12 @@ class common_ext_Manifest
     			}
     		}
     		
+    		// mandatory
     		if (!empty($array['classLoaderPackages'])){
     			$this->setClassLoaderPackages($array['classLoaderPackages']);
+    		}
+    		else{
+    			throw new common_ext_MalformedManifestException("'classLoaderPackages' component is mandatory in manifest located at '{$this->getFilePath()}'.");
     		}
     		
     		if (!empty($array['constants'])){
