@@ -15,12 +15,11 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 }
 
 /**
- * Any exception related to extensions should inherit this class.
+ * An exception that occurs in the context of Extension Manifests.
  *
- * @author lionel.lecaque@tudor.lu
- * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  */
-require_once('common/ext/class.ExtensionException.php');
+require_once('common/ext/class.ManifestException.php');
 
 /* user defined includes */
 // section -64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5B-includes begin
@@ -39,7 +38,7 @@ require_once('common/ext/class.ExtensionException.php');
  * @subpackage ext
  */
 class common_ext_ManifestNotFoundException
-    extends common_ext_ExtensionException
+    extends common_ext_ManifestException
 {
     // --- ASSOCIATIONS ---
 

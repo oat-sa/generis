@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Nov 09 10:51:42 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Nov 09 14:40:21 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -21279,18 +21279,9 @@ specified in the Manifest</UML:TaggedValue.dataValue>
                     </UML:TaggedValue>
                   </UML:ModelElement.taggedValue>
                   <UML:GeneralizableElement.generalization>
-                    <UML:Generalization xmi.idref = '-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5C'/>
+                    <UML:Generalization xmi.idref = '10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6F'/>
                   </UML:GeneralizableElement.generalization>
                 </UML:Class>
-                <UML:Generalization xmi.id = '-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5C'
-                  isSpecification = 'false'>
-                  <UML:Generalization.child>
-                    <UML:Class xmi.idref = '-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5B'/>
-                  </UML:Generalization.child>
-                  <UML:Generalization.parent>
-                    <UML:Class xmi.idref = '-87--2--3--76--148ee98a:12452773959:-8000:0000000000002342'/>
-                  </UML:Generalization.parent>
-                </UML:Generalization>
                 <UML:Class xmi.id = '-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5D'
                   name = 'InstallationException' visibility = 'public' isSpecification = 'false'
                   isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
@@ -21979,6 +21970,65 @@ specified in the Manifest</UML:TaggedValue.dataValue>
                     </UML:Operation>
                   </UML:Classifier.feature>
                 </UML:Class>
+                <UML:Class xmi.id = '10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6C'
+                  name = 'ManifestException' visibility = 'public' isSpecification = 'false'
+                  isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                  <UML:ModelElement.taggedValue>
+                    <UML:TaggedValue xmi.id = '10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6E'
+                      isSpecification = 'false'>
+                      <UML:TaggedValue.dataValue>An exception that occurs in the context of Extension Manifests.</UML:TaggedValue.dataValue>
+                      <UML:TaggedValue.type>
+                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                      </UML:TaggedValue.type>
+                    </UML:TaggedValue>
+                  </UML:ModelElement.taggedValue>
+                  <UML:GeneralizableElement.generalization>
+                    <UML:Generalization xmi.idref = '10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6D'/>
+                  </UML:GeneralizableElement.generalization>
+                </UML:Class>
+                <UML:Generalization xmi.id = '10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6D'
+                  isSpecification = 'false'>
+                  <UML:Generalization.child>
+                    <UML:Class xmi.idref = '10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6C'/>
+                  </UML:Generalization.child>
+                  <UML:Generalization.parent>
+                    <UML:Class xmi.idref = '-87--2--3--76--148ee98a:12452773959:-8000:0000000000002342'/>
+                  </UML:Generalization.parent>
+                </UML:Generalization>
+                <UML:Generalization xmi.id = '10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6F'
+                  isSpecification = 'false'>
+                  <UML:Generalization.child>
+                    <UML:Class xmi.idref = '-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5B'/>
+                  </UML:Generalization.child>
+                  <UML:Generalization.parent>
+                    <UML:Class xmi.idref = '10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6C'/>
+                  </UML:Generalization.parent>
+                </UML:Generalization>
+                <UML:Class xmi.id = '10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C70'
+                  name = 'MalformedManifestException' visibility = 'public' isSpecification = 'false'
+                  isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                  <UML:ModelElement.taggedValue>
+                    <UML:TaggedValue xmi.id = '10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C72'
+                      isSpecification = 'false'>
+                      <UML:TaggedValue.dataValue>This exception must be thrown when a manifest is malformed e.g. missing mandatory data, syntax, ...</UML:TaggedValue.dataValue>
+                      <UML:TaggedValue.type>
+                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                      </UML:TaggedValue.type>
+                    </UML:TaggedValue>
+                  </UML:ModelElement.taggedValue>
+                  <UML:GeneralizableElement.generalization>
+                    <UML:Generalization xmi.idref = '10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C71'/>
+                  </UML:GeneralizableElement.generalization>
+                </UML:Class>
+                <UML:Generalization xmi.id = '10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C71'
+                  isSpecification = 'false'>
+                  <UML:Generalization.child>
+                    <UML:Class xmi.idref = '10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C70'/>
+                  </UML:Generalization.child>
+                  <UML:Generalization.parent>
+                    <UML:Class xmi.idref = '10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6C'/>
+                  </UML:Generalization.parent>
+                </UML:Generalization>
               </UML:Namespace.ownedElement>
             </UML:Package>
             <UML:Class xmi.id = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BA1'
@@ -44633,7 +44683,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig8"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[232, 64, 355, 99]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[264, 16, 355, 99]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-87--2--3--76--148ee98a:12452773959:-8000:0000000000002342"
        fill="1"
        fillcolor="white"
@@ -44644,8 +44694,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </private>
     
     <rectangle name="Fig8.0"
-      x="232"
-      y="64"
+      x="264"
+      y="16"
       width="355"
       height="99"
       fill="1"
@@ -44654,8 +44704,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <text name="Fig8.1"
-      x="233"
-      y="65"
+      x="265"
+      y="17"
       width="353"
       height="21"
       fill="0"
@@ -44670,7 +44720,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       justification="Center"
     >ExtensionException</text>
     <group name="Fig8.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[233, 65, 335, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[265, 17, 335, 0]"
          href="-87--2--3--76--148ee98a:12452773959:-8000:0000000000002342"
          fill="0"
          fillcolor="white"
@@ -44682,8 +44732,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig8.2.0"
-        x="233"
-        y="65"
+        x="265"
+        y="17"
         width="335"
         height="0"
         fill="0"
@@ -44693,8 +44743,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig8.3"
-      x="232"
-      y="86"
+      x="264"
+      y="38"
       width="355"
       height="1"
       fill="1"
@@ -44703,7 +44753,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig8.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[233, 87, 353, 23]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[265, 39, 353, 23]"
          href="-87--2--3--76--148ee98a:12452773959:-8000:0000000000002342"
          fill="0"
          fillcolor="white"
@@ -44714,8 +44764,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig8.4.0"
-        x="233"
-        y="87"
+        x="265"
+        y="39"
         width="353"
         height="23"
         fill="0"
@@ -44724,8 +44774,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
       <text name="Fig8.4.1"
-        x="233"
-        y="87"
+        x="265"
+        y="39"
         width="353"
         height="21"
         fill="0"
@@ -44741,8 +44791,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >extensionId : Integer</text>
     </group>
     <rectangle name="Fig8.5"
-      x="232"
-      y="109"
+      x="264"
+      y="61"
       width="355"
       height="1"
       fill="1"
@@ -44751,7 +44801,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig8.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[233, 110, 353, 53]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[265, 62, 353, 53]"
          href="-87--2--3--76--148ee98a:12452773959:-8000:0000000000002342"
          fill="0"
          fillcolor="white"
@@ -44762,8 +44812,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig8.6.0"
-        x="233"
-        y="110"
+        x="265"
+        y="62"
         width="353"
         height="53"
         fill="0"
@@ -44772,8 +44822,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
       <text name="Fig8.6.1"
-        x="233"
-        y="110"
+        x="265"
+        y="62"
         width="353"
         height="15"
         fill="0"
@@ -44788,8 +44838,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >setExtensionId(extensionId : string)</text>
       <text name="Fig8.6.2"
-        x="233"
-        y="125"
+        x="265"
+        y="77"
         width="353"
         height="15"
         fill="0"
@@ -44804,8 +44854,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >getExtensionId() : string</text>
       <text name="Fig8.6.3"
-        x="233"
-        y="140"
+        x="265"
+        y="92"
         width="353"
         height="21"
         fill="0"
@@ -46046,7 +46096,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </path>
   </group>
   <group name="Fig17"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[416, 272, 149, 23]pathVisible=false;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[304, 248, 149, 23]pathVisible=false;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
        href="-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5B"
        fill="1"
        fillcolor="white"
@@ -46057,8 +46107,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </private>
     
     <rectangle name="Fig17.0"
-      x="416"
-      y="272"
+      x="304"
+      y="248"
       width="149"
       height="23"
       fill="1"
@@ -46067,8 +46117,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <text name="Fig17.1"
-      x="417"
-      y="273"
+      x="305"
+      y="249"
       width="147"
       height="21"
       fill="0"
@@ -46083,7 +46133,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       justification="Center"
     >ManifestNotFoundException</text>
     <group name="Fig17.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[417, 273, 210, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[305, 249, 210, 0]"
          href="-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5B"
          fill="0"
          fillcolor="white"
@@ -46095,8 +46145,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig17.2.0"
-        x="417"
-        y="273"
+        x="305"
+        y="249"
         width="210"
         height="0"
         fill="0"
@@ -46106,8 +46156,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig17.3"
-      x="416"
-      y="294"
+      x="304"
+      y="270"
       width="144"
       height="1"
       fill="1"
@@ -46117,7 +46167,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig17.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[417, 295, 142, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[305, 271, 142, 21]"
          href="-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5B"
          fill="0"
          fillcolor="white"
@@ -46129,8 +46179,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig17.4.0"
-        x="417"
-        y="295"
+        x="305"
+        y="271"
         width="142"
         height="21"
         fill="0"
@@ -46141,8 +46191,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig17.5"
-      x="416"
-      y="315"
+      x="304"
+      y="291"
       width="212"
       height="1"
       fill="1"
@@ -46152,7 +46202,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig17.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[417, 316, 210, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[305, 292, 210, 21]"
          href="-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5B"
          fill="0"
          fillcolor="white"
@@ -46164,8 +46214,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig17.6.0"
-        x="417"
-        y="316"
+        x="305"
+        y="292"
         width="210"
         height="21"
         fill="0"
@@ -46177,38 +46227,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig18"
-       description="org.argouml.uml.diagram.ui.FigGeneralization"
-       href="-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5C"
-       stroke="1"
-       strokecolor="51 51 153"
-  >
-    <private>
-      sourcePortFig="Fig17.0"
-      destPortFig="Fig8.0"
-      sourceFigNode="Fig17"
-      destFigNode="Fig8"
-      <argouml:pathitem figname="Fig18.1"
-                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
-                        figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
-                        ownerhref="-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5C"
-                        angle="270.0"
-                        offset="-10" />
-    </private>
-    <path name="Fig18.0"
-      description="org.argouml.gefext.ArgoFigPoly"
-      fill="0"
-      fillcolor="white"
-      stroke="1"
-      strokecolor="51 51 153"
-    >
-      <moveto x="480"
-              y="272" />
-      <lineto x="480"
-              y="162" />
-    </path>
-  </group>
-  <group name="Fig19"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[280, 272, 114, 23]pathVisible=false;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[160, 248, 114, 23]pathVisible=false;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
        href="-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5D"
        fill="1"
        fillcolor="white"
@@ -46218,9 +46237,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <private>
     </private>
     
-    <rectangle name="Fig19.0"
-      x="280"
-      y="272"
+    <rectangle name="Fig18.0"
+      x="160"
+      y="248"
       width="114"
       height="23"
       fill="1"
@@ -46228,9 +46247,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     />
-    <text name="Fig19.1"
-      x="281"
-      y="273"
+    <text name="Fig18.1"
+      x="161"
+      y="249"
       width="112"
       height="21"
       fill="0"
@@ -46244,8 +46263,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       textsize="10"
       justification="Center"
     >InstallationException</text>
-    <group name="Fig19.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[281, 273, 176, 0]"
+    <group name="Fig18.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[161, 249, 176, 0]"
          href="-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5D"
          fill="0"
          fillcolor="white"
@@ -46256,9 +46275,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <private>
       </private>
       
-      <rectangle name="Fig19.2.0"
-        x="281"
-        y="273"
+      <rectangle name="Fig18.2.0"
+        x="161"
+        y="249"
         width="176"
         height="0"
         fill="0"
@@ -46267,9 +46286,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
     </group>
-    <rectangle name="Fig19.3"
-      x="280"
-      y="294"
+    <rectangle name="Fig18.3"
+      x="160"
+      y="270"
       width="110"
       height="1"
       fill="1"
@@ -46278,8 +46297,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
       visibility="0"
     />
-    <group name="Fig19.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[281, 295, 108, 21]"
+    <group name="Fig18.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[161, 271, 108, 21]"
          href="-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5D"
          fill="0"
          fillcolor="white"
@@ -46290,9 +46309,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <private>
       </private>
       
-      <rectangle name="Fig19.4.0"
-        x="281"
-        y="295"
+      <rectangle name="Fig18.4.0"
+        x="161"
+        y="271"
         width="108"
         height="21"
         fill="0"
@@ -46302,9 +46321,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         visibility="0"
       />
     </group>
-    <rectangle name="Fig19.5"
-      x="280"
-      y="315"
+    <rectangle name="Fig18.5"
+      x="160"
+      y="291"
       width="178"
       height="1"
       fill="1"
@@ -46313,8 +46332,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
       visibility="0"
     />
-    <group name="Fig19.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[281, 316, 176, 21]"
+    <group name="Fig18.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[161, 292, 176, 21]"
          href="-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5D"
          fill="0"
          fillcolor="white"
@@ -46325,9 +46344,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <private>
       </private>
       
-      <rectangle name="Fig19.6.0"
-        x="281"
-        y="316"
+      <rectangle name="Fig18.6.0"
+        x="161"
+        y="292"
         width="176"
         height="21"
         fill="0"
@@ -46338,39 +46357,39 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
     </group>
   </group>
-  <group name="Fig20"
+  <group name="Fig19"
        description="org.argouml.uml.diagram.ui.FigGeneralization"
        href="-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5E"
        stroke="1"
        strokecolor="51 51 153"
   >
     <private>
-      sourcePortFig="Fig19.0"
+      sourcePortFig="Fig18.0"
       destPortFig="Fig8.0"
-      sourceFigNode="Fig19"
+      sourceFigNode="Fig18"
       destFigNode="Fig8"
-      <argouml:pathitem figname="Fig20.1"
+      <argouml:pathitem figname="Fig19.1"
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="-64--88-56-1-1a866557:1380f1ba529:-8000:0000000000001A5E"
                         angle="270.0"
                         offset="-10" />
     </private>
-    <path name="Fig20.0"
+    <path name="Fig19.0"
       description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="336"
-              y="272" />
-      <lineto x="336"
-              y="162" />
+      <moveto x="265"
+              y="248" />
+      <lineto x="265"
+              y="114" />
     </path>
   </group>
-  <group name="Fig21"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[424, 360, 139, 23]pathVisible=false;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
+  <group name="Fig20"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[296, 352, 139, 23]pathVisible=false;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
        href="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A75"
        fill="1"
        fillcolor="white"
@@ -46380,9 +46399,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <private>
     </private>
     
-    <rectangle name="Fig21.0"
-      x="424"
-      y="360"
+    <rectangle name="Fig20.0"
+      x="296"
+      y="352"
       width="139"
       height="23"
       fill="1"
@@ -46390,9 +46409,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     />
-    <text name="Fig21.1"
-      x="425"
-      y="361"
+    <text name="Fig20.1"
+      x="297"
+      y="353"
       width="137"
       height="21"
       fill="0"
@@ -46406,8 +46425,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       textsize="10"
       justification="Center"
     >AlreadyInstalledException</text>
-    <group name="Fig21.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[425, 361, 200, 0]"
+    <group name="Fig20.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[297, 353, 200, 0]"
          href="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A75"
          fill="0"
          fillcolor="white"
@@ -46418,9 +46437,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <private>
       </private>
       
-      <rectangle name="Fig21.2.0"
-        x="425"
-        y="361"
+      <rectangle name="Fig20.2.0"
+        x="297"
+        y="353"
         width="200"
         height="0"
         fill="0"
@@ -46429,9 +46448,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
     </group>
-    <rectangle name="Fig21.3"
-      x="424"
-      y="382"
+    <rectangle name="Fig20.3"
+      x="296"
+      y="374"
       width="134"
       height="1"
       fill="1"
@@ -46440,8 +46459,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
       visibility="0"
     />
-    <group name="Fig21.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[425, 383, 132, 21]"
+    <group name="Fig20.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[297, 375, 132, 21]"
          href="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A75"
          fill="0"
          fillcolor="white"
@@ -46452,9 +46471,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <private>
       </private>
       
-      <rectangle name="Fig21.4.0"
-        x="425"
-        y="383"
+      <rectangle name="Fig20.4.0"
+        x="297"
+        y="375"
         width="132"
         height="21"
         fill="0"
@@ -46464,9 +46483,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         visibility="0"
       />
     </group>
-    <rectangle name="Fig21.5"
-      x="424"
-      y="403"
+    <rectangle name="Fig20.5"
+      x="296"
+      y="395"
       width="202"
       height="1"
       fill="1"
@@ -46475,8 +46494,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
       visibility="0"
     />
-    <group name="Fig21.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[425, 404, 200, 21]"
+    <group name="Fig20.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[297, 396, 200, 21]"
          href="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A75"
          fill="0"
          fillcolor="white"
@@ -46487,9 +46506,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <private>
       </private>
       
-      <rectangle name="Fig21.6.0"
-        x="425"
-        y="404"
+      <rectangle name="Fig20.6.0"
+        x="297"
+        y="396"
         width="200"
         height="21"
         fill="0"
@@ -46500,39 +46519,39 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
     </group>
   </group>
-  <group name="Fig22"
+  <group name="Fig21"
        description="org.argouml.uml.diagram.ui.FigGeneralization"
        href="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A77"
        stroke="1"
        strokecolor="51 51 153"
   >
     <private>
-      sourcePortFig="Fig21.0"
-      destPortFig="Fig19.0"
-      sourceFigNode="Fig21"
-      destFigNode="Fig19"
-      <argouml:pathitem figname="Fig22.1"
+      sourcePortFig="Fig20.0"
+      destPortFig="Fig18.0"
+      sourceFigNode="Fig20"
+      destFigNode="Fig18"
+      <argouml:pathitem figname="Fig21.1"
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A77"
                         angle="270.0"
                         offset="-10" />
     </private>
-    <path name="Fig22.0"
+    <path name="Fig21.0"
       description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="424"
-              y="360" />
-      <lineto x="393"
-              y="294" />
+      <moveto x="296"
+              y="356" />
+      <lineto x="273"
+              y="274" />
     </path>
   </group>
-  <group name="Fig23"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[96, 360, 140, 23]pathVisible=false;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
+  <group name="Fig22"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[8, 352, 127, 23]pathVisible=false;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
        href="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A79"
        fill="1"
        fillcolor="white"
@@ -46542,20 +46561,20 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <private>
     </private>
     
-    <rectangle name="Fig23.0"
-      x="96"
-      y="360"
-      width="140"
+    <rectangle name="Fig22.0"
+      x="8"
+      y="352"
+      width="127"
       height="23"
       fill="1"
       fillcolor="white"
       stroke="1"
       strokecolor="black"
     />
-    <text name="Fig23.1"
-      x="97"
-      y="361"
-      width="138"
+    <text name="Fig22.1"
+      x="9"
+      y="353"
+      width="125"
       height="21"
       fill="0"
       fillcolor="white"
@@ -46568,8 +46587,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       textsize="10"
       justification="Center"
     >ForbiddenActionException</text>
-    <group name="Fig23.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[97, 361, 203, 0]"
+    <group name="Fig22.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[9, 353, 203, 0]"
          href="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A79"
          fill="0"
          fillcolor="white"
@@ -46580,9 +46599,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <private>
       </private>
       
-      <rectangle name="Fig23.2.0"
-        x="97"
-        y="361"
+      <rectangle name="Fig22.2.0"
+        x="9"
+        y="353"
         width="203"
         height="0"
         fill="0"
@@ -46591,9 +46610,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
     </group>
-    <rectangle name="Fig23.3"
-      x="96"
-      y="382"
+    <rectangle name="Fig22.3"
+      x="8"
+      y="374"
       width="137"
       height="1"
       fill="1"
@@ -46602,8 +46621,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
       visibility="0"
     />
-    <group name="Fig23.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[97, 383, 135, 21]"
+    <group name="Fig22.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[9, 375, 135, 21]"
          href="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A79"
          fill="0"
          fillcolor="white"
@@ -46614,9 +46633,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <private>
       </private>
       
-      <rectangle name="Fig23.4.0"
-        x="97"
-        y="383"
+      <rectangle name="Fig22.4.0"
+        x="9"
+        y="375"
         width="135"
         height="21"
         fill="0"
@@ -46626,9 +46645,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         visibility="0"
       />
     </group>
-    <rectangle name="Fig23.5"
-      x="96"
-      y="403"
+    <rectangle name="Fig22.5"
+      x="8"
+      y="395"
       width="205"
       height="1"
       fill="1"
@@ -46637,8 +46656,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
       visibility="0"
     />
-    <group name="Fig23.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[97, 404, 203, 21]"
+    <group name="Fig22.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[9, 396, 203, 21]"
          href="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A79"
          fill="0"
          fillcolor="white"
@@ -46649,9 +46668,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <private>
       </private>
       
-      <rectangle name="Fig23.6.0"
-        x="97"
-        y="404"
+      <rectangle name="Fig22.6.0"
+        x="9"
+        y="396"
         width="203"
         height="21"
         fill="0"
@@ -46662,39 +46681,39 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
     </group>
   </group>
-  <group name="Fig24"
+  <group name="Fig23"
        description="org.argouml.uml.diagram.ui.FigGeneralization"
        href="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A7B"
        stroke="1"
        strokecolor="51 51 153"
   >
     <private>
-      sourcePortFig="Fig23.0"
-      destPortFig="Fig19.0"
-      sourceFigNode="Fig23"
-      destFigNode="Fig19"
-      <argouml:pathitem figname="Fig24.1"
+      sourcePortFig="Fig22.0"
+      destPortFig="Fig18.0"
+      sourceFigNode="Fig22"
+      destFigNode="Fig18"
+      <argouml:pathitem figname="Fig23.1"
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A7B"
                         angle="270.0"
                         offset="-10" />
     </private>
-    <path name="Fig24.0"
+    <path name="Fig23.0"
       description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="235"
-              y="360" />
-      <lineto x="280"
-              y="294" />
+      <moveto x="134"
+              y="356" />
+      <lineto x="160"
+              y="274" />
     </path>
   </group>
-  <group name="Fig25"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[264, 360, 145, 23]pathVisible=false;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
+  <group name="Fig24"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[144, 352, 145, 23]pathVisible=false;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
        href="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A7C"
        fill="1"
        fillcolor="white"
@@ -46704,9 +46723,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <private>
     </private>
     
-    <rectangle name="Fig25.0"
-      x="264"
-      y="360"
+    <rectangle name="Fig24.0"
+      x="144"
+      y="352"
       width="145"
       height="23"
       fill="1"
@@ -46714,9 +46733,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     />
-    <text name="Fig25.1"
-      x="265"
-      y="361"
+    <text name="Fig24.1"
+      x="145"
+      y="353"
       width="143"
       height="21"
       fill="0"
@@ -46730,8 +46749,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       textsize="10"
       justification="Center"
     >MissingExtensionException</text>
-    <group name="Fig25.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[265, 361, 205, 0]"
+    <group name="Fig24.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[145, 353, 205, 0]"
          href="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A7C"
          fill="0"
          fillcolor="white"
@@ -46742,9 +46761,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <private>
       </private>
       
-      <rectangle name="Fig25.2.0"
-        x="265"
-        y="361"
+      <rectangle name="Fig24.2.0"
+        x="145"
+        y="353"
         width="205"
         height="0"
         fill="0"
@@ -46753,9 +46772,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
     </group>
-    <rectangle name="Fig25.3"
-      x="264"
-      y="382"
+    <rectangle name="Fig24.3"
+      x="144"
+      y="374"
       width="139"
       height="1"
       fill="1"
@@ -46764,8 +46783,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
       visibility="0"
     />
-    <group name="Fig25.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[265, 383, 137, 21]"
+    <group name="Fig24.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[145, 375, 137, 21]"
          href="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A7C"
          fill="0"
          fillcolor="white"
@@ -46776,9 +46795,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <private>
       </private>
       
-      <rectangle name="Fig25.4.0"
-        x="265"
-        y="383"
+      <rectangle name="Fig24.4.0"
+        x="145"
+        y="375"
         width="137"
         height="21"
         fill="0"
@@ -46788,9 +46807,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         visibility="0"
       />
     </group>
-    <rectangle name="Fig25.5"
-      x="264"
-      y="403"
+    <rectangle name="Fig24.5"
+      x="144"
+      y="395"
       width="207"
       height="1"
       fill="1"
@@ -46799,8 +46818,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
       visibility="0"
     />
-    <group name="Fig25.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[265, 404, 205, 21]"
+    <group name="Fig24.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[145, 396, 205, 21]"
          href="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A7C"
          fill="0"
          fillcolor="white"
@@ -46811,9 +46830,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <private>
       </private>
       
-      <rectangle name="Fig25.6.0"
-        x="265"
-        y="404"
+      <rectangle name="Fig24.6.0"
+        x="145"
+        y="396"
         width="205"
         height="21"
         fill="0"
@@ -46824,38 +46843,38 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
     </group>
   </group>
-  <group name="Fig26"
+  <group name="Fig25"
        description="org.argouml.uml.diagram.ui.FigGeneralization"
        href="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A7E"
        stroke="1"
        strokecolor="51 51 153"
   >
     <private>
-      sourcePortFig="Fig25.0"
-      destPortFig="Fig19.0"
-      sourceFigNode="Fig25"
-      destFigNode="Fig19"
-      <argouml:pathitem figname="Fig26.1"
+      sourcePortFig="Fig24.0"
+      destPortFig="Fig18.0"
+      sourceFigNode="Fig24"
+      destFigNode="Fig18"
+      <argouml:pathitem figname="Fig25.1"
                         classname="org.argouml.uml.diagram.ui.PathItemPlacement"
                         figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
                         ownerhref="-64--88-56-1--40cf7f1a:1380f5aea49:-8000:0000000000001A7E"
                         angle="270.0"
                         offset="-10" />
     </private>
-    <path name="Fig26.0"
+    <path name="Fig25.0"
       description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="330"
-              y="360" />
-      <lineto x="330"
-              y="294" />
+      <moveto x="220"
+              y="356" />
+      <lineto x="220"
+              y="274" />
     </path>
   </group>
-  <group name="Fig27"
+  <group name="Fig26"
        description="org.argouml.uml.diagram.static_structure.ui.FigClass[936, 704, 301, 594]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02"
        fill="1"
@@ -46866,7 +46885,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <private>
     </private>
     
-    <rectangle name="Fig27.0"
+    <rectangle name="Fig26.0"
       x="936"
       y="704"
       width="301"
@@ -46876,7 +46895,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     />
-    <text name="Fig27.1"
+    <text name="Fig26.1"
       x="937"
       y="705"
       width="299"
@@ -46892,7 +46911,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       textsize="10"
       justification="Center"
     >Manifest</text>
-    <group name="Fig27.2"
+    <group name="Fig26.2"
          description="org.argouml.uml.diagram.ui.FigStereotypesGroup[937, 705, 289, 0]"
          href="-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02"
          fill="0"
@@ -46904,7 +46923,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <private>
       </private>
       
-      <rectangle name="Fig27.2.0"
+      <rectangle name="Fig26.2.0"
         x="937"
         y="705"
         width="289"
@@ -46915,7 +46934,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
     </group>
-    <rectangle name="Fig27.3"
+    <rectangle name="Fig26.3"
       x="936"
       y="726"
       width="301"
@@ -46925,7 +46944,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     />
-    <group name="Fig27.4"
+    <group name="Fig26.4"
          description="org.argouml.uml.diagram.ui.FigAttributesCompartment[937, 727, 299, 188]"
          href="-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02"
          fill="0"
@@ -46936,7 +46955,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <private>
       </private>
       
-      <rectangle name="Fig27.4.0"
+      <rectangle name="Fig26.4.0"
         x="937"
         y="727"
         width="299"
@@ -46946,7 +46965,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         stroke="0"
         strokecolor="black"
       />
-      <text name="Fig27.4.1"
+      <text name="Fig26.4.1"
         x="937"
         y="727"
         width="299"
@@ -46962,7 +46981,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >filePath : string</text>
-      <text name="Fig27.4.2"
+      <text name="Fig26.4.2"
         x="937"
         y="742"
         width="299"
@@ -46978,7 +46997,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >name : string</text>
-      <text name="Fig27.4.3"
+      <text name="Fig26.4.3"
         x="937"
         y="757"
         width="299"
@@ -46994,7 +47013,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >description : string</text>
-      <text name="Fig27.4.4"
+      <text name="Fig26.4.4"
         x="937"
         y="772"
         width="299"
@@ -47010,7 +47029,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >author : string</text>
-      <text name="Fig27.4.5"
+      <text name="Fig26.4.5"
         x="937"
         y="787"
         width="299"
@@ -47026,7 +47045,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >version : string</text>
-      <text name="Fig27.4.6"
+      <text name="Fig26.4.6"
         x="937"
         y="802"
         width="299"
@@ -47042,7 +47061,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >dependencies : array</text>
-      <text name="Fig27.4.7"
+      <text name="Fig26.4.7"
         x="937"
         y="817"
         width="299"
@@ -47058,7 +47077,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >models : array</text>
-      <text name="Fig27.4.8"
+      <text name="Fig26.4.8"
         x="937"
         y="832"
         width="299"
@@ -47074,7 +47093,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >modelsRights : array</text>
-      <text name="Fig27.4.9"
+      <text name="Fig26.4.9"
         x="937"
         y="847"
         width="299"
@@ -47090,7 +47109,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >installModelFiles : array</text>
-      <text name="Fig27.4.10"
+      <text name="Fig26.4.10"
         x="937"
         y="862"
         width="299"
@@ -47106,7 +47125,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >installChecks : array</text>
-      <text name="Fig27.4.11"
+      <text name="Fig26.4.11"
         x="937"
         y="877"
         width="299"
@@ -47122,7 +47141,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >classLoaderPackages : array</text>
-      <text name="Fig27.4.12"
+      <text name="Fig26.4.12"
         x="937"
         y="892"
         width="299"
@@ -47139,7 +47158,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >constants : array</text>
     </group>
-    <rectangle name="Fig27.5"
+    <rectangle name="Fig26.5"
       x="936"
       y="914"
       width="301"
@@ -47149,7 +47168,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     />
-    <group name="Fig27.6"
+    <group name="Fig26.6"
          description="org.argouml.uml.diagram.ui.FigOperationsCompartment[937, 915, 299, 383]"
          href="-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02"
          fill="0"
@@ -47160,7 +47179,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <private>
       </private>
       
-      <rectangle name="Fig27.6.0"
+      <rectangle name="Fig26.6.0"
         x="937"
         y="915"
         width="299"
@@ -47170,7 +47189,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         stroke="0"
         strokecolor="black"
       />
-      <text name="Fig27.6.1"
+      <text name="Fig26.6.1"
         x="937"
         y="915"
         width="299"
@@ -47186,7 +47205,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >__construct(filePath : string)</text>
-      <text name="Fig27.6.2"
+      <text name="Fig26.6.2"
         x="937"
         y="930"
         width="299"
@@ -47202,7 +47221,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getFilePath() : string</text>
-      <text name="Fig27.6.3"
+      <text name="Fig26.6.3"
         x="937"
         y="945"
         width="299"
@@ -47218,7 +47237,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >setFilePath(filePath : string) : void</text>
-      <text name="Fig27.6.4"
+      <text name="Fig26.6.4"
         x="937"
         y="960"
         width="299"
@@ -47234,7 +47253,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getName() : string</text>
-      <text name="Fig27.6.5"
+      <text name="Fig26.6.5"
         x="937"
         y="975"
         width="299"
@@ -47250,7 +47269,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >setName(name : string) : void</text>
-      <text name="Fig27.6.6"
+      <text name="Fig26.6.6"
         x="937"
         y="990"
         width="299"
@@ -47266,7 +47285,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getDescription() : string</text>
-      <text name="Fig27.6.7"
+      <text name="Fig26.6.7"
         x="937"
         y="1005"
         width="299"
@@ -47282,7 +47301,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >setDescription(description : string) : void</text>
-      <text name="Fig27.6.8"
+      <text name="Fig26.6.8"
         x="937"
         y="1020"
         width="299"
@@ -47298,7 +47317,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getAuthor() : string</text>
-      <text name="Fig27.6.9"
+      <text name="Fig26.6.9"
         x="937"
         y="1035"
         width="299"
@@ -47314,7 +47333,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >setAuthor(author : string) : void</text>
-      <text name="Fig27.6.10"
+      <text name="Fig26.6.10"
         x="937"
         y="1050"
         width="299"
@@ -47330,7 +47349,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getVersion() : string</text>
-      <text name="Fig27.6.11"
+      <text name="Fig26.6.11"
         x="937"
         y="1065"
         width="299"
@@ -47346,7 +47365,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >setVersion(version : string) : void</text>
-      <text name="Fig27.6.12"
+      <text name="Fig26.6.12"
         x="937"
         y="1080"
         width="299"
@@ -47362,7 +47381,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getDependencies() : array</text>
-      <text name="Fig27.6.13"
+      <text name="Fig26.6.13"
         x="937"
         y="1095"
         width="299"
@@ -47378,7 +47397,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >setDependencies(dependencies : array) : void</text>
-      <text name="Fig27.6.14"
+      <text name="Fig26.6.14"
         x="937"
         y="1110"
         width="299"
@@ -47394,7 +47413,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getModels() : array</text>
-      <text name="Fig27.6.15"
+      <text name="Fig26.6.15"
         x="937"
         y="1125"
         width="299"
@@ -47410,7 +47429,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >setModels(models : array) : void</text>
-      <text name="Fig27.6.16"
+      <text name="Fig26.6.16"
         x="937"
         y="1140"
         width="299"
@@ -47426,7 +47445,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getModelsRights() : array</text>
-      <text name="Fig27.6.17"
+      <text name="Fig26.6.17"
         x="937"
         y="1155"
         width="299"
@@ -47442,7 +47461,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >setModelsRights(modelsRights : array) : void</text>
-      <text name="Fig27.6.18"
+      <text name="Fig26.6.18"
         x="937"
         y="1170"
         width="299"
@@ -47458,7 +47477,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getInstallModelFiles() : array</text>
-      <text name="Fig27.6.19"
+      <text name="Fig26.6.19"
         x="937"
         y="1185"
         width="299"
@@ -47474,7 +47493,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >setInstallModelFiles(installModelFiles : array) : void</text>
-      <text name="Fig27.6.20"
+      <text name="Fig26.6.20"
         x="937"
         y="1200"
         width="299"
@@ -47490,7 +47509,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getInstallChekcs() : array</text>
-      <text name="Fig27.6.21"
+      <text name="Fig26.6.21"
         x="937"
         y="1215"
         width="299"
@@ -47506,7 +47525,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >setInstallChecks(installChecks : array) : void</text>
-      <text name="Fig27.6.22"
+      <text name="Fig26.6.22"
         x="937"
         y="1230"
         width="299"
@@ -47522,7 +47541,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getClassLoaderPackages() : array</text>
-      <text name="Fig27.6.23"
+      <text name="Fig26.6.23"
         x="937"
         y="1245"
         width="299"
@@ -47538,7 +47557,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >setClassLoaderPackages(classLoaderPackages : array) : void</text>
-      <text name="Fig27.6.24"
+      <text name="Fig26.6.24"
         x="937"
         y="1260"
         width="299"
@@ -47554,7 +47573,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getConstants() : array</text>
-      <text name="Fig27.6.25"
+      <text name="Fig26.6.25"
         x="937"
         y="1275"
         width="299"
@@ -47571,6 +47590,361 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >setConstants(constants : array) : void</text>
     </group>
+  </group>
+  <group name="Fig27"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[412, 180, 98, 23]pathVisible=false;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
+       href="10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6C"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+    </private>
+    
+    <rectangle name="Fig27.0"
+      x="412"
+      y="180"
+      width="98"
+      height="23"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig27.1"
+      x="413"
+      y="181"
+      width="96"
+      height="21"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >ManifestException</text>
+    <group name="Fig27.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[413, 181, 64, 0]"
+         href="10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6C"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig27.2.0"
+        x="413"
+        y="181"
+        width="64"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig27.3"
+      x="412"
+      y="202"
+      width="98"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+      visibility="0"
+    />
+    <group name="Fig27.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[413, 203, 96, 21]"
+         href="10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6C"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig27.4.0"
+        x="413"
+        y="203"
+        width="96"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        visibility="0"
+      />
+    </group>
+    <rectangle name="Fig27.5"
+      x="412"
+      y="202"
+      width="92"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+      visibility="0"
+    />
+    <group name="Fig27.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[413, 203, 90, 21]"
+         href="10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6C"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig27.6.0"
+        x="413"
+        y="203"
+        width="90"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        visibility="0"
+      />
+    </group>
+  </group>
+  <group name="Fig28"
+       description="org.argouml.uml.diagram.ui.FigGeneralization"
+       href="10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6D"
+       stroke="1"
+       strokecolor="51 51 153"
+  >
+    <private>
+      sourcePortFig="Fig27.0"
+      destPortFig="Fig8.0"
+      sourceFigNode="Fig27"
+      destFigNode="Fig8"
+      <argouml:pathitem figname="Fig28.1"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
+                        ownerhref="10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6D"
+                        angle="270.0"
+                        offset="-10" />
+    </private>
+    <path name="Fig28.0"
+      description="org.tigris.gef.presentation.FigPoly"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="51 51 153"
+    >
+      <moveto x="466"
+              y="180" />
+      <lineto x="466"
+              y="114" />
+    </path>
+  </group>
+  <group name="Fig29"
+       description="org.argouml.uml.diagram.ui.FigGeneralization"
+       href="10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6F"
+       stroke="1"
+       strokecolor="51 51 153"
+  >
+    <private>
+      sourcePortFig="Fig17.0"
+      destPortFig="Fig27.0"
+      sourceFigNode="Fig17"
+      destFigNode="Fig27"
+      <argouml:pathitem figname="Fig29.1"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
+                        ownerhref="10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C6F"
+                        angle="270.0"
+                        offset="-10" />
+    </private>
+    <path name="Fig29.0"
+      description="org.tigris.gef.presentation.FigPoly"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="51 51 153"
+    >
+      <moveto x="420"
+              y="248" />
+      <lineto x="420"
+              y="202" />
+    </path>
+  </group>
+  <group name="Fig30"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[492, 248, 149, 23]pathVisible=false;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
+       href="10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C70"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+    </private>
+    
+    <rectangle name="Fig30.0"
+      x="492"
+      y="248"
+      width="149"
+      height="23"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig30.1"
+      x="493"
+      y="249"
+      width="147"
+      height="21"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >MalformedManifestException</text>
+    <group name="Fig30.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[493, 249, 64, 0]"
+         href="10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C70"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig30.2.0"
+        x="493"
+        y="249"
+        width="64"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig30.3"
+      x="492"
+      y="270"
+      width="149"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+      visibility="0"
+    />
+    <group name="Fig30.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[493, 271, 147, 21]"
+         href="10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C70"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig30.4.0"
+        x="493"
+        y="271"
+        width="147"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        visibility="0"
+      />
+    </group>
+    <rectangle name="Fig30.5"
+      x="492"
+      y="270"
+      width="139"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+      visibility="0"
+    />
+    <group name="Fig30.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[493, 271, 137, 21]"
+         href="10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C70"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig30.6.0"
+        x="493"
+        y="271"
+        width="137"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        visibility="0"
+      />
+    </group>
+  </group>
+  <group name="Fig31"
+       description="org.argouml.uml.diagram.ui.FigGeneralization"
+       href="10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C71"
+       stroke="1"
+       strokecolor="51 51 153"
+  >
+    <private>
+      sourcePortFig="Fig30.0"
+      destPortFig="Fig27.0"
+      sourceFigNode="Fig30"
+      destFigNode="Fig27"
+      <argouml:pathitem figname="Fig31.1"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
+                        ownerhref="10-13-1-85-739cd80a:13ae5546680:-8000:0000000000001C71"
+                        angle="270.0"
+                        offset="-10" />
+    </private>
+    <path name="Fig31.0"
+      description="org.tigris.gef.presentation.FigPoly"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="51 51 153"
+    >
+      <moveto x="509"
+              y="248" />
+      <lineto x="509"
+              y="202" />
+    </path>
   </group>
 </pgml>
 <pgml description="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram|-87--2--3--76-6391cf81:1278a3ef617:-8000:0000000000003092"
@@ -67633,7 +68007,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="41"
         y="362"
         width="704"
-        height="29"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
