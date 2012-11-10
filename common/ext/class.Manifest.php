@@ -159,8 +159,12 @@ class common_ext_Manifest
     		$this->setFilePath($filePath);
     		$array = require($this->getFilePath());
     		
+    		// mandatory
     		if (!empty($array['name'])){
     			$this->setName($array['name']);
+    		}
+    		else{
+    			throw new common_ext_MalformedManifestException("The 'name' component is mandatory in manifest located at '{$this->getFilePath()}'.");
     		}
     		
     		if (!empty($array['description'])){
@@ -173,6 +177,9 @@ class common_ext_Manifest
     		
     		if (!empty($array['version'])){
     			$this->setVersion($array['version']);
+    		}
+    		else{
+    			throw new common_ext_MalformedManifestException("The 'version' component is mandatory in manifest located at '{$this->getFilePath()}'.");
     		}
     		
     		if (!empty($array['dependencies'])){
@@ -189,7 +196,18 @@ class common_ext_Manifest
     		
     		if (!empty($array['install'])){
     			if (!empty($array['install']['rdf'])){
-    				$this->setInstallModelFiles($array['install']['rdf']);
+    				$a = array();
+    				foreach ($array['install']['rdf'] as $rdf){
+    					$ns = $rdf['ns'];
+    					$file = $rdf['file'];
+    					
+    					if (!array_key_exists($ns, $a)){
+    						$a[$ns] = array();
+    					}
+    					
+    					array_push($a[$ns], $file);
+    				}
+    				$this->setInstallModelFiles($a);
     			}
     			
     			if (!empty($array['install']['checks'])){
@@ -202,7 +220,7 @@ class common_ext_Manifest
     			$this->setClassLoaderPackages($array['classLoaderPackages']);
     		}
     		else{
-    			throw new common_ext_MalformedManifestException("'classLoaderPackages' component is mandatory in manifest located at '{$this->getFilePath()}'.");
+    			throw new common_ext_MalformedManifestException("The 'classLoaderPackages' component is mandatory in manifest located at '{$this->getFilePath()}'.");
     		}
     		
     		if (!empty($array['constants'])){

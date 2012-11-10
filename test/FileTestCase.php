@@ -64,7 +64,7 @@ class FileTestCase extends UnitTestCase {
 	    $this->assertIsA($fileInfo, 'SplFileInfo');
 		$this->assertTrue($file->delete());
 		
-		$file = core_kernel_classes_File::create('','/tmp/');
+		$file = core_kernel_classes_File::create('',sys_get_temp_dir());
 	    $fileInfo = $file->getFileInfo();
 	    $this->assertIsA($fileInfo,'SplFileInfo');
 	    $this->assertTrue($fileInfo->isDir());
@@ -79,7 +79,7 @@ class FileTestCase extends UnitTestCase {
 	    $this->assertEqual($fileContent,'toto is kite surfing !!! le ouf');
 		$this->assertTrue($file->delete(true));
 		
-		$file = core_kernel_classes_File::create('','/tmp/');
+		$file = core_kernel_classes_File::create('',sys_get_temp_dir());
 	    $fileContent = $file->getFileContent();
 	    $this->assertTrue($file->delete());
 	}
