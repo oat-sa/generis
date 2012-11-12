@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 12.11.2012, 16:00:07 with ArgoUML PHP module 
+ * Automatically generated on 12.11.2012, 15:46:08 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -415,6 +415,16 @@ class core_kernel_versioning_Repository
         $returnValue = null;
 
         // section 10-30-1--78-e79fa48:13af3e783af:-8000:0000000000005035 begin
+		
+		$destination = $this->getPath().$remotePath;
+		$source = $file->getAbsolutePath();
+		if(tao_helpers_File::move($source, $destination)){
+			$returnValue = core_kernel_versioning_File::create('', $remotePath, $this);
+			if(!is_null($returnValue)){
+				$file->delete();
+			}
+		}
+		
         // section 10-30-1--78-e79fa48:13af3e783af:-8000:0000000000005035 end
 
         return $returnValue;
