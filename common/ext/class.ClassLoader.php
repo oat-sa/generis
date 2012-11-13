@@ -220,6 +220,7 @@ class common_ext_ClassLoader
     public function autoload($className)
     {
         // section 10-30-1--78--3a1a6c41:13a1b46a114:-8000:0000000000001B3E begin
+        //var_dump($className);
 		$files = $this->getFiles();
         if(!empty($files) && is_array($files)){
             if(isset($files[$className])){
@@ -252,6 +253,13 @@ class common_ext_ClassLoader
         if (file_exists($filePath)){
             require_once $filePath;
             return;
+        }
+        else{
+        	$filePath = $path . 'interface.'.$split[sizeof($split)-1] . '.php';
+        	if (file_exists($filePath)){
+        		require_once $filePath;
+        		return;
+        	}
         }
         // section 10-30-1--78--3a1a6c41:13a1b46a114:-8000:0000000000001B3E end
     }
