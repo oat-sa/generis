@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 12.04.2012, 14:06:10 with ArgoUML PHP module 
+ * Automatically generated on 14.11.2012, 11:33:30 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
@@ -43,7 +43,7 @@ require_once('core/kernel/classes/class.Resource.php');
  * Short description of class core_kernel_classes_File
  *
  * @access public
- * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
@@ -58,10 +58,83 @@ class core_kernel_classes_File
     // --- OPERATIONS ---
 
     /**
+     * Short description of method getFileClass
+     *
+     * @access protected
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return core_kernel_classes_Class
+     */
+    protected static function getFileClass()
+    {
+        $returnValue = null;
+
+        // section 10-30-1--78--1698032:13afe62e559:-8000:00000000000030B4 begin
+        $returnValue = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
+        // section 10-30-1--78--1698032:13afe62e559:-8000:00000000000030B4 end
+
+        return $returnValue;
+    }
+
+    /**
+     * Create an instance of class File from filename and filepath (filepath
+     * be optionnal)
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  string fileName
+     * @param  string filePath
+     * @param  string uri
+     * @return core_kernel_classes_File
+     */
+    public static function create($fileName, $filePath = null, $uri = "")
+    {
+        $returnValue = null;
+
+        // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:000000000000136C begin
+        
+        // Default file path if not defined
+      	if(is_null($filePath)){
+            $filePath = GENERIS_FILES_PATH; 
+        }
+
+	    $instance = static::getFileClass()->createInstance('File : ' . $filePath. $fileName, 'File : ' . $filePath. $fileName, $uri);
+	    $filePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
+	    $fileNameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
+	    $instance->setPropertyValue($filePathProp, $filePath);
+	    $instance->setPropertyValue($fileNameProp, $fileName);
+	    
+	    $returnValue = new core_kernel_classes_File($instance->uriResource);
+        
+        // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:000000000000136C end
+
+        return $returnValue;
+    }
+
+    /**
+     * Short description of method isFile
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  Resource resource
+     * @return boolean
+     */
+    public static function isFile( core_kernel_classes_Resource $resource)
+    {
+        $returnValue = (bool) false;
+
+        // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001370 begin
+        $resourceType = $resource->getTypes();
+        $returnValue =  array_key_exists(CLASS_GENERIS_FILE, $resourceType)||array_key_exists(CLASS_GENERIS_VERSIONEDFILE, $resourceType);        
+        // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001370 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
      * Short description of method getAbsolutePath
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return string
      */
     public function getAbsolutePath()
@@ -90,66 +163,10 @@ class core_kernel_classes_File
     }
 
     /**
-     * Create an instance of class File from filename and filepath (filepath
-     * be optionnal)
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  string fileName
-     * @param  string filePath
-     * @param  string uri
-     * @return core_kernel_classes_File
-     */
-    public static function create($fileName, $filePath = null, $uri = "")
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:000000000000136C begin
-        
-        // Default file path if not defined
-      	if(is_null($filePath)){
-            $filePath = GENERIS_FILES_PATH; 
-        }
-
-        $clazz = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
-	    $instance = $clazz->createInstance('File : ' . $filePath. $fileName, 'File : ' . $filePath. $fileName, $uri);
-	    $filePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
-	    $fileNameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
-	    $instance->setPropertyValue($filePathProp, $filePath);
-	    $instance->setPropertyValue($fileNameProp, $fileName);
-	    
-	    $returnValue = new core_kernel_classes_File($instance->uriResource);
-        
-        // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:000000000000136C end
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method isFile
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @return boolean
-     */
-    public static function isFile( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = (bool) false;
-
-        // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001370 begin
-        $resourceType = $resource->getTypes();
-        $returnValue =  array_key_exists(CLASS_GENERIS_FILE, $resourceType)||array_key_exists(CLASS_GENERIS_VERSIONEDFILE, $resourceType);        
-        // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001370 end
-
-        return (bool) $returnValue;
-    }
-
-    /**
      * Short description of method getFileContent
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
     public function getFileContent()
@@ -163,29 +180,10 @@ class core_kernel_classes_File
     }
 
     /**
-     * Short description of method getFile
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @return mixed
-     */
-    public static function getFile( core_kernel_classes_Resource $resource)
-    {
-        // section 127-0-1-1--77b1997d:12bf34c2951:-8000:0000000000001388 begin
-        if(self::isFile($resource)){
-            $file = new core_kernel_classes_File($resource->uriResource);
-            return $file->getFileContent();
-        }
-        return false;
-        // section 127-0-1-1--77b1997d:12bf34c2951:-8000:0000000000001388 end
-    }
-
-    /**
      * Short description of method delete
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  boolean deleteReference
      * @return boolean
      */
@@ -210,7 +208,7 @@ class core_kernel_classes_File
      * Short description of method move
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return boolean
      */
     public function move()
@@ -228,7 +226,7 @@ class core_kernel_classes_File
      * Short description of method getFileInfo
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
     public function getFileInfo()
@@ -242,7 +240,7 @@ class core_kernel_classes_File
      * Short description of method setContent
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string content
      * @return boolean
      */
@@ -278,7 +276,7 @@ class core_kernel_classes_File
      * Short description of method fileExists
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return boolean
      */
     public function fileExists()
