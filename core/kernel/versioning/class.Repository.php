@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 12.11.2012, 15:46:08 with ArgoUML PHP module 
+ * Automatically generated on 14.11.2012, 15:28:33 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -117,7 +117,6 @@ class core_kernel_versioning_Repository
 		$repository->setPropertyValue($versioningRepositoryPasswordProp, $password);
 		
 		$returnValue = new core_kernel_versioning_Repository($repository->uriResource);
-		
         // section 127-0-1-1--548d6005:132d344931b:-8000:000000000000251D end
 
         return $returnValue;
@@ -363,6 +362,16 @@ class core_kernel_versioning_Repository
         // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F63 begin
         if ($this->authenticate()) {
         	if($this->checkout()){
+        		// has root file?
+        		$rootFile = $this->getRootFile();
+        		if (!is_null($rootFile)) {
+        			// delete the ressource, not the files
+        			$ressource = new core_kernel_classes_Resource($rootFile);
+        			$ressource->delete();
+        		}
+				$rootFile = core_kernel_versioning_File::create('', DIRECTORY_SEPARATOR, $this);
+				$this->editPropertyValues(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_ROOTFILE), $rootFile);
+        		
         		$this->editPropertyValues(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED), GENERIS_TRUE);
 				common_Logger::i("The remote versioning repository ".$this->getUri()." is bound to TAO.");
         		$returnValue = true;
@@ -386,15 +395,23 @@ class core_kernel_versioning_Repository
 
         // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F65 begin
         $classVersionedFiles = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDFILE);
-        $count = $classVersionedFiles->countInstances(array(
+        $files = $classVersionedFiles->searchInstances(array(
         	PROPERTY_VERSIONEDFILE_REPOSITORY => $this
         ), array('like' => false));
-        if ($count == 0) {
+        $rootFile = $this->getRootFile();
+        $used = false;
+        foreach ($files as $file) {
+        	if (is_null($rootFile) || $file->getUri() != $rootFile->getUri()) {
+        		$used = true;
+        		break;
+        	}
+        }
+        if (!$used) {
 			$this->editPropertyValues(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED), GENERIS_FALSE);
 			common_Logger::i("The remote versioning repository ".$this->getUri()." has been disabled");
 			$returnValue = true;
         } else {
-			common_Logger::w("The remote versioning repository ".$this->getUri()." could not be disabled, because it is in use");
+			common_Logger::w("The remote versioning repository ".$this->getUri()." could not be disabled, because it is in use by ".$file->getUri());
         }
         // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F65 end
 
@@ -426,6 +443,31 @@ class core_kernel_versioning_Repository
 		}
 		
         // section 10-30-1--78-e79fa48:13af3e783af:-8000:0000000000005035 end
+
+        return $returnValue;
+    }
+
+    /**
+     * Short description of method getRootFile
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return core_kernel_versioning_File
+     */
+    public function getRootFile()
+    {
+        $returnValue = null;
+
+        // section 10-30-1--78-6daf7732:13aff506135:-8000:0000000000001CA6 begin
+        $rootFiles = $this->getPropertyValues(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_ROOTFILE));
+        if (count($rootFiles) == 1) {
+        	$returnValue = new core_kernel_versioning_File(current($rootFiles));
+        } else {
+        	if (count($rootFiles) > 1) {
+        		throw new common_Exception("Repository ".$this->getLabel()." has multiple root file");
+        	}
+		}
+        // section 10-30-1--78-6daf7732:13aff506135:-8000:0000000000001CA6 end
 
         return $returnValue;
     }

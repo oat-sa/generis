@@ -213,7 +213,6 @@
     <rdfs:comment xml:lang="EN"><![CDATA[CVS]]></rdfs:comment>
     <rdfs:label xml:lang="EN"><![CDATA[CVS]]></rdfs:label>
   </rdf:Description>
-  
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#VersionedFile">
     <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#File"/>
     <rdfs:label xml:lang="EN"><![CDATA[Versioned File]]></rdfs:label>
@@ -231,6 +230,12 @@
     <rdfs:range rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#VersionedRepository"/>
     <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#RadioBox"/>
     <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#VersionedFile"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#RepositoryRootFile">
+    <rdfs:label><![CDATA[Repository Root File]]></rdfs:label>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#VersionedRepository"/>
+    <rdfs:range rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#VersionedFile"/>
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.w3.org/2000/01/rdf-schema#label">

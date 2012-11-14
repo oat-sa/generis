@@ -63,6 +63,7 @@ define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE' , 	GENERIS_NS . '#VersionedRe
 define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN' , 	GENERIS_NS . '#VersionedRepositoryLogin' , true) ;
 define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_PASSWORD' , 	GENERIS_NS . '#VersionedRepositoryPassword' , true) ;
 define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED' , 	GENERIS_NS . '#VersionedRepositoryEnabled' , true) ;
+define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_ROOTFILE' , 	GENERIS_NS . '#RepositoryRootFile' , true) ;
 
 define('PROPERTY_GENERIS_VCS_TYPE_SUBVERSION' ,	GENERIS_NS . '#VCSTypeSubversion' , true) ;
 define('PROPERTY_GENERIS_VCS_TYPE_SUBVERSION_WIN' ,	GENERIS_NS . '#VCSTypeSubversionWindows' , true) ;
@@ -177,7 +178,7 @@ define('INSTANCE_EMPTY_TERM_URI' , 				RULES_NS.'#Empty', true);
 define('INSTANCE_TERM_IS_NULL' ,	 			RULES_NS.'#IsNull', true);
 
 define('PERSISTENCE_SMOOTH' ,					"smoothsql");
-define('PERSISTENCE_HARD' ,					"hardsql");
+define('PERSISTENCE_HARD' ,						"hardsql");
 define('PERSISTENCE_VIRTUOSO' ,					"virtuoso");
 define('PERSISTENCE_SUBSCRIPTION' ,				"subscription");
 
