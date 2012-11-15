@@ -181,4 +181,37 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
             $this->fail();
         }
     }
+    
+    public function testComponentCollection(){
+    	// Non acyclic simple test.
+    	$collection = new common_configuration_ComponentCollection();
+    	$componentA = new common_configuration_Mock(common_configuration_Report::VALID, 'componentA');
+    	$componentB = new common_configuration_Mock(common_configuration_Report::VALID, 'componentB');
+    	$componentC = new common_configuration_Mock(common_configuration_Report::VALID, 'componentC');
+    	
+    	$collection->addComponent($componentA);
+    	$collection->addComponent($componentB);
+    	$collection->addComponent($componentC);
+    	
+    	$collection->addDependency($componentC, $componentA);
+    	$collection->addDependency($componentB, $componentA);
+    	
+    	try{
+    		$reports = $collection->check();
+    		$this->assertTrue(true); // The graph is acyclic. Perfect!
+    		$this->assertEqual(count($collection->getCheckedComponents()), 3);
+    		$this->assertEqual(count($collection->getUncheckedComponents()), 0);
+    		
+    		// Now change some reports validity.
+    		$componentA->setExpectedStatus(common_configuration_Report::INVALID);
+    		
+    		$reports = $collection->check();
+    		$this->assertTrue(true); // Acyclic graph, no CyclicDependencyException thrown.
+    		$this->assertEqual(count($collection->getCheckedComponents()), 1);
+    		$this->assertEqual(count($collection->getUncheckedComponents()), 2);
+    	}
+    	catch (common_configuration_CyclicDependencyException $e){
+    		$this->assertTrue(false, 'The graph dependency formed by the ComponentCollection must be acyclic.');
+    	}
+    }
 }
