@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 15.11.2012, 15:48:29 with ArgoUML PHP module 
+ * Automatically generated on 15.11.2012, 16:07:35 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -86,6 +86,14 @@ class common_configuration_ComponentCollection
      * @var array
      */
     private $silentComponents = array();
+
+    /**
+     * Short description of attribute rootComponent
+     *
+     * @access private
+     * @var Component
+     */
+    private $rootComponent = null;
 
     // --- OPERATIONS ---
 
@@ -179,7 +187,27 @@ class common_configuration_ComponentCollection
         $this->setReports(array());
         
 		$components = $this->getComponents();
+		$dependencies = $this->getDependencies();
 		$traversed = array();
+		
+		// Any node that has no incoming edge and is not
+		// the root mock should be bound to it.
+		foreach ($components as $c){
+			foreach ($this->getDependencies() as $d){
+				$found = false;
+				
+				if ($c === $d['isDependencyOf']){
+					// Incoming edge(s).
+					$found = true;
+					break;
+				}
+			}
+			
+			// No incoming edge.
+			if ($found === false && $c !== $this->getRootComponent()){
+				$this->addDependency($c, $this->getRootComponent());
+			}
+		}
         
 		if (count($components) > 0){
 	        if (true == $this->isAcyclic()){
@@ -351,8 +379,9 @@ class common_configuration_ComponentCollection
         $returnValue = array();
 
         // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CB5 begin
+        $rootMock = $this->getRootComponent();
     	foreach($this->getComponents() as $c){
-    		if (false === in_array($c, $this->getCheckedComponents())){
+    		if (false === in_array($c, $this->getCheckedComponents()) && $c !== $rootMock){
     			array_push($returnValue, $c);
     		}
     	}
@@ -525,7 +554,9 @@ class common_configuration_ComponentCollection
     private function componentChecked( common_configuration_Component $component)
     {
         // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CD0 begin
-        array_push($this->checkedComponents, $component);
+        if ($component !== $this->getRootComponent()){
+        	array_push($this->checkedComponents, $component);
+        }
         // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CD0 end
     }
 
@@ -630,6 +661,8 @@ class common_configuration_ComponentCollection
         		unset($silentComponents[$k]);
         	}
         }
+        
+        $this->setSilentComponents($silentComponents);
         // section 10-13-1-85--5a4dc0f:13b04700805:-8000:0000000000001CE1 end
     }
 
@@ -669,6 +702,64 @@ class common_configuration_ComponentCollection
         // section 10-13-1-85--2caf879e:13b048739e9:-8000:0000000000001CE7 end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method __construct
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return mixed
+     */
+    public function __construct()
+    {
+        // section 10-13-1-85-34a1d86b:13b04927ae9:-8000:0000000000001CEA begin
+        
+        // A mock root check on which any added component has a dependence. The goal
+        // of this is to make sure that components will not stay alone with no
+        // incoming edges in the dependency graph, making them unreachable.
+        $rootStatus = common_configuration_Report::VALID;
+        $root = new common_configuration_Mock($rootStatus, 'tao.dependencies.root');
+        $this->setRootComponent($root);
+    	
+        // section 10-13-1-85-34a1d86b:13b04927ae9:-8000:0000000000001CEA end
+    }
+
+    /**
+     * Short description of method setRootComponent
+     *
+     * @access private
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Component component
+     * @return void
+     */
+    private function setRootComponent( common_configuration_Component $component)
+    {
+        // section 10-13-1-85--42a1af85:13b049949ca:-8000:0000000000001CEF beginµ
+        $this->rootComponent = $component;
+        $components = $this->getComponents();
+        $components[] = $component;
+        $this->setComponents($components);
+        $this->silent($component);
+        // section 10-13-1-85--42a1af85:13b049949ca:-8000:0000000000001CEF end
+    }
+
+    /**
+     * Short description of method getRootComponent
+     *
+     * @access private
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return common_configuration_Component
+     */
+    private function getRootComponent()
+    {
+        $returnValue = null;
+
+        // section 10-13-1-85--42a1af85:13b049949ca:-8000:0000000000001CF2 begin
+        $returnValue = $this->rootComponent;
+        // section 10-13-1-85--42a1af85:13b049949ca:-8000:0000000000001CF2 end
+
+        return $returnValue;
     }
 
 } /* end of class common_configuration_ComponentCollection */

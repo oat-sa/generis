@@ -203,10 +203,16 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
     		$this->assertEqual(count($collection->getUncheckedComponents()), 0);
     		$this->assertEqual(count($reports), 3);
     		
-    		// Silence 'componentB'.
+    		// Make 'componentB' silent.
     		$collection->silent($componentB);
     		$reports = $collection->check();
     		$this->assertEqual(count($reports), 2);
+    		$this->assertEqual(count($collection->getCheckedComponents()), 3);
+    		
+    		// Make 'componentB' noisy again.
+    		$collection->noisy($componentB);
+    		$reports = $collection->check();
+    		$this->assertEqual(count($reports), 3);
     		
     		// Now change some reports validity.
     		$componentA->setExpectedStatus(common_configuration_Report::INVALID);
