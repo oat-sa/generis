@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 15.11.2012, 15:16:38 with ArgoUML PHP module 
+ * Automatically generated on 15.11.2012, 15:21:36 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -562,6 +562,7 @@ class common_configuration_ComponentCollection
         $returnValue = array();
 
         // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CD9 begin
+        $returnValue = $this->silentComponents;
         // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CD9 end
 
         return (array) $returnValue;
@@ -578,6 +579,7 @@ class common_configuration_ComponentCollection
     private function setSilentComponents($silentComponents)
     {
         // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CDB begin
+        $this->silentComponents = $silentComponents;
         // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CDB end
     }
 
@@ -592,7 +594,24 @@ class common_configuration_ComponentCollection
     public function silent( common_configuration_Component $component)
     {
         // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CDE begin
+        $silentComponents = $this->getSilentComponents();
+        $silentComponents[] = $component;
+        $this->setSilentComponents($silentComponents);
         // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CDE end
+    }
+
+    /**
+     * Short description of method noisy
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Component component
+     * @return void
+     */
+    public function noisy( common_configuration_Component $component)
+    {
+        // section 10-13-1-85--5a4dc0f:13b04700805:-8000:0000000000001CE1 begin
+        // section 10-13-1-85--5a4dc0f:13b04700805:-8000:0000000000001CE1 end
     }
 
 } /* end of class common_configuration_ComponentCollection */
