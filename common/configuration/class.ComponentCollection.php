@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 15.11.2012, 14:51:53 with ArgoUML PHP module 
+ * Automatically generated on 15.11.2012, 15:16:38 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -78,6 +78,14 @@ class common_configuration_ComponentCollection
      * @var array
      */
     public $reports = array();
+
+    /**
+     * Short description of attribute silentComponents
+     *
+     * @access private
+     * @var array
+     */
+    private $silentComponents = array();
 
     // --- OPERATIONS ---
 
@@ -540,6 +548,51 @@ class common_configuration_ComponentCollection
         // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CD3 end
 
         return (int) $returnValue;
+    }
+
+    /**
+     * Short description of method getSilentComponents
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return array
+     */
+    public function getSilentComponents()
+    {
+        $returnValue = array();
+
+        // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CD9 begin
+        // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CD9 end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method setSilentComponents
+     *
+     * @access private
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  array silentComponents
+     * @return void
+     */
+    private function setSilentComponents($silentComponents)
+    {
+        // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CDB begin
+        // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CDB end
+    }
+
+    /**
+     * Short description of method silent
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Component component
+     * @return void
+     */
+    public function silent( common_configuration_Component $component)
+    {
+        // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CDE begin
+        // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CDE end
     }
 
 } /* end of class common_configuration_ComponentCollection */

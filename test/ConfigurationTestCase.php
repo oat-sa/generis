@@ -182,7 +182,7 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
         }
     }
     
-    public function testComponentCollection(){
+    public function testSimpleComponentCollection(){
     	// Non acyclic simple test.
     	$collection = new common_configuration_ComponentCollection();
     	$componentA = new common_configuration_Mock(common_configuration_Report::VALID, 'componentA');
