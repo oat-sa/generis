@@ -219,8 +219,15 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
     		
     		$reports = $collection->check();
     		$this->assertTrue(true); // Acyclic graph, no CyclicDependencyException thrown.
-    		$this->assertEqual(count($collection->getCheckedComponents()), 1);
-    		$this->assertEqual(count($collection->getUncheckedComponents()), 2);
+    		$this->assertEqual($collection->getCheckedComponents(), array($componentA));
+    		$this->assertEqual($collection->getUncheckedComponents(), array($componentB, $componentC));
+    		
+    		// Add an additional independant component.
+    		$componentD = new common_configuration_Mock(common_configuration_Report::VALID, 'componentD');
+    		$collection->addComponent($componentD);
+    		$reports = $collection->check();
+    		$this->assertEqual($collection->getCheckedComponents(), array($componentD, $componentA));
+    		$this->assertEqual($collection->getUncheckedComponents(), array($componentB, $componentC));
     	}
     	catch (common_configuration_CyclicDependencyException $e){
     		$this->assertTrue(false, 'The graph dependency formed by the ComponentCollection must be acyclic.');

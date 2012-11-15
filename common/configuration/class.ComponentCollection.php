@@ -241,6 +241,17 @@ class common_configuration_ComponentCollection
 		   			}
 	        	}
 	        	
+	        	// Finally, sort the reports to make them ordered in the same
+	        	// order the related components where added.
+	        	$reports = array();
+	        	foreach ($components as $c){
+	        		foreach ($this->getReports() as $r){
+	        			if ($r->getComponent() === $c){
+	        				array_push($reports, $r);
+	        			}
+	        		}
+	        	}
+	        	$this->setReports($reports);
 	        	$returnValue = $this->getReports();
 	        }
 	        else{

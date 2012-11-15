@@ -231,7 +231,7 @@ class common_configuration_Report
         $returnValue = null;
 
         // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B24 begin
-        $returnVqlue = $this->component;
+        $returnValue = $this->component;
         // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B24 end
 
         return $returnValue;
