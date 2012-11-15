@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 15.11.2012, 15:21:36 with ArgoUML PHP module 
+ * Automatically generated on 15.11.2012, 15:48:29 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -212,6 +212,8 @@ class common_configuration_ComponentCollection
 		   				}
 		   			}
 	        	}
+	        	
+	        	$returnValue = $this->getReports();
 	        }
 	        else{
 	        	throw new common_configuration_CyclicDependencyException("The dependency graph is cyclic. Please review your dependencies.");
@@ -541,8 +543,12 @@ class common_configuration_ComponentCollection
 
         // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CD3 begin
         $report = $component->check(); // Check the node.
-	    $this->addReport($report); // Store the report.
 	    $this->componentChecked($component); // Mark the node as 'checked'.
+	    
+	    // Store the report if not silenced.
+	    if (false == $this->isSilent($component)){
+	    	$this->addReport($report); // Store the report.
+	    }
 	    
 	    $returnValue = $report->getStatus();
         // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CD3 end
@@ -595,6 +601,12 @@ class common_configuration_ComponentCollection
     {
         // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CDE begin
         $silentComponents = $this->getSilentComponents();
+        foreach ($silentComponents as $silent){
+        	if ($silent === $component){
+        		return;
+        	}
+        }
+        
         $silentComponents[] = $component;
         $this->setSilentComponents($silentComponents);
         // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CDE end
@@ -611,7 +623,52 @@ class common_configuration_ComponentCollection
     public function noisy( common_configuration_Component $component)
     {
         // section 10-13-1-85--5a4dc0f:13b04700805:-8000:0000000000001CE1 begin
+        $silentComponents = $this->getSilentComponents();
+        
+        foreach ($silentComponents as $k => $silent){
+        	if ($silent === $component){
+        		unset($silentComponents[$k]);
+        	}
+        }
         // section 10-13-1-85--5a4dc0f:13b04700805:-8000:0000000000001CE1 end
+    }
+
+    /**
+     * Short description of method isSilent
+     *
+     * @access private
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Component component
+     * @return boolean
+     */
+    private function isSilent( common_configuration_Component $component)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1-85--49d83475:13b04767aaf:-8000:0000000000001CE4 begin
+        $returnValue = in_array($component, $this->getSilentComponents());
+        // section 10-13-1-85--49d83475:13b04767aaf:-8000:0000000000001CE4 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method isNoisy
+     *
+     * @access private
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Component component
+     * @return boolean
+     */
+    private function isNoisy( common_configuration_Component $component)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1-85--2caf879e:13b048739e9:-8000:0000000000001CE7 begin
+        $returnValue = !in_array($component, $this->getSilentComponents());
+        // section 10-13-1-85--2caf879e:13b048739e9:-8000:0000000000001CE7 end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class common_configuration_ComponentCollection */

@@ -201,6 +201,12 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
     		$this->assertTrue(true); // The graph is acyclic. Perfect!
     		$this->assertEqual(count($collection->getCheckedComponents()), 3);
     		$this->assertEqual(count($collection->getUncheckedComponents()), 0);
+    		$this->assertEqual(count($reports), 3);
+    		
+    		// Silence 'componentB'.
+    		$collection->silent($componentB);
+    		$reports = $collection->check();
+    		$this->assertEqual(count($reports), 2);
     		
     		// Now change some reports validity.
     		$componentA->setExpectedStatus(common_configuration_Report::INVALID);
