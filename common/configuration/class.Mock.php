@@ -87,6 +87,7 @@ class common_configuration_Mock
         // section 10-13-1-85--ca6619b:13af946abe3:-8000:0000000000001C7C begin
         $message = 'Mock configuration report.';
         $report = new common_configuration_Report($this->getExpectedStatus(), $message, $this);
+        return $report;
         // section 10-13-1-85--ca6619b:13af946abe3:-8000:0000000000001C7C end
     }
 
