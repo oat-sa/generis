@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 18.07.2012, 10:10:48 with ArgoUML PHP module 
+ * Automatically generated on 16.11.2012, 12:49:42 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -77,14 +77,13 @@ class common_configuration_FileSystemComponent
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string location
      * @param  string expectedRights
-     * @param  string name
      * @param  boolean optional
      * @return mixed
      */
-    public function __construct($location, $expectedRights, $name = 'unknown', $optional = false)
+    public function __construct($location, $expectedRights, $optional = false)
     {
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B11 begin
-        parent::__construct($name, $optional);
+        parent::__construct('tao.configuration.filesystem', $optional);
         $this->setExpectedRights($expectedRights);
         $this->setLocation($location);
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B11 end

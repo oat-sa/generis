@@ -46,8 +46,8 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
 
     function testPHPRuntime() {
         // Core tests.
-        $php = new common_configuration_PHPRuntime('5.3', '5.4', 'PHPRuntime');
-        $this->assertEqual($php->getName(), 'PHPRuntime');
+        $php = new common_configuration_PHPRuntime('5.3', '5.4');
+        $this->assertEqual($php->getName(), 'tao.configuration.phpruntime'); //automatically set
         $this->assertEqual($php->getMin(), '5.3');
         $this->assertEqual($php->getMax(), '5.4');
         $this->assertFalse($php->isOptional());
@@ -65,7 +65,7 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
         $this->assertTrue($php->isOptional());
         
         // max & min test.
-        $php = new common_configuration_PHPRuntime('5.3', '5.4', 'PHPRuntime');
+        $php = new common_configuration_PHPRuntime('5.3', '5.4');
         $report = $php->check();
         $this->assertEqual($report->getStatus(), common_configuration_Report::VALID);
         
@@ -75,7 +75,7 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
         $this->assertEqual($report->getStatus(), common_configuration_Report::INVALID);
         
         // min test.
-        $php = new common_configuration_PHPRuntime('5.3', null, 'PHPRuntime');
+        $php = new common_configuration_PHPRuntime('5.3', null);
         $report = $php->check();
         $this->assertEqual($report->getStatus(), common_configuration_Report::VALID);
         
@@ -84,7 +84,7 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
         $this->assertEqual($report->getStatus(), common_configuration_Report::INVALID);
         
         // max test.
-        $php = new common_configuration_PHPRuntime(null, '5.5', 'PHPRuntime');
+        $php = new common_configuration_PHPRuntime(null, '5.5');
         $report = $php->check();
         $this->assertEqual($report->getStatus(), common_configuration_Report::VALID);
         
@@ -163,10 +163,10 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
     }  
 
     public function testFileSystemComponent(){
-        $f = new common_configuration_FileSystemComponent(__FILE__, 'r', 'This file');
+        $f = new common_configuration_FileSystemComponent(__FILE__, 'r');
         $this->assertEqual($f->getLocation(), __FILE__);
         $this->assertEqual($f->getExpectedRights(), 'r');
-        $this->assertEqual($f->getName(), 'This file');
+        $this->assertEqual($f->getName(), 'tao.configuration.filesystem'); // automatically set.
         $this->assertFalse($f->isOptional());
         $this->assertTrue($f->isReadable());
         

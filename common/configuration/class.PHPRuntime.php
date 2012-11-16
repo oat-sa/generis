@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 19.07.2012, 16:31:45 with ArgoUML PHP module 
+ * Automatically generated on 16.11.2012, 12:55:05 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -126,6 +126,23 @@ class common_configuration_PHPRuntime
         // section -64--88-56-1-1c6f58d0:1389fa4346a:-8000:0000000000001B2E end
 
         return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method __construct
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string min
+     * @param  string max
+     * @param  boolean optional
+     * @return mixed
+     */
+    public function __construct($min, $max, $optional = false)
+    {
+        // section 10-13-1-85-3dfb9289:13b0907d621:-8000:0000000000001CF4 begin
+        parent::__construct($min, $max, 'tao.configuration.phpruntime', $optional);
+        // section 10-13-1-85-3dfb9289:13b0907d621:-8000:0000000000001CF4 end
     }
 
 } /* end of class common_configuration_PHPRuntime */
