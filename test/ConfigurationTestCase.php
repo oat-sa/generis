@@ -219,6 +219,7 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
     		
     		$reports = $collection->check();
     		$this->assertTrue(true); // Acyclic graph, no CyclicDependencyException thrown.
+    		$this->assertEqual(count($reports), 1);
     		$this->assertEqual($collection->getCheckedComponents(), array($componentA));
     		$this->assertEqual($collection->getUncheckedComponents(), array($componentB, $componentC));
     		
@@ -226,8 +227,42 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
     		$componentD = new common_configuration_Mock(common_configuration_Report::VALID, 'componentD');
     		$collection->addComponent($componentD);
     		$reports = $collection->check();
+    		$this->assertTrue(true); // Acyclic graph, no CyclicDependencyException thrown.
+    		$this->assertEqual(count($reports), 2);
     		$this->assertEqual($collection->getCheckedComponents(), array($componentA, $componentD));
     		$this->assertEqual($collection->getUncheckedComponents(), array($componentB, $componentC));
+    		
+    		// Make the whole components valid again.
+    		$componentA->setExpectedStatus(common_configuration_Report::VALID);
+    		$reports = $collection->check();
+    		$this->assertTrue(true); // Acyclic graph, no CyclicDependencyException thrown.
+    		$this->assertEqual(count($reports), 4);
+    		$this->assertEqual($collection->getCheckedComponents(), array($componentA, $componentB, $componentC, $componentD));
+    		$this->assertEqual($collection->getUncheckedComponents(), array());
+    		
+    		try{
+    			// Make the graph cyclic.
+    			$collection->addDependency($componentA, $componentB);
+    			$collection->check();
+    			$this->assertTrue(false, 'The graph should be cyclic.');
+    		}
+    		catch (common_configuration_CyclicDependencyException $e){
+    			$this->assertTrue(true);
+    			$this->assertEqual($collection->getReports(), array());
+    			$this->assertEqual($collection->getCheckedComponents(), array());
+    			$this->assertEqual($collection->getUncheckedComponents(), array($componentA, $componentB, $componentC, $componentD));
+    			
+    			// Finally, we test a ComponentCollection reset.
+    			$collection->reset();
+    			$this->assertEqual($collection->getReports(), array());
+    			$this->assertEqual($collection->getCheckedComponents(), array());
+    			$this->assertEqual($collection->getUncheckedComponents(), array());
+    			$reports = $collection->check();
+    			$this->assertEqual($reports, array());
+    			$this->assertEqual($collection->getReports(), array());
+    			$this->assertEqual($collection->getCheckedComponents(), array());
+    			$this->assertEqual($collection->getUncheckedComponents(), array());
+    		}
     	}
     	catch (common_configuration_CyclicDependencyException $e){
     		$this->assertTrue(false, 'The graph dependency formed by the ComponentCollection must be acyclic.');

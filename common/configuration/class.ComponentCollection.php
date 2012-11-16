@@ -167,6 +167,7 @@ class common_configuration_ComponentCollection
         $this->setComponents(array());
         $this->setDependencies(array());
         $this->setCheckedComponents(array());
+        $this->setSilentComponents(array());
         // section 10-13-1-85--478659bd:13afeb85455:-8000:0000000000001C97 end
     }
 
