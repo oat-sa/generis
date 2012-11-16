@@ -226,7 +226,7 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
     		$componentD = new common_configuration_Mock(common_configuration_Report::VALID, 'componentD');
     		$collection->addComponent($componentD);
     		$reports = $collection->check();
-    		$this->assertEqual($collection->getCheckedComponents(), array($componentD, $componentA));
+    		$this->assertEqual($collection->getCheckedComponents(), array($componentA, $componentD));
     		$this->assertEqual($collection->getUncheckedComponents(), array($componentB, $componentC));
     	}
     	catch (common_configuration_CyclicDependencyException $e){

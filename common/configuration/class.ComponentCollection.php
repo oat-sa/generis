@@ -241,17 +241,6 @@ class common_configuration_ComponentCollection
 		   			}
 	        	}
 	        	
-	        	// Finally, sort the reports to make them ordered in the same
-	        	// order the related components where added.
-	        	$reports = array();
-	        	foreach ($components as $c){
-	        		foreach ($this->getReports() as $r){
-	        			if ($r->getComponent() === $c){
-	        				array_push($reports, $r);
-	        			}
-	        		}
-	        	}
-	        	$this->setReports($reports);
 	        	$returnValue = $this->getReports();
 	        }
 	        else{
@@ -372,7 +361,20 @@ class common_configuration_ComponentCollection
         $returnValue = array();
 
         // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CB3 begin
-        $returnValue = $this->checkedComponents;
+    	// Sort the checked components to make them ordered in the same
+        // way the related components where added.
+        $components = $this->getComponents();
+        $checkedComponents = array();
+        foreach ($components as $c){
+        	foreach ($this->checkedComponents as $cC){
+        		if ($cC === $c){
+        			array_push($checkedComponents, $cC);
+        		}
+        	}
+        }
+        
+        
+        $returnValue = $checkedComponents;
         // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CB3 end
 
         return (array) $returnValue;
@@ -396,6 +398,20 @@ class common_configuration_ComponentCollection
     			array_push($returnValue, $c);
     		}
     	}
+    	
+    	// Sort the checked components to make them ordered in the same
+        // way the related components where added.
+        $components = $this->getComponents();
+        $uncheckedComponents = array();
+        foreach ($components as $c){
+        	foreach ($returnValue as $uC){
+        		if ($uC === $c){
+        			array_push($uncheckedComponents, $uC);
+        		}
+        	}
+        }
+        
+        $returnValue = $uncheckedComponents;
         // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CB5 end
 
         return (array) $returnValue;
@@ -533,7 +549,24 @@ class common_configuration_ComponentCollection
         $returnValue = array();
 
         // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CCB begin
-        $returnValue = $this->reports;
+        if (count($this->reports) == 0){
+        	return $returnValue;
+        }
+        else{
+        	// Sort the reports to make them ordered in the same
+        	// order the related components where added.
+        	$components = $this->getComponents();
+        	$reports = array();
+        	foreach ($components as $c){
+        		foreach ($this->reports as $r){
+        			if ($r->getComponent() === $c){
+        				array_push($reports, $r);
+        			}
+        		}
+        	}
+        }
+        
+        $returnValue = $reports;
         // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CCB end
 
         return (array) $returnValue;
