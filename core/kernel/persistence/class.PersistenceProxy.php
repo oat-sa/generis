@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 05.03.2012, 14:46:51 with ArgoUML PHP module 
+ * Automatically generated on 19.11.2012, 16:34:43 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -34,7 +34,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  *
  * @abstract
  * @access public
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -76,7 +76,7 @@ abstract class core_kernel_persistence_PersistenceProxy
      *
      * @abstract
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  array params
      * @return core_kernel_persistence_ResourceInterface
@@ -86,18 +86,26 @@ abstract class core_kernel_persistence_PersistenceProxy
     /**
      * Short description of method singleton
      *
-     * @abstract
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return core_kernel_persistence_PersistanceProxy
      */
-    public static abstract function singleton();
+    public static function singleton()
+    {
+        $returnValue = null;
+
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000130B begin
+        throw new Exception('Must be implemented by subclasses.');
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000130B end
+
+        return $returnValue;
+    }
 
     /**
      * Short description of method getAvailableImpl
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  array params
      * @return array
      */
@@ -131,7 +139,7 @@ abstract class core_kernel_persistence_PersistenceProxy
      *
      * @abstract
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string context
      * @param  Resource resource
      * @return boolean
@@ -142,7 +150,7 @@ abstract class core_kernel_persistence_PersistenceProxy
      * Force the use of a specific implementation
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string implementation
      * @return mixed
      */
@@ -163,7 +171,7 @@ abstract class core_kernel_persistence_PersistenceProxy
      * Short description of method isForcedMode
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string implementation
      * @return boolean
      */
@@ -190,7 +198,7 @@ abstract class core_kernel_persistence_PersistenceProxy
      * Deprecated, please use restoreMode() instead
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @deprecated
      * @return mixed
      */
@@ -207,7 +215,7 @@ abstract class core_kernel_persistence_PersistenceProxy
      * resores the previsous implementation
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return mixed
      */
     public static function restoreImplementation()

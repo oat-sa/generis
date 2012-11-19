@@ -23,11 +23,11 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 require_once('common/class.Collection.php');
 
 /**
- * include core_kernel_classes_Literal
+ * include core_kernel_classes_Container
  *
- * @author firstname and lastname of author, <author@example.org>
+ * @author patrick.plichart@tudor.lu
  */
-require_once('core/kernel/classes/class.Literal.php');
+require_once('core/kernel/classes/class.Container.php');
 
 /* user defined includes */
 // section 10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000078B-includes begin
@@ -59,11 +59,11 @@ class core_kernel_classes_ContainerCollection
      * Short description of method add
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  Container element
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Object element
      * @return void
      */
-    public function add( core_kernel_classes_Container $element)
+    public function add( common_Object $element)
     {
         // section 10-13-1--31-7253183:11993fa4132:-8000:0000000000000ACF begin
         parent::add($element);
@@ -74,7 +74,7 @@ class core_kernel_classes_ContainerCollection
      * Short description of method toHtml
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
      */
     public function toHtml()
@@ -91,11 +91,11 @@ class core_kernel_classes_ContainerCollection
      * Short description of method union
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  ContainerCollection collection
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Collection collection
      * @return core_kernel_classes_ContainerCollection
      */
-    public function union( core_kernel_classes_ContainerCollection $collection)
+    public function union( common_Collection $collection)
     {
         $returnValue = null;
 
@@ -111,11 +111,11 @@ class core_kernel_classes_ContainerCollection
      * Short description of method intersect
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  ContainerCollection collection
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Collection collection
      * @return core_kernel_classes_ContainerCollection
      */
-    public function intersect( core_kernel_classes_ContainerCollection $collection)
+    public function intersect( common_Collection $collection)
     {
         $returnValue = null;
 
@@ -131,11 +131,11 @@ class core_kernel_classes_ContainerCollection
      * Short description of method indexOf
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  Resource resource
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Object resource
      * @return Integer
      */
-    public function indexOf( core_kernel_classes_Resource $resource)
+    public function indexOf( common_Object $resource)
     {
         $returnValue = null;
 
@@ -157,7 +157,7 @@ class core_kernel_classes_ContainerCollection
      * Short description of method __toString
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
      */
     public function __toString()

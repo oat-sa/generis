@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 20.07.2011, 08:42:00 with ArgoUML PHP module 
+ * Automatically generated on 19.11.2012, 16:36:31 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -34,7 +34,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  *
  * @abstract
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -50,19 +50,27 @@ abstract class core_kernel_persistence_PersistenceImpl
     /**
      * Short description of method singleton
      *
-     * @abstract
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return core_kernel_classes_Resource
      */
-    public static abstract function singleton();
+    public static function singleton()
+    {
+        $returnValue = null;
+
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000140F begin
+        throw new Exception('Must be implemented by subclasses.');
+        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000140F end
+
+        return $returnValue;
+    }
 
     /**
      * Short description of method isValidContext
      *
      * @abstract
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
