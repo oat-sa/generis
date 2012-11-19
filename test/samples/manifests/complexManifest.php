@@ -19,6 +19,14 @@ return array(
 		'rdf' => array(
 				array('ns' => 'http://www.tao.lu/Ontologies/taoFuncACL.rdf', 'file' => '/extension/path/models/ontology/taofuncacl.rdf'),
 				array('ns' => 'http://www.tao.lu/Ontologies/taoItemBank.rdf', 'file' => '/extension/path/models/ontology/taoitembank.rdf')
+		),
+		'checks' => array(
+			array('type' => 'CheckPHPRuntime', 'value' => array('id' => 'php_runtime', 'min' => '5.3', 'max' => '5.3.18')),
+			array('type' => 'CheckPHPExtension', 'value' => array('id' => 'ext_pdo', 'name' => 'PDO')),
+			array('type' => 'CheckPHPExtension', 'value' => array('id' => 'ext_svn','name' => 'svn', 'optional' => true)),
+			array('type' => 'CheckPHPExtension', 'value' => array('id' => 'ext_suhosin','name' => 'suhosin', 'optional' => true)),
+			array('type' => 'CheckPHPINIValue', 'value' => array('id' => 'ini_register_globals', 'name' => 'register_globals', 'value' => "0")),
+			array('type' => 'CheckFileSystemComponent', 'value' => array('id' => 'fs_root','location' => '.', 'rights' => 'rw', 'name' => 'fs_root')),
 		)
 	),
 	'classLoaderPackages' => array(

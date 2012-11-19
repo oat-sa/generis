@@ -581,6 +581,81 @@ class common_ext_Manifest
     private function setInstallChecks($installChecks)
     {
         // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C71 begin
+        // Check if the content is well formed.
+    	if (!is_array($installChecks)){
+    		throw new common_ext_MalformedManifestException("The 'install->checks' component must be an array.");	
+    	}
+    	else{
+    		foreach ($installChecks as $check){
+    			// Mandatory fields for any kind of check are 'id' (string), 
+    			// 'type' (string), 'value' (array).
+    			if (empty($check['type'])){
+    				throw new common_ext_MalformedManifestException("The 'install->checks->type' component is mandatory.");	
+    			}else if (!is_string($check['type'])){
+    				throw new common_ext_MalformedManifestException("The 'install->checks->type' component must be a string.");
+    			}
+    			
+    			if (empty($check['value'])){
+    				throw new common_ext_MalformedManifestException("The 'install->checks->value' component is mandatory.");
+    			}
+    			else if (!is_array($check['value'])){
+    				throw new common_ext_MalformedManifestException("The 'install->checks->value' component must be an array.");	
+    			}
+    			
+    			if (empty($check['value']['id'])){
+    				throw new common_ext_MalformedManifestException("The 'install->checks->value->id' component is mandatory.");	
+    			}
+    			else if (!is_string($check['value']['id'])){
+    				throw new common_ext_MalformedManifestException("The 'install->checks->value->id' component must be a string.");	
+    			}
+    			
+    			switch ($check['type']){
+    				case 'CheckPHPRuntime':
+    					if (empty($check['value']['min'])){
+    						throw new common_ext_MalformedManifestException("The 'install->checks->value->min' component is mandatory for PHPRuntime checks.");	
+    					}
+    				break;
+    				
+    				case 'CheckPHPExtension':
+    					if (empty($check['value']['name'])){
+    						throw new common_ext_MalformedManifestException("The 'install->checks->value->name' component is mandatory for PHPExtension checks.");
+    					}
+    				break;
+    				
+    				case 'CheckPHPINIValue':
+    					if (empty($check['value']['name'])){
+    						throw new common_ext_MalformedManifestException("The 'install->checks->value->name' component is mandatory for PHPINIValue checks.");
+    					}
+    					else if ($check['value']['value'] == ''){
+    						throw new common_ext_MalformedManifestException("The 'install->checks->value->value' component is mandatory for PHPINIValue checks.");
+    					}
+    				break;
+    				
+    				case 'CheckFileSystemComponent':
+    					if (empty($check['value']['location'])){
+    						throw new common_ext_MalformedManifestException("The 'install->checks->value->location' component is mandatory for FileSystemComponent checks.");	
+    					}
+    					else if (empty($check['value']['rights'])){
+    						throw new common_ext_MalformedManifestException("The 'install->checks->value->rights' component is mandatory for FileSystemComponent checks.");	
+    					}
+    				break;
+    				
+    				case 'CheckCustom':
+    					if (empty($check['value']['name'])){
+    						throw new common_ext_MalformedManifestException("The 'install->checks->value->name' component is mandatory for Custom checks.");	
+    					}
+    					else if (empty($check['value']['extension'])){
+    						throw new common_ext_MalformedManifestException("The 'install->checks->value->extension' component is mandatory for Custom checks.");		
+    					}
+    				break;
+    				
+    				default:
+    					throw new common_ext_MalformedManifestException("The 'install->checks->type' component value is unknown.");	
+    				break;
+    			}
+    		}
+    	}
+    	
         $this->installChecks = $installChecks;
         // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C71 end
     }

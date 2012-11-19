@@ -57,7 +57,10 @@ class ManifestTestCase extends UnitTestCase {
 			
 		}
 		catch (common_ext_ManifestException $e){
-			$this->assertTrue(false, "Trying to load a manifest that exists and well formed should not raise an exception.");
+			$this->assertTrue(false, $e->getMessage());
 		}
+		
+		// Load a malformed manifest.
+		
 	}
 }
