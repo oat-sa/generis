@@ -194,8 +194,8 @@ class common_configuration_ComponentCollection
 		// Any node that has no incoming edge and is not
 		// the root mock should be bound to it.
 		foreach ($components as $c){
+			$found = false;
 			foreach ($this->getDependencies() as $d){
-				$found = false;
 				
 				if ($c === $d['isDependencyOf']){
 					// Incoming edge(s).
