@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Nov 22 13:46:44 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Nov 22 15:06:07 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -22017,6 +22017,52 @@ specified in the Manifest</UML:TaggedValue.dataValue>
                           name = 'constants' isSpecification = 'false' kind = 'in'>
                           <UML:Parameter.type>
                             <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85-4049d0c6:13b28618bf6:-8000:0000000000001D6D'
+                      name = 'extractChecks' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:ModelElement.taggedValue>
+                        <UML:TaggedValue xmi.id = '10-13-1-85-4049d0c6:13b28618bf6:-8000:0000000000001D6F'
+                          isSpecification = 'false'>
+                          <UML:TaggedValue.dataValue>Extract checks from a given manifest file.</UML:TaggedValue.dataValue>
+                          <UML:TaggedValue.type>
+                            <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                          </UML:TaggedValue.type>
+                        </UML:TaggedValue>
+                      </UML:ModelElement.taggedValue>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-4049d0c6:13b28618bf6:-8000:0000000000001D6E'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85-4049d0c6:13b28618bf6:-8000:0000000000001D70'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>A collection of configuration check Components.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1-85--478659bd:13afeb85455:-8000:0000000000001C91'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-515b7cdf:13b2866bafd:-8000:0000000000001D71'
+                          name = 'file' isSpecification = 'false' kind = 'in'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85-515b7cdf:13b2866bafd:-8000:0000000000001D72'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>The path to a manifest.php file.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                           </UML:Parameter.type>
                         </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
@@ -48599,7 +48645,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </path>
   </group>
   <group name="Fig26"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[936, 704, 304, 594]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[936, 704, 304, 609]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02"
        fill="1"
        fillcolor="white"
@@ -48613,7 +48659,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       x="936"
       y="704"
       width="304"
-      height="594"
+      height="609"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -48893,7 +48939,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig26.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[937, 915, 302, 383]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[937, 915, 302, 398]"
          href="-64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02"
          fill="0"
          fillcolor="white"
@@ -48907,7 +48953,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="937"
         y="915"
         width="302"
-        height="383"
+        height="398"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -49301,7 +49347,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="937"
         y="1275"
         width="302"
-        height="21"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -49313,6 +49359,22 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >setConstants(constants : array) : void</text>
+      <text name="Fig26.6.26"
+        x="937"
+        y="1290"
+        width="302"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >extractChecks(file : string) : ComponentCollection</text>
     </group>
   </group>
   <group name="Fig27"
@@ -78896,7 +78958,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                         offset="-10" />
     </private>
     <path name="Fig74.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -79010,8 +79072,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig75.5"
       x="2236"
-      y="794"
-      width="215"
+      y="815"
+      width="231"
       height="1"
       fill="1"
       fillcolor="black"
@@ -79020,7 +79082,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig75.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[2237, 795, 213, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[2237, 816, 229, 21]"
          href="10-13-1-85-6e4bf9cd:13b2823942c:-8000:0000000000001D6E"
          fill="0"
          fillcolor="white"
@@ -79033,8 +79095,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig75.6.0"
         x="2237"
-        y="795"
-        width="213"
+        y="816"
+        width="229"
         height="21"
         fill="0"
         fillcolor="white"
@@ -79063,7 +79125,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                         offset="-10" />
     </private>
     <path name="Fig76.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"

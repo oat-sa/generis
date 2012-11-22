@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 09.11.2012, 10:51:37 with ArgoUML PHP module 
+ * Automatically generated on 22.11.2012, 14:56:44 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -724,6 +724,41 @@ class common_ext_Manifest
         // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C78 begin
         $this->constants = $constants;
         // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C78 end
+    }
+
+    /**
+     * Extract checks from a given manifest file.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string file The path to a manifest.php file.
+     * @return common_configuration_ComponentCollection
+     */
+    public static function extractChecks($file)
+    {
+        $returnValue = null;
+
+        // section 10-13-1-85-4049d0c6:13b28618bf6:-8000:0000000000001D6D begin
+        if (is_readable($file)){
+        	$manifestPath = $file;
+	    	$content = file_get_contents($manifestPath);
+	    	$matches = array();
+	    	preg_match_all("/(?:\"|')\s*checks\s*(?:\"|')\s*=>(\s*array\s*\((\s*array\((?:.*)\s*\)\)\s*,{0,1})*\s*\))/", $content, $matches);
+	    	
+	    	if (!empty($matches[1][0])){
+	    		$returnValue = eval('return ' . $matches[1][0] . ';');	
+	    	}
+	    	else{
+	    		$returnValue = array();	
+	    	}
+        }
+        else{
+        	$msg = "Extension Manifest file could not be found in '${file}'.";
+        	throw new common_ext_ManifestNotFoundException($msg);
+        }
+        // section 10-13-1-85-4049d0c6:13b28618bf6:-8000:0000000000001D6D end
+
+        return $returnValue;
     }
 
 } /* end of class common_ext_Manifest */

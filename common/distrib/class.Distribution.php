@@ -335,6 +335,25 @@ class common_distrib_Distribution
         // section 10-13-1-85-7504f477:13b27c1b582:-8000:0000000000001D4B end
     }
 
+    /**
+     * Get the ComponentCollection corresponding to the distribution. It
+     * the configuration checks to perform for all extensions involved in the
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return common_configuration_ComponentCollection
+     */
+    public function getConfigChecker()
+    {
+        $returnValue = null;
+
+        // section 10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D59 begin
+        throw new Exception("Not implemented yet.");
+        // section 10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D59 end
+
+        return $returnValue;
+    }
+
 } /* end of class common_distrib_Distribution */
 
 ?>
