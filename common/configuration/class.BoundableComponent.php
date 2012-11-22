@@ -135,7 +135,8 @@ abstract class common_configuration_BoundableComponent
     public function setMax($max)
     {
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B09 begin
-        $this->max = $max;
+    	// Support .x notation.
+        $this->max = preg_replace('/x/u', '99999', $max);
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B09 end
     }
 

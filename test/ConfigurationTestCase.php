@@ -65,7 +65,7 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
         $this->assertTrue($php->isOptional());
         
         // max & min test.
-        $php = new common_configuration_PHPRuntime('5.3', '5.4');
+        $php = new common_configuration_PHPRuntime('5.3', '5.5');
         $report = $php->check();
         $this->assertEqual($report->getStatus(), common_configuration_Report::VALID);
         
@@ -89,8 +89,12 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
         $this->assertEqual($report->getStatus(), common_configuration_Report::VALID);
         
         $php->setMax('5.2');
+        $this->assertEqual($php->getMax(), '5.2');
         $report = $php->check();
         $this->assertEqual($report->getStatus(), common_configuration_Report::INVALID);
+        
+        $php->setMax('5.3.x');
+        $this->assertEqual($php->getMax(), '5.3.99999');
     }
 
     function testPHPExtension(){
