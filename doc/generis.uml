@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Nov 22 15:06:07 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Nov 23 10:53:54 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -27299,6 +27299,394 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                     </UML:Operation>
                   </UML:Classifier.feature>
                 </UML:Class>
+                <UML:Class xmi.id = '10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D73'
+                  name = 'ComponentFactory' visibility = 'public' isSpecification = 'false'
+                  isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                  <UML:Classifier.feature>
+                    <UML:Operation xmi.id = '10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D74'
+                      name = 'buildPHPRuntime' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D75'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ACD'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D76'
+                          name = 'min' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D77'
+                          name = 'max' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.defaultValue>
+                            <UML:Expression xmi.id = '10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D7D'
+                              language = '' body = 'null'/>
+                          </UML:Parameter.defaultValue>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D7E'
+                          name = 'optional' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.defaultValue>
+                            <UML:Expression xmi.id = '10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D83'
+                              language = '' body = 'false'/>
+                          </UML:Parameter.defaultValue>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D84'
+                      name = 'buildPHPExtension' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D85'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AD1'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D7D'
+                          name = 'name' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D7E'
+                          name = 'min' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D7F'
+                          name = 'max' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.defaultValue>
+                            <UML:Expression xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D83'
+                              language = '' body = 'null'/>
+                          </UML:Parameter.defaultValue>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D84'
+                          name = 'optional' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.defaultValue>
+                            <UML:Expression xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D89'
+                              language = '' body = 'false'/>
+                          </UML:Parameter.defaultValue>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D8A'
+                      name = 'buildPHPINIValue' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D8B'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ACF'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D8C'
+                          name = 'name' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D8D'
+                          name = 'expectedValue' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D8E'
+                          name = 'optional' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.defaultValue>
+                            <UML:Expression xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D93'
+                              language = '' body = 'false'/>
+                          </UML:Parameter.defaultValue>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D94'
+                      name = 'buildPHPDatabaseDriver' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D95'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '-64--88-56-1--4c174f22:138be969f09:-8000:0000000000001B32'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D96'
+                          name = 'name' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D97'
+                          name = 'optional' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.defaultValue>
+                            <UML:Expression xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D9C'
+                              language = '' body = 'false'/>
+                          </UML:Parameter.defaultValue>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D9D'
+                      name = 'buildFileSystemComponent' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D9E'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AD3'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D9F'
+                          name = 'location' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DA0'
+                          name = 'expectedRights' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DA1'
+                          name = 'optional' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.defaultValue>
+                            <UML:Expression xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DA6'
+                              language = '' body = 'false'/>
+                          </UML:Parameter.defaultValue>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DA7'
+                      name = 'buildMock' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DA8'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1-85--ca6619b:13af946abe3:-8000:0000000000001C72'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DA9'
+                          name = 'expectedStatus' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Attribute xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DAA'
+                      name = 'fileSystemCount' visibility = 'private' isSpecification = 'false'
+                      ownerScope = 'classifier' changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DAB'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DAC'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000723'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DAD'
+                      name = 'mockCount' visibility = 'private' isSpecification = 'false' ownerScope = 'classifier'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DAE'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DAF'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:StructuralFeature.type>
+                        <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Operation xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB0'
+                      name = 'buildFromArray' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB1'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001A84'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB2'
+                          name = 'array' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB3'
+                      name = 'getFileSystemCount' visibility = 'private' isSpecification = 'false'
+                      ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB4'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB5'
+                      name = 'setFileSystemCount' visibility = 'private' isSpecification = 'false'
+                      ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB6'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB7'
+                          name = 'fileSystemCount' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB8'
+                      name = 'incrementFileSystemCount' visibility = 'private' isSpecification = 'false'
+                      ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB9'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DBA'
+                      name = 'getMockCount' visibility = 'private' isSpecification = 'false' ownerScope = 'classifier'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DBB'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DBC'
+                      name = 'setMockCount' visibility = 'private' isSpecification = 'false' ownerScope = 'classifier'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DBD'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DBE'
+                          name = 'mockCount' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DBF'
+                      name = 'incrementMockCount' visibility = 'private' isSpecification = 'false'
+                      ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DC0'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB0'
+                      name = 'buildCustom' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB1'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001A84'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB2'
+                          name = 'name' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB3'
+                          name = 'extension' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                  </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DC1'
+                  name = 'ComponentFactoryException' visibility = 'public' isSpecification = 'false'
+                  isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                  <UML:GeneralizableElement.generalization>
+                    <UML:Generalization xmi.idref = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DC2'/>
+                  </UML:GeneralizableElement.generalization>
+                </UML:Class>
+                <UML:Generalization xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DC2'
+                  isSpecification = 'false'>
+                  <UML:Generalization.child>
+                    <UML:Class xmi.idref = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DC1'/>
+                  </UML:Generalization.child>
+                  <UML:Generalization.parent>
+                    <UML:Class xmi.idref = '127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003ECA'/>
+                  </UML:Generalization.parent>
+                </UML:Generalization>
               </UML:Namespace.ownedElement>
             </UML:Package>
             <UML:Package xmi.id = '10-13-1-85-7504f477:13b27c1b582:-8000:0000000000001CF8'
@@ -69841,7 +70229,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="41"
         y="362"
         width="704"
-        height="15"
+        height="29"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -74601,7 +74989,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </path>
   </group>
   <group name="Fig47"
-       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[40, 1136, 1728, 768]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
+       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[40, 1140, 2280, 764]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
        href="-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001A83"
        fill="1"
        fillcolor="white"
@@ -74613,9 +75001,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig47.0"
       x="40"
-      y="1136"
-      width="1728"
-      height="768"
+      y="1140"
+      width="2280"
+      height="764"
       fill="0"
       fillcolor="white"
       stroke="0"
@@ -74629,24 +75017,24 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="40"
-              y="1136" />
-      <lineto x="1718"
-              y="1136" />
-      <lineto x="1718"
-              y="1158" />
-      <lineto x="1767"
-              y="1158" />
-      <lineto x="1767"
+              y="1140" />
+      <lineto x="2270"
+              y="1140" />
+      <lineto x="2270"
+              y="1162" />
+      <lineto x="2319"
+              y="1162" />
+      <lineto x="2319"
               y="1903" />
       <lineto x="40"
               y="1903" />
       <lineto x="40"
-              y="1136" />
+              y="1140" />
     </path>
     <text name="Fig47.2"
       x="40"
-      y="1136"
-      width="1679"
+      y="1140"
+      width="2231"
       height="23"
       fill="0"
       fillcolor="white"
@@ -74660,7 +75048,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       justification="Left"
     >common::configuration</text>
     <group name="Fig47.3"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[40, 1136, 1678, 1]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[40, 1140, 2230, 1]"
          href="-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001A83"
          fill="1"
          fillcolor="white"
@@ -74673,8 +75061,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig47.3.0"
         x="40"
-        y="1136"
-        width="1678"
+        y="1140"
+        width="2230"
         height="1"
         fill="1"
         fillcolor="white"
@@ -74684,9 +75072,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
     <text name="Fig47.4"
       x="40"
-      y="1158"
-      width="1728"
-      height="746"
+      y="1162"
+      width="2280"
+      height="742"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -79136,6 +79524,555 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <lineto x="2560"
               y="784" />
       <lineto x="2560"
+              y="20" />
+      <lineto x="1151"
+              y="20" />
+    </path>
+  </group>
+  <group name="Fig77"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1708, 1280, 568, 279]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       href="10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D73"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+      enclosingFig="Fig47"
+    </private>
+    
+    <rectangle name="Fig77.0"
+      x="1708"
+      y="1280"
+      width="568"
+      height="279"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig77.1"
+      x="1709"
+      y="1281"
+      width="566"
+      height="21"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >common::configuration::ComponentFactory</text>
+    <group name="Fig77.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1709, 1281, 566, 0]"
+         href="10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D73"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig77.2.0"
+        x="1709"
+        y="1281"
+        width="566"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig77.3"
+      x="1708"
+      y="1302"
+      width="568"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig77.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1709, 1303, 566, 38]"
+         href="10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D73"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig77.4.0"
+        x="1709"
+        y="1303"
+        width="566"
+        height="38"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig77.4.1"
+        x="1709"
+        y="1303"
+        width="566"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >fileSystemCount : int</text>
+      <text name="Fig77.4.2"
+        x="1709"
+        y="1318"
+        width="566"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >mockCount : int</text>
+    </group>
+    <rectangle name="Fig77.5"
+      x="1708"
+      y="1340"
+      width="568"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig77.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1709, 1341, 566, 218]"
+         href="10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D73"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig77.6.0"
+        x="1709"
+        y="1341"
+        width="566"
+        height="218"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig77.6.1"
+        x="1709"
+        y="1341"
+        width="566"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >buildPHPRuntime(min : string,max : string = null,optional : boolean = false) : PHPRuntime</text>
+      <text name="Fig77.6.2"
+        x="1709"
+        y="1356"
+        width="566"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >buildPHPExtension(name : string,min : string,max : string = null,optional : boolean = false) : PHPExtension</text>
+      <text name="Fig77.6.3"
+        x="1709"
+        y="1371"
+        width="566"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >buildPHPINIValue(name : string,expectedValue : string,optional : boolean = false) : PHPINIValue</text>
+      <text name="Fig77.6.4"
+        x="1709"
+        y="1386"
+        width="566"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >buildPHPDatabaseDriver(name : string,optional : boolean = false) : PHPDatabaseDriver</text>
+      <text name="Fig77.6.5"
+        x="1709"
+        y="1401"
+        width="566"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >buildFileSystemComponent(location : string,expectedRights : string,optional : boolean = false) : FileSystemComponent</text>
+      <text name="Fig77.6.6"
+        x="1709"
+        y="1416"
+        width="566"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >buildMock(expectedStatus : int) : Mock</text>
+      <text name="Fig77.6.7"
+        x="1709"
+        y="1431"
+        width="566"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >buildFromArray(array : array) : Component</text>
+      <text name="Fig77.6.8"
+        x="1709"
+        y="1446"
+        width="566"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getFileSystemCount() : int</text>
+      <text name="Fig77.6.9"
+        x="1709"
+        y="1461"
+        width="566"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setFileSystemCount(fileSystemCount : int) : void</text>
+      <text name="Fig77.6.10"
+        x="1709"
+        y="1476"
+        width="566"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >incrementFileSystemCount() : void</text>
+      <text name="Fig77.6.11"
+        x="1709"
+        y="1491"
+        width="566"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getMockCount() : int</text>
+      <text name="Fig77.6.12"
+        x="1709"
+        y="1506"
+        width="566"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setMockCount(mockCount : int) : void</text>
+      <text name="Fig77.6.13"
+        x="1709"
+        y="1521"
+        width="566"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >incrementMockCount() : void</text>
+      <text name="Fig77.6.14"
+        x="1709"
+        y="1536"
+        width="566"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >buildCustom(name : string,extension : string) : Component</text>
+    </group>
+  </group>
+  <group name="Fig78"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1952, 1200, 265, 23]pathVisible=true;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
+       href="10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DC1"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+      enclosingFig="Fig47"
+    </private>
+    
+    <rectangle name="Fig78.0"
+      x="1952"
+      y="1200"
+      width="265"
+      height="23"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig78.1"
+      x="1953"
+      y="1201"
+      width="263"
+      height="21"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >common::configuration::ComponentFactoryException</text>
+    <group name="Fig78.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1953, 1201, 263, 0]"
+         href="10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DC1"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig78.2.0"
+        x="1953"
+        y="1201"
+        width="263"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig78.3"
+      x="1952"
+      y="1222"
+      width="265"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+      visibility="0"
+    />
+    <group name="Fig78.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1953, 1223, 263, 21]"
+         href="10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DC1"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig78.4.0"
+        x="1953"
+        y="1223"
+        width="263"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        visibility="0"
+      />
+    </group>
+    <rectangle name="Fig78.5"
+      x="1952"
+      y="1243"
+      width="265"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+      visibility="0"
+    />
+    <group name="Fig78.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1953, 1244, 263, 21]"
+         href="10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DC1"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig78.6.0"
+        x="1953"
+        y="1244"
+        width="263"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        visibility="0"
+      />
+    </group>
+  </group>
+  <group name="Fig79"
+       description="org.argouml.uml.diagram.ui.FigGeneralization"
+       href="10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DC2"
+       stroke="1"
+       strokecolor="51 51 153"
+  >
+    <private>
+      sourcePortFig="Fig78.0"
+      destPortFig="Fig18.0"
+      sourceFigNode="Fig78"
+      destFigNode="Fig18"
+      <argouml:pathitem figname="Fig79.1"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
+                        ownerhref="10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DC2"
+                        angle="270.0"
+                        offset="-10" />
+    </private>
+    <path name="Fig79.0"
+      description="org.argouml.gefext.ArgoFigPoly"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="51 51 153"
+    >
+      <moveto x="2216"
+              y="1208" />
+      <lineto x="2716"
+              y="1208" />
+      <lineto x="2716"
               y="20" />
       <lineto x="1151"
               y="20" />
