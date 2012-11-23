@@ -79,6 +79,7 @@ class DistributionsTestCasePrototype extends TestCasePrototype {
     		
     		// Test the content.
     		$distrib = $distribs[0];
+    		$this->assertTrue($manifest->getDistributionById('tao-minimal') === $distrib);
     		$this->assertEqual($distrib->getId(), 'tao-minimal');
     		$this->assertEqual($distrib->getName(), 'TAO Minimal Distribution');
     		$this->assertEqual($distrib->getDescription(), 'TAO Minimal Distribution description.');
@@ -86,6 +87,7 @@ class DistributionsTestCasePrototype extends TestCasePrototype {
     		$this->assertEqual($distrib->getExtensions(), array('tao'));
     		
     		$distrib = $distribs[1];
+    		$this->assertTrue($manifest->getDistributionById('tao-open-source') === $distrib);
     		$this->assertEqual($distrib->getId(), 'tao-open-source');
     		$this->assertEqual($distrib->getName(), 'TAO Open Source Distribution');
     		$this->assertEqual($distrib->getDescription(), 'TAO Open Source Distribution description.');
@@ -97,6 +99,17 @@ class DistributionsTestCasePrototype extends TestCasePrototype {
     	}
     	catch (common_distrib_MalformedManifestException $e){
     		$this->assertTrue(false, "The manifest should not be malformed.");
+    	}
+    	catch (common_distrib_DistributionNotFoundException $e){
+    		$this->assertTrue(false, "All distributions should be found.");
+    	}
+    	
+    	try{
+    		$distrib = $manifest->getDistributionById('funk-music');
+    		$this->assertTrue(false, "A common_distrib_DistributionNotFoundException should be thrown.");
+    	}
+    	catch (common_distrib_DistributionNotFoundException $e){
+    		$this->assertTrue(true);
     	}
     	
     	// Try to load a manifest that does not exist.

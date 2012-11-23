@@ -160,6 +160,17 @@ class common_distrib_Manifest
         $returnValue = null;
 
         // section 10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DBB begin
+        foreach ($this->getDistributions() as $d){
+        	if ($d->getId() == $id){
+				$returnValue = $d;
+				break;
+        	}
+        }
+        
+        if (empty($returnValue)){
+        	$msg = "Distribution with id '${id}' not found.";
+        	throw new common_distrib_DistributionNotFoundException($msg);	
+        }
         // section 10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DBB end
 
         return $returnValue;
