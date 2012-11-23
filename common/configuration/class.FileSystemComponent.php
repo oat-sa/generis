@@ -196,30 +196,30 @@ class common_configuration_FileSystemComponent
         
         if (!$this->exists()){
             return new common_configuration_Report(common_configuration_Report::UNKNOWN,
-                                                   "File system component '${name}' could not be found.",
+                                                   "File system component '${name}' could not be found in '${location}'.",
                                                    $this);
         }
         else{
             if (strpos($expectedRights, 'r') !== false && !is_readable($location)){
                 return new common_configuration_Report(common_configuration_Report::INVALID,
-                                                       "File system component '${name}' is not readable.",
+                                                       "File system component '${name}' in '${location} is not readable.",
                                                        $this);
             }
             
             if (strpos($expectedRights, 'w') !== false && !is_writable($location)){
                 return new common_configuration_Report(common_configuration_Report::INVALID,
-                                                       "File system component '${name}' is not writable.",
+                                                       "File system component '${name}' in '${location} is not writable.",
                                                        $this);
             }
 
             if (strpos($expectedRights, 'x') !== false && !is_executable($location)){
                 return new common_configuration_Report(common_configuration_Report::INVALID,
-                                                       "File system component '${name}' is not executable.",
+                                                       "File system component '${name}' in '${location} is not executable.",
                                                        $this);
             }
             
             return new common_configuration_Report(common_configuration_Report::VALID,
-                                                   "File system component '${name}' is compliant with expected rights (${expectedRights}).'",
+                                                   "File system component '${name}' in '${location} is compliant with expected rights (${expectedRights}).'",
                                                    $this);
         } 
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B95 end

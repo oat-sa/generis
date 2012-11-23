@@ -746,7 +746,14 @@ class common_ext_Manifest
 	    	preg_match_all("/(?:\"|')\s*checks\s*(?:\"|')\s*=>(\s*array\s*\((\s*array\((?:.*)\s*\)\)\s*,{0,1})*\s*\))/", $content, $matches);
 	    	
 	    	if (!empty($matches[1][0])){
-	    		$returnValue = eval('return ' . $matches[1][0] . ';');	
+	    		$returnValue = eval('return ' . $matches[1][0] . ';');
+	    		
+	    		foreach ($returnValue as &$component){
+		    		if (strpos($component['type'], 'FileSystemComponent') !== false){
+		    			$root = realpath(dirname(__FILE__) . '/../../../');
+	        			$component['value']['location'] = $root . '/' . $component['value']['location'];
+	        		}	
+	    		}
 	    	}
 	    	else{
 	    		$returnValue = array();	
