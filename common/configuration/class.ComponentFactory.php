@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 23.11.2012, 10:53:52 with ArgoUML PHP module 
+ * Automatically generated on 23.11.2012, 11:31:18 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -94,7 +94,7 @@ class common_configuration_ComponentFactory
      * @param  boolean optional
      * @return common_configuration_PHPExtension
      */
-    public static function buildPHPExtension($name, $min, $max = null, $optional = false)
+    public static function buildPHPExtension($name, $min = null, $max = null, $optional = false)
     {
         $returnValue = null;
 
@@ -140,7 +140,7 @@ class common_configuration_ComponentFactory
         $returnValue = null;
 
         // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D94 begin
-        $returnValue = new common_configuration_PHPDatabaseDriver(null, null, $name, $optional = false);
+        $returnValue = new common_configuration_PHPDatabaseDriver(null, null, $name, $optional);
         // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D94 end
 
         return $returnValue;
@@ -170,20 +170,65 @@ class common_configuration_ComponentFactory
     }
 
     /**
+     * Short description of method buildCustom
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string name
+     * @param  string extension
+     * @param  boolean optional
+     * @return common_configuration_Component
+     */
+    public static function buildCustom($name, $extension, $optional = false)
+    {
+        $returnValue = null;
+
+        // section 10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB0 begin
+    	// Camelize the name to find it in the checks folder.
+        $name = explode('_', $name);
+        for ($i = 0; $i < count($name); $i++){
+            $name[$i] = ucfirst($name[$i]);
+        }
+        $name = implode('', $name);
+        $checkClassName = "${extension}_install_checks_${name}";
+        
+        // Instanciate the Component.
+        try{
+            $checkClass = new ReflectionClass($checkClassName);
+            $returnValue = $checkClass->newInstanceArgs(array("custom_${extension}_${name}", $optional));
+        }
+        catch (LogicException $e){
+	        $msg = "Cannot instantiate custom check '${name}' for extension '${extension}': ";
+	        $msg .= $e->getMessage();
+	        throw new common_configuration_ComponentFactoryException($msg);
+        }
+        catch (ReflectionException $e){
+        	$msg = "Cannot instantiate custom check '${name}' for extension '${extension}': ";
+	        $msg .= $e->getMessage();
+	        throw new common_configuration_ComponentFactoryException($msg);
+        }
+        // section 10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB0 end
+
+        return $returnValue;
+    }
+
+    /**
      * Short description of method buildMock
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  int expectedStatus
+     * @param  boolean optional
      * @return common_configuration_Mock
      */
-    public static function buildMock($expectedStatus)
+    public static function buildMock($expectedStatus, $optional = false)
     {
         $returnValue = null;
 
         // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DA7 begin
         self::incrementMockCount();
         $returnValue = new common_configuration_Mock($expectedStatus, 'MockComponentCheck_' . self::getMockCount());
+        $returnValue->setOptional($optional);
         // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DA7 end
 
         return $returnValue;
@@ -204,8 +249,8 @@ class common_configuration_ComponentFactory
         // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB0 begin
         if (!empty($array)){
         	if (!empty($array['type'])){
-        		$acceptedTypes = array('PHPRuntime', 'PHPINIValue', 'PHPExtension', 'PHPDatabaseDriver', 'Custom', 'Mock');
-        		$cleanType = preg_replace('/^check/', '', $array['type']);
+        		$acceptedTypes = array('PHPRuntime', 'PHPINIValue', 'PHPExtension', 'PHPDatabaseDriver', 'FileSystemComponent', 'Custom', 'Mock');
+        		$cleanType = preg_replace('/^Check/i', '', $array['type']);
         		if (in_array($cleanType, $acceptedTypes)){
         			
         			if (!empty($array['value'])){
@@ -235,10 +280,10 @@ class common_configuration_ComponentFactory
 	        				case 'PHPINIValue':
 	        					if (empty($values['name'])){
 	        						$msg = "Mandatory attribute 'name' is missing.";
-	        						throw new common_configuration_ComponentFactory($msg);	
+	        						throw new common_configuration_ComponentFactoryException($msg);	
 	        					}
 	        					
-	        					if (empty($values['value'])){
+	        					if (empty($values['value']) && $values['value'] !== '0'){
 	        						$msg = "Mandatory attribute 'value' is missing.";
 	        						throw new common_configuration_ComponentFactoryException($msg);	
 	        					}
@@ -249,7 +294,7 @@ class common_configuration_ComponentFactory
 	        				case 'PHPExtension':
 	        					if (empty($values['name'])){
 	        						$msg = "Mandatory attribute 'name' is missing.";
-	        						throw new common_configuration_ComponentFactory($msg);	
+	        						throw new common_configuration_ComponentFactoryException($msg);	
 	        					}
 	        					
 	        					$min = null;
@@ -268,16 +313,30 @@ class common_configuration_ComponentFactory
 	        				case 'PHPDatabaseDriver':
 	        					if (empty($values['name'])){
 	        						$msg = "Mandatory attribute 'name' is missing.";
-	        						throw new common_configuration_ComponentFactory($msg);	
+	        						throw new common_configuration_ComponentFactoryException($msg);	
 	        					}
 	        					
 	        					$returnValue = self::buildPHPDatabaseDriver($values['name'], $optional);
 	        				break;
 	        				
+	        				case 'FileSystemComponent':
+	        					if (empty($values['location'])){
+	        						$msg = "Mandatory attribute 'location' is missing.";
+	        						throw new common_configuration_ComponentFactoryException($msg);	
+	        					}
+	        					
+	        					if (empty($values['rights'])){
+	        						$msg = "Mandatory attribute 'rights' is missing.";
+	        						throw new common_configuration_ComponentFactoryException($msg);	
+	        					}
+	        					
+	        					$returnValue = self::buildFileSystemComponent($values['location'], $values['rights'], $optional);
+	        				break;
+	        				
 	        				case 'Custom':
 	        					if (empty($values['name'])){
 	        						$msg = "Mandatory attribute 'name' is missing.";
-	        						throw new common_configuration_ComponentFactory($msg);	
+	        						throw new common_configuration_ComponentFactoryException($msg);	
 	        					}
 
 	        					$extension = 'generis';
@@ -285,7 +344,16 @@ class common_configuration_ComponentFactory
 	        						$extension = $values['extension'];
 	        					}
 	        					
-	        					$returnValue = self::buildCustom($values['name'], $extension);
+	        					$returnValue = self::buildCustom($values['name'], $extension, $optional);
+	        				break;
+	        				
+	        				case 'Mock':
+	        					$status = common_configuration_Report::VALID; 
+	        					if (!empty($values['status'])){
+	        						$status = $values['status'];
+	        					}
+	        					
+	        					$returnValue = self::buildMock($status, $optional);
 	        				break;
 	        			}	
         			}
@@ -409,43 +477,6 @@ class common_configuration_ComponentFactory
         $count++;
         self::setMockCount($count);
         // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DBF end
-    }
-
-    /**
-     * Short description of method buildCustom
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  string name
-     * @param  string extension
-     * @return common_configuration_Component
-     */
-    public static function buildCustom($name, $extension)
-    {
-        $returnValue = null;
-
-        // section 10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB0 begin
-    	// Camelize the name to find it in the checks folder.
-        $name = explode('_', $name);
-        for ($i = 0; $i < count($name); $i++){
-            $name[$i] = ucfirst($name[$i]);
-        }
-        $name = implode('', $name);
-        $checkClassName = "${extension}_install_checks_${name}";
-        
-        // Instanciate the Component.
-        try{
-            $checkClass = new ReflectionClass($checkClassName);
-            $returnValue = $checkClass->newInstanceArgs(array("custom_${extension}_${name}", $optional));
-        }
-        catch (LogicException $e){
-	        $msg = "Cannot instantiate custom check '${name}' for extension '${extension}': ";
-	        $msg .= $e->getMessage();
-	        throw new common_configuration_ComponentFactoryException($msg);
-        }
-        // section 10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB0 end
-
-        return $returnValue;
     }
 
 } /* end of class common_configuration_ComponentFactory */

@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Nov 23 10:53:54 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Nov 23 11:31:22 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -27361,6 +27361,10 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                         </UML:Parameter>
                         <UML:Parameter xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D7E'
                           name = 'min' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.defaultValue>
+                            <UML:Expression xmi.id = '10-13-1-85-1081ab1b:13b2cc69001:-8000:0000000000001DB7'
+                              language = '' body = 'null'/>
+                          </UML:Parameter.defaultValue>
                           <UML:Parameter.type>
                             <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                           </UML:Parameter.type>
@@ -27486,6 +27490,41 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                         </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB0'
+                      name = 'buildCustom' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB1'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001A84'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB2'
+                          name = 'name' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB3'
+                          name = 'extension' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85--3b21ba9:13b2cd042de:-8000:0000000000001DB5'
+                          name = 'optional' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.defaultValue>
+                            <UML:Expression xmi.id = '10-13-1-85--3b21ba9:13b2cd042de:-8000:0000000000001DBA'
+                              language = '' body = 'false'/>
+                          </UML:Parameter.defaultValue>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
                     <UML:Operation xmi.id = '10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DA7'
                       name = 'buildMock' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
                       isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
@@ -27501,6 +27540,16 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                           name = 'expectedStatus' isSpecification = 'false' kind = 'in'>
                           <UML:Parameter.type>
                             <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85--3b21ba9:13b2cd042de:-8000:0000000000001DBB'
+                          name = 'optional' isSpecification = 'false' kind = 'in'>
+                          <UML:Parameter.defaultValue>
+                            <UML:Expression xmi.id = '10-13-1-85--3b21ba9:13b2cd042de:-8000:0000000000001DC0'
+                              language = '' body = 'false'/>
+                          </UML:Parameter.defaultValue>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                           </UML:Parameter.type>
                         </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
@@ -27640,31 +27689,6 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                           name = 'return' isSpecification = 'false' kind = 'return'>
                           <UML:Parameter.type>
                             <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
-                          </UML:Parameter.type>
-                        </UML:Parameter>
-                      </UML:BehavioralFeature.parameter>
-                    </UML:Operation>
-                    <UML:Operation xmi.id = '10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB0'
-                      name = 'buildCustom' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
-                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
-                      isAbstract = 'false'>
-                      <UML:BehavioralFeature.parameter>
-                        <UML:Parameter xmi.id = '10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB1'
-                          name = 'return' isSpecification = 'false' kind = 'return'>
-                          <UML:Parameter.type>
-                            <UML:Class xmi.idref = '-64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001A84'/>
-                          </UML:Parameter.type>
-                        </UML:Parameter>
-                        <UML:Parameter xmi.id = '10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB2'
-                          name = 'name' isSpecification = 'false' kind = 'in'>
-                          <UML:Parameter.type>
-                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                          </UML:Parameter.type>
-                        </UML:Parameter>
-                        <UML:Parameter xmi.id = '10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB3'
-                          name = 'extension' isSpecification = 'false' kind = 'in'>
-                          <UML:Parameter.type>
-                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                           </UML:Parameter.type>
                         </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
@@ -70229,7 +70253,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="41"
         y="362"
         width="704"
-        height="29"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -79716,7 +79740,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >buildPHPExtension(name : string,min : string,max : string = null,optional : boolean = false) : PHPExtension</text>
+      >buildPHPExtension(name : string,min : string = null,max : string = null,optional : boolean = false) : PHPExtension</text>
       <text name="Fig77.6.3"
         x="1709"
         y="1371"
@@ -79780,7 +79804,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >buildMock(expectedStatus : int) : Mock</text>
+      >buildCustom(name : string,extension : string,optional : boolean = false) : Component</text>
       <text name="Fig77.6.7"
         x="1709"
         y="1431"
@@ -79796,7 +79820,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >buildFromArray(array : array) : Component</text>
+      >buildMock(expectedStatus : int,optional : boolean = false) : Mock</text>
       <text name="Fig77.6.8"
         x="1709"
         y="1446"
@@ -79812,7 +79836,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getFileSystemCount() : int</text>
+      >buildFromArray(array : array) : Component</text>
       <text name="Fig77.6.9"
         x="1709"
         y="1461"
@@ -79828,7 +79852,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >setFileSystemCount(fileSystemCount : int) : void</text>
+      >getFileSystemCount() : int</text>
       <text name="Fig77.6.10"
         x="1709"
         y="1476"
@@ -79844,7 +79868,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >incrementFileSystemCount() : void</text>
+      >setFileSystemCount(fileSystemCount : int) : void</text>
       <text name="Fig77.6.11"
         x="1709"
         y="1491"
@@ -79860,7 +79884,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getMockCount() : int</text>
+      >incrementFileSystemCount() : void</text>
       <text name="Fig77.6.12"
         x="1709"
         y="1506"
@@ -79876,7 +79900,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >setMockCount(mockCount : int) : void</text>
+      >getMockCount() : int</text>
       <text name="Fig77.6.13"
         x="1709"
         y="1521"
@@ -79892,7 +79916,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >incrementMockCount() : void</text>
+      >setMockCount(mockCount : int) : void</text>
       <text name="Fig77.6.14"
         x="1709"
         y="1536"
@@ -79908,7 +79932,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >buildCustom(name : string,extension : string) : Component</text>
+      >incrementMockCount() : void</text>
     </group>
   </group>
   <group name="Fig78"

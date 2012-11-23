@@ -118,7 +118,7 @@ abstract class common_configuration_BoundableComponent
         $returnValue = (string) '';
 
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B07 begin
-        $returnValue = $this->min;
+        return $this->min;
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B07 end
 
         return (string) $returnValue;
@@ -136,7 +136,12 @@ abstract class common_configuration_BoundableComponent
     {
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B09 begin
     	// Support .x notation.
-        $this->max = preg_replace('/x/u', '99999', $max);
+    	if (!empty($max)){
+        	$this->max = preg_replace('/x/u', '99999', $max);
+    	}
+    	else{
+    		$this->max = null;
+    	}
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B09 end
     }
 
@@ -152,7 +157,7 @@ abstract class common_configuration_BoundableComponent
         $returnValue = (string) '';
 
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B0C begin
-        $returnValue = $this->max;
+        return $this->max;
         // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B0C end
 
         return (string) $returnValue;
