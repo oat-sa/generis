@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Nov 23 11:31:22 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Nov 23 15:56:41 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -28462,10 +28462,52 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                         <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
                       </UML:StructuralFeature.type>
                     </UML:Attribute>
+                    <UML:Operation xmi.id = '10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D65'
+                      name = '__construct' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:ModelElement.taggedValue>
+                        <UML:TaggedValue xmi.id = '10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DBE'
+                          isSpecification = 'false'>
+                          <UML:TaggedValue.dataValue>Creates a new instance of common_distrib_Manifest. A common_distrib_ManifestNotFound will be thrown if there is no file at the request location. A common_distrib_MalformedManifestException will be thrown if it has not the expected format.</UML:TaggedValue.dataValue>
+                          <UML:TaggedValue.type>
+                            <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                          </UML:TaggedValue.type>
+                        </UML:TaggedValue>
+                      </UML:ModelElement.taggedValue>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D66'
+                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                        <UML:Parameter xmi.id = '10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D67'
+                          name = 'path' isSpecification = 'false' kind = 'in'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D68'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>The path where the distributions.php file is located.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
                     <UML:Operation xmi.id = '10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D62'
                       name = 'getDistributions' visibility = 'public' isSpecification = 'false'
                       ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
                       isLeaf = 'false' isAbstract = 'false'>
+                      <UML:ModelElement.taggedValue>
+                        <UML:TaggedValue xmi.id = '10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DBF'
+                          isSpecification = 'false'>
+                          <UML:TaggedValue.dataValue>Get the distributions described by the manifest.</UML:TaggedValue.dataValue>
+                          <UML:TaggedValue.type>
+                            <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                          </UML:TaggedValue.type>
+                        </UML:TaggedValue>
+                      </UML:ModelElement.taggedValue>
                       <UML:BehavioralFeature.parameter>
                         <UML:Parameter xmi.id = '10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D63'
                           name = 'return' isSpecification = 'false' kind = 'return'>
@@ -28484,24 +28526,28 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                         </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
-                    <UML:Operation xmi.id = '10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D65'
-                      name = '__construct' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
-                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
-                      isAbstract = 'false'>
+                    <UML:Operation xmi.id = '10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DBB'
+                      name = 'getDistributionById' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:ModelElement.taggedValue>
+                        <UML:TaggedValue xmi.id = '10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DC0'
+                          isSpecification = 'false'>
+                          <UML:TaggedValue.dataValue>Get a specific distribution by id. A common_distrib_DistributionNotFound exception will be thrown if the manifest does not describy any distribution matching the provided id.</UML:TaggedValue.dataValue>
+                          <UML:TaggedValue.type>
+                            <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                          </UML:TaggedValue.type>
+                        </UML:TaggedValue>
+                      </UML:ModelElement.taggedValue>
                       <UML:BehavioralFeature.parameter>
-                        <UML:Parameter xmi.id = '10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D66'
-                          name = 'return' isSpecification = 'false' kind = 'return'/>
-                        <UML:Parameter xmi.id = '10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D67'
-                          name = 'path' isSpecification = 'false' kind = 'in'>
-                          <UML:ModelElement.taggedValue>
-                            <UML:TaggedValue xmi.id = '10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D68'
-                              isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>The path where the distributions.php file is located.</UML:TaggedValue.dataValue>
-                              <UML:TaggedValue.type>
-                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
-                              </UML:TaggedValue.type>
-                            </UML:TaggedValue>
-                          </UML:ModelElement.taggedValue>
+                        <UML:Parameter xmi.id = '10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DBC'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1-85-7504f477:13b27c1b582:-8000:0000000000001CF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DBD'
+                          name = 'id' isSpecification = 'false' kind = 'in'>
                           <UML:Parameter.type>
                             <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                           </UML:Parameter.type>
@@ -28537,6 +28583,38 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                   isSpecification = 'false'>
                   <UML:Generalization.child>
                     <UML:Class xmi.idref = '10-13-1-85-6e4bf9cd:13b2823942c:-8000:0000000000001D6E'/>
+                  </UML:Generalization.child>
+                  <UML:Generalization.parent>
+                    <UML:Class xmi.idref = '127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003ECA'/>
+                  </UML:Generalization.parent>
+                </UML:Generalization>
+                <UML:Class xmi.id = '10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DC1'
+                  name = 'DistributionNotFoundException' visibility = 'public' isSpecification = 'false'
+                  isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                  <UML:ModelElement.taggedValue>
+                    <UML:TaggedValue xmi.id = '10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DC2'
+                      isSpecification = 'false'>
+                      <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+                      <UML:TaggedValue.type>
+                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                      </UML:TaggedValue.type>
+                    </UML:TaggedValue>
+                    <UML:TaggedValue xmi.id = '10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DC3'
+                      isSpecification = 'false'>
+                      <UML:TaggedValue.dataValue>Such an Exception must be thrown if a distribution that was supposed to exist does not.</UML:TaggedValue.dataValue>
+                      <UML:TaggedValue.type>
+                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                      </UML:TaggedValue.type>
+                    </UML:TaggedValue>
+                  </UML:ModelElement.taggedValue>
+                  <UML:GeneralizableElement.generalization>
+                    <UML:Generalization xmi.idref = '10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DC4'/>
+                  </UML:GeneralizableElement.generalization>
+                </UML:Class>
+                <UML:Generalization xmi.id = '10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DC4'
+                  isSpecification = 'false'>
+                  <UML:Generalization.child>
+                    <UML:Class xmi.idref = '10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DC1'/>
                   </UML:Generalization.child>
                   <UML:Generalization.parent>
                     <UML:Class xmi.idref = '127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003ECA'/>
@@ -70253,7 +70331,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="41"
         y="362"
         width="704"
-        height="15"
+        height="29"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -78600,7 +78678,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     ></text>
   </group>
   <group name="Fig71"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1696, 576, 505, 339]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1696, 576, 505, 354]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1-85-7504f477:13b27c1b582:-8000:0000000000001CF9"
        fill="1"
        fillcolor="white"
@@ -78615,7 +78693,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       x="1696"
       y="576"
       width="505"
-      height="339"
+      height="354"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -78671,7 +78749,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig71.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1697, 599, 503, 83]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1697, 599, 503, 89]"
          href="10-13-1-85-7504f477:13b27c1b582:-8000:0000000000001CF9"
          fill="0"
          fillcolor="white"
@@ -78685,7 +78763,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="1697"
         y="599"
         width="503"
-        height="83"
+        height="89"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -78774,7 +78852,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig71.5"
       x="1696"
-      y="681"
+      y="688"
       width="505"
       height="1"
       fill="1"
@@ -78783,7 +78861,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig71.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1697, 682, 503, 233]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1697, 689, 503, 239]"
          href="10-13-1-85-7504f477:13b27c1b582:-8000:0000000000001CF9"
          fill="0"
          fillcolor="white"
@@ -78795,9 +78873,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig71.6.0"
         x="1697"
-        y="682"
+        y="689"
         width="503"
-        height="233"
+        height="239"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -78805,7 +78883,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
       <text name="Fig71.6.1"
         x="1697"
-        y="682"
+        y="689"
         width="503"
         height="15"
         fill="0"
@@ -78821,7 +78899,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getId() : string</text>
       <text name="Fig71.6.2"
         x="1697"
-        y="697"
+        y="704"
         width="503"
         height="15"
         fill="0"
@@ -78837,7 +78915,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setId(id : string) : void</text>
       <text name="Fig71.6.3"
         x="1697"
-        y="712"
+        y="719"
         width="503"
         height="15"
         fill="0"
@@ -78853,7 +78931,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getName() : string</text>
       <text name="Fig71.6.4"
         x="1697"
-        y="727"
+        y="734"
         width="503"
         height="15"
         fill="0"
@@ -78869,7 +78947,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setName(name : string) : void</text>
       <text name="Fig71.6.5"
         x="1697"
-        y="742"
+        y="749"
         width="503"
         height="15"
         fill="0"
@@ -78885,7 +78963,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getDescription() : string</text>
       <text name="Fig71.6.6"
         x="1697"
-        y="757"
+        y="764"
         width="503"
         height="15"
         fill="0"
@@ -78901,7 +78979,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setDescription(description : string) : void</text>
       <text name="Fig71.6.7"
         x="1697"
-        y="772"
+        y="779"
         width="503"
         height="15"
         fill="0"
@@ -78917,7 +78995,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getVersion() : string</text>
       <text name="Fig71.6.8"
         x="1697"
-        y="787"
+        y="794"
         width="503"
         height="15"
         fill="0"
@@ -78933,7 +79011,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setVersion(version : string) : void</text>
       <text name="Fig71.6.9"
         x="1697"
-        y="802"
+        y="809"
         width="503"
         height="15"
         fill="0"
@@ -78949,7 +79027,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >getExtensions() : array</text>
       <text name="Fig71.6.10"
         x="1697"
-        y="817"
+        y="824"
         width="503"
         height="15"
         fill="0"
@@ -78965,7 +79043,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >setExtensions(extensions : array) : void</text>
       <text name="Fig71.6.11"
         x="1697"
-        y="832"
+        y="839"
         width="503"
         height="15"
         fill="0"
@@ -78981,7 +79059,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >addExtension(extension : string) : void</text>
       <text name="Fig71.6.12"
         x="1697"
-        y="847"
+        y="854"
         width="503"
         height="15"
         fill="0"
@@ -78997,7 +79075,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >removeExtension(extension : string) : void</text>
       <text name="Fig71.6.13"
         x="1697"
-        y="862"
+        y="869"
         width="503"
         height="15"
         fill="0"
@@ -79013,7 +79091,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >hasExtension(extension : string) : boolean</text>
       <text name="Fig71.6.14"
         x="1697"
-        y="877"
+        y="884"
         width="503"
         height="15"
         fill="0"
@@ -79029,7 +79107,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >«create» __construct(id : string,name : string,description : string,version : string,extensions : array = array())</text>
       <text name="Fig71.6.15"
         x="1697"
-        y="892"
+        y="899"
         width="503"
         height="21"
         fill="0"
@@ -79046,7 +79124,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig72"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[2232, 584, 132, 84]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[2232, 584, 244, 99]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D5C"
        fill="1"
        fillcolor="white"
@@ -79060,8 +79138,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <rectangle name="Fig72.0"
       x="2232"
       y="584"
-      width="132"
-      height="84"
+      width="244"
+      height="99"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -79070,7 +79148,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <text name="Fig72.1"
       x="2233"
       y="585"
-      width="130"
+      width="242"
       height="21"
       fill="0"
       fillcolor="white"
@@ -79109,7 +79187,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <rectangle name="Fig72.3"
       x="2232"
       y="606"
-      width="132"
+      width="244"
       height="1"
       fill="1"
       fillcolor="black"
@@ -79117,7 +79195,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig72.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[2233, 607, 130, 23]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[2233, 607, 242, 23]"
          href="10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D5C"
          fill="0"
          fillcolor="white"
@@ -79130,7 +79208,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <rectangle name="Fig72.4.0"
         x="2233"
         y="607"
-        width="130"
+        width="242"
         height="23"
         fill="0"
         fillcolor="white"
@@ -79140,7 +79218,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig72.4.1"
         x="2233"
         y="607"
-        width="130"
+        width="242"
         height="21"
         fill="0"
         fillcolor="white"
@@ -79157,7 +79235,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <rectangle name="Fig72.5"
       x="2232"
       y="629"
-      width="132"
+      width="244"
       height="1"
       fill="1"
       fillcolor="black"
@@ -79165,7 +79243,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig72.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[2233, 630, 130, 38]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[2233, 630, 242, 53]"
          href="10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D5C"
          fill="0"
          fillcolor="white"
@@ -79178,8 +79256,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <rectangle name="Fig72.6.0"
         x="2233"
         y="630"
-        width="130"
-        height="38"
+        width="242"
+        height="53"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -79188,7 +79266,23 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig72.6.1"
         x="2233"
         y="630"
-        width="130"
+        width="242"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >__construct(path : string)</text>
+      <text name="Fig72.6.2"
+        x="2233"
+        y="645"
+        width="242"
         height="15"
         fill="0"
         fillcolor="white"
@@ -79201,10 +79295,10 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getDistributions() : array</text>
-      <text name="Fig72.6.2"
+      <text name="Fig72.6.3"
         x="2233"
-        y="645"
-        width="130"
+        y="660"
+        width="242"
         height="21"
         fill="0"
         fillcolor="white"
@@ -79216,7 +79310,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >__construct(path : string)</text>
+      >getDistributionById(id : string) : Distribution</text>
     </group>
   </group>
   <group name="Fig73"
@@ -79387,7 +79481,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </path>
   </group>
   <group name="Fig75"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[2236, 772, 231, 23]pathVisible=true;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[2232, 772, 231, 23]pathVisible=true;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
        href="10-13-1-85-6e4bf9cd:13b2823942c:-8000:0000000000001D6E"
        fill="1"
        fillcolor="white"
@@ -79399,7 +79493,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </private>
     
     <rectangle name="Fig75.0"
-      x="2236"
+      x="2232"
       y="772"
       width="231"
       height="23"
@@ -79409,7 +79503,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <text name="Fig75.1"
-      x="2237"
+      x="2233"
       y="773"
       width="229"
       height="21"
@@ -79425,7 +79519,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       justification="Center"
     >common::distrib::MalformedManifestException</text>
     <group name="Fig75.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[2237, 773, 229, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[2233, 773, 229, 0]"
          href="10-13-1-85-6e4bf9cd:13b2823942c:-8000:0000000000001D6E"
          fill="0"
          fillcolor="white"
@@ -79437,7 +79531,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig75.2.0"
-        x="2237"
+        x="2233"
         y="773"
         width="229"
         height="0"
@@ -79448,7 +79542,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig75.3"
-      x="2236"
+      x="2232"
       y="794"
       width="231"
       height="1"
@@ -79459,7 +79553,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig75.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[2237, 795, 229, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[2233, 795, 229, 21]"
          href="10-13-1-85-6e4bf9cd:13b2823942c:-8000:0000000000001D6E"
          fill="0"
          fillcolor="white"
@@ -79471,7 +79565,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig75.4.0"
-        x="2237"
+        x="2233"
         y="795"
         width="229"
         height="21"
@@ -79483,7 +79577,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig75.5"
-      x="2236"
+      x="2232"
       y="815"
       width="231"
       height="1"
@@ -79494,7 +79588,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig75.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[2237, 816, 229, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[2233, 816, 229, 21]"
          href="10-13-1-85-6e4bf9cd:13b2823942c:-8000:0000000000001D6E"
          fill="0"
          fillcolor="white"
@@ -79506,7 +79600,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig75.6.0"
-        x="2237"
+        x="2233"
         y="816"
         width="229"
         height="21"
@@ -79543,7 +79637,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="2466"
+      <moveto x="2462"
               y="784" />
       <lineto x="2560"
               y="784" />
@@ -80097,6 +80191,173 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <lineto x="2716"
               y="1208" />
       <lineto x="2716"
+              y="20" />
+      <lineto x="1151"
+              y="20" />
+    </path>
+  </group>
+  <group name="Fig80"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[2236, 812, 239, 23]pathVisible=true;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
+       href="10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DC1"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+      enclosingFig="Fig70"
+    </private>
+    
+    <rectangle name="Fig80.0"
+      x="2236"
+      y="812"
+      width="239"
+      height="23"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig80.1"
+      x="2237"
+      y="813"
+      width="237"
+      height="21"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >common::distrib::DistributionNotFoundException</text>
+    <group name="Fig80.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[2237, 813, 189, 0]"
+         href="10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DC1"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig80.2.0"
+        x="2237"
+        y="813"
+        width="189"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig80.3"
+      x="2236"
+      y="834"
+      width="191"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+      visibility="0"
+    />
+    <group name="Fig80.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[2237, 835, 189, 21]"
+         href="10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DC1"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig80.4.0"
+        x="2237"
+        y="835"
+        width="189"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        visibility="0"
+      />
+    </group>
+    <rectangle name="Fig80.5"
+      x="2236"
+      y="834"
+      width="180"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+      visibility="0"
+    />
+    <group name="Fig80.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[2237, 835, 178, 21]"
+         href="10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DC1"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig80.6.0"
+        x="2237"
+        y="835"
+        width="178"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        visibility="0"
+      />
+    </group>
+  </group>
+  <group name="Fig81"
+       description="org.argouml.uml.diagram.ui.FigGeneralization"
+       href="10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DC4"
+       stroke="1"
+       strokecolor="51 51 153"
+  >
+    <private>
+      sourcePortFig="Fig80.0"
+      destPortFig="Fig18.0"
+      sourceFigNode="Fig80"
+      destFigNode="Fig18"
+      <argouml:pathitem figname="Fig81.1"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
+                        ownerhref="10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DC4"
+                        angle="270.0"
+                        offset="-10" />
+    </private>
+    <path name="Fig81.0"
+      description="org.tigris.gef.presentation.FigPoly"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="51 51 153"
+    >
+      <moveto x="2474"
+              y="820" />
+      <lineto x="2560"
+              y="820" />
+      <lineto x="2560"
               y="20" />
       <lineto x="1151"
               y="20" />

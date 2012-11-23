@@ -48,25 +48,9 @@ class common_distrib_Manifest
     // --- OPERATIONS ---
 
     /**
-     * Short description of method getDistributions
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return array
-     */
-    public function getDistributions()
-    {
-        $returnValue = array();
-
-        // section 10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D62 begin
-        $returnValue = $this->distributions;
-        // section 10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D62 end
-
-        return (array) $returnValue;
-    }
-
-    /**
-     * Short description of method __construct
+     * Creates a new instance of common_distrib_Manifest. A
+     * will be thrown if there is no file at the request location. A
+     * will be thrown if it has not the expected format.
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -141,6 +125,44 @@ class common_distrib_Manifest
         	throw new common_distrib_ManifestNotFoundException($msg);
         }
         // section 10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D65 end
+    }
+
+    /**
+     * Get the distributions described by the manifest.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return array
+     */
+    public function getDistributions()
+    {
+        $returnValue = array();
+
+        // section 10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D62 begin
+        $returnValue = $this->distributions;
+        // section 10-13-1-85--4c870d1c:13b280e5266:-8000:0000000000001D62 end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Get a specific distribution by id. A common_distrib_DistributionNotFound
+     * will be thrown if the manifest does not describy any distribution
+     * the provided id.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string id
+     * @return common_distrib_Distribution
+     */
+    public function getDistributionById($id)
+    {
+        $returnValue = null;
+
+        // section 10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DBB begin
+        // section 10-13-1-85--15eb259f:13b2dbd2961:-8000:0000000000001DBB end
+
+        return $returnValue;
     }
 
 } /* end of class common_distrib_Manifest */
