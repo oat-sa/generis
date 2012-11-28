@@ -134,6 +134,9 @@ class core_kernel_persistence_hardapi_RowManager
 							if($foreignResource instanceof core_kernel_classes_Resource){
 								$query .= ", '{$foreignResource->uriResource}'";
 							}
+							else if (!empty($foreignResource)){
+								$query.= ", " . $dbWrapper->dbConnector->quote($foreignResource);
+							}
 							else{
 								$query.= ", NULL";
 							}
@@ -159,6 +162,7 @@ class core_kernel_persistence_hardapi_RowManager
 
 			// Insert rows of the main table
 			$dbWrapper->exec($query);
+			
 			
 			//get the ids of the inserted rows
 			$uriList = '';
