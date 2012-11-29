@@ -389,12 +389,14 @@ class core_kernel_persistence_Switcher
 					if(!$foreignTableMgr->exists()){
 						if(!in_array($foreignClassUri, array_keys($this->hardenedClasses))){
 							$range = new core_kernel_classes_Class($foreignClassUri);
-							$this->hardify($range, array_merge($options, array(
-                            	'topClass'      => new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE),
-                                'recursive' 	=> false,
-                                'append' 		=> true,
-                                'allOrNothing'	=> true
-							)));
+							if ($range->exists()){
+								$this->hardify($range, array_merge($options, array(
+	                            	'topClass'      => new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE),
+	                                'recursive' 	=> false,
+	                                'append' 		=> true,
+	                                'allOrNothing'	=> true
+								)));
+							}
 						}else{
 							//set in waiting list, the property to be set as foreign key on a table to be compiled
 							//array(range => array(currentClass => property))
