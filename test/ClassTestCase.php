@@ -293,12 +293,15 @@ class ClassTestCase extends UnitTestCase {
         $user1 = $userClass->createInstance('user1');
         $user1->setPropertyValue(new core_kernel_classes_Property('prop1'), 'toto');
         $user1->setPropertyValue(new core_kernel_classes_Property('prop2'), 'titi');
+        $user1->setPropertyValue(new core_kernel_classes_Property('prop3'), 'Weeman');
         $user2 = $userClass->createInstance('user2');
         $user2->setPropertyValue(new core_kernel_classes_Property('prop1'), 'toto');
-        $user2->setPropertyValue(new core_kernel_classes_Property('prop1'), 'titi');
+        $user2->setPropertyValue(new core_kernel_classes_Property('prop2'), 'titi');
+        $user2->setPropertyValue(new core_kernel_classes_Property('prop3'), 'G-girl');
         $user3 = $userClass->createInstance('user3');
         $user3->setPropertyValue(new core_kernel_classes_Property('prop1'), 'toto');
-        $user3->setPropertyValue(new core_kernel_classes_Property('prop1'), 'titi');
+        $user3->setPropertyValue(new core_kernel_classes_Property('prop2'), 'titi');
+        $user3->setPropertyValue(new core_kernel_classes_Property('prop3'), 'Alpha');
 
         $propertyFilter = array(
             'prop1' => 'toto'
@@ -307,7 +310,19 @@ class ClassTestCase extends UnitTestCase {
         $languagesDependantProp = $userClass->searchInstances($propertyFilter, $options);
         $nfound = count($languagesDependantProp);
         $this->assertEqual($nfound, 2);
-
+        
+        $options = array('order' => 'prop3', 'orderdir' => 'ASC');
+        $result = $userClass->searchInstances($propertyFilter, $options);
+        $this->assertEqual($user3->getUri(), key($result)); next($result);
+        $this->assertEqual($user2->getUri(), key($result)); next($result);
+        $this->assertEqual($user1->getUri(), key($result));
+        
+        $options = array_merge($options, array('orderdir' => 'DESC'));
+        $result = $userClass->searchInstances($propertyFilter, $options);
+        $this->assertEqual($user1->getUri(), key($result)); next($result);
+        $this->assertEqual($user2->getUri(), key($result)); next($result);
+        $this->assertEqual($user3->getUri(), key($result));
+        
         $user1->delete();
         $user2->delete();
         $user3->delete();
