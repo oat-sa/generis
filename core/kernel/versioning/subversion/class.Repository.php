@@ -127,7 +127,7 @@ class core_kernel_versioning_subversion_Repository
             svn_auth_set_parameter(SVN_AUTH_PARAM_DEFAULT_USERNAME, $login);
             svn_auth_set_parameter(SVN_AUTH_PARAM_DEFAULT_PASSWORD, $password);
 
-            if(@svn_info((string) $vcs->getOnePropertyValue(new core_kernel_classes_property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL))) !== false){
+            if(@svn_info((string) $vcs->getOnePropertyValue(new core_kernel_classes_property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL)), false) !== false){
                 $returnValue = true;
             }
         }
