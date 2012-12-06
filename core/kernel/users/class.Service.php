@@ -206,9 +206,23 @@ class core_kernel_users_Service
         $returnValue = (bool) false;
 
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001834 begin
-		
+        
         if(empty($role)){
         	throw new common_Exception('no role provided for login');
+        }
+        else{
+        	// Role can be either a scalar value or a collection.
+        	if (!is_array($role)){
+        		$roleUri = (($role instanceof core_kernel_classes_Resource) ? $role->getUri() : $role);
+        		$roles = array($roleUri);
+        	}
+        	else{
+        		$roles = array();
+        		foreach ($role as $r){
+        			$roles[] = (($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r);
+        		}
+        		unset($role);
+        	}
         }
 	        
 		if(!is_string($login)){
@@ -220,49 +234,44 @@ class core_kernel_users_Service
 			throw new core_kernel_users_Exception('The login cannot be empty');
 			return $returnValue;
 		}
+		
 		if(!is_string($password)){
 			throw new core_kernel_users_Exception('The password must be of "string" type');
 			return $returnValue;
 		}
-			
-		/* get all the concrete roles
+		// Parameters are corect.
 		
-		$roleClass = new core_kernel_classes_Class($role);
-		$userClasses = $roleClass->getInstances(true);
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		common_Logger::i('before generis login: ' . $dbWrapper->getNrOfQueries());
+
+		$filter = array(PROPERTY_USER_LOGIN => $login, PROPERTY_USER_PASSWORD => $password);
+		$options = array('like' => false, 'additionalClasses' => array_slice($roles, 1));
+		$firstClass = new core_kernel_classes_Class($roles[0]);
+		$users = $firstClass->searchInstances( $filter, $options);
+		common_Logger::i('after user lookup: ' . $dbWrapper->getNrOfQueries());
 		
-        //check login
-        $pip = array_shift($userClasses);
-		$pipclass = new core_kernel_classes_Class($pip->getUri());
-		*/
-		$users = $role->searchInstances(
-			array(
-				PROPERTY_USER_LOGIN 	=> $login,
-				PROPERTY_USER_PASSWORD	=> $password
-			), 
-			array(
-				'like' 				=> false,
-				'recursive'			=> 1,
-//				'additionalClasses'	=> $userClasses
-			)
-		);
-        
 		if (count($users) != 1) {
 			if (count($users) > 1) {
 				common_Logger::w('Multiple Users found with the same password for login '.$login, 'GENERIS');
 			}			
 			$this->logout();
-		} else {
-			$returnValue = true;
 		}
-		
-		if ($returnValue) {
-			$this->userResource = reset($users);
+		else {		
+			common_Logger::i('before getting roles :' . $dbWrapper->getNrOfQueries());
+			// The user has the right login and password.
+			// But does it matches an allowed role?.
+			$userTypes = array_keys($users[key($users)]->getTypes());
+			if (count(array_intersect($userTypes, $roles)) > 0){
+				$returnValue = true; // A Matching role was found.
 			
-			$roles = core_kernel_users_Service::singleton()->getUserRoles($this->userResource);
-				
-			core_kernel_classes_Session::singleton()->reset();
-			$session = core_kernel_classes_Session::singleton();
-			$session->setUser($login, $this->userResource->getUri(), $roles);
+				// Initialize current user.
+				$this->userResource = reset($users);
+				$roles = core_kernel_users_Service::singleton()->getUserRoles($this->userResource);	
+				core_kernel_classes_Session::singleton()->reset();
+				$session = core_kernel_classes_Session::singleton();
+				$session->setUser($login, $this->userResource->getUri(), $roles);
+				common_Logger::i('after getting roles: ' . $dbWrapper->getNrOfQueries());	
+			}
 		}
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001834 end
 

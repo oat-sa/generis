@@ -433,39 +433,43 @@ class core_kernel_persistence_ClassProxy
         $clazzToImpls = array();
         $implsToDelegateTo = array();
         
-        $recursive = isset($options['recursive']) && $options['recursive'] ? $options['recursive'] : false;
-        if($recursive){
-            $clazzes = $this->getSubClasses($resource, true);
-            $clazzes[$resource->uriResource] = $resource;//add the crt classes to the list of classes
+        if (isset($options['recursive']) && $options['recursive']) {
+	        $clazzes = $this->getSubClasses($resource, true);
+	        $clazzes[] = $resource; 
+        }
+        else {
+        	$clazzes = array($resource);
+        }
+        unset($options['recursive']);
+        
+        if (isset($options['additionalClasses'])) {
+	        foreach ($options['additionalClasses'] as $addclass) {
+	        	$clazzes[] = ($addclass instanceof core_kernel_classes_Resource) ? $addclass : new core_kernel_classes_Class($addclass);
+	        }
+        }
+        unset($options['additionalClasses']);
 
-            foreach($clazzes as $clazz){
-                $delegate = $this->getImpToDelegateTo($clazz);
-                if(!isset($clazzToImpls[get_class($delegate)])){
-                    $clazzToImpls[get_class($delegate)] = array();
-                    $implsToDelegateTo[get_class($delegate)] = $delegate;
-                }
-                array_push($clazzToImpls[get_class($delegate)], $clazz->uriResource);
-            }
+        foreach ($clazzes as $clazz) {
+	        $delegate = $this->getImpToDelegateTo($clazz);
+	        if (!isset($clazzToImpls[get_class($delegate)])) {
+		        $clazzToImpls[get_class($delegate)] = array();
+		        $implsToDelegateTo[get_class($delegate)] = $delegate;
+	        }
+	        $clazzToImpls[get_class($delegate)][] = $clazz;
         }
-        
-        if(count(array_keys($implsToDelegateTo))>1){
-            //@todo allow dev to search with limit and offset on multiple impls
-            if(isset($options['limit']) || isset($options['offset'])){
-                throw new common_Exception('Unable to search instances on multiple implementations with the options limit and offset');
-            }
-            
-            unset($options['recursive']);
-            foreach($implsToDelegateTo as $clazzName => $delegate){
-                //$options['additionalClasses'] = $clazzToImpls[$clazzName];
-                foreach($clazzToImpls[$clazzName] as $clazzUri){
-                    $returnValue = array_merge($returnValue, $delegate->searchInstances(new core_kernel_classes_Class($clazzUri), $propertyFilters, $options));
-                }
-            }
-        }else{
-            $delegate = $this->getImpToDelegateTo($resource);
-            $returnValue = $delegate->searchInstances($resource, $propertyFilters, $options);
+                
+        //@todo allow dev to search with limit and offset on multiple impls
+        if (count(array_keys($implsToDelegateTo)) > 1 && (isset($options['limit']) || isset($options['offset']))) {
+        	throw new common_Exception('Unable to search instances on multiple implementations with the options limit and offset');
         }
-        
+
+        foreach ($implsToDelegateTo as $clazzName => $delegate){
+	        $classes = $clazzToImpls[$clazzName];
+	        $firstClass = array_shift($classes);
+	        $options['additionalClasses'] = $classes;
+	                        
+	        $returnValue = array_merge($returnValue, $delegate->searchInstances($firstClass, $propertyFilters, $options));
+        }
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
 
         return (array) $returnValue;

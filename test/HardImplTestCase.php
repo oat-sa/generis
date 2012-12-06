@@ -20,7 +20,7 @@ class HardImplTestCase extends UnitTestCase {
 	}
 	
 	public function testCreateContextOfThetest(){
-		// Top Class : TaoSubject
+		// ----- Top Class : TaoSubject
 		$subjectClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
 		// Create a new subject class for the unit test
 		$this->targetSubjectClass = $subjectClass->createSubClass ("Sub Subject Class (Unit Test)");
@@ -40,7 +40,7 @@ class HardImplTestCase extends UnitTestCase {
 		// If get instances in the sub classes of the targetSubjectClass, we should get 2 instances
 		$this->assertEqual (count($this->targetSubjectClass->getInstances (true)), 2);
 		
-		// Top Class : Work
+		// ----- Top Class : Work
 		// Create a class and test its instances & properties.
 		$this->taoClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#TAOObject');
 		$this->targetWorkClass = $this->taoClass->createSubClass('Work', 'The Work class');
@@ -53,14 +53,20 @@ class HardImplTestCase extends UnitTestCase {
 		// Create the Movie class that extends the Work class. 
 		$this->targetMovieClass = $this->targetWorkClass->createSubClass('Movie', 'The Movie class');
 		$this->targetMovieClass = new core_kernel_classes_Class($this->targetMovieClass->uriResource);
+		$this->assertTrue($this->targetMovieClass->isSubClassOf($this->targetWorkClass));
+		$this->assertEqual(count($this->targetWorkClass->getSubClasses()), 1);
 		
 		// Add properties to the Movie class.
 		$this->targetProducerProperty = $this->targetMovieClass->createProperty('Producer', 'The producer of the movie.');
 		$this->targetProducerProperty->setRange($literalClass);
+		$this->targetProducerProperty->setMultiple(true);
+		$this->assertTrue($this->targetProducerProperty->isMultiple());
 		$this->targetActorsProperty = $this->targetMovieClass->createProperty('Actors', 'The actors playing in the movie.');
 		$this->targetActorsProperty->setRange($literalClass);
+		$this->targetActorsProperty->setMultiple(true);
 		$this->targetRelatedMoviesProperty = $this->targetMovieClass->createProperty('Related Movies', 'Movies related to the movie.');
 		$this->targetRelatedMoviesProperty->setRange($this->targetMovieClass);
+		$this->targetRelatedMoviesProperty->setMultiple(true);
 	}
 	
 	public function testHardifier (){
@@ -97,6 +103,9 @@ class HardImplTestCase extends UnitTestCase {
 		$literalClass = new core_kernel_classes_Class(RDFS_LITERAL);
 		$subClassOfProperty = new core_kernel_classes_Property(RDFS_SUBCLASSOF);
 		
+		$this->assertTrue($this->targetActorsProperty->exists());
+		$this->assertTrue($this->targetMovieClass->exists());
+		
 		$this->assertTrue($this->targetWorkClass->isSubclassOf($this->taoClass));
 		$this->assertTrue($this->targetWorkClass->getOnePropertyValue($subClassOfProperty)->uriResource == $this->taoClass->uriResource);
 		$this->assertTrue($referencer->isClassReferenced($this->targetWorkClass));
@@ -119,6 +128,9 @@ class HardImplTestCase extends UnitTestCase {
 		
 		$this->assertTrue($this->targetRelatedMoviesProperty->getOnePropertyValue($domainProperty)->uriResource == $this->targetMovieClass->uriResource);
 		$this->assertTrue($this->targetRelatedMoviesProperty->getOnePropertyValue($rangeProperty)->uriResource == $this->targetMovieClass->uriResource);
+		
+		$prop = new core_kernel_classes_Property($this->targetRelatedMoviesProperty);
+		$this->assertTrue($prop->isMultiple());
 	}
 	
 	public function testHardGetInstances (){
@@ -152,6 +164,7 @@ class HardImplTestCase extends UnitTestCase {
 		$work1Label = 'Mona Lisa';
 		$work1Author = 'Leonardo da Vinci';
 		$work1 = $this->targetWorkClass->createInstance($work1Label, 'Mona Lisa, a half-length portait of a woman');
+		$this->assertTrue($work1->exists());
 		$this->assertTrue($referencer->isResourceReferenced($work1));
 		$this->assertIsA($proxy->getImpToDelegateTo($work1), 'core_kernel_persistence_hardsql_Resource');
 		$this->assertEqual($work1->getLabel(), $work1Label);
@@ -201,6 +214,151 @@ class HardImplTestCase extends UnitTestCase {
 		$work1PropertiesValues = $work1->getPropertiesValues(array($labelProperty, $unknownProperty));
 		$this->assertTrue(array_key_exists(RDFS_LABEL, $work1PropertiesValues));
 		$this->assertTrue(count($work1PropertiesValues) == 1);
+	}
+	
+	public function testHardSearchInstances(){
+		$movieClass = $this->targetMovieClass;
+		$workClass = $this->targetWorkClass;
+		$authorProperty = $this->targetAuthorProperty;
+		$producerProperty = $this->targetProducerProperty;
+		$actorsProperty = $this->targetActorsProperty;
+		$relatedMoviesProperty = $this->targetRelatedMoviesProperty;
+		$labelProperty = new core_kernel_classes_Property(RDFS_LABEL);
+		
+		$bookOfTheRings = $workClass->createInstance('The Lord of the Rings');
+		$bookOfTheRings->setPropertyValue($authorProperty, 'John Ronald Reuel Tolkien');
+		
+		// Works with a rdfs:label which is 'The Lord of the ...'.
+		$propertyFilters = array($labelProperty->getUri() => 'The Lord of the');
+		$instances = $workClass->searchInstances($propertyFilters, array('like' => true));
+		$this->assertEqual(count($instances), 1);
+		$this->assertEqual($instances[key($instances)]->getLabel(), 'The Lord of the Rings');
+		
+		$lordOfTheRings = $movieClass->createInstance('The Lord of the Rings');
+		$lordOfTheRings->setPropertyValueByLg($labelProperty, 'Le Seigneur des Anneaux', 'FR-be');
+		$lordOfTheRings->setPropertyValue($authorProperty, 'Peter Jackson');
+		$lordOfTheRings->setPropertyValue($producerProperty, 'Peter Jackson');
+		$lordOfTheRings->setPropertyValue($producerProperty, 'Barrie M. Osborne');
+		$lordOfTheRings->setPropertyValue($producerProperty, 'Fran Walsh');
+		$lordOfTheRings->setPropertyValue($producerProperty, 'Mark Ordersky');
+		$lordOfTheRings->setPropertyValue($producerProperty, 'Tim Sanders');
+		$lordOfTheRings->setPropertyValue($actorsProperty, 'Viggo Mortensen');
+		$lordOfTheRings->setPropertyValue($actorsProperty, 'Elijah Wood');
+		$lordOfTheRings->setPropertyValue($actorsProperty, 'Sean Bean');
+		$lordOfTheRings->setPropertyValue($actorsProperty, 'Dominic Monaghan');
+		$lordOfTheRings->setPropertyValue($actorsProperty, 'Sean Astin');
+		$lordOfTheRings->setPropertyValue($actorsProperty, 'Ian McKellen');
+		$lordOfTheRings->setPropertyValue($actorsProperty, 'John Rhys-Davies');
+		$lordOfTheRings->setPropertyValue($actorsProperty, 'Orlando Bloom');
+		$lordOfTheRings->setPropertyValue($actorsProperty, 'Billy Boyd');
+		
+		// Works with a rdfs:label which is 'The Lord of the ...' (recursive).
+		$propertyFilters = array($labelProperty->getUri() => 'The Lord of the');
+		$instances = $workClass->searchInstances($propertyFilters, array('like' => true, 'recursive' => 1));
+		$this->assertEqual(count($instances), 2);
+		$this->assertEqual($instances[key($instances)]->getLabel(), 'The Lord of the Rings');
+		
+		$instances = $workClass->searchInstances($propertyFilters, array('like' => true, 'recursive' => 0));
+		$this->assertEqual(count($instances), 1);
+		$this->assertEqual($instances[key($instances)]->getLabel(), 'The Lord of the Rings');
+		
+		$theHobbit = $movieClass->createInstance('The Hobbit: An Unexpected Journey');
+		$theHobbit->setPropertyValue($authorProperty, 'Peter Jackson');
+		$theHobbit->setPropertyValue($producerProperty, 'Peter Jackson');
+		$theHobbit->setPropertyValue($producerProperty, 'Fran Walsh');
+		$theHobbit->setPropertyValue($producerProperty, 'Carolynne Cunningham');
+		$theHobbit->setPropertyValue($producerProperty, 'Zane Weiner');
+		$theHobbit->setPropertyValue($actorsProperty, 'Martin Freeman');
+		$theHobbit->setPropertyValue($actorsProperty, 'Ian McKellen');
+		$theHobbit->setPropertyValue($actorsProperty, 'Richard Armitage');
+		$theHobbit->setPropertyValue($actorsProperty, 'Ian Holm');
+		$theHobbit->setPropertyValue($actorsProperty, 'Andy Serkis');
+		$theHobbit->setPropertyValue($actorsProperty, 'Benedict Cumberbatch');
+		$theHobbit->setPropertyValue($actorsProperty, 'Graham McTavish');
+		$theHobbit->setPropertyValue($actorsProperty, 'Ken Stott');
+		$theHobbit->setPropertyValue($relatedMoviesProperty, $lordOfTheRings);
+		
+		// Movie with rdfs:label equals to 'The Hobbit: An Unexpected Journey'.
+		$propertyFilters = array($labelProperty->getUri() => 'The Hobbit: An Unexpected Journey');
+		$instances = $movieClass->searchInstances($propertyFilters);
+		$this->assertTrue(count($instances) == 1);
+		$instance = new core_kernel_classes_Resource($instances[key($instances)]);
+		$this->assertIsA($instance, 'core_kernel_classes_Resource');
+		$this->assertTrue($instance->exists());
+		$this->assertEqual($instance->getLabel(), 'The Hobbit: An Unexpected Journey');
+		
+		// Movie with rdfs:label equals to 'The Hobbit: An Unexpected Journey'
+		// and mov:producer equals to 'Peter Jackson'.
+		$propertyFilters = array($labelProperty->getUri() => 'The Hobbit: An Unexpected Journey',
+								 $authorProperty->getUri() => 'Peter Jackson');
+								 
+		$instances = $movieClass->searchInstances($propertyFilters);
+		$this->assertTrue(count($instances) == 1);
+		$instance = new core_kernel_classes_Resource($instances[key($instances)]);
+		$this->assertIsA($instance, 'core_kernel_classes_Resource');
+		$this->assertTrue($instance->exists());
+		
+		// Same as previous one but with 'like' option set to false.
+		$propertyFilters = array($labelProperty->getUri() => 'The Hobbit: An Unexpected Journey',
+								 $authorProperty->getUri() => 'Peter Jackson');
+								 
+		$instances = $movieClass->searchInstances($propertyFilters, array('like' => false));
+		$this->assertTrue(count($instances) == 1);
+		$instance = new core_kernel_classes_Resource($instances[key($instances)]);
+		$this->assertIsA($instance, 'core_kernel_classes_Resource');
+		$this->assertTrue($instance->exists());
+		
+		// Movie with 'Sean Bean' produced by 'Peter Jackson'
+		$propertyFilters = array($actorsProperty->getUri() => 'Sean Bean',
+								 $authorProperty->getUri() => 'Peter Jackson');
+								 
+		$instances = $movieClass->searchInstances($propertyFilters);
+		$this->assertTrue(count($instances) == 1);
+		$instance = new core_kernel_classes_Resource($instances[key($instances)]);
+		$this->assertIsA($instance, 'core_kernel_classes_Resource');
+		$this->assertTrue($instance->exists());
+		$this->assertEqual($instance->getLabel(), 'The Lord of the Rings');
+		
+		// Movie with 'Sean Bean' OR 'Richard Armitage' produced by 'Peter Jackson'
+		$propertyFilters = array($actorsProperty->getUri() => array('Richard Armitage', 'Sean Bean'),
+								 $producerProperty->getUri() => 'Peter Jackson');
+
+		$instances = $movieClass->searchInstances($propertyFilters, array('chaining' => 'or'));
+		$this->assertTrue(count($instances) == 2);
+		$foundCount1 = 0;
+		$foundCount2 = 0;
+		foreach ($instances as $i){
+			if ($i->getLabel() == 'The Hobbit: An Unexpected Journey'){
+				$foundCount1++;
+			}
+			
+			if ($i->getLabel() == 'The Lord of the Rings'){
+				$foundCount2++;
+			}
+		}
+		$this->assertEqual($foundCount1 + $foundCount2, 2);
+		
+		// Movie with rdfs:label equals to 'Le Seigneur des Anneaux' in the Belgian French locale.
+		$propertyFilters = array($labelProperty->getUri() => 'Le Seigneur des Anneaux');
+		$instances = $movieClass->searchInstances($propertyFilters, array('lang' => 'FR-be'));
+		$this->assertEqual(count($instances), 1);
+		
+		// All Works limited to 2 results. We should have 'The Lord of The Rings' (movie + book),
+		// 'The Hobbit: An Unexpected Journey' and 'Mona Lisa' in the Knowledge Base at
+		// the moment.
+		$propertyFilters = array();
+		$instances = $workClass->searchInstances($propertyFilters, array('limit' => 3, 'recursive' => 1));
+		$this->assertEqual(count($instances), 3);
+		
+		// Same as previous, but without limit and orderedy by author.
+		$propertyFilters = array();
+		$instances = $workClass->searchInstances($propertyFilters, array('recursive' => 1, 'order' => $authorProperty->getUri()));
+		$this->assertEqual(count($instances), 4);
+		
+		// Same as previous, but with a descendent orderdir.
+		$propertyFilters = array();
+		$instances = $workClass->searchInstances($propertyFilters, array('order' => $authorProperty->getUri(), 'orderdir' => 'ASC'));
+		$this->assertEqual(count($instances), 2);
 	}
 	
 	public function testForceMode (){

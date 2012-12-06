@@ -764,16 +764,19 @@ class core_kernel_persistence_smoothsql_Class
         //If recursive, get the subclasses of the given class
 		if (isset($options['recursive']) && $options['recursive']) {
             foreach($this->getSubClasses($resource, $options['recursive']) as $subClass){
-                $rdftypes[] = $subClass->uriResource;
+                $rdftypes[] = $subClass->getUri();
             }
 		}
         //If additionalClasses are required
         if(isset($options['additionalClasses'])){
-            $rdftypes = array_merge($rdftypes, $options['additionalClasses']);
+        	foreach ($options['additionalClasses'] as $aC){
+        		$rdftypes[] = ($aC instanceof core_kernel_classes_Resource) ? $aC->getUri() : $aC;
+        		$rdftypes = array_unique($rdftypes);
+        	}
         }
         //Add the class type of the given class
-        if(!in_array($resource->uriResource, $rdftypes)){
-            $rdftypes[] = $resource->uriResource;
+        if(!in_array($resource->getUri(), $rdftypes)){
+            $rdftypes[] = $resource->getUri();
         }
            
 		$langToken = '';
