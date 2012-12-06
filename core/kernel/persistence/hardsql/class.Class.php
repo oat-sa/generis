@@ -494,6 +494,7 @@ class core_kernel_persistence_hardsql_Class
 
 		$conditions = array();
 		$joinConditions = array();
+		$propertyFoundCount = 0;
 		foreach ($propertyFilters as $propUri => $pattern){
 
 			$property = new core_kernel_classes_Property($propUri);
@@ -503,6 +504,7 @@ class core_kernel_persistence_hardsql_Class
 
 			$propertyLocation = $referencer->propertyLocation($property);
 			if (in_array($tablePropertiesName, $propertyLocation)){
+				$propertyFoundCount++;
 				$classPropsTabIndex = count($tableNames);
 				$tableNames['t'.$classPropsTabIndex] = $tablePropertiesName;
 
@@ -549,8 +551,7 @@ class core_kernel_persistence_hardsql_Class
 
 			}
 			else if (in_array($tableName, $propertyLocation)){
-					
-
+				$propertyFoundCount++;
 				$propsTabIndex = count($tableNames);
 
 				if (is_string($pattern)){
@@ -576,6 +577,10 @@ class core_kernel_persistence_hardsql_Class
 				}
 
 			}
+		}
+		
+		if (!empty($propertyFilters) && $propertyFoundCount == 0){
+			return $returnValue;
 		}
 		
 		$targetTables = array('"' . $tableNames['t0'] . '" "b"');
@@ -632,6 +637,7 @@ class core_kernel_persistence_hardsql_Class
 				$ids = array_keys($idUris);
 				$ids = implode(', ', $ids);
 				$orderProp = new core_kernel_classes_Property($order);
+				$propertyLocation = $referencer->propertyLocation($orderProp);
 				$orderPropShortName = core_kernel_persistence_hardapi_Utils::getShortName($orderProp);
 				
 				$sqlQuery  = 'SELECT "uri" FROM (';
@@ -639,7 +645,13 @@ class core_kernel_persistence_hardsql_Class
 				$sqlQuery .= 'INNER JOIN "' . $tablePropertiesName . '" "p" ';
 				$sqlQuery .= 'ON ("b"."id" IN(' . $ids . ') AND "b"."id" = "p"."instance_id") ';
 				$sqlQuery .= 'UNION ';
-				$sqlQuery .= 'SELECT "b"."uri", \'' . $order . '\' AS "property_uri", "b"."' . $orderPropShortName. '" AS "property_value" ';
+				
+				if (in_array($tableNames['t0'], $propertyLocation)){
+					$sqlQuery .= 'SELECT "b"."uri", \'' . $order . '\' AS "property_uri", "b"."' . $orderPropShortName. '" AS "property_value" ';
+				}
+				else{
+					$sqlQuery .= 'SELECT "b"."uri", "p"."property_uri" AS "property_uri", "p"."property_value" AS "property_value" ';
+				}
 				$sqlQuery .= 'FROM "' . $tableNames['t0'] . '" "b" ';
 				$sqlQuery .= 'JOIN "' . $tablePropertiesName . '" "p" ';
 				$sqlQuery .= 'ON ("b"."id" IN(' . $ids . ') AND "b"."id" = "p"."instance_id") ';

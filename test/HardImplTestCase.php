@@ -359,6 +359,20 @@ class HardImplTestCase extends UnitTestCase {
 		$propertyFilters = array();
 		$instances = $workClass->searchInstances($propertyFilters, array('order' => $authorProperty->getUri(), 'orderdir' => 'ASC'));
 		$this->assertEqual(count($instances), 2);
+		$this->assertEqual($instances[key($instances)]->getUniquePropertyValue($authorProperty)->literal, 'John Ronald Reuel Tolkien'); next($instances);
+		$this->assertEqual($instances[key($instances)]->getUniquePropertyValue($authorProperty)->literal, 'Leonardo da Vinci'); next($instances);
+		
+		// Get all movies that are produced by 'Peter Jackson' ordered by rdfs:label.
+		$propertyFilters = array($authorProperty->getUri() => 'Peter Jackson');
+		$instances = $movieClass->searchInstances($propertyFilters, array('order' => $labelProperty->getUri()));
+		$this->assertEqual(count($instances), 2);
+		$this->assertEqual($instances[key($instances)]->getUniquePropertyValue($labelProperty)->literal, 'The Hobbit: An Unexpected Journey'); next($instances);
+		$this->assertEqual($instances[key($instances)]->getUniquePropertyValue($labelProperty)->literal, 'The Lord of the Rings'); next($instances);
+		
+		// try to search a property that does not exist.
+		$propertyFilters = array('http://www.unknown.com/i-do-not-exist' => 'do-not-exist');
+		$instances = $movieClass->searchInstances($propertyFilters);
+		$this->assertEqual(count($instances), 0);
 	}
 	
 	public function testForceMode (){
