@@ -3,16 +3,16 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - core/kernel/classes/class.File.php
+ * Generis Object Oriented API - core\kernel\classes\class.File.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 14.11.2012, 11:33:30 with ArgoUML PHP module 
+ * Automatically generated on 06.12.2012, 10:36:19 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
@@ -43,7 +43,7 @@ require_once('core/kernel/classes/class.Resource.php');
  * Short description of class core_kernel_classes_File
  *
  * @access public
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
@@ -61,7 +61,7 @@ class core_kernel_classes_File
      * Short description of method getFileClass
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return core_kernel_classes_Class
      */
     protected static function getFileClass()
@@ -80,13 +80,14 @@ class core_kernel_classes_File
      * be optionnal)
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string fileName
      * @param  string filePath
      * @param  string uri
+     * @param  array options
      * @return core_kernel_classes_File
      */
-    public static function create($fileName, $filePath = null, $uri = "")
+    public static function create($fileName, $filePath = null, $uri = "", $options = array())
     {
         $returnValue = null;
 
@@ -114,7 +115,7 @@ class core_kernel_classes_File
      * Short description of method isFile
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -134,7 +135,7 @@ class core_kernel_classes_File
      * Short description of method getAbsolutePath
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
      */
     public function getAbsolutePath()
@@ -166,7 +167,7 @@ class core_kernel_classes_File
      * Short description of method getFileContent
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return mixed
      */
     public function getFileContent()
@@ -183,7 +184,7 @@ class core_kernel_classes_File
      * Short description of method delete
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  boolean deleteReference
      * @return boolean
      */
@@ -208,7 +209,7 @@ class core_kernel_classes_File
      * Short description of method move
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return boolean
      */
     public function move()
@@ -226,7 +227,7 @@ class core_kernel_classes_File
      * Short description of method getFileInfo
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return mixed
      */
     public function getFileInfo()
@@ -240,7 +241,7 @@ class core_kernel_classes_File
      * Short description of method setContent
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string content
      * @return boolean
      */
@@ -276,7 +277,7 @@ class core_kernel_classes_File
      * Short description of method fileExists
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return boolean
      */
     public function fileExists()
