@@ -112,7 +112,7 @@ class VersioningDisabledTestCase extends UnitTestCase {
 	public function testVersionedFileCreate()
 	{
 		$repository = $this->createRepository();
-	    $instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $repository);
+	    $instance = core_kernel_versioning_File::createVersioned('file_test_case.txt', '/', $repository);
         $this->assertTrue($instance->delete(true));
 	    $this->assertTrue($repository->delete(true));
 	}
@@ -121,7 +121,7 @@ class VersioningDisabledTestCase extends UnitTestCase {
 	public function testVersionedFileAdd()
 	{
         $repository = $this->createRepository();
-	    $instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $repository);
+	    $instance = core_kernel_versioning_File::createVersioned('file_test_case.txt', '/', $repository);
 	    $instance->setContent(__CLASS__.':'.__METHOD__.'()');
         
         //try to add the versioned file to the repository
@@ -165,7 +165,7 @@ class VersioningDisabledTestCase extends UnitTestCase {
 	public function testVersionedFileCommit()
 	{
 		$repository = $this->createRepository();
-	    $instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $repository);
+	    $instance = core_kernel_versioning_File::createVersioned('file_test_case.txt', '/', $repository);
 	    $instance->setContent(__CLASS__.':'.__METHOD__.'()');
         
         //try to add the versioned file to the repository
@@ -209,7 +209,7 @@ class VersioningDisabledTestCase extends UnitTestCase {
 	public function testHistory()
 	{
 		$repository = $this->createRepository();
-	    $instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $repository);
+	    $instance = core_kernel_versioning_File::createVersioned('file_test_case.txt', '/', $repository);
 	    $instance->setContent(__CLASS__.':'.__METHOD__.'()');
 		
         //try to get the history of a versioned file
@@ -241,7 +241,7 @@ class VersioningDisabledTestCase extends UnitTestCase {
 	public function testRevertTo()
 	{
 		$repository = $this->createRepository();
-	    $instance = core_kernel_versioning_File::create('file_test_case.txt', '/', $repository);
+	    $instance = core_kernel_versioning_File::createVersioned('file_test_case.txt', '/', $repository);
 	    $instance->setContent(__CLASS__.':'.__METHOD__.'()');
 		
         //try to get the history of a versioned file

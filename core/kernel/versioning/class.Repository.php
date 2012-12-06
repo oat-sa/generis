@@ -369,7 +369,7 @@ class core_kernel_versioning_Repository
         			$ressource = new core_kernel_classes_Resource($rootFile);
         			$ressource->delete();
         		}
-				$rootFile = core_kernel_versioning_File::create('', DIRECTORY_SEPARATOR, $this);
+				$rootFile = core_kernel_versioning_File::createVersioned('', DIRECTORY_SEPARATOR, $this);
 				$this->editPropertyValues(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_ROOTFILE), $rootFile);
         		
         		$this->editPropertyValues(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED), GENERIS_TRUE);
@@ -436,7 +436,7 @@ class core_kernel_versioning_Repository
 		$destination = $this->getPath().$remotePath;
 		$source = $file->getAbsolutePath();
 		if(tao_helpers_File::move($source, $destination)){
-			$returnValue = core_kernel_versioning_File::create('', $remotePath, $this);
+			$returnValue = core_kernel_versioning_File::createVersioned('', $remotePath, $this);
 			if(!is_null($returnValue)){
 				$file->delete();
 			}

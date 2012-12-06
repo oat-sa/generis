@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Users</activediagram>
+      <activediagram>Versioning</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Dec 06 15:42:43 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Dec 06 16:08:00 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -16631,63 +16631,55 @@ system.</UML:TaggedValue.dataValue>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
-                        <UML:Operation xmi.id = '127-0-1-1--a63bd74:132c9c69076:-8000:000000000000249D'
-                          name = 'create' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
-                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
-                          isAbstract = 'false'>
-                          <UML:ModelElement.taggedValue>
-                            <UML:TaggedValue xmi.id = '127-0-1-1--485428cc:133267d2802:-8000:000000000000171E'
-                              isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>Resources factory</UML:TaggedValue.dataValue>
-                              <UML:TaggedValue.type>
-                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
-                              </UML:TaggedValue.type>
-                            </UML:TaggedValue>
-                          </UML:ModelElement.taggedValue>
+                        <UML:Operation xmi.id = '10-13-1-85--73d3d10:13b70b55a69:-8000:0000000000001DC8'
+                          name = 'createVersioned' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
                           <UML:BehavioralFeature.parameter>
-                            <UML:Parameter xmi.id = '127-0-1-1--a63bd74:132c9c69076:-8000:000000000000249E'
+                            <UML:Parameter xmi.id = '10-13-1-85--73d3d10:13b70b55a69:-8000:0000000000001DC9'
                               name = 'return' isSpecification = 'false' kind = 'return'>
                               <UML:Parameter.type>
-                                <UML:Class xmi.idref = '127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001365'/>
+                                <UML:Class xmi.idref = '127-0-1-1--411682cd:13465a5ef15:-8000:00000000000018C0'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
-                            <UML:Parameter xmi.id = '127-0-1-1--a63bd74:132c9c69076:-8000:000000000000249F'
-                              name = 'fileName' isSpecification = 'false' kind = 'in'>
+                            <UML:Parameter xmi.id = '10-13-1-85--73d3d10:13b70b55a69:-8000:0000000000001DCA'
+                              name = 'filename' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
-                            <UML:Parameter xmi.id = '127-0-1-1--a63bd74:132c9c69076:-8000:00000000000024A0'
+                            <UML:Parameter xmi.id = '10-13-1-85--73d3d10:13b70b55a69:-8000:0000000000001DCB'
                               name = 'relativeFilePath' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '127-0-1-1--411682cd:13465a5ef15:-8000:00000000000018CA'
-                                  language = 'UML 1.4' body = 'null'/>
+                                <UML:Expression xmi.id = '10-13-1-85--73d3d10:13b70b55a69:-8000:0000000000001DD1'
+                                  language = '' body = 'null'/>
                               </UML:Parameter.defaultValue>
-                              <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                              </UML:Parameter.type>
                             </UML:Parameter>
-                            <UML:Parameter xmi.id = '127-0-1-1--548d6005:132d344931b:-8000:00000000000016B1'
+                            <UML:Parameter xmi.id = '10-13-1-85--73d3d10:13b70b55a69:-8000:0000000000001DD2'
                               name = 'repository' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '10-13-1-85--73d3d10:13b70b55a69:-8000:0000000000001DD6'
+                                  language = '' body = 'null'/>
+                              </UML:Parameter.defaultValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
-                            <UML:Parameter xmi.id = '127-0-1-1--548d6005:132d344931b:-8000:00000000000016B3'
+                            <UML:Parameter xmi.id = '10-13-1-85--73d3d10:13b70b55a69:-8000:0000000000001DD7'
                               name = 'uri' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '127-0-1-1--411682cd:13465a5ef15:-8000:00000000000018CB'
-                                  language = 'UML 1.4' body = '&quot;&quot;'/>
+                                <UML:Expression xmi.id = '10-13-1-85--73d3d10:13b70b55a69:-8000:0000000000001DD9'
+                                  language = '' body = '&apos;&apos;'/>
                               </UML:Parameter.defaultValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
-                            <UML:Parameter xmi.id = '127-0-1-1--6e9cb256:133113ef9e0:-8000:00000000000025BB'
+                            <UML:Parameter xmi.id = '10-13-1-85--73d3d10:13b70b55a69:-8000:0000000000001DDA'
                               name = 'options' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '127-0-1-1--411682cd:13465a5ef15:-8000:00000000000018CC'
-                                  language = 'UML 1.4' body = 'array()'/>
+                                <UML:Expression xmi.id = '10-13-1-85--73d3d10:13b70b55a69:-8000:0000000000001DE1'
+                                  language = '' body = 'array()'/>
                               </UML:Parameter.defaultValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
@@ -67076,7 +67068,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >create(fileName : string,relativeFilePath : string = null,repository : Resource,uri : string = &quot;&quot;,options : array = array()) : File</text>
+      >createVersioned(filename : string,relativeFilePath = null,repository : Resource = null,uri : string = &apos;&apos;,options : array = array()) : File</text>
       <text name="Fig9.6.3"
         x="97"
         y="82"

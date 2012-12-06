@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 /**
  * Manage your versioned files as resources in TAO
  *
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_versioning
  */
@@ -17,14 +17,14 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_classes_File
  *
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  */
 require_once('core/kernel/classes/class.File.php');
 
 /**
  * include core_kernel_versioning_FileProxy
  *
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  */
 require_once('core/kernel/versioning/class.FileProxy.php');
 
@@ -58,7 +58,7 @@ const VERSIONING_FILE_VERSION_BASE              = 'base';
  * Manage your versioned files as resources in TAO
  *
  * @access public
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_versioning
  */
@@ -76,7 +76,7 @@ class core_kernel_versioning_File
      * Short description of method getFileClass
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return core_kernel_classes_Class
      */
     protected static function getFileClass()
@@ -91,23 +91,22 @@ class core_kernel_versioning_File
     }
 
     /**
-     * Resources factory
+     * Short description of method createVersioned
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  string fileName
-     * @param  string relativeFilePath
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string filename
+     * @param  relativeFilePath
      * @param  Resource repository
      * @param  string uri
      * @param  array options
-     * @return core_kernel_classes_File
+     * @return core_kernel_versioning_subversion_File
      */
-    public static function create($fileName, $relativeFilePath = null,  core_kernel_classes_Resource $repository = null, $uri = "", $options = array())
+    public function createVersioned($filename, $relativeFilePath = null,  core_kernel_classes_Resource $repository = null, $uri = '', $options = array())
     {
         $returnValue = null;
 
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:000000000000249D begin
-		
+        // section 10-13-1-85--73d3d10:13b70b55a69:-8000:0000000000001DC8 begin
         //@TODO: 3rd arg to be typed to core_kernel_versioning_Repository
         $repositoryPath = $repository->getPath();
         //add a slash at the end of the repository path if it does not exist
@@ -155,8 +154,7 @@ class core_kernel_versioning_File
 	    // Add repository
 	    $versionedFileRepositoryProp = new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_REPOSITORY);
 	    $instance->setPropertyValue($versionedFileRepositoryProp, $repository);
-        
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:000000000000249D end
+        // section 10-13-1-85--73d3d10:13b70b55a69:-8000:0000000000001DC8 end
 
         return $returnValue;
     }
@@ -165,7 +163,7 @@ class core_kernel_versioning_File
      * Check if a resource is a versioned file resource
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -196,7 +194,7 @@ class core_kernel_versioning_File
      * requires an update)
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string message
      * @param  boolean recursive
      * @return boolean
@@ -241,7 +239,7 @@ class core_kernel_versioning_File
      * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  int revision
      * @return boolean
      */
@@ -284,7 +282,7 @@ class core_kernel_versioning_File
      * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  int revision If a revision is given revert changes from this revision. Else revert local changes.
      * @param  string msg
      * @return boolean
@@ -316,7 +314,7 @@ class core_kernel_versioning_File
      * and delete it.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  boolean deleteReference
      * @return boolean
      */
@@ -374,7 +372,7 @@ class core_kernel_versioning_File
      * Get the repository which is associated to the resource
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return core_kernel_versioning_subversion_Repository
      */
     public function getRepository()
@@ -399,7 +397,7 @@ class core_kernel_versioning_File
      * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  boolean recursive
      * @param  boolean force
      * @return boolean
@@ -454,7 +452,7 @@ class core_kernel_versioning_File
      * Check if the resource is versioned
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return boolean
      */
     public function isVersioned()
@@ -485,7 +483,7 @@ class core_kernel_versioning_File
      * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return array
      */
     public function getHistory()
@@ -511,7 +509,7 @@ class core_kernel_versioning_File
      * Get the relative path of the resource in the repository
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
      */
     public function getPath()
@@ -535,7 +533,7 @@ class core_kernel_versioning_File
      * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return boolean
      */
     public function hasLocalChanges()
@@ -555,7 +553,7 @@ class core_kernel_versioning_File
      * Short description of method getVersion
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return int
      */
     public function getVersion()
@@ -576,7 +574,7 @@ class core_kernel_versioning_File
      * Short description of method getStatus
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  array options
      * @return int
      */
@@ -608,7 +606,7 @@ class core_kernel_versioning_File
      * Short description of method resolve
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string version
      * @return boolean
      */
@@ -643,7 +641,7 @@ class core_kernel_versioning_File
      * Short description of method isInConflict
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return boolean
      */
     public function isInConflict()

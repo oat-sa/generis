@@ -131,11 +131,11 @@ class VersioningEnabledTestCase extends UnitTestCase {
 
         //create the folder
         $relativePath = substr($dirPath, strlen($this->getDefaultRepository()->getPath()));
-        $instance = core_kernel_versioning_File::create('', $relativePath, $this->getDefaultRepository());
+        $instance = core_kernel_versioning_File::createVersioned('', $relativePath, $this->getDefaultRepository());
         //if is already versioned, delete the path
         if($instance->isVersioned()){
             $instance->delete();
-            $instance = core_kernel_versioning_File::create('', $relativePath, $this->getDefaultRepository());
+            $instance = core_kernel_versioning_File::createVersioned('', $relativePath, $this->getDefaultRepository());
         }
         
         //create the dir
@@ -267,7 +267,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	// Test versioned file factory
 	public function testVersionedFileCreate()
 	{
-		$instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
+		$instance = core_kernel_versioning_File::createVersioned(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
 	    $this->assertFalse($instance->isVersioned()); //the file is not yet versioned
 	    $this->assertFalse($instance->fileExists()); //the file does not exist
 	    $this->assertFalse(file_exists($instance->getAbsolutePath()));//the file does not exist in file system
@@ -277,7 +277,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	public function _testCleanCreatedResources(){
 		
 		$repository1 = $this->getDefaultRepository();
-		$instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $repository1);
+		$instance = core_kernel_versioning_File::createVersioned(__CLASS__.'_'.__METHOD__.'.txt', '/', $repository1);
 		$filePath = $instance->getAbsolutePath();
 		$files = helpers_File::searchResourcesFromPath($filePath);
 		var_dump($files);
@@ -301,7 +301,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	{
         // @todo This test is dedicated to the subversion implementation, be carrefull!!!
          
-	     		$instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
+	     		$instance = core_kernel_versioning_File::createVersioned(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
 	    $implementationToDelegateTo = core_kernel_versioning_FileProxy::singleton()->getImplementationToDelegateTo($instance);
 	    $this->assertTrue($implementationToDelegateTo instanceof core_kernel_versioning_subversion_File);
 	    $instance->delete(true);
@@ -311,7 +311,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	// Test versioned file function add
 	public function testVersionedFileAdd()
 	{
-	    $instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
+	    $instance = core_kernel_versioning_File::createVersioned(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
 		
 		$filePath = $instance->getAbsolutePath();
         //the file is not versioned
@@ -339,7 +339,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	// Test versioned file function commit
 	public function testVersionedFileCommit()
 	{
-	    $instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
+	    $instance = core_kernel_versioning_File::createVersioned(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
         $filePath = $instance->getAbsolutePath();
         
         //the file is not versioned
@@ -372,7 +372,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	public function testHasLocalChanges()
 	{
 		
-        $instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
+        $instance = core_kernel_versioning_File::createVersioned(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
         $filePath = $instance->getAbsolutePath();
         
         //the file is not versioned
@@ -415,7 +415,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	public function testIsVersioned()
 	{
 		
-		$instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
+		$instance = core_kernel_versioning_File::createVersioned(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
         $filePath = $instance->getAbsolutePath();
         
         //the file is not versioned
@@ -459,7 +459,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	public function testVersionedFileUpdate()
 	{
 		$repository1 = $this->getDefaultRepository();
-		$instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $repository1);
+		$instance = core_kernel_versioning_File::createVersioned(__CLASS__.'_'.__METHOD__.'.txt', '/', $repository1);
 	    $originalFileContent = __CLASS__.':'.__METHOD__.'()';
         $instance->setContent($originalFileContent);
 	    $this->assertTrue($instance->add());
@@ -477,7 +477,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 			'TMP Repository'
 		);
 		$this->assertTrue($repository2->checkout());
-		$file = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $repository2);
+		$file = core_kernel_versioning_File::createVersioned(__CLASS__.'_'.__METHOD__.'.txt', '/', $repository2);
 		$this->assertTrue($file->setContent($originalFileContent.' updated'));
 		$this->assertTrue($file->commit());
 		$this->assertTrue($repository2->delete(true));
@@ -497,7 +497,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	//test the versioning function revert without parameter (revert local change)
 	public function testRevert()
 	{
-		$instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
+		$instance = core_kernel_versioning_File::createVersioned(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
         $filePath = $instance->getAbsolutePath();
         
         //the file is not versioned
@@ -536,7 +536,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 
 	public function testHistory()
 	{
-		$instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
+		$instance = core_kernel_versioning_File::createVersioned(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
         $commonContent = __CLASS__.':'.__METHOD__.'()';
         
         //set the content & create the file in the same move
@@ -561,7 +561,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 
 	public function testVersion()
 	{
-		$instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
+		$instance = core_kernel_versioning_File::createVersioned(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository());
         $commonContent = __CLASS__.':'.__METHOD__.'()';
         
         //set the content & create the file in the same move
@@ -580,7 +580,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
     
 	public function testRevertTo()
 	{
-		$instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository(), "");
+		$instance = core_kernel_versioning_File::createVersioned(__CLASS__.'_'.__METHOD__.'.txt', '/', $this->getDefaultRepository(), "");
         $commonContent = __CLASS__.':'.__METHOD__.'()';
         
 	    $this->assertTrue($instance->setContent($commonContent));
@@ -631,7 +631,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
     public function testVersionedFileConflict()
     {
         $repository1 = $this->getDefaultRepository();
-		$instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $repository1);
+		$instance = core_kernel_versioning_File::createVersioned(__CLASS__.'_'.__METHOD__.'.txt', '/', $repository1);
 	    $originalFileContent = __CLASS__.':'.__METHOD__.'()';
         $instance->setContent($originalFileContent.' mine 1');
 	    $this->assertTrue($instance->add());
@@ -649,7 +649,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 			'TMP Repository'
 		);
 		$this->assertTrue($repository2->checkout());
-		$repository2Instance = core_kernel_versioning_File::create(__CLASS__.'_'.__METHOD__.'.txt', '/', $repository2);
+		$repository2Instance = core_kernel_versioning_File::createVersioned(__CLASS__.'_'.__METHOD__.'.txt', '/', $repository2);
 		$otherUpdatedFileContent = $originalFileContent.' other 1';
 		$this->assertTrue($repository2Instance->setContent($otherUpdatedFileContent));
         $this->assertTrue($repository2Instance->getFileContent(), $otherUpdatedFileContent);
@@ -795,7 +795,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
         $this->assertTrue(file_exists($path));
         
         //create it
-        $importedFolder = core_kernel_versioning_File::create('', '/TAO_TEST_CASE_TEST_RESPOSITORY_IMPORT',  $repository);
+        $importedFolder = core_kernel_versioning_File::createVersioned('', '/TAO_TEST_CASE_TEST_RESPOSITORY_IMPORT',  $repository);
         $this->assertTrue($importedFolder instanceof core_kernel_versioning_File);
         //check the resource exists
         $searchedFile = helpers_File::getResource($path);

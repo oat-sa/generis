@@ -218,7 +218,7 @@ class core_kernel_versioning_subversion_Repository
             $importFolder = helpers_File::getResource($absolutePath);
             if(is_null($importFolder)){
                 //else create it
-                $importFolder = core_kernel_versioning_File::create('', $relativePath, $vcs);
+                $importFolder = core_kernel_versioning_File::createVersioned('', $relativePath, $vcs);
                 }else{
                 $importFolderAlreadyExists = true;
                 }
