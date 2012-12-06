@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Generis Core Kernel</activediagram>
+      <activediagram>Users</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Dec 06 10:41:28 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Dec 06 15:42:43 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -8693,6 +8693,15 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                           name = 'login' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85-5534fcc7:13b70a6c76b:-8000:0000000000001DC6'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>the md5 hash of the password.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001835'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -8702,6 +8711,15 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001836'
                               name = 'login' isSpecification = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-5534fcc7:13b70a6c76b:-8000:0000000000001DC5'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>The login of the user.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
@@ -8713,10 +8731,16 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001838'
-                              name = 'role' isSpecification = 'false'>
-                              <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                              </UML:Parameter.type>
+                              name = 'allowedRoles' isSpecification = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-5534fcc7:13b70a6c76b:-8000:0000000000001DC7'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>A Role or an array of Roles that are allowed to be logged in. If the user has a Role that matches one or more Roles in this array, the login request will be accepted.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
@@ -54742,7 +54766,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </path>
   </group>
   <group name="Fig11"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[344, 880, 407, 202]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[344, 880, 431, 202]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001365"
        fill="1"
        fillcolor="white"
@@ -54755,7 +54779,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <rectangle name="Fig11.0"
       x="344"
       y="880"
-      width="407"
+      width="431"
       height="202"
       fill="1"
       fillcolor="white"
@@ -54765,7 +54789,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <text name="Fig11.1"
       x="345"
       y="881"
-      width="405"
+      width="429"
       height="21"
       fill="0"
       fillcolor="white"
@@ -54779,7 +54803,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::classes::File</text>
     <group name="Fig11.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[345, 881, 366, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[345, 881, 429, 0]"
          href="127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001365"
          fill="0"
          fillcolor="white"
@@ -54793,7 +54817,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <rectangle name="Fig11.2.0"
         x="345"
         y="881"
-        width="366"
+        width="429"
         height="0"
         fill="0"
         fillcolor="white"
@@ -54804,7 +54828,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <rectangle name="Fig11.3"
       x="344"
       y="902"
-      width="407"
+      width="431"
       height="1"
       fill="1"
       fillcolor="black"
@@ -54812,7 +54836,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig11.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[345, 903, 405, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[345, 903, 429, 21]"
          href="127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001365"
          fill="0"
          fillcolor="white"
@@ -54825,7 +54849,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <rectangle name="Fig11.4.0"
         x="345"
         y="903"
-        width="405"
+        width="429"
         height="21"
         fill="0"
         fillcolor="white"
@@ -54836,7 +54860,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <rectangle name="Fig11.5"
       x="344"
       y="923"
-      width="407"
+      width="431"
       height="1"
       fill="1"
       fillcolor="black"
@@ -54844,7 +54868,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig11.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[345, 924, 405, 158]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[345, 924, 429, 158]"
          href="127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001365"
          fill="0"
          fillcolor="white"
@@ -54857,7 +54881,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <rectangle name="Fig11.6.0"
         x="345"
         y="924"
-        width="405"
+        width="429"
         height="158"
         fill="0"
         fillcolor="white"
@@ -54867,7 +54891,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig11.6.1"
         x="345"
         y="924"
-        width="405"
+        width="429"
         height="15"
         fill="0"
         fillcolor="white"
@@ -54883,7 +54907,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig11.6.2"
         x="345"
         y="939"
-        width="405"
+        width="429"
         height="15"
         fill="0"
         fillcolor="white"
@@ -54899,7 +54923,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig11.6.3"
         x="345"
         y="954"
-        width="405"
+        width="429"
         height="15"
         fill="0"
         fillcolor="white"
@@ -54915,7 +54939,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig11.6.4"
         x="345"
         y="969"
-        width="405"
+        width="429"
         height="15"
         fill="0"
         fillcolor="white"
@@ -54931,7 +54955,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig11.6.5"
         x="345"
         y="984"
-        width="405"
+        width="429"
         height="15"
         fill="0"
         fillcolor="white"
@@ -54947,7 +54971,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig11.6.6"
         x="345"
         y="999"
-        width="405"
+        width="429"
         height="15"
         fill="0"
         fillcolor="white"
@@ -54963,7 +54987,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig11.6.7"
         x="345"
         y="1014"
-        width="405"
+        width="429"
         height="15"
         fill="0"
         fillcolor="white"
@@ -54979,7 +55003,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig11.6.8"
         x="345"
         y="1029"
-        width="405"
+        width="429"
         height="15"
         fill="0"
         fillcolor="white"
@@ -54995,7 +55019,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig11.6.9"
         x="345"
         y="1044"
-        width="405"
+        width="429"
         height="15"
         fill="0"
         fillcolor="white"
@@ -55011,7 +55035,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig11.6.10"
         x="345"
         y="1059"
-        width="405"
+        width="429"
         height="21"
         fill="0"
         fillcolor="white"
@@ -65627,7 +65651,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >login(login : string,password : string,role : string) : boolean</text>
+      >login(login : string,password : string,allowedRoles) : boolean</text>
       <text name="Fig1.6.7"
         x="49"
         y="199"
@@ -68123,7 +68147,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <rectangle name="Fig16.5"
       x="736"
       y="211"
-      width="321"
+      width="431"
       height="1"
       fill="1"
       fillcolor="black"
@@ -68146,7 +68170,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <rectangle name="Fig16.6.0"
         x="737"
         y="212"
-        width="319"
+        width="429"
         height="158"
         fill="0"
         fillcolor="white"

@@ -3,16 +3,16 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - core/kernel/users/class.Service.php
+ * Generis Object Oriented API - core\kernel\users\class.Service.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 10.07.2012, 11:08:35 with ArgoUML PHP module 
+ * Automatically generated on 06.12.2012, 15:42:39 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_users
  */
@@ -33,7 +33,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class core_kernel_users_Service
  *
  * @access public
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_users
  */
@@ -66,7 +66,7 @@ class core_kernel_users_Service
      * Short description of method loginExists
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string login
      * @param  Class class
      * @return boolean
@@ -98,7 +98,7 @@ class core_kernel_users_Service
      * Short description of method addRole
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string label
      * @param  string comment
      * @param  string parentRole
@@ -126,7 +126,7 @@ class core_kernel_users_Service
      * Short description of method removeRole
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource role
      * @return boolean
      */
@@ -145,7 +145,7 @@ class core_kernel_users_Service
      * Short description of method addUser
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string login
      * @param  string password
      * @param  Resource role
@@ -176,7 +176,7 @@ class core_kernel_users_Service
      * Short description of method removeUser
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource user
      * @return boolean
      */
@@ -192,63 +192,52 @@ class core_kernel_users_Service
     }
 
     /**
-     * Short description of method login
+     * the md5 hash of the password.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  string login
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string login The login of the user.
      * @param  string password
-     * @param  string role
+     * @param  allowedRoles A Role or an array of Roles that are allowed to be logged in. If the user has a Role that matches one or more Roles in this array, the login request will be accepted.
      * @return boolean
      */
-    public function login($login, $password, $role)
+    public function login($login, $password, $allowedRoles)
     {
         $returnValue = (bool) false;
 
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001834 begin
         
-        if(empty($role)){
+        if(empty($allowedRoles)){
         	throw new common_Exception('no role provided for login');
         }
         else{
         	// Role can be either a scalar value or a collection.
-        	if (!is_array($role)){
-        		$roleUri = (($role instanceof core_kernel_classes_Resource) ? $role->getUri() : $role);
-        		$roles = array($roleUri);
+        	$allowedRoles = is_array($allowedRoles) ? $allowedRoles : array($allowedRoles);
+        	$roles = array();
+        	foreach ($allowedRoles as $r){
+        		$roles[] = (($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r);
         	}
-        	else{
-        		$roles = array();
-        		foreach ($role as $r){
-        			$roles[] = (($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r);
-        		}
-        		unset($role);
-        	}
+        	
+        	unset($allowedRoles);
         }
 	        
 		if(!is_string($login)){
 			throw new core_kernel_users_Exception('The login must be of "string" type');
-			return $returnValue;
 		}
 		$login = trim($login);
 		if(empty($login)){
 			throw new core_kernel_users_Exception('The login cannot be empty');
-			return $returnValue;
 		}
 		
 		if(!is_string($password)){
 			throw new core_kernel_users_Exception('The password must be of "string" type');
-			return $returnValue;
 		}
 		// Parameters are corect.
-		
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		common_Logger::i('before generis login: ' . $dbWrapper->getNrOfQueries());
-
+		$firstClassUri = array_shift($roles);
+		$firstClass = new core_kernel_classes_Class($firstClassUri);
 		$filter = array(PROPERTY_USER_LOGIN => $login, PROPERTY_USER_PASSWORD => $password);
-		$options = array('like' => false, 'additionalClasses' => array_slice($roles, 1));
-		$firstClass = new core_kernel_classes_Class($roles[0]);
+		$options = array('like' => false, 'additionalClasses' => $roles);
 		$users = $firstClass->searchInstances( $filter, $options);
-		common_Logger::i('after user lookup: ' . $dbWrapper->getNrOfQueries());
 		
 		if (count($users) != 1) {
 			if (count($users) > 1) {
@@ -257,21 +246,14 @@ class core_kernel_users_Service
 			$this->logout();
 		}
 		else {		
-			common_Logger::i('before getting roles :' . $dbWrapper->getNrOfQueries());
-			// The user has the right login and password.
-			// But does it matches an allowed role?.
-			$userTypes = array_keys($users[key($users)]->getTypes());
-			if (count(array_intersect($userTypes, $roles)) > 0){
-				$returnValue = true; // A Matching role was found.
-			
-				// Initialize current user.
-				$this->userResource = reset($users);
-				$roles = core_kernel_users_Service::singleton()->getUserRoles($this->userResource);	
-				core_kernel_classes_Session::singleton()->reset();
-				$session = core_kernel_classes_Session::singleton();
-				$session->setUser($login, $this->userResource->getUri(), $roles);
-				common_Logger::i('after getting roles: ' . $dbWrapper->getNrOfQueries());	
-			}
+			$returnValue = true; // A Matching role was found.
+		
+			// Initialize current user.
+			$this->userResource = reset($users);
+			$roles = core_kernel_users_Service::singleton()->getUserRoles($this->userResource);	
+			core_kernel_classes_Session::singleton()->reset();
+			$session = core_kernel_classes_Session::singleton();
+			$session->setUser($login, $this->userResource->getUri(), $roles);
 		}
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001834 end
 
@@ -282,7 +264,7 @@ class core_kernel_users_Service
      * Short description of method getOneUser
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string login
      * @param  Class class
      * @return core_kernel_classes_Resource
@@ -315,7 +297,7 @@ class core_kernel_users_Service
      * Short description of method __construct
      *
      * @access private
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return mixed
      */
     private function __construct()
@@ -335,7 +317,7 @@ class core_kernel_users_Service
      * Short description of method singleton
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return core_kernel_users_Service
      */
     public static function singleton()
@@ -357,7 +339,7 @@ class core_kernel_users_Service
      * Short description of method isASessionOpened
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return boolean
      */
     public function isASessionOpened()
@@ -376,7 +358,7 @@ class core_kernel_users_Service
      * Short description of method logout
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return boolean
      */
     public function logout()
@@ -396,7 +378,7 @@ class core_kernel_users_Service
      * to test the pasword entered
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string password raw password, unencrypted
      * @param  Resource user
      * @return boolean
@@ -421,7 +403,7 @@ class core_kernel_users_Service
      * Short description of method setPassword
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource user
      * @param  string password
      * @return mixed
@@ -441,7 +423,7 @@ class core_kernel_users_Service
      * Short description of method getUserRoles
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource user
      * @return array
      */
