@@ -543,7 +543,7 @@ class core_kernel_persistence_hardsql_Class
 					}
 				}
 				if (!empty($condition) && $chaining == 'and'){
-					$joinConditions[] = 'INNER JOIN "' . $tablePropertiesName . '" "p" ON (' . $condition  . ' AND "b"."id" = "p"."instance_id")';
+					$joinConditions[] = 'INNER JOIN "' . $tablePropertiesName . '" "p" ON (' . $condition  . ' AND "p"."property_uri" = \''.$propUri.'\' AND "b"."id" = "p"."instance_id")';
 				}
 				else{
 					$conditions[] = ' ( "b"."id" = "p"."instance_id" AND "p"."property_uri" = \''.$propUri.'\' AND '.$condition.' )';
