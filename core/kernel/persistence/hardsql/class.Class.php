@@ -404,6 +404,198 @@ class core_kernel_persistence_hardsql_Class
         return $returnValue;
     }
 
+    public function searchInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array()){
+    	$returnValue = array();
+    	
+    	/*
+		options lists:
+		like			: (bool) 	true/false (default: true)
+		chaining		: (string) 	'or'/'and' (default: 'and')
+		recursive		: (int) 	recursivity depth (default: 0)
+		lang			: (string) 	e.g. 'EN', 'FR' (default: '') for all properties!
+		offset  		: default 0
+		limit           : default select all
+		order			: property to order by
+		orderdir		: direction of order (default: 'ASC')
+		*/
+    	
+    	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		
+		// 'like' option.
+		$like = true;
+		if (isset($options['like'])){
+			$like = ($options['like'] == true);
+		}
+		
+		// 'chaining' option.
+		$chaining = 'and';
+		if (!empty($options['chaining'])){
+			$chainingValue = strtolower($options['chaining']);
+			if ($chainingValue == 'and' || $chainingValue == 'or'){
+				$chaining = $chainingValue;
+			}
+		}
+		
+		// 'recursive' option.
+		$recursive = 0;
+		if (isset($options['recursive'])){
+			$recursive = intval($options['recursive']);
+		}
+		
+		// 'offset' option. If not provided, we set it to null.
+		$offset = null;
+		if (isset($options['offset'])){
+			$offset = intval($options['offset']);
+		}
+		
+		// 'limit' option. If not provided, we wet it to null as well.
+		$limit = null;
+		if (isset($options['limit'])){
+			$limit = intval($options['limit']);
+		}
+		
+		// 'order' and 'orderdir' options.
+		$order = null;
+		$orderdir = 'ASC';
+		if (!empty($options['order'])){
+			$order = $options['order'];
+			if (!empty($options['orderdir'])){
+				$orderdirValue = strtolower($options['orderdir']);
+				
+				if ($orderdirValue == 'asc' || $orderdirValue == 'desc'){
+					$orderdir = $orderdirValue;
+				}
+			}
+		}
+		
+		// 'lang' option.
+		$lang = '';
+		if (!empty($options['lang'])){
+			$lang = $options['lang'];
+		}
+		
+		// 'additionalClasses' option.
+		$classes = array($resource);
+		if (!empty($options['additionalClasses'])){
+			$classes = array_merge($classes, $options['additionalClasses']);
+		}
+		
+		$queries = array();
+		foreach ($classes as $class){
+			$query = '';
+			
+			// Get information about where and how to query the database.
+	    	$baseTableName = '';
+			$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+			$classLocations = $referencer->classLocations($class);
+			if (isset($classLocations[0])){
+				// table to query located.
+				$baseTableName = $classLocations[0]['table'];
+				$propsTableName = $baseTableName . 'Props';
+				$baseConditions = array(); 		// Conditions to apply on base table.
+				$propsConditions = array(); 	// Conditions to apply on properties table.
+				
+				
+				foreach ($propertyFilters as $propUri => $pattern){
+					$property = new core_kernel_classes_Property($propUri);
+					$propertyLocations = $referencer->propertyLocation($property);
+					$patterns = (!is_array($pattern)) ? array($pattern) : $pattern;
+					
+					if (in_array($propsTableName, $propertyLocations)){
+						// The property to search is stored in the properties table.
+						$pUri = $dbWrapper->dbConnector->quote($propUri);
+						$condition = '("p"."property_uri" = ' . $pUri . ' AND (';
+						$subConditions = array();
+						foreach ($patterns as $pattern){
+							$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
+							$subConditions[] = 'COALESCE("p"."property_value", "p"."property_foreign_uri") ' . $searchPattern;
+						}
+						$condition .= implode(' OR ', $subConditions) . '))';
+						$propsConditions[] = $condition;
+					}
+					else if (in_array($baseTableName, $propertyLocations)){
+						// The property to search is stored in the base table.
+						$propShortName = core_kernel_persistence_hardapi_Utils::getShortName($property);
+						$subConditions = array();
+						foreach ($patterns as $pattern){
+							$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
+							$subConditions[] = '"b"."' . $propShortName . '" ' . $searchPattern;
+						}
+						$baseConditions[] = '(' . implode(' OR ', $subConditions) . ')';
+					}
+					
+					// else do nothing, the property is not referenced anywhere.
+				}
+				
+				$query .= 'SELECT "b"."id", "b"."uri" FROM "' . $baseTableName . '" "b" ';
+				
+				if (empty($propsConditions) && !empty($baseConditions)){
+					// Scenario with only scalar values.
+					$query .= 'WHERE ';
+					$finalCondition = array();
+					foreach ($baseConditions as $bC){
+						$finalCondition[] = '(' . $bC . ')';
+					}
+					$query .= implode(' ' . strtoupper($chaining) . ' ', $finalCondition);
+				}
+				else{
+					// Mixed approach scenario.
+					if ($chaining == 'and'){
+						for ($i = 0; $i < count($propsConditions); $i++){
+							$joinName = 'bp' . $i;
+							$query .= 'INNER JOIN(';
+							$query .= 	'SELECT "b"."id", "b"."uri" FROM "' . $baseTableName . '" "b" ';
+							$query .= 	'INNER JOIN "' . $propsTableName . '" "p" ON ("b"."id" = "p"."instance_id" AND (';
+							$query .=	$propsConditions[$i];
+							$query .=   '))';
+							$query .= ') AS "' . $joinName . '" ON ("b"."id" = "'. $joinName . '"."id")';
+						}
+						
+						if (!empty($baseConditions)){
+							$query .= ' WHERE ';
+							$query .= implode(' AND ', $baseConditions);
+						}
+					}
+					else{
+						$query .= 'INNER JOIN(';
+						$query .= 	'SELECT "b"."id", "b"."uri" FROM "' . $baseTableName . '" "b" ';
+						$query .= 	'INNER JOIN "' . $propsTableName . '" "p" ON ("b"."id" = "p"."instance_id" AND(';
+						$query .=	implode(' OR ', array_merge($propsConditions, $baseConditions));
+						$query .= 	'))';
+						$query .= ') AS "bp" ON ("b"."id" = "bp"."id")';
+					}
+				}
+				
+				$queries[] = $query;
+			}	
+		}
+		
+		if (!empty($queries)){
+			$finalQuery = implode(' UNION ', $queries);
+			$finalQuery .= ' GROUP BY id';
+			
+			if (!empty($limit)){
+				$finalQuery .= ' LIMIT ' . $limit;
+			}
+			
+			if (!empty($offset)){
+				$finalQuery .= ' OFFSET ' . $offset;
+			}
+			
+			try{
+				$result = $dbWrapper->query($finalQuery);
+				while ($row = $result->fetch()){
+					$returnValue[$row['uri']] = new core_kernel_classes_Resource($row['uri']);
+				}
+			}
+			catch (PDOException $e){
+				throw new core_kernel_persistence_hardsql_Exception("Unable to search instances for the resource {$resource->uriResource} : " .$e->getMessage());
+			}
+		}
+		
+    	return (array) $returnValue;
+    }
+    
     /**
      * Short description of method searchInstances
      *
@@ -414,7 +606,7 @@ class core_kernel_persistence_hardsql_Class
      * @param  array options
      * @return array
      */
-    public function searchInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array())
+    public function oldsearchInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array())
     {
         $returnValue = array();
 
