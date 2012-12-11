@@ -2,9 +2,9 @@
 require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 /**
- * Test of the common_ext_Namespace and common_ext_NamesapceManager
+ * Test of the DbWrappers.
  * 
- * @author Bertrand Chevrier <bertrand.chevrier@tudor.lu>
+ * @author Jerome Bogaerts <jerome.bogaerts@tudor.lu>
  * @package generis
  * @subpackage test
  */
