@@ -474,7 +474,7 @@ class core_kernel_persistence_Switcher
 
 				if($rmSources){
 					//remove exported resources in smooth sql, if required:
-					if (!$resource->delete()){
+					if (!$resource->delete()){//@TODO : modified resource::delete() because resource not in local modelId cannot be deleted
 						$notDeletedInstances[] = $resource->uriResource;
 					}
 				}

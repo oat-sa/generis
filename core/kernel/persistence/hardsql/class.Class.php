@@ -323,15 +323,14 @@ class core_kernel_persistence_hardsql_Class
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
+		$subject = '';
 		if($uri == ''){
-
 			$subject = common_Utils::getNewUri();
-		}
-		else {
-
-			//$uri should start with # and be well formed
+		}else if($uri[0]=='#'){ //$uri should start with # and be well formed
 			$modelUri = core_kernel_classes_Session::singleton()->getNameSpace();
 			$subject = $modelUri . $uri;
+		}else{
+			$subject = $uri;
 		}
 
 		$returnValue = new core_kernel_classes_Resource($subject,__METHOD__);

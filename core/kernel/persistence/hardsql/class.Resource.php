@@ -475,7 +475,7 @@ class core_kernel_persistence_hardsql_Resource
 						|| !$referencer->isPropertyReferenced($property)) {
 
 						$propertyRange = $property->getRange();
-						$lang = ($property->isLgDependent() ? $session->getdataLG() : '');
+						$lang = ($property->isLgDependent() ? $session->getDataLanguage() : '');
 						$formatedValues = array();
 						if ($value instanceof core_kernel_classes_Resource) {
 							$formatedValues[] = $value->uriResource;
@@ -491,7 +491,7 @@ class core_kernel_persistence_hardsql_Resource
 							$formatedValues[] = trim($dbWrapper->dbConnector->quote($value), "'\"");
 						}
 
-						if ($propertyRange->uriResource == RDFS_LITERAL) {
+						if ($propertyRange instanceof core_kernel_classes_Class && $propertyRange->uriResource == RDFS_LITERAL) {
 							foreach ($formatedValues as $formatedValue) {
 								$queryProps .= " ({$instanceId}, '{$property->uriResource}', '{$formatedValue}', null, '{$lang}'),";
 							}
@@ -535,9 +535,12 @@ class core_kernel_persistence_hardsql_Resource
 						if ($i) {
 							$query .= ', ';
 						}
-						$query .= '"' . $hardPropertyName . '" = ?';
+						$query .= '"' . $hardPropertyName . '" = ? ';
 						$variables[] = $value;
+						$i++;
 					}
+					$query .= ' WHERE "id" = ?';
+					
 					$variables[] = $instanceId;
 					
 					try{
