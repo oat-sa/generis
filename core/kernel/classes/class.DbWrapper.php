@@ -432,6 +432,17 @@ abstract class core_kernel_classes_DbWrapper
     public abstract function getTables();
 
     /**
+     * Returns the column names of a given table
+     *
+     * @abstract
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string table
+     * @return array
+     */
+    public abstract function getColumnNames($table);
+
+    /**
      * Get a statement in the statement store regarding the provided statement.
      * it could not be found, NULL is returned.
      *
@@ -496,20 +507,6 @@ abstract class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Increment the number of hits in the statements store.
-     *
-     * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return void
-     */
-    protected function incrementNrOfHits()
-    {
-        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B5E begin
-        $this->nrHits++;
-        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B5E end
-    }
-
-    /**
      * Returns the number of hits in the statements store.
      *
      * @access public
@@ -528,17 +525,17 @@ abstract class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Increment the number of misses in the statements store.
+     * Increment the number of hits in the statements store.
      *
      * @access protected
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return void
      */
-    protected function incrementNrOfMisses()
+    protected function incrementNrOfHits()
     {
-        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B66 begin
-        $this->nrMisses++;
-        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B66 end
+        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B5E begin
+        $this->nrHits++;
+        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B5E end
     }
 
     /**
@@ -557,6 +554,20 @@ abstract class core_kernel_classes_DbWrapper
         // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B6B end
 
         return (int) $returnValue;
+    }
+
+    /**
+     * Increment the number of misses in the statements store.
+     *
+     * @access protected
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return void
+     */
+    protected function incrementNrOfMisses()
+    {
+        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B66 begin
+        $this->nrMisses++;
+        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B66 end
     }
 
     /**

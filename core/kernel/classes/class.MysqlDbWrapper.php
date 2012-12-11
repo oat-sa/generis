@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 07.11.2012, 14:14:34 with ArgoUML PHP module 
+ * Automatically generated on 11.12.2012, 15:36:44 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -264,6 +264,28 @@ class core_kernel_classes_MysqlDbWrapper
         // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BF4 begin
         $this->query('FLUSH TABLE "' . $tableName . '"');
         // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BF4 end
+    }
+
+    /**
+     * Short description of method getColumnNames
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string table
+     * @return array
+     */
+    public function getColumnNames($table)
+    {
+        $returnValue = array();
+
+        // section 10-13-1-85--7fbbcc7e:13b8a608d82:-8000:0000000000001DCC begin
+        $result = $this->query('SHOW COLUMNS FROM "' . $table . '"');
+        while ($col = $result->fetchColumn()){
+        	$returnValue[] = $col;	
+        }
+        // section 10-13-1-85--7fbbcc7e:13b8a608d82:-8000:0000000000001DCC end
+
+        return (array) $returnValue;
     }
 
 } /* end of class core_kernel_classes_MysqlDbWrapper */
