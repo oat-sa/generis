@@ -403,8 +403,21 @@ class core_kernel_persistence_hardsql_Class
         return $returnValue;
     }
 
+    /**
+     * Short description of method searchInstances
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  Resource resource
+     * @param  array propertyFilters
+     * @param  array options
+     * @return array
+     */
     public function searchInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array()){
+    	
     	$returnValue = array();
+    	
+    	// section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 begin
     	
     	/*
 		options lists:
@@ -500,19 +513,7 @@ class core_kernel_persistence_hardsql_Class
 					$propertyLocations = $referencer->propertyLocation($property);
 					$patterns = (!is_array($pattern)) ? array($pattern) : $pattern;
 					
-					if (in_array($propsTableName, $propertyLocations)){
-						// The property to search is stored in the properties table.
-						$pUri = $dbWrapper->dbConnector->quote($propUri);
-						$condition = '("p"."property_uri" = ' . $pUri . ' AND (';
-						$subConditions = array();
-						foreach ($patterns as $pattern){
-							$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
-							$subConditions[] = 'COALESCE("p"."property_value", "p"."property_foreign_uri") ' . $searchPattern;
-						}
-						$condition .= implode(' OR ', $subConditions) . '))';
-						$propsConditions[] = $condition;
-					}
-					else if (in_array($baseTableName, $propertyLocations)){
+					if (in_array($baseTableName, $propertyLocations)){
 						// The property to search is stored in the base table.
 						$propShortName = core_kernel_persistence_hardapi_Utils::getShortName($property);
 						$subConditions = array();
@@ -522,11 +523,34 @@ class core_kernel_persistence_hardsql_Class
 						}
 						$baseConditions[] = '(' . implode(' OR ', $subConditions) . ')';
 					}
+					else {
+						// The property to search is stored in the properties table
+						// or might be simply unknown.
+						$pUri = $dbWrapper->dbConnector->quote($propUri);
+						$condition = '("p"."property_uri" = ' . $pUri . ' AND (';
+						$subConditions = array();
+						foreach ($patterns as $pattern){
+							$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
+							$subCondition = 'COALESCE("p"."property_value", "p"."property_foreign_uri") ' . $searchPattern;
+							
+							// Deal with the language.
+							if(preg_match('/^[a-zA-Z]{2,4}$/', $lang)){
+								$quotedLang = $dbWrapper->dbConnector->quote($lang);
+								$langToken = ' AND ("p".l_language" = \'\' OR "p".l_language" = ' . $quotedLang . ')';
+								$subCondition .= $langToken;
+							}
+							
+							$subConditions[] = $subCondition;
+						}
+						$condition .= implode(' OR ', $subConditions) . '))';
+						$propsConditions[] = $condition;
+					}
 					
 					// else do nothing, the property is not referenced anywhere.
 				}
 				
-				$query .= 'SELECT "b"."id", "b"."uri" FROM "' . $baseTableName . '" "b" ';
+				$quotedTblName = $dbWrapper->dbConnector->quote($baseTableName);
+				$query .= 'SELECT "b"."id", "b"."uri", ' . $quotedTblName . ' AS "tblname" FROM "' . $baseTableName . '" "b" ';
 				
 				if (empty($propsConditions) && !empty($baseConditions)){
 					// Scenario with only scalar values.
@@ -570,8 +594,9 @@ class core_kernel_persistence_hardsql_Class
 		}
 		
 		if (!empty($queries)){
+			
 			$finalQuery = implode(' UNION ', $queries);
-			$finalQuery .= ' GROUP BY id';
+			$finalQuery .= ' GROUP BY "b"."id", "b"."uri", "tblname"';
 			
 			if (!empty($limit)){
 				$finalQuery .= ' LIMIT ' . $limit;
@@ -583,299 +608,81 @@ class core_kernel_persistence_hardsql_Class
 			
 			try{
 				$result = $dbWrapper->query($finalQuery);
+				$idUris = array();
 				while ($row = $result->fetch()){
-					$returnValue[$row['uri']] = new core_kernel_classes_Resource($row['uri']);
+					if (empty($idUris[$row['tblname']])){
+						$idUris[$row['tblname']] = array();
+					}
+					
+					$idUris[$row['tblname']][$row['id']] = $row['uri'];
+				}
+				
+				// Order if needed.
+				if (!empty($order) && !empty($idUris)){
+					
+					$queries = array();
+					foreach ($idUris as $tblname => $value){
+						$ids = array_keys($value);
+						$ids = implode(', ', $ids);
+						$orderProp = new core_kernel_classes_Property($order);
+						$propertyLocation = $referencer->propertyLocation($orderProp);
+						$orderPropShortName = core_kernel_persistence_hardapi_Utils::getShortName($orderProp);
+						$propstblname = $tblname . 'Props';
+						
+						$sqlQuery  = 'SELECT "id", "uri", "property_value" FROM (';
+						$sqlQuery .= 'SELECT "b"."id", "b"."uri", "p"."property_uri" AS "property_uri", COALESCE("p"."property_value", "p"."property_foreign_uri") AS "property_value" FROM "' . $tblname . '" "b" ';
+						$sqlQuery .= 'INNER JOIN "' . $propstblname . '" "p" ';
+						
+						// Deal with the language.
+						$langToken = '';
+						if(preg_match('/^[a-zA-Z]{2,4}$/', $lang)){
+							$quotedLang = $dbWrapper->dbConnector->quote($lang);
+							$langToken = ' AND ("p".l_language" = \'\' OR "p".l_language" = ' . $quotedLang . ')';
+						}
+						
+						$sqlQuery .= 'ON ("b"."id" IN(' . $ids . ') AND "b"."id" = "p"."instance_id"' . $langToken . ') ';
+
+						if (in_array($baseTableName, $propertyLocation)){
+							$sqlQuery .= 'UNION ';
+							
+							$sqlQuery .= 'SELECT "b"."id", "b"."uri", \'' . $order . '\' AS "property_uri", "b"."' . $orderPropShortName. '" AS "property_value" ';
+							$sqlQuery .= 'FROM "' . $tblname . '" "b" ';
+							$sqlQuery .= 'JOIN "' . $propstblname . '" "p" ';
+							$sqlQuery .= 'ON ("b"."id" IN(' . $ids . ') AND "b"."id" = "p"."instance_id") ';
+						}
+						
+						$sqlQuery .= ') AS "s"';
+						
+						$queries[] = $sqlQuery;
+					}
+					
+					$finalQuery = implode(' UNION ', $queries);
+					$finalQuery = 'SELECT "uri", "property_value" FROM (' . $finalQuery;
+					$finalQuery .= ') AS "search" GROUP BY "uri", "property_value" ORDER by "property_value"';
+					$idUris = array();
+					
+					$sqlResult = $dbWrapper->query($finalQuery);
+					while ($row = $sqlResult->fetch()){
+						$instance = new core_kernel_classes_Resource($row['uri']);
+						$returnValue[$instance->uriResource] = $instance;
+					}
+				}
+				else{
+					foreach ($idUris as $tblname => $value){
+						foreach ($value as $uri){
+							$instance = new core_kernel_classes_Resource($uri);
+							$returnValue[$instance->uriResource] = $instance;
+						}
+					}
 				}
 			}
 			catch (PDOException $e){
 				throw new core_kernel_persistence_hardsql_Exception("Unable to search instances for the resource {$resource->uriResource} : " .$e->getMessage());
 			}
 		}
+		// section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
 		
     	return (array) $returnValue;
-    }
-    
-    /**
-     * Short description of method searchInstances
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @param  array propertyFilters
-     * @param  array options
-     * @return array
-     */
-    public function oldsearchInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array())
-    {
-        $returnValue = array();
-
-        // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 begin
-		/*
-		options lists:
-		like			: (bool) 	true/false (default: true)
-		chaining		: (string) 	'or'/'and' (default: 'and')
-		recursive		: (int) 	recursivity depth (default: 0)
-		lang			: (string) 	e.g. 'EN', 'FR' (default: '') for all properties!
-		offset  		: default 0
-		limit           : default select all
-		order			: property to order by
-		orderdir		: direction of order (default: 'ASC')
-		*/
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		
-		// 'like' option.
-		$like = true;
-		if (!empty($options['like'])){
-			$like = ($options['like'] === true);
-		}
-		
-		// 'chaining' option.
-		$chaining = 'and';
-		if (!empty($options['chaining'])){
-			$chainingValue = strtolower($options['chaining']);
-			if ($chainingValue == 'and' || $chainingValue == 'or'){
-				$chaining = $chainingValue;
-			}
-		}
-		
-		// 'recursive' option.
-		$recursive = 0;
-		if (isset($options['recursive'])){
-			$recursive = intval($options['recursive']);
-		}
-		
-		// 'offset' option. If not provided, we set it to null.
-		$offset = null;
-		if (isset($options['offset'])){
-			$offset = intval($options['offset']);
-		}
-		
-		// 'limit' option. If not provided, we wet it to null as well.
-		$limit = null;
-		if (isset($options['limit'])){
-			$limit = intval($options['limit']);
-		}
-		
-		// 'order' and 'orderdir' options.
-		$order = null;
-		$orderdir = 'ASC';
-		if (!empty($options['order'])){
-			$order = $options['order'];
-			if (!empty($options['orderdir'])){
-				$orderdirValue = strtolower($options['orderdir']);
-				
-				if ($orderdirValue == 'asc' || $orderdirValue == 'desc'){
-					$orderdir = $orderdirValue;
-				}
-			}
-		}
-
-		$tableName = '';
-		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
-		$classLocations = $referencer->classLocations($resource);
-		if (isset($classLocations[0])){
-			$tableName = $classLocations[0]['table'];
-		}
-		else{
-			return $returnValue;
-		}
-
-		$tablePropertiesName = $tableName.'Props';
-		$tableNames = array('t0' => $tableName);
-
-		$conditions = array();
-		$joinConditions = array();
-		$propertyFoundCount = 0;
-		foreach ($propertyFilters as $propUri => $pattern){
-
-			$property = new core_kernel_classes_Property($propUri);
-			$propName = core_kernel_persistence_hardapi_Utils::getShortName($property);
-
-			$propsTabIndex = '00';
-
-			$propertyLocation = $referencer->propertyLocation($property);
-			if (in_array($tablePropertiesName, $propertyLocation)){
-				$propertyFoundCount++;
-				$classPropsTabIndex = count($tableNames);
-				$tableNames['t'.$classPropsTabIndex] = $tablePropertiesName;
-
-				$langToken = "";
-				if (!empty($options['lang']) && $property->isLgDependent()){
-					if(preg_match('/^[a-zA-Z]{2,4}$/', $options['lang'])){
-						$langToken = ' AND ( "p"."l_language" = \'\' OR "p"."l_language" = \''.$options['lang'].'\')';
-					}
-				}
-
-				$condition = "";
-
-				if (is_string($pattern)){
-
-					if (!empty($pattern)){
-
-						$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
-						$condition = '("p"."property_value" ' . $searchPattern . ' OR "p"."property_foreign_uri" ' . $searchPattern . ') ' . $langToken;
-					}
-				}
-				else if (is_array($pattern)){
-					if (count($pattern) > 0){
-						$multiCondition =  "(";
-						foreach ($pattern as $i => $patternToken){
-
-							if (!empty($patternToken)){
-								$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
-
-								if ($i > 0){
-									$multiCondition .= " OR ";
-								}
-								$multiCondition .= ' ( ("p"."property_value" '.$searchPattern.' OR "p"."property_foreign_uri" '.$searchPattern.') '.$langToken.')';
-							}
-						}
-						$condition = "{$multiCondition} ) ";
-					}
-				}
-				if (!empty($condition) && $chaining == 'and'){
-					$joinConditions[] = 'INNER JOIN "' . $tablePropertiesName . '" "p" ON (' . $condition  . ' AND "p"."property_uri" = \''.$propUri.'\' AND "b"."id" = "p"."instance_id")';
-				}
-				else{
-					$conditions[] = ' ( "b"."id" = "p"."instance_id" AND "p"."property_uri" = \''.$propUri.'\' AND '.$condition.' )';
-				}
-
-			}
-			else if (in_array($tableName, $propertyLocation)){
-				$propertyFoundCount++;
-				$propsTabIndex = count($tableNames);
-
-				if (is_string($pattern)){
-					if(!empty($pattern)){
-						$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
-						$conditions[] = ' ( "b"."'.$propName.'" '.$searchPattern.' )';
-					}
-				}
-				else if (is_array($pattern)){
-					if (count($pattern) > 0){
-						$multiCondition =  "(";
-						foreach ($pattern as $i => $patternToken){
-
-							$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
-
-							if($i > 0){
-								$multiCondition .= " OR ";
-							}
-							$multiCondition .= ' ( "b"."'.$propName.'" '.$searchPattern.' )';
-						}
-						$conditions[] = "{$multiCondition}) ";
-					}
-				}
-
-			}
-		}
-		
-		if (!empty($propertyFilters) && $propertyFoundCount == 0){
-			return $returnValue;
-		}
-		
-		$targetTables = array('"' . $tableNames['t0'] . '" "b"');
-		if (!empty($conditions) && $chaining == 'or'){
-			array_push($targetTables, '"' . $tablePropertiesName . '" "p"');
-		}
-		
-		$targetTablesQuery = implode(',', $targetTables);
-		
-		$sqlQuery = 'SELECT DISTINCT "b"."id", "b"."uri" FROM ' . $targetTablesQuery. ' ';
-		$sqlQuery .= implode(' ', $joinConditions);
-
-		if (!empty($conditions)){
-			$sqlQuery .= ' WHERE ';
-			$intersect = true;
-			if ($chaining == 'or'){
-				$intersect = false;
-			}
-
-			$j = 0;
-			foreach ($conditions as $condition){
-				if ($j > 0){
-					$sqlQuery .= ($intersect) ? ' AND ' : ' OR ';
-				}
-				$sqlQuery .= $condition;
-				$j++;
-			}
-		}
-		
-		// Deal with the 'offset' & 'limit' options.
-		if (null !== $limit){
-			$queryOffset = 0;
-			$queryLimit = $limit;
-			
-			if ($queryLimit === 0){
-				$queryLimit = 1000000;
-			}
-			
-			if (null !== $offset){
-				$queryOffset = $offset;
-			}
-			
-			$sqlQuery = $dbWrapper->limitStatement($sqlQuery, $queryLimit, $queryOffset);
-		}
-		
-		try{
-			$sqlResult = $dbWrapper->query($sqlQuery);
-			$idUris = array();
-			while ($row = $sqlResult->fetch()){
-				$idUris[$row['id']] = $row['uri'];
-			}
-			
-			if (!empty($order)){
-				$ids = array_keys($idUris);
-				$ids = implode(', ', $ids);
-				$orderProp = new core_kernel_classes_Property($order);
-				$propertyLocation = $referencer->propertyLocation($orderProp);
-				$orderPropShortName = core_kernel_persistence_hardapi_Utils::getShortName($orderProp);
-				
-				$sqlQuery  = 'SELECT "uri" FROM (';
-				$sqlQuery .= 'SELECT "b"."uri", "p"."property_uri" AS "property_uri", "p"."property_value" AS "property_value" FROM "' . $tableNames['t0'] . '" "b" ';
-				$sqlQuery .= 'INNER JOIN "' . $tablePropertiesName . '" "p" ';
-				$sqlQuery .= 'ON ("b"."id" IN(' . $ids . ') AND "b"."id" = "p"."instance_id") ';
-				$sqlQuery .= 'UNION ';
-				
-				if (in_array($tableNames['t0'], $propertyLocation)){
-					$sqlQuery .= 'SELECT "b"."uri", \'' . $order . '\' AS "property_uri", "b"."' . $orderPropShortName. '" AS "property_value" ';
-				}
-				else{
-					$sqlQuery .= 'SELECT "b"."uri", "p"."property_uri" AS "property_uri", "p"."property_value" AS "property_value" ';
-				}
-				$sqlQuery .= 'FROM "' . $tableNames['t0'] . '" "b" ';
-				$sqlQuery .= 'JOIN "' . $tablePropertiesName . '" "p" ';
-				$sqlQuery .= 'ON ("b"."id" IN(' . $ids . ') AND "b"."id" = "p"."instance_id") ';
-				$sqlQuery .= ') AS "search" WHERE property_uri = \'' . $order . '\' GROUP BY "uri" ORDER BY "search"."property_value" ' . $orderdir;
-				
-				$sqlResult = $dbWrapper->query($sqlQuery);
-				while ($row = $sqlResult->fetch()){
-					$instance = new core_kernel_classes_Resource($row['uri']);
-					$returnValue[$instance->uriResource] = $instance;
-				}
-			}
-			else{
-				foreach ($idUris as $iu){
-					$instance = new core_kernel_classes_Resource($iu);
-					$returnValue[$instance->uriResource] = $instance;	
-				}
-			}
-			
-			foreach ($options['additionalClasses'] as $aC){
-				$returnValue = array_merge($returnValue, $aC->searchInstances($propertyFilters, array_merge($options, array('additionalClasses' => array()))));
-				// The query limit might be exceeded (again).
-				if (isset($queryLimit) && count($returnValue) > $queryLimit){
-					$returnValue = array_slice($returnValue, 0, $queryLimit);
-					break;
-				}
-			}
-		}
-		catch (PDOException $e){
-			throw new core_kernel_persistence_hardsql_Exception("Unable to search instances for the resource {$resource->uriResource} : " .$e->getMessage());
-		}
-        // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 end
-
-        return (array) $returnValue;
     }
 
     /**
