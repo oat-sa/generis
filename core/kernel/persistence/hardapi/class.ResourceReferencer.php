@@ -1077,6 +1077,9 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     	
     	self::$_resources			= array();
     	self::$_resources_loaded	= false;
+    	core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo = array();
+    	core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo = array();
+    	core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo = array();
     	
         $cachefile = realpath(GENERIS_CACHE_PATH) . '/hard-api-property.cache';
         if (file_exists($cachefile)) {
