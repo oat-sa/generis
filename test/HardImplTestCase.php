@@ -561,6 +561,8 @@ class HardImplTestCase extends UnitTestCase {
 		core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unreferenceClass(new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#Languages'));
 		
 		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+		$referencer->unReferenceClass($this->targetWorkClass);
+		$referencer->unReferenceClass($this->targetMovieClass);
 		$this->targetWorkClass->delete(true);
 		$this->targetMovieClass->delete(true);
 		$this->assertFalse($this->targetWorkClass->exists());
