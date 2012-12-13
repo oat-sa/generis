@@ -383,6 +383,30 @@ class HardImplTestCase extends UnitTestCase {
 		$this->assertEqual(count($instances), 0);
 	}
 	
+	public function testGetRdfTriples(){
+		$workClass = $this->targetWorkClass;
+		$authorProperty = $this->targetAuthorProperty;
+		
+		// We now test rdfTriples on a hardified resource.
+		$filters = array($authorProperty->getUri() => 'John Ronald Reuel Tolkien');
+		$options = array('like' => false);
+		$instances = $workClass->searchInstances($filters, $options);
+		$this->assertEqual(count($instances), 1);
+		$book = current($instances);
+		$this->assertEqual($book->getLabel(), 'The Lord of the Rings');
+		$triples = $book->getRdfTriples()->toArray();
+		$this->assertEqual($triples[0]->predicate, 'http://www.w3.org/2000/01/rdf-schema#label');
+		$this->assertEqual($triples[1]->predicate, $authorProperty->getUri());
+		$this->assertEqual($triples[1]->object, 'John Ronald Reuel Tolkien');
+		$this->assertEqual($triples[2]->predicate, RDF_TYPE);
+		$this->assertEqual($triples[2]->object, $workClass->getUri());
+		
+		// We now test rdfTriples on a hardified class.
+		$triples = $workClass->getRdfTriples()->toArray();
+		$this->assertEqual($triples[0]->predicate, RDF_TYPE);
+		$this->assertEqual($triples[0]->object, RDF_CLASS);
+	}
+	
 	public function testForceMode (){
 		// Check if the returner implementation are correct
 		core_kernel_persistence_PersistenceProxy::forceMode (PERSISTENCE_SMOOTH);
@@ -485,11 +509,6 @@ class HardImplTestCase extends UnitTestCase {
 	
 	public function testRemovePropertyValues (){
 		foreach ($this->targetSubjectClass->getInstances() as $instance){	
-			
-			// Remove literal single property
-//			$instance->removePropertyValues (new core_kernel_classes_Property(RDFS_LABEL));
-//			$props = $instance->getPropertyValues (new core_kernel_classes_Property(RDFS_LABEL));
-//			$this->assertTrue (empty($props));
 			
 			// Remove foreign single property
 			$instance->removePropertyValues(new core_kernel_classes_Property('http://www.tao.lu/Ontologies/generis.rdf#userDefLg'));
