@@ -374,6 +374,9 @@ class common_Collection
         $returnValue = array();
 
         // section -87--2--3--76--8049d3c:12424ebfe97:-8000:00000000000017D1 begin
+        foreach ($this->getIterator() as $it){
+        	$returnValue[] = $it;
+        }
         // section -87--2--3--76--8049d3c:12424ebfe97:-8000:00000000000017D1 end
 
         return (array) $returnValue;
