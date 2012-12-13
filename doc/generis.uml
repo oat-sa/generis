@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Design generis API oo</activediagram>
+      <activediagram>Hard Database API</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Dec 11 15:36:47 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Dec 12 16:14:29 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -13688,6 +13688,15 @@ The columns is an associative array with a particular format:
                         <UML:Class xmi.id = '127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015A3'
                           name = 'TableManager' visibility = 'public' isSpecification = 'false' isRoot = 'false'
                           isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DD2'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>The TableManager class contains the logic to deal with tables in Hard SQL mode.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:Classifier.feature>
                             <UML:Attribute xmi.id = '127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015A4'
                               name = 'name' visibility = 'protected' isSpecification = 'false' ownerScope = 'instance'
@@ -13726,11 +13735,29 @@ The columns is an associative array with a particular format:
                               <UML:ModelElement.stereotype>
                                 <UML:Stereotype xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000AF1'/>
                               </UML:ModelElement.stereotype>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DD3'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Creates a new instance of TableManager.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:BehavioralFeature.parameter>
                                 <UML:Parameter xmi.id = '127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AB'
                                   name = 'return' isSpecification = 'false' kind = 'return'/>
                                 <UML:Parameter xmi.id = '127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AC'
                                   name = 'name' isSpecification = 'false' kind = 'in'>
+                                  <UML:ModelElement.taggedValue>
+                                    <UML:TaggedValue xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DD4'
+                                      isSpecification = 'false'>
+                                      <UML:TaggedValue.dataValue>The name of the table you have to deal with.</UML:TaggedValue.dataValue>
+                                      <UML:TaggedValue.type>
+                                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                      </UML:TaggedValue.type>
+                                    </UML:TaggedValue>
+                                  </UML:ModelElement.taggedValue>
                                   <UML:Parameter.type>
                                     <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                                   </UML:Parameter.type>
@@ -13741,6 +13768,15 @@ The columns is an associative array with a particular format:
                               name = 'exists' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                               isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                               isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DD5'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Indicates if the table with the name you provided at instanciation time exists within the database.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:BehavioralFeature.parameter>
                                 <UML:Parameter xmi.id = '127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AE'
                                   name = 'return' isSpecification = 'false' kind = 'return'>
@@ -13754,6 +13790,15 @@ The columns is an associative array with a particular format:
                               name = 'create' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                               isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                               isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DD6'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Create a new table with the columns names givien in argument and the name provided with the constructor call.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:BehavioralFeature.parameter>
                                 <UML:Parameter xmi.id = '127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015B0'
                                   name = 'return' isSpecification = 'false' kind = 'return'>
@@ -13777,9 +13822,244 @@ The columns is an associative array with a particular format:
                               name = 'remove' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                               isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                               isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DD7'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Remove the table with the name provided at instanciation time from the database.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:BehavioralFeature.parameter>
                                 <UML:Parameter xmi.id = '127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015BA'
                                   name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:ModelElement.taggedValue>
+                                    <UML:TaggedValue xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DD8'
+                                      isSpecification = 'false'>
+                                      <UML:TaggedValue.dataValue>Returns true if the table was successfully deleted. Otherwise false is returned.</UML:TaggedValue.dataValue>
+                                      <UML:TaggedValue.type>
+                                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                      </UML:TaggedValue.type>
+                                    </UML:TaggedValue>
+                                  </UML:ModelElement.taggedValue>
+                                  <UML:Parameter.type>
+                                    <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                              </UML:BehavioralFeature.parameter>
+                            </UML:Operation>
+                            <UML:Operation xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DD9'
+                              name = 'getName' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                              isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                              isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DDB'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Provides the name of the currently targeted table.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
+                              <UML:BehavioralFeature.parameter>
+                                <UML:Parameter xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DDA'
+                                  name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                              </UML:BehavioralFeature.parameter>
+                            </UML:Operation>
+                            <UML:Operation xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DDC'
+                              name = 'setName' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                              isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                              isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DE0'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Set the name of the table you want the TableManager to deal with.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
+                              <UML:BehavioralFeature.parameter>
+                                <UML:Parameter xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DDD'
+                                  name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:Parameter.type>
+                                    <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                                <UML:Parameter xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DDE'
+                                  name = 'name' isSpecification = 'false' kind = 'in'>
+                                  <UML:ModelElement.taggedValue>
+                                    <UML:TaggedValue xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DDF'
+                                      isSpecification = 'false'>
+                                      <UML:TaggedValue.dataValue>The name of the table you want to deal with.</UML:TaggedValue.dataValue>
+                                      <UML:TaggedValue.type>
+                                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                      </UML:TaggedValue.type>
+                                    </UML:TaggedValue>
+                                  </UML:ModelElement.taggedValue>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                              </UML:BehavioralFeature.parameter>
+                            </UML:Operation>
+                            <UML:Operation xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DE1'
+                              name = 'getPropertyColumns' visibility = 'public' isSpecification = 'false'
+                              ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                              isLeaf = 'false' isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DE4'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Get the columns from the currently targeted table that aim at containing property values. If the targeted table is not a &quot;base&quot; table, a core_kernel_persistence_hardapi_Exception is thrown.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
+                              <UML:BehavioralFeature.parameter>
+                                <UML:Parameter xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DE2'
+                                  name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:ModelElement.taggedValue>
+                                    <UML:TaggedValue xmi.id = '10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DE3'
+                                      isSpecification = 'false'>
+                                      <UML:TaggedValue.dataValue>An array where keys are table column names and values are the corresponding RDF Property URIs.</UML:TaggedValue.dataValue>
+                                      <UML:TaggedValue.type>
+                                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                      </UML:TaggedValue.type>
+                                    </UML:TaggedValue>
+                                  </UML:ModelElement.taggedValue>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                              </UML:BehavioralFeature.parameter>
+                            </UML:Operation>
+                            <UML:Operation xmi.id = '10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DE5'
+                              name = 'getPropertiesTable' visibility = 'public' isSpecification = 'false'
+                              ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                              isLeaf = 'false' isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DE7'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Obtain the &apos;properties table&apos; name bound to the current &apos;base table&apos;. An exception will be thrown if the current table is not a &apos;base table&apos; or if the corresponding &apos;properties table&apos; does not exist.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
+                              <UML:BehavioralFeature.parameter>
+                                <UML:Parameter xmi.id = '10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DE6'
+                                  name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:ModelElement.taggedValue>
+                                    <UML:TaggedValue xmi.id = '10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DE8'
+                                      isSpecification = 'false'>
+                                      <UML:TaggedValue.dataValue>The table name.</UML:TaggedValue.dataValue>
+                                      <UML:TaggedValue.type>
+                                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                      </UML:TaggedValue.type>
+                                    </UML:TaggedValue>
+                                  </UML:ModelElement.taggedValue>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                              </UML:BehavioralFeature.parameter>
+                            </UML:Operation>
+                            <UML:Operation xmi.id = '10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DE9'
+                              name = 'getBaseTable' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                              isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                              isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DEC'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Obtain the &apos;base table&apos; name corresponding to the current table. Exceptions will be thrown
+- if the current table does not exist.
+- if the current table is not a &apos;properties table&apos;
+- if there is no corresponding &apos;base table&apos;</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
+                              <UML:BehavioralFeature.parameter>
+                                <UML:Parameter xmi.id = '10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DEA'
+                                  name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:ModelElement.taggedValue>
+                                    <UML:TaggedValue xmi.id = '10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DEB'
+                                      isSpecification = 'false'>
+                                      <UML:TaggedValue.dataValue>The base table name.</UML:TaggedValue.dataValue>
+                                      <UML:TaggedValue.type>
+                                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                      </UML:TaggedValue.type>
+                                    </UML:TaggedValue>
+                                  </UML:ModelElement.taggedValue>
+                                  <UML:Parameter.type>
+                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                              </UML:BehavioralFeature.parameter>
+                            </UML:Operation>
+                            <UML:Operation xmi.id = '10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DED'
+                              name = 'isBaseTable' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                              isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                              isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DF0'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Check if the current table is a &apos;base table&apos;.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
+                              <UML:BehavioralFeature.parameter>
+                                <UML:Parameter xmi.id = '10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DEE'
+                                  name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:ModelElement.taggedValue>
+                                    <UML:TaggedValue xmi.id = '10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DEF'
+                                      isSpecification = 'false'>
+                                      <UML:TaggedValue.dataValue>Returns true if the current table is a &apos;base table&apos;, false otherwise.</UML:TaggedValue.dataValue>
+                                      <UML:TaggedValue.type>
+                                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                      </UML:TaggedValue.type>
+                                    </UML:TaggedValue>
+                                  </UML:ModelElement.taggedValue>
+                                  <UML:Parameter.type>
+                                    <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                                  </UML:Parameter.type>
+                                </UML:Parameter>
+                              </UML:BehavioralFeature.parameter>
+                            </UML:Operation>
+                            <UML:Operation xmi.id = '10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DF1'
+                              name = 'isPropertiesTable' visibility = 'public' isSpecification = 'false'
+                              ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                              isLeaf = 'false' isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DF4'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Check if the current table is a &apos;properties table&apos;.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
+                              <UML:BehavioralFeature.parameter>
+                                <UML:Parameter xmi.id = '10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DF2'
+                                  name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:ModelElement.taggedValue>
+                                    <UML:TaggedValue xmi.id = '10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DF3'
+                                      isSpecification = 'false'>
+                                      <UML:TaggedValue.dataValue>Returns true if the current table is &apos;properties table&apos;, othewise false.</UML:TaggedValue.dataValue>
+                                      <UML:TaggedValue.type>
+                                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                      </UML:TaggedValue.type>
+                                    </UML:TaggedValue>
+                                  </UML:ModelElement.taggedValue>
                                   <UML:Parameter.type>
                                     <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                                   </UML:Parameter.type>
@@ -33434,7 +33714,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="true"
@@ -64022,7 +64302,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig7"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[472, 400, 264, 133]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[480, 424, 264, 234]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015A3"
        fill="1"
        fillcolor="220 220 220"
@@ -64034,18 +64314,18 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </private>
     
     <rectangle name="Fig7.0"
-      x="472"
-      y="400"
+      x="480"
+      y="424"
       width="264"
-      height="133"
+      height="234"
       fill="1"
       fillcolor="220 220 220"
       stroke="1"
       strokecolor="200 60 60"
     />
     <text name="Fig7.1"
-      x="473"
-      y="401"
+      x="481"
+      y="425"
       width="262"
       height="21"
       fill="0"
@@ -64060,7 +64340,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       justification="Center"
     >TableManager</text>
     <group name="Fig7.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[473, 401, 240, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[481, 425, 240, 0]"
          href="127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015A3"
          fill="0"
          fillcolor="220 220 220"
@@ -64072,8 +64352,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig7.2.0"
-        x="473"
-        y="401"
+        x="481"
+        y="425"
         width="240"
         height="0"
         fill="0"
@@ -64083,8 +64363,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig7.3"
-      x="472"
-      y="422"
+      x="480"
+      y="446"
       width="264"
       height="1"
       fill="1"
@@ -64093,7 +64373,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="200 60 60"
     />
     <group name="Fig7.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[473, 423, 262, 39]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[481, 447, 262, 38]"
          href="127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015A3"
          fill="0"
          fillcolor="220 220 220"
@@ -64104,18 +64384,18 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig7.4.0"
-        x="473"
-        y="423"
+        x="481"
+        y="447"
         width="262"
-        height="39"
+        height="38"
         fill="0"
         fillcolor="white"
         stroke="0"
         strokecolor="200 60 60"
       />
       <text name="Fig7.4.1"
-        x="473"
-        y="423"
+        x="481"
+        y="447"
         width="262"
         height="15"
         fill="0"
@@ -64130,8 +64410,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >name : string</text>
       <text name="Fig7.4.2"
-        x="473"
-        y="438"
+        x="481"
+        y="462"
         width="262"
         height="21"
         fill="0"
@@ -64147,8 +64427,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >_tables : array</text>
     </group>
     <rectangle name="Fig7.5"
-      x="472"
-      y="462"
+      x="480"
+      y="484"
       width="264"
       height="1"
       fill="1"
@@ -64157,7 +64437,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="200 60 60"
     />
     <group name="Fig7.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[473, 463, 262, 69]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[481, 485, 262, 173]"
          href="127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015A3"
          fill="0"
          fillcolor="220 220 220"
@@ -64168,18 +64448,18 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig7.6.0"
-        x="473"
-        y="463"
+        x="481"
+        y="485"
         width="262"
-        height="69"
+        height="173"
         fill="0"
         fillcolor="white"
         stroke="0"
         strokecolor="200 60 60"
       />
       <text name="Fig7.6.1"
-        x="473"
-        y="463"
+        x="481"
+        y="485"
         width="262"
         height="15"
         fill="0"
@@ -64194,8 +64474,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >«create» __construct(name : string)</text>
       <text name="Fig7.6.2"
-        x="473"
-        y="478"
+        x="481"
+        y="500"
         width="262"
         height="15"
         fill="0"
@@ -64210,8 +64490,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >exists() : boolean</text>
       <text name="Fig7.6.3"
-        x="473"
-        y="493"
+        x="481"
+        y="515"
         width="262"
         height="15"
         fill="0"
@@ -64226,10 +64506,10 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         justification="Left"
       >create(columns : array = array()) : boolean</text>
       <text name="Fig7.6.4"
-        x="473"
-        y="508"
+        x="481"
+        y="530"
         width="262"
-        height="21"
+        height="15"
         fill="0"
         fillcolor="220 220 220"
         stroke="0"
@@ -64241,6 +64521,118 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >remove() : boolean</text>
+      <text name="Fig7.6.5"
+        x="481"
+        y="545"
+        width="262"
+        height="15"
+        fill="0"
+        fillcolor="220 220 220"
+        stroke="0"
+        strokecolor="200 60 60"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getName() : string</text>
+      <text name="Fig7.6.6"
+        x="481"
+        y="560"
+        width="262"
+        height="15"
+        fill="0"
+        fillcolor="220 220 220"
+        stroke="0"
+        strokecolor="200 60 60"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setName(name : string) : void</text>
+      <text name="Fig7.6.7"
+        x="481"
+        y="575"
+        width="262"
+        height="15"
+        fill="0"
+        fillcolor="220 220 220"
+        stroke="0"
+        strokecolor="200 60 60"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getPropertyColumns() : array</text>
+      <text name="Fig7.6.8"
+        x="481"
+        y="590"
+        width="262"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getPropertiesTable() : string</text>
+      <text name="Fig7.6.9"
+        x="481"
+        y="605"
+        width="262"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getBaseTable() : string</text>
+      <text name="Fig7.6.10"
+        x="481"
+        y="620"
+        width="262"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >isBaseTable() : boolean</text>
+      <text name="Fig7.6.11"
+        x="481"
+        y="635"
+        width="262"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >isPropertiesTable() : boolean</text>
     </group>
   </group>
   <group name="Fig8"
@@ -64482,7 +64874,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig9"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[472, 560, 298, 117]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[472, 668, 298, 117]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1-8da8919:12f7878e80a:-8000:000000000000161B"
        fill="1"
        fillcolor="220 220 220"
@@ -64495,7 +64887,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig9.0"
       x="472"
-      y="560"
+      y="668"
       width="298"
       height="117"
       fill="1"
@@ -64505,7 +64897,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     />
     <text name="Fig9.1"
       x="473"
-      y="561"
+      y="669"
       width="296"
       height="21"
       fill="0"
@@ -64520,7 +64912,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       justification="Center"
     >RowManager</text>
     <group name="Fig9.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[473, 561, 245, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[473, 669, 245, 0]"
          href="127-0-1-1-8da8919:12f7878e80a:-8000:000000000000161B"
          fill="0"
          fillcolor="220 220 220"
@@ -64533,7 +64925,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig9.2.0"
         x="473"
-        y="561"
+        y="669"
         width="245"
         height="0"
         fill="0"
@@ -64544,7 +64936,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig9.3"
       x="472"
-      y="582"
+      y="690"
       width="298"
       height="1"
       fill="1"
@@ -64553,7 +64945,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="200 60 60"
     />
     <group name="Fig9.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[473, 583, 296, 38]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[473, 691, 296, 38]"
          href="127-0-1-1-8da8919:12f7878e80a:-8000:000000000000161B"
          fill="0"
          fillcolor="220 220 220"
@@ -64565,7 +64957,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig9.4.0"
         x="473"
-        y="583"
+        y="691"
         width="296"
         height="38"
         fill="0"
@@ -64575,7 +64967,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
       <text name="Fig9.4.1"
         x="473"
-        y="583"
+        y="691"
         width="296"
         height="15"
         fill="0"
@@ -64591,7 +64983,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >table : string</text>
       <text name="Fig9.4.2"
         x="473"
-        y="598"
+        y="706"
         width="296"
         height="21"
         fill="0"
@@ -64608,7 +65000,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig9.5"
       x="472"
-      y="621"
+      y="729"
       width="298"
       height="1"
       fill="1"
@@ -64617,7 +65009,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="200 60 60"
     />
     <group name="Fig9.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[473, 622, 296, 53]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[473, 730, 296, 53]"
          href="127-0-1-1-8da8919:12f7878e80a:-8000:000000000000161B"
          fill="0"
          fillcolor="220 220 220"
@@ -64629,7 +65021,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig9.6.0"
         x="473"
-        y="622"
+        y="730"
         width="296"
         height="53"
         fill="0"
@@ -64639,7 +65031,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
       <text name="Fig9.6.1"
         x="473"
-        y="622"
+        y="730"
         width="296"
         height="15"
         fill="0"
@@ -64655,7 +65047,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >«create» __construct(table : string,columns : array)</text>
       <text name="Fig9.6.2"
         x="473"
-        y="637"
+        y="745"
         width="296"
         height="15"
         fill="0"
@@ -64671,7 +65063,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >insertRows(rows : array) : boolean</text>
       <text name="Fig9.6.3"
         x="473"
-        y="652"
+        y="760"
         width="296"
         height="21"
         fill="0"

@@ -73,6 +73,24 @@ class HardApiTestCase extends UnitTestCase {
 		$this->assertFalse($myRoleTblMgr->exists());
 	}
 	
+	public function testFailures(){
+		try{
+			$tblmgr = new core_kernel_persistence_hardapi_TableManager('');
+			$this->assertTrue(false, "An exception should be thrown because the table name is empty.");
+		}
+		catch (core_kernel_persistence_hardapi_Exception $e){
+			$this->assertTrue(true);
+		}
+		
+		try{
+			$tblmgr = new core_kernel_persistence_hardapi_TableManager('statements');
+			$this->assertTrue(false, "An exception should be thrown because the table name is dangerous.");
+		}
+		catch (core_kernel_persistence_hardapi_Exception $e){
+			$this->assertTrue(true);
+		}
+	}
+	
 	/**
 	 * Test the referencer on resources
 	 * @see core_kernel_persistence_hardapi_ResourceReferencer

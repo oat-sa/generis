@@ -3,22 +3,15 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API -
+ * The TableManager class contains the logic to deal with tables in Hard SQL
  *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 05.05.2011, 10:10:07 with ArgoUML PHP module
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
 
 if (0 > version_compare(PHP_VERSION, '5')) {
-	die('This file was generated for PHP 5');
+    die('This file was generated for PHP 5');
 }
 
 /* user defined includes */
@@ -30,49 +23,49 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015A3-constants end
 
 /**
- * Short description of class core_kernel_persistence_hardapi_TableManager
+ * The TableManager class contains the logic to deal with tables in Hard SQL
  *
  * @access public
- * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
 class core_kernel_persistence_hardapi_TableManager
 {
-	// --- ASSOCIATIONS ---
+    // --- ASSOCIATIONS ---
 
 
-	// --- ATTRIBUTES ---
+    // --- ATTRIBUTES ---
 
-	/**
-	 * Short description of attribute name
-	 *
-	 * @access protected
-	 * @var string
-	 */
-	protected $name = '';
+    /**
+     * Short description of attribute name
+     *
+     * @access protected
+     * @var string
+     */
+    protected $name = '';
 
-	/**
-	 * Short description of attribute _tables
-	 *
-	 * @access private
-	 * @var array
-	 */
-	private static $_tables = array();
+    /**
+     * Short description of attribute _tables
+     *
+     * @access private
+     * @var array
+     */
+    private static $_tables = array();
 
-	// --- OPERATIONS ---
+    // --- OPERATIONS ---
 
-	/**
-	 * Short description of method __construct
-	 *
-	 * @access public
-	 * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
-	 * @param  string name
-	 * @return mixed
-	 */
-	public function __construct($name)
-	{
-		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AA begin
+    /**
+     * Creates a new instance of TableManager.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string name The name of the table you have to deal with.
+     * @return mixed
+     */
+    public function __construct($name)
+    {
+        // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AA begin
 
 		if(count(self::$_tables) == 0){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
@@ -81,47 +74,47 @@ class core_kernel_persistence_hardapi_TableManager
 				self::$_tables[] = $row['table'];
 			}
 		}
-		if(!preg_match("/^_[0-9a-zA-Z\-_]{4,}$/", $name)){
-			throw new core_kernel_persistence_hardapi_Exception("Dangerous table name '$name' . Table name must begin by a underscore, followed  with only alphanumeric, - and _ characters are allowed");
-		}
-		$this->name = $name;
 		
-		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AA end
-	}
+		$this->setName($name);
+		
+        // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AA end
+    }
 
-	/**
-	 * Short description of method exists
-	 *
-	 * @access public
-	 * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
-	 * @return boolean
-	 */
-	public function exists()
-	{
-		$returnValue = (bool) false;
+    /**
+     * Indicates if the table with the name you provided at instanciation time
+     * within the database.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return boolean
+     */
+    public function exists()
+    {
+        $returnValue = (bool) false;
 
-		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AD begin
+        // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AD begin
 
 		$returnValue = in_array($this->name, self::$_tables);
 
-		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AD end
+        // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AD end
 
-		return (bool) $returnValue;
-	}
+        return (bool) $returnValue;
+    }
 
-	/**
-	 * Short description of method create
-	 *
-	 * @access public
-	 * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
-	 * @param  array columns
-	 * @return boolean
-	 */
-	public function create($columns = array())
-	{
-		$returnValue = (bool) false;
+    /**
+     * Create a new table with the columns names givien in argument and the name
+     * with the constructor call.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  array columns
+     * @return boolean
+     */
+    public function create($columns = array())
+    {
+        $returnValue = (bool) false;
 
-		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AF begin
+        // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AF begin
 		
 		if(!$this->exists() && !empty($this->name)){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
@@ -187,39 +180,39 @@ class core_kernel_persistence_hardapi_TableManager
 				
 		}
 		
-		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AF end
+        // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AF end
 
-		return (bool) $returnValue;
-	}
+        return (bool) $returnValue;
+    }
 
-	/**
-	 * Short description of method remove
-	 *
-	 * @access public
-	 * @author Cedric Alfonsi, <cedric.alfonsi@tudor.lu>
-	 * @return boolean
-	 */
-	public function remove()
-	{
-		$returnValue = (bool) false;
+    /**
+     * Remove the table with the name provided at instanciation time from the
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return boolean
+     */
+    public function remove()
+    {
+        $returnValue = (bool) false;
 
-		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015B9 begin
-		 
-		if($this->exists() && !empty($this->name)){
+        // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015B9 begin
+		$name = $this->getName(); 
+		if(!empty($name) && $this->exists()){
 			
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
 			//remove the multi properties table
 			try{
-				$dbWrapper->exec('DROP TABLE "'.$this->name.'Props"');
-				$tblKey = array_search("{$this->name}Props", self::$_tables);
+				$dbWrapper->exec('DROP TABLE "'.$name.'Props"');
+				$tblKey = array_search("{$name}Props", self::$_tables);
 				if($tblKey !== false){
 					unset(self::$_tables[$tblKey]);
 				}
 				
 				//remove the table
-				$result = $dbWrapper->exec('DROP TABLE "'.$this->name.'";');
-				$tblKey = array_search($this->name, self::$_tables);
+				$result = $dbWrapper->exec('DROP TABLE "'.$name.'";');
+				$tblKey = array_search($name, self::$_tables);
 				if($tblKey !== false){
 					unset(self::$_tables[$tblKey]);
 				}
@@ -227,14 +220,216 @@ class core_kernel_persistence_hardapi_TableManager
 				$returnValue = true;
 			}
 			catch (PDOException $e){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to remove the multiple properties table {$this->name}Props :" . $e->getMessage());
+				$returnValue = false;
 			}
 		}
+		else{
+			if (empty($name)){
+				throw new LogicException("The 'name' field must be set before trying to remove a table.");
+			}
+			// else, it does nothing because the table actually do not exist.
+			// it will return false.
+		}
 
-		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015B9 end
+        // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015B9 end
 
-		return (bool) $returnValue;
-	}
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Provides the name of the currently targeted table.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return string
+     */
+    public function getName()
+    {
+        $returnValue = (string) '';
+
+        // section 10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DD9 begin
+        $returnValue = $this->name;
+        // section 10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DD9 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Set the name of the table you want the TableManager to deal with.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string name The name of the table you want to deal with.
+     * @return void
+     */
+    public function setName($name)
+    {
+        // section 10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DDC begin
+    	if(!preg_match("/^_[0-9a-zA-Z\-_]{4,}$/", $name)){
+			throw new core_kernel_persistence_hardapi_Exception("Dangerous table name '$name' . Table name must begin by a underscore, followed  with only alphanumeric, - and _ characters are allowed.");
+		}
+		else{
+			$this->name = $name;
+		}
+        // section 10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DDC end
+    }
+
+    /**
+     * Get the columns from the currently targeted table that aim at containing
+     * values. If the targeted table is not a "base" table, a
+     * is thrown.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return array
+     */
+    public function getPropertyColumns()
+    {
+        $returnValue = array();
+
+        // section 10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DE1 begin
+        $name = $this->getName();
+        if ($this->isBaseTable()){
+        	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        	$rawColumns = $dbWrapper->getColumnNames($name);
+        	$propertyColumns = array_diff($rawColumns, array('id', 'uri'));
+        	
+        	foreach ($propertyColumns as $pC){
+        		$longName = core_kernel_persistence_hardapi_Utils::getLongName($pC);
+        		if (!empty($longName)){
+					$returnValue[$pC] = $longName;
+        		}
+        		else{
+        			throw new core_kernel_persistence_hardapi_Exception("Unable to resolve property URI corresponding to column '${name}'.'${pC}'.");	
+        		}
+        	}
+        }
+        // section 10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DE1 end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Obtain the 'properties table' name bound to the current 'base table'. An
+     * will be thrown if the current table is not a 'base table' or if the
+     * 'properties table' does not exist.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return string
+     */
+    public function getPropertiesTable()
+    {
+        $returnValue = (string) '';
+
+        // section 10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DE5 begin
+        $name = $this->getName();
+        if ($this->isBaseTable()){
+        	$propsTableName = $name . 'Props';
+        	$tblmanager = new core_kernel_persistence_hardapi_TableManager($propsTableName);
+        	if ($tblmanager->exists()){
+        		$returnValue = $propsTableName;	
+        	}
+        	else{
+        		throw new core_kernel_persistence_hardapi_Exception("The 'properties table' '${propsTableName}' does not exist.");	
+        	}
+        }
+        else{
+        	throw new core_kernel_persistence_hardapi_Exception("The current table '${name}' is not a 'base table'.");	
+        }
+        // section 10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DE5 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Obtain the 'base table' name corresponding to the current table.
+     * will be thrown
+     * - if the current table does not exist.
+     * - if the current table is not a 'properties table'
+     * - if there is no corresponding 'base table'
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return string
+     */
+    public function getBaseTable()
+    {
+        $returnValue = (string) '';
+
+        // section 10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DE9 begin
+        $name = $this->getName();
+        if ($this->isPropertiesTable()){
+        	$baseTableName = preg_replace("/Props$/i", '', $name);
+        	$tblmgr = new core_kernel_persistence_hardapi_TableManager($baseTableName);
+        	if ($tblmgr->exists()){
+        		$returnValue = $baseTableName;	
+        	}
+        	else{
+        		throw new core_kernel_persistence_hardapi_Exception("The 'base table' '${baseTableName}' does not exist.");	
+        	}
+        }
+        else{
+        	throw new core_kernel_persistence_hardapi_Exception("The current table '${name}' is not a 'properties table'.");
+        }
+        // section 10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DE9 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Check if the current table is a 'base table'.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return boolean
+     */
+    public function isBaseTable()
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DED begin
+        $name = $this->getName();
+        if ($this->exists()){
+        	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        	$rawColumns = $dbWrapper->getColumnNames($this->getName());
+        	$returnValue = (count(array_intersect($rawColumns, array('id', 'uri'))) == 2);
+        }
+        else{
+        	throw new core_kernel_persistence_hardapi_Exception("Table '${name}' does not exist.");	
+        }
+        // section 10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DED end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Check if the current table is a 'properties table'.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return boolean
+     */
+    public function isPropertiesTable()
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DF1 begin
+    	$name = $this->getName();
+        if ($this->exists()){
+        	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        	$rawColumns = $dbWrapper->getColumnNames($this->getName());
+        	$expectedColumns = array('id', 'property_uri', 'property_value', 'property_foreign_uri',
+        							 'l_language', 'instance_id');
+        	$returnValue = (count(array_intersect($rawColumns, $expectedColumns)) == 6);
+        }
+        else{
+        	throw new core_kernel_persistence_hardapi_Exception("Table '${name}' does not exist.");	
+        }
+        // section 10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DF1 end
+
+        return (bool) $returnValue;
+    }
 
 } /* end of class core_kernel_persistence_hardapi_TableManager */
 

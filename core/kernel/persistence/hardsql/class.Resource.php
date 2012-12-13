@@ -796,7 +796,73 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = null;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6 begin
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
+        
+		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+		$tableName = $referencer->resourceLocation($resource);
+		
+		if (!empty($tableName)){
+			try{
+				$tblmgr = new core_kernel_persistence_hardapi_TableManager($tableName);
+				$propertiesTableName = $tblmgr->getPropertiesTable();
+				
+				$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+				// We get the triples for cardinality = multiple or lg dependent properties
+				// as usual...
+				$quotedUri = $dbWrapper->dbConnector->quote($resource->getUri());
+				$propsQuery  = 'SELECT "b"."id", "b"."uri", "p"."property_uri" AS "property_uri", COALESCE("p"."property_value", "p"."property_foreign_uri") as "property_value", "p"."l_language"  FROM "' . $tableName . '" "b" ';
+				$propsQuery .= 'INNER JOIN "' . $propertiesTableName . '" "p" ON ("b"."id" = "p"."instance_id") WHERE "b"."uri" = ' . $quotedUri;
+				
+				$propertyColumns = $tblmgr->getPropertyColumns();
+				$baseQuery = '';
+				if (!empty($propertyColumns)){
+					// But if we have properties as columns in the 'base table' we 
+					// have to be crafty...
+					$baseQueries = array();
+					foreach ($propertyColumns as $k => $pC){
+						$quotedPropUri = $dbWrapper->dbConnector->quote($pC);
+						$baseQueries[] = 'SELECT "b"."id", "b"."uri", ' . $quotedPropUri . ' AS "property_uri", "b"."' . $k . '" AS "property_value", \'\' AS "l_language" FROM "' . $tableName . '" "b" WHERE "b"."uri" = ' . $quotedUri;
+					}
+					
+					$baseQuery = implode(' UNION ', $baseQueries);
+				}
+				$query = $propsQuery . ' UNION ' . $baseQuery;
+				
+				try{
+					$result = $dbWrapper->query($query);
+					while ($row = $result->fetch()){
+						$triple = new core_kernel_classes_Triple();
+						$triple->subject = $row['uri'];
+						$triple->predicate = $row['property_uri'];
+						$triple->object = $row['property_value'];
+						$triple->lg = $row['l_language'];
+						
+						$returnValue->add($triple);
+					}
+					
+					// In hard mode, the rdf:type given to resources is defined by
+					// 'the table' their are belonging to. In this case, we need to
+					// manually add these triples to the end result.
+					$types = $resource->getTypes();
+					foreach ($types as $class){
+						$triple = new core_kernel_classes_Triple();
+						$triple->subject = $resource->getUri();
+						$triple->predicate = RDF_TYPE;
+						$triple->object = $class->getUri();
+						$triple->lg = '';
+						
+						$returnValue->add($triple);
+					}
+				}
+				catch (PDOException $e){
+					$uri = $resource->getUri();
+					throw new core_kernel_persistence_hardsql_Exception("Unable to retrieve RDF triples of resource '${uri}'.");	
+				}
+			}
+			catch (core_kernel_persistence_hardapi_Exception $e){
+				throw new core_kernel_persistence_hardsql_Exception("Unable to access data from table '${tableName}: " . $e->getMessage());
+			}
+		}
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6 end
 
         return $returnValue;
