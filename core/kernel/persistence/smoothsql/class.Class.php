@@ -492,7 +492,7 @@ class core_kernel_persistence_smoothsql_Class
         
 		$result = $dbWrapper->query($query);
 
-		while ($row = $result->fetch()){
+		while ($row = $result->fetch()){	
 			$foundInstancesUri = $row['subject'];
 			$returnValue[$foundInstancesUri] = new core_kernel_classes_Resource($foundInstancesUri);
 		}
@@ -878,8 +878,8 @@ class core_kernel_persistence_smoothsql_Class
         	$orderUri = $options['order'];
         	$orderDir = isset($options['orderdir']) && strtoupper($options['orderdir']) == 'DESC' ? 'DESC' : 'ASC';
         	$orderQuery = 'SELECT "subject","object" FROM "statements" WHERE "predicate" = \''.$orderUri.'\'';
-			$query = 'SELECT DISTINCT "mainq"."subject" from ('.$query.') AS mainq'
-						.' LEFT JOIN ('.$orderQuery.') AS orderq ON "mainq"."subject" = "orderq"."subject"'
+			$query = 'SELECT DISTINCT "mainq"."subject", "orderq"."object" from ('.$query.') AS mainq'
+						.' LEFT JOIN ('.$orderQuery.') AS orderq ON ("mainq"."subject" = "orderq"."subject")'
 						.' ORDER BY "orderq"."object" '.$orderDir;
         } else if (isset($options['limit'])) {
         	$query .= ' ORDER BY "id"';

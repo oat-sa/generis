@@ -395,9 +395,9 @@ class HardImplTestCase extends UnitTestCase {
 		$book = current($instances);
 		$this->assertEqual($book->getLabel(), 'The Lord of the Rings');
 		$triples = $book->getRdfTriples()->toArray();
-		$this->assertEqual($triples[0]->predicate, 'http://www.w3.org/2000/01/rdf-schema#label');
-		$this->assertEqual($triples[1]->predicate, $authorProperty->getUri());
-		$this->assertEqual($triples[1]->object, 'John Ronald Reuel Tolkien');
+		$this->assertEqual($triples[1]->predicate, 'http://www.w3.org/2000/01/rdf-schema#label');
+		$this->assertEqual($triples[0]->predicate, $authorProperty->getUri());
+		$this->assertEqual($triples[0]->object, 'John Ronald Reuel Tolkien');
 		$this->assertEqual($triples[2]->predicate, RDF_TYPE);
 		$this->assertEqual($triples[2]->object, $workClass->getUri());
 		
@@ -571,7 +571,7 @@ class HardImplTestCase extends UnitTestCase {
 		$this->subject1->delete();
 		
 		// unreference the subject sub class
-		core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unReferenceClass($this->targetSubjectSubClass);
+		$this->assertTrue(core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unReferenceClass($this->targetSubjectSubClass));
 		$this->assertFalse(core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($this->targetSubjectSubClass));
 		$this->assertTrue(core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectSubClass) instanceof core_kernel_persistence_smoothsql_Class);
 		$this->targetSubjectSubClass->delete(true);

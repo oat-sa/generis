@@ -826,7 +826,8 @@ class core_kernel_persistence_hardsql_Resource
 					
 					$baseQuery = implode(' UNION ', $baseQueries);
 				}
-				$query = $propsQuery . ' UNION ' . $baseQuery;
+				
+				$query = $propsQuery . ' UNION ' . $baseQuery . ' ORDER BY "property_uri"';
 				
 				try{
 					$result = $dbWrapper->query($query);
@@ -856,7 +857,7 @@ class core_kernel_persistence_hardsql_Resource
 				}
 				catch (PDOException $e){
 					$uri = $resource->getUri();
-					throw new core_kernel_persistence_hardsql_Exception("Unable to retrieve RDF triples of resource '${uri}'.");	
+					throw new core_kernel_persistence_hardsql_Exception("Unable to retrieve RDF triples of resource '${uri}': " . $e->getMessage());	
 				}
 			}
 			catch (core_kernel_persistence_hardapi_Exception $e){

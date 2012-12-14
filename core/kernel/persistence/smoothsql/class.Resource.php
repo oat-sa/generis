@@ -575,7 +575,7 @@ class core_kernel_persistence_smoothsql_Resource
 	     $namespaces = common_ext_NamespaceManager::singleton()->getAllNamespaces();
 	     $namespace = $namespaces[substr($resource->uriResource, 0, strpos($resource->uriResource, '#') + 1)];
 	
-	     $query = 'SELECT * FROM "statements" WHERE "subject" = ? AND "modelID" = ?';
+	     $query = 'SELECT * FROM "statements" WHERE "subject" = ? AND "modelID" = ? ORDER BY "predicate"';
 	     $result = $dbWrapper->query($query, array(
 	    	 $resource->uriResource,
 	     	$namespace->getModelId()
