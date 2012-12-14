@@ -715,5 +715,45 @@ class ClassTestCase extends UnitTestCase {
 		$subClass->delete();
 	}
 	
+	public function testDeleteInstances(){
+		$taoClass = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
+		$creativeWorkClass = $taoClass->createSubClass('Creative Work');
+		$authorProperty = $taoClass->createProperty('Author');
+		$relatedWorksProperty = $taoClass->createProperty('Related Works');
+		
+		$bookLotr = $creativeWorkClass->createInstance('The Lord of The Rings (book)');
+		$bookLotr->setPropertyValue($authorProperty, 'J.R.R. Tolkien');
+		
+		$movieLotr = $creativeWorkClass->createInstance('The Lord of The Rings (movie)');
+		$movieLotr->setPropertyValue($authorProperty, 'Peter Jackson');
+		
+		$movieLotr->setPropertyValue($relatedWorksProperty, $bookLotr);
+		$bookLotr->setPropertyValue($relatedWorksProperty, $movieLotr);
+		
+		$movieMinorityReport = $creativeWorkClass->createInstance('Minority Report');
+		$movieMinorityReport->setPropertyValue($authorProperty, 'Steven Spielberg');
+		
+		$this->assertTrue(count($creativeWorkClass->getInstances()), 3);
+		
+		// delete the LOTR movie with its references.
+		$relatedWorks = $bookLotr->getPropertyValuesCollection($relatedWorksProperty);
+		$this->assertEqual($relatedWorks->sequence[0]->getLabel(), 'The Lord of The Rings (movie)');
+		$creativeWorkClass->deleteInstances(array($movieLotr), true);
+		$relatedWorks = $bookLotr->getPropertyValues($relatedWorksProperty);
+		$this->assertEqual(count($relatedWorks), 0);
+		
+		// Only 1 resource deleted ?
+		$this->assertFalse($movieLotr->exists());
+		$this->assertTrue($bookLotr->exists());
+		$this->assertTrue($movieMinorityReport->exists());
+		
+		// Remove the rest.
+		$creativeWorkClass->deleteInstances(array($bookLotr, $movieMinorityReport));
+		$this->assertEqual(count($creativeWorkClass->getInstances()), 0);
+		$this->assertFalse($bookLotr->exists());
+		$this->assertFalse($movieMinorityReport->exists());
+		
+		$creativeWorkClass->delete(true);
+	}
 }
 ?>

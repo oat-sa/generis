@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 28.02.2012, 17:23:20 with ArgoUML PHP module 
+ * Automatically generated on 14.12.2012, 15:21:53 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_smoothsql
  */
@@ -24,14 +24,14 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_persistence_PersistenceImpl
  *
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  */
 require_once('core/kernel/persistence/class.PersistenceImpl.php');
 
 /**
  * include core_kernel_persistence_ClassInterface
  *
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  */
 require_once('core/kernel/persistence/interface.ClassInterface.php');
 
@@ -47,7 +47,7 @@ require_once('core/kernel/persistence/interface.ClassInterface.php');
  * Short description of class core_kernel_persistence_smoothsql_Class
  *
  * @access public
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_smoothsql
  */
@@ -74,7 +74,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method getSubClasses
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -107,7 +107,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method isSubClassOf
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  Class parentClass
      * @return boolean
@@ -152,7 +152,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method getParentClasses
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -191,7 +191,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method getProperties
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -232,7 +232,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method getInstances
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  boolean recursive
      * @param  array params
@@ -300,7 +300,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method setInstance
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  Resource instance
      * @return core_kernel_classes_Resource
@@ -325,7 +325,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method setSubClassOf
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  Class iClass
      * @return boolean
@@ -348,7 +348,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method setProperty
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return boolean
@@ -373,7 +373,7 @@ class core_kernel_persistence_smoothsql_Class
      * instead
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  string label
      * @param  string comment
@@ -417,7 +417,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method createSubClass
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  string label
      * @param  string comment
@@ -444,7 +444,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method createProperty
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  string label
      * @param  string comment
@@ -475,7 +475,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method searchInstances
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  array propertyFilters
      * @param  array options
@@ -506,7 +506,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method countInstances
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  array propertyFilters
      * @param  array options
@@ -563,7 +563,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method getInstancesPropertyValues
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @param  array propertyFilters
@@ -623,7 +623,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method unsetProperty
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  Property property
      * @return boolean
@@ -653,7 +653,7 @@ class core_kernel_persistence_smoothsql_Class
      * May NOT contain additional types in the properties array
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Class type
      * @param  array properties
      * @return core_kernel_classes_Resource
@@ -677,10 +677,59 @@ class core_kernel_persistence_smoothsql_Class
     }
 
     /**
+     * Delete a collection of instances of the Class.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Resource resource The resource (class) on which to apply the deletion.
+     * @param  array resources An array containing core_kernel_classes_Resource objects or URIs.
+     * @param  boolean deleteReference If set to true, references to instances will be deleted accross the database.
+     * @return boolean
+     */
+    public function deleteInstances( core_kernel_classes_Resource $resource, $resources, $deleteReference = false)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1-85-46895b07:13b99a96e9b:-8000:0000000000001DF5 begin
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $class = new core_kernel_classes_Class($resource->getUri());
+        $uris = array();
+        
+        foreach ($resources as $r){
+        	$uri = (($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r);
+        	$uris[] = $dbWrapper->dbConnector->quote($uri);
+        }
+        
+        if ($class->exists()){
+        	
+        	$inValues = implode(',', $uris);
+        	$query = 'DELETE FROM "statements" WHERE "subject" IN (' . $inValues . ')';
+        	
+        	if (true === $deleteReference){
+        		$params[] = $resource->getUri();
+        		$query .= ' OR "object" IN (' . $inValues . ')';
+        	}
+        	
+        	try{
+        		// Even if now rows are affected, we consider the resources
+        		// as deleted.
+        		$dbWrapper->exec($query);	
+        		$returnValue = true;
+        	}
+        	catch (PDOException $e){
+        		throw new core_kernel_persistence_smoothsql_Exception("An error occured while deleting resources: " . $e->getMessage());
+        	}
+        }
+        // section 10-13-1-85-46895b07:13b99a96e9b:-8000:0000000000001DF5 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
      * Short description of method singleton
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return core_kernel_classes_Resource
      */
     public static function singleton()
@@ -703,7 +752,7 @@ class core_kernel_persistence_smoothsql_Class
      * Short description of method isValidContext
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */

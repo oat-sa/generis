@@ -170,7 +170,7 @@ class core_kernel_classes_Class
      * which simply link the previously created ressource with this class
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource instance
      * @return core_kernel_classes_Resource
      */
@@ -235,7 +235,7 @@ class core_kernel_classes_Class
      * Short description of method __construct
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string uri
      * @param  string debug
      * @return void
@@ -251,7 +251,7 @@ class core_kernel_classes_Class
      * Creates the hyperClass related to a class
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return mixed
      */
     public function createHyperClass()
@@ -308,7 +308,7 @@ class core_kernel_classes_Class
      * core_kernel_classes_ResourceFactory::create() instead
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string label
      * @param  string comment
      * @param  string uri
@@ -331,7 +331,7 @@ class core_kernel_classes_Class
      * Short description of method createSubClass
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string label
      * @param  string comment
      * @param  string uri
@@ -354,7 +354,7 @@ class core_kernel_classes_Class
      * Short description of method createProperty
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string label
      * @param  string comment
      * @param  boolean isLgDependent
@@ -377,7 +377,7 @@ class core_kernel_classes_Class
      * Short description of method getMethodes
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return array
      */
     public function getMethodes()
@@ -395,7 +395,7 @@ class core_kernel_classes_Class
      * Short description of method searchInstances
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  array propertyFilters
      * @param  array options
      * @return array
@@ -415,7 +415,7 @@ class core_kernel_classes_Class
      * Short description of method countInstances
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  array propertyFilters
      * @param  array options
      * @return Integer
@@ -436,7 +436,7 @@ class core_kernel_classes_Class
      * The instances can be filtered.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Property property
      * @param  array propertyFilters
      * @param  array options
@@ -457,7 +457,7 @@ class core_kernel_classes_Class
      * Short description of method unsetProperty
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Property property
      * @return mixed
      */
@@ -475,7 +475,7 @@ class core_kernel_classes_Class
      * Creates a new instance using the properties provided.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  array properties May contain additional types
      * @return core_kernel_classes_Resource
      * @see core_kernel_classes_ResourceFactory
@@ -507,6 +507,26 @@ class core_kernel_classes_Class
         // section 127-0-1-1--49b11f4f:135c41c62e3:-8000:0000000000001951 end
 
         return $returnValue;
+    }
+
+    /**
+     * Delete instances of a Class from the database.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  array resources An array of core_kernel_classes_Resource or URIs.
+     * @param  boolean deleteReference If set to true, references about the resources will also be deleted from the database.
+     * @return boolean
+     */
+    public function deleteInstances($resources, $deleteReference = false)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1-85--6597bda8:13b99b8386b:-8000:0000000000001DFB begin
+         $returnValue = core_kernel_persistence_ClassProxy::singleton()->deleteInstances($this, $resources, $deleteReference);
+        // section 10-13-1-85--6597bda8:13b99b8386b:-8000:0000000000001DFB end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class core_kernel_classes_Class */
