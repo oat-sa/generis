@@ -53,6 +53,14 @@ class core_kernel_persistence_hardapi_TableManager
      */
     private static $_tables = array();
 
+    /**
+     * Table name strict mode.
+     *
+     * @access private
+     * @var boolean
+     */
+    private $strict = false;
+
     // --- OPERATIONS ---
 
     /**
@@ -61,11 +69,15 @@ class core_kernel_persistence_hardapi_TableManager
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string name The name of the table you have to deal with.
+     * @param  boolean strict Use or not table name strict mode.
      * @return mixed
      */
-    public function __construct($name)
+    public function __construct($name, $strict = true)
     {
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AA begin
+
+    	$this->strict = $strict;
+    	$this->setName($name);
 
 		if(count(self::$_tables) == 0){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
@@ -74,9 +86,6 @@ class core_kernel_persistence_hardapi_TableManager
 				self::$_tables[] = $row['table'];
 			}
 		}
-		
-		$this->setName($name);
-		
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AA end
     }
 
@@ -107,7 +116,10 @@ class core_kernel_persistence_hardapi_TableManager
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  array columns
+     * @param  array columns An array of associative arrays.
++ key 'multi' (boolean) describes if the property is multi valued or not.
++ key 'foreign' (boolean) states that the column references remote resources (vs. literal) or not.
++ key 'name' gives the name of the column to create.
      * @return boolean
      */
     public function create($columns = array())
@@ -265,7 +277,7 @@ class core_kernel_persistence_hardapi_TableManager
     public function setName($name)
     {
         // section 10-13-1-85-4976cd9b:13b8f671e92:-8000:0000000000001DDC begin
-    	if(!preg_match("/^_[0-9a-zA-Z\-_]{4,}$/", $name)){
+    	if($this->isStrict() && !preg_match("/^_[0-9a-zA-Z\-_]{4,}$/", $name)){
 			throw new core_kernel_persistence_hardapi_Exception("Dangerous table name '$name' . Table name must begin by a underscore, followed  with only alphanumeric, - and _ characters are allowed.");
 		}
 		else{
@@ -427,6 +439,149 @@ class core_kernel_persistence_hardapi_TableManager
         	throw new core_kernel_persistence_hardapi_Exception("Table '${name}' does not exist.");	
         }
         // section 10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DF1 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Makes you able to know if the current table has a given column or not.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string name A column name.
+     * @return boolean
+     */
+    public function hasColumn($name)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1-85--7fc9b7e9:13ba8f5f383:-8000:0000000000001E09 begin
+        $tblName = $this->getName();
+        if ($this->exists()){
+        	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        	$columns = $dbWrapper->getColumnNames($tblName);
+        	$returnValue = in_array($name, $columns);
+        }
+        else{
+        	throw new core_kernel_persistence_hardapi_Exception("Table '${tblName}' does not exist in database.");	
+        }
+        
+        // section 10-13-1-85--7fc9b7e9:13ba8f5f383:-8000:0000000000001E09 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * States if the current table manager is in strict mode or not.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return boolean
+     */
+    public function isStrict()
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1-85--7fc9b7e9:13ba8f5f383:-8000:0000000000001E1A begin
+        $returnValue = $this->strict;
+        // section 10-13-1-85--7fc9b7e9:13ba8f5f383:-8000:0000000000001E1A end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Create an additional column to the table. The column description is an
+     * array where keys have the following roles:
+     * + 'name' (string) the name of the column to create
+     * + 'multi' (boolean) states the column contains multi values or not
+     * + 'foreign' (boolean) describes if the column references foreign
+     * or not.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  array column
+     * @return boolean
+     */
+    public function addColumn($column)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1-85--2619f144:13ba9352ee6:-8000:0000000000001E1A begin
+        $tblname = $this->getName();
+        if (!empty($column)){
+        	if (!empty($column['name'])){
+        		$colname = $column['name'];
+        		
+        		$multi = true;
+        		if (isset($column['multi'])){
+        			$multi = $column['multi'];
+        		}
+        		
+        		$foreign = false;
+        		if (isset($column['foreign'])){
+        			$foreign = $column['foreign'];	
+        		}
+        		
+        		// Lets deal with this column description.
+        		if (true === $multi){
+        			// There is nothing to do. It will be handled
+        			// by the properties table.
+        			$returnValue = true;	
+        		}
+        		else{
+        			$sql = 'ALTER TABLE "' . $tblname . '" ADD COLUMN "' . $colname . '" TEXT';
+        			try{
+        				$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        				$dbWrapper->exec($sql);
+        				$returnValue = true;
+        			}
+        			catch (PDOException $e){
+        				throw new core_kernel_persistence_hardapi_Exception("An error occured while adding column '${colname}' to table '${tblname}': " . $e->getMessage());
+        			}
+        		}
+        	}
+        	else{
+        		throw new InvalidArgumentException("No column name provided.");
+        	}
+        }
+        else{
+        	throw new InvalidArgumentException("Cannot add a column from an empty array.");	
+        }
+        // section 10-13-1-85--2619f144:13ba9352ee6:-8000:0000000000001E1A end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Removes an existing column from the table.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string name The name of the column to remove from the table.
+     * @return boolean
+     */
+    public function removeColumn($name)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1-85--2619f144:13ba9352ee6:-8000:0000000000001E1E begin
+        if (!empty($name)){
+        	$tblname = $this->getName();
+        	$sql = 'ALTER TABLE "' . $tblname . '" DROP COLUMN "' . $name . '"';
+
+        	try{
+        		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        		$dbWrapper->exec($sql);
+        		$returnValue = true;
+        	}
+        	catch (PDOException $e){
+        		throw new core_kernel_persistence_hardapi_Exception("An error occured while removing column '${name}' from table '${tblname}': " . $e->getMessage());	
+        	}
+        }
+        else{
+        	throw new InvalidArgumentException("Empty column name provided.");	
+        }
+        // section 10-13-1-85--2619f144:13ba9352ee6:-8000:0000000000001E1E end
 
         return (bool) $returnValue;
     }

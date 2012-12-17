@@ -397,7 +397,30 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = null;
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F3C begin
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        // First we reference the property in smooth mode because meta models always remain there.
+		$smoothReturnValue = core_kernel_persistence_smoothsql_Class::singleton()->createProperty($resource, $label, $comment, $isLgDependent);
+		
+		if ($smoothReturnValue){
+			$property = new core_kernel_classes_Property($resource->getUri());
+			$column = array('name' => core_kernel_persistence_hardapi_Utils::getShortName($smoothReturnValue));
+			$column['multi'] = ($isLgDependent) ? true : false; // If no range set, we assume it is a literal.
+			$column['foreign'] = false; // We do not know the range yet.
+			
+			$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+			$classLocations = $referencer->classLocations($resource);
+			
+			foreach ($classLocations as $loc){
+				$tblmgr = new core_kernel_persistence_hardapi_TableManager($loc['table']);
+				$tblmgr->addColumn($column);
+			}
+			
+			$returnValue = $smoothReturnValue;
+		}
+		else{
+			$uri = $resource->getUri();
+			throw new core_kernel_persistence_hardsql_Exception("An error occured when creating property in smooth mode '${uri}' before handling the hard sql aspect.");
+		}
+		
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F3C end
 
         return $returnValue;
