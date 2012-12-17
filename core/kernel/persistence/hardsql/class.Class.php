@@ -1006,7 +1006,12 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = (bool) false;
 
         // section 10-13-1-85-46895b07:13b99a96e9b:-8000:0000000000001DF5 begin
-        throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        foreach ($resources as $r){
+        	$resource = ($r instanceof core_kernel_classes_Resource) ? $r : new core_kernel_classes_Resource($r);
+        	$resource->delete($deleteReference);
+        }
+        
+        $returnValue = true;
         // section 10-13-1-85-46895b07:13b99a96e9b:-8000:0000000000001DF5 end
 
         return (bool) $returnValue;

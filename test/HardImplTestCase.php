@@ -225,6 +225,7 @@ class HardImplTestCase extends UnitTestCase {
 		$relatedMoviesProperty = $this->targetRelatedMoviesProperty;
 		$labelProperty = new core_kernel_classes_Property(RDFS_LABEL);
 		
+		// ---- CREATIVE WORKS
 		$bookOfTheRings = $workClass->createInstance('The Lord of the Rings');
 		$bookOfTheRings->setPropertyValue($authorProperty, 'John Ronald Reuel Tolkien');
 		
@@ -234,6 +235,7 @@ class HardImplTestCase extends UnitTestCase {
 		$this->assertEqual(count($instances), 1);
 		$this->assertEqual($instances[key($instances)]->getLabel(), 'The Lord of the Rings');
 		
+		// ---- MOVIES: The Lord of The Rings
 		$lordOfTheRings = $movieClass->createInstance('The Lord of the Rings');
 		$lordOfTheRings->setPropertyValueByLg($labelProperty, 'Le Seigneur des Anneaux', 'FR-be');
 		$lordOfTheRings->setPropertyValue($authorProperty, 'Peter Jackson');
@@ -263,6 +265,7 @@ class HardImplTestCase extends UnitTestCase {
 		$this->assertEqual(count($instances), 1);
 		$this->assertEqual($instances[key($instances)]->getLabel(), 'The Lord of the Rings');
 		
+		// ---- MOVIES: The Hobbit
 		$theHobbit = $movieClass->createInstance('The Hobbit: An Unexpected Journey');
 		$theHobbit->setPropertyValue($authorProperty, 'Peter Jackson');
 		$theHobbit->setPropertyValue($producerProperty, 'Peter Jackson');
@@ -381,6 +384,80 @@ class HardImplTestCase extends UnitTestCase {
 		$propertyFilters = array('http://www.unknown.com/i-do-not-exist' => 'do-not-exist');
 		$instances = $movieClass->searchInstances($propertyFilters);
 		$this->assertEqual(count($instances), 0);
+	}
+	
+	public function testDeleteInstances(){
+		$movieClass = $this->targetMovieClass;
+		$authorProperty = $this->targetAuthorProperty;
+		$actorsProperty = $this->targetActorsProperty;
+		$producerProperty = $this->targetProducerProperty;
+		$relatedMoviesProperty = $this->targetRelatedMoviesProperty;
+		
+		$matrixMovie = $movieClass->createInstance('The Matrix');
+		$matrixMovie->setPropertyValue($authorProperty, 'Andy & Larry Wachowski');
+		$matrixMovie->setPropertyValue($producerProperty, 'Silver Pictures');
+		$matrixMovie->setPropertyValue($actorsProperty, 'Keanu Reaves');
+		$matrixMovie->setPropertyValue($actorsProperty, 'Laurence Fishburne');
+		$matrixMovie->setPropertyValue($actorsProperty, 'Carrie-Anne Moss');
+		$matrixMovie->setPropertyValue($actorsProperty, 'Hugo Weaving');
+		
+		$matrixReloadedMovie = $movieClass->createInstance('The Matrix Reloaded');
+		$matrixReloadedMovie->setPropertyValue($authorProperty, 'Andy & Larry Wachowski');
+		$matrixReloadedMovie->setPropertyValue($producerProperty, 'Silver Pictures');
+		$matrixReloadedMovie->setPropertyValue($actorsProperty, 'Keanu Reaves');
+		$matrixReloadedMovie->setPropertyValue($actorsProperty, 'Laurence Fishburne');
+		$matrixReloadedMovie->setPropertyValue($actorsProperty, 'Carrie-Anne Moss');
+		$matrixReloadedMovie->setPropertyValue($actorsProperty, 'Hugo Weaving');
+		$matrixReloadedMovie->setPropertyValue($relatedMoviesProperty, $matrixMovie);
+		
+		$matrixRevolutionsMovie = $movieClass->createInstance('The Matrix Reloaded');
+		$matrixRevolutionsMovie->setPropertyValue($authorProperty, 'Andy & Larry Wachowski');
+		$matrixRevolutionsMovie->setPropertyValue($producerProperty, 'Silver Pictures');
+		$matrixRevolutionsMovie->setPropertyValue($actorsProperty, 'Keanu Reaves');
+		$matrixRevolutionsMovie->setPropertyValue($actorsProperty, 'Laurence Fishburne');
+		$matrixRevolutionsMovie->setPropertyValue($actorsProperty, 'Carrie-Anne Moss');
+		$matrixRevolutionsMovie->setPropertyValue($actorsProperty, 'Hugo Weaving');
+		$matrixRevolutionsMovie->setPropertyValue($relatedMoviesProperty, $matrixMovie);
+		$matrixRevolutionsMovie->setPropertyValue($relatedMoviesProperty, $matrixReloadedMovie);
+		
+		$vForVendettaMovie = $movieClass->createInstance('V for Vendetta');
+		$vForVendettaMovie->setPropertyValue($authorProperty, 'Andy & Larry Wachowski');
+		$vForVendettaMovie->setPropertyValue($producerProperty, 'Silver Pictures');
+		$vForVendettaMovie->setPropertyValue($actorsProperty, 'Hugo Weaving');
+		$vForVendettaMovie->setPropertyValue($actorsProperty, 'Natalie Portman');
+		
+		$cloudAtlasMovie = $movieClass->createInstance('Cloud Atlas');
+		$cloudAtlasMovie->setPropertyValue($authorProperty, 'Andy & Larry Wachowski');
+		$cloudAtlasMovie->setPropertyValue($producerProperty, 'Cloud Atlas Productions');
+		$cloudAtlasMovie->setPropertyValue($producerProperty, 'Anarchos Pictures');
+		$cloudAtlasMovie->setPropertyValue($actorsProperty, 'Tom Hanks');
+		$cloudAtlasMovie->setPropertyValue($actorsProperty, 'Halle Berry');
+		$cloudAtlasMovie->setPropertyValue($actorsProperty, 'Jim Sturgess');
+		$cloudAtlasMovie->setPropertyValue($actorsProperty, 'Hugo Weaving');
+		
+		$speedRacerMovie = $movieClass->createInstance('Speed Racer');
+		$speedRacerMovie->setPropertyValue($authorProperty, 'Andy & Larry Wachowski');
+		$speedRacerMovie->setPropertyValue($producerProperty, 'Silver Pictures');
+		$speedRacerMovie->setPropertyValue($actorsProperty, 'Emile Hirsch');
+		$speedRacerMovie->setPropertyValue($actorsProperty, 'Nicholas Elia');
+		$speedRacerMovie->setPropertyValue($actorsProperty, 'Susan Sarando');
+		$speedRacerMovie->setPropertyValue($actorsProperty, 'Ariel Winter');
+		
+		$movieClass->deleteInstances(array($speedRacerMovie));
+		$this->assertFalse($speedRacerMovie->exists());
+		
+		$movieClass->deleteInstances(array($vForVendettaMovie, $cloudAtlasMovie->getUri()));
+		$this->assertFalse($vForVendettaMovie->exists());
+		$this->assertFalse($cloudAtlasMovie->exists());
+		
+		$movieClass->deleteInstances(array($matrixMovie), true);
+		$this->assertFalse($matrixMovie->exists());
+		
+		// We get the related movies of matrix revolutions. We should only
+		// get $matrixReladedMovie but no more $matrixMovie because it was deleted
+		// with its references.
+		$relatedMovie = $matrixRevolutionsMovie->getUniquePropertyValue($relatedMoviesProperty);
+		$this->assertEqual($relatedMovie->getLabel(), 'The Matrix Reloaded');
 	}
 	
 	public function testGetRdfTriples(){
