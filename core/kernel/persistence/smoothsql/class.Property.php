@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 02.08.2011, 15:58:02 with ArgoUML PHP module 
+ * Automatically generated on 18.12.2012, 13:08:58 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_smoothsql
  */
@@ -24,14 +24,14 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_persistence_PersistenceImpl
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  */
 require_once('core/kernel/persistence/class.PersistenceImpl.php');
 
 /**
  * include core_kernel_persistence_PropertyInterface
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  */
 require_once('core/kernel/persistence/interface.PropertyInterface.php');
 
@@ -47,7 +47,7 @@ require_once('core/kernel/persistence/interface.PropertyInterface.php');
  * Short description of class core_kernel_persistence_smoothsql_Property
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_smoothsql
  */
@@ -74,7 +74,7 @@ class core_kernel_persistence_smoothsql_Property
      * Short description of method getSubProperties
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -107,7 +107,7 @@ class core_kernel_persistence_smoothsql_Property
      * Short description of method isLgDependent
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -128,7 +128,7 @@ class core_kernel_persistence_smoothsql_Property
      * Short description of method isMultiple
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -149,7 +149,7 @@ class core_kernel_persistence_smoothsql_Property
      * Short description of method getRange
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @return core_kernel_classes_Class
      */
@@ -168,7 +168,7 @@ class core_kernel_persistence_smoothsql_Property
      * Short description of method delete
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  boolean deleteReference
      * @return boolean
@@ -185,7 +185,7 @@ class core_kernel_persistence_smoothsql_Property
 	        
 	    	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
 			$query = 'DELETE FROM "statements" WHERE "predicate" = ? AND "modelID" IN ('.$modelIds.')';
-	        $returnValue = $dbWrapper->exec($query, array($resource->uriResource));
+	        $returnValue = $dbWrapper->exec($query, array($resource->getUri()));
         }
         $returnValue = core_kernel_persistence_smoothsql_Resource::singleton()->delete($resource, $deleteReference);
         
@@ -195,10 +195,50 @@ class core_kernel_persistence_smoothsql_Property
     }
 
     /**
+     * Short description of method setRange
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Resource resource
+     * @param  Class class
+     * @return core_kernel_classes_Class
+     */
+    public function setRange( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $class)
+    {
+        $returnValue = null;
+
+        // section 10-13-1-85-36aaae10:13bad44a267:-8000:0000000000001E25 begin
+        $rangeProp = new core_kernel_classes_Property(RDFS_RANGE, __METHOD__);
+        $returnValue = $resource->setPropertyValue($rangeProp, $class->getUri());
+        // section 10-13-1-85-36aaae10:13bad44a267:-8000:0000000000001E25 end
+
+        return $returnValue;
+    }
+
+    /**
+     * Short description of method setMultiple
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Resource resource
+     * @param  boolean isMultiple
+     * @return void
+     */
+    public function setMultiple( core_kernel_classes_Resource $resource, $isMultiple)
+    {
+        // section 10-13-1-85-71dc1cdd:13bade8452c:-8000:0000000000001E32 begin
+    	$multipleProperty = new core_kernel_classes_Property(PROPERTY_MULTIPLE);
+        $value = ((bool)$isMultiple) ?  GENERIS_TRUE : GENERIS_FALSE ;
+        core_kernel_persistence_smoothsql_Resource::singleton()->removePropertyValues($resource, $multipleProperty);
+        core_kernel_persistence_smoothsql_Resource::singleton()->setPropertyValue($resource, $multipleProperty, $value);
+        // section 10-13-1-85-71dc1cdd:13bade8452c:-8000:0000000000001E32 end
+    }
+
+    /**
      * Short description of method singleton
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return core_kernel_classes_Resource
      */
     public static function singleton()
@@ -221,7 +261,7 @@ class core_kernel_persistence_smoothsql_Property
      * Short description of method isValidContext
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */

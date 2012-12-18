@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 02.08.2011, 15:58:02 with ArgoUML PHP module 
+ * Automatically generated on 18.12.2012, 13:08:58 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -33,7 +33,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class core_kernel_persistence_PropertyInterface
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_persistence
  */
@@ -47,7 +47,7 @@ interface core_kernel_persistence_PropertyInterface
      * Short description of method getSubProperties
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  boolean recursive
      * @return array
@@ -58,7 +58,7 @@ interface core_kernel_persistence_PropertyInterface
      * Short description of method isLgDependent
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -68,7 +68,7 @@ interface core_kernel_persistence_PropertyInterface
      * Short description of method isMultiple
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -78,7 +78,7 @@ interface core_kernel_persistence_PropertyInterface
      * Short description of method getRange
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @return core_kernel_classes_Class
      */
@@ -88,12 +88,34 @@ interface core_kernel_persistence_PropertyInterface
      * Short description of method delete
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @param  boolean deleteReference
      * @return boolean
      */
     public function delete( core_kernel_classes_Resource $resource, $deleteReference = false);
+
+    /**
+     * Short description of method setRange
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Resource resource
+     * @param  Class class
+     * @return core_kernel_classes_Class
+     */
+    public function setRange( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $class);
+
+    /**
+     * Short description of method setMultiple
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Resource resource
+     * @param  boolean isMultiple
+     * @return void
+     */
+    public function setMultiple( core_kernel_classes_Resource $resource, $isMultiple);
 
 } /* end of interface core_kernel_persistence_PropertyInterface */
 

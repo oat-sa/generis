@@ -6,7 +6,7 @@ error_reporting(E_ALL);
  * Utility class that provides transversal methods 
  * to manage  the hard api
  *
- * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -18,7 +18,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_persistence_Switcher
  *
- * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  */
 require_once('core/kernel/persistence/class.Switcher.php');
 
@@ -35,7 +35,7 @@ require_once('core/kernel/persistence/class.Switcher.php');
  * to manage  the hard api
  *
  * @access public
- * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_persistence_hardapi
  */
@@ -69,7 +69,7 @@ class core_kernel_persistence_hardapi_Utils
      * using the modelID/baseUri mapping
      *
      * @access private
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string namespaceUri
      * @return string
      */
@@ -105,7 +105,7 @@ class core_kernel_persistence_hardapi_Utils
      * that cannot be longer than 64 characters
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
      * @return string
      */
@@ -132,10 +132,10 @@ class core_kernel_persistence_hardapi_Utils
     }
 
     /**
-     * Short description of method getLongName
+     * Get the long name (full URI) by providing a short name.
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string shortName
      * @return string
      */
@@ -161,33 +161,24 @@ class core_kernel_persistence_hardapi_Utils
     }
 
     /**
-     * Short description of method getPropertiesTableName
+     * Get a simple description about a Property in the database. 
+     *
+     * This method returns an associative array where the keys have the
+     * meaning:
+     * + 'name' (string) is the short name of the Property.
+     * + 'isMultiple' (bool) is set to true if the Property accepts multiple
+     * + 'isLgDependant' (bool) is set to true if the Property values depend on
+     * language.
+     * + 'range' (array) contains a collection classes corresponding to the
+     * range.
+     *
+     * If hardRangeClassOnly is set to true, only classes that are hardified
+     * be returned in 'range'.
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @return string
-     */
-    public static function getPropertiesTableName( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = (string) '';
-
-        // section 10-13-1--128--4620d5d7:12fbf26f8b8:-8000:0000000000001502 begin
-		
-		$returnValue = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($resource).'Props';
-		
-        // section 10-13-1--128--4620d5d7:12fbf26f8b8:-8000:0000000000001502 end
-
-        return (string) $returnValue;
-    }
-
-    /**
-     * Short description of method propertyDescriptor
-     *
-     * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Property property
-     * @param  boolean hardRangeClassOnly
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Property property A Property in the database.
+     * @param  boolean hardRangeClassOnly Get only ranges that are in Hard SQL Mode.
      * @return array
      */
     public static function propertyDescriptor( core_kernel_classes_Property $property, $hardRangeClassOnly = false)
@@ -226,12 +217,12 @@ class core_kernel_persistence_hardapi_Utils
     }
 
     /**
-     * Short description of method buildSearchPattern
+     * Build a SQL search pattern on basis of a pattern and a comparison mode.
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  string pattern
-     * @param  boolean like
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string pattern A value to compare.
+     * @param  boolean like The manner to compare values. If set to true, the LIKE SQL operator will be used. If set to false, the = (equal) SQL operator will be used.
      * @return string
      */
     public static function buildSearchPattern($pattern, $like = true)
@@ -261,12 +252,12 @@ class core_kernel_persistence_hardapi_Utils
     }
 
     /**
-     * Short description of method getResourceIdByTable
+     * Get the ID of a resource in database in a given table.
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
-     * @param  Resource resource
-     * @param  string tableName
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Resource resource The Resource you want the ID.
+     * @param  string tableName The name of the table the resource should be located.
      * @return int
      */
     public static function getResourceIdByTable( core_kernel_classes_Resource $resource, $tableName)

@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Hard Database API</activediagram>
+      <activediagram>Persistence</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Dec 17 15:21:23 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Dec 18 13:28:27 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -13512,6 +13512,56 @@ May NOT contain additional types in the properties array
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-36aaae10:13bad44a267:-8000:0000000000001E25'
+                          name = 'setRange' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-36aaae10:13bad44a267:-8000:0000000000001E26'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-36aaae10:13bad44a267:-8000:0000000000001E27'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-36aaae10:13bad44a267:-8000:0000000000001E28'
+                              name = 'class' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-71dc1cdd:13bade8452c:-8000:0000000000001E32'
+                          name = 'setMultiple' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-71dc1cdd:13bade8452c:-8000:0000000000001E33'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-71dc1cdd:13bade8452c:-8000:0000000000001E34'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-71dc1cdd:13bade8452c:-8000:0000000000001E35'
+                              name = 'isMultiple' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
                       </UML:Classifier.feature>
                     </UML:Interface>
                     <UML:Abstraction xmi.id = '127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A5'
@@ -14517,6 +14567,15 @@ that cannot be longer than 64 characters</UML:TaggedValue.dataValue>
                               name = 'getLongName' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
                               isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                               isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-2dc0fefb:13badc53eb4:-8000:0000000000001E29'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Get the long name (full URI) by providing a short name.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:BehavioralFeature.parameter>
                                 <UML:Parameter xmi.id = '127-0-1-1--151fe597:12f7c91b993:-8000:00000000000014C8'
                                   name = 'return' isSpecification = 'false' kind = 'return'>
@@ -14528,25 +14587,6 @@ that cannot be longer than 64 characters</UML:TaggedValue.dataValue>
                                   name = 'shortName' isSpecification = 'false' kind = 'in'>
                                   <UML:Parameter.type>
                                     <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                                  </UML:Parameter.type>
-                                </UML:Parameter>
-                              </UML:BehavioralFeature.parameter>
-                            </UML:Operation>
-                            <UML:Operation xmi.id = '10-13-1--128--4620d5d7:12fbf26f8b8:-8000:0000000000001502'
-                              name = 'getPropertiesTableName' visibility = 'public' isSpecification = 'false'
-                              ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
-                              isLeaf = 'false' isAbstract = 'false'>
-                              <UML:BehavioralFeature.parameter>
-                                <UML:Parameter xmi.id = '10-13-1--128--4620d5d7:12fbf26f8b8:-8000:0000000000001503'
-                                  name = 'return' isSpecification = 'false' kind = 'return'>
-                                  <UML:Parameter.type>
-                                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                                  </UML:Parameter.type>
-                                </UML:Parameter>
-                                <UML:Parameter xmi.id = '10-13-1--128--4620d5d7:12fbf26f8b8:-8000:0000000000001504'
-                                  name = 'resource' isSpecification = 'false' kind = 'in'>
-                                  <UML:Parameter.type>
-                                    <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                                   </UML:Parameter.type>
                                 </UML:Parameter>
                               </UML:BehavioralFeature.parameter>
@@ -14570,15 +14610,50 @@ that cannot be longer than 64 characters</UML:TaggedValue.dataValue>
                               name = 'propertyDescriptor' visibility = 'public' isSpecification = 'false'
                               ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
                               isLeaf = 'false' isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-2dc0fefb:13badc53eb4:-8000:0000000000001E2A'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Get a simple description about a Property in the database. 
+
+This method returns an associative array where the keys have the following meaning:
++ &apos;name&apos; (string) is the short name of the Property.
++ &apos;isMultiple&apos; (bool) is set to true if the Property accepts multiple values.
++ &apos;isLgDependant&apos; (bool) is set to true if the Property values depend on the language.
++ &apos;range&apos; (array) contains a collection classes corresponding to the Property range.
+
+If hardRangeClassOnly is set to true, only classes that are hardified will be returned in &apos;range&apos;.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:BehavioralFeature.parameter>
                                 <UML:Parameter xmi.id = '10-13-1--128-743691ae:12fc0ed9381:-8000:0000000000001526'
                                   name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:ModelElement.taggedValue>
+                                    <UML:TaggedValue xmi.id = '10-13-1-85-2dc0fefb:13badc53eb4:-8000:0000000000001E2B'
+                                      isSpecification = 'false'>
+                                      <UML:TaggedValue.dataValue>An associative array that describes the Property.</UML:TaggedValue.dataValue>
+                                      <UML:TaggedValue.type>
+                                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                      </UML:TaggedValue.type>
+                                    </UML:TaggedValue>
+                                  </UML:ModelElement.taggedValue>
                                   <UML:Parameter.type>
                                     <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
                                   </UML:Parameter.type>
                                 </UML:Parameter>
                                 <UML:Parameter xmi.id = '10-13-1--128-743691ae:12fc0ed9381:-8000:0000000000001527'
                                   name = 'property' isSpecification = 'false' kind = 'in'>
+                                  <UML:ModelElement.taggedValue>
+                                    <UML:TaggedValue xmi.id = '10-13-1-85-2dc0fefb:13badc53eb4:-8000:0000000000001E2C'
+                                      isSpecification = 'false'>
+                                      <UML:TaggedValue.dataValue>A Property in the database.</UML:TaggedValue.dataValue>
+                                      <UML:TaggedValue.type>
+                                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                      </UML:TaggedValue.type>
+                                    </UML:TaggedValue>
+                                  </UML:ModelElement.taggedValue>
                                   <UML:Parameter.type>
                                     <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769'/>
                                   </UML:Parameter.type>
@@ -14589,6 +14664,15 @@ that cannot be longer than 64 characters</UML:TaggedValue.dataValue>
                                     <UML:Expression xmi.id = '10-13-1--128-743691ae:12fc0ed9381:-8000:000000000000152D'
                                       language = '' body = 'false'/>
                                   </UML:Parameter.defaultValue>
+                                  <UML:ModelElement.taggedValue>
+                                    <UML:TaggedValue xmi.id = '10-13-1-85-2dc0fefb:13badc53eb4:-8000:0000000000001E2D'
+                                      isSpecification = 'false'>
+                                      <UML:TaggedValue.dataValue>Get only ranges that are in Hard SQL Mode.</UML:TaggedValue.dataValue>
+                                      <UML:TaggedValue.type>
+                                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                      </UML:TaggedValue.type>
+                                    </UML:TaggedValue>
+                                  </UML:ModelElement.taggedValue>
                                   <UML:Parameter.type>
                                     <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                                   </UML:Parameter.type>
@@ -14599,15 +14683,42 @@ that cannot be longer than 64 characters</UML:TaggedValue.dataValue>
                               name = 'buildSearchPattern' visibility = 'public' isSpecification = 'false'
                               ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
                               isLeaf = 'false' isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-2dc0fefb:13badc53eb4:-8000:0000000000001E2E'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Build a SQL search pattern on basis of a pattern and a comparison mode.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:BehavioralFeature.parameter>
                                 <UML:Parameter xmi.id = '10-13-1--128-743691ae:12fc0ed9381:-8000:000000000000152F'
                                   name = 'return' isSpecification = 'false' kind = 'return'>
+                                  <UML:ModelElement.taggedValue>
+                                    <UML:TaggedValue xmi.id = '10-13-1-85-2dc0fefb:13badc53eb4:-8000:0000000000001E31'
+                                      isSpecification = 'false'>
+                                      <UML:TaggedValue.dataValue>A built search pattern that can be used directly in a SQL statement.</UML:TaggedValue.dataValue>
+                                      <UML:TaggedValue.type>
+                                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                      </UML:TaggedValue.type>
+                                    </UML:TaggedValue>
+                                  </UML:ModelElement.taggedValue>
                                   <UML:Parameter.type>
                                     <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                                   </UML:Parameter.type>
                                 </UML:Parameter>
                                 <UML:Parameter xmi.id = '10-13-1--128-743691ae:12fc0ed9381:-8000:0000000000001530'
                                   name = 'pattern' isSpecification = 'false' kind = 'in'>
+                                  <UML:ModelElement.taggedValue>
+                                    <UML:TaggedValue xmi.id = '10-13-1-85-2dc0fefb:13badc53eb4:-8000:0000000000001E2F'
+                                      isSpecification = 'false'>
+                                      <UML:TaggedValue.dataValue>A value to compare.</UML:TaggedValue.dataValue>
+                                      <UML:TaggedValue.type>
+                                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                      </UML:TaggedValue.type>
+                                    </UML:TaggedValue>
+                                  </UML:ModelElement.taggedValue>
                                   <UML:Parameter.type>
                                     <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                                   </UML:Parameter.type>
@@ -14618,6 +14729,15 @@ that cannot be longer than 64 characters</UML:TaggedValue.dataValue>
                                     <UML:Expression xmi.id = '10-13-1--128-743691ae:12fc0ed9381:-8000:0000000000001535'
                                       language = '' body = 'true'/>
                                   </UML:Parameter.defaultValue>
+                                  <UML:ModelElement.taggedValue>
+                                    <UML:TaggedValue xmi.id = '10-13-1-85-2dc0fefb:13badc53eb4:-8000:0000000000001E30'
+                                      isSpecification = 'false'>
+                                      <UML:TaggedValue.dataValue>The manner to compare values. If set to true, the LIKE SQL operator will be used. If set to false, the = (equal) SQL operator will be used.</UML:TaggedValue.dataValue>
+                                      <UML:TaggedValue.type>
+                                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                      </UML:TaggedValue.type>
+                                    </UML:TaggedValue>
+                                  </UML:ModelElement.taggedValue>
                                   <UML:Parameter.type>
                                     <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                                   </UML:Parameter.type>
@@ -14628,6 +14748,15 @@ that cannot be longer than 64 characters</UML:TaggedValue.dataValue>
                               name = 'getResourceIdByTable' visibility = 'public' isSpecification = 'false'
                               ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
                               isLeaf = 'false' isAbstract = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-2dc0fefb:13badc53eb4:-8000:0000000000001E32'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Get the ID of a resource in database in a given table.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:BehavioralFeature.parameter>
                                 <UML:Parameter xmi.id = '127-0-1-1--4d72422d:1316c1e6091:-8000:000000000000162F'
                                   name = 'return' isSpecification = 'false' kind = 'return'>
@@ -14637,12 +14766,30 @@ that cannot be longer than 64 characters</UML:TaggedValue.dataValue>
                                 </UML:Parameter>
                                 <UML:Parameter xmi.id = '127-0-1-1--4d72422d:1316c1e6091:-8000:0000000000001630'
                                   name = 'resource' isSpecification = 'false' kind = 'in'>
+                                  <UML:ModelElement.taggedValue>
+                                    <UML:TaggedValue xmi.id = '10-13-1-85-2dc0fefb:13badc53eb4:-8000:0000000000001E33'
+                                      isSpecification = 'false'>
+                                      <UML:TaggedValue.dataValue>The Resource you want the ID.</UML:TaggedValue.dataValue>
+                                      <UML:TaggedValue.type>
+                                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                      </UML:TaggedValue.type>
+                                    </UML:TaggedValue>
+                                  </UML:ModelElement.taggedValue>
                                   <UML:Parameter.type>
                                     <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                                   </UML:Parameter.type>
                                 </UML:Parameter>
                                 <UML:Parameter xmi.id = '127-0-1-1--4d72422d:1316c1e6091:-8000:0000000000001631'
                                   name = 'tableName' isSpecification = 'false' kind = 'in'>
+                                  <UML:ModelElement.taggedValue>
+                                    <UML:TaggedValue xmi.id = '10-13-1-85-2dc0fefb:13badc53eb4:-8000:0000000000001E34'
+                                      isSpecification = 'false'>
+                                      <UML:TaggedValue.dataValue>The name of the table the resource should be located.</UML:TaggedValue.dataValue>
+                                      <UML:TaggedValue.type>
+                                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                      </UML:TaggedValue.type>
+                                    </UML:TaggedValue>
+                                  </UML:ModelElement.taggedValue>
                                   <UML:Parameter.type>
                                     <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                                   </UML:Parameter.type>
@@ -58739,7 +58886,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </path>
   </group>
   <group name="Fig17"
-       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[1672, 384, 406, 124]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[1672, 384, 406, 154]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A0"
        fill="1"
        fillcolor="200 255 255"
@@ -58753,7 +58900,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       x="1672"
       y="384"
       width="406"
-      height="124"
+      height="154"
       fill="1"
       fillcolor="200 255 255"
       stroke="1"
@@ -58824,7 +58971,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig17.4"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1673, 425, 404, 83]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1673, 425, 404, 113]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:00000000000013A0"
          fill="0"
          fillcolor="200 255 255"
@@ -58838,7 +58985,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="1673"
         y="425"
         width="404"
-        height="83"
+        height="113"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -58912,7 +59059,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="1673"
         y="485"
         width="404"
-        height="21"
+        height="15"
         fill="0"
         fillcolor="200 255 255"
         stroke="0"
@@ -58924,6 +59071,38 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >delete(resource : Resource,deleteReference : boolean = false) : boolean</text>
+      <text name="Fig17.4.6"
+        x="1673"
+        y="500"
+        width="404"
+        height="15"
+        fill="0"
+        fillcolor="200 255 255"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setRange(resource : Resource,class : Class) : Class</text>
+      <text name="Fig17.4.7"
+        x="1673"
+        y="515"
+        width="404"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >setMultiple(resource : Resource,isMultiple : boolean) : void</text>
     </group>
   </group>
   <group name="Fig18"
@@ -59787,7 +59966,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <lineto x="1840"
               y="776" />
       <lineto x="1840"
-              y="507" />
+              y="537" />
     </path>
   </group>
   <group name="Fig25"
@@ -59820,7 +59999,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <lineto x="1840"
               y="928" />
       <lineto x="1840"
-              y="507" />
+              y="537" />
     </path>
   </group>
   <group name="Fig26"
@@ -59853,7 +60032,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <lineto x="1840"
               y="1184" />
       <lineto x="1840"
-              y="507" />
+              y="537" />
     </path>
   </group>
   <group name="Fig27"
@@ -61792,7 +61971,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <lineto x="1840"
               y="1384" />
       <lineto x="1840"
-              y="507" />
+              y="537" />
     </path>
   </group>
   <group name="Fig45"
@@ -63259,7 +63438,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <lineto x="1840"
               y="1576" />
       <lineto x="1840"
-              y="507" />
+              y="537" />
     </path>
   </group>
   <group name="Fig62"
@@ -64305,7 +64484,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig5"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[576, 232, 466, 174]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[576, 232, 464, 160]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001596"
        fill="1"
        fillcolor="white"
@@ -64319,8 +64498,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <rectangle name="Fig5.0"
       x="576"
       y="232"
-      width="466"
-      height="174"
+      width="464"
+      height="160"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -64329,7 +64508,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <text name="Fig5.1"
       x="577"
       y="233"
-      width="464"
+      width="462"
       height="21"
       fill="0"
       fillcolor="white"
@@ -64368,7 +64547,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <rectangle name="Fig5.3"
       x="576"
       y="254"
-      width="466"
+      width="464"
       height="1"
       fill="1"
       fillcolor="black"
@@ -64376,7 +64555,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig5.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[577, 255, 464, 38]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[577, 255, 462, 38]"
          href="127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001596"
          fill="0"
          fillcolor="white"
@@ -64389,7 +64568,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <rectangle name="Fig5.4.0"
         x="577"
         y="255"
-        width="464"
+        width="462"
         height="38"
         fill="0"
         fillcolor="white"
@@ -64399,7 +64578,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig5.4.1"
         x="577"
         y="255"
-        width="464"
+        width="462"
         height="15"
         fill="0"
         fillcolor="white"
@@ -64415,7 +64594,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig5.4.2"
         x="577"
         y="270"
-        width="464"
+        width="462"
         height="21"
         fill="0"
         fillcolor="white"
@@ -64432,7 +64611,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     <rectangle name="Fig5.5"
       x="576"
       y="292"
-      width="466"
+      width="464"
       height="1"
       fill="1"
       fillcolor="black"
@@ -64440,7 +64619,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig5.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[577, 293, 464, 113]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[577, 293, 462, 98]"
          href="127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001596"
          fill="0"
          fillcolor="white"
@@ -64453,8 +64632,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <rectangle name="Fig5.6.0"
         x="577"
         y="293"
-        width="464"
-        height="113"
+        width="462"
+        height="98"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -64463,7 +64642,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig5.6.1"
         x="577"
         y="293"
-        width="464"
+        width="462"
         height="15"
         fill="0"
         fillcolor="white"
@@ -64479,7 +64658,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig5.6.2"
         x="577"
         y="308"
-        width="464"
+        width="462"
         height="15"
         fill="0"
         fillcolor="white"
@@ -64495,7 +64674,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig5.6.3"
         x="577"
         y="323"
-        width="464"
+        width="462"
         height="15"
         fill="0"
         fillcolor="white"
@@ -64511,23 +64690,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig5.6.4"
         x="577"
         y="338"
-        width="464"
-        height="15"
-        fill="0"
-        fillcolor="white"
-        stroke="0"
-        strokecolor="black"
-        textcolor="black"
-        font="Dialog"
-        italic="false"
-        bold="false"
-        textsize="10"
-        justification="Left"
-      >getPropertiesTableName(resource : Resource) : string</text>
-      <text name="Fig5.6.5"
-        x="577"
-        y="353"
-        width="464"
+        width="462"
         height="15"
         fill="0"
         fillcolor="white"
@@ -64540,10 +64703,10 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >propertyDescriptor(property : Property,hardRangeClassOnly : boolean = false) : array</text>
-      <text name="Fig5.6.6"
+      <text name="Fig5.6.5"
         x="577"
-        y="368"
-        width="464"
+        y="353"
+        width="462"
         height="15"
         fill="0"
         fillcolor="white"
@@ -64556,10 +64719,10 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >buildSearchPattern(pattern : string,like : boolean = true) : string</text>
-      <text name="Fig5.6.7"
+      <text name="Fig5.6.6"
         x="577"
-        y="383"
-        width="464"
+        y="368"
+        width="462"
         height="21"
         fill="0"
         fillcolor="white"
@@ -65089,9 +65252,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         width="280"
         height="15"
         fill="0"
-        fillcolor="white"
+        fillcolor="220 220 220"
         stroke="0"
-        strokecolor="black"
+        strokecolor="200 60 60"
         textcolor="black"
         font="Dialog"
         italic="false"
@@ -65105,9 +65268,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         width="280"
         height="21"
         fill="0"
-        fillcolor="white"
+        fillcolor="220 220 220"
         stroke="0"
-        strokecolor="black"
+        strokecolor="200 60 60"
         textcolor="black"
         font="Dialog"
         italic="false"
@@ -71345,7 +71508,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="41"
         y="362"
         width="704"
-        height="29"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"

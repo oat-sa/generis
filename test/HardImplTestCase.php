@@ -96,6 +96,7 @@ class HardImplTestCase extends UnitTestCase {
 	
 	public function testHardModel(){
 		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+		$propertyProxy = core_kernel_persistence_PropertyProxy::singleton();
 		$proxy = core_kernel_persistence_ResourceProxy::singleton();
 		
 		$domainProperty = new core_kernel_classes_Property(RDFS_DOMAIN);

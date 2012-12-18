@@ -902,7 +902,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     		//saving the properties in the cache file
     		if($this->cacheModes['property'] == self::CACHE_FILE){
     			
-    			$returnValue = file_put_contents($file, serialize(self::$_properties));
+    			$returnValue = file_put_contents($file, serialize(self::$_properties), LOCK_EX);
 				if(!$returnValue){
 					throw new core_kernel_persistence_hardapi_Exception("cannot write the required property cache file in the location ".$file);
 				}
