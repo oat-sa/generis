@@ -275,6 +275,8 @@ class core_kernel_versioning_FileProxy
 				case PROPERTY_GENERIS_VCS_TYPE_SUBVERSION_WIN:
 					$implClass = 'core_kernel_versioning_subversionWindows_File';
 					break;
+	        	default:
+	        		throw new common_exception_Error('unknown Version Control System '.$VCStype->getLabel().'('.$VCStype.')');
 			}
 
 			// If an implementation has been found
