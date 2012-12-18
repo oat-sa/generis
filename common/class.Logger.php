@@ -123,8 +123,7 @@ class common_Logger
      * @access private
      * @var array
      */
-    private $ACCEPTABLE_WARNINGS = array("/Declaration of .* should be compatible with that of /",
-"/Static function .* should not be abstract/");
+    private $ACCEPTABLE_WARNINGS = array();
 
     // --- OPERATIONS ---
 
