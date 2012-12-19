@@ -234,24 +234,24 @@ class core_kernel_persistence_hardsql_Property
 		        		// However, if the property was not 'multiple' but 'language dependent'
 		        		// it is already stored as it should.
 		        		if ($isMultiple == true && $wasLgDependent == false && $wasMulti == false){
+		        			
 		        			// We go from single to multiple.
 		        			$setPropertyValue = (empty($propRanges) || in_array(RDFS_LITERAL, $propRanges)) ? true : false;
 		        			$sql = 'SELECT "id","' . $propName . '" AS "val" FROM "' . $tblname . '"';
 		        			$result = $dbWrapper->query($sql);
+		        			
+		        			// Prepare the insert statement.
+		        			$sql  = 'INSERT INTO "' . $tblname . 'Props" ';
+		        			$sql .= '("property_uri", "property_value", "property_foreign_uri", "l_language", "instance_id") ';
+		        			$sql .= 'VALUES (?, ?, ?, ?, ?)';
+		        			$sth = $dbWrapper->prepare($sql);
 		        			
 		        			while ($row = $result->fetch()){
 		        				// Transfer to the 'properties table'.
 		        				$propertyValue = ($setPropertyValue == true) ? $row['val'] : null;
 		        				$propertyForeignUri = ($setPropertyValue == false) ? $row['val'] : null;
 		        				
-		        				$sql  = 'INSERT INTO "' . $tblname . 'Props" ("property_uri", "property_value", "property_foreign_uri", "l_language", "instance_id)" ';
-		        				$sql .= 'VALUES (?, ?, ?, ?, ?)';
-		        				var_dump($sql);
-		        				$dbWrapper->exec($sql, array($resource->getUri(),
-		        											 $propertyValue,
-		        											 $propertyForeignUri,
-		        											 '',
-		        											 $row['id'])); 
+		        				$sth->execute(array($propUri, $propertyValue, $propertyForeignUri, '', $row['id'])); 
 		        			}
 		        			
 		        			// Remove old column containing scalar values.
@@ -262,19 +262,36 @@ class core_kernel_persistence_hardsql_Property
 		        			}
 		        		}
 		        		else if ($isMultiple == false && ($wasLgDependent == true || $wasMulti == true)){
-		        			// We go from multiple to single.
-		        			$propsTblname = str_replace('Props', '', $tblname);
-		        			$retrievePropertyValue = (empty($propRanges) || in_array(RDFS_LITERAL, $propRanges)) ? true : false;
-		        			$sql  = 'SELECT "id", "instance_id", "property_value", "property_foreign_uri" FROM "' . $propsTblname . '" ';
-		        			$sql .= 'WHERE "property_uri" = ? ORDER by "id"';
-		        			$sql = $dbWrapper->limitStatement($sql, 1);
 		        			
-		        			$result = $dbWrapper->exec($sql, $propUri);
-		        			while ($row = $result->fetch()){
-		        				$propertyValue = ($retrievePropertyValue == true) ? $row['property_value'] : $row['property_foreign_uri'];
-		        				$propertyValue = $dbWrapper->dbConnector->quote($propertyValue);
-		        				$sql  = 'UPDATE "' . $tblname . '" SET "' . $propName . '" = ' . $propertyValue . ' ';
-		        				$sql .= 'WHERE "id" = ' . $row['instance_id'];
+		        			// We go from multiple to single.
+		        			
+		        			// Add a column to the base table to receive single value.
+		        			$baseTableName = str_replace('Props', '', $tblname);
+		        			$tblmgr->setName($baseTableName);
+		        			$shortName = core_kernel_persistence_hardapi_Utils::getShortName($resource);
+		        			$columnAdded = $tblmgr->addColumn(array('name' => $shortName,
+		        											  		'multi' => false));
+		        			if ($columnAdded == true){
+		        				// Now get the values in the props table. Group by instance ID in order to get only
+		        				// one value to put in the target column.
+			        			$retrievePropertyValue = (empty($propRanges) || in_array(RDFS_LITERAL, $propRanges)) ? true : false;
+			        			$sql  = 'SELECT "a"."id", "a"."instance_id", "a"."property_value", "a"."property_foreign_uri" FROM "' . $tblname . '" "a" ';
+			        			$sql .= 'RIGHT JOIN (SELECT "instance_id", MIN("id") AS "id" FROM "' . $tblname . '" WHERE property_uri = ? ';
+			        			$sql .= 'GROUP BY "instance_id") AS "b" ON ("a"."id" = "b"."id")';
+								
+			        			$result = $dbWrapper->query($sql, array($propUri));
+			        			// prepare the update statement.
+			        			$sql  = 'UPDATE "' . $baseTableName . '" SET "' . $shortName . '" = ? WHERE "id" = ?';
+			        			
+			        			$sth = $dbWrapper->prepare($sql);
+			        			while ($row = $result->fetch()){
+			        				$propertyValue = ($retrievePropertyValue == true) ? $row['property_value'] : $row['property_foreign_uri'];
+			        				$sth->execute(array($propertyValue, $row['instance_id']));
+			        			}	
+		        			}
+		        			else{
+		        				$msg = "Cannot set multiplicity of Property '${propUri}' because the corresponding 'base table' column could not be created.";
+		        				throw new core_kernel_persistence_hardsql_Exception($msg);
 		        			}
 		        		}
 	        		}

@@ -415,6 +415,8 @@ class core_kernel_persistence_hardsql_Class
 			}
 			
 			$returnValue = $smoothReturnValue;
+			
+			$referencer->resetCache();
 		}
 		else{
 			$uri = $resource->getUri();

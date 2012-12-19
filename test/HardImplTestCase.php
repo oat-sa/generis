@@ -387,6 +387,107 @@ class HardImplTestCase extends UnitTestCase {
 		$this->assertEqual(count($instances), 0);
 	}
 	
+	public function testGetRdfTriples(){
+		$workClass = $this->targetWorkClass;
+		$authorProperty = $this->targetAuthorProperty;
+		
+		// We now test rdfTriples on a hardified resource.
+		$filters = array($authorProperty->getUri() => 'John Ronald Reuel Tolkien');
+		$options = array('like' => false);
+		$instances = $workClass->searchInstances($filters, $options);
+		$this->assertEqual(count($instances), 1);
+		$book = current($instances);
+		$this->assertEqual($book->getLabel(), 'The Lord of the Rings');
+		$triples = $book->getRdfTriples()->toArray();
+		$this->assertEqual($triples[1]->predicate, 'http://www.w3.org/2000/01/rdf-schema#label');
+		$this->assertEqual($triples[0]->predicate, $authorProperty->getUri());
+		$this->assertEqual($triples[0]->object, 'John Ronald Reuel Tolkien');
+		$this->assertEqual($triples[2]->predicate, RDF_TYPE);
+		$this->assertEqual($triples[2]->object, $workClass->getUri());
+		
+		// We now test rdfTriples on a hardified class.
+		$triples = $workClass->getRdfTriples()->toArray();
+		$this->assertEqual($triples[0]->predicate, RDF_TYPE);
+		$this->assertEqual($triples[0]->object, RDF_CLASS);
+	}
+	
+	public function testPropertyModifications(){
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		
+		$movieClass = $this->targetMovieClass;
+		$workClass = $this->targetWorkClass;
+		$authorProperty = $this->targetAuthorProperty;
+		$producerProperty = $this->targetProducerProperty;
+		$actorsProperty = $this->targetActorsProperty;
+		$labelProperty = new core_kernel_classes_Property(RDFS_LABEL);
+		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+		$propertyProxy = core_kernel_persistence_PropertyProxy::singleton();
+		
+		// Retrieve interesting resources.
+		$instances = $workClass->searchInstances(array($authorProperty->getUri() => 'Leonardo da Vinci'),
+												 array('like' => false, 'recursive' => false));
+		$monaLisa = current($instances);
+		$instances = $movieClass->searchInstances(array($labelProperty->getUri() => 'The Lord of the Rings'),
+												  array('like' => false, 'recursive' => false));
+		$lordOfTheRings = current($instances);
+		
+		$instances = $movieClass->searchInstances(array($labelProperty->getUri() => 'The Hobbit'),
+												  array('like' => true, 'recursive' => false));
+		$theHobbit = current($instances);
+		
+		if (empty($monaLisa) || empty($lordOfTheRings) || empty($theHobbit)){
+			var_dump($monaLisa);
+			var_dump($lordOfTheRings);
+			var_dump($theHobbit);
+			$this->fail("Unable to retrieve instances that will be used in the following tests.");
+		}
+		else{
+			// Try to create a new scalar property after hardification.
+			$testProperty = $movieClass->createProperty('after hardify property');
+			$testPropertyShortName = core_kernel_persistence_hardapi_Utils::getShortName($testProperty);
+			$testPropertyLocations = $referencer->propertyLocation($testProperty);
+			$movieClassLocations = $referencer->classLocations($movieClass);
+			$movieClassTable = $movieClassLocations[0]['table'];
+			$movieClassTableColumns = $dbWrapper->getColumnNames($movieClassTable);
+			$workClassLocations = $referencer->classLocations($workClass);
+			$workClassTable = $movieClassLocations[0]['table'];
+			$workClassTableColumns = $dbWrapper->getColumnNames($workClassTable);
+			$testPropertyShortName = core_kernel_persistence_hardapi_Utils::getShortName($testProperty);
+			$authorPropertyShortName = core_kernel_persistence_hardapi_Utils::getShortName($authorProperty);
+			
+			// test delegation and presence of the column.
+			$this->assertTrue(in_array($testPropertyShortName, $movieClassTableColumns));
+			$this->assertIsA($propertyProxy->getImpToDelegateTo($testProperty), 'core_kernel_persistence_hardsql_Property');
+	
+			// set the author property to multiple.
+			$this->assertTrue(in_array($authorPropertyShortName, $movieClassTableColumns));
+			$this->assertFalse($authorProperty->isMultiple());
+			$authorProperty->setMultiple(true);
+			$this->assertTrue($authorProperty->isMultiple());
+			$movieClassTableColumns = $dbWrapper->getColumnNames($movieClassTable);
+			$this->assertFalse(in_array($authorPropertyShortName, $movieClassTableColumns));
+			// Add a fake value to make it multi valued
+			$theHobbit->setPropertyValue($authorProperty, 'The Clone of Peter Jackson');
+			
+			$authors = $theHobbit->getPropertyValues($authorProperty);
+			$this->assertEqual(count($authors), 2);
+			$this->assertEqual(current($authors), 'Peter Jackson'); next($authors);
+			$this->assertEqual(current($authors), 'The Clone of Peter Jackson');
+			$authors = $monaLisa->getPropertyValues($authorProperty);
+			$this->assertEqual(count($authors), 1);
+			$this->assertEqual(current($authors), 'Leonardo da Vinci');
+	
+			// reset the author property to scalar.
+			$authorProperty->setMultiple(false);
+			$this->assertFalse($authorProperty->isMultiple());
+			$movieClassTableColumns = $dbWrapper->getColumnNames($movieClassTable);
+			$this->assertTrue(in_array($authorPropertyShortName, $movieClassTableColumns));
+			$authors = $theHobbit->getPropertyValues($authorProperty);
+			$this->assertEqual(count($authors), 1);
+			$this->assertEqual(current($authors), 'Peter Jackson');
+		}
+	}
+	
 	public function testDeleteInstances(){
 		$movieClass = $this->targetMovieClass;
 		$authorProperty = $this->targetAuthorProperty;
@@ -459,30 +560,6 @@ class HardImplTestCase extends UnitTestCase {
 		// with its references.
 		$relatedMovie = $matrixRevolutionsMovie->getUniquePropertyValue($relatedMoviesProperty);
 		$this->assertEqual($relatedMovie->getLabel(), 'The Matrix Reloaded');
-	}
-	
-	public function testGetRdfTriples(){
-		$workClass = $this->targetWorkClass;
-		$authorProperty = $this->targetAuthorProperty;
-		
-		// We now test rdfTriples on a hardified resource.
-		$filters = array($authorProperty->getUri() => 'John Ronald Reuel Tolkien');
-		$options = array('like' => false);
-		$instances = $workClass->searchInstances($filters, $options);
-		$this->assertEqual(count($instances), 1);
-		$book = current($instances);
-		$this->assertEqual($book->getLabel(), 'The Lord of the Rings');
-		$triples = $book->getRdfTriples()->toArray();
-		$this->assertEqual($triples[1]->predicate, 'http://www.w3.org/2000/01/rdf-schema#label');
-		$this->assertEqual($triples[0]->predicate, $authorProperty->getUri());
-		$this->assertEqual($triples[0]->object, 'John Ronald Reuel Tolkien');
-		$this->assertEqual($triples[2]->predicate, RDF_TYPE);
-		$this->assertEqual($triples[2]->object, $workClass->getUri());
-		
-		// We now test rdfTriples on a hardified class.
-		$triples = $workClass->getRdfTriples()->toArray();
-		$this->assertEqual($triples[0]->predicate, RDF_TYPE);
-		$this->assertEqual($triples[0]->object, RDF_CLASS);
 	}
 	
 	public function testForceMode (){
