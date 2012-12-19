@@ -213,6 +213,12 @@
     <rdfs:comment xml:lang="EN"><![CDATA[CVS]]></rdfs:comment>
     <rdfs:label xml:lang="EN"><![CDATA[CVS]]></rdfs:label>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#VCSLocalDirectory">
+    <rdf:type rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#VersioningControlSystem"/>
+    <rdf:value xml:lang="EN"><![CDATA[local]]></rdf:value>
+    <rdfs:comment xml:lang="EN"><![CDATA[Local unversioned directory]]></rdfs:comment>
+    <rdfs:label xml:lang="EN"><![CDATA[Local directory]]></rdfs:label>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#VersionedFile">
     <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#File"/>
     <rdfs:label xml:lang="EN"><![CDATA[Versioned File]]></rdfs:label>

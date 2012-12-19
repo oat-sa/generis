@@ -9,12 +9,12 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 25.01.2012, 15:38:16 with ArgoUML PHP module 
+ * Automatically generated on 19.12.2012, 14:52:56 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
- * @subpackage kernel_versioning
+ * @subpackage kernel_versioning_local
  */
 
 if (0 > version_compare(PHP_VERSION, '5')) {
@@ -24,27 +24,27 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_versioning_RepositoryInterface
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  */
 require_once('core/kernel/versioning/interface.RepositoryInterface.php');
 
 /* user defined includes */
-// section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002501-includes begin
-// section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002501-includes end
+// section 10-30-1--78-73b2f78e:13bb35d7c97:-8000:0000000000001E38-includes begin
+// section 10-30-1--78-73b2f78e:13bb35d7c97:-8000:0000000000001E38-includes end
 
 /* user defined constants */
-// section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002501-constants begin
-// section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002501-constants end
+// section 10-30-1--78-73b2f78e:13bb35d7c97:-8000:0000000000001E38-constants begin
+// section 10-30-1--78-73b2f78e:13bb35d7c97:-8000:0000000000001E38-constants end
 
 /**
- * Short description of class core_kernel_versioning_RepositoryProxy
+ * Short description of class core_kernel_versioning_local_Repository
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
- * @subpackage kernel_versioning
+ * @subpackage kernel_versioning_local
  */
-class core_kernel_versioning_RepositoryProxy
+class core_kernel_versioning_local_Repository
         implements core_kernel_versioning_RepositoryInterface
 {
     // --- ASSOCIATIONS ---
@@ -56,7 +56,7 @@ class core_kernel_versioning_RepositoryProxy
      * Short description of attribute instance
      *
      * @access private
-     * @var RepositoryProxy
+     * @var Repository
      */
     private static $instance = null;
 
@@ -66,7 +66,7 @@ class core_kernel_versioning_RepositoryProxy
      * Short description of method checkout
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Repository vcs
      * @param  string url
      * @param  string path
@@ -78,8 +78,8 @@ class core_kernel_versioning_RepositoryProxy
         $returnValue = (bool) false;
 
         // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002503 begin
-        $delegate = $this->getImplementationToDelegateTo($vcs);
-        $returnValue = $delegate->checkout($vcs, $url, $path, $revision);
+        common_Logger::i(__FUNCTION__.' called on local directory', 'LOCALVCS');
+        $returnValue = true;
         // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002503 end
 
         return (bool) $returnValue;
@@ -89,7 +89,7 @@ class core_kernel_versioning_RepositoryProxy
      * Short description of method authenticate
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Repository vcs
      * @param  string login
      * @param  string password
@@ -100,8 +100,8 @@ class core_kernel_versioning_RepositoryProxy
         $returnValue = (bool) false;
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E6 begin
-        $delegate = $this->getImplementationToDelegateTo($vcs);
-        $returnValue = $delegate->authenticate($vcs, $login, $password);
+        common_Logger::i(__FUNCTION__.' called on local directory', 'LOCALVCS');
+        $returnValue = is_dir($vcs->getPath());
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E6 end
 
         return (bool) $returnValue;
@@ -111,7 +111,7 @@ class core_kernel_versioning_RepositoryProxy
      * Short description of method export
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Repository vcs
      * @param  string src
      * @param  string target
@@ -123,8 +123,7 @@ class core_kernel_versioning_RepositoryProxy
         $returnValue = (bool) false;
 
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C begin
-        $delegate = $this->getImplementationToDelegateTo($vcs);
-        $returnValue = $delegate->export($vcs, $src, $target, $revision);
+        throw new core_kernel_versioning_exception_Exception(__METHOD__.' not supported by Local Directory');
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C end
 
         return (bool) $returnValue;
@@ -134,7 +133,7 @@ class core_kernel_versioning_RepositoryProxy
      * Short description of method import
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Repository vcs
      * @param  string src
      * @param  string target
@@ -147,8 +146,7 @@ class core_kernel_versioning_RepositoryProxy
         $returnValue = null;
 
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 begin
-        $delegate = $this->getImplementationToDelegateTo($vcs);
-        $returnValue = $delegate->import($vcs, $src, $target, $message, $options);
+        throw new core_kernel_versioning_exception_Exception(__METHOD__.' not supported by Local Directory');
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 end
 
         return $returnValue;
@@ -158,7 +156,7 @@ class core_kernel_versioning_RepositoryProxy
      * Short description of method listContent
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Repository vcs
      * @param  string path
      * @param  int revision
@@ -169,71 +167,33 @@ class core_kernel_versioning_RepositoryProxy
         $returnValue = array();
 
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 begin
-        $delegate = $this->getImplementationToDelegateTo($vcs);
-        $returnValue = $delegate->listContent($vcs, $path, $revision);
+        throw new core_kernel_versioning_exception_Exception(__METHOD__.' not supported by Local Directory');
         // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 end
 
         return (array) $returnValue;
     }
 
     /**
-     * Short description of method getImplementationToDelegateTo
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  Resource resource
-     * @return core_kernel_versioning_RepositoryInterface
-     */
-    public function getImplementationToDelegateTo( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002513 begin
-    	$VCStype = $resource->getVCSType();
-        $implClass = '';
-        
-        // Function of the repository type, define the implementation to attack
-
-        switch ($VCStype->getUri())
-        {
-        	case PROPERTY_GENERIS_VCS_TYPE_SUBVERSION:
-        		$returnValue = core_kernel_versioning_subversion_Repository::singleton();
-        		break;
-        	case PROPERTY_GENERIS_VCS_TYPE_SUBVERSION_WIN:
-        		$returnValue = core_kernel_versioning_subversionWindows_Repository::singleton();
-        		break;
-        	case INSTANCE_GENERIS_VCS_TYPE_LOCAL:
-        		$returnValue = core_kernel_versioning_local_Repository::singleton();
-        		break;
-			default:
-        		throw new common_exception_Error('unknown Version Control System '.$VCStype->getLabel().'('.$VCStype.')');
-        }
-        // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002513 end
-
-        return $returnValue;
-    }
-
-    /**
      * Short description of method singleton
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @return core_kernel_versioning_RepositoryProxy
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return core_kernel_versioning_local_Repository
      */
     public static function singleton()
     {
         $returnValue = null;
 
-        // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002517 begin
-		if(is_null(self::$instance)){
-			self::$instance = new core_kernel_versioning_RepositoryProxy();
+        // section 10-30-1--78-73b2f78e:13bb35d7c97:-8000:0000000000001E45 begin
+        if(is_null(self::$instance)){
+			self::$instance = new core_kernel_versioning_local_Repository();
 		}
 		$returnValue = self::$instance;
-        // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002517 end
+        // section 10-30-1--78-73b2f78e:13bb35d7c97:-8000:0000000000001E45 end
 
         return $returnValue;
     }
 
-} /* end of class core_kernel_versioning_RepositoryProxy */
+} /* end of class core_kernel_versioning_local_Repository */
 
 ?>

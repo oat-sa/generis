@@ -3,18 +3,18 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - core/kernel/versioning/class.FileProxy.php
+ * Generis Object Oriented API - core/kernel/versioning/local/class.File.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 02.02.2012, 16:53:22 with ArgoUML PHP module 
+ * Automatically generated on 19.12.2012, 14:52:56 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
- * @subpackage kernel_versioning
+ * @subpackage kernel_versioning_local
  */
 
 if (0 > version_compare(PHP_VERSION, '5')) {
@@ -24,27 +24,27 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_versioning_FileInterface
  *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  */
 require_once('core/kernel/versioning/interface.FileInterface.php');
 
 /* user defined includes */
-// section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032DB-includes begin
-// section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032DB-includes end
+// section 10-30-1--78-73b2f78e:13bb35d7c97:-8000:0000000000001E37-includes begin
+// section 10-30-1--78-73b2f78e:13bb35d7c97:-8000:0000000000001E37-includes end
 
 /* user defined constants */
-// section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032DB-constants begin
-// section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032DB-constants end
+// section 10-30-1--78-73b2f78e:13bb35d7c97:-8000:0000000000001E37-constants begin
+// section 10-30-1--78-73b2f78e:13bb35d7c97:-8000:0000000000001E37-constants end
 
 /**
- * Short description of class core_kernel_versioning_FileProxy
+ * Short description of class core_kernel_versioning_local_File
  *
  * @access public
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package core
- * @subpackage kernel_versioning
+ * @subpackage kernel_versioning_local
  */
-class core_kernel_versioning_FileProxy
+class core_kernel_versioning_local_File
         implements core_kernel_versioning_FileInterface
 {
     // --- ASSOCIATIONS ---
@@ -56,7 +56,7 @@ class core_kernel_versioning_FileProxy
      * Short description of attribute instance
      *
      * @access private
-     * @var FileProxy
+     * @var File
      */
     private static $instance = null;
 
@@ -66,7 +66,7 @@ class core_kernel_versioning_FileProxy
      * Short description of method commit
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  File resource
      * @param  string message
      * @param  string path
@@ -79,8 +79,8 @@ class core_kernel_versioning_FileProxy
         $returnValue = (bool) false;
 
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A begin
-        $delegate = $this->getImplementationToDelegateTo($resource);
-		$returnValue = $delegate->commit($resource, $message, $path, $recursive);
+        common_Logger::i(__FUNCTION__.' called on local directory', 'LOCALVCS');
+        $returnValue = true;
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A end
 
         return (bool) $returnValue;
@@ -90,7 +90,7 @@ class core_kernel_versioning_FileProxy
      * Short description of method update
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  File resource
      * @param  string path
      * @param  int revision
@@ -102,8 +102,8 @@ class core_kernel_versioning_FileProxy
         $returnValue = (bool) false;
 
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165C begin
-        $delegate = $this->getImplementationToDelegateTo($resource);
-		$returnValue = $delegate->update($resource, $path, $revision);
+        common_Logger::i(__FUNCTION__.' called on local directory', 'LOCALVCS');
+        $returnValue = true;
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165C end
 
         return (bool) $returnValue;
@@ -113,7 +113,7 @@ class core_kernel_versioning_FileProxy
      * Short description of method revert
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  File resource
      * @param  int revision
      * @param  string msg
@@ -125,8 +125,7 @@ class core_kernel_versioning_FileProxy
         $returnValue = (bool) false;
 
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165E begin
-        $delegate = $this->getImplementationToDelegateTo($resource);
-		$returnValue = $delegate->revert($resource, $revision, $msg);
+		throw new core_kernel_versioning_exception_Exception(__METHOD__.' not supported by Local Directory');
         // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165E end
 
         return (bool) $returnValue;
@@ -136,7 +135,7 @@ class core_kernel_versioning_FileProxy
      * Short description of method delete
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  File resource
      * @param  string path
      * @return boolean
@@ -147,11 +146,7 @@ class core_kernel_versioning_FileProxy
         $returnValue = (bool) false;
 
         // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 begin
-        //update before delete, else we get an out of date exception
-        $resource->update();
-        //and delete
-        $delegate = $this->getImplementationToDelegateTo($resource);
-		$returnValue = $delegate->delete($resource, $path);
+		throw new core_kernel_versioning_exception_Exception(__METHOD__.' not supported by Local Directory');
         // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 end
 
         return (bool) $returnValue;
@@ -161,7 +156,7 @@ class core_kernel_versioning_FileProxy
      * Short description of method add
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  File resource
      * @param  string path
      * @param  boolean recursive
@@ -174,8 +169,7 @@ class core_kernel_versioning_FileProxy
         $returnValue = (bool) false;
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 begin
-        $delegate = $this->getImplementationToDelegateTo($resource);
-		$returnValue = $delegate->add($resource, $path, $recursive, $force);
+        common_Logger::i(__FUNCTION__.' called on local directory', 'LOCALVCS');
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 end
 
         return (bool) $returnValue;
@@ -185,7 +179,7 @@ class core_kernel_versioning_FileProxy
      * Short description of method getHistory
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  File resource
      * @param  string path
      * @return array
@@ -196,8 +190,7 @@ class core_kernel_versioning_FileProxy
         $returnValue = array();
 
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016FB begin
-        $delegate = $this->getImplementationToDelegateTo($resource);
-		$returnValue = $delegate->getHistory($resource, $path);
+		throw new core_kernel_versioning_exception_Exception(__METHOD__.' not supported by local directory');
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016FB end
 
         return (array) $returnValue;
@@ -207,7 +200,7 @@ class core_kernel_versioning_FileProxy
      * Short description of method getStatus
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  File resource
      * @param  string path
      * @param  array options
@@ -218,8 +211,8 @@ class core_kernel_versioning_FileProxy
         $returnValue = (int) 0;
 
         // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001902 begin
-        $delegate = $this->getImplementationToDelegateTo($resource);
-		$returnValue = $delegate->getStatus($resource, $path, $options);
+        common_Logger::i(__FUNCTION__.' called on local directory', 'LOCALVCS');
+        $returnValue = VERSIONING_FILE_STATUS_NORMAL;
         // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001902 end
 
         return (int) $returnValue;
@@ -229,7 +222,7 @@ class core_kernel_versioning_FileProxy
      * Short description of method resolve
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  File resource
      * @param  string path
      * @param  string version
@@ -240,85 +233,33 @@ class core_kernel_versioning_FileProxy
         $returnValue = (bool) false;
 
         // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 begin
-        $delegate = $this->getImplementationToDelegateTo($resource);
-		$returnValue = $delegate->resolve($resource, $path, $version);
+		throw new core_kernel_versioning_exception_Exception(__METHOD__.' not supported by Local Directory');
         // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 end
 
         return (bool) $returnValue;
     }
 
     /**
-     * Short description of method getImplementationToDelegateTo
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  Resource resource
-     * @return core_kernel_versioning_FileInterface
-     */
-    public function getImplementationToDelegateTo( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032E2 begin
-        
-		$repository = $resource->getRepository();
-		if(!is_null($repository)){
-			
-			$type = $repository->getVCSType();
-			$implClass = '';
-
-			// Function of the repository type, define the implementation to attack
-			switch ($type->getUri()) {
-				case PROPERTY_GENERIS_VCS_TYPE_SUBVERSION:
-					$implClass = 'core_kernel_versioning_subversion_File';
-					break;
-				case PROPERTY_GENERIS_VCS_TYPE_SUBVERSION_WIN:
-					$implClass = 'core_kernel_versioning_subversionWindows_File';
-					break;
-				case INSTANCE_GENERIS_VCS_TYPE_LOCAL:
-	        		$implClass = 'core_kernel_versioning_local_File';
-	        		break;
-	        	default:
-	        		throw new common_exception_Error('unknown Version Control System '.$VCStype->getLabel().'('.$VCStype.')');
-			}
-
-			// If an implementation has been found
-			if (!empty($implClass)) {
-				$reflectionMethod = new ReflectionMethod($implClass, 'singleton');
-				$delegate = $reflectionMethod->invoke(null);
-				$returnValue = $delegate;
-			}
-			
-		}else{
-			throw new core_kernel_versioning_exception_FileUnversionedException('no repository associated to the aledged versioned file');
-		}
-
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032E2 end
-
-        return $returnValue;
-    }
-
-    /**
      * Short description of method singleton
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @return core_kernel_versioning_FileProxy
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return core_kernel_versioning_local_File
      */
     public static function singleton()
     {
         $returnValue = null;
 
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F0 begin
-		if(is_null(self::$instance)){
-			self::$instance = new core_kernel_versioning_FileProxy();
+        // section 10-30-1--78-73b2f78e:13bb35d7c97:-8000:0000000000001E43 begin
+        if(is_null(self::$instance)){
+			self::$instance = new self();
 		}
 		$returnValue = self::$instance;
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F0 end
+		// section 10-30-1--78-73b2f78e:13bb35d7c97:-8000:0000000000001E43 end
 
         return $returnValue;
     }
 
-} /* end of class core_kernel_versioning_FileProxy */
+} /* end of class core_kernel_versioning_local_File */
 
 ?>

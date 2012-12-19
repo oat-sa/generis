@@ -68,6 +68,7 @@ define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_ROOTFILE' , 	GENERIS_NS . '#Reposit
 define('PROPERTY_GENERIS_VCS_TYPE_SUBVERSION' ,	GENERIS_NS . '#VCSTypeSubversion' , true) ;
 define('PROPERTY_GENERIS_VCS_TYPE_SUBVERSION_WIN' ,	GENERIS_NS . '#VCSTypeSubversionWindows' , true) ;
 define('PROPERTY_GENERIS_VCS_TYPE_CVS' ,	 	GENERIS_NS . '#VCSTypeCvs' , true) ;
+define('INSTANCE_GENERIS_VCS_TYPE_LOCAL' , 		GENERIS_NS . '#VCSLocalDirectory' , true) ;
 
 #user
 define('CLASS_ROLE',							'http://www.tao.lu/Ontologies/TAO.rdf#ClassRole',true);
