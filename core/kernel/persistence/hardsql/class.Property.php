@@ -254,7 +254,7 @@ class core_kernel_persistence_hardsql_Property
 		        				$sth->execute(array($propUri, $propertyValue, $propertyForeignUri, '', $row['id'])); 
 		        			}
 		        			
-		        			// Remove old column containing scalar values.
+		        			// Remove old column containing the scalar values.
 		        			// we do not need it anymore.
 		        			if ($tblmgr->removeColumn($propName) == false){
 	        					$msg = "Cannot successfully set multiplicity of Property '${propUri}' because its table column could not be removed from database.";
@@ -282,12 +282,24 @@ class core_kernel_persistence_hardsql_Property
 			        			$result = $dbWrapper->query($sql, array($propUri));
 			        			// prepare the update statement.
 			        			$sql  = 'UPDATE "' . $baseTableName . '" SET "' . $shortName . '" = ? WHERE "id" = ?';
-			        			
 			        			$sth = $dbWrapper->prepare($sql);
+			        			$toDelete = array(); // will contain ids of rows to delete in the 'properties table' after data transfer.
+			        			
 			        			while ($row = $result->fetch()){
 			        				$propertyValue = ($retrievePropertyValue == true) ? $row['property_value'] : $row['property_foreign_uri'];
 			        				$sth->execute(array($propertyValue, $row['instance_id']));
-			        			}	
+			        				$toDelete[] = $row['id'];
+			        			}
+			        			
+			        			$inData = implode(',', $toDelete);
+			        			$sql = 'DELETE FROM "' . $tblname . '" WHERE "id" IN (' . $inData . ')';
+			        			
+			        			if ($dbWrapper->exec($sql) == 0){
+			        				// If an error occured or no rows removed, we
+			        				// have a problem.
+			        				$msg = "Cannot set multiplicity of Property '${propUri}' because data transfered to the 'base table' could not be deleted";
+			        				throw new core_kernel_persistence_hardsql_Exception($msg);	
+			        			}
 		        			}
 		        			else{
 		        				$msg = "Cannot set multiplicity of Property '${propUri}' because the corresponding 'base table' column could not be created.";
