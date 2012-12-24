@@ -237,6 +237,7 @@ class core_kernel_persistence_hardsql_Property
 		        			
 		        			// We go from single to multiple.
 		        			$setPropertyValue = (empty($propRanges) || in_array(RDFS_LITERAL, $propRanges)) ? true : false;
+		        			$lang = ($setPropertyValue) ? DEFAULT_LANG : '';
 		        			$sql = 'SELECT "id","' . $propName . '" AS "val" FROM "' . $tblname . '"';
 		        			$result = $dbWrapper->query($sql);
 		        			
@@ -251,7 +252,7 @@ class core_kernel_persistence_hardsql_Property
 		        				$propertyValue = ($setPropertyValue == true) ? $row['val'] : null;
 		        				$propertyForeignUri = ($setPropertyValue == false) ? $row['val'] : null;
 		        				
-		        				$sth->execute(array($propUri, $propertyValue, $propertyForeignUri, '', $row['id'])); 
+		        				$sth->execute(array($propUri, $propertyValue, $propertyForeignUri, $lang, $row['id'])); 
 		        			}
 		        			
 		        			// Remove old column containing the scalar values.
