@@ -225,10 +225,17 @@ class core_kernel_persistence_hardsql_Property
         	$propRanges[] = $range->getUri();	
         }
         
+        // @TODO $batchSize's value is arbitrary.
+        $batchSize = 100;	// Transfer data $batchSize by $batchSize.
+        $offset = 0;
+        
         foreach ($propertyLocations as $tblname){
         	$tblmgr = new core_kernel_persistence_hardapi_TableManager($tblname);
         	if ($tblmgr->exists()){
         		if ($wasMulti != $isMultiple){
+        			// Reset offset.
+        			$offset = 0;
+        			
 	        		try{
 		        		// The multiplicity is then changing.
 		        		// However, if the property was not 'multiple' but 'language dependent'
@@ -236,24 +243,33 @@ class core_kernel_persistence_hardsql_Property
 		        		if ($isMultiple == true && $wasLgDependent == false && $wasMulti == false){
 		        			
 		        			// We go from single to multiple.
-		        			$setPropertyValue = (empty($propRanges) || in_array(RDFS_LITERAL, $propRanges)) ? true : false;
-		        			$lang = ($setPropertyValue) ? DEFAULT_LANG : '';
-		        			$sql = 'SELECT "id","' . $propName . '" AS "val" FROM "' . $tblname . '"';
-		        			$result = $dbWrapper->query($sql);
-		        			
-		        			// Prepare the insert statement.
-		        			$sql  = 'INSERT INTO "' . $tblname . 'Props" ';
-		        			$sql .= '("property_uri", "property_value", "property_foreign_uri", "l_language", "instance_id") ';
-		        			$sql .= 'VALUES (?, ?, ?, ?, ?)';
-		        			$sth = $dbWrapper->prepare($sql);
-		        			
-		        			while ($row = $result->fetch()){
-		        				// Transfer to the 'properties table'.
-		        				$propertyValue = ($setPropertyValue == true) ? $row['val'] : null;
-		        				$propertyForeignUri = ($setPropertyValue == false) ? $row['val'] : null;
+		        			do {
+		        				$hasResult = false;
 		        				
-		        				$sth->execute(array($propUri, $propertyValue, $propertyForeignUri, $lang, $row['id'])); 
+			        			$setPropertyValue = (empty($propRanges) || in_array(RDFS_LITERAL, $propRanges)) ? true : false;
+			        			$lang = ($setPropertyValue) ? DEFAULT_LANG : '';
+			        			$sql = 'SELECT "id","' . $propName . '" AS "val" FROM "' . $tblname . '"';
+			        			$sql = $dbWrapper->limitStatement($sql, $batchSize, $offset);
+			        			$result = $dbWrapper->query($sql);
+			        			
+			        			// Prepare the insert statement.
+			        			$sql  = 'INSERT INTO "' . $tblname . 'Props" ';
+			        			$sql .= '("property_uri", "property_value", "property_foreign_uri", "l_language", "instance_id") ';
+			        			$sql .= 'VALUES (?, ?, ?, ?, ?)';
+			        			$sth = $dbWrapper->prepare($sql);
+			        			
+			        			while ($row = $result->fetch()){
+			        				// Transfer to the 'properties table'.
+			        				$hasResult = true;
+			        				$propertyValue = ($setPropertyValue == true) ? $row['val'] : null;
+			        				$propertyForeignUri = ($setPropertyValue == false) ? $row['val'] : null;
+			        				
+			        				$sth->execute(array($propUri, $propertyValue, $propertyForeignUri, $lang, $row['id'])); 
+			        			}
+			        			
+			        			$offset += $batchSize;
 		        			}
+		        			while($hasResult === true);
 		        			
 		        			// Remove old column containing the scalar values.
 		        			// we do not need it anymore.
@@ -265,6 +281,7 @@ class core_kernel_persistence_hardsql_Property
 		        		else if ($isMultiple == false && ($wasLgDependent == true || $wasMulti == true)){
 		        			
 		        			// We go from multiple to single.
+		        			$toDelete = array(); // will contain ids of rows to delete in the 'properties table' after data transfer.
 		        			
 		        			// Add a column to the base table to receive single value.
 		        			$baseTableName = str_replace('Props', '', $tblname);
@@ -275,24 +292,33 @@ class core_kernel_persistence_hardsql_Property
 		        			if ($columnAdded == true){
 		        				// Now get the values in the props table. Group by instance ID in order to get only
 		        				// one value to put in the target column.
-			        			$retrievePropertyValue = (empty($propRanges) || in_array(RDFS_LITERAL, $propRanges)) ? true : false;
-			        			$sql  = 'SELECT "a"."id", "a"."instance_id", "a"."property_value", "a"."property_foreign_uri" FROM "' . $tblname . '" "a" ';
-			        			$sql .= 'RIGHT JOIN (SELECT "instance_id", MIN("id") AS "id" FROM "' . $tblname . '" WHERE property_uri = ? ';
-			        			$sql .= 'GROUP BY "instance_id") AS "b" ON ("a"."id" = "b"."id")';
-								
-			        			$result = $dbWrapper->query($sql, array($propUri));
-			        			// prepare the update statement.
-			        			$sql  = 'UPDATE "' . $baseTableName . '" SET "' . $shortName . '" = ? WHERE "id" = ?';
-			        			$sth = $dbWrapper->prepare($sql);
-			        			$toDelete = array(); // will contain ids of rows to delete in the 'properties table' after data transfer.
-			        			
-			        			while ($row = $result->fetch()){
-			        				$propertyValue = ($retrievePropertyValue == true) ? $row['property_value'] : $row['property_foreign_uri'];
-			        				$sth->execute(array($propertyValue, $row['instance_id']));
-			        				$toDelete[] = $row['id'];
-			        			}
-			        			
-			        			$inData = implode(',', $toDelete);
+		        				do {
+		        					$hasResult = false;
+		        					
+				        			$retrievePropertyValue = (empty($propRanges) || in_array(RDFS_LITERAL, $propRanges)) ? true : false;
+				        			$sql  = 'SELECT "a"."id", "a"."instance_id", "a"."property_value", "a"."property_foreign_uri" FROM "' . $tblname . '" "a" ';
+				        			$sql .= 'RIGHT JOIN (SELECT "instance_id", MIN("id") AS "id" FROM "' . $tblname . '" WHERE "property_uri" = ? ';
+				        			$sql .= 'GROUP BY "instance_id") AS "b" ON ("a"."id" = "b"."id")';
+				        			$sql  = $dbWrapper->limitStatement($sql, $batchSize, $offset);
+									
+				        			$result = $dbWrapper->query($sql, array($propUri));
+				        			// prepare the update statement.
+				        			$sql  = 'UPDATE "' . $baseTableName . '" SET "' . $shortName . '" = ? WHERE "id" = ?';
+				        			$sth = $dbWrapper->prepare($sql);
+				        			
+				        			while ($row = $result->fetch()){
+				        				// Transfer to the 'base table'.
+				        				$hasResult = true;
+				        				$propertyValue = ($retrievePropertyValue == true) ? $row['property_value'] : $row['property_foreign_uri'];
+				        				$sth->execute(array($propertyValue, $row['instance_id']));
+				        				$toDelete[] = $row['id'];
+				        			}
+				        			
+				        			$offset += $batchSize;
+		        				}
+		        				while($hasResult === true);
+		        				
+		        				$inData = implode(',', $toDelete);
 			        			$sql = 'DELETE FROM "' . $tblname . '" WHERE "id" IN (' . $inData . ')';
 			        			
 			        			if ($dbWrapper->exec($sql) == 0){

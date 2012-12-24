@@ -436,9 +436,6 @@ class HardImplTestCase extends UnitTestCase {
 		$theHobbit = current($instances);
 		
 		if (empty($monaLisa) || empty($lordOfTheRings) || empty($theHobbit)){
-			var_dump($monaLisa);
-			var_dump($lordOfTheRings);
-			var_dump($theHobbit);
 			$this->fail("Unable to retrieve instances that will be used in the following tests.");
 		}
 		else{
