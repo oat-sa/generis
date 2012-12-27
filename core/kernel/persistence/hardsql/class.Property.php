@@ -222,8 +222,6 @@ class core_kernel_persistence_hardsql_Property
         $batchSize = 100;	// Transfer data $batchSize by $batchSize.
         
         if ($wasMulti != $isMultiple){
-        	// Reset offset.
-        	$offset = 0;
         	
         	try{
         		// The multiplicity is then changing.
@@ -262,6 +260,41 @@ class core_kernel_persistence_hardsql_Property
         // section 10-13-1-85-4a20f448:13bdca46e9a:-8000:0000000000001E45 begin
         // First, do the same as in smooth mode.
         core_kernel_persistence_smoothsql_Property::singleton()->setLgDependent($resource, $isLgDependent);
+        
+    	// Second, we alter the relevant table(s) if needed.
+        // For all the classes that have the resource as domain,
+        // we have to alter the correspondent tables.
+        $referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $propertyDescription = core_kernel_persistence_hardapi_Utils::propertyDescriptor($resource);
+        
+        $wasMulti = $propertyDescription['isMultiple'];
+        $wasLgDependent = $propertyDescription['isLgDependent'];
+        
+        // @TODO $batchSize's value is arbitrary.
+        $batchSize = 100;	// Transfer data $batchSize by $batchSize.
+        
+        if ($wasLgDependent != $isLgDependent){
+        	
+        	try{
+        		// The multiplicity is then changing.
+        		// However, if the property was not 'language dependent' but 'multiple'
+        		// it is already stored as it should.
+        		if ($isLgDependent == true && $wasMulti == false && $wasLgDependent == false){
+        			
+        			// We go from single to multiple.
+        			core_kernel_persistence_hardapi_Utils::scalarToMultiple($resource, $batchSize);
+        		}
+        		else if ($isLgDependent == false && ($wasMulti == true || $wasLgDependent == true)){
+        			
+        			// We go from multiple to single.
+        			core_kernel_persistence_hardapi_Utils::multipleToScalar($resource, $batchSize);
+        		}
+        	}
+        	catch (core_kernel_persistence_hardapi_Exception $e){
+        		throw new core_kernel_persistence_hardsql_Exception($e->getMessage());
+        	}
+        }
         // section 10-13-1-85-4a20f448:13bdca46e9a:-8000:0000000000001E45 end
     }
 
