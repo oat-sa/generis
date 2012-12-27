@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 18.12.2012, 13:08:58 with ArgoUML PHP module 
+ * Automatically generated on 27.12.2012, 14:55:59 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -201,7 +201,24 @@ class core_kernel_persistence_subscription_Property
     public function setMultiple( core_kernel_classes_Resource $resource, $isMultiple)
     {
         // section 10-13-1-85-71dc1cdd:13bade8452c:-8000:0000000000001E32 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         // section 10-13-1-85-71dc1cdd:13bade8452c:-8000:0000000000001E32 end
+    }
+
+    /**
+     * Short description of method setLgDependent
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Resource resource
+     * @param  boolean isLgDependent
+     * @return void
+     */
+    public function setLgDependent( core_kernel_classes_Resource $resource, $isLgDependent)
+    {
+        // section 10-13-1-85-4a20f448:13bdca46e9a:-8000:0000000000001E45 begin
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
+        // section 10-13-1-85-4a20f448:13bdca46e9a:-8000:0000000000001E45 end
     }
 
     /**

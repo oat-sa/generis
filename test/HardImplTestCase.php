@@ -87,11 +87,16 @@ class HardImplTestCase extends UnitTestCase {
 	
 	public function testHardSwitchOK(){
 		// Test that resource are now available from the hard sql implementation
-		$persistenceProxy = core_kernel_persistence_ClassProxy::singleton();
-		$this->assertIsA($persistenceProxy->getImpToDelegateTo($this->targetSubjectClass), 'core_kernel_persistence_hardsql_Class');
-		$this->assertIsA($persistenceProxy->getImpToDelegateTo($this->targetSubjectSubClass), 'core_kernel_persistence_hardsql_Class');
-		$this->assertIsA($persistenceProxy->getImpToDelegateTo($this->targetWorkClass), 'core_kernel_persistence_hardsql_Class');
-		$this->assertIsA($persistenceProxy->getImpToDelegateTo($this->targetMovieClass), 'core_kernel_persistence_hardsql_Class');
+		$classProxy = core_kernel_persistence_ClassProxy::singleton();
+		$propertyProxy = core_kernel_persistence_PropertyProxy::singleton();
+		$this->assertIsA($classProxy->getImpToDelegateTo($this->targetSubjectClass), 'core_kernel_persistence_hardsql_Class');
+		$this->assertIsA($classProxy->getImpToDelegateTo($this->targetSubjectSubClass), 'core_kernel_persistence_hardsql_Class');
+		$this->assertIsA($classProxy->getImpToDelegateTo($this->targetWorkClass), 'core_kernel_persistence_hardsql_Class');
+		$this->assertIsA($classProxy->getImpToDelegateTo($this->targetMovieClass), 'core_kernel_persistence_hardsql_Class');
+		$this->assertIsA($propertyProxy->getImpToDelegateTo($this->targetActorsProperty), 'core_kernel_persistence_hardsql_Property');
+		$this->assertIsA($propertyProxy->getImpToDelegateTo($this->targetAuthorProperty), 'core_kernel_persistence_hardsql_Property');
+		$this->assertIsA($propertyProxy->getImpToDelegateTo($this->targetProducerProperty), 'core_kernel_persistence_hardsql_Property');
+		$this->assertIsA($propertyProxy->getImpToDelegateTo($this->targetRelatedMoviesProperty), 'core_kernel_persistence_hardsql_Property');
 	}
 	
 	public function testHardModel(){
@@ -411,7 +416,7 @@ class HardImplTestCase extends UnitTestCase {
 		$this->assertEqual($triples[0]->object, RDF_CLASS);
 	}
 	
-	public function testPropertyModifications(){
+	public function testHardPropertyModifications(){
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		
 		$movieClass = $this->targetMovieClass;

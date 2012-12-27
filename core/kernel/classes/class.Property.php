@@ -351,13 +351,8 @@ class core_kernel_classes_Property
     public function setLgDependent($isLgDependent)
     {
         // section 10-13-1--99--152a2f30:1201eae099d:-8000:000000000000157E begin
-        
-    	$lgDependentProperty = new core_kernel_classes_Property(PROPERTY_IS_LG_DEPENDENT,__METHOD__);
-        $value = $isLgDependent ?  GENERIS_TRUE : GENERIS_FALSE ;
-        if($this->editPropertyValues($lgDependentProperty,$value)) {
-        	$this->lgDependent = $isLgDependent;
-        }
-        
+        core_kernel_persistence_PropertyProxy::singleton()->setLgDependent($this, $isLgDependent);
+    	$this->lgDependent = $isLgDependent;
         // section 10-13-1--99--152a2f30:1201eae099d:-8000:000000000000157E end
     }
 
@@ -406,8 +401,7 @@ class core_kernel_classes_Property
     public function setMultiple($isMultiple)
     {
         // section 127-0-1-1-2ada041a:12fde2cecc0:-8000:00000000000016F8 begin
-        
-    	$returnValue = core_kernel_persistence_PropertyProxy::singleton()->setMultiple($this, $isMultiple);
+    	core_kernel_persistence_PropertyProxy::singleton()->setMultiple($this, $isMultiple);
     	$this->multiple = $isMultiple;
         // section 127-0-1-1-2ada041a:12fde2cecc0:-8000:00000000000016F8 end
     }
