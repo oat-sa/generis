@@ -285,6 +285,191 @@ class core_kernel_persistence_hardapi_Utils
         return (int) $returnValue;
     }
 
+    /**
+     * Change single-valued property to multiple-valued.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Resource property The property to modify.
+     * @param  int batchSize Data must be transfered from a given column to the properties table. This parameter indicates the size of each pack of data transfered from the column to the properties tables.
+     * @return void
+     */
+    public static function scalarToMultiple( core_kernel_classes_Resource $property, $batchSize = 100)
+    {
+        // section 10-13-1-85--4d7ce118:13bdccf0439:-8000:0000000000001E49 begin
+        $referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $propertyDescription = core_kernel_persistence_hardapi_Utils::propertyDescriptor($property);
+        $propertyLocations = $referencer->propertyLocation($property);
+        
+        $propName = $propertyDescription['name'];
+        $propUri = $property->getUri();
+        $propRanges = array();
+        foreach ($propertyDescription['range'] as $range){
+        	$propRanges[] = $range->getUri();	
+        }
+        
+        $offset = 0;
+        
+        foreach ($propertyLocations as $tblname){
+        	$tblmgr = new core_kernel_persistence_hardapi_TableManager($tblname);
+        	if ($tblmgr->exists()){
+        		// Reset offset.
+        		$offset = 0;
+        		
+        		try{	
+        			// We go from single to multiple.
+        			do {
+        				$hasResult = false;
+        				
+	        			$setPropertyValue = (empty($propRanges) || in_array(RDFS_LITERAL, $propRanges)) ? true : false;
+	        			$lang = ($setPropertyValue) ? DEFAULT_LANG : '';
+	        			$sql = 'SELECT "id","' . $propName . '" AS "val" FROM "' . $tblname . '"';
+	        			$sql = $dbWrapper->limitStatement($sql, $batchSize, $offset);
+	        			$result = $dbWrapper->query($sql);
+	        			
+	        			// Prepare the insert statement.
+	        			$sql  = 'INSERT INTO "' . $tblname . 'Props" ';
+	        			$sql .= '("property_uri", "property_value", "property_foreign_uri", "l_language", "instance_id") ';
+	        			$sql .= 'VALUES (?, ?, ?, ?, ?)';
+	        			$sth = $dbWrapper->prepare($sql);
+	        			
+	        			while ($row = $result->fetch()){
+	        				// Transfer to the 'properties table'.
+	        				$hasResult = true;
+	        				$propertyValue = ($setPropertyValue == true) ? $row['val'] : null;
+	        				$propertyForeignUri = ($setPropertyValue == false) ? $row['val'] : null;
+	        				
+	        				$sth->execute(array($propUri, $propertyValue, $propertyForeignUri, $lang, $row['id'])); 
+	        			}
+	        			
+	        			$offset += $batchSize;
+        			}
+        			while($hasResult === true);
+        			
+        			// Remove old column containing the scalar values.
+        			// we do not need it anymore.
+        			if ($tblmgr->removeColumn($propName) == false){
+        				$msg = "Cannot successfully set multiplicity of Property '${propUri}' because its table column could not be removed from database.";
+        				throw new core_kernel_persistence_hardapi_Exception($msg);
+        			}
+        		}
+        		catch (PDOException $e){
+        			$msg = "Cannot set multiplicity of Property '${propUri}': " . $e->getMessage();
+        			throw new core_kernel_persistence_hardapi_Exception($msg);
+        		}
+        	}
+        	else{
+        		$msg = "Cannot set multiplicity of Property '${propUri}' because the corresponding database location '${tblname}' does not exist.";
+        		throw new core_kernel_persistence_hardapi_Exception($msg);
+        	}
+        }
+        
+        $referencer->clearCaches();
+        // section 10-13-1-85--4d7ce118:13bdccf0439:-8000:0000000000001E49 end
+    }
+
+    /**
+     * Change a multi-valued property to a single-valued one.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Resource property The property to modifiy.
+     * @param  int batchSize Data must be transfered from the properties table to a given column. This parameter indicates the size of each pack of data transfered from the properties table to the column.
+     * @return void
+     */
+    public static function multipleToScalar( core_kernel_classes_Resource $property, $batchSize = 100)
+    {
+        // section 10-13-1-85--4d7ce118:13bdccf0439:-8000:0000000000001E50 begin
+        $referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $propertyDescription = core_kernel_persistence_hardapi_Utils::propertyDescriptor($property);
+        $propertyLocations = $referencer->propertyLocation($property);
+        
+        $propName = $propertyDescription['name'];
+        $propUri = $property->getUri();
+        $propRanges = array();
+        foreach ($propertyDescription['range'] as $range){
+        	$propRanges[] = $range->getUri();	
+        }
+        
+        $offset = 0;
+        
+        foreach ($propertyLocations as $tblname){
+        	$tblmgr = new core_kernel_persistence_hardapi_TableManager($tblname);
+        	if ($tblmgr->exists()){
+        		// Reset offset.
+        		$offset = 0;
+        		
+        		try{
+        			// We go from multiple to single.
+        			$toDelete = array(); // will contain ids of rows to delete in the 'properties table' after data transfer.
+        			
+        			// Add a column to the base table to receive single value.
+        			$baseTableName = str_replace('Props', '', $tblname);
+        			$tblmgr->setName($baseTableName);
+        			$shortName = core_kernel_persistence_hardapi_Utils::getShortName($property);
+        			$columnAdded = $tblmgr->addColumn(array('name' => $shortName,
+        											  		'multi' => false));
+        			if ($columnAdded == true){
+        				// Now get the values in the props table. Group by instance ID in order to get only
+        				// one value to put in the target column.
+        				do {
+        					$hasResult = false;
+        					
+		        			$retrievePropertyValue = (empty($propRanges) || in_array(RDFS_LITERAL, $propRanges)) ? true : false;
+		        			$sql  = 'SELECT "a"."id", "a"."instance_id", "a"."property_value", "a"."property_foreign_uri" FROM "' . $tblname . '" "a" ';
+		        			$sql .= 'RIGHT JOIN (SELECT "instance_id", MIN("id") AS "id" FROM "' . $tblname . '" WHERE "property_uri" = ? ';
+		        			$sql .= 'GROUP BY "instance_id") AS "b" ON ("a"."id" = "b"."id")';
+		        			$sql  = $dbWrapper->limitStatement($sql, $batchSize, $offset);
+							
+		        			$result = $dbWrapper->query($sql, array($propUri));
+		        			// prepare the update statement.
+		        			$sql  = 'UPDATE "' . $baseTableName . '" SET "' . $shortName . '" = ? WHERE "id" = ?';
+		        			$sth = $dbWrapper->prepare($sql);
+		        			
+		        			while ($row = $result->fetch()){
+		        				// Transfer to the 'base table'.
+		        				$hasResult = true;
+		        				$propertyValue = ($retrievePropertyValue == true) ? $row['property_value'] : $row['property_foreign_uri'];
+		        				$sth->execute(array($propertyValue, $row['instance_id']));
+		        				$toDelete[] = $row['id'];
+		        			}
+		        			
+		        			$offset += $batchSize;
+        				}
+        				while($hasResult === true);
+        				
+        				$inData = implode(',', $toDelete);
+	        			$sql = 'DELETE FROM "' . $tblname . '" WHERE "id" IN (' . $inData . ')';
+	        			
+	        			if ($dbWrapper->exec($sql) == 0){
+	        				// If an error occured or no rows removed, we
+	        				// have a problem.
+	        				$msg = "Cannot set multiplicity of Property '${propUri}' because data transfered to the 'base table' could not be deleted";
+	        				throw new core_kernel_persistence_hardapi_Exception($msg);	
+	        			}
+        			}
+        			else{
+        				$msg = "Cannot set multiplicity of Property '${propUri}' because the corresponding 'base table' column could not be created.";
+        				throw new core_kernel_persistence_hardapi_Exception($msg);
+        			}
+        		}
+        		catch (PDOException $e){
+        			$msg = "Cannot set multiplicity of Property '${propUri}': " . $e->getMessage();
+        			throw new core_kernel_persistence_hardapi_Exception($msg);
+        		}
+        	}
+        	else{
+        		$msg = "Cannot set multiplicity of Property '${propUri}' because the corresponding database location '${tblname}' does not exist.";
+        		throw new core_kernel_persistence_hardapi_Exception($msg);
+        	}
+        }
+        
+        $referencer->clearCaches();
+        // section 10-13-1-85--4d7ce118:13bdccf0439:-8000:0000000000001E50 end
+    }
+
 } /* end of class core_kernel_persistence_hardapi_Utils */
 
 ?>
