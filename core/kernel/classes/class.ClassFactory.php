@@ -3,16 +3,16 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - core/kernel/classes/class.ClassFactory.php
+ * Generis Object Oriented API - core\kernel\classes\class.ClassFactory.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 16.07.2012, 18:31:46 with ArgoUML PHP module 
+ * Automatically generated on 28.12.2012, 09:51:28 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
@@ -33,7 +33,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class core_kernel_classes_ClassFactory
  *
  * @access public
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
@@ -50,33 +50,38 @@ class core_kernel_classes_ClassFactory
      * Short description of method createInstance
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Class clazz
      * @param  string label
      * @param  string comment
      * @param  string uri
      * @return core_kernel_classes_Resource
      */
-    public static function createInstance( core_kernel_classes_Class $clazz, $label, $comment, $uri)
+    public static function createInstance( core_kernel_classes_Class $clazz, $label = '', $comment = '', $uri = '')
     {
         $returnValue = null;
 
         // section 127-0-1-1-3c0ae01:12c2c9debde:-8000:000000000000138D begin
-		$newUri = self::checkProvidedUri($uri);
+		$newUri = (!empty($uri)) ? self::checkProvidedUri($uri) : common_Utils::getNewUri();
 		$newResource = new core_kernel_classes_Class($newUri);
-		$propertiesValues = array(RDF_TYPE => $clazz->uriResource);
-		if ($label != '') {
+		$propertiesValues = array(RDF_TYPE => $clazz->getUri());
+		
+		if (!empty($label)) {
 			$propertiesValues[RDFS_LABEL] = $label;
 		}
-		if( $comment != '') {
+		
+		if (!empty($comment)) {
 			$propertiesValues[RDFS_COMMENT] = $comment;
 		}
+		
 		$check = $newResource->setPropertiesValues($propertiesValues);
-		if($check){
-			$returnValue =$newResource;
+		if ($check){
+			$returnValue = $newResource;
 		}
 		else{
-			common_Logger::e('Fail to create instance of ' . $clazz . ' null returned');
+			$msg = "Failed to create an instance of class '" . $clazz->getUri() . "'.";
+			throw new common_Exception($msg);
+			common_Logger::e($msg);
 		}
         // section 127-0-1-1-3c0ae01:12c2c9debde:-8000:000000000000138D end
 
@@ -87,7 +92,7 @@ class core_kernel_classes_ClassFactory
      * Short description of method createProperty
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Class clazz
      * @param  string label
      * @param  string comment
@@ -95,17 +100,19 @@ class core_kernel_classes_ClassFactory
      * @param  string uri
      * @return core_kernel_classes_Property
      */
-    public static function createProperty( core_kernel_classes_Class $clazz, $label, $comment, $isLgDependent, $uri)
+    public static function createProperty( core_kernel_classes_Class $clazz, $label = '', $comment = '', $isLgDependent = false, $uri = '')
     {
         $returnValue = null;
 
         // section 127-0-1-1-3c0ae01:12c2c9debde:-8000:0000000000001393 begin
-		$newUri = self::checkProvidedUri($uri);
 		$property = new core_kernel_classes_Class(RDF_PROPERTY);
-		$propertyInstance = self::createInstance($property,$label,$comment,$newUri);
+		$propertyInstance = self::createInstance($property, $label, $comment, $uri);
 		$returnValue = new core_kernel_classes_Property($propertyInstance->uriResource);
-		if(!$clazz->setProperty($returnValue)){
-			throw new common_Exception('proplem creating property');
+		if (!$clazz->setProperty($returnValue)){
+			throw new common_Exception('An error occured during Property creation.');
+		}
+		else{
+			$returnValue->setLgDependent($isLgDependent);
 		}
 
         // section 127-0-1-1-3c0ae01:12c2c9debde:-8000:0000000000001393 end
@@ -117,22 +124,21 @@ class core_kernel_classes_ClassFactory
      * Short description of method createSubClass
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Class clazz
      * @param  string label
      * @param  string comment
      * @param  string uri
      * @return core_kernel_classes_Class
      */
-    public static function createSubClass( core_kernel_classes_Class $clazz, $label, $comment, $uri)
+    public static function createSubClass( core_kernel_classes_Class $clazz, $label = '', $comment = '', $uri = '')
     {
         $returnValue = null;
 
         // section 127-0-1-1-3c0ae01:12c2c9debde:-8000:00000000000013A2 begin
-		$newUri = self::checkProvidedUri($uri);
 		$class = new core_kernel_classes_Class(RDF_CLASS);
-		$intance =  self::createInstance($class,$label,$comment,$newUri);
-		$returnValue = new core_kernel_classes_Class($intance->uriResource);
+		$intance =  self::createInstance($class, $label, $comment, $uri);
+		$returnValue = new core_kernel_classes_Class($instance->uriResource);
 		$returnValue->setSubClassOf($clazz);
 
         // section 127-0-1-1-3c0ae01:12c2c9debde:-8000:00000000000013A2 end
@@ -144,7 +150,7 @@ class core_kernel_classes_ClassFactory
      * Short description of method checkProvidedUri
      *
      * @access private
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string uri
      * @return string
      */
@@ -158,7 +164,7 @@ class core_kernel_classes_ClassFactory
         		$returnValue = $uri;
         	}
         	else{
-        		throw new common_Exception('Could not creates new Resource, bad uri provided : ' . $uri);
+        		throw new common_Exception("Could not create new Resource, malformed URI provided: '" . $uri . "'.");
         	}
         }
         else{

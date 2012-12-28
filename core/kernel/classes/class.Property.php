@@ -319,16 +319,16 @@ class core_kernel_classes_Property
 
         // section 10-13-1--99--152a2f30:1201eae099d:-8000:000000000000157A begin
 
-        if(is_null($this->lgDependent )){
+        if (is_null($this->lgDependent )){
 	        $lgDependentProperty = new core_kernel_classes_Property(PROPERTY_IS_LG_DEPENDENT,__METHOD__);
-		$lgDependent = $this->getOnePropertyValue($lgDependentProperty);
-		 
-		if(is_null($lgDependent)){
-			$returnValue = false;
-		}
-		else{
-			$returnValue = ($lgDependent->uriResource == GENERIS_TRUE);
-		}
+			$lgDependent = $this->getOnePropertyValue($lgDependentProperty);
+			 
+			if (is_null($lgDependent)){
+				$returnValue = false;
+			}
+			else{
+				$returnValue = ($lgDependent->uriResource == GENERIS_TRUE);
+			}
                 
         	$this->lgDependent = $returnValue;
         }

@@ -387,24 +387,26 @@ class core_kernel_persistence_smoothsql_Class
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F27 begin
         
     	$subject = '';
-    	if($uri == ''){
+    	if ($uri == ''){
 			$subject = common_Utils::getNewUri();
-		}else if($uri[0]=='#'){ //$uri should start with # and be well formed
+		}
+		else if ( $uri[0]=='#'){ //$uri should start with # and be well formed
 				$modelUri = core_kernel_classes_Session::singleton()->getNameSpace();
 				$subject = $modelUri . $uri;
-		}else{
+		}
+		else{
 				$subject = $uri;
-			}
+		}
 
 		$returnValue = new core_kernel_classes_Resource($subject, __METHOD__);
-		if(!$returnValue->hasType($resource)){
+		if (!$returnValue->hasType($resource)){
 			$returnValue->setType($resource);
 		}
 
-		if ($label != '') {
+		if (!empty($label)) {
 			$returnValue->setLabel($label);
 		}
-		if( $comment != '') {
+		if (!empty($comment)) {
 			$returnValue->setComment($comment);
 		}
 		

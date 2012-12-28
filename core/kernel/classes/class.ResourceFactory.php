@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 24.03.2010, 14:36:14 with ArgoUML PHP module 
- * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
+ * Automatically generated on 28.12.2012, 09:40:41 with ArgoUML PHP module 
+ * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author firstname and lastname of author, <author@example.org>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
@@ -33,7 +33,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class core_kernel_classes_ResourceFactory
  *
  * @access public
- * @author firstname and lastname of author, <author@example.org>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_classes
  */
@@ -50,21 +50,28 @@ class core_kernel_classes_ResourceFactory
      * Short description of method create
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Class type
      * @param  string label
      * @param  string comment
      * @return core_kernel_classes_Resource
      */
-    public static function create( core_kernel_classes_Class $type, $label = 'Resource Default Label', $comment = 'Resource Default Comment')
+    public static function create( core_kernel_classes_Class $type, $label = '', $comment = '')
     {
         $returnValue = null;
 
         // section 10-13-1--99--2e5efe17:11fffe7b282:-8000:0000000000001519 begin
-		$returnValue = $type->createInstanceWithProperties(array(
-			RDFS_LABEL		=> $label,
-			RDFS_COMMENT	=> $comment
-		));
+        $propertiesValues = array();
+        
+        if (!empty($label)){
+        	$propertiesValues[RDFS_LABEL] = $label;
+        }
+        
+        if (!empty($comment)){
+        	$propertiesValues[RDFS_COMMENT] = $comment;
+        }
+        
+		$returnValue = $type->createInstanceWithProperties($propertiesValues);
         // section 10-13-1--99--2e5efe17:11fffe7b282:-8000:0000000000001519 end
 
         return $returnValue;
