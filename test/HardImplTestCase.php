@@ -75,7 +75,7 @@ class HardImplTestCase extends UnitTestCase {
 			'topClass'				=> new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#User'),
 			'additionalProperties' 	=> array (new core_kernel_classes_Property (RDF_TYPE)),
 			'recursive'				=> true,
-			'createForeigns'		=> true
+			'createForeigns'		=> false
 		));
 		
 		$switcher->hardify($this->targetWorkClass, array(
@@ -458,9 +458,36 @@ class HardImplTestCase extends UnitTestCase {
 			$authorPropertyShortName = core_kernel_persistence_hardapi_Utils::getShortName($authorProperty);
 			
 			// test delegation and presence of the column.
+			$this->assertFalse($testProperty->isMultiple());
 			$this->assertTrue(in_array($testPropertyShortName, $movieClassTableColumns));
 			$this->assertIsA($propertyProxy->getImpToDelegateTo($testProperty), 'core_kernel_persistence_hardsql_Property');
 	
+			// set language dependency of the test property to true.
+			$testProperty->setLgDependent(true);
+			$this->assertTrue($testProperty->isLgDependent());
+			$movieClassTableColumns = $dbWrapper->getColumnNames($movieClassTable);
+			$this->assertFalse(in_array($testPropertyShortName, $movieClassTableColumns));
+			
+			// create some property values for the test property.
+			$testMovie = $movieClass->createInstance('A Test Movie');
+			$testMovie->setPropertyValue($testProperty, 'EN-TestPropertyValue-1');
+			$testMovie->setPropertyValueByLg($testProperty, 'EN-TestPropertyValue-2', DEFAULT_LANG);
+			$testMovie->setPropertyValueByLg($testProperty, 'FR-TestPropertyValue-1', 'FR');
+			$testPropertyValues = $testMovie->getPropertyValues($testProperty);
+			$this->assertEqual(count($testPropertyValues), 2); // Only EN values will come back.
+			$testPropertyValues = $testMovie->getPropertyValuesByLg($testProperty, 'EN');
+			$this->assertEqual(count($testPropertyValues->sequence), 2);
+			$testPropertyValues = $testMovie->getPropertyValuesByLg($testProperty, 'FR');
+			$this->assertEqual(count($testPropertyValues->sequence), 1);
+			
+			// set back the language dependency of the test property to false.
+			$testProperty->setLgDependent(false);
+			$this->assertFalse($testProperty->isLgDependent());
+			$movieClassTableColumns = $dbWrapper->getColumnNames($movieClassTable);
+			$this->assertTrue(in_array($testPropertyShortName, $movieClassTableColumns));
+			$testPropertyValues = $testMovie->getPropertyValues($testProperty);
+			$this->assertEqual(count($testPropertyValues), 1);
+			
 			// set the author property to multiple.
 			$this->assertTrue(in_array($authorPropertyShortName, $movieClassTableColumns));
 			$this->assertFalse($authorProperty->isMultiple());

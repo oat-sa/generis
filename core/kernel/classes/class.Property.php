@@ -371,14 +371,14 @@ class core_kernel_classes_Property
         
         if(is_null($this->multiple )){
         	$multipleProperty = new core_kernel_classes_Property(PROPERTY_MULTIPLE,__METHOD__);
-		$multiple = $this->getOnePropertyValue($multipleProperty);
-		 
-		if(is_null($multiple)){
-			$returnValue = false;
-		}
-		else{
-			$returnValue = ($multiple->uriResource == GENERIS_TRUE);
-		}
+			$multiple = $this->getOnePropertyValue($multipleProperty);
+			 
+			if(is_null($multiple)){
+				$returnValue = false;
+			}
+			else{
+				$returnValue = ($multiple->uriResource == GENERIS_TRUE);
+			}
         	$this->multiple = $returnValue;
         }
  

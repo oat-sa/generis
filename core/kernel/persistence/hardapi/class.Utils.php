@@ -306,7 +306,8 @@ class core_kernel_persistence_hardapi_Utils
         $propUri = $property->getUri();
         $propRanges = array();
         foreach ($propertyDescription['range'] as $range){
-        	$propRanges[] = $range->getUri();	
+        	// If no range provided, we assume it is a Literal.
+        	$propRanges[] = (!empty($range)) ? $range->getUri() : RDFS_LITERAL;
         }
         
         $offset = 0;
@@ -390,7 +391,8 @@ class core_kernel_persistence_hardapi_Utils
         $propUri = $property->getUri();
         $propRanges = array();
         foreach ($propertyDescription['range'] as $range){
-        	$propRanges[] = $range->getUri();	
+        	// If no range provided, we assume it is a Literal.
+        	$propRanges[] = (!empty($range)) ? $range->getUri() : RDFS_LITERAL;
         }
         
         $offset = 0;

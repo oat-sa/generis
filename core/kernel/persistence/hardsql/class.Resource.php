@@ -381,6 +381,10 @@ class core_kernel_persistence_hardsql_Resource
 				$propertyValue = $object;
 			}
 		}
+		else{
+			// We assume the property value is a literal.
+			$propertyValue = $object;	
+		}
 
 		$propertyLocation = $referencer->propertyLocation($property);
 		if (in_array("{$tableName}Props", $propertyLocation)
