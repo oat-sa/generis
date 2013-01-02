@@ -204,8 +204,8 @@ class core_kernel_persistence_hardapi_RowManager
 							$queryRows .= "({$instanceIds[$row['uri']]}, '{$multiplePropertyUri}', NULL, '{$t['object']}', '{$t['l_language']}')";
 						}
 						else{
-							$object = addslashes($t['object']);
-							$queryRows .= "({$instanceIds[$row['uri']]}, '{$multiplePropertyUri}', '{$object}', NULL, '{$t['l_language']}')";
+							$object = $dbWrapper->dbConnector->quote($t['object']);
+							$queryRows .= "({$instanceIds[$row['uri']]}, '{$multiplePropertyUri}', ${object}, NULL, '{$t['l_language']}')";
 						}
 					}
 					
