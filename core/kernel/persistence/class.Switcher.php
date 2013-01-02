@@ -108,7 +108,7 @@ class core_kernel_persistence_Switcher
 
 		// Check if the class has been hardened
 		if (!core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($class)){
-			common_Logger::w("Class ${classLabel} could not be unhardened");
+			common_Logger::w("Class ${classLabel} could not be unhardened because it is not hardified.");
 			return false;
 		}
 
@@ -128,7 +128,7 @@ class core_kernel_persistence_Switcher
 		//removeForeigns will unhardify the class that are range of the properties
 		(isset($options['removeForeigns'])) ? $removeForeigns = $options['removeForeigns'] : $removeForeigns = false;
 
-		//removeForeigns will unhardify the class that are range of the properties
+		//rmSources will remove the related data from the database
 		(isset($options['rmSources'])) ? $rmSources = $options['rmSources'] : $rmSources = true;
 
 		// Get class' properties
@@ -149,7 +149,7 @@ class core_kernel_persistence_Switcher
 
 			// lionel did that :d le salop
 			core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
-			foreach ($instances as $uri=>$instance){
+			foreach ($instances as $uri => $instance){
 				if ($instance->exists()){
 					core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_HARD);
 					$instance->delete();
