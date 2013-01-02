@@ -1052,7 +1052,7 @@ class core_kernel_persistence_hardsql_Resource
         $resourceId = core_kernel_persistence_hardapi_Utils::getResourceIdByTable($resource, $tableName);
         if($resourceId){
                 
-                /*
+        /*
 		 * Delete all the references of the resource first, before the resource is delete of course,
 		 * if the parameter $deleteReference is true
 		 */

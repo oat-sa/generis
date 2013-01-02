@@ -529,6 +529,25 @@ class core_kernel_classes_Class
         return (bool) $returnValue;
     }
 
+    /**
+     * Short description of method delete
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  boolean deleteReference
+     * @return boolean
+     */
+    public function delete($deleteReference = false)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1-85-7ea8832b:13bfb40319c:-8000:0000000000001E63 begin
+        parent::delete($deleteReference);
+        // section 10-13-1-85-7ea8832b:13bfb40319c:-8000:0000000000001E63 end
+
+        return (bool) $returnValue;
+    }
+
 } /* end of class core_kernel_classes_Class */
 
 ?>
