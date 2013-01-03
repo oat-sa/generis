@@ -80,13 +80,12 @@ class HardDbSubjectTestCase extends UnitTestCase {
 		$this->assertEqual($this->dataIntegrity['subSubjectClassCount0'], $this->dataIntegrity['subSubjectClassCount1']);
 		$this->assertEqual($this->dataIntegrity['subSubSubjectClassCount0'], $this->dataIntegrity['subSubSubjectClassCount1']);
 		
-		
 		$this->assertFalse(core_kernel_persistence_ClassProxy::singleton()->isValidContext('hardsql', $this->targetSubjectClass));
 		$this->assertTrue(core_kernel_persistence_ClassProxy::singleton()->isValidContext('smoothsql', $this->targetSubjectClass));
-		$this->assertTrue(core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectClass) instanceof core_kernel_persistence_smoothsql_Class);
+		$this->assertIsA(core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectClass), 'core_kernel_persistence_smoothsql_Class');
 		$this->assertFalse(core_kernel_persistence_ClassProxy::singleton()->isValidContext('hardsql', $this->targetSubjectSubClass));
 		$this->assertTrue(core_kernel_persistence_ClassProxy::singleton()->isValidContext('smoothsql', $this->targetSubjectSubClass));
-		$this->assertTrue(core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectSubClass) instanceof core_kernel_persistence_smoothsql_Class);
+		$this->assertIsA(core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectSubClass), 'core_kernel_persistence_smoothsql_Class');
 	}
 	
 	public function testClean (){
