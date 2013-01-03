@@ -48,7 +48,6 @@ class ExtensionManagerTestCase extends UnitTestCase {
 						'php' => dirname(__FILE__). '/install/install.php'
 					),
 					'registerToClassLoader' => true,
-					'configFile' => dirname(__FILE__). '/includes/common.php',
 					'classLoaderPackages' => array( 
 						dirname(__FILE__).'/actions/' , 
 						dirname(__FILE__).'/models/',
@@ -67,9 +66,9 @@ class ExtensionManagerTestCase extends UnitTestCase {
 		$ext = $extensionManager->getInstalledExtensions();
 		$this->assertTrue(isset($ext['testExtension']));
 		
-		$this->assertEqual($ext['testExtension']->author, 'CRP Henry Tudor');
-		$this->assertEqual($ext['testExtension']->name, 'Test Extension');
-		$this->assertEqual($ext['testExtension']->version, '0.25');
+		$this->assertEqual($ext['testExtension']->getAuthor(), 'CRP Henry Tudor');
+		$this->assertEqual($ext['testExtension']->getName(), 'Test Extension');
+		$this->assertEqual($ext['testExtension']->getVersion(), '0.25');
 		
 		$ext = common_ext_ExtensionsManager::singleton()->getExtensionById('testExtension');
 		$this->assertIsA($ext, 'common_ext_Extension');

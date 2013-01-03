@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 14.09.2012, 14:14:13 with ArgoUML PHP module 
+ * Automatically generated on 03.01.2013, 18:20:51 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -81,24 +81,6 @@ class common_ext_ExtensionsManager
 		}
 		$returnValue = self::$instance;
         // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000233B end
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method getCurrentExtension
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return common_ext_Extension
-     */
-    public static function getCurrentExtension()
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--2fd5728f:139c4b1eaee:-8000:0000000000001B39 begin
-        $returnValue = self::singleton()->getExtensionById(Context::getInstance()->getExtensionName());
-        // section 127-0-1-1--2fd5728f:139c4b1eaee:-8000:0000000000001B39 end
 
         return $returnValue;
     }
@@ -221,10 +203,7 @@ class common_ext_ExtensionsManager
 					throw new common_ext_ExtensionException('Required Extension is Missing : ' . $ext);
 				}
 			}
-			$config = $extension->getConfiguration();
-			if($config->loadedAtStartUp){
-				$extensionLoader->load();
-			}
+			$extensionLoader->load();
 		}
         // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017B4 end
     }
@@ -337,39 +316,6 @@ class common_ext_ExtensionsManager
     }
 
     /**
-     * Get all the extension dependancies for a given extension
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  SimpleExtension extension
-     * @return array
-     */
-    public function getDependancies( common_ext_SimpleExtension $extension)
-    {
-        $returnValue = array();
-
-        // section 127-0-1-1--34c6d20a:12dcbf5c5e2:-8000:00000000000014AE begin
-
-
-        if(is_array($extension->requiredExtensionsList)){
-	        if(count($this->extensions) == 0){
-				$this->getInstalledExtensions(); //init at first load;
-			}
-        	$returnValue = $extension->requiredExtensionsList;
-
-        	foreach($extension->requiredExtensionsList as $dependance){
-        		if(isset($this->extensions[$dependance]) && $this->extensions[$dependance] instanceof common_ext_SimpleExtension){
-        			$returnValue = array_merge($returnValue, $this->getDependancies($this->extensions[$dependance]));
-        		}
-        	}
-        }
-
-        // section 127-0-1-1--34c6d20a:12dcbf5c5e2:-8000:00000000000014AE end
-
-        return (array) $returnValue;
-    }
-
-    /**
      * Short description of method getUpdatableModels
      *
      * @access public
@@ -430,6 +376,8 @@ class common_ext_ExtensionsManager
         }
         if (!isset($this->extensions[$id])) {
         	$this->extensions[$id] = new common_ext_Extension($id, false);
+        	$extensionLoader = new common_ext_ExtensionLoader($this->extensions[$id]);
+        	$extensionLoader->load();
         }
         $returnValue = $this->extensions[$id];
         // section 127-0-1-1-176d7eef:1379cae211f:-8000:0000000000005DC3 end
@@ -455,15 +403,15 @@ class common_ext_ExtensionsManager
 
 		while ($row = $result->fetch()){
 			$id = $row["id"];
-			$extension = new common_ext_Extension($id, true);
-
+			$extension = new common_ext_Extension($id, true, $row);
+/*
 			$extension->configuration = new common_ext_ExtensionConfiguration(
 				($row['loaded'] == 1),
 				($row['loadAtStartUp'] == 1),
 				($row['ghost'] == 1),
 				$row['version']
 			);
-
+*/
 			$this->extensions[$id] = $extension;
 		}
         // section 127-0-1-1--1d51cc99:137f05120f0:-8000:0000000000001A59 end

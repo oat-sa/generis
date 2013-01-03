@@ -86,7 +86,7 @@ class common_ext_ExtensionInstaller
 		try{
 			// not yet installed? 
 			if ($this->extension->isInstalled()) {
-				throw new common_ext_AlreadyInstalledException('Problem installing extension ' . $this->extension->id .' : '. 'Already installed',
+				throw new common_ext_AlreadyInstalledException('Problem installing extension ' . $this->extension->getID() .' : '. 'Already installed',
                                                                $this->extension->getID());
 			}
 			//check dependances
@@ -232,7 +232,7 @@ class common_ext_ExtensionInstaller
     	
 		//add extension to db
 		$db = core_kernel_classes_DbWrapper::singleton();
-		$sql = "INSERT INTO extensions (id, name, version, loaded, \"loadAtStartUp\") VALUES ('".$this->extension->id."', '".$this->extension->name."', '".$this->extension->version."', 1, 1);";
+		$sql = "INSERT INTO extensions (id, name, version, loaded, \"loadAtStartUp\") VALUES ('".$this->extension->getID()."', '".$this->extension->getName()."', '".$this->extension->getVersion()."', 1, 1);";
 		$db->exec($sql);
 		
 		common_Logger::d($this->extension->getID() . ' registered', 'INSTALL');

@@ -67,13 +67,13 @@ class common_ext_ExtensionLoader
     public function load()
     {
         // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017AD begin
-        common_Logger::t('Loading extension ' . $this->extension->id);
-
+        common_Logger::t('Loading extension ' . $this->extension->getID());
+		
 		if(isset($this->extension->configFile)) {
 			require_once $this->extension->configFile;
 		}
     	
-
+		
 	
 		$classLoader = common_ext_ClassLoader::singleton();
 		if(isset($this->extension->classLoaderPackages)) {
