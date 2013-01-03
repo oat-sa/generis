@@ -65,8 +65,7 @@ class HardDbSubjectTestCase extends UnitTestCase {
 		$switcher = new core_kernel_persistence_Switcher();
 		$switcher->unhardify($this->targetSubjectClass, array(
 			'recursive'			=> true,
-			'removeForeigns'	=> false,
-			'rmSources'			=> true
+			'removeForeigns'	=> false
 		));
 		unset ($switcher);
 	}
