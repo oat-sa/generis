@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 01.10.2012, 10:05:57 with ArgoUML PHP module 
+ * Automatically generated on 02.01.2013, 18:01:09 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -299,6 +299,54 @@ class common_Utils
             die("File not found ".$file);
         }
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000001824 end
+    }
+
+    /**
+     * Returns the php code, that if evaluated
+     * would return the value provided
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  value
+     * @return string
+     */
+    public static function toPHPVariableString($value)
+    {
+        $returnValue = (string) '';
+
+        // section 10-30-1--78-48d19975:13bfc2c7bd4:-8000:0000000000001E6E begin
+		switch (gettype($value)) {
+        	case "string" :
+        		// replace \ by \\ and then ' by \'
+        		$returnValue =  '\''.str_replace('\'', '\\\'', str_replace('\\', '\\\\', $value)).'\'';
+        		break;
+        	case "boolean" :
+        		$returnValue = $mixed ? 'true' : 'false';
+        		break;
+        	case "integer" :
+        	case "double" :
+        		$returnValue = $value;
+        		break;
+        	case "array" :
+				$string = "";
+				foreach ($value as $key => $val) {
+					$string .= self::toPHPVariableString($key)." => ".self::toPHPVariableString($val).",";
+				}
+				$returnValue = "array(".substr($string, 0, -1).")";
+				break;
+        	case "null" :
+        		$returnValue = null;
+				break;
+        	case "object" :
+        		$returnValue = 'unserialize(\''.serialize($value).'\')';
+        		break;
+        	default:
+    			// ressource and unexpected types
+        		throw new common_exception_Error("Could not convert variable of type ".gettype($value)." to PHP variable string");
+        }
+        // section 10-30-1--78-48d19975:13bfc2c7bd4:-8000:0000000000001E6E end
+
+        return (string) $returnValue;
     }
 
 } /* end of class common_Utils */
