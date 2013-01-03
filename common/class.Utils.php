@@ -334,8 +334,8 @@ class common_Utils
 				}
 				$returnValue = "array(".substr($string, 0, -1).")";
 				break;
-        	case "null" :
-        		$returnValue = null;
+        	case "NULL" :
+        		$returnValue = 'null';
 				break;
         	case "object" :
         		$returnValue = 'unserialize(\''.serialize($value).'\')';
