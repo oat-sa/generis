@@ -542,7 +542,7 @@ class core_kernel_classes_Class
         $returnValue = (bool) false;
 
         // section 10-13-1-85-7ea8832b:13bfb40319c:-8000:0000000000001E63 begin
-        $returnValue = parent::delete($deleteReference);
+        $returnValue = core_kernel_persistence_ClassProxy::singleton()->delete($this, $deleteReference);
         // section 10-13-1-85-7ea8832b:13bfb40319c:-8000:0000000000001E63 end
 
         return (bool) $returnValue;

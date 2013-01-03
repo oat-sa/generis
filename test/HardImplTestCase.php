@@ -732,42 +732,39 @@ class HardImplTestCase extends UnitTestCase {
 			$instance->removePropertyValueByLg(new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOGroup.rdf#Members'), 'FR');
 			$props = $instance->getPropertyValues(new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOGroup.rdf#Members'));
 			$this->assertFalse(empty($props));
-			
 		}
 	}
 	
 	public function testClean (){
+		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+		$classProxy = core_kernel_persistence_ClassProxy::singleton();
+		$switcher = new core_kernel_persistence_Switcher();
+		
 		// Remove the resources
 		foreach ($this->targetSubjectClass->getInstances() as $instance){
 			$instance->delete();
-			$this->assertFalse(core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isResourceReferenced($instance));
+			$this->assertFalse($referencer->isResourceReferenced($instance));
 		}
 		foreach ($this->targetSubjectSubClass->getInstances() as $instance){
 			$instance->delete();
-			$this->assertFalse(core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isResourceReferenced($instance));
+			$this->assertFalse($referencer->isResourceReferenced($instance));
 		}
 		
-		// unreference the subject class
-		core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unReferenceClass($this->targetSubjectClass);
-		$this->assertFalse(core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($this->targetSubjectClass));
-		$this->assertTrue(core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectClass) instanceof core_kernel_persistence_smoothsql_Class);
+		// delete the sub subject class (will be internally unhardified)
 		$this->targetSubjectClass->delete(true);
-		$this->subject1->delete();
+		$this->assertFalse($referencer->isClassReferenced($this->targetSubjectClass));
+		$this->assertIsA($classProxy->getImpToDelegateTo($this->targetSubjectClass), 'core_kernel_persistence_smoothsql_Class');
 		
-		// unreference the subject sub class
-		$this->assertTrue(core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unReferenceClass($this->targetSubjectSubClass));
-		$this->assertFalse(core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($this->targetSubjectSubClass));
-		$this->assertTrue(core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectSubClass) instanceof core_kernel_persistence_smoothsql_Class);
+		// delete the sub sub subject class (will be internally unhardified)
 		$this->targetSubjectSubClass->delete(true);
-		$this->subject2->delete();
-		
-		core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unreferenceClass(new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#Languages'));
-		
-		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
-		$referencer->unReferenceClass($this->targetWorkClass);
-		$referencer->unReferenceClass($this->targetMovieClass);
+		$this->assertFalse($referencer->isClassReferenced($this->targetSubjectSubClass));
+		$this->assertIsA($classProxy->getImpToDelegateTo($this->targetSubjectSubClass), 'core_kernel_persistence_smoothsql_Class');
+
 		$this->targetWorkClass->delete(true);
 		$this->targetMovieClass->delete(true);
+		
+		$this->assertFalse($referencer->isClassReferenced($this->targetWorkClass));
+		$this->assertFalse($referencer->isClassReferenced($this->targetMovieClass));
 		$this->assertFalse($this->targetWorkClass->exists());
 		$this->assertFalse($this->targetWorkClass->exists());
 	}
@@ -778,16 +775,16 @@ class HardImplTestCase extends UnitTestCase {
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$true = new core_kernel_classes_Resource(GENERIS_TRUE);
 		
-		$this->object->setStatement($true->uriResource,RDFS_SEEALSO,'test1', '');
-		$this->object->setStatement($true->uriResource,RDFS_SEEALSO,'test2', '');
-		$this->object->setStatement($true->uriResource,RDFS_SEEALSO,'testing', 'EN');
-		$this->object->setStatement($true->uriResource,RDFS_SEEALSO,'essai', 'FR');
-		$this->object->setStatement($true->uriResource,RDFS_SEEALSO,'testung1', 'SE');
-		$this->object->setStatement($true->uriResource,RDFS_SEEALSO,'testung2', 'SE');
+		$this->object->setStatement($true->uriResource, RDFS_SEEALSO,'test1', '');
+		$this->object->setStatement($true->uriResource, RDFS_SEEALSO,'test2', '');
+		$this->object->setStatement($true->uriResource, RDFS_SEEALSO,'testing', 'EN');
+		$this->object->setStatement($true->uriResource, RDFS_SEEALSO,'essai', 'FR');
+		$this->object->setStatement($true->uriResource, RDFS_SEEALSO,'testung1', 'SE');
+		$this->object->setStatement($true->uriResource, RDFS_SEEALSO,'testung2', 'SE');
 		
 		// Get some propertyValues as if it was obtained by an SQL Statement.
 		// First test is made with the default language selected.
-		$modelIds	= implode(',',array_keys($session->getLoadedModels()));
+		$modelIds	= implode(',', array_keys($session->getLoadedModels()));
         $query =  "SELECT object, l_language FROM statements 
 		    		WHERE subject = ? AND predicate = ?
 		    		AND (l_language = '' OR l_language = ? OR l_language = ?)

@@ -145,10 +145,6 @@ class HardApiTestCase extends UnitTestCase {
 		$referencer->unReferenceClass($class);
 		$this->assertFalse($referencer->isClassReferenced($class));
 		$this->assertFalse($myTblMgr->exists());
-		
-		// unreference a class -> remove the associated table
-		//$this->assertTrue($myTblMgr->remove());
-		//$this->assertFalse($myTblMgr->exists());
 	}
 	
 	/**
@@ -206,10 +202,6 @@ class HardApiTestCase extends UnitTestCase {
 		$referencer->unReferenceClass($class);
 		$this->assertFalse($referencer->isClassReferenced($class));
 		$this->assertFalse($myUserTblMgr->exists());
-		
-		// unreference a class -> remove the associated table
-		//$this->assertTrue($myUserTblMgr->remove());
-		//$this->assertFalse($myUserTblMgr->exists());
 		
 		$cacheFile = GENERIS_CACHE_PATH . 'hard-api-property.cache';
 		$this->assertTrue(file_exists($cacheFile));

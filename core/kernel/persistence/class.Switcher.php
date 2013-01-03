@@ -129,7 +129,7 @@ class core_kernel_persistence_Switcher
 		(isset($options['removeForeigns'])) ? $removeForeigns = $options['removeForeigns'] : $removeForeigns = false;
 
 		//rmSources will remove the related data from the database
-		$rmSources = true;
+		(isset($options['rmSources'])) ? $rmSources = $options['rmSources'] : $rmSources = true;
 
 		// Get class' properties
 		$propertySwitcher = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);

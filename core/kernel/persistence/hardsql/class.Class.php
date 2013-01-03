@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 14.12.2012, 15:21:53 with ArgoUML PHP module 
+ * Automatically generated on 03.01.2013, 10:59:32 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -1038,6 +1038,34 @@ class core_kernel_persistence_hardsql_Class
         
         $returnValue = true;
         // section 10-13-1-85-46895b07:13b99a96e9b:-8000:0000000000001DF5 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method delete
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Resource resource
+     * @param  boolean deleteReference
+     * @return boolean
+     */
+    public function delete( core_kernel_classes_Resource $resource, $deleteReference = false)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1-85--2c835591:13bffd6ae29:-8000:0000000000001E78 begin
+        $switcher = new core_kernel_persistence_Switcher();
+        $success = $switcher->unhardify(new core_kernel_classes_Class($resource));
+        
+        if (true == $success){
+        	$returnValue = core_kernel_persistence_smoothsql_Class::singleton()->delete($resource, $deleteReference);
+        }
+        else{
+        	$returnValue = false;	
+        }
+        // section 10-13-1-85--2c835591:13bffd6ae29:-8000:0000000000001E78 end
 
         return (bool) $returnValue;
     }
