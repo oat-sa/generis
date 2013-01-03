@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 22.11.2012, 14:56:44 with ArgoUML PHP module 
+ * Automatically generated on 03.01.2013, 14:49:55 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -140,6 +140,14 @@ class common_ext_Manifest
      */
     private $constants = array();
 
+    /**
+     * Short description of attribute installPHPFiles
+     *
+     * @access private
+     * @var array
+     */
+    private $installPHPFiles = array();
+
     // --- OPERATIONS ---
 
     /**
@@ -175,6 +183,7 @@ class common_ext_Manifest
     			$this->setAuthor($array['author']);	
     		}
     		
+    		// mandatory
     		if (!empty($array['version'])){
     			$this->setVersion($array['version']);
     		}
@@ -196,22 +205,15 @@ class common_ext_Manifest
     		
     		if (!empty($array['install'])){
     			if (!empty($array['install']['rdf'])){
-    				$a = array();
-    				foreach ($array['install']['rdf'] as $rdf){
-    					$ns = $rdf['ns'];
-    					$file = $rdf['file'];
-    					
-    					if (!array_key_exists($ns, $a)){
-    						$a[$ns] = array();
-    					}
-    					
-    					array_push($a[$ns], $file);
-    				}
-    				$this->setInstallModelFiles($a);
+    				$this->setInstallModelFiles($array['install']['rdf']);
     			}
     			
     			if (!empty($array['install']['checks'])){
     				$this->setInstallChecks($array['install']['checks']);
+    			}
+    			
+    			if (!empty($array['install']['php'])){
+    				$this->setInstallPHPFiles($array['install']['php']);
     			}
     		}
     		
@@ -249,9 +251,6 @@ class common_ext_Manifest
         // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C41 begin
         if (!empty($this->filePath)){
         	$returnValue = $this->filePath;
-        }
-        else{
-        	$returnValue = null;
         }
         // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C41 end
 
@@ -326,9 +325,6 @@ class common_ext_Manifest
         if (!empty($this->description)){
         	$returnValue = $this->description;
         }
-        else{
-        	$returnValue = null;
-        }
         // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C45 end
 
         return (string) $returnValue;
@@ -396,9 +392,6 @@ class common_ext_Manifest
         // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C47 begin
         if (!empty($this->version)){
         	$returnValue = $this->version;
-        }
-        else{
-        	$returnValue = null;
         }
         // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C47 end
 
@@ -658,6 +651,39 @@ class common_ext_Manifest
     	
         $this->installChecks = $installChecks;
         // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C71 end
+    }
+
+    /**
+     * Short description of method getInstallPHPFiles
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return array
+     */
+    public function getInstallPHPFiles()
+    {
+        $returnValue = array();
+
+        // section 10-13-1-85--5c116a76:13c00a41227:-8000:0000000000001E85 begin
+        $returnValue = $this->installPHPFiles;
+        // section 10-13-1-85--5c116a76:13c00a41227:-8000:0000000000001E85 end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method setInstallPHPFiles
+     *
+     * @access private
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  array installPHPFiles
+     * @return void
+     */
+    private function setInstallPHPFiles($installPHPFiles)
+    {
+        // section 10-13-1-85--5c116a76:13c00a41227:-8000:0000000000001E87 begin
+        $this->installPHPFiles = $installPHPFiles;
+        // section 10-13-1-85--5c116a76:13c00a41227:-8000:0000000000001E87 end
     }
 
     /**

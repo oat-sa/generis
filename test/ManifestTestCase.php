@@ -50,8 +50,8 @@ class ManifestTestCase extends UnitTestCase {
 			$this->assertEqual($manifest->getVersion(), '1.0');
 			$this->assertEqual($manifest->getAuthor(), 'TAO Team');
 			$this->assertEqual($manifest->getDependencies(), array('taoItemBank', 'taoDocuments'));
-			$this->assertEqual($manifest->getInstallModelFiles(), array('http://www.tao.lu/Ontologies/taoFuncACL.rdf' => array('/extension/path/models/ontology/taofuncacl.rdf'),
-																		'http://www.tao.lu/Ontologies/taoItemBank.rdf' => array('/extension/path/models/ontology/taoitembank.rdf')));
+			$this->assertEqual($manifest->getInstallModelFiles(), array(array('ns' => 'http://www.tao.lu/Ontologies/taoFuncACL.rdf', 'file' => '/extension/path/models/ontology/taofuncacl.rdf'),
+																  		array('ns' => 'http://www.tao.lu/Ontologies/taoItemBank.rdf', 'file' => '/extension/path/models/ontology/taoitembank.rdf')));
 			$this->assertEqual($manifest->getClassLoaderPackages(), array('extension/path/actions/', 'extension/path/helpers/', 'extension/path/helpers/form'));
 			$this->assertEqual($manifest->getConstants(), array('WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/', 'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php'));
 			
