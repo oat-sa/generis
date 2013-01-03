@@ -9,21 +9,18 @@ class HardDbSubjectTestCase extends UnitTestCase {
 	protected $dataIntegrity = array ();
 
 	public function setUp(){
-		//if (!defined('DEBUG_PERSISTENCE'))
-		//	define('DEBUG_PERSISTENCE', true);
         GenerisTestRunner::initTest();
 	}
 
 	private function countStatements (){
-		$query =  "SELECT count(*) FROM statements";
+		$query =  'SELECT count(*) FROM "statements"';
 		$result = core_kernel_classes_DbWrapper::singleton()->query($query);
 		$row = $result->fetch();
+		$result->closeCursor();
 		return $row[0];
 	}
 	
 	public function testCreateContextOfThetest(){
-		$this->dataIntegrity['statements'] = $this->countStatements();
-		
 		// Top Class : TaoSubject
 		$subjectClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
 		// Create a new subject class for the unit test
@@ -42,12 +39,10 @@ class HardDbSubjectTestCase extends UnitTestCase {
 		$this->assertEqual (count($this->targetSubjectClass->getInstances ()), 1);
 		// If get instances in the sub classes of the targetSubjectClass, we should get 2 instances
 		$this->assertEqual (count($this->targetSubjectClass->getInstances (true)), 2);
-
-	}
-
-	public function testStoreKeyDataIntegrity (){
 		
-		$this->assertTrue(core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectClass) instanceof core_kernel_persistence_smoothsql_Class);
+		$this->dataIntegrity['statements0'] = $this->countStatements();
+		$this->dataIntegrity['subSubjectClassCount0'] = $this->targetSubjectClass->countInstances();
+		$this->dataIntegrity['subSubSubjectClassCount0'] = $this->targetSubjectSubClass->countInstances();
 	}
 
 	public function testHardifier () {
@@ -61,8 +56,8 @@ class HardDbSubjectTestCase extends UnitTestCase {
 		));
 		unset ($switcher);
 		
-		$this->assertTrue(core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectClass) instanceof core_kernel_persistence_hardsql_Class);
-		$this->assertTrue(core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectSubClass) instanceof core_kernel_persistence_hardsql_Class);
+		$this->assertIsA(core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectClass), 'core_kernel_persistence_hardsql_Class');
+		$this->assertIsA(core_kernel_persistence_ClassProxy::singleton()->getImpToDelegateTo($this->targetSubjectSubClass), 'core_kernel_persistence_hardsql_Class');
 	}
 
 	public function testUnhardifier () {
@@ -70,12 +65,21 @@ class HardDbSubjectTestCase extends UnitTestCase {
 		$switcher = new core_kernel_persistence_Switcher();
 		$switcher->unhardify($this->targetSubjectClass, array(
 			'recursive'			=> true,
-			'removeForeigns'	=> false
+			'removeForeigns'	=> false,
+			'rmSources'			=> true
 		));
 		unset ($switcher);
 	}
 	
 	public function testDataIntegrity (){
+		$this->dataIntegrity['statements1'] = $this->countStatements();
+		$this->dataIntegrity['subSubjectClassCount1'] = $this->targetSubjectClass->countInstances();
+		$this->dataIntegrity['subSubSubjectClassCount1'] = $this->targetSubjectSubClass->countInstances();
+		
+		$this->assertEqual($this->dataIntegrity['statements0'], $this->dataIntegrity['statements1']);
+		$this->assertEqual($this->dataIntegrity['subSubjectClassCount0'], $this->dataIntegrity['subSubjectClassCount1']);
+		$this->assertEqual($this->dataIntegrity['subSubSubjectClassCount0'], $this->dataIntegrity['subSubSubjectClassCount1']);
+		
 		
 		$this->assertFalse(core_kernel_persistence_ClassProxy::singleton()->isValidContext('hardsql', $this->targetSubjectClass));
 		$this->assertTrue(core_kernel_persistence_ClassProxy::singleton()->isValidContext('smoothsql', $this->targetSubjectClass));
