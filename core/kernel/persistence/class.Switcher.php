@@ -128,8 +128,9 @@ class core_kernel_persistence_Switcher
 		//removeForeigns will unhardify the class that are range of the properties
 		(isset($options['removeForeigns'])) ? $removeForeigns = $options['removeForeigns'] : $removeForeigns = false;
 
-		//rmSources will remove the related data from the database
-		(isset($options['rmSources'])) ? $rmSources = $options['rmSources'] : $rmSources = true;
+		//rmSources will remove the related data from the hard data after
+		//transfer to the smooth data. 
+		$rmSources = true;
 
 		// Get class' properties
 		$propertySwitcher = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
@@ -236,16 +237,9 @@ class core_kernel_persistence_Switcher
 						}
 					}
 				}
+				
 				// delete instance in the hard implementation
-				if($rmSources) {
-					$instance->delete();
-				}
-			}
-
-
-			if(!$rmSources){
-				//increment start index only if not removed
-				$startIndex += $instancePackSize;
+				$instance->delete();
 			}
 
 			//record decompiled instances number
