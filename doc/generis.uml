@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Design generis API oo</activediagram>
+      <activediagram>Persistence</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jan 03 10:01:50 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jan 03 10:59:34 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -13513,6 +13513,35 @@ May NOT contain additional types in the properties array
                                   </UML:TaggedValue.type>
                                 </UML:TaggedValue>
                               </UML:ModelElement.taggedValue>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85--2c835591:13bffd6ae29:-8000:0000000000001E78'
+                          name = 'delete' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--2c835591:13bffd6ae29:-8000:0000000000001E79'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--2c835591:13bffd6ae29:-8000:0000000000001E7A'
+                              name = 'resource' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--2c835591:13bffd6ae29:-8000:0000000000001E7B'
+                              name = 'deleteReference' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '10-13-1-85--2c835591:13bffd6ae29:-8000:0000000000001E86'
+                                  language = '' body = 'false'/>
+                              </UML:Parameter.defaultValue>
                               <UML:Parameter.type>
                                 <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
@@ -34970,7 +34999,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         fill="0"
         fillcolor="white"
         stroke="0"
-        strokecolor="black"
+        strokecolor="192 192 192"
         textcolor="black"
         font="Dialog"
         italic="false"
@@ -59621,7 +59650,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig18"
-       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[888, 376, 678, 304]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[888, 376, 678, 319]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
        href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139F"
        fill="1"
        fillcolor="200 255 255"
@@ -59635,7 +59664,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       x="888"
       y="376"
       width="678"
-      height="304"
+      height="319"
       fill="1"
       fillcolor="200 255 255"
       stroke="1"
@@ -59706,7 +59735,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig18.4"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[889, 417, 676, 263]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[889, 417, 676, 278]"
          href="127-0-1-1--30506d9:12f6daaa255:-8000:000000000000139F"
          fill="0"
          fillcolor="200 255 255"
@@ -59720,7 +59749,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="889"
         y="417"
         width="676"
-        height="263"
+        height="278"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -59986,7 +60015,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="889"
         y="657"
         width="676"
-        height="21"
+        height="15"
         fill="0"
         fillcolor="200 255 255"
         stroke="0"
@@ -59998,6 +60027,22 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >deleteInstances(resource : Resource,resources : array,deleteReference : boolean = false) : boolean</text>
+      <text name="Fig18.4.18"
+        x="889"
+        y="672"
+        width="676"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >delete(resource : Resource,deleteReference : boolean = false) : boolean</text>
     </group>
   </group>
   <group name="Fig19"
@@ -60030,7 +60075,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <lineto x="1320"
               y="960" />
       <lineto x="1320"
-              y="679" />
+              y="694" />
     </path>
   </group>
   <group name="Fig20"
@@ -60063,7 +60108,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <lineto x="1232"
               y="704" />
       <lineto x="1232"
-              y="679" />
+              y="694" />
     </path>
   </group>
   <group name="Fig21"
@@ -60444,7 +60489,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <lineto x="1320"
               y="1168" />
       <lineto x="1320"
-              y="679" />
+              y="694" />
     </path>
   </group>
   <group name="Fig24"
@@ -62728,7 +62773,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <lineto x="1320"
               y="1328" />
       <lineto x="1320"
-              y="679" />
+              y="694" />
     </path>
   </group>
   <group name="Fig48"
@@ -63071,7 +63116,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <lineto x="1320"
               y="1560" />
       <lineto x="1320"
-              y="679" />
+              y="694" />
     </path>
   </group>
   <group name="Fig54"
@@ -72548,7 +72593,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="41"
         y="362"
         width="704"
-        height="29"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
