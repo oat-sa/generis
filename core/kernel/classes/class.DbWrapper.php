@@ -704,6 +704,30 @@ abstract class core_kernel_classes_DbWrapper
      */
     public abstract function flush($tableName);
 
+    /**
+     * Get the row count of a given table. The column to count is specified for
+     * performance reasons.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string tableName The name of the table.
+     * @param  string column The column name on wich the COUNT sql statement must be performed.
+     * @return int
+     */
+    public function getRowCount($tableName, $column = 'id')
+    {
+        $returnValue = (int) 0;
+
+        // section 10-13-1-85--56c91145:13bff9fe3e5:-8000:0000000000001E6F begin
+        $sql = 'SELECT count("' . $column . '") FROM "' . $tableName . '"';
+        $result = $this->dbConnector->query($sql);
+        $returnValue = intval($result->fetchColumn(0));
+        $result->closeCursor();
+        // section 10-13-1-85--56c91145:13bff9fe3e5:-8000:0000000000001E6F end
+
+        return (int) $returnValue;
+    }
+
 } /* end of abstract class core_kernel_classes_DbWrapper */
 
 ?>

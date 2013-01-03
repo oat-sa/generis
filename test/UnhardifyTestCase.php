@@ -13,11 +13,7 @@ class HardDbSubjectTestCase extends UnitTestCase {
 	}
 
 	private function countStatements (){
-		$query =  'SELECT count(*) FROM "statements"';
-		$result = core_kernel_classes_DbWrapper::singleton()->query($query);
-		$row = $result->fetch();
-		$result->closeCursor();
-		return $row[0];
+		return core_kernel_classes_DbWrapper::singleton()->getRowCount('statements');
 	}
 	
 	public function testCreateContextOfThetest(){

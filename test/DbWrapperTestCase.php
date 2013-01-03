@@ -14,6 +14,13 @@ class DbWrapperTestCase extends UnitTestCase {
         GenerisTestRunner::initTest();
 	}
 	
+	public function testGetRowCount(){
+		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$rowCount = $dbWrapper->getRowCount('statements');
+		$this->assertTrue(is_int($rowCount));
+		$this->assertTrue($rowCount > 0);
+	}
+	
 	public function testGetColumnNames(){
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$columns = $dbWrapper->getColumnNames('statements');
