@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jan 03 18:23:25 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jan 04 16:02:19 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -20831,6 +20831,29 @@ would return the value provided</UML:TaggedValue.dataValue>
                         <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
                       </UML:StructuralFeature.type>
                     </UML:Attribute>
+                    <UML:Operation xmi.id = '10-30-1--78--302e8d4b:13c05a95bce:-8000:0000000000001E9A'
+                      name = 'getConfigFilePath' visibility = 'private' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:ModelElement.taggedValue>
+                        <UML:TaggedValue xmi.id = '10-30-1--78--302e8d4b:13c05a95bce:-8000:0000000000001E9C'
+                          isSpecification = 'false'>
+                          <UML:TaggedValue.dataValue>returns the path to the config file
+used for instalation specific configurations</UML:TaggedValue.dataValue>
+                          <UML:TaggedValue.type>
+                            <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                          </UML:TaggedValue.type>
+                        </UML:TaggedValue>
+                      </UML:ModelElement.taggedValue>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-30-1--78--302e8d4b:13c05a95bce:-8000:0000000000001E9B'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
                     <UML:Attribute xmi.id = '-87--2--3--76--148ee98a:12452773959:-8000:0000000000002346'
                       name = 'classLoaderPackages' visibility = 'public' isSpecification = 'false'
                       ownerScope = 'instance' changeability = 'changeable' targetScope = 'instance'>
@@ -30414,6 +30437,22 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                   name = 'isEnabled' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
                   isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                   isAbstract = 'false'>
+                  <UML:ModelElement.taggedValue>
+                    <UML:TaggedValue xmi.id = '10-30-1--78-400cd9:13c05dfbbe2:-8000:00000000000052D8'
+                      isSpecification = 'false'>
+                      <UML:TaggedValue.dataValue>true</UML:TaggedValue.dataValue>
+                      <UML:TaggedValue.type>
+                        <UML:TagDefinition xmi.idref = '127-0-1-1--ded7727:12f59911cd7:-8000:0000000000001436'/>
+                      </UML:TaggedValue.type>
+                    </UML:TaggedValue>
+                    <UML:TaggedValue xmi.id = '10-30-1--78-400cd9:13c05dfbbe2:-8000:00000000000052D9'
+                      isSpecification = 'false'>
+                      <UML:TaggedValue.dataValue>deprecated, since always enabled</UML:TaggedValue.dataValue>
+                      <UML:TaggedValue.type>
+                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                      </UML:TaggedValue.type>
+                    </UML:TaggedValue>
+                  </UML:ModelElement.taggedValue>
                   <UML:BehavioralFeature.parameter>
                     <UML:Parameter xmi.id = '10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F60'
                       name = 'return' isSpecification = 'false' kind = 'return'>
@@ -30427,8 +30466,52 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                   name = 'getAvailableRepositories' visibility = 'public' isSpecification = 'false'
                   ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
                   isLeaf = 'false' isAbstract = 'false'>
+                  <UML:ModelElement.taggedValue>
+                    <UML:TaggedValue xmi.id = '10-30-1--78-400cd9:13c05dfbbe2:-8000:00000000000052DA'
+                      isSpecification = 'false'>
+                      <UML:TaggedValue.dataValue>true</UML:TaggedValue.dataValue>
+                      <UML:TaggedValue.type>
+                        <UML:TagDefinition xmi.idref = '127-0-1-1--ded7727:12f59911cd7:-8000:0000000000001436'/>
+                      </UML:TaggedValue.type>
+                    </UML:TaggedValue>
+                    <UML:TaggedValue xmi.id = '10-30-1--78-400cd9:13c05dfbbe2:-8000:00000000000052DB'
+                      isSpecification = 'false'>
+                      <UML:TaggedValue.dataValue>please use helpers_FileSource::getFileSources</UML:TaggedValue.dataValue>
+                      <UML:TaggedValue.type>
+                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                      </UML:TaggedValue.type>
+                    </UML:TaggedValue>
+                  </UML:ModelElement.taggedValue>
                   <UML:BehavioralFeature.parameter>
                     <UML:Parameter xmi.id = '10-30-1--78--774a33b7:13ad0ae6f5f:-8000:0000000000001BBA'
+                      name = 'return' isSpecification = 'false' kind = 'return'>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                  </UML:BehavioralFeature.parameter>
+                </UML:Operation>
+              </UML:Classifier.feature>
+            </UML:Class>
+            <UML:Class xmi.id = '10-30-1--78-400cd9:13c05dfbbe2:-8000:00000000000052D7'
+              name = 'FileSource' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+              isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+              <UML:Classifier.feature>
+                <UML:Operation xmi.id = '10-30-1--78-400cd9:13c05dfbbe2:-8000:00000000000052DC'
+                  name = 'getFileSources' visibility = 'public' isSpecification = 'false'
+                  ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                  isLeaf = 'false' isAbstract = 'false'>
+                  <UML:ModelElement.taggedValue>
+                    <UML:TaggedValue xmi.id = '10-30-1--78-400cd9:13c05dfbbe2:-8000:00000000000052E0'
+                      isSpecification = 'false'>
+                      <UML:TaggedValue.dataValue>returns a list of active FileSources</UML:TaggedValue.dataValue>
+                      <UML:TaggedValue.type>
+                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                      </UML:TaggedValue.type>
+                    </UML:TaggedValue>
+                  </UML:ModelElement.taggedValue>
+                  <UML:BehavioralFeature.parameter>
+                    <UML:Parameter xmi.id = '10-30-1--78-400cd9:13c05dfbbe2:-8000:00000000000052DD'
                       name = 'return' isSpecification = 'false' kind = 'return'>
                       <UML:Parameter.type>
                         <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
@@ -47414,7 +47497,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig2.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[561, 525, 308, 126]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[561, 525, 308, 120]"
          href="-87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017AF"
          fill="0"
          fillcolor="white"
@@ -47428,7 +47511,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         x="561"
         y="525"
         width="308"
-        height="126"
+        height="120"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -47565,7 +47648,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig2.5"
       x="560"
-      y="651"
+      y="644"
       width="310"
       height="1"
       fill="1"
@@ -47574,7 +47657,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig2.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[561, 652, 308, 252]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[561, 645, 308, 260]"
          href="-87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017AF"
          fill="0"
          fillcolor="white"
@@ -47586,9 +47669,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig2.6.0"
         x="561"
-        y="652"
+        y="645"
         width="308"
-        height="252"
+        height="260"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -47596,7 +47679,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       />
       <text name="Fig2.6.1"
         x="561"
-        y="652"
+        y="645"
         width="308"
         height="14"
         fill="0"
@@ -47612,7 +47695,23 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       >__construct(id : string,installed : boolean,data : array = null)</text>
       <text name="Fig2.6.2"
         x="561"
-        y="666"
+        y="659"
+        width="308"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getConfigFilePath() : string</text>
+      <text name="Fig2.6.3"
+        x="561"
+        y="673"
         width="308"
         height="14"
         fill="0"
@@ -47626,9 +47725,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getID() : string</text>
-      <text name="Fig2.6.3"
+      <text name="Fig2.6.4"
         x="561"
-        y="680"
+        y="687"
         width="308"
         height="14"
         fill="0"
@@ -47642,9 +47741,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getConstants() : array</text>
-      <text name="Fig2.6.4"
+      <text name="Fig2.6.5"
         x="561"
-        y="694"
+        y="701"
         width="308"
         height="14"
         fill="0"
@@ -47658,9 +47757,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getConfigs() : array</text>
-      <text name="Fig2.6.5"
+      <text name="Fig2.6.6"
         x="561"
-        y="708"
+        y="715"
         width="308"
         height="14"
         fill="0"
@@ -47674,9 +47773,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >setConfig(key : string,value)</text>
-      <text name="Fig2.6.6"
+      <text name="Fig2.6.7"
         x="561"
-        y="722"
+        y="729"
         width="308"
         height="14"
         fill="0"
@@ -47690,9 +47789,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getConfig(key : string) : mixed</text>
-      <text name="Fig2.6.7"
+      <text name="Fig2.6.8"
         x="561"
-        y="736"
+        y="743"
         width="308"
         height="14"
         fill="0"
@@ -47706,9 +47805,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >unsetConfig(key : string)</text>
-      <text name="Fig2.6.8"
+      <text name="Fig2.6.9"
         x="561"
-        y="750"
+        y="757"
         width="308"
         height="14"
         fill="0"
@@ -47722,9 +47821,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getVersion() : string</text>
-      <text name="Fig2.6.9"
+      <text name="Fig2.6.10"
         x="561"
-        y="764"
+        y="771"
         width="308"
         height="14"
         fill="0"
@@ -47738,9 +47837,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getAuthor() : string</text>
-      <text name="Fig2.6.10"
+      <text name="Fig2.6.11"
         x="561"
-        y="778"
+        y="785"
         width="308"
         height="14"
         fill="0"
@@ -47754,9 +47853,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getName() : string</text>
-      <text name="Fig2.6.11"
+      <text name="Fig2.6.12"
         x="561"
-        y="792"
+        y="799"
         width="308"
         height="14"
         fill="0"
@@ -47770,9 +47869,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >isEnabled() : boolean</text>
-      <text name="Fig2.6.12"
+      <text name="Fig2.6.13"
         x="561"
-        y="806"
+        y="813"
         width="308"
         height="14"
         fill="0"
@@ -47786,9 +47885,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >isInstalled() : boolean</text>
-      <text name="Fig2.6.13"
+      <text name="Fig2.6.14"
         x="561"
-        y="820"
+        y="827"
         width="308"
         height="14"
         fill="0"
@@ -47802,9 +47901,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getDir() : string</text>
-      <text name="Fig2.6.14"
+      <text name="Fig2.6.15"
         x="561"
-        y="834"
+        y="841"
         width="308"
         height="14"
         fill="0"
@@ -47818,9 +47917,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getConstant(key : string) : mixed</text>
-      <text name="Fig2.6.15"
+      <text name="Fig2.6.16"
         x="561"
-        y="848"
+        y="855"
         width="308"
         height="14"
         fill="0"
@@ -47834,9 +47933,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getAllModules() : array</text>
-      <text name="Fig2.6.16"
+      <text name="Fig2.6.17"
         x="561"
-        y="862"
+        y="869"
         width="308"
         height="14"
         fill="0"
@@ -47850,9 +47949,9 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getModule(id : string) : Module</text>
-      <text name="Fig2.6.17"
+      <text name="Fig2.6.18"
         x="561"
-        y="876"
+        y="883"
         width="308"
         height="20"
         fill="0"
@@ -51078,7 +51177,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
       <text name="Fig23.6.25"
         x="889"
         y="1073"
-        width="311"
+        width="310"
         height="14"
         fill="0"
         fillcolor="white"

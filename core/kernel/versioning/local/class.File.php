@@ -146,7 +146,8 @@ class core_kernel_versioning_local_File
         $returnValue = (bool) false;
 
         // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 begin
-		throw new core_kernel_versioning_exception_Exception(__METHOD__.' not supported by Local Directory');
+        common_Logger::i(__FUNCTION__.' called on local directory', 'LOCALVCS');
+        unlink($path);
         // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 end
 
         return (bool) $returnValue;
@@ -169,7 +170,7 @@ class core_kernel_versioning_local_File
         $returnValue = (bool) false;
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 begin
-        common_Logger::i(__FUNCTION__.' called on local directory', 'LOCALVCS');
+        common_Logger::i(__FUNCTION__.' called on local directory ', 'LOCALVCS');
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 end
 
         return (bool) $returnValue;

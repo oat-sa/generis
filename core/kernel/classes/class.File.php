@@ -145,19 +145,29 @@ class core_kernel_classes_File
         // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001367 begin
         $filePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
 	    $fileNameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
-	    $filePath = (string) $this->getOnePropertyValue($filePathProp);
-	    $fileName = (string) $this->getOnePropertyValue($fileNameProp);
+	    
+	    $props = $this->getPropertiesValues(array(
+	    	PROPERTY_FILE_FILEPATH, PROPERTY_FILE_FILENAME
+	    ));
+	    if (!isset($props[PROPERTY_FILE_FILEPATH]) || count($props[PROPERTY_FILE_FILEPATH]) == 0) {
+	    	throw new common_Exception('filepath missing for file '.$this->getUri());
+	    }
+	    if (!isset($props[PROPERTY_FILE_FILENAME]) || count($props[PROPERTY_FILE_FILENAME]) == 0) {
+	    	throw new common_Exception('filename missing for file '.$this->getUri());
+	    }
+	    $filePath = (string)current($props[PROPERTY_FILE_FILEPATH]);
+	    $fileName = (string)current($props[PROPERTY_FILE_FILENAME]);
         
-        if($filePath == null){
-            $filePath = GENERIS_FILES_PATH; 
-        }
-        
-        //IF the resource is a folder resource, the absolute filepath should respect a specific format without slash as last char
-        if(empty($fileName) && substr($filePath, strlen($returnValue)-1, 1) == DIRECTORY_SEPARATOR){
+        if(substr($filePath, strlen($returnValue)-1, 1) == DIRECTORY_SEPARATOR){
             $filePath = substr($filePath, 0, strlen($filePath)-1);
         }
-        $returnValue = $filePath . $fileName;
         
+        if(empty($fileName)) {
+	        //IF the resource is a folder resource, the absolute filepath should respect a specific format without slash as last char
+        	$returnValue = $filePath;
+        } else {
+	        $returnValue = $filePath . DIRECTORY_SEPARATOR . $fileName;
+        }
         // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001367 end
 
         return (string) $returnValue;

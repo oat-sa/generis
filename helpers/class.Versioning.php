@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 05.11.2012, 14:09:43 with ArgoUML PHP module 
+ * Automatically generated on 04.01.2013, 15:34:00 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -45,10 +45,11 @@ class helpers_Versioning
     // --- OPERATIONS ---
 
     /**
-     * Short description of method isEnabled
+     * deprecated, since always enabled
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
+     * @deprecated
      * @return boolean
      */
     public static function isEnabled()
@@ -63,10 +64,11 @@ class helpers_Versioning
     }
 
     /**
-     * Short description of method getAvailableRepositories
+     * please use helpers_FileSource::getFileSources
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
+     * @deprecated
      * @return array
      */
     public static function getAvailableRepositories()
@@ -74,12 +76,7 @@ class helpers_Versioning
         $returnValue = array();
 
         // section 10-30-1--78--774a33b7:13ad0ae6f5f:-8000:0000000000001BB9 begin
-        $classRepository = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDREPOSITORY);
-        $returnValue = $classRepository->searchInstances(array(
-        	PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED => GENERIS_TRUE
-        ), array(
-        	'like' => false
-        ));
+        $returnValue = helpers_FileSource::getFileSources();
         // section 10-30-1--78--774a33b7:13ad0ae6f5f:-8000:0000000000001BB9 end
 
         return (array) $returnValue;

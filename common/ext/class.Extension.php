@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.01.2013, 18:01:47 with ArgoUML PHP module 
+ * Automatically generated on 04.01.2013, 14:33:56 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -186,6 +186,25 @@ class common_ext_Extension
     }
 
     /**
+     * returns the path to the config file
+     * used for instalation specific configurations
+     *
+     * @access private
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return string
+     */
+    private function getConfigFilePath()
+    {
+        $returnValue = (string) '';
+
+        // section 10-30-1--78--302e8d4b:13c05a95bce:-8000:0000000000001E9A begin
+        $returnValue = $this->getDir().'common'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'common.conf.php';
+        // section 10-30-1--78--302e8d4b:13c05a95bce:-8000:0000000000001E9A end
+
+        return (string) $returnValue;
+    }
+
+    /**
      * returns the id of the extension
      *
      * @access public
@@ -255,7 +274,7 @@ class common_ext_Extension
 			
         }
         if (is_null($this->fileConfig)) {
-			$configFile = EXTENSION_PATH.DIRECTORY_SEPARATOR.$this->getID().DIRECTORY_SEPARATOR.'common'.DIRECTORY_SEPARATOR.'common.conf.php';
+			$configFile = $this->getConfigFilePath();
 			if (file_exists($configFile)) {
 				$this->fileConfig = include $configFile;
 			} else {
@@ -281,9 +300,8 @@ class common_ext_Extension
     {
         // section 10-30-1--78--220638c3:13bfff7253d:-8000:0000000000009D34 begin
 		$this->fileConfig[$key] = $value;
-		$configFile = EXTENSION_PATH.DIRECTORY_SEPARATOR.$this->getID().DIRECTORY_SEPARATOR.'common'.DIRECTORY_SEPARATOR.'common.conf.php';
-		$handle = fopen($configFile, 'w');
-        fwrite($handle, '<? return '.common_Utils::toPHPVariableString($this->fileConfig).';');
+		$handle = fopen($this->getConfigFilePath(), 'w');
+        fwrite($handle, '<?php return '.common_Utils::toPHPVariableString($this->fileConfig).';');
         fclose($handle);
         // section 10-30-1--78--220638c3:13bfff7253d:-8000:0000000000009D34 end
     }
@@ -324,8 +342,7 @@ class common_ext_Extension
     {
         // section 10-30-1--78--220638c3:13bfff7253d:-8000:0000000000009D49 begin
         unset($this->fileConfig[$key]);
-		$configFile = EXTENSION_PATH.DIRECTORY_SEPARATOR.$this->getID().DIRECTORY_SEPARATOR.'common'.DIRECTORY_SEPARATOR.'common.conf.php';
-        $handle = fopen($configFile, 'w');
+        $handle = fopen($this->getConfigFilePath(), 'w');
         fwrite($handle, '<? return '.common_Utils::toPHPVariableString($this->fileConfig).';');
         fclose($handle);
         // section 10-30-1--78--220638c3:13bfff7253d:-8000:0000000000009D49 end

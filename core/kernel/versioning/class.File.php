@@ -203,11 +203,6 @@ class core_kernel_versioning_File
         $returnValue = (bool) false;
 
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F5 begin
-    
-        if(!helpers_Versioning::isEnabled()){
-        	throw new core_kernel_versioning_exception_VersioningDisabledException();
-        }
-        
         $status = $this->getStatus();
         
         //check that the file does not remain in conflict
@@ -247,11 +242,6 @@ class core_kernel_versioning_File
         $returnValue = (bool) false;
 
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F7 begin
-        
-        if(!helpers_Versioning::isEnabled()){
-        	throw new core_kernel_versioning_exception_VersioningDisabledException();
-        }
-        
         $status = $this->getStatus();
         
         //if a revision has been given
@@ -291,11 +281,6 @@ class core_kernel_versioning_File
         $returnValue = (bool) false;
 
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F9 begin
-        
-        if(!helpers_Versioning::isEnabled()){
-        	throw new core_kernel_versioning_exception_VersioningDisabledException();
-        }
-        
         if($this->fileExists()){
         	if($this->isVersioned()){
         		$returnValue = core_kernel_versioning_FileProxy::singleton()->revert($this, $revision, $msg);
@@ -323,7 +308,7 @@ class core_kernel_versioning_File
 
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032FC begin
         
-        if($this->fileExists() && helpers_Versioning::isEnabled()){
+        if($this->fileExists()){
         	$filePath = $this->getAbsolutePath();
             //check if the file is up to date
             
@@ -407,10 +392,6 @@ class core_kernel_versioning_File
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F5 begin
         
-        if (!helpers_Versioning::isEnabled()){
-            throw new core_kernel_versioning_exception_VersioningDisabledException();
-        }
-
         //Check if the path is versioned
         $relativePath = (string) $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_FILEPATH));
         $fileName = (string) $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_FILE_FILENAME));
@@ -459,11 +440,6 @@ class core_kernel_versioning_File
         $returnValue = (bool) false;
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F8 begin
-	    
-        if(!helpers_Versioning::isEnabled()){
-        	$returnValue = false;
-        }
-        
         $status = $this->getStatus(array('SHOW_UPDATES'=>false));
         if($status
 			&& $status	!= VERSIONING_FILE_STATUS_UNVERSIONED
@@ -490,11 +466,6 @@ class core_kernel_versioning_File
         $returnValue = array();
 
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F9 begin
-    
-        if(!helpers_Versioning::isEnabled()){
-        	throw new core_kernel_versioning_exception_VersioningDisabledException();
-        }
-        
         if(!is_null($this->getRepository())){
         	$returnValue = core_kernel_versioning_FileProxy::singleton()->gethistory($this, $this->getAbsolutePath());
         }
@@ -582,11 +553,6 @@ class core_kernel_versioning_File
         $returnValue = (int) 0;
 
         // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001900 begin
-    
-        if(!helpers_Versioning::isEnabled()){
-        	throw new core_kernel_versioning_exception_VersioningDisabledException();
-        }
-        
 		try{
 		
 			$svnStatusOptions = array();
@@ -614,10 +580,6 @@ class core_kernel_versioning_File
         $returnValue = (bool) false;
 
         // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001926 begin
-        
-        if(!helpers_Versioning::isEnabled()){
-        	throw new core_kernel_versioning_exception_VersioningDisabledException();
-        }
         
         switch($version){
             case VERSIONING_FILE_VERSION_MINE:
