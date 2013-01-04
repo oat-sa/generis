@@ -3,6 +3,8 @@
 require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 class ConfigurationTestCasePrototype extends TestCasePrototype {
+	
+	const TESTKEY = 'config_test_key';
     
     public function setUp()
     {
