@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 23.03.2010, 15:58:22 with ArgoUML PHP module 
- * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
+ * Automatically generated on 04.01.2013, 17:05:09 with ArgoUML PHP module 
+ * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author firstname and lastname of author, <author@example.org>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_rules
  */
@@ -24,7 +24,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_rules_Term
  *
- * @author firstname and lastname of author, <author@example.org>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  */
 require_once('core/kernel/rules/class.Term.php');
 
@@ -40,7 +40,7 @@ require_once('core/kernel/rules/class.Term.php');
  * Short description of class core_kernel_rules_Operation
  *
  * @access public
- * @author firstname and lastname of author, <author@example.org>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package core
  * @subpackage kernel_rules
  */
@@ -82,7 +82,7 @@ class core_kernel_rules_Operation
      * Short description of method getFirstOperation
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return core_kernel_rules_Term
      */
     public function getFirstOperation()
@@ -105,7 +105,7 @@ class core_kernel_rules_Operation
      * Short description of method getSecondOperation
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return core_kernel_rules_Term
      */
     public function getSecondOperation()
@@ -128,7 +128,7 @@ class core_kernel_rules_Operation
      * Short description of method getOperator
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return core_kernel_classes_Resource
      */
     public function getOperator()
@@ -150,7 +150,7 @@ class core_kernel_rules_Operation
      * Short description of method evaluate
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  array variable
      * @return mixed
      */
@@ -206,7 +206,7 @@ class core_kernel_rules_Operation
 
     	common_Logger::d('First Part : ', array('Generis Operation'));
     	common_Logger::d('Second Part : '. $secondPart, array('Generis Operation'));
-    	$returnValue = $this->evaluateOperation($firstPart,$secondPart,$operator);
+    	$returnValue = $this->evaluateRecursiveOperation($firstPart,$secondPart,$operator);
     	common_Logger::i('Operation value: '. $returnValue, array('Generis Operation'));
     	
     	return $returnValue;
@@ -214,16 +214,16 @@ class core_kernel_rules_Operation
     }
 
     /**
-     * Short description of method evaluateOperation
+     * Short description of method evaluateRecursiveOperation
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Literal first
      * @param  Literal second
      * @param  Resource operator
      * @return mixed
      */
-    public function evaluateOperation( core_kernel_classes_Literal $first,  core_kernel_classes_Literal $second,  core_kernel_classes_Resource $operator)
+    public function evaluateRecursiveOperation( core_kernel_classes_Literal $first,  core_kernel_classes_Literal $second,  core_kernel_classes_Resource $operator)
     {
         // section 10-13-1--99-1a35566c:11edfbb4d4b:-8000:0000000000000F43 begin
         
