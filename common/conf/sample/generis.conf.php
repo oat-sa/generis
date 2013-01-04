@@ -36,11 +36,11 @@ define('USE_HTTP_USER', '');
 define('USE_HTTP_PASS', '');
 
 #generis paths
-define('INCLUDES_PATH' , GENERIS_BASE_PATH.'/includes');
-define('EXTENSION_PATH' , GENERIS_BASE_PATH.'/..');
+define('INCLUDES_PATH' , GENERIS_BASE_PATH.DIRECTORY_SEPARATOR.'includes');
+define('EXTENSION_PATH' , GENERIS_BASE_PATH.DIRECTORY_SEPARATOR.'..');
 define('MANIFEST_NAME' , 'manifest.php');
-define('GENERIS_FILES_PATH' , GENERIS_BASE_PATH.'/data/');
-define('GENERIS_CACHE_PATH', GENERIS_FILES_PATH.'cache/');
+define('GENERIS_FILES_PATH' , GENERIS_BASE_PATH.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR);
+define('GENERIS_CACHE_PATH', GENERIS_FILES_PATH.'cache'.DIRECTORY_SEPARATOR);
 
 # uri providers ('MicrotimeUriProvider'|'MicrotimeRandUriProvider'|'DatabaseSerialUriProvider')
 define('GENERIS_URI_PROVIDER', 'DatabaseSerialUriProvider');

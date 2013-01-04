@@ -47,12 +47,13 @@ class FileTestCase extends UnitTestCase {
 	{
 	    $file = core_kernel_classes_File::create('toto.txt');
 	    $absolutePath = $file->getAbsolutePath();
-	    $this->assertTrue($absolutePath == GENERIS_FILES_PATH . 'toto.txt');
+	    $this->assertEqual($absolutePath, GENERIS_FILES_PATH . 'toto.txt');
 	    $this->assertTrue($file->delete());
 	    
-	    $file = core_kernel_classes_File::create('toto.txt','/tmp/');	    
+	    $file = core_kernel_classes_File::create('toto.txt', DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR);	    
 	    $absolutePath = $file->getAbsolutePath();
-	    $this->assertTrue($absolutePath == '/tmp/toto.txt');
+	    $this->assertEqual($absolutePath, DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'toto.txt');
+	    
 	    $this->assertTrue($file->delete());
 	}
 	
