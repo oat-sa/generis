@@ -29,9 +29,10 @@ class FileSourceLocalTestCase extends UnitTestCase {
 		self::$repository = new core_kernel_versioning_Repository($repository);
     }
 	
-    public function cleanUp()
+    public function tearDown()
     {
 	    self::$repository->delete();
+	    parent::tearDown();
 	}
 
 	protected function getTestRepository () {
