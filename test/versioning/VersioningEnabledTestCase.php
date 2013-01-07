@@ -770,6 +770,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
         
         //import the tmp folder in the TAO repository & save the resource
         $importedFolder = $repository->import($tmpFolder, $repository->getUrl().'/TAO_TEST_CASE_TEST_RESPOSITORY_IMPORT', 'Import test case message', array('saveResource'=>true));
+        $this->assertNotNull($importedFolder);
         
         $path = $importedFolder->getAbsolutePath().'/';
         $this->assertNotNull($importedFolder);

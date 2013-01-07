@@ -301,8 +301,11 @@ class common_ext_Extension
         // section 10-30-1--78--220638c3:13bfff7253d:-8000:0000000000009D34 begin
 		$this->fileConfig[$key] = $value;
 		$handle = fopen($this->getConfigFilePath(), 'w');
-        fwrite($handle, '<?php return '.common_Utils::toPHPVariableString($this->fileConfig).';');
+        $success = fwrite($handle, '<?php return '.common_Utils::toPHPVariableString($this->fileConfig).';');
         fclose($handle);
+        if (!$success) {
+			throw new common_exception_Error('Unable to write config for extension '.$this->getID());
+        }
         // section 10-30-1--78--220638c3:13bfff7253d:-8000:0000000000009D34 end
     }
 
