@@ -10,13 +10,13 @@ require_once INCLUDES_PATH.'/simpletest/autorun.php';
 
 class VersioningEnabledTestCase extends UnitTestCase {
     
-	private $repositoryUrl = GENERIS_VERSIONED_REPOSITORY_URL;
-	private $repositoryPath = GENERIS_VERSIONED_REPOSITORY_PATH;
-	private $repositoryType = 'http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversion';
-	private $repositoryLogin = GENERIS_VERSIONED_REPOSITORY_LOGIN;
-	private $repositoryPassword = GENERIS_VERSIONED_REPOSITORY_PASSWORD;
-	private $repositoryLabel = GENERIS_VERSIONED_REPOSITORY_LABEL;
-	private $repositoryComment = GENERIS_VERSIONED_REPOSITORY_COMMENT;
+	// used to recover correct repo
+	private $repositoryPath = null;
+	
+	private $repositoryUrl = null;
+	private $repositoryType = null;
+	private $repositoryLogin = null;
+	private $repositoryPassword = null;
 	private $envName = 'VERSIONING_TEST_CASE_ENV';
     private $envDeep = 2;
     private $envNbFiles = 12;
@@ -24,11 +24,31 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	public function __construct()
 	{
 		parent::__construct();
+		// test repo path
+		$this->repositoryPath = GENERIS_BASE_PATH
+			.DIRECTORY_SEPARATOR.'data'
+			.DIRECTORY_SEPARATOR.'versioning'
+			.DIRECTORY_SEPARATOR.'DEFAULT'.DIRECTORY_SEPARATOR;
 	}
 	
     public function setUp()
     {
 	    TaoTestRunner::initTest();
+	    $repo = $this->getDefaultRepository();
+	    $props = $repo->getPropertiesValues(array(
+	    	PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL,
+	    	PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN,
+	    	PROPERTY_GENERIS_VERSIONEDREPOSITORY_PASSWORD,
+	    	PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE,
+	    	RDFS_LABEL,
+	    	RDFS_COMMENT
+	    ));
+	    
+	    $type = current($props[PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE]);
+	    $this->repositoryUrl 		= current($props[PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL]);
+		$this->repositoryLogin		= current($props[PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN]);
+		$this->repositoryPassword	= current($props[PROPERTY_GENERIS_VERSIONEDREPOSITORY_PASSWORD]);
+		$this->repositoryType		= $type->getUri();
 	}
 	
 	/* --------------
@@ -42,6 +62,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		$repositories = $versioningRepositoryClass->getInstances();
 		$repository = null;
         
+		common_Logger::i('Search for '.$this->repositoryPath);
         foreach($repositories as $r){
             if((string) $r->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH)) == $this->repositoryPath){
                 $repository = new core_kernel_versioning_Repository($r->uriResource);
@@ -49,32 +70,8 @@ class VersioningEnabledTestCase extends UnitTestCase {
             }
         }
         if(is_null($repository)){
-            $repository = $this->createRepository();
+            throw new common_exception_Error('Repository not found for '.__CLASS__);
         }
-		
-		return $repository;
-	}
-	
-	// Create repository by creating triples
-	protected function createRepository_byTriple()
-	{
-		$versioningRepositoryClass = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDREPOSITORY);
-		$repository = $versioningRepositoryClass->createInstance($this->repositoryLabel, $this->repositoryComment);
-		
-		$VersioningRepositoryUrlProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL);
-		$repository->setPropertyValue($VersioningRepositoryUrlProp, $this->repositoryUrl);
-		
-		$VersioningRepositoryPathProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH);
-		$repository->setPropertyValue($VersioningRepositoryPathProp, $this->repositoryPath);
-		
-		$VersioningRepositoryTypeProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE);
-		$repository->setPropertyValue($VersioningRepositoryTypeProp, $this->repositoryType);
-		
-		$VersioningRepositoryTypeProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN);
-		$repository->setPropertyValue($VersioningRepositoryTypeProp, $this->repositoryLogin);
-		
-		$VersioningRepositoryTypeProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PASSWORD);
-		$repository->setPropertyValue($VersioningRepositoryTypeProp, $this->repositoryPassword);
 		
 		return $repository;
 	}
@@ -88,8 +85,8 @@ class VersioningEnabledTestCase extends UnitTestCase {
 			$this->repositoryLogin,
 			$this->repositoryPassword,
 			$this->repositoryPath,
-			$this->repositoryLabel,
-			$this->repositoryComment
+			'test_repo',
+			'created by '.__CLASS__
 		);
 	}
 	
@@ -214,7 +211,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	public function testRepositoryType()
 	{
 	    $repository = $this->getDefaultRepository();
-	    $type = $repository->getType();
+	    $type = $repository->getVCSType();
 	    $this->assertTrue($type->uriResource, $this->repositoryType);
 	}
 
@@ -640,7 +637,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	    
 	    // Update the file from another repository
 	    $repository2 = core_kernel_versioning_Repository::create(
-			new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversion'),
+			new core_kernel_classes_Resource(PROPERTY_GENERIS_VCS_TYPE_SUBVERSION),
 			$this->repositoryUrl,
 			$this->repositoryLogin,
 			$this->repositoryPassword,

@@ -84,7 +84,7 @@ class VersioningDisabledTestCase extends UnitTestCase {
 	public function testRespositoryCheckout()
 	{
 		$repository = core_kernel_versioning_Repository::create(
-			new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOItem.rdf#VersioningRepositoryTypeSubversion'),
+			new core_kernel_classes_Resource(PROPERTY_GENERIS_VCS_TYPE_SUBVERSION),
 			$this->repositoryUrl,
 			$this->repositoryLogin,
 			$this->repositoryPassword,
