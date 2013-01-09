@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 04.04.2012, 16:58:18 with ArgoUML PHP module 
+ * Automatically generated on 08.01.2013, 16:33:28 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package helpers
  */
 
@@ -32,7 +32,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class helpers_File
  *
  * @access public
- * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+ * @author Joel Bout, <joel.bout@tudor.lu>
  * @package helpers
  */
 class helpers_File
@@ -48,7 +48,7 @@ class helpers_File
      * Short description of method resourceExists
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string path
      * @return boolean
      */
@@ -72,7 +72,7 @@ class helpers_File
      * Short description of method getResource
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string path
      * @return core_kernel_classes_File
      */
@@ -96,7 +96,7 @@ class helpers_File
      * Short description of method searchResourcesFromPath
      *
      * @access public
-     * @author Somsack Sipasseuth, <somsack.sipasseuth@tudor.lu>
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  string path
      * @return array
      */
@@ -126,6 +126,38 @@ class helpers_File
         // section 127-0-1-1-6a191a88:1367c838c77:-8000:0000000000002A0F end
 
         return (array) $returnValue;
+    }
+
+    /**
+     * returns the relative path from the file/directory 'from'
+     * to the file/directory 'to'
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  string from
+     * @param  string to
+     * @return string
+     */
+    public static function getRelPath($from, $to)
+    {
+        $returnValue = (string) '';
+
+        // section 10-30-1--78-45a9d031:13c193b4a22:-8000:00000000000052F9 begin
+        $from = is_dir($from) ? $from : dirname($from); 
+		$arrFrom = explode(DIRECTORY_SEPARATOR, rtrim($from, DIRECTORY_SEPARATOR));
+  		$arrTo = explode(DIRECTORY_SEPARATOR, rtrim($to, DIRECTORY_SEPARATOR));
+  		
+		while(count($arrFrom) && count($arrTo) && ($arrFrom[0] == $arrTo[0])) {
+			array_shift($arrFrom);
+			array_shift($arrTo);
+		}
+		foreach ($arrFrom as $dir) {
+			$returnValue .= '..'.DIRECTORY_SEPARATOR;
+		}
+		$returnValue .= implode(DIRECTORY_SEPARATOR, $arrTo);
+        // section 10-30-1--78-45a9d031:13c193b4a22:-8000:00000000000052F9 end
+
+        return (string) $returnValue;
     }
 
 } /* end of class helpers_File */

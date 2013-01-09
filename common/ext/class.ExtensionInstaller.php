@@ -100,7 +100,11 @@ class common_ext_ExtensionInstaller
 			$this->installOntologyTranslation();
 			$this->installRegisterExt();
 			$this->installModuleModel();
+
+			core_kernel_classes_Session::singleton()->update();
+			
 			$this->installCustomScript();
+			
 			if ($this->getLocalData() == true){
 				$this->installLocalData();
 			}
@@ -175,6 +179,7 @@ class common_ext_ExtensionInstaller
 				}
 				$ns = (string) $attrs['base'];
 				//import the model in the ontology
+				common_Logger::d('Inserting model '.$rdfpath.' for '.$this->extension->getID(), 'INSTALL');
 				$modelCreator->insertModelFile($ns, $rdfpath);
     		}
     	}
@@ -277,13 +282,24 @@ class common_ext_ExtensionInstaller
     protected function installLocalData()
     {
         // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A22 begin
-		$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
-    	$localData = $this->extension->getDir().'/models/ontology/local.rdf';
-		if(file_exists($localData)){
-			common_Logger::d('Inserting localdata for '.$this->extension->getID(), 'INSTALL');
-			$modelCreator->insertLocalModelFile($localData);
+    	if(isset($this->extension->localData['rdf'])){
+    		$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
+    		foreach ($this->extension->localData['rdf'] as $rdfpath) {
+				if(file_exists($rdfpath)){
+					common_Logger::d('Inserting local data rdf '.$rdfpath.' for '.$this->extension->getID(), 'INSTALL');
+					$modelCreator->insertLocalModelFile($rdfpath);
+				}
+    		}
 		}
-        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A22 end
+    	if(isset($this->extension->localData['php'])) {
+    		$scripts = $this->extension->localData['php'];
+			$scripts = is_array($scripts) ? $scripts : array($scripts);
+			foreach ($scripts as $script) {
+				common_Logger::d('Running local data script '.$script.' for ext '.$this->extension->getID(), 'INSTALL');
+				require_once $script;
+			}
+    	}
+		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A22 end
     }
 
     /**

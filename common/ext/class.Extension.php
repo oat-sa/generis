@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 04.01.2013, 14:33:56 with ArgoUML PHP module 
+ * Automatically generated on 08.01.2013, 17:31:43 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -111,6 +111,14 @@ class common_ext_Extension
      */
     protected $installed = false;
 
+    /**
+     * Short description of attribute localData
+     *
+     * @access public
+     * @var array
+     */
+    public $localData = array();
+
     // --- OPERATIONS ---
 
     /**
@@ -172,6 +180,9 @@ class common_ext_Extension
 			}
 			if(isset($manifestArray['install']) && is_array($manifestArray['install'])) {
 				$this->installFiles = $manifestArray['install'];
+			}
+			if(isset($manifestArray['local']) && is_array($manifestArray['local'])) {
+				$this->localData = $manifestArray['local'];
 			}
 			$this->constants = (isset($manifestArray['constants']) && is_array($manifestArray['constants']))
 				? $manifestArray['constants']
