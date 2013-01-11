@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 /**
  * Manage your versioned files as resources in TAO
  *
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
  * @package core
  * @subpackage kernel_versioning
  */
@@ -17,14 +17,14 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_classes_File
  *
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
  */
 require_once('core/kernel/classes/class.File.php');
 
 /**
  * include core_kernel_versioning_FileProxy
  *
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
  */
 require_once('core/kernel/versioning/class.FileProxy.php');
 
@@ -58,7 +58,7 @@ const VERSIONING_FILE_VERSION_BASE              = 'base';
  * Manage your versioned files as resources in TAO
  *
  * @access public
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
  * @package core
  * @subpackage kernel_versioning
  */
@@ -76,7 +76,7 @@ class core_kernel_versioning_File
      * Short description of method getFileClass
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @return core_kernel_classes_Class
      */
     protected static function getFileClass()
@@ -94,13 +94,13 @@ class core_kernel_versioning_File
      * Short description of method createVersioned
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  string filename
      * @param  relativeFilePath
      * @param  Repository repository
      * @param  string uri
      * @param  array options
-     * @return core_kernel_versioning_subversion_File
+     * @return core_kernel_versioning_File
      */
     public static function createVersioned($filename, $relativeFilePath = null,  core_kernel_versioning_Repository $repository = null, $uri = '', $options = array())
     {
@@ -162,7 +162,7 @@ class core_kernel_versioning_File
      * Check if a resource is a versioned file resource
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource resource
      * @return boolean
      */
@@ -193,7 +193,7 @@ class core_kernel_versioning_File
      * requires an update)
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  string message
      * @param  boolean recursive
      * @return boolean
@@ -233,7 +233,7 @@ class core_kernel_versioning_File
      * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  int revision
      * @return boolean
      */
@@ -271,7 +271,7 @@ class core_kernel_versioning_File
      * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  int revision If a revision is given revert changes from this revision. Else revert local changes.
      * @param  string msg
      * @return boolean
@@ -298,7 +298,7 @@ class core_kernel_versioning_File
      * and delete it.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  boolean deleteReference
      * @return boolean
      */
@@ -356,7 +356,7 @@ class core_kernel_versioning_File
      * Get the repository which is associated to the resource
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @return core_kernel_versioning_subversion_Repository
      */
     public function getRepository()
@@ -381,7 +381,7 @@ class core_kernel_versioning_File
      * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  boolean recursive
      * @param  boolean force
      * @return boolean
@@ -432,7 +432,7 @@ class core_kernel_versioning_File
      * Check if the resource is versioned
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @return boolean
      */
     public function isVersioned()
@@ -458,7 +458,7 @@ class core_kernel_versioning_File
      * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @return array
      */
     public function getHistory()
@@ -479,7 +479,7 @@ class core_kernel_versioning_File
      * Get the relative path of the resource in the repository
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @return string
      */
     public function getPath()
@@ -503,7 +503,7 @@ class core_kernel_versioning_File
      * if the constant GENERIS_VERSIONING_ENABLED is set to false
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @return boolean
      */
     public function hasLocalChanges()
@@ -523,7 +523,7 @@ class core_kernel_versioning_File
      * Short description of method getVersion
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @return int
      */
     public function getVersion()
@@ -544,7 +544,7 @@ class core_kernel_versioning_File
      * Short description of method getStatus
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  array options
      * @return int
      */
@@ -571,7 +571,7 @@ class core_kernel_versioning_File
      * Short description of method resolve
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  string version
      * @return boolean
      */
@@ -602,7 +602,7 @@ class core_kernel_versioning_File
      * Short description of method isInConflict
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @return boolean
      */
     public function isInConflict()
