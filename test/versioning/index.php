@@ -1,6 +1,9 @@
 <?php
-error_reporting(E_ALL);
-require_once dirname(__FILE__) . '/../../../tao/test/TaoTestRunner.php';
+
+require_once dirname(__FILE__).'/../../common/inc.extension.php';
+require_once INCLUDES_PATH.'/simpletest/autorun.php';
+require_once INCLUDES_PATH.'/ClearFw/core/simpletestRunner/_main.php';
+
 
 $testSuite = new TestSuite('Versioning unit tests');
 $testSuite->addFile(dirname(__FILE__).'/VersioningEnabledTestCase.php');
