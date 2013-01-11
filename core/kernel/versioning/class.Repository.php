@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 14.11.2012, 15:28:33 with ArgoUML PHP module 
+ * Automatically generated on 11.01.2013, 16:46:17 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
  * @package core
  * @subpackage kernel_versioning
  */
@@ -34,7 +34,7 @@ require_once('core/kernel/classes/class.Resource.php');
 /**
  * include core_kernel_versioning_RepositoryProxy
  *
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
  */
 require_once('core/kernel/versioning/class.RepositoryProxy.php');
 
@@ -50,7 +50,7 @@ require_once('core/kernel/versioning/class.RepositoryProxy.php');
  * Short description of class core_kernel_versioning_Repository
  *
  * @access public
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
  * @package core
  * @subpackage kernel_versioning
  */
@@ -76,7 +76,7 @@ class core_kernel_versioning_Repository
      * Repository factory
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  Resource type
      * @param  string url
      * @param  string login
@@ -85,7 +85,7 @@ class core_kernel_versioning_Repository
      * @param  string label
      * @param  string comment
      * @param  string uri
-     * @return core_kernel_versioning_subversion_Repository
+     * @return core_kernel_versioning_Repository
      */
     public static function create( core_kernel_classes_Resource $type, $url, $login, $password, $path, $label, $comment, $uri = '')
     {
@@ -126,7 +126,7 @@ class core_kernel_versioning_Repository
      * Checkout the remote repository to a local directory
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  int revision
      * @return boolean
      */
@@ -154,7 +154,7 @@ class core_kernel_versioning_Repository
      * Get the repository type
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @return core_kernel_classes_Resource
      */
     public function getVCSType()
@@ -172,7 +172,7 @@ class core_kernel_versioning_Repository
      * Get path of the local repository
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @return string
      */
     public function getPath()
@@ -192,7 +192,7 @@ class core_kernel_versioning_Repository
      * Get authenticated with the remote repository
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @return boolean
      */
     public function authenticate()
@@ -228,7 +228,7 @@ class core_kernel_versioning_Repository
      * system.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  boolean deleteReference
      * @return boolean
      */
@@ -256,7 +256,7 @@ class core_kernel_versioning_Repository
      * Short description of method export
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  string src
      * @param  string target
      * @param  int revision
@@ -279,7 +279,7 @@ class core_kernel_versioning_Repository
      * @param options.saveResource {boolean} Save the resource in the onthology
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  string src
      * @param  string target
      * @param  string message
@@ -312,7 +312,7 @@ class core_kernel_versioning_Repository
      * Short description of method listContent
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  string path
      * @param  int revision
      * @return array
@@ -332,7 +332,7 @@ class core_kernel_versioning_Repository
      * Short description of method getUrl
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @return string
      */
     public function getUrl()
@@ -352,7 +352,7 @@ class core_kernel_versioning_Repository
      * Short description of method enable
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @return boolean
      */
     public function enable()
@@ -386,7 +386,7 @@ class core_kernel_versioning_Repository
      * Short description of method disable
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @return boolean
      */
     public function disable()
@@ -422,7 +422,7 @@ class core_kernel_versioning_Repository
      * Short description of method addFile
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @param  File file
      * @param  string remotePath
      * @return core_kernel_versioning_File
@@ -451,7 +451,7 @@ class core_kernel_versioning_Repository
      * Short description of method getRootFile
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
      * @return core_kernel_versioning_File
      */
     public function getRootFile()

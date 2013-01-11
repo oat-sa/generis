@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jan 11 16:42:46 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jan 11 16:46:07 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -17057,7 +17057,7 @@ This function is usefull specially during unhardening</UML:TaggedValue.dataValue
                             <UML:Parameter xmi.id = '127-0-1-1--548d6005:132d344931b:-8000:000000000000251E'
                               name = 'return' isSpecification = 'false' kind = 'return'>
                               <UML:Parameter.type>
-                                <UML:Class xmi.idref = '127-0-1-1--548d6005:132d344931b:-8000:0000000000002500'/>
+                                <UML:Class xmi.idref = '127-0-1-1--548d6005:132d344931b:-8000:0000000000002519'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '127-0-1-1--548d6005:132d344931b:-8000:000000000000251F'
