@@ -263,12 +263,12 @@ class core_kernel_versioning_FileProxy
         
 		$repository = $resource->getRepository();
 		if(!is_null($repository)){
-			
-			$type = $repository->getVCSType();
+
+            $VCStype = $repository->getVCSType();
 			$implClass = '';
 
 			// Function of the repository type, define the implementation to attack
-			switch ($type->getUri()) {
+			switch ($VCStype->getUri()) {
 				case PROPERTY_GENERIS_VCS_TYPE_SUBVERSION:
 					$implClass = 'core_kernel_versioning_subversion_File';
 					break;
