@@ -157,7 +157,7 @@ class core_kernel_users_Service
 
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:000000000000182C begin
         if($this->loginExists($login)){
-        	throw new core_kernel_users_Exception('login already taken',core_kernel_users_Exception::LOGIN_EXITS);
+        	throw new core_kernel_users_Exception("Login '${login}' already in use.", core_kernel_users_Exception::LOGIN_EXITS);
         }
         $roleClass = new core_kernel_classes_Class($role->uriResource);
         $returnValue = $roleClass->createInstance('User_'.$login , 'Created on'. date(DATE_ISO8601));
@@ -236,13 +236,13 @@ class core_kernel_users_Service
 		$firstClassUri = array_shift($roles);
 		$firstClass = new core_kernel_classes_Class($firstClassUri);
 		$filter = array(PROPERTY_USER_LOGIN => $login, PROPERTY_USER_PASSWORD => $password);
-		$options = array('like' => false, 'additionalClasses' => $roles);
+		$options = array('like' => false, 'additionalClasses' => $roles, 'recursive' => true);
 		$users = $firstClass->searchInstances( $filter, $options);
 		
 		if (count($users) != 1) {
 			if (count($users) > 1) {
-				common_Logger::w('Multiple Users found with the same password for login '.$login, 'GENERIS');
-			}			
+				common_Logger::w("Multiple Users found with the same password for login '${login}'.", 'GENERIS');
+			}
 			$this->logout();
 		}
 		else {		
@@ -281,7 +281,7 @@ class core_kernel_users_Service
         
     	$users = $class->searchInstances(
     		array(PROPERTY_USER_LOGIN => $login), 
-    		array('like' => false, 'recursive' => 1)
+    		array('like' => false, 'recursive' => true)
     	);
     	foreach($users as $user){
     		$returnValue = $user;
