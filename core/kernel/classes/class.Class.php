@@ -548,6 +548,28 @@ class core_kernel_classes_Class
         return (bool) $returnValue;
     }
 
+    /**
+     * States if the Class exists or not in persistent memory. The rule is
+     * if the Class has parent classes, it exists. It works even for the
+     * class because it inherits itself.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return boolean
+     */
+    public function exists()
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1-85--c748ed5:13c47c01595:-8000:0000000000001E99 begin
+        // If the Class has one or more direct parent classes (this rdfs:isSubClassOf C),
+        // we know that the class exists. 
+        $returnValue = (count($this->getParentClasses(false)) > 0);
+        // section 10-13-1-85--c748ed5:13c47c01595:-8000:0000000000001E99 end
+
+        return (bool) $returnValue;
+    }
+
 } /* end of class core_kernel_classes_Class */
 
 ?>
