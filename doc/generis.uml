@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jan 17 12:32:45 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jan 17 12:35:45 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -9583,6 +9583,21 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                               </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-6f23684e:13c4849f66a:-8000:0000000000001EC6'
+                              name = 'user' isSpecification = 'false' kind = 'in'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-6f23684e:13c4849f66a:-8000:0000000000001EC7'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>The User instance you want to check Roles.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '10-13-1-85--1a7d19de:13c484485d8:-8000:0000000000001EC4'
@@ -67805,7 +67820,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >userHasRoles(roles) : boolean</text>
+      >userHasRoles(user : Resource,roles) : boolean</text>
     </group>
   </group>
 </pgml>
