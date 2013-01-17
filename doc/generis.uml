@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Generis Core Kernel</activediagram>
+      <activediagram>Users</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jan 17 10:22:35 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jan 17 11:58:07 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -8845,20 +8845,56 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                     <UML:Class xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815'
                       name = 'Service' visibility = 'public' isSpecification = 'false' isRoot = 'false'
                       isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                      <UML:ModelElement.taggedValue>
+                        <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001E9F'
+                          isSpecification = 'false'>
+                          <UML:TaggedValue.dataValue>The UserService aims at providing an API to manage Users and Roles witinh Generis.</UML:TaggedValue.dataValue>
+                          <UML:TaggedValue.type>
+                            <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                          </UML:TaggedValue.type>
+                        </UML:TaggedValue>
+                      </UML:ModelElement.taggedValue>
                       <UML:Classifier.feature>
                         <UML:Operation xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001816'
                           name = 'loginExists' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EA0'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Returns true if the a user with login = $login is currently in the persistent memory of Generis.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001817'
                               name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EA1'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Returns true if the login exists, false otherwise.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001818'
                               name = 'login' isSpecification = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EA2'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>A string that is used as a Generis user login in the persistent memory.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
@@ -8869,6 +8905,15 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                                 <UML:Expression xmi.id = '127-0-1-1-6b35acc2:12fbb20ecfe:-8000:00000000000016A8'
                                   language = '' body = 'null'/>
                               </UML:Parameter.defaultValue>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EA3'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>A specific sub class of User where the login must be searched into.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767'/>
                               </UML:Parameter.type>
@@ -8879,11 +8924,29 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                           name = 'addRole' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EA4'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Add a role in Generis.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:000000000000181A'
                               name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EA5'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>The created Role as a Resource.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767'/>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:000000000000181B'
@@ -8892,6 +8955,15 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                                 <UML:Expression xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:000000000000181D'
                                   language = '' body = '&apos;&apos;'/>
                               </UML:Parameter.defaultValue>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EA6'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>The label to apply to the newly created Generis Role.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
@@ -8902,19 +8974,35 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                                 <UML:Expression xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001821'
                                   language = '' body = '&apos;&apos;'/>
                               </UML:Parameter.defaultValue>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EA7'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>A comment to apply to the newly created Generis Role.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001822'
-                              name = 'parentRole' isSpecification = 'false'>
+                              name = 'includedRoles' isSpecification = 'false'>
                               <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001827'
+                                <UML:Expression xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EB2'
                                   language = '' body = 'null'/>
                               </UML:Parameter.defaultValue>
-                              <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                              </UML:Parameter.type>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EB3'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>The Role(s) to be included in the newly created Generis Role.
+Can be either a Resource or an array of Resources.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
@@ -8922,6 +9010,15 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                           name = 'removeRole' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EB4'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Remove a Generis role from the persistent memory. References to this Role will be removed.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001829'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -8929,12 +9026,30 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                                 <UML:Expression xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:000000000000182A'
                                   language = '' body = ''/>
                               </UML:Parameter.defaultValue>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EB5'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Returns true if the role was deleted, false otherwise.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:000000000000182B'
                               name = 'role' isSpecification = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EB6'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>The Role to remove.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                               </UML:Parameter.type>
@@ -8945,21 +9060,57 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                           name = 'addUser' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EB7'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Create a new Generis User with a specific Role.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:000000000000182D'
                               name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EB8'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>The newly created User.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:000000000000182E'
                               name = 'login' isSpecification = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EB9'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>A specific login for the User to create.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:000000000000182F'
                               name = 'password' isSpecification = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EBA'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>A password for the User to create.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
@@ -8970,6 +9121,15 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                                 <UML:Expression xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001845'
                                   language = '' body = ''/>
                               </UML:Parameter.defaultValue>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EBB'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>A Role to grant to the new User.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                               </UML:Parameter.type>
@@ -8980,15 +9140,42 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                           name = 'removeUser' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EBC'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Remove a Generis User from persistent memory. Bound roles will remain unchanged.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001832'
                               name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EBD'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Returns true if the user was successfully removed from the persistent memory of Generis, false otherwise.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001833'
                               name = 'user' isSpecification = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EBE'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>A reference to the User to be removed from the persistent memory of Generis.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                               </UML:Parameter.type>
@@ -9002,7 +9189,7 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                           <UML:ModelElement.taggedValue>
                             <UML:TaggedValue xmi.id = '10-13-1-85-5534fcc7:13b70a6c76b:-8000:0000000000001DC6'
                               isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>the md5 hash of the password.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.dataValue>Log in a user into Generis that has one of the provided $allowedRoles.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
@@ -9032,6 +9219,15 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001837'
                               name = 'password' isSpecification = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EBF'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>the md5 hash of the password.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
@@ -9054,6 +9250,15 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                           name = 'getOneUser' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EC0'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Get a specific Generis User from the persistent memory of Generis that matches a specific login.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:000000000000183A'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -9063,6 +9268,15 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000001821'
                               name = 'login' isSpecification = 'false'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EC1'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>A Generis User login.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
@@ -9073,6 +9287,15 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                                 <UML:Expression xmi.id = '127-0-1-1-6b35acc2:12fbb20ecfe:-8000:00000000000016AD'
                                   language = '' body = 'null'/>
                               </UML:Parameter.defaultValue>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EC2'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>A specific sub Class of User where in the User has to be searched in.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767'/>
                               </UML:Parameter.type>
@@ -9114,6 +9337,15 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                           name = 'singleton' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EC3'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Get a unique instance of the UserService.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E96'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -9146,9 +9378,27 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                           name = 'isASessionOpened' visibility = 'public' isSpecification = 'false'
                           ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
                           isLeaf = 'false' isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EC4'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Indicates if an Authenticated Session is open.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E9E'
                               name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EC6'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Returns true if an Authenticated Session is open, false otherwise.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
@@ -9159,9 +9409,27 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                           name = 'logout' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EC5'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Logout the current user.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EB6'
                               name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EC7'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Returns true if the User was successfully logged out, false otherwise.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
@@ -9216,6 +9484,15 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                           name = 'setPassword' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EC8'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Set the password of a specifc user.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-2ec10bd7:138702395c4:-8000:0000000000004D73'
                               name = 'return' isSpecification = 'false' kind = 'return'/>
@@ -9237,13 +9514,22 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                           name = 'getUserRoles' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EC9'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Get the roles that a specific user has.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-1c7cc2b7:137dbf1ddb6:-8000:0000000000002BC3'
                               name = 'return' isSpecification = 'false' kind = 'return'>
                               <UML:ModelElement.taggedValue>
                                 <UML:TaggedValue xmi.id = '127-0-1-1-1c7cc2b7:137dbf1ddb6:-8000:0000000000002BC5'
                                   isSpecification = 'false'>
-                                  <UML:TaggedValue.dataValue>gets all roles of the user</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.dataValue>An array of Roles where the keys are the Role URIs.</UML:TaggedValue.dataValue>
                                   <UML:TaggedValue.type>
                                     <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                                   </UML:TaggedValue.type>
@@ -9255,6 +9541,15 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-1c7cc2b7:137dbf1ddb6:-8000:0000000000002BC4'
                               name = 'user' isSpecification = 'false' kind = 'in'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001ECA'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>A Generis User.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                               </UML:Parameter.type>
@@ -66974,7 +67269,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       name="Users"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[24, 16, 560, 328]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
+       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[24, 16, 736, 492]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
        href="-87--2--3--76-51a982f1:1278aabc987:-8000:000000000000239E"
        fill="1"
        fillcolor="white"
@@ -66987,8 +67282,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     <rectangle name="Fig0.0"
       x="24"
       y="16"
-      width="560"
-      height="328"
+      width="736"
+      height="492"
       fill="0"
       fillcolor="white"
       stroke="0"
@@ -67003,23 +67298,23 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     >
       <moveto x="24"
               y="16" />
-      <lineto x="534"
+      <lineto x="710"
               y="16" />
-      <lineto x="534"
+      <lineto x="710"
               y="38" />
-      <lineto x="583"
+      <lineto x="759"
               y="38" />
-      <lineto x="583"
-              y="343" />
+      <lineto x="759"
+              y="507" />
       <lineto x="24"
-              y="343" />
+              y="507" />
       <lineto x="24"
               y="16" />
     </path>
     <text name="Fig0.2"
       x="24"
       y="16"
-      width="511"
+      width="687"
       height="23"
       fill="0"
       fillcolor="white"
@@ -67033,7 +67328,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Left"
     >core::kernel::users</text>
     <group name="Fig0.3"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[24, 16, 510, 1]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[24, 16, 686, 1]"
          href="-87--2--3--76-51a982f1:1278aabc987:-8000:000000000000239E"
          fill="1"
          fillcolor="white"
@@ -67047,7 +67342,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <rectangle name="Fig0.3.0"
         x="24"
         y="16"
-        width="510"
+        width="686"
         height="1"
         fill="1"
         fillcolor="white"
@@ -67058,8 +67353,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     <text name="Fig0.4"
       x="24"
       y="38"
-      width="560"
-      height="306"
+      width="736"
+      height="470"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -67073,7 +67368,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     ></text>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[48, 48, 472, 279]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[48, 84, 472, 279]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
        fill="1"
        fillcolor="white"
@@ -67086,7 +67381,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig1.0"
       x="48"
-      y="48"
+      y="84"
       width="472"
       height="279"
       fill="1"
@@ -67096,7 +67391,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     />
     <text name="Fig1.1"
       x="49"
-      y="49"
+      y="85"
       width="470"
       height="21"
       fill="0"
@@ -67111,7 +67406,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::users::Service</text>
     <group name="Fig1.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[49, 49, 470, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[49, 85, 470, 0]"
          href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
          fill="0"
          fillcolor="white"
@@ -67124,7 +67419,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig1.2.0"
         x="49"
-        y="49"
+        y="85"
         width="470"
         height="0"
         fill="0"
@@ -67135,7 +67430,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig1.3"
       x="48"
-      y="70"
+      y="106"
       width="472"
       height="1"
       fill="1"
@@ -67144,7 +67439,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[49, 71, 470, 38]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[49, 107, 470, 38]"
          href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
          fill="0"
          fillcolor="white"
@@ -67156,7 +67451,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig1.4.0"
         x="49"
-        y="71"
+        y="107"
         width="470"
         height="38"
         fill="0"
@@ -67166,7 +67461,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       />
       <text name="Fig1.4.1"
         x="49"
-        y="71"
+        y="107"
         width="470"
         height="15"
         fill="0"
@@ -67182,7 +67477,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >userResource : Resource  = null</text>
       <text name="Fig1.4.2"
         x="49"
-        y="86"
+        y="122"
         width="470"
         height="21"
         fill="0"
@@ -67199,7 +67494,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig1.5"
       x="48"
-      y="108"
+      y="144"
       width="472"
       height="1"
       fill="1"
@@ -67208,7 +67503,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[49, 109, 470, 218]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[49, 145, 470, 218]"
          href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
          fill="0"
          fillcolor="white"
@@ -67220,7 +67515,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig1.6.0"
         x="49"
-        y="109"
+        y="145"
         width="470"
         height="218"
         fill="0"
@@ -67230,7 +67525,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       />
       <text name="Fig1.6.1"
         x="49"
-        y="109"
+        y="145"
         width="470"
         height="15"
         fill="0"
@@ -67246,7 +67541,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >loginExists(login : string,class : Class = null) : boolean</text>
       <text name="Fig1.6.2"
         x="49"
-        y="124"
+        y="160"
         width="470"
         height="15"
         fill="0"
@@ -67259,10 +67554,10 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >addRole(label : string = &apos;&apos;,comment : string = &apos;&apos;,parentRole : string = null) : Class</text>
+      >addRole(label : string = &apos;&apos;,comment : string = &apos;&apos;,includedRoles = null) : Resource</text>
       <text name="Fig1.6.3"
         x="49"
-        y="139"
+        y="175"
         width="470"
         height="15"
         fill="0"
@@ -67278,7 +67573,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >removeRole(role : Resource) : boolean</text>
       <text name="Fig1.6.4"
         x="49"
-        y="154"
+        y="190"
         width="470"
         height="15"
         fill="0"
@@ -67294,7 +67589,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >addUser(login : string,password : string,role : Resource) : Resource</text>
       <text name="Fig1.6.5"
         x="49"
-        y="169"
+        y="205"
         width="470"
         height="15"
         fill="0"
@@ -67310,7 +67605,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >removeUser(user : Resource) : boolean</text>
       <text name="Fig1.6.6"
         x="49"
-        y="184"
+        y="220"
         width="470"
         height="15"
         fill="0"
@@ -67326,7 +67621,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >login(login : string,password : string,allowedRoles) : boolean</text>
       <text name="Fig1.6.7"
         x="49"
-        y="199"
+        y="235"
         width="470"
         height="15"
         fill="0"
@@ -67342,7 +67637,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >getOneUser(login : string,class : Class = null) : Resource</text>
       <text name="Fig1.6.8"
         x="49"
-        y="214"
+        y="250"
         width="470"
         height="15"
         fill="0"
@@ -67358,7 +67653,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >«create» __construct()</text>
       <text name="Fig1.6.9"
         x="49"
-        y="229"
+        y="265"
         width="470"
         height="15"
         fill="0"
@@ -67374,7 +67669,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >singleton() : Service</text>
       <text name="Fig1.6.10"
         x="49"
-        y="244"
+        y="280"
         width="470"
         height="15"
         fill="0"
@@ -67390,7 +67685,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >isASessionOpened() : boolean</text>
       <text name="Fig1.6.11"
         x="49"
-        y="259"
+        y="295"
         width="470"
         height="15"
         fill="0"
@@ -67406,7 +67701,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >logout() : boolean</text>
       <text name="Fig1.6.12"
         x="49"
-        y="274"
+        y="310"
         width="470"
         height="15"
         fill="0"
@@ -67422,7 +67717,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >isPasswordValid(password : string,user : Resource) : boolean</text>
       <text name="Fig1.6.13"
         x="49"
-        y="289"
+        y="325"
         width="470"
         height="15"
         fill="0"
@@ -67438,7 +67733,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >setPassword(user : Resource,password : string)</text>
       <text name="Fig1.6.14"
         x="49"
-        y="304"
+        y="340"
         width="470"
         height="21"
         fill="0"
@@ -72530,7 +72825,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="41"
         y="362"
         width="704"
-        height="15"
+        height="29"
         fill="0"
         fillcolor="white"
         stroke="0"
