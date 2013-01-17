@@ -206,7 +206,7 @@ class core_kernel_persistence_smoothsql_Class
 			AND "object" = ?';
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$sqlResult = $dbWrapper->query($sqlQuery, array(
-			RDF_DOMAIN,
+			RDFS_DOMAIN,
 			$resource->uriResource
 		));
 
@@ -217,7 +217,7 @@ class core_kernel_persistence_smoothsql_Class
 		if($recursive == true) {
 			$parentClasses = $resource->getParentClasses(true);
 			foreach ($parentClasses as $parent) {
-				if($parent->uriResource != RDF_CLASS) {
+				if($parent->uriResource != RDFS_CLASS) {
 					$returnValue = array_merge($returnValue, $parent->getProperties(true));
 				}
 			}

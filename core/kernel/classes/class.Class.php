@@ -122,11 +122,13 @@ class core_kernel_classes_Class
     }
 
     /**
-     * Short description of method getProperties
+     * Returns the Properties bound to the Class. If the $recursive parameter is
+     * to true, the whole class hierarchy will be inspected from the current
+     * to the top one to retrieve tall its properties.
      *
      * @access public
      * @author patrick.plichart@tudor.lu
-     * @param  boolean recursive
+     * @param  boolean recursive Recursive Properties retrieval accross the Class hierarchy.
      * @return array
      */
     public function getProperties($recursive = false)

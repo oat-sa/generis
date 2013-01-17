@@ -112,7 +112,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jan 17 10:11:44 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jan 17 10:22:35 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -1846,6 +1846,13 @@ The method returns the new resource. </UML:TaggedValue.dataValue>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85-4d4744ee:13c47cce141:-8000:0000000000001E9E'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Returns the Properties bound to the Class. If the $recursive parameter is set to true, the whole class hierarchy will be inspected from the current class to the top one to retrieve tall its properties.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '10-13-1--31-5c77d5ee:119187ec9d2:-8000:000000000000094C'
@@ -1854,6 +1861,15 @@ The method returns the new resource. </UML:TaggedValue.dataValue>
                                 <UML:Expression xmi.id = '-87--2--3--76--148ee98a:12452773959:-8000:00000000000017DC'
                                   language = '' body = ''/>
                               </UML:Parameter.defaultValue>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-4d4744ee:13c47cce141:-8000:0000000000001E9D'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>An array of core_kernel_classes_Property instances where array keys are the Property URIs.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
                               </UML:Parameter.type>
@@ -1864,6 +1880,15 @@ The method returns the new resource. </UML:TaggedValue.dataValue>
                                 <UML:Expression xmi.id = '-87--2--3--76--148ee98a:12452773959:-8000:00000000000017E6'
                                   language = '' body = 'false'/>
                               </UML:Parameter.defaultValue>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85-4d4744ee:13c47cce141:-8000:0000000000001E9C'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Recursive Properties retrieval accross the Class hierarchy.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
@@ -33567,7 +33592,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         width="657"
         height="21"
         fill="0"
-        fillcolor="white"
+        fillcolor="200 200 255"
         stroke="0"
         strokecolor="black"
         textcolor="black"
