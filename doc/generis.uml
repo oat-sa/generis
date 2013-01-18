@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Cache</activediagram>
+      <activediagram>Users</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -116,7 +116,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jan 18 15:31:59 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jan 18 17:00:32 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -9660,6 +9660,95 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                               </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                      </UML:Classifier.feature>
+                    </UML:Class>
+                    <UML:Class xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3A'
+                      name = 'Cache' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                      <UML:Classifier.feature>
+                        <UML:Operation xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3B'
+                          name = 'cacheIncludedRoles' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3C'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3D'
+                              name = 'role' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3E'
+                          name = 'removeIncludedRoles' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3F'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F40'
+                              name = 'role' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F43'
+                          name = 'areIncludedRolesInCache' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F44'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-7aff3a42:13c4e6071d5:-8000:0000000000001F45'
+                          name = 'buildIncludedRolesSerial' visibility = 'private' isSpecification = 'false'
+                          ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-7aff3a42:13c4e6071d5:-8000:0000000000001F46'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-7aff3a42:13c4e6071d5:-8000:0000000000001F47'
+                              name = 'role' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F41'
+                          name = 'flush' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F42'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -68065,7 +68154,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       name="Users"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[24, 16, 736, 492]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
+       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[24, 16, 532, 556]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
        href="-87--2--3--76-51a982f1:1278aabc987:-8000:000000000000239E"
        fill="1"
        fillcolor="white"
@@ -68078,8 +68167,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     <rectangle name="Fig0.0"
       x="24"
       y="16"
-      width="736"
-      height="492"
+      width="532"
+      height="556"
       fill="0"
       fillcolor="white"
       stroke="0"
@@ -68094,23 +68183,23 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     >
       <moveto x="24"
               y="16" />
-      <lineto x="710"
+      <lineto x="506"
               y="16" />
-      <lineto x="710"
+      <lineto x="506"
               y="38" />
-      <lineto x="759"
+      <lineto x="555"
               y="38" />
-      <lineto x="759"
-              y="507" />
+      <lineto x="555"
+              y="571" />
       <lineto x="24"
-              y="507" />
+              y="571" />
       <lineto x="24"
               y="16" />
     </path>
     <text name="Fig0.2"
       x="24"
       y="16"
-      width="687"
+      width="483"
       height="23"
       fill="0"
       fillcolor="white"
@@ -68124,7 +68213,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Left"
     >core::kernel::users</text>
     <group name="Fig0.3"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[24, 16, 686, 1]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[24, 16, 482, 1]"
          href="-87--2--3--76-51a982f1:1278aabc987:-8000:000000000000239E"
          fill="1"
          fillcolor="white"
@@ -68138,7 +68227,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <rectangle name="Fig0.3.0"
         x="24"
         y="16"
-        width="686"
+        width="482"
         height="1"
         fill="1"
         fillcolor="white"
@@ -68149,8 +68238,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     <text name="Fig0.4"
       x="24"
       y="38"
-      width="736"
-      height="470"
+      width="532"
+      height="534"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -68575,6 +68664,500 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >getIncludedRoles(role : Resource) : array</text>
+    </group>
+  </group>
+  <group name="Fig2"
+       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[580, 360, 200, 184]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
+       href="10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EC9"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+    </private>
+    
+    <rectangle name="Fig2.0"
+      x="580"
+      y="360"
+      width="200"
+      height="184"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+    />
+    <path name="Fig2.1"
+      description="org.argouml.uml.diagram.static_structure.ui.FigPackage$PackageBackground"
+      fill="1"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+    >
+      <moveto x="580"
+              y="360" />
+      <lineto x="730"
+              y="360" />
+      <lineto x="730"
+              y="382" />
+      <lineto x="779"
+              y="382" />
+      <lineto x="779"
+              y="543" />
+      <lineto x="580"
+              y="543" />
+      <lineto x="580"
+              y="360" />
+    </path>
+    <text name="Fig2.2"
+      x="580"
+      y="360"
+      width="151"
+      height="23"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Left"
+    >common::cache</text>
+    <group name="Fig2.3"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[580, 360, 150, 1]"
+         href="10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EC9"
+         fill="1"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig2.3.0"
+        x="580"
+        y="360"
+        width="150"
+        height="1"
+        fill="1"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <text name="Fig2.4"
+      x="580"
+      y="382"
+      width="200"
+      height="162"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    ></text>
+  </group>
+  <group name="Fig3"
+       description="org.argouml.uml.diagram.static_structure.ui.FigInterface[600, 400, 154, 124]pathVisible=true;stereotypeView=0;operationsVisible=true;operationsVisible=true"
+       href="10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE8"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+      enclosingFig="Fig2"
+    </private>
+    
+    <rectangle name="Fig3.0"
+      x="600"
+      y="400"
+      width="154"
+      height="124"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig3.1"
+      x="601"
+      y="401"
+      width="152"
+      height="39"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >common::cache::Cache</text>
+    <group name="Fig3.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[601, 401, 152, 18]"
+         href="10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE8"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig3.2.0"
+        x="601"
+        y="401"
+        width="152"
+        height="18"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig3.2.1"
+        x="601"
+        y="401"
+        width="152"
+        height="16"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Center"
+      >«interface»</text>
+    </group>
+    <rectangle name="Fig3.3"
+      x="600"
+      y="440"
+      width="154"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig3.4"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[601, 441, 152, 83]"
+         href="10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE8"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig3.4.0"
+        x="601"
+        y="441"
+        width="152"
+        height="83"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig3.4.1"
+        x="601"
+        y="441"
+        width="152"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >put(mixed,serial : string = null)</text>
+      <text name="Fig3.4.2"
+        x="601"
+        y="456"
+        width="152"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >get(serial : string) : Serializable</text>
+      <text name="Fig3.4.3"
+        x="601"
+        y="471"
+        width="152"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >has(serial : string) : boolean</text>
+      <text name="Fig3.4.4"
+        x="601"
+        y="486"
+        width="152"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >remove(serial : string)</text>
+      <text name="Fig3.4.5"
+        x="601"
+        y="501"
+        width="152"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >purge() : mixed</text>
+    </group>
+  </group>
+  <group name="Fig4"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[44, 384, 239, 127]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       href="10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3A"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+      enclosingFig="Fig0"
+    </private>
+    
+    <rectangle name="Fig4.0"
+      x="44"
+      y="384"
+      width="239"
+      height="127"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig4.1"
+      x="45"
+      y="385"
+      width="237"
+      height="21"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >core::kernel::users::Cache</text>
+    <group name="Fig4.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[45, 385, 234, 0]"
+         href="10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3A"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig4.2.0"
+        x="45"
+        y="385"
+        width="234"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig4.3"
+      x="44"
+      y="406"
+      width="239"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig4.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[45, 407, 237, 21]"
+         href="10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3A"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig4.4.0"
+        x="45"
+        y="407"
+        width="237"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig4.5"
+      x="44"
+      y="427"
+      width="239"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig4.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[45, 428, 237, 83]"
+         href="10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3A"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig4.6.0"
+        x="45"
+        y="428"
+        width="237"
+        height="83"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig4.6.1"
+        x="45"
+        y="428"
+        width="237"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >cacheIncludedRoles(role : Resource) : boolean</text>
+      <text name="Fig4.6.2"
+        x="45"
+        y="443"
+        width="237"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >removeIncludedRoles(role : Resource) : boolean</text>
+      <text name="Fig4.6.3"
+        x="45"
+        y="458"
+        width="237"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >areIncludedRolesInCache() : boolean</text>
+      <text name="Fig4.6.4"
+        x="45"
+        y="473"
+        width="237"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >buildIncludedRolesSerial(role : Resource) : string</text>
+      <text name="Fig4.6.5"
+        x="45"
+        y="488"
+        width="237"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >flush() : boolean</text>
     </group>
   </group>
 </pgml>
@@ -73653,7 +74236,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="41"
         y="362"
         width="704"
-        height="15"
+        height="29"
         fill="0"
         fillcolor="white"
         stroke="0"
