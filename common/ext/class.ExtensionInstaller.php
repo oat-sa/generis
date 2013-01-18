@@ -109,7 +109,7 @@ class common_ext_ExtensionInstaller
 				$this->installLocalData();
 			}
 			// clear filecache
-			tao_models_classes_cache_FileCache::singleton()->purge();
+			common_cache_FileCache::singleton()->purge();
 			
 				
 		}catch (common_ext_ExtensionException $e){
@@ -170,12 +170,12 @@ class common_ext_ExtensionInstaller
     			} elseif (is_array($row) && isset($row['file'])) {
     				$rdfpath = $row['file'];
     			} else {
-					throw new common_Exception('Error in definition of model to add into the ontology for '.$this->extension->getID(), 'INSTALL');
+					throw new common_ext_InstallationException('Error in definition of model to add into the ontology for '.$this->extension->getID(), 'INSTALL');
     			}
     			$xml = simplexml_load_file($rdfpath);
 				$attrs = $xml->attributes('xml', true);
 				if(!isset($attrs['base']) || empty($attrs['base'])){
-					throw new common_Exception('The namespace of '.$rdfpath.' has to be defined with the "xml:base" attribute of the ROOT node');
+					throw new common_ext_InstallationException('The namespace of '.$rdfpath.' has to be defined with the "xml:base" attribute of the ROOT node');
 				}
 				$ns = (string) $attrs['base'];
 				//import the model in the ontology
