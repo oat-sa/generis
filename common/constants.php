@@ -78,7 +78,13 @@ define('PROPERTY_USER_PASSWORD' , 				GENERIS_NS . '#password' , true) ;
 define('PROPERTY_USER_UILG' ,					GENERIS_NS . '#userUILg' , true) ;
 define('PROPERTY_USER_DEFLG' ,					GENERIS_NS . '#userDefLg' , true) ;
 define('PROPERTY_USER_MAIL' ,					GENERIS_NS . '#userMail' , true) ;
+/**
+ * Typo, to be replaced with PROPERTY_USER_FIRSTNAME
+ * @var string
+ * @deprecated
+ */
 define('PROPERTY_USER_FIRTNAME' , 				GENERIS_NS . '#userFirstName' , true) ;
+define('PROPERTY_USER_FIRSTNAME' , 				GENERIS_NS . '#userFirstName' , true) ;
 define('PROPERTY_USER_LASTNAME' , 				GENERIS_NS . '#userLastName' , true) ;
 
 define('CLASS_ROLE_TAOMANAGER',					'http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole', true) ;

@@ -193,7 +193,7 @@ class HardApiTestCase extends UnitTestCase {
 		$passwordProperty = new core_kernel_classes_Property(PROPERTY_USER_PASSWORD);
 		$this->assertTrue($referencer->isPropertyReferenced($passwordProperty));
 		
-		$firstNameProperty = new core_kernel_classes_Property(PROPERTY_USER_FIRTNAME);
+		$firstNameProperty = new core_kernel_classes_Property(PROPERTY_USER_FIRSTNAME);
 		foreach($referencer->propertyLocation($firstNameProperty) as $foundTable){
 			$this->assertEqual($foundTable, $table);
 		}
