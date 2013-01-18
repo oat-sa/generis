@@ -163,7 +163,7 @@ class common_cache_FileCache
         $returnValue = null;
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F48 begin
-    	$cachepath =  common_ext_ExtensionsManager::singleton()->getExtensionById('tao')->getConstant('CACHE_PATH');
+    	$cachepath =  GENERIS_CACHE_PATH;
         if (false !== ($files = scandir($cachepath))){
             foreach ($files as $f) {
                 $filePath = $cachepath . $f;
