@@ -91,9 +91,9 @@ class common_cache_FileCache
         	}
         	$serial = $mixed->getSerial();
         }
-		$handle = fopen($this->getFilePath($serial), 'w');
-		fwrite($handle, "<? return ".common_utils::toPHPVariableString($mixed).";?>");
-		fclose($handle);
+        
+        $data = "<? return ".common_utils::toPHPVariableString($mixed).";?>";
+        file_put_contents($this->getFilePath($serial), $data, LOCK_EX);
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F34 end
     }
 
