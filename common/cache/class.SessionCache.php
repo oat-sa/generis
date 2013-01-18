@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 18.01.2013, 12:14:31 with ArgoUML PHP module 
+ * Automatically generated on 18.01.2013, 14:32:03 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -85,7 +85,7 @@ class common_cache_SessionCache
     public function put($mixed, $serial = null)
     {
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F34 begin
-        if ($mixed instanceof tao_models_classes_Serializable) {
+        if ($mixed instanceof common_Serializable) {
         	if (!is_null($serial) && $serial != $mixed->getSerial()) {
         		throw new common_exception_Error('Serial mismatch for Serializable '.$mixed->getSerial());
         	}
@@ -119,7 +119,7 @@ class common_cache_SessionCache
 	        	}
 	        	$this->items[$serial] = $data;
 	        } else {
-        		throw new tao_models_classes_cache_NotFoundException('Failed to get ('.$serial.')');
+        		throw new common_cache_NotFoundException('Failed to get ('.$serial.')');
         	}
         }
         $returnValue = $this->items[$serial];
@@ -257,6 +257,24 @@ class common_cache_SessionCache
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F30 end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method singleton
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return common_cache_SessionCache
+     */
+    public static function singleton()
+    {
+        $returnValue = null;
+
+        // section 10-13-1-85-73eaea5c:13c4ddaf54d:-8000:0000000000001F32 begin
+        $returnValue = new self();
+        // section 10-13-1-85-73eaea5c:13c4ddaf54d:-8000:0000000000001F32 end
+
+        return $returnValue;
     }
 
 } /* end of class common_cache_SessionCache */

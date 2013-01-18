@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Users</activediagram>
+      <activediagram>Cache</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -116,7 +116,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jan 18 12:57:37 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jan 18 14:32:05 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -30556,6 +30556,19 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                         </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85-4b3a31bc:13c4dd4402a:-8000:0000000000001F30'
+                      name = 'singleton' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-4b3a31bc:13c4dd4402a:-8000:0000000000001F31'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ED0'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
                   </UML:Classifier.feature>
                 </UML:Class>
                 <UML:Class xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ED8'
@@ -30854,6 +30867,19 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                           name = 'serial' isSpecification = 'false' kind = 'in'>
                           <UML:Parameter.type>
                             <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85-73eaea5c:13c4ddaf54d:-8000:0000000000001F32'
+                      name = 'singleton' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                      isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                      isAbstract = 'false'>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85-73eaea5c:13c4ddaf54d:-8000:0000000000001F33'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:Class xmi.idref = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE3'/>
                           </UML:Parameter.type>
                         </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
@@ -73597,7 +73623,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="41"
         y="362"
         width="704"
-        height="29"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -84568,7 +84594,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig3"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[288, 464, 192, 67]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[288, 464, 192, 82]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ED0"
        fill="1"
        fillcolor="white"
@@ -84583,7 +84609,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       x="288"
       y="464"
       width="192"
-      height="67"
+      height="82"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -84671,7 +84697,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig3.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[289, 508, 190, 23]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[289, 508, 190, 38]"
          href="10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ED0"
          fill="0"
          fillcolor="white"
@@ -84685,7 +84711,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="289"
         y="508"
         width="190"
-        height="23"
+        height="38"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -84694,6 +84720,22 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig3.6.1"
         x="289"
         y="508"
+        width="190"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getFilePath(serial : string) : string</text>
+      <text name="Fig3.6.2"
+        x="289"
+        y="523"
         width="190"
         height="21"
         fill="0"
@@ -84706,7 +84748,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getFilePath(serial : string) : string</text>
+      >singleton() : FileCache</text>
     </group>
   </group>
   <group name="Fig4"
@@ -85465,7 +85507,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig9"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[716, 464, 169, 114]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[716, 464, 169, 129]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE3"
        fill="1"
        fillcolor="white"
@@ -85480,7 +85522,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       x="716"
       y="464"
       width="169"
-      height="114"
+      height="129"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -85600,7 +85642,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig9.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[717, 525, 167, 53]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[717, 525, 167, 68]"
          href="10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE3"
          fill="0"
          fillcolor="white"
@@ -85614,7 +85656,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="717"
         y="525"
         width="167"
-        height="53"
+        height="68"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -85656,7 +85698,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="717"
         y="555"
         width="167"
-        height="21"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -85668,6 +85710,22 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         textsize="10"
         justification="Left"
       >contains(serial : string) : boolean</text>
+      <text name="Fig9.6.4"
+        x="717"
+        y="570"
+        width="167"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >singleton() : SessionCache</text>
     </group>
   </group>
   <group name="Fig10"
