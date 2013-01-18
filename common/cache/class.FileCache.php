@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 18.01.2013, 14:25:15 with ArgoUML PHP module 
+ * Automatically generated on 18.01.2013, 15:28:29 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -59,6 +59,14 @@ class common_cache_FileCache
     // generateAssociationEnd : 
 
     // --- ATTRIBUTES ---
+
+    /**
+     * Short description of attribute instance
+     *
+     * @access private
+     * @var FileCache
+     */
+    private $instance = null;
 
     // --- OPERATIONS ---
 
@@ -208,7 +216,11 @@ class common_cache_FileCache
         $returnValue = null;
 
         // section 10-13-1-85-4b3a31bc:13c4dd4402a:-8000:0000000000001F30 begin
-        $returnValue = new self();
+        if (!isset(self::$instance)){
+        	self::$instance = new self();
+        }
+        
+        return self::$instance;
         // section 10-13-1-85-4b3a31bc:13c4dd4402a:-8000:0000000000001F30 end
 
         return $returnValue;

@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 18.01.2013, 14:32:03 with ArgoUML PHP module 
+ * Automatically generated on 18.01.2013, 15:28:29 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -67,6 +67,14 @@ class common_cache_SessionCache
      * @var string
      */
     const SESSION_KEY = 'cache';
+
+    /**
+     * Short description of attribute instance
+     *
+     * @access private
+     * @var SessionCache
+     */
+    private $instance = null;
 
     // --- OPERATIONS ---
 
@@ -271,7 +279,11 @@ class common_cache_SessionCache
         $returnValue = null;
 
         // section 10-13-1-85-73eaea5c:13c4ddaf54d:-8000:0000000000001F32 begin
-        $returnValue = new self();
+        if (!isset(self::$instance)){
+        	self::$instance = new self();
+        }
+        
+        return self::$instance;
         // section 10-13-1-85-73eaea5c:13c4ddaf54d:-8000:0000000000001F32 end
 
         return $returnValue;
