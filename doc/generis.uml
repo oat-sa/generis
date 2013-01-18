@@ -116,7 +116,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jan 18 15:28:31 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jan 18 15:31:59 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -30570,7 +30570,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
                     <UML:Attribute xmi.id = '10-13-1-85-be1f82c:13c4e0d7180:-8000:0000000000001F34'
-                      name = 'instance' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      name = 'instance' visibility = 'private' isSpecification = 'false' ownerScope = 'classifier'
                       changeability = 'changeable' targetScope = 'instance'>
                       <UML:StructuralFeature.multiplicity>
                         <UML:Multiplicity xmi.id = '10-13-1-85-be1f82c:13c4e0d7180:-8000:0000000000001F35'>
@@ -30900,7 +30900,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
                     <UML:Attribute xmi.id = '10-13-1-85-be1f82c:13c4e0d7180:-8000:0000000000001F37'
-                      name = 'instance' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                      name = 'instance' visibility = 'private' isSpecification = 'false' ownerScope = 'classifier'
                       changeability = 'changeable' targetScope = 'instance'>
                       <UML:StructuralFeature.multiplicity>
                         <UML:Multiplicity xmi.id = '10-13-1-85-be1f82c:13c4e0d7180:-8000:0000000000001F38'>
