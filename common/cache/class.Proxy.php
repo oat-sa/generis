@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 18.01.2013, 11:34:18 with ArgoUML PHP module 
+ * Automatically generated on 18.01.2013, 12:12:06 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -28,14 +28,6 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  */
 require_once('common/cache/interface.Cache.php');
 
-/**
- * Classes that implement this class claims their instances are serializable and
- * be identified by a unique serial string.
- *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- */
-require_once('common/interface.Serializable.php');
-
 /* user defined includes */
 // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE0-includes begin
 // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE0-includes end
@@ -53,8 +45,7 @@ require_once('common/interface.Serializable.php');
  * @subpackage cache
  */
 class common_cache_Proxy
-        implements common_Serializable,
-                   common_cache_Cache
+        implements common_cache_Cache
 {
     // --- ASSOCIATIONS ---
 
@@ -72,23 +63,6 @@ class common_cache_Proxy
     // --- OPERATIONS ---
 
     /**
-     * Obtain a serial for the instance of the class that implements the
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return string
-     */
-    public function getSerial()
-    {
-        $returnValue = (string) '';
-
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ECB begin
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ECB end
-
-        return (string) $returnValue;
-    }
-
-    /**
      * puts "something" into the cache,
      *      * If this is an object and implements Serializable,
      *      * we use the serial provided by the object
@@ -102,12 +76,9 @@ class common_cache_Proxy
      */
     public function put($mixed, $serial = null)
     {
-        $returnValue = null;
-
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F34 begin
+        $this->implementation->put($mixed, $serial);
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F34 end
-
-        return $returnValue;
     }
 
     /**
@@ -123,6 +94,7 @@ class common_cache_Proxy
         $returnValue = null;
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F3C begin
+        $returnValue = $this->implementation->get($serial);
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F3C end
 
         return $returnValue;
@@ -141,6 +113,7 @@ class common_cache_Proxy
         $returnValue = (bool) false;
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F40 begin
+        $returnValue = $this->implementation->has($serial);
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F40 end
 
         return (bool) $returnValue;
@@ -156,12 +129,9 @@ class common_cache_Proxy
      */
     public function remove($serial)
     {
-        $returnValue = null;
-
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F44 begin
+        $this->implementation->remove($serial);
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F44 end
-
-        return $returnValue;
     }
 
     /**
@@ -176,6 +146,7 @@ class common_cache_Proxy
         $returnValue = null;
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F48 begin
+        $this->implementation->purge();
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F48 end
 
         return $returnValue;
@@ -191,6 +162,7 @@ class common_cache_Proxy
     public function __construct()
     {
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F22 begin
+        $this->implementation = $this->getImplementation();
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F22 end
     }
 

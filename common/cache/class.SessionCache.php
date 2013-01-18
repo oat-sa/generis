@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 18.01.2013, 11:34:18 with ArgoUML PHP module 
+ * Automatically generated on 18.01.2013, 12:14:31 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -28,14 +28,6 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  */
 require_once('common/cache/interface.Cache.php');
 
-/**
- * Classes that implement this class claims their instances are serializable and
- * be identified by a unique serial string.
- *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- */
-require_once('common/interface.Serializable.php');
-
 /* user defined includes */
 // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE3-includes begin
 // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE3-includes end
@@ -53,8 +45,7 @@ require_once('common/interface.Serializable.php');
  * @subpackage cache
  */
 class common_cache_SessionCache
-        implements common_Serializable,
-                   common_cache_Cache
+        implements common_cache_Cache
 {
     // --- ASSOCIATIONS ---
 
@@ -75,26 +66,9 @@ class common_cache_SessionCache
      * @access public
      * @var string
      */
-    const SESSION_KEY = '\'cache\'';
+    const SESSION_KEY = 'cache';
 
     // --- OPERATIONS ---
-
-    /**
-     * Obtain a serial for the instance of the class that implements the
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return string
-     */
-    public function getSerial()
-    {
-        $returnValue = (string) '';
-
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ECB begin
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ECB end
-
-        return (string) $returnValue;
-    }
 
     /**
      * puts "something" into the cache,
@@ -110,12 +84,15 @@ class common_cache_SessionCache
      */
     public function put($mixed, $serial = null)
     {
-        $returnValue = null;
-
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F34 begin
+        if ($mixed instanceof tao_models_classes_Serializable) {
+        	if (!is_null($serial) && $serial != $mixed->getSerial()) {
+        		throw new common_exception_Error('Serial mismatch for Serializable '.$mixed->getSerial());
+        	}
+        	$serial = $mixed->getSerial();
+        }
+        $this->items[$serial] = $mixed;
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F34 end
-
-        return $returnValue;
     }
 
     /**
@@ -131,6 +108,21 @@ class common_cache_SessionCache
         $returnValue = null;
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F3C begin
+        if (!isset($this->items[$serial])) {
+        	if ($this->has($serial)) {
+        		$storage = Session::getAttribute(static::SESSION_KEY);
+	        	$data = @unserialize($storage[$serial]);
+		        
+	        	// check if serialize successfull, see http://lu.php.net/manual/en/function.unserialize.php
+	        	if ($data === false && $storage[$serial] !== serialize(false)){
+	        		throw new common_exception_Error("Unable to unserialize session entry identified by \"".$serial.'"');
+	        	}
+	        	$this->items[$serial] = $data;
+	        } else {
+        		throw new tao_models_classes_cache_NotFoundException('Failed to get ('.$serial.')');
+        	}
+        }
+        $returnValue = $this->items[$serial];
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F3C end
 
         return $returnValue;
@@ -149,6 +141,14 @@ class common_cache_SessionCache
         $returnValue = (bool) false;
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F40 begin
+    	if (isset($this->items[$serial])) {
+			$returnValue = true;
+		} else {
+			if (Session::hasAttribute(static::SESSION_KEY)) {
+				$storage = Session::getAttribute(static::SESSION_KEY);
+				$returnValue = isset($storage[$serial]);
+			}
+		}
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F40 end
 
         return (bool) $returnValue;
@@ -164,12 +164,12 @@ class common_cache_SessionCache
      */
     public function remove($serial)
     {
-        $returnValue = null;
-
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F44 begin
+    	if (isset($this->items[$serial])) {
+	        unset($this->items[$serial]);
+	        unset($_SESSION[SESSION_NAMESPACE][static::SESSION_KEY][$serial]);
+        }
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F44 end
-
-        return $returnValue;
     }
 
     /**
@@ -184,6 +184,8 @@ class common_cache_SessionCache
         $returnValue = null;
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F48 begin
+        Session::removeAttribute(static::SESSION_KEY);
+        $this->items = array();
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F48 end
 
         return $returnValue;
@@ -198,12 +200,13 @@ class common_cache_SessionCache
      */
     public function __destruct()
     {
-        $returnValue = null;
-
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F2C begin
+    	foreach ($this->items as $key => $value) {
+			// not clean put reading the session and then adding data to the session causses concurrency problems
+			// therefore this DOES NOT WORK: session::setAttribute(static::SESSION_KEY, $storage)
+        	$_SESSION[SESSION_NAMESPACE][static::SESSION_KEY][$key] = serialize($value);
+    	}
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F2C end
-
-        return $returnValue;
     }
 
     /**
@@ -218,6 +221,15 @@ class common_cache_SessionCache
         $returnValue = array();
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F2E begin
+        if (Session::hasAttribute(static::SESSION_KEY)) {
+    		foreach (Session::getAttribute(static::SESSION_KEY) as $serial => $raw) {
+    			if (!isset($this->items[$serial])) {
+    				// loads the serial to the item
+    				$this->get($serial);
+    			}
+	        }
+    	}
+    	$returnValue = $this->items;
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F2E end
 
         return (array) $returnValue;
@@ -236,6 +248,12 @@ class common_cache_SessionCache
         $returnValue = (bool) false;
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F30 begin
+    	if (isset($this->items[$serial])) {
+        	$returnValue = true;
+        } elseif (!empty($serial) && Session::hasAttribute(static::SESSION_KEY)){
+        	$storage = Session::getAttribute(static::SESSION_KEY);
+        	$returnValue = isset($storage[$serial]);
+        }
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F30 end
 
         return (bool) $returnValue;

@@ -116,7 +116,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jan 18 11:34:22 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jan 18 12:18:42 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -30488,7 +30488,6 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                   name = 'FileCache' visibility = 'public' isSpecification = 'false' isRoot = 'false'
                   isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
                   <UML:ModelElement.clientDependency>
-                    <UML:Abstraction xmi.idref = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ED4'/>
                     <UML:Abstraction xmi.idref = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE9'/>
                   </UML:ModelElement.clientDependency>
                   <UML:Classifier.feature>
@@ -30513,18 +30512,6 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                     </UML:Operation>
                   </UML:Classifier.feature>
                 </UML:Class>
-                <UML:Abstraction xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ED4'
-                  isSpecification = 'false'>
-                  <UML:ModelElement.stereotype>
-                    <UML:Stereotype xmi.idref = '10-13-1--31-5c77d5ee:119187ec9d2:-8000:000000000000096A'/>
-                  </UML:ModelElement.stereotype>
-                  <UML:Dependency.client>
-                    <UML:Class xmi.idref = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ED0'/>
-                  </UML:Dependency.client>
-                  <UML:Dependency.supplier>
-                    <UML:Interface xmi.idref = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ECA'/>
-                  </UML:Dependency.supplier>
-                </UML:Abstraction>
                 <UML:Class xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ED8'
                   name = 'NotFoundException' visibility = 'public' isSpecification = 'false'
                   isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
@@ -30618,11 +30605,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                       isAbstract = 'false'>
                       <UML:BehavioralFeature.parameter>
                         <UML:Parameter xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F09'
-                          name = 'return' isSpecification = 'false' kind = 'return'>
-                          <UML:Parameter.type>
-                            <UML:DataType xmi.idref = '127-0-1-1--5eb6294b:1369c3f7e95:-8000:00000000000019BD'/>
-                          </UML:Parameter.type>
-                        </UML:Parameter>
+                          name = 'return' isSpecification = 'false' kind = 'return'/>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
                     <UML:Operation xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F0A'
@@ -30631,11 +30614,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                       isAbstract = 'false'>
                       <UML:BehavioralFeature.parameter>
                         <UML:Parameter xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F0B'
-                          name = 'return' isSpecification = 'false' kind = 'return'>
-                          <UML:Parameter.type>
-                            <UML:DataType xmi.idref = '127-0-1-1--5eb6294b:1369c3f7e95:-8000:00000000000019BD'/>
-                          </UML:Parameter.type>
-                        </UML:Parameter>
+                          name = 'return' isSpecification = 'false' kind = 'return'/>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
                     <UML:Operation xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F0C'
@@ -30706,7 +30685,6 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                   name = 'Proxy' visibility = 'public' isSpecification = 'false' isRoot = 'false'
                   isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
                   <UML:ModelElement.clientDependency>
-                    <UML:Abstraction xmi.idref = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE1'/>
                     <UML:Abstraction xmi.idref = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EEB'/>
                   </UML:ModelElement.clientDependency>
                   <UML:Classifier.feature>
@@ -30752,23 +30730,10 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                     </UML:Operation>
                   </UML:Classifier.feature>
                 </UML:Class>
-                <UML:Abstraction xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE1'
-                  isSpecification = 'false'>
-                  <UML:ModelElement.stereotype>
-                    <UML:Stereotype xmi.idref = '10-13-1--31-5c77d5ee:119187ec9d2:-8000:000000000000096A'/>
-                  </UML:ModelElement.stereotype>
-                  <UML:Dependency.client>
-                    <UML:Class xmi.idref = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE0'/>
-                  </UML:Dependency.client>
-                  <UML:Dependency.supplier>
-                    <UML:Interface xmi.idref = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ECA'/>
-                  </UML:Dependency.supplier>
-                </UML:Abstraction>
                 <UML:Class xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE3'
                   name = 'SessionCache' visibility = 'public' isSpecification = 'false' isRoot = 'false'
                   isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
                   <UML:ModelElement.clientDependency>
-                    <UML:Abstraction xmi.idref = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE4'/>
                     <UML:Abstraction xmi.idref = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EED'/>
                   </UML:ModelElement.clientDependency>
                   <UML:Classifier.feature>
@@ -30799,8 +30764,8 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                         </UML:Multiplicity>
                       </UML:StructuralFeature.multiplicity>
                       <UML:Attribute.initialValue>
-                        <UML:Expression xmi.id = '10-13-1-85-18df6ee9:13c4d31cfef:-8000:0000000000001F35'
-                          language = '' body = '&apos;cache&apos;'/>
+                        <UML:Expression xmi.id = '10-13-1-85--5eb02a67:13c4d4588bc:-8000:0000000000001F2E'
+                          language = '' body = 'cache'/>
                       </UML:Attribute.initialValue>
                       <UML:StructuralFeature.type>
                         <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
@@ -30812,11 +30777,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                       isAbstract = 'false'>
                       <UML:BehavioralFeature.parameter>
                         <UML:Parameter xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F2D'
-                          name = 'return' isSpecification = 'false' kind = 'return'>
-                          <UML:Parameter.type>
-                            <UML:DataType xmi.idref = '127-0-1-1--5eb6294b:1369c3f7e95:-8000:00000000000019BD'/>
-                          </UML:Parameter.type>
-                        </UML:Parameter>
+                          name = 'return' isSpecification = 'false' kind = 'return'/>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
                     <UML:Operation xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F2E'
@@ -30853,18 +30814,6 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                     </UML:Operation>
                   </UML:Classifier.feature>
                 </UML:Class>
-                <UML:Abstraction xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE4'
-                  isSpecification = 'false'>
-                  <UML:ModelElement.stereotype>
-                    <UML:Stereotype xmi.idref = '10-13-1--31-5c77d5ee:119187ec9d2:-8000:000000000000096A'/>
-                  </UML:ModelElement.stereotype>
-                  <UML:Dependency.client>
-                    <UML:Class xmi.idref = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE3'/>
-                  </UML:Dependency.client>
-                  <UML:Dependency.supplier>
-                    <UML:Interface xmi.idref = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ECA'/>
-                  </UML:Dependency.supplier>
-                </UML:Abstraction>
                 <UML:Abstraction xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EE6'
                   isSpecification = 'false'>
                   <UML:ModelElement.stereotype>
@@ -30908,11 +30857,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                       </UML:ModelElement.taggedValue>
                       <UML:BehavioralFeature.parameter>
                         <UML:Parameter xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F35'
-                          name = 'return' isSpecification = 'false' kind = 'return'>
-                          <UML:Parameter.type>
-                            <UML:DataType xmi.idref = '127-0-1-1--5eb6294b:1369c3f7e95:-8000:00000000000019BD'/>
-                          </UML:Parameter.type>
-                        </UML:Parameter>
+                          name = 'return' isSpecification = 'false' kind = 'return'/>
                         <UML:Parameter xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F36'
                           name = 'mixed' isSpecification = 'false' kind = 'in'/>
                         <UML:Parameter xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F37'
@@ -30998,11 +30943,7 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                       </UML:ModelElement.taggedValue>
                       <UML:BehavioralFeature.parameter>
                         <UML:Parameter xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F45'
-                          name = 'return' isSpecification = 'false' kind = 'return'>
-                          <UML:Parameter.type>
-                            <UML:DataType xmi.idref = '127-0-1-1--5eb6294b:1369c3f7e95:-8000:00000000000019BD'/>
-                          </UML:Parameter.type>
-                        </UML:Parameter>
+                          name = 'return' isSpecification = 'false' kind = 'return'/>
                         <UML:Parameter xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F47'
                           name = 'serial' isSpecification = 'false' kind = 'in'>
                           <UML:Parameter.type>
@@ -85204,7 +85145,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >__wakeup() : mixed</text>
+      >__wakeup()</text>
       <text name="Fig7.6.4"
         x="113"
         y="366"
@@ -85220,7 +85161,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >_remove() : mixed</text>
+      >_remove()</text>
       <text name="Fig7.6.5"
         x="113"
         y="381"
@@ -85584,7 +85525,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >SESSION_KEY : string  = &apos;cache&apos;</text>
+      >SESSION_KEY : string  = cache</text>
     </group>
     <rectangle name="Fig9.5"
       x="716"
@@ -85632,7 +85573,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >__destruct() : mixed</text>
+      >__destruct()</text>
       <text name="Fig9.6.2"
         x="717"
         y="540"
@@ -85822,7 +85763,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >put(mixed,serial : string = null) : mixed</text>
+      >put(mixed,serial : string = null)</text>
       <text name="Fig11.4.2"
         x="493"
         y="324"
@@ -85870,7 +85811,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >remove(serial : string) : mixed</text>
+      >remove(serial : string)</text>
       <text name="Fig11.4.5"
         x="493"
         y="369"

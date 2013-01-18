@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 18.01.2013, 11:34:19 with ArgoUML PHP module 
+ * Automatically generated on 18.01.2013, 12:12:06 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -84,6 +84,10 @@ abstract class common_cache_PartitionedCachable
         $returnValue = (string) '';
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ECB begin
+        if (empty($this->serial)){
+			$this->serial = $this->buildSerial();
+		}
+		$returnValue = $this->serial;
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ECB end
 
         return (string) $returnValue;
@@ -99,6 +103,9 @@ abstract class common_cache_PartitionedCachable
     public function __construct()
     {
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EFD begin
+    	if (!is_null($this->getCache())) {
+        	$this->getCache()->put($this);
+        }
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EFD end
     }
 
@@ -114,6 +121,41 @@ abstract class common_cache_PartitionedCachable
         $returnValue = array();
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F05 begin
+    	$this->serializedProperties = array();
+        $reflection = new ReflectionClass($this);
+		foreach($reflection->getProperties() as $property){
+			//assuming that private properties don't contain serializables
+			if(!$property->isStatic() && !$property->isPrivate()) {
+				$propertyName = $property->getName();
+				$containsSerializable = false;
+				$value = $this->$propertyName;
+				if (is_array($value)) {
+					$containsNonSerializable = false;
+					$serials = array();
+					foreach ($value as $key => $subvalue) {
+						if (is_object($subvalue) && $subvalue instanceof self) {
+							$containsSerializable = true; 
+							$serials[$key] = $subvalue->getSerial();
+						} else {
+							$containsNonSerializable = true;
+						}
+					}
+					if ($containsNonSerializable && $containsSerializable) {
+						throw new common_exception_Error('Serializable '.$this->getSerial().' mixed serializable and non serializable values in property '.$propertyName);
+					}
+				} else {
+					if (is_object($value) && $value instanceof self) {
+						$containsSerializable = true;
+						$serials = $value->getSerial();
+					}
+				}
+				if ($containsSerializable) {
+					$this->serializedProperties[$property->getName()] = $serials;
+				} else {
+					$returnValue[] = $property->getName();
+				}
+			}
+		}
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F05 end
 
         return (array) $returnValue;
@@ -128,12 +170,20 @@ abstract class common_cache_PartitionedCachable
      */
     public function __wakeup()
     {
-        $returnValue = null;
-
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F08 begin
+        foreach ($this->serializedProperties as $key => $value) {
+			if (is_array($value)) {
+				$restored = array();
+				foreach ($value as $arrayKey => $arrayValue) {
+					$restored[$arrayKey] = $this->getCache()->get($arrayValue);
+				}
+			} else {
+				$restored = $this->getCache()->get($value);
+			}
+			$this->$key = $restored;
+		}
+		$this->serializedProperties = array();
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F08 end
-
-        return $returnValue;
     }
 
     /**
@@ -145,12 +195,13 @@ abstract class common_cache_PartitionedCachable
      */
     public function _remove()
     {
-        $returnValue = null;
-
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F0A begin
+    	//usefull only when persistance is enabled
+		if (!is_null($this->getCache())){
+			//clean session
+			$this->getCache()->remove($this->getSerial());
+		}
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F0A end
-
-        return $returnValue;
     }
 
     /**
@@ -165,6 +216,22 @@ abstract class common_cache_PartitionedCachable
         $returnValue = array();
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F0C begin
+    	$reflection = new ReflectionClass($this);
+		foreach($reflection->getProperties() as $property){
+			if(!$property->isStatic() && !$property->isPrivate()){
+				$propertyName = $property->getName();
+				$value = $this->$propertyName;
+				if (is_array($value)) {
+					foreach ($value as $key => $subvalue) {
+						if (is_object($subvalue) && $subvalue instanceof self) {
+								$returnValue[] = $subvalue;
+						}
+					}
+				} elseif (is_object($value) && $value instanceof self) {
+						$returnValue[] = $value;
+					}
+				}
+		}
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F0C end
 
         return (array) $returnValue;
@@ -183,6 +250,14 @@ abstract class common_cache_PartitionedCachable
         $returnValue = array();
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F0E begin
+    	foreach ($this->getCache()->getAll() as $serial => $instance) {
+			
+			if (($classFilter == null || $instance instanceof $classFilter)
+				&& in_array($this, $instance->getSuccessors())) {
+				$returnValue[] = $instance;
+				break;
+			}
+		}
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F0E end
 
         return (array) $returnValue;
