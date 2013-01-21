@@ -116,7 +116,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Jan 21 11:25:31 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Jan 21 11:28:30 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -9667,7 +9667,7 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                       </UML:Classifier.feature>
                     </UML:Class>
                     <UML:Class xmi.id = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F48'
-                      name = 'RolesCacheException' visibility = 'public' isSpecification = 'false'
+                      name = 'CacheException' visibility = 'public' isSpecification = 'false'
                       isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
                       <UML:GeneralizableElement.generalization>
                         <UML:Generalization xmi.idref = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F4A'/>
@@ -68817,7 +68817,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::users::Cache</text>
     <group name="Fig2.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[37, 417, 332, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[37, 417, 350, 0]"
          href="10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3A"
          fill="0"
          fillcolor="white"
@@ -68831,7 +68831,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <rectangle name="Fig2.2.0"
         x="37"
         y="417"
-        width="332"
+        width="350"
         height="0"
         fill="0"
         fillcolor="white"
@@ -69284,7 +69284,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       bold="false"
       textsize="10"
       justification="Center"
-    >core::kernel::users::RolesCacheException</text>
+    >core::kernel::users::CacheException</text>
     <group name="Fig5.2"
          description="org.argouml.uml.diagram.ui.FigStereotypesGroup[425, 421, 203, 0]"
          href="10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F48"
@@ -74486,7 +74486,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="41"
         y="362"
         width="704"
-        height="29"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
