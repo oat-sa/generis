@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Cache</activediagram>
+      <activediagram>Users</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -116,7 +116,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Jan 21 11:13:21 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Jan 21 11:25:31 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -9682,6 +9682,208 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                         <UML:Class xmi.idref = '127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003ECA'/>
                       </UML:Generalization.parent>
                     </UML:Generalization>
+                    <UML:Class xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3A'
+                      name = 'Cache' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                      <UML:ModelElement.taggedValue>
+                        <UML:TaggedValue xmi.id = '10-13-1-85--1142a8d8:13c5c9f800e:-8000:0000000000001F56'
+                          isSpecification = 'false'>
+                          <UML:TaggedValue.dataValue>A facade aiming at helping client code to put User data in the Cache memory.</UML:TaggedValue.dataValue>
+                          <UML:TaggedValue.type>
+                            <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                          </UML:TaggedValue.type>
+                        </UML:TaggedValue>
+                      </UML:ModelElement.taggedValue>
+                      <UML:Classifier.feature>
+                        <UML:Operation xmi.id = '10-13-1-85--1142a8d8:13c5c9f800e:-8000:0000000000001F4D'
+                          name = 'retrieveIncludedRoles' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1142a8d8:13c5c9f800e:-8000:0000000000001F55'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Retrieve roles included in a given Generis Role from the Cache memory.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--1142a8d8:13c5c9f800e:-8000:0000000000001F4E'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--1142a8d8:13c5c9f800e:-8000:0000000000001F4F'
+                              name = 'role' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3B'
+                          name = 'cacheIncludedRoles' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1142a8d8:13c5c9f800e:-8000:0000000000001F50'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Put roles included in a Generis Role in the Cache memory.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3C'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3D'
+                              name = 'role' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F4B'
+                              name = 'includedRoles' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3E'
+                          name = 'removeIncludedRoles' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1142a8d8:13c5c9f800e:-8000:0000000000001F51'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Remove roles included in a Generis Role from the Cache memory.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3F'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F40'
+                              name = 'role' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F43'
+                          name = 'areIncludedRolesInCache' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1142a8d8:13c5c9f800e:-8000:0000000000001F52'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Returns true if the roles included in a given Generis Role are in the Cache memory.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F44'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F4C'
+                              name = 'role' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85-7aff3a42:13c4e6071d5:-8000:0000000000001F45'
+                          name = 'buildIncludedRolesSerial' visibility = 'private' isSpecification = 'false'
+                          ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1142a8d8:13c5c9f800e:-8000:0000000000001F53'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Build a serial aiming at identifying the includes roles of a given Generis Role in the Cache memory.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-7aff3a42:13c4e6071d5:-8000:0000000000001F46'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85-7aff3a42:13c4e6071d5:-8000:0000000000001F47'
+                              name = 'role' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F41'
+                          name = 'flush' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1142a8d8:13c5c9f800e:-8000:0000000000001F54'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Removes all entries related to included roles from the Cache memory.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F42'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Attribute xmi.id = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F4D'
+                          name = 'SERIAL_PREFIX_INCLUDED_ROLES' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' changeability = 'frozen' targetScope = 'instance'>
+                          <UML:StructuralFeature.multiplicity>
+                            <UML:Multiplicity xmi.id = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F4E'>
+                              <UML:Multiplicity.range>
+                                <UML:MultiplicityRange xmi.id = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F4F'
+                                  lower = '1' upper = '1'/>
+                              </UML:Multiplicity.range>
+                            </UML:Multiplicity>
+                          </UML:StructuralFeature.multiplicity>
+                          <UML:Attribute.initialValue>
+                            <UML:Expression xmi.id = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F5A'
+                              language = '' body = 'roles-ir'/>
+                          </UML:Attribute.initialValue>
+                          <UML:StructuralFeature.type>
+                            <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                          </UML:StructuralFeature.type>
+                        </UML:Attribute>
+                      </UML:Classifier.feature>
+                    </UML:Class>
                   </UML:Namespace.ownedElement>
                 </UML:Package>
                 <UML:Package xmi.id = '10-13-1--99--152a2f30:1201eae099d:-8000:000000000000279E'
@@ -31619,126 +31821,6 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         </UML:Class>
         <UML:Package xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EC8'
           isSpecification = 'false' isRoot = 'false' isLeaf = 'false' isAbstract = 'false'/>
-        <UML:Class xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3A'
-          name = 'Cache' visibility = 'public' isSpecification = 'false' isRoot = 'false'
-          isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
-          <UML:Classifier.feature>
-            <UML:Operation xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3B'
-              name = 'cacheIncludedRoles' visibility = 'public' isSpecification = 'false'
-              ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
-              isLeaf = 'false' isAbstract = 'false'>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3C'
-                  name = 'return' isSpecification = 'false' kind = 'return'>
-                  <UML:Parameter.type>
-                    <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-                <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3D'
-                  name = 'role' isSpecification = 'false' kind = 'in'>
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-                <UML:Parameter xmi.id = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F4B'
-                  name = 'includedRoles' isSpecification = 'false' kind = 'in'>
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-            </UML:Operation>
-            <UML:Operation xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3E'
-              name = 'removeIncludedRoles' visibility = 'public' isSpecification = 'false'
-              ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
-              isLeaf = 'false' isAbstract = 'false'>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3F'
-                  name = 'return' isSpecification = 'false' kind = 'return'>
-                  <UML:Parameter.type>
-                    <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-                <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F40'
-                  name = 'role' isSpecification = 'false' kind = 'in'>
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-            </UML:Operation>
-            <UML:Operation xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F43'
-              name = 'areIncludedRolesInCache' visibility = 'public' isSpecification = 'false'
-              ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
-              isLeaf = 'false' isAbstract = 'false'>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F44'
-                  name = 'return' isSpecification = 'false' kind = 'return'>
-                  <UML:Parameter.type>
-                    <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-                <UML:Parameter xmi.id = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F4C'
-                  name = 'role' isSpecification = 'false' kind = 'in'>
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-            </UML:Operation>
-            <UML:Operation xmi.id = '10-13-1-85-7aff3a42:13c4e6071d5:-8000:0000000000001F45'
-              name = 'buildIncludedRolesSerial' visibility = 'private' isSpecification = 'false'
-              ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
-              isLeaf = 'false' isAbstract = 'false'>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id = '10-13-1-85-7aff3a42:13c4e6071d5:-8000:0000000000001F46'
-                  name = 'return' isSpecification = 'false' kind = 'return'>
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-                <UML:Parameter xmi.id = '10-13-1-85-7aff3a42:13c4e6071d5:-8000:0000000000001F47'
-                  name = 'role' isSpecification = 'false' kind = 'in'>
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-            </UML:Operation>
-            <UML:Operation xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F41'
-              name = 'flush' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
-              isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
-              isAbstract = 'false'>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F42'
-                  name = 'return' isSpecification = 'false' kind = 'return'>
-                  <UML:Parameter.type>
-                    <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-            </UML:Operation>
-            <UML:Attribute xmi.id = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F4D'
-              name = 'SERIAL_PREFIX_INCLUDED_ROLES' visibility = 'public' isSpecification = 'false'
-              ownerScope = 'instance' changeability = 'frozen' targetScope = 'instance'>
-              <UML:StructuralFeature.multiplicity>
-                <UML:Multiplicity xmi.id = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F4E'>
-                  <UML:Multiplicity.range>
-                    <UML:MultiplicityRange xmi.id = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F4F'
-                      lower = '1' upper = '1'/>
-                  </UML:Multiplicity.range>
-                </UML:Multiplicity>
-              </UML:StructuralFeature.multiplicity>
-              <UML:Attribute.initialValue>
-                <UML:Expression xmi.id = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F5A'
-                  language = '' body = 'roles-ir'/>
-              </UML:Attribute.initialValue>
-              <UML:StructuralFeature.type>
-                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-              </UML:StructuralFeature.type>
-            </UML:Attribute>
-          </UML:Classifier.feature>
-        </UML:Class>
       </UML:Namespace.ownedElement>
     </UML:Model>
     <UML:Expression xmi.id = '127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015B8'
@@ -68697,7 +68779,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig2"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[36, 416, 352, 129]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[36, 416, 352, 144]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3A"
        fill="1"
        fillcolor="white"
@@ -68705,13 +68787,14 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
        strokecolor="black"
   >
     <private>
+      enclosingFig="Fig0"
     </private>
     
     <rectangle name="Fig2.0"
       x="36"
       y="416"
       width="352"
-      height="129"
+      height="144"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -68732,9 +68815,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       bold="false"
       textsize="10"
       justification="Center"
-    >Cache</text>
+    >core::kernel::users::Cache</text>
     <group name="Fig2.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[37, 417, 350, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[37, 417, 332, 0]"
          href="10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3A"
          fill="0"
          fillcolor="white"
@@ -68748,7 +68831,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <rectangle name="Fig2.2.0"
         x="37"
         y="417"
-        width="350"
+        width="332"
         height="0"
         fill="0"
         fillcolor="white"
@@ -68815,7 +68898,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig2.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[37, 462, 350, 83]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[37, 462, 350, 98]"
          href="10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3A"
          fill="0"
          fillcolor="white"
@@ -68829,7 +68912,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="37"
         y="462"
         width="350"
-        height="83"
+        height="98"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -68850,7 +68933,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >cacheIncludedRoles(role : Resource,includedRoles : array) : boolean</text>
+      >retrieveIncludedRoles(role : Resource) : array</text>
       <text name="Fig2.6.2"
         x="37"
         y="477"
@@ -68866,7 +68949,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >removeIncludedRoles(role : Resource) : boolean</text>
+      >cacheIncludedRoles(role : Resource,includedRoles : array) : boolean</text>
       <text name="Fig2.6.3"
         x="37"
         y="492"
@@ -68882,7 +68965,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >areIncludedRolesInCache(role : Resource) : boolean</text>
+      >removeIncludedRoles(role : Resource) : boolean</text>
       <text name="Fig2.6.4"
         x="37"
         y="507"
@@ -68898,10 +68981,26 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >buildIncludedRolesSerial(role : Resource) : string</text>
+      >areIncludedRolesInCache(role : Resource) : boolean</text>
       <text name="Fig2.6.5"
         x="37"
         y="522"
+        width="350"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >buildIncludedRolesSerial(role : Resource) : string</text>
+      <text name="Fig2.6.6"
+        x="37"
+        y="537"
         width="350"
         height="21"
         fill="0"
@@ -74387,7 +74486,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="41"
         y="362"
         width="704"
-        height="15"
+        height="29"
         fill="0"
         fillcolor="white"
         stroke="0"
