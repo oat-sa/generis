@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 18.01.2013, 12:12:06 with ArgoUML PHP module 
+ * Automatically generated on 21.01.2013, 11:13:18 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -39,12 +39,13 @@ require_once('common/cache/interface.Cache.php');
 /**
  * Short description of class common_cache_Proxy
  *
+ * @abstract
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package common
  * @subpackage cache
  */
-class common_cache_Proxy
+abstract class common_cache_Proxy
         implements common_cache_Cache
 {
     // --- ASSOCIATIONS ---
@@ -176,6 +177,6 @@ class common_cache_Proxy
      */
     public abstract function getImplementation();
 
-} /* end of class common_cache_Proxy */
+} /* end of abstract class common_cache_Proxy */
 
 ?>
