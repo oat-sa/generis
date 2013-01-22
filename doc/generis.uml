@@ -116,7 +116,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Jan 21 11:28:30 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Jan 22 11:38:30 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -8857,6 +8857,13 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                             <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                           </UML:TaggedValue.type>
                         </UML:TaggedValue>
+                        <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F5B'
+                          isSpecification = 'false'>
+                          <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                          <UML:TaggedValue.type>
+                            <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                          </UML:TaggedValue.type>
+                        </UML:TaggedValue>
                       </UML:ModelElement.taggedValue>
                       <UML:Classifier.feature>
                         <UML:Operation xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001816'
@@ -8869,6 +8876,13 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                               <UML:TaggedValue.dataValue>Returns true if the a user with login = $login is currently in the persistent memory of Generis.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F5C'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
@@ -8934,6 +8948,13 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                               <UML:TaggedValue.dataValue>Add a role in Generis.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F5D'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
@@ -9017,9 +9038,16 @@ Can be either a Resource or an array of Resources.</UML:TaggedValue.dataValue>
                           <UML:ModelElement.taggedValue>
                             <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EB4'
                               isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>Remove a Generis role from the persistent memory. References to this Role will be removed.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.dataValue>Remove a Generis role from the persistent memory. User References to this Role will be removed.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F5E'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
@@ -9067,9 +9095,16 @@ Can be either a Resource or an array of Resources.</UML:TaggedValue.dataValue>
                           <UML:ModelElement.taggedValue>
                             <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EB7'
                               isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>Create a new Generis User with a specific Role.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.dataValue>Create a new Generis User with a specific Role. If the $role is not provided, the user will be given the Generis Role.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F5F'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
@@ -9122,8 +9157,8 @@ Can be either a Resource or an array of Resources.</UML:TaggedValue.dataValue>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001830'
                               name = 'role' isSpecification = 'false'>
                               <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001845'
-                                  language = '' body = ''/>
+                                <UML:Expression xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F5A'
+                                  language = '' body = 'null'/>
                               </UML:Parameter.defaultValue>
                               <UML:ModelElement.taggedValue>
                                 <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EBB'
@@ -9150,6 +9185,13 @@ Can be either a Resource or an array of Resources.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.dataValue>Remove a Generis User from persistent memory. Bound roles will remain unchanged.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F60'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
@@ -9196,6 +9238,13 @@ Can be either a Resource or an array of Resources.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.dataValue>Log in a user into Generis that has one of the provided $allowedRoles.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F61'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
@@ -9262,6 +9311,13 @@ Can be either a Resource or an array of Resources.</UML:TaggedValue.dataValue>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F62'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:000000000000183A'
@@ -9313,6 +9369,15 @@ Can be either a Resource or an array of Resources.</UML:TaggedValue.dataValue>
                           <UML:ModelElement.stereotype>
                             <UML:Stereotype xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000AF1'/>
                           </UML:ModelElement.stereotype>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F63'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:000000000000183C'
                               name = 'return' isSpecification = 'false' kind = 'return'/>
@@ -9347,6 +9412,13 @@ Can be either a Resource or an array of Resources.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.dataValue>Get a unique instance of the UserService.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F64'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
@@ -9390,6 +9462,13 @@ Can be either a Resource or an array of Resources.</UML:TaggedValue.dataValue>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F65'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E9E'
@@ -9419,6 +9498,13 @@ Can be either a Resource or an array of Resources.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.dataValue>Logout the current user.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F66'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
@@ -9451,6 +9537,13 @@ Can be either a Resource or an array of Resources.</UML:TaggedValue.dataValue>
 to test the pasword entered</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F67'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
@@ -9496,6 +9589,13 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F68'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '127-0-1-1-2ec10bd7:138702395c4:-8000:0000000000004D73'
@@ -9524,6 +9624,13 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.dataValue>Get the roles that a specific user has.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F69'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
@@ -9570,6 +9677,13 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.dataValue>Indicates if a user is granted with a set of Roles.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F6A'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
@@ -9630,6 +9744,13 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F6B'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '10-13-1-85-6f2605b9:13c4d801acc:-8000:0000000000001F2B'
@@ -9669,6 +9790,15 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                     <UML:Class xmi.id = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F48'
                       name = 'CacheException' visibility = 'public' isSpecification = 'false'
                       isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                      <UML:ModelElement.taggedValue>
+                        <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F6C'
+                          isSpecification = 'false'>
+                          <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                          <UML:TaggedValue.type>
+                            <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                          </UML:TaggedValue.type>
+                        </UML:TaggedValue>
+                      </UML:ModelElement.taggedValue>
                       <UML:GeneralizableElement.generalization>
                         <UML:Generalization xmi.idref = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F4A'/>
                       </UML:GeneralizableElement.generalization>
@@ -9693,6 +9823,13 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                             <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                           </UML:TaggedValue.type>
                         </UML:TaggedValue>
+                        <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F6D'
+                          isSpecification = 'false'>
+                          <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                          <UML:TaggedValue.type>
+                            <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                          </UML:TaggedValue.type>
+                        </UML:TaggedValue>
                       </UML:ModelElement.taggedValue>
                       <UML:Classifier.feature>
                         <UML:Operation xmi.id = '10-13-1-85--1142a8d8:13c5c9f800e:-8000:0000000000001F4D'
@@ -9707,16 +9844,41 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F6E'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '10-13-1-85--1142a8d8:13c5c9f800e:-8000:0000000000001F4E'
                               name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F74'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>An associative array where keys are included roles URIs and values the Included Roles.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '10-13-1-85--1142a8d8:13c5c9f800e:-8000:0000000000001F4F'
                               name = 'role' isSpecification = 'false' kind = 'in'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F75'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>A Generis Role Resource.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                               </UML:Parameter.type>
@@ -9733,6 +9895,13 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.dataValue>Put roles included in a Generis Role in the Cache memory.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F6F'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
@@ -9769,16 +9938,41 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F70'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3F'
                               name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F76'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Returns true if successfully deleted, false otherwise.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F40'
                               name = 'role' isSpecification = 'false' kind = 'in'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F77'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>A Generis Role as a Resource.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                               </UML:Parameter.type>
@@ -9797,16 +9991,41 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F71'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F44'
                               name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F78'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>Returns true if included roles related to $role are in the cache memory, otherwise false.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F4C'
                               name = 'role' isSpecification = 'false' kind = 'in'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F79'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>The Generis Role you want to check if its included roles are in the cache memory.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                               </UML:Parameter.type>
@@ -9825,16 +10044,41 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F72'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '10-13-1-85-7aff3a42:13c4e6071d5:-8000:0000000000001F46'
                               name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F7B'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>A unique string serial ID to be used by the cache to identify resources.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '10-13-1-85-7aff3a42:13c4e6071d5:-8000:0000000000001F47'
                               name = 'role' isSpecification = 'false' kind = 'in'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F7A'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>The role you want to create a serial for.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                               </UML:Parameter.type>
@@ -9851,6 +10095,13 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.dataValue>Removes all entries related to included roles from the Cache memory.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--1b9a88ac:13c61cef11d:-8000:0000000000001F73'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Jerome Bogaerts, &lt;jerome.bogaerts@tudor.lu&gt;</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C5'/>
                               </UML:TaggedValue.type>
                             </UML:TaggedValue>
                           </UML:ModelElement.taggedValue>
@@ -68583,7 +68834,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >addUser(login : string,password : string,role : Resource) : Resource</text>
+      >addUser(login : string,password : string,role : Resource = null) : Resource</text>
       <text name="Fig1.6.5"
         x="45"
         y="177"
@@ -69311,7 +69562,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     <rectangle name="Fig5.3"
       x="424"
       y="442"
-      width="205"
+      width="179"
       height="1"
       fill="1"
       fillcolor="black"
@@ -69320,7 +69571,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig5.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[425, 443, 203, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[425, 443, 177, 21]"
          href="10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F48"
          fill="0"
          fillcolor="white"
@@ -69334,7 +69585,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <rectangle name="Fig5.4.0"
         x="425"
         y="443"
-        width="203"
+        width="177"
         height="21"
         fill="0"
         fillcolor="white"
@@ -69346,7 +69597,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     <rectangle name="Fig5.5"
       x="424"
       y="463"
-      width="205"
+      width="179"
       height="1"
       fill="1"
       fillcolor="black"
@@ -69355,7 +69606,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig5.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[425, 464, 203, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[425, 464, 177, 21]"
          href="10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F48"
          fill="0"
          fillcolor="white"
@@ -69369,7 +69620,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <rectangle name="Fig5.6.0"
         x="425"
         y="464"
-        width="203"
+        width="177"
         height="21"
         fill="0"
         fillcolor="white"
