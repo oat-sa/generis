@@ -114,7 +114,6 @@ class core_kernel_persistence_hardapi_Utils
         $returnValue = (string) '';
 
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:000000000000159D begin
-        
     	if(!is_null($resource)){
     		
     		if (isset(self::$shortNames[$resource->uriResource])){

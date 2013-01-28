@@ -11,6 +11,7 @@ class generis_actions_RestClass extends generis_actions_RestResource {
         switch($this->getRequestMethod()) {
 
             case 'GET' :
+            	$userService = core_kernel_users_Service::singleton();
                 try {
 					
                     if(!$this->hasRequestParameter('clazz')){
@@ -44,13 +45,14 @@ class generis_actions_RestClass extends generis_actions_RestResource {
 
                     }
                     echo "</classes>";
-                    core_control_FrontController::logOff();
+                    
+            		$userService->logout();
                     break;
                 }
 
                 catch (common_Exception $e)
                 {
-                    core_control_FrontController::logOff();
+            		$userService->logout();
                     header('WWW-Authenticate: Basic realm="GENERIS_REALM"');
                     header('HTTP/1.1 401 Unauthorized');
                     die('Unauthorized');
@@ -69,6 +71,9 @@ class generis_actions_RestClass extends generis_actions_RestResource {
         switch($this->getRequestMethod()) {
 
             case 'GET' :
+            	
+            	$userService = core_kernel_users_Service::singleton();
+            	
                 try {
 					
                     if(!$this->hasRequestParameter('clazz')){
@@ -104,13 +109,14 @@ class generis_actions_RestClass extends generis_actions_RestResource {
 
                     }
                     echo "</classes>";
-                    core_control_FrontController::logOff();
+                    
+                    $userService->logout();
                     break;
                 }
 
                 catch (common_Exception $e)
                 {
-                    core_control_FrontController::logOff();
+                    $userService->logout();
                     header('WWW-Authenticate: Basic realm="GENERIS_REALM"');
                     header('HTTP/1.1 401 Unauthorized');
                     die('Unauthorized');
@@ -129,6 +135,7 @@ class generis_actions_RestClass extends generis_actions_RestResource {
         switch($this->getRequestMethod()) {
 
             case 'GET' :
+            	$userService = core_kernel_users_Service::singleton();
                 try {
 					
                     if(!$this->hasRequestParameter('clazz')){
@@ -164,13 +171,13 @@ class generis_actions_RestClass extends generis_actions_RestResource {
 
                     }
                     echo "</resources>";
-                    core_control_FrontController::logOff();
+                    $userService->logout();
                     break;
                 }
 
                 catch (common_Exception $e)
                 {
-                    core_control_FrontController::logOff();
+                    $userService->logout();
                     header('WWW-Authenticate: Basic realm="GENERIS_REALM"');
                     header('HTTP/1.1 401 Unauthorized');
                     die('Unauthorized');

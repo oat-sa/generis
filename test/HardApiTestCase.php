@@ -23,7 +23,7 @@ class HardApiTestCase extends UnitTestCase {
 		
 		$class = new core_kernel_classes_Class(CLASS_ROLE);
 		$shortName = core_kernel_persistence_hardapi_Utils::getShortName($class);
-		$this->assertEqual($shortName, "06ClassRole");
+		$this->assertEqual($shortName, "07ClassRole");
 		
 		$longName = core_kernel_persistence_hardapi_Utils::getLongName($shortName);
 		$this->assertEqual($longName, $class->uriResource);

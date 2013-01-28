@@ -281,9 +281,9 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 				
 				if($activityNumber){
 					//set as a subject
-					$roleSubjectClass = new core_kernel_classes_Class(CLASS_ROLE_SUBJECT);
-					$this->currentUser->removeType($roleSubjectClass);
-					$this->currentUser->setType($roleSubjectClass);
+					$roleSubject = new core_kernel_classes_Resource(INSTANCE_ROLE_DELIVERY);
+					$rolesProperty = new core_kernel_classes_Property(PROPERTY_USER_ROLES);
+					$this->currentUser->editPropertyValues($rolesProperty, $roleSubject);
 					
 					$authoringService = wfAuthoring_models_classes_ProcessService::singleton();
 					$processExecutionService = wfEngine_models_classes_ProcessExecutionService::singleton();

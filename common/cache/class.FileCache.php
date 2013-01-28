@@ -155,7 +155,9 @@ class common_cache_FileCache
     public function remove($serial)
     {
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F44 begin
-        @unlink($this->getFilePath($serial));
+        if (true === $this->has($serial)){
+        	@unlink($this->getFilePath($serial));
+        }
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F44 end
     }
 

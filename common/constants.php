@@ -56,43 +56,37 @@ define('PROPERTY_VERSIONEDFILE_REPOSITORY' ,	GENERIS_NS . '#VersionedFileReposit
 define('PROPERTY_VERSIONEDFILE_FILEPATH' , 		GENERIS_NS . '#VersionedFilePath' , true) ;
 
 #Versioned Repository
-define('CLASS_GENERIS_VERSIONEDREPOSITORY' ,	GENERIS_NS . '#VersionedRepository' , true) ;
-define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL' , 	GENERIS_NS . '#VersionedRepositoryUrl' , true) ;
-define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH' , 	GENERIS_NS . '#VersionedRepositoryPath' , true) ;
-define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE' , 	GENERIS_NS . '#VersionedRepositoryType' , true) ;
-define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN' , 	GENERIS_NS . '#VersionedRepositoryLogin' , true) ;
+define('CLASS_GENERIS_VERSIONEDREPOSITORY' ,				GENERIS_NS . '#VersionedRepository' , true) ;
+define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL' , 		GENERIS_NS . '#VersionedRepositoryUrl' , true) ;
+define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH' , 		GENERIS_NS . '#VersionedRepositoryPath' , true) ;
+define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE' , 		GENERIS_NS . '#VersionedRepositoryType' , true) ;
+define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN' , 		GENERIS_NS . '#VersionedRepositoryLogin' , true) ;
 define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_PASSWORD' , 	GENERIS_NS . '#VersionedRepositoryPassword' , true) ;
 define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED' , 	GENERIS_NS . '#VersionedRepositoryEnabled' , true) ;
 define('PROPERTY_GENERIS_VERSIONEDREPOSITORY_ROOTFILE' , 	GENERIS_NS . '#RepositoryRootFile' , true) ;
 
-define('PROPERTY_GENERIS_VCS_TYPE_SUBVERSION' ,	GENERIS_NS . '#VCSTypeSubversion' , true) ;
-define('PROPERTY_GENERIS_VCS_TYPE_SUBVERSION_WIN' ,	GENERIS_NS . '#VCSTypeSubversionWindows' , true) ;
-define('PROPERTY_GENERIS_VCS_TYPE_CVS' ,	 	GENERIS_NS . '#VCSTypeCvs' , true) ;
-define('INSTANCE_GENERIS_VCS_TYPE_LOCAL' , 		GENERIS_NS . '#VCSLocalDirectory' , true) ;
+define('PROPERTY_GENERIS_VCS_TYPE_SUBVERSION' ,				GENERIS_NS . '#VCSTypeSubversion' , true) ;
+define('PROPERTY_GENERIS_VCS_TYPE_SUBVERSION_WIN' ,			GENERIS_NS . '#VCSTypeSubversionWindows' , true) ;
+define('PROPERTY_GENERIS_VCS_TYPE_CVS' ,	 				GENERIS_NS . '#VCSTypeCvs' , true) ;
+define('INSTANCE_GENERIS_VCS_TYPE_LOCAL' , 					GENERIS_NS . '#VCSLocalDirectory' , true) ;
 
 #user
-define('CLASS_ROLE',							'http://www.tao.lu/Ontologies/TAO.rdf#ClassRole',true);
-define('PROPERTY_ROLE_ISSYSTEM',				'http://www.tao.lu/Ontologies/TAO.rdf#IsSystem',true);
-define('PROPERTY_USER_LOGIN' ,					GENERIS_NS . '#login' , true) ;
-define('PROPERTY_USER_PASSWORD' , 				GENERIS_NS . '#password' , true) ;
-define('PROPERTY_USER_UILG' ,					GENERIS_NS . '#userUILg' , true) ;
-define('PROPERTY_USER_DEFLG' ,					GENERIS_NS . '#userDefLg' , true) ;
-define('PROPERTY_USER_MAIL' ,					GENERIS_NS . '#userMail' , true) ;
-/**
- * Typo, to be replaced with PROPERTY_USER_FIRSTNAME
- * @var string
- * @deprecated
- */
-define('PROPERTY_USER_FIRTNAME' , 				GENERIS_NS . '#userFirstName' , true) ;
+define('CLASS_ROLE',							GENERIS_NS . '#ClassRole' ,true);
+define('PROPERTY_ROLE_ISSYSTEM',				GENERIS_NS . '#isSystem' , true);
+define('PROPERTY_ROLE_INCLUDESROLE',			GENERIS_NS . '#includesRole' , true);
+define('PROPERTY_USER_LOGIN' ,					GENERIS_NS . '#login' , true);
+define('PROPERTY_USER_PASSWORD' , 				GENERIS_NS . '#password' , true);
+define('PROPERTY_USER_UILG' ,					GENERIS_NS . '#userUILg' , true);
+define('PROPERTY_USER_DEFLG' ,					GENERIS_NS . '#userDefLg' , true);
+define('PROPERTY_USER_MAIL' ,					GENERIS_NS . '#userMail' , true);
+define('PROPERTY_USER_FIRTNAME' , 				GENERIS_NS . '#userFirstName' , true);
 define('PROPERTY_USER_FIRSTNAME' , 				GENERIS_NS . '#userFirstName' , true) ;
-define('PROPERTY_USER_LASTNAME' , 				GENERIS_NS . '#userLastName' , true) ;
-
-define('CLASS_ROLE_TAOMANAGER',					'http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole', true) ;
-define('CLASS_ROLE_BACKOFFICE',					'http://www.tao.lu/Ontologies/TAO.rdf#BackOffice', true) ;
-define('CLASS_ROLE_FRONTOFFICE',				'http://www.tao.lu/Ontologies/TAO.rdf#FrontOffice', true) ;
+define('PROPERTY_USER_LASTNAME' , 				GENERIS_NS . '#userLastName' , true);
+define('PROPERTY_USER_ROLES',					GENERIS_NS . '#userRoles' , true);
+define('INSTANCE_ROLE_GENERIS',					GENERIS_NS . '#GenerisRole' , true);
 
 define('FUNCACL_NS',							'http://www.tao.lu/Ontologies/taoFuncACL.rdf', true);
-define('CLASS_ROLE_BASEACCESS',					FUNCACL_NS.'#BaseAccessRole', true) ;
+define('INSTANCE_ROLE_BASEACCESS',				FUNCACL_NS.'#BaseAccessRole', true) ;
 
 define('CLASS_ACL_MODULE',						FUNCACL_NS.'#Module', true);
 define('PROPERTY_ACL_MODULE_ID',				FUNCACL_NS.'#moduleIdentifier', true);

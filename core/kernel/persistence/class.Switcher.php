@@ -55,25 +55,10 @@ class core_kernel_persistence_Switcher
 	// --- OPERATIONS ---
 
 	public function __construct($blackList = array()){
-
-		if(count(self::$blackList) == 0 || count($blackList) > 0){
-			self::$blackList = array_merge(
-				array(
-					CLASS_GENERIS_USER,
-					CLASS_ROLE,
-					CLASS_ROLE_TAOMANAGER,
-					CLASS_ROLE_BACKOFFICE,
-					CLASS_ROLE_FRONTOFFICE,
-					RDF_CLASS,
-					'http://www.tao.lu/middleware/wfEngine.rdf#ClassProcessVariables'
-				),
-					$blackList
-			);
-		}
+		self::$blackList = array_merge(array(RDF_CLASS), $blackList);
 	}
 
 	public function __destruct(){
-		//core_kernel_persistence_PersistenceProxy::restoreImplementation();
 		core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo = array();
 		core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo = array();
 		core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo = array();

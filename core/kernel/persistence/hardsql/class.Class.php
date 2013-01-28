@@ -561,7 +561,7 @@ class core_kernel_persistence_hardsql_Class
 							// Deal with the language.
 							if(preg_match('/^[a-zA-Z]{2,4}$/', $lang)){
 								$quotedLang = $dbWrapper->dbConnector->quote($lang);
-								$langToken = ' AND ("p".l_language" = \'\' OR "p".l_language" = ' . $quotedLang . ')';
+								$langToken = ' AND ("p"."l_language" = \'\' OR "p"."l_language" = ' . $quotedLang . ')';
 								$subCondition .= $langToken;
 							}
 							
@@ -632,6 +632,7 @@ class core_kernel_persistence_hardsql_Class
 			}
 			
 			try{
+				
 				$result = $dbWrapper->query($finalQuery);
 				$idUris = array();
 				while ($row = $result->fetch()){

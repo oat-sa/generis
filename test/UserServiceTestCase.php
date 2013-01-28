@@ -7,17 +7,130 @@ require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 	
 class UserServiceTestCase extends UnitTestCase {
 	
+	/**
+	 * @var core_kernel_users_Service
+	 */
 	protected $service;
+	
+	public function __construct($label = false){
+		parent::__construct($label);
+		$this->initRoles();
+	}
 	
 	public function setUp(){
         GenerisTestRunner::initTest();
 		$this->service = core_kernel_users_Service::singleton();
 	}
+	
+	public function initRoles(){
+		// Main parent role.
+		$roleClass = new core_kernel_classes_Class(CLASS_ROLE);
+		$isSystemProperty = new core_kernel_classes_Property(PROPERTY_ROLE_ISSYSTEM);
+		$includesRoleProperty = new core_kernel_classes_Property(PROPERTY_ROLE_INCLUDESROLE);
+		$trueInstance = new core_kernel_classes_Resource(GENERIS_TRUE);
+		$falseInstance = new core_kernel_classes_Resource(GENERIS_FALSE);
+		$prefix = LOCAL_NAMESPACE . '#';
+		
+		// Do not forget that more you go deep in the Roles hierarchy, more rights you have.
+		$baseRole = $roleClass->createInstance('BASE Role', 'The base role of the hierarchy (minimal rights).', $prefix . 'baseRole');
+		$baseRole->setPropertyValue($isSystemProperty, $falseInstance);
+		
+		$subRole1 = $roleClass->createInstance('SUB Role 1', 'Includes BASE role.', $prefix . 'subRole1');
+		$subRole1->setPropertyValue($includesRoleProperty, $baseRole);
+		$subRole1->setPropertyValue($isSystemProperty, $falseInstance);
+		
+		$subRole2 = $roleClass->createInstance('SUB Role 2', 'Includes BASE role.', $prefix . 'subRole2');
+		$subRole2->setPropertyValue($includesRoleProperty, $baseRole);
+		$subRole2->setPropertyValue($isSystemProperty, $falseInstance);
+		
+		$subRole3 = $roleClass->createInstance('SUB Role 3', 'Includes BASE role.', $prefix . 'subRole3');
+		$subRole3->setPropertyValue($includesRoleProperty, $baseRole);
+		$subRole3->setPropertyValue($isSystemProperty, $falseInstance);
+		
+		$subRole11 = $roleClass->createInstance('SUB Role 11', 'Includes SUB Role 1.', $prefix . 'subRole11');
+		$subRole11->setPropertyValue($includesRoleProperty, $subRole1);
+		$subRole11->setPropertyValue($isSystemProperty, $falseInstance);
+		
+		$subRole12 = $roleClass->createInstance('SUB Role 12', 'Includes SUB Role 1.', $prefix . 'subRole12');
+		$subRole12->setPropertyValue($includesRoleProperty, $subRole1);
+		$subRole12->setPropertyValue($isSystemProperty, $falseInstance);
+		
+		$subRole13 = $roleClass->createInstance('SUB Role 13', 'Includes SUB Role 1, SUB Role 11, SUB Role 12.', $prefix . 'subRole13');
+		$subRole13->setPropertyValue($includesRoleProperty, $subRole1);
+		$subRole13->setPropertyValue($includesRoleProperty, $subRole11);
+		$subRole13->setPropertyValue($includesRoleProperty, $subRole12);
+		$subRole13->setPropertyValue($isSystemProperty, $falseInstance);
+	}
+	
+	public function testModel(){
+		// We must have a property dedicated to Roles in the Generis User class.
+		$userClass = new core_kernel_classes_Class(CLASS_GENERIS_USER);
+		$this->assertTrue($userClass->exists());
+		
+		// The userClass must have a dedicated userRoles property.
+		$this->assertTrue(array_key_exists(PROPERTY_USER_ROLES, $userClass->getProperties()));
+		
+		// The class that gather all Roles instances together must exist.
+		$roleClass = new core_kernel_classes_Class(CLASS_ROLE);
+		$this->assertTrue($roleClass->exists());
+		
+		// The Role class must have the right properties (isSystem and includesRole)
+		$roleClassProperties = $roleClass->getProperties();
+		$this->assertTrue(array_key_exists(PROPERTY_ROLE_ISSYSTEM, $roleClassProperties));
+		$this->assertTrue(array_key_exists(PROPERTY_ROLE_INCLUDESROLE, $roleClassProperties));
+		
+		// The Generis Role must exist after installation.
+		$generisRole = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
+		$this->assertTrue($generisRole->exists());
+	}
+	
+	public function testGetOneUser(){
+		$sysUser = $this->service->getOneUser(SYS_USER_LOGIN);
+		$this->assertFalse(empty($sysUser));
+		$this->assertIsA($sysUser, 'core_kernel_classes_Resource');
+		$loginProperty = new core_kernel_classes_Property(PROPERTY_USER_LOGIN);
+		$login = $sysUser->getUniquePropertyValue($loginProperty);
+		$this->assertIsA($login, 'core_kernel_classes_Literal');
+		$this->assertEqual($login->literal, SYS_USER_LOGIN);
+		
+		$unknownUser = $this->service->getOneUser('unknown');
+		$this->assertTrue(empty($unknownUser));
+	}
+	
+	public function testGetIncludedRoles(){
+		$prefix = LOCAL_NAMESPACE . '#';
+		
+		$subRole13 = new core_kernel_classes_Resource($prefix . 'subRole13');
+		$includedRoles = $this->service->getIncludedRoles($subRole13);
+		$this->assertEqual(count($includedRoles), 4);
+		$this->assertFalse(array_key_exists($prefix . 'subRole13', $includedRoles));
+		$this->assertTrue(array_key_exists($prefix . 'baseRole', $includedRoles));
+		$this->assertTrue(array_key_exists($prefix . 'subRole1', $includedRoles));
+		$this->assertTrue(array_key_exists($prefix . 'subRole11', $includedRoles));
+		$this->assertTrue(array_key_exists($prefix . 'subRole12', $includedRoles));
+	}
+	
+	public function testIsPasswordValid(){
+		$role = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
+		$user = $this->service->addUser('passwordValid', md5('passwordValid'), $role);
+		$this->assertIsA($user, 'core_kernel_classes_Resource');
+		$this->assertTrue($this->service->isPasswordValid('passwordValid', $user));
+		$this->assertTrue($user->delete());
+	}
 
 	public function testLogin(){
-		$this->assertTrue($this->service->login(SYS_USER_LOGIN, SYS_USER_PASS,new core_kernel_classes_Class(CLASS_ROLE_TAOMANAGER)));
-		$this->assertFalse($this->service->login('toto', '',new core_kernel_classes_Class(CLASS_ROLE_TAOMANAGER)));
-		// $this->assertTrue($this->service->login(SYS_USER_LOGIN, SYS_USER_PASS,CLASS_ROLE_BACKOFFICE));
+		$role = $this->service->addRole('LOGINROLE', 'A newly added Role for a login test.');
+		$user = $this->service->addUser('login', md5('password'), $role);
+		$taoManagerRole = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole');
+		
+		$this->assertTrue($this->service->login('login', md5('password'), $role));
+		$this->assertTrue($this->service->isASessionOpened());
+		$this->assertTrue($this->service->logout());
+		$this->assertTrue($this->service->login(SYS_USER_LOGIN, SYS_USER_PASS, $taoManagerRole)); // relog sys user.
+		$this->assertFalse($this->service->login('toto', '', $taoManagerRole));
+		
+		$role->delete();
+		$user->delete();
 	}
 	
 	public function testLoginExists(){
@@ -25,34 +138,222 @@ class UserServiceTestCase extends UnitTestCase {
 		$this->assertFalse($this->service->loginExists('toto'));
 	}
 	
+	public function testAddUser(){
+		$userRolesProperty = new core_kernel_classes_Property(PROPERTY_USER_ROLES);
+		
+		// single role.
+		$role1 = $this->service->addRole('ADDUSERROLE 1', 'A newly added Role.');
+		$user = $this->service->addUser('user1', md5('password1'), $role1);
+		
+		$this->assertTrue($this->service->loginExists('user1'));
+		$userRoles = $user->getUniquePropertyValue($userRolesProperty);
+		$this->assertEqual($userRoles->getUri(), $role1->getUri());
+		$this->assertTrue($this->service->logout());
+		$this->assertTrue($this->service->login('user1', md5('password1'), $role1));
+		$this->assertTrue($this->service->logout());
+		$taoManagerRole = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole');
+		$this->assertTrue($this->service->login(SYS_USER_LOGIN, SYS_USER_PASS, $taoManagerRole));
+		
+		$user->delete();
+		$this->assertFalse($user->exists());
+		$role1->delete();
+		$this->assertFalse($role1->exists());
+		
+		// No role provided. Will be given the genuine GENERIS ROLE.
+		$user = $this->service->addUser('user2', md5('password2'));
+		$this->assertTrue($this->service->loginExists('user2'));
+		$userRoles = $user->getUniquePropertyValue($userRolesProperty);
+		$this->assertEqual($userRoles->getUri(), INSTANCE_ROLE_GENERIS);
+		$user->delete();
+	}
+	
 	public function testAddRole(){
-		$this->service->login(SYS_USER_LOGIN, SYS_USER_PASS, DATABASE_NAME, new core_kernel_classes_Class(CLASS_ROLE_TAOMANAGER));
-		$role1 = $this->service->addRole('testAddRoleTESt 1','testAddRole 1');
-		$subClassProp = new core_kernel_classes_Property(RDF_SUBCLASSOF);
-		$typeProp = new core_kernel_classes_Property(RDF_TYPE);
-		$this->assertTrue($role1->getOnePropertyValue($subClassProp)->uriResource == CLASS_GENERIS_USER);
-
-		$backoffice = new core_kernel_classes_Class(CLASS_ROLE_BACKOFFICE);
-		$role2 = $this->service->addRole('testAddRoleTESt 2','test2',$backoffice);
-		$this->assertTrue($role2->getOnePropertyValue($subClassProp)->uriResource == CLASS_GENERIS_USER);
-
-		$role1->hasType(new core_kernel_classes_Class(CLASS_ROLE));
-
-		$this->assertTrue($role2->hasType($backoffice));
+		$roleClass = new core_kernel_classes_Class(CLASS_ROLE);
+		$includesRoleProperty = new core_kernel_classes_Property(PROPERTY_ROLE_INCLUDESROLE);
+		
+		// Prepare roles to be included to others.
+		$iRole1 = $this->service->addRole('INCLUDED ROLE 1', 'A Role to be included in others.');
+		
+		// Role without included roles.
+		$role1 = $this->service->addRole('NEWROLE 1', 'A Role that includes no other roles.');
+		$this->assertIsA($role1, 'core_kernel_classes_Resource');
+		$includesRoles = $role1->getPropertyValues($includesRoleProperty);
+		$this->assertTrue(empty($includesRoles));
 		
 		$role1->delete();
+		$this->assertFalse($role1->exists());
+		
+		// Role with included roles.
+		$role2 = $this->service->addRole('NEWROLE 2', 'A Role that includes an other role.', $iRole1);
+		$includedRoles = $role2->getUniquePropertyValue($includesRoleProperty);
+		$this->assertTrue($includedRoles->isInstanceOf($roleClass));
+		$this->assertEqual($includedRoles->getUri(), $iRole1->getUri());
+		
 		$role2->delete();
+		$this->assertFalse($role2->exists());
 	}
 	
-	public function testAddUser(){
-		$this->service->login(SYS_USER_LOGIN, SYS_USER_PASS, DATABASE_NAME, new core_kernel_classes_Class(CLASS_ROLE_TAOMANAGER));
-		$role1 = $this->service->addRole('addUserFakeRole','addUserFakeRole');
-		$user = $this->service->addUser('toto',md5('toto'),$role1);
-		$this->assertTrue($this->service->loginExists('toto'));
-		$this->assertTrue($this->service->logout());
-		$this->assertTrue($this->service->login('toto', md5('toto'),$role1));
+	public function testGetUserRoles(){
+		$prefix = LOCAL_NAMESPACE . '#';
+		
+		$subRole2 = new core_kernel_classes_Resource($prefix . 'subRole2');
+		$user = $this->service->addUser('user', md5('password'), $subRole2);
+		$userRoles = $this->service->getUserRoles($user);
+		
+		$this->assertEqual(count($userRoles), 2);
+		$this->assertTrue(array_key_exists($prefix . 'subRole2', $userRoles));
+		$this->assertTrue(array_key_exists($prefix . 'baseRole', $userRoles));
 		$user->delete();
-		$role1->delete();
+		
+		$subRole11 = new core_kernel_classes_Resource($prefix . 'subRole11');
+		$user = $this->service->addUser('user', md5('password'), $subRole11);
+		$userRoles = $this->service->getUserRoles($user);
+		
+		$this->assertEqual(count($userRoles), 3);
+		$this->assertTrue(array_key_exists($prefix . 'subRole11', $userRoles));
+		$this->assertTrue(array_key_exists($prefix . 'subRole1', $userRoles));
+		$this->assertTrue(array_key_exists($prefix . 'baseRole', $userRoles));
+		$user->delete();
 	}
 	
+	public function testUserHasRoles(){
+		$prefix = LOCAL_NAMESPACE . '#';
+		$baseRole = new core_kernel_classes_Resource($prefix . 'baseRole');
+		$subRole1 = new core_kernel_classes_Resource($prefix . 'subRole1');
+		$subRole2 = new core_kernel_classes_Resource($prefix . 'subRole2');
+		$subRole3 = new core_kernel_classes_Resource($prefix . 'subRole3');
+		$subRole11 = new core_kernel_classes_Resource($prefix . 'subRole11');
+		$subRole12 = new core_kernel_classes_Resource($prefix . 'subRole12');
+		$subRole13 = new core_kernel_classes_Resource($prefix . 'subRole13');
+		$allRolesOf13 = array($baseRole, $subRole1, $subRole11, $subRole12, $subRole13);
+		
+		$this->assertTrue($baseRole->exists());
+		$this->assertTrue($subRole1->exists());
+		
+		$user = $this->service->addUser('user', md5('password'), $baseRole);
+		$this->assertTrue($this->service->userHasRoles($user, $baseRole));
+		$this->assertFalse($this->service->userHasRoles($user, array($baseRole, $subRole1)));
+		$user->delete();
+		
+		$user = $this->service->addUser('user', md5('password'), $subRole1);
+		$this->assertTrue($this->service->userHasRoles($user, $baseRole));
+		$this->assertTrue($this->service->userHasRoles($user, $subRole1));
+		$this->assertFalse($this->service->userHasRoles($user, $subRole2));
+		$this->assertTrue($this->service->userHasRoles($user, array($baseRole, $subRole1)));
+		$this->assertFalse($this->service->userHasRoles($user, array($baseRole, $subRole1, $subRole2)));
+		$user->delete();
+
+		$user = $this->service->addUser('user', md5('password'), $subRole13);
+		$this->assertTrue($this->service->userHasRoles($user, $subRole13));
+		$this->assertTrue($this->service->userHasRoles($user, $baseRole));
+		$this->assertTrue($this->service->userHasRoles($user, $allRolesOf13));
+		$user->delete();
+	}
+	
+	public function testRemoveRole(){
+		$prefix = LOCAL_NAMESPACE . '#';
+		
+		$subRole13 = new core_kernel_classes_Resource($prefix . 'subRole13');
+		$user = $this->service->addUser('user', md5('password'), $subRole13);
+		$this->assertTrue($this->service->userHasRoles($user, $subRole13));
+		
+		$this->assertTrue($this->service->removeRole($subRole13));
+		$this->assertFalse($this->service->userHasRoles($user, $subRole13));
+		$userRoles = $this->service->getUserRoles($user);
+		$this->assertTrue(empty($userRoles));
+		
+		$user->delete();
+	}
+	
+	public function testRemoveUser(){
+		$role = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
+		$user = $this->service->addUser('removeUser', md5('removeUser'), $role);
+		$this->assertTrue($user->exists());
+		$this->service->removeUser($user);
+		$this->assertFalse($user->exists());
+	}
+	
+	public function testSetPassword(){
+		$role = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
+		$user = $this->service->addUser('passwordUser', md5('passwordUser'), $role);
+		$this->assertTrue($user->exists());
+		$this->assertTrue($this->service->isPasswordValid('passwordUser', $user));
+		$this->assertFalse($this->service->isPasswordValid('password', $user));
+		$this->service->setPassword($user, 'password');
+		$this->assertTrue($this->service->isPasswordValid('password', $user));
+		$this->service->removeUser($user);
+		$this->assertFalse($user->exists());
+	}
+	
+	public function testRolesCache(){
+		$includedRole = $this->service->addRole('INCLUDED ROLE');
+		$role = $this->service->addRole('CACHE ROLE',
+										'A Role that will be put in cache memory.',
+										$includedRole);
+		
+		// Nothing is in the cache, we should get an exception.
+		try{
+			core_kernel_users_Cache::retrieveIncludedRoles($role);
+			$this->assertTrue(false, 'An exception should be raised when trying to retrieve included roles that are not yet in the cache memory.');
+		}
+		catch (core_kernel_users_CacheException $e){
+			$this->assertTrue(true);
+		}
+		
+		$includedRoles = $this->service->getIncludedRoles($role);
+		$this->assertEqual(count($includedRoles), 1);
+		$this->assertTrue(array_key_exists($includedRole->getUri(), $includedRoles));
+		
+		// try to put included roles in the cache.
+		try{
+			core_kernel_users_Cache::cacheIncludedRoles($role, $includedRoles);
+			
+			// now try to retrieve it.
+			$includedRolesFromCache = core_kernel_users_Cache::retrieveIncludedRoles($role);
+			$this->assertTrue(is_array($includedRolesFromCache));
+			$this->assertEqual(count($includedRolesFromCache), 1);
+			$this->assertTrue(array_key_exists($includedRole->getUri(), $includedRolesFromCache));
+			
+			// and remove it !
+			$this->assertTrue(core_kernel_users_Cache::removeIncludedRoles($role));
+			$this->assertFalse(core_kernel_users_Cache::areIncludedRolesInCache($role));
+		}
+		catch (core_kernel_users_CacheException $e){
+			$this->assertTrue(false, 'An exception occured while writing included roles in the cache memory.');
+		}
+		
+		// try to flush users cache.
+		try{
+			core_kernel_users_Cache::flush();
+		}
+		catch (core_kernel_users_CacheException $e){
+			$this->assertTrue(false, 'An error occured while flushing the users cache.');
+		}
+		
+		$includedRole->delete();
+		$role->delete();
+	}
+	
+	public function testClearRoles(){
+		$prefix = LOCAL_NAMESPACE . '#';
+		$roleUris = array($prefix . 'baseRole',
+						  $prefix . 'subRole1',
+						  $prefix . 'subRole2',
+						  $prefix . 'subRole3',
+						  $prefix . 'subRole11',
+						  $prefix . 'subRole12',
+						  $prefix . 'subRole13');
+						  
+		foreach ($roleUris as $ru){
+			$r = new core_kernel_classes_Class($ru);
+			$r->delete(true);
+			$this->assertFalse($r->exists());
+		}
+	}
+	
+	public function testLogout(){
+		$this->assertTrue($this->service->isASessionOpened());
+		$this->service->logout();
+		$this->assertFalse($this->service->isASessionOpened());
+	}
 }

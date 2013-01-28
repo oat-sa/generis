@@ -5,7 +5,8 @@ class generis_actions_RestResource extends Module {
     public function __construct(){
         //TODO link with HTTP auth below
         if(defined('ENABLE_SUBSCRIPTION') 	&& ENABLE_SUBSCRIPTION ){
-            core_control_FrontController::connect(SYS_USER_LOGIN, SYS_USER_PASS,DATABASE_NAME);
+        	$userService = core_kernel_users_Service::singleton();
+        	$userService->login(SYS_USER_LOGIN, SYS_USER_PASS, new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole'));
         }
         else{
               header('HTTP/1.1 401 Unauthorized');
@@ -14,7 +15,8 @@ class generis_actions_RestResource extends Module {
     }
 
     public function __destruct(){
-        core_control_FrontController::logOff();
+        $userService = core_kernel_users_Service::singleton();
+        $userService->logout();
     }
 
     public function auth(){
@@ -25,15 +27,15 @@ class generis_actions_RestResource extends Module {
         }
         else
         {
+        	$userService = core_kernel_users_Service::singleton();
+        	
             try
             {
-                @core_control_FrontController::connect($_SERVER['PHP_AUTH_USER'],
-                md5($_SERVER['PHP_AUTH_PW']),
-                DATABASE_NAME);
+            	$userService->login(SYS_USER_LOGIN, SYS_USER_PASS, new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole'));
             }
             catch (Exception $e)
             {
-                core_control_FrontController::logOff();
+                $userService->logout();
                 header('HTTP/1.1 401 Unauthorized');
                 die('Unauthorized to access this area.');
 
@@ -50,13 +52,16 @@ class generis_actions_RestResource extends Module {
         switch($this->getRequestMethod()) {
 
             case 'GET' :
+            	
+            	$userService = core_kernel_users_Service::singleton();
+            	
                 try {
 					
                     if($this->hasRequestParameter('uri')){
                         $resource = new core_kernel_classes_Resource($this->getRequestParameter('uri'));
                     }
                     else {
-                        core_control_FrontController::logOff();
+                        $userService->logout();
                         header('HTTP/1.1 400 Bad Request');
                         die('uri parameter is missing');
                     }
@@ -64,7 +69,7 @@ class generis_actions_RestResource extends Module {
                         $property = new core_kernel_classes_Property($this->getRequestParameter('property'));
                     }
                     else {
-                        core_control_FrontController::logOff();
+                        $userService->logout();
                         header('HTTP/1.1 400 Bad Request');
                         die('property parameter is missing');
                     }
@@ -85,13 +90,13 @@ class generis_actions_RestResource extends Module {
                     echo "</propertyValues>\n";
                     
                     
-                    core_control_FrontController::logOff();
+                    $userService->logout();
                     break;
                 }
 
                 catch (Exception $e)
                 {
-                    core_control_FrontController::logOff();
+                    $userService->logout();
                     header('WWW-Authenticate: Basic realm="' . PIAAC_HTTP_API_REALM . '"');
                     header('HTTP/1.1 401 Unauthorized');
                     die('Unauthorized');
@@ -111,13 +116,15 @@ class generis_actions_RestResource extends Module {
         switch($this->getRequestMethod()) {
 
             case 'GET' :
+            	$userService = core_kernel_users_Service::singleton();
+            	
                 try {
 					$this->auth();
                     if($this->hasRequestParameter('uri')){
                         $resource = new core_kernel_classes_Resource($this->getRequestParameter('uri'));
                     }
                     else {
-                        core_control_FrontController::logOff();
+                        $userService->logout();
                         header('HTTP/1.1 400 Bad Request');
                         die('uri parameter is missing');
                     }
@@ -129,13 +136,13 @@ class generis_actions_RestResource extends Module {
                     echo " <label>" . common_Utils::fullTrim($resource->getLabel()). "</label>\n";
                     echo " <comment>" . common_Utils::fullTrim($resource->getLabel()). "</comment>\n";
                     echo "</resource>\n";
-                    core_control_FrontController::logOff();
+                    $userService->logout();
                     break;
                 }
 
                 catch (common_Exception $e)
                 {
-                    core_control_FrontController::logOff();
+                    $userService->logout();
                     header('WWW-Authenticate: Basic realm="GENERIS_REALM"');
                     header('HTTP/1.1 401 Unauthorized');
                     die('Unauthorized');
