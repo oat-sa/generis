@@ -119,7 +119,7 @@ class UserServiceTestCase extends UnitTestCase {
 	}
 
 	public function testLogin(){
-		$role = $this->service->addRole('LOGINROLE', 'A newly added Role for a login test.');
+		$role = $this->service->addRole('LOGINROLE');
 		$user = $this->service->addUser('login', md5('password'), $role);
 		$taoManagerRole = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole');
 		
@@ -142,7 +142,7 @@ class UserServiceTestCase extends UnitTestCase {
 		$userRolesProperty = new core_kernel_classes_Property(PROPERTY_USER_ROLES);
 		
 		// single role.
-		$role1 = $this->service->addRole('ADDUSERROLE 1', 'A newly added Role.');
+		$role1 = $this->service->addRole('ADDUSERROLE 1');
 		$user = $this->service->addUser('user1', md5('password1'), $role1);
 		
 		$this->assertTrue($this->service->loginExists('user1'));
@@ -172,10 +172,10 @@ class UserServiceTestCase extends UnitTestCase {
 		$includesRoleProperty = new core_kernel_classes_Property(PROPERTY_ROLE_INCLUDESROLE);
 		
 		// Prepare roles to be included to others.
-		$iRole1 = $this->service->addRole('INCLUDED ROLE 1', 'A Role to be included in others.');
+		$iRole1 = $this->service->addRole('INCLUDED ROLE 1');
 		
 		// Role without included roles.
-		$role1 = $this->service->addRole('NEWROLE 1', 'A Role that includes no other roles.');
+		$role1 = $this->service->addRole('NEWROLE 1');
 		$this->assertIsA($role1, 'core_kernel_classes_Resource');
 		$includesRoles = $role1->getPropertyValues($includesRoleProperty);
 		$this->assertTrue(empty($includesRoles));
@@ -184,7 +184,7 @@ class UserServiceTestCase extends UnitTestCase {
 		$this->assertFalse($role1->exists());
 		
 		// Role with included roles.
-		$role2 = $this->service->addRole('NEWROLE 2', 'A Role that includes an other role.', $iRole1);
+		$role2 = $this->service->addRole('NEWROLE 2', $iRole1);
 		$includedRoles = $role2->getUniquePropertyValue($includesRoleProperty);
 		$this->assertTrue($includedRoles->isInstanceOf($roleClass));
 		$this->assertEqual($includedRoles->getUri(), $iRole1->getUri());
@@ -287,9 +287,7 @@ class UserServiceTestCase extends UnitTestCase {
 	
 	public function testRolesCache(){
 		$includedRole = $this->service->addRole('INCLUDED ROLE');
-		$role = $this->service->addRole('CACHE ROLE',
-										'A Role that will be put in cache memory.',
-										$includedRole);
+		$role = $this->service->addRole('CACHE ROLE', $includedRole);
 		
 		// Nothing is in the cache, we should get an exception.
 		try{

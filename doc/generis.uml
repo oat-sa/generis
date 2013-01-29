@@ -116,7 +116,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Jan 22 11:38:30 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Jan 29 14:40:15 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -8976,33 +8976,10 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                             </UML:Parameter>
                             <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:000000000000181B'
                               name = 'label' isSpecification = 'false'>
-                              <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:000000000000181D'
-                                  language = '' body = '&apos;&apos;'/>
-                              </UML:Parameter.defaultValue>
                               <UML:ModelElement.taggedValue>
                                 <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EA6'
                                   isSpecification = 'false'>
                                   <UML:TaggedValue.dataValue>The label to apply to the newly created Generis Role.</UML:TaggedValue.dataValue>
-                                  <UML:TaggedValue.type>
-                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
-                                  </UML:TaggedValue.type>
-                                </UML:TaggedValue>
-                              </UML:ModelElement.taggedValue>
-                              <UML:Parameter.type>
-                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                              </UML:Parameter.type>
-                            </UML:Parameter>
-                            <UML:Parameter xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:000000000000181E'
-                              name = 'comment' isSpecification = 'false'>
-                              <UML:Parameter.defaultValue>
-                                <UML:Expression xmi.id = '-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001821'
-                                  language = '' body = '&apos;&apos;'/>
-                              </UML:Parameter.defaultValue>
-                              <UML:ModelElement.taggedValue>
-                                <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EA7'
-                                  isSpecification = 'false'>
-                                  <UML:TaggedValue.dataValue>A comment to apply to the newly created Generis Role.</UML:TaggedValue.dataValue>
                                   <UML:TaggedValue.type>
                                     <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                                   </UML:TaggedValue.type>
@@ -9306,7 +9283,7 @@ Can be either a Resource or an array of Resources.</UML:TaggedValue.dataValue>
                           <UML:ModelElement.taggedValue>
                             <UML:TaggedValue xmi.id = '10-13-1-85--499a63c0:13c4816aa6b:-8000:0000000000001EC0'
                               isSpecification = 'false'>
-                              <UML:TaggedValue.dataValue>Get a specific Generis User from the persistent memory of Generis that matches a specific login.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.dataValue>Get a specific Generis User from the persistent memory of Generis that matches a specific login. If multiple users have the same login, a UserException will be thrown.</UML:TaggedValue.dataValue>
                               <UML:TaggedValue.type>
                                 <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                               </UML:TaggedValue.type>
@@ -68616,7 +68593,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     ></text>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[44, 56, 472, 309]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[44, 56, 472, 324]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
        fill="1"
        fillcolor="white"
@@ -68631,7 +68608,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       x="44"
       y="56"
       width="472"
-      height="309"
+      height="324"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -68687,7 +68664,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[45, 79, 470, 38]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[45, 79, 470, 44]"
          href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
          fill="0"
          fillcolor="white"
@@ -68701,7 +68678,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="45"
         y="79"
         width="470"
-        height="38"
+        height="44"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -68742,7 +68719,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig1.5"
       x="44"
-      y="116"
+      y="123"
       width="472"
       height="1"
       fill="1"
@@ -68751,7 +68728,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[45, 117, 470, 248]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[45, 124, 470, 254]"
          href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
          fill="0"
          fillcolor="white"
@@ -68763,9 +68740,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig1.6.0"
         x="45"
-        y="117"
+        y="124"
         width="470"
-        height="248"
+        height="254"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -68773,7 +68750,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       />
       <text name="Fig1.6.1"
         x="45"
-        y="117"
+        y="124"
         width="470"
         height="15"
         fill="0"
@@ -68789,7 +68766,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >loginExists(login : string,class : Class = null) : boolean</text>
       <text name="Fig1.6.2"
         x="45"
-        y="132"
+        y="139"
         width="470"
         height="15"
         fill="0"
@@ -68802,10 +68779,10 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >addRole(label : string = &apos;&apos;,comment : string = &apos;&apos;,includedRoles = null) : Resource</text>
+      >addRole(label : string,includedRoles = null) : Resource</text>
       <text name="Fig1.6.3"
         x="45"
-        y="147"
+        y="154"
         width="470"
         height="15"
         fill="0"
@@ -68821,7 +68798,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >removeRole(role : Resource) : boolean</text>
       <text name="Fig1.6.4"
         x="45"
-        y="162"
+        y="169"
         width="470"
         height="15"
         fill="0"
@@ -68837,7 +68814,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >addUser(login : string,password : string,role : Resource = null) : Resource</text>
       <text name="Fig1.6.5"
         x="45"
-        y="177"
+        y="184"
         width="470"
         height="15"
         fill="0"
@@ -68853,7 +68830,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >removeUser(user : Resource) : boolean</text>
       <text name="Fig1.6.6"
         x="45"
-        y="192"
+        y="199"
         width="470"
         height="15"
         fill="0"
@@ -68869,7 +68846,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >login(login : string,password : string,allowedRoles) : boolean</text>
       <text name="Fig1.6.7"
         x="45"
-        y="207"
+        y="214"
         width="470"
         height="15"
         fill="0"
@@ -68885,7 +68862,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >getOneUser(login : string,class : Class = null) : Resource</text>
       <text name="Fig1.6.8"
         x="45"
-        y="222"
+        y="229"
         width="470"
         height="15"
         fill="0"
@@ -68901,7 +68878,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >«create» __construct()</text>
       <text name="Fig1.6.9"
         x="45"
-        y="237"
+        y="244"
         width="470"
         height="15"
         fill="0"
@@ -68917,7 +68894,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >singleton() : Service</text>
       <text name="Fig1.6.10"
         x="45"
-        y="252"
+        y="259"
         width="470"
         height="15"
         fill="0"
@@ -68933,7 +68910,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >isASessionOpened() : boolean</text>
       <text name="Fig1.6.11"
         x="45"
-        y="267"
+        y="274"
         width="470"
         height="15"
         fill="0"
@@ -68949,7 +68926,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >logout() : boolean</text>
       <text name="Fig1.6.12"
         x="45"
-        y="282"
+        y="289"
         width="470"
         height="15"
         fill="0"
@@ -68965,7 +68942,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >isPasswordValid(password : string,user : Resource) : boolean</text>
       <text name="Fig1.6.13"
         x="45"
-        y="297"
+        y="304"
         width="470"
         height="15"
         fill="0"
@@ -68981,7 +68958,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >setPassword(user : Resource,password : string)</text>
       <text name="Fig1.6.14"
         x="45"
-        y="312"
+        y="319"
         width="470"
         height="15"
         fill="0"
@@ -68997,7 +68974,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >getUserRoles(user : Resource) : array</text>
       <text name="Fig1.6.15"
         x="45"
-        y="327"
+        y="334"
         width="470"
         height="15"
         fill="0"
@@ -69013,7 +68990,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >userHasRoles(user : Resource,roles) : boolean</text>
       <text name="Fig1.6.16"
         x="45"
-        y="342"
+        y="349"
         width="470"
         height="21"
         fill="0"

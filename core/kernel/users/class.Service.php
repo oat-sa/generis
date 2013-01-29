@@ -94,12 +94,11 @@ class core_kernel_users_Service
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string label The label to apply to the newly created Generis Role.
-     * @param  string comment A comment to apply to the newly created Generis Role.
      * @param  includedRoles The Role(s) to be included in the newly created Generis Role.
 Can be either a Resource or an array of Resources.
      * @return core_kernel_classes_Resource
      */
-    public function addRole($label = '', $comment = '', $includedRoles = null)
+    public function addRole($label, $includedRoles = null)
     {
         $returnValue = null;
 
@@ -109,7 +108,7 @@ Can be either a Resource or an array of Resources.
 		
 		$classRole =  new core_kernel_classes_Class(CLASS_ROLE);
 		$includesRoleProperty = new core_kernel_classes_Property(PROPERTY_ROLE_INCLUDESROLE);
-        $role = $classRole->createInstance($label, $comment);
+        $role = $classRole->createInstance($label, "${label} Role");
         
         foreach ($includedRoles as $ir){
         	$role->setPropertyValue($includesRoleProperty, $ir);	
@@ -306,7 +305,8 @@ Can be either a Resource or an array of Resources.
 
     /**
      * Get a specific Generis User from the persistent memory of Generis that
-     * a specific login.
+     * a specific login. If multiple users have the same login, a UserException
+     * be thrown.
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -329,8 +329,11 @@ Can be either a Resource or an array of Resources.
     		array('like' => false, 'recursive' => true)
     	);
     	
-    	if (count($users) > 0){
+    	if (count($users) == 1){
     		$returnValue = current($users);	
+    	}
+    	else if (count($users) > 1){
+    		$msg = "More than one user have the same login '${login}'.";
     	}
     	
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001839 end
