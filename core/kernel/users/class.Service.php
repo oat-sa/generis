@@ -594,6 +594,61 @@ Can be either a Resource or an array of Resources.
         return (array) $returnValue;
     }
 
+    /**
+     * Attach a Generis Role to a given Generis User. A UserException will be
+     * if an error occurs. If the User already has the role, nothing happens.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Resource user The User you want to attach a Role.
+     * @param  Resource role A Role to attach to a User.
+     * @return void
+     */
+    public function attachRole( core_kernel_classes_Resource $user,  core_kernel_classes_Resource $role)
+    {
+        // section 10-13-1-85--55594e99:13c8696e165:-8000:0000000000001F74 begin
+        try{
+	        if (false === $this->userHasRoles($user, $role)){
+	        	$rolesProperty = new core_kernel_classes_Property(PROPERTY_USER_ROLES);
+	        	$user->setPropertyValue($rolesProperty, $role);	
+	        }
+        }
+        catch (common_Exception $e){
+        	$roleUri = $role->getUri;
+        	$userUri = $user->getUri();
+        	$msg = "An error occured while attaching role '${roleUri}' to user '${userUri}': " . $e->getMessage();
+        	throw new core_kernel_users_Exception($msg);
+        }
+        // section 10-13-1-85--55594e99:13c8696e165:-8000:0000000000001F74 end
+    }
+
+    /**
+     * Short description of method unnatachRole
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  Resource user
+     * @param  Resource role
+     * @return void
+     */
+    public function unnatachRole( core_kernel_classes_Resource $user,  core_kernel_classes_Resource $role)
+    {
+        // section 10-13-1-85--55594e99:13c8696e165:-8000:0000000000001F7B begin
+        try{
+        	if (true === $this->userHasRoles($user, $role)){
+        		$rolesProperty = new core_kernel_classes_Property(PROPERTY_USER_ROLES);
+        		$options = array('like' => false, 'pattern' => $role->getUri());
+        		$user->removePropertyValues($rolesProperty, $options);
+        	}
+        }
+        catch (common_Exception $e){
+        	$roleUri = $role->getUri();
+        	$userUri = $user->getUri();
+        	$msg = "An error occured while unnataching role '${roleUri}' from user '${userUri}': " . $e->getMessage();	
+        }
+        // section 10-13-1-85--55594e99:13c8696e165:-8000:0000000000001F7B end
+    }
+
 } /* end of class core_kernel_users_Service */
 
 ?>

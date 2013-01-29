@@ -116,7 +116,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Jan 29 14:40:15 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Jan 29 15:24:34 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -9756,6 +9756,83 @@ to test the pasword entered</UML:TaggedValue.dataValue>
                                   </UML:TaggedValue.type>
                                 </UML:TaggedValue>
                               </UML:ModelElement.taggedValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85--55594e99:13c8696e165:-8000:0000000000001F74'
+                          name = 'attachRole' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--55594e99:13c8696e165:-8000:0000000000001F78'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Attach a Generis Role to a given Generis User. A UserException will be thrown if an error occurs. If the User already has the role, nothing happens.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--55594e99:13c8696e165:-8000:0000000000001F75'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--55594e99:13c8696e165:-8000:0000000000001F76'
+                              name = 'user' isSpecification = 'false' kind = 'in'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--55594e99:13c8696e165:-8000:0000000000001F79'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>The User you want to attach a Role.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--55594e99:13c8696e165:-8000:0000000000001F77'
+                              name = 'role' isSpecification = 'false' kind = 'in'>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '10-13-1-85--55594e99:13c8696e165:-8000:0000000000001F7A'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>A Role to attach to a User.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-1-85--55594e99:13c8696e165:-8000:0000000000001F7B'
+                          name = 'unnatachRole' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--55594e99:13c8696e165:-8000:0000000000001F7C'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--55594e99:13c8696e165:-8000:0000000000001F7D'
+                              name = 'user' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-1-85--55594e99:13c8696e165:-8000:0000000000001F7E'
+                              name = 'role' isSpecification = 'false' kind = 'in'>
                               <UML:Parameter.type>
                                 <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                               </UML:Parameter.type>
@@ -68494,7 +68571,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       name="Users"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[24, 20, 652, 552]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
+       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[24, 20, 640, 596]pathVisible=true;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
        href="-87--2--3--76-51a982f1:1278aabc987:-8000:000000000000239E"
        fill="1"
        fillcolor="white"
@@ -68507,8 +68584,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     <rectangle name="Fig0.0"
       x="24"
       y="20"
-      width="652"
-      height="552"
+      width="640"
+      height="596"
       fill="0"
       fillcolor="white"
       stroke="0"
@@ -68523,23 +68600,23 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     >
       <moveto x="24"
               y="20" />
-      <lineto x="626"
+      <lineto x="614"
               y="20" />
-      <lineto x="626"
+      <lineto x="614"
               y="42" />
-      <lineto x="675"
+      <lineto x="663"
               y="42" />
-      <lineto x="675"
-              y="571" />
+      <lineto x="663"
+              y="615" />
       <lineto x="24"
-              y="571" />
+              y="615" />
       <lineto x="24"
               y="20" />
     </path>
     <text name="Fig0.2"
       x="24"
       y="20"
-      width="603"
+      width="591"
       height="23"
       fill="0"
       fillcolor="white"
@@ -68553,7 +68630,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Left"
     >core::kernel::users</text>
     <group name="Fig0.3"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[24, 20, 602, 1]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[24, 20, 590, 1]"
          href="-87--2--3--76-51a982f1:1278aabc987:-8000:000000000000239E"
          fill="1"
          fillcolor="white"
@@ -68567,7 +68644,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <rectangle name="Fig0.3.0"
         x="24"
         y="20"
-        width="602"
+        width="590"
         height="1"
         fill="1"
         fillcolor="white"
@@ -68578,8 +68655,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     <text name="Fig0.4"
       x="24"
       y="42"
-      width="652"
-      height="530"
+      width="640"
+      height="574"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -68593,7 +68670,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     ></text>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[44, 56, 472, 324]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[44, 56, 472, 339]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
        fill="1"
        fillcolor="white"
@@ -68608,7 +68685,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       x="44"
       y="56"
       width="472"
-      height="324"
+      height="339"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -68664,7 +68741,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[45, 79, 470, 44]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[45, 79, 470, 38]"
          href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
          fill="0"
          fillcolor="white"
@@ -68678,7 +68755,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="45"
         y="79"
         width="470"
-        height="44"
+        height="38"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -68719,7 +68796,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig1.5"
       x="44"
-      y="123"
+      y="116"
       width="472"
       height="1"
       fill="1"
@@ -68728,7 +68805,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[45, 124, 470, 254]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[45, 117, 470, 278]"
          href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
          fill="0"
          fillcolor="white"
@@ -68740,9 +68817,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig1.6.0"
         x="45"
-        y="124"
+        y="117"
         width="470"
-        height="254"
+        height="278"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -68750,7 +68827,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       />
       <text name="Fig1.6.1"
         x="45"
-        y="124"
+        y="117"
         width="470"
         height="15"
         fill="0"
@@ -68766,7 +68843,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >loginExists(login : string,class : Class = null) : boolean</text>
       <text name="Fig1.6.2"
         x="45"
-        y="139"
+        y="132"
         width="470"
         height="15"
         fill="0"
@@ -68782,7 +68859,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >addRole(label : string,includedRoles = null) : Resource</text>
       <text name="Fig1.6.3"
         x="45"
-        y="154"
+        y="147"
         width="470"
         height="15"
         fill="0"
@@ -68798,7 +68875,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >removeRole(role : Resource) : boolean</text>
       <text name="Fig1.6.4"
         x="45"
-        y="169"
+        y="162"
         width="470"
         height="15"
         fill="0"
@@ -68814,7 +68891,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >addUser(login : string,password : string,role : Resource = null) : Resource</text>
       <text name="Fig1.6.5"
         x="45"
-        y="184"
+        y="177"
         width="470"
         height="15"
         fill="0"
@@ -68830,7 +68907,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >removeUser(user : Resource) : boolean</text>
       <text name="Fig1.6.6"
         x="45"
-        y="199"
+        y="192"
         width="470"
         height="15"
         fill="0"
@@ -68846,7 +68923,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >login(login : string,password : string,allowedRoles) : boolean</text>
       <text name="Fig1.6.7"
         x="45"
-        y="214"
+        y="207"
         width="470"
         height="15"
         fill="0"
@@ -68862,7 +68939,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >getOneUser(login : string,class : Class = null) : Resource</text>
       <text name="Fig1.6.8"
         x="45"
-        y="229"
+        y="222"
         width="470"
         height="15"
         fill="0"
@@ -68878,7 +68955,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >«create» __construct()</text>
       <text name="Fig1.6.9"
         x="45"
-        y="244"
+        y="237"
         width="470"
         height="15"
         fill="0"
@@ -68894,7 +68971,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >singleton() : Service</text>
       <text name="Fig1.6.10"
         x="45"
-        y="259"
+        y="252"
         width="470"
         height="15"
         fill="0"
@@ -68910,7 +68987,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >isASessionOpened() : boolean</text>
       <text name="Fig1.6.11"
         x="45"
-        y="274"
+        y="267"
         width="470"
         height="15"
         fill="0"
@@ -68926,7 +69003,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >logout() : boolean</text>
       <text name="Fig1.6.12"
         x="45"
-        y="289"
+        y="282"
         width="470"
         height="15"
         fill="0"
@@ -68942,7 +69019,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >isPasswordValid(password : string,user : Resource) : boolean</text>
       <text name="Fig1.6.13"
         x="45"
-        y="304"
+        y="297"
         width="470"
         height="15"
         fill="0"
@@ -68958,7 +69035,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >setPassword(user : Resource,password : string)</text>
       <text name="Fig1.6.14"
         x="45"
-        y="319"
+        y="312"
         width="470"
         height="15"
         fill="0"
@@ -68974,7 +69051,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >getUserRoles(user : Resource) : array</text>
       <text name="Fig1.6.15"
         x="45"
-        y="334"
+        y="327"
         width="470"
         height="15"
         fill="0"
@@ -68990,7 +69067,39 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >userHasRoles(user : Resource,roles) : boolean</text>
       <text name="Fig1.6.16"
         x="45"
-        y="349"
+        y="342"
+        width="470"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getIncludedRoles(role : Resource) : array</text>
+      <text name="Fig1.6.17"
+        x="45"
+        y="357"
+        width="470"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >attachRole(user : Resource,role : Resource) : void</text>
+      <text name="Fig1.6.18"
+        x="45"
+        y="372"
         width="470"
         height="21"
         fill="0"
@@ -69003,11 +69112,11 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getIncludedRoles(role : Resource) : array</text>
+      >unnatachRole(user : Resource,role : Resource) : void</text>
     </group>
   </group>
   <group name="Fig2"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[36, 416, 352, 144]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[36, 455, 352, 144]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3A"
        fill="1"
        fillcolor="white"
@@ -69020,7 +69129,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig2.0"
       x="36"
-      y="416"
+      y="455"
       width="352"
       height="144"
       fill="1"
@@ -69030,7 +69139,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     />
     <text name="Fig2.1"
       x="37"
-      y="417"
+      y="456"
       width="350"
       height="21"
       fill="0"
@@ -69045,7 +69154,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::users::Cache</text>
     <group name="Fig2.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[37, 417, 350, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[37, 456, 350, 0]"
          href="10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3A"
          fill="0"
          fillcolor="white"
@@ -69058,7 +69167,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig2.2.0"
         x="37"
-        y="417"
+        y="456"
         width="350"
         height="0"
         fill="0"
@@ -69069,7 +69178,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig2.3"
       x="36"
-      y="438"
+      y="477"
       width="352"
       height="1"
       fill="1"
@@ -69078,7 +69187,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig2.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[37, 439, 350, 23]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[37, 478, 350, 23]"
          href="10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3A"
          fill="0"
          fillcolor="white"
@@ -69090,7 +69199,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig2.4.0"
         x="37"
-        y="439"
+        y="478"
         width="350"
         height="23"
         fill="0"
@@ -69100,7 +69209,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       />
       <text name="Fig2.4.1"
         x="37"
-        y="439"
+        y="478"
         width="350"
         height="21"
         fill="0"
@@ -69117,7 +69226,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig2.5"
       x="36"
-      y="461"
+      y="500"
       width="352"
       height="1"
       fill="1"
@@ -69126,7 +69235,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig2.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[37, 462, 350, 98]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[37, 501, 350, 98]"
          href="10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3A"
          fill="0"
          fillcolor="white"
@@ -69138,7 +69247,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig2.6.0"
         x="37"
-        y="462"
+        y="501"
         width="350"
         height="98"
         fill="0"
@@ -69148,7 +69257,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       />
       <text name="Fig2.6.1"
         x="37"
-        y="462"
+        y="501"
         width="350"
         height="15"
         fill="0"
@@ -69164,7 +69273,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >retrieveIncludedRoles(role : Resource) : array</text>
       <text name="Fig2.6.2"
         x="37"
-        y="477"
+        y="516"
         width="350"
         height="15"
         fill="0"
@@ -69180,7 +69289,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >cacheIncludedRoles(role : Resource,includedRoles : array) : boolean</text>
       <text name="Fig2.6.3"
         x="37"
-        y="492"
+        y="531"
         width="350"
         height="15"
         fill="0"
@@ -69196,7 +69305,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >removeIncludedRoles(role : Resource) : boolean</text>
       <text name="Fig2.6.4"
         x="37"
-        y="507"
+        y="546"
         width="350"
         height="15"
         fill="0"
@@ -69212,7 +69321,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >areIncludedRolesInCache(role : Resource) : boolean</text>
       <text name="Fig2.6.5"
         x="37"
-        y="522"
+        y="561"
         width="350"
         height="15"
         fill="0"
@@ -69228,7 +69337,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >buildIncludedRolesSerial(role : Resource) : string</text>
       <text name="Fig2.6.6"
         x="37"
-        y="537"
+        y="576"
         width="350"
         height="21"
         fill="0"
@@ -69245,7 +69354,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig3"
-       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[688, 341, 148, 232]pathVisible=false;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
+       description="org.argouml.uml.diagram.static_structure.ui.FigPackage[688, 380, 148, 232]pathVisible=false;stereotypeView=0;stereotypeVisible=true;visibilityVisible=false"
        href="10-13-1--31--3b304a1e:11b08118c60:-8000:0000000000000D12"
        fill="1"
        fillcolor="white"
@@ -69257,7 +69366,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig3.0"
       x="688"
-      y="341"
+      y="380"
       width="148"
       height="232"
       fill="0"
@@ -69273,23 +69382,23 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="688"
-              y="341" />
+              y="380" />
       <lineto x="786"
-              y="341" />
+              y="380" />
       <lineto x="786"
-              y="363" />
+              y="402" />
       <lineto x="835"
-              y="363" />
+              y="402" />
       <lineto x="835"
-              y="572" />
+              y="611" />
       <lineto x="688"
-              y="572" />
+              y="611" />
       <lineto x="688"
-              y="341" />
+              y="380" />
     </path>
     <text name="Fig3.2"
       x="688"
-      y="341"
+      y="380"
       width="99"
       height="23"
       fill="0"
@@ -69304,7 +69413,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Left"
     >common</text>
     <group name="Fig3.3"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[688, 341, 98, 1]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[688, 380, 98, 1]"
          href="10-13-1--31--3b304a1e:11b08118c60:-8000:0000000000000D12"
          fill="1"
          fillcolor="white"
@@ -69317,7 +69426,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig3.3.0"
         x="688"
-        y="341"
+        y="380"
         width="98"
         height="1"
         fill="1"
@@ -69328,7 +69437,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
     <text name="Fig3.4"
       x="688"
-      y="363"
+      y="402"
       width="148"
       height="210"
       fill="0"
@@ -69344,7 +69453,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     ></text>
   </group>
   <group name="Fig4"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[708, 420, 106, 23]pathVisible=true;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[708, 459, 106, 23]pathVisible=true;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
        href="127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003ECA"
        fill="1"
        fillcolor="white"
@@ -69357,7 +69466,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig4.0"
       x="708"
-      y="420"
+      y="459"
       width="106"
       height="23"
       fill="1"
@@ -69367,7 +69476,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     />
     <text name="Fig4.1"
       x="709"
-      y="421"
+      y="460"
       width="104"
       height="21"
       fill="0"
@@ -69382,7 +69491,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Center"
     >common::Exception</text>
     <group name="Fig4.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[709, 421, 104, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[709, 460, 104, 0]"
          href="127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003ECA"
          fill="0"
          fillcolor="white"
@@ -69395,7 +69504,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig4.2.0"
         x="709"
-        y="421"
+        y="460"
         width="104"
         height="0"
         fill="0"
@@ -69406,7 +69515,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig4.3"
       x="708"
-      y="442"
+      y="481"
       width="106"
       height="1"
       fill="1"
@@ -69416,7 +69525,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig4.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[709, 443, 104, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[709, 482, 104, 21]"
          href="127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003ECA"
          fill="0"
          fillcolor="white"
@@ -69429,7 +69538,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig4.4.0"
         x="709"
-        y="443"
+        y="482"
         width="104"
         height="21"
         fill="0"
@@ -69441,7 +69550,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig4.5"
       x="708"
-      y="463"
+      y="502"
       width="106"
       height="1"
       fill="1"
@@ -69451,7 +69560,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig4.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[709, 464, 104, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[709, 503, 104, 21]"
          href="127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003ECA"
          fill="0"
          fillcolor="white"
@@ -69464,7 +69573,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig4.6.0"
         x="709"
-        y="464"
+        y="503"
         width="104"
         height="21"
         fill="0"
@@ -69476,7 +69585,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig5"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[424, 420, 205, 23]pathVisible=true;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[424, 459, 205, 23]pathVisible=true;stereotypeView=0;operationsVisible=false;attributesVisible=false;"
        href="10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F48"
        fill="1"
        fillcolor="white"
@@ -69489,7 +69598,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig5.0"
       x="424"
-      y="420"
+      y="459"
       width="205"
       height="23"
       fill="1"
@@ -69499,7 +69608,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     />
     <text name="Fig5.1"
       x="425"
-      y="421"
+      y="460"
       width="203"
       height="21"
       fill="0"
@@ -69514,7 +69623,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::users::CacheException</text>
     <group name="Fig5.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[425, 421, 203, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[425, 460, 203, 0]"
          href="10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F48"
          fill="0"
          fillcolor="white"
@@ -69527,7 +69636,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig5.2.0"
         x="425"
-        y="421"
+        y="460"
         width="203"
         height="0"
         fill="0"
@@ -69538,7 +69647,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig5.3"
       x="424"
-      y="442"
+      y="481"
       width="179"
       height="1"
       fill="1"
@@ -69548,7 +69657,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig5.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[425, 443, 177, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[425, 482, 177, 21]"
          href="10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F48"
          fill="0"
          fillcolor="white"
@@ -69561,7 +69670,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig5.4.0"
         x="425"
-        y="443"
+        y="482"
         width="177"
         height="21"
         fill="0"
@@ -69573,7 +69682,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig5.5"
       x="424"
-      y="463"
+      y="502"
       width="179"
       height="1"
       fill="1"
@@ -69583,7 +69692,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       visibility="0"
     />
     <group name="Fig5.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[425, 464, 177, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[425, 503, 177, 21]"
          href="10-13-1-85--2ffc450f:13c5c8176ac:-8000:0000000000001F48"
          fill="0"
          fillcolor="white"
@@ -69596,7 +69705,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig5.6.0"
         x="425"
-        y="464"
+        y="503"
         width="177"
         height="21"
         fill="0"
@@ -69633,9 +69742,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="51 51 153"
     >
       <moveto x="628"
-              y="432" />
+              y="471" />
       <lineto x="708"
-              y="432" />
+              y="471" />
     </path>
   </group>
 </pgml>

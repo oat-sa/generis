@@ -285,6 +285,25 @@ class UserServiceTestCase extends UnitTestCase {
 		$this->assertFalse($user->exists());
 	}
 	
+	public function testAttachUnnatachRole(){
+		$prefix = LOCAL_NAMESPACE . '#';
+		$user = $this->service->addUser('attachUser', md5('attachUser'));
+		
+		$role = new core_kernel_classes_Resource($prefix . 'baseRole');
+		$this->service->attachRole($user, $role);
+		$userRoles = $this->service->getUserRoles($user);
+		$this->assertFalse(empty($userRoles));
+		$this->assertEqual(count($userRoles), 2); // also contains Generis Role.
+		$this->assertTrue(array_key_exists($prefix . 'baseRole', $userRoles));
+		
+		$this->service->unnatachRole($user, $role);
+		$userRoles = $this->service->getUserRoles($user);
+		$this->assertEqual(count($userRoles), 1);
+		$this->assertFalse(array_key_exists($prefix . 'baseRole', $userRoles));
+		
+		$this->assertTrue($user->delete());
+	}
+	
 	public function testRolesCache(){
 		$includedRole = $this->service->addRole('INCLUDED ROLE');
 		$role = $this->service->addRole('CACHE ROLE', $includedRole);
