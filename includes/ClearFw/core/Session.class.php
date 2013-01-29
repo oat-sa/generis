@@ -29,8 +29,7 @@ class Session
 	
 	public static function removeAttribute($name)
 	{
-		if(isset($_SESSION[SESSION_NAMESPACE][$name])){
-			
+		if (isset($_SESSION[SESSION_NAMESPACE][$name])){
 			unset($_SESSION[SESSION_NAMESPACE][$name]);
 		}
 	}

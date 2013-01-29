@@ -73,7 +73,7 @@ class Context
 	public static function getInstance()
 	{
 		if (!self::$instance) {	
-			self::$instance = new Context();
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}
@@ -138,24 +138,6 @@ class Context
 		return $this->viewData;
 	}
 	
-//	/**
-//	 * set the context specifiers
-//	 * @param array $specifiers
-//	 */
-//	public function setSpecifiers(array $specifiers){
-//		$this->specifiers = $specifiers;
-//	}
-//	
-//	/**
-//	 * get the context specifiers
-//	 * @return array
-//	 */
-//	public function getSpecifiers(){
-//		return $this->specifiers;
-//	}
-	
-	/// @name Behaviors methods
-	//@{
 	/**
 	Adds a new behavior to behaviors stack. <var>$func</var> must be a valid
 	and callable callback.
