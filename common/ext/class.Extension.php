@@ -184,9 +184,6 @@ class common_ext_Extension
 			if(isset($manifestArray['local']) && is_array($manifestArray['local'])) {
 				$this->localData = $manifestArray['local'];
 			}
-			$this->constants = (isset($manifestArray['constants']) && is_array($manifestArray['constants']))
-				? $manifestArray['constants']
-				: array();
 		}
 		else {
 			//Here the extension is set unvalided to not be displayed by the view
@@ -485,8 +482,9 @@ class common_ext_Extension
         $returnValue = null;
 
         // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EA7 begin
-        if (isset($this->constants[$key])) {
-        	$returnValue = $this->constants[$key];
+        $constants = $this->getConstants();
+        if (isset($constants[$key])) {
+        	$returnValue = $constants[$key];
         } elseif (defined($key)) {
         	common_logger::w('constant outside of extension called: '.$key);
         	$returnValue = constant($key);
