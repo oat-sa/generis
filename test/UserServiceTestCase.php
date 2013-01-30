@@ -304,6 +304,21 @@ class UserServiceTestCase extends UnitTestCase {
 		$this->assertTrue($user->delete());
 	}
 	
+	public function testGetDefaultRole(){
+		$defaultRole = $this->service->getDefaultRole();
+		$expectedRole = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
+		$this->assertEqual($defaultRole->getUri(), $expectedRole->getUri());
+	}
+	
+	public function testGetAllowedRoles(){
+		$expectedRole = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
+		$allowedRoles = $this->service->getAllowedRoles();
+		$this->assertEqual(count($allowedRoles), 1);
+		$this->assertTrue(array_key_exists($expectedRole->getUri(), $allowedRoles));
+		$role = current($allowedRoles);
+		$this->assertEqual($expectedRole->getUri(), $role->getUri());
+	}
+	
 	public function testRolesCache(){
 		$includedRole = $this->service->addRole('INCLUDED ROLE');
 		$role = $this->service->addRole('CACHE ROLE', $includedRole);

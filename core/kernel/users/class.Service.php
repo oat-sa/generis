@@ -526,6 +526,8 @@ Can be either a Resource or an array of Resources.
         $returnValue = array();
 
         // section 10-13-1-85-789cda43:13c8b795f73:-8000:000000000000200E begin
+        $role = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
+        $returnValue = array($role->getUri() => $role);
         // section 10-13-1-85-789cda43:13c8b795f73:-8000:000000000000200E end
 
         return (array) $returnValue;
@@ -545,6 +547,7 @@ Can be either a Resource or an array of Resources.
         $returnValue = null;
 
         // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000002010 begin
+        $returnValue = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
         // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000002010 end
 
         return $returnValue;
@@ -565,19 +568,18 @@ Can be either a Resource or an array of Resources.
         $returnValue = (bool) false;
 
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001834 begin
-        if(empty($allowedRoles)){
-        	throw new common_Exception('no role(s) provided for login');
+
+        // Role can be either a scalar value or a collection.
+        $allowedRoles = is_array($allowedRoles) ? $allowedRoles : array($allowedRoles);
+        $roles = array();
+        foreach ($allowedRoles as $r){
+        	$roles[] = (($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r);
         }
-        else{
-        	// Role can be either a scalar value or a collection.
-        	$allowedRoles = is_array($allowedRoles) ? $allowedRoles : array($allowedRoles);
-        	$roles = array();
-        	foreach ($allowedRoles as $r){
-        		$roles[] = (($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r);
-        	}
-        	
-        	unset($allowedRoles);
-        }
+        
+        unset($allowedRoles);
+        
+        $roles = array_merge(array_keys($this->getAllowedRoles()), $roles);
+        $roles = array_unique($roles);
 	        
 		if(!is_string($login)){
 			throw new core_kernel_users_Exception('The login must be of "string" type');
