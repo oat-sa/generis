@@ -3,13 +3,13 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - common/ext/class.ExtensionInstaller.php
+ * Generis Object Oriented API - common\ext\class.ExtensionInstaller.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 14.06.2012, 11:31:45 with ArgoUML PHP module 
+ * Automatically generated on 31.01.2013, 10:26:55 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -69,8 +69,8 @@ class common_ext_ExtensionInstaller
      * install an extension
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return mixed
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return void
      */
     public function install()
     {
@@ -99,7 +99,10 @@ class common_ext_ExtensionInstaller
 			$this->installOntology();
 			$this->installOntologyTranslation();
 			$this->installRegisterExt();
-			$this->installModuleModel();
+			
+			// Method to be overriden by subclasses
+			// to extend the installation mechanism.
+			$this->extendedInstall();
 
 			core_kernel_classes_Session::singleton()->update();
 			
@@ -122,11 +125,10 @@ class common_ext_ExtensionInstaller
 
     /**
      * writes the config based on the config.sample
-     * This is no longer a required step
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return mixed
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return void
      */
     protected function installWriteConfig()
     {
@@ -155,8 +157,8 @@ class common_ext_ExtensionInstaller
      * specified in the Manifest
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return mixed
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return void
      */
     protected function installOntology()
     {
@@ -190,8 +192,8 @@ class common_ext_ExtensionInstaller
      * inserts the translation of the datamodel
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return mixed
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return void
      */
     protected function installOntologyTranslation()
     {
@@ -209,26 +211,11 @@ class common_ext_ExtensionInstaller
     }
 
     /**
-     * creates a model of all callable modules and actions
-     * for the funcACL
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return mixed
-     */
-    public function installModuleModel()
-    {
-        // section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A44 begin
-        tao_helpers_funcACL_Model::spawnExtensionModel($this->extension);
-        // section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A44 end
-    }
-
-    /**
      * Registers the Extension with the extensionManager
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return mixed
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return void
      */
     protected function installRegisterExt()
     {
@@ -254,8 +241,8 @@ class common_ext_ExtensionInstaller
      * specified in the Manifest
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return mixed
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return void
      */
     protected function installCustomScript()
     {
@@ -276,8 +263,8 @@ class common_ext_ExtensionInstaller
      * Installs example files and other non essential content
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return mixed
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return void
      */
     protected function installLocalData()
     {
@@ -299,14 +286,14 @@ class common_ext_ExtensionInstaller
 				require_once $script;
 			}
     	}
-		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A22 end
+        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A22 end
     }
 
     /**
      * check required extensions are not missing
      *
      * @access protected
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return boolean
      */
     protected function checkRequiredExtensions()
@@ -332,7 +319,7 @@ class common_ext_ExtensionInstaller
      * Instantiate a new ExtensionInstaller for a given Extension.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Extension extension The extension to install
      * @param  boolean localData Import local data or not.
      * @return mixed
@@ -349,7 +336,7 @@ class common_ext_ExtensionInstaller
      * Sets localData field.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  boolean value
      * @return mixed
      */
@@ -364,7 +351,7 @@ class common_ext_ExtensionInstaller
      * Retrieve localData field
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return boolean
      */
     public function getLocalData()
@@ -376,6 +363,24 @@ class common_ext_ExtensionInstaller
         // section -64--88-56-1--cf3e319:137e64d7097:-8000:0000000000001A3D end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * This method can be overriden by sub classes in order to extend the
+     * process. This method is called after all instalXXX methods but before all
+     * are flushed.
+     *
+     * In this implementation, this method simply returns void.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return void
+     */
+    public function extendedInstall()
+    {
+        // section 10-13-1-85--34b66bb6:13c8fe59fb3:-8000:0000000000001F7E begin
+        tao_helpers_funcACL_Model::spawnExtensionModel($this->extension);
+        // section 10-13-1-85--34b66bb6:13c8fe59fb3:-8000:0000000000001F7E end
     }
 
 } /* end of class common_ext_ExtensionInstaller */

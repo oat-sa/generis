@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Users</activediagram>
+      <activediagram>Extension Management</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -116,7 +116,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Jan 30 16:05:42 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jan 31 10:26:57 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -22386,7 +22386,11 @@ depends on recursively </UML:TaggedValue.dataValue>
                       </UML:ModelElement.taggedValue>
                       <UML:BehavioralFeature.parameter>
                         <UML:Parameter xmi.id = '-87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017C5'
-                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
                     <UML:Operation xmi.id = '127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A26'
@@ -22404,7 +22408,11 @@ depends on recursively </UML:TaggedValue.dataValue>
                       </UML:ModelElement.taggedValue>
                       <UML:BehavioralFeature.parameter>
                         <UML:Parameter xmi.id = '127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A27'
-                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
                     <UML:Operation xmi.id = '127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A24'
@@ -22423,7 +22431,11 @@ specified in the Manifest</UML:TaggedValue.dataValue>
                       </UML:ModelElement.taggedValue>
                       <UML:BehavioralFeature.parameter>
                         <UML:Parameter xmi.id = '127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A25'
-                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
                     <UML:Operation xmi.id = '127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A42'
@@ -22441,26 +22453,11 @@ specified in the Manifest</UML:TaggedValue.dataValue>
                       </UML:ModelElement.taggedValue>
                       <UML:BehavioralFeature.parameter>
                         <UML:Parameter xmi.id = '127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A43'
-                          name = 'return' isSpecification = 'false' kind = 'return'/>
-                      </UML:BehavioralFeature.parameter>
-                    </UML:Operation>
-                    <UML:Operation xmi.id = '127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A44'
-                      name = 'installModuleModel' visibility = 'public' isSpecification = 'false'
-                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
-                      isLeaf = 'false' isAbstract = 'false'>
-                      <UML:ModelElement.taggedValue>
-                        <UML:TaggedValue xmi.id = '127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A4A'
-                          isSpecification = 'false'>
-                          <UML:TaggedValue.dataValue>creates a model of all callable modules and actions
-for the funcACL</UML:TaggedValue.dataValue>
-                          <UML:TaggedValue.type>
-                            <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
-                          </UML:TaggedValue.type>
-                        </UML:TaggedValue>
-                      </UML:ModelElement.taggedValue>
-                      <UML:BehavioralFeature.parameter>
-                        <UML:Parameter xmi.id = '127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A45'
-                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
                     <UML:Operation xmi.id = '127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A28'
@@ -22478,7 +22475,11 @@ for the funcACL</UML:TaggedValue.dataValue>
                       </UML:ModelElement.taggedValue>
                       <UML:BehavioralFeature.parameter>
                         <UML:Parameter xmi.id = '127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A29'
-                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
                     <UML:Operation xmi.id = '127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A2C'
@@ -22497,7 +22498,11 @@ specified in the Manifest</UML:TaggedValue.dataValue>
                       </UML:ModelElement.taggedValue>
                       <UML:BehavioralFeature.parameter>
                         <UML:Parameter xmi.id = '127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A2D'
-                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
                     <UML:Operation xmi.id = '127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A22'
@@ -22515,7 +22520,11 @@ specified in the Manifest</UML:TaggedValue.dataValue>
                       </UML:ModelElement.taggedValue>
                       <UML:BehavioralFeature.parameter>
                         <UML:Parameter xmi.id = '127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A23'
-                          name = 'return' isSpecification = 'false' kind = 'return'/>
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
                     </UML:Operation>
                     <UML:Operation xmi.id = '-87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A2'
@@ -22661,6 +22670,30 @@ specified in the Manifest</UML:TaggedValue.dataValue>
                           name = 'return' isSpecification = 'false' kind = 'return'>
                           <UML:Parameter.type>
                             <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                          </UML:Parameter.type>
+                        </UML:Parameter>
+                      </UML:BehavioralFeature.parameter>
+                    </UML:Operation>
+                    <UML:Operation xmi.id = '10-13-1-85--34b66bb6:13c8fe59fb3:-8000:0000000000001F7E'
+                      name = 'extendedInstall' visibility = 'public' isSpecification = 'false'
+                      ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false'>
+                      <UML:ModelElement.taggedValue>
+                        <UML:TaggedValue xmi.id = '10-13-1-85--34b66bb6:13c8fe59fb3:-8000:0000000000001F80'
+                          isSpecification = 'false'>
+                          <UML:TaggedValue.dataValue>This method can be overriden by sub classes in order to extend the installation process. This method is called after all instalXXX methods but before all caches are flushed.
+
+In this implementation, this method simply returns void.</UML:TaggedValue.dataValue>
+                          <UML:TaggedValue.type>
+                            <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                          </UML:TaggedValue.type>
+                        </UML:TaggedValue>
+                      </UML:ModelElement.taggedValue>
+                      <UML:BehavioralFeature.parameter>
+                        <UML:Parameter xmi.id = '10-13-1-85--34b66bb6:13c8fe59fb3:-8000:0000000000001F7F'
+                          name = 'return' isSpecification = 'false' kind = 'return'>
+                          <UML:Parameter.type>
+                            <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
                           </UML:Parameter.type>
                         </UML:Parameter>
                       </UML:BehavioralFeature.parameter>
@@ -49731,7 +49764,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >install()</text>
+      >install() : void</text>
       <text name="Fig3.6.2"
         x="17"
         y="605"
@@ -49747,7 +49780,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >installWriteConfig()</text>
+      >installWriteConfig() : void</text>
       <text name="Fig3.6.3"
         x="17"
         y="620"
@@ -49763,7 +49796,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >installOntology()</text>
+      >installOntology() : void</text>
       <text name="Fig3.6.4"
         x="17"
         y="635"
@@ -49779,7 +49812,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >installOntologyTranslation()</text>
+      >installOntologyTranslation() : void</text>
       <text name="Fig3.6.5"
         x="17"
         y="650"
@@ -49795,7 +49828,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >installModuleModel()</text>
+      >installRegisterExt() : void</text>
       <text name="Fig3.6.6"
         x="17"
         y="665"
@@ -49811,7 +49844,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >installRegisterExt()</text>
+      >installCustomScript() : void</text>
       <text name="Fig3.6.7"
         x="17"
         y="680"
@@ -49827,7 +49860,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >installCustomScript()</text>
+      >installLocalData() : void</text>
       <text name="Fig3.6.8"
         x="17"
         y="695"
@@ -49843,7 +49876,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >installLocalData()</text>
+      >checkRequiredExtensions() : boolean</text>
       <text name="Fig3.6.9"
         x="17"
         y="710"
@@ -49859,7 +49892,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >checkRequiredExtensions() : boolean</text>
+      >«create» __construct(extension : Extension,localData : boolean = true)</text>
       <text name="Fig3.6.10"
         x="17"
         y="725"
@@ -49875,7 +49908,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >«create» __construct(extension : Extension,localData : boolean = true)</text>
+      >setLocalData(value : boolean)</text>
       <text name="Fig3.6.11"
         x="17"
         y="740"
@@ -49891,7 +49924,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >setLocalData(value : boolean)</text>
+      >getLocalData() : boolean</text>
       <text name="Fig3.6.12"
         x="17"
         y="755"
@@ -49907,7 +49940,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getLocalData() : boolean</text>
+      >extendedInstall() : void</text>
     </group>
   </group>
   <group name="Fig4"
@@ -68724,7 +68757,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::users::Service</text>
     <group name="Fig1.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[45, 57, 470, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[45, 57, 474, 0]"
          href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
          fill="0"
          fillcolor="white"
@@ -68738,7 +68771,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <rectangle name="Fig1.2.0"
         x="45"
         y="57"
-        width="470"
+        width="474"
         height="0"
         fill="0"
         fillcolor="white"
@@ -69843,7 +69876,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
                         offset="25" />
     </private>
     <path name="Fig8.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -70063,7 +70096,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
                         offset="25" />
     </private>
     <path name="Fig10.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -75153,7 +75186,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="41"
         y="362"
         width="704"
-        height="29"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"
