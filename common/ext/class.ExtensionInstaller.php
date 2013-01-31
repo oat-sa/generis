@@ -111,9 +111,6 @@ class common_ext_ExtensionInstaller
 			if ($this->getLocalData() == true){
 				$this->installLocalData();
 			}
-			// clear filecache
-			common_cache_FileCache::singleton()->purge();
-			
 				
 		}catch (common_ext_ExtensionException $e){
 			// Rethrow
@@ -379,7 +376,7 @@ class common_ext_ExtensionInstaller
     public function extendedInstall()
     {
         // section 10-13-1-85--34b66bb6:13c8fe59fb3:-8000:0000000000001F7E begin
-        tao_helpers_funcACL_Model::spawnExtensionModel($this->extension);
+        return;
         // section 10-13-1-85--34b66bb6:13c8fe59fb3:-8000:0000000000001F7E end
     }
 
