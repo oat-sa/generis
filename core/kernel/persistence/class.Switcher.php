@@ -346,7 +346,7 @@ class core_kernel_persistence_Switcher
 
 		//get the table columns from the class properties
 		$columns = array();
-		$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
+		$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, null);
 		$properties = $ps->getProperties($additionalProperties);
 		$columns = $ps->getTableColumns($additionalProperties, self::$blackList);
 
@@ -369,7 +369,6 @@ class core_kernel_persistence_Switcher
 						if(!in_array($foreignClassUri, array_keys($this->hardenedClasses))){
 							$range = new core_kernel_classes_Class($foreignClassUri);
 							$this->hardify($range, array_merge($options, array(
-                            	'topClass'      => new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE),
                                 'recursive' 	=> false,
                                 'append' 		=> true,
                                 'allOrNothing'	=> true

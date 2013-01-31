@@ -577,9 +577,6 @@ Can be either a Resource or an array of Resources.
         }
         
         unset($allowedRoles);
-        
-        $roles = array_merge(array_keys($this->getAllowedRoles()), $roles);
-        $roles = array_unique($roles);
 	        
 		if(!is_string($login)){
 			throw new core_kernel_users_Exception('The login must be of "string" type');
