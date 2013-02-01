@@ -200,15 +200,16 @@ class core_kernel_persistence_hardapi_RowManager
 						if(!(empty($queryRows))){
 							$queryRows .= ',';
 						}
-						if (isset($column['foreign']) && !empty($column['foreign'])){
-							$queryRows .= "({$instanceIds[$row['uri']]}, '{$multiplePropertyUri}', NULL, '{$t['object']}', '{$t['l_language']}')";
+						
+						$object = $dbWrapper->dbConnector->quote($t['object']);
+						
+						if (common_Utils::isUri($t['object'])){
+							$queryRows .= "({$instanceIds[$row['uri']]}, '{$multiplePropertyUri}', NULL, {$object}, '{$t['l_language']}')";	
 						}
 						else{
-							$object = $dbWrapper->dbConnector->quote($t['object']);
-							$queryRows .= "({$instanceIds[$row['uri']]}, '{$multiplePropertyUri}', ${object}, NULL, '{$t['l_language']}')";
+							$queryRows .= "({$instanceIds[$row['uri']]}, '{$multiplePropertyUri}', {$object}, NULL, '{$t['l_language']}')";
 						}
 					}
-					
 				}
 				
 				if (!empty($queryRows)){

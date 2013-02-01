@@ -125,7 +125,7 @@ class core_kernel_classes_File
 
         // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001370 begin
         $resourceType = $resource->getTypes();
-        $returnValue =  array_key_exists(CLASS_GENERIS_FILE, $resourceType)||array_key_exists(CLASS_GENERIS_VERSIONEDFILE, $resourceType);        
+        $returnValue =  array_key_exists(CLASS_GENERIS_FILE, $resourceType) || array_key_exists(CLASS_GENERIS_VERSIONEDFILE, $resourceType);        
         // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001370 end
 
         return (bool) $returnValue;
@@ -147,7 +147,7 @@ class core_kernel_classes_File
 	    $fileNameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
 	    
 	    $props = $this->getPropertiesValues(array(
-	    	PROPERTY_FILE_FILEPATH, PROPERTY_FILE_FILENAME
+	    	$filePathProp, $fileNameProp
 	    ));
 	    if (!isset($props[PROPERTY_FILE_FILEPATH]) || count($props[PROPERTY_FILE_FILEPATH]) == 0) {
 	    	throw new common_Exception('filepath missing for file '.$this->getUri());

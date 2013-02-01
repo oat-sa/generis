@@ -55,7 +55,7 @@ class core_kernel_persistence_Switcher
 	// --- OPERATIONS ---
 
 	public function __construct($blackList = array()){
-		self::$blackList = array_merge(array(RDF_CLASS), $blackList);
+		self::$blackList = array_merge(array(RDFS_CLASS, RDFS_MEMBER, RDF_PROPERTY), $blackList);
 	}
 
 	public function __destruct(){
@@ -430,8 +430,6 @@ class core_kernel_persistence_Switcher
 					core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_HARD);
 					$resource->delete();
 					core_kernel_persistence_PersistenceProxy::restoreImplementation();
-					//unset($instances[$index]);
-					//continue;
 				}
 				$row = array('uri' => $resource->uriResource);
 				foreach($properties as $property){

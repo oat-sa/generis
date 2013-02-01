@@ -114,7 +114,7 @@ class core_kernel_persistence_hardsql_Resource
 			$result	= $dbWrapper->query($query, array($resource->uriResource));
 	
 			while ($row = $result->fetch()){
-				$returnValue[] = new core_kernel_classes_Class($row['uri']);
+				$returnValue[$row['uri']] = new core_kernel_classes_Class($row['uri']);
 			}
 		}
 		catch (PDOException $e){
