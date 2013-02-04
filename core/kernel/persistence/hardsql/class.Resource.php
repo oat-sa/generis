@@ -825,7 +825,7 @@ class core_kernel_persistence_hardsql_Resource
 					$baseQueries = array();
 					foreach ($propertyColumns as $k => $pC){
 						$quotedPropUri = $dbWrapper->dbConnector->quote($pC);
-						$baseQueries[] = 'SELECT "b"."id", "b"."uri", ' . $quotedPropUri . ' AS "property_uri", "b"."' . $k . '" AS "property_value", \'\' AS "l_language" FROM "' . $tableName . '" "b" WHERE "b"."uri" = ' . $quotedUri;
+						$baseQueries[] = 'SELECT "b"."id", "b"."uri", ' . $quotedPropUri . ' AS "property_uri", "b"."' . $k . '" AS "property_value", \'\' AS "l_language" FROM "' . $tableName . '" "b" WHERE "b"."uri" = ' . $quotedUri . ' AND "b"."' . $k . '" IS NOT NULL';
 					}
 					
 					$baseQuery = implode(' UNION ', $baseQueries);

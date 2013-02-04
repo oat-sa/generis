@@ -31,7 +31,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#FirstExpression">
     <rdfs:range rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Expression"/>
-    <rdfs:label xml:lang="EN"><![CDATA[firstExpression<br />]]></rdfs:label>
+    <rdfs:label xml:lang="EN"><![CDATA[firstExpression]]></rdfs:label>
     <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox"/>
     <rdfs:domain rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Expression"/>
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
@@ -236,7 +236,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#Quantifier">
     <rdfs:subClassOf rdf:resource="http://www.tao.lu/middleware/Rules.rdf#LogicalOperator"/>
-    <rdfs:label xml:lang="EN"><![CDATA[Quantifier<br />]]></rdfs:label>
+    <rdfs:label xml:lang="EN"><![CDATA[Quantifier]]></rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#ItExistsUniqueItem">
     <rdf:type rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Quantifier"/>
@@ -282,7 +282,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#Assignment">
     <rdfs:subClassOf rdf:resource="http://www.tao.lu/middleware/Rules.rdf#RuleEngine"/>
-    <rdfs:comment xml:lang="EN"><![CDATA[Class to dynamicaly register data into knowledge base<br />]]></rdfs:comment>
+    <rdfs:comment xml:lang="EN"><![CDATA[Class to dynamicaly register data into knowledge base]]></rdfs:comment>
     <rdfs:label xml:lang="EN"><![CDATA[Assignment]]></rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#Variable">
@@ -296,7 +296,7 @@
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
     <rdfs:domain rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Assignment"/>
     <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox"/>
-    <rdfs:comment xml:lang="EN"><![CDATA[<span class="resourcedescription">Value that will be assigned to Variable <br /></span>]]></rdfs:comment>
+    <rdfs:comment xml:lang="EN"><![CDATA[<span class="resourcedescription">Value that will be assigned to Variable</span>]]></rdfs:comment>
     <rdfs:label xml:lang="EN"><![CDATA[Value]]></rdfs:label>
     <rdfs:range rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Term"/>
   </rdf:Description>

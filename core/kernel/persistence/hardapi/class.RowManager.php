@@ -186,11 +186,11 @@ class core_kernel_persistence_hardapi_RowManager
 				
 				foreach($this->columns as $column){
 					
-					if (!isset($column['multi']) || $column['multi'] === false){
+					$multiplePropertyUri = core_kernel_persistence_hardapi_Utils::getLongName($column['name']);
+					if (!isset($column['multi']) || $column['multi'] === false || $multiplePropertyUri == RDF_TYPE){
 						continue;
 					}
 					
-					$multiplePropertyUri = core_kernel_persistence_hardapi_Utils::getLongName($column['name']);
 					$multiQuery = 'SELECT "object", "l_language" FROM "statements" WHERE "subject" = ? AND "predicate" = ?';
 					$multiResult = $dbWrapper->prepare($multiQuery);
 					$multiResult->execute(array($row['uri'], $multiplePropertyUri));

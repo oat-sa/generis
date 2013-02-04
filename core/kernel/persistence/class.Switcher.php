@@ -118,8 +118,8 @@ class core_kernel_persistence_Switcher
 		$rmSources = true;
 
 		// Get class' properties
-		$propertySwitcher = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
-		$additionalProperties = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->getAdditionalProperties($class);
+		$propertySwitcher = new core_kernel_persistence_switcher_PropertySwitcher($class);
+		$additionalProperties = array();
 		$properties = $propertySwitcher->getProperties($additionalProperties);
 		$columns = $propertySwitcher->getTableColumns($additionalProperties, self::$blackList);
 
@@ -346,7 +346,7 @@ class core_kernel_persistence_Switcher
 
 		//get the table columns from the class properties
 		$columns = array();
-		$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, null);
+		$ps = new core_kernel_persistence_switcher_PropertySwitcher($class);
 		$properties = $ps->getProperties($additionalProperties);
 		$columns = $ps->getTableColumns($additionalProperties, self::$blackList);
 
@@ -434,7 +434,6 @@ class core_kernel_persistence_Switcher
 				$row = array('uri' => $resource->uriResource);
 				foreach($properties as $property){
 					$propValue = $resource->getOnePropertyValue($property);
-					//$propValue = ($propValue instanceof core_kernel_classes_Resource)?$propValue->uriResource:$propValue;
 					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propValue;
 				}
 
