@@ -84,6 +84,7 @@ class core_kernel_persistence_hardapi_TableManager
 			$result = $dbWrapper->query('SELECT DISTINCT "table" FROM class_to_table');
 			while($row = $result->fetch()){
 				self::$_tables[] = $row['table'];
+				self::$_tables[] = $row['table'] . 'Props';
 			}
 		}
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AA end
