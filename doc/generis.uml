@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Extension Management</activediagram>
+      <activediagram>Design generis API oo</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -116,7 +116,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Jan 31 10:26:57 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Feb 04 18:16:26 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -6183,6 +6183,259 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                       isSpecification = 'false'>
                       <UML:Generalization.child>
                         <UML:Class xmi.idref = '10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1'/>
+                      </UML:Generalization.child>
+                      <UML:Generalization.parent>
+                        <UML:Class xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB'/>
+                      </UML:Generalization.parent>
+                    </UML:Generalization>
+                    <UML:Class xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F7E'
+                      name = 'SqlsrvDbWrapper' visibility = 'public' isSpecification = 'false'
+                      isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                      <UML:ModelElement.taggedValue>
+                        <UML:TaggedValue xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F80'
+                          isSpecification = 'false'>
+                          <UML:TaggedValue.dataValue>Microsoft SQL Server Database Wrapper</UML:TaggedValue.dataValue>
+                          <UML:TaggedValue.type>
+                            <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                          </UML:TaggedValue.type>
+                        </UML:TaggedValue>
+                      </UML:ModelElement.taggedValue>
+                      <UML:GeneralizableElement.generalization>
+                        <UML:Generalization xmi.idref = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F7F'/>
+                      </UML:GeneralizableElement.generalization>
+                      <UML:Classifier.feature>
+                        <UML:Operation xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F83'
+                          name = 'getExtraConfiguration' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F84'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F89'
+                          name = 'getTableNotFoundErrorCode' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F8A'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F8B'
+                          name = 'getColumnNotFoundErrorCode' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F8C'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F8D'
+                          name = 'afterConnect' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F8E'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F8F'
+                          name = 'getTables' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F90'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F97'
+                          name = 'getIndexAlreadyExistsErrorCode' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F98'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F99'
+                          name = 'limitStatement' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F9A'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:ModelElement.stereotype>
+                                <UML:Stereotype xmi.idref = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F9B'/>
+                              </UML:ModelElement.stereotype>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F9C'
+                              name = 'statement' isSpecification = 'false' kind = 'in'>
+                              <UML:ModelElement.stereotype>
+                                <UML:Stereotype xmi.idref = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F9D'/>
+                              </UML:ModelElement.stereotype>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F9E'
+                              name = 'limit' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F9F'
+                              name = 'offset' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FB2'
+                                  language = '' body = '0'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB5'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FA1'
+                          name = 'getExtraDSN' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FA2'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FA3'
+                          name = 'createIndex' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FA4'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FA5'
+                              name = 'indexName' isSpecification = 'false' kind = 'in'>
+                              <UML:ModelElement.stereotype>
+                                <UML:Stereotype xmi.idref = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FA6'/>
+                              </UML:ModelElement.stereotype>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FA7'
+                              name = 'tableName' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FA8'
+                              name = 'columns' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FA9'
+                          name = 'rebuildIndexes' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FAA'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FB3'
+                              name = 'tableName' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FAB'
+                          name = 'flush' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FAC'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:DataType xmi.idref = '10-13-1--99--4fdec042:11a2a3b44dc:-8000:0000000000000BF9'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FAD'
+                              name = 'tableName' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FAE'
+                          name = 'getColumnNames' visibility = 'public' isSpecification = 'false'
+                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FAF'
+                              name = 'return' isSpecification = 'false' kind = 'return'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FB0'
+                              name = 'table' isSpecification = 'false' kind = 'in'>
+                              <UML:ModelElement.stereotype>
+                                <UML:Stereotype xmi.idref = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FB1'/>
+                              </UML:ModelElement.stereotype>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                      </UML:Classifier.feature>
+                    </UML:Class>
+                    <UML:Generalization xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F7F'
+                      isSpecification = 'false'>
+                      <UML:Generalization.child>
+                        <UML:Class xmi.idref = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F7E'/>
                       </UML:Generalization.child>
                       <UML:Generalization.parent>
                         <UML:Class xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB'/>
@@ -32175,6 +32428,22 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         </UML:Class>
         <UML:Package xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EC8'
           isSpecification = 'false' isRoot = 'false' isLeaf = 'false' isAbstract = 'false'/>
+        <UML:Stereotype xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F9B'
+          isSpecification = 'false' isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
+          <UML:Stereotype.baseClass>Parameter</UML:Stereotype.baseClass>
+        </UML:Stereotype>
+        <UML:Stereotype xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F9D'
+          isSpecification = 'false' isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
+          <UML:Stereotype.baseClass>Parameter</UML:Stereotype.baseClass>
+        </UML:Stereotype>
+        <UML:Stereotype xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FA6'
+          isSpecification = 'false' isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
+          <UML:Stereotype.baseClass>Parameter</UML:Stereotype.baseClass>
+        </UML:Stereotype>
+        <UML:Stereotype xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FB1'
+          isSpecification = 'false' isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
+          <UML:Stereotype.baseClass>Parameter</UML:Stereotype.baseClass>
+        </UML:Stereotype>
       </UML:Namespace.ownedElement>
     </UML:Model>
     <UML:Expression xmi.id = '127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015B8'
@@ -36173,7 +36442,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig9"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1508, 0, 378, 654]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1728, 0, 378, 654]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB"
        fill="1"
        fillcolor="white"
@@ -36184,7 +36453,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </private>
     
     <rectangle name="Fig9.0"
-      x="1508"
+      x="1728"
       y="0"
       width="378"
       height="654"
@@ -36194,7 +36463,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="192 192 192"
     />
     <text name="Fig9.1"
-      x="1509"
+      x="1729"
       y="1"
       width="376"
       height="21"
@@ -36210,7 +36479,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::classes::DbWrapper</text>
     <group name="Fig9.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1509, 1, 376, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1729, 1, 376, 0]"
          href="10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB"
          fill="0"
          fillcolor="white"
@@ -36222,7 +36491,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig9.2.0"
-        x="1509"
+        x="1729"
         y="1"
         width="376"
         height="0"
@@ -36233,7 +36502,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig9.3"
-      x="1508"
+      x="1728"
       y="22"
       width="378"
       height="1"
@@ -36243,7 +36512,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="192 192 192"
     />
     <group name="Fig9.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1509, 23, 376, 143]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1729, 23, 376, 143]"
          href="10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB"
          fill="0"
          fillcolor="white"
@@ -36254,7 +36523,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig9.4.0"
-        x="1509"
+        x="1729"
         y="23"
         width="376"
         height="143"
@@ -36264,7 +36533,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         strokecolor="192 192 192"
       />
       <text name="Fig9.4.1"
-        x="1509"
+        x="1729"
         y="23"
         width="376"
         height="15"
@@ -36280,7 +36549,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >instance : DbWrapper</text>
       <text name="Fig9.4.2"
-        x="1509"
+        x="1729"
         y="38"
         width="376"
         height="15"
@@ -36296,7 +36565,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >dbConnector : PDO</text>
       <text name="Fig9.4.3"
-        x="1509"
+        x="1729"
         y="53"
         width="376"
         height="15"
@@ -36312,7 +36581,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >nrQueries : int  = 0</text>
       <text name="Fig9.4.4"
-        x="1509"
+        x="1729"
         y="68"
         width="376"
         height="15"
@@ -36328,7 +36597,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >preparedExec : boolean</text>
       <text name="Fig9.4.5"
-        x="1509"
+        x="1729"
         y="83"
         width="376"
         height="15"
@@ -36344,7 +36613,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >lastPreparedExecStatement : PDOStatement</text>
       <text name="Fig9.4.6"
-        x="1509"
+        x="1729"
         y="98"
         width="376"
         height="15"
@@ -36360,7 +36629,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >statements : array</text>
       <text name="Fig9.4.7"
-        x="1509"
+        x="1729"
         y="113"
         width="376"
         height="15"
@@ -36376,7 +36645,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >nrHits : int  = 0</text>
       <text name="Fig9.4.8"
-        x="1509"
+        x="1729"
         y="128"
         width="376"
         height="15"
@@ -36392,7 +36661,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >nrMisses : int  = 0</text>
       <text name="Fig9.4.9"
-        x="1509"
+        x="1729"
         y="143"
         width="376"
         height="21"
@@ -36409,7 +36678,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >debug : boolean</text>
     </group>
     <rectangle name="Fig9.5"
-      x="1508"
+      x="1728"
       y="165"
       width="378"
       height="1"
@@ -36419,7 +36688,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="192 192 192"
     />
     <group name="Fig9.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1509, 166, 376, 488]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1729, 166, 376, 488]"
          href="10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB"
          fill="0"
          fillcolor="white"
@@ -36430,7 +36699,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig9.6.0"
-        x="1509"
+        x="1729"
         y="166"
         width="376"
         height="488"
@@ -36440,7 +36709,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         strokecolor="192 192 192"
       />
       <text name="Fig9.6.1"
-        x="1509"
+        x="1729"
         y="166"
         width="376"
         height="15"
@@ -36456,7 +36725,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >singleton() : DbWrapper</text>
       <text name="Fig9.6.2"
-        x="1509"
+        x="1729"
         y="181"
         width="376"
         height="15"
@@ -36472,7 +36741,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >«create» __construct() : void</text>
       <text name="Fig9.6.3"
-        x="1509"
+        x="1729"
         y="196"
         width="376"
         height="15"
@@ -36488,7 +36757,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >«destroy» __destruct()</text>
       <text name="Fig9.6.4"
-        x="1509"
+        x="1729"
         y="211"
         width="376"
         height="15"
@@ -36504,7 +36773,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >__clone() : DbWrapper</text>
       <text name="Fig9.6.5"
-        x="1509"
+        x="1729"
         y="226"
         width="376"
         height="15"
@@ -36520,7 +36789,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getSetting(name : string) : string</text>
       <text name="Fig9.6.6"
-        x="1509"
+        x="1729"
         y="241"
         width="376"
         height="15"
@@ -36536,7 +36805,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getNrOfQueries() : int</text>
       <text name="Fig9.6.7"
-        x="1509"
+        x="1729"
         y="256"
         width="376"
         height="15"
@@ -36552,7 +36821,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >query(statement : string,params : array = array()) : PDOStatement</text>
       <text name="Fig9.6.8"
-        x="1509"
+        x="1729"
         y="271"
         width="376"
         height="15"
@@ -36568,7 +36837,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >exec(statement : string,params : array = array()) : int</text>
       <text name="Fig9.6.9"
-        x="1509"
+        x="1729"
         y="286"
         width="376"
         height="15"
@@ -36584,7 +36853,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >prepare(statement : string) : PDOStatement</text>
       <text name="Fig9.6.10"
-        x="1509"
+        x="1729"
         y="301"
         width="376"
         height="15"
@@ -36600,7 +36869,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >errorCode() : string</text>
       <text name="Fig9.6.11"
-        x="1509"
+        x="1729"
         y="316"
         width="376"
         height="15"
@@ -36616,7 +36885,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >errorMessage() : string</text>
       <text name="Fig9.6.12"
-        x="1509"
+        x="1729"
         y="331"
         width="376"
         height="15"
@@ -36632,7 +36901,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getTables() : array</text>
       <text name="Fig9.6.13"
-        x="1509"
+        x="1729"
         y="346"
         width="376"
         height="15"
@@ -36648,7 +36917,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getColumnNames(table : string) : array</text>
       <text name="Fig9.6.14"
-        x="1509"
+        x="1729"
         y="361"
         width="376"
         height="15"
@@ -36664,7 +36933,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getStatement(statement : string) : PDOStatement</text>
       <text name="Fig9.6.15"
-        x="1509"
+        x="1729"
         y="376"
         width="376"
         height="15"
@@ -36680,7 +36949,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getStatementKey(statement : string) : string</text>
       <text name="Fig9.6.16"
-        x="1509"
+        x="1729"
         y="391"
         width="376"
         height="15"
@@ -36696,7 +36965,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >incrementNrOfQueries() : void</text>
       <text name="Fig9.6.17"
-        x="1509"
+        x="1729"
         y="406"
         width="376"
         height="15"
@@ -36712,7 +36981,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getNrOfHits() : int</text>
       <text name="Fig9.6.18"
-        x="1509"
+        x="1729"
         y="421"
         width="376"
         height="15"
@@ -36728,7 +36997,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >incrementNrOfHits() : void</text>
       <text name="Fig9.6.19"
-        x="1509"
+        x="1729"
         y="436"
         width="376"
         height="15"
@@ -36744,7 +37013,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getNrOfMisses() : int</text>
       <text name="Fig9.6.20"
-        x="1509"
+        x="1729"
         y="451"
         width="376"
         height="15"
@@ -36760,7 +37029,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >incrementNrOfMisses() : void</text>
       <text name="Fig9.6.21"
-        x="1509"
+        x="1729"
         y="466"
         width="376"
         height="15"
@@ -36776,7 +37045,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >debug(statement : string) : void</text>
       <text name="Fig9.6.22"
-        x="1509"
+        x="1729"
         y="481"
         width="376"
         height="15"
@@ -36792,7 +37061,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >limitStatement(statement : string,limit : int,offset : int = 0) : string</text>
       <text name="Fig9.6.23"
-        x="1509"
+        x="1729"
         y="496"
         width="376"
         height="15"
@@ -36808,7 +37077,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getExtraConfiguration() : array</text>
       <text name="Fig9.6.24"
-        x="1509"
+        x="1729"
         y="511"
         width="376"
         height="15"
@@ -36824,7 +37093,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getTableNotFoundErrorCode() : string</text>
       <text name="Fig9.6.25"
-        x="1509"
+        x="1729"
         y="526"
         width="376"
         height="15"
@@ -36840,7 +37109,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getColumnNotFoundErrorCode() : string</text>
       <text name="Fig9.6.26"
-        x="1509"
+        x="1729"
         y="541"
         width="376"
         height="15"
@@ -36856,7 +37125,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >afterConnect() : void</text>
       <text name="Fig9.6.27"
-        x="1509"
+        x="1729"
         y="556"
         width="376"
         height="15"
@@ -36872,7 +37141,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getIndexAlreadyExistsErrorCode() : string</text>
       <text name="Fig9.6.28"
-        x="1509"
+        x="1729"
         y="571"
         width="376"
         height="15"
@@ -36888,7 +37157,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getExtraDSN() : string</text>
       <text name="Fig9.6.29"
-        x="1509"
+        x="1729"
         y="586"
         width="376"
         height="15"
@@ -36904,7 +37173,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >createIndex(indexName : string,tableName : string,columns : array) : void</text>
       <text name="Fig9.6.30"
-        x="1509"
+        x="1729"
         y="601"
         width="376"
         height="15"
@@ -36920,7 +37189,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >rebuildIndexes(tableName : string) : void</text>
       <text name="Fig9.6.31"
-        x="1509"
+        x="1729"
         y="616"
         width="376"
         height="15"
@@ -36936,7 +37205,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >flush(tableName : string) : void</text>
       <text name="Fig9.6.32"
-        x="1509"
+        x="1729"
         y="631"
         width="376"
         height="21"
@@ -40715,7 +40984,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
   </group>
   <group name="Fig27"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1472, 952, 286, 69]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1456, 1168, 286, 69]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EB2"
        fill="1"
        fillcolor="192 192 192"
@@ -40726,8 +40995,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </private>
     
     <rectangle name="Fig27.0"
-      x="1472"
-      y="952"
+      x="1456"
+      y="1168"
       width="286"
       height="69"
       fill="1"
@@ -40736,8 +41005,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <text name="Fig27.1"
-      x="1473"
-      y="953"
+      x="1457"
+      y="1169"
       width="284"
       height="21"
       fill="0"
@@ -40752,7 +41021,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Center"
     >ContainerComparator</text>
     <group name="Fig27.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1473, 953, 212, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1457, 1169, 212, 0]"
          href="10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EB2"
          fill="0"
          fillcolor="192 192 192"
@@ -40764,8 +41033,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig27.2.0"
-        x="1473"
-        y="953"
+        x="1457"
+        y="1169"
         width="212"
         height="0"
         fill="0"
@@ -40775,8 +41044,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig27.3"
-      x="1472"
-      y="974"
+      x="1456"
+      y="1190"
       width="286"
       height="1"
       fill="1"
@@ -40785,7 +41054,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig27.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1473, 975, 284, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1457, 1191, 284, 21]"
          href="10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EB2"
          fill="0"
          fillcolor="192 192 192"
@@ -40796,8 +41065,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig27.4.0"
-        x="1473"
-        y="975"
+        x="1457"
+        y="1191"
         width="284"
         height="21"
         fill="0"
@@ -40807,8 +41076,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig27.5"
-      x="1472"
-      y="996"
+      x="1456"
+      y="1212"
       width="286"
       height="1"
       fill="1"
@@ -40817,7 +41086,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig27.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1473, 997, 284, 23]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1457, 1213, 284, 23]"
          href="10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EB2"
          fill="0"
          fillcolor="192 192 192"
@@ -40828,8 +41097,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig27.6.0"
-        x="1473"
-        y="997"
+        x="1457"
+        y="1213"
         width="284"
         height="23"
         fill="0"
@@ -40838,8 +41107,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
       <text name="Fig27.6.1"
-        x="1473"
-        y="997"
+        x="1457"
+        y="1213"
         width="284"
         height="21"
         fill="0"
@@ -41589,7 +41858,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </path>
   </group>
   <group name="Fig51"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1444, 676, 378, 232]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1432, 760, 378, 232]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001B86"
        fill="1"
        fillcolor="white"
@@ -41600,8 +41869,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </private>
     
     <rectangle name="Fig51.0"
-      x="1444"
-      y="676"
+      x="1432"
+      y="760"
       width="378"
       height="232"
       fill="1"
@@ -41610,8 +41879,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <text name="Fig51.1"
-      x="1445"
-      y="677"
+      x="1433"
+      y="761"
       width="376"
       height="21"
       fill="0"
@@ -41626,7 +41895,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::classes::MysqlDbWrapper</text>
     <group name="Fig51.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1445, 677, 376, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1433, 761, 376, 0]"
          href="10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001B86"
          fill="0"
          fillcolor="white"
@@ -41638,8 +41907,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig51.2.0"
-        x="1445"
-        y="677"
+        x="1433"
+        y="761"
         width="376"
         height="0"
         fill="0"
@@ -41649,8 +41918,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig51.3"
-      x="1444"
-      y="698"
+      x="1432"
+      y="782"
       width="378"
       height="1"
       fill="1"
@@ -41659,7 +41928,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig51.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1445, 699, 376, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1433, 783, 376, 21]"
          href="10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001B86"
          fill="0"
          fillcolor="white"
@@ -41670,8 +41939,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig51.4.0"
-        x="1445"
-        y="699"
+        x="1433"
+        y="783"
         width="376"
         height="21"
         fill="0"
@@ -41681,8 +41950,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig51.5"
-      x="1444"
-      y="719"
+      x="1432"
+      y="803"
       width="378"
       height="1"
       fill="1"
@@ -41691,7 +41960,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig51.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1445, 720, 376, 188]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1433, 804, 376, 188]"
          href="10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001B86"
          fill="0"
          fillcolor="white"
@@ -41702,8 +41971,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig51.6.0"
-        x="1445"
-        y="720"
+        x="1433"
+        y="804"
         width="376"
         height="188"
         fill="0"
@@ -41712,8 +41981,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
       <text name="Fig51.6.1"
-        x="1445"
-        y="720"
+        x="1433"
+        y="804"
         width="376"
         height="15"
         fill="0"
@@ -41728,8 +41997,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getExtraConfiguration() : array</text>
       <text name="Fig51.6.2"
-        x="1445"
-        y="735"
+        x="1433"
+        y="819"
         width="376"
         height="15"
         fill="0"
@@ -41744,8 +42013,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getTableNotFoundErrorCode() : string</text>
       <text name="Fig51.6.3"
-        x="1445"
-        y="750"
+        x="1433"
+        y="834"
         width="376"
         height="15"
         fill="0"
@@ -41760,8 +42029,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getColumnNotFoundErrorCode() : string</text>
       <text name="Fig51.6.4"
-        x="1445"
-        y="765"
+        x="1433"
+        y="849"
         width="376"
         height="15"
         fill="0"
@@ -41776,8 +42045,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >afterConnect() : void</text>
       <text name="Fig51.6.5"
-        x="1445"
-        y="780"
+        x="1433"
+        y="864"
         width="376"
         height="15"
         fill="0"
@@ -41792,8 +42061,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getTables() : array</text>
       <text name="Fig51.6.6"
-        x="1445"
-        y="795"
+        x="1433"
+        y="879"
         width="376"
         height="15"
         fill="0"
@@ -41808,8 +42077,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >limitStatement(statement : string,limit : int,offset : int = 0) : string</text>
       <text name="Fig51.6.7"
-        x="1445"
-        y="810"
+        x="1433"
+        y="894"
         width="376"
         height="15"
         fill="0"
@@ -41824,8 +42093,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getIndexAlreadyExistsErrorCode() : string</text>
       <text name="Fig51.6.8"
-        x="1445"
-        y="825"
+        x="1433"
+        y="909"
         width="376"
         height="15"
         fill="0"
@@ -41840,8 +42109,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getExtraDSN() : string</text>
       <text name="Fig51.6.9"
-        x="1445"
-        y="840"
+        x="1433"
+        y="924"
         width="376"
         height="15"
         fill="0"
@@ -41856,8 +42125,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >createIndex(indexName : string,tableName : string,columns : array) : void</text>
       <text name="Fig51.6.10"
-        x="1445"
-        y="855"
+        x="1433"
+        y="939"
         width="376"
         height="15"
         fill="0"
@@ -41872,8 +42141,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >rebuildIndexes(tableName : string) : void</text>
       <text name="Fig51.6.11"
-        x="1445"
-        y="870"
+        x="1433"
+        y="954"
         width="376"
         height="15"
         fill="0"
@@ -41888,8 +42157,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >flush(tableName : string) : void</text>
       <text name="Fig51.6.12"
-        x="1445"
-        y="885"
+        x="1433"
+        y="969"
         width="376"
         height="21"
         fill="0"
@@ -41930,14 +42199,18 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="1514"
-              y="676" />
-      <lineto x="1514"
+      <moveto x="1576"
+              y="760" />
+      <lineto x="1576"
+              y="712" />
+      <lineto x="1912"
+              y="712" />
+      <lineto x="1912"
               y="653" />
     </path>
   </group>
   <group name="Fig53"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1872, 676, 366, 232]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1832, 760, 344, 232]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1"
        fill="1"
        fillcolor="white"
@@ -41948,9 +42221,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </private>
     
     <rectangle name="Fig53.0"
-      x="1872"
-      y="676"
-      width="366"
+      x="1832"
+      y="760"
+      width="344"
       height="232"
       fill="1"
       fillcolor="white"
@@ -41958,9 +42231,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <text name="Fig53.1"
-      x="1873"
-      y="677"
-      width="364"
+      x="1833"
+      y="761"
+      width="342"
       height="21"
       fill="0"
       fillcolor="white"
@@ -41974,7 +42247,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::classes::PgsqlDbWrapper</text>
     <group name="Fig53.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1873, 677, 364, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1833, 761, 364, 0]"
          href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1"
          fill="0"
          fillcolor="white"
@@ -41986,8 +42259,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig53.2.0"
-        x="1873"
-        y="677"
+        x="1833"
+        y="761"
         width="364"
         height="0"
         fill="0"
@@ -41997,9 +42270,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig53.3"
-      x="1872"
-      y="698"
-      width="366"
+      x="1832"
+      y="782"
+      width="344"
       height="1"
       fill="1"
       fillcolor="black"
@@ -42007,7 +42280,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig53.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1873, 699, 364, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1833, 783, 342, 21]"
          href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1"
          fill="0"
          fillcolor="white"
@@ -42018,9 +42291,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig53.4.0"
-        x="1873"
-        y="699"
-        width="364"
+        x="1833"
+        y="783"
+        width="342"
         height="21"
         fill="0"
         fillcolor="white"
@@ -42029,9 +42302,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       />
     </group>
     <rectangle name="Fig53.5"
-      x="1872"
-      y="719"
-      width="366"
+      x="1832"
+      y="803"
+      width="344"
       height="1"
       fill="1"
       fillcolor="black"
@@ -42039,7 +42312,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig53.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1873, 720, 364, 188]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1833, 804, 342, 188]"
          href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1"
          fill="0"
          fillcolor="white"
@@ -42050,9 +42323,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       </private>
       
       <rectangle name="Fig53.6.0"
-        x="1873"
-        y="720"
-        width="364"
+        x="1833"
+        y="804"
+        width="342"
         height="188"
         fill="0"
         fillcolor="white"
@@ -42060,9 +42333,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         strokecolor="black"
       />
       <text name="Fig53.6.1"
-        x="1873"
-        y="720"
-        width="364"
+        x="1833"
+        y="804"
+        width="342"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42076,9 +42349,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getExtraConfiguration() : array</text>
       <text name="Fig53.6.2"
-        x="1873"
-        y="735"
-        width="364"
+        x="1833"
+        y="819"
+        width="342"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42092,9 +42365,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getTableNotFoundErrorCode() : string</text>
       <text name="Fig53.6.3"
-        x="1873"
-        y="750"
-        width="364"
+        x="1833"
+        y="834"
+        width="342"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42108,9 +42381,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getColumnNotFoundErrorCode() : string</text>
       <text name="Fig53.6.4"
-        x="1873"
-        y="765"
-        width="364"
+        x="1833"
+        y="849"
+        width="342"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42124,9 +42397,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >afterConnect() : void</text>
       <text name="Fig53.6.5"
-        x="1873"
-        y="780"
-        width="364"
+        x="1833"
+        y="864"
+        width="342"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42140,9 +42413,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getTables() : array</text>
       <text name="Fig53.6.6"
-        x="1873"
-        y="795"
-        width="364"
+        x="1833"
+        y="879"
+        width="342"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42156,9 +42429,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >limitStatement(statement : string,limit : int,offset : int = 0) : string</text>
       <text name="Fig53.6.7"
-        x="1873"
-        y="810"
-        width="364"
+        x="1833"
+        y="894"
+        width="342"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42172,9 +42445,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getIndexAlreadyExistsErrorCode() : string</text>
       <text name="Fig53.6.8"
-        x="1873"
-        y="825"
-        width="364"
+        x="1833"
+        y="909"
+        width="342"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42188,9 +42461,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >getExtraDSN() : string</text>
       <text name="Fig53.6.9"
-        x="1873"
-        y="840"
-        width="364"
+        x="1833"
+        y="924"
+        width="342"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42204,9 +42477,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >createIndex(indexName : string,tableName : string,columns : array) : void</text>
       <text name="Fig53.6.10"
-        x="1873"
-        y="855"
-        width="364"
+        x="1833"
+        y="939"
+        width="342"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42220,9 +42493,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >rebuildIndexes(tableName : string) : void</text>
       <text name="Fig53.6.11"
-        x="1873"
-        y="870"
-        width="364"
+        x="1833"
+        y="954"
+        width="342"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42236,9 +42509,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         justification="Left"
       >flush(tableName : string) : void</text>
       <text name="Fig53.6.12"
-        x="1873"
-        y="885"
-        width="364"
+        x="1833"
+        y="969"
+        width="342"
         height="21"
         fill="0"
         fillcolor="white"
@@ -42278,9 +42551,361 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="1885"
-              y="676" />
-      <lineto x="1885"
+      <moveto x="1912"
+              y="760" />
+      <lineto x="1912"
+              y="653" />
+    </path>
+  </group>
+  <group name="Fig55"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[2216, 760, 361, 232]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       href="10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F7E"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+    </private>
+    
+    <rectangle name="Fig55.0"
+      x="2216"
+      y="760"
+      width="361"
+      height="232"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig55.1"
+      x="2217"
+      y="761"
+      width="359"
+      height="21"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="10"
+      justification="Center"
+    >core::kernel::classes::SqlsrvDbWrapper</text>
+    <group name="Fig55.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[2217, 761, 188, 0]"
+         href="10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F7E"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig55.2.0"
+        x="2217"
+        y="761"
+        width="188"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig55.3"
+      x="2216"
+      y="782"
+      width="361"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig55.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[2217, 783, 359, 21]"
+         href="10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F7E"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig55.4.0"
+        x="2217"
+        y="783"
+        width="359"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig55.5"
+      x="2216"
+      y="803"
+      width="361"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig55.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[2217, 804, 359, 188]"
+         href="10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F7E"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig55.6.0"
+        x="2217"
+        y="804"
+        width="359"
+        height="188"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig55.6.1"
+        x="2217"
+        y="804"
+        width="359"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getExtraConfiguration() : string</text>
+      <text name="Fig55.6.2"
+        x="2217"
+        y="819"
+        width="359"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getTableNotFoundErrorCode() : string</text>
+      <text name="Fig55.6.3"
+        x="2217"
+        y="834"
+        width="359"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getColumnNotFoundErrorCode() : string</text>
+      <text name="Fig55.6.4"
+        x="2217"
+        y="849"
+        width="359"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >afterConnect() : void</text>
+      <text name="Fig55.6.5"
+        x="2217"
+        y="864"
+        width="359"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getTables() : array</text>
+      <text name="Fig55.6.6"
+        x="2217"
+        y="879"
+        width="359"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getIndexAlreadyExistsErrorCode() : string</text>
+      <text name="Fig55.6.7"
+        x="2217"
+        y="894"
+        width="359"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >limitStatement(statement : string,limit : int,offset : int = 0) : string</text>
+      <text name="Fig55.6.8"
+        x="2217"
+        y="909"
+        width="359"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getExtraDSN() : string</text>
+      <text name="Fig55.6.9"
+        x="2217"
+        y="924"
+        width="359"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >createIndex(indexName : string,tableName : string,columns : array) : void</text>
+      <text name="Fig55.6.10"
+        x="2217"
+        y="939"
+        width="359"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >rebuildIndexes(tableName : string) : void</text>
+      <text name="Fig55.6.11"
+        x="2217"
+        y="954"
+        width="359"
+        height="15"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >flush(tableName : string) : void</text>
+      <text name="Fig55.6.12"
+        x="2217"
+        y="969"
+        width="359"
+        height="21"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getColumnNames(table : string) : array</text>
+    </group>
+  </group>
+  <group name="Fig56"
+       description="org.argouml.uml.diagram.ui.FigGeneralization"
+       href="10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F7F"
+       stroke="1"
+       strokecolor="51 51 153"
+  >
+    <private>
+      sourcePortFig="Fig55.0"
+      destPortFig="Fig9.0"
+      sourceFigNode="Fig55"
+      destFigNode="Fig9"
+      <argouml:pathitem figname="Fig56.1"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
+                        ownerhref="10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F7F"
+                        angle="270.0"
+                        offset="-10" />
+    </private>
+    <path name="Fig56.0"
+      description="org.tigris.gef.presentation.FigPoly"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="51 51 153"
+    >
+      <moveto x="2320"
+              y="760" />
+      <lineto x="2320"
+              y="712" />
+      <lineto x="1912"
+              y="712" />
+      <lineto x="1912"
               y="653" />
     </path>
   </group>
@@ -75186,7 +75811,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="41"
         y="362"
         width="704"
-        height="15"
+        height="29"
         fill="0"
         fillcolor="white"
         stroke="0"
