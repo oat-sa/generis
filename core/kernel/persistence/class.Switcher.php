@@ -421,7 +421,7 @@ class core_kernel_persistence_Switcher
 		$notDeletedInstances = array ();
 		do{
 			//reset timeout:
-			set_time_limit('30');
+			set_time_limit(30);
 
 			$rows = array();
 

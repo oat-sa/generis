@@ -204,12 +204,12 @@ class core_kernel_users_Cache
         		}
         	}
         	else{
-        		$msg = 'The Generis Cache cannot be scanned.';
+        		$msg = 'The Users Cache cannot be scanned.';
         		throw new core_kernel_users_CacheException($msg);
         	}
         }
         else{
-        	$msg = 'The Generis Cache is not readable or is not a directory.';
+        	$msg = 'The Users Cache is not readable or is not a directory.';
         	throw new core_kernel_users_CacheException($msg);
         }
         // section 10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F41 end

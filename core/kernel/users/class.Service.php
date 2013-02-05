@@ -465,7 +465,6 @@ Can be either a Resource or an array of Resources.
         // section 10-13-1-85-789cda43:13c8b795f73:-8000:000000000000200B begin
     	if (GENERIS_CACHE_USERS_ROLES == true && core_kernel_users_Cache::areIncludedRolesInCache($role) == true){
         	$returnValue = core_kernel_users_Cache::retrieveIncludedRoles($role);
-        	common_Logger::i("Included roles of '" . $role->getUri() . "' retrieved from cache memory.", 'CACHE');
         }
         else{
 	        // We use a Depth First Search approach to flatten the Roles Graph.
@@ -492,12 +491,10 @@ Can be either a Resource or an array of Resources.
 	        
 	        // remove the root vertex which is actually the role we are testing.
 	        unset($returnValue[$role->getUri()]);
-	        common_Logger::i("Included roles of '" . $role->getUri() . "' retrieved from persistent memory.", 'CACHE');
 	        
 	        if (GENERIS_CACHE_USERS_ROLES == true){
 	        	try{
 					core_kernel_users_Cache::cacheIncludedRoles($role, $returnValue);
-					common_Logger::i("Included roles of '" . $role->getUri() . "' written in cache memory.", 'CACHE');
 	        	}
 	        	catch(core_kernel_users_CacheException $e){
 	        		$roleUri = $role->getUri();
