@@ -86,19 +86,6 @@ define('PROPERTY_USER_LASTNAME' , 				GENERIS_NS . '#userLastName' , true);
 define('PROPERTY_USER_ROLES',					GENERIS_NS . '#userRoles' , true);
 define('INSTANCE_ROLE_GENERIS',					GENERIS_NS . '#GenerisRole' , true);
 
-define('FUNCACL_NS',							'http://www.tao.lu/Ontologies/taoFuncACL.rdf', true);
-define('INSTANCE_ROLE_BASEACCESS',				FUNCACL_NS.'#BaseAccessRole', true) ;
-
-define('CLASS_ACL_MODULE',						FUNCACL_NS.'#Module', true);
-define('PROPERTY_ACL_MODULE_ID',				FUNCACL_NS.'#moduleIdentifier', true);
-define('PROPERTY_ACL_MODULE_EXTENSION',			FUNCACL_NS.'#moduleExtension', true);
-define('PROPERTY_ACL_MODULE_GRANTACCESS',		FUNCACL_NS.'#grantAccessModule', true);
-
-define('CLASS_ACL_ACTION',						FUNCACL_NS.'#Action', true);
-define('PROPERTY_ACL_ACTION_ID',				FUNCACL_NS.'#actionIdentifier', true);
-define('PROPERTY_ACL_ACTION_MEMBEROF',			FUNCACL_NS.'#actionMemberOf', true);
-define('PROPERTY_ACL_ACTION_GRANTACCESS',		FUNCACL_NS.'#grantAccessAction', true);
-
 define('CLASS_SUBCRIPTION',						GENERIS_NS . '#Subscription' , true) ;
 define('PROPERTY_SUBCRIPTION_URL', 				GENERIS_NS . '#SubscriptionUrl' , true) ;
 define('PROPERTY_SUBCRIPTION_MASK', 			GENERIS_NS . '#SubscriptionMask' , true) ;
