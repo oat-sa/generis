@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 11.12.2012, 15:36:44 with ArgoUML PHP module 
+ * Automatically generated on 07.02.2013, 11:16:19 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package core
  * @subpackage kernel_classes
  */
@@ -27,7 +27,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  *
  * This database wrapper uses PDO.
  *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  */
 require_once('core/kernel/classes/class.DbWrapper.php');
 
@@ -43,7 +43,7 @@ require_once('core/kernel/classes/class.DbWrapper.php');
  * Short description of class core_kernel_classes_MysqlDbWrapper
  *
  * @access public
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package core
  * @subpackage kernel_classes
  */
@@ -61,7 +61,7 @@ class core_kernel_classes_MysqlDbWrapper
      * Short description of method getExtraConfiguration
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return array
      */
     protected function getExtraConfiguration()
@@ -78,7 +78,7 @@ class core_kernel_classes_MysqlDbWrapper
      * Short description of method getTableNotFoundErrorCode
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
     public function getTableNotFoundErrorCode()
@@ -96,7 +96,7 @@ class core_kernel_classes_MysqlDbWrapper
      * Short description of method getColumnNotFoundErrorCode
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
     public function getColumnNotFoundErrorCode()
@@ -114,7 +114,7 @@ class core_kernel_classes_MysqlDbWrapper
      * Short description of method afterConnect
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return void
      */
     protected function afterConnect()
@@ -128,7 +128,7 @@ class core_kernel_classes_MysqlDbWrapper
      * Short description of method getTables
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return array
      */
     public function getTables()
@@ -150,7 +150,7 @@ class core_kernel_classes_MysqlDbWrapper
      * Short description of method limitStatement
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string statement
      * @param  int limit
      * @param  int offset
@@ -172,7 +172,7 @@ class core_kernel_classes_MysqlDbWrapper
      * Short description of method getIndexAlreadyExistsErrorCode
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
     public function getIndexAlreadyExistsErrorCode()
@@ -187,18 +187,22 @@ class core_kernel_classes_MysqlDbWrapper
     }
 
     /**
-     * Short description of method getExtraDSN
+     * Short description of method getDSN
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
-    protected function getExtraDSN()
+    protected function getDSN()
     {
         $returnValue = (string) '';
 
         // section 10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD7 begin
-        $returnValue = ';charset=utf8';
+        $driver = str_replace('pdo_', '', SGBD_DRIVER);
+        $dbName = DATABASE_NAME;
+        $dbUrl = DATABASE_URL;
+        
+        $returnValue = $driver . ':dbname=' . $dbName . ';host=' . $dbUrl . ';charset=utf8';
         // section 10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD7 end
 
         return (string) $returnValue;
@@ -208,7 +212,7 @@ class core_kernel_classes_MysqlDbWrapper
      * Short description of method createIndex
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string indexName
      * @param  string tableName
      * @param  array columns
@@ -240,7 +244,7 @@ class core_kernel_classes_MysqlDbWrapper
      * Short description of method rebuildIndexes
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string tableName
      * @return void
      */
@@ -255,7 +259,7 @@ class core_kernel_classes_MysqlDbWrapper
      * Short description of method flush
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string tableName
      * @return void
      */
@@ -270,7 +274,7 @@ class core_kernel_classes_MysqlDbWrapper
      * Short description of method getColumnNames
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string table
      * @return array
      */

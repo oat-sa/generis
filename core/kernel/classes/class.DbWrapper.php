@@ -8,7 +8,7 @@ error_reporting(E_ALL);
  *
  * This database wrapper uses PDO.
  *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package core
  * @subpackage kernel_classes
  */
@@ -33,7 +33,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  *
  * @abstract
  * @access public
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package core
  * @subpackage kernel_classes
  */
@@ -136,8 +136,30 @@ abstract class core_kernel_classes_DbWrapper
 
         // section 10-13-1--31--647ec317:119141cd117:-8000:00000000000008F3 begin
 		if (!isset(self::$instance)) {
-			$className = 'core_kernel_classes_' . ucfirst(strtolower(SGBD_DRIVER)) .'DbWrapper';
-            self::$instance = new $className();
+			$driver = strtolower(SGBD_DRIVER);
+			$driverName = ucfirst($driver);
+			$className = 'core_kernel_classes_' . $driverName .'DbWrapper';
+			
+			if (class_exists($className)){
+				self::$instance = new $className;
+			}
+			else{
+				// maybe a 'pdo_' named driver?
+				$driverName = str_replace('pdo_', '', $driver);
+				$driverName = ucfirst($driverName);
+				$className = $className = 'core_kernel_classes_' . $driverName .'DbWrapper';
+				
+				if (class_exists($className)){
+					self::$instance = new $className();	
+				}
+				else
+				{
+					$driver = SGBD_DRIVER;
+					$msg = "Unable to load the DBWrapper sub-class related to the '${driver}' database driver.";
+					throw new core_kernel_persistence_Exception($msg);
+				}
+			}
+            
 
         }
         $returnValue = self::$instance;
@@ -162,7 +184,7 @@ abstract class core_kernel_classes_DbWrapper
         
         while (true){
 	        $driver = strtolower(SGBD_DRIVER);
-	        $dsn = $driver . ':dbname=' . DATABASE_NAME . ';host=' . DATABASE_URL . $this->getExtraDSN();
+	        $dsn = $this->getDSN();
 	        $options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_BOTH,
 	        				 PDO::ATTR_PERSISTENT => false,
 	        				 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -254,7 +276,7 @@ abstract class core_kernel_classes_DbWrapper
      * Returns the ammount of queries executed so far.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return int
      */
     public function getNrOfQueries()
@@ -273,7 +295,7 @@ abstract class core_kernel_classes_DbWrapper
      * only.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string statement
      * @param  array params
      * @return PDOStatement
@@ -307,7 +329,7 @@ abstract class core_kernel_classes_DbWrapper
      * DELETE statements.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string statement
      * @param  array params
      * @return int
@@ -341,7 +363,7 @@ abstract class core_kernel_classes_DbWrapper
      * Creates a prepared PDOStatement.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string statement
      * @return PDOStatement
      */
@@ -365,7 +387,7 @@ abstract class core_kernel_classes_DbWrapper
      * the PDOStatement::errorCode method for prepared statements.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
     public function errorCode()
@@ -389,7 +411,7 @@ abstract class core_kernel_classes_DbWrapper
      * call PDOStatement::errorMessage for prepared statements.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
     public function errorMessage()
@@ -426,7 +448,7 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @abstract
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return array
      */
     public abstract function getTables();
@@ -436,7 +458,7 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @abstract
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string table
      * @return array
      */
@@ -447,7 +469,7 @@ abstract class core_kernel_classes_DbWrapper
      * it could not be found, NULL is returned.
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string statement
      * @return PDOStatement
      */
@@ -477,7 +499,7 @@ abstract class core_kernel_classes_DbWrapper
      * Get the key of a given statement stored in the statements store.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string statement
      * @return string
      */
@@ -496,7 +518,7 @@ abstract class core_kernel_classes_DbWrapper
      * Increments the number of queries executed so far.
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return void
      */
     protected function incrementNrOfQueries()
@@ -510,7 +532,7 @@ abstract class core_kernel_classes_DbWrapper
      * Returns the number of hits in the statements store.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return int
      */
     public function getNrOfHits()
@@ -528,7 +550,7 @@ abstract class core_kernel_classes_DbWrapper
      * Increment the number of hits in the statements store.
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return void
      */
     protected function incrementNrOfHits()
@@ -542,7 +564,7 @@ abstract class core_kernel_classes_DbWrapper
      * Returns the number of misses in the statements store.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return int
      */
     public function getNrOfMisses()
@@ -560,7 +582,7 @@ abstract class core_kernel_classes_DbWrapper
      * Increment the number of misses in the statements store.
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return void
      */
     protected function incrementNrOfMisses()
@@ -574,7 +596,7 @@ abstract class core_kernel_classes_DbWrapper
      * outputs a given statement in the logger.
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string statement
      * @return void
      */
@@ -594,7 +616,7 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @abstract
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string statement The statement to limit
      * @param  int limit Limit lower bound.
      * @param  int offset Limit upper bound.
@@ -607,7 +629,7 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @abstract
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return array
      */
     protected abstract function getExtraConfiguration();
@@ -618,7 +640,7 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @abstract
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
     public abstract function getTableNotFoundErrorCode();
@@ -629,7 +651,7 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @abstract
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
     public abstract function getColumnNotFoundErrorCode();
@@ -640,7 +662,7 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @abstract
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return void
      */
     protected abstract function afterConnect();
@@ -651,20 +673,20 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @abstract
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
     public abstract function getIndexAlreadyExistsErrorCode();
 
     /**
-     * Short description of method getExtraDSN
+     * Returns the DSN to Connect with PDO to the database.
      *
      * @abstract
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
-    protected abstract function getExtraDSN();
+    protected abstract function getDSN();
 
     /**
      * Create an index on a given table and selected columns. This method throws
@@ -672,7 +694,7 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @abstract
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string indexName The name of the index to create.
      * @param  string tableName A table name
      * @param  array columns An associative array that represents the columns on which the index applies. The keys of the array are the name of the columns, the values are the length of the data to index in the column. If there is no length limitation, set the value of the array cell to null.
@@ -686,7 +708,7 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @abstract
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string tableName
      * @return void
      */
@@ -698,7 +720,7 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @abstract
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string tableName
      * @return void
      */
@@ -709,7 +731,7 @@ abstract class core_kernel_classes_DbWrapper
      * performance reasons.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string tableName The name of the table.
      * @param  string column The column name on wich the COUNT sql statement must be performed.
      * @return int

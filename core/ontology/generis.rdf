@@ -326,6 +326,7 @@
   	<rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#ClassRole"/>
     <rdfs:range rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#ClassRole"/>
 	<widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#CheckBox"/>
+	<generis:Multiple rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#True"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#isSystem">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
@@ -333,6 +334,7 @@
     <rdfs:range rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#Boolean"/>
     <rdfs:label xml:lang="EN"><![CDATA[Is a system role]]></rdfs:label>
 	<rdfs:comment xml:lang="EN"><![CDATA[Is a system role]]></rdfs:comment>
+	<generis:Multiple rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#False"/>
   </rdf:Description>
   
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#GenerisRole">

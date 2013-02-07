@@ -86,18 +86,31 @@ class DbStore extends Object
 	try{
 		// We try to load the DBConnection class specialization for the
 		// requested driver.
-		$className = ucfirst($this->driver) . 'DBConnection';
+		$driver = $this->driver;
+		$driverName = ucfirst($driver);
+		$className = $driverName . 'DBConnection';
 		$classFile = RDFAPI_INCLUDE_DIR . 'util/' . $className . '.php';
 		if (file_exists($classFile)){
 			require_once($classFile);
 			$this->dbConn = new $className($dsn, $user, $password, $options);
 		}
 		else{
-			throw new Exception("RDF-API: No DBConnection class found for driver {$this->driver}.");
+			$driver = ucfirst(str_replace('pdo_', '', $this->driver));
+			$className = $className = $driver . 'DBConnection';
+			$classFile = $classFile = RDFAPI_INCLUDE_DIR . 'util/' . $className . '.php';
+			if (file_exists($classFile)){
+				require_once($classFile);
+				$driver = strtolower($driver);
+				$dsn = "{$driver}:host=${host};dbname=${dbName}";
+				$this->dbConn = new $className($dsn, $user, $password, $options);	
+			}
+			else{
+				throw new Exception("RDF-API: No DBConnection sub-class found for driver {$classFile}.");
+			}
 		}
 	}
 	catch (PDOException $e){
-		throw new Exception("RDF-API: Could not connect to database with DSN '${dsn}'.");
+		throw new Exception("RDF-API: Cannot connect to database with DSN '${dsn}'.");
 	}
  }
 

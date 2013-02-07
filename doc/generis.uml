@@ -116,7 +116,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Feb 04 18:16:26 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Feb 07 11:16:37 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -4013,9 +4013,18 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
                         <UML:Operation xmi.id = '10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD5'
-                          name = 'getExtraDSN' visibility = 'protected' isSpecification = 'false'
-                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
-                          isLeaf = 'false' isAbstract = 'true'>
+                          name = 'getDSN' visibility = 'protected' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'true'>
+                          <UML:ModelElement.taggedValue>
+                            <UML:TaggedValue xmi.id = '10-13-1-85--6b91d14b:13cb42566a4:-8000:0000000000001FA7'
+                              isSpecification = 'false'>
+                              <UML:TaggedValue.dataValue>Returns the DSN to Connect with PDO to the database.</UML:TaggedValue.dataValue>
+                              <UML:TaggedValue.type>
+                                <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                              </UML:TaggedValue.type>
+                            </UML:TaggedValue>
+                          </UML:ModelElement.taggedValue>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD6'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -5845,9 +5854,9 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
                         <UML:Operation xmi.id = '10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD7'
-                          name = 'getExtraDSN' visibility = 'protected' isSpecification = 'false'
-                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
-                          isLeaf = 'false' isAbstract = 'false'>
+                          name = 'getDSN' visibility = 'protected' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD8'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -6077,9 +6086,9 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
                         <UML:Operation xmi.id = '10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD9'
-                          name = 'getExtraDSN' visibility = 'protected' isSpecification = 'false'
-                          ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
-                          isLeaf = 'false' isAbstract = 'false'>
+                          name = 'getDSN' visibility = 'protected' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
                           <UML:BehavioralFeature.parameter>
                             <UML:Parameter xmi.id = '10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BDA'
                               name = 'return' isSpecification = 'false' kind = 'return'>
@@ -6324,7 +6333,7 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
                         <UML:Operation xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FA1'
-                          name = 'getExtraDSN' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          name = 'getDSN' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false'>
                           <UML:BehavioralFeature.parameter>
@@ -37155,7 +37164,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getExtraDSN() : string</text>
+      >getDSN() : string</text>
       <text name="Fig9.6.29"
         x="1729"
         y="586"
@@ -42107,7 +42116,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getExtraDSN() : string</text>
+      >getDSN() : string</text>
       <text name="Fig51.6.9"
         x="1433"
         y="924"
@@ -42210,7 +42219,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </path>
   </group>
   <group name="Fig53"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1832, 760, 344, 232]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1832, 760, 351, 232]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1"
        fill="1"
        fillcolor="white"
@@ -42223,7 +42232,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     <rectangle name="Fig53.0"
       x="1832"
       y="760"
-      width="344"
+      width="351"
       height="232"
       fill="1"
       fillcolor="white"
@@ -42233,7 +42242,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     <text name="Fig53.1"
       x="1833"
       y="761"
-      width="342"
+      width="349"
       height="21"
       fill="0"
       fillcolor="white"
@@ -42247,7 +42256,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::classes::PgsqlDbWrapper</text>
     <group name="Fig53.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1833, 761, 364, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1833, 761, 349, 0]"
          href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1"
          fill="0"
          fillcolor="white"
@@ -42261,7 +42270,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <rectangle name="Fig53.2.0"
         x="1833"
         y="761"
-        width="364"
+        width="349"
         height="0"
         fill="0"
         fillcolor="white"
@@ -42272,7 +42281,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     <rectangle name="Fig53.3"
       x="1832"
       y="782"
-      width="344"
+      width="351"
       height="1"
       fill="1"
       fillcolor="black"
@@ -42280,7 +42289,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig53.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1833, 783, 342, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1833, 783, 349, 21]"
          href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1"
          fill="0"
          fillcolor="white"
@@ -42293,7 +42302,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <rectangle name="Fig53.4.0"
         x="1833"
         y="783"
-        width="342"
+        width="349"
         height="21"
         fill="0"
         fillcolor="white"
@@ -42304,7 +42313,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     <rectangle name="Fig53.5"
       x="1832"
       y="803"
-      width="344"
+      width="351"
       height="1"
       fill="1"
       fillcolor="black"
@@ -42312,7 +42321,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig53.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1833, 804, 342, 188]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1833, 804, 349, 188]"
          href="10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1"
          fill="0"
          fillcolor="white"
@@ -42325,7 +42334,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <rectangle name="Fig53.6.0"
         x="1833"
         y="804"
-        width="342"
+        width="349"
         height="188"
         fill="0"
         fillcolor="white"
@@ -42335,7 +42344,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig53.6.1"
         x="1833"
         y="804"
-        width="342"
+        width="349"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42351,7 +42360,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig53.6.2"
         x="1833"
         y="819"
-        width="342"
+        width="349"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42367,7 +42376,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig53.6.3"
         x="1833"
         y="834"
-        width="342"
+        width="349"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42383,7 +42392,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig53.6.4"
         x="1833"
         y="849"
-        width="342"
+        width="349"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42399,7 +42408,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig53.6.5"
         x="1833"
         y="864"
-        width="342"
+        width="349"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42415,7 +42424,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig53.6.6"
         x="1833"
         y="879"
-        width="342"
+        width="349"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42431,7 +42440,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig53.6.7"
         x="1833"
         y="894"
-        width="342"
+        width="349"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42447,7 +42456,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig53.6.8"
         x="1833"
         y="909"
-        width="342"
+        width="349"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42459,11 +42468,11 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getExtraDSN() : string</text>
+      >getDSN() : string</text>
       <text name="Fig53.6.9"
         x="1833"
         y="924"
-        width="342"
+        width="349"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42479,7 +42488,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig53.6.10"
         x="1833"
         y="939"
-        width="342"
+        width="349"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42495,7 +42504,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig53.6.11"
         x="1833"
         y="954"
-        width="342"
+        width="349"
         height="15"
         fill="0"
         fillcolor="white"
@@ -42511,7 +42520,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig53.6.12"
         x="1833"
         y="969"
-        width="342"
+        width="349"
         height="21"
         fill="0"
         fillcolor="white"
@@ -42595,7 +42604,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::classes::SqlsrvDbWrapper</text>
     <group name="Fig55.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[2217, 761, 188, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[2217, 761, 359, 0]"
          href="10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F7E"
          fill="0"
          fillcolor="white"
@@ -42609,7 +42618,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <rectangle name="Fig55.2.0"
         x="2217"
         y="761"
-        width="188"
+        width="359"
         height="0"
         fill="0"
         fillcolor="white"
@@ -42807,7 +42816,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getExtraDSN() : string</text>
+      >getDSN() : string</text>
       <text name="Fig55.6.9"
         x="2217"
         y="924"
@@ -42893,7 +42902,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
                         offset="-10" />
     </private>
     <path name="Fig56.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -75811,7 +75820,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="41"
         y="362"
         width="704"
-        height="29"
+        height="15"
         fill="0"
         fillcolor="white"
         stroke="0"

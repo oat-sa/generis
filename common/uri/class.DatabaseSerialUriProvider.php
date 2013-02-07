@@ -65,8 +65,8 @@ class common_uri_DatabaseSerialUriProvider
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:00000000000019A5 begin
         $driver = $this->getDriver();
         switch ($driver){
-            case 'pgsql':
-            case 'mysql':
+            case 'pdo_pgsql':
+            case 'pdo_mysql':
                 $dbWrapper = core_kernel_classes_DbWrapper::singleton();
                 $modelUri = core_kernel_classes_Session::singleton()->getNameSpace() . '#';
                 $sth = $dbWrapper->prepare("SELECT generis_sequence_uri_provider(?)");
