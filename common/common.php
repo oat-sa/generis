@@ -14,8 +14,9 @@
  * @package common
  */
 
-if(!isset($_SESSION))
-session_start();
+if(!isset($_SESSION)){
+    session_start();
+}
 
 # xdebug custom error reporting
 if (function_exists("xdebug_enable"))  {

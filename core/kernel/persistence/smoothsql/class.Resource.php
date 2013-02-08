@@ -476,7 +476,9 @@ class core_kernel_persistence_smoothsql_Resource
 				$multiCondition =  "( ";
 				foreach($pattern as $i => $patternToken){
 					$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
-					if($i > 0) $multiCondition .= " OR ";
+					if($i > 0) {
+                        $multiCondition .= " OR ";
+                    }
 					$multiCondition .= '( "object" '.$searchPattern.' )';
 				}
 				$conditions[] = "{$multiCondition} ) ";

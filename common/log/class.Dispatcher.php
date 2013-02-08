@@ -131,9 +131,9 @@ class common_log_Dispatcher
     		if (isset($appenderConfig['class'])) {
     			
     			$classname = $appenderConfig['class'];
-    			if (!class_exists($classname))
+    			if (!class_exists($classname)){
     				$classname = 'common_log_'.$classname;
-    			
+                }
     			if (class_exists($classname) && is_subclass_of($classname, 'common_log_Appender')) {
     				$appender = new $classname();
     				if (!is_null($appender) && $appender->init($appenderConfig)) {

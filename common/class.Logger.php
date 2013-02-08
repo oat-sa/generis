@@ -139,8 +139,9 @@ class common_Logger
         $returnValue = null;
 
         // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004328 begin
-		if (is_null(self::$instance))
+		if (is_null(self::$instance)){
 			self::$instance = new self();
+        }
 		$returnValue = self::$instance;
         // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004328 end
 
@@ -404,8 +405,9 @@ class common_Logger
         // section 127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001848 begin
         if ($errorNumber == E_STRICT) {
 	    	foreach ($this->ACCEPTABLE_WARNINGS as $pattern) {
-				if (preg_match($pattern, $errorString) > 0)
+				if (preg_match($pattern, $errorString) > 0){
 					return false;
+                }
 			}
         }
 			

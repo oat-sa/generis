@@ -105,9 +105,9 @@ abstract class common_log_BaseAppender
 
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017C6 begin
         $threshold = 0;
-        while (($this->mask & 1<<$threshold) == 0)
+        while (($this->mask & 1<<$threshold) == 0){
         	$threshold++;
-        
+        }
         $returnValue = $threshold;
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017C6 end
 

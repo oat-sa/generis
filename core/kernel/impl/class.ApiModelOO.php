@@ -211,7 +211,9 @@ class core_kernel_impl_ApiModelOO
 								$nodeName = null;
 								
 								foreach($allNs as $namespaceId => $namespaceUri){
-									if($namespaceId == 'xml:base') continue;
+									if($namespaceId == 'xml:base') {
+                                        continue;
+                                    }
 									if(preg_match("/^".preg_quote($namespaceUri, '/')."/", $predicate)){
 										if(!array_key_exists($namespaceId, $currentNs)){
 											$currentNs[$namespaceId] = $namespaceUri;
@@ -444,7 +446,9 @@ class core_kernel_impl_ApiModelOO
 				$nodeName = null;
 				
 				foreach($allNs as $namespaceId => $namespaceUri){
-					if($namespaceId == 'xml:base') continue;
+					if($namespaceId == 'xml:base') {
+                        continue;
+                    }
 					if(preg_match("/^".preg_quote($namespaceUri, '/')."/", $predicate)){
 						if(!array_key_exists($namespaceId, $currentNs)){
 							$currentNs[$namespaceId] = $namespaceUri;

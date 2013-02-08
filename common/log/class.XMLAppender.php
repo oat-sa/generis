@@ -101,8 +101,9 @@ class common_log_XMLAppender
 		$doc->preserveWhiteSpace = false;
 		$doc->formatOutput = true;
 		$success = @$doc->load($this->filename);
-		if (!$success)
-			$doc->loadXML('<events></events>');
+		if (!$success) {
+            $doc->loadXML('<events></events>');
+        }
 
 		$event_element = $doc->createElement("event");
 

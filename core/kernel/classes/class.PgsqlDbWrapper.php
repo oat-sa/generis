@@ -139,9 +139,9 @@ class core_kernel_classes_PgsqlDbWrapper
         $catalog = $this->dbConnector->quote(DATABASE_NAME);
         $schema = $this->dbConnector->quote('public');
         $type = $this->dbConnector->quote('BASE TABLE');
-        $sql = 'SELECT "table_name" FROM "information_schema"."tables" WHERE '
-        	 . '"table_catalog" = ' . $catalog . ' AND table_schema = ' . $schema . ' '
-        	 . 'AND "table_type" = ' . $type;
+        $sql = 'SELECT "table_name" FROM "information_schema"."tables" WHERE
+                "table_catalog" = ' . $catalog . ' AND table_schema = ' . $schema
+            . ' AND "table_type" = ' . $type;
         	 
         $result = $this->query($sql);
         while($table = (string)$result->fetchColumn(0)){

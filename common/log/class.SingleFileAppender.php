@@ -119,10 +119,12 @@ class common_log_SingleFileAppender
     		$this->maxFileSize = $configuration['max_file_size'];
     	}
     	
-    	if (!empty($this->filename))
+    	if (!empty($this->filename)){
     		$returnValue = parent::init($configuration);
-    	else
+        }
+    	else{
     		$returnValue = false;
+        }
         // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001855 end
 
         return (bool) $returnValue;

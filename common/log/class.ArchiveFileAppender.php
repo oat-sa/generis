@@ -121,11 +121,12 @@ class common_log_ArchiveFileAppender
         	}
         }
         
-        if (!empty($this->directory))
+        if (!empty($this->directory)){
         	$returnValue = parent::init($configuration);
-        else
+        }
+        else{
         	$returnValue = false;
-
+        }
         // section 127-0-1-1-7b882644:1342260c2b6:-8000:0000000000001866 end
 
         return (bool) $returnValue;
@@ -146,7 +147,7 @@ class common_log_ArchiveFileAppender
 	    	if ($this->compression == self::COMPRESSION_ZIP) {
 	    		$zip = new ZipArchive;
 				$res = $zip->open($this->getAvailableArchiveFileName(), ZipArchive::CREATE);
-				if ($res === TRUE) {
+				if ($res === true) {
 				    $zip->addFile($this->filename, basename($this->filename));
 				    $zip->close();
 				    unlink($this->filename);

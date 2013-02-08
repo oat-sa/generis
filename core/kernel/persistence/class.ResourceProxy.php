@@ -638,7 +638,9 @@ class core_kernel_persistence_ResourceProxy
 			$i = 0;
 			foreach($this->getAvailableImpl() as $name => $valid){
 				if($valid){
-					if($i>0) $errorMessage .= ", ";
+					if($i>0) {
+                        $errorMessage .= ", ";
+                    }
 					$errorMessage .= $name;
 				}
 				$i++;

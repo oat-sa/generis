@@ -523,8 +523,12 @@ class core_kernel_persistence_smoothsql_Class
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
 		if (isset($propertyFilters) && count($propertyFilters)) {
-			if (isset($options['offset'])) unset($options['offset']);
-			if (isset($options['limit'])) unset($options['limit']);
+			if (isset($options['offset'])) {
+                unset($options['offset']);
+            }
+			if (isset($options['limit'])) {
+                unset($options['limit']);
+            }
 			$query = $this->getFilteredQuery($resource, $propertyFilters, $options);
 			if (substr($query, 0, strlen('SELECT "subject"')) == 'SELECT "subject"') {
 				$query = 'SELECT count(*) as count'.substr($query, strlen('SELECT "subject"'));
@@ -931,13 +935,17 @@ class core_kernel_persistence_smoothsql_Class
 		if ($intersect) {
 			foreach ($conditions as $condition) {
 				if (!strlen($q)) $q = $query . $condition;
-				else $q = $query . $condition . ' AND "subject" IN (' . $q . ')';
+				else {
+                    $q = $query . $condition . ' AND "subject" IN (' . $q . ')';
+                }
 			}
                         if(!empty($q)){
                             $query = $q;
                         }
 		}
-		else $query .= join(' OR ', $conditions);
+		else {
+            $query .= join(' OR ', $conditions);
+        }
 
 		if(!empty($conditions)){
 			$query .= ' AND';
@@ -949,9 +957,9 @@ class core_kernel_persistence_smoothsql_Class
         	$orderUri = $options['order'];
         	$orderDir = isset($options['orderdir']) && strtoupper($options['orderdir']) == 'DESC' ? 'DESC' : 'ASC';
         	$orderQuery = 'SELECT "subject","object" FROM "statements" WHERE "predicate" = \''.$orderUri.'\'';
-			$query = 'SELECT DISTINCT "mainq"."subject", "orderq"."object" from ('.$query.') AS mainq'
-						.' LEFT JOIN ('.$orderQuery.') AS orderq ON ("mainq"."subject" = "orderq"."subject")'
-						.' ORDER BY "orderq"."object" '.$orderDir;
+			$query = 'SELECT DISTINCT "mainq"."subject", "orderq"."object" from ('.$query.') AS mainq
+			          LEFT JOIN ('.$orderQuery.') AS orderq ON ("mainq"."subject" = "orderq"."subject")
+			          ORDER BY "orderq"."object" '.$orderDir;
         } else if (isset($options['limit'])) {
         	$query .= ' ORDER BY "id"';
         }
