@@ -81,7 +81,7 @@ class common_uri_DatabaseSerialUriProvider
                 
             break;
         	default:
-        		throw new common_uri_UriProviderException("Unknown database driver.");
+        		throw new common_uri_UriProviderException("Unknown database driver : ".$driver);
         	break;
         }
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:00000000000019A5 end
