@@ -95,10 +95,14 @@ class common_cache_FileCache
         $data = "<? return ".common_utils::toPHPVariableString($mixed).";?>";
        	
         try{
-        	// Acquire main cache lock for writing (exclusive).
-        	// Indeed, file_put_contents is not an atomic file system operation!
+        	// Acquire the lock and open with mode 'c'. Indeed, we do not use mode 'w' because
+        	// it could truncate the file before it gets the lock!
         	$filePath = $this->getFilePath($serial);
-        	if (false !== ($fp = @fopen($filePath, 'w')) && true === @flock($fp, LOCK_EX, $wait = true)){
+        	if (false !== ($fp = @fopen($filePath, 'c')) && true === @flock($fp, LOCK_EX, $wait = true)){
+        		
+        		// We first need to truncate.
+        		ftruncate($fp, 0);
+        		
         		fwrite($fp, $data);
         		@flock($fp, LOCK_UN);
         		@fclose($fp);
