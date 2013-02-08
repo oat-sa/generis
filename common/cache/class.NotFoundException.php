@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 18.01.2013, 11:34:19 with ArgoUML PHP module 
+ * Automatically generated on 08.02.2013, 10:33:11 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package common
  * @subpackage cache
  */
@@ -22,11 +22,11 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 }
 
 /**
- * include common_Exception
+ * A cache exception.
  *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  */
-require_once('common/class.Exception.php');
+require_once('common/cache/class.Exception.php');
 
 /* user defined includes */
 // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ED8-includes begin
@@ -40,12 +40,12 @@ require_once('common/class.Exception.php');
  * Short description of class common_cache_NotFoundException
  *
  * @access public
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package common
  * @subpackage cache
  */
 class common_cache_NotFoundException
-    extends common_Exception
+    extends common_cache_Exception
 {
     // --- ASSOCIATIONS ---
 

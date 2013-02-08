@@ -3,13 +3,13 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - common/class.Utils.php
+ * Generis Object Oriented API - common\class.Utils.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 02.01.2013, 18:01:09 with ArgoUML PHP module 
+ * Automatically generated on 08.02.2013, 10:22:20 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -50,7 +50,7 @@ class common_Utils
      * Short description of method isUri
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string strarg
      * @return boolean
      */
@@ -74,7 +74,7 @@ class common_Utils
      * Short description of method getLongUri
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string strarg
      * @return string
      */
@@ -94,7 +94,7 @@ class common_Utils
      * Short description of method getShortUri
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string strarg
      * @return string
      */
@@ -116,7 +116,7 @@ class common_Utils
      * Removes starting/ending spaces, strip html tags out, remove any \r and \n
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string strarg
      * @return string
      */
@@ -135,7 +135,7 @@ class common_Utils
      * Short description of method startTimer
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  int id
      * @return void
      */
@@ -149,7 +149,7 @@ class common_Utils
      * Short description of method endTimer
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  int id
      * @return string
      */
@@ -168,7 +168,7 @@ class common_Utils
      * triming, etc.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string toFormat
      * @param  string separator
      * @return string
@@ -190,7 +190,7 @@ class common_Utils
      * Short description of method hyperMask
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  int withVariables
      * @return void
      */
@@ -214,7 +214,7 @@ class common_Utils
      * Short description of method getNewUri
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
     public static function getNewUri()
@@ -234,7 +234,7 @@ class common_Utils
      * Short description of method get
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return core_kernel_classes_Container
      */
     public static function get()
@@ -251,7 +251,7 @@ class common_Utils
      * Short description of method xmlEntityDecode
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string string
      * @return string
      */
@@ -269,7 +269,7 @@ class common_Utils
      * Short description of method loadSqlFile
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string file
      * @return mixed
      */
@@ -306,7 +306,7 @@ class common_Utils
      * would return the value provided
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  value
      * @return string
      */
@@ -345,6 +345,32 @@ class common_Utils
         		throw new common_exception_Error("Could not convert variable of type ".gettype($value)." to PHP variable string");
         }
         // section 10-30-1--78-48d19975:13bfc2c7bd4:-8000:0000000000001E6E end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Creates a temporary file in the System Temp directory with a unique name.
+     * the file cannot be created, a FileException will be thrown. This method
+     * compliant with all operating systems.
+     *
+     * Please make sure you unlink your file after use.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @return string
+     */
+    public static function createTempFile()
+    {
+        $returnValue = (string) '';
+
+        // section 10-30-1--82-485ebc01:13cb90c6d20:-8000:0000000000001FA8 begin
+        $returnValue = @tempnam('/tmp', 'tao');
+        if ($returnValue === false){
+        	$msg = "Unable to create a temporary file in '" . sys_get_temp_dir() . "'."; 
+        	throw new common_exception_FileSystemError($msg);
+        }
+        // section 10-30-1--82-485ebc01:13cb90c6d20:-8000:0000000000001FA8 end
 
         return (string) $returnValue;
     }

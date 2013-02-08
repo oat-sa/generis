@@ -93,7 +93,28 @@ class common_cache_FileCache
         }
         
         $data = "<? return ".common_utils::toPHPVariableString($mixed).";?>";
-        file_put_contents($this->getFilePath($serial), $data, LOCK_EX);
+       	
+        try{
+        	// Acquire main cache lock for writing (exclusive).
+        	// Indeed, file_put_contents is not an atomic file system operation!
+        	$filePath = $this->getFilePath($serial);
+        	if (false !== ($fp = @fopen($filePath, 'w')) && true === @flock($fp, LOCK_EX, $wait = true)){
+        		fwrite($fp, $data);
+        		@flock($fp, LOCK_UN);
+        		@fclose($fp);
+        	}
+        	else{
+        		$msg = "Unable to acquire exclusive lock for writing on 'lock.php' file.";
+        		throw new common_exception_FileSystemError($msg);
+        	}
+        	
+        }
+        catch (common_exception_FileSystemError $e){
+        	$msg  = "An unexpected error occured while creating a temporary ";
+        	$msg .= "file to cache data with serial '${serial}': " . $e->getMessage();
+        	
+        	throw new common_cache_Exception($msg);
+        }
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F34 end
     }
 
@@ -110,16 +131,33 @@ class common_cache_FileCache
         $returnValue = null;
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F3C begin
-    	if ($this->has($serial)) {
-	        try {
-	        	$returnValue = include $this->getFilePath($serial);
-	        } catch (Exception $e) {
-	        	common_Logger::d('Exception while reading cache entry for '.$serial);
-	        	
-	        }
-        } else {
-        	throw new common_cache_NotFoundException('Failed to get ('.$serial.') from filecache');
+        
+        // Acquire a shared lock for reading on the main lock file.
+        // We acquire the lock here because we have a critical section below:
+        // 1. Check if we have something for this serial.
+        // 2. Include the file corresponding to the serial. 
+        $filePath = $this->getFilePath($serial);
+        if (false !== ($fp = @fopen($filePath, 'r')) && true === @flock($fp, LOCK_SH, $wait = true)){
+        	if ($this->has($serial)) {
+        		try {
+        			$returnValue = include $this->getFilePath($serial);
+        		}
+        		catch (Exception $e) {
+        			throw new common_exception_FileSystemError('Exception while reading cache entry for '. $serial);
+        		}
+        	} 
+        	else {
+        		throw new common_cache_NotFoundException('Failed to get (' . $serial . ') from filecache');
+        	}
+        	
+        	@flock($fp, LOCK_UN);
+        	@fclose($fp);
         }
+        else{
+        	$msg = "Unable to acquire shared lock for reading on 'lock.php' file.";
+        	throw new common_exception_FileSystemError($msg);
+        }
+    	
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F3C end
 
         return $returnValue;
@@ -155,9 +193,7 @@ class common_cache_FileCache
     public function remove($serial)
     {
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F44 begin
-        if (true === $this->has($serial)){
-        	@unlink($this->getFilePath($serial));
-        }
+        @unlink($this->getFilePath($serial));
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F44 end
     }
 
