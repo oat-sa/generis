@@ -98,7 +98,7 @@ class common_cache_FileCache
         	// Acquire the lock and open with mode 'c'. Indeed, we do not use mode 'w' because
         	// it could truncate the file before it gets the lock!
         	$filePath = $this->getFilePath($serial);
-        	if (false !== ($fp = @fopen($filePath, 'c')) && true === @flock($fp, LOCK_EX, $wait = true)){
+        	if (false !== ($fp = @fopen($filePath, 'c')) && true === flock($fp, LOCK_EX)){
         		
         		// We first need to truncate.
         		ftruncate($fp, 0);
@@ -141,7 +141,7 @@ class common_cache_FileCache
         // 1. Check if we have something for this serial.
         // 2. Include the file corresponding to the serial. 
         $filePath = $this->getFilePath($serial);
-        if (false !== ($fp = @fopen($filePath, 'r')) && true === @flock($fp, LOCK_SH, $wait = true)){
+        if (false !== ($fp = @fopen($filePath, 'r')) && true === flock($fp, LOCK_SH)){
         	if ($this->has($serial)) {
         		try {
         			$returnValue = include $this->getFilePath($serial);
