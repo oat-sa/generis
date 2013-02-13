@@ -69,7 +69,7 @@ class core_kernel_users_Cache
         		$returnValue[$uri] = new core_kernel_classes_Resource($uri);
         	}
         }
-        catch (common_cache_NotFoundException $e){
+        catch (common_cache_Exception $e){
         	$roleUri = $role->getUri();
         	$msg = "Includes roles related to Role with URI '${roleUri}' is not in the Cache memory.";
         	throw new core_kernel_users_CacheException($msg);
