@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 08.01.2013, 17:31:43 with ArgoUML PHP module 
+ * Automatically generated on 13.02.2013, 10:42:23 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -579,6 +579,24 @@ class common_ext_Extension
         // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EAF end
 
         return (array) $returnValue;
+    }
+
+    /**
+     * returns the manifest of the extension
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return common_ext_Manifest
+     */
+    public function getManifest()
+    {
+        $returnValue = null;
+
+        // section 10-30-1--78-5610a354:13cd2e07c14:-8000:0000000000001FB2 begin
+        $returnValue = $this->manifest;
+        // section 10-30-1--78-5610a354:13cd2e07c14:-8000:0000000000001FB2 end
+
+        return $returnValue;
     }
 
 } /* end of class common_ext_Extension */

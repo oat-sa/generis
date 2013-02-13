@@ -163,15 +163,9 @@ class common_ext_ExtensionInstaller
         // insert model
     	if(isset($this->extension->installFiles['rdf'])){
     		$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
-    		foreach ($this->extension->installFiles['rdf'] as $row) {
-    			if (is_string($row)) {
-    				$rdfpath = $row;
-    			} elseif (is_array($row) && isset($row['file'])) {
-    				$rdfpath = $row['file'];
-    			} else {
-					throw new common_ext_InstallationException('Error in definition of model to add into the ontology for '.$this->extension->getID(), 'INSTALL');
-    			}
-    			$xml = simplexml_load_file($rdfpath);
+    		foreach ($this->extension->getManifest()->getInstallModelFiles() as $rdfpath) {
+    			
+       			$xml = simplexml_load_file($rdfpath);
 				$attrs = $xml->attributes('xml', true);
 				if(!isset($attrs['base']) || empty($attrs['base'])){
 					throw new common_ext_InstallationException('The namespace of '.$rdfpath.' has to be defined with the "xml:base" attribute of the ROOT node');

@@ -541,7 +541,17 @@ class common_ext_Manifest
     private function setInstallModelFiles($installModelFiles)
     {
         // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C6E begin
-        $this->installModelFiles = $installModelFiles;
+        $this->installModelFiles = array();
+		foreach ($installModelFiles as $row) {
+			if (is_string($row)) {
+				$rdfpath = $row;
+			} elseif (is_array($row) && isset($row['file'])) {
+				$rdfpath = $row['file'];
+			} else {
+				throw new common_ext_InstallationException('Error in definition of model to add into the ontology for '.$this->extension->getID(), 'INSTALL');
+			}
+    		$this->installModelFiles[] = $rdfpath;
+		}
         // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C6E end
     }
 
