@@ -142,24 +142,14 @@ class common_cache_FileCache
         // 2. Include the file corresponding to the serial. 
         $filePath = $this->getFilePath($serial);
         if (false !== ($fp = @fopen($filePath, 'r')) && true === flock($fp, LOCK_SH)){
-        	if ($this->has($serial)) {
-        		try {
-        			$returnValue = include $this->getFilePath($serial);
-        		}
-        		catch (Exception $e) {
-        			throw new common_exception_FileSystemError('Exception while reading cache entry for '. $serial);
-        		}
-        	} 
-        	else {
-        		throw new common_cache_NotFoundException('Failed to get (' . $serial . ') from filecache');
-        	}
+        	$returnValue = include $this->getFilePath($serial);
         	
         	@flock($fp, LOCK_UN);
         	@fclose($fp);
         }
         else{
-        	$msg = "Unable to acquire shared lock for reading on 'lock.php' file.";
-        	throw new common_exception_FileSystemError($msg);
+        	$msg = "Unable to acquire lock to read file '${filePath}'.";
+        	throw new common_cache_NotFoundException($msg);
         }
     	
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F3C end
