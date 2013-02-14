@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Extension Management</activediagram>
+      <activediagram>Users</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -116,7 +116,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Feb 13 12:12:16 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Feb 14 17:52:33 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -9224,25 +9224,6 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                               name = 'return' isSpecification = 'false' kind = 'return'/>
                           </UML:BehavioralFeature.parameter>
                         </UML:Operation>
-                        <UML:Attribute xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002359'
-                          name = 'userResource' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
-                          changeability = 'changeable' targetScope = 'instance'>
-                          <UML:StructuralFeature.multiplicity>
-                            <UML:Multiplicity xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:000000000000235A'>
-                              <UML:Multiplicity.range>
-                                <UML:MultiplicityRange xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:000000000000235B'
-                                  lower = '1' upper = '1'/>
-                              </UML:Multiplicity.range>
-                            </UML:Multiplicity>
-                          </UML:StructuralFeature.multiplicity>
-                          <UML:Attribute.initialValue>
-                            <UML:Expression xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EA9'
-                              language = '' body = 'null'/>
-                          </UML:Attribute.initialValue>
-                          <UML:StructuralFeature.type>
-                            <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
-                          </UML:StructuralFeature.type>
-                        </UML:Attribute>
                         <UML:Operation xmi.id = '-87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E95'
                           name = 'singleton' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
                           isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
@@ -9325,6 +9306,21 @@ Enables you to retrieve staticly the DbWrapper instance.</UML:TaggedValue.dataVa
                               </UML:ModelElement.taggedValue>
                               <UML:Parameter.type>
                                 <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                          </UML:BehavioralFeature.parameter>
+                        </UML:Operation>
+                        <UML:Operation xmi.id = '10-30-1--78--48fee1a:13cd96eb40b:-8000:0000000000001FB6'
+                          name = 'startSession' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                          isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                          isAbstract = 'false'>
+                          <UML:BehavioralFeature.parameter>
+                            <UML:Parameter xmi.id = '10-30-1--78--48fee1a:13cd96eb40b:-8000:0000000000001FB7'
+                              name = 'return' isSpecification = 'false' kind = 'return'/>
+                            <UML:Parameter xmi.id = '10-30-1--78--48fee1a:13cd96eb40b:-8000:0000000000001FB8'
+                              name = 'user' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765'/>
                               </UML:Parameter.type>
                             </UML:Parameter>
                           </UML:BehavioralFeature.parameter>
@@ -69500,7 +69496,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     ></text>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[44, 56, 476, 129]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[44, 56, 476, 137]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
        fill="1"
        fillcolor="white"
@@ -69515,7 +69511,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       x="44"
       y="56"
       width="476"
-      height="129"
+      height="137"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -69571,7 +69567,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[45, 79, 474, 38]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[45, 79, 474, 28]"
          href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
          fill="0"
          fillcolor="white"
@@ -69585,7 +69581,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="45"
         y="79"
         width="474"
-        height="38"
+        height="28"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -69594,22 +69590,6 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig1.4.1"
         x="45"
         y="79"
-        width="474"
-        height="14"
-        fill="0"
-        fillcolor="white"
-        stroke="0"
-        strokecolor="black"
-        textcolor="black"
-        font="Dialog"
-        italic="false"
-        bold="false"
-        textsize="10"
-        justification="Left"
-      >userResource : Resource  = null</text>
-      <text name="Fig1.4.2"
-        x="45"
-        y="93"
         width="474"
         height="20"
         fill="0"
@@ -69626,7 +69606,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig1.5"
       x="44"
-      y="117"
+      y="107"
       width="476"
       height="1"
       fill="1"
@@ -69635,7 +69615,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[45, 118, 474, 66]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[45, 108, 474, 84]"
          href="-87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815"
          fill="0"
          fillcolor="white"
@@ -69647,9 +69627,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig1.6.0"
         x="45"
-        y="118"
+        y="108"
         width="474"
-        height="66"
+        height="84"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -69657,7 +69637,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       />
       <text name="Fig1.6.1"
         x="45"
-        y="118"
+        y="108"
         width="474"
         height="14"
         fill="0"
@@ -69673,7 +69653,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >login(login : string,password : string,allowedRoles) : boolean</text>
       <text name="Fig1.6.2"
         x="45"
-        y="132"
+        y="122"
         width="474"
         height="14"
         fill="0"
@@ -69689,7 +69669,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >«create» __construct()</text>
       <text name="Fig1.6.3"
         x="45"
-        y="146"
+        y="136"
         width="474"
         height="14"
         fill="0"
@@ -69705,7 +69685,23 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >singleton() : Service</text>
       <text name="Fig1.6.4"
         x="45"
-        y="160"
+        y="150"
+        width="474"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >logout() : boolean</text>
+      <text name="Fig1.6.5"
+        x="45"
+        y="164"
         width="474"
         height="20"
         fill="0"
@@ -69718,7 +69714,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >logout() : boolean</text>
+      >startSession(user : Resource)</text>
     </group>
   </group>
   <group name="Fig2"
@@ -70479,7 +70475,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig7.4.2"
         x="581"
         y="113"
-        width="357"
+        width="375"
         height="14"
         fill="0"
         fillcolor="white"
@@ -70779,7 +70775,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig9.4.1"
         x="585"
         y="355"
-        width="276"
+        width="279"
         height="14"
         fill="0"
         fillcolor="white"
@@ -70884,7 +70880,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="51 51 153"
     >
       <moveto x="448"
-              y="185" />
+              y="193" />
       <lineto x="448"
               y="368" />
       <lineto x="584"
@@ -75967,7 +75963,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="41"
         y="353"
         width="704"
-        height="27"
+        height="14"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -87779,7 +87775,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig6.6.6"
         x="113"
         y="394"
-        width="254"
+        width="243"
         height="14"
         fill="0"
         fillcolor="white"

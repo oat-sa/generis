@@ -259,7 +259,7 @@ class core_kernel_classes_Session
         $returnValue = (string) '';
 
         // section 10-13-1--31-42d46662:11bb6ef4845:-8000:0000000000000D59 begin
-	$returnValue = $this->userLogin;
+		$returnValue = $this->userLogin;
         // section 10-13-1--31-42d46662:11bb6ef4845:-8000:0000000000000D59 end
 
         return (string) $returnValue;
