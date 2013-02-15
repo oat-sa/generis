@@ -52,4 +52,10 @@ function set_data($key, $data){
 	$context = Context::getInstance();
 	$context->setData($key, $data);
 }
+
+function has_data($key){
+	$context = Context::getInstance();
+	$data = $context->getData($key);
+	return !empty($data);
+}
 ?>
