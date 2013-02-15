@@ -206,7 +206,7 @@ class common_ext_Extension
         $returnValue = (string) '';
 
         // section 10-30-1--78--302e8d4b:13c05a95bce:-8000:0000000000001E9A begin
-        $returnValue = $this->getDir().'common'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'common.conf.php';
+        $returnValue = $this->getDir().'includes'.DIRECTORY_SEPARATOR.'config.php';
         // section 10-30-1--78--302e8d4b:13c05a95bce:-8000:0000000000001E9A end
 
         return (string) $returnValue;
