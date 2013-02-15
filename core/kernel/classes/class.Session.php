@@ -123,12 +123,15 @@ class core_kernel_classes_Session
         $returnValue = null;
 
         // section 10-13-1--31--7858878e:119b84cada6:-8000:0000000000000AE0 begin
+        $context = Context::getInstance();
+        $session = $context->getSession(); //ClearFramework Session.
+        
 		if (!isset(self::$instance) || is_null(self::$instance)) {
-			if (Session::hasAttribute('generis_session')) {
-				self::$instance = Session::getAttribute('generis_session');
+			if ($session->hasAttribute('generis_session')) {
+				self::$instance = $session->getAttribute('generis_session');
 			} else {
 				self::$instance = new self();
-				Session::setAttribute('generis_session', self::$instance);
+				$session->setAttribute('generis_session', self::$instance);
 			}
 		}
 		$returnValue = self::$instance;

@@ -118,7 +118,9 @@ class common_cache_SessionCache
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F3C begin
         if (!isset($this->items[$serial])) {
         	if ($this->has($serial)) {
-        		$storage = Session::getAttribute(static::SESSION_KEY);
+        		$context = Context::getInstance();
+        		$session = $context->getSession();
+        		$storage = $session->getAttribute(static::SESSION_KEY);
 	        	$data = @unserialize($storage[$serial]);
 		        
 	        	// check if serialize successfull, see http://lu.php.net/manual/en/function.unserialize.php
@@ -149,11 +151,15 @@ class common_cache_SessionCache
         $returnValue = (bool) false;
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F40 begin
+        $context = Context::getInstance();
+        $session = $context->getSession();
+        
     	if (isset($this->items[$serial])) {
 			$returnValue = true;
 		} else {
-			if (Session::hasAttribute(static::SESSION_KEY)) {
-				$storage = Session::getAttribute(static::SESSION_KEY);
+			if ($session->hasAttribute(static::SESSION_KEY)) {
+				
+				$storage = $session->getAttribute(static::SESSION_KEY);
 				$returnValue = isset($storage[$serial]);
 			}
 		}
@@ -192,7 +198,8 @@ class common_cache_SessionCache
         $returnValue = null;
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F48 begin
-        Session::removeAttribute(static::SESSION_KEY);
+        $session = Context::getInstance()->getSession();
+        $session->removeAttribute(static::SESSION_KEY);
         $this->items = array();
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F48 end
 
@@ -229,8 +236,11 @@ class common_cache_SessionCache
         $returnValue = array();
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F2E begin
-        if (Session::hasAttribute(static::SESSION_KEY)) {
-    		foreach (Session::getAttribute(static::SESSION_KEY) as $serial => $raw) {
+        $context = Context::getInstance();
+        $session = $context->getSession();
+        
+        if ($session->hasAttribute(static::SESSION_KEY)) {
+    		foreach ($session->getAttribute(static::SESSION_KEY) as $serial => $raw) {
     			if (!isset($this->items[$serial])) {
     				// loads the serial to the item
     				$this->get($serial);
@@ -256,10 +266,14 @@ class common_cache_SessionCache
         $returnValue = (bool) false;
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F30 begin
+        $context = Context::getInstance();
+        $session = $context->getSession();
+        
     	if (isset($this->items[$serial])) {
         	$returnValue = true;
-        } elseif (!empty($serial) && Session::hasAttribute(static::SESSION_KEY)){
-        	$storage = Session::getAttribute(static::SESSION_KEY);
+        } elseif (!empty($serial) && $session->hasAttribute(static::SESSION_KEY)){
+        	
+        	$storage = $session->getAttribute(static::SESSION_KEY);
         	$returnValue = isset($storage[$serial]);
         }
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F30 end
