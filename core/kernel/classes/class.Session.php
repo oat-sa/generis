@@ -123,8 +123,7 @@ class core_kernel_classes_Session
         $returnValue = null;
 
         // section 10-13-1--31--7858878e:119b84cada6:-8000:0000000000000AE0 begin
-        $context = Context::getInstance();
-        $session = $context->getSession(); //ClearFramework Session.
+        $session = PHPSession::singleton();
         
 		if (!isset(self::$instance) || is_null(self::$instance)) {
 			if ($session->hasAttribute('generis_session')) {

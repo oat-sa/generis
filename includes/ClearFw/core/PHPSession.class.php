@@ -5,9 +5,18 @@
  * 
  * @author J�r�me Bogaerts <jerome.bogaerts@tudor.lu> <jerome.bogaerts@gmail.com>
  */
-class Session
+class PHPSession
 {
-	public function __construct()
+	private static $instance = null;
+	
+	public static function singleton() {
+		if (is_null(self::$instance)) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+	
+	private function __construct()
 	{
 		if (!isset($_SESSION[SESSION_NAMESPACE])) $_SESSION[SESSION_NAMESPACE] = array();
 	}

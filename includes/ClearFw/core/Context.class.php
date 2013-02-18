@@ -13,7 +13,6 @@ class Context
 {
 	private $request;
 	private $response;
-	private $session;
 	
 	private $extensionName;
 	private $moduleName;
@@ -39,18 +38,11 @@ class Context
 	 * Constructor. Please use only getInstance to retrieve the single instance.
 	 * 
 	 * @see Context#getInstance
-	 * 
-	 * @param Request $request
-	 * @param Response $response
-	 * @param Session $session
-	 * @param string $moduleName
-	 * @param string $actionName
 	 */
 	private function __construct() {
 		
 		$this->request			= new Request();
 		$this->response			= new Response();
-		$this->session 			= new Session();
 		
 		$this->viewData			= array();
 		$this->behaviors		= array();
@@ -90,7 +82,7 @@ class Context
 	
 	public function getSession()
 	{
-		return $this->session;
+		return PHPSession::singleton();
 	}
 	
 	public function setExtensionName($extensionName)
