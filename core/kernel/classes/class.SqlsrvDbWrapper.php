@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 /**
  * Microsoft SQL Server Database Wrapper
  *
- * @author firstname and lastname of author, <author@example.org>
+ * @author Lionel Lecaque, <lionel@taotesting.com>
  * @package core
  * @subpackage kernel_classes
  */
@@ -20,7 +20,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  *
  * This database wrapper uses PDO.
  *
- * @author firstname and lastname of author, <author@example.org>
+ * @author Lionel Lecaque, <lionel@taotesting.com>
  */
 require_once('core/kernel/classes/class.DbWrapper.php');
 
@@ -36,7 +36,7 @@ require_once('core/kernel/classes/class.DbWrapper.php');
  * Microsoft SQL Server Database Wrapper
  *
  * @access public
- * @author firstname and lastname of author, <author@example.org>
+ * @author Lionel Lecaque, <lionel@taotesting.com>
  * @package core
  * @subpackage kernel_classes
  */
@@ -54,7 +54,7 @@ class core_kernel_classes_SqlsrvDbWrapper
      * Short description of method getExtraConfiguration
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @return string
      */
     public function getExtraConfiguration()
@@ -71,7 +71,7 @@ class core_kernel_classes_SqlsrvDbWrapper
      * Short description of method getTableNotFoundErrorCode
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @return string
      */
     public function getTableNotFoundErrorCode()
@@ -88,7 +88,7 @@ class core_kernel_classes_SqlsrvDbWrapper
      * Short description of method getColumnNotFoundErrorCode
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @return string
      */
     public function getColumnNotFoundErrorCode()
@@ -105,7 +105,7 @@ class core_kernel_classes_SqlsrvDbWrapper
      * Short description of method afterConnect
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @return void
      */
     public function afterConnect()
@@ -118,7 +118,7 @@ class core_kernel_classes_SqlsrvDbWrapper
      * Short description of method getTables
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @return array
      */
     public function getTables()
@@ -135,7 +135,7 @@ class core_kernel_classes_SqlsrvDbWrapper
      * Short description of method getIndexAlreadyExistsErrorCode
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @return string
      */
     public function getIndexAlreadyExistsErrorCode()
@@ -152,7 +152,7 @@ class core_kernel_classes_SqlsrvDbWrapper
      * Short description of method limitStatement
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @param  string statement
      * @param  int limit
      * @param  int offset
@@ -169,13 +169,13 @@ class core_kernel_classes_SqlsrvDbWrapper
     }
 
     /**
-     * Short description of method getExtraDSN
+     * Provide driver specific Dsn to connect to the db
      *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @access protected
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @return string
      */
-    public function getExtraDSN()
+    protected function getDSN()
     {
         $returnValue = (string) '';
 
@@ -189,7 +189,7 @@ class core_kernel_classes_SqlsrvDbWrapper
      * Short description of method createIndex
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @param  string indexName
      * @param  string tableName
      * @param  array columns
@@ -205,7 +205,7 @@ class core_kernel_classes_SqlsrvDbWrapper
      * Short description of method rebuildIndexes
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @param  string tableName
      * @return void
      */
@@ -219,7 +219,7 @@ class core_kernel_classes_SqlsrvDbWrapper
      * Short description of method flush
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @param  string tableName
      * @return void
      */
@@ -233,7 +233,7 @@ class core_kernel_classes_SqlsrvDbWrapper
      * Short description of method getColumnNames
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @param  string table
      * @return array
      */
