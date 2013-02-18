@@ -118,9 +118,7 @@ class common_cache_SessionCache
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F3C begin
         if (!isset($this->items[$serial])) {
         	if ($this->has($serial)) {
-        		$context = Context::getInstance();
-        		$session = $context->getSession();
-        		$storage = $session->getAttribute(static::SESSION_KEY);
+        		$storage = PHPSession::singleton()->getAttribute(static::SESSION_KEY);
 	        	$data = @unserialize($storage[$serial]);
 		        
 	        	// check if serialize successfull, see http://lu.php.net/manual/en/function.unserialize.php
@@ -151,8 +149,7 @@ class common_cache_SessionCache
         $returnValue = (bool) false;
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F40 begin
-        $context = Context::getInstance();
-        $session = $context->getSession();
+        $session = PHPSession::singleton();
         
     	if (isset($this->items[$serial])) {
 			$returnValue = true;
@@ -198,8 +195,7 @@ class common_cache_SessionCache
         $returnValue = null;
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F48 begin
-        $session = Context::getInstance()->getSession();
-        $session->removeAttribute(static::SESSION_KEY);
+        PHPSession::singleton()->removeAttribute(static::SESSION_KEY);
         $this->items = array();
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F48 end
 
@@ -236,8 +232,7 @@ class common_cache_SessionCache
         $returnValue = array();
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F2E begin
-        $context = Context::getInstance();
-        $session = $context->getSession();
+        $session = PHPSession::singleton();
         
         if ($session->hasAttribute(static::SESSION_KEY)) {
     		foreach ($session->getAttribute(static::SESSION_KEY) as $serial => $raw) {
@@ -266,8 +261,7 @@ class common_cache_SessionCache
         $returnValue = (bool) false;
 
         // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F30 begin
-        $context = Context::getInstance();
-        $session = $context->getSession();
+        $session = PHPSession::singleton();
         
     	if (isset($this->items[$serial])) {
         	$returnValue = true;
