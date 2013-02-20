@@ -180,6 +180,10 @@ class core_kernel_classes_SqlsrvDbWrapper
         $returnValue = (string) '';
 
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FA1 begin
+        $driver = str_replace('pdo_', '', SGBD_DRIVER);
+        $dbName = DATABASE_NAME;
+        $dbUrl = DATABASE_URL;
+        $returnValue  = $driver . ':Server=' . $dbUrl. ';Database=' . $dbName;
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FA1 end
 
         return (string) $returnValue;

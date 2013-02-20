@@ -218,7 +218,7 @@ abstract class core_kernel_classes_DbWrapper
      * Used to close the database connection on destruction
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return mixed
      */
     public function __destruct()
@@ -236,7 +236,7 @@ abstract class core_kernel_classes_DbWrapper
      * Will throw an exception. Singleton instances must not be cloned.
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return core_kernel_classes_DbWrapper
      */
     public function __clone()
@@ -254,7 +254,7 @@ abstract class core_kernel_classes_DbWrapper
      * Short description of method getSetting
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @author Cï¿½dric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @deprecated
      * @param  string name
      * @return string
