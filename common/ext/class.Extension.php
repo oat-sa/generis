@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 13.02.2013, 10:42:23 with ArgoUML PHP module 
+ * Automatically generated on 18.02.2013, 15:42:12 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -125,7 +125,7 @@ class common_ext_Extension
      * Should not be called directly, please use ExtensionsManager
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string id
      * @param  boolean installed
      * @param  array data array to preload the dbconfiguration
@@ -198,7 +198,7 @@ class common_ext_Extension
      * used for instalation specific configurations
      *
      * @access private
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return string
      */
     private function getConfigFilePath()
@@ -216,7 +216,7 @@ class common_ext_Extension
      * returns the id of the extension
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return string
      */
     public function getID()
@@ -234,7 +234,7 @@ class common_ext_Extension
      * returns all constants of the extension
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return array
      */
     public function getConstants()
@@ -252,7 +252,7 @@ class common_ext_Extension
      * returns all configuration key/value pairs
      *
      * @access private
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return array
      */
     private function getConfigs()
@@ -299,7 +299,7 @@ class common_ext_Extension
      * sets a configuration value
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string key
      * @param  value
      * @return mixed
@@ -321,7 +321,7 @@ class common_ext_Extension
      * retrieves a configuration value
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string key
      * @return mixed
      */
@@ -345,7 +345,7 @@ class common_ext_Extension
      * removes a configuration entry
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string key
      * @return mixed
      */
@@ -363,7 +363,7 @@ class common_ext_Extension
      * returns the version of the extension
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return string
      */
     public function getVersion()
@@ -381,7 +381,7 @@ class common_ext_Extension
      * returns the author of the extension
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return string
      */
     public function getAuthor()
@@ -399,7 +399,7 @@ class common_ext_Extension
      * returns the name of the extension
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return string
      */
     public function getName()
@@ -417,7 +417,7 @@ class common_ext_Extension
      * returns whenever or not the extension is enabled
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return boolean
      */
     public function isEnabled()
@@ -437,7 +437,7 @@ class common_ext_Extension
      * returns whenever or not the extension is installed
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return boolean
      */
     public function isInstalled()
@@ -455,7 +455,7 @@ class common_ext_Extension
      * returns the base dir of the extension
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return string
      */
     public function getDir()
@@ -473,7 +473,7 @@ class common_ext_Extension
      * retrieves a constant
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string key
      * @return mixed
      */
@@ -501,7 +501,7 @@ class common_ext_Extension
      * by searching the actions directory, not the ontology
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return array
      */
     public function getAllModules()
@@ -534,7 +534,7 @@ class common_ext_Extension
      * returns a module by ID
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string id
      * @return Module
      */
@@ -559,7 +559,7 @@ class common_ext_Extension
      * depends on recursively
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return array
      */
     public function getDependencies()
@@ -585,7 +585,7 @@ class common_ext_Extension
      * returns the manifest of the extension
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return common_ext_Manifest
      */
     public function getManifest()
@@ -595,6 +595,26 @@ class common_ext_Extension
         // section 10-30-1--78-5610a354:13cd2e07c14:-8000:0000000000001FB2 begin
         $returnValue = $this->manifest;
         // section 10-30-1--78-5610a354:13cd2e07c14:-8000:0000000000001FB2 end
+
+        return $returnValue;
+    }
+
+    /**
+     * Get the Management Role of the Extension. Returns null in case of no
+     * Role for the Extension.
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return core_kernel_classes_Resource
+     */
+    public function getManagementRole()
+    {
+        $returnValue = null;
+
+        // section 127-0-1-1-4028d1e7:13cedb79c9e:-8000:0000000000001FB1 begin
+        $manifest = $this->getManifest();
+        $returnValue = $manifest->getManagementRole();
+        // section 127-0-1-1-4028d1e7:13cedb79c9e:-8000:0000000000001FB1 end
 
         return $returnValue;
     }

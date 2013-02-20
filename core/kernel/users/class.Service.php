@@ -17,14 +17,14 @@ if (0 > version_compare(PHP_VERSION, '5')) {
 /**
  * include core_kernel_users_RolesManagement
  *
- * @author Joel Bout, <joel@taotesting.com>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  */
 require_once('core/kernel/users/interface.RolesManagement.php');
 
 /**
  * include core_kernel_users_UsersManagement
  *
- * @author Joel Bout, <joel@taotesting.com>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  */
 require_once('core/kernel/users/interface.UsersManagement.php');
 
@@ -68,7 +68,7 @@ class core_kernel_users_Service
      * memory of Generis.
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string login A string that is used as a Generis user login in the persistent memory.
      * @param  Class class A specific sub class of User where the login must be searched into.
      * @return boolean
@@ -98,7 +98,7 @@ class core_kernel_users_Service
      * the user will be given the Generis Role.
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string login A specific login for the User to create.
      * @param  string password A password for the User to create (md5 hash).
      * @param  Resource role A Role to grant to the new User.
@@ -142,7 +142,7 @@ class core_kernel_users_Service
      * Remove a Generis User from persistent memory. Bound roles will remain
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  Resource user A reference to the User to be removed from the persistent memory of Generis.
      * @return boolean
      */
@@ -163,7 +163,7 @@ class core_kernel_users_Service
      * be thrown.
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string login A Generis User login.
      * @param  Class class A specific sub Class of User where in the User has to be searched in.
      * @return core_kernel_classes_Resource
@@ -197,7 +197,7 @@ class core_kernel_users_Service
      * Indicates if an Authenticated Session is open.
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return boolean
      */
     public function isASessionOpened()
@@ -217,7 +217,7 @@ class core_kernel_users_Service
      * to test the pasword entered
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string password used in conjunction with the callback validator
 to test the pasword entered
      * @param  Resource user used in conjunction with the callback validator
@@ -244,7 +244,7 @@ to test the pasword entered
      * Set the password of a specifc user.
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  Resource user The user you want to set the password.
      * @param  string password The md5 hash of the password you want to set to the user.
      * @return void
@@ -264,7 +264,7 @@ to test the pasword entered
      * Get the roles that a given user has.
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  Resource user A Generis User.
      * @return array
      */
@@ -292,7 +292,7 @@ to test the pasword entered
      * Indicates if a user is granted with a set of Roles.
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  Resource user The User instance you want to check Roles.
      * @param  roles Can be either a single Resource or an array of Resource depicting Role(s).
      * @return boolean
@@ -328,7 +328,7 @@ to test the pasword entered
      * if an error occurs. If the User already has the role, nothing happens.
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  Resource user The User you want to attach a Role.
      * @param  Resource role A Role to attach to a User.
      * @return void
@@ -355,7 +355,7 @@ to test the pasword entered
      * Short description of method unnatachRole
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  Resource user A Generis user from which you want to unnattach the Generis Role.
      * @param  Resource role The Generis Role you want to Unnatach from the Generis User.
      * @return void
@@ -382,7 +382,7 @@ to test the pasword entered
      * Add a role in Generis.
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string label The label to apply to the newly created Generis Role.
      * @param  includedRoles The Role(s) to be included in the newly created Generis Role.
 Can be either a Resource or an array of Resources.
@@ -415,7 +415,7 @@ Can be either a Resource or an array of Resources.
      * will be removed.
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  Resource role The Role to remove.
      * @return boolean
      */
@@ -446,7 +446,7 @@ Can be either a Resource or an array of Resources.
      * Get an array of the Roles included by a Generis Role.
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  Resource role A Generis Role.
      * @return array
      */
@@ -507,7 +507,7 @@ Can be either a Resource or an array of Resources.
      * system.
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return array
      */
     public function getAllowedRoles()
@@ -528,7 +528,7 @@ Can be either a Resource or an array of Resources.
      * role.
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return core_kernel_classes_Resource
      */
     public function getDefaultRole()
@@ -540,6 +540,24 @@ Can be either a Resource or an array of Resources.
         // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000002010 end
 
         return $returnValue;
+    }
+
+    /**
+     * Make a Role include another Role.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param  Resource role The role that needs to include another role.
+     * @param  Resource roleToInclude The role to be included.
+     * @return void
+     */
+    public function includeRole( core_kernel_classes_Resource $role,  core_kernel_classes_Resource $roleToInclude)
+    {
+        // section 127-0-1-1--55ee3a0d:13cedda118c:-8000:0000000000001FB5 begin
+        $includesRoleProperty = new core_kernel_classes_Property(PROPERTY_ROLE_INCLUDESROLE);
+        $role->removePropertyValues($includesRoleProperty, array('pattern' => $roleToInclude->getUri()));
+        $role->setPropertyValue($includesRoleProperty, $roleToInclude->getUri());
+        // section 127-0-1-1--55ee3a0d:13cedda118c:-8000:0000000000001FB5 end
     }
 
     /**
@@ -687,7 +705,7 @@ Can be either a Resource or an array of Resources.
      * Short description of method startSession
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  Resource user
      * @return mixed
      */

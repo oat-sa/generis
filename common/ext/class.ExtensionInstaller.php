@@ -3,13 +3,13 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - common\ext\class.ExtensionInstaller.php
+ * Generis Object Oriented API - common/ext/class.ExtensionInstaller.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 31.01.2013, 10:26:55 with ArgoUML PHP module 
+ * Automatically generated on 19.02.2013, 13:10:26 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author lionel.lecaque@tudor.lu
@@ -69,7 +69,7 @@ class common_ext_ExtensionInstaller
      * install an extension
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return void
      */
     public function install()
@@ -99,11 +99,9 @@ class common_ext_ExtensionInstaller
 			$this->installOntology();
 			$this->installOntologyTranslation();
 			$this->installRegisterExt();
+			$this->installLoadConstants();
+			$this->installExtensionModel();
 			
-			// Method to be overriden by subclasses
-			// to extend the installation mechanism.
-			$this->extendedInstall();
-
 			core_kernel_classes_Session::singleton()->update();
 			
 			$this->installCustomScript();
@@ -111,6 +109,10 @@ class common_ext_ExtensionInstaller
 			if ($this->getLocalData() == true){
 				$this->installLocalData();
 			}
+			
+			// Method to be overriden by subclasses
+			// to extend the installation mechanism.
+			$this->extendedInstall();
 				
 		}catch (common_ext_ExtensionException $e){
 			// Rethrow
@@ -124,7 +126,7 @@ class common_ext_ExtensionInstaller
      * writes the config based on the config.sample
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return void
      */
     protected function installWriteConfig()
@@ -154,7 +156,7 @@ class common_ext_ExtensionInstaller
      * specified in the Manifest
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return void
      */
     protected function installOntology()
@@ -164,16 +166,25 @@ class common_ext_ExtensionInstaller
     	if(isset($this->extension->installFiles['rdf'])){
     		$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
     		foreach ($this->extension->getManifest()->getInstallModelFiles() as $rdfpath) {
-    			
-       			$xml = simplexml_load_file($rdfpath);
-				$attrs = $xml->attributes('xml', true);
-				if(!isset($attrs['base']) || empty($attrs['base'])){
-					throw new common_ext_InstallationException('The namespace of '.$rdfpath.' has to be defined with the "xml:base" attribute of the ROOT node');
-				}
-				$ns = (string) $attrs['base'];
-				//import the model in the ontology
-				common_Logger::d('Inserting model '.$rdfpath.' for '.$this->extension->getID(), 'INSTALL');
-				$modelCreator->insertModelFile($ns, $rdfpath);
+    			if (file_exists($rdfpath)){
+    				if (is_readable($rdfpath)){
+    					$xml = simplexml_load_file($rdfpath);
+    					$attrs = $xml->attributes('xml', true);
+    					if(!isset($attrs['base']) || empty($attrs['base'])){
+    						throw new common_ext_InstallationException('The namespace of '.$rdfpath.' has to be defined with the "xml:base" attribute of the ROOT node');
+    					}
+    					$ns = (string) $attrs['base'];
+    					//import the model in the ontology
+    					common_Logger::d('Inserting model '.$rdfpath.' for '.$this->extension->getID(), 'INSTALL');
+    					$modelCreator->insertModelFile($ns, $rdfpath);
+    				}
+    				else{
+    					throw new common_ext_InstallationException("Unable to load ontology in '${rdfpath}' because the file is not readable.");
+    				}
+    			}
+    			else{
+    				throw new common_ext_InstallationException("Unable to load ontology in '${rdfpath}' because the file does not exist.");
+    			}
     		}
     	}
         // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A24 end
@@ -183,7 +194,7 @@ class common_ext_ExtensionInstaller
      * inserts the translation of the datamodel
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return void
      */
     protected function installOntologyTranslation()
@@ -205,7 +216,7 @@ class common_ext_ExtensionInstaller
      * Registers the Extension with the extensionManager
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return void
      */
     protected function installRegisterExt()
@@ -232,7 +243,7 @@ class common_ext_ExtensionInstaller
      * specified in the Manifest
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return void
      */
     protected function installCustomScript()
@@ -254,7 +265,7 @@ class common_ext_ExtensionInstaller
      * Installs example files and other non essential content
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return void
      */
     protected function installLocalData()
@@ -281,10 +292,40 @@ class common_ext_ExtensionInstaller
     }
 
     /**
+     * Loads the /extension_folder/includes/constants.php file of the extension.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @return void
+     */
+    public function installLoadConstants()
+    {
+        // section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FCE begin
+    	common_Logger::i("Loading constants for extension '" . $this->extension->getID() . "'");
+    	Bootstrap::loadConstants($this->extension->getID());
+        // section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FCE end
+    }
+
+    /**
+     * Instantiate the Extension/Module/Action model in the persistent memory of
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @return void
+     */
+    public function installExtensionModel()
+    {
+        // section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FD1 begin
+    	common_Logger::i("Spawning Extension/Module/Action model for extension '" . $this->extension->getID() . "'");
+    	tao_helpers_funcACL_Model::spawnExtensionModel($this->extension);
+        // section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FD1 end
+    }
+
+    /**
      * check required extensions are not missing
      *
      * @access protected
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return boolean
      */
     protected function checkRequiredExtensions()
@@ -310,7 +351,7 @@ class common_ext_ExtensionInstaller
      * Instantiate a new ExtensionInstaller for a given Extension.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  Extension extension The extension to install
      * @param  boolean localData Import local data or not.
      * @return mixed
@@ -327,7 +368,7 @@ class common_ext_ExtensionInstaller
      * Sets localData field.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  boolean value
      * @return mixed
      */
@@ -342,7 +383,7 @@ class common_ext_ExtensionInstaller
      * Retrieve localData field
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return boolean
      */
     public function getLocalData()
@@ -357,21 +398,17 @@ class common_ext_ExtensionInstaller
     }
 
     /**
-     * This method can be overriden by sub classes in order to extend the
-     * process. This method is called after all instalXXX methods but before all
-     * are flushed.
-     *
-     * In this implementation, this method simply returns void.
+     * Short description of method extendedInstall
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return void
      */
     public function extendedInstall()
     {
-        // section 10-13-1-85--34b66bb6:13c8fe59fb3:-8000:0000000000001F7E begin
-        return;
-        // section 10-13-1-85--34b66bb6:13c8fe59fb3:-8000:0000000000001F7E end
+        // section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FD6 begin
+    	return;
+        // section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FD6 end
     }
 
 } /* end of class common_ext_ExtensionInstaller */

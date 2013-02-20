@@ -3,16 +3,16 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - core\kernel\users\interface.RolesManagement.php
+ * Generis Object Oriented API - core/kernel/users/interface.RolesManagement.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 30.01.2013, 15:11:01 with ArgoUML PHP module 
+ * Automatically generated on 18.02.2013, 16:33:58 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package core
  * @subpackage kernel_users
  */
@@ -33,7 +33,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class core_kernel_users_RolesManagement
  *
  * @access public
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package core
  * @subpackage kernel_users
  */
@@ -47,7 +47,7 @@ interface core_kernel_users_RolesManagement
      * Add a role in Generis.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string label The label to apply to the newly created Generis Role.
      * @param  includedRoles The Role(s) to be included in the newly created Generis Role.
 Can be either a Resource or an array of Resources.
@@ -60,7 +60,7 @@ Can be either a Resource or an array of Resources.
      * will be removed.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  Resource role The Role to remove.
      * @return boolean
      */
@@ -70,7 +70,7 @@ Can be either a Resource or an array of Resources.
      * Get an array of the Roles included by a Generis Role.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  Resource role A Generis Role.
      * @return array
      */
@@ -82,7 +82,7 @@ Can be either a Resource or an array of Resources.
      * system.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return array
      */
     public function getAllowedRoles();
@@ -93,10 +93,21 @@ Can be either a Resource or an array of Resources.
      * role.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return core_kernel_classes_Resource
      */
     public function getDefaultRole();
+
+    /**
+     * Make a Role include another Role.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param  Resource role The role that needs to include another role.
+     * @param  Resource roleToInclude The role to be included.
+     * @return void
+     */
+    public function includeRole( core_kernel_classes_Resource $role,  core_kernel_classes_Resource $roleToInclude);
 
 } /* end of interface core_kernel_users_RolesManagement */
 

@@ -3,17 +3,18 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - common\ext\class.Manifest.php
+ * Generis Object Oriented API - common/ext/class.Manifest.php
  *
  * $Id$
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 03.01.2013, 14:49:55 with ArgoUML PHP module 
+ * Automatically generated on 18.02.2013, 15:42:12 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ * @author Jerome Bogaerts <jerome@taotesting.com>
  * @package common
+ * @since 2.3
  * @subpackage ext
  */
 
@@ -33,8 +34,9 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class common_ext_Manifest
  *
  * @access public
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ * @author Jerome Bogaerts <jerome@taotesting.com>
  * @package common
+ * @since 2.3
  * @subpackage ext
  */
 class common_ext_Manifest
@@ -148,13 +150,21 @@ class common_ext_Manifest
      */
     private $installPHPFiles = array();
 
+    /**
+     * Short description of attribute managementRole
+     *
+     * @access private
+     * @var Resource
+     */
+    private $managementRole = null;
+
     // --- OPERATIONS ---
 
     /**
      * Short description of method __construct
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string filePath
      * @return mixed
      */
@@ -228,6 +238,11 @@ class common_ext_Manifest
     		if (!empty($array['constants'])){
     			$this->setConstants($array['constants']);
     		}
+    		
+    		if (!empty($array['managementRole'])){
+    			$role = new core_kernel_classes_Resource($array['managementRole']);
+    			$this->setManagementRole($role);
+    		}
     	}
     	else{
     		throw new common_ext_ManifestNotFoundException("The Extension Manifest file located at '${filePath}' could not be read.");
@@ -241,7 +256,7 @@ class common_ext_Manifest
      * Short description of method getFilePath
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return string
      */
     public function getFilePath()
@@ -261,7 +276,7 @@ class common_ext_Manifest
      * Short description of method setFilePath
      *
      * @access private
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string filePath
      * @return void
      */
@@ -276,7 +291,7 @@ class common_ext_Manifest
      * Short description of method getName
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return string
      */
     public function getName()
@@ -299,7 +314,7 @@ class common_ext_Manifest
      * Short description of method setName
      *
      * @access private
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string name
      * @return void
      */
@@ -314,7 +329,7 @@ class common_ext_Manifest
      * Short description of method getDescription
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return string
      */
     public function getDescription()
@@ -334,7 +349,7 @@ class common_ext_Manifest
      * Short description of method setDescription
      *
      * @access private
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string description
      * @return void
      */
@@ -349,7 +364,7 @@ class common_ext_Manifest
      * Short description of method getAuthor
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return string
      */
     public function getAuthor()
@@ -367,7 +382,7 @@ class common_ext_Manifest
      * Short description of method setAuthor
      *
      * @access private
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string author
      * @return void
      */
@@ -382,7 +397,7 @@ class common_ext_Manifest
      * Short description of method getVersion
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return string
      */
     public function getVersion()
@@ -402,7 +417,7 @@ class common_ext_Manifest
      * Short description of method setVersion
      *
      * @access private
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string version
      * @return void
      */
@@ -417,7 +432,7 @@ class common_ext_Manifest
      * Short description of method getDependencies
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return array
      */
     public function getDependencies()
@@ -435,7 +450,7 @@ class common_ext_Manifest
      * Short description of method setDependencies
      *
      * @access private
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  array dependencies
      * @return void
      */
@@ -450,7 +465,7 @@ class common_ext_Manifest
      * Short description of method getModels
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return array
      */
     public function getModels()
@@ -468,7 +483,7 @@ class common_ext_Manifest
      * Short description of method setModels
      *
      * @access private
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  array models
      * @return void
      */
@@ -483,7 +498,7 @@ class common_ext_Manifest
      * Short description of method getModelsRights
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return array
      */
     public function getModelsRights()
@@ -501,7 +516,7 @@ class common_ext_Manifest
      * Short description of method setModelsRights
      *
      * @access private
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  array modelsRights
      * @return void
      */
@@ -513,10 +528,11 @@ class common_ext_Manifest
     }
 
     /**
-     * Short description of method getInstallModelFiles
+     * returns an array of rdf files
+     * to import during install
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return array
      */
     public function getInstallModelFiles()
@@ -534,7 +550,7 @@ class common_ext_Manifest
      * Short description of method setInstallModelFiles
      *
      * @access private
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  array installModelFiles
      * @return void
      */
@@ -559,7 +575,7 @@ class common_ext_Manifest
      * Short description of method getInstallChekcs
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return array
      */
     public function getInstallChekcs()
@@ -577,7 +593,7 @@ class common_ext_Manifest
      * Short description of method setInstallChecks
      *
      * @access private
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  array installChecks
      * @return void
      */
@@ -667,7 +683,7 @@ class common_ext_Manifest
      * Short description of method getInstallPHPFiles
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return array
      */
     public function getInstallPHPFiles()
@@ -685,7 +701,7 @@ class common_ext_Manifest
      * Short description of method setInstallPHPFiles
      *
      * @access private
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  array installPHPFiles
      * @return void
      */
@@ -700,7 +716,7 @@ class common_ext_Manifest
      * Short description of method getClassLoaderPackages
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return array
      */
     public function getClassLoaderPackages()
@@ -718,7 +734,7 @@ class common_ext_Manifest
      * Short description of method setClassLoaderPackages
      *
      * @access private
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  array classLoaderPackages
      * @return void
      */
@@ -733,7 +749,7 @@ class common_ext_Manifest
      * Short description of method getConstants
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @return array
      */
     public function getConstants()
@@ -751,7 +767,7 @@ class common_ext_Manifest
      * Short description of method setConstants
      *
      * @access private
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  array constants
      * @return void
      */
@@ -766,7 +782,7 @@ class common_ext_Manifest
      * Extract checks from a given manifest file.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author firstname and lastname of author, <author@example.org>
      * @param  string file The path to a manifest.php file.
      * @return common_configuration_ComponentCollection
      */
@@ -802,6 +818,40 @@ class common_ext_Manifest
         // section 10-13-1-85-4049d0c6:13b28618bf6:-8000:0000000000001D6D end
 
         return $returnValue;
+    }
+
+    /**
+     * Get the Role dedicated to manage this extension. Returns null if there is
+     * Management Role.
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return core_kernel_classes_Resource
+     */
+    public function getManagementRole()
+    {
+        $returnValue = null;
+
+        // section 127-0-1-1-4028d1e7:13cedb79c9e:-8000:0000000000001FA2 begin
+        $returnValue = $this->managementRole;
+        // section 127-0-1-1-4028d1e7:13cedb79c9e:-8000:0000000000001FA2 end
+
+        return $returnValue;
+    }
+
+    /**
+     * Set the Management Role of the Extension Manifest.
+     *
+     * @access private
+     * @author firstname and lastname of author, <author@example.org>
+     * @param  Resource managementRole The Management Role of the Extension as a Generis Resource.
+     * @return void
+     */
+    private function setManagementRole( core_kernel_classes_Resource $managementRole)
+    {
+        // section 127-0-1-1-4028d1e7:13cedb79c9e:-8000:0000000000001FA6 begin
+        $this->managementRole = $managementRole;
+        // section 127-0-1-1-4028d1e7:13cedb79c9e:-8000:0000000000001FA6 end
     }
 
 } /* end of class common_ext_Manifest */
