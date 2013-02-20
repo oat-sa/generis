@@ -66,9 +66,8 @@ class core_kernel_classes_PgsqlDbWrapper
      */
     public function getExtraConfiguration()
     {
-        $returnValue = array();
-
         // section 10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC3 begin
+    	$returnValue = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
         // section 10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC3 end
 
         return (array) $returnValue;

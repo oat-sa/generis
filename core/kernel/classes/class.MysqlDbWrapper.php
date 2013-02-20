@@ -66,9 +66,8 @@ class core_kernel_classes_MysqlDbWrapper
      */
     protected function getExtraConfiguration()
     {
-        $returnValue = array();
-
         // section 10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001BE8 begin
+    	$returnValue = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
         // section 10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001BE8 end
 
         return (array) $returnValue;
