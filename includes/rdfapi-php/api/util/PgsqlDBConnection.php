@@ -2,15 +2,17 @@
 class PgsqlDBConnection extends DBConnection{
 	
 	protected function getExtraConfiguration(){
-		return array();
+		return array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
 	}
 	
 	protected function afterConnect(){
 		$this->exec("SET NAMES 'UTF8'");
 	}
 	
-	protected function getExtraDSN(){
-		return '';
+	protected function getDSN(){
+		$host = $this->host;
+		$dbName = $this->dbName;
+		return "mysql:host=${host};dbname=${dbName}";
 	}
 }
 ?>

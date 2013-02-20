@@ -7,16 +7,30 @@ abstract class DBConnection extends PDO {
 	 */
 	private $statementStore = array();
 	
+	protected $user;
+	
+	protected $pass;
+	
+	protected $host;
+	
+	protected $dbName;
+	
 	/**
 	 * Creates a new extended PDO instance that represents a connection to a
 	 * specific RDBMS.
 	 */
-	public function DBConnection($dsn, $username, $password, $driver_options = array()){
+	public function DBConnection($username, $password, $dbName, $host, $driver_options = array()){
+		
+		$this->user = $username;
+		$this->pass = $password;
+		$this->dbName = $dbName;
+		$this->host = $host;
+		
 		foreach ($this->getExtraConfiguration() as $k => $v){
 			$driver_options[$k] = $v;
 		}
 
-		$dsn .= $this->getExtraDSN(); 
+		$dsn = $this->getDSN();
 		parent::__construct($dsn, $username, $password, $driver_options);
 		$this->afterConnect();
 	}
@@ -39,13 +53,12 @@ abstract class DBConnection extends PDO {
 	protected abstract function afterConnect();
 	
 	/**
-	 * Implement this method to append a piece of string to the DSN used by PDO at
-	 * connection time e.g. ';charset=utf8' supported by MySQL. If you have nothing
-	 * to append, simply return an empty string.
+	 * Implement this method to create the DSN used by PDO at
+	 * connection time e.g. ';charset=utf8' supported by MySQL.
 	 * 
-	 * @return string The piece of string to append to the DSN.
+	 * @return string The DSN for your PDO Driver.
 	 */
-	protected abstract function getExtraDSN();
+	protected abstract function getDSN();
 	
 	/**
 	 * PDO::prepare function overload that implements a prepared statement store

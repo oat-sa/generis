@@ -77,11 +77,9 @@ class DbStore extends Object
 
 	// create a new PDO object
 	$this->driver = strtolower($dbDriver);
-	$dsn = "{$this->driver}:host=${host};dbname=${dbName}";
 	$options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_NUM, // Best performance
-		        				 PDO::ATTR_PERSISTENT => false,
-		        				 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-		        				 PDO::ATTR_EMULATE_PREPARES => false);
+		        	 PDO::ATTR_PERSISTENT => false,
+		        	 PDO::ATTR_EMULATE_PREPARES => false);
 
 	try{
 		// We try to load the DBConnection class specialization for the
@@ -92,7 +90,7 @@ class DbStore extends Object
 		$classFile = RDFAPI_INCLUDE_DIR . 'util/' . $className . '.php';
 		if (file_exists($classFile)){
 			require_once($classFile);
-			$this->dbConn = new $className($dsn, $user, $password, $options);
+			$this->dbConn = new $className($user, $password, $dbName, $host, $options);
 		}
 		else{
 			$driver = ucfirst(str_replace('pdo_', '', $this->driver));
@@ -101,8 +99,7 @@ class DbStore extends Object
 			if (file_exists($classFile)){
 				require_once($classFile);
 				$driver = strtolower($driver);
-				$dsn = "{$driver}:host=${host};dbname=${dbName}";
-				$this->dbConn = new $className($dsn, $user, $password, $options);	
+				$this->dbConn = new $className($user, $password, $dbName, $host, $options);	
 			}
 			else{
 				throw new Exception("RDF-API: No DBConnection sub-class found for driver {$classFile}.");
