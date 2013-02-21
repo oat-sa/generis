@@ -108,7 +108,7 @@ class common_cache_FileCache
         		@fclose($fp);
         	}
         	else{
-        		$msg = "Unable to acquire exclusive lock for writing on 'lock.php' file.";
+        		$msg = "Unable to write cache file '${filePath}'.";
         		throw new common_exception_FileSystemError($msg);
         	}
         	
@@ -148,7 +148,7 @@ class common_cache_FileCache
         	@fclose($fp);
         }
         else{
-        	$msg = "Unable to acquire lock to read file '${filePath}'.";
+        	$msg = "Unable to read cache file '${filePath}'.";
         	throw new common_cache_NotFoundException($msg);
         }
     	
