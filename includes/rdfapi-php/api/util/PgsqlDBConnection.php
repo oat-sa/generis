@@ -12,7 +12,7 @@ class PgsqlDBConnection extends DBConnection{
 	protected function getDSN(){
 		$host = $this->host;
 		$dbName = $this->dbName;
-		return "mysql:host=${host};dbname=${dbName}";
+		return "pgsql:host=${host};dbname=${dbName}";
 	}
 }
 ?>

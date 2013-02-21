@@ -107,7 +107,7 @@ class DbStore extends Object
 		}
 	}
 	catch (PDOException $e){
-		throw new Exception("RDF-API: Cannot connect to database with DSN '${dsn}'.");
+		throw new Exception("RDF-API: Cannot connect to database: " . $e->getMessage());
 	}
  }
 
