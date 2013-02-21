@@ -403,38 +403,40 @@ class common_Logger
         $returnValue = (bool) false;
 
         // section 127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001848 begin
-        if ($errorNumber == E_STRICT) {
-	    	foreach ($this->ACCEPTABLE_WARNINGS as $pattern) {
-				if (preg_match($pattern, $errorString) > 0){
-					return false;
-                }
-			}
+        if (error_reporting() != 0){
+        	if ($errorNumber == E_STRICT) {
+        		foreach ($this->ACCEPTABLE_WARNINGS as $pattern) {
+        			if (preg_match($pattern, $errorString) > 0){
+        				return false;
+        			}
+        		}
+        	}
+        		
+        	switch ($errorNumber) {
+        		case E_USER_ERROR :
+        		case E_RECOVERABLE_ERROR :
+        			$severity = self::FATAL_LEVEL;
+        			break;
+        		case E_WARNING :
+        		case E_USER_WARNING :
+        			$severity = self::ERROR_LEVEL;
+        			break;
+        		case E_NOTICE :
+        		case E_USER_NOTICE:
+        			$severity = self::WARNING_LEVEL;
+        			break;
+        		case E_DEPRECATED :
+        		case E_USER_DEPRECATED :
+        		case E_STRICT:
+        			$severity = self::DEBUG_LEVEL;
+        			break;
+        		default :
+        			self::d('Unsuported PHP error type: '.$errorNumber, 'common_Logger');
+        			$severity = self::ERROR_LEVEL;
+        			break;
+        	}
+        	self::singleton()->log($severity, 'php error('.$errorNumber.'): '.$errorString, array('PHPERROR'), $errorFile, $errorLine);
         }
-			
-		switch ($errorNumber) {
-			case E_USER_ERROR :
-			case E_RECOVERABLE_ERROR :
-				$severity = self::FATAL_LEVEL;
-				break;
-			case E_WARNING :
-			case E_USER_WARNING :
-				$severity = self::ERROR_LEVEL;
-				break;
-	   		case E_NOTICE :
-			case E_USER_NOTICE:
-				$severity = self::WARNING_LEVEL;
-				break;
-			case E_DEPRECATED :
-			case E_USER_DEPRECATED :
-			case E_STRICT:
-				$severity = self::DEBUG_LEVEL;
-				break;
-	   		default :
-	   			self::d('Unsuported PHP error type: '.$errorNumber, 'common_Logger');
-				$severity = self::ERROR_LEVEL;
-				break;
-		}
-		self::singleton()->log($severity, 'php error('.$errorNumber.'): '.$errorString, array('PHPERROR'), $errorFile, $errorLine);
         // section 127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001848 end
 
         return (bool) $returnValue;
