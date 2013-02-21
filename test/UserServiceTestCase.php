@@ -250,6 +250,27 @@ class UserServiceTestCase extends UnitTestCase {
 		$user->delete();
 	}
 	
+	public function testIncludeRole(){
+		$prefix = LOCAL_NAMESPACE . '#';
+		$role = new core_kernel_classes_Resource($prefix . 'subRole3');
+		$user = $this->service->addUser('user', md5('password'), $role);
+		
+		$userRoles = $this->service->getUserRoles($user);
+		$this->assertEqual(count($userRoles), 2);
+		$this->assertTrue(array_key_exists($prefix . 'baseRole', $userRoles));
+		$this->assertTrue(array_key_exists($role->getUri(), $userRoles));
+		
+		// subRole3 includes subRole2 for this test.
+		$roleToInclude = new core_kernel_classes_Resource($prefix . 'subRole2');
+		$this->service->includeRole($role, $roleToInclude);
+		
+		$userRoles = $this->service->getUserRoles($user);
+		$this->assertEqual(count($userRoles), 3);
+		
+		$user->delete();
+		$this->assertFalse($user->exists());
+	}
+	
 	public function testRemoveRole(){
 		$prefix = LOCAL_NAMESPACE . '#';
 		

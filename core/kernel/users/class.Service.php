@@ -557,6 +557,9 @@ Can be either a Resource or an array of Resources.
         $includesRoleProperty = new core_kernel_classes_Property(PROPERTY_ROLE_INCLUDESROLE);
         $role->removePropertyValues($includesRoleProperty, array('pattern' => $roleToInclude->getUri()));
         $role->setPropertyValue($includesRoleProperty, $roleToInclude->getUri());
+        
+        // invalidate cache for the role.
+        core_kernel_users_Cache::removeIncludedRoles($role);
         // section 127-0-1-1--55ee3a0d:13cedda118c:-8000:0000000000001FB5 end
     }
 
