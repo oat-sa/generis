@@ -3,9 +3,9 @@
  * ViewException class
  * TODO ViewException class documentation.
  * 
- * @author Jérôme Bogaerts <jerome.bogaerts@tudor.lu> <jerome.bogaerts@gmail.com>
+ * @author Jï¿½rï¿½me Bogaerts <jerome.bogaerts@tudor.lu> <jerome.bogaerts@gmail.com>
  */
-class ViewException extends Exception
+class ViewException extends common_exception_Error
 {
 	private $moduleName;
 	private $actionName;
