@@ -138,6 +138,7 @@ class DbModel extends Model{
 
 		if (!is_a($statement, 'Statement')) {
 			$errmsg = RDFAPI_ERROR . '(class: DbModel; method: add): Statement expected.';
+            common_Logger::e($errmsg);
 			trigger_error($errmsg, E_USER_ERROR);
 		}
 
@@ -157,7 +158,7 @@ class DbModel extends Model{
 				. "'yyy[admin,administrators,authors]',"		
 				. "'yyy[admin,administrators,authors]',"
 				. "'yyy[admin,administrators,authors]',"
-				. "NOW())";
+				. "CURRENT_TIMESTAMP)";
 				
 				$a[] = $statement->obj->getLabel();
 				$a[] = ($statement->obj->getLanguage() == null) ? '' : $statement->obj->getLanguage();
@@ -169,17 +170,18 @@ class DbModel extends Model{
 				."'yyy[admin,administrators,authors]',"
 				."'yyy[admin,administrators,authors]',"
 				."'yyy[admin,administrators,authors]',"
-				."NOW())";
-				
+				."CURRENT_TIMESTAMP)";
+
 				$a[] = $statement->obj->getLabel();
 				$a[] = $author;
 			}
-			
+
 			$sth = $this->dbConn->prepare($sql);
 			
 			if ($sth === false) {
 				$errormsg = $this->dbConn->errorInfo();
-				$errormsg = $errorMsg[0];
+				$errormsg = $errormsg[0];
+                common_Logger::e($errmsg);
 				trigger_error($errmsg, E_USER_ERROR);
             } else {
             	if ($sth->execute($a) === true){
@@ -187,7 +189,8 @@ class DbModel extends Model{
             	}
             	else{
             		$errmsg = $sth->errorInfo();
-            		$errormsg = $errormsg[0];
+            		$errormsg = $errmsg[0];
+                    common_Logger::e($errmsg);
             		trigger_error($errmsg, E_USER_ERROR);	
             	}
             }
@@ -234,6 +237,7 @@ class DbModel extends Model{
 		if ($rs === false){
 			$errmsg = $this->dbConn->errorInfo();
 			$errmsg = $errmsg[0];
+            common_Logger::e($errmsg);
 			trigger_error($errmsg, E_USER_ERROR);
 		}
 	}
@@ -662,7 +666,7 @@ class DbModel extends Model{
 		$recordSet = $this->dbConn->query($sql);
 
 		if ($recordSet === false){
-			$errmsg = $dbConn->errorInfo();
+			$errmsg = $this->dbConn->errorInfo();
 			$errmsg = $errmsg[0];
 			trigger_error($errmsg, E_USER_ERROR);
 		}

@@ -55,16 +55,16 @@ class core_kernel_classes_SqlsrvDbWrapper
      *
      * @access public
      * @author Lionel Lecaque, <lionel@taotesting.com>
-     * @return string
+     * @return array
      */
     public function getExtraConfiguration()
     {
-        $returnValue = (string) '';
+        $returnValue = array();
 
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F83 begin
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F83 end
 
-        return (string) $returnValue;
+        return (array) $returnValue;
     }
 
     /**
@@ -79,6 +79,7 @@ class core_kernel_classes_SqlsrvDbWrapper
         $returnValue = (string) '';
 
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F89 begin
+        $returnValue = '42S02';
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F89 end
 
         return (string) $returnValue;
@@ -96,6 +97,7 @@ class core_kernel_classes_SqlsrvDbWrapper
         $returnValue = (string) '';
 
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F8B begin
+        $returnValue = '42S22';
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F8B end
 
         return (string) $returnValue;
@@ -111,11 +113,13 @@ class core_kernel_classes_SqlsrvDbWrapper
     public function afterConnect()
     {
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F8D begin
+        $this->dbConnector->exec("SET NAMES 'UTF8'");
+        $this->dbConnector->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F8D end
     }
 
     /**
-     * Short description of method getTables
+     * Retrieve an array of Tables of the databases
      *
      * @access public
      * @author Lionel Lecaque, <lionel@taotesting.com>
@@ -126,6 +130,10 @@ class core_kernel_classes_SqlsrvDbWrapper
         $returnValue = array();
 
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F8F begin
+        $result = $this->dbConnector->query('SELECT "TABLE_NAME" FROM "INFORMATION_SCHEMA"."tables"');
+        while ($t = $result->fetchColumn(0)){
+            $tables[] = $t;
+        }
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F8F end
 
         return (array) $returnValue;
@@ -163,6 +171,36 @@ class core_kernel_classes_SqlsrvDbWrapper
         $returnValue = (string) '';
 
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F99 begin
+         if ($limit > 0) {
+            if ($offset == 0) {
+                //add TOP after select if no offset defined
+                $returnValue = preg_replace('/^(SELECT\s(DISTINCT\s)?)/i', '\1TOP ' . $limit . ' ', $statement);
+            }
+            else{
+                //looking for order by
+                $orderBy = stristr($statement, 'ORDER BY');
+
+                if (!$orderBy) {
+                    $over = 'ORDER BY (SELECT 0)';
+                } else {
+                    $over = preg_replace('/\"[^,]*\".\"([^,]*)\"/i', '"inner_tbl"."$1"', $orderBy);
+                }
+                // Remove ORDER BY clause from $statement
+                $statement = preg_replace('/\s+ORDER BY(.*)/', '', $statement);
+                $statement = preg_replace('/^SELECT\s/', '', $statement);
+
+                $start = $offset + 1;
+                $end = $offset + $limit;
+
+                $returnValue = 'WITH results AS
+                            ( SELECT ROW_NUMBER() OVER (' . $over . ') AS RowNum,'.  $statement .')
+                            SELECT * FROM results WHERE RowNum BETWEEN '.  $start. 'AND' . $end;
+
+            }
+        }
+        else {
+            common_Logger::e('Could not limitStatement to negative value');
+        }
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F99 end
 
         return (string) $returnValue;
@@ -183,7 +221,7 @@ class core_kernel_classes_SqlsrvDbWrapper
         $driver = str_replace('pdo_', '', SGBD_DRIVER);
         $dbName = DATABASE_NAME;
         $dbUrl = DATABASE_URL;
-        $returnValue  = $driver . ':Server=' . $dbUrl. ';Database=' . $dbName;
+        $returnValue  = $driver . ':server=' . $dbUrl. ';database=' . $dbName;
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FA1 end
 
         return (string) $returnValue;
@@ -230,6 +268,7 @@ class core_kernel_classes_SqlsrvDbWrapper
     public function flush($tableName)
     {
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FAB begin
+        return;
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FAB end
     }
 
@@ -246,6 +285,13 @@ class core_kernel_classes_SqlsrvDbWrapper
         $returnValue = array();
 
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FAE begin
+        $table = $this->dbConnector->quote($table);
+        $result = $this->dbConnector->query(
+                            'SELECT "COLUMN_NAME" FROM "INFORMATION_SCHEMA"."COLUMNS"
+                             WHERE "TABLE_NAME" = ' . $table);
+        while ($c = $result->fetchColumn(0)){
+            $returnValue[] = $c;
+        }
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FAE end
 
         return (array) $returnValue;
