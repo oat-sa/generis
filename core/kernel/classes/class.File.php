@@ -98,7 +98,7 @@ class core_kernel_classes_File
             $filePath = GENERIS_FILES_PATH; 
         }
 
-	    $instance = static::getFileClass()->createInstance('File : ' . $filePath. $fileName, 'File : ' . $filePath. $fileName, $uri);
+	    $instance = static::getFileClass()->createInstance('File : ' . $fileName, 'File : ' . $filePath. $fileName, $uri);
 	    $filePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
 	    $fileNameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
 	    $instance->setPropertyValue($filePathProp, $filePath);

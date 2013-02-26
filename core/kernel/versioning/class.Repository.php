@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 11.01.2013, 16:46:17 with ArgoUML PHP module 
+ * Automatically generated on 26.02.2013, 17:02:22 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package core
  * @subpackage kernel_versioning
  */
@@ -34,7 +34,7 @@ require_once('core/kernel/classes/class.Resource.php');
 /**
  * include core_kernel_versioning_RepositoryProxy
  *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  */
 require_once('core/kernel/versioning/class.RepositoryProxy.php');
 
@@ -50,7 +50,7 @@ require_once('core/kernel/versioning/class.RepositoryProxy.php');
  * Short description of class core_kernel_versioning_Repository
  *
  * @access public
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package core
  * @subpackage kernel_versioning
  */
@@ -76,7 +76,7 @@ class core_kernel_versioning_Repository
      * Repository factory
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  Resource type
      * @param  string url
      * @param  string login
@@ -126,7 +126,7 @@ class core_kernel_versioning_Repository
      * Checkout the remote repository to a local directory
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  int revision
      * @return boolean
      */
@@ -154,7 +154,7 @@ class core_kernel_versioning_Repository
      * Get the repository type
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return core_kernel_classes_Resource
      */
     public function getVCSType()
@@ -172,7 +172,7 @@ class core_kernel_versioning_Repository
      * Get path of the local repository
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
     public function getPath()
@@ -192,7 +192,7 @@ class core_kernel_versioning_Repository
      * Get authenticated with the remote repository
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return boolean
      */
     public function authenticate()
@@ -228,7 +228,7 @@ class core_kernel_versioning_Repository
      * system.
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  boolean deleteReference
      * @return boolean
      */
@@ -256,7 +256,7 @@ class core_kernel_versioning_Repository
      * Short description of method export
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string src
      * @param  string target
      * @param  int revision
@@ -279,7 +279,7 @@ class core_kernel_versioning_Repository
      * @param options.saveResource {boolean} Save the resource in the onthology
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string src
      * @param  string target
      * @param  string message
@@ -312,7 +312,7 @@ class core_kernel_versioning_Repository
      * Short description of method listContent
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string path
      * @param  int revision
      * @return array
@@ -332,7 +332,7 @@ class core_kernel_versioning_Repository
      * Short description of method getUrl
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
     public function getUrl()
@@ -352,7 +352,7 @@ class core_kernel_versioning_Repository
      * Short description of method enable
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return boolean
      */
     public function enable()
@@ -386,7 +386,7 @@ class core_kernel_versioning_Repository
      * Short description of method disable
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return boolean
      */
     public function disable()
@@ -419,10 +419,12 @@ class core_kernel_versioning_Repository
     }
 
     /**
-     * Short description of method addFile
+     * This method is deprecated since version 2.4. You must now use the
+     * method to ask a repository to deal with your file.
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @deprecated
      * @param  File file
      * @param  string remotePath
      * @return core_kernel_versioning_File
@@ -451,7 +453,7 @@ class core_kernel_versioning_Repository
      * Short description of method getRootFile
      *
      * @access public
-     * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return core_kernel_versioning_File
      */
     public function getRootFile()
@@ -470,6 +472,57 @@ class core_kernel_versioning_Repository
         // section 10-30-1--78-6daf7732:13aff506135:-8000:0000000000001CA6 end
 
         return $returnValue;
+    }
+
+    /**
+     * Ask the repository to deal with a file located in $filePath. It will
+     * you a reference on Versioned File.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param  string filePath The path to the file you want the repository to deal with.
+     * @return core_kernel_versioning_File
+     * @since 2.4
+     */
+    public function spawnFile($filePath)
+    {
+        $returnValue = null;
+
+        // section 127-0-1-1-18201a84:13d170d1914:-8000:0000000000001FD7 begin
+        $fileInfo = new SplFileInfo($filePath);
+        $fileName = self::createFileName($fileInfo->getFilename());
+        
+        $destination = $this->getPath() . $fileName;
+        $source = $filePath;
+        if(tao_helpers_File::move($source, $destination)){
+        	
+        	$returnValue = core_kernel_versioning_File::createVersioned($fileName, null, $this);
+        	if(!is_null($returnValue)){
+        		tao_helpers_File::remove($source);
+        	}
+        }
+        // section 127-0-1-1-18201a84:13d170d1914:-8000:0000000000001FD7 end
+
+        return $returnValue;
+    }
+
+    /**
+     * Create a unique file name on basis of the original one.
+     *
+     * @access private
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param  string originalName
+     * @return string
+     */
+    private static function createFileName($originalName)
+    {
+        $returnValue = (string) '';
+
+        // section 127-0-1-1-18201a84:13d170d1914:-8000:0000000000001FE2 begin
+        $returnValue = md5($originalName) . rand(0, 1000);
+        // section 127-0-1-1-18201a84:13d170d1914:-8000:0000000000001FE2 end
+
+        return (string) $returnValue;
     }
 
 } /* end of class core_kernel_versioning_Repository */
