@@ -109,6 +109,31 @@ class CreateInstanceTestCase extends UnitTestCase {
 		sort($propNormative);
 		$this->assertEqual($propActual, $propNormative);
 		
+		// multiple classes
+		$classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDF_CLASS), 'TestClass2');
+	    $class2 = new core_kernel_classes_Class($classres);
+		$classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDF_CLASS), 'TestClass3');
+	    $class3 = new core_kernel_classes_Class($classres);
+	    
+		// 2 classes (by ressource)
+	    $instance5 = $class->createInstanceWithProperties(array(
+			RDFS_LABEL			=> 'testlabel5',
+			RDF_TYPE			=> $classres
+		));
+		$this->assertTrue($instance5->hasType($class));
+		$this->assertTrue($instance5->hasType($class3));
+		$this->assertEqual($instance5->getLabel(), 'testlabel5');
+		
+		// 3 classes (by uri + class)
+		$instance6 = $class->createInstanceWithProperties(array(
+			RDFS_LABEL			=> 'testlabel6',
+			RDF_TYPE			=> array($class2, $class3->getUri())
+		));
+		$this->assertTrue($instance6->hasType($class));
+		$this->assertTrue($instance6->hasType($class2));
+		$this->assertTrue($instance6->hasType($class3));
+		$this->assertEqual($instance6->getLabel(), 'testlabel6');
+		
 		$instance->delete();
 		$instance1->delete();
 		$instance2->delete();
@@ -117,6 +142,11 @@ class CreateInstanceTestCase extends UnitTestCase {
 		$propInst2->delete();
 		$property->delete();
 		$litproperty->delete();
+		
+		$instance5->delete();
+		$instance6->delete();
+		$class2->delete();
+		$class3->delete();
 	}
 	
 	public function testCreateInstanceHardified() {

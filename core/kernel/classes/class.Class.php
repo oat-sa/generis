@@ -492,14 +492,14 @@ class core_kernel_classes_Class
         $additonalTypes = array();
         if (isset($properties[RDF_TYPE])) {
         	$types = is_array($properties[RDF_TYPE]) ? $properties[RDF_TYPE] : array($properties[RDF_TYPE]);
-        	foreach ($types as $candidate) {
-        		if ($type->getUri() != $candidate->getUri()) {
-        			$additonalTypes[] = $candidate;
+        	foreach ($types as $type) {
+        		$uri = is_object($type) ? $type->getUri() : $type;
+        		if ($uri != $this->getUri()) {
+        			$additonalTypes[] = new core_kernel_classes_Class($uri);
         		}
         	}
         	unset($properties[RDF_TYPE]);
         }
-        
         // create the instance
         $returnValue = core_kernel_persistence_ClassProxy::singleton()->createInstanceWithProperties($this, $properties);
         
