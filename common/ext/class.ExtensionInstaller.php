@@ -302,7 +302,8 @@ class common_ext_ExtensionInstaller
     {
         // section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FCE begin
     	common_Logger::i("Loading constants for extension '" . $this->extension->getID() . "'");
-    	Bootstrap::loadConstants($this->extension->getID());
+    	$extLoader = new common_ext_ExtensionLoader($this->extension);
+    	$extLoader->load();
         // section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FCE end
     }
 

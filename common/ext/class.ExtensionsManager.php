@@ -203,6 +203,7 @@ class common_ext_ExtensionsManager
 					throw new common_ext_ExtensionException('Required Extension is Missing : ' . $ext);
 				}
 			}
+			
 			$extensionLoader->load();
 		}
         // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017B4 end

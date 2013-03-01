@@ -91,7 +91,4 @@ function generis_extension_autoload($pClassName) {
 spl_autoload_register("generis_extension_autoload");
 set_include_path(get_include_path() . PATH_SEPARATOR . GENERIS_BASE_PATH);
 
-$extensionManager = common_ext_ExtensionsManager::singleton();
-$extensionManager->loadExtensions();
-
 ?>
