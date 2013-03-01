@@ -19,8 +19,11 @@ class TestCasePrototype extends UnitTestCase {
 	 * @param string $pContent
 	 */
 	public function createFile($pContent = '', $name = null) {
-		if (is_null($name)) $tmpfname = tempnam(sys_get_temp_dir(), "tst");
-		else $tmpfname = sys_get_temp_dir().$name;
+		if (is_null($name)) {
+			$tmpfname = tempnam(sys_get_temp_dir(), "tst");
+		} else {
+			$tmpfname = sys_get_temp_dir().DIRECTORY_SEPARATOR.$name;	
+		}
 		$this->files[] = $tmpfname;
 
 		if (!empty($pContent)) {
