@@ -326,10 +326,11 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
     	$this->assertIsA($report, 'common_configuration_Report');
     	$this->assertEqual($report->getStatus(), common_configuration_Report::VALID);
     	
-    	$component = common_configuration_ComponentFactory::buildCustom('database_drivers', 'tao', false);
+    	// TAO Dependency
+    	/*$component = common_configuration_ComponentFactory::buildCustom('database_drivers', 'tao', false);
     	$this->assertIsA($component, 'common_configuration_Component');
     	$this->assertEqual($component->getName(), 'custom_tao_DatabaseDrivers');
-    	$this->assertFalse($component->isOptional());
+    	$this->assertFalse($component->isOptional());*/
     	
     	
     	$array = array('type' => 'PHPRuntime', 'value' => array('min' => '5.0', 'max' => '5.5', 'optional' => true));
@@ -377,6 +378,8 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
     	$this->assertIsA($report, 'common_configuration_Report');
     	$this->assertEqual($report->getStatus(), common_configuration_Report::VALID);
     	
+    	// TAO Dependency
+    	/*
     	$array = array('type' => 'Custom', 'value' => array('name' => 'database_drivers', 'extension' => 'tao', 'optional' => false));
     	$component = common_configuration_ComponentFactory::buildFromArray($array);
     	$this->assertIsA($component, 'common_configuration_Component');
@@ -391,6 +394,7 @@ class ConfigurationTestCasePrototype extends TestCasePrototype {
     	catch (common_configuration_ComponentFactoryException $e){
     		$this->assertTrue(true);
     	}
+    	*/
     	
     	try{
     		$array = array('type' => 'PHPINIValue', 'value' => array());
