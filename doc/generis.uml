@@ -120,7 +120,7 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Feb 26 17:02:23 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Mar 01 10:36:33 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -18942,6 +18942,25 @@ system.</UML:TaggedValue.dataValue>
                                 <UML:TaggedValue xmi.id = '127-0-1-1-18201a84:13d170d1914:-8000:0000000000001FDB'
                                   isSpecification = 'false'>
                                   <UML:TaggedValue.dataValue>The path to the file you want the repository to deal with.</UML:TaggedValue.dataValue>
+                                  <UML:TaggedValue.type>
+                                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                                  </UML:TaggedValue.type>
+                                </UML:TaggedValue>
+                              </UML:ModelElement.taggedValue>
+                              <UML:Parameter.type>
+                                <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                              </UML:Parameter.type>
+                            </UML:Parameter>
+                            <UML:Parameter xmi.id = '127-0-1-1-4695d866:13d254e4d4e:-8000:0000000000001FE2'
+                              name = 'label' isSpecification = 'false' kind = 'in'>
+                              <UML:Parameter.defaultValue>
+                                <UML:Expression xmi.id = '127-0-1-1-4695d866:13d254e4d4e:-8000:0000000000001FE4'
+                                  language = '' body = '&apos;&apos;'/>
+                              </UML:Parameter.defaultValue>
+                              <UML:ModelElement.taggedValue>
+                                <UML:TaggedValue xmi.id = '127-0-1-1-4695d866:13d254e4d4e:-8000:0000000000001FE5'
+                                  isSpecification = 'false'>
+                                  <UML:TaggedValue.dataValue>A label for the created file Resource.</UML:TaggedValue.dataValue>
                                   <UML:TaggedValue.type>
                                     <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
                                   </UML:TaggedValue.type>
@@ -51611,7 +51630,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig8.6.3"
         x="265"
         y="91"
-        width="367"
+        width="353"
         height="20"
         fill="0"
         fillcolor="white"
@@ -72600,7 +72619,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Center"
     >core::kernel::versioning::File</text>
     <group name="Fig9.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[97, 9, 662, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[97, 9, 668, 0]"
          href="127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001668"
          fill="0"
          fillcolor="white"
@@ -72614,7 +72633,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <rectangle name="Fig9.2.0"
         x="97"
         y="9"
-        width="662"
+        width="668"
         height="0"
         fill="0"
         fillcolor="white"
@@ -73372,7 +73391,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >spawnFile(filePath : string) : File</text>
+      >spawnFile(filePath : string,label : string = &apos;&apos;) : File</text>
       <text name="Fig11.6.16"
         x="97"
         y="567"

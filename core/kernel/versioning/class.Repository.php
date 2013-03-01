@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 26.02.2013, 17:02:22 with ArgoUML PHP module 
+ * Automatically generated on 01.03.2013, 10:36:30 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Jerome Bogaerts, <jerome@taotesting.com>
@@ -481,10 +481,11 @@ class core_kernel_versioning_Repository
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string filePath The path to the file you want the repository to deal with.
+     * @param  string label A label for the created file Resource.
      * @return core_kernel_versioning_File
      * @since 2.4
      */
-    public function spawnFile($filePath)
+    public function spawnFile($filePath, $label = '')
     {
         $returnValue = null;
 
@@ -497,6 +498,11 @@ class core_kernel_versioning_Repository
         if(tao_helpers_File::move($source, $destination)){
         	
         	$returnValue = core_kernel_versioning_File::createVersioned($fileName, null, $this);
+        	
+        	if (!empty($label)){
+        		$returnValue->setLabel($label);
+        	}
+        	
         	if(!is_null($returnValue)){
         		tao_helpers_File::remove($source);
         	}
