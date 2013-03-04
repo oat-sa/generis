@@ -110,26 +110,26 @@ abstract class Actions implements IRequest, IResponse, ISession
 	
 	public function hasSessionAttribute($name)
 	{
-		return Context::getInstance()->getSession()->hasAttribute($name);
+		return PHPSession::singleton()->hasAttribute($name);
 	}
 	
 	public function getSessionAttribute($name)
 	{
-		return Context::getInstance()->getSession()->getAttribute($name);
+		return PHPSession::singleton()->getAttribute($name);
 	}
 	
 	public function setSessionAttribute($name, $value)
 	{
-		Context::getInstance()->getSession()->setAttribute($name, $value);
+		PHPSession::singleton()->setAttribute($name, $value);
 	}
 	
 	public function removeSessionAttribute($name){
-		Context::getInstance()->getSession()->removeAttribute($name);
+		PHPSession::singleton()->removeAttribute($name);
 	}
 	
 	public function clearSession($global = true)
 	{
-		Context::getInstance()->getSession()->clear($global);
+		PHPSession::singleton()->clear($global);
 	}
 }
 ?>
