@@ -203,22 +203,25 @@ class HardApiTestCase extends UnitTestCase {
 		$this->assertFalse($referencer->isClassReferenced($class));
 		$this->assertFalse($myUserTblMgr->exists());
 		
-		$cacheFile = GENERIS_CACHE_PATH . 'hard-api-property.cache';
-		$this->assertTrue(file_exists($cacheFile));
+		// Testing the cache...
+		$cache = common_cache_FileCache::singleton();
+		$serial = 'hard-api-property';
+		$this->assertTrue($cache->has($serial));
 		
-		$cacheContent = unserialize(file_get_contents($cacheFile));
-		if($cacheContent === false){
-			$this->fail('wrong cache content');
+		try{
+			$cacheContent = $cache->get($serial);
+			$this->assertTrue(is_array($cacheContent));
+			$this->assertTrue(count($cacheContent) > 0);
+			$this->assertTrue(array_key_exists(RDFS_LABEL, $cacheContent));
+			$this->assertTrue(array_key_exists(PROPERTY_USER_LOGIN, $cacheContent));
 		}
-		
-		$this->assertTrue(is_array($cacheContent));
-		$this->assertTrue(count($cacheContent) > 0);
-		$this->assertTrue(array_key_exists(RDFS_LABEL, $cacheContent));
-		$this->assertTrue(array_key_exists(PROPERTY_USER_LOGIN, $cacheContent));
-		
+		catch (common_cache_Exception $e){
+			$this->fail('Cannot access hard-api-property cache.');
+		}
+
 		//clear the cache
-		$this->assertTrue(unlink($cacheFile));
-		
+		$cache->remove($serial);
+		$this->assertFalse($cache->has($serial));
 	}
 }
 ?>

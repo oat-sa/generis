@@ -814,98 +814,93 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     {
         // section 127-0-1-1-78ed0233:12fde709f61:-8000:0000000000001723 begin
     	if(is_null(self::$_properties) || $force){
-    		
-			//file where is the data saved
-			$file = realpath(GENERIS_CACHE_PATH) . '/hard-api-property.cache';
 				
     		if(!$force && $this->cacheModes['property'] == self::CACHE_FILE){
     			
-				//if the properties are cached in the file, we load it
-				if(file_exists($file)){
-					if(!is_readable($file)){
-						throw new core_kernel_persistence_hardapi_Exception("Cache file $file must have read/write permissions");
-					}
-					$properties = @unserialize(file_get_contents($file));
-					if($properties !== false && is_array($properties) && count($properties) > 0){
-						self::$_properties = $properties;
-						return;
-					}
-				}
-			}
-
-			//get all the compiled tables
-    		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-    		$tables = array();
-    		$query = 'SELECT DISTINCT "id","table" FROM "class_to_table"';
-    		$result = $dbWrapper->query($query);
-    		while($row = $result->fetch()){
-    			$tables[$row['id']] = $row['table'];
-    		}
-    		
-    		$additionalPropertiesTable = array();
-    		$query = 'SELECT DISTINCT "class_id","property_uri" FROM "class_additional_properties"';
-    		$result = $dbWrapper->query($query);
-    		while($row = $result->fetch()){
-    			$additionalPropertiesTable[$row['class_id']][] = new core_kernel_classes_Property($row['property_uri']);
-    		}
-    		//retrieve each property by table
-			$this->loadClasses();
-			    		
-    		self::$_properties = array();
-    		
-    		foreach($tables as $classId => $table){
-
-    			//check in $additionalPropertiesTable if current table is concerned by additionnal properties
-    			if(isset($additionalPropertiesTable[$classId])){
-	   				$additionalProperties = $additionalPropertiesTable[$classId];
+    			$serial = 'hard-api-property';
+    			
+    			try{
+    				$cache = common_cache_FileCache::singleton();
+    				$properties = $cache->get($serial);
+    				self::$_properties = $properties;
+    			}
+    			catch (common_cache_NotFoundException $e){
+    				// The cache cannot be accessed, build the property cache.
+    				// get all the compiled tables
+    				$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+    				$tables = array();
+    				$query = 'SELECT DISTINCT "id","table" FROM "class_to_table"';
+    				$result = $dbWrapper->query($query);
+    				while($row = $result->fetch()){
+    					$tables[$row['id']] = $row['table'];
+    				}
     				
+    				$additionalPropertiesTable = array();
+    				$query = 'SELECT DISTINCT "class_id","property_uri" FROM "class_additional_properties"';
+    				$result = $dbWrapper->query($query);
+    				while($row = $result->fetch()){
+    					$additionalPropertiesTable[$row['class_id']][] = new core_kernel_classes_Property($row['property_uri']);
+    				}
+    				//retrieve each property by table
+    				$this->loadClasses();
+    				 
+    				self::$_properties = array();
+    				
+    				foreach($tables as $classId => $table){
+    				
+    					//check in $additionalPropertiesTable if current table is concerned by additionnal properties
+    					if(isset($additionalPropertiesTable[$classId])){
+    						$additionalProperties = $additionalPropertiesTable[$classId];
+    				
+    					}
+    					else{
+    						$additionalProperties = array();
+    					}
+    					 
+    					$classUri = core_kernel_persistence_hardapi_Utils::getLongName($table);
+    					$class = new core_kernel_classes_Class($classUri);
+    					$topClassUri = self::$_classes[$classUri]['topClass'];
+    					$topClass = new core_kernel_classes_Class($topClassUri);
+    					$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
+    					$properties = $ps->getProperties($additionalProperties);
+    					foreach ($properties as $property){
+    						$propertyUri = $property->uriResource;
+    						if ($property->isMultiple() || $property->isLgDependent()){
+    				
+    							if(isset(self::$_properties[$propertyUri])) {
+    								if (!in_array("{$table}Props", self::$_properties[$propertyUri])){
+    									self::$_properties[$propertyUri][] = "{$table}Props";
+    								}
+    							} else {
+    								self::$_properties[$propertyUri] = array("{$table}Props");
+    							}
+    				
+    						} else {
+    								
+    							if(isset(self::$_properties[$propertyUri])) {
+    								if (!in_array("{$table}", self::$_properties[$propertyUri])){
+    									self::$_properties[$propertyUri][] = "{$table}";
+    								}
+    							} else {
+    								self::$_properties[$propertyUri] = array("{$table}");
+    							}
+    						}
+    					}
+    					 
+    				}
+    				
+    				//saving the properties in the cache file
+    				if($this->cacheModes['property'] == self::CACHE_FILE){
+
+    					try{
+    						$cache = common_cache_FileCache::singleton();
+    						$cache->put(self::$_properties, $serial);
+    					}
+    					catch (common_cache_Exception $e){
+    						throw new core_kernel_persistence_hardapi_Exception("cannot write the required property cache file for serial '${serial}'.");
+    					}
+    				}
     			}
-    			else{
-    				$additionalProperties = array();
-    			}
-    			
-    			$classUri = core_kernel_persistence_hardapi_Utils::getLongName($table);
-    			$class = new core_kernel_classes_Class($classUri);
-    			$topClassUri = self::$_classes[$classUri]['topClass'];
-    			$topClass = new core_kernel_classes_Class($topClassUri);
-                        $ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
-                        $properties = $ps->getProperties($additionalProperties);
-                        foreach ($properties as $property){
-                                $propertyUri = $property->uriResource;
-                                if ($property->isMultiple() || $property->isLgDependent()){
-
-                                        if(isset(self::$_properties[$propertyUri])) {
-                                                if (!in_array("{$table}Props", self::$_properties[$propertyUri])){
-                                                        self::$_properties[$propertyUri][] = "{$table}Props";
-                                                }
-                                        } else {
-                                                self::$_properties[$propertyUri] = array("{$table}Props");
-                                        } 
-
-                                } else {
-									
-                                        if(isset(self::$_properties[$propertyUri])) {
-                                                if (!in_array("{$table}", self::$_properties[$propertyUri])){
-                                                        self::$_properties[$propertyUri][] = "{$table}";
-                                                }
-                                        } else {
-                                                self::$_properties[$propertyUri] = array("{$table}");
-                                        } 
-                                }
-                          
-            
-
-                        }
-         
-    		}
-
-    		//saving the properties in the cache file
-    		if($this->cacheModes['property'] == self::CACHE_FILE){
-    			
-    			$returnValue = file_put_contents($file, serialize(self::$_properties), LOCK_EX);
-				if(!$returnValue){
-					throw new core_kernel_persistence_hardapi_Exception("cannot write the required property cache file in the location ".$file);
-				}
     		}
     	}
     	
@@ -1081,10 +1076,9 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     	core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo = array();
     	core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo = array();
     	
-        $cachefile = realpath(GENERIS_CACHE_PATH) . '/hard-api-property.cache';
-        if (file_exists($cachefile)) {
-        	unlink($cachefile);
-        }
+    	// remove hard-api-property cache.
+    	$cache = common_cache_FileCache::singleton();
+    	$cache->remove('hard-api-property');
         // section 127-0-1-1--770b92db:136a03f38fa:-8000:00000000000019B8 end
     }
 
