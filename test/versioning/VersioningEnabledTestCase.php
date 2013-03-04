@@ -136,7 +136,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
         
         //create the dir
         if(file_exists($dirPath)){
-            tao_helpers_File::remove($dirPath, true);
+            helpers_File::remove($dirPath);
         }
         mkdir($dirPath);
         
@@ -477,7 +477,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		$this->assertTrue($file->setContent($originalFileContent.' updated'));
 		$this->assertTrue($file->commit());
 		$this->assertTrue($repository2->delete(true));
-		$this->assertTrue(helpers_file::remove(GENERIS_FILES_PATH.'/versioning/TMP_TEST_CASE_REPOSITORY', true));
+		$this->assertTrue(helpers_file::remove(GENERIS_FILES_PATH.'/versioning/TMP_TEST_CASE_REPOSITORY'));
 	    
 		// Test the file has been updated in the first repository
 		$this->assertTrue($instance->update());
@@ -706,7 +706,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		$this->assertTrue($repository2Instance->update());
 		$this->assertTrue($repository2Instance->delete());
 		$this->assertTrue($repository2->delete(true));
-		tao_helpers_File::remove(GENERIS_FILES_PATH.'/versioning/TMP_TEST_CASE_REPOSITORY', true);
+		helpers_File::remove(GENERIS_FILES_PATH.'/versioning/TMP_TEST_CASE_REPOSITORY');
         
         //Clean
         $filePath = $instance->getAbsolutePath();
@@ -758,7 +758,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
         $importedFolder = null;
         //create tmp folder with some folders & files
         if(file_exists($tmpFolder)){
-            $this->assertTrue(tao_helpers_File::remove($tmpFolder, true));
+            $this->assertTrue(helpers_File::remove($tmpFolder));
             $this->assertFalse(file_exists($tmpFolder));
         }
         $this->assertTrue(mkdir($tmpFolder));
@@ -808,7 +808,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
         $this->assertFalse(helpers_File::resourceExists($path));
 
 		//delete the tmp folder
-        tao_helpers_File::remove($tmpFolder, true);
+        $this->assertTrue(helpers_File::remove($tmpFolder));
 	}
 
     //test the export function on the repository
@@ -835,7 +835,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
             }
         }
         
-        $this->assertTrue(tao_helpers_File::remove($exportPath, true));
+        $this->assertTrue(helpers_File::remove($exportPath));
         $this->assertTrue($rootFile->delete(true));
     }
 	
