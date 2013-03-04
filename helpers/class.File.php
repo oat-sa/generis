@@ -9,10 +9,10 @@ error_reporting(E_ALL);
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 08.01.2013, 16:33:28 with ArgoUML PHP module 
+ * Automatically generated on 04.03.2013, 15:58:40 with ArgoUML PHP module 
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Joel Bout, <joel@taotesting.com>
  * @package helpers
  */
 
@@ -32,7 +32,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * Short description of class helpers_File
  *
  * @access public
- * @author Joel Bout, <joel.bout@tudor.lu>
+ * @author Joel Bout, <joel@taotesting.com>
  * @package helpers
  */
 class helpers_File
@@ -48,7 +48,7 @@ class helpers_File
      * Short description of method resourceExists
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Joel Bout, <joel@taotesting.com>
      * @param  string path
      * @return boolean
      */
@@ -72,7 +72,7 @@ class helpers_File
      * Short description of method getResource
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Joel Bout, <joel@taotesting.com>
      * @param  string path
      * @return core_kernel_classes_File
      */
@@ -96,7 +96,7 @@ class helpers_File
      * Short description of method searchResourcesFromPath
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Joel Bout, <joel@taotesting.com>
      * @param  string path
      * @return array
      */
@@ -133,7 +133,7 @@ class helpers_File
      * to the file/directory 'to'
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Joel Bout, <joel@taotesting.com>
      * @param  string from
      * @param  string to
      * @return string
@@ -158,6 +158,37 @@ class helpers_File
         // section 10-30-1--78-45a9d031:13c193b4a22:-8000:00000000000052F9 end
 
         return (string) $returnValue;
+    }
+
+    /**
+     * deletes a file or a directory recursively
+     *
+     * @access public
+     * @author Joel Bout, <joel@taotesting.com>
+     * @param  string path
+     * @return boolean
+     */
+    public static function remove($path)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-30-1--78--3660a937:13d35e0b7d2:-8000:0000000000001FFC begin
+		if (is_file($path)) {
+        	$returnValue = @unlink($path);
+        } elseif (is_dir($path)) {
+			$iterator = new DirectoryIterator($path);
+			foreach ($iterator as $fileinfo) {
+				if (!$fileinfo->isDot()) {
+					self::remove($fileinfo->getPathname());
+				}
+			}
+			$returnValue = @rmdir($path);
+        } else {
+        	throw new common_exception_Error('"'.$path.'" cannot be removed since it\'s neither a file nor directory');
+        }
+        // section 10-30-1--78--3660a937:13d35e0b7d2:-8000:0000000000001FFC end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class helpers_File */

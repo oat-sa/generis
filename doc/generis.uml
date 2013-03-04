@@ -4,7 +4,7 @@
     <documentation>
       <authorname>Patrick Plichart</authorname>
       <authoremail>patrick.plichart@tudor.lu</authoremail>
-      <version>0.34</version>
+      <version>0.32.2</version>
       <description>
         Generis
       </description>
@@ -26,7 +26,7 @@
       <fontname>Dialog</fontname>
       <fontsize>10</fontsize>
       <defaultstereotypeview>0</defaultstereotypeview>
-      <activediagram>Extension Management</activediagram>
+      <activediagram>Generis Helpers</activediagram>
     </settings>
     <searchpath href="PROJECT_DIR" />
     <members>
@@ -120,10 +120,10 @@
 			UML 1.4
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Mar 01 12:24:58 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Mar 04 16:20:52 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
-      <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
+      <XMI.exporterVersion>0.32.2(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
     </XMI.documentation>
     <XMI.metamodel xmi.name="UML" xmi.version="1.4"/></XMI.header>
   <XMI.content>
@@ -32874,6 +32874,144 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
                 </UML:Operation>
               </UML:Classifier.feature>
             </UML:Class>
+            <UML:Class xmi.id = '127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018E5'
+              name = 'File' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+              isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+              <UML:Classifier.feature>
+                <UML:Operation xmi.id = '127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018E9'
+                  name = 'resourceExists' visibility = 'public' isSpecification = 'false'
+                  ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                  isLeaf = 'false' isAbstract = 'false'>
+                  <UML:BehavioralFeature.parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018EA'
+                      name = 'return' isSpecification = 'false' kind = 'return'>
+                      <UML:Parameter.type>
+                        <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018EB'
+                      name = 'path' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.defaultValue>
+                        <UML:Expression xmi.id = '127-0-1-1-602f558a:134cbda6031:-8000:00000000000018F4'
+                          language = 'UML 1.4' body = '&quot;&quot;'/>
+                      </UML:Parameter.defaultValue>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                  </UML:BehavioralFeature.parameter>
+                </UML:Operation>
+                <UML:Operation xmi.id = '127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018ED'
+                  name = 'getResource' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                  isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                  isAbstract = 'false'>
+                  <UML:BehavioralFeature.parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018EE'
+                      name = 'return' isSpecification = 'false' kind = 'return'>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001365'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018EF'
+                      name = 'path' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.defaultValue>
+                        <UML:Expression xmi.id = '127-0-1-1-6a191a88:1367c838c77:-8000:0000000000002A12'
+                          language = 'UML 1.4' body = '&quot;&quot;'/>
+                      </UML:Parameter.defaultValue>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                  </UML:BehavioralFeature.parameter>
+                </UML:Operation>
+                <UML:Operation xmi.id = '127-0-1-1-6a191a88:1367c838c77:-8000:0000000000002A0F'
+                  name = 'searchResourcesFromPath' visibility = 'public' isSpecification = 'false'
+                  ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                  isLeaf = 'false' isAbstract = 'false'>
+                  <UML:BehavioralFeature.parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1-6a191a88:1367c838c77:-8000:0000000000002A10'
+                      name = 'return' isSpecification = 'false' kind = 'return'>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '127-0-1-1-6a191a88:1367c838c77:-8000:0000000000002A11'
+                      name = 'path' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.defaultValue>
+                        <UML:Expression xmi.id = '127-0-1-1-6a191a88:1367c838c77:-8000:0000000000002A13'
+                          language = 'UML 1.4' body = '&quot;&quot;'/>
+                      </UML:Parameter.defaultValue>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                  </UML:BehavioralFeature.parameter>
+                </UML:Operation>
+                <UML:Operation xmi.id = '10-30-1--78-45a9d031:13c193b4a22:-8000:00000000000052F9'
+                  name = 'getRelPath' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                  isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                  isAbstract = 'false'>
+                  <UML:ModelElement.taggedValue>
+                    <UML:TaggedValue xmi.id = '10-30-1--78-45a9d031:13c193b4a22:-8000:00000000000052FD'
+                      isSpecification = 'false'>
+                      <UML:TaggedValue.dataValue>returns the relative path from the file/directory &apos;from&apos;
+to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
+                      <UML:TaggedValue.type>
+                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                      </UML:TaggedValue.type>
+                    </UML:TaggedValue>
+                  </UML:ModelElement.taggedValue>
+                  <UML:BehavioralFeature.parameter>
+                    <UML:Parameter xmi.id = '10-30-1--78-45a9d031:13c193b4a22:-8000:00000000000052FA'
+                      name = 'return' isSpecification = 'false' kind = 'return'>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '10-30-1--78-45a9d031:13c193b4a22:-8000:00000000000052FB'
+                      name = 'from' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '10-30-1--78-45a9d031:13c193b4a22:-8000:00000000000052FC'
+                      name = 'to' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                  </UML:BehavioralFeature.parameter>
+                </UML:Operation>
+                <UML:Operation xmi.id = '10-30-1--78--3660a937:13d35e0b7d2:-8000:0000000000001FFC'
+                  name = 'remove' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
+                  isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+                  isAbstract = 'false'>
+                  <UML:ModelElement.taggedValue>
+                    <UML:TaggedValue xmi.id = '10-30-1--78--3660a937:13d35e0b7d2:-8000:0000000000001FFF'
+                      isSpecification = 'false'>
+                      <UML:TaggedValue.dataValue>deletes a file or a directory recursively</UML:TaggedValue.dataValue>
+                      <UML:TaggedValue.type>
+                        <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
+                      </UML:TaggedValue.type>
+                    </UML:TaggedValue>
+                  </UML:ModelElement.taggedValue>
+                  <UML:BehavioralFeature.parameter>
+                    <UML:Parameter xmi.id = '10-30-1--78--3660a937:13d35e0b7d2:-8000:0000000000001FFD'
+                      name = 'return' isSpecification = 'false' kind = 'return'>
+                      <UML:Parameter.type>
+                        <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                    <UML:Parameter xmi.id = '10-30-1--78--3660a937:13d35e0b7d2:-8000:0000000000001FFE'
+                      name = 'path' isSpecification = 'false' kind = 'in'>
+                      <UML:Parameter.type>
+                        <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
+                  </UML:BehavioralFeature.parameter>
+                </UML:Operation>
+              </UML:Classifier.feature>
+            </UML:Class>
           </UML:Namespace.ownedElement>
         </UML:Package>
         <UML:Generalization xmi.id = '127-0-1-1--47e0a302:1351972edf2:-8000:000000000000190B'
@@ -32917,116 +33055,6 @@ through an other way than the ajax mechanism</UML:TaggedValue.dataValue>
           isSpecification = 'false' isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
           <UML:Stereotype.baseClass>Parameter</UML:Stereotype.baseClass>
         </UML:Stereotype>
-        <UML:Class xmi.id = '127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018E5'
-          name = 'Filel' visibility = 'public' isSpecification = 'false' isRoot = 'false'
-          isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
-          <UML:Classifier.feature>
-            <UML:Operation xmi.id = '127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018E9'
-              name = 'resourceExists' visibility = 'public' isSpecification = 'false'
-              ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
-              isLeaf = 'false' isAbstract = 'false'>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id = '127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018EA'
-                  name = 'return' isSpecification = 'false' kind = 'return'>
-                  <UML:Parameter.type>
-                    <UML:DataType xmi.idref = '10-13-1--31--647ec317:119141cd117:-8000:000000000000091C'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-                <UML:Parameter xmi.id = '127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018EB'
-                  name = 'path' isSpecification = 'false' kind = 'in'>
-                  <UML:Parameter.defaultValue>
-                    <UML:Expression xmi.id = '127-0-1-1-602f558a:134cbda6031:-8000:00000000000018F4'
-                      language = 'UML 1.4' body = '&quot;&quot;'/>
-                  </UML:Parameter.defaultValue>
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-            </UML:Operation>
-            <UML:Operation xmi.id = '127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018ED'
-              name = 'getResource' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
-              isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
-              isAbstract = 'false'>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id = '127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018EE'
-                  name = 'return' isSpecification = 'false' kind = 'return'>
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref = '127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001365'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-                <UML:Parameter xmi.id = '127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018EF'
-                  name = 'path' isSpecification = 'false' kind = 'in'>
-                  <UML:Parameter.defaultValue>
-                    <UML:Expression xmi.id = '127-0-1-1-6a191a88:1367c838c77:-8000:0000000000002A12'
-                      language = 'UML 1.4' body = '&quot;&quot;'/>
-                  </UML:Parameter.defaultValue>
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-            </UML:Operation>
-            <UML:Operation xmi.id = '127-0-1-1-6a191a88:1367c838c77:-8000:0000000000002A0F'
-              name = 'searchResourcesFromPath' visibility = 'public' isSpecification = 'false'
-              ownerScope = 'classifier' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
-              isLeaf = 'false' isAbstract = 'false'>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id = '127-0-1-1-6a191a88:1367c838c77:-8000:0000000000002A10'
-                  name = 'return' isSpecification = 'false' kind = 'return'>
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B11'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-                <UML:Parameter xmi.id = '127-0-1-1-6a191a88:1367c838c77:-8000:0000000000002A11'
-                  name = 'path' isSpecification = 'false' kind = 'in'>
-                  <UML:Parameter.defaultValue>
-                    <UML:Expression xmi.id = '127-0-1-1-6a191a88:1367c838c77:-8000:0000000000002A13'
-                      language = 'UML 1.4' body = '&quot;&quot;'/>
-                  </UML:Parameter.defaultValue>
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-            </UML:Operation>
-            <UML:Operation xmi.id = '10-30-1--78-45a9d031:13c193b4a22:-8000:00000000000052F9'
-              name = 'getRelPath' visibility = 'public' isSpecification = 'false' ownerScope = 'classifier'
-              isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
-              isAbstract = 'false'>
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue xmi.id = '10-30-1--78-45a9d031:13c193b4a22:-8000:00000000000052FD'
-                  isSpecification = 'false'>
-                  <UML:TaggedValue.dataValue>returns the relative path from the file/directory &apos;from&apos;
-to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref = '10-13-1--31--231466ec:119133bcedb:-8000:00000000000008C9'/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id = '10-30-1--78-45a9d031:13c193b4a22:-8000:00000000000052FA'
-                  name = 'return' isSpecification = 'false' kind = 'return'>
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-                <UML:Parameter xmi.id = '10-30-1--78-45a9d031:13c193b4a22:-8000:00000000000052FB'
-                  name = 'from' isSpecification = 'false' kind = 'in'>
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-                <UML:Parameter xmi.id = '10-30-1--78-45a9d031:13c193b4a22:-8000:00000000000052FC'
-                  name = 'to' isSpecification = 'false' kind = 'in'>
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref = '10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0E'/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-            </UML:Operation>
-          </UML:Classifier.feature>
-        </UML:Class>
         <UML:Package xmi.id = '10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EC8'
           isSpecification = 'false' isRoot = 'false' isLeaf = 'false' isAbstract = 'false'/>
         <UML:Stereotype xmi.id = '10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F9B'
@@ -41665,7 +41693,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="247"
+      <moveto x="248"
               y="55" />
       <lineto x="472"
               y="55" />
@@ -41696,7 +41724,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="335"
+      <moveto x="336"
               y="167" />
       <lineto x="472"
               y="167" />
@@ -41727,7 +41755,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="335"
+      <moveto x="336"
               y="375" />
       <lineto x="472"
               y="375" />
@@ -41758,7 +41786,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="335"
+      <moveto x="336"
               y="272" />
       <lineto x="472"
               y="272" />
@@ -41789,7 +41817,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="335"
+      <moveto x="336"
               y="512" />
       <lineto x="472"
               y="512" />
@@ -41825,7 +41853,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="64"
               y="496" />
       <lineto x="64"
-              y="99" />
+              y="100" />
     </path>
   </group>
   <group name="Fig34"
@@ -41853,12 +41881,12 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="775"
+      <moveto x="776"
               y="160" />
       <lineto x="1024"
               y="160" />
       <lineto x="1024"
-              y="111" />
+              y="112" />
     </path>
   </group>
   <group name="Fig35"
@@ -41886,12 +41914,12 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="699"
+      <moveto x="700"
               y="376" />
       <lineto x="1024"
               y="376" />
       <lineto x="1024"
-              y="111" />
+              y="112" />
     </path>
   </group>
   <group name="Fig36"
@@ -41922,7 +41950,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="1024"
               y="248" />
       <lineto x="1024"
-              y="111" />
+              y="112" />
     </path>
   </group>
   <group name="Fig37"
@@ -41953,7 +41981,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="865"
               y="1936" />
       <lineto x="865"
-              y="1947" />
+              y="1936" />
     </path>
   </group>
   <group name="Fig38"
@@ -41984,7 +42012,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="1291"
               y="952" />
       <lineto x="1291"
-              y="876" />
+              y="877" />
     </path>
   </group>
   <group name="Fig39"
@@ -42014,7 +42042,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     >
       <moveto x="1468"
               y="1044" />
-      <lineto x="1421"
+      <lineto x="1422"
               y="1044" />
     </path>
   </group>
@@ -42043,7 +42071,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="701"
+      <moveto x="702"
               y="952" />
       <lineto x="752"
               y="952" />
@@ -42143,7 +42171,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="262"
               y="2160" />
       <lineto x="262"
-              y="2100" />
+              y="2101" />
     </path>
   </group>
   <group name="Fig44"
@@ -42174,7 +42202,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="1312"
               y="1080" />
       <lineto x="1312"
-              y="1048" />
+              y="1049" />
     </path>
   </group>
   <group name="Fig45"
@@ -42202,12 +42230,12 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="982"
+      <moveto x="983"
               y="504" />
       <lineto x="1024"
               y="504" />
       <lineto x="1024"
-              y="111" />
+              y="112" />
     </path>
   </group>
   <group name="Fig46"
@@ -42271,7 +42299,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="1072"
               y="904" />
       <lineto x="1072"
-              y="876" />
+              y="877" />
     </path>
   </group>
   <group name="Fig48"
@@ -42304,7 +42332,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="64"
               y="376" />
       <lineto x="64"
-              y="99" />
+              y="100" />
     </path>
   </group>
   <group name="Fig49"
@@ -42337,7 +42365,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="64"
               y="256" />
       <lineto x="64"
-              y="99" />
+              y="100" />
     </path>
   </group>
   <group name="Fig50"
@@ -42370,7 +42398,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="64"
               y="160" />
       <lineto x="64"
-              y="99" />
+              y="100" />
     </path>
   </group>
   <group name="Fig51"
@@ -42722,7 +42750,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="1912"
               y="712" />
       <lineto x="1912"
-              y="653" />
+              y="654" />
     </path>
   </group>
   <group name="Fig53"
@@ -43070,7 +43098,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="1912"
               y="760" />
       <lineto x="1912"
-              y="653" />
+              y="654" />
     </path>
   </group>
   <group name="Fig55"
@@ -43422,7 +43450,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="1912"
               y="712" />
       <lineto x="1912"
-              y="653" />
+              y="654" />
     </path>
   </group>
 </pgml>
@@ -43983,7 +44011,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="351"
+      <moveto x="352"
               y="104" />
       <lineto x="400"
               y="104" />
@@ -44250,7 +44278,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="577"
               y="232" />
       <lineto x="577"
-              y="197" />
+              y="198" />
     </path>
   </group>
   <group name="Fig7"
@@ -44419,10 +44447,10 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="385"
+      <moveto x="386"
               y="232" />
       <lineto x="400"
-              y="164" />
+              y="165" />
     </path>
   </group>
   <group name="Fig9"
@@ -44453,7 +44481,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="432"
               y="232" />
       <lineto x="432"
-              y="164" />
+              y="165" />
     </path>
   </group>
   <group name="Fig10"
@@ -44486,7 +44514,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="496"
               y="208" />
       <lineto x="496"
-              y="164" />
+              y="165" />
     </path>
   </group>
   <group name="Fig11"
@@ -45771,7 +45799,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="418"
+      <moveto x="419"
               y="216" />
       <lineto x="472"
               y="216" />
@@ -46087,7 +46115,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="696"
               y="224" />
       <lineto x="696"
-              y="188" />
+              y="189" />
     </path>
   </group>
   <group name="Fig12"
@@ -46118,7 +46146,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="744"
               y="232" />
       <lineto x="744"
-              y="188" />
+              y="189" />
     </path>
   </group>
   <group name="Fig13"
@@ -46172,7 +46200,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="561"
+      <moveto x="562"
               y="184" />
       <lineto x="688"
               y="184" />
@@ -46232,7 +46260,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="352"
               y="160" />
       <lineto x="352"
-              y="122" />
+              y="123" />
     </path>
   </group>
   <group name="Fig15"
@@ -46288,7 +46316,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     >
       <moveto x="280"
               y="200" />
-      <lineto x="222"
+      <lineto x="223"
               y="200" />
     </path>
   </group>
@@ -46345,8 +46373,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     >
       <moveto x="280"
               y="160" />
-      <lineto x="217"
-              y="122" />
+      <lineto x="218"
+              y="123" />
     </path>
   </group>
   <group name="Fig17"
@@ -46400,10 +46428,10 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="418"
+      <moveto x="419"
               y="160" />
       <lineto x="456"
-              y="114" />
+              y="115" />
     </path>
   </group>
   <group name="Fig18"
@@ -46584,7 +46612,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     >
       <moveto x="280"
               y="280" />
-      <lineto x="221"
+      <lineto x="222"
               y="280" />
     </path>
   </group>
@@ -46642,7 +46670,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="344"
               y="376" />
       <lineto x="344"
-              y="335" />
+              y="336" />
     </path>
   </group>
 </pgml>
@@ -48829,7 +48857,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="1056"
               y="464" />
       <lineto x="1056"
-              y="396" />
+              y="397" />
     </path>
   </group>
   <group name="Fig9"
@@ -48859,7 +48887,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     >
       <moveto x="1216"
               y="272" />
-      <lineto x="1130"
+      <lineto x="1131"
               y="272" />
     </path>
   </group>
@@ -50091,7 +50119,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Center"
     >ExtensionLoader</text>
     <group name="Fig1.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[329, 840, 161, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[329, 841, 221, 0]"
          href="-87--2--3--76-e9002fe:123ebbb9fa8:-8000:000000000000179B"
          fill="0"
          fillcolor="white"
@@ -50104,8 +50132,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig1.2.0"
         x="329"
-        y="840"
-        width="161"
+        y="841"
+        width="221"
         height="0"
         fill="0"
         fillcolor="white"
@@ -51429,7 +51457,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="256"
               y="544" />
       <lineto x="256"
-              y="488" />
+              y="489" />
     </path>
   </group>
   <group name="Fig6"
@@ -51460,7 +51488,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="456"
               y="840" />
       <lineto x="456"
-              y="488" />
+              y="489" />
     </path>
   </group>
   <group name="Fig7"
@@ -52448,7 +52476,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     >
       <moveto x="344"
               y="1000" />
-      <lineto x="301"
+      <lineto x="302"
               y="1000" />
     </path>
   </group>
@@ -52621,7 +52649,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="168"
               y="840" />
       <lineto x="168"
-              y="807" />
+              y="808" />
     </path>
   </group>
   <group name="Fig14"
@@ -52914,7 +52942,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="265"
               y="248" />
       <lineto x="265"
-              y="114" />
+              y="115" />
     </path>
   </group>
   <group name="Fig17"
@@ -53075,8 +53103,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     >
       <moveto x="328"
               y="352" />
-      <lineto x="273"
-              y="270" />
+      <lineto x="274"
+              y="271" />
     </path>
   </group>
   <group name="Fig19"
@@ -53235,10 +53263,10 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="147"
+      <moveto x="148"
               y="352" />
       <lineto x="160"
-              y="270" />
+              y="271" />
     </path>
   </group>
   <group name="Fig21"
@@ -53400,7 +53428,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="220"
               y="352" />
       <lineto x="220"
-              y="270" />
+              y="271" />
     </path>
   </group>
   <group name="Fig23"
@@ -54391,7 +54419,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="466"
               y="180" />
       <lineto x="466"
-              y="114" />
+              y="115" />
     </path>
   </group>
   <group name="Fig26"
@@ -54422,7 +54450,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="420"
               y="248" />
       <lineto x="420"
-              y="202" />
+              y="203" />
     </path>
   </group>
   <group name="Fig27"
@@ -54584,7 +54612,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="509"
               y="248" />
       <lineto x="509"
-              y="202" />
+              y="203" />
     </path>
   </group>
 </pgml>
@@ -59083,7 +59111,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     >
       <moveto x="960"
               y="600" />
-      <lineto x="863"
+      <lineto x="864"
               y="600" />
     </path>
   </group>
@@ -59140,7 +59168,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     >
       <moveto x="656"
               y="56" />
-      <lineto x="543"
+      <lineto x="544"
               y="56" />
     </path>
   </group>
@@ -59457,7 +59485,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="616"
               y="880" />
       <lineto x="616"
-              y="843" />
+              y="844" />
     </path>
   </group>
   <group name="Fig13"
@@ -59492,7 +59520,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="392"
               y="136" />
       <lineto x="392"
-              y="81" />
+              y="82" />
     </path>
   </group>
   <group name="Fig14"
@@ -59527,7 +59555,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="392"
               y="136" />
       <lineto x="392"
-              y="81" />
+              y="82" />
     </path>
   </group>
 </pgml>
@@ -60881,12 +60909,12 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="562"
+      <moveto x="563"
               y="608" />
       <lineto x="760"
               y="608" />
       <lineto x="760"
-              y="356" />
+              y="357" />
     </path>
   </group>
   <group name="Fig5"
@@ -61465,7 +61493,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="760"
               y="944" />
       <lineto x="760"
-              y="356" />
+              y="357" />
     </path>
   </group>
   <group name="Fig10"
@@ -61498,7 +61526,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="760"
               y="1160" />
       <lineto x="760"
-              y="356" />
+              y="357" />
     </path>
   </group>
   <group name="Fig11"
@@ -63007,7 +63035,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="1320"
               y="960" />
       <lineto x="1320"
-              y="694" />
+              y="695" />
     </path>
   </group>
   <group name="Fig20"
@@ -63035,12 +63063,12 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="562"
+      <moveto x="563"
               y="704" />
       <lineto x="1232"
               y="704" />
       <lineto x="1232"
-              y="694" />
+              y="695" />
     </path>
   </group>
   <group name="Fig21"
@@ -63421,7 +63449,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="1320"
               y="1168" />
       <lineto x="1320"
-              y="694" />
+              y="695" />
     </path>
   </group>
   <group name="Fig24"
@@ -63449,7 +63477,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="527"
+      <moveto x="528"
               y="872" />
       <lineto x="712"
               y="872" />
@@ -63458,7 +63486,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="1840"
               y="776" />
       <lineto x="1840"
-              y="552" />
+              y="553" />
     </path>
   </group>
   <group name="Fig25"
@@ -63491,7 +63519,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="1840"
               y="928" />
       <lineto x="1840"
-              y="552" />
+              y="553" />
     </path>
   </group>
   <group name="Fig26"
@@ -63524,7 +63552,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="1840"
               y="1184" />
       <lineto x="1840"
-              y="552" />
+              y="553" />
     </path>
   </group>
   <group name="Fig27"
@@ -63710,7 +63738,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="1008"
-              y="980" />
+              y="981" />
       <lineto x="1008"
               y="1040" />
       <lineto x="160"
@@ -63745,7 +63773,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="1512"
-              y="994" />
+              y="995" />
       <lineto x="1512"
               y="1040" />
       <lineto x="160"
@@ -63780,7 +63808,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="2040"
-              y="980" />
+              y="981" />
       <lineto x="2040"
               y="1040" />
       <lineto x="160"
@@ -65463,7 +65491,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="1840"
               y="1384" />
       <lineto x="1840"
-              y="552" />
+              y="553" />
     </path>
   </group>
   <group name="Fig45"
@@ -65498,7 +65526,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="264"
               y="1248" />
       <lineto x="264"
-              y="1153" />
+              y="1154" />
     </path>
   </group>
   <group name="Fig46"
@@ -65705,7 +65733,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="1320"
               y="1328" />
       <lineto x="1320"
-              y="694" />
+              y="695" />
     </path>
   </group>
   <group name="Fig48"
@@ -65740,7 +65768,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="264"
               y="1248" />
       <lineto x="264"
-              y="1153" />
+              y="1154" />
     </path>
   </group>
   <group name="Fig49"
@@ -65947,7 +65975,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="760"
               y="1368" />
       <lineto x="760"
-              y="356" />
+              y="357" />
     </path>
   </group>
   <group name="Fig51"
@@ -65982,7 +66010,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="264"
               y="1248" />
       <lineto x="264"
-              y="1153" />
+              y="1154" />
     </path>
   </group>
   <group name="Fig52"
@@ -66015,7 +66043,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="760"
               y="1544" />
       <lineto x="760"
-              y="356" />
+              y="357" />
     </path>
   </group>
   <group name="Fig53"
@@ -66048,7 +66076,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="1320"
               y="1560" />
       <lineto x="1320"
-              y="694" />
+              y="695" />
     </path>
   </group>
   <group name="Fig54"
@@ -66575,7 +66603,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="264"
               y="1464" />
       <lineto x="264"
-              y="1153" />
+              y="1154" />
     </path>
   </group>
   <group name="Fig57"
@@ -66610,7 +66638,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="264"
               y="1464" />
       <lineto x="264"
-              y="1153" />
+              y="1154" />
     </path>
   </group>
   <group name="Fig58"
@@ -66645,7 +66673,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="264"
               y="1464" />
       <lineto x="264"
-              y="1153" />
+              y="1154" />
     </path>
   </group>
   <group name="Fig59"
@@ -66930,7 +66958,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="1840"
               y="1576" />
       <lineto x="1840"
-              y="552" />
+              y="553" />
     </path>
   </group>
   <group name="Fig62"
@@ -67209,10 +67237,10 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="2649"
+      <moveto x="2650"
               y="904" />
       <lineto x="2880"
-              y="816" />
+              y="817" />
     </path>
   </group>
   <group name="Fig65"
@@ -67240,10 +67268,10 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="2577"
+      <moveto x="2578"
               y="1104" />
       <lineto x="2880"
-              y="816" />
+              y="817" />
     </path>
   </group>
   <group name="Fig66"
@@ -67271,10 +67299,10 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="2305"
+      <moveto x="2306"
               y="1312" />
       <lineto x="2880"
-              y="816" />
+              y="817" />
     </path>
   </group>
   <group name="Fig67"
@@ -67302,10 +67330,10 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="2335"
+      <moveto x="2336"
               y="1528" />
       <lineto x="2880"
-              y="816" />
+              y="817" />
     </path>
   </group>
   <group name="Fig68"
@@ -67333,8 +67361,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1807"
-              y="119" />
+      <moveto x="1808"
+              y="120" />
       <lineto x="2880"
               y="752" />
     </path>
@@ -69928,7 +69956,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="320"
-              y="161" />
+              y="162" />
       <lineto x="320"
               y="192" />
     </path>
@@ -69959,7 +69987,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     >
       <moveto x="488"
-              y="161" />
+              y="162" />
       <lineto x="488"
               y="200" />
     </path>
@@ -70915,7 +70943,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="900"
+      <moveto x="901"
               y="502" />
       <lineto x="996"
               y="502" />
@@ -71231,7 +71259,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="519"
+      <moveto x="520"
               y="184" />
       <lineto x="568"
               y="184" />
@@ -71468,7 +71496,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="51 51 153"
     >
       <moveto x="448"
-              y="192" />
+              y="193" />
       <lineto x="448"
               y="368" />
       <lineto x="568"
@@ -71693,12 +71721,12 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="857"
+      <moveto x="858"
               y="560" />
       <lineto x="1032"
               y="560" />
       <lineto x="1032"
-              y="522" />
+              y="523" />
     </path>
   </group>
 </pgml>
@@ -71878,7 +71906,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig0.4.5"
         x="49"
         y="679"
-        width="472"
+        width="470"
         height="14"
         fill="0"
         fillcolor="white"
@@ -72139,13 +72167,13 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="503"
+      <moveto x="504"
               y="896" />
       <lineto x="696"
               y="896" />
       <lineto x="696"
               y="600" />
-      <lineto x="519"
+      <lineto x="520"
               y="600" />
     </path>
   </group>
@@ -72792,13 +72820,13 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="503"
+      <moveto x="504"
               y="1008" />
       <lineto x="1056"
               y="1008" />
       <lineto x="1056"
               y="800" />
-      <lineto x="619"
+      <lineto x="620"
               y="800" />
     </path>
   </group>
@@ -72827,7 +72855,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="720"
+      <moveto x="721"
               y="1208" />
       <lineto x="784"
               y="1208" />
@@ -72837,7 +72865,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
               y="1128" />
       <lineto x="1056"
               y="800" />
-      <lineto x="619"
+      <lineto x="620"
               y="800" />
     </path>
   </group>
@@ -72983,7 +73011,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <text name="Fig9.6.2"
         x="97"
         y="74"
-        width="669"
+        width="668"
         height="14"
         fill="0"
         fillcolor="white"
@@ -73861,12 +73889,12 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="791"
+      <moveto x="792"
               y="456" />
       <lineto x="928"
               y="456" />
       <lineto x="928"
-              y="119" />
+              y="120" />
     </path>
   </group>
   <group name="Fig15"
@@ -74159,7 +74187,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="832"
               y="160" />
       <lineto x="832"
-              y="119" />
+              y="120" />
     </path>
   </group>
   <group name="Fig18"
@@ -74187,12 +74215,12 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="765"
+      <moveto x="766"
               y="240" />
       <lineto x="832"
               y="240" />
       <lineto x="832"
-              y="183" />
+              y="184" />
     </path>
   </group>
   <group name="Fig19"
@@ -74356,7 +74384,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="840"
               y="672" />
       <lineto x="840"
-              y="599" />
+              y="600" />
     </path>
   </group>
   <group name="Fig21"
@@ -74799,7 +74827,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="378"
+      <moveto x="379"
               y="1344" />
       <lineto x="416"
               y="1344" />
@@ -74809,7 +74837,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
               y="1128" />
       <lineto x="696"
               y="600" />
-      <lineto x="519"
+      <lineto x="520"
               y="600" />
     </path>
   </group>
@@ -74838,7 +74866,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="750"
+      <moveto x="751"
               y="1336" />
       <lineto x="784"
               y="1336" />
@@ -74848,7 +74876,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
               y="1128" />
       <lineto x="1056"
               y="800" />
-      <lineto x="619"
+      <lineto x="620"
               y="800" />
     </path>
   </group>
@@ -75177,7 +75205,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="333"
+      <moveto x="334"
               y="1208" />
       <lineto x="416"
               y="1208" />
@@ -75187,7 +75215,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
               y="1128" />
       <lineto x="696"
               y="600" />
-      <lineto x="519"
+      <lineto x="520"
               y="600" />
     </path>
   </group>
@@ -75352,7 +75380,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="840"
               y="648" />
       <lineto x="840"
-              y="599" />
+              y="600" />
     </path>
   </group>
   <group name="Fig31"
@@ -75516,7 +75544,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="840"
               y="704" />
       <lineto x="840"
-              y="599" />
+              y="600" />
     </path>
   </group>
   <group name="Fig33"
@@ -75680,7 +75708,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="840"
               y="744" />
       <lineto x="840"
-              y="599" />
+              y="600" />
     </path>
   </group>
   <group name="Fig35"
@@ -75842,7 +75870,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="984"
               y="576" />
       <lineto x="984"
-              y="535" />
+              y="536" />
     </path>
   </group>
   <group name="Fig37"
@@ -76285,7 +76313,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="303"
+      <moveto x="304"
               y="1456" />
       <lineto x="416"
               y="1456" />
@@ -76295,7 +76323,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
               y="1128" />
       <lineto x="696"
               y="600" />
-      <lineto x="519"
+      <lineto x="520"
               y="600" />
     </path>
   </group>
@@ -76324,7 +76352,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="674"
+      <moveto x="675"
               y="1464" />
       <lineto x="784"
               y="1464" />
@@ -76334,7 +76362,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
               y="1128" />
       <lineto x="1056"
               y="800" />
-      <lineto x="619"
+      <lineto x="620"
               y="800" />
     </path>
   </group>
@@ -77392,7 +77420,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     >
       <moveto x="400"
               y="568" />
-      <lineto x="295"
+      <lineto x="296"
               y="568" />
     </path>
   </group>
@@ -77423,7 +77451,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     >
       <moveto x="400"
               y="544" />
-      <lineto x="295"
+      <lineto x="296"
               y="544" />
     </path>
   </group>
@@ -77480,7 +77508,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     >
       <moveto x="400"
               y="520" />
-      <lineto x="295"
+      <lineto x="296"
               y="520" />
     </path>
   </group>
@@ -77701,7 +77729,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="200"
               y="624" />
       <lineto x="200"
-              y="581" />
+              y="582" />
     </path>
   </group>
   <group name="Fig9"
@@ -77910,7 +77938,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="208"
               y="760" />
       <lineto x="208"
-              y="725" />
+              y="726" />
     </path>
   </group>
   <group name="Fig11"
@@ -78167,7 +78195,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="208"
               y="760" />
       <lineto x="208"
-              y="725" />
+              y="726" />
     </path>
   </group>
   <group name="Fig13"
@@ -78456,7 +78484,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="208"
               y="760" />
       <lineto x="208"
-              y="725" />
+              y="726" />
     </path>
   </group>
   <group name="Fig15"
@@ -78725,7 +78753,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="560"
               y="952" />
       <lineto x="560"
-              y="934" />
+              y="935" />
     </path>
   </group>
   <group name="Fig17"
@@ -79278,7 +79306,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="848"
               y="248" />
       <lineto x="848"
-              y="39" />
+              y="40" />
     </path>
   </group>
   <group name="Fig22"
@@ -79456,7 +79484,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="848"
               y="296" />
       <lineto x="848"
-              y="39" />
+              y="40" />
     </path>
   </group>
   <group name="Fig24"
@@ -79634,7 +79662,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="928"
               y="352" />
       <lineto x="928"
-              y="322" />
+              y="323" />
     </path>
   </group>
   <group name="Fig26"
@@ -79954,7 +79982,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="848"
               y="176" />
       <lineto x="848"
-              y="39" />
+              y="40" />
     </path>
   </group>
   <group name="Fig30"
@@ -79987,7 +80015,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="1568"
               y="256" />
       <lineto x="1568"
-              y="212" />
+              y="213" />
     </path>
   </group>
   <group name="Fig31"
@@ -80165,7 +80193,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="848"
               y="424" />
       <lineto x="848"
-              y="39" />
+              y="40" />
     </path>
   </group>
   <group name="Fig33"
@@ -80343,7 +80371,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="848"
               y="480" />
       <lineto x="848"
-              y="39" />
+              y="40" />
     </path>
   </group>
   <group name="Fig35"
@@ -80818,10 +80846,10 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="1115"
+      <moveto x="1116"
               y="728" />
       <lineto x="1152"
-              y="689" />
+              y="690" />
     </path>
   </group>
   <group name="Fig39"
@@ -80994,7 +81022,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="1256"
               y="728" />
       <lineto x="1256"
-              y="689" />
+              y="690" />
     </path>
   </group>
   <group name="Fig41"
@@ -81166,8 +81194,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     >
       <moveto x="1400"
               y="728" />
-      <lineto x="1358"
-              y="689" />
+      <lineto x="1359"
+              y="690" />
     </path>
   </group>
   <group name="Fig43"
@@ -81326,7 +81354,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="848"
               y="592" />
       <lineto x="848"
-              y="39" />
+              y="40" />
     </path>
   </group>
   <group name="Fig45"
@@ -81565,7 +81593,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="848"
               y="392" />
       <lineto x="848"
-              y="39" />
+              y="40" />
     </path>
   </group>
   <group name="Fig47"
@@ -83181,7 +83209,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="496"
               y="1384" />
       <lineto x="496"
-              y="1358" />
+              y="1359" />
     </path>
   </group>
   <group name="Fig55"
@@ -83466,7 +83494,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="273"
               y="1440" />
       <lineto x="273"
-              y="1358" />
+              y="1359" />
     </path>
   </group>
   <group name="Fig57"
@@ -83497,7 +83525,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="160"
               y="1648" />
       <lineto x="160"
-              y="1598" />
+              y="1599" />
     </path>
   </group>
   <group name="Fig58"
@@ -83528,7 +83556,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="424"
               y="1648" />
       <lineto x="424"
-              y="1598" />
+              y="1599" />
     </path>
   </group>
   <group name="Fig59"
@@ -83563,7 +83591,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="360"
               y="1424" />
       <lineto x="360"
-              y="1358" />
+              y="1359" />
     </path>
   </group>
   <group name="Fig60"
@@ -83749,7 +83777,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="512"
+      <moveto x="513"
               y="1309" />
       <lineto x="696"
               y="1309" />
@@ -83789,7 +83817,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="848"
               y="864" />
       <lineto x="848"
-              y="39" />
+              y="40" />
     </path>
   </group>
   <group name="Fig63"
@@ -83969,7 +83997,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="448"
               y="1760" />
       <lineto x="448"
-              y="1708" />
+              y="1709" />
     </path>
   </group>
   <group name="Fig65"
@@ -84214,7 +84242,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="436"
               y="1404" />
       <lineto x="436"
-              y="1358" />
+              y="1359" />
     </path>
   </group>
   <group name="Fig67"
@@ -84383,7 +84411,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="848"
               y="864" />
       <lineto x="848"
-              y="39" />
+              y="40" />
     </path>
   </group>
   <group name="Fig69"
@@ -85948,13 +85976,13 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="2463"
+      <moveto x="2464"
               y="744" />
       <lineto x="2560"
               y="744" />
       <lineto x="2560"
               y="20" />
-      <lineto x="1151"
+      <lineto x="1152"
               y="20" />
     </path>
   </group>
@@ -86115,13 +86143,13 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="2468"
+      <moveto x="2469"
               y="784" />
       <lineto x="2560"
               y="784" />
       <lineto x="2560"
               y="20" />
-      <lineto x="1151"
+      <lineto x="1152"
               y="20" />
     </path>
   </group>
@@ -86664,13 +86692,13 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="2222"
+      <moveto x="2223"
               y="1208" />
       <lineto x="2716"
               y="1208" />
       <lineto x="2716"
               y="20" />
-      <lineto x="1151"
+      <lineto x="1152"
               y="20" />
     </path>
   </group>
@@ -86831,13 +86859,13 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       stroke="1"
       strokecolor="51 51 153"
     >
-      <moveto x="2480"
+      <moveto x="2481"
               y="820" />
       <lineto x="2560"
               y="820" />
       <lineto x="2560"
               y="20" />
-      <lineto x="1151"
+      <lineto x="1152"
               y="20" />
     </path>
   </group>
@@ -87003,7 +87031,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="1568"
               y="304" />
       <lineto x="1568"
-              y="212" />
+              y="213" />
     </path>
   </group>
 </pgml>
@@ -87110,7 +87138,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     ></text>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[40, 56, 280, 112]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[40, 56, 280, 122]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018E5"
        fill="1"
        fillcolor="white"
@@ -87118,13 +87146,14 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
        strokecolor="black"
   >
     <private>
+      enclosingFig="Fig0"
     </private>
     
     <rectangle name="Fig1.0"
       x="40"
       y="56"
       width="280"
-      height="112"
+      height="122"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -87145,7 +87174,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       bold="false"
       textsize="10"
       justification="Center"
-    >Filel</text>
+    >helpers::File</text>
     <group name="Fig1.2"
          description="org.argouml.uml.diagram.ui.FigStereotypesGroup[41, 57, 262, 0]"
          href="127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018E5"
@@ -87180,7 +87209,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[41, 79, 278, 22]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[41, 79, 278, 21]"
          href="127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018E5"
          fill="0"
          fillcolor="white"
@@ -87194,7 +87223,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         x="41"
         y="79"
         width="278"
-        height="22"
+        height="21"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -87203,7 +87232,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig1.5"
       x="40"
-      y="101"
+      y="99"
       width="280"
       height="1"
       fill="1"
@@ -87212,7 +87241,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig1.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[41, 102, 278, 65]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[41, 100, 278, 78]"
          href="127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018E5"
          fill="0"
          fillcolor="white"
@@ -87224,9 +87253,9 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig1.6.0"
         x="41"
-        y="102"
+        y="100"
         width="278"
-        height="65"
+        height="78"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -87234,7 +87263,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       />
       <text name="Fig1.6.1"
         x="41"
-        y="102"
+        y="100"
         width="278"
         height="14"
         fill="0"
@@ -87250,7 +87279,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >resourceExists(path : string = &quot;&quot;) : boolean</text>
       <text name="Fig1.6.2"
         x="41"
-        y="116"
+        y="114"
         width="278"
         height="14"
         fill="0"
@@ -87266,7 +87295,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >getResource(path : string = &quot;&quot;) : File</text>
       <text name="Fig1.6.3"
         x="41"
-        y="130"
+        y="128"
         width="278"
         height="14"
         fill="0"
@@ -87282,7 +87311,23 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >searchResourcesFromPath(path : string = &quot;&quot;) : array</text>
       <text name="Fig1.6.4"
         x="41"
-        y="144"
+        y="142"
+        width="278"
+        height="14"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="10"
+        justification="Left"
+      >getRelPath(from : string,to : string) : string</text>
+      <text name="Fig1.6.5"
+        x="41"
+        y="156"
         width="278"
         height="20"
         fill="0"
@@ -87295,11 +87340,11 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
         bold="false"
         textsize="10"
         justification="Left"
-      >getRelPath(from : string,to : string) : string</text>
+      >remove(path : string) : boolean</text>
     </group>
   </group>
   <group name="Fig2"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[40, 184, 627, 128]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[40, 240, 627, 128]pathVisible=true;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--3ab6260f:13542827269:-8000:0000000000001921"
        fill="1"
        fillcolor="white"
@@ -87312,7 +87357,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     
     <rectangle name="Fig2.0"
       x="40"
-      y="184"
+      y="240"
       width="627"
       height="128"
       fill="1"
@@ -87322,7 +87367,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     />
     <text name="Fig2.1"
       x="41"
-      y="185"
+      y="241"
       width="625"
       height="21"
       fill="0"
@@ -87337,7 +87382,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       justification="Center"
     >helpers::VersionedFile</text>
     <group name="Fig2.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[41, 185, 625, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[41, 241, 625, 0]"
          href="127-0-1-1--3ab6260f:13542827269:-8000:0000000000001921"
          fill="0"
          fillcolor="white"
@@ -87350,7 +87395,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig2.2.0"
         x="41"
-        y="185"
+        y="241"
         width="625"
         height="0"
         fill="0"
@@ -87361,7 +87406,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig2.3"
       x="40"
-      y="206"
+      y="262"
       width="627"
       height="1"
       fill="1"
@@ -87370,7 +87415,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig2.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[41, 207, 625, 37]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[41, 263, 625, 37]"
          href="127-0-1-1--3ab6260f:13542827269:-8000:0000000000001921"
          fill="0"
          fillcolor="white"
@@ -87382,7 +87427,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig2.4.0"
         x="41"
-        y="207"
+        y="263"
         width="625"
         height="37"
         fill="0"
@@ -87393,7 +87438,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
     </group>
     <rectangle name="Fig2.5"
       x="40"
-      y="244"
+      y="300"
       width="627"
       height="1"
       fill="1"
@@ -87402,7 +87447,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       strokecolor="black"
     />
     <group name="Fig2.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[41, 245, 625, 66]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[41, 301, 625, 66]"
          href="127-0-1-1--3ab6260f:13542827269:-8000:0000000000001921"
          fill="0"
          fillcolor="white"
@@ -87414,7 +87459,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       
       <rectangle name="Fig2.6.0"
         x="41"
-        y="245"
+        y="301"
         width="625"
         height="66"
         fill="0"
@@ -87424,7 +87469,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       />
       <text name="Fig2.6.1"
         x="41"
-        y="245"
+        y="301"
         width="625"
         height="14"
         fill="0"
@@ -87440,7 +87485,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >deleteFiles(files : array = array()) : boolean</text>
       <text name="Fig2.6.2"
         x="41"
-        y="259"
+        y="315"
         width="625"
         height="14"
         fill="0"
@@ -87456,8 +87501,8 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       >rmWorkingCopy(path : string,recursive : boolean = true) : boolean</text>
       <text name="Fig2.6.3"
         x="41"
-        y="273"
-        width="625"
+        y="329"
+        width="626"
         height="20"
         fill="0"
         fillcolor="white"
@@ -89334,7 +89379,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="588"
               y="416" />
       <lineto x="588"
-              y="391" />
+              y="392" />
     </path>
   </group>
   <group name="Fig12"
@@ -89365,7 +89410,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="588"
               y="464" />
       <lineto x="588"
-              y="391" />
+              y="392" />
     </path>
   </group>
   <group name="Fig13"
@@ -89400,7 +89445,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <lineto x="588"
               y="416" />
       <lineto x="588"
-              y="391" />
+              y="392" />
     </path>
   </group>
   <group name="Fig14"
@@ -89563,7 +89608,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="88"
               y="552" />
       <lineto x="88"
-              y="118" />
+              y="119" />
     </path>
   </group>
   <group name="Fig16"
@@ -89594,7 +89639,7 @@ to the file/directory &apos;to&apos;</UML:TaggedValue.dataValue>
       <moveto x="134"
               y="632" />
       <lineto x="134"
-              y="574" />
+              y="575" />
     </path>
   </group>
 </pgml>

@@ -477,7 +477,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		$this->assertTrue($file->setContent($originalFileContent.' updated'));
 		$this->assertTrue($file->commit());
 		$this->assertTrue($repository2->delete(true));
-		tao_helpers_File::remove(GENERIS_FILES_PATH.'/versioning/TMP_TEST_CASE_REPOSITORY', true);
+		$this->assertTrue(helpers_file::remove(GENERIS_FILES_PATH.'/versioning/TMP_TEST_CASE_REPOSITORY', true));
 	    
 		// Test the file has been updated in the first repository
 		$this->assertTrue($instance->update());
