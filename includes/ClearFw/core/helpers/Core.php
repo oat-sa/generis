@@ -36,26 +36,16 @@ function load_helper($helperName)
  */
 function get_data($key)
 {
-	$context = Context::getInstance();
-	return $context->getData($key);
+	return RenderContext::getCurrentContext()->getData($key);
 }
 
 /**
- * Set data in the request context. If a data is associated with the key
- * provided with the function call, it will be erased by the new one.
- *
- * @param string $key A key to identify the data.
- * @param mixed $data The data to store, identified by the key.
- * @return void
+ * Returns whenever or not a variable with the specified key is defined
+ * 
+ * @param string $key
+ * @return boolean
  */
-function set_data($key, $data){
-	$context = Context::getInstance();
-	$context->setData($key, $data);
-}
-
 function has_data($key){
-	$context = Context::getInstance();
-	$data = $context->getData($key);
-	return !empty($data);
+	return RenderContext::getCurrentContext()->hasData($key);
 }
 ?>

@@ -43,10 +43,10 @@ class GenerisActionEnforcer extends ActionEnforcer
     		call_user_func_array(array($module, $action), $tabParam);
     		
     		// Render the view if selected.
-    		if ($view = $module->getView())
+    		if ($module->hasView())
     		{
-    			$renderer = new Renderer();
-    			$renderer->render($view);
+    			$renderer = $module->getRenderer();
+    			echo $renderer->render();
     		}
     	} 
     	else {

@@ -1,7 +1,6 @@
 <?php
 /**
  * Renderer class
- * TODO Renderer class documentation.
  * 
  * @author J�r�me Bogaerts <jerome.bogaerts@tudor.lu> <jerome.bogaerts@gmail.com>
  */
@@ -10,69 +9,104 @@ class Renderer
 	/**
 	 * @var string base directory containing the views themes
 	 */
-	private static $viewsBasePath = '';
+	private $template = null;
 	
-	public function __construct()
+	/**
+	 * @var array associtaiv array of variables that will be replaced in the template
+	 */
+	private $variables = array();
+	
+	/**
+	 * Constructor with optional parameters
+	 * 
+	 * @param string $templatePath template to use
+	 * @param array $variables
+	 */
+	public function __construct($templatePath = null, $variables = array())
 	{
-		//by default the path is set by configuration
-		if(empty(self::$viewsBasePath)){
-			self::$viewsBasePath = DIR_VIEWS;
-		}
+		$this->template		= $templatePath;
+		$this->variables	= $variables;
 	}
 	
-	/**
-	 * enable you to change dynamically the views base path
-	 * @param string $path
-	 * @return void
-	 */
-	public static function setViewsBasePath($path){
-		self::$viewsBasePath = $path;
-	} 
-	
-	/**
-	 * conveniance method
-	 * @return string the view directory for the current theme
-	 */
-	protected function getViewPath(){
-		return self::$viewsBasePath . 'templates/';
-	}
-	
-	/**
-	 * Render a view in the current context
-	 * @param string $view the view 
-	 */
-	public function render($view)
-	{
-		$context = Context::getInstance();
-		
-		// We sets variables in order to be available from the current scope.
-		// View data variables.
-		$viewData = $context->getDataCollection();
-		foreach ($viewData as $key => $value)
-			$$key = $value;
+    /**
+     * sets the template to be used
+     *
+     * @access public
+     * @author Joel Bout, <joel@taotesting.com>
+     * @param  string templatePath
+     * @return mixed
+     */
+    public function setTemplate($templatePath)
+    {
+        common_Logger::d('template set to '.$templatePath);
+        $this->template = $templatePath;
+    }
 
-//		//check if there is a specified context first
-//		if(count($context->getSpecifiers()) > 0){
-//			foreach($context->getSpecifiers() as $specifier){
-//			
-//				$expectedPath = $this->getViewPath() . $specifier . '/' . $view;
-//
-//				//if we find the view in the specialized context, we load it  
-//				if (file_exists($expectedPath)){
-//					include ($expectedPath);
-//					return;
-//				}
-//			}
-//		}
-//		//if there is none, we look at the global context
-		
-		$expectedPath = $this->getViewPath() . $view;
-		if (file_exists($expectedPath))
-			include ($expectedPath);
-		else
-			throw new ViewException("No view at location {$expectedPath}.",
-									$context->getModuleName(),
-									$context->getActionName());
-	}
+    /**
+     * adds or replaces the data for a specific key
+     *
+     * @access public
+     * @author Joel Bout, <joel@taotesting.com>
+     * @param  string key
+     * @param  mixed value
+     */
+    public function setData($key, $value)
+    {
+        $this->variables[$key] = $value;
+    }
+	
+    /**
+     * adds or replaces the data for multiple keys
+     *
+     * @access public
+     * @author Joel Bout, <joel@taotesting.com>
+     * @param  array array associativ array of data
+     */
+    public function setMultipleData($array)
+    {
+    	foreach ($array as $key => $value) {
+    		$this->variables[$key] = $value;
+    	}
+    }
+    
+    /**
+     * Whenever or not a template has been specified
+     * 
+     * @return boolean
+     */
+    public function hasTemplate()
+    {
+    	return !is_null($this->template);
+    }
+    
+	/**
+	 * Renders the template
+	 * 
+	 * @return string the rendered view 
+	 */
+    public function render()
+    {
+        
+		if (!$this->hasTemplate()) {
+			throw new common_Exception('Cannot render without template');
+		}
+    	
+        extract($this->variables);
+        RenderContext::pushContext($this->variables);
+        
+        ob_start();
+        include $this->template;
+        $returnValue = ob_get_contents();
+        
+        ob_end_clean();
+        
+        //clean the extracted variables
+        foreach($this->variables as $key => $name){
+        	unset($$key);
+        }
+        RenderContext::popContext();
+        
+		return $returnValue;
+    }
 }
 ?>

@@ -3,11 +3,16 @@
  * Module class
  * TODO Module class documentation.
  * 
- * @author Jérôme Bogaerts <jerome.bogaerts@tudor.lu> <jerome.bogaerts@gmail.com>
+ * @author Jï¿½rï¿½me Bogaerts <jerome.bogaerts@tudor.lu> <jerome.bogaerts@gmail.com>
  */
 class Module extends Actions implements IFlowControl, IViewable
 {
 	private $selectedView = null;
+	
+	/**
+	 * @var Renderer
+	 */
+	private $renderer;
 	
 	public function forward($moduleName, $actionName)
 	{
@@ -21,9 +26,16 @@ class Module extends Actions implements IFlowControl, IViewable
 		$flowController->redirect($url);
 	}
 	
+	public function getRenderer() {
+		if (!isset($this->renderer)) {
+			$this->renderer = new Renderer();
+		}
+		return $this->renderer;
+	}
+	
 	public function setView($identifier)
 	{
-		$this->selectedView = $identifier;
+		$this->getRenderer()->setTemplate($identifier);
 	}
 	
 	public function getView()
@@ -33,12 +45,12 @@ class Module extends Actions implements IFlowControl, IViewable
 	
 	public function setData($key, $value)
 	{
-		Context::getInstance()->setData($key, $value);
+		$this->getRenderer()->setData($key, $value);
 	}
 	
-	public function getData($key)
-	{
-		Context::getInstance()->getData($key);
+	public function hasView() {
+		return isset($this->renderer) && $this->renderer->hasTemplate();
 	}
+	
 }
 ?>
