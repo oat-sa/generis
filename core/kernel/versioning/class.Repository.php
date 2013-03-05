@@ -242,7 +242,7 @@ class core_kernel_versioning_Repository
         /* remove the resource implies other consequence, do not remove 
         if(is_dir($path)){
         	// Remove the local copy
-        	tao_helpers_File::remove($path, true);
+        	helpers_File::remove($path);
         }*/
         
         $returnValue = parent::delete();
@@ -504,7 +504,7 @@ class core_kernel_versioning_Repository
         	}
         	
         	if(!is_null($returnValue)){
-        		tao_helpers_File::remove($source);
+        		helpers_File::remove($source);
         	}
         }
         // section 127-0-1-1-18201a84:13d170d1914:-8000:0000000000001FD7 end
