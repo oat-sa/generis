@@ -38,7 +38,6 @@ class Renderer
      */
     public function setTemplate($templatePath)
     {
-        common_Logger::d('template set to '.$templatePath);
         $this->template = $templatePath;
     }
 
