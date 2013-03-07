@@ -65,7 +65,13 @@ class Resolver {
      * @return	String The module name
      */
     public function getModule() {
-    	return is_null($this->module) ? DEFAULT_MODULE_NAME : $this->module;
+    	$defaultModuleName = 'Main';
+    	
+    	if (defined('DEFAULT_MODULE_NAME')){
+    		$defaultModuleName = DEFAULT_MODULE_NAME;
+    	}
+    	
+    	return is_null($this->module) ? $defaultModuleName : $this->module;
     }
 
     /**
@@ -73,7 +79,13 @@ class Resolver {
      * @return String The action name
      */
     public function getAction() {
-    	return is_null($this->action) ? DEFAULT_ACTION_NAME : $this->action;
+    	$defaultActionName = 'index';
+    	
+    	if (defined('DEFAULT_ACTION_NAME')){
+    		$defaultActionName = DEFAULT_ACTION_NAME;
+    	}
+    	
+    	return is_null($this->action) ? $defaultActionName : $this->action;
     }
 
     /**
