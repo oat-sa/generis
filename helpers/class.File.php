@@ -174,7 +174,7 @@ class helpers_File
 
         // section 10-30-1--78--3660a937:13d35e0b7d2:-8000:0000000000001FFC begin
 		if (is_file($path)) {
-        	$returnValue = @unlink($path);
+        	$returnValue = unlink($path);
         } elseif (is_dir($path)) {
 			$iterator = new DirectoryIterator($path);
 			foreach ($iterator as $fileinfo) {
@@ -182,7 +182,7 @@ class helpers_File
 					self::remove($fileinfo->getPathname());
 				}
 			}
-			$returnValue = @rmdir($path);
+			$returnValue = rmdir($path);
         } else {
         	throw new common_exception_Error('"'.$path.'" cannot be removed since it\'s neither a file nor directory');
         }

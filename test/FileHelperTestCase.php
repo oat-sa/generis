@@ -24,7 +24,7 @@ class FileHelperTestCase extends UnitTestCase {
 		$subDir21	= $this->mkdir($subDir2);
 		$file211	= tempnam($subDir21, 'testdir');
 		$subDir22	= $this->mkdir($subDir2);
-		helpers_File::remove($basedir);
+		$this->assertTrue(helpers_File::remove($basedir));
 		$this->assertFalse(is_dir($basedir));
 	}
 	
