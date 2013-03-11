@@ -3,41 +3,7 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API -
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 02.02.2012, 16:53:22 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
- * @package core
- * @subpackage kernel_versioning_subversion
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * include core_kernel_versioning_FileInterface
- *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
- */
-require_once('core/kernel/versioning/interface.FileInterface.php');
-
-/* user defined includes */
-// section 127-0-1-1--411682cd:13465a5ef15:-8000:00000000000018C0-includes begin
-// section 127-0-1-1--411682cd:13465a5ef15:-8000:00000000000018C0-includes end
-
-/* user defined constants */
-// section 127-0-1-1--411682cd:13465a5ef15:-8000:00000000000018C0-constants begin
-// section 127-0-1-1--411682cd:13465a5ef15:-8000:00000000000018C0-constants end
-
-/**
- * Short description of class core_kernel_versioning_subversion_File
+ * Subversion implementation of a file
  *
  * @access public
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -53,7 +19,7 @@ class core_kernel_versioning_subversion_File
     // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute instance
+     * singleton
      *
      * @access private
      * @var File
@@ -63,7 +29,7 @@ class core_kernel_versioning_subversion_File
     // --- OPERATIONS ---
 
     /**
-     * Short description of method commit
+     * Commit File with given message to the given path
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -78,8 +44,6 @@ class core_kernel_versioning_subversion_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A begin
-        
         $startTime = helpers_Time::getMicroTime();
         if($resource->getRepository()->authenticate()){
             $paths = is_array($path) ? $path : array($path);
@@ -88,14 +52,12 @@ class core_kernel_versioning_subversion_File
         }
         $endTime = helpers_Time::getMicroTime();
         common_Logger::i("svn_commit (".$path.') recursive='.($recursive==true?'true':'false').'-> '.($endTime-$startTime).'s');
-        
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A end
 
         return (bool) $returnValue;
     }
 
     /**
-     * Short description of method update
+     * Update a file
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -122,7 +84,7 @@ class core_kernel_versioning_subversion_File
     }
 
     /**
-     * Short description of method revert
+     * Revert a file
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -136,8 +98,6 @@ class core_kernel_versioning_subversion_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165E begin
-        
         if($resource->getRepository()->authenticate()){
 			
             //no revision, revert local change
@@ -207,14 +167,12 @@ class core_kernel_versioning_subversion_File
                 
             }
         }
-        
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165E end
 
         return (bool) $returnValue;
     }
 
     /**
-     * Short description of method delete
+     * Delete a file
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -242,7 +200,7 @@ class core_kernel_versioning_subversion_File
     }
 
     /**
-     * Short description of method add
+     * Add a file
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -274,7 +232,7 @@ class core_kernel_versioning_subversion_File
     }
 
     /**
-     * Short description of method getHistory
+     * Retrieve file 's history
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -302,7 +260,7 @@ class core_kernel_versioning_subversion_File
     }
 
     /**
-     * Short description of method getStatus
+     * Retrieve file's status
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -315,8 +273,6 @@ class core_kernel_versioning_subversion_File
     {
         $returnValue = (int) 0;
 
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001902 begin
-        
         $startTime = helpers_Time::getMicroTime();
         
         if($resource->getRepository()->authenticate()){
@@ -379,13 +335,11 @@ class core_kernel_versioning_subversion_File
         
         $endTime =  helpers_Time::getMicroTime();
         common_Logger::i("svn_getStatus ('.$path.') '.$returnValue.' -> ".($endTime - $startTime).'s');
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001902 end
-
         return (int) $returnValue;
     }
 
     /**
-     * Short description of method resolve
+     * Retrieve given version of a file from a path
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -398,10 +352,8 @@ class core_kernel_versioning_subversion_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 begin
-        
         $startTime = helpers_Time::getMicroTime();
-        $listParentFolder = tao_helpers_File::scandir(dirname($path));
+        $listParentFolder = helpers_File::scandir(dirname($path));
 		return core_kernel_versioning_subversionWindows_File::singleton()->resolve($resource, $path, $version);
 		
         var_dump('resolving');
@@ -443,14 +395,12 @@ class core_kernel_versioning_subversion_File
         //$returnValue = core_kernel_versioning_subversionWindows_File::singleton()->resolve($resource, $path, $version);
         $endTime =  helpers_Time::getMicroTime();
         common_Logger::i("svn_resolve ('.$path.' : '.$version.') -> ".($endTime - $startTime).'s');
-        
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 end
 
         return (bool) $returnValue;
     }
 
     /**
-     * Short description of method singleton
+     * Singleton
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -460,12 +410,10 @@ class core_kernel_versioning_subversion_File
     {
         $returnValue = null;
 
-        // section 127-0-1-1--411682cd:13465a5ef15:-8000:00000000000018C4 begin
         if(is_null(self::$instance)){
 			self::$instance = new self();
 		}
 		$returnValue = self::$instance;
-        // section 127-0-1-1--411682cd:13465a5ef15:-8000:00000000000018C4 end
 
         return $returnValue;
     }

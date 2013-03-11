@@ -761,9 +761,11 @@ class VersioningEnabledTestCase extends UnitTestCase {
             $this->assertTrue(helpers_File::remove($tmpFolder));
             $this->assertFalse(file_exists($tmpFolder));
         }
-        $this->assertTrue(mkdir($tmpFolder));
+        else {
+            $this->assertTrue(mkdir($tmpFolder));
+        }
         $this->assertTrue(touch($tmpFolder.'/file_test_empty'));
-        
+
         //import the tmp folder in the TAO repository & save the resource
         $importedFolder = $repository->import($tmpFolder, $repository->getUrl().'/TAO_TEST_CASE_TEST_RESPOSITORY_IMPORT', 'Import test case message', array('saveResource'=>true));
         $this->assertNotNull($importedFolder);

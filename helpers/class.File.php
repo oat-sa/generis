@@ -5,50 +5,40 @@ error_reporting(E_ALL);
 /**
  * Generis Object Oriented API - helpers/class.File.php
  *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 04.03.2013, 15:58:40 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Joel Bout, <joel@taotesting.com>
- * @package helpers
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/* user defined includes */
-// section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018E5-includes begin
-// section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018E5-includes end
-
-/* user defined constants */
-// section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018E5-constants begin
-// section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018E5-constants end
-
-/**
- * Short description of class helpers_File
+ * Utilities on files
  *
  * @access public
- * @author Joel Bout, <joel@taotesting.com>
- * @package helpers
+ * @author Lionel Lecaque, <lionel@taotesting.com>
+ * @package generis
+ * @subpackage helpers
  */
 class helpers_File
 {
-    // --- ASSOCIATIONS ---
+     // --- ATTRIBUTES ---
 
+    /**
+     *  Directory Mode
+     *
+     * @access public
+     * @var int
+     */
+    public static $DIR = 2;
 
-    // --- ATTRIBUTES ---
+    /**
+     * File Mode
+     *
+     * @access public
+     * @var int
+     */
+    public static $FILE = 1;
 
     // --- OPERATIONS ---
 
     /**
-     * Short description of method resourceExists
+     * Check if Resource exists
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @param  string path
      * @return boolean
      */
@@ -56,23 +46,20 @@ class helpers_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018E9 begin
-        
+
 		$instances = self::searchResourcesFromPath($path);
         if(!empty($instances)){
             $returnValue = true;
         }
 		
-        // section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018E9 end
-
         return (bool) $returnValue;
     }
 
     /**
-     * Short description of method getResource
+     * Retrieve Resource
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @param  string path
      * @return core_kernel_classes_File
      */
@@ -80,23 +67,19 @@ class helpers_File
     {
         $returnValue = null;
 
-        // section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018ED begin
-        
         $instances = self::searchResourcesFromPath($path);
         if(!empty($instances)){
             $returnValue = current($instances);
         }
-        
-        // section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018ED end
 
         return $returnValue;
     }
 
     /**
-     * Short description of method searchResourcesFromPath
+     * Search Resources from specific path
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @param  string path
      * @return array
      */
@@ -104,7 +87,7 @@ class helpers_File
     {
         $returnValue = array();
 
-        // section 127-0-1-1-6a191a88:1367c838c77:-8000:0000000000002A0F begin
+
 		$lastDirSep = strrpos($path, DIRECTORY_SEPARATOR);
         $filePath = substr($path, 0, $lastDirSep+1);
         $fileName = substr($path, $lastDirSep+1);
@@ -122,8 +105,6 @@ class helpers_File
 				$returnValue[$resource->uriResource] = new core_kernel_classes_File($resource->uriResource);
 			}
 		}
-		
-        // section 127-0-1-1-6a191a88:1367c838c77:-8000:0000000000002A0F end
 
         return (array) $returnValue;
     }
@@ -133,7 +114,7 @@ class helpers_File
      * to the file/directory 'to'
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @param  string from
      * @param  string to
      * @return string
@@ -142,8 +123,7 @@ class helpers_File
     {
         $returnValue = (string) '';
 
-        // section 10-30-1--78-45a9d031:13c193b4a22:-8000:00000000000052F9 begin
-        $from = is_dir($from) ? $from : dirname($from); 
+        $from = is_dir($from) ? $from : dirname($from);
 		$arrFrom = explode(DIRECTORY_SEPARATOR, rtrim($from, DIRECTORY_SEPARATOR));
   		$arrTo = explode(DIRECTORY_SEPARATOR, rtrim($to, DIRECTORY_SEPARATOR));
   		
@@ -155,7 +135,6 @@ class helpers_File
 			$returnValue .= '..'.DIRECTORY_SEPARATOR;
 		}
 		$returnValue .= implode(DIRECTORY_SEPARATOR, $arrTo);
-        // section 10-30-1--78-45a9d031:13c193b4a22:-8000:00000000000052F9 end
 
         return (string) $returnValue;
     }
@@ -164,7 +143,7 @@ class helpers_File
      * deletes a file or a directory recursively
      *
      * @access public
-     * @author Joel Bout, <joel@taotesting.com>
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @param  string path
      * @return boolean
      */
@@ -172,23 +151,134 @@ class helpers_File
     {
         $returnValue = (bool) false;
 
-        // section 10-30-1--78--3660a937:13d35e0b7d2:-8000:0000000000001FFC begin
 		if (is_file($path)) {
         	$returnValue = unlink($path);
         } elseif (is_dir($path)) {
 			$iterator = new DirectoryIterator($path);
 			foreach ($iterator as $fileinfo) {
 				if (!$fileinfo->isDot()) {
-					self::remove($fileinfo->getPathname());
+
+                    self::remove($fileinfo->getPathname());
 				}
 			}
 			$returnValue = rmdir($path);
         } else {
         	throw new common_exception_Error('"'.$path.'" cannot be removed since it\'s neither a file nor directory');
         }
-        // section 10-30-1--78--3660a937:13d35e0b7d2:-8000:0000000000001FFC end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Copy a file from source to destination, may be done recursively and may ignore system files
+     *
+     * @access public
+     * @author Lionel Lecaque, <lionel@taotesting.com>
+     * @param  string source
+     * @param  string destination
+     * @param  boolean recursive
+     * @param  boolean ignoreSystemFiles
+     * @return boolean
+     */
+    public static function copy($source, $destination, $recursive = true, $ignoreSystemFiles = true)
+    {
+        $returnValue = (bool) false;
+
+        // Check for System File
+        $basename = basename($source);
+        if ($basename[0] == '.' && $ignoreSystemFiles == true){
+            return false;
+        }
+
+        // Check for symlinks
+        if (is_link($source)) {
+            return symlink(readlink($source), $destination);
+        }
+
+        // Simple copy for a file
+        if (is_file($source)) {
+            // get path info of destination.
+            $destInfo = pathinfo($destination);
+            if (isset($destInfo['dirname']) && !is_dir($destInfo['dirname'])){
+                if(!mkdir($destInfo['dirname'], 0777, true)){
+                    return false;
+                }
+            }
+
+            return copy($source, $destination);
+        }
+
+        // Make destination directory
+        if ($recursive == true){
+            if (!is_dir($destination)) {
+                // 0777 is default. See mkdir PHP Official documentation.
+                mkdir($destination, 0777, true);
+            }
+
+            // Loop through the folder
+            $dir = dir($source);
+            while (false !== $entry = $dir->read()) {
+                // Skip pointers
+                if ($entry == '.' || $entry == '..') {
+                    continue;
+                }
+
+                // Deep copy directories
+                self::copy("${source}/${entry}", "${destination}/${entry}", $recursive, $ignoreSystemFiles);
+            }
+
+            // Clean up
+            $dir->close();
+            return true;
+        }
+        else{
+            return false;
+        }
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Scan directory depending on option
+     *
+     * @access public
+     * @author Lionel Lecaque, <lionel@taotesting.com>
+     * @param  string path
+     * @param  array options
+     * @return array
+     */
+    public static function scandir($path, $options = array())
+    {
+        $returnValue = array();
+
+        $recursive = isset($options['recursive']) ? $options['recursive'] : false;
+        $only = isset($options['only']) ? $options['only'] : null;
+
+        if(is_dir($path)){
+            $iterator = new DirectoryIterator($path);
+            foreach ($iterator as $fileinfo) {
+                if (!$fileinfo->isDot()){
+                    if(!is_null($only)){
+                        if($only==self::$DIR && $fileinfo->isDir()){
+                            array_push($returnValue, $fileinfo->getFilename());
+                        }
+                        else if($only==self::$FILE && $fileinfo->isFile()){
+                            array_push($returnValue, $fileinfo->getFilename());
+                        }
+                    }else{
+                        array_push($returnValue, $fileinfo->getFilename());
+                    }
+
+                    if($fileinfo->isDir() && $recursive){
+                        $returnValue = array_merge($returnValue, self::scandir(realpath($fileinfo->getPathname()), $options));
+                    }
+                }
+            }
+        }else{
+            throw new common_Exception("An error occured : The function (".__METHOD__.") of the class (".__CLASS__.") is expecting a directory path as first parameter : ".$path);
+        }
+
+        return (array) $returnValue;
     }
 
 } /* end of class helpers_File */
