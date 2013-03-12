@@ -113,8 +113,9 @@ class common_ext_ExtensionInstaller
 			// Method to be overriden by subclasses
 			// to extend the installation mechanism.
 			$this->extendedInstall();
+			
 			$cache = common_cache_FileCache::singleton();
-			$cache->flush();
+			$cache->purge();
 				
 		}catch (common_ext_ExtensionException $e){
 			// Rethrow
