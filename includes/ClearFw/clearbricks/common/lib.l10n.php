@@ -28,7 +28,13 @@
 */
 function __($str)
 {
-	return (!empty($GLOBALS['__l10n'][$str])) ? $GLOBALS['__l10n'][$str] : $str;
+	$translated = (!empty($GLOBALS['__l10n'][$str])) ? $GLOBALS['__l10n'][$str] : $str;
+	if (func_num_args() > 1) {
+		$args =func_get_args();
+		$args[0] = $translated;
+		$translated = call_user_func_array('sprintf', $args);
+	}
+	return $translated;
 }
 
 /**
