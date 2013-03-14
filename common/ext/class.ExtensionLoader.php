@@ -212,6 +212,8 @@ class common_ext_ExtensionLoader
     			foreach($todefine as $constName => $constValue){
     				if(!defined($constName)){
     					define($constName, $constValue);	//constants are defined there!
+    				} else {
+    					common_Logger::d('Constant '.$constName.' in '.$extensionId.' has already been defined');
     				}
     			}
     			unset($todefine);
