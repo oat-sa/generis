@@ -530,22 +530,24 @@ class common_ext_Extension
         $returnValue = array();
 
         // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EAA begin
-		$dir = new DirectoryIterator(ROOT_PATH.$this->getID().DIRECTORY_SEPARATOR.'actions');
-	    foreach ($dir as $fileinfo) {
-			if(preg_match('/^class\.[^.]*\.php$/', $fileinfo->getFilename())) {
-				$module = substr($fileinfo->getFilename(), 6, -4);
-				$class = $this->getID().'_actions_'.$module;
-				if (class_exists($class)) {
-					if (is_subclass_of($class, 'Module')) {
-						$returnValue[$module] = $class;
+        if (file_exists($this->getConstant('DIR_ACTIONS'))) {
+			$dir = new DirectoryIterator($this->getConstant('DIR_ACTIONS'));
+		    foreach ($dir as $fileinfo) {
+				if(preg_match('/^class\.[^.]*\.php$/', $fileinfo->getFilename())) {
+					$module = substr($fileinfo->getFilename(), 6, -4);
+					$class = $this->getID().'_actions_'.$module;
+					if (class_exists($class)) {
+						if (is_subclass_of($class, 'Module')) {
+							$returnValue[$module] = $class;
+						} else {
+							common_Logger::w($class.' does not inherit Module');
+						}
 					} else {
-						common_Logger::w($class.' does not inherit Module');
+						common_Logger::w($class.' not found for file \''.$fileinfo->getFilename().'\'');
 					}
-				} else {
-					common_Logger::w($class.' not found for file \''.$fileinfo->getFilename().'\'');
 				}
 			}
-		}
+        }
         // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EAA end
 
         return (array) $returnValue;
