@@ -217,13 +217,13 @@ class common_ext_ExtensionInstaller
     }
 
     /**
-     * inserts the translation of the datamodel
+     * returns the paths of the translations of a specified ontology file
      *
-     * @access protected
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return void
+     * @access private
+     * @author Joel Bout, <joel@taotesting.com>
+     * @return array absolute paths to the translated rdf files
      */
-    protected function getTranslatedModelFiles($rdfpath) {
+    private function getTranslatedModelFiles($rdfpath) {
     	$returnValue = array();
     	$localesPath = $this->extension->getDir() . 'locales' . DIRECTORY_SEPARATOR;
     	if (file_exists($localesPath)) {
