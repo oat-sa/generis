@@ -118,7 +118,6 @@ class common_ext_ExtensionInstaller
 			// deprecated, but might still be used
 			$this->installWriteConfig();
 			$this->installOntology();
-			$this->installOntologyTranslation();
 			$this->installRegisterExt();
 			$this->installLoadConstants();
 			$this->installExtensionModel();
@@ -201,6 +200,9 @@ class common_ext_ExtensionInstaller
     					//import the model in the ontology
     					common_Logger::d('Inserting model '.$rdfpath.' for '.$this->extension->getID(), 'INSTALL');
     					$modelCreator->insertModelFile($ns, $rdfpath);
+    					foreach ($this->getTranslatedModelFiles($rdfpath) as $translation) {
+    						$modelCreator->insertModelFile($ns, $translation);
+    					}
     				}
     				else{
     					throw new common_ext_InstallationException("Unable to load ontology in '${rdfpath}' because the file is not readable.");
@@ -221,19 +223,21 @@ class common_ext_ExtensionInstaller
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return void
      */
-    protected function installOntologyTranslation()
-    {
-        // section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A42 begin
-		// insert translated models
-		$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
-    	$models = tao_install_utils_ModelCreator::getTranslationModelsFromExtension($this->extension);
-		foreach($models as $ns => $modelFile){
-			foreach($modelFile as $mF) {
-				common_Logger::d('Inserting translation of model ' . basename($mF) . ' for extension '.$this->extension->getID(), 'INSTALL');
-				$modelCreator->insertModelFile($ns, $mF);
+    protected function getTranslatedModelFiles($rdfpath) {
+    	$returnValue = array();
+    	$localesPath = $this->extension->getDir() . 'locales' . DIRECTORY_SEPARATOR;
+    	if (file_exists($localesPath)) {
+    		$fileName = basename($rdfpath);
+    		foreach (new DirectoryIterator($localesPath) as $fileinfo) {
+				if (!$fileinfo->isDot() && $fileinfo->isDir() && $fileinfo->getFilename() != '.svn') {
+					$candidate = $fileinfo->getPathname() . DIRECTORY_SEPARATOR . $fileName;
+					if (file_exists($candidate)) {
+						$returnValue[] = $candidate;
+					} 
+				} 
 			}
-		}
-        // section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A42 end
+    	}
+    	return $returnValue;
     }
 
     /**
