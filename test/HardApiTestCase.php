@@ -130,6 +130,7 @@ class HardApiTestCase extends UnitTestCase {
 		
 		$referencer->unReferenceResource($testTaker);
 		$this->assertFalse($referencer->isResourceReferenced($testTaker));
+		$testTaker->delete();
 	}
 	
 	/**
