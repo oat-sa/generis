@@ -211,6 +211,8 @@ class UserServiceTestCase extends UnitTestCase {
 		$this->assertEqual($includedRoles->getUri(), $iRole1->getUri());
 		
 		$role2->delete();
+		$iRole1->delete();
+		$this->assertFalse($iRole1->exists());
 		$this->assertFalse($role2->exists());
 	}
 	
