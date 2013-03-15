@@ -172,6 +172,7 @@ class core_kernel_classes_SqlsrvDbWrapper
         $returnValue = (string) '';
 
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F97 begin
+        $returnValue = '42S11';
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001F97 end
 
         return (string) $returnValue;
@@ -261,6 +262,18 @@ class core_kernel_classes_SqlsrvDbWrapper
     public function createIndex($indexName, $tableName, $columns)
     {
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FA3 begin
+        if(!is_array($columns)){
+            throw new common_exception_InvalidArgumentType(__CLASS__, __METHOD__, 3, 'array',$columns);
+        }
+        $sql = 'CREATE INDEX "' . $indexName . '" ON "' . $tableName . '" (';
+        $colsSql = array();
+        foreach ($columns as $column){
+            $colsSql[] = '"' . $column . '"';
+        }
+        $colsSql = implode(',', $colsSql);
+        $sql .= $colsSql . ')';
+
+        $this->exec($sql);
         // section 10-13-2-29--9182fea:13ca61699b4:-8000:0000000000001FA3 end
     }
 
