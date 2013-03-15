@@ -256,8 +256,7 @@ class core_kernel_classes_SqlsrvDbWrapper
      * @author Lionel Lecaque, <lionel@taotesting.com>
      * @param  string indexName
      * @param  string tableName
-     * @param  array columns
-     * @return void
+     * @param  array columns array('key => 'size')
      */
     public function createIndex($indexName, $tableName, $columns)
     {
@@ -267,8 +266,9 @@ class core_kernel_classes_SqlsrvDbWrapper
         }
         $sql = 'CREATE INDEX "' . $indexName . '" ON "' . $tableName . '" (';
         $colsSql = array();
-        foreach ($columns as $column){
-            $colsSql[] = '"' . $column . '"';
+        foreach ($columns as $n => $l){
+            //TODO size only support in mysql need to remove it in tableManager to be more generic
+           $colsSql[] = '"' . $n . '"';
         }
         $colsSql = implode(',', $colsSql);
         $sql .= $colsSql . ')';
