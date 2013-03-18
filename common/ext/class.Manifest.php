@@ -179,6 +179,15 @@ class common_ext_Manifest
      */
     private $managementRole = null;
 
+    /**
+     * Local data which can be added as an example
+     * uses same format as install data
+     *
+     * @access private
+     * @var array
+     */
+    private $localData = array();
+
     // --- OPERATIONS ---
 
     /**
@@ -197,6 +206,14 @@ class common_ext_Manifest
     	if (is_readable($filePath)){
     		$this->setFilePath($filePath);
     		$array = require($this->getFilePath());
+    		
+    		// legacy support
+    		if (isset($array['additional']) && is_array($array['additional'])) {
+				foreach ($array['additional'] as $key => $val) {
+					$array[$key] = $val;
+				}
+				unset($array['additional']);
+			}
     		
     		// mandatory
     		if (!empty($array['name'])){
@@ -224,7 +241,10 @@ class common_ext_Manifest
     		
     		if (!empty($array['dependencies'])){
     			$this->setDependencies($array['dependencies']);
-    		}
+    		} elseif (!empty($array['dependances'])){
+    			// legacy
+    			$this->setDependencies($array['dependances']);
+    		} 
     		
     		if (!empty($array['models'])){
     			$this->setModels($array['models']);
@@ -236,7 +256,9 @@ class common_ext_Manifest
     		
     		if (!empty($array['install'])){
     			if (!empty($array['install']['rdf'])){
-    				$this->setInstallModelFiles($array['install']['rdf']);
+    				
+					$files = is_array($array['install']['rdf']) ? $array['install']['rdf'] : array($array['install']['rdf']);
+    				$this->setInstallModelFiles($files);
     			}
     			
     			if (!empty($array['install']['checks'])){
@@ -244,9 +266,14 @@ class common_ext_Manifest
     			}
     			
     			if (!empty($array['install']['php'])){
-    				$this->setInstallPHPFiles($array['install']['php']);
+					$files = is_array($array['install']['php']) ? $array['install']['php'] : array($array['install']['php']);
+    				$this->setInstallPHPFiles($files);
     			}
     		}
+    		if (!empty($array['local'])){
+    			$this->localData = $array['local']; 
+    		}
+    		
     		
     		// mandatory
     		if (!empty($array['classLoaderPackages'])){
@@ -579,6 +606,7 @@ class common_ext_Manifest
     {
         // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C6E begin
         $this->installModelFiles = array();
+        $installModelFiles = is_array($installModelFiles) ? $installModelFiles : array($installModelFiles);
 		foreach ($installModelFiles as $row) {
 			if (is_string($row)) {
 				$rdfpath = $row;
@@ -716,6 +744,21 @@ class common_ext_Manifest
         // section 10-13-1-85--5c116a76:13c00a41227:-8000:0000000000001E85 end
 
         return (array) $returnValue;
+    }
+    
+   /**
+     * gets an array of
+     * * rdf files to include
+     * * php scripts to execute
+     * in order to add some sample data to an install
+     *
+     * @access public
+     * @author joel.bout <joel@taotesting.com>
+     * @return array
+     */
+    public function getLocalData()
+    {
+        return $this->localData;
     }
 
     /**

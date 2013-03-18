@@ -124,10 +124,8 @@ class common_ext_ExtensionLoader
     		$ext = $extManager->getExtensionById($extId);
     		
     		$classLoader = common_ext_ClassLoader::singleton();
-    		if(isset($ext->classLoaderPackages)) {
-    			foreach($ext->classLoaderPackages as $package) {
-    				$classLoader->addPackage($package);
-    			}
+    		foreach($ext->getManifest()->getClassLoaderPackages() as $package) {
+    			$classLoader->addPackage($package);
     		}
     	}
     	

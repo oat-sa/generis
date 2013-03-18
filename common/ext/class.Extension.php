@@ -84,31 +84,6 @@ class common_ext_Extension
     public $manifest = null;
 
     /**
-     * Short description of attribute requiredExtensionsList
-     *
-     * @access public
-     * @var array
-     */
-    public $requiredExtensionsList = array();
-
-    /**
-     * Short description of attribute classLoaderPackages
-     *
-     * @access public
-     * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
-     * @var array
-     */
-    public $classLoaderPackages = array();
-
-    /**
-     * Short description of attribute installFiles
-     *
-     * @access public
-     * @var array
-     */
-    public $installFiles = array();
-
-    /**
      * configuration array read from db
      *
      * @access private
@@ -132,14 +107,6 @@ class common_ext_Extension
      */
     protected $installed = false;
 
-    /**
-     * Short description of attribute localData
-     *
-     * @access public
-     * @var array
-     */
-    public $localData = array();
-
     // --- OPERATIONS ---
 
     /**
@@ -155,58 +122,12 @@ class common_ext_Extension
     public function __construct($id, $installed = false, $data = null)
     {
         // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002320 begin
-    	$manifestFile = EXTENSION_PATH.'/'.$id.'/'.MANIFEST_NAME;
 		$this->id = $id;
 		$this->installed = $installed;
+    	$manifestFile = EXTENSION_PATH.DIRECTORY_SEPARATOR.$id.DIRECTORY_SEPARATOR.MANIFEST_NAME;
 		if(is_file($manifestFile)){
-			
 			$this->manifest = new common_ext_Manifest($manifestFile);
-			
-			$manifestArray = require $manifestFile;
-			// adapt legacy manifests
-			if (isset($manifestArray['additional']) && is_array($manifestArray['additional'])) {
-				foreach ($manifestArray['additional'] as $key => $val) {
-					$manifestArray[$key] = $val;
-				}
-				unset($manifestArray['additional']);
-			}
-			
-			$this->name = $manifestArray['name'];
-			
-			if(isset($manifestArray['install']) && is_array($manifestArray['install'])) {
-				$this->installFiles = $manifestArray['install'];
-			}
-			$list = isset($manifestArray['dependencies']) ? $manifestArray['dependencies']
-				: (isset($manifestArray['dependances']) ? $manifestArray['dependances'] : array());
-			if(!is_array($list) && !empty($list)){
-				$list = array($list);
-			}
-			foreach ($list as $ext) {
-				$this->requiredExtensionsList[] = $ext;
-			}
-			
-			if(isset($manifestArray['classLoaderPackages'])) {
-				$this->classLoaderPackages = $manifestArray['classLoaderPackages'];	
-			}
-			if(isset($manifestArray['models'])) {
-				if(!is_array($manifestArray['models']) && !empty($manifestArray['models'])){
-					$this->model = array($manifestArray['models']);
-				}
-				else{
-					$this->model = $manifestArray['models'];	
-				}
-			}
-			if(isset($manifestArray['modelsRight']) && !empty ($manifestArray['modelsRight'])) {
-				$this->modelsRight = $manifestArray['modelsRight'];
-			}
-			if(isset($manifestArray['install']) && is_array($manifestArray['install'])) {
-				$this->installFiles = $manifestArray['install'];
-			}
-			if(isset($manifestArray['local']) && is_array($manifestArray['local'])) {
-				$this->localData = $manifestArray['local'];
-			}
-		}
-		else {
+		} else {
 			//Here the extension is set unvalided to not be displayed by the view
 			throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '${id}'.", $id);
 		}
@@ -590,15 +511,12 @@ class common_ext_Extension
         $returnValue = array();
 
         // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EAF begin
-		if(is_array($this->requiredExtensionsList)) {
-        	$returnValue = $this->requiredExtensionsList;
-        	
-        	foreach($this->requiredExtensionsList as $id){
-        		$dependence = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
-        		$returnValue = array_merge($returnValue, $dependence->getDependencies());
-        	}
+        $returnValue = array();
+        foreach ($this->getManifest()->getDependencies() as $id) {
+        	$returnValue[] = $id;
+        	$dependence = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
+        	$returnValue = array_unique(array_merge($returnValue, $dependence->getDependencies()));
         }
-        $returnValue = array_unique($returnValue);
         // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EAF end
 
         return (array) $returnValue;

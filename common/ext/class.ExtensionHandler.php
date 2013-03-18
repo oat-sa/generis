@@ -65,7 +65,7 @@ abstract class common_ext_ExtensionHandler
      * Short description of attribute extension
      *
      * @access public
-     * @var Extension
+     * @var common_ext_Extension
      */
     public $extension = null;
 

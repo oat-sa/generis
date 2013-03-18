@@ -219,7 +219,7 @@ class common_ext_ExtensionsManager
 			$extensionLoader = new common_ext_ExtensionLoader($extension);
 
 			//handle dependances requirement
-			foreach ($extension->requiredExtensionsList as $ext) {
+			foreach ($extension->getManifest()->getDependencies() as $ext) {
 				if(!array_key_exists($ext, $this->extensions) && $ext != 'generis') {
 					throw new common_ext_ExtensionException('Required Extension is Missing : ' . $ext);
 				}
@@ -287,14 +287,7 @@ class common_ext_ExtensionsManager
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002383 begin
 		foreach ($configurationArray as $id => $configuration) {
 			$ext = $this->getExtensionById($id);
-//			TODO var_dump($ext->requiredExtensionsList);
-			foreach ($ext->requiredExtensionsList as $id) {
-//				var_dump($configurationArray[$id]);
-			}
-
-			//throw new common_ext_ExtensionException(__('Extension '). $ext->id  .__( ' could not be removed :'). $e->getMessage());
 			$configuration->save($ext);
-
 		}
 
         // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:0000000000002383 end
@@ -327,9 +320,7 @@ class common_ext_ExtensionsManager
 
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001840 begin
 		foreach ($this->getInstalledExtensions() as $ext) {
-			if(isset($ext->model) && count($ext->model) > 0){
-				$returnValue = array_merge($returnValue, $ext->model);
-			}
+			$returnValue = array_merge($returnValue, $ext->getManifest()->getModels());
 		}
 		$returnValue = array_unique($returnValue);
         // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001840 end
@@ -351,26 +342,22 @@ class common_ext_ExtensionsManager
         // section 127-0-1-1--450598c3:13175ea282e:-8000:0000000000003C45 begin
 
     	foreach ($this->getInstalledExtensions() as $ext) {
-			if(isset ($ext->modelsRight) && count($ext->modelsRight) > 0){
-				if (isset($ext->modelsRight)){
-					/*
-					 *
-					 * TODO
-					 * We manage update, add read, delete ..
-					 * if the variable exist, the model is updatable!
-					 * use a code in the next investigation, such as unix right
-					 *
-					 */
-					foreach ($ext->modelsRight as $model=>$right){
-						$ns = common_ext_NamespaceManager::singleton()->getNamespace ($model.'#');
-						if ($ns == null) {
-							throw new common_ext_ExtensionException("Session Expired, could not get namespace for model ".$model);
-						}
-						$modelId = $ns->getModelId();
-						if (!isset($returnValue[$modelId])){
-							$returnValue[$modelId] = $model;
-						}
-					}
+			foreach ($ext->getManifest()->getModelsRights() as $model=>$right){
+				/*
+				 *
+				 * TODO
+				 * We manage update, add read, delete ..
+				 * if the variable exist, the model is updatable!
+				 * use a code in the next investigation, such as unix right
+				 *
+				 */
+				$ns = common_ext_NamespaceManager::singleton()->getNamespace ($model.'#');
+				if ($ns == null) {
+					throw new common_ext_ExtensionException("Session Expired, could not get namespace for model ".$model);
+				}
+				$modelId = $ns->getModelId();
+				if (!isset($returnValue[$modelId])){
+					$returnValue[$modelId] = $model;
 				}
 			}
 		}
