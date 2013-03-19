@@ -15,7 +15,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);\n *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
 ?>
@@ -73,28 +74,6 @@ interface core_kernel_api_ApiModel
 
     // --- OPERATIONS ---
 
-    /**
-     * this suport standard sparql query (string) and return the corresponding
-     * of resources as collection. This makes use of pOWl third party library
-     *
-     * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
-     * @param  string sparqlQuery
-     * @return core_kernel_classes_ContainerCollection
-     * @see sparql proposed by the w3c consortium
-     */
-    public function sparqlQuery($sparqlQuery);
-
-    /**
-     * This supports rdql queries formulated as strings , this make use of the
-     * party library pOwl
-     *
-     * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
-     * @param  string rdqlQuery
-     * @return boolean
-     */
-    public function rdqlQuery($rdqlQuery);
 
     /**
      * build xml rdf containing rdf:Description of all meta-data the conected
@@ -118,26 +97,6 @@ interface core_kernel_api_ApiModel
      */
     public function importXmlRdf($targetNameSpace, $fileLocation);
 
-    /**
-     * connect on the remote module whose id is provided, retrive the knowledge
-     *
-     * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
-     * @param  int idSubscription
-     * @return boolean
-     */
-    public function connectOnRemoteModule($idSubscription);
-
-    /**
-     * return resource object for the provided uriResource, if the uri does not
-     * in the knowledge base, returns false
-     *
-     * @access public
-     * @author patrick.plichart@tudor.lu
-     * @param  string uriResource
-     * @return core_kernel_classes_Resource
-     */
-    public function getResourceDescription($uriResource);
 
     /**
      * returns an xml rdf serialization for uriResource with all meta dat found

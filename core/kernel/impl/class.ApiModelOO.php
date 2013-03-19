@@ -26,47 +26,12 @@ error_reporting(E_ALL);
 /**
  * Generis Object Oriented API - core\kernel\impl\class.ApiModelOO.php
  *
- * $Id$
+ * Short description of class core_kernel_impl_ApiModelOO
  *
  * This file is part of Generis Object Oriented API.
  *
  * Automatically generated on 29.03.2010, 15:28:05 with ArgoUML PHP module 
  * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
- *
- * @author firstname and lastname of author, <author@example.org>
- * @package core
- * @subpackage kernel_impl
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * include core_kernel_api_ApiModel
- *
- * @author firstname and lastname of author, <author@example.org>
- */
-require_once('core/kernel/api/interface.ApiModel.php');
-
-/**
- * session has been set public because when implementing an interface, the son
- * this class may not read this attribute otherwise in php 5.2
- *
- * @author firstname and lastname of author, <author@example.org>
- */
-require_once('core/kernel/impl/class.ApiI.php');
-
-/* user defined includes */
-// section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000964-includes begin
-// section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000964-includes end
-
-/* user defined constants */
-// section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000964-constants begin
-// section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000964-constants end
-
-/**
- * Short description of class core_kernel_impl_ApiModelOO
  *
  * @access public
  * @author firstname and lastname of author, <author@example.org>
@@ -74,7 +39,7 @@ require_once('core/kernel/impl/class.ApiI.php');
  * @subpackage kernel_impl
  */
 class core_kernel_impl_ApiModelOO
-    extends core_kernel_impl_ApiI
+    extends core_kernel_impl_Api
         implements core_kernel_api_ApiModel
 {
     // --- ASSOCIATIONS ---
@@ -92,44 +57,6 @@ class core_kernel_impl_ApiModelOO
 
     // --- OPERATIONS ---
 
-    /**
-     * this suport standard sparql query (string) and return the corresponding
-     * of resources as collection. This makes use of pOWl third party library
-     *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  string sparqlQuery
-     * @return core_kernel_classes_ContainerCollection
-     * @see sparql proposed by the w3c consortium
-     */
-    public function sparqlQuery($sparqlQuery)
-    {
-        $returnValue = null;
-
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009BD begin
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009BD end
-
-        return $returnValue;
-    }
-
-    /**
-     * This supports rdql queries formulated as strings , this make use of the
-     * party library pOwl
-     *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  string rdqlQuery
-     * @return boolean
-     */
-    public function rdqlQuery($rdqlQuery)
-    {
-        $returnValue = (bool) false;
-
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009CB begin
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009CB end
-
-        return (bool) $returnValue;
-    }
 
     /**
      * build xml rdf containing rdf:Description of all meta-data the conected
@@ -349,42 +276,7 @@ class core_kernel_impl_ApiModelOO
         return (bool) $returnValue;
     }
 
-    /**
-     * connect on the remote module whose id is provided, retrive the knowledge
-     *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  int idSubscription
-     * @return boolean
-     */
-    public function connectOnRemoteModule($idSubscription)
-    {
-        $returnValue = (bool) false;
 
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C2 begin
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C2 end
-
-        return (bool) $returnValue;
-    }
-
-    /**
-     * return resource object for the provided uriResource, if the uri does not
-     * in the knowledge base, returns false
-     *
-     * @access public
-     * @author patrick.plichart@tudor.lu
-     * @param  string uriResource
-     * @return core_kernel_classes_Resource
-     */
-    public function getResourceDescription($uriResource)
-    {
-        $returnValue = null;
-
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C6 begin
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C6 end
-
-        return $returnValue;
-    }
 
     /**
      * returns an xml rdf serialization for uriResource with all meta dat found
@@ -414,7 +306,7 @@ class core_kernel_impl_ApiModelOO
 		$query = "SELECT `models`.`modelID`, `models`.`modelURI` FROM `models` INNER JOIN `statements` ON `statements`.`modelID` = `models`.`modelID`
 											WHERE `statements`.`subject`= '{$subject}'";
 		$query = $dbWrapper->limitStatement($query, 1);
-		$result = $dbWrapper->query();
+		$result = $dbWrapper->query($query);
 		if($row = $result->fetch()){
 			$modelId  = $row['modelID'];
 			$modelUri =  $row['modelURI'];
