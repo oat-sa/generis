@@ -68,8 +68,8 @@ class ApiModelTestCase extends UnitTestCase {
 				$this->assertEqual($uri,  RDF_CLASS);
 			}
 			//don't check the user root classes
-			if(!preg_match($pattern, $rootClass->uriResource)){
-				$this->assertTrue(in_array($rootClass->uriResource, $expectedResult));
+			if(!preg_match($pattern, $rootClass->getUri())){
+				$this->assertTrue(in_array($rootClass->getUri(), $expectedResult));
 			}
 		}
 	}
@@ -79,7 +79,7 @@ class ApiModelTestCase extends UnitTestCase {
 		$this->assertIsA($metaClasses,'core_kernel_classes_ContainerCollection');
 		$metaClass = $metaClasses->get(0);
 		$this->assertIsA($metaClass,'core_kernel_classes_Class');
-		$this->assertEqual($metaClass->uriResource,RDFS_DATATYPE);
+		$this->assertEqual($metaClass->getUri(),RDFS_DATATYPE);
 		$this->assertEqual($metaClass->getLabel(),'Datatype');
 		$this->assertEqual($metaClass->getComment(),'The class of RDF datatypes.');
 	}
@@ -88,7 +88,7 @@ class ApiModelTestCase extends UnitTestCase {
 		$true = new core_kernel_classes_Resource(GENERIS_TRUE, __METHOD__);
 		$predicate = RDFS_SEEALSO;
 		$property = new core_kernel_classes_Property($predicate,__METHOD__); 
-		$this->assertTrue($this->object->setStatement($true->uriResource,$predicate,'test', 'EN'), 
+		$this->assertTrue($this->object->setStatement($true->getUri(),$predicate,'test', 'EN'), 
 						  "setStatement should be able to set a value.");
 		
 		$values = $true->getPropertyValues($property);
@@ -102,10 +102,10 @@ class ApiModelTestCase extends UnitTestCase {
 			}
 		}
 		
-		$this->assertTrue($tripleFound, "A property value for property " . $property->uriResource . 
-										" should be found for resource " . $true->uriResource);
+		$this->assertTrue($tripleFound, "A property value for property " . $property->getUri() . 
+										" should be found for resource " . $true->getUri());
 		
-		$this->object->removeStatement($true->uriResource,$predicate,'test','EN');
+		$this->object->removeStatement($true->getUri(),$predicate,'test','EN');
 	}
 	
 	public function testRemoveStatement(){
@@ -125,7 +125,7 @@ class ApiModelTestCase extends UnitTestCase {
 			$this->assertFalse($set->isEmpty());
 			$found = false;
 			foreach($set->getIterator() as $resource){
-				if($resource->uriResource == GENERIS_TRUE){
+				if($resource->getUri() == GENERIS_TRUE){
 					$found = true;
 					break;
 				}
@@ -142,27 +142,27 @@ class ApiModelTestCase extends UnitTestCase {
 		$this->assertIsA($collection,'core_kernel_classes_ContainerCollection');
 		foreach ($collection->getIterator() as $aClass) {
 			$this->assertIsA($aClass,'core_kernel_classes_Class');
-			if($aClass->uriResource === RDF_CLASS){
+			if($aClass->getUri() === RDF_CLASS){
 				$this->assertEqual($aClass->getLabel(),'Class');
 				$this->assertEqual($aClass->getComment(),'The class of classes.');
 			}
-			if($aClass->uriResource === RDFS_STATEMENT){
+			if($aClass->getUri() === RDFS_STATEMENT){
 				$this->assertEqual($aClass->getLabel(),'Statement');
 				$this->assertEqual($aClass->getComment(), 'The class of RDF statements.');
 			}
-			if($aClass->uriResource === RDF_RESOURCE){
+			if($aClass->getUri() === RDF_RESOURCE){
 				$this->assertEqual($aClass->getLabel(),'Resource');
 				$this->assertEqual($aClass->getComment(), 'The class resource, everything.');
 			}
-			if($aClass->uriResource ===  RDF_PROPERTY){
+			if($aClass->getUri() ===  RDF_PROPERTY){
 				$this->assertEqual($aClass->getLabel(),'Property');
 				$this->assertEqual($aClass->getComment(), 'The class of RDF properties.');
 			}
-			if($aClass->uriResource ===  CLASS_GENERIS_RESOURCE){
+			if($aClass->getUri() ===  CLASS_GENERIS_RESOURCE){
 				$this->assertEqual($aClass->getLabel(),'generis_Ressource');
 				$this->assertEqual($aClass->getComment(), 'generis_Ressource');
 			}
-			if($aClass->uriResource ===  RDFS_DATATYPE){
+			if($aClass->getUri() ===  RDFS_DATATYPE){
 				$this->assertEqual($aClass->getLabel(),'Datatype');
 				$this->assertEqual($aClass->getComment(), 'The class of RDF datatypes.');
 			}

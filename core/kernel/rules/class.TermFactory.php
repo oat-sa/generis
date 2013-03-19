@@ -88,8 +88,8 @@ class core_kernel_rules_TermFactory
 		$label = 'Def Term Constant Label : ' . $constant;
 		$comment = 'Def Term Constant Comment : '. $constant;
         $constantResource =  core_kernel_classes_ResourceFactory::create($termConstClass,$label , $comment);
-        $returnValue = new core_kernel_rules_Term($constantResource->uriResource);
-        $returnValue->setPropertyValue($terminalExpressionProperty,$returnValue->uriResource);
+        $returnValue = new core_kernel_rules_Term($constantResource->getUri());
+        $returnValue->setPropertyValue($terminalExpressionProperty,$returnValue->getUri());
 		$returnValue->setPropertyValue($logicalOperatorProperty,INSTANCE_EXISTS_OPERATOR_URI);
 		$returnValue->setPropertyValue($termValueProperty,$constant);
 		$returnValue->debug = __METHOD__;
@@ -114,14 +114,14 @@ class core_kernel_rules_TermFactory
         // section 10-13-1--99-2335bfbb:1207fc834f5:-8000:000000000000175A begin
         $termSPXClass = new core_kernel_classes_Class(CLASS_TERM_SUJET_PREDICATE_X,__METHOD__);
 		$label = 'Def Term SPX Label : ' .$subject->getLabel() . ' - ' . $predicate->getLabel();
-		$comment = 'Def Term SPX Label : ' .$subject->uriResource . ' ' . $predicate->uriResource;
+		$comment = 'Def Term SPX Label : ' .$subject->getUri() . ' ' . $predicate->getUri();
         $SPXResource = core_kernel_classes_ResourceFactory::create($termSPXClass, $label,$comment );
-     	$returnValue = new core_kernel_rules_Term($SPXResource->uriResource);
+     	$returnValue = new core_kernel_rules_Term($SPXResource->getUri());
      		
      	$subjectProperty = new core_kernel_classes_Property(PROPERTY_TERM_SPX_SUBJET,__METHOD__);
 		$predicateProperty = new core_kernel_classes_Property(PROPERTY_TERM_SPX_PREDICATE,__METHOD__);
-     	$returnValue->setPropertyValue($subjectProperty,$subject->uriResource);
-     	$returnValue->setPropertyValue($predicateProperty,$predicate->uriResource);
+     	$returnValue->setPropertyValue($subjectProperty,$subject->getUri());
+     	$returnValue->setPropertyValue($predicateProperty,$predicate->getUri());
         // section 10-13-1--99-2335bfbb:1207fc834f5:-8000:000000000000175A end
 
         return $returnValue;

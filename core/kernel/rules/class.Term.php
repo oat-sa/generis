@@ -143,10 +143,10 @@ class core_kernel_rules_Term
         $returnValue = null;
 
         // section 10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EBA begin
-    	if($setOperator->uriResource == INSTANCE_OPERATOR_UNION) {
+    	if($setOperator->getUri() == INSTANCE_OPERATOR_UNION) {
 			$returnValue = $actualSet->union($newSet);
     	}
-    	else if($setOperator->uriResource == INSTANCE_OPERATOR_INTERSECT) {
+    	else if($setOperator->getUri() == INSTANCE_OPERATOR_INTERSECT) {
     		$returnValue =  $actualSet->intersect($newSet);
     	}
     	else {
@@ -171,11 +171,11 @@ class core_kernel_rules_Term
     	common_Logger::d('SPX TYPE', array('Generis Term evaluateSPX'));
     	$resource = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_TERM_SPX_SUBJET));
     	if($resource instanceof core_kernel_classes_Resource){
-    		if(array_key_exists($resource->uriResource,$variable)) {
-    			common_Logger::d('Variable uri : ' .  $resource->uriResource . ' found', array('Generis Term evaluateSPX'));
+    		if(array_key_exists($resource->getUri(),$variable)) {
+    			common_Logger::d('Variable uri : ' .  $resource->getUri() . ' found', array('Generis Term evaluateSPX'));
     			common_Logger::d('Variable name : ' .  $resource->getLabel() . ' found', array('Generis Term evaluateSPX'));
-    			$resource = new core_kernel_classes_Resource($variable[$resource->uriResource]);
-    			common_Logger::d('Variable repaced uri : ' .  $resource->uriResource, array('Generis Term evaluateSPX'));
+    			$resource = new core_kernel_classes_Resource($variable[$resource->getUri()]);
+    			common_Logger::d('Variable repaced uri : ' .  $resource->getUri(), array('Generis Term evaluateSPX'));
     			common_Logger::d('Variable repaced name : ' .  $resource->getLabel(), array('Generis Term evaluateSPX'));
     		}
     		
@@ -189,15 +189,15 @@ class core_kernel_rules_Term
     			var_dump($this);
     			die('unable to get property value in Term');
     		}
-//    		if(array_key_exists($propertyInstance->uriResource,$variable)) {
-//				$logger->debug('Variable uri : ' .  $propertyInstance->uriResource . ' found' , __FILE__, __LINE__);
+//    		if(array_key_exists($propertyInstance->getUri(),$variable)) {
+//				$logger->debug('Variable uri : ' .  $propertyInstance->getUri() . ' found' , __FILE__, __LINE__);
 //    			$logger->debug('Variable name : ' .  $propertyInstance->getLabel() . ' found' , __FILE__, __LINE__);
-//				$propertyInstance = new core_kernel_classes_Resource($variable[$resource->uriResource]);
-//    			$logger->debug('Variable repaced uri : ' .  $propertyInstance->uriResource , __FILE__, __LINE__);
+//				$propertyInstance = new core_kernel_classes_Resource($variable[$resource->getUri()]);
+//    			$logger->debug('Variable repaced uri : ' .  $propertyInstance->getUri() , __FILE__, __LINE__);
 //    			$logger->debug('Variable repaced name : ' .  $propertyInstance->getLabel() , __FILE__, __LINE__);
 //    	    }
-    		$property = new core_kernel_classes_Property($propertyInstance->uriResource);
-    		common_Logger::d('Property uri ' . $property->uriResource, array('Generis Term evaluateSPX'));
+    		$property = new core_kernel_classes_Property($propertyInstance->getUri());
+    		common_Logger::d('Property uri ' . $property->getUri(), array('Generis Term evaluateSPX'));
     		common_Logger::d('Property name ' . $property->getLabel(), array('Generis Term evaluateSPX'));
        		$returnValue = $resource->getPropertyValuesCollection($property);
        		$returnValue->debug = __METHOD__;
@@ -239,11 +239,11 @@ class core_kernel_rules_Term
 			$objValue = $obj->literal;
 		}
    		if($obj instanceof core_kernel_classes_Resource) {
-			$objValue = $pred->uriResource;
+			$objValue = $pred->getUri();
 		}
 		
 		$returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
-		$terms = $classTerm->searchInstances(array($pred->uriResource => $objValue), array('like' => false));
+		$terms = $classTerm->searchInstances(array($pred->getUri() => $objValue), array('like' => false));
 		foreach($terms as $term){
 			$returnValue->add($term);
 		}
@@ -272,7 +272,7 @@ class core_kernel_rules_Term
 		foreach ($subSets->getIterator() as $aSet) {
     		
     		if ($aSet instanceof core_kernel_classes_Resource ) {
-    			$newSet = new core_kernel_rules_Term($aSet->uriResource);
+    			$newSet = new core_kernel_rules_Term($aSet->getUri());
     			$resultSet = $newSet->evaluate();
     			if ($resultSet instanceof core_kernel_classes_ContainerCollection  ) {
     				$returnValue = $this->evalutateSetOperation($operator,$returnValue,$resultSet);
@@ -336,7 +336,7 @@ class core_kernel_rules_Term
     public function evaluateArithmOperation($variable = array())
     {
         // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015CA begin
-        $operation = new core_kernel_rules_Operation($this->uriResource, __METHOD__);
+        $operation = new core_kernel_rules_Operation($this->getUri(), __METHOD__);
     	return  $operation->evaluate($variable);
         // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015CA end
     }

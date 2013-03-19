@@ -121,9 +121,9 @@ class helpers_File
         $resources = $clazz->searchInstances($propertyFilters, array('recursive'=>true, 'like'=>false));
 		foreach($resources as $resource){
 			if (core_kernel_versioning_File::isVersionedFile($resource)) {
-				$returnValue[$resource->uriResource] = new core_kernel_versioning_File($resource->uriResource);
+				$returnValue[$resource->getUri()] = new core_kernel_versioning_File($resource);
 			} else if (core_kernel_versioning_File::isFile($resource)) {
-				$returnValue[$resource->uriResource] = new core_kernel_classes_File($resource->uriResource);
+				$returnValue[$resource->getUri()] = new core_kernel_classes_File($resource);
 			}
 		}
 

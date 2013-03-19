@@ -108,11 +108,11 @@ class core_kernel_persistence_smoothsql_Class
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$sqlQuery = 'SELECT "subject" FROM "statements" WHERE "predicate" = ? and "object" = ?';
-		$sqlResult = $dbWrapper->query($sqlQuery, array(RDF_SUBCLASSOF, $resource->uriResource));
+		$sqlResult = $dbWrapper->query($sqlQuery, array(RDF_SUBCLASSOF, $resource->getUri()));
 		
 		while ($row = $sqlResult->fetch()){
 			$subClass = new core_kernel_classes_Class($row['subject']);
-			$returnValue[$subClass->uriResource] = $subClass;
+			$returnValue[$subClass->getUri()] = $subClass;
 			if($recursive == true ){
 				$plop = $subClass->getSubClasses(true);
 				$returnValue = array_merge($returnValue, $plop);
@@ -145,9 +145,9 @@ class core_kernel_persistence_smoothsql_Class
 					WHERE "subject" = ?
 					AND "predicate" = ? AND "object" = ?';
 		$result = $dbWrapper->query($query, array(
-			$resource->uriResource,
+			$resource->getUri(),
 			RDF_SUBCLASSOF,
-			$parentClass->uriResource
+			$parentClass->getUri()
 		));
 		while($row = $result->fetch()){
 			
@@ -157,7 +157,7 @@ class core_kernel_persistence_smoothsql_Class
 		if(!$returnValue){
 			$parentSubClasses = $parentClass->getSubClasses(true);
 			foreach ($parentSubClasses as $subClass){
-				if ($subClass->uriResource == $resource->uriResource) {
+				if ($subClass->getUri() == $resource->getUri()) {
 					$returnValue =  true;
 					break;
 				}
@@ -190,14 +190,14 @@ class core_kernel_persistence_smoothsql_Class
         			AND ("predicate" = ? OR "predicate" = ?)';
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->query($sqlQuery, array($resource->uriResource, RDF_SUBCLASSOF, RDF_TYPE));
+		$sqlResult = $dbWrapper->query($sqlQuery, array($resource->getUri(), RDF_SUBCLASSOF, RDF_TYPE));
 
 		while ($row = $sqlResult->fetch()){
 
 			$parentClass = new core_kernel_classes_Class($row['object']);
 
-			$returnValue[$parentClass->uriResource] = $parentClass ;
-			if($recursive == true && $parentClass->uriResource != RDF_CLASS && $parentClass->uriResource != RDF_RESOURCE){
+			$returnValue[$parentClass->getUri()] = $parentClass ;
+			if($recursive == true && $parentClass->getUri() != RDF_CLASS && $parentClass->getUri() != RDF_RESOURCE){
 				$plop = $parentClass->getParentClasses(true);
 				$returnValue = array_merge($returnValue, $plop);
 			}
@@ -228,17 +228,17 @@ class core_kernel_persistence_smoothsql_Class
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$sqlResult = $dbWrapper->query($sqlQuery, array(
 			RDFS_DOMAIN,
-			$resource->uriResource
+			$resource->getUri()
 		));
 
 		while ($row = $sqlResult->fetch()){
 			$property = new core_kernel_classes_Property($row['subject']);
-			$returnValue[$property->uriResource] = $property;
+			$returnValue[$property->getUri()] = $property;
 		}
 		if($recursive == true) {
 			$parentClasses = $resource->getParentClasses(true);
 			foreach ($parentClasses as $parent) {
-				if($parent->uriResource != RDFS_CLASS) {
+				if($parent->getUri() != RDFS_CLASS) {
 					$returnValue = array_merge($returnValue, $parent->getProperties(true));
 				}
 			}
@@ -283,24 +283,24 @@ class core_kernel_persistence_smoothsql_Class
 		
 		$sqlResult = $dbWrapper->query($sqlQuery, array (
 			RDF_TYPE,
-			$resource->uriResource
+			$resource->getUri()
 		));
 
 		while ($row = $sqlResult->fetch()){
 
 			$instance = new core_kernel_classes_Resource($row['subject']);
-			$returnValue[$instance->uriResource] = $instance;
+			$returnValue[$instance->getUri()] = $instance;
 
 			//In case of a meta class, subclasses of instances may be returned*/
-			if (($instance->uriResource != RDF_CLASS)
-			&& ($resource->uriResource == RDF_CLASS)
-			&& ($instance->uriResource != RDF_RESOURCE)) {
+			if (($instance->getUri() != RDF_CLASS)
+			&& ($resource->getUri() == RDF_CLASS)
+			&& ($instance->getUri() != RDF_RESOURCE)) {
 
-				$instanceClass = new core_kernel_classes_Class($instance->uriResource);
+				$instanceClass = new core_kernel_classes_Class($instance->getUri());
 				$subClasses = $instanceClass->getSubClasses(true);
 
 				foreach($subClasses as $subClass) {
-					$returnValue[$subClass->uriResource] = $subClass;
+					$returnValue[$subClass->getUri()] = $subClass;
 				}
 			}
 		}
@@ -333,7 +333,7 @@ class core_kernel_persistence_smoothsql_Class
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001506 begin
 		$rdfType = new core_kernel_classes_Property(RDF_TYPE);
 		$newInstance = clone $instance;	//call Resource::__clone
-		$newInstance->setPropertyValue($rdfType, $resource->uriResource);
+		$newInstance->setPropertyValue($rdfType, $resource->getUri());
 
 		$returnValue = $newInstance;
 
@@ -358,7 +358,7 @@ class core_kernel_persistence_smoothsql_Class
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000150F begin
 
 		$subClassOf = new core_kernel_classes_Property(RDF_SUBCLASSOF);
-		$returnValue = $resource->setPropertyValue($subClassOf, $iClass->uriResource);
+		$returnValue = $resource->setPropertyValue($subClassOf, $iClass->getUri());
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000150F end
 
@@ -381,8 +381,8 @@ class core_kernel_persistence_smoothsql_Class
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 begin
 
 		$domain = new core_kernel_classes_Property(RDF_DOMAIN, __METHOD__);
-		$instanceProperty = new core_kernel_classes_Resource($property->uriResource, __METHOD__);
-		$returnValue = $instanceProperty->setPropertyValue($domain, $resource->uriResource);
+		$instanceProperty = new core_kernel_classes_Resource($property->getUri(), __METHOD__);
+		$returnValue = $instanceProperty->setPropertyValue($domain, $resource->getUri());
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 end
 
@@ -455,7 +455,7 @@ class core_kernel_persistence_smoothsql_Class
         
         $class = new core_kernel_classes_Class(RDF_CLASS, __METHOD__);
 		$intance = $class->createInstance($label, $comment, $uri);
-		$returnValue = new core_kernel_classes_Class($intance->uriResource);
+		$returnValue = new core_kernel_classes_Class($intance->getUri());
 		$returnValue->setSubClassOf($resource);
         
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 end
@@ -482,7 +482,7 @@ class core_kernel_persistence_smoothsql_Class
         
     	$property = new core_kernel_classes_Class(RDF_PROPERTY, __METHOD__);
 		$propertyInstance = $property->createInstance($label,$comment);
-		$returnValue = new core_kernel_classes_Property($propertyInstance->uriResource, __METHOD__);
+		$returnValue = new core_kernel_classes_Property($propertyInstance->getUri(), __METHOD__);
 		$returnValue->setLgDependent($isLgDependent);
 
 		if (!$resource->setProperty($returnValue)){
@@ -571,7 +571,7 @@ class core_kernel_persistence_smoothsql_Class
 			
 			$sqlResult = $dbWrapper->query($sqlQuery, array(
 				RDF_TYPE,
-				$resource->uriResource
+				$resource->getUri()
 			));
 
 			if ($row = $sqlResult->fetch()) {
@@ -615,7 +615,7 @@ class core_kernel_persistence_smoothsql_Class
         $instances = $resource->searchInstances($propertyFilters, $searchInstancesOptions);
         if ($instances){
 	        foreach ($instances as $instance){
-	        	$uris .= '\''.$instance->uriResource.'\',';
+	        	$uris .= '\''.$instance->getUri().'\',';
 	        } 
 	        $uris = substr($uris, 0, strlen($uris)-1);
 	        
@@ -628,7 +628,7 @@ class core_kernel_persistence_smoothsql_Class
 	        	WHERE "predicate" = ?
 	        	AND "subject" IN ('.$uris.')';
 			$sqlResult = $dbWrapper->query($query, array(
-				$property->uriResource
+				$property->getUri()
 			));
 			
 			while ($row = $sqlResult->fetch()){
@@ -662,8 +662,8 @@ class core_kernel_persistence_smoothsql_Class
         // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:00000000000031F8 begin
         
 		$domain = new core_kernel_classes_Property(RDF_DOMAIN, __METHOD__);
-		$instanceProperty = new core_kernel_classes_Resource($property->uriResource, __METHOD__);
-		$returnValue = $instanceProperty->removePropertyValues($domain, array('pattern' => $resource->uriResource));
+		$instanceProperty = new core_kernel_classes_Resource($property->getUri(), __METHOD__);
+		$returnValue = $instanceProperty->removePropertyValues($domain, array('pattern' => $resource->getUri()));
         
         // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:00000000000031F8 end
 
@@ -848,10 +848,10 @@ class core_kernel_persistence_smoothsql_Class
 		
 		//add the type check to the filters
 		/*if (isset($propertyFilters[RDF_TYPE])) {
-			if (!is_array($propertyFilters[RDF_TYPE])) $propertyFilters[RDF_TYPE] = array($propertyFilters[RDF_TYPE], $resource->uriResource);
-			else $propertyFilters[RDF_TYPE] = array_merge($propertyFilters[RDF_TYPE], array($resource->uriResource));
+			if (!is_array($propertyFilters[RDF_TYPE])) $propertyFilters[RDF_TYPE] = array($propertyFilters[RDF_TYPE], $resource->getUri());
+			else $propertyFilters[RDF_TYPE] = array_merge($propertyFilters[RDF_TYPE], array($resource->getUri()));
 		}
-		else $propertyFilters[RDF_TYPE] = $resource->uriResource;*/
+		else $propertyFilters[RDF_TYPE] = $resource->getUri();*/
 
 		$rdftypes = array();
         //If recursive, get the subclasses of the given class

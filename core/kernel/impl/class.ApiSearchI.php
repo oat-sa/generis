@@ -328,7 +328,7 @@ class core_kernel_impl_ApiSearchI
 		
 		// Define the target table
 		// Require $topClazz ?!
-		$targetTable = $classToTable[$topClazz->uriResource];
+		$targetTable = $classToTable[$topClazz->getUri()];
 		
 		// The (cow) query (aux blagues) 
 		$query = "SELECT uri FROM `{$targetTable}` WHERE ";

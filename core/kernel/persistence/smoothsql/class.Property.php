@@ -107,12 +107,12 @@ class core_kernel_persistence_smoothsql_Property
         // section 127-0-1-1-7b8668ff:12f77d22c39:-8000:000000000000144D begin
         
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlQuery = "SELECT subject FROM statements WHERE predicate = '" . RDF_SUBPROPERTYOF . "' AND object = '".$resource->uriResource."'";
+		$sqlQuery = "SELECT subject FROM statements WHERE predicate = '" . RDF_SUBPROPERTYOF . "' AND object = '".$resource->getUri()."'";
 		$returnValue = array();
 		$sqlResult = $dbWrapper->query($sqlQuery);
 		while ($row = $sqlResult->fetch()){
 			$property = new core_kernel_classes_Property($row['subject']);
-			$returnValue[$property->uriResource] = $property;
+			$returnValue[$property->getUri()] = $property;
 
 			if($recursive == true) {
 				$returnValue = array_merge($returnValue,$property->getSubProperties(true));

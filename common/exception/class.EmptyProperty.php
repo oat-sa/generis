@@ -105,7 +105,7 @@ class common_exception_EmptyProperty
         // section 127-0-1-1-6b4920b6:136ba654e76:-8000:00000000000019C8 begin
         $this->resource = $resource;
         $this->property = $property;
-        parent::__construct("Property {$property->getLabel()} ({$property->uriResource}) of resource {$resource->getLabel()} ({$resource->uriResource})
+        parent::__construct("Property {$property->getLabel()} ({$property->getUri()}) of resource {$resource->getLabel()} ({$resource->getUri()})
             							 should not be empty");
         // section 127-0-1-1-6b4920b6:136ba654e76:-8000:00000000000019C8 end
     }

@@ -100,7 +100,7 @@ class core_kernel_versioning_subversionWindows_Utils
 			}
         	
 			if(is_null($repository)){
-				throw new Exception('Unable to find the repository to work with for the reference resource ('.$resource->uriResource.')');
+				throw new Exception('Unable to find the repository to work with for the reference resource ('.$resource->getUri().')');
 			}
 			
 			$username = $repository->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN));

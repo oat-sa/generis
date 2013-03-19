@@ -137,7 +137,7 @@ class core_kernel_versioning_Repository
 		$versioningRepositoryPasswordProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PASSWORD);
 		$repository->setPropertyValue($versioningRepositoryPasswordProp, $password);
 		
-		$returnValue = new core_kernel_versioning_Repository($repository->uriResource);
+		$returnValue = new core_kernel_versioning_Repository($repository);
         // section 127-0-1-1--548d6005:132d344931b:-8000:000000000000251D end
 
         return $returnValue;

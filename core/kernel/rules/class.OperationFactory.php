@@ -84,16 +84,16 @@ class core_kernel_rules_OperationFactory
         // section 10-13-1--99-2335bfbb:1207fc834f5:-8000:000000000000174F begin
         $operationClass = new core_kernel_classes_Class(CLASS_OPERATION,__METHOD__); 
         $label = 'Def Operation Label ' . $term1->getLabel() . ' ' . $operator->getLabel() . ' ' . $term2->getLabel();
-        $comment = 'Def Operation Comment ' . $term1->uriResource . ' ' . $operator->uriResource. ' ' . $term2->uriResource;
+        $comment = 'Def Operation Comment ' . $term1->getUri() . ' ' . $operator->getUri(). ' ' . $term2->getUri();
 		$operatorProperty = new core_kernel_classes_Property(PROPERTY_OPERATION_OPERATOR,__METHOD__);
         $firstOperand = new core_kernel_classes_Property(PROPERTY_OPERATION_FIRST_OP,__METHOD__);
 		$secondOperand = new core_kernel_classes_Property(PROPERTY_OPERATION_SECND_OP,__METHOD__);		
         $termOperationInstance = core_kernel_classes_ResourceFactory::create($operationClass,$label,$comment);
-        $returnValue = new core_kernel_rules_Operation($termOperationInstance->uriResource);
+        $returnValue = new core_kernel_rules_Operation($termOperationInstance->getUri());
         $returnValue->debug = __METHOD__;
-        $returnValue->setPropertyValue($operatorProperty,$operator->uriResource);
-        $returnValue->setPropertyValue($firstOperand,$term1->uriResource);
-		$returnValue->setPropertyValue($secondOperand,$term2->uriResource);
+        $returnValue->setPropertyValue($operatorProperty,$operator->getUri());
+        $returnValue->setPropertyValue($firstOperand,$term1->getUri());
+		$returnValue->setPropertyValue($secondOperand,$term2->getUri());
         // section 10-13-1--99-2335bfbb:1207fc834f5:-8000:000000000000174F end
 
         return $returnValue;

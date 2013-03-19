@@ -153,7 +153,7 @@ class core_kernel_versioning_File
 		$propertyFilter = array(
 			PROPERTY_FILE_FILENAME => $filename,
 			PROPERTY_VERSIONEDFILE_FILEPATH => $filePath,
-			PROPERTY_VERSIONEDFILE_REPOSITORY => $repository->uriResource
+			PROPERTY_VERSIONEDFILE_REPOSITORY => $repository
 		);
         $sameNameFiles = $clazz->searchInstances($propertyFilter, $options);
         if(!empty($sameNameFiles)){
@@ -388,7 +388,7 @@ class core_kernel_versioning_File
         
         $repository = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_REPOSITORY));
         if(!is_null($repository)){
-        	$returnValue = new core_kernel_versioning_Repository($repository->uriResource);
+        	$returnValue = new core_kernel_versioning_Repository($repository);
         }
         
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016DB end

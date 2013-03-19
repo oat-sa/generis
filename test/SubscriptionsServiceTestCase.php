@@ -56,12 +56,12 @@ class SubscriptionsServiceTestCase extends UnitTestCase {
 		$object = new core_kernel_classes_Resource($this->subscriptionResoourceUrl);
 		$this->maskInst->setPropertyValue(new core_kernel_classes_Property(PROPERTY_MASK_PREDICATE),RDF_TYPE);
 		$this->maskInst->setPropertyValue(new core_kernel_classes_Property(PROPERTY_MASK_PREDICATE),RDFS_LABEL);
-		$this->maskInst->setPropertyValue(new core_kernel_classes_Property(PROPERTY_MASK_OBJECT),$object->uriResource);
+		$this->maskInst->setPropertyValue(new core_kernel_classes_Property(PROPERTY_MASK_OBJECT),$object->getUri());
 		$this->subcriptionInst->setPropertyValue(new core_kernel_classes_Property(PROPERTY_SUBCRIPTION_URL),$this->subscriptionUrl);
-		$this->subcriptionInst->setPropertyValue(new core_kernel_classes_Property(PROPERTY_SUBCRIPTION_MASK),$this->maskInst->uriResource);
+		$this->subcriptionInst->setPropertyValue(new core_kernel_classes_Property(PROPERTY_SUBCRIPTION_MASK),$this->maskInst->getUri());
 		$subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions(null,new core_kernel_classes_Property(RDF_TYPE),$object);
 
-		$this->assertTrue(in_array($this->subcriptionInst->uriResource,$subcriptions));
+		$this->assertTrue(in_array($this->subcriptionInst->getUri(),$subcriptions));
 
 
 	}

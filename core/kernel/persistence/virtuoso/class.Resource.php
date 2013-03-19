@@ -124,7 +124,7 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = array();
 
         // section 127-0-1-1--1ee05ee5:13611d6d34c:-8000:000000000000196B begin
-        list($NS, $ID) = explode('#', $resource->uriResource);
+        list($NS, $ID) = explode('#', $resource->getUri());
         if(isset($ID) && !empty($ID)){
                 
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
@@ -163,8 +163,8 @@ class core_kernel_persistence_virtuoso_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
         
-        list($NS, $ID) = explode('#', $resource->uriResource);
-        list($propNS, $propID) = explode('#', $property->uriResource);
+        list($NS, $ID) = explode('#', $resource->getUri());
+        list($propNS, $propID) = explode('#', $property->getUri());
         if(isset($ID) && !empty($ID)){
                 
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
@@ -246,8 +246,8 @@ class core_kernel_persistence_virtuoso_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
         
-        list($NS, $ID) = explode('#', $resource->uriResource);
-        list($propNS, $propID) = explode('#', $property->uriResource);
+        list($NS, $ID) = explode('#', $resource->getUri());
+        list($propNS, $propID) = explode('#', $property->getUri());
         if(isset($ID) && !empty($ID)){
                 
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
@@ -290,8 +290,8 @@ class core_kernel_persistence_virtuoso_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 begin
        
-        list($NS, $ID) = explode('#', $resource->uriResource);
-        list($propNS, $propID) = explode('#', $property->uriResource);
+        list($NS, $ID) = explode('#', $resource->getUri());
+        list($propNS, $propID) = explode('#', $property->getUri());
         if(isset($ID) && !empty($ID)){
                 
                 $lg = trim($lg);
@@ -337,7 +337,7 @@ class core_kernel_persistence_virtuoso_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE begin
         
-        list($NS, $ID) = explode('#', $resource->uriResource);
+        list($NS, $ID) = explode('#', $resource->getUri());
 		
         if(!empty($ID)){
                 
@@ -359,7 +359,7 @@ class core_kernel_persistence_virtuoso_Resource
                 }
 
                 //decompose property uri:
-                list($propNS, $propID) = explode('#', $property->uriResource);
+                list($propNS, $propID) = explode('#', $property->getUri());
                 
                 $query .= '
                         PREFIX resourceNS: <'.$NS.'#>
@@ -389,7 +389,7 @@ class core_kernel_persistence_virtuoso_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B3 begin
-        list($NS, $ID) = explode('#', $resource->uriResource);
+        list($NS, $ID) = explode('#', $resource->getUri());
         if(is_array($properties) && !empty($ID)){
         	if(count($properties) > 0){
                         
@@ -404,7 +404,7 @@ class core_kernel_persistence_virtuoso_Resource
 	       			
                                 if(!common_Utils::isUri($propertyUri)){
 	       				$label = $resource->getLabel();
-	       				throw new common_Exception("setPropertiesValues' argument must contains property uris as keys, in {$label} ({$resource->uriResource})");
+	       				throw new common_Exception("setPropertiesValues' argument must contains property uris as keys, in {$label} ({$resource->getUri()})");
 	       			}
                                 
                                 list($propNS, $propID) = explode('#', $propertyUri);
@@ -470,8 +470,8 @@ class core_kernel_persistence_virtuoso_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012B7 begin
         
-        list($NS, $ID) = explode('#', $resource->uriResource);
-        list($propNS, $propID) = explode('#', $property->uriResource);
+        list($NS, $ID) = explode('#', $resource->getUri());
+        list($propNS, $propID) = explode('#', $property->getUri());
                 
         if(!empty($ID) && !empty($propID)){
                 
@@ -518,8 +518,8 @@ class core_kernel_persistence_virtuoso_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012BD begin
         
-        list($NS, $ID) = explode('#', $resource->uriResource);
-        list($propNS, $propID) = explode('#', $property->uriResource);
+        list($NS, $ID) = explode('#', $resource->getUri());
+        list($propNS, $propID) = explode('#', $property->getUri());
         if(!empty($ID) && !empty($propID)){
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
                 
@@ -554,8 +554,8 @@ class core_kernel_persistence_virtuoso_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C1 begin
         
-        list($NS, $ID) = explode('#', $resource->uriResource);
-        list($propNS, $propID) = explode('#', $property->uriResource);
+        list($NS, $ID) = explode('#', $resource->getUri());
+        list($propNS, $propID) = explode('#', $property->getUri());
         if(!empty($ID) && !empty($propID)){
                 
                 $lg = trim($lg);
@@ -594,7 +594,7 @@ class core_kernel_persistence_virtuoso_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C6 begin
         
-        list($NS, $ID) = explode('#', $resource->uriResource);
+        list($NS, $ID) = explode('#', $resource->getUri());
         if(isset($ID) && !empty($ID)){
 
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
@@ -609,7 +609,7 @@ class core_kernel_persistence_virtuoso_Resource
                         if(isset($resultArray[$i][0])){
                                 $triple = new core_kernel_classes_Triple();
                                 $triple->modelID = $resource->modelID;
-                                $triple->subject = $resource->uriResource;
+                                $triple->subject = $resource->getUri();
                                 $triple->predicate = (string) $resultArray[$i][0];
                                 $triple->object = (string) $resultArray[$i][1];
                                 $triple->id = '';
@@ -683,7 +683,7 @@ class core_kernel_persistence_virtuoso_Resource
     			if(!in_array($triple->predicate, $excludedProperties)){
 	    			if (!common_Utils::isUri($triple->predicate)) {
                                         $label = $resource->getLabel();
-                                        throw new common_Exception("setPropertiesValues' argument must contains property uris as keys in duplicate of {$label} ({$resource->uriResource})");
+                                        throw new common_Exception("setPropertiesValues' argument must contains property uris as keys in duplicate of {$label} ({$resource->getUri()})");
                                 }
 
                                 list($propNS, $propID) = explode('#', $triple->predicate);
@@ -745,7 +745,7 @@ class core_kernel_persistence_virtuoso_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 begin
         
-        list($NS, $id) = explode('#', $resource->uriResource);
+        list($NS, $id) = explode('#', $resource->getUri());
         if(isset($id) && !empty($id)){
                 
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
@@ -849,8 +849,8 @@ class core_kernel_persistence_virtuoso_Resource
 
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 begin
         
-        list($NS, $ID) = explode('#', $resource->uriResource);
-	list($classNS, $classID) = explode('#', $class->uriResource);
+        list($NS, $ID) = explode('#', $resource->getUri());
+	list($classNS, $classID) = explode('#', $class->getUri());
         
         if(!empty($ID) && !empty($classID)){
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
@@ -885,8 +885,8 @@ class core_kernel_persistence_virtuoso_Resource
 
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000154C begin
         
-        list($NS, $ID) = explode('#', $resource->uriResource);
-        list($classNS, $classID) = explode('#', $class->uriResource);
+        list($NS, $ID) = explode('#', $resource->getUri());
+        list($classNS, $classID) = explode('#', $class->getUri());
         if(!empty($ID) && !empty($classID)){
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
                 
@@ -941,7 +941,7 @@ class core_kernel_persistence_virtuoso_Resource
 
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:00000000000022E6 begin
         
-        list($NS, $id) = explode('#', $resource->uriResource);
+        list($NS, $id) = explode('#', $resource->getUri());
         if(isset($id) && !empty($id)){
                 
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();

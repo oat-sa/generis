@@ -101,7 +101,7 @@ class generis_actions_RestResource extends Module {
                     echo "<propertyValues>\n";
                     foreach ($propValues->getIterator() as $value ){
                         if($value instanceof core_kernel_classes_Resource){
-                             echo "<propertyValue>" . $value->uriResource.'</propertyValue>';
+                             echo "<propertyValue>" . $value->getUri().'</propertyValue>';
                         }
                         else {
                               echo "<propertyValue>" . common_Utils::fullTrim($value).'</propertyValue>';

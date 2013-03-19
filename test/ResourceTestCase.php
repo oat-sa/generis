@@ -75,12 +75,12 @@ class ResourceTestCase extends UnitTestCase{
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = new core_kernel_classes_Property(RDFS_SEEALSO,__METHOD__);
 		$api = core_kernel_impl_ApiModelOO::singleton();
-		$api->setStatement($instance->uriResource, RDFS_SEEALSO, GENERIS_TRUE, '');
-		$api->setStatement($instance->uriResource, RDFS_SEEALSO, GENERIS_FALSE, '');
-		$api->setStatement($instance->uriResource, RDFS_SEEALSO, 'plop', '');
-		$api->setStatement($instance->uriResource, RDFS_SEEALSO, 'plup', 'FR');
-		$api->setStatement($instance->uriResource, RDFS_SEEALSO, 'plip', 'FR');
-		$api->setStatement($instance->uriResource, RDFS_SEEALSO, GENERIS_TRUE, 'FR');
+		$api->setStatement($instance->getUri(), RDFS_SEEALSO, GENERIS_TRUE, '');
+		$api->setStatement($instance->getUri(), RDFS_SEEALSO, GENERIS_FALSE, '');
+		$api->setStatement($instance->getUri(), RDFS_SEEALSO, 'plop', '');
+		$api->setStatement($instance->getUri(), RDFS_SEEALSO, 'plup', 'FR');
+		$api->setStatement($instance->getUri(), RDFS_SEEALSO, 'plip', 'FR');
+		$api->setStatement($instance->getUri(), RDFS_SEEALSO, GENERIS_TRUE, 'FR');
 
 		// Default language is EN (English) so that we should get a collection
 		// containing 3 triples because we will receive the ones with no language
@@ -92,7 +92,7 @@ class ResourceTestCase extends UnitTestCase{
 		foreach ($collection->getIterator() as $value) {
 			$this->assertIsA($value, 'core_kernel_classes_Container' );
 			if($value instanceof core_kernel_classes_Resource ){
-				$this->assertTrue($value->uriResource == GENERIS_TRUE || $value->uriResource == GENERIS_FALSE);
+				$this->assertTrue($value->getUri() == GENERIS_TRUE || $value->getUri() == GENERIS_FALSE);
 			}
 			if ( $value instanceof core_kernel_classes_Literal){
 				$this->assertEqual($value->literal, 'plop');
@@ -107,7 +107,7 @@ class ResourceTestCase extends UnitTestCase{
 		foreach ($collection->getIterator() as $value) {
 			$this->assertIsA($value, 'core_kernel_classes_Container' );
 			if($value instanceof core_kernel_classes_Resource ){
-				$this->assertTrue($value->uriResource == GENERIS_TRUE || $value->uriResource == GENERIS_FALSE);
+				$this->assertTrue($value->getUri() == GENERIS_TRUE || $value->getUri() == GENERIS_FALSE);
 			}
 			if ( $value instanceof core_kernel_classes_Literal){
 				$this->assertEqual($value->literal, 'plop');
@@ -122,7 +122,7 @@ class ResourceTestCase extends UnitTestCase{
 		foreach ($collection->getIterator() as $value) {
 			$this->assertIsA($value, 'core_kernel_classes_Container' );
 			if($value instanceof core_kernel_classes_Resource ){
-				$this->assertTrue($value->uriResource == GENERIS_TRUE, $value->uriResource . ' must be equal to ' . GENERIS_TRUE);
+				$this->assertTrue($value->getUri() == GENERIS_TRUE, $value->getUri() . ' must be equal to ' . GENERIS_TRUE);
 			}
 			if ( $value instanceof core_kernel_classes_Literal){
 				$this->assertTrue($value->literal == 'plup' || $value->literal == 'plip', $value->literal . ' must be equal to plip or plop');
@@ -159,16 +159,16 @@ class ResourceTestCase extends UnitTestCase{
 		
 		//test with one property
 		$result = $resource->getPropertiesValues(array($property1));
-		$this->assertTrue(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->uriResource]));
+		$this->assertTrue(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
 		//test with an other one
 		$result = $resource->getPropertiesValues(array($property2));
-		$this->assertTrue(in_array('prop2', $result[$property2->uriResource]));
+		$this->assertTrue(in_array('prop2', $result[$property2->getUri()]));
 		
 		//test with several properties
 		$result = $resource->getPropertiesValues(array($property1, $property2, $property3));
-		$this->assertTrue(in_array('prop1', $result[$property1->uriResource]));
-		$this->assertTrue(in_array('prop2', $result[$property2->uriResource]));
-		$this->assertTrue(in_array('prop3', $result[$property3->uriResource]));
+		$this->assertTrue(in_array('prop1', $result[$property1->getUri()]));
+		$this->assertTrue(in_array('prop2', $result[$property2->getUri()]));
+		$this->assertTrue(in_array('prop3', $result[$property3->getUri()]));
 		
 		//clean all
 		$property1->delete();
@@ -212,11 +212,11 @@ class ResourceTestCase extends UnitTestCase{
 		$property2 = $class->createProperty('multi','multi',true);
 
 		$instance3 = $class->createInstance('test3' , 'test3');
-		$instance3->setPropertyValue($property2, $instance2->uriResource);
+		$instance3->setPropertyValue($property2, $instance2->getUri());
 
 		$api = core_kernel_impl_ApiModelOO::singleton();
-		$api->setStatement($instance2->uriResource,$property2->uriResource,'vrai','FR');
-		$api->setStatement($instance2->uriResource,$property2->uriResource,'true','EN');
+		$api->setStatement($instance2->getUri(),$property2->getUri(),'vrai','FR');
+		$api->setStatement($instance2->getUri(),$property2->getUri(),'true','EN');
 
 		$this->assertTrue($instance2->delete(true));
 		$this->assertNull($instance3->getOnePropertyValue($property2));
@@ -237,7 +237,7 @@ class ResourceTestCase extends UnitTestCase{
 		foreach ($collection->getIterator() as $value) {
 			$this->assertIsA($value, 'core_kernel_classes_Container' );
 			if($value instanceof core_kernel_classes_Resource ){
-				$this->assertTrue($value->uriResource == GENERIS_TRUE || $value->uriResource ==GENERIS_FALSE);
+				$this->assertTrue($value->getUri() == GENERIS_TRUE || $value->getUri() ==GENERIS_FALSE);
 			}
 			if ( $value instanceof core_kernel_classes_Literal){
 				$this->assertEqual($value->literal, "&plop n'\"; plop'\' plop");
@@ -274,8 +274,8 @@ class ResourceTestCase extends UnitTestCase{
 		$seeAlso = $class->createProperty('seeAlso','multilingue',true);
 
 		$api = core_kernel_impl_ApiModelOO::singleton();
-		$api->setStatement($instance->uriResource,$seeAlso->uriResource,GENERIS_TRUE,'FR');
-		$api->setStatement($instance->uriResource,$seeAlso->uriResource,GENERIS_TRUE,'EN');
+		$api->setStatement($instance->getUri(),$seeAlso->getUri(),GENERIS_TRUE,'FR');
+		$api->setStatement($instance->getUri(),$seeAlso->getUri(),GENERIS_TRUE,'EN');
 		$lg = $instance->getUsedLanguages($seeAlso);
 		$this->assertTrue(in_array('FR',$lg));
 		$this->assertTrue(in_array('EN',$lg));
@@ -289,9 +289,9 @@ class ResourceTestCase extends UnitTestCase{
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = $class->createProperty('seeAlso','multilingue',true);
 		$api = core_kernel_impl_ApiModelOO::singleton();
-		$api->setStatement($instance->uriResource,$seeAlso->uriResource,'vrai','FR');
-		$api->setStatement($instance->uriResource,$seeAlso->uriResource,'vrai peut etre','FR');
-		$api->setStatement($instance->uriResource,$seeAlso->uriResource,'true','EN');
+		$api->setStatement($instance->getUri(),$seeAlso->getUri(),'vrai','FR');
+		$api->setStatement($instance->getUri(),$seeAlso->getUri(),'vrai peut etre','FR');
+		$api->setStatement($instance->getUri(),$seeAlso->getUri(),'true','EN');
 
 		$collectionFr = $instance->getPropertyValuesByLg($seeAlso,'FR');
 		$this->assertTrue($collectionFr->count() == 2);

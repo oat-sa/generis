@@ -164,7 +164,7 @@ class core_kernel_classes_ContainerCollection
         $returnValue = -1;
         foreach($this->sequence as $index => $_resource){
         	if ($_resource instanceof  core_kernel_classes_Resource){
-				if($resource->uriResource === $_resource->uriResource){
+				if($resource->equals($_resource)){
 					return $index;
 				}
         	}

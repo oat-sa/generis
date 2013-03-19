@@ -153,7 +153,7 @@ class core_kernel_persistence_hardapi_RowManager
 							//set the uri of the foreign resource
 							$foreignResource = $row[$column['name']];
 							if($foreignResource instanceof core_kernel_classes_Resource){
-								$query .= ", '{$foreignResource->uriResource}'";
+								$query .= ", '{$foreignResource->getUri()}'";
 							}
 							else if (!empty($foreignResource)){
 								$query.= ", " . $dbWrapper->dbConnector->quote($foreignResource);
@@ -166,7 +166,7 @@ class core_kernel_persistence_hardapi_RowManager
 							
 							$value = $row[$column['name']];
 							if($value instanceof core_kernel_classes_Resource){
-								$query.= ", '{$value->uriResource}'";
+								$query.= ", '{$value->getUri()}'";
 							}
 							else{	//the value is a literal
 								$value = trim($dbWrapper->dbConnector->quote($value), "'\"");
@@ -275,7 +275,7 @@ class core_kernel_persistence_hardapi_RowManager
 					$foreignResource = $row[$column['name']];
 					if ($foreignResource!=null){
 						if($foreignResource instanceof core_kernel_classes_Resource){
-							$uriList .= "'{$foreignResource->uriResource}',";
+							$uriList .= "'{$foreignResource->getUri()}',";
 						}
 					} 
 				}

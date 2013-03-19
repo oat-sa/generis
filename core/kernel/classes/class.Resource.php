@@ -103,7 +103,7 @@ class core_kernel_classes_Resource
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  string uri
+     * @param  mixed uri
      * @param  string debug
      * @return void
      */
@@ -195,7 +195,7 @@ class core_kernel_classes_Resource
         // section 10-13-1--31--647ec317:119141cd117:-8000:0000000000000915 begin
         
         foreach($this->getTypes() as $type){
-        	if($type->uriResource == RDF_PROPERTY){
+        	if($type->getUri() == RDF_PROPERTY){
         		$returnValue = true;
         		break;
         	}
@@ -415,7 +415,7 @@ class core_kernel_classes_Resource
         else {
         	$propLabel = $property->getLabel();
         	$label = $this->getLabel();
-            throw new common_Exception("Property {$propLabel} ({$property->uriResource}) of resource {$label} ({$this->uriResource}) 
+            throw new common_Exception("Property {$propLabel} ({$property->getUri()}) of resource {$label} ({$this->getUri()}) 
             							has more than one value do not use getUniquePropertyValue but use getPropertyValue instead");
         }
         	
@@ -802,7 +802,7 @@ class core_kernel_classes_Resource
         $returnValue .= '</span>';
         $returnValue .= '<span style="display:block;height=90px;font-weight:normal;font-style:italic;font-size:9;">';
         $returnValue .= ''.$this->getComment()."<br />";
-        $returnValue .= '<span style="font-size:5;">'.$this->uriResource.'</span>';
+        $returnValue .= '<span style="font-size:5;">'.$this->getUri().'</span>';
         $returnValue .= '</span>';
 
         $returnValue .= '</span>';
@@ -824,7 +824,7 @@ class core_kernel_classes_Resource
         $returnValue = (string) '';
 
         // section 10-13-1--99-20ac9d48:11a723d33d6:-8000:0000000000001253 begin
-        $returnValue = $this->uriResource.'<br/>' . $this->getLabel() . '<br/>' ;
+        $returnValue = $this->getUri().'<br/>' . $this->getLabel() . '<br/>' ;
         // section 10-13-1--99-20ac9d48:11a723d33d6:-8000:0000000000001253 end
 
         return (string) $returnValue;
@@ -910,7 +910,7 @@ class core_kernel_classes_Resource
 
         // section 127-0-1-1--72f5bf1f:12fd500f94d:-8000:0000000000001552 begin
     	foreach($this->getTypes() as $type){
-        	if ($class->uriResource == $type->uriResource){
+        	if ($class->equals($type)){
         		$returnValue = true;
         		break;
         	}
@@ -1007,7 +1007,8 @@ class core_kernel_classes_Resource
     }
 
     /**
-     * Short description of method isInstanceOf
+     * Whenever or not the current resource is
+     * an instance of the specified class
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
@@ -1020,7 +1021,7 @@ class core_kernel_classes_Resource
 
         // section 127-0-1-1-4723dbde:1373bc88899:-8000:00000000000019E8 begin
         foreach($this->getTypes() as $type){
-        	if ($class->uriResource == $type->uriResource || $type->isSubClassOf($class)){
+        	if ($class->equals($type) || $type->isSubClassOf($class)){
         		$returnValue = true;
         		break;
         	}
@@ -1029,7 +1030,7 @@ class core_kernel_classes_Resource
 
         return (bool) $returnValue;
     }
-
+  
 } /* end of class core_kernel_classes_Resource */
 
 ?>

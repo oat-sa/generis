@@ -128,7 +128,7 @@ class core_kernel_classes_ClassFactory
         // section 127-0-1-1-3c0ae01:12c2c9debde:-8000:0000000000001393 begin
 		$property = new core_kernel_classes_Class(RDF_PROPERTY);
 		$propertyInstance = self::createInstance($property, $label, $comment, $uri);
-		$returnValue = new core_kernel_classes_Property($propertyInstance->uriResource);
+		$returnValue = new core_kernel_classes_Property($propertyInstance->getUri());
 		if (!$clazz->setProperty($returnValue)){
 			throw new common_Exception('An error occured during Property creation.');
 		}
@@ -159,7 +159,7 @@ class core_kernel_classes_ClassFactory
         // section 127-0-1-1-3c0ae01:12c2c9debde:-8000:00000000000013A2 begin
 		$class = new core_kernel_classes_Class(RDF_CLASS);
 		$intance =  self::createInstance($class, $label, $comment, $uri);
-		$returnValue = new core_kernel_classes_Class($instance->uriResource);
+		$returnValue = new core_kernel_classes_Class($instance->getUri());
 		$returnValue->setSubClassOf($clazz);
 
         // section 127-0-1-1-3c0ae01:12c2c9debde:-8000:00000000000013A2 end

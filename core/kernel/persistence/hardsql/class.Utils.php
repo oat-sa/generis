@@ -87,7 +87,7 @@ class core_kernel_persistence_hardsql_Utils
     	try{
 	    	$query = 'SELECT "id" FROM "'.$table.'" WHERE uri= ?';
 	    	$query = $dbWrapper->limitStatement($query, 1);
-	    	$result = $dbWrapper->query($query, array ($resource->uriResource));
+	    	$result = $dbWrapper->query($query, array ($resource->getUri()));
 	  
 	    	if($row = $result->fetch()){
 	    		$returnValue = $row['id'];
@@ -95,7 +95,7 @@ class core_kernel_persistence_hardsql_Utils
 	    	}
     	}
     	catch (PDOException $e){
-    		throw new core_kernel_persistence_hardsql_Exception("Unable to find the resource {$resource->uriResource} in {$table} : " .$e->getMessage());
+    		throw new core_kernel_persistence_hardsql_Exception("Unable to find the resource {$resource->getUri()} in {$table} : " .$e->getMessage());
     	}
         // section 127-0-1-1-53ffc1dd:131463d99b5:-8000:000000000000160E end
 
@@ -118,7 +118,7 @@ class core_kernel_persistence_hardsql_Utils
         
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
     	$query = 'SELECT "id" FROM "resource_to_table" WHERE "uri"=?';
-    	$result = $dbWrapper->query($query, array ($resource->uriResource));
+    	$result = $dbWrapper->query($query, array ($resource->getUri()));
     	
     	if ($row = $result->fetch()){
     		$returnValue = $row['id'];
@@ -148,7 +148,7 @@ class core_kernel_persistence_hardsql_Utils
 	        $dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
 	    	$query = 'SELECT "id" FROM "class_to_table" WHERE "uri"=? AND "table"=?';
 	    	$result = $dbWrapper->query($query, array (
-	    		$class->uriResource
+	    		$class->getUri()
 	    		, core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation ($resource)
 	    	));
 	    	
@@ -157,7 +157,7 @@ class core_kernel_persistence_hardsql_Utils
 	    	}
         }
         catch (PDOException $e){
-        	throw new core_kernel_persistence_hardsql_Exception("Unable to find the class {$class->uriResource} in class_to_table : " .$e->getMessage());
+        	throw new core_kernel_persistence_hardsql_Exception("Unable to find the class {$class->getUri()} in class_to_table : " .$e->getMessage());
         }
         
         // section 127-0-1-1-53ffc1dd:131463d99b5:-8000:0000000000001614 end

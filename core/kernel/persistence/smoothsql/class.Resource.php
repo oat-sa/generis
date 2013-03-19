@@ -127,7 +127,7 @@ class core_kernel_persistence_smoothsql_Resource
 		$sqlQuery = 'SELECT "object" FROM "statements" WHERE "subject" = ? and predicate = ?;';
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $sth = $dbWrapper->prepare($sqlQuery);
-        $sth->execute(array($resource->uriResource, RDF_TYPE));
+        $sth->execute(array($resource->getUri(), RDF_TYPE));
         while ($row = $sth->fetch()){
             $uri = $row['object'];
             $returnValue[$uri] = new core_kernel_classes_Class($uri);
@@ -183,19 +183,19 @@ class core_kernel_persistence_smoothsql_Resource
 			$query .= ' ORDER BY "id" DESC';
 			$query = $dbWrapper->limitStatement($query, 1, 0);
 			$sth = $dbWrapper->prepare($query);
-			$result = $sth->execute(array($resource->uriResource, $property->uriResource, $lang));
+			$result = $sth->execute(array($resource->getUri(), $property->getUri(), $lang));
 		}
 		// Select Last
 		else if($last){
 			$query .= ' ORDER BY "id" ASC';
 			$query = $dbWrapper->limitStatement($query, 1, 0);
 			$sth = $dbWrapper->prepare($query);
-			$result = $sth->execute(array($resource->uriResource, $property->uriResource, $lang));
+			$result = $sth->execute(array($resource->getUri(), $property->getUri(), $lang));
 		}
 		// Select All
 		else{
 			$sth = $dbWrapper->prepare($query);
-			$result = $sth->execute(array($resource->uriResource, $property->uriResource, $lang));
+			$result = $sth->execute(array($resource->getUri(), $property->getUri(), $lang));
 		}
         
 		// Treat the query result
@@ -342,8 +342,8 @@ class core_kernel_persistence_smoothsql_Resource
 
         $returnValue = $dbWrapper->exec($query, array(
        		$localNs->getModelId(),
-       		$resource->uriResource,
-       		$property->uriResource,
+       		$resource->getUri(),
+       		$property->getUri(),
        		$object,
        		$lang,
        		$session->getUserLogin(),
@@ -391,11 +391,11 @@ class core_kernel_persistence_smoothsql_Resource
 					
 					$formatedValues = array();
 					if($value instanceof core_kernel_classes_Resource){
-						$formatedValues[] = $value->uriResource;
+						$formatedValues[] = $value->getUri();
 					}else if(is_array($value)){
 						foreach($value as $val){
 							if($val instanceof core_kernel_classes_Resource){
-								$formatedValues[] = $val->uriResource;
+								$formatedValues[] = $val->getUri();
 							}else{
 								$formatedValues[] = trim($dbWrapper->dbConnector->quote($val), "'\"");
 							}
@@ -405,7 +405,7 @@ class core_kernel_persistence_smoothsql_Resource
 					}
 					
 					foreach($formatedValues as $object){
-						$query .= " ($modelId, '{$resource->uriResource}', '{$property->uriResource}', '{$object}', '{$lang}', '{$user}', '{$mask}','{$mask}','{$mask}', CURRENT_TIMESTAMP),";
+						$query .= " ($modelId, '{$resource->getUri()}', '{$property->getUri()}', '{$object}', '{$lang}', '{$user}', '{$mask}','{$mask}','{$mask}', CURRENT_TIMESTAMP),";
 					}
 	       		}
 	       		
@@ -446,8 +446,8 @@ class core_kernel_persistence_smoothsql_Resource
 
         $returnValue = $dbWrapper->exec($query, array(
        		$localNs->getModelId(),
-       		$resource->uriResource,
-       		$property->uriResource,
+       		$resource->getUri(),
+       		$property->getUri(),
        		$value,
        		($property->isLgDependent() ? $lg : ''),
        		$session->getUserLogin(),
@@ -519,16 +519,16 @@ class core_kernel_persistence_smoothsql_Resource
         	$session = core_kernel_classes_Session::singleton();
         	$query .=  ' AND ("l_language" = \'\' OR "l_language" = ?) ';
         	$returnValue = $dbWrapper->exec($query,array(
-	        		$resource->uriResource,
-	        		$property->uriResource,
+	        		$resource->getUri(),
+	        		$property->getUri(),
 	        		$session->getDataLanguage()
 	        ));
         }
         else{
         	
         	$returnValue = $dbWrapper->exec($query,array(
-	        		$resource->uriResource,
-	        		$property->uriResource
+	        		$resource->getUri(),
+	        		$property->getUri()
 	        ));   
         }
         
@@ -565,8 +565,8 @@ class core_kernel_persistence_smoothsql_Resource
 		$sqlQuery .= ' AND "modelID" IN ('.$modelIds.')';
         
         $returnValue = $dbWrapper->exec($sqlQuery, array (
-        	$resource->uriResource,
-        	$property->uriResource,
+        	$resource->getUri(),
+        	$property->getUri(),
         	$lg
         ));
         
@@ -596,11 +596,11 @@ class core_kernel_persistence_smoothsql_Resource
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 	
 	     $namespaces = common_ext_NamespaceManager::singleton()->getAllNamespaces();
-	     $namespace = $namespaces[substr($resource->uriResource, 0, strpos($resource->uriResource, '#') + 1)];
+	     $namespace = $namespaces[substr($resource->getUri(), 0, strpos($resource->getUri(), '#') + 1)];
 	
 	     $query = 'SELECT * FROM "statements" WHERE "subject" = ? AND "modelID" = ? ORDER BY "predicate"';
 	     $result = $dbWrapper->query($query, array(
-	    	 $resource->uriResource,
+	    	 $resource->getUri(),
 	     	$namespace->getModelId()
 	     ));
 	
@@ -642,8 +642,8 @@ class core_kernel_persistence_smoothsql_Resource
     	$sqlQuery = 'SELECT "l_language" FROM "statements" WHERE "subject" = ? AND "predicate" = ? ';
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $sqlResult = $dbWrapper->query($sqlQuery, array (
-        	$resource->uriResource,
-        	$property->uriResource
+        	$resource->getUri(),
+        	$property->getUri()
         ));
         while ($row = $sqlResult->fetch()){
             $returnValue[] = $row['l_language'];
@@ -717,7 +717,7 @@ class core_kernel_persistence_smoothsql_Resource
         
     	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
 		$query = 'DELETE FROM "statements" WHERE "subject" = ? AND "modelID" IN ('.$modelIds.')';
-        $returnValue = $dbWrapper->exec($query, array($resource->uriResource));
+        $returnValue = $dbWrapper->exec($query, array($resource->getUri()));
 
         //if no rows affected return false
         if (!$returnValue){
@@ -725,7 +725,7 @@ class core_kernel_persistence_smoothsql_Resource
         } 
         else if($deleteReference){
         	$sqlQuery = 'DELETE FROM "statements" WHERE "object" = ? AND "modelID" IN ('.$modelIds.')';
-        	$return = $dbWrapper->exec($sqlQuery, array ($resource->uriResource));
+        	$return = $dbWrapper->exec($sqlQuery, array ($resource->getUri()));
         	
         	if ($return !== false){
         		$returnValue = true;
@@ -751,10 +751,10 @@ class core_kernel_persistence_smoothsql_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 begin
         
-    	$sqlQuery = 'SELECT "epoch" FROM "statements" WHERE "subject" = \''. $resource->uriResource.'\' ';
+    	$sqlQuery = 'SELECT "epoch" FROM "statements" WHERE "subject" = \''. $resource->getUri().'\' ';
 
         if(!is_null($property) && $property instanceof core_kernel_classes_Property){
-            $sqlQuery = $sqlQuery.' AND "predicate" = \''. $property->uriResource.'\' ';
+            $sqlQuery = $sqlQuery.' AND "predicate" = \''. $property->getUri().'\' ';
         }
 
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
@@ -800,7 +800,7 @@ class core_kernel_persistence_smoothsql_Resource
         $sqlQuery = "SELECT author FROM statements WHERE subject = ? and predicate = ?";
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $sqlResult = $dbWrapper->query($sqlQuery, array (
-        	$resource->uriResource,
+        	$resource->getUri(),
         	RDF_TYPE
         ));
         
@@ -836,7 +836,7 @@ class core_kernel_persistence_smoothsql_Resource
         }
         
         /*foreach($properties as $property){
-        	$returnValue[$property->uriResource] = $this->getPropertyValues($resource, $property);
+        	$returnValue[$property->getUri()] = $this->getPropertyValues($resource, $property);
         }*/
  
     	$predicatesQuery = '';
@@ -855,7 +855,7 @@ class core_kernel_persistence_smoothsql_Resource
         $query =  'SELECT "predicate", "object", "l_language" 
             FROM "statements" 
             WHERE 
-                "subject" = \''.$resource->uriResource.'\' 
+                "subject" = \''.$resource->getUri().'\' 
                 AND "predicate" IN ('.$predicatesQuery.')
                 AND ("l_language" = \'\' 
                     OR "l_language" = \''.$session->defaultLg.'\' 
@@ -937,9 +937,9 @@ class core_kernel_persistence_smoothsql_Resource
 		$query .= ' AND "modelID" IN ('.$modelIds.')';
         
         $returnValue = $dbWrapper->exec($query,array(
-        	$resource->uriResource,
+        	$resource->getUri(),
         	RDF_TYPE,
-        	$class->uriResource
+        	$class->getUri()
         ));
         
         $returnValue = true;

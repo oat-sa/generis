@@ -86,11 +86,11 @@ class core_kernel_rules_ExpressionFactory
         }
         $expressionClass = new core_kernel_classes_Class(CLASS_EXPRESSION,__METHOD__);
         $label = 'Terminal Expression : ' . $term->getLabel();
-        $comment = 'Terminal Expression : ' . $term->uriResource;
+        $comment = 'Terminal Expression : ' . $term->getUri();
         $expressionInst = core_kernel_classes_ResourceFactory::create($expressionClass,$label,$comment);
       	$terminalExpressionProperty = new core_kernel_classes_Property(PROPERTY_TERMINAL_EXPRESSION,__METHOD__);
-        $returnValue = new core_kernel_rules_Expression($expressionInst->uriResource);
-        $returnValue->setPropertyValue($terminalExpressionProperty,$term->uriResource);
+        $returnValue = new core_kernel_rules_Expression($expressionInst->getUri());
+        $returnValue->setPropertyValue($terminalExpressionProperty,$term->getUri());
         $returnValue->debug = __METHOD__;
         // section 10-13-1--99-2335bfbb:1207fc834f5:-8000:0000000000001747 end
 
@@ -119,18 +119,18 @@ class core_kernel_rules_ExpressionFactory
 
         $expressionClass = new core_kernel_classes_Class(CLASS_EXPRESSION,__METHOD__);
         $label = 'Expression : ' . $exp1->getLabel() . ' ' . $operator->getLabel() . ' ' . $exp2->getLabel();
-        $comment = 'Expression : ' . $exp1->uriResource . ' ' . $operator->uriResource . ' ' . $exp2->uriResource;
+        $comment = 'Expression : ' . $exp1->getUri() . ' ' . $operator->getUri() . ' ' . $exp2->getUri();
         $expressionInst = core_kernel_classes_ResourceFactory::create($expressionClass,$label,$comment);
       	$terminalExpressionProperty = new core_kernel_classes_Property(PROPERTY_TERMINAL_EXPRESSION,__METHOD__);
         $logicalOperatorProperty = new core_kernel_classes_Property(PROPERTY_HASLOGICALOPERATOR,__METHOD__);
 		$firstExpressionProperty = new core_kernel_classes_Property(PROPERTY_FIRST_EXPRESSION,__METHOD__);
 		$secondExpressionProperty = new core_kernel_classes_Property(PROPERTY_SECOND_EXPRESSION,__METHOD__);
-		$returnValue = new core_kernel_rules_Expression($expressionInst->uriResource);
+		$returnValue = new core_kernel_rules_Expression($expressionInst->getUri());
 		$returnValue->debug = __METHOD__;
 		$returnValue->setPropertyValue($terminalExpressionProperty,INSTANCE_EMPTY_TERM_URI);
-		$returnValue->setPropertyValue($firstExpressionProperty,$exp1->uriResource);
-		$returnValue->setPropertyValue($secondExpressionProperty,$exp2->uriResource);
-		$returnValue->setPropertyValue($logicalOperatorProperty,$operator->uriResource); 
+		$returnValue->setPropertyValue($firstExpressionProperty,$exp1->getUri());
+		$returnValue->setPropertyValue($secondExpressionProperty,$exp2->getUri());
+		$returnValue->setPropertyValue($logicalOperatorProperty,$operator->getUri()); 
 		// section 10-13-1--99-2335bfbb:1207fc834f5:-8000:000000000000174A end
 
         return $returnValue;

@@ -85,7 +85,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		common_Logger::i('Search for '.$this->repositoryPath);
         foreach($repositories as $r){
             if((string) $r->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH)) == $this->repositoryPath){
-                $repository = new core_kernel_versioning_Repository($r->uriResource);
+                $repository = new core_kernel_versioning_Repository($r->getUri());
                 break;
             }
         }
@@ -133,7 +133,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	    $versionedFileRepositoryProp = new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_REPOSITORY);
 	    $instance->setPropertyValue($versionedFileRepositoryProp, $this->getDefaultRepository());
 	    
-	    $instance = new core_kernel_versioning_File($instance->uriResource);
+	    $instance = new core_kernel_versioning_File($instance->getUri());
 	    
 	    return $instance;
 	}
@@ -201,7 +201,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryUrlProp), $this->repositoryUrl);
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryPathProp), $this->repositoryPath);
-		$this->assertEqual($repository->getOnePropertyValue($VersioningRepositoryTypeProp)->uriResource, $this->repositoryType);
+		$this->assertEqual($repository->getOnePropertyValue($VersioningRepositoryTypeProp)->getUri(), $this->repositoryType);
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryLoginProp), $this->repositoryLogin);
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryPasswordProp), $this->repositoryPassword);
         
@@ -220,7 +220,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryUrlProp), $this->repositoryUrl);
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryPathProp), $this->repositoryPath);
-		$this->assertEqual($repository->getOnePropertyValue($VersioningRepositoryTypeProp)->uriResource, $this->repositoryType);
+		$this->assertEqual($repository->getOnePropertyValue($VersioningRepositoryTypeProp)->getUri(), $this->repositoryType);
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryLoginProp), $this->repositoryLogin);
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryPasswordProp), $this->repositoryPassword);
 		
@@ -232,7 +232,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	{
 	    $repository = $this->getDefaultRepository();
 	    $type = $repository->getVCSType();
-	    $this->assertTrue($type->uriResource, $this->repositoryType);
+	    $this->assertTrue($type->getUri(), $this->repositoryType);
 	}
 
 	public function testRepositoryAuthenticate()
@@ -268,7 +268,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 		$this->assertEqual((string)$versionedFile->getOnePropertyValue($versionedFileVersionProp), '1');
 		
 	    $versionedFileRepositoryProp = new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_REPOSITORY);
-		$this->assertEqual($versionedFile->getOnePropertyValue($versionedFileRepositoryProp)->uriResource, $this->getDefaultRepository()->uriResource);
+		$this->assertEqual($versionedFile->getOnePropertyValue($versionedFileRepositoryProp)->getUri(), $this->getDefaultRepository()->getUri());
 		
 		$this->assertTrue($versionedFile->delete());
 	}
@@ -797,7 +797,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
         //check the resource exists
         $searchedFile = helpers_File::getResource($path);
         $this->assertNotNull($searchedFile);
-        $this->assertEqual($importedFolder->uriResource, $searchedFile->uriResource);
+        $this->assertEqual($importedFolder->getUri(), $searchedFile->getUri());
         //the file exists
         $this->assertTrue(file_exists($path));
         //delete the imported folder
@@ -820,7 +820,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
         //check the resource exists
         $searchedFile = helpers_File::getResource($path);
         $this->assertNotNull($searchedFile);
-        $this->assertEqual($importedFolder->uriResource, $searchedFile->uriResource);
+        $this->assertEqual($importedFolder->getUri(), $searchedFile->getUri());
         //delete the imported folder
         $this->assertTrue($importedFolder->delete(true));
         //check the resource does not exist

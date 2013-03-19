@@ -322,11 +322,11 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 					$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 					if(is_null($table)){
 						$result = $dbWrapper->prepare('SELECT "id" FROM "class_to_table" WHERE "uri" = ?');
-						$result->execute(array($class->uriResource));
+						$result->execute(array($class->getUri()));
 					}
 					else{
 						$result = $dbWrapper->prepare('SELECT "id" FROM "class_to_table" WHERE "uri" = ? AND "table" = ?');
-						$result->execute(array($class->uriResource, $table));
+						$result->execute(array($class->getUri(), $table));
 					}
 					
 					if($row = $result->fetch()){
@@ -340,7 +340,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 					
 						if(is_null($table)){
 							foreach(self::$_classes as $aClass){
-								if(isset($aClass['uri']) && $aClass['uri'] == $class->uriResource ){
+								if(isset($aClass['uri']) && $aClass['uri'] == $class->getUri() ){
 									$returnValue = true;
 									break;
 								}
@@ -348,7 +348,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 						}
 						else{
 							foreach(self::$_classes as $aClass){
-							if(isset($aClass['uri']) && $aClass['uri'] == $class->uriResource 
+							if(isset($aClass['uri']) && $aClass['uri'] == $class->getUri() 
 								&& isset($aClass['table']) && $aClass['table'] == $table){
 								$returnValue = true;
 								break;
@@ -395,23 +395,23 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         // Is the class is not already referenced
         if(!$this->isClassReferenced($class, $table)){
         	
-        	$topClassUri = $topClass->uriResource;
+        	$topClassUri = $topClass->getUri();
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
 			$query = 'INSERT INTO "class_to_table" ("uri", "table", "topClass") VALUES (?,?,?)';
 			$result = $dbWrapper->prepare($query);
-			$result->execute(array($class->uriResource, $table, $topClassUri));
+			$result->execute(array($class->getUri(), $table, $topClassUri));
 			
 			// Get last inserted id
 			$query = 'SELECT "id" FROM "class_to_table" WHERE "uri" = ? AND "table" = ?';
 			$result = $dbWrapper->prepare($query);
-			$result->execute(array($class->uriResource, $table));
+			$result->execute(array($class->getUri(), $table));
 			
 			if ($row = $result->fetch()){
 				$classId = $row['id'];
 				$result->closeCursor();
 			} else {
-				throw new core_kernel_persistence_hardapi_Exception("Unable to retrieve the class Id of the referenced class {$class->uriResource}");
+				throw new core_kernel_persistence_hardapi_Exception("Unable to retrieve the class Id of the referenced class {$class->getUri()}");
 			}
 			
 			try{
@@ -419,7 +419,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				if (!is_null($additionalProperties) && !empty($additionalProperties)){
 					$query = 'INSERT INTO "class_additional_properties" ("class_id", "property_uri") VALUES';
 					foreach ($additionalProperties as $additionalProperty){
-						$query .= " ('{$classId}', '{$additionalProperty->uriResource}')";
+						$query .= " ('{$classId}', '{$additionalProperty->getUri()}')";
 					}
 					$result = $dbWrapper->exec($query);
 				} 		
@@ -433,7 +433,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 							FROM "class_to_table" 
 							WHERE "uri" = ? 
 							AND "table" = ?';
-						$memResult = $dbWrapper->query($memQuery, array($class->uriResource, $table));
+						$memResult = $dbWrapper->query($memQuery, array($class->getUri(), $table));
 						while($row = $memResult->fetch()){
 							self::$_classes[$row['uri']] = array(
 				        		'id'		=> $row['id'],
@@ -446,7 +446,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				}
 			}
 			catch (PDOException $e){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to reference the additional properties of the class {$class->uriResource} in class_additional_properties: " . $e->getMessage());
+				throw new core_kernel_persistence_hardapi_Exception("Unable to reference the additional properties of the class {$class->getUri()} in class_additional_properties: " . $e->getMessage());
 			}
 		}
         
@@ -512,7 +512,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 					// remove class from the cache
 					if($this->cacheModes['class'] == self::CACHE_MEMORY && is_array(self::$_classes)){
 						foreach(self::$_classes as $index => $aClass){
-							if($aClass['uri'] == $class->uriResource){
+							if($aClass['uri'] == $class->getUri()){
 								unset(self::$_classes[$index]);
 							}
 						}
@@ -524,7 +524,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo = array();
 			}
 			catch (PDOException $e){
-				throw new core_kernel_persistence_hardapi_Exception("Unable to unreference class {$class->uriResource} : " .$e->getMessage());
+				throw new core_kernel_persistence_hardapi_Exception("Unable to unreference class {$class->getUri()} : " .$e->getMessage());
 			}
 		}
         
@@ -554,7 +554,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			        
 			        $query = "SELECT id, uri, table, topClass FROM class_to_table WHERE uri=? ";
-			    	$result = $dbWrapper->query($query, array ($class->uriResource));
+			    	$result = $dbWrapper->query($query, array ($class->getUri()));
 
 					while($row = $result->fetch()){
 						$returnValue[$row['uri']] = array(
@@ -569,7 +569,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			   case self::CACHE_MEMORY:
 			   		$this->loadClasses();
 			   		foreach( self::$_classes as $key =>  $res){
-						if($res['uri'] == $class->uriResource){
+						if($res['uri'] == $class->getUri()){
 							$returnValue[] = $res;
 						}
 					}
@@ -625,16 +625,16 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			switch($this->cacheModes['instance']){
 				
 				case self::CACHE_NONE:
-					if(array_key_exists($resource->uriResource, self::$_resources)){
+					if(array_key_exists($resource->getUri(), self::$_resources)){
 						$returnValue = true;
 						break;
 					}
 					
 					$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-					$result = $dbWrapper->query('SELECT "table" FROM "resource_to_table" WHERE "uri" = ?', array($resource->uriResource));
+					$result = $dbWrapper->query('SELECT "table" FROM "resource_to_table" WHERE "uri" = ?', array($resource->getUri()));
 					$fetch = $result->fetchAll();
 					if(count($fetch) > 0){
-						self::$_resources[$resource->uriResource] = $fetch[0]['table'];
+						self::$_resources[$resource->getUri()] = $fetch[0]['table'];
 						$returnValue = true;
 					}	
 					
@@ -644,7 +644,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				case self::CACHE_MEMORY:
 					
 					$this->loadResources();
-					$returnValue = array_key_exists($resource->uriResource, self::$_resources);
+					$returnValue = array_key_exists($resource->getUri(), self::$_resources);
 					break;
 					
 				default:
@@ -680,11 +680,11 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
 			$query = 'INSERT INTO "resource_to_table" ("uri", "table") VALUES (?,?)';
-			$insertResult = $dbWrapper->exec($query, array($resource->uriResource, $table));
+			$insertResult = $dbWrapper->exec($query, array($resource->getUri(), $table));
 
 			if($referenceClassLink && $insertResult !== false){
 				$query = 'SELECT * FROM "resource_to_table" WHERE "uri" = ? AND "table" = ?';
-				$result = $dbWrapper->query($query, array($resource->uriResource, $table));
+				$result = $dbWrapper->query($query, array($resource->getUri(), $table));
 				while($row = $result->fetch(PDO::FETCH_ASSOC)){
 					$rows[] = $row;
 				}
@@ -695,7 +695,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         		
 				foreach($types as $type){
 					
-					$typeClass = new core_kernel_classes_Class($type->uriResource);
+					$typeClass = new core_kernel_classes_Class($type->getUri());
 					if($this->isClassReferenced($typeClass)){
 						
 						$classLocations = $this->classLocations($typeClass);
@@ -755,8 +755,8 @@ class core_kernel_persistence_hardapi_ResourceReferencer
                         }
 
                         if ($returnValue !== false) {
-                                if (array_key_exists($resource->uriResource, self::$_resources)) {
-                                        unset(self::$_resources[$resource->uriResource]);
+                                if (array_key_exists($resource->getUri(), self::$_resources)) {
+                                        unset(self::$_resources[$resource->getUri()]);
                                 }
                         }
                 }
@@ -786,19 +786,19 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			switch($this->cacheModes['instance']){
 				
 				case self::CACHE_NONE:
-					if(array_key_exists($resource->uriResource, self::$_resources)){
-						$returnValue = self::$_resources[$resource->uriResource];
+					if(array_key_exists($resource->getUri(), self::$_resources)){
+						$returnValue = self::$_resources[$resource->getUri()];
 						break;
 					}
 					
 			        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			        
 			        $query = 'SELECT "table" FROM "resource_to_table" WHERE uri=?';
-			    	$result = $dbWrapper->query($query, array ($resource->uriResource));
+			    	$result = $dbWrapper->query($query, array ($resource->getUri()));
 
 					if ($row = $result->fetch()){
 						$returnValue = $row['table'];
-						self::$_resources[$resource->uriResource] = $row['table'];
+						self::$_resources[$resource->getUri()] = $row['table'];
 						$result->closeCursor();
 					} else {
 						common_Logger::w("Unable to find table for ressource " .$resource->getUri(), "GENERIS");
@@ -808,8 +808,8 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			
 			   case self::CACHE_MEMORY:
 			   		$this->loadResources();
-			   		if(array_key_exists($resource->uriResource, self::$_resources)){
-						$returnValue = self::$_resources[$resource->uriResource];
+			   		if(array_key_exists($resource->getUri(), self::$_resources)){
+						$returnValue = self::$_resources[$resource->getUri()];
 						break;
 					}
 			   break;
@@ -885,7 +885,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     					$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
     					$properties = $ps->getProperties($additionalProperties);
     					foreach ($properties as $property){
-    						$propertyUri = $property->uriResource;
+    						$propertyUri = $property->getUri();
     						if ($property->isMultiple() || $property->isLgDependent()){
     				
     							if(isset(self::$_properties[$propertyUri])) {
@@ -968,7 +968,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 							}
 						}
 					}else{
-						$returnValue = array_key_exists($property->uriResource, self::$_properties);
+						$returnValue = array_key_exists($property->getUri(), self::$_properties);
 					}
 					break;
 					
@@ -1005,8 +1005,8 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				case self::CACHE_MEMORY:
 					
 					$this->loadProperties();
-					if(isset(self::$_properties[$property->uriResource]) && is_array(self::$_properties[$property->uriResource])){
-						$returnValue = self::$_properties[$property->uriResource];
+					if(isset(self::$_properties[$property->getUri()]) && is_array(self::$_properties[$property->getUri()])){
+						$returnValue = self::$_properties[$property->getUri()];
 					}
 					break;
 				default:
@@ -1042,7 +1042,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         						WHERE predicate = ? 
         						AND object = ?)";
         $result = $dbWrapper->prepare($query);
-        $result->execute(array(RDF_TYPE, $class->uriResource, RDF_TYPE, $class->uriResource));
+        $result->execute(array(RDF_TYPE, $class->getUri(), RDF_TYPE, $class->getUri()));
 
 		$types = array();
         while($row = $result->fetch()){
@@ -1124,7 +1124,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			FROM class_additional_properties, class_to_table 
 			WHERE class_additional_properties.class_id = class_to_table.id
 			AND class_to_table.uri = ?";
-		$result = $dbWrapper->query($query, array($clazz->uriResource));
+		$result = $dbWrapper->query($query, array($clazz->getUri()));
 		
    		while($row = $result->fetch()){
 			$returnValue[] = new core_kernel_classes_Property($row['property_uri']);

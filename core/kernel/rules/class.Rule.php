@@ -98,10 +98,10 @@ class core_kernel_rules_Rule
         $returnValue = null;
 
         // section 10-13-1--99--2ca656b4:11c9ebb5ddd:-8000:0000000000000ED7 begin
-		common_Logger::i('Evaluating rule '.$this->getLabel().'('.$this->uriResource.')', array('Generis Rule'));
+		common_Logger::i('Evaluating rule '.$this->getLabel().'('.$this->getUri().')', array('Generis Rule'));
          if(empty($this->expression)){
          	$property = new core_kernel_classes_Property(PROPERTY_RULE_IF);
-         	$this->expression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->uriResource ,__METHOD__);
+         	$this->expression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->getUri() ,__METHOD__);
         }
         $returnValue = $this->expression;
         // section 10-13-1--99--2ca656b4:11c9ebb5ddd:-8000:0000000000000ED7 end

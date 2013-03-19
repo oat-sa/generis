@@ -47,7 +47,7 @@ class HardApiTestCase extends UnitTestCase {
 		$this->assertEqual($shortName, "07ClassRole");
 		
 		$longName = core_kernel_persistence_hardapi_Utils::getLongName($shortName);
-		$this->assertEqual($longName, $class->uriResource);
+		$this->assertEqual($longName, $class->getUri());
 	}
 	
 	/**
@@ -160,7 +160,7 @@ class HardApiTestCase extends UnitTestCase {
 		$foundTables = $referencer->classLocations($class);
 		foreach($foundTables as $foundTable){
 			$this->assertEqual($foundTable['table'], $table);
-			$this->assertEqual($foundTable['uri'], $class->uriResource);
+			$this->assertEqual($foundTable['uri'], $class->getUri());
 		}
 		
 		$this->assertTrue($myTblMgr->exists());

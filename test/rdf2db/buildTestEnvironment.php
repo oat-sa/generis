@@ -108,7 +108,7 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 		$this->assertTrue(defined('TAO_SUBJECT_CLASS'));
 		$subjectClass = $this->subjectsService->getSubjectClass();
 		$this->assertIsA($subjectClass, 'core_kernel_classes_Class');
-		$this->assertEqual(TAO_SUBJECT_CLASS, $subjectClass->uriResource);
+		$this->assertEqual(TAO_SUBJECT_CLASS, $subjectClass->getUri());
 
 		//create a subclass
 		$subsubjectClassLabel = 'test subject class';
@@ -201,7 +201,7 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 				$factory = new ProcessExecutionFactory();
 				$factory->name = 'Test Process Execution';
 				
-				$factory->execution = $processDefinition->uriResource;
+				$factory->execution = $processDefinition->getUri();
 				$factory->ownerUri = SYS_USER_LOGIN;
 
 				//init 1st activity
@@ -234,7 +234,7 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 
 					$token = $this->service->getCurrent($activityExecuction);
 					$this->assertNotNull($token);
-					$this->out("Token: ".$token->getLabel()." ".$token->uriResource);
+					$this->out("Token: ".$token->getLabel()." ".$token->getUri());
 
 					$tokenActivity = $token->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_TOKEN_ACTIVITY));
 					$this->assertNotNull($tokenActivity);
@@ -249,7 +249,7 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 					$this->out("Token User: ".$tokenUser->getLabel());
 
 					//transition to 2nd activity
-					$proc->performTransition($activityExecuction->uriResource);
+					$proc->performTransition($activityExecuction->getUri());
 
 					$currentTokens = $this->service->getCurrents($proc->resource);
 					$this->assertIsA($currentTokens, 'array');
@@ -320,7 +320,7 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 						$factory = new ProcessExecutionFactory();
 						$factory->name = 'Test Process Execution of '.$deliveryProcess->getLabel();
 						
-						$factory->execution = $deliveryProcess->uriResource;
+						$factory->execution = $deliveryProcess->getUri();
 						$factory->ownerUri = SYS_USER_LOGIN;
 
 						//init 1st activity
@@ -352,7 +352,7 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 
 							$token = $this->service->getCurrent($activityExecuction);
 							$this->assertNotNull($token);
-							$this->out("Token: ".$token->getLabel()." ".$token->uriResource);
+							$this->out("Token: ".$token->getLabel()." ".$token->getUri());
 
 							$tokenActivity = $token->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_TOKEN_ACTIVITY));
 							$this->assertNotNull($tokenActivity);
@@ -367,7 +367,7 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 							$this->out("Token User: ".$tokenUser->getLabel());
 
 							//transition to 2nd activity
-							$proc->performTransition($activityExecuction->uriResource);
+							$proc->performTransition($activityExecuction->getUri());
 
 							$currentTokens = $this->service->getCurrents($proc->resource);
 							$this->assertIsA($currentTokens, 'array');

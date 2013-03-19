@@ -148,9 +148,9 @@ class core_kernel_persistence_subscription_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
 
-		if ($property->uriResource != PROPERTY_SUBCRIPTION_MASK && $property->uriResource != PROPERTY_SUBCRIPTION_URL
-		&& $property->uriResource != PROPERTY_MASK_SUBJECT && $property->uriResource != PROPERTY_MASK_PREDICATE
-		&& $property->uriResource != PROPERTY_MASK_OBJECT){
+		if ($property->getUri() != PROPERTY_SUBCRIPTION_MASK && $property->getUri() != PROPERTY_SUBCRIPTION_URL
+		&& $property->getUri() != PROPERTY_MASK_SUBJECT && $property->getUri() != PROPERTY_MASK_PREDICATE
+		&& $property->getUri() != PROPERTY_MASK_OBJECT){
 		
 			$subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions ($resource, $property, null);
 			foreach ($subcriptions as $sub){
@@ -183,9 +183,9 @@ class core_kernel_persistence_subscription_Resource
 		
 		$returnValue = new core_kernel_classes_ContainerCollection($resource);
 		
-		if ($property->uriResource != PROPERTY_SUBCRIPTION_MASK && $property->uriResource != PROPERTY_SUBCRIPTION_URL
-		&& $property->uriResource != PROPERTY_MASK_SUBJECT && $property->uriResource != PROPERTY_MASK_PREDICATE
-		&& $property->uriResource != PROPERTY_MASK_OBJECT){
+		if ($property->getUri() != PROPERTY_SUBCRIPTION_MASK && $property->getUri() != PROPERTY_SUBCRIPTION_URL
+		&& $property->getUri() != PROPERTY_MASK_SUBJECT && $property->getUri() != PROPERTY_MASK_PREDICATE
+		&& $property->getUri() != PROPERTY_MASK_OBJECT){
 			
 			$propertiesValues = array ();
 			$subcriptions = core_kernel_subscriptions_Service::singleton()->getSubscriptions ($resource, $property, null);
@@ -626,7 +626,7 @@ class core_kernel_persistence_subscription_Resource
         // section 127-0-1-1--499759bc:12f72c12020:-8000:0000000000001437 begin
 
 		if(defined('ENABLE_SUBSCRIPTION') && ENABLE_SUBSCRIPTION
-		&& $resource->uriResource != CLASS_SUBCRIPTION 	&& $resource->uriResource != CLASS_MASK){
+		&& $resource->getUri() != CLASS_SUBCRIPTION 	&& $resource->getUri() != CLASS_MASK){
 			$returnValue = true;
 		}
 

@@ -167,7 +167,7 @@ class core_kernel_persistence_PropertyProxy
         if (is_null($lgDependent)) {
                 $returnValue = false;
         } else {
-                $returnValue = ($lgDependent->uriResource == GENERIS_TRUE);
+                $returnValue = ($lgDependent->getUri() == GENERIS_TRUE);
         }
         // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014DB end
 
@@ -203,7 +203,7 @@ class core_kernel_persistence_PropertyProxy
 			$returnValue = false;
         }
         else{
-			$returnValue = ($multiple->uriResource == GENERIS_TRUE);
+			$returnValue = ($multiple->getUri() == GENERIS_TRUE);
         }
         // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014DD end
 
@@ -360,7 +360,7 @@ class core_kernel_persistence_PropertyProxy
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F63 begin
 		
-        if(!isset(core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo[$resource->uriResource]) 
+        if(!isset(core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo[$resource->getUri()]) 
         || core_kernel_persistence_PersistenceProxy::isForcedMode()){
         	
 	    	$impls = $this->getAvailableImpl($params);
@@ -375,13 +375,13 @@ class core_kernel_persistence_PropertyProxy
                                         return $delegate;
                                 }
 
-                                core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo[$resource->uriResource] = $delegate;
+                                core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo[$resource->getUri()] = $delegate;
                                 break;
                         }
                 }
         }
 
-		$returnValue = core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo[$resource->uriResource];
+		$returnValue = core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo[$resource->getUri()];
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F63 end
 

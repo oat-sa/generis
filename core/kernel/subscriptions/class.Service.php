@@ -121,14 +121,14 @@ class core_kernel_subscriptions_Service
 		$returnValue = array();
 
 		// section 127-0-1-1--5f676de6:12cea59c091:-8000:000000000000141B begin
-		$topClassArray = isset($this->subscriptionArray[$subscription->uriResource]['object']) ? $this->subscriptionArray[$subscription->uriResource]['object']  : null;
+		$topClassArray = isset($this->subscriptionArray[$subscription->getUri()]['object']) ? $this->subscriptionArray[$subscription->getUri()]['object']  : null;
 
-		if($topClassArray != null && in_array($topClass->uriResource,$topClassArray)){
+		if($topClassArray != null && in_array($topClass->getUri(),$topClassArray)){
 
 			$mask = $subscription->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_SUBCRIPTION_MASK));
 			$subscriptionUrl = $subscription->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_SUBCRIPTION_URL));
 				
-			$url = $subscriptionUrl . 'RestClass/instances?clazz=' .  urlencode($topClass->uriResource);
+			$url = $subscriptionUrl . 'RestClass/instances?clazz=' .  urlencode($topClass->getUri());
 			$fileContent = file_get_contents($url);
 			$xml = new DOMDocument('1.0', 'UTF-8');
 			$xml->loadXML($fileContent);
@@ -142,7 +142,7 @@ class core_kernel_subscriptions_Service
 				$containerColleciton->add($resource);
 				$this->addSubject($containerColleciton,$subscription);
 				if($mask instanceof core_kernel_classes_Resource){
-					$mask->setPropertyValue(new core_kernel_classes_Property(PROPERTY_MASK_SUBJECT),$resource->uriResource);
+					$mask->setPropertyValue(new core_kernel_classes_Property(PROPERTY_MASK_SUBJECT),$resource->getUri());
 
 				}
 
@@ -228,14 +228,14 @@ class core_kernel_subscriptions_Service
 	{
 		// section -64--88-0-10-6435a2f4:12cf4ccb9f8:-8000:00000000000013CF begin
 		foreach ($subjects->getIterator() as $subject){
-			if(!isset($this->subjectArray[$subject->uriResource])){
-				$this->subjectArray[$subject->uriResource] = array();
+			if(!isset($this->subjectArray[$subject->getUri()])){
+				$this->subjectArray[$subject->getUri()] = array();
 			}
-			$this->subjectArray[$subject->uriResource][] = $subscription->uriResource;
-			if(!isset($this->subscriptionArray[$subscription->uriResource]['subject'])){
-				$this->subscriptionArray[$subscription->uriResource]['subject'] =  array();
+			$this->subjectArray[$subject->getUri()][] = $subscription->getUri();
+			if(!isset($this->subscriptionArray[$subscription->getUri()]['subject'])){
+				$this->subscriptionArray[$subscription->getUri()]['subject'] =  array();
 			}
-			$this->subscriptionArray[$subscription->uriResource]['subject'][] = $subject->uriResource;
+			$this->subscriptionArray[$subscription->getUri()]['subject'][] = $subject->getUri();
 		}
 		// section -64--88-0-10-6435a2f4:12cf4ccb9f8:-8000:00000000000013CF end
 	}
@@ -253,14 +253,14 @@ class core_kernel_subscriptions_Service
 	{
 		// section -64--88-0-10-6435a2f4:12cf4ccb9f8:-8000:00000000000013D1 begin
 		foreach ($predicates->getIterator() as $predicate){
-			if(!isset($this->predicateArray[$predicate->uriResource])){
-				$this->predicateArray[$predicate->uriResource] = array();
+			if(!isset($this->predicateArray[$predicate->getUri()])){
+				$this->predicateArray[$predicate->getUri()] = array();
 			}
-			$this->predicateArray[$predicate->uriResource][] = $subscription->uriResource;
-			if(!isset($this->subscriptionArray[$subscription->uriResource]['predicate'])){
-				$this->subscriptionArray[$subscription->uriResource]['predicate'] =  array();
+			$this->predicateArray[$predicate->getUri()][] = $subscription->getUri();
+			if(!isset($this->subscriptionArray[$subscription->getUri()]['predicate'])){
+				$this->subscriptionArray[$subscription->getUri()]['predicate'] =  array();
 			}
-			$this->subscriptionArray[$subscription->uriResource]['predicate'][] = $predicate->uriResource;
+			$this->subscriptionArray[$subscription->getUri()]['predicate'][] = $predicate->getUri();
 		}
 
 		// section -64--88-0-10-6435a2f4:12cf4ccb9f8:-8000:00000000000013D1 end
@@ -280,24 +280,24 @@ class core_kernel_subscriptions_Service
 		// section -64--88-0-10-6435a2f4:12cf4ccb9f8:-8000:00000000000013D3 begin
 		foreach ($objects->getIterator() as $object){
 			if($object instanceof core_kernel_classes_Resource){
-				if(!isset($this->objectArray[$object->uriResource])){
-					$this->objectArray[$object->uriResource] = array();
+				if(!isset($this->objectArray[$object->getUri()])){
+					$this->objectArray[$object->getUri()] = array();
 				}
-				$this->objectArray[$object->uriResource][] = $subscriptionInst->uriResource;
-				if(!isset($this->subscriptionArray[$subscriptionInst->uriResource]['object'])){
-					$this->subscriptionArray[$subscriptionInst->uriResource]['object'] =  array();
+				$this->objectArray[$object->getUri()][] = $subscriptionInst->getUri();
+				if(!isset($this->subscriptionArray[$subscriptionInst->getUri()]['object'])){
+					$this->subscriptionArray[$subscriptionInst->getUri()]['object'] =  array();
 				}
-				$this->subscriptionArray[$subscriptionInst->uriResource]['object'][] = $object->uriResource;
+				$this->subscriptionArray[$subscriptionInst->getUri()]['object'][] = $object->getUri();
 			}
 			if($object instanceof core_kernel_classes_Literal){
 				if(!isset($this->objectArray[$object->literal])){
 					$this->objectArray[$object->literal] = array();
 				}
-				$this->objectArray[$object->literal][] = $subscriptionInst->uriResource;
-				if(!isset($this->subscriptionArray[$subscriptionInst->uriResource]['object'])){
-					$this->subscriptionArray[$subscriptionInst->uriResource]['object'] =  array();
+				$this->objectArray[$object->literal][] = $subscriptionInst->getUri();
+				if(!isset($this->subscriptionArray[$subscriptionInst->getUri()]['object'])){
+					$this->subscriptionArray[$subscriptionInst->getUri()]['object'] =  array();
 				}
-				$this->subscriptionArray[$subscriptionInst->uriResource]['object'][] = $object->literal;
+				$this->subscriptionArray[$subscriptionInst->getUri()]['object'][] = $object->literal;
 			}
 		}
 		// section -64--88-0-10-6435a2f4:12cf4ccb9f8:-8000:00000000000013D3 end
@@ -319,16 +319,16 @@ class core_kernel_subscriptions_Service
 
 		// section -64--88-0-10-6435a2f4:12cf4ccb9f8:-8000:00000000000013DB begin
 		if($predicate != null && $object!=null) {
-			if(isset($this->predicateArray[$predicate->uriResource])){
-				if($object instanceof core_kernel_classes_Resource &&  isset($this->objectArray[$object->uriResource])
+			if(isset($this->predicateArray[$predicate->getUri()])){
+				if($object instanceof core_kernel_classes_Resource &&  isset($this->objectArray[$object->getUri()])
 				|| ($object instanceof core_kernel_classes_Literal && isset($this->objectArray[$object->literal]))) {
-					$returnValue = array_merge($returnValue,$this->predicateArray[$predicate->uriResource]);
+					$returnValue = array_merge($returnValue,$this->predicateArray[$predicate->getUri()]);
 				}
 			}
 		}
 		if($predicate != null && $subject!=null) {
-			if(isset($this->predicateArray[$predicate->uriResource]) && isset($this->subjectArray[$subject->uriResource]) ){
-				$returnValue = array_merge($returnValue,$this->predicateArray[$predicate->uriResource]);
+			if(isset($this->predicateArray[$predicate->getUri()]) && isset($this->subjectArray[$subject->getUri()]) ){
+				$returnValue = array_merge($returnValue,$this->predicateArray[$predicate->getUri()]);
 			}
 		}
 		// section -64--88-0-10-6435a2f4:12cf4ccb9f8:-8000:00000000000013DB end
@@ -351,16 +351,16 @@ class core_kernel_subscriptions_Service
 		$returnValue = array();
 
 		// section -64--88-0-10--63e3923:12cfa7bcdaf:-8000:00000000000013DB begin
-		$subjectArray = isset($this->subscriptionArray[$subscription->uriResource]['subject']) ? $this->subscriptionArray[$subscription->uriResource]['subject']  : null;
-		$predicateArray = isset($this->subscriptionArray[$subscription->uriResource]['predicate']) ? $this->subscriptionArray[$subscription->uriResource]['predicate']  : null;
-		if($subjectArray != null && in_array($instance->uriResource,$subjectArray)
-		&& $predicateArray!= null && in_array($property->uriResource,$predicateArray)){
+		$subjectArray = isset($this->subscriptionArray[$subscription->getUri()]['subject']) ? $this->subscriptionArray[$subscription->getUri()]['subject']  : null;
+		$predicateArray = isset($this->subscriptionArray[$subscription->getUri()]['predicate']) ? $this->subscriptionArray[$subscription->getUri()]['predicate']  : null;
+		if($subjectArray != null && in_array($instance->getUri(),$subjectArray)
+		&& $predicateArray!= null && in_array($property->getUri(),$predicateArray)){
 				
 			$subscriptionUrl = $subscription->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_SUBCRIPTION_URL));
 			$url = $subscriptionUrl .'RestResource/propertyValues?uri='
-			. urlencode($instance->uriResource)
+			. urlencode($instance->getUri())
 			. '&property='
-			.  urlencode($property->uriResource);
+			.  urlencode($property->getUri());
 				
 			$fileContent = file_get_contents($url);
 			$xml = new DOMDocument('1.0', 'UTF-8');

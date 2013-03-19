@@ -233,13 +233,13 @@ class core_kernel_classes_Property
         
         if(!is_null($class)){
         	foreach($this->getDomain()->getIterator() as $domainClass){
-        		if($class->uriResource == $domainClass->uriResource){
+        		if ($class->equals($domainClass)) {
         			$returnValue = true;
         			break;
         		}
         	}
         	if(!$returnValue){
-        		$this->setPropertyValue(new core_kernel_classes_Property(RDF_DOMAIN), $class->uriResource);
+        		$this->setPropertyValue(new core_kernel_classes_Property(RDF_DOMAIN), $class->getUri());
         		if(!is_null($this->domain)){
         			$this->domain->add($class);
         		}
@@ -348,7 +348,7 @@ class core_kernel_classes_Property
 				$returnValue = false;
 			}
 			else{
-				$returnValue = ($lgDependent->uriResource == GENERIS_TRUE);
+				$returnValue = ($lgDependent->getUri() == GENERIS_TRUE);
 			}
                 
         	$this->lgDependent = $returnValue;
@@ -398,7 +398,7 @@ class core_kernel_classes_Property
 				$returnValue = false;
 			}
 			else{
-				$returnValue = ($multiple->uriResource == GENERIS_TRUE);
+				$returnValue = ($multiple->getUri() == GENERIS_TRUE);
 			}
         	$this->multiple = $returnValue;
         }

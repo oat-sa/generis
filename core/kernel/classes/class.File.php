@@ -126,7 +126,7 @@ class core_kernel_classes_File
 	    $instance->setPropertyValue($filePathProp, $filePath);
 	    $instance->setPropertyValue($fileNameProp, $fileName);
 	    
-	    $returnValue = new core_kernel_classes_File($instance->uriResource);
+	    $returnValue = new core_kernel_classes_File($instance->getUri());
         
         // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:000000000000136C end
 

@@ -85,7 +85,7 @@ class core_kernel_classes_ContainerComparator
         	$returnValue = strcasecmp($o1->literal,$o2->literal);
         }
         else if($o1 instanceof core_kernel_classes_Resource && $o2 instanceof core_kernel_classes_Resource) {
-        	$returnValue = strcasecmp($o1->uriResource,$o2->uriResource);
+        	$returnValue = strcasecmp($o1->getUri(),$o2->getUri());
         }
         else {
            	throw new common_Exception('try to compared not implemented type');

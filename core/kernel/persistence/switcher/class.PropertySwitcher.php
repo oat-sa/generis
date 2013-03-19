@@ -153,20 +153,20 @@ bewteen a class and it's parent to retrieve the properties.
 				}
 				$lastLevelParents = array();
 				foreach($parentClasses as $parentClass){
-					if($parentClass->uriResource == RDF_CLASS){
+					if($parentClass->getUri() == RDF_CLASS){
 						continue;
 					}
-					if($parentClass->uriResource == $this->topClass->uriResource) {
-						$parents[$parentClass->uriResource] = $parentClass;	
+					if($parentClass->equals($this->topClass)) {
+						$parents[$parentClass->getUri()] = $parentClass;	
 						$top = true;
 						break;
 					}
 					
 					$allParentClasses = $parentClass->getParentClasses(true);
-					if(array_key_exists($this->topClass->uriResource, $allParentClasses)){
-						 $parents[$parentClass->uriResource] = $parentClass;
+					if(array_key_exists($this->topClass->getUri(), $allParentClasses)){
+						 $parents[$parentClass->getUri()] = $parentClass;
 					}
-					$lastLevelParents[$parentClass->uriResource] = $parentClass;
+					$lastLevelParents[$parentClass->getUri()] = $parentClass;
 				}
 			}while(!$top);
 		}
@@ -209,7 +209,7 @@ bewteen a class and it's parent to retrieve the properties.
     	}
     	
         foreach ($additionalProps as $additionalProp){
-        	$returnValue[$additionalProp->uriResource] = $additionalProp;
+        	$returnValue[$additionalProp->getUri()] = $additionalProp;
         }
     	
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001615 end
@@ -245,7 +245,7 @@ bewteen a class and it's parent to retrieve the properties.
 
                 $range = $property->getRange();
 
-                if(!is_null($range) && $range->uriResource != RDFS_LITERAL && !in_array($range->uriResource, $blackListedProps)){
+                if(!is_null($range) && $range->getUri() != RDFS_LITERAL && !in_array($range->getUri(), $blackListedProps)){
                         //constraint to the class that represents the range
 
                         $column['foreign'] = '_'.core_kernel_persistence_hardapi_Utils::getShortName($range);

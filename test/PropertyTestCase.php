@@ -36,7 +36,7 @@ class PropertyTestCase extends UnitTestCase{
 		$domainCollection = $this->object->getDomain();
 		$this->assertTrue($domainCollection instanceof core_kernel_classes_ContainerCollection  );
 		$domain = $domainCollection->get(0);
-		$this->assertEqual($domain->uriResource,RDF_PROPERTY);
+		$this->assertEqual($domain->getUri(),RDF_PROPERTY);
 		$this->assertEqual($domain->getLabel(),'Property');
 		$this->assertEqual($domain->getComment(),'The class of RDF properties.');
 	}
@@ -44,7 +44,7 @@ class PropertyTestCase extends UnitTestCase{
 	public function testGetRange(){
 		$range = $this->object->getRange();
 		$this->assertTrue($range instanceof core_kernel_classes_Class );
-		$this->assertEqual($range->uriResource,CLASS_WIDGET);
+		$this->assertEqual($range->getUri(),CLASS_WIDGET);
 		$this->assertEqual($range->getLabel(), 'Widget Class');
 		$this->assertEqual($range->getComment(), 'The class of all possible widgets');
 	}
@@ -52,7 +52,7 @@ class PropertyTestCase extends UnitTestCase{
 	public function testGetWidget(){
 		$widget = $this->object->getWidget();
 		$this->assertTrue($widget instanceof core_kernel_classes_Resource );
-		$this->assertEqual($widget->uriResource,WIDGET_COMBO);
+		$this->assertEqual($widget->getUri(),WIDGET_COMBO);
 		$this->assertEqual($widget->getLabel(), 'Drop down menu');
 		$this->assertEqual($widget->getComment(), 'In drop down menu, one may select 1 to N options');
 	}	

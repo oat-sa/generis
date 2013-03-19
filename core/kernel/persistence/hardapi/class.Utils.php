@@ -137,12 +137,12 @@ class core_kernel_persistence_hardapi_Utils
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:000000000000159D begin
     	if(!is_null($resource)){
     		
-    		if (isset(self::$shortNames[$resource->uriResource])){
-    			$returnValue = self::$shortNames[$resource->uriResource];
+    		if (isset(self::$shortNames[$resource->getUri()])){
+    			$returnValue = self::$shortNames[$resource->getUri()];
     		} else {
-    			$pos = strpos($resource->uriResource, '#');
-				$returnValue = self::getNamespaceId(substr($resource->uriResource, 0, $pos+1)) . substr($resource->uriResource, $pos+1);
-				self::$shortNames[$resource->uriResource] = $returnValue;
+    			$pos = strpos($resource->getUri(), '#');
+				$returnValue = self::getNamespaceId(substr($resource->getUri(), 0, $pos+1)) . substr($resource->getUri(), $pos+1);
+				self::$shortNames[$resource->getUri()] = $returnValue;
     		}
 		}
         
@@ -219,7 +219,7 @@ class core_kernel_persistence_hardapi_Utils
 		
 		if($hardRangeClassOnly){
 			$is_class_referenced = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($range);
-			if($range->uriResource!=RDFS_LITERAL && $is_class_referenced){
+			if($range->getUri()!=RDFS_LITERAL && $is_class_referenced){
 				$classLocations = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($range);
 				
 				if(isset($classLocations[0])){
@@ -287,7 +287,7 @@ class core_kernel_persistence_hardapi_Utils
         // section 127-0-1-1--4d72422d:1316c1e6091:-8000:000000000000162E begin
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
-        $selectQuery = 'SELECT id FROM "' . $tableName . '" WHERE uri = \'' . $resource->uriResource . '\'';
+        $selectQuery = 'SELECT id FROM "' . $tableName . '" WHERE uri = \'' . $resource->getUri() . '\'';
         $selectQuery = $dbWrapper->limitStatement($selectQuery, 1);
         $selectResult = $dbWrapper->query($selectQuery);
         try{
@@ -298,7 +298,7 @@ class core_kernel_persistence_hardapi_Utils
 	        }
         }
         catch (PDOException $e){
-        	throw new core_kernel_persistence_hardsql_Exception("Unable to get the id of the resource {$resource->uriResource} in the table '{$tableName}': " . $e->getMessage());
+        	throw new core_kernel_persistence_hardsql_Exception("Unable to get the id of the resource {$resource->getUri()} in the table '{$tableName}': " . $e->getMessage());
         }
         // section 127-0-1-1--4d72422d:1316c1e6091:-8000:000000000000162E end
 

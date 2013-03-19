@@ -73,7 +73,7 @@ class HardImplTestCase extends UnitTestCase {
 		
 		// Create the Movie class that extends the Work class. 
 		$this->targetMovieClass = $this->targetWorkClass->createSubClass('Movie', 'The Movie class');
-		$this->targetMovieClass = new core_kernel_classes_Class($this->targetMovieClass->uriResource);
+		$this->targetMovieClass = new core_kernel_classes_Class($this->targetMovieClass->getUri());
 		$this->assertTrue($this->targetMovieClass->isSubClassOf($this->targetWorkClass));
 		$this->assertEqual(count($this->targetWorkClass->getSubClasses()), 1);
 		
@@ -134,27 +134,27 @@ class HardImplTestCase extends UnitTestCase {
 		$this->assertTrue($this->targetMovieClass->exists());
 		
 		$this->assertTrue($this->targetWorkClass->isSubclassOf($this->taoClass));
-		$this->assertTrue($this->targetWorkClass->getOnePropertyValue($subClassOfProperty)->uriResource == $this->taoClass->uriResource);
+		$this->assertTrue($this->targetWorkClass->getOnePropertyValue($subClassOfProperty)->getUri() == $this->taoClass->getUri());
 		$this->assertTrue($referencer->isClassReferenced($this->targetWorkClass));
 		// Note for developers: data defining classes always remain in smooth mode.
 		// Thus, the delegation is always 'smooth'.
 		$this->assertFalse(is_a($proxy->getImpToDelegateTo($this->targetWorkClass), 'core_kernel_persistence_smoothsql_Class'));
 		
-		$this->assertTrue($this->targetAuthorProperty->getOnePropertyValue($domainProperty)->uriResource == $this->targetWorkClass->uriResource);
-		$this->assertTrue($this->targetAuthorProperty->getOnePropertyValue($rangeProperty)->uriResource == RDFS_LITERAL);
+		$this->assertTrue($this->targetAuthorProperty->getOnePropertyValue($domainProperty)->getUri() == $this->targetWorkClass->getUri());
+		$this->assertTrue($this->targetAuthorProperty->getOnePropertyValue($rangeProperty)->getUri() == RDFS_LITERAL);
 		
 		$this->assertTrue($this->targetMovieClass->isSubclassOf($this->targetWorkClass));
-		$this->assertTrue($this->targetMovieClass->getOnePropertyValue($subClassOfProperty)->uriResource == $this->targetWorkClass->uriResource);
+		$this->assertTrue($this->targetMovieClass->getOnePropertyValue($subClassOfProperty)->getUri() == $this->targetWorkClass->getUri());
 		$this->assertTrue($referencer->isClassReferenced($this->targetMovieClass));
 		
-		$this->assertTrue($this->targetProducerProperty->getOnePropertyValue($domainProperty)->uriResource == $this->targetMovieClass->uriResource);
-		$this->assertTrue($this->targetProducerProperty->getOnePropertyValue($rangeProperty)->uriResource == RDFS_LITERAL);
+		$this->assertTrue($this->targetProducerProperty->getOnePropertyValue($domainProperty)->getUri() == $this->targetMovieClass->getUri());
+		$this->assertTrue($this->targetProducerProperty->getOnePropertyValue($rangeProperty)->getUri() == RDFS_LITERAL);
 		
-		$this->assertTrue($this->targetActorsProperty->getOnePropertyValue($domainProperty)->uriResource == $this->targetMovieClass->uriResource);
-		$this->assertTrue($this->targetActorsProperty->getOnePropertyValue($rangeProperty)->uriResource == RDFS_LITERAL);
+		$this->assertTrue($this->targetActorsProperty->getOnePropertyValue($domainProperty)->getUri() == $this->targetMovieClass->getUri());
+		$this->assertTrue($this->targetActorsProperty->getOnePropertyValue($rangeProperty)->getUri() == RDFS_LITERAL);
 		
-		$this->assertTrue($this->targetRelatedMoviesProperty->getOnePropertyValue($domainProperty)->uriResource == $this->targetMovieClass->uriResource);
-		$this->assertTrue($this->targetRelatedMoviesProperty->getOnePropertyValue($rangeProperty)->uriResource == $this->targetMovieClass->uriResource);
+		$this->assertTrue($this->targetRelatedMoviesProperty->getOnePropertyValue($domainProperty)->getUri() == $this->targetMovieClass->getUri());
+		$this->assertTrue($this->targetRelatedMoviesProperty->getOnePropertyValue($rangeProperty)->getUri() == $this->targetMovieClass->getUri());
 		
 		$prop = new core_kernel_classes_Property($this->targetRelatedMoviesProperty);
 		$this->assertTrue($prop->isMultiple());
@@ -214,7 +214,7 @@ class HardImplTestCase extends UnitTestCase {
 		$work1PropertiesValues = $work1->getPropertiesValues(array($labelProperty, $this->targetAuthorProperty));
 		$this->assertEqual(count($work1PropertiesValues), 2);
 		$this->assertTrue(array_key_exists(RDFS_LABEL, $work1PropertiesValues));
-		$this->assertTrue(array_key_exists($this->targetAuthorProperty->uriResource, $work1PropertiesValues));
+		$this->assertTrue(array_key_exists($this->targetAuthorProperty->getUri(), $work1PropertiesValues));
 		$this->assertEqual($work1->getUsedLanguages($labelProperty), array(DEFAULT_LANG));
 		
 		// Test property (that doesn't exist) values for $work1.
@@ -796,12 +796,12 @@ class HardImplTestCase extends UnitTestCase {
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$true = new core_kernel_classes_Resource(GENERIS_TRUE);
 		
-		$this->object->setStatement($true->uriResource, RDFS_SEEALSO,'test1', '');
-		$this->object->setStatement($true->uriResource, RDFS_SEEALSO,'test2', '');
-		$this->object->setStatement($true->uriResource, RDFS_SEEALSO,'testing', 'EN');
-		$this->object->setStatement($true->uriResource, RDFS_SEEALSO,'essai', 'FR');
-		$this->object->setStatement($true->uriResource, RDFS_SEEALSO,'testung1', 'SE');
-		$this->object->setStatement($true->uriResource, RDFS_SEEALSO,'testung2', 'SE');
+		$this->object->setStatement($true->getUri(), RDFS_SEEALSO,'test1', '');
+		$this->object->setStatement($true->getUri(), RDFS_SEEALSO,'test2', '');
+		$this->object->setStatement($true->getUri(), RDFS_SEEALSO,'testing', 'EN');
+		$this->object->setStatement($true->getUri(), RDFS_SEEALSO,'essai', 'FR');
+		$this->object->setStatement($true->getUri(), RDFS_SEEALSO,'testung1', 'SE');
+		$this->object->setStatement($true->getUri(), RDFS_SEEALSO,'testung2', 'SE');
 		
 		// Get some propertyValues as if it was obtained by an SQL Statement.
 		// First test is made with the default language selected.
@@ -861,12 +861,12 @@ class HardImplTestCase extends UnitTestCase {
 		$session->setDataLanguage('');
 		
 		// Set back ontology to normal.
-		$this->object->removeStatement($true->uriResource,RDFS_SEEALSO,'test1', '');
-		$this->object->removeStatement($true->uriResource,RDFS_SEEALSO,'test2', '');
-		$this->object->removeStatement($true->uriResource,RDFS_SEEALSO,'testing', 'EN');
-		$this->object->removeStatement($true->uriResource,RDFS_SEEALSO,'essai', 'FR');
-		$this->object->removeStatement($true->uriResource,RDFS_SEEALSO,'testung1', 'SE');
-		$this->object->removeStatement($true->uriResource,RDFS_SEEALSO,'testung2', 'SE');
+		$this->object->removeStatement($true->getUri(),RDFS_SEEALSO,'test1', '');
+		$this->object->removeStatement($true->getUri(),RDFS_SEEALSO,'test2', '');
+		$this->object->removeStatement($true->getUri(),RDFS_SEEALSO,'testing', 'EN');
+		$this->object->removeStatement($true->getUri(),RDFS_SEEALSO,'essai', 'FR');
+		$this->object->removeStatement($true->getUri(),RDFS_SEEALSO,'testung1', 'SE');
+		$this->object->removeStatement($true->getUri(),RDFS_SEEALSO,'testung2', 'SE');
 	}
 	
 	public function testIdentifyFirstLanguage() {

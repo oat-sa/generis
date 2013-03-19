@@ -95,8 +95,8 @@ class core_kernel_versioning_subversion_Repository
 		$returnValue = (bool) false;
 
 		//if the system has already do its authentication to the repository, return the negociation result
-		if(isset(self::$authenticatedRepositories[$vcs->uriResource])){
-			$returnValue = self::$authenticatedRepositories[$vcs->uriResource];
+		if(isset(self::$authenticatedRepositories[$vcs->getUri()])){
+			$returnValue = self::$authenticatedRepositories[$vcs->getUri()];
 		}
 		//authenticate the system to the repository
 		else{
@@ -112,7 +112,7 @@ class core_kernel_versioning_subversion_Repository
 				$returnValue = true;
 			}
 		}
-		self::$authenticatedRepositories[$vcs->uriResource] = $returnValue;
+		self::$authenticatedRepositories[$vcs->getUri()] = $returnValue;
 
 		return (bool) $returnValue;
 	}
@@ -250,7 +250,7 @@ class core_kernel_versioning_subversion_Repository
 			$returnValue = $importFolder;
 		}
 		else{
-			$resourceToDelete = new core_kernel_classes_Resource($importFolder->uriResource);
+			$resourceToDelete = new core_kernel_classes_Resource($importFolder->getUri());
 			$resourceToDelete->delete();
 		}
 		

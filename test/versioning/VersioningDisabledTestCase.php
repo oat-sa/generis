@@ -94,7 +94,7 @@ class VersioningDisabledTestCase extends UnitTestCase {
 		
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryUrlProp), $this->repositoryUrl);
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryPathProp), $this->repositoryPath);
-		$this->assertEqual($repository->getOnePropertyValue($VersioningRepositoryTypeProp)->uriResource, $this->repositoryType);
+		$this->assertEqual($repository->getOnePropertyValue($VersioningRepositoryTypeProp)->getUri(), $this->repositoryType);
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryLoginProp), $this->repositoryLogin);
 		$this->assertEqual((string)$repository->getOnePropertyValue($VersioningRepositoryPasswordProp), $this->repositoryPassword);
 		

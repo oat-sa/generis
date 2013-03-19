@@ -88,7 +88,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 
                 $this->assertFalse(empty($types));
                 $theType = array_pop($types);
-                $this->assertEqual($theType->uriResource, 'http://www.tao.lu/Ontologies/TAO.rdf#Languages');
+                $this->assertEqual($theType->getUri(), 'http://www.tao.lu/Ontologies/TAO.rdf#Languages');
         }
         
         public function testGetLabel(){
@@ -127,7 +127,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 
                 foreach($typesCollection->getIterator() as $type){
                         $this->assertIsA($type, 'core_kernel_classes_Resource');
-                        $this->assertEqual($type->uriResource, 'http://www.tao.lu/Ontologies/TAO.rdf#Languages');
+                        $this->assertEqual($type->getUri(), 'http://www.tao.lu/Ontologies/TAO.rdf#Languages');
                 }
                 
         }
@@ -137,7 +137,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 $property1 = new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOtestCase.rdf#Property1');
                 $value1 = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOtestCase.rdf#Resource1_'.time());
                 
-                $this->assertTrue($resource->setPropertyValue($property1, $value1->uriResource));
+                $this->assertTrue($resource->setPropertyValue($property1, $value1->getUri()));
                 $this->assertTrue($resource->removePropertyValues($property1));
                 $this->assertEqual(count($resource->getPropertyValues($property1)), 0);
                 
@@ -244,8 +244,8 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 $this->assertEqual(count($foundSubclasses), 1);
                 
                 //one identical triple allowed by language.
-//                $this->assertTrue($subSubClass->setPropertyValue(new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOTestCase1.rdf#Prop1'), $subclass->uriResource));
-//                $this->assertTrue($subSubClass->setPropertyValue(new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOTestCase1.rdf#Prop1'), $subclass->uriResource));
+//                $this->assertTrue($subSubClass->setPropertyValue(new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOTestCase1.rdf#Prop1'), $subclass->getUri()));
+//                $this->assertTrue($subSubClass->setPropertyValue(new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOTestCase1.rdf#Prop1'), $subclass->getUri()));
 //                $this->assertTrue($subSubClass->setPropertyValue(new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOTestCase1.rdf#Prop1'), 'hello'));
 //                $this->assertTrue($subSubClass->setPropertyValueByLg(new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOTestCase1.rdf#Prop1'), 'hello', 'EN'));
                 
@@ -253,7 +253,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 $parentClasses = $subSubClass->getParentClasses();
                 $this->assertEqual(count($parentClasses), 1);
                 $theParentClass = array_pop($parentClasses);
-                $this->assertEqual($theParentClass->uriResource, $subclass->uriResource);
+                $this->assertEqual($theParentClass->getUri(), $subclass->getUri());
                 
                 $this->assertTrue($subSubClass->delete());
                 $this->assertTrue($subclass->delete());
@@ -288,7 +288,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 
                 $this->assertIsA($newInstance1, 'core_kernel_classes_Resource');
                 $this->assertEqual($subclass2->countInstances(), 1);
-                $this->assertNotEqual($newInstance1->uriResource, $newInstance2->uriResource);
+                $this->assertNotEqual($newInstance1->getUri(), $newInstance2->getUri());
                 $this->assertEqual($newInstance1->getLabel(), $newInstance2->getLabel());
                 
                 $this->assertTrue($newInstance1->delete());
@@ -310,13 +310,13 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 
                 $instance->setPropertyValue($prop, 'comment1');
                 $instance->setPropertyValueByLg($prop, 'comment2', 'EN');
-                $instance->setPropertyValue($prop2, $instance1->uriResource);
-                $instance->setPropertyValueByLg($prop2, $instance2->uriResource, 'en');
+                $instance->setPropertyValue($prop2, $instance1->getUri());
+                $instance->setPropertyValueByLg($prop2, $instance2->getUri(), 'en');
                 $instance->setPropertyValue($prop3, $complexStringValue);
                 
                 $propertyFilters = array(
-                    $prop->uriResource => 'comment1',
-                    $prop2->uriResource => $instance1->uriResource
+                    $prop->getUri() => 'comment1',
+                    $prop2->getUri() => $instance1->getUri()
                 );
                 //like(true), lang (''), chaining (or/and), recursive(false)
                 $options = array('like'=>false);
@@ -327,8 +327,8 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 
                 
                 $propertyFilters = array(
-                    $prop->uriResource => 'comment2',
-                    $prop2->uriResource => $instance1->uriResource
+                    $prop->getUri() => 'comment2',
+                    $prop2->getUri() => $instance1->getUri()
                 );
                 $options = array('like'=>false, 'lang' => 'en');
                 $foundInstances = $class->searchInstances($propertyFilters, $options);
@@ -336,8 +336,8 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 
                 
                 $propertyFilters = array(
-                    $prop->uriResource => 'ent2',
-                    $prop2->uriResource => $instance1->uriResource
+                    $prop->getUri() => 'ent2',
+                    $prop2->getUri() => $instance1->getUri()
                 );
                 $options = array('like'=>true, 'lang' => 'en');
                 $foundInstances = $class->searchInstances($propertyFilters, $options);
@@ -346,7 +346,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 
                 
                 $propertyFilters = array(
-                    $prop->uriResource => 'comment1'
+                    $prop->getUri() => 'comment1'
                 );
                 $options = array('like'=>false, 'lang' => 'en');
                 $foundInstances = $class->searchInstances($propertyFilters, $options);
@@ -355,8 +355,8 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 
                 
                 $propertyFilters = array(
-                    $prop->uriResource => 'comment2',
-                    $prop2->uriResource => $instance2->uriResource
+                    $prop->getUri() => 'comment2',
+                    $prop2->getUri() => $instance2->getUri()
                 );
                 $options = array('like'=>false, 'lang' => 'en');
                 $foundInstances = $class->searchInstances($propertyFilters, $options);
@@ -365,7 +365,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 
                 
                 $propertyFilters = array(
-                    $prop3->uriResource => $complexStringValue
+                    $prop3->getUri() => $complexStringValue
                 );
                 $options = array();
                 $foundInstances = $class->searchInstances($propertyFilters, $options);
@@ -393,7 +393,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
                 $newSuperUser = $class->createInstance('SuperUser', 'super user created during the Virtuoso Unit Test', '#superUser');
                 
                 $this->assertIsA($newSuperUser, 'core_kernel_classes_Resource');
-                $this->assertEqual($newSuperUser->uriResource, $superUserUri);
+                $this->assertEqual($newSuperUser->getUri(), $superUserUri);
                 
                 $newSuperUser->setPropertiesValues(array(
                         'http://www.tao.lu/Ontologies/generis.rdf#login' => 'tao',

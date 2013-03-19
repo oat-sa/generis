@@ -294,10 +294,10 @@ class core_kernel_classes_Class
 		$rootNode = $classNode->setInstance($this);
 
 		//links the rootNode with the class
-		$rootNode->setPropertyValue(new core_kernel_classes_Property(PROPERTY_REL_CLASS), $this->uriResource);
+		$rootNode->setPropertyValue(new core_kernel_classes_Property(PROPERTY_REL_CLASS), $this->getUri());
 			
 		//links the hyperclass with this node as rootnode
-		$hyperClass->setPropertyValue(new core_kernel_classes_Property(PROPERTY_ROOTNODE), $rootNode->uriResource);
+		$hyperClass->setPropertyValue(new core_kernel_classes_Property(PROPERTY_ROOTNODE), $rootNode->getUri());
 
 
 
@@ -316,10 +316,10 @@ class core_kernel_classes_Class
 			$nodeAttribute->setPropertyValue(new core_kernel_classes_Property(PROPERTY_IS_EDITABLE), "http://www.tao.lu/Ontologies/generis.rdf#True");
 
 			//links the related property to this nodeattribute
-			$nodeAttribute->setPropertyValue(new core_kernel_classes_Property(PROPERTY_REL_PROPERTY), $property->uriResource);
+			$nodeAttribute->setPropertyValue(new core_kernel_classes_Property(PROPERTY_REL_PROPERTY), $property->getUri());
 
 			//links the rootNode with this NodeAttribute
-			$rootNode->setPropertyValue(new core_kernel_classes_Property(PROPERTY_NODE_ATTRIBUTES), $nodeAttribute->uriResource);
+			$rootNode->setPropertyValue(new core_kernel_classes_Property(PROPERTY_NODE_ATTRIBUTES), $nodeAttribute->getUri());
 
 
 		}

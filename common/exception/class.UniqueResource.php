@@ -89,7 +89,7 @@ class common_exception_UniqueResource
         // section 127-0-1-1-602f558a:134cbda6031:-8000:00000000000018FA begin
         
         if(empty($message)){
-            $message = 'The resource ('.$resource->uriResource.') should be unique';
+            $message = 'The resource ('.$resource->getUri().') should be unique';
         }
         parent::__construct($message);
         

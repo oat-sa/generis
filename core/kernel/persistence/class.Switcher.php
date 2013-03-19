@@ -109,7 +109,7 @@ class core_kernel_persistence_Switcher
         common_Logger::i("Unhardifying class ${classLabel}", 'GENERIS');
         
 		if (defined ("DEBUG_PERSISTENCE") && DEBUG_PERSISTENCE){
-			var_dump('unhardify '.$class->uriResource);
+			var_dump('unhardify '.$class->getUri());
 		}
 
 		// Check if the class has been hardened
@@ -122,7 +122,7 @@ class core_kernel_persistence_Switcher
 		$classLocations = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($class);
 		$topClass = null;
 		if (count($classLocations)>1){
-			throw new core_kernel_persistence_hardapi_Exception("Try to unhardify the class {$class->uriResource} which has multiple locations");
+			throw new core_kernel_persistence_hardapi_Exception("Try to unhardify the class {$class->getUri()} which has multiple locations");
 		}
 		else {
 			$topClass = new core_kernel_classes_Class($classLocations[0]['topClass']);
@@ -178,11 +178,11 @@ class core_kernel_persistence_Switcher
 
 				// Create instance in the smooth implementation
 				core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
-				$class->createInstance('', '', $instance->uriResource);
+				$class->createInstance('', '', $instance->getUri());
 				// set types to the newly created instance
 				foreach ($types as $type) {
 
-					if ($type->uriResource != $class->uriResource) {
+					if (!$type->equals($class)) {
 						$instance->setType($type);
 					}
 				}
@@ -205,8 +205,8 @@ class core_kernel_persistence_Switcher
 								AND "'.$tableName.'Props"."property_uri" = ?';
 						$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 						$sqlResult = $dbWrapper->query($sqlQuery, array(
-						$instance->uriResource,
-						$property->uriResource
+						$instance->getUri(),
+						$property->getUri()
 						));
 						if ($sqlResult->errorCode() !== '00000') {
 							throw new core_kernel_persistence_hardapi_Exception("unable to unhardify : " . $dbWrapper->errorMessage());
@@ -249,10 +249,10 @@ class core_kernel_persistence_Switcher
 			}
 
 			//record decompiled instances number
-			if(isset($this->decompiledClasses[$class->uriResource])){
-				$this->decompiledClasses[$class->uriResource] += $count;
+			if(isset($this->decompiledClasses[$class->getUri()])){
+				$this->decompiledClasses[$class->getUri()] += $count;
 			}else{
-				$this->decompiledClasses[$class->uriResource] = $count;
+				$this->decompiledClasses[$class->getUri()] = $count;
 			}
 
 			//update instance array and count value
@@ -315,15 +315,15 @@ class core_kernel_persistence_Switcher
         common_Logger::i("Hardifying class ${classLabel}", array("GENERIS"));
 
 		if (defined ("DEBUG_PERSISTENCE") && DEBUG_PERSISTENCE){
-			if (in_array($class->uriResource, self::$debug_tables)){
+			if (in_array($class->getUri(), self::$debug_tables)){
 				return;
 			}
-			var_dump('hardify '.$class->uriResource);
-			self::$debug_tables[] = $class->uriResource;
+			var_dump('hardify '.$class->getUri());
+			self::$debug_tables[] = $class->getUri();
 			$countStatement = $this->countStatements();
 		}
 
-		if(in_array($class->uriResource, self::$blackList)){
+		if(in_array($class->getUri(), self::$blackList)){
 			return $returnValue;
 		}
 
@@ -372,11 +372,11 @@ class core_kernel_persistence_Switcher
 		$columns = $ps->getTableColumns($additionalProperties, self::$blackList);
 
 		//init the count value in hardened classes:
-		if(isset($this->hardenedClasses[$class->uriResource])){
+		if(isset($this->hardenedClasses[$class->getUri()])){
 		    core_kernel_persistence_PersistenceProxy::restoreImplementation();
 			return true;//already being compiled
 		}else{
-			$this->hardenedClasses[$class->uriResource] = 0;
+			$this->hardenedClasses[$class->getUri()] = 0;
 		}
 
 		// Treat foreign classes of the current class
@@ -452,7 +452,7 @@ class core_kernel_persistence_Switcher
 					$resource->delete();
 					core_kernel_persistence_PersistenceProxy::restoreImplementation();
 				}
-				$row = array('uri' => $resource->uriResource);
+				$row = array('uri' => $resource->getUri());
 				foreach($properties as $property){
 					$propValue = $resource->getOnePropertyValue($property);
 					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propValue;
@@ -469,7 +469,7 @@ class core_kernel_persistence_Switcher
 				if($rmSources){
 					//remove exported resources in smooth sql, if required:
 					if (!$resource->delete()){//@TODO : modified resource::delete() because resource not in local modelId cannot be deleted
-						$notDeletedInstances[] = $resource->uriResource;
+						$notDeletedInstances[] = $resource->getUri();
 					}
 				}
 			}
@@ -480,10 +480,10 @@ class core_kernel_persistence_Switcher
 			}
 
 			//record hardened instances number
-			if(isset($this->hardenedClasses[$class->uriResource])){
-				$this->hardenedClasses[$class->uriResource] += $count;
+			if(isset($this->hardenedClasses[$class->getUri()])){
+				$this->hardenedClasses[$class->getUri()] += $count;
 			}else{
-				$this->hardenedClasses[$class->uriResource] = $count;
+				$this->hardenedClasses[$class->getUri()] = $count;
 			}
 
 			//update instance array and count value

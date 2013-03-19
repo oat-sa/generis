@@ -114,7 +114,7 @@ class core_kernel_rules_Operation
         if(empty($this->firstOperation)){
         	$property = new core_kernel_classes_Property(PROPERTY_OPERATION_FIRST_OP);
         	$resource = $this->getUniquePropertyValue($property);
-        	$this->firstOperation = new core_kernel_rules_Term($resource->uriResource);
+        	$this->firstOperation = new core_kernel_rules_Term($resource->getUri());
         }
         $returnValue = $this->firstOperation;
         // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000E23 end
@@ -137,7 +137,7 @@ class core_kernel_rules_Operation
         if(empty($this->secondOperation)){
         	$property = new core_kernel_classes_Property(PROPERTY_OPERATION_SECND_OP);
         	$resource = $this->getUniquePropertyValue($property);
-        	$this->secondOperation = new core_kernel_rules_Term($resource->uriResource);
+        	$this->secondOperation = new core_kernel_rules_Term($resource->getUri());
         }
         $returnValue = $this->secondOperation;
         // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000E25 end
@@ -178,11 +178,11 @@ class core_kernel_rules_Operation
     public function evaluate($variable = array())
     {
         // section 10-13-1--99-1a35566c:11edfbb4d4b:-8000:0000000000000F3A begin
-        common_Logger::i('Evaluating Operation uri : '. $this->uriResource, array('Generis Operation'));
+        common_Logger::i('Evaluating Operation uri : '. $this->getUri(), array('Generis Operation'));
         common_Logger::i('Evaluating Operation name : '. $this->getLabel(), array('Generis Operation'));
         
         $operator = $this->getOperator();
-        common_Logger::d('Operator uri: '. $operator->uriResource, array('Generis Operation'));
+        common_Logger::d('Operator uri: '. $operator->getUri(), array('Generis Operation'));
         common_Logger::d('Operator name: '. $operator->getLabel(), array('Generis Operation'));         
 
 	    $firstPart = $this->getFirstOperation()->evaluate($variable);
@@ -248,7 +248,7 @@ class core_kernel_rules_Operation
     {
         // section 10-13-1--99-1a35566c:11edfbb4d4b:-8000:0000000000000F43 begin
         
-        switch ($operator->uriResource) {
+        switch ($operator->getUri()) {
         	case INSTANCE_OPERATOR_ADD: {
         		$returnValue = new core_kernel_classes_Literal($first->literal + $second->literal);
         		break;

@@ -116,12 +116,12 @@ class core_kernel_rules_Expression
 
         // section 10-13-1--99-6bb5697e:11bda1bbfa6:-8000:0000000000001349 begin
         
-        common_Logger::i('Evaluating Expression uri: '. $this->uriResource, array('Generis Expression'));
+        common_Logger::i('Evaluating Expression uri: '. $this->getUri(), array('Generis Expression'));
         common_Logger::i('Evaluating Expression name: '. $this->getLabel(), array('Generis Expression'));
-		if ($this->uriResource == INSTANCE_EXPRESSION_TRUE) {
+		if ($this->getUri() == INSTANCE_EXPRESSION_TRUE) {
 			return true;
 		}
-    	if ($this->uriResource == INSTANCE_EXPRESSION_FALSE) {
+    	if ($this->getUri() == INSTANCE_EXPRESSION_FALSE) {
 			return false;
 		}
 		$returnValue = $this->expEval($variable);
@@ -187,7 +187,7 @@ class core_kernel_rules_Expression
         $property = new core_kernel_classes_Property(PROPERTY_TERMINAL_EXPRESSION);
         $propertyValue = $this->getUniquePropertyValue($property);
         if ($propertyValue instanceof core_kernel_classes_Resource ) {
-       		$returnValue = new core_kernel_rules_Term($propertyValue->uriResource );
+       		$returnValue = new core_kernel_rules_Term($propertyValue->getUri() );
         	$returnValue->debug = __METHOD__;	
         }
         else {
@@ -212,7 +212,7 @@ class core_kernel_rules_Expression
         // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DE3 begin
         if(empty($this->firstExpression)){
         	$property = new core_kernel_classes_Property(PROPERTY_FIRST_EXPRESSION);
-			$this->firstExpression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->uriResource);
+			$this->firstExpression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->getUri());
         }
 		$returnValue = $this->firstExpression;
         // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DE3 end
@@ -234,7 +234,7 @@ class core_kernel_rules_Expression
         // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DE5 begin
         if(empty($this->secondExpression)){
 	        $property = new core_kernel_classes_Property(PROPERTY_SECOND_EXPRESSION);
-			$this->secondExpression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->uriResource);
+			$this->secondExpression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->getUri());
         }
         $returnValue = $this->secondExpression;
         // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DE5 end
@@ -256,16 +256,16 @@ class core_kernel_rules_Expression
 		$terminalExpression = $this->getTerminalExpression();
 		
 
-    	if ($terminalExpression->uriResource == INSTANCE_EMPTY_TERM_URI){
+    	if ($terminalExpression->getUri() == INSTANCE_EMPTY_TERM_URI){
 			$firstPart = $this->getFirstExpression()->expEval($variable) ;
 			
-			if($this->getLogicalOperator()->uriResource == INSTANCE_AND_OPERATOR) {
+			if($this->getLogicalOperator()->getUri() == INSTANCE_AND_OPERATOR) {
 				if ($firstPart == false) {
 					common_Logger::i('CUT : first Expression == FALSE and OPERATOR = AND', array('Generis Expression'));
 					return false;
 				}
 			}
-			if($this->getLogicalOperator()->uriResource == INSTANCE_OR_OPERATOR) {
+			if($this->getLogicalOperator()->getUri() == INSTANCE_OR_OPERATOR) {
 
 				if ($firstPart == true) {
 					common_Logger::i('CUT : first Expression == TRUE and OPERATOR = OR', array('Generis Expression'));
@@ -316,7 +316,7 @@ class core_kernel_rules_Expression
 					
 					//TODO exist unique need to be added
 					
-					if ($this->getLogicalOperator()->uriResource != INSTANCE_DIFFERENT_OPERATOR_URI)
+					if ($this->getLogicalOperator()->getUri() != INSTANCE_DIFFERENT_OPERATOR_URI)
 					{
 						$tempResult = $tempResult || $this->operatorEval($container,$secondPart);
 					}
@@ -352,7 +352,7 @@ class core_kernel_rules_Expression
 			else {
 				common_Logger::d('Both part are boolean', array('Generis Expression'));
 			
-				switch($this->getLogicalOperator()->uriResource) {
+				switch($this->getLogicalOperator()->getUri()) {
 					case INSTANCE_OR_OPERATOR : {
 						$returnValue = $firstPart || $secondPart ;
 						
@@ -532,16 +532,16 @@ class core_kernel_rules_Expression
 
         // section 10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EA0 begin
         if ($firstPart instanceof core_kernel_classes_Resource ) {
-        	$firstPart = new core_kernel_classes_Literal($firstPart->uriResource);
+        	$firstPart = new core_kernel_classes_Literal($firstPart->getUri());
 		}
         if ($secondPart instanceof core_kernel_classes_Resource ) {
-       		$secondPart = new core_kernel_classes_Literal($secondPart->uriResource);
+       		$secondPart = new core_kernel_classes_Literal($secondPart->getUri());
         }
         common_Logger::d('First Value : '. $firstPart->literal, array('Generis Expression'));
         common_Logger::d('Second Value : '. $secondPart->literal, array('Generis Expression'));
         common_Logger::d('Operator : '. $this->getLogicalOperator()->getLabel(), array('Generis Expression'));
         
-        switch($this->getLogicalOperator()->uriResource) {
+        switch($this->getLogicalOperator()->getUri()) {
 			case INSTANCE_EQUALS_OPERATOR_URI : {
 				$returnValue = $this->evalEquals($firstPart,$secondPart);
 				break;

@@ -286,7 +286,7 @@ class core_kernel_persistence_virtuoso_Property
         $returnValue = (bool) false;
 
         // section 127-0-1-1--3a4c22:13104bcfe8d:-8000:00000000000022FA begin
-        list($NS, $id) = explode('#', $resource->uriResource);
+        list($NS, $id) = explode('#', $resource->getUri());
         if(isset($id) && !empty($id)){
                 
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();

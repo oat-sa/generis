@@ -96,14 +96,14 @@ class ClassTestCase extends UnitTestCase {
 		$expectedResult = array (CLASS_GENERIS_RESOURCE , RDF_RESOURCE);
 		foreach ($indirectParentClasses  as $parentClass) {
 			$this->assertIsA($parentClass,'core_kernel_classes_Class');	
-			$this->assertTrue(in_array($parentClass->uriResource,$expectedResult));
+			$this->assertTrue(in_array($parentClass->getUri(),$expectedResult));
 		}
 		
 		$directParentClass = $class->getParentClasses(); 
 		$this->assertTrue(count($directParentClass) == 1);
 		foreach ($directParentClass  as $parentClass) {
 			$this->assertIsA($parentClass,'core_kernel_classes_Class');	
-			$this->assertEqual($parentClass->uriResource, CLASS_GENERIS_RESOURCE); 
+			$this->assertEqual($parentClass->getUri(), CLASS_GENERIS_RESOURCE); 
 		}
 
 	}
@@ -120,14 +120,14 @@ class ClassTestCase extends UnitTestCase {
 		foreach ($properties as $property) {
 			
 			$this->assertTrue($property instanceof core_kernel_classes_Property);
-			$this->assertTrue(in_array($property->uriResource,$expectedResult));
-			if ($property->uriResource === RDF_FIRST) {
-				$this->assertEqual($property->getRange()->uriResource, RDF_RESOURCE);
+			$this->assertTrue(in_array($property->getUri(),$expectedResult));
+			if ($property->getUri() === RDF_FIRST) {
+				$this->assertEqual($property->getRange()->getUri(), RDF_RESOURCE);
 				$this->assertEqual($property->getLabel(),'first');
 				$this->assertEqual($property->getComment(),'The first item in the subject RDF list.');		
 			}
-			if ($property->uriResource === RDF_REST) {
-				$this->assertEqual($property->getRange()->uriResource, RDF_LIST);
+			if ($property->getUri() === RDF_REST) {
+				$this->assertEqual($property->getRange()->getUri(), RDF_LIST);
 				$this->assertEqual($property->getLabel(),'rest');
 				$this->assertEqual($property->getComment(),'The rest of the subject RDF list after the first item.');		
 			}
@@ -157,23 +157,23 @@ class ClassTestCase extends UnitTestCase {
  		foreach ($instances as $k=>$instance) {
  			$this->assertTrue($instance instanceof core_kernel_classes_Resource );
  						
- 			if ($instance->uriResource === WIDGET_COMBO) {
+ 			if ($instance->getUri() === WIDGET_COMBO) {
  				$this->assertEqual($instance->getLabel(),'Drop down menu' );
  				$this->assertEqual($instance->getComment(),'In drop down menu, one may select 1 to N options' );
  			}
- 		 	if ($instance->uriResource === WIDGET_RADIO) {
+ 		 	if ($instance->getUri() === WIDGET_RADIO) {
  				$this->assertEqual($instance->getLabel(),'Radio button' );
  				$this->assertEqual($instance->getComment(),'In radio boxes, one may select exactly one option' );
  			}
- 		 	if ($instance->uriResource === WIDGET_CHECK) {
+ 		 	if ($instance->getUri() === WIDGET_CHECK) {
  				$this->assertEqual($instance->getLabel(),'Check box' );
  				$this->assertEqual($instance->getComment(),'In check boxes, one may select 0 to N options' );
  			}
- 		  	if ($instance->uriResource === WIDGET_FTE) {
+ 		  	if ($instance->getUri() === WIDGET_FTE) {
  				$this->assertEqual($instance->getLabel(),'A Text Box' );
  				$this->assertEqual($instance->getComment(),'A particular text box' );
  			}
- 			if ($instance->uriResource === $subclassInstance->uriResource){
+ 			if ($instance->getUri() === $subclassInstance->getUri()){
  				$this->assertEqual($instance->getLabel(),'test3' );
  				$this->assertEqual($instance->getComment(),'comment3' );
  			}			
@@ -183,27 +183,27 @@ class ClassTestCase extends UnitTestCase {
  		$this->assertTrue(count($instances2)  > 0);
  		foreach ($instances2 as $k=>$instance) {
  			$this->assertTrue($instance instanceof core_kernel_classes_Resource );		
- 			if ($instance->uriResource === WIDGET_COMBO) {
+ 			if ($instance->getUri() === WIDGET_COMBO) {
  				$this->assertEqual($instance->getLabel(),'Drop down menu' );
  				$this->assertEqual($instance->getComment(),'In drop down menu, one may select 1 to N options' );
  			}
- 		 	if ($instance->uriResource === WIDGET_RADIO) {
+ 		 	if ($instance->getUri() === WIDGET_RADIO) {
  				$this->assertEqual($instance->getLabel(),'Radio button' );
  				$this->assertEqual($instance->getComment(),'In radio boxes, one may select exactly one option' );
  			}
- 		 	if ($instance->uriResource === WIDGET_CHECK) {
+ 		 	if ($instance->getUri() === WIDGET_CHECK) {
  				$this->assertEqual($instance->getLabel(),'Check box' );
  				$this->assertEqual($instance->getComment(),'In check boxes, one may select 0 to N options' );
  			}
- 		  	if ($instance->uriResource === WIDGET_FTE) {
+ 		  	if ($instance->getUri() === WIDGET_FTE) {
  				$this->assertEqual($instance->getLabel(),'A Text Box' );
  				$this->assertEqual($instance->getComment(),'A particular text box' );
  			}
- 			if ($instance->uriResource === $plop->uriResource){
+ 			if ($instance->getUri() === $plop->getUri()){
  				$this->assertEqual($instance->getLabel(),'test' );
  				$this->assertEqual($instance->getComment(),'comment' );
  			}	
-			if ($instance->uriResource === $plop->uriResource){
+			if ($instance->getUri() === $plop->getUri()){
  				$this->assertEqual($instance->getLabel(),'test' );
  				$this->assertEqual($instance->getComment(),'comment' );
  			}	
@@ -270,7 +270,7 @@ class ClassTestCase extends UnitTestCase {
 		$this->assertEqual($subClass->getComment(), 'tata');
 		$subClassOfProperty = new core_kernel_classes_Property('http://www.w3.org/2000/01/rdf-schema#subClassOf');
 		$subClassOfPropertyValue = $subClass->getPropertyValues($subClassOfProperty);
-		$this->assertTrue(in_array($class->uriResource, array_values($subClassOfPropertyValue))); 
+		$this->assertTrue(in_array($class->getUri(), array_values($subClassOfPropertyValue))); 
 		$subClass->delete();
 	}
 
@@ -283,7 +283,7 @@ class ClassTestCase extends UnitTestCase {
 
 		$this->assertTrue($property->getComment() == 'toto');
 		$this->assertTrue($property2->isLgDependent());
-		$this->assertTrue($property->getDomain()->get(0)->uriResource ==$class->uriResource );
+		$this->assertTrue($property->getDomain()->get(0)->getUri() ==$class->getUri() );
 		$property->delete();
 		$property2->delete();
 	}
@@ -373,9 +373,9 @@ class ClassTestCase extends UnitTestCase {
             RDFS_LABEL => 'test case instance'
         );
         $instances = $clazz->searchInstances($propertyFilter, array('recursive'=>true));
-        $this->assertTrue(array_key_exists($sub1ClazzInstance->uriResource, $instances));
-        $this->assertTrue(array_key_exists($sub2ClazzInstance->uriResource, $instances));
-        $this->assertTrue(array_key_exists($sub3ClazzInstance->uriResource, $instances));
+        $this->assertTrue(array_key_exists($sub1ClazzInstance->getUri(), $instances));
+        $this->assertTrue(array_key_exists($sub2ClazzInstance->getUri(), $instances));
+        $this->assertTrue(array_key_exists($sub3ClazzInstance->getUri(), $instances));
         
         common_Logger::d('starting hardify');
         //Test the search instances on the hard impl
@@ -388,9 +388,9 @@ class ClassTestCase extends UnitTestCase {
             RDFS_LABEL => 'test case instance'
         );
         $instances = $sub1Clazz->searchInstances($propertyFilter, array('recursive'=>true));
-        $this->assertTrue(array_key_exists($sub1ClazzInstance->uriResource, $instances));
-        $this->assertTrue(array_key_exists($sub2ClazzInstance->uriResource, $instances));
-        $this->assertTrue(array_key_exists($sub3ClazzInstance->uriResource, $instances));
+        $this->assertTrue(array_key_exists($sub1ClazzInstance->getUri(), $instances));
+        $this->assertTrue(array_key_exists($sub2ClazzInstance->getUri(), $instances));
+        $this->assertTrue(array_key_exists($sub3ClazzInstance->getUri(), $instances));
         
         $switcher = new core_kernel_persistence_Switcher();
         $switcher->unhardify($sub1Clazz, $options);
@@ -404,9 +404,9 @@ class ClassTestCase extends UnitTestCase {
         unset ($switcher); //Required to update cache data
         
         $instances = $sub1Clazz->searchInstances($propertyFilter, array('recursive'=>true));
-        $this->assertTrue(array_key_exists($sub1ClazzInstance->uriResource, $instances));
-        $this->assertTrue(array_key_exists($sub2ClazzInstance->uriResource, $instances));
-        $this->assertTrue(array_key_exists($sub3ClazzInstance->uriResource, $instances));
+        $this->assertTrue(array_key_exists($sub1ClazzInstance->getUri(), $instances));
+        $this->assertTrue(array_key_exists($sub2ClazzInstance->getUri(), $instances));
+        $this->assertTrue(array_key_exists($sub3ClazzInstance->getUri(), $instances));
         
         try{
             $instances = $sub1Clazz->searchInstances($propertyFilter, array('recursive'=>true, 'offset'=>1));
@@ -655,7 +655,7 @@ class ClassTestCase extends UnitTestCase {
 		$result = $subClass->getInstancesPropertyValues($p1, $propertyFilters);
 		$this->assertEqual(count($result), 2);
 		foreach ($result as $property) {
-			$this->assertTrue($property->uriResource == GENERIS_TRUE);
+			$this->assertTrue($property->getUri() == GENERIS_TRUE);
 		}
 		// Search * P1 for P1=GENERIS_TRUE WITH DISTINCT options
 		// Expected 1 results, and 1 possibility
@@ -664,7 +664,7 @@ class ClassTestCase extends UnitTestCase {
 		);
 		$result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 1);
-		$this->assertTrue($result[0]->uriResource == GENERIS_TRUE);
+		$this->assertTrue($result[0]->getUri() == GENERIS_TRUE);
 		
 		// Search * P2 for P1=GENERIS_TRUE WITH DISTINCT options
 		// Expected 2 results, and 2 possibilities
@@ -674,7 +674,7 @@ class ClassTestCase extends UnitTestCase {
 		$result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 2);
 		foreach ($result as $property){
-			$this->assertTrue ($property->uriResource == GENERIS_TRUE || $property->uriResource == GENERIS_FALSE);
+			$this->assertTrue ($property->getUri() == GENERIS_TRUE || $property->getUri() == GENERIS_FALSE);
 		}
 		
 		// Search * P2 for P1=NotExistingProperty litteral WITH DISTINCT options
@@ -692,7 +692,7 @@ class ClassTestCase extends UnitTestCase {
 		);
 		$result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 1);
-		$this->assertTrue($result[0]->uriResource == GENERIS_TRUE);
+		$this->assertTrue($result[0]->getUri() == GENERIS_TRUE);
 		
 		// Search * P1 for P2=GENERIS_FALSE WITH DISTINCT options
 		// Expected 1 results, and 1 possibilities
@@ -701,7 +701,7 @@ class ClassTestCase extends UnitTestCase {
 		);
 		$result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 1);
-		$this->assertTrue($result[0]->uriResource == GENERIS_TRUE);
+		$this->assertTrue($result[0]->getUri() == GENERIS_TRUE);
 		
 		// Search * P3 for P1=GENERIS_TRUE & P2=GENERIS_TRUE litteral WITH DISTINCT options
 		// Expected 1 results, and 1 possibilities
@@ -722,7 +722,7 @@ class ClassTestCase extends UnitTestCase {
 		$result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, array ("distinct" => true));
 		$this->assertEqual(count($result), 2);
 		foreach ($result as $property){
-			$this->assertTrue ($property->uriResource == GENERIS_TRUE || $property->uriResource == GENERIS_FALSE);
+			$this->assertTrue ($property->getUri() == GENERIS_TRUE || $property->getUri() == GENERIS_FALSE);
 		}
 		
 		// Clean the model		

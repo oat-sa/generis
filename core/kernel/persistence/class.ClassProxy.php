@@ -671,7 +671,7 @@ class core_kernel_persistence_ClassProxy
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F60 begin
 
-        if(!isset(core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo[$resource->uriResource]) 
+        if(!isset(core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo[$resource->getUri()]) 
         || core_kernel_persistence_PersistenceProxy::isForcedMode()){
         	
 	    	$impls = $this->getAvailableImpl($params);
@@ -686,13 +686,13 @@ class core_kernel_persistence_ClassProxy
 						return $delegate;
 					}
 					
-					core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo[$resource->uriResource] = $delegate;
+					core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo[$resource->getUri()] = $delegate;
 					break;
 		        }
 			}
         }
         
-        $returnValue = core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo[$resource->uriResource];
+        $returnValue = core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo[$resource->getUri()];
         
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F60 end
 

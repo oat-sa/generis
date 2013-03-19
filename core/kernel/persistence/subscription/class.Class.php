@@ -549,7 +549,7 @@ class core_kernel_persistence_subscription_Class
 
         // section 127-0-1-1--499759bc:12f72c12020:-8000:0000000000001434 begin
         
-        if(defined('ENABLE_SUBSCRIPTION') && ENABLE_SUBSCRIPTION && $resource->uriResource != CLASS_SUBCRIPTION){
+        if(defined('ENABLE_SUBSCRIPTION') && ENABLE_SUBSCRIPTION && $resource->getUri() != CLASS_SUBCRIPTION){
         	$returnValue = true;
         }
         

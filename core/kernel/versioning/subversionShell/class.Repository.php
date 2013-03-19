@@ -198,7 +198,7 @@ class core_kernel_versioning_subversionWindows_Repository
         if($saveResource){
             $returnValue = $folder;
         }else{
-            $resourceToDelete = new core_kernel_classes_Resource($folder->uriResource);
+            $resourceToDelete = new core_kernel_classes_Resource($folder);
             $resourceToDelete->delete();
         }
         
