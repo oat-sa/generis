@@ -224,11 +224,13 @@ class common_ext_Extension
 			
         }
         if (is_null($this->fileConfig)) {
-			$configFile = $this->getConfigFilePath();
+			$this->fileConfig = array();
+        	$configFile = $this->getConfigFilePath();
 			if (file_exists($configFile)) {
-				$this->fileConfig = include $configFile;
-			} else {
-				$this->fileConfig = array();
+				$data = include $configFile;
+				if (is_array($data)) {
+					$this->fileConfig = $data;
+				}
 			}
         }
         $returnValue = array_merge($this->dbConfig, $this->fileConfig);
