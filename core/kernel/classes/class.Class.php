@@ -19,8 +19,6 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
 
 error_reporting(E_ALL);
 
@@ -29,45 +27,15 @@ error_reporting(E_ALL);
  * instances, properties and subclasses retrieval, but also enable to edit it
  * setSubClassOf setProperty, etc.
  *
- * @author patrick.plichart@tudor.lu
- * @package core
- * @see http://www.w3.org/TR/rdf-schema/
- * @subpackage kernel_classes
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * Resource implements rdf:resource container identified by an uri (a string).
- * Methods enable meta data management for this resource
  *
  * @author patrick.plichart@tudor.lu
+ * @package generis
+ * @subpackage core_kernel_classes
  * @see http://www.w3.org/RDF/
- * @version v1.0
- */
-require_once('core/kernel/classes/class.Resource.php');
-
-/* user defined includes */
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767-includes begin
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767-includes end
-
-/* user defined constants */
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767-constants begin
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000767-constants end
-
-/**
- * The class of rdfs:classes. It implements basic tests like isSubClassOf(Class
- * instances, properties and subclasses retrieval, but also enable to edit it
- * setSubClassOf setProperty, etc.
- *
- * @access public
- * @author patrick.plichart@tudor.lu
- * @package core
  * @see http://www.w3.org/TR/rdf-schema/
- * @subpackage kernel_classes
+ *
  */
+
 class core_kernel_classes_Class
     extends core_kernel_classes_Resource
 {
@@ -90,15 +58,7 @@ class core_kernel_classes_Class
      */
     public function getSubClasses($recursive = false)
     {
-        $returnValue = array();
-
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000772 begin
-		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getSubClasses($this, $recursive);
-
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000772 end
-
-        return (array) $returnValue;
+        return (array) core_kernel_persistence_ClassProxy::singleton()->getSubClasses($this, $recursive);
     }
 
     /**
@@ -111,15 +71,7 @@ class core_kernel_classes_Class
      */
     public function isSubClassOf( core_kernel_classes_Class $parentClass)
     {
-        $returnValue = (bool) false;
-
-        // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000AF2 begin
-		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->isSubClassOf($this, $parentClass);
-		
-        // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000AF2 end
-
-        return (bool) $returnValue;
+        return (bool) core_kernel_persistence_ClassProxy::singleton()->isSubClassOf($this, $parentClass);
     }
 
     /**
@@ -132,15 +84,7 @@ class core_kernel_classes_Class
      */
     public function getParentClasses($recursive = false)
     {
-        $returnValue = array();
-
-        // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B20 begin
-		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getParentClasses($this, $recursive);
-		
-        // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B20 end
-
-        return (array) $returnValue;
+       return (array) core_kernel_persistence_ClassProxy::singleton()->getParentClasses($this, $recursive);
     }
 
     /**
@@ -155,16 +99,7 @@ class core_kernel_classes_Class
      */
     public function getProperties($recursive = false)
     {
-        $returnValue = array();
-
-        // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:000000000000094B begin
-		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getProperties($this, $recursive);
-
-		
-        // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:000000000000094B end
-
-        return (array) $returnValue;
+        return (array) core_kernel_persistence_ClassProxy::singleton()->getProperties($this, $recursive);
     }
 
     /**
@@ -178,15 +113,7 @@ class core_kernel_classes_Class
      */
     public function getInstances($recursive = false, $params = array())
     {
-        $returnValue = array();
-
-        // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000958 begin
-		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getInstances($this, $recursive, $params);
-
-        // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000958 end
-
-        return (array) $returnValue;
+        return (array) core_kernel_persistence_ClassProxy::singleton()->getInstances($this, $recursive, $params);
     }
 
     /**
@@ -222,15 +149,7 @@ class core_kernel_classes_Class
      */
     public function setSubClassOf( core_kernel_classes_Class $iClass)
     {
-        $returnValue = (bool) false;
-
-        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AB0 begin
-		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->setSubClassOf($this, $iClass);
-        
-        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AB0 end
-
-        return (bool) $returnValue;
+        return (bool) core_kernel_persistence_ClassProxy::singleton()->setSubClassOf($this, $iClass);
     }
 
     /**
@@ -244,15 +163,7 @@ class core_kernel_classes_Class
      */
     public function setProperty( core_kernel_classes_Property $property)
     {
-        $returnValue = (bool) false;
-
-        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AC1 begin
-		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->setProperty($this, $property);
-        
-        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AC1 end
-
-        return (bool) $returnValue;
+        return (bool) core_kernel_persistence_ClassProxy::singleton()->setProperty($this, $property);
     }
 
     /**
@@ -262,7 +173,6 @@ class core_kernel_classes_Class
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string uri
      * @param  string debug
-     * @return void
      */
     public function __construct($uri, $debug = '')
     {
@@ -277,12 +187,10 @@ class core_kernel_classes_Class
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return mixed
+     * @deprecated
      */
     public function createHyperClass()
     {
-        // section 10-13-1--31-42d46662:11bb6ef4845:-8000:0000000000000D54 begin
-			
-			
 		//creates a new hyperclass with the same label, comment
 		//investigate the possibility to add a new type to the class as hyperclass , ie, addInstance instead of setInstance
 		$classOfHyperClass = new core_kernel_classes_Class(CLASS_HYPERCLASS);
@@ -323,8 +231,8 @@ class core_kernel_classes_Class
 
 
 		}
-		$returnValue =$hyperClass;
-        // section 10-13-1--31-42d46662:11bb6ef4845:-8000:0000000000000D54 end
+		return $hyperClass;
+
     }
 
     /**
@@ -398,7 +306,7 @@ class core_kernel_classes_Class
     }
 
     /**
-     * Short description of method getMethodes
+     * Retrieve available methods on class
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -406,17 +314,11 @@ class core_kernel_classes_Class
      */
     public function getMethodes()
     {
-        $returnValue = array();
-
-        // section -87--2--3--76--148ee98a:12452773959:-8000:00000000000017DF begin
-        $returnValue = array( 'instanciate' => true , 'addSubclass' => true , 'addPropery' => true);
-        // section -87--2--3--76--148ee98a:12452773959:-8000:00000000000017DF end
-
-        return (array) $returnValue;
+        return array( 'instanciate' => true , 'addSubclass' => true , 'addPropery' => true);
     }
 
     /**
-     * Short description of method searchInstances
+     * Search for a specific instances according to filters and options
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -426,13 +328,7 @@ class core_kernel_classes_Class
      */
     public function searchInstances($propertyFilters = array(), $options = array())
     {
-        $returnValue = array();
-
-        // section 10-13-1--128--26678bb4:12fbafcb344:-8000:0000000000001503 begin
-		$returnValue = core_kernel_persistence_ClassProxy::singleton()->searchInstances($this, $propertyFilters, $options);
-        // section 10-13-1--128--26678bb4:12fbafcb344:-8000:0000000000001503 end
-
-        return (array) $returnValue;
+        return (array) core_kernel_persistence_ClassProxy::singleton()->searchInstances($this, $propertyFilters, $options);
     }
 
     /**
@@ -446,13 +342,7 @@ class core_kernel_classes_Class
      */
     public function countInstances($propertyFilters = array(), $options = array())
     {
-        $returnValue = null;
-
-        // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159B begin
-		$returnValue = core_kernel_persistence_ClassProxy::singleton()->countInstances($this, $propertyFilters, $options);
-        // section 127-0-1-1--700ce06c:130dbc6fc61:-8000:000000000000159B end
-
-        return $returnValue;
+		return core_kernel_persistence_ClassProxy::singleton()->countInstances($this, $propertyFilters, $options);
     }
 
     /**
@@ -468,28 +358,19 @@ class core_kernel_classes_Class
      */
     public function getInstancesPropertyValues( core_kernel_classes_Property $property, $propertyFilters = array(), $options = array())
     {
-        $returnValue = array();
-
-        // section 127-0-1-1--120bf54f:13142fdf597:-8000:0000000000003137 begin
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->getInstancesPropertyValues($this, $property, $propertyFilters, $options);
-        // section 127-0-1-1--120bf54f:13142fdf597:-8000:0000000000003137 end
-
-        return (array) $returnValue;
+        return (array) core_kernel_persistence_ClassProxy::singleton()->getInstancesPropertyValues($this, $property, $propertyFilters, $options);
     }
 
     /**
-     * Short description of method unsetProperty
+     * Unset the domain of the property related to the class
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Property property
-     * @return mixed
      */
     public function unsetProperty( core_kernel_classes_Property $property)
     {
-        // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:000000000000163C begin
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->unsetProperty($this, $property);
-        // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:000000000000163C end
+        core_kernel_persistence_ClassProxy::singleton()->unsetProperty($this, $property);
     }
 
     /**
@@ -508,7 +389,6 @@ class core_kernel_classes_Class
     {
         $returnValue = null;
 
-        // section 127-0-1-1--49b11f4f:135c41c62e3:-8000:0000000000001951 begin
         // remove the additional types, because they might be implemented differently
         
         $additonalTypes = array();
@@ -528,7 +408,6 @@ class core_kernel_classes_Class
         foreach ($additonalTypes as $type) {
         	$returnValue->setType($type);
         }
-        // section 127-0-1-1--49b11f4f:135c41c62e3:-8000:0000000000001951 end
 
         return $returnValue;
     }
@@ -544,13 +423,7 @@ class core_kernel_classes_Class
      */
     public function deleteInstances($resources, $deleteReference = false)
     {
-        $returnValue = (bool) false;
-
-        // section 10-13-1-85--6597bda8:13b99b8386b:-8000:0000000000001DFB begin
-         $returnValue = core_kernel_persistence_ClassProxy::singleton()->deleteInstances($this, $resources, $deleteReference);
-        // section 10-13-1-85--6597bda8:13b99b8386b:-8000:0000000000001DFB end
-
-        return (bool) $returnValue;
+        return (bool) core_kernel_persistence_ClassProxy::singleton()->deleteInstances($this, $resources, $deleteReference);
     }
 
     /**
@@ -563,13 +436,7 @@ class core_kernel_classes_Class
      */
     public function delete($deleteReference = false)
     {
-        $returnValue = (bool) false;
-
-        // section 10-13-1-85-7ea8832b:13bfb40319c:-8000:0000000000001E63 begin
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->delete($this, $deleteReference);
-        // section 10-13-1-85-7ea8832b:13bfb40319c:-8000:0000000000001E63 end
-
-        return (bool) $returnValue;
+        return (bool) core_kernel_persistence_ClassProxy::singleton()->delete($this, $deleteReference);
     }
 
     /**
@@ -583,15 +450,9 @@ class core_kernel_classes_Class
      */
     public function exists()
     {
-        $returnValue = (bool) false;
-
-        // section 10-13-1-85--c748ed5:13c47c01595:-8000:0000000000001E99 begin
         // If the Class has one or more direct parent classes (this rdfs:isSubClassOf C),
         // we know that the class exists. 
-        $returnValue = (count($this->getParentClasses(false)) > 0);
-        // section 10-13-1-85--c748ed5:13c47c01595:-8000:0000000000001E99 end
-
-        return (bool) $returnValue;
+        return (bool) (count($this->getParentClasses(false)) > 0);
     }
 
 } /* end of class core_kernel_classes_Class */
