@@ -181,59 +181,6 @@ class core_kernel_classes_Class
         // section 10-5-2-6-d9cdd2e:11b0c43cdd8:-8000:0000000000000D4D end
     }
 
-    /**
-     * Creates the hyperClass related to a class
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return mixed
-     * @deprecated
-     */
-    public function createHyperClass()
-    {
-		//creates a new hyperclass with the same label, comment
-		//investigate the possibility to add a new type to the class as hyperclass , ie, addInstance instead of setInstance
-		$classOfHyperClass = new core_kernel_classes_Class(CLASS_HYPERCLASS);
-		$this->label =$this->label.time();
-		$hyperClass = $classOfHyperClass->setInstance($this);
-			
-		//creates rootNode
-		$classNode = new core_kernel_classes_Class(CLASS_NODE);
-		$rootNode = $classNode->setInstance($this);
-
-		//links the rootNode with the class
-		$rootNode->setPropertyValue(new core_kernel_classes_Property(PROPERTY_REL_CLASS), $this->getUri());
-			
-		//links the hyperclass with this node as rootnode
-		$hyperClass->setPropertyValue(new core_kernel_classes_Property(PROPERTY_ROOTNODE), $rootNode->getUri());
-
-
-
-		//loops among properties of this class, create nodeattributes and link them with the rootnode
-		$propertiesCollection = $this->getProperties();
-		foreach ($propertiesCollection->sequence as $property)
-		{
-
-			$classNodeAttribute = new core_kernel_classes_Class(CLASS_NODE_ATTRIBUTE);
-			$nodeAttribute = $classNodeAttribute->setInstance($property);
-
-			//links the default css to this nodeattribute
-			$nodeAttribute->setPropertyValue(new core_kernel_classes_Property(PROPERTY_CSS_STYLE), "simple");
-
-			//links the default css to this nodeattribute
-			$nodeAttribute->setPropertyValue(new core_kernel_classes_Property(PROPERTY_IS_EDITABLE), "http://www.tao.lu/Ontologies/generis.rdf#True");
-
-			//links the related property to this nodeattribute
-			$nodeAttribute->setPropertyValue(new core_kernel_classes_Property(PROPERTY_REL_PROPERTY), $property->getUri());
-
-			//links the rootNode with this NodeAttribute
-			$rootNode->setPropertyValue(new core_kernel_classes_Property(PROPERTY_NODE_ATTRIBUTES), $nodeAttribute->getUri());
-
-
-		}
-		return $hyperClass;
-
-    }
 
     /**
      * Should not be called by application code, please use
