@@ -63,6 +63,10 @@ return array(
 	 'optimizableClasses' => array(
 	 	'http://www.linkeddata.org/ontologies/data.rdf#myClass1',
 	 	'http://www.linkeddata.org/ontologies/data.rdf#myClass2'
+	 ),
+	 'optimizableProperties' => array(
+	 	'http://www.linkeddata.org/ontologies/props.rdf#myProp1',
+	 	'http://www.linkeddata.org/ontologies/props.rdf#myProp2'
 	 )
 );
 ?>

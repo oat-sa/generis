@@ -162,12 +162,19 @@ class common_ext_Manifest
     private $localData = array();
     
     /**
-     * The classes that are considered optimizable for the described Extension.
+     * The RDFS Classes that are considered optimizable for the described Extension.
      * 
      * @access private
      * @var array
      */
     private $optimizableClasses = array();
+    
+    /**
+     * The RDF Properties that are considered optimizable for the described Extension.
+     * @access private
+     * @var array
+     */
+    private $optimizableProperties = array();
 
 
     /**
@@ -276,6 +283,15 @@ class common_ext_Manifest
     			}
     			else{
     				$this->setOptimizableClasses($array['optimizableClasses']);
+    			}
+    		}
+    		
+    		if (!empty($array['optimizableProperties'])){
+    			if (!is_array($array['optimizableProperties'])){
+    				throw new common_ext_MalformedManifestException("The 'optimizableProperties' component must be an array.");
+    			}
+    			else{
+    				$this->setOptimizableProperties($array['optimizableProperties']);
     			}
     		}
     	}
@@ -878,7 +894,34 @@ class common_ext_Manifest
 	{
 		$this->optimizableClasses = $optimizableClasses;
 	}
-
+	
+	/**
+	 * Get an array of Property URIs (as strings) that are considered optimizable for the
+	 * described Extension.
+	 * 
+	 * @return array
+	 */
+	public function getOptimizableProperties()
+	{
+		$returnValue = array();
+		
+		$returnValue = $this->optimizableProperties;
+		
+		return $returnValue;
+	}
+	
+	/**
+	 * Set the Properties that are considered optimizable for the described Extension.
+	 * 
+	 * The array passed as a parameter must be a set of URIs (as strings) referencing
+	 * RDF Properties.
+	 * 
+	 * @param array $optimizableProperties
+	 */
+	private function setOptimizableProperties(array $optimizableProperties)
+	{
+		$this->optimizableProperties = $optimizableProperties;
+	}
 }
 
 ?>

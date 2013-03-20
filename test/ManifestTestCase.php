@@ -76,6 +76,7 @@ class ManifestTestCase extends UnitTestCase {
 			$this->assertEqual($manifest->getClassLoaderPackages(), array('extension/path/actions/', 'extension/path/helpers/', 'extension/path/helpers/form'));
 			$this->assertEqual($manifest->getConstants(), array('WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/', 'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php'));
 			$this->assertEqual($manifest->getOptimizableClasses(), array('http://www.linkeddata.org/ontologies/data.rdf#myClass1','http://www.linkeddata.org/ontologies/data.rdf#myClass2'));
+			$this->assertEqual($manifest->getOptimizableProperties(), array('http://www.linkeddata.org/ontologies/props.rdf#myProp1','http://www.linkeddata.org/ontologies/props.rdf#myProp2'));
 			
 		}
 		catch (common_ext_ManifestException $e){
