@@ -23,36 +23,13 @@
 
 error_reporting(E_ALL);
 
-/**
- * Generis Object Oriented API - common/ext/class.Manifest.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 18.02.2013, 15:42:12 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Jerome Bogaerts <jerome@taotesting.com>
- * @package common
- * @since 2.3
- * @subpackage ext
- */
-
 if (0 > version_compare(PHP_VERSION, '5')) {
     die('This file was generated for PHP 5');
 }
 
-/* user defined includes */
-// section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02-includes begin
-// section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02-includes end
-
-/* user defined constants */
-// section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02-constants begin
-// section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C02-constants end
-
 /**
- * Short description of class common_ext_Manifest
+ * A class dedicated to load an Extension Manifest and retrieve the values
+ * described into it through a common interface.
  *
  * @access public
  * @author Jerome Bogaerts <jerome@taotesting.com>
@@ -62,13 +39,9 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  */
 class common_ext_Manifest
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute filePath
+     * The path to the file where the manifest is described.
      *
      * @access private
      * @var string
@@ -76,7 +49,7 @@ class common_ext_Manifest
     private $filePath = '';
 
     /**
-     * Short description of attribute name
+     * The name of the Extension the manifest describes.
      *
      * @access private
      * @var string
@@ -84,7 +57,7 @@ class common_ext_Manifest
     private $name = '';
 
     /**
-     * Short description of attribute description
+     * The description of the Extension the manifest describes.
      *
      * @access private
      * @var string
@@ -92,7 +65,7 @@ class common_ext_Manifest
     private $description = '';
 
     /**
-     * Short description of attribute author
+     * The author of the Extension the manifest describes.
      *
      * @access private
      * @var string
@@ -100,7 +73,7 @@ class common_ext_Manifest
     private $author = '';
 
     /**
-     * Short description of attribute version
+     * The version of the Extension the manifest describes.
      *
      * @access private
      * @var string
@@ -108,7 +81,7 @@ class common_ext_Manifest
     private $version = '';
 
     /**
-     * Short description of attribute dependencies
+     * The dependencies of the Extension the manifest describes.
      *
      * @access private
      * @var array
@@ -116,7 +89,7 @@ class common_ext_Manifest
     private $dependencies = array();
 
     /**
-     * Short description of attribute models
+     * The RDF models that are required by the Extension the manifest describes.
      *
      * @access private
      * @var array
@@ -124,7 +97,7 @@ class common_ext_Manifest
     private $models = array();
 
     /**
-     * Short description of attribute modelsRights
+     * The rights to apply on models required by the Extension the manifest describes.
      *
      * @access private
      * @var array
@@ -132,7 +105,7 @@ class common_ext_Manifest
     private $modelsRights = array();
 
     /**
-     * Short description of attribute installModelFiles
+     * The files corresponding to the RDF models to be imported at installation time.
      *
      * @access private
      * @var array
@@ -140,7 +113,7 @@ class common_ext_Manifest
     private $installModelFiles = array();
 
     /**
-     * Short description of attribute installChecks
+     * The configuration checks that have to be performed prior to installation.
      *
      * @access private
      * @var array
@@ -148,7 +121,7 @@ class common_ext_Manifest
     private $installChecks = array();
 
     /**
-     * Short description of attribute classLoaderPackages
+     * The folders that contain PHP classes for the Extension described by the manifest.
      *
      * @access private
      * @var array
@@ -156,7 +129,7 @@ class common_ext_Manifest
     private $classLoaderPackages = array();
 
     /**
-     * Short description of attribute constants
+     * The constants to be defined for the described extension.
      *
      * @access private
      * @var array
@@ -164,7 +137,7 @@ class common_ext_Manifest
     private $constants = array();
 
     /**
-     * Short description of attribute installPHPFiles
+     * The paths to PHP Scripts to be run at installation time.
      *
      * @access private
      * @var array
@@ -172,7 +145,7 @@ class common_ext_Manifest
     private $installPHPFiles = array();
 
     /**
-     * Short description of attribute managementRole
+     * The Management Role of the extension described by the manifest.
      *
      * @access private
      * @var Resource
@@ -188,19 +161,16 @@ class common_ext_Manifest
      */
     private $localData = array();
 
-    // --- OPERATIONS ---
 
     /**
-     * Short description of method __construct
+     * Creates a new instance of Manifest.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  string filePath
-     * @return mixed
+     * @author Jerome Bogaerts <jerome@taotesting.com>
+     * @param  string filePath The path to the manifest.php file to parse.
      */
     public function __construct($filePath)
     {
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C26 begin
         
     	// the file exists, we can refer to the $filePath.
     	if (is_readable($filePath)){
@@ -297,314 +267,283 @@ class common_ext_Manifest
     	}
     	
         $this->setFilePath($filePath);
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C26 end
     }
 
     /**
-     * Short description of method getFilePath
+     * Get the path to the manifest file.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @return string
      */
     public function getFilePath()
     {
         $returnValue = (string) '';
 
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C41 begin
         if (!empty($this->filePath)){
         	$returnValue = $this->filePath;
         }
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C41 end
 
         return (string) $returnValue;
     }
 
     /**
-     * Short description of method setFilePath
+     * Set the path to the manifest file.
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  string filePath
-     * @return void
+     * @author Jerome Bogaerts <jerome@taotesting.com>
+     * @param  string filePath An absolute path.
      */
     private function setFilePath($filePath)
     {
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C57 begin
         $this->filePath = $filePath;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C57 end
     }
 
     /**
-     * Short description of method getName
+     * Get the name of the Extension the manifest describes.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @return string
      */
     public function getName()
     {
         $returnValue = (string) '';
 
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C43 begin
         if (!empty($this->name)){
         	$returnValue = $this->name;
         }
         else{
         	$returnValue = null;
         }
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C43 end
 
         return (string) $returnValue;
     }
 
     /**
-     * Short description of method setName
+     * Set the name of the Extension the manifest describes.
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  string name
-     * @return void
+     * @author Jerome Bogaerts <jerome@taotesting.com>
+     * @param  string name A name
      */
     private function setName($name)
     {
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C5A begin
         $this->name = $name;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C5A end
     }
 
     /**
-     * Short description of method getDescription
+     * Get the description of the Extension the manifest describes.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @return string
      */
     public function getDescription()
     {
         $returnValue = (string) '';
 
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C45 begin
         if (!empty($this->description)){
         	$returnValue = $this->description;
         }
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C45 end
 
         return (string) $returnValue;
     }
 
     /**
-     * Short description of method setDescription
+     * Set the description of the Extension that the manifest describes.
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  string description
-     * @return void
+     * @author Jerome Bogaerts <jerome@taotesting.com>
+     * @param  string description A description
      */
     private function setDescription($description)
     {
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C5D begin
         $this->description = $description;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C5D end
     }
 
     /**
-     * Short description of method getAuthor
+     * Get the author of the Extension the manifest describes.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @return string
      */
     public function getAuthor()
     {
         $returnValue = (string) '';
 
-        // section 10-13-1-85-9f61b60:13ae4914bf6:-8000:0000000000001C62 begin
         $returnValue = $this->author;
-        // section 10-13-1-85-9f61b60:13ae4914bf6:-8000:0000000000001C62 end
 
         return (string) $returnValue;
     }
 
     /**
-     * Short description of method setAuthor
+     * Set the author of the Extension the manifest describes.
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  string author
-     * @return void
+     * @author Jerome Bogaerts <jerome@taotesting.com>
+     * @param  string author The author name
      */
     private function setAuthor($author)
     {
-        // section 10-13-1-85-9f61b60:13ae4914bf6:-8000:0000000000001C64 begin
         $this->author = $author;
-        // section 10-13-1-85-9f61b60:13ae4914bf6:-8000:0000000000001C64 end
     }
 
     /**
-     * Short description of method getVersion
+     * Get the version of the Extension the manifest describes.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @return string
      */
     public function getVersion()
     {
         $returnValue = (string) '';
 
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C47 begin
         if (!empty($this->version)){
         	$returnValue = $this->version;
         }
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C47 end
 
         return (string) $returnValue;
     }
 
     /**
-     * Short description of method setVersion
+     * Set the version of the Extension the manifest describes.
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  string version
-     * @return void
+     * @author Jerome Bogaerts <jerome@taotesting.com>
+     * @param  string version A version number
      */
     private function setVersion($version)
     {
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C60 begin
         $this->version = $version;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C60 end
     }
 
     /**
-     * Short description of method getDependencies
+     * Get the dependencies of the Extension the manifest describes.
+     * 
+     * The content of the array are extensionIDs, represented as strings.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author @author Jerome Bogaerts <jerome@taotesting.com>
      * @return array
      */
     public function getDependencies()
     {
         $returnValue = array();
 
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C49 begin
         $returnValue = $this->dependencies;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C49 end
 
         return (array) $returnValue;
     }
 
     /**
-     * Short description of method setDependencies
+     * Set the dependencies of the Extension the manifest describes.
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  array dependencies
-     * @return void
+     * @author @author Jerome Bogaerts <jerome@taotesting.com>
+     * @param  array dependencies The dependencies
      */
     private function setDependencies($dependencies)
     {
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C63 begin
         $this->dependencies = $dependencies;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C63 end
     }
 
     /**
-     * Short description of method getModels
+     * Get the models related to the Extension the manifest describes.
+     * 
+     * The returned value is an array containing model URIs as strings.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author @author Jerome Bogaerts <jerome@taotesting.com>
      * @return array
      */
     public function getModels()
     {
         $returnValue = array();
 
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4B begin
         $returnValue = $this->models;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4B end
 
         return (array) $returnValue;
     }
 
     /**
-     * Short description of method setModels
+     * Set the models related to the Extension the manifest describes.
+     * 
+     * The $models parameter must be an array of strings that represent model URIs.
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @param  array models
-     * @return void
      */
     private function setModels($models)
     {
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C66 begin
         $this->models = $models;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C66 end
     }
 
     /**
-     * Short description of method getModelsRights
+     * Get the rights to be applied on the models.
+     * 
+     * The returned array have keys corresponding to model URIs and values
+     * are a string containing a unix-like mode e.g. 7 = rwx, 6 = rw, ...
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @return array
      */
     public function getModelsRights()
     {
         $returnValue = array();
 
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4D begin
         $returnValue = $this->modelsRights;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4D end
 
         return (array) $returnValue;
     }
 
     /**
-     * Short description of method setModelsRights
+     * Set the rights to be applied on the models.
+     * 
+     * The $modelsRights have keys corresponding to model URIs and values
+     * are a string containing a unix-like mode e.g. 7 = rwx, 6 = rw, ...
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @param  array modelsRights
-     * @return void
      */
     private function setModelsRights($modelsRights)
     {
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C69 begin
         $this->modelsRights = $modelsRights;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C69 end
     }
 
     /**
-     * returns an array of rdf files
-     * to import during install
+     * returns an array of RDF files
+     * to import during install. The returned array contains paths to the files
+     * to be imported.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author @author Jerome Bogaerts <jerome@taotesting.com>
      * @return array
      */
     public function getInstallModelFiles()
     {
         $returnValue = array();
 
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4F begin
         $returnValue = $this->installModelFiles;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C4F end
 
         return (array) $returnValue;
     }
 
     /**
-     * Short description of method setInstallModelFiles
+     * Sets the the RDF files to be imported during install. The array must contain
+     * paths to the files to be imported.
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @param  array installModelFiles
-     * @return void
      */
     private function setInstallModelFiles($installModelFiles)
     {
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C6E begin
         $this->installModelFiles = array();
         $installModelFiles = is_array($installModelFiles) ? $installModelFiles : array($installModelFiles);
 		foreach ($installModelFiles as $row) {
@@ -617,38 +556,33 @@ class common_ext_Manifest
 			}
     		$this->installModelFiles[] = $rdfpath;
 		}
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C6E end
     }
 
     /**
-     * Short description of method getInstallChekcs
+     * Get the installation checks to be performed prior installation of the described Extension.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @return array
      */
     public function getInstallChekcs()
     {
         $returnValue = array();
 
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C51 begin
         $returnValue = $this->installChecks;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C51 end
 
         return (array) $returnValue;
     }
 
     /**
-     * Short description of method setInstallChecks
+     * Set the installation checks to be performed prior installation of the described Extension.
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @param  array installChecks
-     * @return void
      */
     private function setInstallChecks($installChecks)
     {
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C71 begin
         // Check if the content is well formed.
     	if (!is_array($installChecks)){
     		throw new common_ext_MalformedManifestException("The 'install->checks' component must be an array.");	
@@ -725,32 +659,28 @@ class common_ext_Manifest
     	}
     	
         $this->installChecks = $installChecks;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C71 end
     }
 
     /**
-     * Short description of method getInstallPHPFiles
+     * Get a list of PHP files to be executed at installation time.
+     * 
+     * The returned array contains absolute paths to the files to execute.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author @author Jerome Bogaerts <jerome@taotesting.com>
      * @return array
      */
     public function getInstallPHPFiles()
     {
         $returnValue = array();
 
-        // section 10-13-1-85--5c116a76:13c00a41227:-8000:0000000000001E85 begin
         $returnValue = $this->installPHPFiles;
-        // section 10-13-1-85--5c116a76:13c00a41227:-8000:0000000000001E85 end
 
         return (array) $returnValue;
     }
     
    /**
-     * gets an array of
-     * * rdf files to include
-     * * php scripts to execute
-     * in order to add some sample data to an install
+     * PHP scripts to execute in order to add some sample data to an install
      *
      * @access public
      * @author joel.bout <joel@taotesting.com>
@@ -762,91 +692,82 @@ class common_ext_Manifest
     }
 
     /**
-     * Short description of method setInstallPHPFiles
+     * Set the PHP files to be run at installation time of the described Extension.
+     * 
+     * The array must contain absolute paths to theses PHP files.
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @param  array installPHPFiles
-     * @return void
      */
     private function setInstallPHPFiles($installPHPFiles)
     {
-        // section 10-13-1-85--5c116a76:13c00a41227:-8000:0000000000001E87 begin
         $this->installPHPFiles = $installPHPFiles;
-        // section 10-13-1-85--5c116a76:13c00a41227:-8000:0000000000001E87 end
     }
 
     /**
-     * Short description of method getClassLoaderPackages
+     * Get the folders that contain classes to be loaded automatically for the described Extension.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @return array
      */
     public function getClassLoaderPackages()
     {
         $returnValue = array();
 
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C53 begin
         $returnValue = $this->classLoaderPackages;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C53 end
 
         return (array) $returnValue;
     }
 
     /**
-     * Short description of method setClassLoaderPackages
+     * Set the folders that have to be inspected for class autoloading.
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @param  array classLoaderPackages
-     * @return void
      */
     private function setClassLoaderPackages($classLoaderPackages)
     {
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C75 begin
         $this->classLoaderPackages = $classLoaderPackages;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C75 end
     }
 
     /**
-     * Short description of method getConstants
+     * Get an array of constants to be defined where array keys are constant names
+     * and values are the values of these constants.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @return array
      */
     public function getConstants()
     {
         $returnValue = array();
 
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C55 begin
         $returnValue = $this->constants;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C55 end
 
         return (array) $returnValue;
     }
 
     /**
-     * Short description of method setConstants
+     * Set an array of constants to be defined where array keys are constant names
+     * and values are the values of these constants.
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @param  array constants
-     * @return void
      */
     private function setConstants($constants)
     {
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C78 begin
         $this->constants = $constants;
-        // section -64--88-0-2--ea43850:13ae1d8a335:-8000:0000000000001C78 end
     }
 
     /**
      * Extract checks from a given manifest file.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @param  string file The path to a manifest.php file.
      * @return common_configuration_ComponentCollection
      */
@@ -854,7 +775,6 @@ class common_ext_Manifest
     {
         $returnValue = null;
 
-        // section 10-13-1-85-4049d0c6:13b28618bf6:-8000:0000000000001D6D begin
         if (is_readable($file)){
         	$manifestPath = $file;
 	    	$content = file_get_contents($manifestPath);
@@ -879,7 +799,6 @@ class common_ext_Manifest
         	$msg = "Extension Manifest file could not be found in '${file}'.";
         	throw new common_ext_ManifestNotFoundException($msg);
         }
-        // section 10-13-1-85-4049d0c6:13b28618bf6:-8000:0000000000001D6D end
 
         return $returnValue;
     }
@@ -889,16 +808,14 @@ class common_ext_Manifest
      * Management Role.
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @return core_kernel_classes_Resource
      */
     public function getManagementRole()
     {
         $returnValue = null;
 
-        // section 127-0-1-1-4028d1e7:13cedb79c9e:-8000:0000000000001FA2 begin
         $returnValue = $this->managementRole;
-        // section 127-0-1-1-4028d1e7:13cedb79c9e:-8000:0000000000001FA2 end
 
         return $returnValue;
     }
@@ -907,17 +824,14 @@ class common_ext_Manifest
      * Set the Management Role of the Extension Manifest.
      *
      * @access private
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @param  Resource managementRole The Management Role of the Extension as a Generis Resource.
-     * @return void
      */
     private function setManagementRole( core_kernel_classes_Resource $managementRole)
     {
-        // section 127-0-1-1-4028d1e7:13cedb79c9e:-8000:0000000000001FA6 begin
         $this->managementRole = $managementRole;
-        // section 127-0-1-1-4028d1e7:13cedb79c9e:-8000:0000000000001FA6 end
     }
 
-} /* end of class common_ext_Manifest */
+}
 
 ?>
