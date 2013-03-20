@@ -160,6 +160,14 @@ class common_ext_Manifest
      * @var array
      */
     private $localData = array();
+    
+    /**
+     * The classes that are considered optimizable for the described Extension.
+     * 
+     * @access private
+     * @var array
+     */
+    private $optimizableClasses = array();
 
 
     /**
@@ -260,6 +268,15 @@ class common_ext_Manifest
     		if (!empty($array['managementRole'])){
     			$role = new core_kernel_classes_Resource($array['managementRole']);
     			$this->setManagementRole($role);
+    		}
+    		
+    		if (!empty($array['optimizableClasses'])){
+    			if (!is_array($array['optimizableClasses'])){
+    				throw new common_ext_MalformedManifestException("The 'optimizableClasses' component must be an array.");
+    			}
+    			else{
+    				$this->setOptimizableClasses($array['optimizableClasses']);
+    			}
     		}
     	}
     	else{
@@ -831,6 +848,36 @@ class common_ext_Manifest
     {
         $this->managementRole = $managementRole;
     }
+    
+    /**
+     * Get an array of Class URIs (as strings) that are considered optimizable for the 
+     * described Extension.
+     * 
+     * @access public
+     * @author Jerome Bogaerts <jerome@taotesting.com>
+     * @return array
+     */
+    public function getOptimizableClasses()
+    {
+    	$returnValue = array();
+    	
+    	$returnValue = $this->optimizableClasses;
+    	
+    	return $returnValue;
+    }
+    
+    /**
+     * Set the Classes that are considered optimizable for the described Extension.
+     * 
+     * The array passed as a parameter must be a set of URIs (as strings) referencing
+     * RDFS Classes.
+     * 
+     * @param array $optimizableClasses
+     */
+    private function setOptimizableClasses(array $optimizableClasses)
+	{
+		$this->optimizableClasses = $optimizableClasses;
+	}
 
 }
 

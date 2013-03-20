@@ -75,6 +75,7 @@ class ManifestTestCase extends UnitTestCase {
 																  		'/extension/path/models/ontology/taoitembank.rdf'));
 			$this->assertEqual($manifest->getClassLoaderPackages(), array('extension/path/actions/', 'extension/path/helpers/', 'extension/path/helpers/form'));
 			$this->assertEqual($manifest->getConstants(), array('WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/', 'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php'));
+			$this->assertEqual($manifest->getOptimizableClasses(), array('http://www.linkeddata.org/ontologies/data.rdf#myClass1','http://www.linkeddata.org/ontologies/data.rdf#myClass2'));
 			
 		}
 		catch (common_ext_ManifestException $e){
@@ -82,6 +83,6 @@ class ManifestTestCase extends UnitTestCase {
 		}
 		
 		// Load a malformed manifest.
-		
+		// @TODO try to load a malformed manifest.
 	}
 }

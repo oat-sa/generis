@@ -59,6 +59,10 @@ return array(
 		 // web services
          'WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/',
          'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php'
+	 ),
+	 'optimizableClasses' => array(
+	 	'http://www.linkeddata.org/ontologies/data.rdf#myClass1',
+	 	'http://www.linkeddata.org/ontologies/data.rdf#myClass2'
 	 )
 );
 ?>
