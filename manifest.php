@@ -50,6 +50,14 @@ return array(
 	),
 	'classLoaderPackages' => array(
 		dirname(__FILE__).'/actions/'
+	),
+	'optimizableClasses' => array(
+		'http://www.tao.lu/Ontologies/generis.rdf#User',
+		'http://www.tao.lu/Ontologies/generis.rdf#ClassRole'
+	),
+	'optimizableProperties' => array(
+		'http://www.tao.lu/Ontologies/generis.rdf#login',
+		'http://www.tao.lu/Ontologies/generis.rdf#password'
 	)
 );
 ?>
