@@ -318,7 +318,7 @@ class core_kernel_persistence_Switcher
 			if (in_array($class->getUri(), self::$debug_tables)){
 				return;
 			}
-			var_dump('hardify '.$class->getUri());
+			common_Logger::d('hardify ' .$class->getUri());
 			self::$debug_tables[] = $class->getUri();
 			$countStatement = $this->countStatements();
 		}
@@ -342,7 +342,7 @@ class core_kernel_persistence_Switcher
 		//If the option is true, we check if the table has alreayd been created, if yes, it's finished. If no, we can continue.
 		(isset($options['allOrNothing'])) ? $allOrNothing = $options['allOrNothing'] : $allOrNothing = false;
 
-		//if true, the instances of the class will  be removed!
+		//if true, the instances of the class will  be removed from the statements table!
 		(isset($options['rmSources'])) ? $rmSources = (bool) $options['rmSources'] : $rmSources = false;
 
 		//if defined, we took all the properties of the class and it's parents till the topclass
