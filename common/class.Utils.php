@@ -20,8 +20,6 @@
  *
  */
 
-error_reporting(E_ALL);
-
 /**
  *
  * Generis Object Oriented API - common/class.Utils.php
@@ -31,7 +29,8 @@ error_reporting(E_ALL);
  * This file is part of Generis Object Oriented API.
  *
  * @author lionel.lecaque@tudor.lu
- * @package common
+ * @package generis
+ * @subpackage common
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
  */
 

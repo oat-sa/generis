@@ -26,7 +26,8 @@
  * This file is part of Generis Object Oriented API.
  *
  * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
- * @package common
+ * @package generis
+ * @subpackage common
  * @license GPLv2  http://www.opensource.org/licenses/gpl-2.0.php
  */
 
