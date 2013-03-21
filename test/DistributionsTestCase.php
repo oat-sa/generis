@@ -23,7 +23,7 @@
 
 require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
-class DistributionsTestCasePrototype extends TestCasePrototype {
+class DistributionsTestCase extends TestCasePrototype {
     
 	const DIR_SAMPLES = '/samples/distributions/';
 	const SAMPLE_DISTRIBUTIONS = 'distributions.php';
