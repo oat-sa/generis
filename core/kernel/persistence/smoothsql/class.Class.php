@@ -600,49 +600,30 @@ class core_kernel_persistence_smoothsql_Class
     public function getInstancesPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $propertyFilters = array(), $options = array())
     {
         $returnValue = array();
-
         // section 127-0-1-1--120bf54f:13142fdf597:-8000:000000000000312D begin
-        
     	$distinct = isset($options['distinct']) ? $options['distinct'] : false;
-    	$recursive = isset($options['recursive']) ? $options['recursive'] : false;
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $uris = '';
-        $searchInstancesOptions = array (
-        	'recursive' 	=> $recursive
-        );
-        
-        // Search all instances for the property filters paramter
-        $instances = $resource->searchInstances($propertyFilters, $searchInstancesOptions);
-        if ($instances){
-	        foreach ($instances as $instance){
-	        	$uris .= '\''.$instance->getUri().'\',';
-	        } 
-	        $uris = substr($uris, 0, strlen($uris)-1);
-	        
-	        // Get all the available property values in the subset of instances
-	        $query = 'SELECT';
-	        if($distinct){
-	        	$query .= ' DISTINCT';
-	        }
-	        $query .= ' "object" FROM "statements"
-	        	WHERE "predicate" = ?
-	        	AND "subject" IN ('.$uris.')';
-			$sqlResult = $dbWrapper->query($query, array(
-				$property->getUri()
-			));
-			
-			while ($row = $sqlResult->fetch()){
-				if(!common_Utils::isUri($row['object'])) {
-	                $returnValue[] = new core_kernel_classes_Literal($row['object']);
-	            }
-	            else {
-	                $returnValue[] = new core_kernel_classes_Resource($row['object']);
-	            }
-			}
-        }
-        
+	
+	$filteredQuery = $this->getFilteredQuery($resource, $propertyFilters, $options);
+	
+	// Get all the available property values in the subset of instances
+	$query = 'SELECT';
+	if($distinct){
+		$query .= ' DISTINCT';
+	}
+	$query .= ' "object" FROM "statements"
+		WHERE "predicate" = ?
+		AND "subject" IN ('.$filteredQuery.')';
+	$sqlResult = $dbWrapper->query($query, array($property->getUri()));
+	while ($row = $sqlResult->fetch()){
+	    if(!common_Utils::isUri($row['object'])) {
+	    $returnValue[] = new core_kernel_classes_Literal($row['object']);
+	    }
+	    else {
+		$returnValue[] = new core_kernel_classes_Resource($row['object']);
+	    }
+	}
         // section 127-0-1-1--120bf54f:13142fdf597:-8000:000000000000312D end
-
         return (array) $returnValue;
     }
 
