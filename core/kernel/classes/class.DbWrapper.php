@@ -15,36 +15,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);\n *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
 
 error_reporting(E_ALL);
 
-/**
- * Simple utility class that allow you to wrap the database connector.
- * You can retrieve an instance evreywhere using the singleton method.
- *
- * This database wrapper uses PDO.
- *
- * @author Jerome Bogaerts, <jerome@taotesting.com>
- * @package core
- * @subpackage kernel_classes
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/* user defined includes */
-// section 10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB-includes begin
-// section 10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB-includes end
-
-/* user defined constants */
-// section 10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB-constants begin
-// section 10-13-1--31--647ec317:119141cd117:-8000:00000000000008DB-constants end
 
 /**
  * Simple utility class that allow you to wrap the database connector.
@@ -66,7 +43,7 @@ abstract class core_kernel_classes_DbWrapper
     // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute instance
+     * singleton
      *
      * @access private
      * @var DbWrapper
@@ -149,13 +126,14 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
+     * @throws core_kernel_persistence_Exception
      * @return core_kernel_classes_DbWrapper
      */
     public static function singleton()
     {
         $returnValue = null;
 
-        // section 10-13-1--31--647ec317:119141cd117:-8000:00000000000008F3 begin
+
 		if (!isset(self::$instance)) {
 			$driver = strtolower(SGBD_DRIVER);
 			$driverName = ucfirst($driver);
@@ -185,7 +163,7 @@ abstract class core_kernel_classes_DbWrapper
         }
         $returnValue = self::$instance;
 
-        // section 10-13-1--31--647ec317:119141cd117:-8000:00000000000008F3 end
+
 
         return $returnValue;
     }
@@ -195,16 +173,16 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @access private
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return void
+     * @throws PDOException
+     * @return core_kernel_classes_DbWrapper
      */
     private function __construct()
     {
-        // section 10-13-1--31-6e1b148f:1192d5c62ab:-8000:00000000000009A7 begin
+
         $connLimit = 3; // Max connection attempts.
         $counter = 0; // Connection attemps counter.
         
         while (true){
-	        $driver = strtolower(SGBD_DRIVER);
 	        $dsn = $this->getDSN();
 	        $options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_BOTH,
 	        				 PDO::ATTR_PERSISTENT => false,
@@ -231,7 +209,7 @@ abstract class core_kernel_classes_DbWrapper
 	        	}
 	        }
         }
-        // section 10-13-1--31-6e1b148f:1192d5c62ab:-8000:00000000000009A7 end
+
     }
 
     /**
@@ -239,17 +217,13 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @access public
      * @author C�dric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @return mixed
+     *
      */
     public function __destruct()
     {
-        // section 127-0-1-1-35ccf597:12f4de46ade:-8000:0000000000001423 begin
-        
     	if(!is_null($this->dbConnector)){
     		$this->dbConnector = null;
     	}
-    	
-        // section 127-0-1-1-35ccf597:12f4de46ade:-8000:0000000000001423 end
     }
 
     /**
@@ -262,34 +236,8 @@ abstract class core_kernel_classes_DbWrapper
     public function __clone()
     {
         $returnValue = null;
-
-        // section 127-0-0-1-71ce5466:11938f47d30:-8000:0000000000000AA2 begin
 		trigger_error('You cannot clone a singleton', E_USER_ERROR);
-        // section 127-0-0-1-71ce5466:11938f47d30:-8000:0000000000000AA2 end
-
         return $returnValue;
-    }
-
-    /**
-     * Short description of method getSetting
-     *
-     * @access public
-     * @author C�dric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @deprecated
-     * @param  string name
-     * @return string
-     */
-    public function getSetting($name)
-    {
-        $returnValue = (string) '';
-
-        // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000235A begin
-		
-		throw new Exception(__CLASS__ .'::'.__METHOD__. ' is deprecated');
-		
-        // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000235A end
-
-        return (string) $returnValue;
     }
 
     /**
@@ -301,13 +249,7 @@ abstract class core_kernel_classes_DbWrapper
      */
     public function getNrOfQueries()
     {
-        $returnValue = (int) 0;
-
-        // section 127-0-1-1-4275bef6:136722a6279:-8000:00000000000019AA begin
-        $returnValue = $this->nrQueries;
-        // section 127-0-1-1-4275bef6:136722a6279:-8000:00000000000019AA end
-
-        return (int) $returnValue;
+        return $this->nrQueries;
     }
 
     /**
@@ -323,8 +265,6 @@ abstract class core_kernel_classes_DbWrapper
     public function query($statement, $params = array())
     {
         $returnValue = null;
-
-        // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B41 begin
         $this->preparedExec = false;
         
         $this->debug($statement);
@@ -339,8 +279,6 @@ abstract class core_kernel_classes_DbWrapper
         
         $returnValue = $sth;
         $this->incrementNrOfQueries();
-        // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B41 end
-
         return $returnValue;
     }
 
@@ -356,11 +294,7 @@ abstract class core_kernel_classes_DbWrapper
      */
     public function exec($statement, $params = array())
     {
-        $returnValue = (int) 0;
-
-        // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B50 begin
         $this->debug($statement);
-        
         if (count($params) > 0){
         	$sth = $this->dbConnector->prepare($statement);
         	$this->preparedExec = true;
@@ -374,8 +308,6 @@ abstract class core_kernel_classes_DbWrapper
         }
         
         $this->incrementNrOfQueries();
-        // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B50 end
-
         return (int) $returnValue;
     }
 
@@ -390,15 +322,10 @@ abstract class core_kernel_classes_DbWrapper
     public function prepare($statement)
     {
         $returnValue = null;
-
-        // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B5B begin
         $this->preparedExec = false;
         $this->debug($statement);
-        
         $returnValue = $this->getStatement($statement);
         $this->incrementNrOfQueries();
-        // section 10-13-1-85--1639374a:13a883294da:-8000:0000000000001B5B end
-
         return $returnValue;
     }
 
@@ -412,17 +339,12 @@ abstract class core_kernel_classes_DbWrapper
      */
     public function errorCode()
     {
-        $returnValue = (string) '';
-
-        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B57 begin
-    	if ($this->preparedExec == false){
+        if ($this->preparedExec == false){
     		$returnValue = $this->dbConnector->errorCode();
     	}
     	else{
     		$returnValue = $this->lastPreparedExecStatement->errorCode();
     	}
-        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B57 end
-
         return (string) $returnValue;
     }
 
@@ -436,9 +358,8 @@ abstract class core_kernel_classes_DbWrapper
      */
     public function errorMessage()
     {
-        $returnValue = (string) '';
 
-        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B59 begin
+
         if ($this->preparedExec == false){
     		$info = $this->dbConnector->errorInfo();
     	}
@@ -450,14 +371,14 @@ abstract class core_kernel_classes_DbWrapper
     		$returnValue = $info[2];
     	}
     	else if (!empty($info[1])){
-    		$returnValue = 'Driver error: ' . $info[1];
+            $returnValue = 'Driver error: ' . $info[1];
     	}
     	else if (!empty($info[0])){
     		$returnValue = 'SQLSTATE: ' . $info[0];
     	}
-    	
-    	$returnValue = 'No error message to display.';
-        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B59 end
+        else{
+            $returnValue = 'No error message to display.';
+        }
 
         return (string) $returnValue;
     }
@@ -495,9 +416,6 @@ abstract class core_kernel_classes_DbWrapper
      */
     protected function getStatement($statement)
     {
-        $returnValue = null;
-
-        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B5D begin
         $key = $this->getStatementKey($statement);
     	$sth = null;
     	
@@ -509,10 +427,8 @@ abstract class core_kernel_classes_DbWrapper
     		$this->statements[$key] = $sth;
     	}
     	
-    	$returnValue = $sth;
-        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B5D end
+    	return $sth;
 
-        return $returnValue;
     }
 
     /**
@@ -525,13 +441,7 @@ abstract class core_kernel_classes_DbWrapper
      */
     public function getStatementKey($statement)
     {
-        $returnValue = (string) '';
-
-        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B60 begin
-        $returnValue = hash('crc32b', $statement);
-        // section 10-13-1-85-8c38d91:13a93112c47:-8000:0000000000001B60 end
-
-        return (string) $returnValue;
+        return hash('crc32b', $statement);
     }
 
     /**
@@ -543,9 +453,7 @@ abstract class core_kernel_classes_DbWrapper
      */
     protected function incrementNrOfQueries()
     {
-        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B58 begin
         $this->nrQueries++;
-        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B58 end
     }
 
     /**
@@ -557,13 +465,7 @@ abstract class core_kernel_classes_DbWrapper
      */
     public function getNrOfHits()
     {
-        $returnValue = (int) 0;
-
-        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B60 begin
-        $returnValue = $this->nrHits;
-        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B60 end
-
-        return (int) $returnValue;
+        return  $this->nrHits;
     }
 
     /**
@@ -571,13 +473,11 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @access protected
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return void
+     *
      */
     protected function incrementNrOfHits()
     {
-        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B5E begin
         $this->nrHits++;
-        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B5E end
     }
 
     /**
@@ -589,13 +489,7 @@ abstract class core_kernel_classes_DbWrapper
      */
     public function getNrOfMisses()
     {
-        $returnValue = (int) 0;
-
-        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B6B begin
-        $returnValue = $this->nrMisses;
-        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B6B end
-
-        return (int) $returnValue;
+        return  $this->nrMisses;
     }
 
     /**
@@ -603,13 +497,11 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @access protected
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return void
+     *
      */
     protected function incrementNrOfMisses()
     {
-        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B66 begin
         $this->nrMisses++;
-        // section 10-13-1-85--51093958:13a933dcb3b:-8000:0000000000001B66 end
     }
 
     /**
@@ -618,15 +510,13 @@ abstract class core_kernel_classes_DbWrapper
      * @access protected
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string statement
-     * @return void
+     *
      */
     protected function debug($statement)
     {
-        // section 10-13-1-85-c41ef28:13a98403690:-8000:0000000000001B6D begin
         if ($this->debug){
         	common_Logger::w($statement);
         }
-        // section 10-13-1-85-c41ef28:13a98403690:-8000:0000000000001B6D end
     }
 
     /**
@@ -645,7 +535,7 @@ abstract class core_kernel_classes_DbWrapper
     public abstract function limitStatement($statement, $limit, $offset = 0);
 
     /**
-     * Short description of method getExtraConfiguration
+     * Retrieve Extra Configuration for the driver
      *
      * @abstract
      * @access protected
@@ -758,15 +648,10 @@ abstract class core_kernel_classes_DbWrapper
      */
     public function getRowCount($tableName, $column = 'id')
     {
-        $returnValue = (int) 0;
-
-        // section 10-13-1-85--56c91145:13bff9fe3e5:-8000:0000000000001E6F begin
         $sql = 'SELECT count("' . $column . '") FROM "' . $tableName . '"';
         $result = $this->dbConnector->query($sql);
         $returnValue = intval($result->fetchColumn(0));
         $result->closeCursor();
-        // section 10-13-1-85--56c91145:13bff9fe3e5:-8000:0000000000001E6F end
-
         return (int) $returnValue;
     }
 
