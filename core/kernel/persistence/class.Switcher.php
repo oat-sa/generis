@@ -100,6 +100,12 @@ class core_kernel_persistence_Switcher
 	 * Unhardify a specific class. Unhardifying a class implies that the instances of this
 	 * class will be transfered from specific optimized tables to the statement table, as RDF
 	 * triples.
+	 * 
+	 * The $options array is an associative array where values are all booleans. The keys that
+	 * can be used to pass specific unhardify options are the following:
+	 * 
+	 * - recursive: Unhardify the target class and its subclasses (default: false).
+	 * - removeForeigns: Unhardify the classes that are ranges of the target class properties (default: false).
 	 *
 	 * @access public
 	 * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -309,6 +315,14 @@ class core_kernel_persistence_Switcher
 	 * 
 	 * During optimization, the current user has all privileges on the persistent memory. At
 	 * the end of the process, the old privileges will be set back.
+	 * 
+	 * The $options array can contain the following key => values (all booleans):
+	 * 
+	 * - recursive: compile the target class and its subclasses (default: false).
+	 * - createForeigns: compile the classes that are ranges of the target class properties (default: false).
+	 * - append: append data to the existing optimized table if it already exists (default: false).
+	 * - allOrNothing: if the optimized table already exists, do nothing (default: false).
+	 * - rmSources: remove the triples in the statement table after transfer (default: true).
 	 *
 	 * @access public
 	 * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
@@ -358,7 +372,7 @@ class core_kernel_persistence_Switcher
 			(isset($options['allOrNothing'])) ? $allOrNothing = $options['allOrNothing'] : $allOrNothing = false;
 			
 			//if true, the instances of the class will  be removed from the statements table!
-			(isset($options['rmSources'])) ? $rmSources = (bool) $options['rmSources'] : $rmSources = false;
+			(isset($options['rmSources'])) ? $rmSources = (bool) $options['rmSources'] : $rmSources = true;
 			
 			//if defined, we took all the properties of the class and it's parents till the topclass
 			(isset($options['topClass'])) ? $topClass = $options['topClass'] : $topClass = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
