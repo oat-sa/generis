@@ -48,9 +48,6 @@ return array(
 				array('ns' => 'http://www.tao.lu/Ontologies/generis.rdf', 'file' => dirname(__FILE__). '/core/ontology/generis.rdf'),
 		)
 	),
-	'classLoaderPackages' => array(
-		dirname(__FILE__).'/actions/'
-	),
 	'optimizableClasses' => array(
 		'http://www.tao.lu/Ontologies/generis.rdf#User',
 		'http://www.tao.lu/Ontologies/generis.rdf#ClassRole'

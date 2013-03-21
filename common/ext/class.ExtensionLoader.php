@@ -99,39 +99,9 @@ class common_ext_ExtensionLoader
         common_Logger::t('Loading extension ' . $this->extension->getID());
         
         $this->loadConstants();
-        $this->loadClasses();
         // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017AD end
     }
 
-    /**
-     * Initializes the class loaders of the extension
-     *
-     * @access protected
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return void
-     */
-    protected function loadClasses()
-    {
-        // section 127-0-1-1-62ede985:13d2586a59c:-8000:0000000000001FE5 begin
-    	common_Logger::t('Loading extension ' . $this->extension->getId() . ' class loader packages');
-    	 
-    	$extensions = $this->extension->getDependencies();
-    	array_unshift($extensions, $this->extension->getID());
-    	
-    	$extManager = common_ext_ExtensionsManager::singleton();
-    	
-    	foreach ($extensions as $extId){
-    		$ext = $extManager->getExtensionById($extId);
-    		
-    		$classLoader = common_ext_ClassLoader::singleton();
-    		foreach($ext->getManifest()->getClassLoaderPackages() as $package) {
-    			$classLoader->addPackage($package);
-    		}
-    	}
-    	
-    	$classLoader->register();
-        // section 127-0-1-1-62ede985:13d2586a59c:-8000:0000000000001FE5 end
-    }
 
     /**
      * Load the constant and configuration files.
@@ -146,7 +116,8 @@ class common_ext_ExtensionLoader
         common_Logger::t('Loading extension ' . $this->extension->getId() . ' constants');
         $ctxPath = ROOT_PATH . '/' . $this->extension->getID();
     	
-    	if ($this->extension->getID() != "generis"){
+    	// load the constants from the manifest
+        if ($this->extension->getID() != "generis"){
     		$ext = common_ext_ExtensionsManager::singleton()->getExtensionById($this->extension->getID());
     		if (count($ext->getConstants()) > 0) {
     			foreach ($ext->getConstants() as $key => $value) {
@@ -154,10 +125,6 @@ class common_ext_ExtensionLoader
     					define($key, $value);
     				}
     			}
-    		}
-    		// backward compatibility
-    		if (file_exists($ctxPath . "/includes/config.php")) {
-    			require_once $ctxPath . "/includes/config.php";
     		}
     	}
     	// we will load the constant file of the current extension and all it's dependancies

@@ -264,9 +264,6 @@ class common_ext_Manifest
     		if (!empty($array['classLoaderPackages'])){
     			$this->setClassLoaderPackages($array['classLoaderPackages']);
     		}
-    		else{
-    			throw new common_ext_MalformedManifestException("The 'classLoaderPackages' component is mandatory in manifest located at '{$this->getFilePath()}'.");
-    		}
     		
     		if (!empty($array['constants'])){
     			$this->setConstants($array['constants']);
