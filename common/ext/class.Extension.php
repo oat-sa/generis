@@ -23,33 +23,9 @@
 
 error_reporting(E_ALL);
 
-/**
- * Generis Object Oriented API - common/ext/class.Extension.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 18.02.2013, 15:42:12 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author lionel.lecaque@tudor.lu
- * @package common
- * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
- * @subpackage ext
- */
-
 if (0 > version_compare(PHP_VERSION, '5')) {
     die('This file was generated for PHP 5');
 }
-
-/* user defined includes */
-// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017AF-includes begin
-// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017AF-includes end
-
-/* user defined constants */
-// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017AF-constants begin
-// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017AF-constants end
 
 /**
  * Short description of class common_ext_Extension
@@ -62,10 +38,6 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  */
 class common_ext_Extension
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
 
     /**
      * Short description of attribute id
@@ -87,7 +59,7 @@ class common_ext_Extension
      * configuration array read from db
      *
      * @access private
-     * @var mixed
+     * @var array
      */
     private $dbConfig = null;
 
@@ -95,7 +67,7 @@ class common_ext_Extension
      * configuration array read from file
      *
      * @access public
-     * @var mixed
+     * @var array
      */
     public $fileConfig = null;
 
@@ -106,8 +78,6 @@ class common_ext_Extension
      * @var boolean
      */
     protected $installed = false;
-
-    // --- OPERATIONS ---
 
     /**
      * Should not be called directly, please use ExtensionsManager
@@ -121,7 +91,6 @@ class common_ext_Extension
      */
     public function __construct($id, $installed = false, $data = null)
     {
-        // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002320 begin
 		$this->id = $id;
 		$this->installed = $installed;
     	$manifestFile = EXTENSION_PATH.DIRECTORY_SEPARATOR.$id.DIRECTORY_SEPARATOR.MANIFEST_NAME;
@@ -132,7 +101,6 @@ class common_ext_Extension
 			throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '${id}'.", $id);
 		}
 		$this->dbConfig = $data;
-        // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002320 end
     }
 
     /**
@@ -147,9 +115,7 @@ class common_ext_Extension
     {
         $returnValue = (string) '';
 
-        // section 10-30-1--78--302e8d4b:13c05a95bce:-8000:0000000000001E9A begin
         $returnValue = $this->getDir().'includes'.DIRECTORY_SEPARATOR.'config.php';
-        // section 10-30-1--78--302e8d4b:13c05a95bce:-8000:0000000000001E9A end
 
         return (string) $returnValue;
     }
@@ -165,9 +131,7 @@ class common_ext_Extension
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A17 begin
         return $this->id;
-        // section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A17 end
 
         return (string) $returnValue;
     }
@@ -183,9 +147,7 @@ class common_ext_Extension
     {
         $returnValue = array();
 
-        // section 127-0-1-1--52d0f243:139d3b5b89e:-8000:0000000000001B39 begin
         $returnValue = $this->manifest->getConstants();
-        // section 127-0-1-1--52d0f243:139d3b5b89e:-8000:0000000000001B39 end
 
         return (array) $returnValue;
     }
@@ -201,7 +163,6 @@ class common_ext_Extension
     {
         $returnValue = array();
 
-        // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A0 begin
         if(is_null($this->dbConfig)) {
         	$db = core_kernel_classes_DbWrapper::singleton();
 			$query = "SELECT loaded,\"loadAtStartUp\",ghost FROM extensions WHERE id = ?";
@@ -210,12 +171,6 @@ class common_ext_Extension
 
 			if ($success && $row = $sth->fetch()){
 				$this->dbConfig = $row;
-				/*
-				$loaded = $row['loaded'] == 1;
-				$loadedAtStartUp = $row['loadAtStartUp'] == 1;
-				$ghost = $row['ghost'] == 1;
-				$this->configuration = new common_ext_ExtensionConfiguration($loaded,$loadedAtStartUp, $ghost);
-				*/
 				$sth->closeCursor();	
 			} else {
 				common_Logger::w('Unable to load dbconfig for '.$this->getID());
@@ -234,7 +189,6 @@ class common_ext_Extension
 			}
         }
         $returnValue = array_merge($this->dbConfig, $this->fileConfig);
-        // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A0 end
 
         return (array) $returnValue;
     }
@@ -250,7 +204,6 @@ class common_ext_Extension
      */
     public function setConfig($key, $value)
     {
-        // section 10-30-1--78--220638c3:13bfff7253d:-8000:0000000000009D34 begin
 		$this->fileConfig[$key] = $value;
 		$handle = fopen($this->getConfigFilePath(), 'w');
         $success = fwrite($handle, '<?php return '.common_Utils::toPHPVariableString($this->fileConfig).';');
@@ -258,7 +211,6 @@ class common_ext_Extension
         if (!$success) {
 			throw new common_exception_Error('Unable to write config for extension '.$this->getID());
         }
-        // section 10-30-1--78--220638c3:13bfff7253d:-8000:0000000000009D34 end
     }
 
     /**
@@ -273,14 +225,12 @@ class common_ext_Extension
     {
         $returnValue = null;
 
-        // section 10-30-1--78--220638c3:13bfff7253d:-8000:0000000000009D39 begin
         $config = $this->getConfigs();
         if (isset($config[$key])) {
         	$returnValue = $config[$key]; 
         } else {
         	common_Logger::w('Unknown config key '.$key.' used for extension '.$this->getID());
         }
-        // section 10-30-1--78--220638c3:13bfff7253d:-8000:0000000000009D39 end
 
         return $returnValue;
     }
@@ -295,12 +245,10 @@ class common_ext_Extension
      */
     public function unsetConfig($key)
     {
-        // section 10-30-1--78--220638c3:13bfff7253d:-8000:0000000000009D49 begin
         unset($this->fileConfig[$key]);
         $handle = fopen($this->getConfigFilePath(), 'w');
         fwrite($handle, '<? return '.common_Utils::toPHPVariableString($this->fileConfig).';');
         fclose($handle);
-        // section 10-30-1--78--220638c3:13bfff7253d:-8000:0000000000009D49 end
     }
 
     /**
@@ -314,9 +262,7 @@ class common_ext_Extension
     {
         $returnValue = (string) '';
 
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001E9B begin
         $returnValue = $this->manifest->getVersion();
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001E9B end
 
         return (string) $returnValue;
     }
@@ -332,9 +278,7 @@ class common_ext_Extension
     {
         $returnValue = (string) '';
 
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001E9D begin
         $returnValue = $this->manifest->getAuthor();
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001E9D end
 
         return (string) $returnValue;
     }
@@ -350,9 +294,7 @@ class common_ext_Extension
     {
         $returnValue = (string) '';
 
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001E9F begin
         $returnValue = $this->manifest->getName();
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001E9F end
 
         return (string) $returnValue;
     }
@@ -368,11 +310,9 @@ class common_ext_Extension
     {
         $returnValue = (bool) false;
 
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EA1 begin
     	if ($this->isInstalled()) {
         	$returnValue = !$this->getConfig('ghost');
         }
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EA1 end
 
         return (bool) $returnValue;
     }
@@ -388,9 +328,7 @@ class common_ext_Extension
     {
         $returnValue = (bool) false;
 
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EA3 begin
         $returnValue = $this->installed;
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EA3 end
 
         return (bool) $returnValue;
     }
@@ -406,9 +344,7 @@ class common_ext_Extension
     {
         $returnValue = (string) '';
 
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EA5 begin
 		$returnValue = EXTENSION_PATH .DIRECTORY_SEPARATOR.$this->getID().DIRECTORY_SEPARATOR;
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EA5 end
 
         return (string) $returnValue;
     }
@@ -425,7 +361,6 @@ class common_ext_Extension
     {
         $returnValue = null;
 
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EA7 begin
         $constants = $this->getConstants();
         if (isset($constants[$key])) {
         	$returnValue = $constants[$key];
@@ -435,7 +370,6 @@ class common_ext_Extension
         } else {
         	throw new common_exception_Error('Unknown constant \''.$key.'\'');
         }
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EA7 end
 
         return $returnValue;
     }
@@ -452,7 +386,6 @@ class common_ext_Extension
     {
         $returnValue = array();
 
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EAA begin
         if (file_exists($this->getConstant('DIR_ACTIONS'))) {
 			$dir = new DirectoryIterator($this->getConstant('DIR_ACTIONS'));
 		    foreach ($dir as $fileinfo) {
@@ -471,7 +404,6 @@ class common_ext_Extension
 				}
 			}
         }
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EAA end
 
         return (array) $returnValue;
     }
@@ -488,14 +420,12 @@ class common_ext_Extension
     {
         $returnValue = null;
 
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EAC begin
     	$className = $this->getID().'_actions_'.$id;
 		if(class_exists($className)) {
 			$returnValue = new $className;
 		} else {
 			common_Logger::e('could not load '.$className);
 		}
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EAC end
 
         return $returnValue;
     }
@@ -512,14 +442,12 @@ class common_ext_Extension
     {
         $returnValue = array();
 
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EAF begin
         $returnValue = array();
         foreach ($this->getManifest()->getDependencies() as $id) {
         	$returnValue[] = $id;
         	$dependence = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
         	$returnValue = array_unique(array_merge($returnValue, $dependence->getDependencies()));
         }
-        // section 10-30-1--78--70d18191:13c00dcd1c6:-8000:0000000000001EAF end
 
         return (array) $returnValue;
     }
@@ -535,9 +463,7 @@ class common_ext_Extension
     {
         $returnValue = null;
 
-        // section 10-30-1--78-5610a354:13cd2e07c14:-8000:0000000000001FB2 begin
         $returnValue = $this->manifest;
-        // section 10-30-1--78-5610a354:13cd2e07c14:-8000:0000000000001FB2 end
 
         return $returnValue;
     }
@@ -554,14 +480,37 @@ class common_ext_Extension
     {
         $returnValue = null;
 
-        // section 127-0-1-1-4028d1e7:13cedb79c9e:-8000:0000000000001FB1 begin
         $manifest = $this->getManifest();
         $returnValue = $manifest->getManagementRole();
-        // section 127-0-1-1-4028d1e7:13cedb79c9e:-8000:0000000000001FB1 end
 
         return $returnValue;
     }
+    
+    /**
+     * Get an array of Class URIs (as strings) that are considered optimizable by the Extension.
+     * 
+     * @access public
+     * @author Jerome Bogaerts <jerome@taotesting.com>
+     * @return array
+     */
+    public function getOptimizableClasses()
+	{
+		$manifest = $this->getManifest();
+		return $manifest->getOptimizableClasses();
+	}
 
-} /* end of class common_ext_Extension */
+	/**
+	 * Get an array of Property URIs (as strings) that are considered optimizable by the Extension.
+	 *
+	 * @access public
+	 * @author Jerome Bogaerts <jerome@taotesting.com>
+	 * @return array
+	 */
+	public function getOptimizableProperties()
+	{
+		$manifest = $this->getManifest();
+		return $manifest->getOptimizableProperties();
+	}
+}
 
 ?>

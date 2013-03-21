@@ -18,45 +18,14 @@
  *               
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API - core/kernel/persistence/class.Switcher.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 20.04.2011, 13:05:54 with ArgoUML PHP module
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
- * @package core
- * @subpackage kernel_persistence
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-	die('This file was generated for PHP 5');
-}
-
-/* user defined includes */
-// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001588-includes begin
-// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001588-includes end
-
-/* user defined constants */
-// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001588-constants begin
-// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001588-constants end
 
 /**
  * Short description of class core_kernel_persistence_Switcher
  *
  * @access public
  * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
- * @package core
- * @subpackage kernel_persistence
+ * @package generis
+ * @subpackage core_kernel_persistence
  */
 class core_kernel_persistence_Switcher
 {
@@ -311,6 +280,12 @@ class core_kernel_persistence_Switcher
 		$returnValue = (bool) false;
 
 		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 begin
+		$session = core_kernel_classes_Session::singleton();
+		$oldUpdatableModels = $session->getUpdatableModels();
+		
+		// Give access to all models during hardification.
+		$session->setUpdatableModels(self::getAllModels());
+		
         $classLabel = $class->getLabel();
         common_Logger::i("Hardifying class ${classLabel}", array("GENERIS"));
 
@@ -448,6 +423,7 @@ class core_kernel_persistence_Switcher
 
 			foreach($instances as $index =>  $resource){
 				if($referencer->isResourceReferenced($resource)){
+					common_Logger::i('/!\\ Resource already referenced');
 					core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_HARD);
 					$resource->delete();
 					core_kernel_persistence_PersistenceProxy::restoreImplementation();
@@ -464,12 +440,24 @@ class core_kernel_persistence_Switcher
 			$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
 			$rowMgr->insertRows($rows);
 			foreach($instances as $resource){
+				common_Logger::i('Referecing resource ' . $resource->getUri());
 				$referencer->referenceResource($resource, $tableName, null, true);
 
 				if($rmSources){
 					//remove exported resources in smooth sql, if required:
-					if (!$resource->delete()){//@TODO : modified resource::delete() because resource not in local modelId cannot be deleted
+					// Be carefull, the resource can still exist even if 
+					// delete returns true. Indeed, modelIds can be mixed between
+					// multiple models and only a part of the triples that consitute
+					// the resource might have been deleted.
+					if (!$resource->delete() || $resource->exists()){//@TODO : modified resource::delete() because resource not in local modelId cannot be deleted
 						$notDeletedInstances[] = $resource->getUri();
+						$startIndex++;
+						
+						common_Logger::i('Resource ' . $resource->getUri() . ' not deleted.');
+						common_Logger::i('$startIndex = ' . $startIndex);
+					}
+					else{
+						common_Logger::i('Resource deleted');
 					}
 				}
 			}
@@ -487,11 +475,15 @@ class core_kernel_persistence_Switcher
 			}
 
 			//update instance array and count value
+			common_Logger::i('getting instances (' . $startIndex . '-' . $instancePackSize);
 			$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
 			foreach($notDeletedInstances as $uri){
 				unset($instances[$uri]);
 			}
+			
+			common_Logger::i('hardification of ' . $class->getUri() . ' now finished');
 			$count = count($instances);
+			common_Logger::i('count = ' . $count);
 
 		} while($count> 0);
 
@@ -518,8 +510,11 @@ class core_kernel_persistence_Switcher
 				'recursive' 		=> false,
 				'removeForeigns' 	=> false
 			)));
-			var_dump('unhardened result statements '.$this->countStatements(). ' / '.$countStatement);
+			common_Logger::d('unhardened result statements '.$this->countStatements(). ' / '.$countStatement);
 		}
+		
+		// Give the normal rights on models to the session.
+		$session->setUpdatableModels($oldUpdatableModels);
 
 		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 end
 
@@ -576,6 +571,18 @@ class core_kernel_persistence_Switcher
 
 		return true;
 
+	}
+	
+	private static function getAllModels(){
+		$nsManager = common_ext_NamespaceManager::singleton();
+		$allModels = $nsManager->getAllNamespaces();
+		
+		$newUpdatableModels = array();
+		foreach ($allModels as $m){
+			$newUpdatableModels[$m->getModelId()] = $m->getUri();
+		}
+		
+		return $newUpdatableModels;
 	}
 } /* end of class core_kernel_persistence_Switcher */
 
