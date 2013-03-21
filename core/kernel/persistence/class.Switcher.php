@@ -423,7 +423,6 @@ class core_kernel_persistence_Switcher
 
 			foreach($instances as $index =>  $resource){
 				if($referencer->isResourceReferenced($resource)){
-					common_Logger::i('/!\\ Resource already referenced');
 					core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_HARD);
 					$resource->delete();
 					core_kernel_persistence_PersistenceProxy::restoreImplementation();
@@ -440,7 +439,6 @@ class core_kernel_persistence_Switcher
 			$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
 			$rowMgr->insertRows($rows);
 			foreach($instances as $resource){
-				common_Logger::i('Referecing resource ' . $resource->getUri());
 				$referencer->referenceResource($resource, $tableName, null, true);
 
 				if($rmSources){
@@ -452,12 +450,6 @@ class core_kernel_persistence_Switcher
 					if (!$resource->delete() || $resource->exists()){//@TODO : modified resource::delete() because resource not in local modelId cannot be deleted
 						$notDeletedInstances[] = $resource->getUri();
 						$startIndex++;
-						
-						common_Logger::i('Resource ' . $resource->getUri() . ' not deleted.');
-						common_Logger::i('$startIndex = ' . $startIndex);
-					}
-					else{
-						common_Logger::i('Resource deleted');
 					}
 				}
 			}
@@ -475,15 +467,12 @@ class core_kernel_persistence_Switcher
 			}
 
 			//update instance array and count value
-			common_Logger::i('getting instances (' . $startIndex . '-' . $instancePackSize);
 			$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
 			foreach($notDeletedInstances as $uri){
 				unset($instances[$uri]);
 			}
-			
-			common_Logger::i('hardification of ' . $class->getUri() . ' now finished');
+
 			$count = count($instances);
-			common_Logger::i('count = ' . $count);
 
 		} while($count> 0);
 
