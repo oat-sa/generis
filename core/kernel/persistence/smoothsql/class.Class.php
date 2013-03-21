@@ -865,7 +865,6 @@ class core_kernel_persistence_smoothsql_Class
 		if(isset($options['like'])){
 			$like = ($options['like'] === true);
 		}
-		//PPL modif below to prevent from building a useless embedded query in the case there is no propertyfilter specified, looks like this is often the 
 		
 		    $query = 'SELECT "subject" FROM "statements" WHERE ';
 		    $conditions = array();
