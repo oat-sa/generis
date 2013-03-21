@@ -887,7 +887,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     					foreach ($properties as $property){
     						$propertyUri = $property->getUri();
     						if ($property->isMultiple() || $property->isLgDependent()){
-    				
+    							
     							if(isset(self::$_properties[$propertyUri])) {
     								if (!in_array("{$table}Props", self::$_properties[$propertyUri])){
     									self::$_properties[$propertyUri][] = "{$table}Props";
@@ -897,7 +897,6 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     							}
     				
     						} else {
-    								
     							if(isset(self::$_properties[$propertyUri])) {
     								if (!in_array("{$table}", self::$_properties[$propertyUri])){
     									self::$_properties[$propertyUri][] = "{$table}";

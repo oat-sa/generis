@@ -172,11 +172,11 @@ class core_kernel_persistence_hardsql_Resource
 		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
 		$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
 		$propertyLocation = $referencer->propertyLocation($property);
-
+		
 		// Select in the properties table of the class
 		if (in_array("{$table}Props", $propertyLocation)
 		|| ! $referencer->isPropertyReferenced($property)){
-			
+
 			try{
 				// Check if we have to return first or last entry
 				$one = isset($options['one']) && $options['one'] == true ? true : false;

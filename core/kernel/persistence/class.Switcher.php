@@ -375,7 +375,7 @@ class core_kernel_persistence_Switcher
 			(isset($options['rmSources'])) ? $rmSources = (bool) $options['rmSources'] : $rmSources = true;
 			
 			//if defined, we took all the properties of the class and it's parents till the topclass
-			(isset($options['topClass'])) ? $topClass = $options['topClass'] : $topClass = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
+			(isset($options['topClass'])) ? $topClass = $options['topClass'] : $topClass = new core_kernel_classes_Class(RDFS_RESOURCE);
 			
 			//if defined, compile the additional properties
 			(isset($options['additionalProperties'])) ? $additionalProperties = $options['additionalProperties'] : $additionalProperties = array();
