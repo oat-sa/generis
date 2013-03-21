@@ -15,40 +15,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);\n *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
+ *              2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
 
-error_reporting(E_ALL);
-
-/**
- * Abstraction for the System Logger
- *
- * @author Joel Bout, <joel.bout@tudor.lu>
- * @package common
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/* user defined includes */
-// section 127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7-includes begin
-require_once('common/log/class.Item.php');
-// section 127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7-includes end
-
-/* user defined constants */
-// section 127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7-constants begin
-// section 127-0-1-1--ff2797c:12dc23d98f0:-8000:0000000000003EC7-constants end
 
 /**
  * Abstraction for the System Logger
  *
  * @access public
  * @author Joel Bout, <joel.bout@tudor.lu>
- * @package common
+ * @package generis
+ * @subpackage common
  */
 class common_Logger
 {
@@ -415,7 +394,7 @@ class common_Logger
      * @param  int errorNumber
      * @param  string errorString
      * @param  string errorFile
-     * @param  int errorLine
+     * @param  mixed  errorLine
      * @param  array errorContext
      * @return boolean
      */
