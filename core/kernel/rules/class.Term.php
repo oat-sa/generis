@@ -200,7 +200,6 @@ class core_kernel_rules_Term
     		common_Logger::d('Property uri ' . $property->getUri(), array('Generis Term evaluateSPX'));
     		common_Logger::d('Property name ' . $property->getLabel(), array('Generis Term evaluateSPX'));
        		$returnValue = $resource->getPropertyValuesCollection($property);
-       		$returnValue->debug = __METHOD__;
        		common_Logger::d($returnValue->count() . ' values returned ', array('Generis Term evaluateSPX'));
 
        		if($returnValue->isEmpty()) {
@@ -247,8 +246,6 @@ class core_kernel_rules_Term
 		foreach($terms as $term){
 			$returnValue->add($term);
 		}
-    	
-		$returnValue->debug = __METHOD__;
     	return $returnValue;
         // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015BF end
     }
@@ -267,8 +264,7 @@ class core_kernel_rules_Term
     	$operator = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_SET_OPERATOR));
     	$subSets = $this->getPropertyValuesCollection(new core_kernel_classes_Property(PROPERTY_SUBSET));
     	$returnValue = new core_kernel_classes_ContainerCollection($this);
-		$returnValue->debug = __METHOD__;
-		
+
 		foreach ($subSets->getIterator() as $aSet) {
     		
     		if ($aSet instanceof core_kernel_classes_Resource ) {

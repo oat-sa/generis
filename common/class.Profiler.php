@@ -1,5 +1,5 @@
 <?php
-/*  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -15,24 +15,61 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);\n *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
+
+/**
+ * Profiler class
+ *
+ * @author Somsack Sipasseuth ,<sam@taotesting.com>
+ * @package generis
+ * @subpackage common
+ */
 class common_Profiler
 {
-	
-	private static $instance = null;
-	private $startTime = 0;
-	private $startTimeLogs = array();
-	private $elapsedTimeLogs = array();
-	private $slowQueries = array();
-	protected $loggers = array();//specify how messages should be logged, common_Logger, client popup
-	private $slowQueryTimer = 0;
-	private $slowQueryThreshold = 100;//in milliseconds (ms)
-	
-	public static function singleton()
+	/*
+	 * @var common_Profiler
+	 */
+    private static $instance = null;
+
+    /**
+     * @var int|mixed
+     */
+    private $startTime = 0;
+    /**
+     * @var array
+     */
+    private $startTimeLogs = array();
+    /**
+     * @var array
+     */
+    private $elapsedTimeLogs = array();
+    /**
+     * @var array
+     */
+    private $slowQueries = array();
+    /**
+     * @var array
+     */
+    protected $loggers = array();//specify how messages should be logged, common_Logger, client popup
+    /**
+     * @var int
+     */
+    private $slowQueryTimer = 0;
+    /**
+     * @var int
+     */
+    private $slowQueryThreshold = 100;//in milliseconds (ms)
+
+    /**
+     * Singleton
+     *
+     * @static
+     * @return null
+     */
+    public static function singleton()
     {
         $returnValue = null;
 
@@ -43,23 +80,42 @@ class common_Profiler
 
         return $returnValue;
     }
-	
-	private function __construct()
+
+    /**
+     * Constructor
+     *
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     * @access private
+     */
+    private function __construct()
     {
 		$this->startTime = self::getCurrentTime();
 	}
-	
-	protected function getCurrentTime()
+
+    /**
+     *
+     *
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     * @return mixed
+     */
+    protected function getCurrentTime()
     {
 		return microtime(true);
 	}
-	
-	public function register()
+
+    /**
+     *
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    public function register()
     {
 		register_shutdown_function(array($this, 'shutdownProfiler'));
 	}
-	
-	public function shutdownProfiler()
+
+    /**
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    public function shutdownProfiler()
     {
 		$this->logRequestUrl();
 		$this->logTimer();
@@ -67,8 +123,12 @@ class common_Profiler
 		$this->logNrOfQueries();
 		$this->logSlowQueries();
 	}
-	
-	protected function logTimer(){
+
+    /**
+     *
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    protected function logTimer(){
 		$total = $this->getCurrentTime() - $this->startTime;
 		$totalRounded = round($total * 1000, 3);
 		$sumDurations = 0;
@@ -81,7 +141,13 @@ class common_Profiler
 		$this->log('???: ' . round($uncovered * 1000, 3) . 'ms/'.$totalRounded.'ms (' . round($uncovered / $total * 100, 1) . '%)');
 	}
 	
-	protected function prettyPrintMemory($mem){
+	/**
+     *
+     * @param $mem
+     * @return string
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    protected function prettyPrintMemory($mem){
 		$returnValue = '';
 		if ($mem < 1024){
 			$returnValue = $mem.'B';
@@ -93,7 +159,11 @@ class common_Profiler
 		return $returnValue;
 	}
 	
-	protected function logMemoryPeakUsage(){
+	/**
+     *
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    protected function logMemoryPeakUsage(){
 		$memPeak = memory_get_peak_usage(true);
 		$memMax = ini_get('memory_limit');
 		$memPc = 0;
@@ -106,48 +176,96 @@ class common_Profiler
 		$this->log('peak mem usage: '.$this->prettyPrintMemory($memPeak).'/'.$this->prettyPrintMemory($memMax).' ('.$memPc.'%)');
 	}
 	
-	protected function logNrOfQueries(){
+	/**
+     *
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    protected function logNrOfQueries(){
 		$this->log(core_kernel_classes_DbWrapper::singleton()->getNrOfQueries().' queries for this request');
 	}
 	
-	protected function logRequestUrl(){
+	/**
+     *
+     */
+    protected function logRequestUrl(){
 		$requestUrl = Context::getInstance()->getExtensionName() . '/' . Context::getInstance()->getModuleName() . '/' . Context::getInstance()->getActionName();
 		$this->log('Profiling action called: '.$requestUrl);
 	}
-	protected function log($msg){
+	/**
+     * @param $msg
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    protected function log($msg){
 		common_Logger::d($msg, array('PROFILER'));
 	}
 	
-	public static function start($flag){
+	/**
+     * @static
+     * @param $flag
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    public static function start($flag){
 		self::singleton()->startTimer($flag);
 	}
 	
-	public static function stop($flag){
+	/**
+     * @static
+     * @param $flag
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    public static function stop($flag){
 		self::singleton()->stopTimer($flag);
 	}
 	
-	public static function queryStart(){
+	/**
+     * @static
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     *
+     */
+    public static function queryStart(){
 		self::singleton()->startSlowQuery();
 	}
 	
-	public static function queryStop($statement, $params = array()){
+	/**
+     * @static
+     * @param $statement
+     * @param array $params
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    public static function queryStop($statement, $params = array()){
 		self::singleton()->stopSlowQuery($statement, $params);
 	}
 	
-	public function startTimer($flag = 'global'){
+	/**
+     * @param string $flag
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    public function startTimer($flag = 'global'){
 		$this->startTimeLogs[$flag] = $this->getCurrentTime();
 	}
 	
-	public function stopTimer($flag = 'global'){
+	/**
+     * @param string $flag
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    public function stopTimer($flag = 'global'){
 		$startTime = isset($this->startTimeLogs[$flag])?$this->startTimeLogs[$flag]:$this->startTime;
 		$this->elapsedTimeLogs[$flag] = $this->getCurrentTime() - $startTime;
 	}
 	
-	public function startSlowQuery(){
+	/**
+     *
+     */
+    public function startSlowQuery(){
 		$this->slowQueryTimer = $this->getCurrentTime();
 	}
 	
-	public function stopSlowQuery($statement, $params = array()){
+	/**
+     * @param $statement
+     * @param array $params
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    public function stopSlowQuery($statement, $params = array()){
 		if($this->slowQueryTimer){//log only if timer has been started
 			$statementKey = md5($statement);
 			$time = $this->getCurrentTime() - $this->slowQueryTimer;
@@ -165,7 +283,12 @@ class common_Profiler
 		$this->slowQueryTimer = 0;
 	}
 	
-	protected function logSlowQueries(){
+	/**
+     *
+     *
+     *@author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    protected function logSlowQueries(){
 		foreach($this->slowQueries as $logs) {
 			$count = count($logs); 
 			for($i=0;$i<$count;$i++){
@@ -178,7 +301,10 @@ class common_Profiler
 	 * (experimental)
 	 * call common_Profiler::singleton()->initMysqlProfiler(); when after the DbWrapper has been constructed
 	 */
-	public function initMysqlProfiler(){
+	/**
+     *@author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    public function initMysqlProfiler(){
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		if($dbWrapper instanceof core_kernel_classes_MysqlDbWrapper){
 			$dbWrapper->exec('SET profiling = 1');
@@ -190,7 +316,10 @@ class common_Profiler
 	 * (experimental)
 	 * log profiles from mysql built-in profiler
 	 */
-	protected function logMysqlProfiles(){
+	/**
+     *@author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    protected function logMysqlProfiles(){
 		
 		$this->initMysqlProfiler();
 		

@@ -408,9 +408,6 @@ class core_kernel_classes_Resource
         }
         if($collection->count() == 1 ) {
             $returnValue= $collection->get(0);
-            if(DEBUG_MODE){
-            	$returnValue->debug = __METHOD__;
-            }
         }
         else {
         	$propLabel = $property->getLabel();

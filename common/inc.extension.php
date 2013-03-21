@@ -1,5 +1,5 @@
 <?php
-/*  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -18,9 +18,6 @@
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);\n *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-error_reporting(E_ALL);
 
 /**
  * Generis Object Oriented API - common\inc.extension.php
@@ -29,7 +26,8 @@ error_reporting(E_ALL);
  *
  *
  * @author lionel.lecaque@tudor.lu
- * @package common
+ * @package generis
+ * @subpackage common
  * @license GPLv2  http://www.opensource.org/licenses/gpl-2.0.php
  */
 

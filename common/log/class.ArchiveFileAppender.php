@@ -189,6 +189,7 @@ class common_log_ArchiveFileAppender
     	}
     	$this->filehandle = @fopen($this->filename, 'a');
         // section 127-0-1-1-7b882644:1342260c2b6:-8000:0000000000001868 end
+
     }
 
     /**

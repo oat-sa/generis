@@ -1,5 +1,5 @@
 <?php
-/*  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -15,59 +15,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);\n *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
 
-error_reporting(E_ALL);
 
 /**
  * Generis Object Oriented API - common\class.Collection.php
  *
- * $Id$
+ * Object Collection
  *
  * This file is part of Generis Object Oriented API.
  *
  * Automatically generated on 24.03.2010, 14:38:36 with ArgoUML PHP module 
  * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
  *
- * @author lionel.lecaque@tudor.lu
- * @package common
+ * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
+ * @package generis
+ * @subpacakge common
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
  */
 
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * include common_Object
- *
- * @author lionel.lecaque@tudor.lu
- * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
- */
-require_once('common/class.Object.php');
-
-/* user defined includes */
-// section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BA1-includes begin
-// section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BA1-includes end
-
-/* user defined constants */
-// section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BA1-constants begin
-// section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BA1-constants end
-
-/**
- * Short description of class common_Collection
- *
- * @access public
- * @author lionel.lecaque@tudor.lu
- * @package common
- * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
- */
 class common_Collection
-    extends common_Object
+    extends common_Object implements IteratorAggregate
 {
     // --- ASSOCIATIONS ---
 
@@ -96,7 +67,7 @@ class common_Collection
      * Short description of method __construct
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @param  Object container
      * @param  string debug
      * @return void
@@ -113,7 +84,7 @@ class common_Collection
      * return the number of node of the collection (only this level)
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @return int
      */
     public function count()
@@ -131,7 +102,7 @@ class common_Collection
      * return the index of the node array at which the given node resides
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @param  Object object
      * @return int
      */
@@ -155,7 +126,7 @@ class common_Collection
      * Retrun the node at the given index
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @param  int index
      * @return common_Object
      */
@@ -178,7 +149,7 @@ class common_Collection
      * Short description of method isEmpty
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @return boolean
      */
     public function isEmpty()
@@ -196,7 +167,7 @@ class common_Collection
      * Implementation of ArrayAccess:offsetSet()
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @param  Object key
      * @param  Object value
      * @return void
@@ -212,7 +183,7 @@ class common_Collection
      * Implementation of ArrayAccess:offsetGet()
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @param  Object key
      * @return common_Object
      */
@@ -231,7 +202,7 @@ class common_Collection
      * Implementation of ArrayAccess:offsetUnset()
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @param  Object key
      * @return void
      */
@@ -246,7 +217,7 @@ class common_Collection
      * Implementation of ArrayAccess:offsetExists()
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @param  Object key
      * @return boolean
      */
@@ -265,7 +236,7 @@ class common_Collection
      * Implementation of IteratorAggregate::getIterator()
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @return mixed
      */
     public function getIterator()
@@ -279,7 +250,7 @@ class common_Collection
      * Add a node to the collection
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @param  Object node
      * @return mixed
      */
@@ -292,36 +263,10 @@ class common_Collection
     }
 
     /**
-     * return a string with HTML representation of the collection
-     *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @return string
-     */
-    public function toHtml()
-    {
-        $returnValue = (string) '';
-
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BFB begin
-    	if (!($this->isEmpty()))
-		{
-			$returnValue.='<span style="display:block;margin:5px;padding:5px;align:center;border: #9c9c9c 1px dashed;border-color:black;font-family:Verdana;background-color:#F5F5F5;font-size:8;font-weight:bold;"><span style=color:#003399;>'.$this->debug.'</span><br>';
-			foreach ($this->sequence as $container)
-				{
-					$returnValue.=$container->toHtml();
-				}
-			$returnValue.='</span>';
-		}
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BFB end
-
-        return (string) $returnValue;
-    }
-
-    /**
      * Remove the node from the collection
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @param  Object object
      * @return boolean
      */
@@ -347,7 +292,7 @@ class common_Collection
      * Short description of method union
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @param  Collection collection
      * @return common_Collection
      */
@@ -367,7 +312,7 @@ class common_Collection
      * Short description of method intersect
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @param  Collection collection
      * @return common_Collection
      */
@@ -387,7 +332,7 @@ class common_Collection
      * Short description of method toArray
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @return array
      */
     public function toArray()

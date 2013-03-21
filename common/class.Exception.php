@@ -1,5 +1,5 @@
 <?php
-/*  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -18,20 +18,15 @@
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);\n *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
+
 /**
  * Generis Object Oriented API - common\class.Exception.php
  *
- *
- *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 02.04.2009, 14:14:33 with ArgoUML PHP module 
- * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
- *
  * @author lionel.lecaque@tudor.lu
- * @package common
+ * @package generis
+ * @subpackage common
  * @license GPLv2  http://www.opensource.org/licenses/gpl-2.0.php
  */
 
