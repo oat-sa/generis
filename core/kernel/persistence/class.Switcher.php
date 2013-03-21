@@ -20,7 +20,10 @@
  */
 
 /**
- * Short description of class core_kernel_persistence_Switcher
+ * The Switcher class aims at providing a programming interface to:
+ * 
+ * - Hardify a specific class.
+ * - Unhardify a specific class.
  *
  * @access public
  * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
@@ -35,25 +38,57 @@ class core_kernel_persistence_Switcher
 	// --- ATTRIBUTES ---
 
 	/**
-	 * The list of classes that should never been compiled
+	 * The list of classes that must never be compiled.
+	 * 
 	 * @var array
 	 */
 	private static $blackList = array();
+	
+	/**
+	 * The list of classes that were compiled during the last call of the
+	 * hardify method.
+	 * 
+	 * @var array
+	 */
 	private $hardenedClasses = array();
+	
+	/**
+	 * The list of classes that were decompiled during the last call of the
+	 * unhardify method.
+	 * 
+	 * @var array
+	 */
 	private $decompiledClasses = array();
 
 	// --- OPERATIONS ---
 
+	/**
+	 * Creates a new instance of Switcher. 
+	 * 
+	 * @access public
+	 * @param array $blackList An array of URIs (as strings) that must never be implied in compiling.
+	 */
 	public function __construct($blackList = array()){
 		self::$blackList = array_merge(array(RDFS_CLASS, RDFS_MEMBER, RDF_PROPERTY), $blackList);
 	}
 
+	/**
+	 * Behaviour to adopt when an instancer of Switcher is destroyed by PHP.
+	 * 
+	 * @access public
+	 */
 	public function __destruct(){
 		core_kernel_persistence_ClassProxy::$ressourcesDelegatedTo = array();
 		core_kernel_persistence_ResourceProxy::$ressourcesDelegatedTo = array();
 		core_kernel_persistence_PropertyProxy::$ressourcesDelegatedTo = array();
 	}
 
+	/**
+	 * Count the amount of RDF statements in the statements table.
+	 * 
+	 * @access public
+	 * @return int
+	 */
 	private function countStatements (){
 		$query =  "SELECT count(*) FROM statements";
 		$result = core_kernel_classes_DbWrapper::singleton()->query($query);
@@ -62,13 +97,15 @@ class core_kernel_persistence_Switcher
 	}
 
 	/**
-	 * Short description of method unhardifier
+	 * Unhardify a specific class. Unhardifying a class implies that the instances of this
+	 * class will be transfered from specific optimized tables to the statement table, as RDF
+	 * triples.
 	 *
 	 * @access public
 	 * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-	 * @param  Class class
+	 * @param  core_kernel_classes_Class class
 	 * @param  array options
-	 * @return boolean
+	 * @return boolean true if the resource was correctly unhardified, false otherwise.
 	 */
 	public function unhardify (core_kernel_classes_Class $class, $options = array ()) {
 
@@ -267,257 +304,287 @@ class core_kernel_persistence_Switcher
 	protected $foreignPropertiesWaitingList = array();
 
 	/**
-	 * Short description of method hardifier
+	 * Calling this method will transfer all instances of $class from the statements table
+	 * to specific optimized relational tables.
+	 * 
+	 * During optimization, the current user has all privileges on the persistent memory. At
+	 * the end of the process, the old privileges will be set back.
 	 *
 	 * @access public
 	 * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
-	 * @param  Class class
+	 * @param  core_kernel_classes_Class class
 	 * @param  array options
-	 * @return boolean
+	 * @return boolean Will return true if it succeeds, false otherwise.
 	 */
 	public function hardify( core_kernel_classes_Class $class, $options = array())
 	{
 		$returnValue = (bool) false;
-
-		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 begin
 		$session = core_kernel_classes_Session::singleton();
 		$oldUpdatableModels = $session->getUpdatableModels();
 		
-		// Give access to all models during hardification.
-		$session->setUpdatableModels(self::getAllModels());
-		
-        $classLabel = $class->getLabel();
-        common_Logger::i("Hardifying class ${classLabel}", array("GENERIS"));
-
-		if (defined ("DEBUG_PERSISTENCE") && DEBUG_PERSISTENCE){
-			if (in_array($class->getUri(), self::$debug_tables)){
-				return;
+		try{
+			// Give access to all models during hardification.
+			$session->setUpdatableModels(self::getAllModels());
+			
+			$classLabel = $class->getLabel();
+			common_Logger::i("Hardifying class ${classLabel}", array("GENERIS"));
+			
+			if (defined ("DEBUG_PERSISTENCE") && DEBUG_PERSISTENCE){
+				if (in_array($class->getUri(), self::$debug_tables)){
+					return;
+				}
+				common_Logger::d('hardify ' .$class->getUri());
+				self::$debug_tables[] = $class->getUri();
+				$countStatement = $this->countStatements();
 			}
-			common_Logger::d('hardify ' .$class->getUri());
-			self::$debug_tables[] = $class->getUri();
-			$countStatement = $this->countStatements();
-		}
-
-		if(in_array($class->getUri(), self::$blackList)){
-			return $returnValue;
-		}
-
-		// ENTER IN SMOOTH SQL MODE
-		core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
-
-		//recursive will hardify the class and it's subclasses in the same table!
-		(isset($options['recursive'])) ? $recursive = $options['recursive'] : $recursive = false;
-
-		//createForeigns will hardify the class that are range of the properties
-		(isset($options['createForeigns'])) ? $createForeigns = $options['createForeigns'] : $createForeigns = false;
-
-		//check if we append the data in case the hard table exists or truncate the table and add the new rows
-		(isset($options['append'])) ? $append = $options['append'] : $append = false;
-
-		//If the option is true, we check if the table has alreayd been created, if yes, it's finished. If no, we can continue.
-		(isset($options['allOrNothing'])) ? $allOrNothing = $options['allOrNothing'] : $allOrNothing = false;
-
-		//if true, the instances of the class will  be removed from the statements table!
-		(isset($options['rmSources'])) ? $rmSources = (bool) $options['rmSources'] : $rmSources = false;
-
-		//if defined, we took all the properties of the class and it's parents till the topclass
-		(isset($options['topClass'])) ? $topClass = $options['topClass'] : $topClass = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
-
-		//if defined, compile the additional properties
-		(isset($options['additionalProperties'])) ? $additionalProperties = $options['additionalProperties'] : $additionalProperties = array();
-
-		//if defined, reference the additional class to the table
-		(isset($options['referencesAllTypes'])) ? $referencesAllTypes = $options['referencesAllTypes'] : $referencesAllTypes = false;
-
-		$tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
-		$myTableMgr = new core_kernel_persistence_hardapi_TableManager($tableName);
-
-		if($allOrNothing && $myTableMgr->exists() && !$class->countInstances()){
-		    common_Logger::d("Class ${classLabel} not hardified");
-		    core_kernel_persistence_PersistenceProxy::restoreImplementation();
-			return $returnValue;
-		}
-
-		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
-
-		//get the table columns from the class properties
-		$columns = array();
-		$ps = new core_kernel_persistence_switcher_PropertySwitcher($class);
-		$properties = $ps->getProperties($additionalProperties);
-		$columns = $ps->getTableColumns($additionalProperties, self::$blackList);
-
-		//init the count value in hardened classes:
-		if(isset($this->hardenedClasses[$class->getUri()])){
-		    core_kernel_persistence_PersistenceProxy::restoreImplementation();
-			return true;//already being compiled
-		}else{
-			$this->hardenedClasses[$class->getUri()] = 0;
-		}
-
-		// Treat foreign classes of the current class
-		foreach($columns as $i => $column){
-			//create the foreign tables recursively
-			if(isset($column['foreign']) && !empty($column['foreign'])){
-				if($createForeigns){
-					$foreignClassUri = core_kernel_persistence_hardapi_Utils::getLongName($column['foreign']);
-					$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
-					if(!$foreignTableMgr->exists()){
-						if(!in_array($foreignClassUri, array_keys($this->hardenedClasses))){
-							$range = new core_kernel_classes_Class($foreignClassUri);
-							$this->hardify($range, array_merge($options, array(
-                                'recursive' 	=> false,
-                                'append' 		=> true,
-                                'allOrNothing'	=> true
-							)));
-						}else{
-							//set in waiting list, the property to be set as foreign key on a table to be compiled
-							//array(range => array(currentClass => property))
-							//array(foreignTable => array(currentTable => column))
-							if(!isset($this->foreignPropertiesWaitingList[$column['foreign']])){
-								$this->foreignPropertiesWaitingList[$column['foreign']] = array($tableName => $column['name']);
+			
+			if(in_array($class->getUri(), self::$blackList)){
+				return $returnValue;
+			}
+			
+			// ENTER IN SMOOTH SQL MODE
+			core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
+			
+			//recursive will hardify the class and it's subclasses in the same table!
+			(isset($options['recursive'])) ? $recursive = $options['recursive'] : $recursive = false;
+			
+			//createForeigns will hardify the class that are range of the properties
+			(isset($options['createForeigns'])) ? $createForeigns = $options['createForeigns'] : $createForeigns = false;
+			
+			//check if we append the data in case the hard table exists or truncate the table and add the new rows
+			(isset($options['append'])) ? $append = $options['append'] : $append = false;
+			
+			//If the option is true, we check if the table has alreayd been created, if yes, it's finished. If no, we can continue.
+			(isset($options['allOrNothing'])) ? $allOrNothing = $options['allOrNothing'] : $allOrNothing = false;
+			
+			//if true, the instances of the class will  be removed from the statements table!
+			(isset($options['rmSources'])) ? $rmSources = (bool) $options['rmSources'] : $rmSources = false;
+			
+			//if defined, we took all the properties of the class and it's parents till the topclass
+			(isset($options['topClass'])) ? $topClass = $options['topClass'] : $topClass = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
+			
+			//if defined, compile the additional properties
+			(isset($options['additionalProperties'])) ? $additionalProperties = $options['additionalProperties'] : $additionalProperties = array();
+			
+			//if defined, reference the additional class to the table
+			(isset($options['referencesAllTypes'])) ? $referencesAllTypes = $options['referencesAllTypes'] : $referencesAllTypes = false;
+			
+			$tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
+			$myTableMgr = new core_kernel_persistence_hardapi_TableManager($tableName);
+			
+			if($allOrNothing && $myTableMgr->exists() && !$class->countInstances()){
+				common_Logger::d("Class ${classLabel} not hardified");
+				core_kernel_persistence_PersistenceProxy::restoreImplementation();
+				return $returnValue;
+			}
+			
+			$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+			
+			//get the table columns from the class properties
+			$columns = array();
+			$ps = new core_kernel_persistence_switcher_PropertySwitcher($class);
+			$properties = $ps->getProperties($additionalProperties);
+			$columns = $ps->getTableColumns($additionalProperties, self::$blackList);
+			
+			//init the count value in hardened classes:
+			if(isset($this->hardenedClasses[$class->getUri()])){
+				core_kernel_persistence_PersistenceProxy::restoreImplementation();
+				return true;//already being compiled
+			}else{
+				$this->hardenedClasses[$class->getUri()] = 0;
+			}
+			
+			// Treat foreign classes of the current class
+			foreach($columns as $i => $column){
+				//create the foreign tables recursively
+				if(isset($column['foreign']) && !empty($column['foreign'])){
+					if($createForeigns){
+						$foreignClassUri = core_kernel_persistence_hardapi_Utils::getLongName($column['foreign']);
+						$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
+						if(!$foreignTableMgr->exists()){
+							if(!in_array($foreignClassUri, array_keys($this->hardenedClasses))){
+								$range = new core_kernel_classes_Class($foreignClassUri);
+								$this->hardify($range, array_merge($options, array(
+										'recursive' 	=> false,
+										'append' 		=> true,
+										'allOrNothing'	=> true
+								)));
 							}else{
-								$this->foreignPropertiesWaitingList[$column['foreign']][$tableName] = $column['name'];
+								//set in waiting list, the property to be set as foreign key on a table to be compiled
+								//array(range => array(currentClass => property))
+								//array(foreignTable => array(currentTable => column))
+								if(!isset($this->foreignPropertiesWaitingList[$column['foreign']])){
+									$this->foreignPropertiesWaitingList[$column['foreign']] = array($tableName => $column['name']);
+								}else{
+									$this->foreignPropertiesWaitingList[$column['foreign']][$tableName] = $column['name'];
+								}
+								unset($columns[$i]['foreign']);//do not create the foreign key for now
 							}
-							unset($columns[$i]['foreign']);//do not create the foreign key for now
+						}
+					}else{
+						unset($columns[$i]['foreign']);//do not create foreign key at all
+					}
+				}
+			}
+			
+			// important! need to force the mode again to "smooth" after foreign classes (ranges) compilation
+			//core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
+			
+			if(!$append || ($append && !$myTableMgr->exists())){
+			
+				//create the table
+				if($myTableMgr->exists()){
+					$myTableMgr->remove();
+				}
+				$myTableMgr->create($columns);
+			
+				//reference the class
+				$referencer->referenceClass($class, array (
+						"topClass" 				=> $topClass,
+						"additionalProperties" 	=> $additionalProperties
+				));
+			
+				if($referencesAllTypes){
+					$referencer->referenceInstanceTypes($class);
+				}
+			}
+			
+			//insert the resources
+			$startIndex = 0;
+			$instancePackSize = 100;
+			$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
+			$count = count($instances);
+			$notDeletedInstances = array ();
+			do{
+				//reset timeout:
+				set_time_limit(30);
+			
+				$rows = array();
+			
+				foreach($instances as $index =>  $resource){
+					if($referencer->isResourceReferenced($resource)){
+						core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_HARD);
+						$resource->delete();
+						core_kernel_persistence_PersistenceProxy::restoreImplementation();
+					}
+					$row = array('uri' => $resource->getUri());
+					foreach($properties as $property){
+						$propValue = $resource->getOnePropertyValue($property);
+						$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propValue;
+					}
+			
+					$rows[] = $row;
+				}
+			
+				$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
+				$rowMgr->insertRows($rows);
+				foreach($instances as $resource){
+					$referencer->referenceResource($resource, $tableName, null, true);
+			
+					if($rmSources){
+						//remove exported resources in smooth sql, if required:
+						// Be carefull, the resource can still exist even if
+						// delete returns true. Indeed, modelIds can be mixed between
+						// multiple models and only a part of the triples that consitute
+						// the resource might have been deleted.
+						if (!$resource->delete() || $resource->exists()){//@TODO : modified resource::delete() because resource not in local modelId cannot be deleted
+							$notDeletedInstances[] = $resource->getUri();
+							$startIndex++;
 						}
 					}
+				}
+			
+				if(!$rmSources){
+					//increment start index only if not removed
+					$startIndex += $instancePackSize;
+				}
+			
+				//record hardened instances number
+				if(isset($this->hardenedClasses[$class->getUri()])){
+					$this->hardenedClasses[$class->getUri()] += $count;
 				}else{
-					unset($columns[$i]['foreign']);//do not create foreign key at all
+					$this->hardenedClasses[$class->getUri()] = $count;
+				}
+			
+				//update instance array and count value
+				$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
+				foreach($notDeletedInstances as $uri){
+					unset($instances[$uri]);
+				}
+			
+				$count = count($instances);
+			
+			} while($count> 0);
+			
+			$returnValue = true;
+			
+			// Treat subclasses of the current class
+			if($recursive){
+				foreach($class->getSubClasses(true) as $subClass){
+					$returnValue = $this->hardify($subClass, array_merge($options, array(
+							'recursive' 	=> false,
+							'append' 	=> true,
+							'allOrNothing'	=> true
+					)));
 				}
 			}
-		}
-
-		// important! need to force the mode again to "smooth" after foreign classes (ranges) compilation
-		//core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
-
-		if(!$append || ($append && !$myTableMgr->exists())){
-
-			//create the table
-			if($myTableMgr->exists()){
-				$myTableMgr->remove();
-			}
-			$myTableMgr->create($columns);
-
-			//reference the class
-			$referencer->referenceClass($class, array (
-				"topClass" 				=> $topClass,
-				"additionalProperties" 	=> $additionalProperties
-			));
-
-			if($referencesAllTypes){
-				$referencer->referenceInstanceTypes($class);
-			}
-		}
-
-		//insert the resources
-		$startIndex = 0;
-		$instancePackSize = 100;
-		$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
-		$count = count($instances);
-		$notDeletedInstances = array ();
-		do{
-			//reset timeout:
-			set_time_limit(30);
-
-			$rows = array();
-
-			foreach($instances as $index =>  $resource){
-				if($referencer->isResourceReferenced($resource)){
-					core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_HARD);
-					$resource->delete();
-					core_kernel_persistence_PersistenceProxy::restoreImplementation();
-				}
-				$row = array('uri' => $resource->getUri());
-				foreach($properties as $property){
-					$propValue = $resource->getOnePropertyValue($property);
-					$row[core_kernel_persistence_hardapi_Utils::getShortName($property)] = $propValue;
-				}
-
-				$rows[] = $row;
-			}
-
-			$rowMgr = new core_kernel_persistence_hardapi_RowManager($tableName, $columns);
-			$rowMgr->insertRows($rows);
-			foreach($instances as $resource){
-				$referencer->referenceResource($resource, $tableName, null, true);
-
-				if($rmSources){
-					//remove exported resources in smooth sql, if required:
-					// Be carefull, the resource can still exist even if 
-					// delete returns true. Indeed, modelIds can be mixed between
-					// multiple models and only a part of the triples that consitute
-					// the resource might have been deleted.
-					if (!$resource->delete() || $resource->exists()){//@TODO : modified resource::delete() because resource not in local modelId cannot be deleted
-						$notDeletedInstances[] = $resource->getUri();
-						$startIndex++;
-					}
-				}
-			}
-
-			if(!$rmSources){
-				//increment start index only if not removed
-				$startIndex += $instancePackSize;
-			}
-
-			//record hardened instances number
-			if(isset($this->hardenedClasses[$class->getUri()])){
-				$this->hardenedClasses[$class->getUri()] += $count;
-			}else{
-				$this->hardenedClasses[$class->getUri()] = $count;
-			}
-
-			//update instance array and count value
-			$instances = $class->getInstances(false, array('offset'=>$startIndex, 'limit'=> $instancePackSize));
-			foreach($notDeletedInstances as $uri){
-				unset($instances[$uri]);
-			}
-
-			$count = count($instances);
-
-		} while($count> 0);
-
-		$returnValue = true;
-
-		// Treat subclasses of the current class
-		if($recursive){
-			foreach($class->getSubClasses(true) as $subClass){
-				$returnValue = $this->hardify($subClass, array_merge($options, array(
-					'recursive' 	=> false,
-					'append' 	=> true,
-					'allOrNothing'	=> true
+			
+			//reset cache:
+			$referencer->clearCaches();
+			// EXIT SMOOTH SQL MODE
+			core_kernel_persistence_PersistenceProxy::restoreImplementation();
+			
+			if (defined ("DEBUG_PERSISTENCE") && DEBUG_PERSISTENCE){
+				$this->unhardify($class, array_merge($options, array(
+						'recursive' 		=> false,
+						'removeForeigns' 	=> false
 				)));
+				common_Logger::d('unhardened result statements '.$this->countStatements(). ' / '.$countStatement);
 			}
+			
+			// Give the normal rights on models to the session.
+			$session->setUpdatableModels($oldUpdatableModels);
 		}
-
-		//reset cache:
-		$referencer->clearCaches();
-		// EXIT SMOOTH SQL MODE
-		core_kernel_persistence_PersistenceProxy::restoreImplementation();
-
-		if (defined ("DEBUG_PERSISTENCE") && DEBUG_PERSISTENCE){
-			$this->unhardify($class, array_merge($options, array(
-				'recursive' 		=> false,
-				'removeForeigns' 	=> false
-			)));
-			common_Logger::d('unhardened result statements '.$this->countStatements(). ' / '.$countStatement);
+		catch (Exception $e){
+			common_Logger::e('An error occured during hardification: ' . $e->getMessage());
+			$session->setUpdatableModels($oldUpdatableModels);
 		}
-		
-		// Give the normal rights on models to the session.
-		$session->setUpdatableModels($oldUpdatableModels);
-
-		// section 127-0-1-1--5a63b0fb:12f72879be9:-8000:0000000000001589 end
 
 		return (bool) $returnValue;
 	}
 
+	/**
+	 * Returns the classes that were successfuly compiled during the last call of the
+	 * hardify method.
+	 * 
+	 * @access public
+	 * @return array
+	 */
 	public function getHardenedClasses(){
 		return $this->hardenedClasses;
 	}
 
+	/**
+	 * Returns the classes that were successfuly decompiled during the last call of the
+	 * unhardify method.
+	 * 
+	 * @access public
+	 * @return array
+	 */
 	public function getDecompiledClasses(){
 		return $this->decompiledClasses;
 	}
 
+	/**
+	 * Will create an Index (in the RDBMS) for all the promperties passed as
+	 * a parameter. This may increase the performance of the system.
+	 * 
+	 * @static
+	 * @access public
+	 * @param array $indexProperties
+	 * @throws core_kernel_persistence_hardapi_Exception
+	 * @return boolean If it succeeds, false otherwise.
+	 */
 	public static function createIndex($indexProperties = array()){
 
 		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
@@ -562,6 +629,10 @@ class core_kernel_persistence_Switcher
 
 	}
 	
+	/**
+	 * 
+	 * @return multitype:NULL
+	 */
 	private static function getAllModels(){
 		$nsManager = common_ext_NamespaceManager::singleton();
 		$allModels = $nsManager->getAllNamespaces();
@@ -573,6 +644,6 @@ class core_kernel_persistence_Switcher
 		
 		return $newUpdatableModels;
 	}
-} /* end of class core_kernel_persistence_Switcher */
+}
 
 ?>
