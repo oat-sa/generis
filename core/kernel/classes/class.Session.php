@@ -18,48 +18,21 @@
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);\n *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
 
-error_reporting(E_ALL);
 
 /**
- * returns conencted user(string)
- *
- * @author patrick.plichart@tudor.lu
- * @package core
- * @subpackage kernel_classes
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/* user defined includes */
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000071F-includes begin
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000071F-includes end
-
-/* user defined constants */
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000071F-constants begin
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000071F-constants end
-
-/**
- * returns conencted user(string)
+ * Represents a Session on Generis.
  *
  * @access private
- * @author patrick.plichart@tudor.lu
- * @package core
- * @subpackage kernel_classes
+ * @author patrick@taotesting.com
+ * @package generis
+ * @subpackage core_kernel_classes
  */
 class core_kernel_classes_Session
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute instance
+     * The single instance of core_kernel_classes_Session
      *
      * @access private
      * @var Session
@@ -67,7 +40,8 @@ class core_kernel_classes_Session
     private static $instance = null;
 
     /**
-     * Short description of attribute dataLanguage
+     * The language in use to access data stored into persistent memory for
+     * the currenly authenticated user.
      *
      * @access private
      * @var string
@@ -75,7 +49,7 @@ class core_kernel_classes_Session
     private $dataLanguage = '';
 
     /**
-     * Short description of attribute interfaceLanguage
+     * The language in use at the gui level for the currently authenticated user.
      *
      * @access private
      * @var string
@@ -83,7 +57,7 @@ class core_kernel_classes_Session
     private $interfaceLanguage = '';
 
     /**
-     * Short description of attribute userLogin
+     * The login of the currently authenticated user.
      *
      * @access private
      * @var string
@@ -91,7 +65,7 @@ class core_kernel_classes_Session
     private $userLogin = '';
 
     /**
-     * Short description of attribute userUri
+     * the URI identifying the currently authenticated user in persistent memory.
      *
      * @access private
      * @var string
@@ -99,7 +73,8 @@ class core_kernel_classes_Session
     private $userUri = '';
 
     /**
-     * Short description of attribute defaultLg
+     * The default language to use if the data language or GUI language
+     * cannot be accessed. It is used as a fallback language.
      *
      * @access public
      * @var string
@@ -107,7 +82,8 @@ class core_kernel_classes_Session
     public $defaultLg = '';
 
     /**
-     * Short description of attribute loadedModels
+     * The RDF models currently loaded for the authenticated user. This associative array
+     * contains keys that are model IDs and values are URIs as strings.
      *
      * @access protected
      * @var array
@@ -115,7 +91,9 @@ class core_kernel_classes_Session
     protected $loadedModels = array();
 
     /**
-     * Short description of attribute updatableModels
+     * The models that can be updated (modified) by the currently authenticated
+     * user. This associative array contains keys that are model IDs and values 
+     * are URIs as strings.
      *
      * @access protected
      * @var array
@@ -123,27 +101,26 @@ class core_kernel_classes_Session
     protected $updatableModels = array();
 
     /**
-     * Short description of attribute userRoles
+     * The roles that the currently authenticated user is given. This array
+     * contains instances of core_kernel_classes_Resource.
      *
      * @access private
      * @var array
      */
     private $userRoles = array();
 
-    // --- OPERATIONS ---
 
     /**
-     * Short description of method singleton
+     * Obtain a single core_kernel_classes_Session instance.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Joel Bout, <joel@taotesting.com>
      * @return core_kernel_classes_Session
      */
     public static function singleton()
     {
         $returnValue = null;
 
-        // section 10-13-1--31--7858878e:119b84cada6:-8000:0000000000000AE0 begin
         $session = PHPSession::singleton();
         
 		if (!isset(self::$instance) || is_null(self::$instance)) {
@@ -156,21 +133,18 @@ class core_kernel_classes_Session
 		}
 		$returnValue = self::$instance;
 
-        // section 10-13-1--31--7858878e:119b84cada6:-8000:0000000000000AE0 end
-
         return $returnValue;
     }
 
     /**
-     * This function is used to reset the session
+     * This function is used to reset the session values.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Joel Bout, <joel@taotesting.com>
      * @return void
      */
     public function reset()
     {
-        // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 begin
 		common_Logger::d('resetting session');
 		$this->defaultLg = DEFAULT_LANG;
 		$this->setDataLanguage('');
@@ -180,18 +154,16 @@ class core_kernel_classes_Session
 		$this->userUri		= null;
 		$this->userRoles	= array();
 		$this->update();
-        // section 10-13-1--31--626b8103:11b358dabdb:-8000:0000000000000D63 end
     }
 
     /**
-     * Short description of method __construct
+     * Creates a new instance of core_kernel_classes_Session
      *
      * @access private
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Joel Bout, <joel@taotesting.com>
      */
     private function __construct()
     {
-        // section 10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000AE7 begin
 		
 		//active  models needed by extension
     	$extensionManager = common_ext_ExtensionsManager::singleton();
@@ -209,12 +181,10 @@ class core_kernel_classes_Session
 		$this->defaultLg			= DEFAULT_LANG;
 		$this->interfaceLanguage	= '';
 		$this->dataLanguage			= '';
-		
-        // section 10-13-1--31--7714f845:11984dc9fef:-8000:0000000000000AE7 end
     }
 
     /**
-     * please use setDataLanguage() instead
+     * Please use setDataLanguage() instead.
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -226,15 +196,13 @@ class core_kernel_classes_Session
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000752 begin
         $returnValue = $this->setDataLanguage($lg);
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000752 end
 
         return (bool) $returnValue;
     }
 
     /**
-     * please use getDataLanguage() instead
+     * Please use getDataLanguage() instead.
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -245,15 +213,13 @@ class core_kernel_classes_Session
     {
         $returnValue = (string) '';
 
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000754 begin
         $returnValue = $this->getDataLanguage();
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000754 end
 
         return (string) $returnValue;
     }
 
     /**
-     * Short description of method getNameSpace
+     * Get the local namespace (model) in use by the authenticated user.
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -263,15 +229,13 @@ class core_kernel_classes_Session
     {
         $returnValue = (string) '';
 
-        // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0C begin
 		$returnValue= LOCAL_NAMESPACE;
-        // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B0C end
 
         return (string) $returnValue;
     }
 
     /**
-     * Short description of method getUserLogin
+     *Returns the login of the currently authenticated user.
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -281,63 +245,55 @@ class core_kernel_classes_Session
     {
         $returnValue = (string) '';
 
-        // section 10-13-1--31-42d46662:11bb6ef4845:-8000:0000000000000D59 begin
 		$returnValue = $this->userLogin;
-        // section 10-13-1--31-42d46662:11bb6ef4845:-8000:0000000000000D59 end
 
         return (string) $returnValue;
     }
 
     /**
-     * Short description of method getUserUri
+     * Get the URI identifying the currently authenticated user in persistent memory.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Joel Bout, <joel@taotesting.com>
      * @return string
      */
     public function getUserUri()
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A07 begin
         return $this->userUri;
-        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A07 end
 
         return (string) $returnValue;
     }
 
     /**
-     * Short description of method setUser
+     * Set the currently authenticated user.
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  string login
-     * @param  string uri
-     * @param  array roles
-     * @return mixed
+     * @param  string login The login of the user.
+     * @param  string uri The URI identifying the user in persistent memory.
+     * @param  array roles The array of roles that the user is given. This array
      */
     public function setUser($login, $uri = null, $roles = array())
     {
-        // section 127-0-1-1--14f68f95:12f59b39209:-8000:000000000000143A begin
     	$this->userLogin	= $login;
     	$this->userUri		= $uri;
     	$this->userRoles	= $roles;
-        // section 127-0-1-1--14f68f95:12f59b39209:-8000:000000000000143A end
     }
 
     /**
-     * Short description of method loadModel
+     * Load a particular model depending on the provided URI.
      *
      * @access protected
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  string model
-     * @return boolean
+     * @param  string model A URI.
+     * @return boolean true if the model was correctly loaded, false otherwise.
      */
     protected function loadModel($model)
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--ded7727:12f59911cd7:-8000:0000000000001433 begin
         
         if(!preg_match("/#$/", $model)){
         	$model .= '#';
@@ -355,54 +311,59 @@ class core_kernel_classes_Session
         		}
         	}
         }
-        // section 127-0-1-1--ded7727:12f59911cd7:-8000:0000000000001433 end
 
         return (bool) $returnValue;
     }
 
     /**
-     * Short description of method getLoadedModels
+     * Obtain the list of the models loaded for the authenticated user.
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @return array
+     * @return array An array of URIs as strings
      */
     public function getLoadedModels()
     {
         $returnValue = array();
-
-        // section 127-0-1-1--14f68f95:12f59b39209:-8000:0000000000001438 begin
         
         $returnValue = $this->loadedModels;
-        
-        // section 127-0-1-1--14f68f95:12f59b39209:-8000:0000000000001438 end
 
         return (array) $returnValue;
     }
 
     /**
-     * Short description of method getUpdatableModels
+     * Get the list of models that are updatable (editable) by the currently
+     * authenticated user.
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @return array
+     * @return array An associative array where keys Uare integers and values are URI strings.
      */
     public function getUpdatableModels()
     {
         $returnValue = array();
-
-        // section 127-0-1-1--450598c3:13175ea282e:-8000:0000000000003C47 begin
+        
         $returnValue = $this->updatableModels;        
-        // section 127-0-1-1--450598c3:13175ea282e:-8000:0000000000003C47 end
 
         return (array) $returnValue;
+    }
+    
+    /**
+     * Set the list of models that are updatable by the currently authenticated
+     * user.
+     * 
+     * @param array $updatableModels An associative array where keys Uare integers and values are URI strings.
+     */
+    public function setUpdatableModels(array $updatableModels)
+    {
+    	$this->updatableModels = $updatableModels;
     }
 
     /**
      * Unload a model from the current session.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Joel Bout, <joel@taotesting.com>
      * @param  string model The model URI.
      * @return boolean
      */
@@ -410,7 +371,6 @@ class core_kernel_classes_Session
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85--3885cdb:135aa86a412:-8000:0000000000001941 begin
         foreach ($this->loadedModels as $loadedModel){
         	if ($loadedModel == $model){
         		unset($loadedModel);
@@ -418,7 +378,6 @@ class core_kernel_classes_Session
         		break;
         	}
         }
-        // section 10-13-1-85--3885cdb:135aa86a412:-8000:0000000000001941 end
 
         return (bool) $returnValue;
     }
@@ -427,12 +386,10 @@ class core_kernel_classes_Session
      * Updates the session by reloading references to models.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return void
+     * @author Joel Bout, <joel@taotesting.com>
      */
     public function update()
     {
-        // section 10-13-1-85-91f6d5e:135c7e94b2b:-8000:0000000000002A48 begin
         $this->loadedModels = array();
         $extensionManager = common_ext_ExtensionsManager::singleton();
         common_ext_NamespaceManager::singleton()->reset();
@@ -446,95 +403,81 @@ class core_kernel_classes_Session
 		//get updatable models
 		$this->updatableModels = array();
 		$this->updatableModels = $extensionManager->getUpdatableModels ();
-        // section 10-13-1-85-91f6d5e:135c7e94b2b:-8000:0000000000002A48 end
     }
 
     /**
      * Behaviour to adopt at PHP __wakup time.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Joel Bout, <joel@taotesting.com>
      * @return void
      */
     public function __wakeup()
     {
-        // section 10-13-1-85-91f6d5e:135c7e94b2b:-8000:0000000000002A4B begin
         $this->update();
-        // section 10-13-1-85-91f6d5e:135c7e94b2b:-8000:0000000000002A4B end
     }
 
     /**
-     * Short description of method setDataLanguage
+     * Set the language to use for data access in persistent memory.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Joel Bout, <joel@taotesting.com>
      * @param  string language
-     * @return mixed
      */
     public function setDataLanguage($language)
     {
-        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A13 begin
         if (empty($language)) {
         	$this->dataLanguage = '';
         } else {
         	$this->dataLanguage = $language;
         }
 	    common_Logger::d('Set data language to '.$language, array('GENERIS', 'I18N'));
-        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A13 end
     }
 
     /**
-     * returns the language code to use for data
+     * Obtain the language to use for data access in persistent memory.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Joel Bout, <joel@taotesting.com>
      * @return string
      */
     public function getDataLanguage()
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A0E begin
         $returnValue = empty($this->dataLanguage) ? $this->defaultLg : $this->dataLanguage;
-        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A0E end
 
         return (string) $returnValue;
     }
 
     /**
-     * Short description of method setInterfaceLanguage
+     * Change the language to use at the GUI level.
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Joel Bout, <joel@taotesting.com>
      * @param  string language
-     * @return mixed
      */
     public function setInterfaceLanguage($language)
     {
-        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A15 begin
 		if (empty($language)) {
         	$this->interfaceLanguage = '';
         } else {
         	$this->interfaceLanguage = $language;
         }
-	    common_Logger::d('Set interface language to '.$language, array('GENERIS', 'I18N'));
-        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A15 end
     }
 
     /**
      * returns the language code associated with user interactions
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @author Joel Bout, <joel@taotesting.com>
      * @return string
      */
     public function getInterfaceLanguage()
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A0C begin
 		$returnValue = empty($this->interfaceLanguage) ? $this->defaultLg : $this->interfaceLanguage;
-        // section 127-0-1-1--104cb9d8:137c774c247:-8000:0000000000001A0C end
 
         return (string) $returnValue;
     }
@@ -543,20 +486,18 @@ class core_kernel_classes_Session
      * returns the roles of the current user
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return array
+     * @author Joel Bout, <joel@taotesting.com>
+     * @return array An array of core_kernel_classes_Resource
      */
     public function getUserRoles()
     {
         $returnValue = array();
 
-        // section 127-0-1-1--67a0c37:137dbbe2925:-8000:0000000000001A0F begin
         return $this->userRoles;
-        // section 127-0-1-1--67a0c37:137dbbe2925:-8000:0000000000001A0F end
 
         return (array) $returnValue;
     }
 
-} /* end of class core_kernel_classes_Session */
+}
 
 ?>
