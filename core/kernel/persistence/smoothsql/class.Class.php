@@ -512,7 +512,7 @@ class core_kernel_persistence_smoothsql_Class
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$query = $this->getFilteredQuery($resource, $propertyFilters, $options);
-        
+		
 		$result = $dbWrapper->query($query);
 
 		while ($row = $result->fetch()){	
@@ -604,8 +604,10 @@ class core_kernel_persistence_smoothsql_Class
     	$distinct = isset($options['distinct']) ? $options['distinct'] : false;
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
 	
+	
 	$filteredQuery = $this->getFilteredQuery($resource, $propertyFilters, $options);
 	
+	//echo $filteredQuery;
 	// Get all the available property values in the subset of instances
 	$query = 'SELECT';
 	if($distinct){
@@ -812,7 +814,7 @@ class core_kernel_persistence_smoothsql_Class
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CC begin
+        // section 127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CC begin"
 				/*
 		options lists:
 		like			: (bool) 	true/false (default: true)
@@ -863,58 +865,58 @@ class core_kernel_persistence_smoothsql_Class
 		if(isset($options['like'])){
 			$like = ($options['like'] === true);
 		}
+		//PPL modif below to prevent from building a useless embedded query in the case there is no propertyfilter specified, looks like this is often the 
+		
+		    $query = 'SELECT "subject" FROM "statements" WHERE ';
+		    $conditions = array();
+		    foreach($propertyFilters as $propUri => $pattern){
 
-		$query = 'SELECT "subject" FROM "statements" WHERE ';
+			    $propUri = trim($dbWrapper->dbConnector->quote($propUri), "'\"");
+			    $values = is_array($pattern) ? $pattern : array($pattern);
+			    $sub = array();
+			    foreach ($values as $value) {
+				    switch (gettype($value)) {
+					    case 'string' :
+					    case 'numeric':
+						    $patternToken = trim($dbWrapper->dbConnector->quote($value), "'\"");
+						    $object = trim(str_replace('*', '%', $patternToken));
 
-		$conditions = array();
-		foreach($propertyFilters as $propUri => $pattern){
-			
-			$propUri = trim($dbWrapper->dbConnector->quote($propUri), "'\"");
-			$values = is_array($pattern) ? $pattern : array($pattern);
-			$sub = array();
-			foreach ($values as $value) {
-				switch (gettype($value)) {
-					case 'string' :
-					case 'numeric':
-						$patternToken = trim($dbWrapper->dbConnector->quote($value), "'\"");
-						$object = trim(str_replace('*', '%', $patternToken));
-						
-						if($like){
-							if(!preg_match("/^%/", $object)){
-								$object = "%".$object;
-							}
-							if(!preg_match("/%$/", $object)){
-								$object = $object."%";
-							}
-							$sub[] .= '"object" LIKE \''.$object.'\'';
-						}
-						else {
-							$sub[] = (strpos($object, '%') !== false)
-								? '"object" LIKE \''.$object.'\''
-								: '"object" = \''.$patternToken.'\'';
-						}
-					break;
-					
-					case 'object' :
-						if($value instanceof core_kernel_classes_Resource) {
-							$sub[] = '"object" = \''.$value->getUri().'\'';
-						} else {
-							common_Logger::w('non ressource as search parameter: '.get_class($value), 'GENERIS');
-						}
-					break;
+						    if($like){
+							    if(!preg_match("/^%/", $object)){
+								    $object = "%".$object;
+							    }
+							    if(!preg_match("/%$/", $object)){
+								    $object = $object."%";
+							    }
+							    $sub[] .= '"object" LIKE \''.$object.'\'';
+						    }
+						    else {
+							    $sub[] = (strpos($object, '%') !== false)
+								    ? '"object" LIKE \''.$object.'\''
+								    : '"object" = \''.$patternToken.'\'';
+						    }
+					    break;
 
-					default:
-						throw new common_Exception("Unsupported type for searchinstance array: ".gettype($value));
-						
-				}
-			}
-			if (empty($sub)) {
-				$conditions[] = "(\"predicate\" = '{$propUri}'{$langToken})";
-			} else {
-				$conditions[] = "(\"predicate\" = '{$propUri}' AND (".implode(" OR ", $sub)."){$langToken})";
-			}
-		}
+					    case 'object' :
+						    if($value instanceof core_kernel_classes_Resource) {
+							    $sub[] = '"object" = \''.$value->getUri().'\'';
+						    } else {
+							    common_Logger::w('non ressource as search parameter: '.get_class($value), 'GENERIS');
+						    }
+					    break;
 
+					    default:
+						    throw new common_Exception("Unsupported type for searchinstance array: ".gettype($value));
+
+				    }
+			    }
+			    if (empty($sub)) {
+				    $conditions[] = "(\"predicate\" = '{$propUri}'{$langToken})";
+			    } else {
+				    $conditions[] = "(\"predicate\" = '{$propUri}' AND (".implode(" OR ", $sub)."){$langToken})";
+			    }
+		    }
+		
 		$intersect = true;
 		if (isset($options['chaining']) && $options['chaining'] == 'or') {
 			$intersect = false;
@@ -952,8 +954,13 @@ class core_kernel_persistence_smoothsql_Class
 		if(!empty($conditions)){
 			$query .= ' AND';
 		}
-		$query .= ' "subject" IN (SELECT "subject" FROM "statements" WHERE "predicate" = \''.RDF_TYPE.'\' AND "object" in (\''.implode('\',\'', $rdftypes).'\'))';
-
+		
+	
+	if (count($propertyFilters) > 0){
+	$query .= ' "subject" IN (SELECT "subject" FROM "statements" WHERE "predicate" = \''.RDF_TYPE.'\' AND "object" in (\''.implode('\',\'', $rdftypes).'\'))';
+	} else {
+	    $query = 'SELECT "subject" FROM "statements" WHERE "predicate" = \''.RDF_TYPE.'\' AND "object" in (\''.implode('\',\'', $rdftypes).'\')';
+	}
 		// sorting
         if (isset($options['order']) && !empty($options['order'])) {
         	$orderUri = $options['order'];
