@@ -372,7 +372,7 @@ class core_kernel_persistence_Switcher
 			(isset($options['allOrNothing'])) ? $allOrNothing = $options['allOrNothing'] : $allOrNothing = false;
 			
 			//if true, the instances of the class will  be removed from the statements table!
-			(isset($options['rmSources'])) ? $rmSources = (bool) $options['rmSources'] : $rmSources = true;
+			(isset($options['rmSources'])) ? $rmSources = (bool) $options['rmSources'] : $rmSources = false;
 			
 			//if defined, we took all the properties of the class and it's parents till the topclass
 			(isset($options['topClass'])) ? $topClass = $options['topClass'] : $topClass = new core_kernel_classes_Class(RDFS_RESOURCE);
