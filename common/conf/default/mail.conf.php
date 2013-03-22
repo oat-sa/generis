@@ -17,10 +17,15 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);\n *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
+ *
+ * mail config
+ *
+ * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
+ * @package generis
+ * @subpackage conf
+ * @license GPLv2  http://www.opensource.org/licenses/gpl-2.0.php
  */
-?>
-<?php
-#mail config
+
 define('SMTP_HOST', 'localhost');
 define('SMTP_PORT', 25);
 define('SMTP_AUTH', false);

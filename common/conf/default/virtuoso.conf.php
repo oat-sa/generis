@@ -18,9 +18,15 @@
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);\n *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-# virtuoso
+/**
+ * virtuoso config
+ *
+ * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
+ * @package generis
+ * @subpackage conf
+ * @license GPLv2  http://www.opensource.org/licenses/gpl-2.0.php
+ */
+
 define('VIRTUOSO_ODBC_NAME','');
 define('VIRTUOSO_LOGIN','');
 define('VIRTUOSO_PASSWORD','');
