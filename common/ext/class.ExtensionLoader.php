@@ -91,26 +91,28 @@ class common_ext_ExtensionLoader
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param array $extraConstants
      * @return mixed
      */
-    public function load()
+    public function load($extraConstants = array())
     {
         // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017AD begin
         common_Logger::t('Loading extension ' . $this->extension->getID());
         
-        $this->loadConstants();
+        $this->loadConstants($extraConstants);
         // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017AD end
     }
 
 
     /**
-     * Load the constant and configuration files.
+     * Load the constantfiles.
      *
      * @access protected
      * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param array $extraConstants
      * @return void
      */
-    protected function loadConstants()
+    protected function loadConstants($extraConstants)
     {
         // section 127-0-1-1-62ede985:13d2586a59c:-8000:0000000000001FE8 begin
         common_Logger::t('Loading extension ' . $this->extension->getId() . ' constants');
@@ -133,13 +135,9 @@ class common_ext_ExtensionLoader
     	$extensions = $this->extension->getDependencies();
     	
     	// merge them with the additional constants (defined in the options)
-    	if(isset($this->options['constants'])){
-    		if(is_string($this->options['constants'])){
-    			$this->options['constants'] = array($this->options['constants']);
-    		}
-    		$extensions = array_merge($extensions, $this->options['constants']);
-    	}
-    	// add the current extension (as well !)
+   		$extensions = array_merge($extensions, $extraConstants);
+   		
+   		// add the current extension (as well !)
     	$extensions = array_merge(array($this->extension->getID()), $extensions);
     	
     	foreach($extensions as $extension){
