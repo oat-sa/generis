@@ -31,8 +31,8 @@ require_once dirname(__FILE__) . '/GenerisTestRunner.php';
  * @subpackage test
  */
 class DbWrapperTestCase extends UnitTestCase {
-	
-	public function setUp(){
+
+    public function setUp(){
         GenerisTestRunner::initTest();
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         //TODO need to connect to a dbWrapper a function createTable that currently not exists
@@ -48,8 +48,7 @@ class DbWrapperTestCase extends UnitTestCase {
 	}
 
 
-
-	public function testGetRowCount(){
+    public function testGetRowCount(){
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$rowCount = $dbWrapper->getRowCount('dbTestCase');
 		$this->assertTrue(is_int($rowCount));
@@ -59,7 +58,7 @@ class DbWrapperTestCase extends UnitTestCase {
         $this->assertTrue(is_int($rowCount));
         $this->assertTrue($rowCount == 5);
 	}
-	
+
 	public function testGetColumnNames(){
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$columns = $dbWrapper->getColumnNames('dbTestCase');
@@ -108,6 +107,7 @@ class DbWrapperTestCase extends UnitTestCase {
             $this->assertTrue($value['uri'] = 'http://uri'.$i);
             $this->assertTrue($value['value'] = 'value'.$i);
         }
+
 
 
     }
