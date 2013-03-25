@@ -224,8 +224,7 @@ class core_kernel_persistence_Switcher
 							throw new core_kernel_persistence_hardapi_Exception("unable to unhardify : " . $dbWrapper->errorMessage());
 						}
 
-						//
- *  IN SMOOTH SQL MODE
+						// ENTER IN SMOOTH SQL MODE
 						core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
 
 						while ($row = $sqlResult->fetch()) {
@@ -357,8 +356,7 @@ class core_kernel_persistence_Switcher
 				return $returnValue;
 			}
 			
-			//
- *  IN SMOOTH SQL MODE
+			// ENTER IN SMOOTH SQL MODE
 			core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
 			
 			//recursive will hardify the class and it's subclasses in the same table!
