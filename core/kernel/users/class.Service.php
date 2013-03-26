@@ -126,7 +126,7 @@ class core_kernel_users_Service
      * @param  Resource role A Role to grant to the new User.
      * @return core_kernel_classes_Resource
      */
-    public function addUser($login, $password,  core_kernel_classes_Resource $role = null)
+    public function addUser($login, $password,  core_kernel_classes_Resource $role = null, core_kernel_classes_Class $class = null)
     {
         $returnValue = null;
 
@@ -137,7 +137,7 @@ class core_kernel_users_Service
         else{
         	$role = (empty($role)) ? new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS) : $role;
         	
-        	$userClass = new core_kernel_classes_Class(CLASS_GENERIS_USER);
+        	$userClass = (!empty($class)) ? $class : new core_kernel_classes_Class(CLASS_GENERIS_USER);
         	$newUser = $userClass->createInstance("User ${login}" , 'User Created on ' . date(DATE_ISO8601));
         	
         	if (!empty($newUser)){
