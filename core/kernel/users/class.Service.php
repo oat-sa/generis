@@ -240,10 +240,8 @@ class core_kernel_users_Service
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string password used in conjunction with the callback validator
-to test the pasword entered
-     * @param  Resource user used in conjunction with the callback validator
-to test the pasword entered
+     * @param  string password used in conjunction with the callback validator to test the pasword entered
+     * @param  Resource user used in conjunction with the callback validator to test the pasword entered
      * @return boolean
      */
     public function isPasswordValid($password,  core_kernel_classes_Resource $user)
@@ -269,7 +267,6 @@ to test the pasword entered
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  Resource user The user you want to set the password.
      * @param  string password The md5 hash of the password you want to set to the user.
-     * @return void
      */
     public function setPassword( core_kernel_classes_Resource $user, $password)
     {
@@ -380,7 +377,6 @@ to test the pasword entered
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  Resource user A Generis user from which you want to unnattach the Generis Role.
      * @param  Resource role The Generis Role you want to Unnatach from the Generis User.
-     * @return void
      */
     public function unnatachRole( core_kernel_classes_Resource $user,  core_kernel_classes_Resource $role)
     {
