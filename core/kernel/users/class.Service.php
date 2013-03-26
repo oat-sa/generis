@@ -19,50 +19,12 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
 
 /**
- * The UserService aims at providing an API to manage Users and Roles witinh
- *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package core
- * @subpackage kernel_users
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * include core_kernel_users_RolesManagement
- *
- * @author Jerome Bogaerts, <jerome@taotesting.com>
- */
-require_once('core/kernel/users/interface.RolesManagement.php');
-
-/**
- * include core_kernel_users_UsersManagement
- *
- * @author Jerome Bogaerts, <jerome@taotesting.com>
- */
-require_once('core/kernel/users/interface.UsersManagement.php');
-
-/* user defined includes */
-// section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815-includes begin
-// section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815-includes end
-
-/* user defined constants */
-// section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815-constants begin
-// section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001815-constants end
-
-/**
- * The UserService aims at providing an API to manage Users and Roles witinh
+ * The UserService aims at providing an API to manage Users and Roles within Generis.
  *
  * @access public
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package core
  * @subpackage kernel_users
  */
@@ -70,24 +32,18 @@ class core_kernel_users_Service
         implements core_kernel_users_UsersManagement,
                    core_kernel_users_RolesManagement
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute instance
      *
      * @access private
-     * @var Service
+     * @var core_kernel_users_Service
      */
     private static $instance = null;
 
-    // --- OPERATIONS ---
 
     /**
-     * Returns true if the a user with login = $login is currently in the
-     * memory of Generis.
+     * Returns true if a user with login = $login is currently in the
+     * persistent memory of Generis.
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
@@ -99,7 +55,6 @@ class core_kernel_users_Service
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001F80 begin
     	if(is_null($class)){
         	$class = new core_kernel_classes_Class(CLASS_GENERIS_USER);
         }
@@ -110,7 +65,6 @@ class core_kernel_users_Service
         if(count($users) > 0){
         	$returnValue = true;
         }
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001F80 end
 
         return (bool) $returnValue;
     }
@@ -130,7 +84,6 @@ class core_kernel_users_Service
     {
         $returnValue = null;
 
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FA3 begin
     	if($this->loginExists($login)){
         	throw new core_kernel_users_Exception("Login '${login}' already in use.", core_kernel_users_Exception::LOGIN_EXITS);
         }
@@ -155,7 +108,6 @@ class core_kernel_users_Service
         		throw new core_kernel_users_Exception("Unable to create user with login = '${login}'.");
         	}
         }
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FA3 end
 
         return $returnValue;
     }
@@ -172,9 +124,7 @@ class core_kernel_users_Service
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FB1 begin
         $returnValue = $user->delete();
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FB1 end
 
         return (bool) $returnValue;
     }
@@ -194,7 +144,6 @@ class core_kernel_users_Service
     {
         $returnValue = null;
 
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FBB begin
     	if(empty($class)){
         	$class = new core_kernel_classes_Class(CLASS_GENERIS_USER);
     	}
@@ -210,7 +159,6 @@ class core_kernel_users_Service
     	else if (count($users) > 1){
     		$msg = "More than one user have the same login '${login}'.";
     	}
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FBB end
 
         return $returnValue;
     }
@@ -226,10 +174,8 @@ class core_kernel_users_Service
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FC6 begin
         $userUri = core_kernel_classes_Session::singleton()->getUserUri();
         $returnValue = !is_null($userUri);
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FC6 end
 
         return (bool) $returnValue;
     }
@@ -248,14 +194,12 @@ class core_kernel_users_Service
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FCA begin
         if(!is_string($password)){
 			throw new core_kernel_users_Exception('The password must be of "string" type, got '.gettype($password));
 		}
 		
 		$userPass = $user->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD));
 		$returnValue = md5($password) == $userPass;
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FCA end
 
         return (bool) $returnValue;
     }
@@ -270,13 +214,11 @@ class core_kernel_users_Service
      */
     public function setPassword( core_kernel_classes_Resource $user, $password)
     {
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FD1 begin
         if(!is_string($password)){
 			throw new core_kernel_users_Exception('The password must be of "string" type, got '.gettype($password));
 		}
 		
 		$user->editPropertyValues(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD),md5($password));
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FD1 end
     }
 
     /**
@@ -291,7 +233,6 @@ class core_kernel_users_Service
     {
         $returnValue = array();
 
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FD8 begin
         // We use a Depth First Search approach to flatten the Roles Graph.
         $rolesProperty = new core_kernel_classes_Property(PROPERTY_USER_ROLES);
         $rootRoles = $user->getPropertyValuesCollection($rolesProperty);
@@ -302,7 +243,6 @@ class core_kernel_users_Service
         }
         
         $returnValue = array_unique($returnValue);
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FD8 end
 
         return (array) $returnValue;
     }
@@ -320,7 +260,6 @@ class core_kernel_users_Service
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FDE begin
     	if (empty($roles)){
         	throw new InvalidArgumentException('The $roles parameter must not be empty.');	
         }
@@ -337,7 +276,6 @@ class core_kernel_users_Service
         	
         	$returnValue = (count($identicalRoles) === count($searchRoles));
         }
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FDE end
 
         return (bool) $returnValue;
     }
@@ -354,7 +292,6 @@ class core_kernel_users_Service
      */
     public function attachRole( core_kernel_classes_Resource $user,  core_kernel_classes_Resource $role)
     {
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FEB begin
     	try{
 	        if (false === $this->userHasRoles($user, $role)){
 	        	$rolesProperty = new core_kernel_classes_Property(PROPERTY_USER_ROLES);
@@ -367,7 +304,6 @@ class core_kernel_users_Service
         	$msg = "An error occured while attaching role '${roleUri}' to user '${userUri}': " . $e->getMessage();
         	throw new core_kernel_users_Exception($msg);
         }
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FEB end
     }
 
     /**
@@ -380,7 +316,6 @@ class core_kernel_users_Service
      */
     public function unnatachRole( core_kernel_classes_Resource $user,  core_kernel_classes_Resource $role)
     {
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FF3 begin
     	try{
         	if (true === $this->userHasRoles($user, $role)){
         		$rolesProperty = new core_kernel_classes_Property(PROPERTY_USER_ROLES);
@@ -393,7 +328,6 @@ class core_kernel_users_Service
         	$userUri = $user->getUri();
         	$msg = "An error occured while unnataching role '${roleUri}' from user '${userUri}': " . $e->getMessage();	
         }
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000001FF3 end
     }
 
     /**
@@ -402,15 +336,13 @@ class core_kernel_users_Service
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string label The label to apply to the newly created Generis Role.
-     * @param  includedRoles The Role(s) to be included in the newly created Generis Role.
-Can be either a Resource or an array of Resources.
+     * @param  includedRoles The Role(s) to be included in the newly created Generis Role. Can be either a Resource or an array of Resources.
      * @return core_kernel_classes_Resource
      */
     public function addRole($label, $includedRoles = null)
     {
         $returnValue = null;
 
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000002000 begin
         $includedRoles = is_array($includedRoles) ? $includedRoles : array($includedRoles);
 		$includedRoles = empty($includedRoles[0]) ? array() : $includedRoles;
 		
@@ -423,7 +355,6 @@ Can be either a Resource or an array of Resources.
         }
         
         $returnValue = $role;
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000002000 end
 
         return $returnValue;
     }
@@ -441,7 +372,6 @@ Can be either a Resource or an array of Resources.
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000002008 begin
     	if (GENERIS_CACHE_USERS_ROLES == true && core_kernel_users_Cache::areIncludedRolesInCache($role)){	
         	if (core_kernel_users_Cache::removeIncludedRoles($role) == true){
         		$returnValue = $role->delete(true);	// delete references to this role!
@@ -455,7 +385,6 @@ Can be either a Resource or an array of Resources.
         else{
         	$returnValue = $role->delete(true);	// delete references to this role!
         }
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000002008 end
 
         return (bool) $returnValue;
     }
@@ -472,7 +401,6 @@ Can be either a Resource or an array of Resources.
     {
         $returnValue = array();
 
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:000000000000200B begin
     	if (GENERIS_CACHE_USERS_ROLES == true && core_kernel_users_Cache::areIncludedRolesInCache($role) == true){
         	$returnValue = core_kernel_users_Cache::retrieveIncludedRoles($role);
         }
@@ -514,7 +442,6 @@ Can be either a Resource or an array of Resources.
 	        	}
 	        }
         }
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:000000000000200B end
 
         return (array) $returnValue;
     }
@@ -532,10 +459,8 @@ Can be either a Resource or an array of Resources.
     {
         $returnValue = array();
 
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:000000000000200E begin
         $role = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
         $returnValue = array($role->getUri() => $role);
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:000000000000200E end
 
         return (array) $returnValue;
     }
@@ -553,9 +478,7 @@ Can be either a Resource or an array of Resources.
     {
         $returnValue = null;
 
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000002010 begin
         $returnValue = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
-        // section 10-13-1-85-789cda43:13c8b795f73:-8000:0000000000002010 end
 
         return $returnValue;
     }
@@ -571,21 +494,19 @@ Can be either a Resource or an array of Resources.
      */
     public function includeRole( core_kernel_classes_Resource $role,  core_kernel_classes_Resource $roleToInclude)
     {
-        // section 127-0-1-1--55ee3a0d:13cedda118c:-8000:0000000000001FB5 begin
         $includesRoleProperty = new core_kernel_classes_Property(PROPERTY_ROLE_INCLUDESROLE);
         $role->removePropertyValues($includesRoleProperty, array('pattern' => $roleToInclude->getUri()));
         $role->setPropertyValue($includesRoleProperty, $roleToInclude->getUri());
         
         // invalidate cache for the role.
         core_kernel_users_Cache::removeIncludedRoles($role);
-        // section 127-0-1-1--55ee3a0d:13cedda118c:-8000:0000000000001FB5 end
     }
 
     /**
      * Log in a user into Generis that has one of the provided $allowedRoles.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string login The login of the user.
      * @param  string password the md5 hash of the password.
      * @param  allowedRoles A Role or an array of Roles that are allowed to be logged in. If the user has a Role that matches one or more Roles in this array, the login request will be accepted.
@@ -594,8 +515,6 @@ Can be either a Resource or an array of Resources.
     public function login($login, $password, $allowedRoles)
     {
         $returnValue = (bool) false;
-
-        // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001834 begin
 
         // Role can be either a scalar value or a collection.
         $allowedRoles = is_array($allowedRoles) ? $allowedRoles : array($allowedRoles);
@@ -656,68 +575,54 @@ Can be either a Resource or an array of Resources.
 				$session->setUser($login, $user->getUri(), $userRoles);
 			}
 		}
-        // section -87--2--3--76-270abbe1:12886b059d2:-8000:0000000000001834 end
 
         return (bool) $returnValue;
     }
 
     /**
-     * Short description of method __construct
+     * The constructor is private to implement the Singleton Design Pattern.
      *
      * @access private
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return mixed
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      */
     private function __construct()
     {
-        // section -87--2--3--76-270abbe1:12886b059d2:-8000:000000000000183B begin
-         if(!$this->isASessionOpened()) { 
-         	
-         	//init a fake session to do the 1st cheks
-		    core_kernel_classes_Session::singleton();
-		    $this->db = core_kernel_classes_DbWrapper::singleton();
-         }
-		    
-        // section -87--2--3--76-270abbe1:12886b059d2:-8000:000000000000183B end
+		// Only to restrict instances of this class to a single instance.
     }
 
     /**
      * Get a unique instance of the UserService.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return core_kernel_users_Service
      */
     public static function singleton()
     {
         $returnValue = null;
 
-        // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E95 begin
         if (!isset(self::$instance)) {
 			$c = __CLASS__;
 			self::$instance = new $c();
 		}
 		$returnValue = self::$instance;
-        // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002E95 end
 
         return $returnValue;
     }
 
     /**
-     * Logout the current user.
+     * Logout the current user. The session will be entirely reset.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return boolean
      */
     public function logout()
     {
         $returnValue = (bool) false;
 
-        // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EB5 begin
         core_kernel_classes_Session::singleton()->reset();
         $returnValue = true;
-        // section -87--2--3--76-16cc328d:128a5fc99af:-8000:0000000000002EB5 end
 
         return (bool) $returnValue;
     }
@@ -730,17 +635,15 @@ Can be either a Resource or an array of Resources.
      * @param  Resource user
      * @return mixed
      */
-    public function startSession( core_kernel_classes_Resource $user)
+    public function startSession(core_kernel_classes_Resource $user)
     {
-        // section 10-30-1--78--48fee1a:13cd96eb40b:-8000:0000000000001FB6 begin
 		$userRoles = $this->getUserRoles($user);
 			
 		$session = core_kernel_classes_Session::singleton();
 		$session->reset();
 		$session->setUser('', $user->getUri(), $userRoles);
-        // section 10-30-1--78--48fee1a:13cd96eb40b:-8000:0000000000001FB6 end
     }
 
-} /* end of class core_kernel_users_Service */
+}
 
 ?>

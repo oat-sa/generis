@@ -190,6 +190,28 @@ to test the pasword entered
      * @return void
      */
     public function unnatachRole( core_kernel_classes_Resource $user,  core_kernel_classes_Resource $role);
+    
+    /**
+     * Returns an array of Roles (as Resources) where keys are their URIs. The
+     * roles represent which kind of Roles are accepted to be identified against
+     * system.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @return array
+     */
+    public function getAllowedRoles();
+    
+    /**
+     * Returns a Role (as a Resource) which represents the default role of the
+     * If a user has to be created but no Role is given to him, it will receive
+     * role.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @return core_kernel_classes_Resource
+    */
+    public function getDefaultRole();
 
 } /* end of interface core_kernel_users_UsersManagement */
 
