@@ -155,7 +155,10 @@ class core_kernel_users_Cache
         $fileCache = common_cache_FileCache::singleton();
         $fileCache->remove($serial);
         
-        $returnValue = (file_exists(GENERIS_CACHE_PATH . $serial)) ? false : true;
+        // -- note: the cache might exist even if it was successfuly
+        // removed due to race conditions.
+        // $returnValue = (file_exists(GENERIS_CACHE_PATH . $serial)) ? false : true;
+        $returnValue = true;
         // section 10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3E end
 
         return (bool) $returnValue;

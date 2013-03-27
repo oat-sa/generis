@@ -371,10 +371,19 @@ class core_kernel_users_Service
     public function removeRole( core_kernel_classes_Resource $role)
     {
         $returnValue = (bool) false;
-
+        
     	if (GENERIS_CACHE_USERS_ROLES == true && core_kernel_users_Cache::areIncludedRolesInCache($role)){	
-        	if (core_kernel_users_Cache::removeIncludedRoles($role) == true){
-        		$returnValue = $role->delete(true);	// delete references to this role!
+    		
+    		if ($role->delete(true) == true){
+        		$returnValue = core_kernel_users_Cache::removeIncludedRoles($role);
+        		
+        		// We also need to remove all included roles cache that contain
+        		// the role we just deleted.
+        		foreach ($this->getAllRoles() as $r){
+        			if (array_key_exists($role->getUri(), $this->getIncludedRoles($r))){
+        				core_kernel_users_Cache::removeIncludedRoles($r);
+        			}
+        		}
         	}
         	else{
         		$roleUri = $role->getUri();
@@ -395,7 +404,7 @@ class core_kernel_users_Service
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  Resource role A Generis Role.
-     * @return array
+     * @return array An associative array where keys are Role URIs and values are instances of core_kernel_classes_Resource.
      */
     public function getIncludedRoles( core_kernel_classes_Resource $role)
     {
@@ -644,6 +653,16 @@ class core_kernel_users_Service
 		$session->setUser('', $user->getUri(), $userRoles);
     }
 
+    /**
+     * Returns the whole collection of Roles in Generis.
+     * 
+     * @return array An associative array where keys are Role URIs and values are instances of the core_kernel_classes_Resource PHP class.
+     */
+    public function getAllRoles()
+    {
+    	$roleClass = new core_kernel_classes_Class(CLASS_ROLE);
+    	return $roleClass->getInstances(true);
+    }
 }
 
 ?>

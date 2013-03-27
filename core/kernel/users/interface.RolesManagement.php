@@ -51,7 +51,7 @@ interface core_kernel_users_RolesManagement
      * @param  Resource role The Role to remove.
      * @return boolean
      */
-    public function removeRole( core_kernel_classes_Resource $role);
+    public function removeRole(core_kernel_classes_Resource $role);
 
     /**
      * Get an array of the Roles included by a Generis Role.
@@ -61,7 +61,7 @@ interface core_kernel_users_RolesManagement
      * @param  Resource role A Generis Role.
      * @return array
      */
-    public function getIncludedRoles( core_kernel_classes_Resource $role);
+    public function getIncludedRoles(core_kernel_classes_Resource $role);
 
     /**
      * Make a Role include another Role.
@@ -71,7 +71,16 @@ interface core_kernel_users_RolesManagement
      * @param  Resource role The role that needs to include another role.
      * @param  Resource roleToInclude The role to be included.
      */
-    public function includeRole( core_kernel_classes_Resource $role,  core_kernel_classes_Resource $roleToInclude);
+    public function includeRole(core_kernel_classes_Resource $role,  core_kernel_classes_Resource $roleToInclude);
+    
+    /**
+     * Return all instances of Roles from the persistent memory of Generis.
+     * 
+     * @access public
+     * @author Jerome Bogaerts
+     * @return array An associative array where keys are Role URIs and values are instances of the core_kernel_classes_Resource class.
+     */
+    public function getAllRoles();
 
 }
 
