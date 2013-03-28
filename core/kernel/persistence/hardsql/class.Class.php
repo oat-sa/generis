@@ -607,7 +607,7 @@ class core_kernel_persistence_hardsql_Class
 					}
 					$query .= implode(' ' . strtoupper($chaining) . ' ', $finalCondition);
 				}
-				else{
+				else if (!empty($propsConditions)){
 					// Mixed approach scenario.
 					if ($chaining == 'and'){
 						for ($i = 0; $i < count($propsConditions); $i++){

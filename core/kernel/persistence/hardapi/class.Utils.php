@@ -251,20 +251,39 @@ class core_kernel_persistence_hardapi_Utils
 
         // section 10-13-1--128-743691ae:12fc0ed9381:-8000:000000000000152E begin
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$pattern = trim($dbWrapper->dbConnector->quote($pattern), "'\"");
 		
-		if($like){
-			$object = trim(str_replace('*', '%', $pattern));
-			if(!preg_match("/^%/", $object)){
-				$object = "%".$object;
-			}
-			if(!preg_match("/%$/", $object)){
-				$object = $object."%";
-			}
-			$returnValue = " LIKE '{$object}' ";
-		}
-		else{
-			$returnValue = " = '{$pattern}' ";
+    	switch (gettype($pattern)) {
+			case 'string' :
+			case 'numeric':
+				$patternToken = $pattern;
+				$object = trim(str_replace('*', '%', $patternToken));
+
+			    if($like){
+				    if(!preg_match("/^%/", $object)){
+					    $object = "%" . $object;
+				    }
+				    if(!preg_match("/%$/", $object)){
+					    $object = $object . "%";
+				    }
+				    $returnValue .= ' LIKE '. $dbWrapper->dbConnector->quote($object);
+			    }
+			    else {
+				    $returnValue = (strpos($object, '%') !== false)
+					    ? 'LIKE '. $dbWrapper->dbConnector->quote($object)
+					    : '= '. $dbWrapper->dbConnector->quote($patternToken);
+			    }
+		    break;
+
+		    case 'object' :
+			    if($pattern instanceof core_kernel_classes_Resource) {
+				    $returnValue = ' = ' . $dbWrapper->dbConnector->quote($pattern->getUri());
+			    } else {
+				    common_Logger::w('non ressource as search parameter: '. get_class($pattern), 'GENERIS');
+			    }
+		    break;
+
+		    default:
+			    throw new common_Exception("Unsupported type for searchinstance array: " . gettype($value));
 		}
         // section 10-13-1--128-743691ae:12fc0ed9381:-8000:000000000000152E end
 
