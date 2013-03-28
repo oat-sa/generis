@@ -294,6 +294,41 @@ class UserServiceTestCase extends UnitTestCase {
 		$this->assertFalse($user->exists());
 	}
 	
+	public function testUnincludeRole(){
+		$prefix = LOCAL_NAMESPACE . '#';
+		$role = new core_kernel_classes_Resource($prefix . 'subRole11');
+		$user = $this->service->addUser('user', md5('password'), $role);
+		
+		$userRoles = $this->service->getUserRoles($user);
+		$baseRole = new core_kernel_classes_Resource($prefix . 'baseRole');
+		$subRole1 = new core_kernel_classes_Resource($prefix . 'subRole1');
+		
+		$this->assertEqual(3, count($userRoles));
+		$this->assertTrue(array_key_exists($baseRole->getUri(), $userRoles));
+		$this->assertTrue(array_key_exists($subRole1->getUri(), $userRoles));
+		$this->assertTrue(array_key_exists($role->getUri(), $userRoles));
+		
+		
+		common_Logger::i('unincluding ' . $baseRole->getUri() . ' from ' . $subRole1->getUri());
+		$this->service->unincludeRole($subRole1, $baseRole);
+		common_Logger::i('-------------------------------------');
+		common_Logger::i('included roles of subRole11 are ...');
+		common_Logger::i(var_export($this->service->getIncludedRoles($role), true));
+		$userRoles = $this->service->getUserRoles($user);
+		common_Logger::i('-------------------------------------');
+		$this->assertEqual(2, count($userRoles));
+		$this->assertTrue(array_key_exists($role->getUri(), $userRoles));
+		$this->assertTrue(array_key_exists($subRole1->getUri(), $userRoles));
+		
+		$this->service->includeRole($role, $baseRole);
+		$userRoles = $this->service->getUserRoles($user);
+		$this->assertEqual(3, count($userRoles));
+		$this->assertTrue(array_key_exists($baseRole->getUri(), $userRoles));
+		
+		$user->delete();
+		$this->assertFalse($user->exists());
+	}
+	
 	public function testRemoveRole(){
 		$prefix = LOCAL_NAMESPACE . '#';
 		

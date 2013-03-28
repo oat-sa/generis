@@ -232,18 +232,20 @@ class core_kernel_users_Service
     public function getUserRoles( core_kernel_classes_Resource $user)
     {
         $returnValue = array();
-
         // We use a Depth First Search approach to flatten the Roles Graph.
         $rolesProperty = new core_kernel_classes_Property(PROPERTY_USER_ROLES);
         $rootRoles = $user->getPropertyValuesCollection($rolesProperty);
+
+        common_Logger::i('root roles ...');
         
         foreach ($rootRoles->getIterator() as $r){
+        	common_Logger::i(var_export($r, true));
         	$returnValue[$r->getUri()] = $r;
         	$returnValue = array_merge($returnValue, $this->getIncludedRoles($r));
         }
         
         $returnValue = array_unique($returnValue);
-
+        
         return (array) $returnValue;
     }
 
@@ -339,14 +341,14 @@ class core_kernel_users_Service
      * @param  includedRoles The Role(s) to be included in the newly created Generis Role. Can be either a Resource or an array of Resources.
      * @return core_kernel_classes_Resource
      */
-    public function addRole($label, $includedRoles = null)
+    public function addRole($label, $includedRoles = null, core_kernel_classes_Class $class = null)
     {
         $returnValue = null;
 
         $includedRoles = is_array($includedRoles) ? $includedRoles : array($includedRoles);
 		$includedRoles = empty($includedRoles[0]) ? array() : $includedRoles;
 		
-		$classRole =  new core_kernel_classes_Class(CLASS_ROLE);
+		$classRole =  (empty($class)) ? new core_kernel_classes_Class(CLASS_ROLE) : $class;
 		$includesRoleProperty = new core_kernel_classes_Property(PROPERTY_ROLE_INCLUDESROLE);
         $role = $classRole->createInstance($label, "${label} Role");
         
@@ -360,7 +362,7 @@ class core_kernel_users_Service
     }
 
     /**
-     * Remove a Generis role from the persistent memory. User References to this
+     * Remove a Generis Role from the persistent memory. Any reference to the Role
      * will be removed.
      *
      * @access public
@@ -374,7 +376,7 @@ class core_kernel_users_Service
         
     	if (GENERIS_CACHE_USERS_ROLES == true && core_kernel_users_Cache::areIncludedRolesInCache($role)){	
     		
-    		if ($role->delete(true) == true){
+    		if ($role->delete(true) == true){ // delete references.
         		$returnValue = core_kernel_users_Cache::removeIncludedRoles($role);
         		
         		// We also need to remove all included roles cache that contain
@@ -411,7 +413,8 @@ class core_kernel_users_Service
         $returnValue = array();
 
     	if (GENERIS_CACHE_USERS_ROLES == true && core_kernel_users_Cache::areIncludedRolesInCache($role) == true){
-        	$returnValue = core_kernel_users_Cache::retrieveIncludedRoles($role);
+        	common_Logger::i('included roles of ' . $role->getUri() . ' in cache');
+    		$returnValue = core_kernel_users_Cache::retrieveIncludedRoles($role);
         }
         else{
 	        // We use a Depth First Search approach to flatten the Roles Graph.
@@ -497,18 +500,51 @@ class core_kernel_users_Service
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  Resource role The role that needs to include another role.
-     * @param  Resource roleToInclude The role to be included.
-     * @return void
+     * @param  core_kernel_classes_Resource role The role that needs to include another role.
+     * @param  core_kernel_classes_Resource Resource roleToInclude The role to be included.
      */
     public function includeRole( core_kernel_classes_Resource $role,  core_kernel_classes_Resource $roleToInclude)
     {
         $includesRoleProperty = new core_kernel_classes_Property(PROPERTY_ROLE_INCLUDESROLE);
-        $role->removePropertyValues($includesRoleProperty, array('pattern' => $roleToInclude->getUri()));
+        
+        // Clean to avoid double entries...
+        $role->removePropertyValues($includesRoleProperty, array('like' => false, 'pattern' => $roleToInclude->getUri()));
+        
+        // Include the Role.
         $role->setPropertyValue($includesRoleProperty, $roleToInclude->getUri());
         
-        // invalidate cache for the role.
+        // Reset cache.
         core_kernel_users_Cache::removeIncludedRoles($role);
+    }
+    
+    /**
+     * Uninclude a Role from antother Role.
+     * 
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param core_kernel_classes_Resource role The Role from which you want to uninclude a Role.
+     * @param core_kernel_classes_Resource roleToUninclude The Role to uninclude. 
+     */
+    public function unincludeRole(core_kernel_classes_Resource $role, core_kernel_classes_Resource $roleToUninclude)
+    {
+    	$includesRoleProperty = new core_kernel_classes_Property(PROPERTY_ROLE_INCLUDESROLE);
+    	$role->removePropertyValues($includesRoleProperty, array('like' => false, 'pattern' => $roleToUninclude->getUri()));
+
+    	// invalidate cache for the role.
+    	if (GENERIS_CACHE_USERS_ROLES == true){
+    		core_kernel_users_Cache::removeIncludedRoles($role);
+    		
+    		// For each roles that have $role for included role,
+    		// remove the cache entry.
+    		foreach ($this->getAllRoles() as $r){
+    			$includedRoles = $this->getIncludedRoles($r);
+    			
+    			if (array_key_exists($role->getUri(), $includedRoles)){
+    				core_kernel_users_Cache::removeIncludedRoles($r);
+    			}
+    		}
+    	}
+    	
     }
 
     /**

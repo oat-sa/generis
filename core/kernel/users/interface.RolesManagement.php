@@ -40,7 +40,7 @@ interface core_kernel_users_RolesManagement
      * @param  includedRoles The Role(s) to be included in the newly created Generis Role. Can be either a Resource or an array of Resources.
      * @return core_kernel_classes_Resource
      */
-    public function addRole($label, $includedRoles = null);
+    public function addRole($label, $includedRoles = null, core_kernel_classes_Class $class = null);
 
     /**
      * Remove a Generis role from the persistent memory. User References to this
@@ -68,10 +68,19 @@ interface core_kernel_users_RolesManagement
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  Resource role The role that needs to include another role.
-     * @param  Resource roleToInclude The role to be included.
+     * @param  core_kernel_classes_Resource role The role that needs to include another role.
+     * @param  core_kernel_classes_Resource roleToInclude The role to be included.
      */
     public function includeRole(core_kernel_classes_Resource $role,  core_kernel_classes_Resource $roleToInclude);
+    
+    /**
+     * Uninclude a Role from another Role.
+     * 
+     * @author Jerome Bogaerts <jerome.taotesting.com>
+     * @param core_kernel_classes_Resource role The role from which you want to uninclude a Role.
+     * @param core_kernel_classes_Resource roleToUninclude The Role to uninclude.
+     */
+    public function unincludeRole(core_kernel_classes_Resource $role, core_kernel_classes_Resource $roleToUninclude);
     
     /**
      * Return all instances of Roles from the persistent memory of Generis.

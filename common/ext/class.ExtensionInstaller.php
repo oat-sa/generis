@@ -110,32 +110,35 @@ class common_ext_ExtensionInstaller
 				throw new common_ext_AlreadyInstalledException('Problem installing extension ' . $this->extension->getID() .' : '. 'Already installed',
 															   $this->extension->getID());
 			}
-			//check dependances
-			if(!$this->checkRequiredExtensions()){
-				// unreachable code
+			else{
+				// we purge the whole cache.
+				$cache = common_cache_FileCache::singleton();
+				$cache->purge();	
+			
+				//check dependances
+				if(!$this->checkRequiredExtensions()){
+					// unreachable code
+				}
+					
+				// deprecated, but might still be used
+				$this->installWriteConfig();
+				$this->installOntology();
+				$this->installRegisterExt();
+				$this->installLoadConstants();
+				$this->installExtensionModel();
+					
+				core_kernel_classes_Session::singleton()->update();
+					
+				$this->installCustomScript();
+					
+				if ($this->getLocalData() == true){
+					$this->installLocalData();
+				}
+					
+				// Method to be overriden by subclasses
+				// to extend the installation mechanism.
+				$this->extendedInstall();
 			}
-			
-			// deprecated, but might still be used
-			$this->installWriteConfig();
-			$this->installOntology();
-			$this->installRegisterExt();
-			$this->installLoadConstants();
-			$this->installExtensionModel();
-			
-			core_kernel_classes_Session::singleton()->update();
-			
-			$this->installCustomScript();
-			
-			if ($this->getLocalData() == true){
-				$this->installLocalData();
-			}
-			
-			// Method to be overriden by subclasses
-			// to extend the installation mechanism.
-			$this->extendedInstall();
-			
-			$cache = common_cache_FileCache::singleton();
-			$cache->purge();
 				
 		}catch (common_ext_ExtensionException $e){
 			// Rethrow
