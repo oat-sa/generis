@@ -308,14 +308,8 @@ class UserServiceTestCase extends UnitTestCase {
 		$this->assertTrue(array_key_exists($subRole1->getUri(), $userRoles));
 		$this->assertTrue(array_key_exists($role->getUri(), $userRoles));
 		
-		
-		common_Logger::i('unincluding ' . $baseRole->getUri() . ' from ' . $subRole1->getUri());
 		$this->service->unincludeRole($subRole1, $baseRole);
-		common_Logger::i('-------------------------------------');
-		common_Logger::i('included roles of subRole11 are ...');
-		common_Logger::i(var_export($this->service->getIncludedRoles($role), true));
 		$userRoles = $this->service->getUserRoles($user);
-		common_Logger::i('-------------------------------------');
 		$this->assertEqual(2, count($userRoles));
 		$this->assertTrue(array_key_exists($role->getUri(), $userRoles));
 		$this->assertTrue(array_key_exists($subRole1->getUri(), $userRoles));

@@ -235,11 +235,8 @@ class core_kernel_users_Service
         // We use a Depth First Search approach to flatten the Roles Graph.
         $rolesProperty = new core_kernel_classes_Property(PROPERTY_USER_ROLES);
         $rootRoles = $user->getPropertyValuesCollection($rolesProperty);
-
-        common_Logger::i('root roles ...');
         
         foreach ($rootRoles->getIterator() as $r){
-        	common_Logger::i(var_export($r, true));
         	$returnValue[$r->getUri()] = $r;
         	$returnValue = array_merge($returnValue, $this->getIncludedRoles($r));
         }
@@ -413,7 +410,6 @@ class core_kernel_users_Service
         $returnValue = array();
 
     	if (GENERIS_CACHE_USERS_ROLES == true && core_kernel_users_Cache::areIncludedRolesInCache($role) == true){
-        	common_Logger::i('included roles of ' . $role->getUri() . ' in cache');
     		$returnValue = core_kernel_users_Cache::retrieveIncludedRoles($role);
         }
         else{
