@@ -169,19 +169,29 @@ class helpers_File
      * @return boolean
      */
     public static function remove($path)
-    {
-        $returnValue = (bool) false;
+    {	$returnValue = (bool) false;
 
 		if (is_file($path)) {
         	$returnValue = unlink($path);
         } elseif (is_dir($path)) {
+			/*
+			//It seems to raise problemes on windows, depending on the php version the resource handler is not freed with DirectoryIterator preventing from further deletions
+			//
 			$iterator = new DirectoryIterator($path);
 			foreach ($iterator as $fileinfo) {
 				if (!$fileinfo->isDot()) {
-
-                    self::remove($fileinfo->getPathname());
+       
 				}
 			}
+			*/
+			$handle = opendir($path);
+			while (false !== ($entry = readdir($handle))) {
+			 if ($entry != "." && $entry != "..") {
+			 self::remove($path.DIRECTORY_SEPARATOR.$entry);
+			 }
+			}
+			closedir($handle);
+			
 			$returnValue = rmdir($path);
         } else {
         	throw new common_exception_Error('"'.$path.'" cannot be removed since it\'s neither a file nor directory');
