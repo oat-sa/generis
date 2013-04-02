@@ -368,7 +368,7 @@ class common_ext_Extension
         	common_logger::w('constant outside of extension called: '.$key);
         	$returnValue = constant($key);
         } else {
-        	throw new common_exception_Error('Unknown constant \''.$key.'\'');
+        	throw new common_exception_Error('Unknown constant \''.$key.'\' for extension '.$this->id);
         }
 
         return $returnValue;
