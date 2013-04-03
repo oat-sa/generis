@@ -270,13 +270,10 @@ class core_kernel_persistence_smoothsql_Class
 						WHERE "predicate" = ?  
 							AND "object" = ? ';
 		if(isset($params['limit'])){
-			$offset = 0;
 			$limit = intval($params['limit']);
-			if ($limit==0){
-				$limit = 1000000;
-			}
-			if(isset($params['offset'])){
-				$offset = intval($params['offset']);
+			$offset = isset($params['offset']) ? intval($params['offset']) : 0;
+			if ($limit == 0) {
+				throw new common_exception_InvalidArgumentType('Invalid limit in '.__FUNCTION__.': '.$params['limit']);
 			}
 			$sqlQuery = $dbWrapper->limitStatement($sqlQuery, $limit, $offset);
 		}
@@ -309,7 +306,7 @@ class core_kernel_persistence_smoothsql_Class
 		if($recursive == true){
 			$subClasses = $resource->getSubClasses(true);
 			foreach ($subClasses as $subClass){
-				$returnValue = array_merge($returnValue, $subClass->getInstances(true));
+				$returnValue = array_merge($returnValue, $subClass->getInstances(false));
 			}
 		}
 
