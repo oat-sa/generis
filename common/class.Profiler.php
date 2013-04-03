@@ -42,22 +42,28 @@ class common_Profiler
      * @var array
      */
     private $startTimeLogs = array();
+	
     /**
      * @var array
      */
     private $elapsedTimeLogs = array();
+	
     /**
      * @var array
      */
     private $slowQueries = array();
+	private $queries = array();
+	
     /**
      * @var array
      */
     protected $loggers = array();//specify how messages should be logged, common_Logger, client popup
+	
     /**
      * @var int
      */
     private $slowQueryTimer = 0;
+	
     /**
      * @var int
      */
@@ -94,7 +100,6 @@ class common_Profiler
 
     /**
      *
-     *
      * @author Somsack Sipasseuth ,<sam@taotesting.com>
      * @return mixed
      */
@@ -117,25 +122,25 @@ class common_Profiler
      */
     public function shutdownProfiler()
     {
-		$this->logRequestUrl();
-		$this->logTimer();
+		$this->logContext();
+		$this->logEventTimer();
 		$this->logMemoryPeakUsage();
 		$this->logNrOfQueries();
 		$this->logSlowQueries();
+//		$this->logQueries();
 	}
 
     /**
      *
      * @author Somsack Sipasseuth ,<sam@taotesting.com>
      */
-    protected function logTimer(){
+    protected function logEventTimer(){
 		$total = $this->getCurrentTime() - $this->startTime;
 		$totalRounded = round($total * 1000, 3);
 		$sumDurations = 0;
 		foreach ($this->elapsedTimeLogs as $event => $duration) {
 			$this->log($event . ': ' . round($duration * 1000, 3) . 'ms/'.$totalRounded.'ms (' . round($duration / $total * 100, 1) . '%)');
-			if ($event == 'start' || $event == 'dispatch')
-				$sumDurations += $duration;
+			if ($event == 'start' || $event == 'dispatch') $sumDurations += $duration;
 		}
 		$uncovered = $total - $sumDurations;
 		$this->log('???: ' . round($uncovered * 1000, 3) . 'ms/'.$totalRounded.'ms (' . round($uncovered / $total * 100, 1) . '%)');
@@ -187,11 +192,15 @@ class common_Profiler
 	/**
      *
      */
-    protected function logRequestUrl(){
+    protected function logContext(){
 		$requestUrl = Context::getInstance()->getExtensionName() . '/' . Context::getInstance()->getModuleName() . '/' . Context::getInstance()->getActionName();
 		$this->log('Profiling action called: '.$requestUrl);
+		
+		$this->log('server signature : '.$_SERVER['SERVER_SIGNATURE'].$_SERVER['SERVER_ADMIN'].' -> '.$_SERVER['PHP_SELF']);
 	}
+	
 	/**
+	 * 
      * @param $msg
      * @author Somsack Sipasseuth ,<sam@taotesting.com>
      */
@@ -245,6 +254,7 @@ class common_Profiler
 	}
 	
 	/**
+	 * 
      * @param string $flag
      * @author Somsack Sipasseuth ,<sam@taotesting.com>
      */
@@ -254,13 +264,15 @@ class common_Profiler
 	}
 	
 	/**
-     *
+	 * 
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
      */
     public function startSlowQuery(){
 		$this->slowQueryTimer = $this->getCurrentTime();
 	}
 	
 	/**
+	 * 
      * @param $statement
      * @param array $params
      * @author Somsack Sipasseuth ,<sam@taotesting.com>
@@ -269,40 +281,51 @@ class common_Profiler
 		if($this->slowQueryTimer){//log only if timer has been started
 			$statementKey = md5($statement);
 			$time = $this->getCurrentTime() - $this->slowQueryTimer;
+			$queryData = array(
+				'statement' => $statement,
+				'params' => $params,
+				'time' => $time
+			);
 			if(1000*$time > $this->slowQueryThreshold){//compare to threshold (ms)
 				if(!isset($this->slowQueries[$statementKey])){
 					$this->slowQueries[$statementKey] =  array();
 				}
-				$this->slowQueries[$statementKey][] = array(
-					'statement' => $statement,
-					'params' => $params,
-					'time' => $time
-				);
+				$this->slowQueries[$statementKey][] = $queryData;
 			}
+			
+			if(!isset($this->queries[$statementKey])){
+				$this->queries[$statementKey] = array('statement' => $statement, 'count'=>0, 'cumul'=>0);
+			}
+			$this->queries[$statementKey]['count']++;
+			$this->queries[$statementKey]['cumul'] += $time;
 		}
 		$this->slowQueryTimer = 0;
 	}
 	
 	/**
      *
-     *
-     *@author Somsack Sipasseuth ,<sam@taotesting.com>
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
      */
     protected function logSlowQueries(){
 		foreach($this->slowQueries as $logs) {
-			$count = count($logs); 
+			$count = count($logs);
 			for($i=0;$i<$count;$i++){
-				$this->log('slow query : '.$logs[$i]['statement'].' : '.round($logs[$i]['time']*1000, 3).'ms');
+				$this->log('slow query: '.$logs[$i]['statement'].' : '.round($logs[$i]['time']*1000, 3).'ms');
 			}
 		}
 	}
 	
-	/*
+	protected function logQueries(){
+		foreach($this->queries as $query){
+			if($query['count']>10) $this->log('Query count: '.$query['statement'].' => '.$query['count']);
+		}
+	}
+	
+	/**
 	 * (experimental)
 	 * call common_Profiler::singleton()->initMysqlProfiler(); when after the DbWrapper has been constructed
-	 */
-	/**
-     *@author Somsack Sipasseuth ,<sam@taotesting.com>
+	 * 
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
      */
     public function initMysqlProfiler(){
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
@@ -315,9 +338,8 @@ class common_Profiler
 	/*
 	 * (experimental)
 	 * log profiles from mysql built-in profiler
-	 */
-	/**
-     *@author Somsack Sipasseuth ,<sam@taotesting.com>
+	 * 
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
      */
     protected function logMysqlProfiles(){
 		
