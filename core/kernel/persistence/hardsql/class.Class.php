@@ -244,7 +244,7 @@ class core_kernel_persistence_hardsql_Class
 	
 							$limit = $limit - count($returnValue);
 							if ($limit > 0){
-								$returnValue = array_merge($returnValue, $subClass->getInstances(true), array('limit'=>$limit));
+								$returnValue = array_merge($returnValue, $subClass->getInstances(true, array('limit'=>$limit)));
 							} else {
 								break 2;
 							}
@@ -258,7 +258,7 @@ class core_kernel_persistence_hardsql_Class
 				throw new core_kernel_persistence_hardsql_Exception("Unable to get instances for the resource {$resource->getUri()} in the table {$tableName} : " .$e->getMessage());
 			}
 		}
-
+		
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 end
 
         return (array) $returnValue;
