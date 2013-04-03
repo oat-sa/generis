@@ -390,16 +390,29 @@ class core_kernel_persistence_hardsql_Class
      * @param  string comment
      * @param  string uri
      * @return core_kernel_classes_Class
+     * @throws core_kernel_persistence_hardapi_Exception
      */
     public function createSubClass( core_kernel_classes_Resource $resource, $label = '', $comment = '', $uri = '')
     {
-        $returnValue = null;
-
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 begin
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 end
-
-        return $returnValue;
+    	// Meta-model is still in smooth mode...
+		$newClass = core_kernel_persistence_smoothsql_Class::singleton()->createSubClass($resource, $label, $comment, $uri);
+		
+		if (empty($newClass)){
+			$classUri = $resource->getUri();
+			$msg = "An error occured while creating a sub-class of '${classUri}'.";
+			throw new core_kernel_persistence_hardapi_Exception($msg);
+		}
+		
+		// Simply hardify the class to keep consistency in the class hierarchy.
+		// We want to avoid class hierarchies with multiple persistence implementations.
+		$switcher = new core_kernel_persistence_Switcher();
+		if (!$switcher->hardify($newClass)){
+			$classUri = $resource->getUri();
+			$msg = "An error occured while hardifying class '${classUri}'.";
+			throw new core_kernel_persistence_hardapi_Exception($msg);
+		}
+		
+		return $newClass;
     }
 
     /**

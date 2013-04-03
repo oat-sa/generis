@@ -386,22 +386,8 @@ class core_kernel_persistence_ClassProxy
      */
     public function createSubClass( core_kernel_classes_Resource $resource, $label = '', $comment = '', $uri = '')
     {
-        $returnValue = null;
-
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 begin
-        
         $delegate = $this->getImpToDelegateTo($resource);
-        if($delegate instanceof core_kernel_persistence_hardsql_Class){
-                // Use the smooth sql implementation to get this information
-		// Or find the right way to treat this case
-                $returnValue = core_kernel_persistence_smoothsql_Class::singleton()->createSubClass($resource, $label, $comment, $uri);
-        }else{
-                $returnValue = $delegate->createSubClass($resource, $label, $comment, $uri);
-        }
-        
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 end
-
-        return $returnValue;
+        return $delegate->createSubClass($resource, $label, $comment, $uri);
     }
 
     /**

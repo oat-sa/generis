@@ -851,7 +851,6 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     				$dbWrapper = core_kernel_classes_DbWrapper::singleton();
     				$tables = array();
     				$query = 'SELECT DISTINCT "id","table" FROM "class_to_table"';
-    				common_Logger::i($query);
     				$result = $dbWrapper->query($query);
     				while($row = $result->fetch()){
     					$tables[$row['id']] = $row['table'];
