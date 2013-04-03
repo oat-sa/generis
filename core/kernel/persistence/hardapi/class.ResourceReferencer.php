@@ -851,6 +851,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     				$dbWrapper = core_kernel_classes_DbWrapper::singleton();
     				$tables = array();
     				$query = 'SELECT DISTINCT "id","table" FROM "class_to_table"';
+    				common_Logger::i($query);
     				$result = $dbWrapper->query($query);
     				while($row = $result->fetch()){
     					$tables[$row['id']] = $row['table'];
@@ -906,19 +907,17 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     							}
     						}
     					}
-    					 
     				}
     				
     				//saving the properties in the cache file
-    				if($this->cacheModes['property'] == self::CACHE_FILE){
 
-    					try{
-    						$cache = common_cache_FileCache::singleton();
-    						$cache->put(self::$_properties, $serial);
-    					}
-    					catch (common_cache_Exception $e){
-    						throw new core_kernel_persistence_hardapi_Exception("cannot write the required property cache file for serial '${serial}'.");
-    					}
+    				
+    				try{
+    					$cache = common_cache_FileCache::singleton();
+    					$cache->put(self::$_properties, $serial);
+    				}
+    				catch (common_cache_Exception $e){
+    					throw new core_kernel_persistence_hardapi_Exception("cannot write the required property cache file for serial '${serial}'.");
     				}
     			}
     		}
