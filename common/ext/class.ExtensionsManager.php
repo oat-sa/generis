@@ -98,6 +98,7 @@ class common_ext_ExtensionsManager
      * Returns true if an extension is installed.
      * Now deprecated !
      *
+     * @deprecated
      * @access public
      * @author Joel Bout, <joel@taotesting.com>
      * @param  string extension
@@ -116,6 +117,7 @@ class common_ext_ExtensionsManager
      * Returns true if an extension is installed and enabled.
      * Now deprecated !
      *
+     * @deprecated
      * @access public
      * @author Joel Bout, <joel@taotesting.com>
      * @param  string extension
