@@ -95,44 +95,6 @@ class common_ext_ExtensionsManager
     }
 
     /**
-     * Returns true if an extension is installed.
-     * Now deprecated !
-     *
-     * @deprecated
-     * @access public
-     * @author Joel Bout, <joel@taotesting.com>
-     * @param  string extension
-     * @return boolean
-     */
-    public function isExtensionInstalled($extension)
-    {
-        $returnValue = (bool) false;
-
-        throw new Exception('deprecated function '.__FUNCTION__);
-
-        return (bool) $returnValue;
-    }
-
-    /**
-     * Returns true if an extension is installed and enabled.
-     * Now deprecated !
-     *
-     * @deprecated
-     * @access public
-     * @author Joel Bout, <joel@taotesting.com>
-     * @param  string extension
-     * @return boolean
-     */
-    public function isExtensionEnabled($extension)
-    {
-        $returnValue = (bool) false;
-
-        throw new Exception('deprecated function '.__FUNCTION__);
-
-        return (bool) $returnValue;
-    }
-
-    /**
      * Add (it actually installs) an extension on the platform from a
      * ZIP archive containing it.
      *
