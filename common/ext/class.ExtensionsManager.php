@@ -273,12 +273,14 @@ class common_ext_ExtensionsManager
     }
 
     /**
-     * Short description of method getExtensionById
+     * Get an extension by Id. If the extension is not yet loaded, it will be
+     * loaded using common_ext_Extension::load.
      *
      * @access public
      * @author Joel Bout, <joel@taotesting.com>
-     * @param  string id
-     * @return common_ext_Extension
+     * @param  string id The id of the extension.
+     * @return common_ext_Extension A common_ext_Extension instance or null if it does not exist.
+     * @throws common_ext_ExtensionException If the provided id is empty.
      */
     public function getExtensionById($id)
     {
