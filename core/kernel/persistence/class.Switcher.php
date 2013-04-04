@@ -105,7 +105,6 @@ class core_kernel_persistence_Switcher
 	 * can be used to pass specific unhardify options are the following:
 	 * 
 	 * - recursive: Unhardify the target class and its subclasses (default: false).
-	 * - removeForeigns: Unhardify the classes that are ranges of the target class properties (default: false).
 	 *
 	 * @access public
 	 * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -280,18 +279,6 @@ class core_kernel_persistence_Switcher
 		// Unreference the class
 		$returnValue = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->unReferenceClass($class);
 
-		// If removeForeigns, treat the foreign classes
-		if($removeForeigns){
-
-			foreach($properties as $property){
-				$range = $property->getRange();
-				if (!is_null($range) && core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($range)){
-					
-					$this->unhardify($range, $options);
-				}
-			}
-		}
-
 		// If recursive, treat the subclasses
 		if($recursive){
 
@@ -319,9 +306,7 @@ class core_kernel_persistence_Switcher
 	 * The $options array can contain the following key => values (all booleans):
 	 * 
 	 * - recursive: compile the target class and its subclasses (default: false).
-	 * - createForeigns: compile the classes that are ranges of the target class properties (default: false).
 	 * - append: append data to the existing optimized table if it already exists (default: false).
-	 * - allOrNothing: if the optimized table already exists, do nothing (default: false).
 	 * - rmSources: remove the triples in the statement table after transfer (default: true).
 	 *
 	 * @access public
@@ -368,9 +353,6 @@ class core_kernel_persistence_Switcher
 			//check if we append the data in case the hard table exists or truncate the table and add the new rows
 			(isset($options['append'])) ? $append = $options['append'] : $append = false;
 			
-			//If the option is true, we check if the table has alreayd been created, if yes, it's finished. If no, we can continue.
-			(isset($options['allOrNothing'])) ? $allOrNothing = $options['allOrNothing'] : $allOrNothing = false;
-			
 			//if true, the instances of the class will  be removed from the statements table!
 			(isset($options['rmSources'])) ? $rmSources = (bool) $options['rmSources'] : $rmSources = false;
 			
@@ -385,12 +367,6 @@ class core_kernel_persistence_Switcher
 			
 			$tableName = '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
 			$myTableMgr = new core_kernel_persistence_hardapi_TableManager($tableName);
-			
-			if($allOrNothing && $myTableMgr->exists() && !$class->countInstances()){
-				common_Logger::d("Class ${classLabel} not hardified");
-				core_kernel_persistence_PersistenceProxy::restoreImplementation();
-				return $returnValue;
-			}
 			
 			$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
 			
@@ -407,42 +383,6 @@ class core_kernel_persistence_Switcher
 			}else{
 				$this->hardenedClasses[$class->getUri()] = 0;
 			}
-			
-			// Treat foreign classes of the current class
-			foreach($columns as $i => $column){
-				//create the foreign tables recursively
-				if(isset($column['foreign']) && !empty($column['foreign'])){
-					if($createForeigns){
-						$foreignClassUri = core_kernel_persistence_hardapi_Utils::getLongName($column['foreign']);
-						$foreignTableMgr = new core_kernel_persistence_hardapi_TableManager($column['foreign']);
-						if(!$foreignTableMgr->exists()){
-							if(!in_array($foreignClassUri, array_keys($this->hardenedClasses))){
-								$range = new core_kernel_classes_Class($foreignClassUri);
-								$this->hardify($range, array_merge($options, array(
-										'recursive' 	=> false,
-										'append' 		=> true,
-										'allOrNothing'	=> true
-								)));
-							}else{
-								//set in waiting list, the property to be set as foreign key on a table to be compiled
-								//array(range => array(currentClass => property))
-								//array(foreignTable => array(currentTable => column))
-								if(!isset($this->foreignPropertiesWaitingList[$column['foreign']])){
-									$this->foreignPropertiesWaitingList[$column['foreign']] = array($tableName => $column['name']);
-								}else{
-									$this->foreignPropertiesWaitingList[$column['foreign']][$tableName] = $column['name'];
-								}
-								unset($columns[$i]['foreign']);//do not create the foreign key for now
-							}
-						}
-					}else{
-						unset($columns[$i]['foreign']);//do not create foreign key at all
-					}
-				}
-			}
-			
-			// important! need to force the mode again to "smooth" after foreign classes (ranges) compilation
-			//core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
 			
 			if(!$append || ($append && !$myTableMgr->exists())){
 			
@@ -537,8 +477,7 @@ class core_kernel_persistence_Switcher
 				foreach($class->getSubClasses(true) as $subClass){
 					$returnValue = $this->hardify($subClass, array_merge($options, array(
 							'recursive' 	=> false,
-							'append' 	=> true,
-							'allOrNothing'	=> true
+							'append' 	=> true
 					)));
 				}
 			}

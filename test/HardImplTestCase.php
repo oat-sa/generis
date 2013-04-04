@@ -24,14 +24,64 @@ require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 class HardImplTestCase extends UnitTestCase {
 	
+	/**
+	 * 
+	 * @var core_kernel_classes_Class
+	 */
 	protected $targetSubjectClass = null;
+	
+	/**
+	 *
+	 * @var core_kernel_classes_Class
+	 */
 	protected $targetSubjectSubClass = null;
+	
+	/**
+	 *
+	 * @var core_kernel_classes_Class
+	 */
 	protected $targetWorkClass = null;
+	
+	/**
+	 *
+	 * @var core_kernel_classes_Class
+	 */
 	protected $targetMovieClass = null;
+	
+	/**
+	 *
+	 * @var core_kernel_classes_Class
+	 */
+	protected $targetSongClass = null;
+	
+	/**
+	 *
+	 * @var core_kernel_classes_Class
+	 */
 	protected $taoClass = null;
+	
+	/**
+	 *
+	 * @var core_kernel_classes_Property
+	 */
 	protected $targetAuthorProperty = null;
+	
+	/**
+	 *
+	 * @var core_kernel_classes_Property
+	 */
 	protected $targetProducerProperty = null;
+	
+	/**
+	 *
+	 * @var core_kernel_classes_Property
+	 */
 	protected $targetActorsProperty = null;
+	
+	/**
+	 *
+	 * @var core_kernel_classes_Property
+	 */
 	protected $targetRelatedMoviesProperty = null;
 	
 	public function setUp(){
@@ -93,16 +143,11 @@ class HardImplTestCase extends UnitTestCase {
 	public function testHardifier (){
 		$switcher = new core_kernel_persistence_Switcher();
 		$switcher->hardify($this->targetSubjectClass, array(
-			'topClass'				=> new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#User'),
-			'additionalProperties' 	=> array (new core_kernel_classes_Property (RDF_TYPE)),
-			'recursive'				=> true,
-			'createForeigns'		=> false
+			'recursive'	=> true,
 		));
 		
 		$switcher->hardify($this->targetWorkClass, array(
-			'topClass'			=> $this->targetWorkClass,
-			'recursive' 		=> true,
-			'createForeigns'	=> true
+			'recursive' => true,
 		));
 	}
 	
@@ -536,6 +581,15 @@ class HardImplTestCase extends UnitTestCase {
 			$this->assertEqual(count($authors), 1);
 			$this->assertEqual(current($authors), 'Peter Jackson');
 		}
+	}
+	
+	public function testCreateSubClassOf(){
+		$classProxy = core_kernel_persistence_ClassProxy::singleton();
+		
+		// Any new subclass of an hardified class must be hardified as well.
+		$this->targetSongClass = $this->targetWorkClass->createSubClass('Song', 'The Song Class');
+		$this->assertTrue($this->targetSongClass->exists());
+		$this->assertIsA($classProxy->getImpToDelegateTo($this->targetSongClass), 'core_kernel_persistence_hardsql_Class');
 	}
 	
 	public function testDeleteInstances(){

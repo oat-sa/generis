@@ -158,20 +158,16 @@ class core_kernel_persistence_hardapi_TableManager
 						"id" SERIAL,
 						PRIMARY KEY ("id"),
 						"uri" VARCHAR(255) NOT NULL';
+			
 			foreach($columns as $column){
 				if(isset($column['name'])){
-					if(isset($column['multi'])){
-						continue;
-					}
-					$query .= ', "'.$column['name'].'"';
-					if(isset($column['foreign']) && !empty($column['foreign'])){
-						$query .= " TEXT";
-					}
-					else{
+					if(!isset($column['multi'])){
+						$query .= ', "'.$column['name'].'"';
 						$query .= " TEXT";
 					}
 				}
 			}
+			
 			$query .= ')/*!ENGINE = MYISAM, DEFAULT CHARSET=utf8*/;';
 
 			$dbWrapper->exec($query);
