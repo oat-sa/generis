@@ -23,7 +23,6 @@
 /**
  * This class resolve data containing into a specific URL
  *
- * @uses Class Plugin
  * @author Eric Montecalvo <eric.montecalvo@tudor.lu> <eric.mtc@gmail.com>
  */
 class Resolver {
@@ -49,16 +48,6 @@ class Resolver {
 	protected $action;
 
 	/**
-	 * @var Bool Equal true if a plugin is requested
-	 */
-	protected $isPlugin;
-
-	/**
-	 * @var String the plugin name (plugin folder)
-	 */
-	protected $pluginFolderName;
-
-	/**
 	 * The constructor
 	 */
     public function __construct($url = null) {
@@ -68,11 +57,9 @@ class Resolver {
 
     	$this->module		= null;
     	$this->action		= null;
-    	$this->isPlugin		= false;
-    	$this->pluginFolderName = '';
-
+    	
 		# Now resolve the Url
-    	$this->resolveUrl();
+    	$this->resolveRequest($this->url);
     }
 
     /**
@@ -109,42 +96,6 @@ class Resolver {
     	return is_null($this->action) ? $defaultActionName : $this->action;
     }
 
-    /**
-     * @return Bool True if a plugin is requested
-     */
-    public function isPlugin() {
-    	return $this->isPlugin;
-    }
-
-    /**
-     * @return String The plugin name (the folder name)
-     */
-    public function getPluginName() {
-    	return $this->pluginFolderName;
-    }
-
-    /**
-     * Parse the URL to initialise the object
-     */
-    protected function resolveUrl() {
-		# Get the index file
-    	if(defined('INDEX_FILE'))
-			$index = INDEX_FILE;
-		else
-			$index = 'index.php';
-
-    	# Look for the index file
-    	if (strpos($this->url, '/'.$index) !== false){
-			# Get the url of the framework requested-object
-			$s = explode($index, $this->url);
-			$cleanUrl = $s[1];
-    	}else{
-    		$cleanUrl = $this->url;
-    	}
-
-    	$this->resolveRequest($this->url);
-    }
-
 	/**
 	 * Parse the framework-object requested into the URL
 	 *
@@ -152,23 +103,11 @@ class Resolver {
 	 */
 	protected function resolveRequest($request){
 		if(empty($request)) return;
-
-		# Clean the request string
-		if(strpos($request, '?') !== false){
-			$request = substr($request, 0, strpos($request, '?'));
-		}
+		$rootUrlPath	= parse_url(ROOT_URL, PHP_URL_PATH);
+		$absPath		= parse_url($request, PHP_URL_PATH);
+		$relPath		= ltrim($absPath, $rootUrlPath);
+		$tab = explode('/', $relPath);
 		
-		$matches = array();
-		preg_match ('/^([^\/]*)\/\/([^\/]*)(\/.*)?$/' , ROOT_URL, $matches);
-		$request = isset($matches[3]) ? substr($request, strlen($matches[3])) : $request;
-		$request = trim($request, '/');
-		
-		# Resolve
-		$tab = explode('/', $request);
-		# Decode the URL
-		for($i=0;$i<count($tab);$i++)
-			$tab[$i] = urldecode($tab[$i]);
-
 		if (count($tab) > 0) {
 			$this->extension	= $tab[0];
 			$this->module		= isset($tab[1]) ? $tab[1] : null;
@@ -176,12 +115,7 @@ class Resolver {
 		} else {
 			throw new common_exception_Error('Empty request Uri '.$request.' reached resolver');
 		}
-		
-		//legacy
-		if (isset($_GET['extension'])) {
-			common_Logger::i('deprecated parameter extension(\''.$_GET['extension'].'\') used coming from '.$_SERVER['HTTP_REFERER']);
-			$this->extension = $_GET['extension'] == 'none' ? 'tao' : $_GET['extension'];
-		}
+
 	}
 }
 ?>
