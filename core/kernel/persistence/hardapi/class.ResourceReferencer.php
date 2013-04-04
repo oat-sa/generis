@@ -793,7 +793,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 					
 			        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			        
-			        $query = 'SELECT "table" FROM "resource_to_table" WHERE uri=?';
+			        $query = 'SELECT "table" FROM "resource_to_table" WHERE "uri"=?';
 			    	$result = $dbWrapper->query($query, array ($resource->getUri()));
 
 					if ($row = $result->fetch()){
