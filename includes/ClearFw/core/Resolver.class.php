@@ -102,10 +102,20 @@ class Resolver {
 	 * @param String $request A sub part of the requested URL
 	 */
 	protected function resolveRequest($request){
-		if(empty($request)) return;
+		if(empty($request)) {
+			throw new common_exception_Error('Empty request URI in Resolver');
+		}
+		if (preg_match('/^\/\/+/', $request)) {
+			common_Logger::w('Multiple leading slashes in request URI: '.$request);
+			$request = '/'.ltrim($request, '/');
+		}
 		$rootUrlPath	= parse_url(ROOT_URL, PHP_URL_PATH);
 		$absPath		= parse_url($request, PHP_URL_PATH);
-		$relPath		= ltrim($absPath, $rootUrlPath);
+		if (substr($absPath, 0, strlen($rootUrlPath)) != $rootUrlPath ) {
+			throw new common_exception_Error('Request Uri '.$request.' outside of TAO path '.ROOT_URL);
+		}
+		$relPath		= substr($absPath, strlen($rootUrlPath));
+		$relPath		= ltrim($relPath, '/');
 		$tab = explode('/', $relPath);
 		
 		if (count($tab) > 0) {
@@ -115,7 +125,6 @@ class Resolver {
 		} else {
 			throw new common_exception_Error('Empty request Uri '.$request.' reached resolver');
 		}
-
 	}
 }
 ?>
