@@ -586,6 +586,31 @@ class core_kernel_classes_Resource
 
         return (bool) $returnValue;
     }
+    
+    /**
+     * remove a single triple with this subject and predicate
+     *
+     * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     * @param  Property property
+     * @param  mixed value
+     * @return boolean
+     */
+    public function removePropertyValue( core_kernel_classes_Property $property, $value)
+    {
+        $returnValue = (bool) false;
+
+        // section 10-13-1--31--64270bf:11918ad765e:-8000:000000000000097C begin
+
+        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->removePropertyValues($this, $property, array(
+        	'pattern'	=> (is_object($value) && $value instanceof self ? $value->getUri() : $value),
+        	'like'		=> false 
+        ));
+        
+        // section 10-13-1--31--64270bf:11918ad765e:-8000:000000000000097C end
+
+        return (bool) $returnValue;
+    }    
 
     /**
      * remove all triples with this subject and predicate
