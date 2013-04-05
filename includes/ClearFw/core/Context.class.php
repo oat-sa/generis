@@ -68,13 +68,15 @@ class Context
 		$this->viewData			= array();
 		$this->behaviors		= array();
 		
-		if (PHP_SAPI == 'cli') {
-			$this->currentExtensionName = 'tao';
-		} else {
-			$resolver = new Resolver();
-			$this->extensionName	= $resolver->getExtensionFromURL();
-			$this->moduleName 		= Camelizer::firstToUpper($resolver->getModule());
-			$this->actionName 		= Camelizer::firstToLower($resolver->getAction());
+		if (PHP_SAPI != 'cli') {
+			try {
+				$resolver = new Resolver();
+				$this->extensionName	= $resolver->getExtensionFromURL();
+				$this->moduleName 		= Camelizer::firstToUpper($resolver->getModule());
+				$this->actionName 		= Camelizer::firstToLower($resolver->getAction());
+			} catch (ResolverException $re) {
+				$this->extensionName = 'tao';
+			}
 		}
 		
 	}

@@ -103,7 +103,7 @@ class Resolver {
 	 */
 	protected function resolveRequest($request){
 		if(empty($request)) {
-			throw new common_exception_Error('Empty request URI in Resolver');
+			throw new ResolverException('Empty request URI in Resolver');
 		}
 		if (preg_match('/^\/\/+/', $request)) {
 			common_Logger::w('Multiple leading slashes in request URI: '.$request);
@@ -112,7 +112,7 @@ class Resolver {
 		$rootUrlPath	= parse_url(ROOT_URL, PHP_URL_PATH);
 		$absPath		= parse_url($request, PHP_URL_PATH);
 		if (substr($absPath, 0, strlen($rootUrlPath)) != $rootUrlPath ) {
-			throw new common_exception_Error('Request Uri '.$request.' outside of TAO path '.ROOT_URL);
+			throw new ResolverException('Request Uri '.$request.' outside of TAO path '.ROOT_URL);
 		}
 		$relPath		= substr($absPath, strlen($rootUrlPath));
 		$relPath		= ltrim($relPath, '/');
@@ -123,7 +123,7 @@ class Resolver {
 			$this->module		= isset($tab[1]) ? $tab[1] : null;
 			$this->action		= isset($tab[2]) ? $tab[2] : null;
 		} else {
-			throw new common_exception_Error('Empty request Uri '.$request.' reached resolver');
+			throw new ResolverException('Empty request Uri '.$request.' reached resolver');
 		}
 	}
 }
