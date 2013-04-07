@@ -350,12 +350,12 @@ class common_ext_Extension
     }
 
     /**
-     * retrieves a constant
+     * Retrieves a constant from the manifest.php file of the extension.
      *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
+     * @author Joel Bout, <joel@taotesting.com>
      * @param  string key
      * @return mixed
+     * @throws common_exception_Error If the constant cannot be found.
      */
     public function getConstant($key)
     {
