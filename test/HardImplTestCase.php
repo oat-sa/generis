@@ -695,6 +695,98 @@ class HardImplTestCase extends UnitTestCase {
 		}
 	}
 	
+	public function testSetType (){
+		
+		$instance = $this->targetWorkClass->createInstance('setType test instance');
+		$sanityCheckInstance = $this->targetWorkClass->createInstance('sanityCheck setType test');
+		
+		// verify everything is sane to begin with
+		
+		$this->assertIsA($instance, 'core_kernel_classes_resource');
+		$this->assertTrue($instance->exists());
+		$this->assertIsA($sanityCheckInstance, 'core_kernel_classes_resource');
+		$this->assertTrue($sanityCheckInstance->exists());
+		$instfound = 0;
+		$sanityfound = 0;
+		foreach ($this->targetWorkClass->getInstances() as $workInst) {
+			if ($workInst->equals($instance)) {
+				$instfound++;
+			}
+			if ($workInst->equals($sanityCheckInstance)) {
+				$sanityfound++;
+			}
+		}
+		$this->assertEqual($instfound, 1);
+		$this->assertEqual($sanityfound, 1);
+		
+		foreach ($this->targetSongClass->getInstances() as $songInst) {
+			$this->assertFalse($songInst->equals($instance), 'instance in getInstances of targetSongclass');
+			$this->assertFalse($songInst->equals($sanityCheckInstance), 'sanity check instance in getInstances of targetSongclass');
+		}
+		
+		$types = $instance->getTypes();
+		$this->assertEqual(count($types), 1);
+		$this->assertTrue($this->targetWorkClass->equals(current($types)));
+		
+		// remove the old type (targetWorkClass)
+		
+		$this->assertTrue($instance->removeType($this->targetWorkClass));
+		$types = $instance->getTypes();
+		$this->assertEqual(count($types), 0);
+		$sanityfound = 0;
+		foreach ($this->targetWorkClass->getInstances() as $workInst) {
+			if ($workInst->equals($sanityCheckInstance)) {
+				$sanityfound++;
+			}
+			$this->assertFalse($workInst->equals($instance), 'instance still in getInstances() of class after removeType()');
+		}
+		$this->assertEqual($sanityfound, 1);
+		foreach ($this->targetSongClass->getInstances() as $songInst) {
+			$this->assertFalse($songInst->equals($instance), 'instance in getInstances of targetSongclass');
+			$this->assertFalse($songInst->equals($sanityCheckInstance), 'sanity check instance in getInstances of targetSongclass');
+		}
+		
+		// set the new type (targetSongClass)
+		
+		$this->assertTrue($instance->setType($this->targetSongClass));
+		$types = $instance->getTypes();
+		$this->assertEqual(count($types), 1);
+		$this->assertTrue($this->targetSongClass->equals(current($types)));
+		$sanityfound = 0;
+		foreach ($this->targetWorkClass->getInstances() as $workInst) {
+			if ($workInst->equals($sanityCheckInstance)) {
+				$sanityfound++;
+			}
+			$this->assertFalse($workInst->equals($instance), 'instance still in getInstances() of class after removeType()');
+		}
+		$this->assertEqual($sanityfound, 1);
+		$instfound = 0;
+		foreach ($this->targetSongClass->getInstances() as $songInst) {
+			if ($songInst->equals($instance)) {
+				$instfound++;
+			}
+			$this->assertFalse($songInst->equals($sanityCheckInstance), 'sanity check instance in getInstances of targetSongclass');
+		}
+		$this->assertEqual($instfound, 1);
+		
+		// cleanup and check cleanup
+		
+		$this->assertTrue($instance->delete());
+		$this->assertFalse($instance->exists());
+		
+		$this->assertTrue($sanityCheckInstance->delete());
+		$this->assertFalse($sanityCheckInstance->exists());
+		foreach ($this->targetWorkClass->getInstances() as $workInst) {
+			$this->assertFalse($workInst->equals($instance), 'instance still in getInstances() of class targetWorkClass after delete()');
+			$this->assertFalse($workInst->equals($sanityCheckInstance), 'instance still in getInstances() of class targetWorkClass after delete()');
+		}
+		foreach ($this->targetSongClass->getInstances() as $songInst) {
+			$this->assertFalse($songInst->equals($instance), 'instance still in getInstances() of class targetSongClass after delete()');
+			$this->assertFalse($songInst->equals($sanityCheckInstance), 'instance still in getInstances() of class targetSongClass after delete()');
+		}
+		
+	}
+	
 	public function testGetOnePropertyValue (){
 		foreach ($this->targetSubjectClass->getInstances() as $instance){
 			
