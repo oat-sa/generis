@@ -272,7 +272,8 @@ class core_kernel_classes_MysqlDbWrapper
     public function rebuildIndexes($tableName)
     {
         // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BF1 begin
-        $this->query('OPTIMIZE TABLE "' . $tableName . '"');
+        $sth = $this->query('OPTIMIZE TABLE "' . $tableName . '"');
+        $sth->closeCursor();
         // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BF1 end
     }
 
@@ -287,7 +288,8 @@ class core_kernel_classes_MysqlDbWrapper
     public function flush($tableName)
     {
         // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BF4 begin
-        $this->query('FLUSH TABLE "' . $tableName . '"');
+        $sth = $this->query('FLUSH TABLE "' . $tableName . '"');
+        $sth->closeCursor();
         // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BF4 end
     }
 
