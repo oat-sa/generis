@@ -289,7 +289,6 @@ class core_kernel_classes_MysqlDbWrapper
     {
         // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BF4 begin
         $sth = $this->query('FLUSH TABLE "' . $tableName . '"');
-        $sth->closeCursor();
         // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BF4 end
     }
 
