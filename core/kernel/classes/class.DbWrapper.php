@@ -277,7 +277,10 @@ abstract class core_kernel_classes_DbWrapper
         	$sth = $this->dbConnector->query($statement);
         }
         
-        $returnValue = $sth;
+        if (!empty($sth)){
+        	$returnValue = $sth;
+        }
+
         $this->incrementNrOfQueries();
         return $returnValue;
     }
