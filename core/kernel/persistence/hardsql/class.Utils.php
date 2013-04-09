@@ -164,6 +164,23 @@ class core_kernel_persistence_hardsql_Utils
 
         return (string) $returnValue;
     }
+    
+    public static function getClassInfo(core_kernel_classes_Class $class){
+    	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+    	$sql = 'SELECT "id", "table" FROM "class_to_table" WHERE "uri" = ?';
+    	$result = $dbWrapper->query($sql, array($class->getUri()));
+    
+    	$returnValue = false;
+    
+    	while ($row = $result->fetch()){
+    		$returnValue = array('id' => $row['id'], 'table' => $row['table']);
+    		$result->closeCursor();
+    		
+    		return $returnValue;
+    	}
+    
+    	return $returnValue;
+    }
 
 } /* end of class core_kernel_persistence_hardsql_Utils */
 

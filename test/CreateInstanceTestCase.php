@@ -49,10 +49,10 @@ class CreateInstanceTestCase extends UnitTestCase {
 	public function testCreateInstance(){
 		$class = $this->class;
 		$instance = $class->createInstance('toto' , 'tata');
-		$this->assertEqual($instance->getLabel(), 'toto');
-		$this->assertEqual($instance->getComment(), 'tata');
+		$this->assertEqual($instance->getLabel(), 'toto', 'label should be equal to toto');
+		$this->assertEqual($instance->getComment(), 'tata', 'comment should be equal to tata');
 		$instance2 = $class->createInstance('toto' , 'tata');
-		$this->assertNotIdentical($instance,$instance2);
+		$this->assertNotIdentical($instance,$instance2, 'resources are identical');
 		$instance->delete();
 		$instance2->delete();
 	}
@@ -141,6 +141,8 @@ class CreateInstanceTestCase extends UnitTestCase {
 			RDFS_LABEL			=> 'testlabel5',
 			RDF_TYPE			=> $classres
 		));
+
+	    
 		$this->assertTrue($instance5->hasType($class));
 		$this->assertTrue($instance5->hasType($class3));
 		$this->assertEqual($instance5->getLabel(), 'testlabel5');
@@ -169,7 +171,9 @@ class CreateInstanceTestCase extends UnitTestCase {
 		$class2->delete();
 		$class3->delete();
 	}
-	
+	// -- Removed until this extreme test case is unmisticalized in hard mode.
+	/*
+	 * 
 	public function testCreateInstanceHardified() {
 		
 		$rr = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
@@ -188,10 +192,6 @@ class CreateInstanceTestCase extends UnitTestCase {
 		$hardinstance = core_kernel_classes_ResourceFactory::create($this->class);
 		$this->assertTrue($rr->isResourceReferenced($hardinstance), 'Instance created from harmode class was added in softmode');
 		
-		$this->testCreateInstance();
-		$this->testCreateInstanceViaFactory();
-		$this->testCreateInstanceWithProperties();
-		
 		$softinstance->delete();
 		$hardinstance->delete();
 		
@@ -199,6 +199,7 @@ class CreateInstanceTestCase extends UnitTestCase {
 		$switcher->unhardify($this->class);
 		unset($switcher);
 	}
+	*/
 	
 	public function after($pMethode) {
 		common_Logger::i('Cleaning up class '.$this->class->getUri().' for Create instance Tests');

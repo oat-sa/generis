@@ -372,11 +372,12 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012AE begin
-
+        
 		// Get the table name
 		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
 		$tableName = $referencer->resourceLocation ($resource);
 		if(empty($tableName)){
+			common_Logger::i('resourceLocation failed');
 			return $returnValue;
 		}
 
@@ -406,11 +407,11 @@ class core_kernel_persistence_hardsql_Resource
 			// We assume the property value is a literal.
 			$propertyValue = $object;	
 		}
-
+		
 		$propertyLocation = $referencer->propertyLocation($property);
 		if (in_array("{$tableName}Props", $propertyLocation)
 		|| !$referencer->isPropertyReferenced($property)){
-			 
+			
 			$session 	= core_kernel_classes_Session::singleton();
 			$lang = "";
 			// Define language if required
@@ -440,12 +441,13 @@ class core_kernel_persistence_hardsql_Resource
 			}
 		} 
 		else {
+			
 			try{
 				$propertyName = core_kernel_persistence_hardapi_Utils::getShortName ($property);
-				$query = 'UPDATE "'.$tableName.'" SET "'.$propertyName.'" = ? WHERE id = ?';
-				$result	= $dbWrapper->exec($query, array(
-				$propertyValue != null ? $propertyValue : $propertyForeignUri
-				, $instanceId
+				$queryUpdate = 'UPDATE "' . $tableName . '" SET "' . $propertyName . '" = ? WHERE id = ?';
+				$result	= $dbWrapper->exec($queryUpdate, array(
+					$propertyValue != null ? $propertyValue : $propertyForeignUri, 
+					$instanceId
 				));
 
 				$returnValue = true;
@@ -1356,61 +1358,44 @@ class core_kernel_persistence_hardsql_Resource
     public function setType( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $class)
     {
         $returnValue = (bool) false;
-
-        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 begin
-		
-		$classToTableId = core_kernel_persistence_hardsql_Utils::getClassId($class, $resource);
-		$resourceLocation = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
-		
-		// If classToTableId is null
-		// !!!!!!!!!!!! BE CARREFULL !!!!!!!!!!!!!!
-		// We reference it in class_to_table, setType function is used to mark resources with classes (like a tag system)
-		// If the class has not been hardified and contains instances, the function will throw an exception
-		if ($classToTableId==null){
-			
-			/*
-			 * @todo Write a class hasInstance function
-			 */
-			$instances = $class->getInstances();
-			if (!core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($class) && !empty($instances)) {
-				throw new core_kernel_persistence_hardsql_Exception("Try to set a type ({$class->getLabel()}), which has not been hardified and has instances, to a resource ({$resource->getLabel()})");
-			}
-			
-			$returnValue = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->referenceClass($class, array('table'=>$resourceLocation));//use default top class
-			$classToTableId = core_kernel_persistence_hardsql_Utils::getClassId ($class, $resource);
-		}
-
-		// Check if the resource is already associated with the class
-		if ($resource->hasType($class)){
-			return true;
-		}
-
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$resourceToTableId = core_kernel_persistence_hardsql_Utils::getResourceToTableId ($resource);
+		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
+        
+        if (!$resource->hasType($class)){
+        	
+        	$classInfo = core_kernel_persistence_hardsql_Utils::getClassInfo($class);
+        	
+        	if ($classInfo !== false){
+        		
+        		
+        		$sql = 'INSERT INTO "resource_to_table" ("uri", "table") VALUES (?, ?)';
+        		$rowsAffected1 = $dbWrapper->exec($sql, array($resource->getUri(), $classInfo['table']));
+        		
+        		$sql = 'INSERT INTO "resource_has_class" ("resource_id", "class_id") VALUES (?, ?)';
+        		$rowsAffected2 = $dbWrapper->exec($sql, array($dbWrapper->dbConnector->lastInsertId('resource_to_table_id_seq'), $classInfo['id']));
 
-		// Associate the resource with the class
-		try{
-			$query = 'INSERT INTO "resource_has_class" ("resource_id", "class_id") VALUES (?,?)';
-			$result	= $dbWrapper->exec($query, array($resourceToTableId, $classToTableId));
-			$returnValue = true;
-		}
-		catch (PDOException $e){
-			throw new core_kernel_persistence_hardsql_Exception("Unable to associate a class {$class->getUri()} to a resource {$resource->getUri()} : " . $e->getMessage());
-		}
-		
-		// Check if the association class to table has not yet been referenced
-		foreach (core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations ($class) as $classLocation){
-			if ($classLocation['uri'] == $class->getUri() && $classLocation['table']==$resourceLocation){
-				return true;
-			}
-		}
-
-		// Associate the class with the table
-		$query = 'INSERT INTO "class_to_table" ("uri", "table") VALUES (?,?)';
-		$result	= $dbWrapper->exec($query, array($class->getUri(), $resourceLocation));
-		
-		$returnValue = true;
-        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001548 end
+        		$sql = 'INSERT INTO "' . $classInfo['table'] . '" ("uri") VALUES (?)';
+        		$dbWrapper->exec($sql, array($resource->getUri())); 
+        		
+        		$referencer->clearCaches();
+        		
+        		$sql = 'SELECT * FROM "statements" WHERE "modelID" = ? AND "subject" = ?';
+        		$result = $dbWrapper->query($sql, array(99999, $resource->getUri()));
+        			
+        		while ($row = $result->fetch()){
+        			if ($row['predicate'] !== 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'){
+        				$resource->setPropertyValue(new core_kernel_classes_Property($row['predicate']), $row['object']);
+        			}
+        				
+        			$sql = 'DELETE FROM "statements" WHERE "id" = ' . $row['id'];
+        			$dbWrapper->exec($sql);
+        		}
+        			
+				
+        	}
+        }
+        
+        $returnValue = true;
 
         return (bool) $returnValue;
     }
@@ -1429,24 +1414,29 @@ class core_kernel_persistence_hardsql_Resource
         $returnValue = (bool) false;
 
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000154C begin
-
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$instanceId = core_kernel_persistence_hardsql_Utils::getInstanceId ($resource);
-		$classId = core_kernel_persistence_hardsql_Utils::getClassId ($class, $resource);
+		$referencer = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
 		
-		try{
-			$query = 'DELETE "resource_has_class".*
-	        	FROM "resource_has_class" 
-	        	INNER JOIN "class_to_table" ON "resource_has_class"."class_id" = "class_to_table"."id"
-	    		INNER JOIN "resource_to_table" ON "resource_to_table"."id" = "resource_has_class"."resource_id"
-	        	WHERE "resource_to_table"."uri" = ?
-	        	AND "class_to_table"."uri" = ?';
-			$result	= $dbWrapper->exec($query, array($resource->getUri(),$class->getUri()));
-			$returnValue = true;
+		if ($resource->hasType($class)){
+			$resourceId = intval(core_kernel_persistence_hardsql_Utils::getResourceToTableId($resource));
+			$classInfo = core_kernel_persistence_hardsql_Utils::getClassInfo($class);
+			$triples = $resource->getRdfTriples();
+			
+			if (!empty($resourceId)){
+				$resource->delete(false);
+				$referencer->unReferenceResource($resource);
+				
+				$query = 'INSERT INTO "statements" ("modelID", "subject", "predicate", "object", "l_language", "epoch") VALUES  (?, ?, ?, ?, ?, CURRENT_TIMESTAMP);';
+
+				foreach ($triples as $t){
+					$dbWrapper->exec($query, array(99999, $t->subject, $t->predicate, $t->object, $t->lg));
+				}
+			}
+			
+			
 		}
-		catch (PDOException $e){
-			throw new core_kernel_persistence_hardsql_Exception("Unable to remove the type {$class->getUri()} for {$resource->getUri()} : " .$e->getMessage());
-		}
+		
+		$returnValue = true;
         // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:000000000000154C end
 
         return (bool) $returnValue;
