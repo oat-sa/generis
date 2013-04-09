@@ -28,7 +28,6 @@
  */
 interface IViewable
 {
-	public function getView();
 	public function setView($identifier);
 	public function setData($key, $value);
 }

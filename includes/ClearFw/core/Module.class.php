@@ -28,8 +28,6 @@
  */
 class Module extends Actions implements IFlowControl, IViewable
 {
-	private $selectedView = null;
-	
 	/**
 	 * @var Renderer
 	 */
@@ -57,11 +55,6 @@ class Module extends Actions implements IFlowControl, IViewable
 	public function setView($identifier)
 	{
 		$this->getRenderer()->setTemplate($identifier);
-	}
-	
-	public function getView()
-	{
-		return $this->selectedView;
 	}
 	
 	public function setData($key, $value)
