@@ -88,7 +88,7 @@ class core_kernel_impl_Api
 
         // section 10-13-1--31--1e8cf08b:11927b92513:-8000:00000000000009AF begin
         if($role === true) {
-        	$role = new core_kernel_classes_Class(INSTANCE_ROLE_TAOMANAGER);
+        	$role = new core_kernel_classes_Resource(INSTANCE_ROLE_GLOBALMANAGER);
         }
        
         core_kernel_users_Service::singleton()->login($login, $password, $role);
