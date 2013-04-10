@@ -560,24 +560,6 @@ class core_kernel_persistence_Switcher
 			}
 		}
 
-		//Need to OPTIMIZE / FLUSH the tables in order to rebuild the indexes
-		$tables = $dbWrapper->getTables();
-
-		$size = count($tables);
-		$i = 0;
-		while($i < $size){
-
-			$percent = round(($i / $size) * 100);
-			if($percent < 10){
-				$percent = '0'.$percent;
-			}
-
-			$dbWrapper->rebuildIndexes($tables[$i]);
-			$dbWrapper->flush($tables[$i]);
-
-			$i++;
-		}
-
 		return true;
 
 	}
