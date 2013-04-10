@@ -25,7 +25,7 @@
 error_reporting(E_ALL);
 
 /**
- * Generis Object Oriented API - common/exception/class.fileAlreadyExists.php
+ * Generis Object Oriented API - common/exception/class.FileAlreadyExists.php.php
  *
  * $Id$
  *
@@ -59,14 +59,14 @@ require_once('common/class.Exception.php');
 // section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018F2-constants end
 
 /**
- * Short description of class common_exception_fileAlreadyExists
+ * Short description of class common_exception_FileAlreadyExists
  *
  * @access public
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package common
  * @subpackage exception
  */
-class common_exception_fileAlreadyExists
+class common_exception_FileAlreadyExists
     extends common_Exception
 {
     // --- ASSOCIATIONS ---
@@ -94,6 +94,6 @@ class common_exception_fileAlreadyExists
         // section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018F5 end
     }
 
-} /* end of class common_exception_fileAlreadyExists */
+} /* end of class common_exception_FileAlreadyExists */
 
 ?>

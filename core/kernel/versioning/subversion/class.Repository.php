@@ -184,7 +184,7 @@ class core_kernel_versioning_subversion_Repository
 		// Same thing here
 		//check if the file already exist
 		else if(file_exists($absolutePath)){
-			throw new common_exception_fileAlreadyExists($absolutePath);
+			throw new common_exception_FileAlreadyExists($absolutePath);
 		}
 		*/
 

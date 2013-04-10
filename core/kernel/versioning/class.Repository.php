@@ -296,7 +296,7 @@ class core_kernel_versioning_Repository
 
     /**
      * @exception core_kernel_versioning_ResourceAlreadyExistsException
-     * @exception common_exception_fileAlreadyExists
+     * @exception common_exception_FileAlreadyExists
      * @param options.saveResource {boolean} Save the resource in the onthology
      *
      * @access public
