@@ -120,8 +120,8 @@ class Resolver {
 		
 		if (count($tab) > 0) {
 			$this->extension	= $tab[0];
-			$this->module		= isset($tab[1]) ? $tab[1] : null;
-			$this->action		= isset($tab[2]) ? $tab[2] : null;
+			$this->module		= isset($tab[1]) && !empty($tab[1]) ? $tab[1] : null;
+			$this->action		= isset($tab[2]) && !empty($tab[2]) ? $tab[2] : null;
 		} else {
 			throw new ResolverException('Empty request Uri '.$request.' reached resolver');
 		}
