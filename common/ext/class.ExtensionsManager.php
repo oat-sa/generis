@@ -93,6 +93,27 @@ class common_ext_ExtensionsManager
 
         return (array) $returnValue;
     }
+    
+    /**
+     * Get the set of currently enabled extensions. This method
+     * returns an array of common_ext_Extension.
+     *
+     * @access public
+     * @author Joel Bout, <joel@taotesting.com>
+     * @return array
+     */
+    public function getEnabledExtensions()
+    {
+        $returnValue = array();
+
+        foreach ($this->extensions as $ext) {
+        	if ($ext->isEnabled()) {
+        		$returnValue[$ext->getID()] = $ext;
+        	}
+        }
+
+        return (array) $returnValue;
+    }
 
     /**
      * Add (it actually installs) an extension on the platform from a
