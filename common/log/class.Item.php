@@ -19,37 +19,6 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API - common/log/class.Item.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 09.12.2011, 14:07:22 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Joel Bout, <joel.bout@tudor.lu>
- * @package common
- * @subpackage log
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/* user defined includes */
-// section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000435B-includes begin
-// section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000435B-includes end
-
-/* user defined constants */
-// section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000435B-constants begin
-// section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000435B-constants end
 
 /**
  * Short description of class common_log_Item
@@ -61,10 +30,6 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  */
 class common_log_Item
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
 
     /**
      * Short description of attribute datetime
@@ -138,8 +103,6 @@ class common_log_Item
      */
     private $errorLine = 0;
 
-    // --- OPERATIONS ---
-
     /**
      * Short description of method __construct
      *
@@ -158,7 +121,10 @@ class common_log_Item
      */
     public function __construct($description, $severity, $datetime, $user = null, $backtrace = array(), $tags = array(), $request = "", $errorFile = '', $errorLine = 0)
     {
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DA begin
+        if (!is_string($description)){
+        	throw new InvalidArgumentException("The description must be a string, " . gettype($description) . " given");
+        }
+        
         $this->description		= $description;
         $this->severity			= $severity;
         $this->datetime			= $datetime;
@@ -175,38 +141,37 @@ class common_log_Item
         
         $cleanbacktrace = array();
         foreach ($backtrace as $key => $row) {
-        	
+        	 
         	if (isset($backtrace[$key]['object'])) {
         		unset($backtrace[$key]['object']);
         	}
-
+        
         	// WARNING
-			// do NOT modify the variables in the backtrace directly or
-	        // objects passed by reference will be modified aswell
+        	// do NOT modify the variables in the backtrace directly or
+        	// objects passed by reference will be modified aswell
         	if (isset($backtrace[$key]['args'])) {
-	        	$vars = array();
-	        	foreach ($backtrace[$key]['args'] as $k => $v) {
-		        	switch (gettype($v)) {
-	        			case 'boolean' :
-	        			case 'integer' :
-	        			case 'double' :
-	        				$vars[$k] = (string)$v;
-	        				break;
-	        			case 'string' :
-	        				$vars[$k] = strlen($v) > 128 ? 'string('.strlen($v).')' : $v;
-	        				break;
-	        			case 'class' :
-	        				$vars[$k] = get_class($v);
-	        				break;
-	        			default:
-	        				$vars[$k] = gettype($v);
-	        		}
-		        }
-	        	$backtrace[$key]['args'] = $vars;
+        		$vars = array();
+        		foreach ($backtrace[$key]['args'] as $k => $v) {
+        			switch (gettype($v)) {
+        				case 'boolean' :
+        				case 'integer' :
+        				case 'double' :
+        					$vars[$k] = (string)$v;
+        					break;
+        				case 'string' :
+        					$vars[$k] = strlen($v) > 128 ? 'string('.strlen($v).')' : $v;
+        					break;
+        				case 'class' :
+        					$vars[$k] = get_class($v);
+        					break;
+        				default:
+        					$vars[$k] = gettype($v);
+        			}
+        		}
+        		$backtrace[$key]['args'] = $vars;
         	}
         }
         $this->backtrace		= $backtrace;
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DA end
     }
 
     /**
@@ -220,9 +185,7 @@ class common_log_Item
     {
         $returnValue = (int) 0;
 
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017C8 begin
         $returnValue = $this->datetime;
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017C8 end
 
         return (int) $returnValue;
     }
@@ -238,9 +201,7 @@ class common_log_Item
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017CB begin
         $returnValue = $this->description;
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017CB end
 
         return (string) $returnValue;
     }
@@ -256,9 +217,7 @@ class common_log_Item
     {
         $returnValue = (int) 0;
 
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017CD begin
         $returnValue = $this->severity;
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017CD end
 
         return (int) $returnValue;
     }
@@ -274,9 +233,7 @@ class common_log_Item
     {
         $returnValue = array();
 
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017CF begin
         $returnValue = $this->backtrace;
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017CF end
 
         return (array) $returnValue;
     }
@@ -292,9 +249,7 @@ class common_log_Item
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D1 begin
         $returnValue = $this->request;
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D1 end
 
         return (string) $returnValue;
     }
@@ -310,9 +265,7 @@ class common_log_Item
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D6 begin
         $returnValue = $this->errorFile;
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D6 end
 
         return (string) $returnValue;
     }
@@ -328,9 +281,7 @@ class common_log_Item
     {
         $returnValue = (int) 0;
 
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D8 begin
         $returnValue = $this->errorLine;
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017D8 end
 
         return (int) $returnValue;
     }
@@ -346,9 +297,7 @@ class common_log_Item
     {
         $returnValue = array();
 
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DC begin
         $returnValue = $this->tags;
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017DC end
 
         return (array) $returnValue;
     }
@@ -364,7 +313,6 @@ class common_log_Item
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001846 begin
         switch ($this->severity) {
         	case common_Logger::TRACE_LEVEL:
         		$returnValue = "TRACE";break;
@@ -381,7 +329,6 @@ class common_log_Item
         	default:
         		$returnValue = "UNKNOWN";
         }
-        // section 127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001846 end
 
         return (string) $returnValue;
     }
@@ -397,13 +344,11 @@ class common_log_Item
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001832 begin
         $returnValue = $this->authentifiedUser;
-        // section 127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001832 end
 
         return (string) $returnValue;
     }
 
-} /* end of class common_log_Item */
+}
 
 ?>
