@@ -1,21 +1,9 @@
 Options +FollowSymLinks
-Options +Indexes
 RewriteEngine On
-#don't macth resources and tests
-RewriteCond %{REQUEST_URI} !/views/  [NC]
+
+#usual behavior for resources calls
 RewriteCond %{REQUEST_URI} !/test/  [NC]
-RewriteCond %{REQUEST_URI} !/doc/  [NC]
-RewriteCond %{REQUEST_URI} !/install/  [NC]
-RewriteCond %{REQUEST_URI} !/locales/  [NC]
-#keep the original portal without url rewriting
-RewriteCond %{REQUEST_URI} !.php  [NC]
-RewriteCond %{REQUEST_URI} !.gif  [NC]
-RewriteCond %{REQUEST_URI} !.css  [NC]
-#keep the generis user interfaces without url rewriting
-RewriteCond %{REQUEST_URI} !core/view  [NC]
-RewriteCond %{REQUEST_URI} !includes/dhtmlxMenu  [NC]
-RewriteCond %{REQUEST_URI} !includes/  [NC]
+
+
 #call entry point for url resolving and framework bootstrap
 RewriteRule ^(.*)$ index.php [L]
-
-
