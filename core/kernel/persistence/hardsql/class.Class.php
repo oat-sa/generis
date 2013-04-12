@@ -513,16 +513,20 @@ class core_kernel_persistence_hardsql_Class
 			$recursive = intval($options['recursive']);
 		}
 		
-		// 'offset' option. If not provided, we set it to null.
-		$offset = null;
-		if (isset($options['offset'])){
-			$offset = intval($options['offset']);
-		}
-		
 		// 'limit' option. If not provided, we wet it to null as well.
 		$limit = null;
 		if (isset($options['limit'])){
 			$limit = intval($options['limit']);
+		}
+		
+		// 'offset' option. If not provided, we set it to null.
+		$offset = null;
+		if (isset($options['offset'])){
+			$offset = intval($options['offset']);
+			if (empty($limit)) {
+				// offset requires a limit
+				$limit = 1000000;
+			}
 		}
 		
 		// 'order' and 'orderdir' options.
