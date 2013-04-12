@@ -927,13 +927,16 @@ class HardImplTestCase extends UnitTestCase {
 		$this->assertFalse($referencer->isClassReferenced($this->targetSubjectSubClass));
 		$this->assertIsA($classProxy->getImpToDelegateTo($this->targetSubjectSubClass), 'core_kernel_persistence_smoothsql_Class');
 
-		$this->targetWorkClass->delete(true);
-		$this->targetMovieClass->delete(true);
+		$this->assertTrue($this->targetWorkClass->delete(true));
+		$this->assertTrue($this->targetMovieClass->delete(true));
+		$this->assertTrue($this->targetSongClass->delete(true));
 		
 		$this->assertFalse($referencer->isClassReferenced($this->targetWorkClass));
 		$this->assertFalse($referencer->isClassReferenced($this->targetMovieClass));
+		$this->assertFalse($referencer->isClassReferenced($this->targetSongClass));
 		$this->assertFalse($this->targetWorkClass->exists());
 		$this->assertFalse($this->targetWorkClass->exists());
+		$this->assertFalse($this->targetSongClass->exists());
 	}
 	
 	public function testFilterByLanguage() {
