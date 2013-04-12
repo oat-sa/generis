@@ -193,6 +193,7 @@ class core_kernel_persistence_hardapi_TableManager
 			
 			// Create multiples properties table indexes
 			try{
+				$dbWrapper->createIndex('idx_props_l_language', $this->name . 'Props', array('l_language' => null));
 				$dbWrapper->createIndex('idx_props_property_uri', $this->name . 'Props', array('property_uri' => null));
 				$dbWrapper->createIndex('idx_props_foreign_property_uri', $this->name . 'Props', array('property_foreign_uri' => null));
 				$dbWrapper->createIndex('idx_props_instance_id', $this->name . 'Props', array('instance_id' => null));
