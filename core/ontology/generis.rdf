@@ -357,7 +357,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#generisRessourceComment">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-    <rdfs:label xml:lang="en-US"><![CDATA[level]]></rdfs:label>
+    <rdfs:label xml:lang="en-US"><![CDATA[Comment]]></rdfs:label>
     <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource"/>
     <rdfs:range rdf:resource="http://www.tao.lu/Ontologies/TAO.rdf#comment"/>
     <generis:Multiple rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#True" />

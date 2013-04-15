@@ -71,6 +71,7 @@ define('CLASS_GENERIS_FILE' , 				    GENERIS_NS . '#File' , true) ;
 define('PROPERTY_FILE_FILENAME' , 				GENERIS_NS . '#FileName' , true) ;
 define('PROPERTY_FILE_FILEPATH' , 				GENERIS_NS . '#FilePath' , true) ;
 define('PROPERTY_MULTIPLE',						GENERIS_NS . '#Multiple' , true) ;
+define('PROPERTY_COMMENT',						GENERIS_NS . '#generisRessourceComment' , true);
 
 #versioned file
 define('CLASS_GENERIS_VERSIONEDFILE' , 			GENERIS_NS . '#VersionedFile' , true) ;
