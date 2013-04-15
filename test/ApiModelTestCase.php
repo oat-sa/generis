@@ -88,7 +88,7 @@ class ApiModelTestCase extends UnitTestCase {
 		$true = new core_kernel_classes_Resource(GENERIS_TRUE, __METHOD__);
 		$predicate = RDFS_SEEALSO;
 		$property = new core_kernel_classes_Property($predicate,__METHOD__); 
-		$this->assertTrue($this->object->setStatement($true->getUri(),$predicate,'test', 'EN'), 
+		$this->assertTrue($this->object->setStatement($true->getUri(), $predicate, 'test', DEFAULT_LANG), 
 						  "setStatement should be able to set a value.");
 		
 		$values = $true->getPropertyValues($property);
@@ -105,7 +105,7 @@ class ApiModelTestCase extends UnitTestCase {
 		$this->assertTrue($tripleFound, "A property value for property " . $property->getUri() . 
 										" should be found for resource " . $true->getUri());
 		
-		$this->object->removeStatement($true->getUri(),$predicate,'test','EN');
+		$this->object->removeStatement($true->getUri(), $predicate, 'test', DEFAULT_LANG);
 	}
 	
 	public function testRemoveStatement(){

@@ -541,7 +541,7 @@ class HardImplTestCase extends UnitTestCase {
 			$testMovie->setPropertyValueByLg($testProperty, 'FR-TestPropertyValue-1', 'FR');
 			$testPropertyValues = $testMovie->getPropertyValues($testProperty);
 			$this->assertEqual(count($testPropertyValues), 2); // Only EN values will come back.
-			$testPropertyValues = $testMovie->getPropertyValuesByLg($testProperty, 'EN');
+			$testPropertyValues = $testMovie->getPropertyValuesByLg($testProperty, DEFAULT_LANG);
 			$this->assertEqual(count($testPropertyValues->sequence), 2);
 			$testPropertyValues = $testMovie->getPropertyValuesByLg($testProperty, 'FR');
 			$this->assertEqual(count($testPropertyValues->sequence), 1);

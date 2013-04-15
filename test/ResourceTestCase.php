@@ -187,11 +187,11 @@ class ResourceTestCase extends UnitTestCase{
 			$this->assertEqual($triple->subject, GENERIS_BOOLEAN );
 			if ($triple->predicate === RDFS_LABEL) {
 				$this->assertEqual($triple->object,'Boolean' );
-				$this->assertEqual($triple->lg, 'EN' );
+				$this->assertEqual($triple->lg, DEFAULT_LANG );
 			}
 			if ($triple->predicate === RDFS_COMMENT) {
 				$this->assertEqual($triple->object,'Boolean' );
-				$this->assertEqual($triple->lg, 'EN' );
+				$this->assertEqual($triple->lg, DEFAULT_LANG );
 			}
 		}
 
