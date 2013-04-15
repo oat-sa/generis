@@ -657,7 +657,19 @@ abstract class core_kernel_classes_DbWrapper
         $result->closeCursor();
         return (int) $returnValue;
     }
+    
+    /**
+     * Convenience access to PDO::quote.
+     * 
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param string $parameter The parameter to quote.
+     * @param int $parameter_type A PDO PARAM_XX constant.
+     * @return string The quoted string.
+     */
+    public function quote($parameter, $parameter_type = PDO::PARAM_STR){
+    	return $this->dbConnector->quote($parameter, $parameter_type);
+    }
 
-} /* end of abstract class core_kernel_classes_DbWrapper */
+}
 
 ?>

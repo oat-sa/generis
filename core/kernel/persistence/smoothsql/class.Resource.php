@@ -675,6 +675,8 @@ class core_kernel_persistence_smoothsql_Resource
     	$collection = $resource->getRdfTriples();
     	if($collection->count() > 0){
     		
+    		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+    		
     		$session = core_kernel_classes_Session::singleton();
     		$localNs = common_ext_NamespaceManager::singleton()->getLocalNamespace();
 	       	$modelId = $localNs->getModelId();
@@ -683,12 +685,12 @@ class core_kernel_persistence_smoothsql_Resource
 	    	$insert = 'INSERT INTO "statements" ("modelID", "subject", "predicate", "object", "l_language", "author", "stread", "stedit", "stdelete") VALUES ';
     		foreach($collection->getIterator() as $triple){
     			if(!in_array($triple->predicate, $excludedProperties)){
-	    			$insert .= "({$modelId}, '$newUri', '{$triple->predicate}', '{$triple->object}',  '{$triple->lg}', '{$user}', '{$triple->readPrivileges}', '{$triple->editPrivileges}', '{$triple->deletePrivileges}'),"; 
+	    			$insert .= "({$modelId}, '$newUri', '{$triple->predicate}', " . $dbWrapper->quote($triple->object) . ",  '{$triple->lg}', '{$user}', '{$triple->readPrivileges}', '{$triple->editPrivileges}', '{$triple->deletePrivileges}'),"; 
 	    		}
 	    	}
 	    	$insert = substr($insert, 0, strlen($insert) -1);
 	    	
-	    	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
+	    	
         	if($dbWrapper->exec($insert)){
         		$returnValue = new core_kernel_classes_Resource($newUri);
         	}
