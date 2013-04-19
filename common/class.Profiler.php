@@ -89,9 +89,9 @@ class common_Profiler
      */
     private function __construct()
     {
-		$this->enabled = true;
 		$this->startTime = self::getCurrentTime();
 		$this->implementor = common_profiler_Dispatcher::singleton();
+		$this->enabled = (bool)$this->implementor->hasAppender();
 	}
 
     /**
@@ -110,7 +110,10 @@ class common_Profiler
      */
     public function register()
     {
-		register_shutdown_function(array($this, 'shutdownProfiler'));
+		if($this->isEnabled()){
+			register_shutdown_function(array($this, 'shutdownProfiler'));
+		}
+		
 	}
 
     /**
@@ -118,14 +121,18 @@ class common_Profiler
      */
     public function shutdownProfiler()
     {
-		$this->logContext();
-		$this->logEventTimer();
-		$this->logMemoryPeakUsage();
-		$this->logQueriesCount();
-		$this->logQueriesSlowest();
-		$this->logQueriesSlow();
-		$this->logQueriesStat();
-		$this->flush();
+		
+		if($this->isEnabled()){
+			$this->logContext();
+			$this->logEventTimer();
+			$this->logMemoryPeakUsage();
+			$this->logQueriesCount();
+			$this->logQueriesSlowest();
+			$this->logQueriesSlow();
+			$this->logQueriesStat();
+			$this->flush();
+		}
+		
 	}
 
     /**
@@ -134,17 +141,17 @@ class common_Profiler
      */
     protected function logEventTimer(){
 		if($this->isEnabled('timer')){
-		$total = $this->getCurrentTime() - $this->startTime;
-		$sumDurations = 0;
-		foreach ($this->elapsedTimeLogs as $event => $duration) {
-				$this->implementor->logTimer($event, $duration, $total);
-				if ($event == 'start' || $event == 'dispatch')
-					$sumDurations += $duration;
+			$total = $this->getCurrentTime() - $this->startTime;
+			$sumDurations = 0;
+			foreach ($this->elapsedTimeLogs as $event => $duration) {
+					$this->implementor->logTimer($event, $duration, $total);
+					if ($event == 'start' || $event == 'dispatch')
+						$sumDurations += $duration;
+			}
+			$uncovered = $total - $sumDurations;
+				$this->implementor->logTimer('???', $uncovered, $total);
 		}
-		$uncovered = $total - $sumDurations;
-			$this->implementor->logTimer('???', $uncovered, $total);
 	}
-		}
 	
 	/**
      *
@@ -152,15 +159,15 @@ class common_Profiler
      */
     protected function logMemoryPeakUsage(){
 		if($this->isEnabled('memoryPeak')){
-		$memPeak = memory_get_peak_usage(true);
-		$memMax = ini_get('memory_limit');
-			if (substr($memMax, -1) == 'M') {
-			$memMax = substr($memMax, 0, -1);
-				$memMax = $memMax * 1048576;
+			$memPeak = memory_get_peak_usage(true);
+			$memMax = ini_get('memory_limit');
+				if (substr($memMax, -1) == 'M') {
+				$memMax = substr($memMax, 0, -1);
+					$memMax = $memMax * 1048576;
+			}
+
+				$this->implementor->logMemoryPeak($memPeak, $memMax);
 		}
-		
-			$this->implementor->logMemoryPeak($memPeak, $memMax);
-	}
 	}
 	
 	/**
@@ -178,7 +185,7 @@ class common_Profiler
 		if($this->isEnabled('context')){
 			$context = new common_profiler_Context();
 			$this->implementor->logContext($context);
-	}
+		}
 	}
 	
 	/**
@@ -223,7 +230,7 @@ class common_Profiler
      * @author Somsack Sipasseuth ,<sam@taotesting.com>
      */
     public function startTimer($flag = 'global'){
-		$this->startTimeLogs[$flag] = $this->getCurrentTime();
+		if($this->isEnabled()) $this->startTimeLogs[$flag] = $this->getCurrentTime();
 	}
 	
 	/**
@@ -232,8 +239,10 @@ class common_Profiler
      * @author Somsack Sipasseuth ,<sam@taotesting.com>
      */
     public function stopTimer($flag = 'global'){
-		$startTime = isset($this->startTimeLogs[$flag])?$this->startTimeLogs[$flag]:$this->startTime;
-		$this->elapsedTimeLogs[$flag] = $this->getCurrentTime() - $startTime;
+		if($this->isEnabled()){
+			$startTime = isset($this->startTimeLogs[$flag]) ? $this->startTimeLogs[$flag] : $this->startTime;
+			$this->elapsedTimeLogs[$flag] = $this->getCurrentTime() - $startTime;
+		}
 	}
 	
 	/**
@@ -241,7 +250,7 @@ class common_Profiler
      * @author Somsack Sipasseuth ,<sam@taotesting.com>
      */
     public function startSlowQuery(){
-		$this->slowQueryTimer = $this->getCurrentTime();
+		if($this->isEnabled()) $this->slowQueryTimer = $this->getCurrentTime();
 	}
 	
 	public function isEnabled($appenderName = ''){

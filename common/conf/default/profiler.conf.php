@@ -54,8 +54,7 @@ $defaultConfig = array(
 	)
 );
 $GLOBALS['COMMON_PROFILER_CONFIG'] = array(
-	/*
-	array_merge(
+	/*array_merge(
 		array(
 			'class'		=> 'LoggerAppender',
 			'tag'		=> 'PROFILER'
