@@ -268,7 +268,8 @@ abstract class core_kernel_classes_DbWrapper
         $this->preparedExec = false;
         
         $this->debug($statement);
-        
+        common_Profiler::queryStart();
+		
         if (count($params) > 0){
         	$sth = $this->dbConnector->prepare($statement);
         	$sth->execute($params);
@@ -276,7 +277,9 @@ abstract class core_kernel_classes_DbWrapper
         else{
         	$sth = $this->dbConnector->query($statement);
         }
-        
+		
+        common_Profiler::queryStop($statement, $params);
+		
         if (!empty($sth)){
         	$returnValue = $sth;
         }
@@ -298,6 +301,8 @@ abstract class core_kernel_classes_DbWrapper
     public function exec($statement, $params = array())
     {
         $this->debug($statement);
+		
+		common_Profiler::queryStart();
         if (count($params) > 0){
         	$sth = $this->dbConnector->prepare($statement);
         	$this->preparedExec = true;
@@ -309,7 +314,8 @@ abstract class core_kernel_classes_DbWrapper
         	$this->preparedExec = false;
         	$returnValue = $this->dbConnector->exec($statement);
         }
-        
+        common_Profiler::queryStop($statement, $params);
+		
         $this->incrementNrOfQueries();
         return (int) $returnValue;
     }
@@ -324,11 +330,15 @@ abstract class core_kernel_classes_DbWrapper
      */
     public function prepare($statement)
     {
+		common_Profiler::queryStart();
+		
         $returnValue = null;
         $this->preparedExec = false;
         $this->debug($statement);
         $returnValue = $this->getStatement($statement);
         $this->incrementNrOfQueries();
+		
+		common_Profiler::queryStop($statement);
         return $returnValue;
     }
 
@@ -671,5 +681,3 @@ abstract class core_kernel_classes_DbWrapper
     }
 
 }
-
-?>
