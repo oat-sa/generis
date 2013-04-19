@@ -18,33 +18,45 @@
  * 
  */
 
-class common_profiler_PrettyPrint{
+/**
+ *	Represent a query to be profiled
+ * 
+ * @access public
+ * @author Sam, <sam@taotesting.com>
+ * @package common
+ * @subpackage log
+ */
+class common_profiler_Query
+{
+	protected $statement = '';
+	protected $params = array();
+	protected $time = 0;
 	
-	/**
-     *
-     * @param $mem
-     * @return string
-     * @author Somsack Sipasseuth ,<sam@taotesting.com>
-     */
-    public static function memory($mem){
-		$returnValue = '';
-		if ($mem < 1024){
-			$returnValue = $mem.'B';
-		}else if($mem < 1048576){
-			$returnValue = round($mem/1024, 2).'KB';
-		}else{
-			$returnValue = round($mem/1048576, 2).'MB';
+	public function __construct($statement, $params, $time){
+		$this->statement = $statement;
+		$this->params = $params;
+		$this->time = $time;//µs
+	}
+	
+	public function toArray(){
+		return get_object_vars($this);
+	}
+	
+	public function getTime($unit = 'µs'){
+		$returnValue = 0;
+		switch(strtolower($unit)){
+			case 'ms':
+				$returnValue = round($this->time * 1000, 3);
+				break;
+			case 'µs':
+			default:
+				$returnValue = $this->time;
+				break;	
 		}
 		return $returnValue;
 	}
 	
-	/**
-     *
-     * @param $mem
-     * @return string
-     * @author Somsack Sipasseuth ,<sam@taotesting.com>
-     */
-    public static function percentage($part, $total, $decimal = 1){
-		return round($part/$total*100,1);
+	public function getStatement(){
+		return $this->statement;
 	}
 }

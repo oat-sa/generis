@@ -83,3 +83,6 @@ define('RDFAPI_INCLUDE_DIR', INCLUDES_PATH.'/rdfapi-php/api/');
 
 # users cache
 define('GENERIS_CACHE_USERS_ROLES', true);
+
+# profiling
+define('PROFILING', true);

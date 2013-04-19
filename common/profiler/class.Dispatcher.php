@@ -14,46 +14,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2013 (original work) Open Assessment Techonologies SA (under the project TAO-PRODUCT);
  * 
  */
-
-/**
- * Generis Object Oriented API - common/log/class.Dispatcher.php
- *
- * This file is part of Generis Object Oriented API.
- *
- * @author Sam, <sam@taotesting.com>
- * @package common
- * @subpackage profiler
- */
-
-/**
- * include common_log_Appender
- *
- * @author Sam, <sam@taotesting.com>
- */
-require_once('common/log/interface.Appender.php');
-
-/* user defined includes */
-// section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001808-includes begin
-// section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001808-includes end
-
-/* user defined constants */
-// section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001808-constants begin
-// section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001808-constants end
 
 /**
  *
  * @access public
  * @author Sam, <sam@taotesting.com>
  * @package common
- * @subpackage log
+ * @subpackage profiler
  */
 class common_profiler_Dispatcher
-        implements common_profiler_Appender
+        extends common_profiler_Appender
 {
 
     /**
@@ -73,20 +46,6 @@ class common_profiler_Dispatcher
     private static $instance = null;
 
     /**
-     * Short description of method getLogThreshold
-     *
-     * @access public
-     * @author Sam, <sam@taotesting.com>
-     * @return int
-     */
-    public function getLogThreshold()
-    {
-        $returnValue = (int) 0;
-
-        return (int) $returnValue;
-    }
-
-    /**
      * Init profiler appenders according to config
      *
      * @access public
@@ -99,8 +58,8 @@ class common_profiler_Dispatcher
         $returnValue = (bool) false;
 
     	$this->appenders = array();
-    	foreach ($configuration as $appenderConfig) {
-    		if (isset($appenderConfig['class'])) {
+    	foreach ($configuration as $appenderConfig){
+    		if(isset($appenderConfig['class'])){
     			
     			$classname = $appenderConfig['class'];
     			if (!class_exists($classname)){
@@ -109,13 +68,94 @@ class common_profiler_Dispatcher
     			if (class_exists($classname) && is_subclass_of($classname, 'common_profiler_Appender')) {
     				$appender = new $classname();
     				if (!is_null($appender) && $appender->init($appenderConfig)) {
+    					
+						//add appender
     					$this->addAppender($appender);
+						
+						foreach ($appenderConfig as $logger => $options) {
+							//set global config:
+							$appenderName = strtolower($logger);
+							$enable = isset($options['active']) ? (boolean) $options['active'] : false;
+							if($enable){
+								switch ($appenderName) {
+									case 'context': {
+										if(!$this->isEnabled($appenderName)){
+											$this->enable($appenderName);
+    				}
+										break;
+    			}
+									case 'timer': {
+										if(!$this->isEnabled($appenderName)){
+											$this->enable($appenderName);
+    		}
+
+										$flags = (array) $this->getConfigOption($appenderName, 'flags');
+										$newFlags = (isset($options['flags']) && is_array($options['flags'])) ? (array) $options['flags'] : array();
+										if(!empty($newFlags)){
+											$flags = array_merge($flags, $newFlags);
+											$this->setConfigOption($appenderName, 'flags', $flags);
+    	}
+										break;
+									}
+									case 'memorypeak': {
+										if(!$this->isEnabled($appenderName)){
+											$this->enable($appenderName);
+										}
+										break;
+									}
+									case 'countqueries': {
+										if(!$this->isEnabled($appenderName)){
+											$this->enable($appenderName);
+										}
+										break;
+									}
+									case 'slowestqueries': {
+										if(!$this->isEnabled($appenderName)){
+											$this->enable($appenderName);
+										}
+										
+										$slowest = $this->getConfigOption($appenderName, 'count');
+										$newSlowest = isset($options['count']) ? (int) $options['count'] : 0;
+										if(is_null($newSlowest) || $newSlowest > $slowest){
+											$this->setConfigOption($appenderName, 'count', $newSlowest);
+										}
+										break;
+									}
+									case 'slowqueries': {
+										if(!$this->isEnabled($appenderName)){
+											$this->enable($appenderName);
+										}
+
+										$threshold = $this->getConfigOption($appenderName, 'threshold');
+										$newThreshold = isset($options['threshold']) ? (int) $options['threshold'] : 1000;
+										if(is_null($threshold) || $newThreshold < $threshold){
+											$this->setConfigOption($appenderName, 'threshold', $newThreshold);
+										}
+										break;
+									}
+									case 'queries': {
+										if(!$this->isEnabled($appenderName)){
+											$this->enable($appenderName);
+										}
+
+										$count = $this->getConfigOption($appenderName, 'count');
+										$newCount = isset($options['slowest']) ? (int) $options['count'] : 10;
+										if(is_null($count) || $newCount > $count){
+											$this->setConfigOption($appenderName, 'count', $newCount);
+										}
+										break;
+									}
+								}
+							}	
+						}//end of foreach on appender config options
     				}
     			}
     		}
-    	}
+    	}//end of foreach loop
     	$returnValue = (count($this->appenders) > 0);
 
+//		common_Logger::d($this, 'PROFILER');exit;
+		
         return (bool) $returnValue;
     }
 
@@ -162,10 +202,76 @@ class common_profiler_Dispatcher
      * @param  Appender appender
      * @return mixed
      */
-    public function addAppender(common_log_Appender $appender)
-    {
+    public function addAppender(common_profiler_Appender $appender){
         $this->appenders[] = $appender;
     }
+
+	public function hasAppender(){
+		return (bool) count($this->appenders);
+	}
+	
+	public function logContext(common_profiler_Context $context){
+		foreach ($this->appenders as $appender){
+			if($appender->isEnabled('context')){
+				$appender->logContext($context);
+			}
+		}
+	}
+	
+	public function logTimer($flag, $duration, $total){
+		foreach($this->appenders as $appender){
+			$flags = $appender->getConfigOption('timer', 'flags');
+			if($appender->isEnabled('timer') && (is_array($flags)||in_array($flag, $flags))){
+				$appender->logTimer($flag, $duration, $total);
+			}
+		}
+	}
+	
+	public function logMemoryPeak($memPeak, $memMax){
+		foreach($this->appenders as $appender){
+			if($appender->isEnabled('memoryPeak')){
+				$appender->logMemoryPeak($memPeak, $memMax);
+			}
+		}
+	}
+	
+	public function logQueriesCount($count){
+		foreach($this->appenders as $appender){
+			if($appender->isEnabled('countQueries')){
+				$appender->logQueriesCount($count);
+			}
+		}
+	}
+	
+	public function logQueriesSlow($slowQueries){
+		foreach($this->appenders as $appender){
+			if($appender->isEnabled('slowQueries')){
+				$appender->logQueriesSlow($slowQueries);
+			}
+		}
+	}
+	
+	public function logQueriesSlowest($slowestQueries){
+		foreach($this->appenders as $appender){
+			if($appender->isEnabled('slowestQueries')){
+				$appender->logQueriesSlowest($slowestQueries);
+			}
+		}
+	}
+	
+	public function logQueriesStat($queries){
+		foreach ($this->appenders as $appender) {
+			if ($appender->isEnabled('queries')) {
+				$appender->logQueriesStat($queries);
+			}
+		}
+	}
+	
+	public function flush(){
+		foreach($this->appenders as $appender){
+			$appender->flush();
+		}
+	}
 
 } /* end of class common_profiler_Dispatcher */
 

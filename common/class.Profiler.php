@@ -14,9 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2013 (original work) Open Assessment Techonologies SA (under the project TAO-PRODUCT);
  * 
  */
 
@@ -33,7 +31,7 @@ class common_Profiler
 	 * @var common_Profiler
 	 */
     private static $instance = null;
-
+	private $enabled = false;
     /**
      * @var int|mixed
      */
@@ -52,12 +50,9 @@ class common_Profiler
      * @var array
      */
     private $slowQueries = array();
+    private $slowestQueries = array();
 	private $queries = array();
 	
-    /**
-     * @var array
-     */
-    protected $loggers = array();//specify how messages should be logged, common_Logger, client popup
 	
     /**
      * @var int
@@ -67,7 +62,6 @@ class common_Profiler
     /**
      * @var int
      */
-    private $slowQueryThreshold = 100;//in milliseconds (ms)
 
     /**
      * Singleton
@@ -95,7 +89,9 @@ class common_Profiler
      */
     private function __construct()
     {
+		$this->enabled = true;
 		$this->startTime = self::getCurrentTime();
+		$this->implementor = common_profiler_Dispatcher::singleton();
 	}
 
     /**
@@ -125,9 +121,11 @@ class common_Profiler
 		$this->logContext();
 		$this->logEventTimer();
 		$this->logMemoryPeakUsage();
-		$this->logNrOfQueries();
-		$this->logSlowQueries();
-//		$this->logQueries();
+		$this->logQueriesCount();
+		$this->logQueriesSlowest();
+		$this->logQueriesSlow();
+		$this->logQueriesStat();
+		$this->flush();
 	}
 
     /**
@@ -135,77 +133,52 @@ class common_Profiler
      * @author Somsack Sipasseuth ,<sam@taotesting.com>
      */
     protected function logEventTimer(){
+		if($this->isEnabled('timer')){
 		$total = $this->getCurrentTime() - $this->startTime;
-		$totalRounded = round($total * 1000, 3);
 		$sumDurations = 0;
 		foreach ($this->elapsedTimeLogs as $event => $duration) {
-			$this->log($event . ': ' . round($duration * 1000, 3) . 'ms/'.$totalRounded.'ms (' . round($duration / $total * 100, 1) . '%)');
-			if ($event == 'start' || $event == 'dispatch') $sumDurations += $duration;
+				$this->implementor->logTimer($event, $duration, $total);
+				if ($event == 'start' || $event == 'dispatch')
+					$sumDurations += $duration;
 		}
 		$uncovered = $total - $sumDurations;
-		$this->log('???: ' . round($uncovered * 1000, 3) . 'ms/'.$totalRounded.'ms (' . round($uncovered / $total * 100, 1) . '%)');
+			$this->implementor->logTimer('???', $uncovered, $total);
 	}
-	
-	/**
-     *
-     * @param $mem
-     * @return string
-     * @author Somsack Sipasseuth ,<sam@taotesting.com>
-     */
-    protected function prettyPrintMemory($mem){
-		$returnValue = '';
-		if ($mem < 1024){
-			$returnValue = $mem.'B';
-		}else if($mem < 1048576){
-			$returnValue = round($mem/1024, 2).'KB';
-		}else{
-			$returnValue = round($mem/1048576, 2).'MB';
 		}
-		return $returnValue;
-	}
 	
 	/**
      *
      * @author Somsack Sipasseuth ,<sam@taotesting.com>
      */
     protected function logMemoryPeakUsage(){
+		if($this->isEnabled('memoryPeak')){
 		$memPeak = memory_get_peak_usage(true);
 		$memMax = ini_get('memory_limit');
-		$memPc = 0;
-        if(substr($memMax, -1) == 'M'){
+			if (substr($memMax, -1) == 'M') {
 			$memMax = substr($memMax, 0, -1);
-			$memMax = $memMax*1048576;
+				$memMax = $memMax * 1048576;
 		}
-		$memPc = round($memPeak/$memMax*100,1);
 		
-		$this->log('peak mem usage: '.$this->prettyPrintMemory($memPeak).'/'.$this->prettyPrintMemory($memMax).' ('.$memPc.'%)');
+			$this->implementor->logMemoryPeak($memPeak, $memMax);
+	}
 	}
 	
 	/**
      *
      * @author Somsack Sipasseuth ,<sam@taotesting.com>
      */
-    protected function logNrOfQueries(){
-		$this->log(core_kernel_classes_DbWrapper::singleton()->getNrOfQueries().' queries for this request');
+    protected function logQueriesCount(){
+		$this->implementor->logQueriesCount(core_kernel_classes_DbWrapper::singleton()->getNrOfQueries());
 	}
 	
 	/**
      *
      */
     protected function logContext(){
-		$requestUrl = Context::getInstance()->getExtensionName() . '/' . Context::getInstance()->getModuleName() . '/' . Context::getInstance()->getActionName();
-		$this->log('Profiling action called: '.$requestUrl);
-		
-		$this->log('server signature : '.$_SERVER['SERVER_SIGNATURE'].$_SERVER['SERVER_ADMIN'].' -> '.$_SERVER['PHP_SELF']);
+		if($this->isEnabled('context')){
+			$context = new common_profiler_Context();
+			$this->implementor->logContext($context);
 	}
-	
-	/**
-	 * 
-     * @param $msg
-     * @author Somsack Sipasseuth ,<sam@taotesting.com>
-     */
-    protected function log($msg){
-		common_Logger::d($msg, array('PROFILER'));
 	}
 	
 	/**
@@ -271,6 +244,14 @@ class common_Profiler
 		$this->slowQueryTimer = $this->getCurrentTime();
 	}
 	
+	public function isEnabled($appenderName = ''){
+		$returnValue = ($this->enabled && $this->implementor->hasAppender());
+		if(!empty($appenderName)){
+			$returnValue &= $this->implementor->isEnabled($appenderName);
+		}
+		return $returnValue;
+	}
+	
 	/**
 	 * 
      * @param $statement
@@ -278,47 +259,80 @@ class common_Profiler
      * @author Somsack Sipasseuth ,<sam@taotesting.com>
      */
     public function stopSlowQuery($statement, $params = array()){
-		if($this->slowQueryTimer){//log only if timer has been started
-			$statementKey = md5($statement);
+		
+		if($this->isEnabled() && $this->slowQueryTimer){//log only if timer has been started
+			
+			$statementKey = hash('crc32b', $statement);
 			$time = $this->getCurrentTime() - $this->slowQueryTimer;
-			$queryData = array(
-				'statement' => $statement,
-				'params' => $params,
-				'time' => $time
-			);
-			if(1000*$time > $this->slowQueryThreshold){//compare to threshold (ms)
-				if(!isset($this->slowQueries[$statementKey])){
-					$this->slowQueries[$statementKey] =  array();
+			$query = new common_profiler_Query($statement, $params, $time);
+			
+			if($this->implementor->isEnabled('slowQueries')){
+				$threshold = $this->implementor->getConfigOption('slowQueries', 'threshold');
+				if (!is_null($threshold)) {
+					if (1000 * $time > $threshold) {//compare to threshold (ms)
+						if (!isset($this->slowQueries[$statementKey])) {
+							$this->slowQueries[$statementKey] = array();
 				}
-				$this->slowQueries[$statementKey][] = $queryData;
+						$this->slowQueries[$statementKey][] = $query;
+			}
+				}
 			}
 			
-			if(!isset($this->queries[$statementKey])){
-				$this->queries[$statementKey] = array('statement' => $statement, 'count'=>0, 'cumul'=>0);
+			if($this->implementor->isEnabled('slowestQueries')){
+				$count = $this->implementor->getConfigOption('slowestQueries', 'count');
+				if (!is_null($count) && $count > 0) {
+					$this->slowestQueries[] = $query;
+					uasort($this->slowestQueries, function($q1, $q2) {
+						if ($q1->getTime() == $q2->getTime()) {
+							return 0;
 			}
+						return ($q1->getTime() > $q2->getTime()) ? -1 : 1;
+					});
+					
+					if (count($this->slowestQueries) > $count) {
+						array_pop($this->slowestQueries);
+					}
+				}
+			}
+			
+			if($this->implementor->isEnabled('queries')){
+				if (!isset($this->queries[$statementKey])) {
+					$this->queries[$statementKey] = array('statement' => $statement, 'count' => 0, 'cumul' => 0);
+				}
 			$this->queries[$statementKey]['count']++;
 			$this->queries[$statementKey]['cumul'] += $time;
 		}
+		
+		}
+		
 		$this->slowQueryTimer = 0;
 	}
 	
-	/**
-     *
-     * @author Somsack Sipasseuth ,<sam@taotesting.com>
-     */
-    protected function logSlowQueries(){
-		foreach($this->slowQueries as $logs) {
-			$count = count($logs);
-			for($i=0;$i<$count;$i++){
-				$this->log('slow query: '.$logs[$i]['statement'].' : '.round($logs[$i]['time']*1000, 3).'ms');
+    protected function logQueriesSlow(){
+		if($this->isEnabled('slowQueries')){
+			$this->implementor->logQueriesSlow($this->slowQueries);
 			}
+		}
+	
+	protected function logQueriesSlowest(){
+		if($this->isEnabled('slowestQueries')){
+			$this->implementor->logQueriesSlowest($this->slowestQueries);
+	}
+	}
+	
+	protected function logQueriesStat(){
+		if($this->isEnabled('queries')){
+			$this->implementor->logQueriesStat($this->queries);
 		}
 	}
 	
-	protected function logQueries(){
-		foreach($this->queries as $query){
-			if($query['count']>10) $this->log('Query count: '.$query['statement'].' => '.$query['count']);
-		}
+	/**
+     * Flush log data
+	 * 
+     * @author Somsack Sipasseuth ,<sam@taotesting.com>
+     */
+    protected function flush(){
+		$this->implementor->flush();
 	}
 	
 	/**

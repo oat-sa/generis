@@ -14,9 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2013 (original work) Open Assessment Techonologies SA (under the project TAO-PRODUCT);
  * 
  */
 
@@ -35,6 +33,7 @@ class common_profiler_Context
 		$this->extension = $context->getExtensionName();
 		$this->module = $context->getModuleName();
 		$this->action = $context->getActionName();
+		$this->epoch = time();
 		$this->user = wfEngine_models_classes_UserService::singleton()->getCurrentUser();
 		$this->script = $_SERVER['PHP_SELF'];
 		$this->system = new common_profiler_System();

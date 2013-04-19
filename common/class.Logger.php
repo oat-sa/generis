@@ -20,7 +20,6 @@
  * 
  */
 
-
 /**
  * Abstraction for the System Logger
  *
@@ -219,6 +218,17 @@ class common_Logger
 			}else{
 				$requestURI = implode(' ', $_SERVER['argv']);
 			}
+			
+			//reformat input
+			if(is_object($message) || is_array($message)){
+				$message = print_r($message, true);
+			}else{
+				$message = (string) $message;
+			}
+			if(is_string($tags)){
+				$tags = array($tags);
+			}
+			
 			$this->implementor->log(new common_log_Item($message, $level, time(), $user, $stack, $tags, $requestURI, $errorFile, $errorLine));
 			$this->restore();
 		};
@@ -304,6 +314,20 @@ class common_Logger
 		self::singleton()->log(self::DEBUG_LEVEL, $message, $tags);
         // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004337 end
     }
+
+	public static function dt($message, $tags = array()){
+//		$stack = debug_backtrace();
+//		array_shift($stack);
+//		$keys = array_keys($stack);
+//		$current = $stack[$keys[0]];
+//		if ( (isset($current['file'])||isset($current['class'])) && isset($current['line'])) {
+//			$errorLoc = isset($current['class'])?$current['class']:$current['file'];
+//			$errorLine = $current['line'];
+//			$errorFunc = isset($current['function'])?$current['function']:'body';
+//			self::w($errorLoc.'::'.$errorFunc.' (line '.$errorLine.')', $tags);
+//		}
+		self::w($message,$tags);
+	}
 
     /**
      * info logs high level system events

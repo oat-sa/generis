@@ -14,9 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2013 (original work) Open Assessment Techonologies SA (under the project TAO-PRODUCT);
  * 
  */
 
@@ -28,22 +26,8 @@
  * @subpackage log
  */
 class common_profiler_LoggerAppender
-        implements common_profiler_Appender
+        extends common_profiler_Appender
 {
-
-    /**
-     * Short description of method getLogThreshold
-     *
-     * @access public
-     * @author Sam
-     * @return int
-     */
-    public function getLogThreshold()
-    {
-        $returnValue = (int) 0;
-
-        return (int) $returnValue;
-    }
 
     /**
      * Short description of method init
@@ -57,9 +41,12 @@ class common_profiler_LoggerAppender
 		
         $returnValue = (bool) false;
     	
+		parent::init($configuration);
+		
     	if (isset($configuration['tag']) && !empty($configuration['tag'])) {
     		$this->tag = (isset($configuration['tag']) && !empty($configuration['tag'])) ? strval($configuration['tag']) : 'PROFILER';
     	}
+		
     	$returnValue = true;
 
         return (bool) $returnValue;
@@ -73,32 +60,45 @@ class common_profiler_LoggerAppender
 		$this->log('Profiling action called: '.$context->getCalledUrl());
 	}
 	
-	public function logEventTimer($flag, $duration, $total){
+	public function logTimer($flag, $duration, $total){
 		$totalRounded = round($total * 1000, 3);
 		$this->log($flag . ': ' . round($duration * 1000, 3) . 'ms/'.$totalRounded.'ms (' . common_profiler_PrettyPrint::percentage($duration, $total) . '%)');
 	}
 	
-	public function logMemoryPeakUsage($memPeak, $memMax){
+	public function logMemoryPeak($memPeak, $memMax){
 		$memPc = common_profiler_PrettyPrint::percentage($memPeak, $memMax);
-		$this->log('peak mem usage: '.common_profiler_PrettyPrint::memory($memPeak).'/'.ommon_profiler_PrettyPrint::memory($memMax).' ('.$memPc.'%)');
+		$this->log('peak mem usage: '.common_profiler_PrettyPrint::memory($memPeak).'/'.common_profiler_PrettyPrint::memory($memMax).' ('.$memPc.'%)');
 	}
 	
-	public function logNrOfQueries($count){
+	public function logQueriesCount($count){
 		$this->log($count.' queries for this request');
 	}
 	
-	public function logSlowQueries($slowQueries){
-		foreach($slowQueries as $logs) {
-			$count = count($logs);
+	public function logQueriesSlow($slowQueries){
+		foreach($slowQueries as $queries){
+			$count = count($queries);
 			for($i=0; $i<$count; $i++){
-				$this->log('slow query: '.$logs[$i]['statement'].' : '.round($logs[$i]['time']*1000, 3).'ms');
+				$this->log('slow query: '.$queries[$i]->getTime('ms').'ms : '.$queries[$i]->getStatement());
 			}
 		}
 	}
 	
-	public function logQuery($queries){
-		foreach($queries as $query){
-			if($query['count']>10) $this->log('Query count: '.$query['statement'].' => '.$query['count']);
+	public function logQueriesSlowest($slowestQueries){
+		$i = 1;
+		foreach($slowestQueries as $query){
+			$this->log('slowest query#'.$i.': '.$query->getTime('ms').'ms : '.$query->getStatement());
+			$i++;
+		}
+	}
+	
+	public function logQueriesStat($queries){
+		$count = $this->getConfigOption('queries', 'count');
+		if(!is_null($count)){
+			foreach ($queries as $query) {
+				if ($query['count'] > $count){
+					$this->log('Query count: ' . $query['statement'] . ' => ' . $query['count']);
+				}
+			}
 		}
 	}
 	

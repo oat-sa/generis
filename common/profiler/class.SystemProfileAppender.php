@@ -14,9 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2013 (original work) Open Assessment Techonologies SA (under the project TAO-PRODUCT);
  * 
  */
 
@@ -28,22 +26,10 @@
  * @subpackage log
  */
 class common_profiler_SystemProfileAppender
-        implements common_profiler_Appender
+        extends common_profiler_Appender
 {
 
-    /**
-     * Short description of method getLogThreshold
-     *
-     * @access public
-     * @author Sam
-     * @return int
-     */
-    public function getLogThreshold()
-    {
-        $returnValue = (int) 0;
-
-        return (int) $returnValue;
-    }
+	protected $data = array();
 
     /**
      * Short description of method init
@@ -57,37 +43,81 @@ class common_profiler_SystemProfileAppender
 		
         $returnValue = (bool) false;
     	
-    	if (isset($configuration['tag']) && !empty($configuration['tag'])) {
-    		$this->tag = (isset($configuration['tag']) && !empty($configuration['tag'])) ? strval($configuration['tag']) : 'PROFILER';
-    	}
+    	parent::init($configuration);
+		$this->data = array();
+		
     	$returnValue = true;
 
         return (bool) $returnValue;
     }
 	
-	protected function log($msg){
-	}
-	
 	public function logContext(common_profiler_Context $context){
+		$this->data['call'] = $context->getCalledUrl();
 	}
 	
-	public function logEventTimer($flag, $duration, $total){
+	public function logTimer($flag, $duration, $total){
+		if(!isset($this->data['timer'])){
+			$this->data['timer'] = array();
+	}
+		if(!isset($this->data['timer'][$flag])){
+			$this->data['timer'][$flag] = array();
+		}
+		$this->data['timer'][$flag][] = $duration;
 	}
 	
-	public function logMemoryPeakUsage($memPeak, $memMax){
+	public function logMemoryPeak($memPeak, $memMax){
+		if(!isset($this->data['mem'])){
+			$this->data['mem'] = array();
+	}
+		$this->data['mem']['peak'] = $memPeak;
+		$this->data['mem']['max'] = $memMax;
 	}
 	
-	public function logNrOfQueries($count){
+	public function logQueriesCount($count){
+		if(!isset($this->data['query'])){
+			$this->data['query'] = array();
+	}
+		$this->data['query']['count'] = $count;
 	}
 	
-	public function logSlowQueries($slowQueries){
+	public function logQueriesSlow($slowQueries){
+		if(!isset($this->data['query'])){
+			$this->data['query'] = array();
 	}
 	
-	public function logQuery($queries){
+		$logs = array();
+		foreach($slowQueries as $statementKey => $queries){
+			$count = count($queries);
+			$logs[$statementKey] = array();
+			for($i=0; $i<$count; $i++){
+				$logs[$statementKey] = $queries[$i]->toArray();
+	}
+		}
+	
+		$this->data['query']['slow'] = $logs;
+	}
+	
+	public function logQueriesSlowest($slowestQueries){
+		if(!isset($this->data['query'])){
+			$this->data['query'] = array();
+		}
+		$this->data['query']['slowest'] = array();
+		foreach($slowestQueries as $query){
+			$this->data['query']['slowest'][] = $query->toArray();
+		}
+	}
+	
+	public function logQueriesStat($queries){
+		$count = $this->getConfigOption('queries', 'count');
+		if(!is_null($count)){
+			$this->data['query']['stat'] = $queries;
+		}
 	}
 	
 	public function flush(){
-		//check if flush condition is fullfilled
+		//nothing to flush here
+		var_dump($this->data);
+		common_Logger::d($this->data, 'PROFILER');
 	}
 	
 } /* end of abstract class common_profiler_SystemAppender */
