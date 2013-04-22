@@ -31,6 +31,9 @@ class common_profiler_System
 	public function __construct(){
 		$this->computerId = $this->getComputerId();
 		$this->taoId = $this->getTaoInstanceId();
+		$this->uname = php_uname();
+		$this->hostname = gethostname();
+		$this->php = phpversion();
 	}
 	
 	protected function getTaoInstanceId(){
@@ -43,4 +46,7 @@ class common_profiler_System
 		return md5($key);
 	}
 	
+	public function toArray(){
+		return get_object_vars($this);
+	}
 }

@@ -43,9 +43,7 @@ class common_profiler_LoggerAppender
     	
 		parent::init($configuration);
 		
-    	if (isset($configuration['tag']) && !empty($configuration['tag'])) {
-    		$this->tag = (isset($configuration['tag']) && !empty($configuration['tag'])) ? strval($configuration['tag']) : 'PROFILER';
-    	}
+    	$this->tag = (isset($configuration['tag']) && !empty($configuration['tag'])) ? strval($configuration['tag']) : 'PROFILER';
 		
     	$returnValue = true;
 

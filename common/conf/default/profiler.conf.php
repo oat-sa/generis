@@ -64,7 +64,12 @@ $GLOBALS['COMMON_PROFILER_CONFIG'] = array(
 	)
 	,array_merge(
 		array(
-			'class'		=> 'SystemProfileAppender'
+			'class'			=> 'SystemProfileAppender',
+			'directory'		=> GENERIS_FILES_PATH.'profiler'.DIRECTORY_SEPARATOR,//(must be writable)
+			'file_name'		=> 'mySystemProfile',
+			'max_file_size'	=> 1048576,//(bits)
+			'sent_time_interval'=> 3600,//(seconds)
+			'archive_sent'	=> true
 		), 
 		$defaultConfig,
 		array()

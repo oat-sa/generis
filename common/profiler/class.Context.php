@@ -46,4 +46,11 @@ class common_profiler_Context
 		}
 		return $returnValue;
 	}
+	
+	public function toArray(){
+		$returnValue = get_object_vars($this);
+		$returnValue['user'] = is_null($this->user)?'n/a':$this->user->getUri();
+		$returnValue['system'] = $this->system->toArray();
+		return $returnValue;
+	}
 }
