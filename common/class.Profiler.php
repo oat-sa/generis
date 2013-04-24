@@ -271,9 +271,9 @@ class common_Profiler
 		
 		if($this->isEnabled() && $this->slowQueryTimer){//log only if timer has been started
 			
-			$statementKey = hash('crc32b', $statement);
 			$time = $this->getCurrentTime() - $this->slowQueryTimer;
 			$query = new common_profiler_Query($statement, $params, $time);
+			$statementKey = $query->getStatementKey();
 			
 			if($this->implementor->isEnabled('slowQueries')){
 				$threshold = $this->implementor->getConfigOption('slowQueries', 'threshold');
@@ -281,9 +281,9 @@ class common_Profiler
 					if (1000 * $time > $threshold) {//compare to threshold (ms)
 						if (!isset($this->slowQueries[$statementKey])) {
 							$this->slowQueries[$statementKey] = array();
-				}
+						}
 						$this->slowQueries[$statementKey][] = $query;
-			}
+					}
 				}
 			}
 			
@@ -294,7 +294,7 @@ class common_Profiler
 					uasort($this->slowestQueries, function($q1, $q2) {
 						if ($q1->getTime() == $q2->getTime()) {
 							return 0;
-			}
+						}
 						return ($q1->getTime() > $q2->getTime()) ? -1 : 1;
 					});
 					

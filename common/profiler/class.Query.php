@@ -29,13 +29,19 @@
 class common_profiler_Query
 {
 	protected $statement = '';
+	protected $key = '';
 	protected $params = array();
 	protected $time = 0;
 	
 	public function __construct($statement, $params, $time){
 		$this->statement = $statement;
+		$this->key = hash('crc32b', $this->statement);
 		$this->params = $params;
 		$this->time = $time;//µs
+	}
+	
+	public function getStatementKey(){
+		return $this->key;
 	}
 	
 	public function toArray(){

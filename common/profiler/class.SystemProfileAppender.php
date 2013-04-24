@@ -78,8 +78,6 @@ class common_profiler_SystemProfileAppender
     		$this->maxFileSize = $configuration['max_file_size'];
     	}
 		
-//		common_Logger::d($this, 'PROFILER');exit;
-		
     	$returnValue = true;
 
         return (bool) $returnValue;
@@ -151,7 +149,7 @@ class common_profiler_SystemProfileAppender
 		}
 	}
 	
-	public function clear(){
+	protected function clear(){
 		if(file_exists($this->file)) helpers_File::remove($this->file);
 		if(file_exists($this->counterFile)) helpers_File::remove($this->counterFile);
 		if(file_exists($this->sentFolder)) helpers_File::remove($this->sentFolder);
@@ -195,12 +193,9 @@ class common_profiler_SystemProfileAppender
 			$profileDataStr .= ',';
 		}
 		
-//		common_Logger::d('profile saved to: '.$this->file, 'PROFILER');
 		file_put_contents($this->file, $profileDataStr, FILE_APPEND);
 		
 		if($send){
-//			common_Logger::d('sending after time interval of '.$this->sentInterval.' seconds : '.$this->file, 'PROFILER');
-//			common_Logger::d(file_get_contents($this->file), 'PROFILER');
 			
 			file_put_contents($this->counterFile, $currentTimestamp);
 			helpers_File::copy($this->file, $this->sentFolder.DIRECTORY_SEPARATOR.'sent_'.$currentTimestamp, false);
@@ -208,6 +203,15 @@ class common_profiler_SystemProfileAppender
 		}
 		
 //		common_Logger::d($this->data, 'PROFILER');
+	}
+	
+	protected function send($message){
+		
+		$resource = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+		socket_set_nonblock($resource);
+		@socket_sendto($resource, $message, strlen($message), 0, $this->host, $this->port);
+		socket_close($resource);
+		
 	}
 	
 } /* end of abstract class common_profiler_SystemAppender */
