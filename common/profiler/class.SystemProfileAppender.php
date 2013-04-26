@@ -30,7 +30,8 @@ class common_profiler_SystemProfileAppender
 {
 
 	protected $data = array();
-	protected $archive = true;
+	protected $archivers = array();
+	protected $backup = true;
 	protected $file = '';
 	protected $maxFileSize = 1048576;
 	 
@@ -63,9 +64,25 @@ class common_profiler_SystemProfileAppender
 			$this->sentInterval = intval($configuration['sent_time_interval']);
 		}
 		
-		if(isset($configuration['archive_sent']) && !empty($configuration['archive_sent'])){
-			$this->archive = (bool) $configuration['archive_sent'];
+		if(isset($configuration['sent_backup']) && !empty($configuration['sent_backup'])){
+			$this->backup = (bool) $configuration['sent_backup'];
 		}
+		
+		$this->archivers = array();
+		foreach ($configuration['archivers'] as $archiverConfig){
+    		if(isset($archiverConfig['class'])){
+    			$classname = $archiverConfig['class'];
+    			if (!class_exists($classname)){
+    				$classname = 'common_profiler_archiver_'.$classname;
+                }
+    			if (class_exists($classname)){
+    				$archiver = new $classname();
+    				if ($archiver instanceof common_profiler_archiver_Archiver && !is_null($archiver) && $archiver->init($archiverConfig)) {
+						$this->archivers[] = $archiver;
+					}
+				}
+			}
+		}	
 		
     	$fileName = (isset($configuration['file_name']) && !empty($configuration['file_name'])) ? strval($configuration['file_name']) : 'systemProfiles';
 		$this->file = $this->directory.$fileName;
@@ -157,8 +174,6 @@ class common_profiler_SystemProfileAppender
 	
 	public function flush(){
 		
-//		$this->clear();
-		
 		$profileData = $this->data;
 		
 		$systemDataStr = '';
@@ -176,42 +191,28 @@ class common_profiler_SystemProfileAppender
 		
 		$send = false;
 		$currentTimestamp = time();
-		
 		if(file_exists($this->counterFile)){
 			$lastSent = intval(file_get_contents($this->counterFile));
-			if ($currentTimestamp > $lastSent + $this->sentInterval) {
-				$send = true;
-			}
+			$send = ($currentTimestamp > $lastSent + $this->sentInterval);
 		}else{
 			//initialize counter file somehow
 			file_put_contents($this->counterFile, $currentTimestamp);
 		}
 		
-		if($send){
-			$profileDataStr .= ']';//finalize the file by closing the array
-		}else{
-			$profileDataStr .= ',';
-		}
-		
+		$profileDataStr .= ($send)?']':',';//finalize the file by closing the array or continue appending
 		file_put_contents($this->file, $profileDataStr, FILE_APPEND);
 		
 		if($send){
-			
 			file_put_contents($this->counterFile, $currentTimestamp);
-			helpers_File::copy($this->file, $this->sentFolder.DIRECTORY_SEPARATOR.'sent_'.$currentTimestamp, false);
-			helpers_File::remove($this->file);
+			foreach($this->archivers as $archiver){
+				$archiver->store($this->file);
+			}
+			if($this->backup){
+				helpers_File::copy($this->file, $this->sentFolder.DIRECTORY_SEPARATOR.'sent_'.$currentTimestamp, false);
+				helpers_File::remove($this->file);
+			}
 		}
 		
-//		common_Logger::d($this->data, 'PROFILER');
 	}
 	
-	protected function send($message){
-		
-		$resource = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-		socket_set_nonblock($resource);
-		@socket_sendto($resource, $message, strlen($message), 0, $this->host, $this->port);
-		socket_close($resource);
-		
-	}
-	
-} /* end of abstract class common_profiler_SystemAppender */
+} /* end of class common_profiler_SystemAppender */

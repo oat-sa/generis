@@ -24,7 +24,7 @@
  * @access public
  * @author Sam, <sam@taotesting.com>
  * @package common
- * @subpackage log
+ * @subpackage profiler
  */
 abstract class common_profiler_Appender
 {

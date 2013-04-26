@@ -35,6 +35,8 @@ class common_profiler_Context
 		$this->action = $context->getActionName();
 		$this->epoch = time();
 		$this->user = wfEngine_models_classes_UserService::singleton()->getCurrentUser();
+		$this->session = session_id();
+		//http request id?
 		$this->script = $_SERVER['PHP_SELF'];
 		$this->system = new common_profiler_System();
 	}

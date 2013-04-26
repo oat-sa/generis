@@ -19,34 +19,18 @@
  */
 
 /**
- *	Represent the system being profiled
  * 
+ *
  * @access public
  * @author Sam, <sam@taotesting.com>
  * @package common
- * @subpackage log
+ * @subpackage profiler
  */
-class common_profiler_System
+interface common_profiler_archiver_Archiver
 {
-	public function __construct(){
-		$this->computerId = $this->getComputerId();
-		$this->taoId = $this->getTaoInstanceId();
-		$this->uname = php_uname();
-		$this->hostname = gethostname();
-		$this->php = phpversion();
-	}
+
+	public function init($configuration);
 	
-	public function getTaoInstanceId(){
-		$key = LOCAL_NAMESPACE.GENERIS_INSTANCE_NAME.GENERIS_SESSION_NAME.SYS_USER_LOGIN.SYS_USER_PASS;
-		return md5($key);
-	}
-	
-	public function getComputerId(){
-		$key = $_SERVER['SERVER_SIGNATURE'].$_SERVER['SERVER_ADMIN'].$_SERVER['DOCUMENT_ROOT'];
-		return md5($key);
-	}
-	
-	public function toArray(){
-		return get_object_vars($this);
-	}
+	public function store($filePath);
+
 }

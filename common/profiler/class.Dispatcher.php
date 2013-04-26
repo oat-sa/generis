@@ -81,20 +81,20 @@ class common_profiler_Dispatcher
 									case 'context': {
 										if(!$this->isEnabled($appenderName)){
 											$this->enable($appenderName);
-    				}
+										}
 										break;
-    			}
+									}
 									case 'timer': {
 										if(!$this->isEnabled($appenderName)){
 											$this->enable($appenderName);
-    		}
+										}
 
 										$flags = (array) $this->getConfigOption($appenderName, 'flags');
 										$newFlags = (isset($options['flags']) && is_array($options['flags'])) ? (array) $options['flags'] : array();
 										if(!empty($newFlags)){
 											$flags = array_merge($flags, $newFlags);
 											$this->setConfigOption($appenderName, 'flags', $flags);
-    	}
+										}
 										break;
 									}
 									case 'memorypeak': {

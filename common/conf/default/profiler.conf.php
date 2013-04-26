@@ -68,11 +68,19 @@ $GLOBALS['COMMON_PROFILER_CONFIG'] = array(
 			'directory'		=> GENERIS_FILES_PATH.'profiler'.DIRECTORY_SEPARATOR,//(must be writable)
 			'file_name'		=> 'mySystemProfile',
 			'max_file_size'	=> 1048576,//(bits)
-			'sent_time_interval'=> 3600,//(seconds)
-			'archive_sent'	=> true
+			'sent_time_interval'=> 60,//(seconds)
+			'sent_backup'	=> true,
+			'archivers'		=> array(
+				array(
+					'class'			=> 'FtpArchiver',//ZipArchiver, MailArchiver
+					'ftp_server'	=> '127.0.0.1',
+					'ftp_port'		=> 21,
+					'ftp_user'		=> 'taoProfilerFtp',
+					'ftp_password'	=> '123456'
+				)
+			)	
 		), 
 		$defaultConfig,
 		array()
-	)
-	*/
+	)*/
 );
