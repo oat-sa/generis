@@ -189,14 +189,16 @@ class common_profiler_SystemProfileAppender
 		}
 		
 		
-		$send = false;
 		$currentTimestamp = time();
-		if(file_exists($this->counterFile)){
-			$lastSent = intval(file_get_contents($this->counterFile));
-			$send = ($currentTimestamp > $lastSent + $this->sentInterval);
-		}else{
-			//initialize counter file somehow
-			file_put_contents($this->counterFile, $currentTimestamp);
+		$send = ($this->maxFileSize > 0 && file_exists($this->file) && filesize($this->file) >= $this->maxFileSize);
+		if(!$send){
+			if (file_exists($this->counterFile)) {
+				$lastSent = intval(file_get_contents($this->counterFile));
+				$send = ($currentTimestamp > $lastSent + $this->sentInterval);
+			} else {
+				//initialize counter file somehow
+				file_put_contents($this->counterFile, $currentTimestamp);
+			}
 		}
 		
 		$profileDataStr .= ($send)?']':',';//finalize the file by closing the array or continue appending
@@ -208,8 +210,7 @@ class common_profiler_SystemProfileAppender
 				$archiver->store($this->file);
 			}
 			if($this->backup){
-				helpers_File::copy($this->file, $this->sentFolder.DIRECTORY_SEPARATOR.'sent_'.$currentTimestamp, false);
-				helpers_File::remove($this->file);
+				rename($this->file, $this->sentFolder.DIRECTORY_SEPARATOR.'sent_'.$currentTimestamp);
 			}
 		}
 		
