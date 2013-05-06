@@ -65,7 +65,7 @@ class common_profiler_archiver_FtpArchiver implements common_profiler_archiver_A
 			if (ftp_login($ftpStream, $this->ftpUser, $this->ftpPassword)) {
 				$system = new common_profiler_System();
 				$remoteFile = 'taoProfile_'.$system->getComputerId().'_'.time();
-				$res = ftp_nb_put($ftpStream, $remoteFile, $filePath, FTP_ASCII);
+				$res = ftp_put($ftpStream, $remoteFile, $filePath, FTP_ASCII);
 				if (!$res) {
 					common_Logger::d('profiles upload failed!', 'PROFILER');
 				}

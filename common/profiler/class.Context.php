@@ -28,15 +28,29 @@
  */
 class common_profiler_Context
 {
+	protected $extension = 'n/a';
+	protected $module = 'n/a';
+	protected $action = 'n/a';
+	protected $epoch = 0;
+	protected $user = null;
+	protected $script = '';
+	protected $system = null;
+	
 	public function __construct(){
-		$context = Context::getInstance();
-		$this->extension = $context->getExtensionName();
-		$this->module = $context->getModuleName();
-		$this->action = $context->getActionName();
+		
+		if (PHP_SAPI == 'cli') {
+			try {
+				$resolver = new Resolver();
+				$this->extension	= $resolver->getExtensionFromURL();
+				$this->module 		= Camelizer::firstToUpper($resolver->getModule());
+				$this->action 		= Camelizer::firstToLower($resolver->getAction());
+			} catch (ResolverException $re) {
+				$this->extension = 'tao';
+			}
+		}
+		
 		$this->epoch = time();
 		$this->user = wfEngine_models_classes_UserService::singleton()->getCurrentUser();
-		$this->session = session_id();
-		//http request id?
 		$this->script = $_SERVER['PHP_SELF'];
 		$this->system = new common_profiler_System();
 	}
