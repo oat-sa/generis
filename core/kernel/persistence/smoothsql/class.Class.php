@@ -817,7 +817,7 @@ class core_kernel_persistence_smoothsql_Class
 		options lists:
 		like			: (bool) 	true/false (default: true)
 		chaining		: (string) 	'or'/'and' (default: 'and')
-		recursive		: (int) 	recursivity depth (default: 0)
+		recursive		: (bool) 	saerch in subvlasses(default: false)
 		lang			: (string) 	e.g. 'EN', 'FR' (default: '') for all properties!
 		offset  		: default 0
 		limit           : default select all
