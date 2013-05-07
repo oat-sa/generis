@@ -31,9 +31,6 @@ class common_profiler_SystemProfileAppender
 
 	protected $data = array();
 	protected $archivers = array();
-	protected $backup = true;
-	protected $file = '';
-	protected $maxFileSize = 1048576;
 	 
     /**
      * Short description of method init
@@ -49,26 +46,8 @@ class common_profiler_SystemProfileAppender
     	
     	parent::init($configuration);
 		$this->data = array();
-		
-		if (isset($configuration['directory']) && !empty($configuration['directory'])) {
-			if(is_dir($configuration['directory']) && is_writable($configuration['directory'])){
-				$this->directory = strval($configuration['directory']);
-			}else{
-				throw new InvalidArgumentException('the "directory" is not writable');
-			}
-    	}else{
-			throw new InvalidArgumentException('the "directory" is required in the configuration');
-		}
-		
-		if(isset($configuration['sent_time_interval']) && !empty($configuration['sent_time_interval'])){
-			$this->sentInterval = intval($configuration['sent_time_interval']);
-		}
-		
-		if(isset($configuration['sent_backup']) && !empty($configuration['sent_backup'])){
-			$this->backup = (bool) $configuration['sent_backup'];
-		}
-		
 		$this->archivers = array();
+		
 		foreach ($configuration['archivers'] as $archiverConfig){
     		if(isset($archiverConfig['class'])){
     			$classname = $archiverConfig['class'];
@@ -83,17 +62,6 @@ class common_profiler_SystemProfileAppender
 				}
 			}
 		}	
-		
-    	$fileName = (isset($configuration['file_name']) && !empty($configuration['file_name'])) ? strval($configuration['file_name']) : 'systemProfiles';
-		$this->file = $this->directory.$fileName;
-		
-		$this->counterFile = $this->directory.'counter';
-		
-		$this->sentFolder = $this->directory.'sent';
-		
-    	if (isset($configuration['max_file_size'])) {
-    		$this->maxFileSize = $configuration['max_file_size'];
-    	}
 		
     	$returnValue = true;
 
@@ -166,54 +134,10 @@ class common_profiler_SystemProfileAppender
 		}
 	}
 	
-	protected function clear(){
-		if(file_exists($this->file)) helpers_File::remove($this->file);
-		if(file_exists($this->counterFile)) helpers_File::remove($this->counterFile);
-		if(file_exists($this->sentFolder)) helpers_File::remove($this->sentFolder);
-	}
-	
 	public function flush(){
-		
-		$profileData = $this->data;
-		
-		$systemDataStr = '';
-		if(isset($profileData['context']) && isset($profileData['context']['system'])){
-			$systemDataStr = json_encode($profileData['context']['system']);
-			unset($profileData['context']['system']);
+		foreach($this->archivers as $archiver){
+			$archiver->store($this->data);
 		}
-		
-		$profileDataStr = json_encode($profileData);
-		if(!file_exists($this->file) && !empty($systemDataStr)){
-			//initilize file:
-			$profileDataStr = '['.$systemDataStr.','.$profileDataStr;
-		}
-		
-		
-		$currentTimestamp = time();
-		$send = ($this->maxFileSize > 0 && file_exists($this->file) && filesize($this->file) >= $this->maxFileSize);
-		if(!$send){
-			if (file_exists($this->counterFile)) {
-				$lastSent = intval(file_get_contents($this->counterFile));
-				$send = ($currentTimestamp > $lastSent + $this->sentInterval);
-			} else {
-				//initialize counter file somehow
-				file_put_contents($this->counterFile, $currentTimestamp);
-			}
-		}
-		
-		$profileDataStr .= ($send)?']':',';//finalize the file by closing the array or continue appending
-		file_put_contents($this->file, $profileDataStr, FILE_APPEND);
-		
-		if($send){
-			file_put_contents($this->counterFile, $currentTimestamp);
-			foreach($this->archivers as $archiver){
-				$archiver->store($this->file);
-			}
-			if($this->backup){
-				rename($this->file, $this->sentFolder.DIRECTORY_SEPARATOR.'sent_'.$currentTimestamp);
-			}
-		}
-		
 	}
 	
 } /* end of class common_profiler_SystemAppender */

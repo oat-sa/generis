@@ -31,6 +31,6 @@ interface common_profiler_archiver_Archiver
 
 	public function init($configuration);
 	
-	public function store($filePath);
+	public function store($profileData);
 
 }

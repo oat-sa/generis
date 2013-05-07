@@ -38,7 +38,7 @@ class common_profiler_Context
 	
 	public function __construct(){
 		
-		if (PHP_SAPI == 'cli') {
+		if (PHP_SAPI != 'cli') {
 			try {
 				$resolver = new Resolver();
 				$this->extension	= $resolver->getExtensionFromURL();

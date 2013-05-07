@@ -26,6 +26,7 @@
  * @license GPLv2  http://www.opensource.org/licenses/gpl-2.0.php
  */
 
+//default profilers config:
 $defaultConfig = array(
 	'context' => array(
 		'active' => true
@@ -53,6 +54,26 @@ $defaultConfig = array(
 		'count'=> 10,//most used queries?
 	)
 );
+
+//archivers config:
+$ftpArchiver = array(
+	'class'			=> 'FtpArchiver',
+	'ftp_server'	=> '127.0.0.1',
+	'ftp_port'		=> 21,
+	'ftp_user'		=> 'taoProfilerFtp',
+	'ftp_password'	=> '123456',
+	'directory'		=> GENERIS_FILES_PATH.'profiler'.DIRECTORY_SEPARATOR, //(must be writable)
+	'file_name'		=> 'mySystemProfile',
+	'max_file_size' => 1048576, //(bits)
+	'sent_time_interval' => 60, //(seconds)
+	'sent_backup'	=> true,
+ );
+$udpArchiver = array(
+	'class'			=> 'UdpArchiver',
+	'udp_host'		=> '127.0.0.1',
+	'udp_port'		=> 27072
+);
+
 $GLOBALS['COMMON_PROFILER_CONFIG'] = array(
 	/*array_merge(
 		array(
@@ -65,22 +86,10 @@ $GLOBALS['COMMON_PROFILER_CONFIG'] = array(
 	,array_merge(
 		array(
 			'class'			=> 'SystemProfileAppender',
-			'directory'		=> GENERIS_FILES_PATH.'profiler'.DIRECTORY_SEPARATOR,//(must be writable)
-			'file_name'		=> 'mySystemProfile',
-			'max_file_size'	=> 1048576,//(bits)
-			'sent_time_interval'=> 60,//(seconds)
-			'sent_backup'	=> true,
 			'archivers'		=> array(
-				array(
-					'class'			=> 'FtpArchiver',//ZipArchiver, MailArchiver
-					'ftp_server'	=> '127.0.0.1',
-					'ftp_port'		=> 21,
-					'ftp_user'		=> 'taoProfilerFtp',
-					'ftp_password'	=> '123456'
-				)
-			)	
+				$udpArchiver
+			)
 		), 
-		$defaultConfig,
-		array()
+		$defaultConfig
 	)*/
 );
