@@ -29,6 +29,7 @@ class common_profiler_SystemProfileAppender
         extends common_profiler_Appender
 {
 
+	protected $comment = '';
 	protected $data = array();
 	protected $archivers = array();
 	 
@@ -47,6 +48,10 @@ class common_profiler_SystemProfileAppender
     	parent::init($configuration);
 		$this->data = array();
 		$this->archivers = array();
+		
+		if(isset($configuration['local_server_comment'])){
+			$this->comment = strval($configuration['local_server_comment']);
+		}
 		
 		foreach ($configuration['archivers'] as $archiverConfig){
     		if(isset($archiverConfig['class'])){
@@ -70,6 +75,9 @@ class common_profiler_SystemProfileAppender
 	
 	public function logContext(common_profiler_Context $context){
 		$this->data['context'] = $context->toArray();
+		if(!empty($this->comment)){
+			$this->data['context']['comment'] = $this->comment;
+		}
 	}
 	
 	public function logTimer($flag, $duration, $total){

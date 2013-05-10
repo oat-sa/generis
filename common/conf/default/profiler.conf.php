@@ -70,7 +70,7 @@ $ftpArchiver = array(
  );
 $udpArchiver = array(
 	'class'			=> 'UdpArchiver',
-	'udp_host'		=> '127.0.0.1',
+	'udp_host'		=> '192.168.2.100',
 	'udp_port'		=> 27072
 );
 
@@ -86,6 +86,7 @@ $GLOBALS['COMMON_PROFILER_CONFIG'] = array(
 	,array_merge(
 		array(
 			'class'			=> 'SystemProfileAppender',
+			'local_server_comment'		=> "This is Sam's computer",
 			'archivers'		=> array(
 				$udpArchiver
 			)
