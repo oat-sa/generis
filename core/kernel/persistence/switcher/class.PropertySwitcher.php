@@ -153,7 +153,7 @@ bewteen a class and it's parent to retrieve the properties.
 				}
 				$lastLevelParents = array();
 				foreach($parentClasses as $parentClass){
-					if($parentClass->getUri() == RDF_CLASS){
+					if($parentClass->getUri() == RDFS_CLASS){
 						continue;
 					}
 					if($parentClass->equals($this->topClass)) {

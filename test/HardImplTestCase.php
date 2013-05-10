@@ -479,7 +479,7 @@ class HardImplTestCase extends UnitTestCase {
 		// We now test rdfTriples on a hardified class.
 		$triples = $workClass->getRdfTriples()->toArray();
 		$this->assertEqual($triples[0]->predicate, RDF_TYPE);
-		$this->assertEqual($triples[0]->object, RDF_CLASS);
+		$this->assertEqual($triples[0]->object, RDFS_CLASS);
 	}
 	
 	public function testHardPropertyModifications(){

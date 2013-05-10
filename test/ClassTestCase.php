@@ -41,7 +41,7 @@ class ClassTestCase extends UnitTestCase {
 
         GenerisTestRunner::initTest();
 
-		$this->object = new core_kernel_classes_Class(RDF_RESOURCE);
+		$this->object = new core_kernel_classes_Class(RDFS_RESOURCE);
 		$this->object->debug = __METHOD__;
 	}
     
@@ -93,7 +93,7 @@ class ClassTestCase extends UnitTestCase {
 		$indirectParentClasses = $class->getParentClasses(true);
 
 		$this->assertTrue(count($indirectParentClasses) == 2);
-		$expectedResult = array (CLASS_GENERIS_RESOURCE , RDF_RESOURCE);
+		$expectedResult = array (CLASS_GENERIS_RESOURCE , RDFS_RESOURCE);
 		foreach ($indirectParentClasses  as $parentClass) {
 			$this->assertIsA($parentClass,'core_kernel_classes_Class');	
 			$this->assertTrue(in_array($parentClass->getUri(),$expectedResult));
@@ -122,7 +122,7 @@ class ClassTestCase extends UnitTestCase {
 			$this->assertTrue($property instanceof core_kernel_classes_Property);
 			$this->assertTrue(in_array($property->getUri(),$expectedResult));
 			if ($property->getUri() === RDF_FIRST) {
-				$this->assertEqual($property->getRange()->getUri(), RDF_RESOURCE);
+				$this->assertEqual($property->getRange()->getUri(), RDFS_RESOURCE);
 				$this->assertEqual($property->getLabel(),'first');
 				$this->assertEqual($property->getComment(),'The first item in the subject RDF list.');		
 			}
@@ -352,7 +352,7 @@ class ClassTestCase extends UnitTestCase {
     //Test search instances with a model shared between smooth and hard implentation
     public function testSearchInstancesMultipleImpl()
     {
-        $clazz = new core_kernel_classes_Class(RDF_CLASS);
+        $clazz = new core_kernel_classes_Class(RDFS_CLASS);
         $sub1Clazz = $clazz->createSubClass();
         $sub1ClazzInstance = $sub1Clazz->createInstance('test case instance');
         $sub2Clazz = $sub1Clazz->createSubClass();

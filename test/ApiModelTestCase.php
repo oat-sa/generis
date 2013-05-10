@@ -54,7 +54,7 @@ class ApiModelTestCase extends UnitTestCase {
 		$expectedResult = 	array( 	
 			WIDGET_CONSTRAINT_TYPE,
 			CLASS_WIDGET,
-			RDF_RESOURCE
+			RDFS_RESOURCE
 		);
 		
 		$pattern = "/^".preg_quote($localModel, '/')."/";
@@ -65,7 +65,7 @@ class ApiModelTestCase extends UnitTestCase {
 			$parentClasses = $rootClass->getParentClasses(true);
 			$this->assertEqual(count($parentClasses), 1);
 			foreach($parentClasses as $uri => $parent){
-				$this->assertEqual($uri,  RDF_CLASS);
+				$this->assertEqual($uri,  RDFS_CLASS);
 			}
 			//don't check the user root classes
 			if(!preg_match($pattern, $rootClass->getUri())){
@@ -142,15 +142,15 @@ class ApiModelTestCase extends UnitTestCase {
 		$this->assertIsA($collection,'core_kernel_classes_ContainerCollection');
 		foreach ($collection->getIterator() as $aClass) {
 			$this->assertIsA($aClass,'core_kernel_classes_Class');
-			if($aClass->getUri() === RDF_CLASS){
+			if($aClass->getUri() === RDFS_CLASS){
 				$this->assertEqual($aClass->getLabel(),'Class');
 				$this->assertEqual($aClass->getComment(),'The class of classes.');
 			}
-			if($aClass->getUri() === RDFS_STATEMENT){
+			if($aClass->getUri() === RDF_STATEMENT){
 				$this->assertEqual($aClass->getLabel(),'Statement');
 				$this->assertEqual($aClass->getComment(), 'The class of RDF statements.');
 			}
-			if($aClass->getUri() === RDF_RESOURCE){
+			if($aClass->getUri() === RDFS_RESOURCE){
 				$this->assertEqual($aClass->getLabel(),'Resource');
 				$this->assertEqual($aClass->getComment(), 'The class resource, everything.');
 			}

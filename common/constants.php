@@ -33,14 +33,9 @@
 
 #RDF
 define('RDF_TYPE',								'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',true);
-define('RDF_CLASS',								'http://www.w3.org/2000/01/rdf-schema#Class',true);
 define('RDF_PROPERTY',							'http://www.w3.org/1999/02/22-rdf-syntax-ns#Property',true);
-define('RDF_SUBCLASSOF',						'http://www.w3.org/2000/01/rdf-schema#subClassOf',true);
-define('RDF_DOMAIN',							'http://www.w3.org/2000/01/rdf-schema#domain',true);
 define('RDF_VALUE',								'http://www.w3.org/1999/02/22-rdf-syntax-ns#value',true);
-define('RDFS_RANGE',							'http://www.w3.org/2000/01/rdf-schema#range',true);
-define('RDFS_MEMBER',							'http://www.w3.org/2000/01/rdf-schema#member', true);
-define('RDF_RESOURCE',							'http://www.w3.org/2000/01/rdf-schema#Resource',true);
+define('RDF_STATEMENT', 						'http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement', true);
 
 define('RDF_FIRST',								'http://www.w3.org/1999/02/22-rdf-syntax-ns#first', true);
 define('RDF_REST',								'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest', true);
@@ -53,11 +48,12 @@ define('RDFS_LABEL',							'http://www.w3.org/2000/01/rdf-schema#label', true);
 define('RDFS_LITERAL',							'http://www.w3.org/2000/01/rdf-schema#Literal', true);
 define('RDFS_SEEALSO', 							'http://www.w3.org/2000/01/rdf-schema#seeAlso', true);
 define('RDFS_DATATYPE', 						'http://www.w3.org/2000/01/rdf-schema#Datatype', true);
-define('RDFS_STATEMENT', 						'http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement', true);
 define('RDFS_CLASS',							'http://www.w3.org/2000/01/rdf-schema#Class', true);
 define('RDFS_SUBCLASSOF',						'http://www.w3.org/2000/01/rdf-schema#subClassOf', true);
 define('RDFS_DOMAIN',							'http://www.w3.org/2000/01/rdf-schema#domain', true);
 define('RDFS_RESOURCE',							'http://www.w3.org/2000/01/rdf-schema#Resource', true);
+define('RDFS_MEMBER',							'http://www.w3.org/2000/01/rdf-schema#member', true);
+define('RDFS_RANGE',							'http://www.w3.org/2000/01/rdf-schema#range',true);
 
 #generis
 define('GENERIS_NS',							'http://www.tao.lu/Ontologies/generis.rdf', true ) ;
@@ -193,5 +189,33 @@ define('PERSISTENCE_SMOOTH' ,					"smoothsql");
 define('PERSISTENCE_HARD' ,						"hardsql");
 define('PERSISTENCE_VIRTUOSO' ,					"virtuoso");
 define('PERSISTENCE_SUBSCRIPTION' ,				"subscription");
+
+// deprecated
+/**
+ * replaced by RDF_STATEMENT
+ * @deprecated
+ */
+define('RDFS_STATEMENT', 						'http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement', true);
+/**
+ * replaced by RDFS_SUBCLASSOF
+ * @deprecated
+ */
+define('RDF_SUBCLASSOF',						'http://www.w3.org/2000/01/rdf-schema#subClassOf',true);
+/**
+ * replaced by RDFS_DOMAIN
+ * @deprecated
+ */
+define('RDF_DOMAIN',							'http://www.w3.org/2000/01/rdf-schema#domain',true);
+/**
+ * replaced by RDFS_CLASS
+ * @deprecated
+ */
+define('RDF_CLASS',								'http://www.w3.org/2000/01/rdf-schema#Class',true);
+/**
+ * replaced by RDFS_RESOURCE
+ * @deprecated
+ */
+define('RDF_RESOURCE',							'http://www.w3.org/2000/01/rdf-schema#Resource',true);
+
 
 ?>

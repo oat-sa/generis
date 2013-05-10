@@ -36,7 +36,7 @@ class ModelsRightTestCase extends UnitTestCase {
 		$this->assertTrue(array_search(LOCAL_NAMESPACE, $updatableModels) !== false);
 		
 		// Try to delete a resource of a locked model
-		$clazz = new core_kernel_classes_Class(RDF_RESOURCE);
+		$clazz = new core_kernel_classes_Class(RDFS_RESOURCE);
 		$this->assertFalse ($clazz->delete());
 		
 		// Try to remove a property of a locked model

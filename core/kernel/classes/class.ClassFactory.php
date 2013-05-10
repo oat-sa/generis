@@ -158,7 +158,7 @@ class core_kernel_classes_ClassFactory
         $returnValue = null;
 
         // section 127-0-1-1-3c0ae01:12c2c9debde:-8000:00000000000013A2 begin
-		$class = new core_kernel_classes_Class(RDF_CLASS);
+		$class = new core_kernel_classes_Class(RDFS_CLASS);
 		$intance =  self::createInstance($class, $label, $comment, $uri);
 		$returnValue = new core_kernel_classes_Class($instance->getUri());
 		$returnValue->setSubClassOf($clazz);

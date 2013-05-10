@@ -203,7 +203,7 @@ class core_kernel_persistence_virtuoso_Class
                         if (isset($resultArray[$i][0])) {
                                 $parentClass = new core_kernel_classes_Class($resultArray[$i][0]);
                                 $returnValue[$parentClass->getUri()] = $parentClass ;
-                                if($recursive == true && $parentClass->getUri() != RDF_CLASS && $parentClass->getUri() != RDF_RESOURCE){
+                                if($recursive == true && $parentClass->getUri() != RDFS_CLASS && $parentClass->getUri() != RDFS_RESOURCE){
                                         $recursiveParents = $parentClass->getParentClasses(true);
                                         $returnValue = array_merge($returnValue, $recursiveParents);
                                 }
@@ -250,7 +250,7 @@ class core_kernel_persistence_virtuoso_Class
                 if($recursive == true) {
 			$parentClasses = $resource->getParentClasses(true);
 			foreach ($parentClasses as $parent) {
-				if($parent->getUri() != RDF_CLASS) {
+				if($parent->getUri() != RDFS_CLASS) {
 					$returnValue = array_merge($returnValue, $parent->getProperties(true));
 				}
 			}
@@ -309,9 +309,9 @@ class core_kernel_persistence_virtuoso_Class
                                 $returnValue[$instance->getUri()] = $instance ;
 
                                 //In case of a meta class, subclasses of instances may be returned*/
-                                if (($instance->getUri()!=RDF_CLASS)
-                                && ($resource->getUri() == RDF_CLASS)
-                                && ($instance->getUri()!=RDF_RESOURCE)) {
+                                if (($instance->getUri()!=RDFS_CLASS)
+                                && ($resource->getUri() == RDFS_CLASS)
+                                && ($instance->getUri()!=RDFS_RESOURCE)) {
 
                                         $instanceClass = new core_kernel_classes_Class($instance->getUri());
                                         $subClasses = $instanceClass->getSubClasses(true);
@@ -380,7 +380,7 @@ class core_kernel_persistence_virtuoso_Class
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000150F begin
         
-        $subClassOf = new core_kernel_classes_Property(RDF_SUBCLASSOF);
+        $subClassOf = new core_kernel_classes_Property(RDFS_SUBCLASSOF);
         $returnValue = $resource->setPropertyValue($subClassOf,$iClass->getUri());
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000150F end
@@ -403,7 +403,7 @@ class core_kernel_persistence_virtuoso_Class
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 begin
         
-        $domain = new core_kernel_classes_Property(RDF_DOMAIN,__METHOD__);
+        $domain = new core_kernel_classes_Property(RDFS_DOMAIN,__METHOD__);
         $instanceProperty = new core_kernel_classes_Resource($property->getUri(),__METHOD__);
         $returnValue = $instanceProperty->setPropertyValue($domain, $resource->getUri());
                 
@@ -487,7 +487,7 @@ class core_kernel_persistence_virtuoso_Class
 
         // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 begin
         
-        $class = new core_kernel_classes_Class(RDF_CLASS,__METHOD__);
+        $class = new core_kernel_classes_Class(RDFS_CLASS,__METHOD__);
         $intance = $class->createInstance($label, $comment, $uri);
         $returnValue = new core_kernel_classes_Class($intance->getUri());
         $returnValue->setSubClassOf($resource);
@@ -798,7 +798,7 @@ class core_kernel_persistence_virtuoso_Class
 
         // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:00000000000031F8 begin
         
-		$domain = new core_kernel_classes_Property(RDF_DOMAIN,__METHOD__);
+		$domain = new core_kernel_classes_Property(RDFS_DOMAIN,__METHOD__);
 		$instanceProperty = new core_kernel_classes_Resource($property->getUri(),__METHOD__);
 		$returnValue = $instanceProperty->removePropertyValues($domain, array('pattern' => $resource->getUri()));
 		

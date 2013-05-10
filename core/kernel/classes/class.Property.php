@@ -207,7 +207,7 @@ class core_kernel_classes_Property
         // section 10-13-1--31--64270bf:11918ad765e:-8000:0000000000000972 begin
         if (is_null($this->domain)){
         	$this->domain = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
-			$domainValues = $this->getPropertyValues(new core_kernel_classes_Property(RDF_DOMAIN));
+			$domainValues = $this->getPropertyValues(new core_kernel_classes_Property(RDFS_DOMAIN));
 			foreach ($domainValues as $domainValue){
 				$this->domain->add(new core_kernel_classes_Class($domainValue));
 			}
@@ -240,7 +240,7 @@ class core_kernel_classes_Property
         		}
         	}
         	if(!$returnValue){
-        		$this->setPropertyValue(new core_kernel_classes_Property(RDF_DOMAIN), $class->getUri());
+        		$this->setPropertyValue(new core_kernel_classes_Property(RDFS_DOMAIN), $class->getUri());
         		if(!is_null($this->domain)){
         			$this->domain->add($class);
         		}

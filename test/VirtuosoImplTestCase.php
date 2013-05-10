@@ -230,7 +230,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
         }
         
         public function testCreateSubclass(){
-                $class = new core_kernel_classes_Class(RDF_CLASS);
+                $class = new core_kernel_classes_Class(RDFS_CLASS);
                 $label = 'new subclass';
                 $comment = 'created for unit virtuoso test @ '.date('Y:i:s');
                 $subclass = $class->createSubClass($label, $comment);
@@ -266,7 +266,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
         
         public function testSetInstance(){
                 
-                $class = new core_kernel_classes_Class(RDF_CLASS);
+                $class = new core_kernel_classes_Class(RDFS_CLASS);
                 $label1 = 'new subclass 1';
                 $label2 = 'new subclass 2';
                 $comment = 'created for virtuoso unit test @ '.date('d-m-Y H:i:s');
@@ -298,7 +298,7 @@ class VirtuosoImplTestCase extends UnitTestCase {
         }
         
         public function testSearchInstance(){
-                $class = new core_kernel_classes_Class(RDF_CLASS);
+                $class = new core_kernel_classes_Class(RDFS_CLASS);
                 $instance = $class->createInstance('instance for unit test', 'instance for unit test @ '.date('d-m-Y H:i:s'));
                 $prop = new core_kernel_classes_Property(RDFS_COMMENT);
                 $prop2 = new core_kernel_classes_Property('http://www.tao.lu/Ontologies/TAOtestCase.rdf#property1');

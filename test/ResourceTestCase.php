@@ -503,7 +503,7 @@ class ResourceTestCase extends UnitTestCase{
 	
 	public function testIsInstanceOf()
 	{
-		$baseClass = new core_kernel_classes_Class(RDF_CLASS);
+		$baseClass = new core_kernel_classes_Class(RDFS_CLASS);
 		$level1a = $baseClass->createSubClass('level1a');
 		$level1b = $baseClass->createSubClass('level1b');
 		$level2a = $level1a->createSubClass('level2a');

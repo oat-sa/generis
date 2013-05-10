@@ -39,10 +39,10 @@ class CreateInstanceTestCase extends UnitTestCase {
 	public function setUp(){
 
         GenerisTestRunner::initTest();
-	    $classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDF_CLASS), 'TestClass');
+	    $classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDFS_CLASS), 'TestClass');
 	    $this->class = new core_kernel_classes_Class($classres->getUri());
 	    $this->assertIsA($this->class, 'core_kernel_classes_Class');
-	    $this->assertTrue($this->class->hasType(new core_kernel_classes_Class(RDF_CLASS)));
+	    $this->assertTrue($this->class->hasType(new core_kernel_classes_Class(RDFS_CLASS)));
 	    common_Logger::i('using class '.$this->class->getUri().' for Create instance Tests');
 	}
 	
@@ -131,9 +131,9 @@ class CreateInstanceTestCase extends UnitTestCase {
 		$this->assertEqual($propActual, $propNormative);
 		
 		// multiple classes
-		$classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDF_CLASS), 'TestClass2');
+		$classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDFS_CLASS), 'TestClass2');
 	    $class2 = new core_kernel_classes_Class($classres);
-		$classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDF_CLASS), 'TestClass3');
+		$classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDFS_CLASS), 'TestClass3');
 	    $class3 = new core_kernel_classes_Class($classres);
 	    
 		// 2 classes (by ressource)

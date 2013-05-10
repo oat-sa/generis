@@ -439,7 +439,7 @@ class core_kernel_impl_ApiModelOO
         // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009CF begin
         $returnValue = new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(__METHOD__),__METHOD__);
         
-        $classClass = new core_kernel_classes_Class(RDF_CLASS);
+        $classClass = new core_kernel_classes_Class(RDFS_CLASS);
         foreach($classClass->getSubClasses(true) as $uri => $subClass){
         	$returnValue->add($subClass);
         }
@@ -469,8 +469,8 @@ class core_kernel_impl_ApiModelOO
         			AND subject NOT IN (SELECT subject FROM statements WHERE predicate = ?)";
     	$result	= $dbWrapper->query($query, array(
         	RDF_TYPE,
-        	RDF_CLASS,
-        	RDF_SUBCLASSOF
+        	RDFS_CLASS,
+        	RDFS_SUBCLASSOF
         ));
         
         while ($row = $result->fetch()) {
@@ -575,8 +575,8 @@ class core_kernel_impl_ApiModelOO
         $query =  "SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) OR predicate = ?";
     	$result	= $dbWrapper->query($query, array(
         	RDF_TYPE,
-        	RDF_CLASS,
-        	RDF_SUBCLASSOF
+        	RDFS_CLASS,
+        	RDFS_SUBCLASSOF
         ));
         
         while ($row = $result->fetch()) {
