@@ -38,16 +38,10 @@ class FileSourceLocalTestCase extends UnitTestCase {
     public function setUp()
     {
 	    GenerisTestRunner::initTest();
-	    
-		$versioningRepositoryClass = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDREPOSITORY);
-		$repository = $versioningRepositoryClass->createInstanceWithProperties(array(
-			RDFS_LABEL => 'UnitTestRepository',
-			PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH => sys_get_temp_dir().DIRECTORY_SEPARATOR."testrepo",
-			PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE => INSTANCE_GENERIS_VCS_TYPE_LOCAL,
-			PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED => GENERIS_TRUE
-		));
-	
-		self::$repository = new core_kernel_versioning_Repository($repository);
+		self::$repository = core_kernel_fileSystem_FileSystemFactory::createFileSystem(
+			new core_kernel_classes_Resource(INSTANCE_GENERIS_VCS_TYPE_LOCAL),
+			'', '', '', sys_get_temp_dir().DIRECTORY_SEPARATOR."testrepo", 'UnitTestRepository', true
+		);
     }
 	
     public function tearDown()

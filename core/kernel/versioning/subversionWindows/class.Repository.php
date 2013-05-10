@@ -192,7 +192,7 @@ class core_kernel_versioning_subversionWindows_Repository
         if($saveResource){
             $folderName = basename($src);
             $relativePath = $target.$folderName;
-            $folder = core_kernel_versioning_File::createVersioned('', $relativePath, $vcs);
+            $folder = $vcs->createFile('', $relativePath);
             $returnValue = $folder;
         }
         

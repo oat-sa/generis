@@ -122,12 +122,14 @@ class core_kernel_versioning_File
      * @param  string uri
      * @param  array options
      * @return core_kernel_versioning_File
+     * @deprecated
      */
     public static function createVersioned($filename, $relativeFilePath = null,  core_kernel_versioning_Repository $repository = null, $uri = '', $options = array())
     {
         $returnValue = null;
-
-        // section 10-13-1-85--73d3d10:13b70b55a69:-8000:0000000000001DC8 begin
+        
+        $returnValue = $repository->createFile($filename, $relativeFilePath);
+		/*
         $repositoryPath = $repository->getPath();
         //add a slash at the end of the repository path if it does not exist
         $repositoryPath = substr($repositoryPath,strlen($repositoryPath)-1,1)==DIRECTORY_SEPARATOR ? $repositoryPath : $repositoryPath.DIRECTORY_SEPARATOR;
@@ -160,10 +162,6 @@ class core_kernel_versioning_File
         	throw new core_kernel_versioning_exception_Exception(__('A file with the name "'.$filename.'" already exists at the location '.$repositoryPath.$filePath));
         }
         
-        // If the file does not exist, create it
-        /*if(!file_exists($repositoryPath.$filePath.DIRECTORY_SEPARATOR.$fileName)){
-        	$create = true;
-    	}*/
         $instance = parent::create($filename, $filePath, $uri);
         $returnValue = new core_kernel_versioning_File($instance);
         
@@ -174,7 +172,7 @@ class core_kernel_versioning_File
 	    // Add repository
 	    $versionedFileRepositoryProp = new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_REPOSITORY);
 	    $instance->setPropertyValue($versionedFileRepositoryProp, $repository);
-        // section 10-13-1-85--73d3d10:13b70b55a69:-8000:0000000000001DC8 end
+	    */
 
         return $returnValue;
     }

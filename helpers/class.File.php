@@ -108,22 +108,28 @@ class helpers_File
     {
         $returnValue = array();
 
-
-		$lastDirSep = strrpos($path, DIRECTORY_SEPARATOR);
-        $filePath = substr($path, 0, $lastDirSep+1);
-        $fileName = substr($path, $lastDirSep+1);
-        $fileNameStr = $fileName != false ? $fileName : '';
-        $clazz = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
-        $propertyFilters = array(
-            PROPERTY_FILE_FILEPATH      =>$filePath
-            , PROPERTY_FILE_FILENAME    =>$fileNameStr
-        );
-        $resources = $clazz->searchInstances($propertyFilters, array('recursive'=>true, 'like'=>false));
-		foreach($resources as $resource){
-			if (core_kernel_versioning_File::isVersionedFile($resource)) {
+		$fileSource = core_kernel_fileSystem_Cache::getRelatedFileSystem($path);
+		if (!is_null($fileSource)) {
+			$fsPath = core_kernel_fileSystem_Cache::getFileSystemPath($fileSource);
+			$relPath = substr($path, strlen($fsPath));
+			$lastDirSep = strrpos($relPath, DIRECTORY_SEPARATOR);
+			if ($lastDirSep === false) {
+				$filePath = '';
+				$fileName = $relPath;
+			} else {
+				$filePath = trim(substr($relPath, 0, $lastDirSep+1), DIRECTORY_SEPARATOR);
+		        $fileName = substr($relPath, $lastDirSep+1);	
+			}
+	        
+	        $clazz = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
+	        $propertyFilters = array(
+	            PROPERTY_VERSIONEDFILE_FILEPATH		=>$filePath
+	            , PROPERTY_FILE_FILENAME			=>$fileName
+	            , PROPERTY_VERSIONEDFILE_REPOSITORY => $fileSource
+	        );
+	        $resources = $clazz->searchInstances($propertyFilters, array('recursive'=>true, 'like'=>false));
+			foreach($resources as $resource){
 				$returnValue[$resource->getUri()] = new core_kernel_versioning_File($resource);
-			} else if (core_kernel_versioning_File::isFile($resource)) {
-				$returnValue[$resource->getUri()] = new core_kernel_classes_File($resource);
 			}
 		}
 

@@ -21,29 +21,15 @@
  */
 
 /**
- * FileSource helper functions
+ * FileSystem class
  *
  * @access public
- * @author Joel Bout, <joel.bout@tudor.lu>
- * @package helpers
- * @deprecated
+ * @author Joel Bout, <joel@taotesting.com>
+ * @package core
+ * @subpackage kernel_fileSystem
  */
-class helpers_FileSource
+class core_kernel_fileSystem_FileSystem extends core_kernel_versioning_Repository
 {
-	
-    /**
-     * returns a list of active FileSources
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return array
-     * @deprecated
-     */
-    public static function getFileSources()
-    {
-        return core_kernel_fileSystem_Cache::getEnabledFileSystems();
-    }
-    
 }
 
 ?>

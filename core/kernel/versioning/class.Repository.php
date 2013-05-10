@@ -107,37 +107,14 @@ class core_kernel_versioning_Repository
      * @param  string comment
      * @param  string uri
      * @return core_kernel_versioning_Repository
+     * @deprecated
      */
     public static function create( core_kernel_classes_Resource $type, $url, $login, $password, $path, $label, $comment, $uri = '')
     {
         $returnValue = null;
 
         // section 127-0-1-1--548d6005:132d344931b:-8000:000000000000251D begin
-        
-        //add directory separator at the end of the repository path
-        
-        $path = rtrim($path, "\\/") . DIRECTORY_SEPARATOR;
-        
-        $versioningRepositoryClass = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDREPOSITORY);
-        
-        $repository = $versioningRepositoryClass->createInstance($label, $comment, $uri);
-		
-        $versioningRepositoryUrlProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL);
-		$repository->setPropertyValue($versioningRepositoryUrlProp, $url);
-		
-		$versioningRepositoryPathProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH);
-		$repository->setPropertyValue($versioningRepositoryPathProp, $path);
-		
-		$versioningRepositoryTypeProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE);
-		$repository->setPropertyValue($versioningRepositoryTypeProp, $type);
-		
-		$versioningRepositoryLoginProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN);
-		$repository->setPropertyValue($versioningRepositoryLoginProp, $login);
-		
-		$versioningRepositoryPasswordProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PASSWORD);
-		$repository->setPropertyValue($versioningRepositoryPasswordProp, $password);
-		
-		$returnValue = new core_kernel_versioning_Repository($repository);
+        $returnValue = core_kernel_fileSystem_FileSystemFactory::createFileSystem($type, $url, $login, $password, $path, $label);
         // section 127-0-1-1--548d6005:132d344931b:-8000:000000000000251D end
 
         return $returnValue;
@@ -202,8 +179,14 @@ class core_kernel_versioning_Repository
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016D9 begin
         
-        $returnValue = (string) $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH));
-        
+        // try the cache first
+        $returnValue = core_kernel_fileSystem_Cache::getFileSystemPath($this);
+    	if (empty($returnValue)) {
+    		common_Logger::i('FileSystem '.$this->getUri().' not found in Cache');
+    		$returnValue = (string) $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH));
+    	}
+
+        return (string) $returnValue;
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016D9 end
 
         return (string) $returnValue;
@@ -267,6 +250,7 @@ class core_kernel_versioning_Repository
         }*/
         
         $returnValue = parent::delete();
+		core_kernel_fileSystem_Cache::flushCache();
         
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F7 end
 
@@ -390,11 +374,12 @@ class core_kernel_versioning_Repository
         			$ressource = new core_kernel_classes_Resource($rootFile);
         			$ressource->delete();
         		}
-				$rootFile = core_kernel_versioning_File::createVersioned('', DIRECTORY_SEPARATOR, $this);
+				$rootFile = $this->createFile('');
 				$this->editPropertyValues(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_ROOTFILE), $rootFile);
         		
         		$this->editPropertyValues(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED), GENERIS_TRUE);
 				common_Logger::i("The remote versioning repository ".$this->getUri()." is bound to TAO.");
+				core_kernel_fileSystem_Cache::flushCache();
         		$returnValue = true;
         	}
         }
@@ -431,6 +416,7 @@ class core_kernel_versioning_Repository
 			$this->editPropertyValues(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED), GENERIS_FALSE);
 			common_Logger::i("The remote versioning repository ".$this->getUri()." has been disabled");
 			$returnValue = true;
+			core_kernel_fileSystem_Cache::flushCache();
         } else {
 			common_Logger::w("The remote versioning repository ".$this->getUri()." could not be disabled, because it is in use by ".$file->getUri());
         }
@@ -459,7 +445,7 @@ class core_kernel_versioning_Repository
 		$destination = $this->getPath().$remotePath;
 		$source = $file->getAbsolutePath();
 		if(tao_helpers_File::move($source, $destination)){
-			$returnValue = core_kernel_versioning_File::createVersioned('', $remotePath, $this);
+			$returnValue = $this->createFile('', $remotePath);
 			if(!is_null($returnValue)){
 				$file->delete();
 			}
@@ -496,7 +482,7 @@ class core_kernel_versioning_Repository
     }
 
     /**
-     * Ask the repository to deal with a file located in $filePath. It will
+     * Ask the repository to deal with a file located in $filePath. It will return
      * you a reference on Versioned File.
      *
      * @access public
@@ -518,7 +504,7 @@ class core_kernel_versioning_Repository
         $source = $filePath;
         if(tao_helpers_File::move($source, $destination)){
         	
-        	$returnValue = core_kernel_versioning_File::createVersioned($fileName, null, $this);
+        	$returnValue = $this->createFile($fileName);
         	
         	if (!empty($label)){
         		$returnValue->setLabel($label);
@@ -529,6 +515,27 @@ class core_kernel_versioning_Repository
         return $returnValue;
     }
 
+    /**
+     * Creates a new file with a specific name and path
+     * 
+     * @param string $filename
+     * @param string $relativeFilePath
+     * @return core_kernel_versioning_File
+     */
+    public function createFile($filename, $relativeFilePath = '') {
+    	
+        $resource = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDFILE));
+	    $returnValue = new core_kernel_versioning_File($resource);
+	    
+	    $returnValue->setPropertiesValues(array(
+	    	PROPERTY_FILE_FILENAME => $filename,
+	    	PROPERTY_VERSIONEDFILE_FILEPATH => trim($relativeFilePath, DIRECTORY_SEPARATOR),
+	    	PROPERTY_VERSIONEDFILE_REPOSITORY => $this
+	    ));
+	    
+	    return $returnValue;
+    }
+    
     /**
      * Create a unique file name on basis of the original one.
      *

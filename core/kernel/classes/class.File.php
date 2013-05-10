@@ -108,6 +108,7 @@ class core_kernel_classes_File
      * @param  string uri
      * @param  array options
      * @return core_kernel_classes_File
+     * @deprecated
      */
     public static function create($fileName, $filePath = null, $uri = "", $options = array())
     {
@@ -165,30 +166,34 @@ class core_kernel_classes_File
         $returnValue = (string) '';
 
         // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001367 begin
-        $filePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
-	    $fileNameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
-	    
 	    $props = $this->getPropertiesValues(array(
-	    	$filePathProp, $fileNameProp
+	    	new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_FILEPATH),
+	    	new core_kernel_classes_Property(PROPERTY_FILE_FILENAME),
+	    	new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_REPOSITORY)
 	    ));
-	    if (!isset($props[PROPERTY_FILE_FILEPATH]) || count($props[PROPERTY_FILE_FILEPATH]) == 0) {
+	    if (!isset($props[PROPERTY_VERSIONEDFILE_FILEPATH]) || count($props[PROPERTY_VERSIONEDFILE_FILEPATH]) == 0) {
 	    	throw new common_Exception('filepath missing for file '.$this->getUri());
 	    }
 	    if (!isset($props[PROPERTY_FILE_FILENAME]) || count($props[PROPERTY_FILE_FILENAME]) == 0) {
 	    	throw new common_Exception('filename missing for file '.$this->getUri());
 	    }
-	    $filePath = (string)current($props[PROPERTY_FILE_FILEPATH]);
-	    $fileName = (string)current($props[PROPERTY_FILE_FILENAME]);
-        
-        if(substr($filePath, strlen($returnValue)-1, 1) == DIRECTORY_SEPARATOR){
-            $filePath = substr($filePath, 0, strlen($filePath)-1);
-        }
-        
+	    if (!isset($props[PROPERTY_VERSIONEDFILE_REPOSITORY]) || count($props[PROPERTY_VERSIONEDFILE_REPOSITORY]) == 0) {
+	    	throw new common_Exception('filesource missing for file '.$this->getUri());
+	    }
+	    $relFilePath = (string)current($props[PROPERTY_VERSIONEDFILE_FILEPATH]);
+	    $fileName	= (string)current($props[PROPERTY_FILE_FILENAME]);
+        $fileSystem	= new core_kernel_fileSystem_FileSystem(current($props[PROPERTY_VERSIONEDFILE_REPOSITORY]));
+         
+	    $path = $fileSystem->getPath();
+	    if (!empty($relFilePath)) {
+	    	$path .= $relFilePath.DIRECTORY_SEPARATOR;
+	    }
+	    
         if(empty($fileName)) {
 	        //IF the resource is a folder resource, the absolute filepath should respect a specific format without slash as last char
-        	$returnValue = $filePath;
+        	$returnValue = rtrim($path, DIRECTORY_SEPARATOR);
         } else {
-	        $returnValue = $filePath . DIRECTORY_SEPARATOR . $fileName;
+	        $returnValue = $path . $fileName;
         }
         // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001367 end
 
@@ -206,7 +211,7 @@ class core_kernel_classes_File
     {
         // section 127-0-1-1--77b1997d:12bf34c2951:-8000:0000000000001386 begin
         if (!file_exists($this->getAbsolutePath())){
-        	throw new Exception(__('File not found '.$this->getAbsolutePath()));
+        	throw new common_exception_FileSystemError(__('File not found '.$this->getAbsolutePath()));
         }
     	return @file_get_contents($this->getAbsolutePath());
         // section 127-0-1-1--77b1997d:12bf34c2951:-8000:0000000000001386 end
@@ -283,9 +288,8 @@ class core_kernel_classes_File
 
         // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001675 begin
         
-        $filePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
-        $filePath = $this->getOnePropertyValue($filePathProp);
-        $path = explode(DIRECTORY_SEPARATOR, $filePath);
+        $filePath = $this->getAbsolutePath();
+        $path = explode(DIRECTORY_SEPARATOR, dirname($filePath));
         $breadCrumb = '';
         foreach($path as $bread){
         	$breadCrumb .= $bread.DIRECTORY_SEPARATOR;
@@ -294,7 +298,7 @@ class core_kernel_classes_File
         	}
         }
         
-        if(file_put_contents($this->getAbsolutePath(), $content)===false){
+        if(file_put_contents($filePath, $content)===false){
             $returnValue = false;
         }else{
             $returnValue = true;

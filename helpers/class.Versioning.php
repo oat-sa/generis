@@ -56,6 +56,7 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * @access public
  * @author Joel Bout, <joel.bout@tudor.lu>
  * @package helpers
+ * @deprecated
  */
 class helpers_Versioning
 {
@@ -76,17 +77,11 @@ class helpers_Versioning
      */
     public static function isEnabled()
     {
-        $returnValue = (bool) false;
-
-        // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F5F begin
-        $returnValue = count(self::getAvailableRepositories()) > 0;
-        // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F5F end
-
-        return (bool) $returnValue;
+        return true;
     }
 
     /**
-     * please use helpers_FileSource::getFileSources
+     * please use core_kernel_fileSystem_Cache::getEnabledFileSystems()
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
@@ -98,7 +93,7 @@ class helpers_Versioning
         $returnValue = array();
 
         // section 10-30-1--78--774a33b7:13ad0ae6f5f:-8000:0000000000001BB9 begin
-        $returnValue = helpers_FileSource::getFileSources();
+        $returnValue = core_kernel_fileSystem_Cache::getEnabledFileSystems();
         // section 10-30-1--78--774a33b7:13ad0ae6f5f:-8000:0000000000001BB9 end
 
         return (array) $returnValue;

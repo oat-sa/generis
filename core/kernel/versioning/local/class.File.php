@@ -168,7 +168,7 @@ class core_kernel_versioning_local_File
 
         // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 begin
         common_Logger::i(__FUNCTION__.' called on local directory', 'LOCALVCS');
-        unlink($path);
+        $returnValue = helpers_File::remove($path);
         // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 end
 
         return (bool) $returnValue;

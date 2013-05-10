@@ -36,7 +36,6 @@ class VersioningDisabledTestCase extends UnitTestCase {
 	private $repositoryLogin = GENERIS_VERSIONED_REPOSITORY_LOGIN;
 	private $repositoryPassword = GENERIS_VERSIONED_REPOSITORY_PASSWORD;
 	private $repositoryLabel = GENERIS_VERSIONED_REPOSITORY_LABEL;
-	private $repositoryComment = GENERIS_VERSIONED_REPOSITORY_COMMENT;
 	
 	public function __construct()
 	{
@@ -58,14 +57,13 @@ class VersioningDisabledTestCase extends UnitTestCase {
 	// Create repository by using generis API
 	public function createRepository()
 	{
-		return core_kernel_versioning_Repository::create(
+		return core_kernel_fileSystem_FileSystemFactory::createFileSystem(
 			new core_kernel_classes_Resource($this->repositoryType),
 			$this->repositoryUrl,
 			$this->repositoryLogin,
 			$this->repositoryPassword,
 			$this->repositoryPath,
-			$this->repositoryLabel,
-			$this->repositoryComment
+			$this->repositoryLabel
 		);
 	}
 	
@@ -76,14 +74,13 @@ class VersioningDisabledTestCase extends UnitTestCase {
 	// Create repository by using generis API
 	public function testCreateRepository()
 	{
-		$repository = core_kernel_versioning_Repository::create(
+		$repository = core_kernel_fileSystem_FileSystemFactory::createFileSystem(
 			new core_kernel_classes_Resource($this->repositoryType),
 			$this->repositoryUrl,
 			$this->repositoryLogin,
 			$this->repositoryPassword,
 			$this->repositoryPath,
-			$this->repositoryLabel,
-			$this->repositoryComment
+			$this->repositoryLabel
 		);
 		
 		$VersioningRepositoryUrlProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL);
@@ -103,14 +100,13 @@ class VersioningDisabledTestCase extends UnitTestCase {
 	
 	public function testRespositoryCheckout()
 	{
-		$repository = core_kernel_versioning_Repository::create(
+		$repository = core_kernel_fileSystem_FileSystemFactory::createFileSystem(
 			new core_kernel_classes_Resource(PROPERTY_GENERIS_VCS_TYPE_SUBVERSION),
 			$this->repositoryUrl,
 			$this->repositoryLogin,
 			$this->repositoryPassword,
 			$this->repositoryPath,
-			$this->repositoryLabel,
-			$this->repositoryComment
+			$this->repositoryLabel
 		);
 		
 		try{
@@ -132,7 +128,7 @@ class VersioningDisabledTestCase extends UnitTestCase {
 	public function testVersionedFileCreate()
 	{
 		$repository = $this->createRepository();
-	    $instance = core_kernel_versioning_File::createVersioned('file_test_case.txt', '/', $repository);
+	    $instance = $repository->createFile('file_test_case.txt', '/');
         $this->assertTrue($instance->delete(true));
 	    $this->assertTrue($repository->delete(true));
 	}
@@ -141,7 +137,7 @@ class VersioningDisabledTestCase extends UnitTestCase {
 	public function testVersionedFileAdd()
 	{
         $repository = $this->createRepository();
-	    $instance = core_kernel_versioning_File::createVersioned('file_test_case.txt', '/', $repository);
+	    $instance = $repository->createFile('file_test_case.txt', '/');
 	    $instance->setContent(__CLASS__.':'.__METHOD__.'()');
         
         //try to add the versioned file to the repository
@@ -185,7 +181,7 @@ class VersioningDisabledTestCase extends UnitTestCase {
 	public function testVersionedFileCommit()
 	{
 		$repository = $this->createRepository();
-	    $instance = core_kernel_versioning_File::createVersioned('file_test_case.txt', '/', $repository);
+	    $instance = $repository->createFile('file_test_case.txt', '/');
 	    $instance->setContent(__CLASS__.':'.__METHOD__.'()');
         
         //try to add the versioned file to the repository
@@ -229,7 +225,7 @@ class VersioningDisabledTestCase extends UnitTestCase {
 	public function testHistory()
 	{
 		$repository = $this->createRepository();
-	    $instance = core_kernel_versioning_File::createVersioned('file_test_case.txt', '/', $repository);
+	    $instance = $repository->createFile('file_test_case.txt', '/');
 	    $instance->setContent(__CLASS__.':'.__METHOD__.'()');
 		
         //try to get the history of a versioned file
@@ -261,7 +257,7 @@ class VersioningDisabledTestCase extends UnitTestCase {
 	public function testRevertTo()
 	{
 		$repository = $this->createRepository();
-	    $instance = core_kernel_versioning_File::createVersioned('file_test_case.txt', '/', $repository);
+	    $instance = $repository->createFile('file_test_case.txt', '/');
 	    $instance->setContent(__CLASS__.':'.__METHOD__.'()');
 		
         //try to get the history of a versioned file

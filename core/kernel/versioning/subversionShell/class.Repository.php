@@ -191,7 +191,7 @@ class core_kernel_versioning_subversionWindows_Repository
         
         $repositoryUrl = $vcs->getUrl();
         $relativePath = substr($target, strlen($repositoryUrl));
-        $folder = core_kernel_versioning_File::createVersioned('', $relativePath, $vcs);
+        $folder = $vcs->createFile('', $relativePath);
         $folder->update();
         
         //Save a resource

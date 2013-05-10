@@ -25,17 +25,34 @@ require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 
 class FileTestCase extends UnitTestCase {
+	
+	private $fsPath;
+	/**
+	 * @var core_kernel_versioning_Repository
+	 */
+	private $fileSource;
     
     public function setUp()
     {
         GenerisTestRunner::initTest();
+        $this->fsPath = sys_get_temp_dir().DIRECTORY_SEPARATOR.'taoFileTestCase'.DIRECTORY_SEPARATOR;
+        mkdir($this->fsPath);
+        $this->fileSource = core_kernel_fileSystem_FileSystemFactory::createFileSystem(
+        	new core_kernel_classes_Resource(INSTANCE_GENERIS_VCS_TYPE_LOCAL), '', '', '', $this->fsPath, 'testFileSource', true
+        );
     }
     
-	public function testIsFile()
+    public function tearDown()
+    {
+        parent::tearDown();
+        $this->fileSource->delete();
+        helpers_File::remove($this->fsPath);
+    }
+    
+    public function testIsFile()
 	{
 	    $clazz = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
 	    $instance = $clazz->createInstance('toto.txt','toto');
-	    $filePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
 	    $fileNameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
 	    $instance->setPropertyValue($fileNameProp,'file://toto.txt');
 	    $this->assertTrue(core_kernel_classes_File::isFile($instance));
@@ -45,64 +62,73 @@ class FileTestCase extends UnitTestCase {
 	
 	public function testCreate()
 	{
-	    $file = core_kernel_classes_File::create('toto.txt');
+	    $file = $this->fileSource->createFile('toto.txt');
 	    $this->assertTrue($file instanceof core_kernel_classes_File);
-	    $filePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
 	    $fileNameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
-	    $filePath = $file->getOnePropertyValue($filePathProp);
 	    $fileName = $file->getOnePropertyValue($fileNameProp);
-	    $this->assertTrue($filePath == GENERIS_FILES_PATH);
-	    $this->assertTrue($fileName == 'toto.txt');
+	    $this->assertEqual($fileName,'toto.txt');
+	    $this->assertEqual($file->getAbsolutePath(),$this->fsPath.'toto.txt');
 	    $this->assertTrue($file->delete());
 	    
-	    $file = core_kernel_classes_File::create('toto.txt','/tmp/');
-	    $filePath = $file->getOnePropertyValue($filePathProp);
-	    $this->assertTrue($filePath == '/tmp/');
+	    
+	    $file = $this->fileSource->createFile('toto.txt','/tmp/');
+	    $this->assertEqual($file->getAbsolutePath(),$this->fsPath.'tmp'.DIRECTORY_SEPARATOR.'toto.txt');
 	    $this->assertTrue($file->delete());
 	    
 	    // Create dir
-	    $dir = core_kernel_classes_File::create('', '/tmp/myDir');
+	    $dir = $this->fileSource->createFile('', '/tmp/myDir');
+	    $this->assertEqual($dir->getAbsolutePath(), $this->fsPath.'tmp/myDir');
+	    $this->assertTrue($dir->delete());
 	}
 	
 	public function testGetAbsolutePath()
 	{
-	    $file = core_kernel_classes_File::create('toto.txt');
+	    $file = $this->fileSource->createFile('toto.txt');
 	    $absolutePath = $file->getAbsolutePath();
-	    $this->assertEqual($absolutePath, GENERIS_FILES_PATH . 'toto.txt');
+	    $this->assertEqual($absolutePath, $this->fsPath.'toto.txt');
 	    $this->assertTrue($file->delete());
 	    
-	    $file = core_kernel_classes_File::create('toto.txt', DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR);	    
+	    $file = $this->fileSource->createFile('toto.txt', DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR);	    
 	    $absolutePath = $file->getAbsolutePath();
-	    $this->assertEqual($absolutePath, DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'toto.txt');
+	    $this->assertEqual($absolutePath, $this->fsPath. 'tmp' . DIRECTORY_SEPARATOR . 'toto.txt');
 	    
 	    $this->assertTrue($file->delete());
 	}
 	
 	public function testGetFileInfo()
 	{
-	    $file = core_kernel_classes_File::create('toto.txt');
+	    $file = $this->fileSource->createFile('toto.txt');
 	    $file->setContent('toto is kite surfing !!! le ouf');
 	    $fileInfo = $file->getFileInfo();
 	    $this->assertIsA($fileInfo, 'SplFileInfo');
 		$this->assertTrue($file->delete());
 		
-		$file = core_kernel_classes_File::create('',sys_get_temp_dir());
+		$folderName = 'folder'.crc32(time());
+		mkdir($this->fsPath.$folderName);
+		$file = $this->fileSource->createFile('', $folderName);
+		
 	    $fileInfo = $file->getFileInfo();
 	    $this->assertIsA($fileInfo,'SplFileInfo');
 	    $this->assertTrue($fileInfo->isDir());
 	    $this->assertTrue($file->delete());
+	    $this->assertFalse($fileInfo->isDir());
 	}
 	
 	public function testSetGetFileContent()
 	{
-	    $file = core_kernel_classes_File::create('toto.txt', null);
+	    $file = $this->fileSource->createFile('toto.txt', null);
 	    $file->setContent('toto is kite surfing !!! le ouf');
 	    $fileContent = $file->getFileContent();
 	    $this->assertEqual($fileContent,'toto is kite surfing !!! le ouf');
 		$this->assertTrue($file->delete(true));
 		
-		$file = core_kernel_classes_File::create('',sys_get_temp_dir());
-	    $fileContent = $file->getFileContent();
+		$file = $this->fileSource->createFile('',sys_get_temp_dir());
+		try {
+	    	$fileContent = $file->getFileContent();
+	    	$this->fail('no Exception thrown on empty file content');
+		} catch (common_Exception $e) {
+			$this->pass();
+		}
 	    $this->assertTrue($file->delete());
 	}
     
@@ -111,11 +137,11 @@ class FileTestCase extends UnitTestCase {
     {
     	// Create a correct path...
     	$file = 'FileTestCase_testResourceFileExists';
-    	$dir = rtrim(sys_get_temp_dir(), "\\/") . DIRECTORY_SEPARATOR;
-    	$path = $dir . $file;
+    	$dir = '';
+    	$path = $this->fsPath . $dir . $file;
     	
         $this->assertFalse(helpers_File::resourceExists($path));
-        $file = core_kernel_classes_File::create($file, $dir, 'FileTestCase_testResourceFileExists_URI');
+        $file = $this->fileSource->createFile($file, $dir);
         $this->assertTrue(helpers_File::resourceExists($path));
         $this->assertFalse(helpers_File::resourceExists('test'));
         $file->delete();
@@ -125,11 +151,11 @@ class FileTestCase extends UnitTestCase {
     public function testGetResourceFile()
     {
     	$file = 'FileTestCase_testResourceFileExists'; 
-    	$dir = rtrim(sys_get_temp_dir(), "\\/") . DIRECTORY_SEPARATOR;
-    	$path = $dir . $file;
-    	
+    	$dir = 'subdir' . DIRECTORY_SEPARATOR;
+    	$path = $this->fsPath . $dir . $file;
+    	    	
         $this->assertNull(helpers_File::getResource($path));
-        $file = core_kernel_classes_File::create($file, $dir, 'FileTestCase_testResourceFileExists_URI');
+        $file = $this->fileSource->createFile($file, $dir);
         $searchedFile = helpers_File::getResource($path);
         $this->assertNotNull($searchedFile);
         $this->assertTrue($searchedFile instanceof core_kernel_classes_File);
