@@ -943,7 +943,6 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = null;
 
         // section 127-0-1-1--49b11f4f:135c41c62e3:-8000:0000000000001947 begin
-        common_Logger::d('creating with proprties '.implode(',', array_keys($properties)));
         if (isset($properties[RDF_TYPE])) {
         	throw new core_kernel_persistence_Exception('Additional types in createInstanceWithProperties not permited');
         }
