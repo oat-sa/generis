@@ -740,7 +740,7 @@ class ClassTestCase extends UnitTestCase {
 		$taoClass = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
 		$creativeWorkClass = $taoClass->createSubClass('Creative Work');
 		$authorProperty = $taoClass->createProperty('Author');
-		$relatedWorksProperty = $taoClass->createProperty('Related Works');
+		$relatedWorksProperty = $creativeWorkClass->createProperty('Related Works');
 		
 		$bookLotr = $creativeWorkClass->createInstance('The Lord of The Rings (book)');
 		$bookLotr->setPropertyValue($authorProperty, 'J.R.R. Tolkien');
@@ -773,6 +773,9 @@ class ClassTestCase extends UnitTestCase {
 		$this->assertEqual(count($creativeWorkClass->getInstances()), 0);
 		$this->assertFalse($bookLotr->exists());
 		$this->assertFalse($movieMinorityReport->exists());
+		
+		$this->assertTrue($authorProperty->delete());
+		$this->assertTrue($relatedWorksProperty->delete());
 		
 		$creativeWorkClass->delete(true);
 	}
