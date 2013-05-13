@@ -50,7 +50,7 @@ class common_profiler_Context
 		}
 		
 		$this->epoch = time();
-		$this->user = wfEngine_models_classes_UserService::singleton()->getCurrentUser();
+		$this->user = core_kernel_classes_Session::singleton()->getUserLogin();
 		$this->script = $_SERVER['PHP_SELF'];
 		$this->system = new common_profiler_System();
 	}
@@ -65,7 +65,6 @@ class common_profiler_Context
 	
 	public function toArray(){
 		$returnValue = get_object_vars($this);
-		$returnValue['user'] = is_null($this->user)?'n/a':$this->user->getUri();
 		$returnValue['system'] = $this->system->toArray();
 		return $returnValue;
 	}

@@ -45,6 +45,14 @@ class common_profiler_archiver_UdpArchiver implements common_profiler_archiver_A
      */
     public $port = 27072;
 	
+    /**
+     * Short description of attribute resource
+     *
+     * @access public
+     * @var resource
+     */
+    public $resource = null;
+	
 	public function init($configuration){
 		
 		$returnValue = false;
@@ -57,7 +65,9 @@ class common_profiler_archiver_UdpArchiver implements common_profiler_archiver_A
     		$this->port = intval($configuration['udp_port']);
     	}
 		
+		$this->resource = null;
 		$returnValue = true;
+		
 		return $returnValue;
 	}
 	
