@@ -75,9 +75,12 @@ class core_kernel_classes_Resource
 
     /**
      * long uri as string (including namespace)
+     * direct access to this uri is deprecated,
+     * please use getUri()
      *
      * @access public
      * @var string
+     * @deprecated
      */
     public $uriResource = '';
 
