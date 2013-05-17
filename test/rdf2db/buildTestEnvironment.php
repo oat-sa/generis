@@ -215,8 +215,8 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 				
 					$activity = $proc->currentActivity[0];
 
-					$this->out("<strong>".$activity->label."</strong>", true);
-					$this->assertTrue($activity->label == 'activity'.$i);
+					$this->out("<strong>".$activity->getLabel()."</strong>", true);
+					$this->assertTrue($activity->getLabel() == 'activity'.$i);
 
 					$currentTokens = $this->service->getCurrents($proc->resource);
 
@@ -333,7 +333,7 @@ class BuildTestEnvironmentTestCase extends UnitTestCase {
 							
 							$activity = $proc->currentActivity[0];
 
-							$this->out("<strong>".$activity->label."</strong>", true);
+							$this->out("<strong>".$activity->getLabel()."</strong>", true);
 
 							$currentTokens = $this->service->getCurrents($proc->resource);
 							
