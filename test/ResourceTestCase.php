@@ -472,13 +472,9 @@ class ResourceTestCase extends UnitTestCase{
 	public function testGetComment()
 	{
 		$inst = new core_kernel_classes_Resource(CLASS_GENERIS_RESOURCE);
-		$this->assertFalse($inst->label == 'generis_Ressource');
 		$this->assertTrue($inst->getLabel()== 'generis_Ressource');
-		$this->assertTrue($inst->label == 'generis_Ressource');
 	  
-		$this->assertFalse($inst->comment == 'generis_Ressource');
 		$this->assertTrue($inst->getComment() == 'generis_Ressource');
-		$this->assertTrue($inst->comment == 'generis_Ressource');
 	}
 	
 	public function testGetLastModificationDate()

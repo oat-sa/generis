@@ -364,7 +364,7 @@ class core_kernel_rules_Expression
 					}
 					default : {
 						var_dump($this);
-						throw new common_Exception('Expression ' . $this->label . ' do not have knowm operator');
+						throw new common_Exception('Expression ' . $this->getLabel() . ' do not have knowm operator');
 					}
 				}
 			}
@@ -570,7 +570,7 @@ class core_kernel_rules_Expression
 			
 			default: {
 				var_dump($this);
-				throw new common_Exception('Expression ' . $this->label . ' do not have knowm operator');
+				throw new common_Exception('Expression ' . $this->getLabel() . ' do not have knowm operator');
 			}
 		}
 		

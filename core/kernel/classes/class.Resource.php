@@ -75,7 +75,7 @@ class core_kernel_classes_Resource
 
     /**
      * long uri as string (including namespace)
-     * direct access to this uri is deprecated,
+     * direct access to the uri is deprecated,
      * please use getUri()
      *
      * @access public
@@ -86,17 +86,23 @@ class core_kernel_classes_Resource
 
     /**
      * The resource label
+     * direct access to the label is deprecated,
+     * please use getLabel() 
      *
      * @access public
      * @var string
+     * @deprecated
      */
     public $label = '';
 
     /**
      * The resource comment
+     * direct access to the comment is deprecated,
+     * please use getComment() 
      *
      * @access public
      * @var string
+     * @deprecated
      */
     public $comment = '';
 
