@@ -93,7 +93,7 @@ class common_ext_Extension
     {
 		$this->id = $id;
 		$this->installed = $installed;
-    	$manifestFile = EXTENSION_PATH.DIRECTORY_SEPARATOR.$id.DIRECTORY_SEPARATOR.MANIFEST_NAME;
+    	$manifestFile = $this->getDir().MANIFEST_NAME;
 		if(is_file($manifestFile)){
 			$this->manifest = new common_ext_Manifest($manifestFile);
 		} else {
@@ -344,7 +344,7 @@ class common_ext_Extension
     {
         $returnValue = (string) '';
 
-		$returnValue = EXTENSION_PATH .DIRECTORY_SEPARATOR.$this->getID().DIRECTORY_SEPARATOR;
+		$returnValue = EXTENSION_PATH.$this->getID().DIRECTORY_SEPARATOR;
 
         return (string) $returnValue;
     }
