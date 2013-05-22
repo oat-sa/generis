@@ -76,7 +76,7 @@ interface core_kernel_versioning_FileInterface
      * @return boolean
      * @see core_kernel_versioning_File::commit()
      */
-    public function commit( core_kernel_classes_File $resource, $message, $path, $recursive = false);
+    public function commit( core_kernel_file_File $resource, $message, $path, $recursive = false);
 
     /**
      * Short description of method update
@@ -89,7 +89,7 @@ interface core_kernel_versioning_FileInterface
      * @return boolean
      * @see core_kernel_versioning_File::update()
      */
-    public function update( core_kernel_classes_File $resource, $path, $revision = null);
+    public function update( core_kernel_file_File $resource, $path, $revision = null);
 
     /**
      * Short description of method revert
@@ -102,7 +102,7 @@ interface core_kernel_versioning_FileInterface
      * @return boolean
      * @see core_kernel_versioning_File::revert()
      */
-    public function revert( core_kernel_classes_File $resource, $revision = null, $msg = "");
+    public function revert( core_kernel_file_File $resource, $revision = null, $msg = "");
 
     /**
      * Short description of method delete
@@ -114,7 +114,7 @@ interface core_kernel_versioning_FileInterface
      * @return boolean
      * @see core_kernel_versioning_File::delete()
      */
-    public function delete( core_kernel_classes_File $resource, $path);
+    public function delete( core_kernel_file_File $resource, $path);
 
     /**
      * Short description of method add
@@ -128,7 +128,7 @@ interface core_kernel_versioning_FileInterface
      * @return boolean
      * @see core_kernel_versioning_File::add()
      */
-    public function add( core_kernel_classes_File $resource, $path, $recursive = false, $force = false);
+    public function add( core_kernel_file_File $resource, $path, $recursive = false, $force = false);
 
     /**
      * Short description of method getHistory
@@ -140,7 +140,7 @@ interface core_kernel_versioning_FileInterface
      * @return array
      * @see core_kernel_versioning_File::gethistory()
      */
-    public function getHistory( core_kernel_classes_File $resource, $path);
+    public function getHistory( core_kernel_file_File $resource, $path);
 
     /**
      * Short description of method getStatus
@@ -152,7 +152,7 @@ interface core_kernel_versioning_FileInterface
      * @param  array options
      * @return int
      */
-    public function getStatus( core_kernel_classes_File $resource, $path, $options = array());
+    public function getStatus( core_kernel_file_File $resource, $path, $options = array());
 
     /**
      * Short description of method resolve
@@ -164,7 +164,7 @@ interface core_kernel_versioning_FileInterface
      * @param  string version
      * @return boolean
      */
-    public function resolve( core_kernel_classes_File $resource, $path, $version);
+    public function resolve( core_kernel_file_File $resource, $path, $version);
 
 } /* end of interface core_kernel_versioning_FileInterface */
 

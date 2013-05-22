@@ -63,17 +63,17 @@ define('GENERIS_FALSE',							GENERIS_NS . '#False' , true);
 define('PROPERTY_IS_LG_DEPENDENT',				GENERIS_NS . '#is_language_dependent' , true);
 define('CLASS_GENERIS_USER' , 					GENERIS_NS . '#User' , true) ;
 define('CLASS_GENERIS_RESOURCE' , 				GENERIS_NS . '#generis_Ressource' , true) ;
-define('CLASS_GENERIS_FILE' , 				    GENERIS_NS . '#File' , true) ;
-define('PROPERTY_FILE_FILENAME' , 				GENERIS_NS . '#FileName' , true) ;
-define('PROPERTY_FILE_FILEPATH' , 				GENERIS_NS . '#FilePath' , true) ;
 define('PROPERTY_MULTIPLE',						GENERIS_NS . '#Multiple' , true) ;
 define('PROPERTY_COMMENT',						GENERIS_NS . '#generisRessourceComment' , true);
 
+#file
+define('CLASS_GENERIS_FILE' , 					GENERIS_NS . '#VersionedFile' , true) ;
+define('PROPERTY_FILE_FILENAME' , 				GENERIS_NS . '#FileName' , true) ;
+define('PROPERTY_FILE_FILEPATH' , 				GENERIS_NS . '#VersionedFilePath' , true) ;
+define('PROPERTY_FILE_FILESYSTEM' ,				GENERIS_NS . '#VersionedFileRepository' , true) ;
+
 #versioned file
-define('CLASS_GENERIS_VERSIONEDFILE' , 			GENERIS_NS . '#VersionedFile' , true) ;
 define('PROPERTY_VERSIONEDFILE_VERSION' , 		GENERIS_NS . '#VersionedFileVersion' , true) ;
-define('PROPERTY_VERSIONEDFILE_REPOSITORY' ,	GENERIS_NS . '#VersionedFileRepository' , true) ;
-define('PROPERTY_VERSIONEDFILE_FILEPATH' , 		GENERIS_NS . '#VersionedFilePath' , true) ;
 
 #Versioned Repository
 define('CLASS_GENERIS_VERSIONEDREPOSITORY' ,				GENERIS_NS . '#VersionedRepository' , true) ;
@@ -216,6 +216,21 @@ define('RDF_CLASS',								'http://www.w3.org/2000/01/rdf-schema#Class',true);
  * @deprecated
  */
 define('RDF_RESOURCE',							'http://www.w3.org/2000/01/rdf-schema#Resource',true);
+/**
+ * replaced by PROPERTY_FILE_FILESYSTEM
+ * @deprecated
+ */
+define('PROPERTY_VERSIONEDFILE_REPOSITORY' ,	PROPERTY_FILE_FILESYSTEM) ;
+/**
+ * replaced by PROPERTY_FILE_FILEPATH
+ * @deprecated
+ */
+define('PROPERTY_VERSIONEDFILE_FILEPATH' , 		PROPERTY_FILE_FILEPATH) ;
+/**
+ * replaced by CLASS_GENERIS_FILE
+ * @deprecated
+ */
+define('CLASS_GENERIS_VERSIONEDFILE' , 				    CLASS_GENERIS_FILE) ;
 
 
 ?>

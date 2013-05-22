@@ -55,15 +55,15 @@ class FileTestCase extends UnitTestCase {
 	    $instance = $clazz->createInstance('toto.txt','toto');
 	    $fileNameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
 	    $instance->setPropertyValue($fileNameProp,'file://toto.txt');
-	    $this->assertTrue(core_kernel_classes_File::isFile($instance));
-	    $this->assertFalse(core_kernel_classes_File::isFile($clazz));
+	    $this->assertTrue(core_kernel_file_File::isFile($instance));
+	    $this->assertFalse(core_kernel_file_File::isFile($clazz));
 	    $instance->delete();
 	}
 	
 	public function testCreate()
 	{
 	    $file = $this->fileSource->createFile('toto.txt');
-	    $this->assertTrue($file instanceof core_kernel_classes_File);
+	    $this->assertTrue($file instanceof core_kernel_file_File);
 	    $fileNameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
 	    $fileName = $file->getOnePropertyValue($fileNameProp);
 	    $this->assertEqual($fileName,'toto.txt');
@@ -158,7 +158,7 @@ class FileTestCase extends UnitTestCase {
         $file = $this->fileSource->createFile($file, $dir);
         $searchedFile = helpers_File::getResource($path);
         $this->assertNotNull($searchedFile);
-        $this->assertTrue($searchedFile instanceof core_kernel_classes_File);
+        $this->assertTrue($searchedFile instanceof core_kernel_file_File);
         $file->delete();
         $this->assertNull(helpers_File::getResource($path));
     }

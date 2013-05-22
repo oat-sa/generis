@@ -400,9 +400,9 @@ class core_kernel_versioning_Repository
         $returnValue = (bool) false;
 
         // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F65 begin
-        $classVersionedFiles = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDFILE);
+        $classVersionedFiles = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
         $files = $classVersionedFiles->searchInstances(array(
-        	PROPERTY_VERSIONEDFILE_REPOSITORY => $this
+        	PROPERTY_FILE_FILESYSTEM => $this
         ), array('like' => false));
         $rootFile = $this->getRootFile();
         $used = false;
@@ -423,37 +423,6 @@ class core_kernel_versioning_Repository
         // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F65 end
 
         return (bool) $returnValue;
-    }
-
-    /**
-     * This method is deprecated since version 2.4. You must now use the
-     * method to ask a repository to deal with your file.
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @deprecated
-     * @param  File file
-     * @param  string remotePath
-     * @return core_kernel_versioning_File
-     */
-    public function addFile( core_kernel_classes_File $file, $remotePath = '')
-    {
-        $returnValue = null;
-
-        // section 10-30-1--78-e79fa48:13af3e783af:-8000:0000000000005035 begin
-		
-		$destination = $this->getPath().$remotePath;
-		$source = $file->getAbsolutePath();
-		if(tao_helpers_File::move($source, $destination)){
-			$returnValue = $this->createFile('', $remotePath);
-			if(!is_null($returnValue)){
-				$file->delete();
-			}
-		}
-		
-        // section 10-30-1--78-e79fa48:13af3e783af:-8000:0000000000005035 end
-
-        return $returnValue;
     }
 
     /**
@@ -524,13 +493,13 @@ class core_kernel_versioning_Repository
      */
     public function createFile($filename, $relativeFilePath = '') {
     	
-        $resource = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDFILE));
+        $resource = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(CLASS_GENERIS_FILE));
 	    $returnValue = new core_kernel_versioning_File($resource);
 	    
 	    $returnValue->setPropertiesValues(array(
 	    	PROPERTY_FILE_FILENAME => $filename,
-	    	PROPERTY_VERSIONEDFILE_FILEPATH => trim($relativeFilePath, DIRECTORY_SEPARATOR),
-	    	PROPERTY_VERSIONEDFILE_REPOSITORY => $this
+	    	PROPERTY_FILE_FILEPATH => trim($relativeFilePath, DIRECTORY_SEPARATOR),
+	    	PROPERTY_FILE_FILESYSTEM => $this
 	    ));
 	    
 	    return $returnValue;

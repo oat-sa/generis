@@ -18,40 +18,6 @@
  *               
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * Manage your versioned files as resources in TAO
- *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
- * @package core
- * @subpackage kernel_versioning
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * include core_kernel_classes_File
- *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
- */
-require_once('core/kernel/classes/class.File.php');
-
-/**
- * include core_kernel_versioning_FileProxy
- *
- * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
- */
-require_once('core/kernel/versioning/class.FileProxy.php');
-
-/* user defined includes */
-// section 127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001668-includes begin
-// section 127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001668-includes end
 
 /* user defined constants */
 // section 127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001668-constants begin
@@ -84,7 +50,7 @@ const VERSIONING_FILE_VERSION_BASE              = 'base';
  * @subpackage kernel_versioning
  */
 class core_kernel_versioning_File
-    extends core_kernel_classes_File
+    extends core_kernel_file_File
 {
     // --- ASSOCIATIONS ---
 
@@ -105,7 +71,7 @@ class core_kernel_versioning_File
         $returnValue = null;
 
         // section 10-30-1--78--1698032:13afe62e559:-8000:00000000000030B6 begin
-        $returnValue = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDFILE);
+        $returnValue = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
         // section 10-30-1--78--1698032:13afe62e559:-8000:00000000000030B6 end
 
         return $returnValue;
@@ -150,12 +116,12 @@ class core_kernel_versioning_File
         $filePath = substr($filePath,strlen($filePath)-1,1)==DIRECTORY_SEPARATOR ? $filePath : $filePath.DIRECTORY_SEPARATOR;
         
         //check if a resource with the same path exists yet in the repository
-        $clazz = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDFILE);
+        $clazz = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
         $options = array('like' => false, 'recursive' => true);
 		$propertyFilter = array(
 			PROPERTY_FILE_FILENAME => $filename,
-			PROPERTY_VERSIONEDFILE_FILEPATH => $filePath,
-			PROPERTY_VERSIONEDFILE_REPOSITORY => $repository
+			PROPERTY_FILE_FILEPATH => $filePath,
+			PROPERTY_FILE_FILESYSTEM => $repository
 		);
         $sameNameFiles = $clazz->searchInstances($propertyFilter, $options);
         if(!empty($sameNameFiles)){
@@ -166,11 +132,11 @@ class core_kernel_versioning_File
         $returnValue = new core_kernel_versioning_File($instance);
         
         // Add versioned file path, path of the file in the repository
-	    $versionedFilePathProp = new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_FILEPATH);
+	    $versionedFilePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
 	    $instance->setPropertyValue($versionedFilePathProp, $relativeFilePath);
 	    
 	    // Add repository
-	    $versionedFileRepositoryProp = new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_REPOSITORY);
+	    $versionedFileRepositoryProp = new core_kernel_classes_Property(PROPERTY_FILE_FILESYSTEM);
 	    $instance->setPropertyValue($versionedFileRepositoryProp, $repository);
 	    */
 
@@ -191,7 +157,7 @@ class core_kernel_versioning_File
 
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000024B1 begin
         
-        $returnValue = $resource->hasType(new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDFILE));
+        $returnValue = $resource->hasType(new core_kernel_classes_Class(CLASS_GENERIS_FILE));
         
         // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000024B1 end
 
@@ -384,7 +350,7 @@ class core_kernel_versioning_File
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016DB begin
         
-        $repository = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_REPOSITORY));
+        $repository = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_FILE_FILESYSTEM));
         if(!is_null($repository)){
         	$returnValue = new core_kernel_versioning_Repository($repository);
         }
@@ -412,7 +378,7 @@ class core_kernel_versioning_File
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F5 begin
         
         //Check if the path is versioned
-        $relativePath = (string) $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_FILEPATH));
+        $relativePath = (string) $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH));
         $fileName = (string) $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_FILE_FILENAME));
         $filePath = $this->getRepository()->getPath() . DIRECTORY_SEPARATOR . $relativePath;
         $relativeFilePathExploded = explode(DIRECTORY_SEPARATOR, $relativePath);
@@ -507,7 +473,7 @@ class core_kernel_versioning_File
 
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:0000000000001708 begin
         
-       	$versionedFilePathProp = new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_FILEPATH);
+       	$versionedFilePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
 	    $returnValue = $this->getOnePropertyValue($versionedFilePathProp);
         
         // section 127-0-1-1--57fd8084:132ecf4b934:-8000:0000000000001708 end

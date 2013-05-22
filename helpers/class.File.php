@@ -82,7 +82,7 @@ class helpers_File
      * @access public
      * @author Lionel Lecaque, <lionel@taotesting.com>
      * @param  string path
-     * @return core_kernel_classes_File
+     * @return core_kernel_file_File
      */
     public static function getResource($path = "")
     {
@@ -123,9 +123,9 @@ class helpers_File
 	        
 	        $clazz = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
 	        $propertyFilters = array(
-	            PROPERTY_VERSIONEDFILE_FILEPATH		=>$filePath
-	            , PROPERTY_FILE_FILENAME			=>$fileName
-	            , PROPERTY_VERSIONEDFILE_REPOSITORY => $fileSource
+	            PROPERTY_FILE_FILEPATH		=>$filePath
+	            , PROPERTY_FILE_FILENAME	=>$fileName
+	            , PROPERTY_FILE_FILESYSTEM	=> $fileSource
 	        );
 	        $resources = $clazz->searchInstances($propertyFilters, array('recursive'=>true, 'like'=>false));
 			foreach($resources as $resource){
