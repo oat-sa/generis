@@ -113,7 +113,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	// Create version file sample by creating triples
 	protected function createVersionedFile_byTriple()
 	{
-		$clazz = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDFILE);
+		$clazz = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
 	    $instance = $clazz->createInstance('myVersionedFile');
 	    
 	    // Add version number
@@ -125,7 +125,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	    $instance->setPropertyValue($versionedFilenameProp, 'myFile.txt');
 	    
 	    // Add repository
-	    $versionedFileRepositoryProp = new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_REPOSITORY);
+	    $versionedFileRepositoryProp = new core_kernel_classes_Property(PROPERTY_FILE_FILESYSTEM);
 	    $instance->setPropertyValue($versionedFileRepositoryProp, $this->getDefaultRepository());
 	    
 	    $instance = new core_kernel_versioning_File($instance->getUri());
@@ -179,8 +179,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 
 	public function testModel()
 	{	
-		$this->assertTrue(defined('CLASS_GENERIS_VERSIONEDFILE'));
-		$this->assertTrue(CLASS_GENERIS_VERSIONEDFILE);
+		$this->assertTrue(defined('CLASS_GENERIS_FILE'));
 	}
 	
 	public function testRepositoryModel()
@@ -262,7 +261,7 @@ class VersioningEnabledTestCase extends UnitTestCase {
 	    $versionedFileVersionProp = new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_VERSION);
 		$this->assertEqual((string)$versionedFile->getOnePropertyValue($versionedFileVersionProp), '1');
 		
-	    $versionedFileRepositoryProp = new core_kernel_classes_Property(PROPERTY_VERSIONEDFILE_REPOSITORY);
+	    $versionedFileRepositoryProp = new core_kernel_classes_Property(PROPERTY_FILE_FILESYSTEM);
 		$this->assertEqual($versionedFile->getOnePropertyValue($versionedFileRepositoryProp)->getUri(), $this->getDefaultRepository()->getUri());
 		
 		$this->assertTrue($versionedFile->delete());

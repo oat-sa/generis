@@ -84,7 +84,7 @@ class common_exception_UniqueFileResource
      * @param  File resource
      * @return mixed
      */
-    public function __construct( core_kernel_classes_File $resource)
+    public function __construct( core_kernel_file_File $resource)
     {
         // section 127-0-1-1-602f558a:134cbda6031:-8000:0000000000001900 begin
 

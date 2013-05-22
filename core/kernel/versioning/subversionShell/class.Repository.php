@@ -176,7 +176,7 @@ class core_kernel_versioning_subversionWindows_Repository
      * @param  string target
      * @param  string message
      * @param  array options
-     * @return core_kernel_classes_File
+     * @return core_kernel_file_File
      */
     public function import( core_kernel_versioning_Repository $vcs, $src, $target, $message = "", $options = array())
     {

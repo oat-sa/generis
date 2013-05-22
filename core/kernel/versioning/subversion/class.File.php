@@ -61,7 +61,7 @@ class core_kernel_versioning_subversion_File
      * @return boolean
      * @see core_kernel_versioning_File::commit()
      */
-    public function commit( core_kernel_classes_File $resource, $message, $path, $recursive = false)
+    public function commit( core_kernel_file_File $resource, $message, $path, $recursive = false)
     {
         $returnValue = (bool) false;
 
@@ -88,7 +88,7 @@ class core_kernel_versioning_subversion_File
      * @return boolean
      * @see core_kernel_versioning_File::update()
      */
-    public function update( core_kernel_classes_File $resource, $path, $revision = null)
+    public function update( core_kernel_file_File $resource, $path, $revision = null)
     {
         $returnValue = (bool) false;
 
@@ -115,7 +115,7 @@ class core_kernel_versioning_subversion_File
      * @return boolean
      * @see core_kernel_versioning_File::revert()
      */
-    public function revert( core_kernel_classes_File $resource, $revision = null, $msg = "")
+    public function revert( core_kernel_file_File $resource, $revision = null, $msg = "")
     {
         $returnValue = (bool) false;
 
@@ -202,7 +202,7 @@ class core_kernel_versioning_subversion_File
      * @return boolean
      * @see core_kernel_versioning_File::delete()
      */
-    public function delete( core_kernel_classes_File $resource, $path)
+    public function delete( core_kernel_file_File $resource, $path)
     {
         $returnValue = (bool) false;
 
@@ -232,7 +232,7 @@ class core_kernel_versioning_subversion_File
      * @return boolean
      * @see core_kernel_versioning_File::add()
      */
-    public function add( core_kernel_classes_File $resource, $path, $recursive = false, $force = false)
+    public function add( core_kernel_file_File $resource, $path, $recursive = false, $force = false)
     {
         $returnValue = (bool) false;
 
@@ -262,7 +262,7 @@ class core_kernel_versioning_subversion_File
      * @return array
      * @see core_kernel_versioning_File::gethistory()
      */
-    public function getHistory( core_kernel_classes_File $resource, $path)
+    public function getHistory( core_kernel_file_File $resource, $path)
     {
         $returnValue = array();
 
@@ -290,7 +290,7 @@ class core_kernel_versioning_subversion_File
      * @param  array options
      * @return int
      */
-    public function getStatus( core_kernel_classes_File $resource, $path, $options = array())
+    public function getStatus( core_kernel_file_File $resource, $path, $options = array())
     {
         $returnValue = (int) 0;
 
@@ -369,7 +369,7 @@ class core_kernel_versioning_subversion_File
      * @param  string version
      * @return boolean
      */
-    public function resolve( core_kernel_classes_File $resource, $path, $version)
+    public function resolve( core_kernel_file_File $resource, $path, $version)
     {
         $returnValue = (bool) false;
 
