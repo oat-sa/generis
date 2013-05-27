@@ -297,15 +297,15 @@ class core_kernel_impl_ApiModelOO
         
         
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$subject = mysql_real_escape_string($uriResource);
+		$subject = $dbWrapper->dbConnector->quote($uriResource);
 		
 		$baseNs = array(
 						'xmlns:rdf'		=> 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
 						'xmlns:rdfs'	=> 'http://www.w3.org/2000/01/rdf-schema#'
 					);
 		
-		$query = "SELECT `models`.`modelID`, `models`.`modelURI` FROM `models` INNER JOIN `statements` ON `statements`.`modelID` = `models`.`modelID`
-											WHERE `statements`.`subject`= '{$subject}'";
+		$query = 'SELECT "models"."modelID", "models"."modelURI" FROM "models" INNER JOIN "statements" ON "statements"."modelID" = "models"."modelID"
+											WHERE "statements"."subject" = ' . $subject;
 		$query = $dbWrapper->limitStatement($query, 1);
 		$result = $dbWrapper->query($query);
 		if($row = $result->fetch()){
@@ -322,7 +322,7 @@ class core_kernel_impl_ApiModelOO
 		
 		
 		$allModels = array();
-		$result = $dbWrapper->query("SELECT * FROM `models`");
+		$result = $dbWrapper->query('SELECT * FROM "models"');
 		while($row = $result->fetch(PDO::FETCH_ASSOC)){
 			$allModels[] = $row;
 		}
@@ -350,7 +350,7 @@ class core_kernel_impl_ApiModelOO
 			$description = $dom->createElement('rdf:Description');
 			$description->setAttribute('rdf:about', $subject);
 			
-			$result = $dbWrapper->query("SELECT * FROM `statements` WHERE `subject`= '{$subject}'");
+			$result = $dbWrapper->query('SELECT * FROM "statements" WHERE "subject" = ' . $subject);
 			while($row = $result->fetch()){
 				
 				$predicate 	= trim($row['predicate']);
