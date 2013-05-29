@@ -181,9 +181,8 @@ class HardImplTestCase extends UnitTestCase {
 		$this->assertTrue($this->targetWorkClass->isSubclassOf($this->taoClass));
 		$this->assertTrue($this->targetWorkClass->getOnePropertyValue($subClassOfProperty)->getUri() == $this->taoClass->getUri());
 		$this->assertTrue($referencer->isClassReferenced($this->targetWorkClass));
-		// Note for developers: data defining classes always remain in smooth mode.
-		// Thus, the delegation is always 'smooth'.
 		$this->assertFalse(is_a($proxy->getImpToDelegateTo($this->targetWorkClass), 'core_kernel_persistence_smoothsql_Class'));
+		$this->assertFalse(is_a($proxy->getImpToDelegateTo($this->targetMovieClass), 'core_kernel_persistence_smoothsql_Class'));
 		
 		$this->assertTrue($this->targetAuthorProperty->getOnePropertyValue($domainProperty)->getUri() == $this->targetWorkClass->getUri());
 		$this->assertTrue($this->targetAuthorProperty->getOnePropertyValue($rangeProperty)->getUri() == RDFS_LITERAL);
@@ -200,6 +199,11 @@ class HardImplTestCase extends UnitTestCase {
 		
 		$this->assertTrue($this->targetRelatedMoviesProperty->getOnePropertyValue($domainProperty)->getUri() == $this->targetMovieClass->getUri());
 		$this->assertTrue($this->targetRelatedMoviesProperty->getOnePropertyValue($rangeProperty)->getUri() == $this->targetMovieClass->getUri());
+		
+		$parentClasses = $this->targetMovieClass->getParentClasses();
+		$this->assertEqual(2, count($parentClasses));
+		$this->assertTrue(array_key_exists(RDFS_CLASS, $parentClasses));
+		$this->assertTrue(array_key_exists($this->targetWorkClass->getUri(), $parentClasses));
 		
 		$prop = new core_kernel_classes_Property($this->targetRelatedMoviesProperty);
 		$this->assertTrue($prop->isMultiple());
