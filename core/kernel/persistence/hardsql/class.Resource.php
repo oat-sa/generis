@@ -170,7 +170,6 @@ class core_kernel_persistence_hardsql_Resource
 		}
 		
 		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-		$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
 		$propertyLocation = $referencer->propertyLocation($property);
 		
 		// Select in the properties table of the class
@@ -243,7 +242,8 @@ class core_kernel_persistence_hardsql_Resource
 		}
 		// Select in the main table of the class
 		else{
-			try{
+			try {
+				$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
 				$query =  'SELECT "'.$propertyAlias.'" as "propertyValue" FROM "'.$table.'" WHERE "uri" = ?';
 				$result	= $dbWrapper->query($query, array($resource->getUri()));
 
@@ -260,6 +260,8 @@ class core_kernel_persistence_hardsql_Resource
 				else if ($e->getCode() !== '00000'){ 
 					throw new core_kernel_persistence_hardsql_Exception("Unable to get property (single) values for {$resource->getUri()} in {$table} : " .$e->getMessage());
 				}
+			} catch (common_exception_UnknownNamespace $n) {
+				// unknown namespace means we have no propertyAlias, so it's impossible that a value exists
 			}
 		}
 
@@ -1254,9 +1256,8 @@ class core_kernel_persistence_hardsql_Resource
 		$propertiesProps = '';
 		$propertyIndexes = array();
 		$propertyIndex = 0;
-		foreach ($properties as $property) {
-
-			$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
+		foreach ($properties as $propertyMixed) {
+			$property = is_object($propertyMixed) ? $propertyMixed : new core_kernel_classes_Property($propertyMixed); 
 			$propertyLocation = $referencer->propertyLocation($property);
 
 			if (in_array($tableProps, $propertyLocation)
@@ -1266,13 +1267,18 @@ class core_kernel_persistence_hardsql_Resource
 				}
 				$propertiesProps .= "'" . $property->getUri() . "'";
 			} else {
-				if (!empty($propertiesMain)) {
-					$propertiesMain .= ', ';
+				try {
+					$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
+					if (!empty($propertiesMain)) {
+						$propertiesMain .= ', ';
+					}
+					$propertiesMain .= '"' . $propertyAlias . '" as "propertyValue' . $propertyIndex . '"';
+	
+					$propertyIndexes[$propertyIndex] = $property;
+					$propertyIndex++;
+				} catch (common_exception_UnknownNamespace $e) {
+					// unknown property
 				}
-				$propertiesMain .= '"' . $propertyAlias . '" as "propertyValue' . $propertyIndex . '"';
-
-				$propertyIndexes[$propertyIndex] = $property;
-				$propertyIndex++;
 			}
 		}
 
