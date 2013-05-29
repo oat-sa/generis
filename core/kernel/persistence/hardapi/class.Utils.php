@@ -141,7 +141,11 @@ class core_kernel_persistence_hardapi_Utils
     			$returnValue = self::$shortNames[$resource->getUri()];
     		} else {
     			$pos = strpos($resource->getUri(), '#');
-				$returnValue = self::getNamespaceId(substr($resource->getUri(), 0, $pos+1)) . substr($resource->getUri(), $pos+1);
+    			$namespaceId = self::getNamespaceId(substr($resource->getUri(), 0, $pos+1));
+    			if (empty($namespaceId)) {
+    				throw new common_exception_Error('namespace of resource "'.$resource->getUri().'" not found');
+    			}
+				$returnValue = $namespaceId . substr($resource->getUri(), $pos+1);
 				self::$shortNames[$resource->getUri()] = $returnValue;
     		}
 		}
