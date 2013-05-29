@@ -846,7 +846,9 @@ class core_kernel_persistence_smoothsql_Resource
     	//build the predicate query
        	//$predicatesQuery = implode(',', $properties);
 		foreach ($properties as $property) {
-			$predicatesQuery .= ", '" . (is_string($property) ? $property : $property->getUri()) . "'";
+			$uri = (is_string($property) ? $property : $property->getUri());
+			$returnValue[$uri] = array();
+			$predicatesQuery .= ", '" . $uri . "'";
 		}
     	$predicatesQuery=substr($predicatesQuery, 1);
         
@@ -863,8 +865,7 @@ class core_kernel_persistence_smoothsql_Resource
                 AND ("l_language" = \'\' 
                     OR "l_language" = \''.$session->defaultLg.'\' 
                     OR "l_language" = \''.$session->getDataLanguage().'\') 
-                AND "modelID" IN ('.$modelIds.')
-            ORDER BY "predicate"';
+                AND "modelID" IN ('.$modelIds.')';
         
         $result	= $dbWrapper->query($query);
         
@@ -872,21 +873,11 @@ class core_kernel_persistence_smoothsql_Resource
         $sortedByLg = core_kernel_persistence_smoothsql_Utils::sortByLanguage($rows, 'l_language');
         $identifiedLg = core_kernel_persistence_smoothsql_Utils::identifyFirstLanguage($sortedByLg);
 
-        //current property
-        $currentPredicate = null;
         foreach($rows as $row){
-        	if ($currentPredicate != $row['predicate']){
-        		$currentPredicate = $row['predicate'];
-        		$returnValue[$currentPredicate] = array();
-        	}
-	        
         	$value = $row['object'];
-        	if(!common_Utils::isUri($value)) {
-        		array_push($returnValue[$currentPredicate], new core_kernel_classes_Literal($value));
-        	}
-        	else {
-        		array_push($returnValue[$currentPredicate], new core_kernel_classes_Resource($value));
-        	}
+			$returnValue[$row['predicate']][] = common_Utils::isUri($value)
+				? new core_kernel_classes_Resource($value)
+				: new core_kernel_classes_Literal($value);
         }
         
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014D1 end
