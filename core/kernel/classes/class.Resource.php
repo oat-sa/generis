@@ -140,6 +140,39 @@ class core_kernel_classes_Resource
         // section 127-0-0-1-59fa2263:1193cca7051:-8000:0000000000000AFB end
     }
 
+
+    /**
+     * returns all properties values describing the resource from defintion (slow)
+     * @author patrick
+     * @param fromDefinition specify if the properties should be computed from resources types or base on effective values
+     * @return array an array of propertiesUri->arra of objects/literals
+     */
+    public function getResourceDescription($fromDefinition = true){
+	$returnValue = null;
+	$properties =array();
+	if ($fromDefinition){
+	$types = $this->getTypes();
+	foreach ($types as $type){
+	    foreach ($type->getProperties(true) as $property){
+		//$this->$$property->getUri() = array($property->getLabel(),$this->getPropertyValues());
+		$properties[$property->getUri()] = $property;
+	    }
+	}
+	$properties = array_unique($properties);
+	$returnValue =  $this->getPropertiesValues($properties);
+	}
+	else	//get effective triples and map the returned information into the same structure
+	{
+	    $triples = $this->getRdfTriples();
+	    foreach ($triples as $triple){
+		$properties[$triple->predicate][] = common_Utils::isUri($triple->object)
+				? new core_kernel_classes_Resource($triple->object)
+				: new core_kernel_classes_Literal($triple->object);
+	    }
+	  $returnValue = $properties;
+	}
+	return $returnValue;
+    }
     /**
      * Conveniance method to duplicate a resource using the clone keyword
      *
