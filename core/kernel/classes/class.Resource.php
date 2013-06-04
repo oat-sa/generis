@@ -161,7 +161,7 @@ class core_kernel_classes_Resource
 	$properties = array_unique($properties);
 	$propertiesValues =  $this->getPropertiesValues($properties);
 	
-	$returnValue = self::propertiesValuestoStdClasses($propertiesValues);
+	$propertiesValuesStdClasses = self::propertiesValuestoStdClasses($propertiesValues);
 	}
 	else	//get effective triples and map the returned information into the same structure
 	{
@@ -171,12 +171,15 @@ class core_kernel_classes_Resource
 				? new core_kernel_classes_Resource($triple->object)
 				: new core_kernel_classes_Literal($triple->object);
 	    }
-	  $returnValue = self::propertiesValuestoStdClasses($properties);
+	  $propertiesValuesStdClasses = self::propertiesValuestoStdClasses($properties);
 	}
-	return $returnValue;
+	 $resource = new stdClass;
+	 $resource->uri = $this->getUri();
+	 $resource->properties = $propertiesValuesStdClasses;
+	return $resource;
     }
     /**
-     * helper converting the "tao" assocaitive array with properties -> literal/resource into an array of stdclass
+     * small helper (TODO to be moved) more convenient data structure for propertiesValues for exchange
      * @return array
      */
     private static function propertiesValuestoStdClasses($propertiesValues = null){
@@ -187,7 +190,7 @@ class core_kernel_classes_Resource
 		foreach ($values as $value){
 		    $stdValue = new stdClass;
 		    $stdValue->valueType = (get_class($value)=="core_kernel_classes_Literal") ? "literal" : "resource";
-		    $stdValue->value = (get_class($value)=="core_kernel_classes_Literal") ? $value->getLiteral : $value->getUri();
+		    $stdValue->value = (get_class($value)=="core_kernel_classes_Literal") ? $value->__toString() : $value->getUri();
 		    $propStdClass->values[]= $stdValue;
 		}
 		$returnValue[]=$propStdClass;
