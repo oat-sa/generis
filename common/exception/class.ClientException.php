@@ -50,9 +50,16 @@ require_once('common/exception/class.Error.php');
  * @subpackage exception
  */
 abstract class common_exception_ClientException
-    extends common_exception_Error
+    extends common_exception
 {
-   
+    public function __construct($message = null, $code = 0)
+    {
+        if (!$message) {
+            $message = "Client exception";
+        }
+        parent::__construct($message, $code);
+
+    }
 } /* end of class common_exception_InvalidArgumentType */
 
 ?>
