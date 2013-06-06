@@ -16,34 +16,9 @@
  *
  *
  */
-/**
- * Generis Object Oriented API - common/exception/class.InvalidArgumentType.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 30.01.2012, 16:44:05 with ArgoUML PHP module
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Joel Bout, <joel.bout@tudor.lu>
- * @package common
- * @subpackage exception
- */
-
-
-require_once('common/exception/class.Error.php');
-
-/* user defined includes */
-// section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FA-includes begin
-// section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FA-includes end
-
-/* user defined constants */
-// section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FA-constants begin
-// section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FA-constants end
 
 /**
- * Missing Parameter are thrown for missing parameters that are not strongly passed (sub protocols)
+ * Content type accepted can't be satisfied
  * @access public
  * @author Patrick Plichart
  * @package common
@@ -52,22 +27,7 @@ require_once('common/exception/class.Error.php');
 class common_exception_NotAcceptable
     extends common_exception_BadRequest
 {
-    // --- ASSOCIATIONS ---
-    // --- ATTRIBUTES ---
-    // --- OPERATIONS ---
-    /**
-     * Short description of method __construct
-     *
-     * @access public
-     * @author patrick
-     * @param  string class
-     * @param  string function
-     * @param  int position
-     * @param  string expectedType
-     * @param  object
-     * @return mixed
-     */
-    
+   
     
 } /* end of class common_exception_InvalidArgumentType */
 
