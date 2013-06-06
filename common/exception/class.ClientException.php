@@ -52,8 +52,7 @@ require_once('common/exception/class.Error.php');
 abstract class common_exception_ClientException
     extends common_exception_Error
 {
-    private $clientMessage;
-    abstract public function handle($clientType );
+   
 } /* end of class common_exception_InvalidArgumentType */
 
 ?>

@@ -68,10 +68,7 @@ class common_exception_NotAcceptable
      * @return mixed
      */
     
-    public function handle($clientType="HTTP"){
-	header("HTTP/1.0 406 Not Acceptable" );
-	return $this;
-    }
+    
 } /* end of class common_exception_InvalidArgumentType */
 
 ?>

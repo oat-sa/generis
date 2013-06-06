@@ -67,10 +67,7 @@ class common_exception_Unauthorized
      * @param  object
      * @return mixed
      */
-    public function handle($clientType="HTTP"){
-	header("HTTP/1.0 401 Unauthorized" );
-	return $this;
-    }
+   
 } /* end of class common_exception_InvalidArgumentType */
 
 ?>

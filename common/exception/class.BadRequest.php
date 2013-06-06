@@ -54,10 +54,7 @@ abstract class common_exception_BadRequest
 {
     // --- ASSOCIATIONS ---
     // --- ATTRIBUTES ---
-  public function handle($clientType="HTTP"){
-	header("HTTP/1.0 400 Bad Request" );
-	return $this;
-    }
+  
 
 } /* end of class common_exception_InvalidArgumentType */
 

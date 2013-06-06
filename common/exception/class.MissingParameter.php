@@ -75,10 +75,7 @@ class common_exception_MissingParameter
 
         // section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FF end
     }
-    public function handle($clientType="HTTP"){
-	header("HTTP/1.0 400 Bad Request" );
-	return $this;
-    }
+    
 } /* end of class common_exception_InvalidArgumentType */
 
 ?>
