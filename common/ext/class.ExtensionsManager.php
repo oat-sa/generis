@@ -281,7 +281,7 @@ class common_ext_ExtensionsManager
 				 */
 				$ns = common_ext_NamespaceManager::singleton()->getNamespace ($model.'#');
 				if ($ns == null) {
-					throw new common_ext_ExtensionException("Session Expired, could not get namespace for model ".$model);
+					throw new common_ext_ExtensionException("Could not get namespace for model ".$model);
 				}
 				$modelId = $ns->getModelId();
 				if (!isset($returnValue[$modelId])){
