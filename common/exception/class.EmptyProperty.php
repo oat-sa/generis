@@ -92,9 +92,6 @@ class common_exception_EmptyProperty
 
     // --- OPERATIONS ---
 
-    public function getSeverity() {
-		return common_Logger::ERROR_LEVEL;    	
-    }
     /**
      * Short description of method __construct
      *
