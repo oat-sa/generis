@@ -113,7 +113,7 @@ class common_cache_FileCache
         	$serial = $mixed->getSerial();
         }
         
-        $data = "<? return ".common_utils::toPHPVariableString($mixed).";?>";
+        $data = "<? return ".common_Utils::toPHPVariableString($mixed).";?>";
        	
         try{
         	// Acquire the lock and open with mode 'c'. Indeed, we do not use mode 'w' because
