@@ -142,10 +142,9 @@ class core_kernel_classes_Resource
 
 
     /**
-     * returns all properties values describing the resource from defintion (slow)
-     * @author patrick
-     * @param fromDefinition specify if the properties should be computed from resources types or base on effective values
-     * @return array an array of propertiesUri->arra of objects/literals
+     * returns all properties values describing the resource 
+     * @param fromDefinition specify if the properties should be computed from resources types (slow) or from effective values
+     * @return object {uri, properties}
      */
     public function getResourceDescription($fromDefinition = true){
 	$returnValue = null;
@@ -179,7 +178,7 @@ class core_kernel_classes_Resource
 	return $resource;
     }
     /**
-     * small helper (TODO to be moved) more convenient data structure for propertiesValues for exchange
+     * small helper (shall it be moved) more convenient data structure for propertiesValues for exchange
      * @return array
      */
     private static function propertiesValuestoStdClasses($propertiesValues = null){
@@ -194,7 +193,6 @@ class core_kernel_classes_Resource
 		    $propStdClass->values[]= $stdValue;
 		}
 		$returnValue[]=$propStdClass;
-
 	}
 	return $returnValue;
     }
