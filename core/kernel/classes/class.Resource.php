@@ -159,12 +159,17 @@ class core_kernel_classes_Resource
 	}
 	$properties = array_unique($properties);
 	$propertiesValues =  $this->getPropertiesValues($properties);
-	
+	if (count($propertiesValues)==0) {
+	    throw new common_exception_NoContent();
+	}
 	$propertiesValuesStdClasses = self::propertiesValuestoStdClasses($propertiesValues);
 	}
 	else	//get effective triples and map the returned information into the same structure
 	{
 	    $triples = $this->getRdfTriples();
+	    if (count( $triples)==0) {
+	    throw new common_exception_NoContent();
+	    }
 	    foreach ($triples as $triple){
 		$properties[$triple->predicate][] = common_Utils::isUri($triple->object)
 				? new core_kernel_classes_Resource($triple->object)
