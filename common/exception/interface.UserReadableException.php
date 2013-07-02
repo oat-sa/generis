@@ -21,32 +21,14 @@
  */
 
 /**
- * An element of a report representing an exception that occured
- * These elements are interpreted as errors 
+ * A namespace was not found in the current TAO instalation
+ * This can lead to complications in hardmode
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package common
- * @subpackage report
+ * @subpackage exception
  */
-class common_report_ExceptionElement extends common_report_ErrorElement
-{
-    /**
-     * @var common_exception_UserReadableException
-     */
-    private $exception;
-    
-    /**
-     * 
-     * Enter description here ...
-     * @param common_exception_UserReadableException $exception
-     */
-    public function __construct($exception) {
-        parent::__construct('');
-        $this->exception = $exception;
-    }
-    
-    public function __toString() {
-        return $this->exception->getUserMessage();
-    }
+interface common_exception_UserReadableException {
+    public function getUserMessage();
 }

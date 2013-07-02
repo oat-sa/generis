@@ -159,7 +159,7 @@ class common_report_Report
     		    foreach ($element->getElements() as $subElement) {
         	        $this->add($subElement);
         	    }
-		    } elseif ($element instanceof Exception) {
+		    } elseif ($element instanceof common_exception_UserReadableException) {
 		        $this->elements[] = new common_report_ExceptionElement($element);
 		    } else {
 		        throw new common_Exception('Tried to add '.is_object($element) ? get_class($element) : gettype($element).' to report');
