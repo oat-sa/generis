@@ -198,7 +198,7 @@ class common_Logger
         // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432A begin
 		if ($this->enabled && $this->implementor->getLogThreshold() <= $level) {
 			$this->disable();
-			$stack = debug_backtrace();
+			$stack = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 			array_shift($stack);
 			// if session has not been started, no user can be involved yet
 			// else logging fails during install
