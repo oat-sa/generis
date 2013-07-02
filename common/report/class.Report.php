@@ -51,7 +51,7 @@ class common_report_Report
 	 * @param mixed $data
 	 * @return common_report_Report
 	 */
-	public static function createSuccess($title, $data = null) {
+	public static function createSuccess($title = '', $data = null) {
 	    common_Logger::i($title);
 		$report = new static($title);
 		if (!empty($data)) {
@@ -68,15 +68,35 @@ class common_report_Report
 	 * @param mixed $errors
 	 * @return common_report_Report
 	 */
-	public static function createFailure($title = '', $errors = array()) {
-		common_Logger::w($title);
-		$report = new static($title);
-		$report->add($errors);
+	public static function createFailure($title, $errors = array()) {
+	    if (strlen($title) > 0) {
+		    common_Logger::w($title);
+	    }
+	    
+	    if ($title == '' && empty($errors)) {
+	        throw new common_Exception('Cannot create failure report without error');
+	    }
+	    
+		if (!empty($errors)) {
+		    $report = new static($title);
+		    $report->add($errors);
+		} else {
+		    $report = new static();
+		    $report->add(new common_report_ErrorElement($title));
+		}
 		return $report;
 	}
 	
-	public function __construct($title) {
+	public function __construct($title = '') {
 	    $this->elements = array();
+		$this->title = $title;
+	}
+	
+	/**
+	 * Change the title of the report
+	 * @param string $title
+	 */
+	public function setTitle($title) {
 		$this->title = $title;
 	}
 	
