@@ -348,7 +348,7 @@ class core_kernel_impl_ApiModelOO
 			$dom->appendChild($root);
 					
 			$description = $dom->createElement('rdf:Description');
-			$description->setAttribute('rdf:about', $subject);
+			$description->setAttribute('rdf:about', $uriResource);
 			
 			$result = $dbWrapper->query('SELECT * FROM "statements" WHERE "subject" = ' . $subject);
 			while($row = $result->fetch()){
