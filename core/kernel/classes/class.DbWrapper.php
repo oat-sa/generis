@@ -312,7 +312,12 @@ abstract class core_kernel_classes_DbWrapper
         }
         else{
         	$this->preparedExec = false;
-        	$returnValue = $this->dbConnector->exec($statement);
+        	try {
+        	    $returnValue = $this->dbConnector->exec($statement);
+        	} catch (PDOException $e) {
+        	    common_Logger::w('Error in statement: '.$statement);
+        	    throw $e;
+        	}
         }
         common_Profiler::queryStop($statement, $params);
 		
