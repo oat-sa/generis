@@ -49,8 +49,8 @@ require_once('common/exception/class.Error.php');
  * @package common
  * @subpackage exception
  */
-abstract class common_exception_ClientException
-    extends common_exception
+abstract class common_exception_ClientException 
+    extends common_exception implements common_exception_UserReadableException
 {
     public function __construct($message = null, $code = 0)
     {
@@ -60,6 +60,7 @@ abstract class common_exception_ClientException
         parent::__construct($message, $code);
 
     }
+   
 } /* end of class common_exception_InvalidArgumentType */
 
 ?>

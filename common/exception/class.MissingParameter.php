@@ -75,6 +75,9 @@ class common_exception_MissingParameter
 
         // section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FF end
     }
+    public function getUserMessage() {
+	return __("At least one mandatory parameter was required but found missing in your request");
+    }
     
 } /* end of class common_exception_InvalidArgumentType */
 

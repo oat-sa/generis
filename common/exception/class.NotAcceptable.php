@@ -28,7 +28,9 @@ class common_exception_NotAcceptable
     extends common_exception_BadRequest
 {
    
-    
+    public function getUserMessage() {
+	return __("The requested content encoding cannot be satisfied");
+    }
 } /* end of class common_exception_InvalidArgumentType */
 
 ?>
