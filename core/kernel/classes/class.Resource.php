@@ -19,40 +19,6 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * Resource implements rdf:resource container identified by an uri (a string).
- * Methods enable meta data management for this resource
- *
- * @author patrick.plichart@tudor.lu
- * @package core
- * @see http://www.w3.org/RDF/
- * @subpackage kernel_classes
- * @version v1.0
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * include core_kernel_classes_Container
- *
- * @author patrick.plichart@tudor.lu
- */
-require_once('core/kernel/classes/class.Container.php');
-
-/* user defined includes */
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765-includes begin
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765-includes end
-
-/* user defined constants */
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765-constants begin
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000765-constants end
 
 /**
  * Resource implements rdf:resource container identified by an uri (a string).
@@ -147,60 +113,62 @@ class core_kernel_classes_Resource
      * @return object {uri, properties}
      */
     public function getResourceDescription($fromDefinition = true){
-	$returnValue = null;
-	$properties =array();
-	if ($fromDefinition){
-	$types = $this->getTypes();
-	foreach ($types as $type){
-	    foreach ($type->getProperties(true) as $property){
-		//$this->$$property->getUri() = array($property->getLabel(),$this->getPropertyValues());
-		$properties[$property->getUri()] = $property;
-	    }
-	}
-	$properties = array_unique($properties);
-	$propertiesValues =  $this->getPropertiesValues($properties);
-	if (count($propertiesValues)==0) {
-	    throw new common_exception_NoContent();
-	}
-	$propertiesValuesStdClasses = self::propertiesValuestoStdClasses($propertiesValues);
-	}
-	else	//get effective triples and map the returned information into the same structure
-	{
-	    $triples = $this->getRdfTriples();
-	    if (count( $triples)==0) {
-	    throw new common_exception_NoContent();
-	    }
-	    foreach ($triples as $triple){
-		$properties[$triple->predicate][] = common_Utils::isUri($triple->object)
-				? new core_kernel_classes_Resource($triple->object)
-				: new core_kernel_classes_Literal($triple->object);
-	    }
-	  $propertiesValuesStdClasses = self::propertiesValuestoStdClasses($properties);
-	}
-	 $resource = new stdClass;
-	 $resource->uri = $this->getUri();
-	 $resource->properties = $propertiesValuesStdClasses;
-	return $resource;
+        $returnValue = null;
+        $properties =array();
+        if ($fromDefinition){
+            $types = $this->getTypes();
+            foreach ($types as $type){
+                foreach ($type->getProperties(true) as $property){
+                    //$this->$$property->getUri() = array($property->getLabel(),$this->getPropertyValues());
+                    $properties[$property->getUri()] = $property;
+                }
+            }
+            $properties = array_unique($properties);
+            $propertiesValues =  $this->getPropertiesValues($properties);
+            if (count($propertiesValues)==0) {
+                throw new common_exception_NoContent();
+            }
+            $propertiesValuesStdClasses = self::propertiesValuestoStdClasses($propertiesValues);
+        }
+        else	//get effective triples and map the returned information into the same structure
+        {
+            $triples = $this->getRdfTriples();
+            if (count( $triples)==0) {
+                throw new common_exception_NoContent();
+            }
+            foreach ($triples as $triple){
+                $properties[$triple->predicate][] = common_Utils::isUri($triple->object)
+                ? new core_kernel_classes_Resource($triple->object)
+                : new core_kernel_classes_Literal($triple->object);
+            }
+            $propertiesValuesStdClasses = self::propertiesValuestoStdClasses($properties);
+        }
+        $resource = new stdClass;
+        $resource->uri = $this->getUri();
+        $resource->properties = $propertiesValuesStdClasses;
+        return $resource;
     }
+
     /**
      * small helper (shall it be moved) more convenient data structure for propertiesValues for exchange
      * @return array
      */
     private static function propertiesValuestoStdClasses($propertiesValues = null){
-	$returnValue =array();
-	foreach ($propertiesValues as $uri => $values) {
-		$propStdClass = new stdClass;
-		$propStdClass->predicateUri = $uri;
-		foreach ($values as $value){
-		    $stdValue = new stdClass;
-		    $stdValue->valueType = (get_class($value)=="core_kernel_classes_Literal") ? "literal" : "resource";
-		    $stdValue->value = (get_class($value)=="core_kernel_classes_Literal") ? $value->__toString() : $value->getUri();
-		    $propStdClass->values[]= $stdValue;
-		}
-		$returnValue[]=$propStdClass;
-	}
-	return $returnValue;
+        $returnValue =array();
+        foreach ($propertiesValues as $uri => $values) {
+            $propStdClass = new stdClass;
+            $propStdClass->predicateUri = $uri;
+            foreach ($values as $value){
+                $stdValue = new stdClass;
+                $stdValue->valueType = (get_class($value)=="core_kernel_classes_Literal") ? "literal" : "resource";
+                $stdValue->value = (get_class($value)=="core_kernel_classes_Literal") ? $value->__toString() : $value->getUri();
+                $propStdClass->values[]= $stdValue;
+            }
+            $returnValue[]=$propStdClass;
+        }
+        return $returnValue;
     }
+
     /**
      * Conveniance method to duplicate a resource using the clone keyword
      *
