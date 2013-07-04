@@ -12,7 +12,7 @@
  */
 abstract class common_exception_ExceptionHandler {
     //put your code here
-    public abstract static function handle(common_Exception $exception);
+    public abstract function handle(common_Exception $exception);
 }
 
 ?>
