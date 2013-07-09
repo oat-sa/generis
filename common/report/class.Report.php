@@ -182,7 +182,7 @@ class common_report_Report
 		    } elseif ($element instanceof common_exception_UserReadableException) {
 		        $this->elements[] = new common_report_ExceptionElement($element);
 		    } else {
-		        throw new common_Exception('Tried to add '.is_object($element) ? get_class($element) : gettype($element).' to report');
+		        throw new common_exception_Error('Tried to add '.(is_object($element) ? get_class($element) : gettype($element)).' to report');
 		    }
 		}
 	}
