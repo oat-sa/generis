@@ -477,19 +477,6 @@ class core_kernel_persistence_hardsql_Class
         $returnValue = array();
 
         // section 10-13-1--128--26678bb4:12fbafcb344:-8000:00000000000014F0 begin
-    	
-    	/*
-		options lists:
-		like			: (bool) 	true/false (default: true)
-		chaining		: (string) 	'or'/'and' (default: 'and')
-		recursive		: (int) 	recursivity depth (default: 0)
-		lang			: (string) 	e.g. 'EN', 'FR' (default: '') for all properties!
-		offset  		: default 0
-		limit           : default select all
-		order			: property to order by
-		orderdir		: direction of order (default: 'ASC')
-		*/
-    	
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		
 		// 'like' option.

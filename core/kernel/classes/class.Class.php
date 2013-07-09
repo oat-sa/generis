@@ -266,7 +266,17 @@ class core_kernel_classes_Class
 
     /**
      * Search for a specific instances according to filters and options
-     *
+     * 
+     * options lists:
+     * like			: (bool) 	true/false (default: true)
+     * chaining		: (string) 	'or'/'and' (default: 'and')
+     * recursive	: (bool) 	saerch in subvlasses(default: false)
+     * lang			: (string) 	e.g. 'en-US', 'fr-FR' (default: '') for all properties!
+     * offset  		: default 0
+     * limit        : default select all
+     * order		: property to order by
+     * orderdir		: direction of order (default: 'ASC')
+     * 
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  array propertyFilters

@@ -813,18 +813,6 @@ class core_kernel_persistence_smoothsql_Class
         $returnValue = (string) '';
 
         // section 127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CC begin"
-				/*
-		options lists:
-		like			: (bool) 	true/false (default: true)
-		chaining		: (string) 	'or'/'and' (default: 'and')
-		recursive		: (bool) 	saerch in subvlasses(default: false)
-		lang			: (string) 	e.g. 'EN', 'FR' (default: '') for all properties!
-		offset  		: default 0
-		limit           : default select all
-		order			: property to order by
-		orderdir		: direction of order (default: 'ASC')
-		*/
-
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		
 		//add the type check to the filters
