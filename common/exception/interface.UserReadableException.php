@@ -21,8 +21,7 @@
  */
 
 /**
- * A namespace was not found in the current TAO instalation
- * This can lead to complications in hardmode
+ * An Exception containing a human-readable message for the end-user.
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
@@ -30,5 +29,13 @@
  * @subpackage exception
  */
 interface common_exception_UserReadableException {
+	
+	/**
+	 * Get the human-readable message for the end-user. It is supposed
+	 * to be translated and does not contain any confidential information
+	 * about the system and its sensitive data.
+	 * 
+	 * @return string A human-readable message.
+	 */
     public function getUserMessage();
 }
