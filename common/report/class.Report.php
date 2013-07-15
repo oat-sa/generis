@@ -176,7 +176,7 @@ class common_report_Report
 		    if ($element instanceof common_report_ReportElement) {
 		        $this->elements[] = $element;
 		    } elseif ($element instanceof common_report_Report) {
-    		    foreach ($element->getElements() as $subElement) {
+    		    foreach ($element->elements as $subElement) {
         	        $this->add($subElement);
         	    }
 		    } elseif ($element instanceof common_exception_UserReadableException) {
