@@ -215,6 +215,7 @@ class common_ext_Extension
 
     /**
      * retrieves a configuration value
+	 * returns null if not found
      *
      * @access public
      * @author firstname and lastname of author, <author@example.org>
