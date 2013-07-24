@@ -54,10 +54,8 @@ class common_report_Report
 	public static function createSuccess($title = '', $data = null) {
 	    common_Logger::i($title);
 		$report = new static($title);
-		if (!empty($data)) {
-		    $successElement = new common_report_SuccessElement($title, $data);
-		    $report->add($successElement);
-		}
+	    $successElement = new common_report_SuccessElement($title, $data);
+	    $report->add($successElement);
 		return $report;
 	}
 	
