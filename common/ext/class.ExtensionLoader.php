@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -18,46 +18,6 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API - common/ext/class.ExtensionLoader.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 01.03.2013, 12:18:24 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author lionel.lecaque@tudor.lu
- * @package common
- * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
- * @subpackage ext
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * EXtension Wrapper
- *
- * @author lionel.lecaque@tudor.lu
- * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
- */
-require_once('common/ext/class.ExtensionHandler.php');
-
-/* user defined includes */
-// section -87--2--3--76-e9002fe:123ebbb9fa8:-8000:000000000000179B-includes begin
-// section -87--2--3--76-e9002fe:123ebbb9fa8:-8000:000000000000179B-includes end
-
-/* user defined constants */
-// section -87--2--3--76-e9002fe:123ebbb9fa8:-8000:000000000000179B-constants begin
-// section -87--2--3--76-e9002fe:123ebbb9fa8:-8000:000000000000179B-constants end
 
 /**
  * Short description of class common_ext_ExtensionLoader
@@ -120,14 +80,11 @@ class common_ext_ExtensionLoader
     	
     	// load the constants from the manifest
         if ($this->extension->getID() != "generis"){
-    		$ext = common_ext_ExtensionsManager::singleton()->getExtensionById($this->extension->getID());
-    		if (count($ext->getConstants()) > 0) {
-    			foreach ($ext->getConstants() as $key => $value) {
-    				if(!defined($key) && !is_array($value)){
-    					define($key, $value);
-    				}
-    			}
-    		}
+   			foreach ($this->extension->getConstants() as $key => $value) {
+   				if(!defined($key) && !is_array($value)){
+   					define($key, $value);
+   				}
+   			}
     	}
     	// we will load the constant file of the current extension and all it's dependancies
     	
@@ -220,6 +177,4 @@ class common_ext_ExtensionLoader
         // section 127-0-1-1-62ede985:13d2586a59c:-8000:0000000000001FF7 end
     }
 
-} /* end of class common_ext_ExtensionLoader */
-
-?>
+}

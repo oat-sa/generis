@@ -312,9 +312,10 @@ class common_ext_ExtensionsManager
         }
         if (!isset($this->extensions[$id])) {
         	$this->extensions[$id] = new common_ext_Extension($id, false);
-        	$extensionLoader = new common_ext_ExtensionLoader($this->extensions[$id]);
-        	$extensionLoader->load();
         }
+        // loads the extension if it hasn't been loaded yet
+        $this->extensions[$id]->load();
+        
         $returnValue = $this->extensions[$id];
 
         return $returnValue;

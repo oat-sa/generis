@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -18,14 +18,7 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
 
-error_reporting(E_ALL);
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
 
 /**
  * Short description of class common_ext_Extension
@@ -66,18 +59,18 @@ class common_ext_Extension
     /**
      * configuration array read from file
      *
-     * @access public
+     * @access private
      * @var array
      */
-    public $fileConfig = null;
+    private $fileConfig = null;
 
     /**
-     * Short description of attribute installed
+     * Whenever or not an extension has already been loaded
      *
-     * @access protected
+     * @access private
      * @var boolean
      */
-    protected $installed = false;
+    protected $loaded = false;
 
     /**
      * Should not be called directly, please use ExtensionsManager
@@ -512,6 +505,26 @@ class common_ext_Extension
 		$manifest = $this->getManifest();
 		return $manifest->getOptimizableProperties();
 	}
-}
 
-?>
+	/**
+	 * Whenever or not the extension and it's constants have been loaded
+	 * @return boolean
+	 */
+	public function isLoaded()
+	{
+		return $this->loaded;
+	}
+	
+	/**
+	 * Loads the extension if it hasn't been loaded (using load), yet
+	 */
+	public function load()
+	{
+		if (!$this->loaded) {
+			$loader = new common_ext_ExtensionLoader($this);
+			$loader->load();
+			$this->loaded = true;
+		}
+		
+	}
+}
