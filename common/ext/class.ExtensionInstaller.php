@@ -199,9 +199,15 @@ class common_ext_ExtensionInstaller
 						throw new common_ext_InstallationException('The namespace of '.$rdfpath.' has to be defined with the "xml:base" attribute of the ROOT node');
 					}
 					$ns = (string) $attrs['base'];
-					//import the model in the ontology
-					common_Logger::d('Inserting model '.$rdfpath.' for '.$this->extension->getID(), 'INSTALL');
-					$modelCreator->insertModelFile($ns, $rdfpath);
+					if($ns != 'LOCAL_NAMESPACE##'){
+					    //import the model in the ontology
+					    common_Logger::d('Inserting model '.$rdfpath.' for '.$this->extension->getID(), 'INSTALL');
+					    $modelCreator->insertModelFile($ns, $rdfpath);
+					  
+					}else{
+					    common_Logger::d('Inserting model '.$rdfpath.' for '.$this->extension->getID() . ' in LOCAL NAMESPACE', 'INSTALL');
+					    $modelCreator->insertLocalModelFile($rdfpath);
+					}
 					foreach ($this->getTranslatedModelFiles($rdfpath) as $translation) {
 						$modelCreator->insertModelFile($ns, $translation);
 					}
