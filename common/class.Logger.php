@@ -16,7 +16,8 @@
  * 
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *              2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ *               2013 (update and modification) Open Assessment Techonologies SA (under the project TAO-PRODUCT);
  * 
  */
 
@@ -200,11 +201,8 @@ class common_Logger
 			$this->disable();
 			$stack = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 			array_shift($stack);
-			// if session has not been started, no user can be involved yet
-			// else logging fails during install
-			$user = class_exists('core_kernel_classes_Session', false)
-				? core_kernel_classes_Session::singleton()->getUserLogin()
-				: null;
+			// retrieving the user can be a complex procedure, leading to missing log informations
+			$user = null;
 			if ($errorFile == '') {
 				$keys = array_keys($stack);
 				$current = $stack[$keys[0]];
@@ -229,7 +227,7 @@ class common_Logger
 				$tags = array($tags);
 			}
 			
-			$this->implementor->log(new common_log_Item($message, $level, time(), $user, $stack, $tags, $requestURI, $errorFile, $errorLine));
+			$this->implementor->log(new common_log_Item($message, $level, time(), $stack, $tags, $requestURI, $errorFile, $errorLine));
 			$this->restore();
 		};
         // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432A end
@@ -488,6 +486,4 @@ class common_Logger
         // section 127-0-1-1-56e04748:1341d1d0e41:-8000:000000000000182B end
     }
 
-} /* end of class common_Logger */
-
-?>
+}
