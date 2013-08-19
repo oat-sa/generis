@@ -50,7 +50,7 @@ class common_profiler_Context
 		}
 		
 		$this->epoch = time();
-		$this->user = core_kernel_classes_Session::singleton()->getUserLogin();
+		$this->user = core_kernel_classes_Session::singleton()->getUserUri();
 		$this->script = $_SERVER['PHP_SELF'];
 		$this->system = new common_profiler_System();
 	}
