@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -16,39 +16,9 @@
  * 
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ *               2013 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * Enables you to manage the module namespaces
- *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package common
- * @subpackage ext
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * include common_ext_Namespace
- *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- */
-require_once('common/ext/class.Namespace.php');
-
-/* user defined includes */
-// section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001589-includes begin
-// section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001589-includes end
-
-/* user defined constants */
-// section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001589-constants begin
-// section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001589-constants end
 
 /**
  * Enables you to manage the module namespaces
@@ -92,8 +62,6 @@ class common_ext_NamespaceManager
      */
     private function __construct()
     {
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001591 begin
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001591 end
     }
 
     /**
@@ -232,6 +200,4 @@ class common_ext_NamespaceManager
         // section 10-13-1-85--470bb007:135aad37aa4:-8000:0000000000001944 end
     }
 
-} /* end of class common_ext_NamespaceManager */
-
-?>
+}
