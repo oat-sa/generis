@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -17,6 +17,7 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ *               2013 (update and modification) Open Assessment Techonologies SA (under the project TAO-PRODUCT);
  * 
  */
 
@@ -80,14 +81,6 @@ class common_log_Item
     private $tags = array();
 
     /**
-     * Short description of attribute authentifiedUser
-     *
-     * @access private
-     * @var string
-     */
-    private $authentifiedUser = '';
-
-    /**
      * Short description of attribute errorFile
      *
      * @access private
@@ -119,7 +112,7 @@ class common_log_Item
      * @param  int errorLine
      * @return mixed
      */
-    public function __construct($description, $severity, $datetime, $user = null, $backtrace = array(), $tags = array(), $request = "", $errorFile = '', $errorLine = 0)
+    public function __construct($description, $severity, $datetime, $backtrace = array(), $tags = array(), $request = "", $errorFile = '', $errorLine = 0)
     {
         if (!is_string($description)){
         	throw new InvalidArgumentException("The description must be a string, " . gettype($description) . " given");
@@ -130,7 +123,6 @@ class common_log_Item
         $this->datetime			= $datetime;
         $this->tags				= is_array($tags) ? $tags : array($tags);
         $this->request			= $request;
-        $this->authentifiedUser	= $user;
         $this->errorFile		= $errorFile;
         $this->errorLine		= $errorLine;
         
@@ -332,23 +324,4 @@ class common_log_Item
 
         return (string) $returnValue;
     }
-
-    /**
-     * returns the user that was authentified while this item was created
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return string
-     */
-    public function getUser()
-    {
-        $returnValue = (string) '';
-
-        $returnValue = $this->authentifiedUser;
-
-        return (string) $returnValue;
-    }
-
 }
-
-?>
