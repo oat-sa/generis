@@ -378,8 +378,8 @@ class VirtuosoImplTestCase extends UnitTestCase {
         }
         
         public function testCreateSuperUser(){
-                $modelUri = core_kernel_classes_Session::singleton()->getNameSpace();
-                $superUserUri = $modelUri.'#superUser';
+                $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
+                $superUserUri = $modelUri.'superUser';
                 $superUser = new core_kernel_classes_Resource($superUserUri);
                 try{
                         if($superUser->exists()){

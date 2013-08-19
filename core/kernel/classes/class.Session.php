@@ -41,46 +41,12 @@ class core_kernel_classes_Session
     private static $instance = null;
 
     /**
-     * The language in use to access data stored into persistent memory for
-     * the currenly authenticated user.
-     *
-     * @access private
-     * @var string
-     */
-    private $dataLanguage = '';
-
-    /**
-     * The language in use at the gui level for the currently authenticated user.
-     *
-     * @access private
-     * @var string
-     */
-    private $interfaceLanguage = '';
-
-    /**
      * The login of the currently authenticated user.
      *
      * @access private
      * @var string
      */
     private $userLogin = '';
-
-    /**
-     * the URI identifying the currently authenticated user in persistent memory.
-     *
-     * @access private
-     * @var string
-     */
-    private $userUri = '';
-
-    /**
-     * The default language to use if the data language or GUI language
-     * cannot be accessed. It is used as a fallback language.
-     *
-     * @access public
-     * @var string
-     */
-    public $defaultLg = '';
 
     /**
      * The RDF models currently loaded for the authenticated user. This associative array
@@ -102,15 +68,15 @@ class core_kernel_classes_Session
     protected $updatableModels = array();
 
     /**
-     * The roles that the currently authenticated user is given. This array
-     * contains instances of core_kernel_classes_Resource.
-     *
-     * @access private
-     * @var array
+     * returns the current user session
+     * 
+     * @return common_session_Session
      */
-    private $userRoles = array();
-
-
+    private static function getCurrentUserSession() {
+        return common_session_SessionManager::getSession();
+    }
+    
+    
     /**
      * Obtain a single core_kernel_classes_Session instance.
      *
@@ -147,13 +113,10 @@ class core_kernel_classes_Session
     public function reset()
     {
 		common_Logger::d('resetting session');
-		$this->defaultLg = DEFAULT_LANG;
-		$this->setDataLanguage('');
-		$this->setInterfaceLanguage('');
+		common_session_SessionManager::endSession();
 
 		$this->userLogin	= '';
 		$this->userUri		= null;
-		$this->userRoles	= array();
 		$this->update();
     }
 
@@ -178,45 +141,6 @@ class core_kernel_classes_Session
 		//get updatable models
 		$this->updatableModels = $extensionManager->getUpdatableModels ();
 		
-		//set default language
-		$this->defaultLg			= DEFAULT_LANG;
-		$this->interfaceLanguage	= '';
-		$this->dataLanguage			= '';
-    }
-
-    /**
-     * Please use setDataLanguage() instead.
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @deprecated
-     * @param  string lg
-     * @return boolean
-     */
-    public function setLg($lg)
-    {
-        $returnValue = (bool) false;
-
-        $returnValue = $this->setDataLanguage($lg);
-
-        return (bool) $returnValue;
-    }
-
-    /**
-     * Please use getDataLanguage() instead.
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @deprecated
-     * @return string
-     */
-    public function getLg()
-    {
-        $returnValue = (string) '';
-
-        $returnValue = $this->getDataLanguage();
-
-        return (string) $returnValue;
     }
 
     /**
@@ -242,13 +166,9 @@ class core_kernel_classes_Session
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return string
      */
-    public function getUserLogin()
+    public function getUserLabel()
     {
-        $returnValue = (string) '';
-
-		$returnValue = $this->userLogin;
-
-        return (string) $returnValue;
+        return $this->getCurrentUserSession()->getUserLabel();
     }
 
     /**
@@ -260,29 +180,19 @@ class core_kernel_classes_Session
      */
     public function getUserUri()
     {
-        $returnValue = (string) '';
-
-        return $this->userUri;
-
-        return (string) $returnValue;
+        return $this->getCurrentUserSession()->getUserUri();
     }
-
+    
     /**
-     * Set the currently authenticated user.
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  string login The login of the user.
-     * @param  string uri The URI identifying the user in persistent memory.
-     * @param  array roles The array of roles that the user is given. This array
+     * Sets the current session
+     * @param common_session_Session $session
+     * @return boolean
      */
-    public function setUser($login, $uri = null, $roles = array())
+    public function setSession(common_session_Session $session)
     {
-    	$this->userLogin	= $login;
-    	$this->userUri		= $uri;
-    	$this->userRoles	= $roles;
-    }
-
+        return common_session_SessionManager::startSession($session);
+    }    
+    
     /**
      * Load a particular model depending on the provided URI.
      *
@@ -382,6 +292,21 @@ class core_kernel_classes_Session
 
         return (bool) $returnValue;
     }
+    
+    /**
+     * Refreshes the user session to empty the cashed
+     * roles and data 
+     *
+     * @access public
+     * @author Joel Bout, <joel@taotesting.com>
+     */
+    public function refresh()
+    {
+        $session = $this->getCurrentUserSession();
+        if ($session instanceof common_session_StatefulSession) {
+            $session->refresh();
+        }
+    }
 
     /**
      * Updates the session by reloading references to models.
@@ -419,23 +344,6 @@ class core_kernel_classes_Session
     }
 
     /**
-     * Set the language to use for data access in persistent memory.
-     *
-     * @access public
-     * @author Joel Bout, <joel@taotesting.com>
-     * @param  string language
-     */
-    public function setDataLanguage($language)
-    {
-        if (empty($language)) {
-        	$this->dataLanguage = '';
-        } else {
-        	$this->dataLanguage = $language;
-        }
-	    common_Logger::d('Set data language to '.$language, array('GENERIS', 'I18N'));
-    }
-
-    /**
      * Obtain the language to use for data access in persistent memory.
      *
      * @access public
@@ -444,27 +352,7 @@ class core_kernel_classes_Session
      */
     public function getDataLanguage()
     {
-        $returnValue = (string) '';
-
-        $returnValue = empty($this->dataLanguage) ? $this->defaultLg : $this->dataLanguage;
-
-        return (string) $returnValue;
-    }
-
-    /**
-     * Change the language to use at the GUI level.
-     *
-     * @access public
-     * @author Joel Bout, <joel@taotesting.com>
-     * @param  string language
-     */
-    public function setInterfaceLanguage($language)
-    {
-		if (empty($language)) {
-        	$this->interfaceLanguage = '';
-        } else {
-        	$this->interfaceLanguage = $language;
-        }
+        return (string) self::getCurrentUserSession()->getDataLanguage();
     }
 
     /**
@@ -476,11 +364,7 @@ class core_kernel_classes_Session
      */
     public function getInterfaceLanguage()
     {
-        $returnValue = (string) '';
-
-		$returnValue = empty($this->interfaceLanguage) ? $this->defaultLg : $this->interfaceLanguage;
-
-        return (string) $returnValue;
+        return self::getCurrentUserSession()->getInterfaceLanguage();
     }
 
     /**
@@ -492,11 +376,7 @@ class core_kernel_classes_Session
      */
     public function getUserRoles()
     {
-        $returnValue = array();
-
-        return $this->userRoles;
-
-        return (array) $returnValue;
+        return self::getCurrentUserSession()->getUserRoles();
     }
 
 }

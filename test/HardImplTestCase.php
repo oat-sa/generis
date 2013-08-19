@@ -945,7 +945,7 @@ class HardImplTestCase extends UnitTestCase {
 	
 	public function testFilterByLanguage() {
 		return;
-		$session = core_kernel_classes_Session::singleton();
+		$session = GenerisTestRunner::getTestSession();
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$true = new core_kernel_classes_Resource(GENERIS_TRUE);
 		
@@ -967,7 +967,7 @@ class HardImplTestCase extends UnitTestCase {
         $result	= $dbWrapper->query($query, array(
         	GENERIS_TRUE,
         	RDFS_SEEALSO,
-        	$session->defaultLg,
+        	DEFAULT_LANG,
         	$session->getDataLanguage()
         ));
         
@@ -983,7 +983,7 @@ class HardImplTestCase extends UnitTestCase {
         $result	= $dbWrapper->query($query, array(
         	GENERIS_TRUE,
         	RDFS_SEEALSO,
-        	$session->defaultLg,
+        	DEFAULT_LANG,
         	$session->getDataLanguage()
         ));
         
@@ -1002,7 +1002,7 @@ class HardImplTestCase extends UnitTestCase {
         $result	= $dbWrapper->query($query, array(
         	GENERIS_TRUE,
         	RDFS_SEEALSO,
-        	$session->defaultLg,
+        	DEFAULT_LANG,
         	$session->getDataLanguage()
         ));
         
@@ -1011,7 +1011,7 @@ class HardImplTestCase extends UnitTestCase {
         $filtered = core_kernel_persistence_smoothsql_Utils::filterByLanguage($result, 'l_language');
         $this->assertTrue(count($filtered) == 1 && $filtered[0] == 'testing');
 		
-		$session->setDataLanguage('');
+		$session->setDataLanguage(DEFAULT_LANG);
 		
 		// Set back ontology to normal.
 		$this->object->removeStatement($true->getUri(),RDFS_SEEALSO,'test1', '');

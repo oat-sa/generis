@@ -262,20 +262,30 @@ class core_kernel_users_Service
     	if (empty($roles)){
         	throw new InvalidArgumentException('The $roles parameter must not be empty.');	
         }
-        else{
-        	$roles = (is_array($roles)) ? $roles : array($roles);
-        	$searchRoles = array();
-        	foreach ($roles as $r){
-        		$searchRoles[] = ($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r;
-        	}
-        	unset($roles);
-        	
+        
+    	$roles = (is_array($roles)) ? $roles : array($roles);
+    	$searchRoles = array();
+    	foreach ($roles as $r){
+    		$searchRoles[] = ($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r;
+    	}
+    	unset($roles);
+    	
+        if (common_session_SessionManager::getSession()->getUserUri() == $user->getUri()){
+            foreach (common_session_SessionManager::getSession()->getUserRoles() as $role) {
+                if (in_array($role->getUri(), $searchRoles)) {
+                    $returnValue = true;
+                    break;
+                }
+            }
+        } else {
+    	    // After introducing remote users, we can no longer guarantee that any user and his roles are available
+        	common_Logger::w('Roles of non current user ('.$user->getUri().') checked, trying fallback to local ontology');	
         	$userRoles = array_keys($this->getUserRoles($user));
         	$identicalRoles = array_intersect($searchRoles, $userRoles);
         	
         	$returnValue = (count($identicalRoles) === count($searchRoles));
         }
-
+    	
         return (bool) $returnValue;
     }
 
@@ -555,69 +565,8 @@ class core_kernel_users_Service
      */
     public function login($login, $password, $allowedRoles)
     {
-        $returnValue = (bool) false;
-
-        // Role can be either a scalar value or a collection.
-        $allowedRoles = is_array($allowedRoles) ? $allowedRoles : array($allowedRoles);
-        $roles = array();
-        foreach ($allowedRoles as $r){
-        	$roles[] = (($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r);
-        }
-        
-        unset($allowedRoles);
-	        
-		if(!is_string($login)){
-			throw new core_kernel_users_Exception('The login must be of "string" type');
-		}
-		$login = trim($login);
-		if(empty($login)){
-			throw new core_kernel_users_Exception('The login cannot be empty');
-		}
-		
-		if(!is_string($password)){
-			throw new core_kernel_users_Exception('The password must be of "string" type');
-		}
-		// Parameters are corect.
-		$userClass = new core_kernel_classes_Class(CLASS_GENERIS_USER);
-		$filters = array(PROPERTY_USER_LOGIN => $login, PROPERTY_USER_PASSWORD => $password);
-		$options = array('like' => false, 'recursive' => true);
-		$users = $userClass->searchInstances($filters, $options);
-		
-		if (count($users) != 1){
-			// Multiple users matching or not at all.
-			if (count($users) > 1) {
-				common_Logger::w("Multiple Users found with the same password for login '${login}'.", 'GENERIS');
-			}
-			
-			$this->logout();
-		}
-		else{
-			
-			$user = reset($users);
-			
-			// A Matching user was found.
-			// We now search for a matching role for this user.
-			$userRoles = $this->getUserRoles($user);
-			$found = false;
-			
-			foreach ($userRoles as $r){
-				if (in_array($r->getUri(), $roles)){
-					$found = true;
-					break;	
-				}
-			}
-			
-			if ($found === true){
-				$returnValue = true;
-				
-				// Initialize current user.
-				$session = core_kernel_classes_Session::singleton();
-				$session->reset();
-				$session->setUser($login, $user->getUri(), $userRoles);
-			}
-		}
-
-        return (bool) $returnValue;
+        $adapter = new core_kernel_users_AuthAdapter($login, $password);
+        return common_user_auth_Service::singleton()->login($adapter, $allowedRoles);
     }
 
     /**
@@ -666,23 +615,6 @@ class core_kernel_users_Service
         $returnValue = true;
 
         return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method startSession
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  Resource user
-     * @return mixed
-     */
-    public function startSession(core_kernel_classes_Resource $user)
-    {
-		$userRoles = $this->getUserRoles($user);
-			
-		$session = core_kernel_classes_Session::singleton();
-		$session->reset();
-		$session->setUser('', $user->getUri(), $userRoles);
     }
 
     /**

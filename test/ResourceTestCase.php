@@ -70,7 +70,7 @@ class ResourceTestCase extends UnitTestCase{
 	
 	public function testGetPropertyValuesCollection()
 	{
-		$session = core_kernel_classes_Session::singleton();
+		$session = GenerisTestRunner::getTestSession();
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = new core_kernel_classes_Property(RDFS_SEEALSO,__METHOD__);
@@ -130,7 +130,7 @@ class ResourceTestCase extends UnitTestCase{
 		}
 		
 		// Back to normal.
-		$session->setDataLanguage('');
+		$session->setDataLanguage(DEFAULT_LANG);
 
 		$instance->delete();
 	}
@@ -348,7 +348,7 @@ class ResourceTestCase extends UnitTestCase{
 	
 	public function testRemovePropertyValues()
 	{
-		$session = core_kernel_classes_Session::singleton();
+		$session = GenerisTestRunner::getTestSession();
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test', 'test');
 		$instance2 = $class->createInstance('test2', 'test2');
@@ -370,7 +370,7 @@ class ResourceTestCase extends UnitTestCase{
 		$instance->setPropertyValueByLg($prop2,'multiSE1','SE');
 		$instance->setPropertyValueByLg($prop2,'multiSE1','SE');
 		$instance->setPropertyValueByLg($prop2,'multiJA','JA');
-		$this->assertTrue(count($instance->getPropertyValues($prop2)) == 1);
+		$this->assertEqual(count($instance->getPropertyValues($prop2)),1);
 		
 		// We are by default in EN language (English). If we call removePropertyValues
 		// for property values on a language dependant property, we should only remove
@@ -424,7 +424,7 @@ class ResourceTestCase extends UnitTestCase{
 
 	public function testGetOnePropertyValue()
 	{
-		$session = core_kernel_classes_Session::singleton();
+		$session = GenerisTestRunner::getTestSession();
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = $class->createProperty('seeAlsoDo','multilingue',true);
@@ -455,7 +455,7 @@ class ResourceTestCase extends UnitTestCase{
 		$one = $instance->getPropertyValuesByLg($seeAlso, 'FR');
 		
 		// Back to default language.
-		$session->setDataLanguage('');
+		$session->setDataLanguage(DEFAULT_LANG);
 
 		$instance->delete();
 	}

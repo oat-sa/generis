@@ -18,8 +18,7 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
+
 require_once dirname(__FILE__).'/../common/inc.extension.php';
 require_once INCLUDES_PATH.'/simpletest/autorun.php';
 require_once INCLUDES_PATH.'/ClearFw/core/simpletestRunner/_main.php';
@@ -45,9 +44,28 @@ class GenerisTestRunner extends TestRunner
     public static function initTest(){
         //connect the API
         if(!self::$connected){
-        	$userService = core_kernel_users_Service::singleton();
-        	$userService->login(SYS_USER_LOGIN, SYS_USER_PASS, new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole'));
+            common_session_SessionManager::startSession(new common_test_TestUserSession());
             self::$connected = true;
         }
+    }
+    
+    public static function restoreTestSession() {
+        return common_session_SessionManager::startSession(new common_test_TestUserSession());
+    }
+    
+    /**
+     * Returns the test session if available
+     * @throws common_exception_Error
+     * @return common_test_TestUserSession
+     */
+    public static function getTestSession() {
+        if(!self::$connected){
+            throw new common_exception_Error('Trying to retrieve TestSession without initialising it first via initTest()');
+        }
+        $session = common_session_SessionManager::getSession();
+        if(!$session instanceof common_test_TestUserSession){
+            throw new common_exception_Error('current session is no longer a common_test_TestUserSession');
+        }
+        return $session;
     }
 }

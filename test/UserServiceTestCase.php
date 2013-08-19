@@ -144,10 +144,10 @@ class UserServiceTestCase extends UnitTestCase {
 		$user = $this->service->addUser('login', md5('password'), $role);
 		$taoManagerRole = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole');
 		
-		$this->assertTrue($this->service->login('login', md5('password'), $role));
+		$this->assertTrue($this->service->login('login', 'password', $role));
 		$this->assertTrue($this->service->isASessionOpened());
 		$this->assertTrue($this->service->logout());
-		$this->assertTrue($this->service->login(SYS_USER_LOGIN, SYS_USER_PASS, $taoManagerRole)); // relog sys user.
+		$this->assertTrue(GenerisTestRunner::restoreTestSession()); // relog sys user.
 		$this->assertFalse($this->service->login('toto', '', $taoManagerRole));
 		
 		$role->delete();
@@ -170,10 +170,9 @@ class UserServiceTestCase extends UnitTestCase {
 		$userRoles = $user->getUniquePropertyValue($userRolesProperty);
 		$this->assertEqual($userRoles->getUri(), $role1->getUri());
 		$this->assertTrue($this->service->logout());
-		$this->assertTrue($this->service->login('user1', md5('password1'), $role1));
+		$this->assertTrue($this->service->login('user1', 'password1', $role1));
 		$this->assertTrue($this->service->logout());
-		$taoManagerRole = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole');
-		$this->assertTrue($this->service->login(SYS_USER_LOGIN, SYS_USER_PASS, $taoManagerRole));
+		$this->assertTrue(GenerisTestRunner::restoreTestSession());
 		
 		$user->delete();
 		$this->assertFalse($user->exists());
