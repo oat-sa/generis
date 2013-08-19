@@ -348,8 +348,8 @@ class core_kernel_persistence_hardsql_Class
 		if($uri == ''){
 			$subject = common_Utils::getNewUri();
 		}else if($uri[0]=='#'){ //$uri should start with # and be well formed
-			$modelUri = core_kernel_classes_Session::singleton()->getNameSpace();
-			$subject = $modelUri . $uri;
+			$modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
+			$subject = rtrim($modelUri, '#') . $uri;
 		}else{
 			$subject = $uri;
 		}
@@ -839,7 +839,7 @@ class core_kernel_persistence_hardsql_Class
 				}
 				else{
 					$lang = $session->getDataLanguage();
-					$defaultLg = ' OR "l_language" = \''.$session->defaultLg.'\' ';
+					$defaultLg = ' OR "l_language" = \''.DEFAULT_LANG.'\' ';
 				}
 	            
 				$query = 'SELECT '.$distinct.' "property_value", "property_foreign_uri"

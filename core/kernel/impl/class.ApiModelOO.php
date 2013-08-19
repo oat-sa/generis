@@ -261,7 +261,7 @@ class core_kernel_impl_ApiModelOO
 		$size = $memModel->size();
 		while ($it->hasNext()) {
 			$statement = $it->next();
-			if($dbModel->add($statement, $session->getUserLogin()) === true){
+			if($dbModel->add($statement, $session->getUserUri()) === true){
 				$added++;
 			}
 		}
@@ -512,7 +512,7 @@ class core_kernel_impl_ApiModelOO
 	       		$predicate,
 	       		$object,
 	       		$language,
-	       		$session->getUserLogin(),
+	       		$session->getUserUri(),
 	       		$mask,
 	       		$mask,
 	       		$mask

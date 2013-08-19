@@ -410,8 +410,8 @@ class core_kernel_persistence_smoothsql_Class
 			$subject = common_Utils::getNewUri();
 		}
 		else if ( $uri[0]=='#'){ //$uri should start with # and be well formed
-				$modelUri = core_kernel_classes_Session::singleton()->getNameSpace();
-				$subject = $modelUri . $uri;
+				$modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
+				$subject = rtrim($modelUri, '#') . $uri;
 		}
 		else{
 				$subject = $uri;

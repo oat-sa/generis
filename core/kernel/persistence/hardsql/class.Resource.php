@@ -191,7 +191,7 @@ class core_kernel_persistence_hardsql_Resource
 				}
 				else{
 					$lang = $session->getDataLanguage();
-					$defaultLg = ' OR "l_language" = \''.$session->defaultLg.'\' ';
+					$defaultLg = ' OR "l_language" = \''.DEFAULT_LANG.'\' ';
 				}
 	            
 				$query = 'SELECT "property_value", "property_foreign_uri"
@@ -1294,7 +1294,7 @@ class core_kernel_persistence_hardsql_Resource
 				$lang = $options['lg'];
 			} else {
 				$lang = $session->getDataLanguage();
-				$defaultLg = ' OR "l_language" = \'' . $session->defaultLg . '\' ';
+				$defaultLg = ' OR "l_language" = \'' . DEFAULT_LANG . '\' ';
 			}
 
 			$query = 'SELECT "property_uri", "property_value", "property_foreign_uri"

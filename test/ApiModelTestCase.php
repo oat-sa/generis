@@ -44,9 +44,7 @@ class ApiModelTestCase extends UnitTestCase {
 	}
 	
 	public function testGetRootClass(){
-		$session = core_kernel_classes_Session::singleton();
-		$this->assertNotNull($session);
-		$localModel = $session->getNameSpace();
+		$localModel = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
 		$this->assertFalse(empty($localModel));
 		
 		$rootClasses = $this->object->getRootClasses();

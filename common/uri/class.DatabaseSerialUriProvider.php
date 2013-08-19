@@ -90,7 +90,7 @@ class common_uri_DatabaseSerialUriProvider
             case 'pdo_pgsql':
             case 'pdo_mysql':
                 $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-                $modelUri = core_kernel_classes_Session::singleton()->getNameSpace() . '#';
+                $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
                 $sth = $dbWrapper->prepare("SELECT generis_sequence_uri_provider(?)");
         		if ($sth->execute(array($modelUri)) !== false){
         			$row = $sth->fetch();

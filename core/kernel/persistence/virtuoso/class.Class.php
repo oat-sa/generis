@@ -436,7 +436,7 @@ class core_kernel_persistence_virtuoso_Class
         else {
                 //$uri should start with # and be well formed
                 if ($uri[0]=='#'){
-                        $modelUri = core_kernel_classes_Session::singleton()->getNameSpace();
+                        $modelUri = rtrim(common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri(), '#');
                         $subject = $modelUri . $uri;
                 } else {
                         $subject = $uri;

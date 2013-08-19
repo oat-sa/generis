@@ -165,7 +165,7 @@ class core_kernel_persistence_smoothsql_Resource
 		}
 		else{
 			$lang = $session->getDataLanguage();
-			$defaultLg = ' OR "l_language" = \''.$session->defaultLg.'\' ';
+			$defaultLg = ' OR "l_language" = \''.DEFAULT_LANG.'\' ';
 		}
 		
         $session = core_kernel_classes_Session::singleton();
@@ -347,7 +347,7 @@ class core_kernel_persistence_smoothsql_Resource
        		$property->getUri(),
        		$object,
        		$lang,
-       		$session->getUserLogin(),
+       		$session->getUserUri(),
        		$mask,
        		$mask,
        		$mask
@@ -382,7 +382,7 @@ class core_kernel_persistence_smoothsql_Resource
 	        	$localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
 	       		$modelId	= $localNs->getModelId();
 	        	$mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
-	        	$user		= $session->getUserLogin();
+	        	$user		= $session->getUserUri();
 	       		
 	       		$query = 'INSERT INTO "statements" ("modelID","subject","predicate","object","l_language","author","stread","stedit","stdelete","epoch") VALUES ';
 	       		
@@ -451,7 +451,7 @@ class core_kernel_persistence_smoothsql_Resource
        		$property->getUri(),
        		$value,
        		($property->isLgDependent() ? $lg : ''),
-       		$session->getUserLogin(),
+       		$session->getUserUri(),
        		$mask,
        		$mask,
        		$mask
@@ -680,7 +680,7 @@ class core_kernel_persistence_smoothsql_Resource
     		$session = core_kernel_classes_Session::singleton();
     		$localNs = common_ext_NamespaceManager::singleton()->getLocalNamespace();
 	       	$modelId = $localNs->getModelId();
-    		$user = $session->getUserLogin();
+    		$user = $session->getUserUri();
     		
 	    	$insert = 'INSERT INTO "statements" ("modelID", "subject", "predicate", "object", "l_language", "author", "stread", "stedit", "stdelete") VALUES ';
     		foreach($collection->getIterator() as $triple){
@@ -863,7 +863,7 @@ class core_kernel_persistence_smoothsql_Resource
                 "subject" = \''.$resource->getUri().'\' 
                 AND "predicate" IN ('.$predicatesQuery.')
                 AND ("l_language" = \'\' 
-                    OR "l_language" = \''.$session->defaultLg.'\' 
+                    OR "l_language" = \''.DEFAULT_LANG.'\' 
                     OR "l_language" = \''.$session->getDataLanguage().'\') 
                 AND "modelID" IN ('.$modelIds.')';
         

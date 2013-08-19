@@ -671,9 +671,6 @@ class core_kernel_persistence_virtuoso_Resource
         list($NS, $ID) = explode('#', $newUri);
     	if($collection->count() > 0 && !empty($ID)){
     		
-//    		$session = core_kernel_classes_Session::singleton();
-//    		$user = $session->getUserLogin();
-    		
                 $virtuoso = core_kernel_persistence_virtuoso_VirtuosoDataStore::singleton();
                 $prefixes =  array($NS => 'resourceNS');
                 $query = '
