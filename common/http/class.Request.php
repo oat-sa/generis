@@ -140,10 +140,21 @@ class common_http_Request
                 break;
             }
              case "POST":{
-                    $params = (is_array($this->params) and (count($this->params)>0)) ? $this->postEncode($this->params) : $this->getBody();
+
+                    if (is_array($this->params) and (count($this->params)>0)) {
+                        $params =  $this->postEncode($this->params);
+                         curl_setopt($curlHandler,CURLOPT_POST, true);//application/x-www-form-urlencoded
+                         curl_setopt($curlHandler,CURLOPT_POSTFIELDS, $params);
+                    } else {
+                        if (!is_null(($this->getBody()))) {
+                        $this->headers["Content-Type"] = "text/plain";
+                        curl_setopt($curlHandler, CURLOPT_POSTFIELDS, urlencode($this->getBody()));
+                        }
+                    }
+
+                   
             		//analyse if there is a body or structured postfields
-                    curl_setopt($curlHandler,CURLOPT_POST, true);//application/x-www-form-urlencoded
-                    curl_setopt($curlHandler,CURLOPT_POSTFIELDS, $params);
+                   
                  break;}
             case "PUT":{
 
