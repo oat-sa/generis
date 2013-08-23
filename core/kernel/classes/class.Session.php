@@ -204,7 +204,6 @@ class core_kernel_classes_Session
     protected function loadModel($model)
     {
         $returnValue = (bool) false;
-
         
         if(!preg_match("/#$/", $model)){
         	$model .= '#';
@@ -221,6 +220,9 @@ class core_kernel_classes_Session
         			break;
         		}
         	}
+        }
+        if (!$returnValue) {
+            common_Logger::w('Unable to load '.$model);
         }
 
         return (bool) $returnValue;
