@@ -84,6 +84,8 @@ class common_http_Request
 
     private $headers;
 
+    private $body;
+
     public function __construct($url, $method = self::METHOD_POST, $params = array(), $headers = array())
     {
         $this->url = $url;
@@ -115,5 +117,83 @@ class common_http_Request
     public function getHeaders()
     {
         return $this->headers;
+    }
+    /**
+     * set request body to send
+     */
+    public function setBody($requestBodyData) {
+        $this->body = $requestBodyData;
+    }
+    public function getBody() {
+        return $this->body;
+    }
+    /**
+     * @return common_http_Response
+     */
+    public function send(){
+
+        $curlHandler = curl_init($this->getUrl());
+        switch ($this->getMethod()) {
+            case "HEAD":{
+                    curl_setopt($curlHandler,CURLOPT_NOBODY, true);
+                    curl_setopt($curlHandler,CURLOPT_HEADER, true);
+                break;
+            }
+             case "POST":{
+                    $params = (is_array($this->params) and (count($this->params)>0)) ? $this->postEncode($this->params) : $this->getBody();
+            		//analyse if there is a body or structured postfields
+                    curl_setopt($curlHandler,CURLOPT_POST, true);//application/x-www-form-urlencoded
+                    curl_setopt($curlHandler,CURLOPT_POSTFIELDS, $params);
+                 break;}
+            case "PUT":{
+
+                break;}
+            case "GET":{
+                curl_setopt($curlHandler,CURLOPT_HTTPGET, true);
+                break;}
+        }
+        //set the headers
+        if ((is_array($this->headers)) and (count($this->headers)>0)) {
+             curl_setopt($curlHandler,CURLOPT_HTTPHEADER, self::headerEncode($this->headers));
+        }
+        curl_setopt($curlHandler, CURLOPT_RETURNTRANSFER, 1);
+        //curl_setopt($curlHandler, CURLINFO_HEADER_OUT, 1);
+        //curl_setopt($curlHandler, CURLOPT_HEADER, true);
+        
+        $responseData = curl_exec($curlHandler);
+        $httpResponse = new common_http_Response();
+        
+        $httpResponse->httpCode = curl_getinfo($curlHandler, CURLINFO_HTTP_CODE);
+        $httpResponse->headerOut = curl_getinfo($curlHandler, CURLINFO_HEADER_OUT);
+        $httpResponse->effectiveUrl = curl_getinfo($curlHandler, CURLINFO_EFFECTIVE_URL);
+        $httpResponse->responseData = $responseData;
+        //curl_setopt($curlHandler, );
+        curl_close($curlHandler);
+        return $httpResponse;
+    }
+    /**
+     * @param array
+     */
+
+   static function postEncode($parameters){
+        
+        //todo
+        $content_type = isset($this->headers['Content-Type']) ? $this->headers['Content-Type'] : 'text/plain';
+        //should detect suitable encoding
+		$format = $content_type;
+		switch($format)
+		{
+			default:
+					return http_build_query($parameters, null, '&');
+				break;
+		}
+    }
+    static function headerEncode($headers){
+        $encodedHeaders = array();
+        //todo using aray_walk
+        foreach ($headers as $key => $value) {
+            $encodedHeaders[]=$key.': '.$value;
+        }
+        return $encodedHeaders;
     }
 }
