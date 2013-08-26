@@ -113,6 +113,10 @@ class common_http_Request
     {
         return $this->params[$key] = $value;
     }
+    public function setHeader($key, $value)
+    {
+        return $this->headers[$key] = $value;
+    }
     
     public function getHeaders()
     {
@@ -140,15 +144,15 @@ class common_http_Request
                 break;
             }
              case "POST":{
-
+                    curl_setopt($curlHandler,CURLOPT_POST, true);
                     if (is_array($this->params) and (count($this->params)>0)) {
                         $params =  $this->postEncode($this->params);
-                         curl_setopt($curlHandler,CURLOPT_POST, true);//application/x-www-form-urlencoded
+                         //application/x-www-form-urlencoded
                          curl_setopt($curlHandler,CURLOPT_POSTFIELDS, $params);
                     } else {
                         if (!is_null(($this->getBody()))) {
-                        $this->headers["Content-Type"] = "text/plain";
-                        curl_setopt($curlHandler, CURLOPT_POSTFIELDS, urlencode($this->getBody()));
+                        
+                        curl_setopt($curlHandler, CURLOPT_POSTFIELDS, ($this->getBody()));
                         }
                     }
 
@@ -160,7 +164,7 @@ class common_http_Request
 
                 break;}
             case "GET":{
-                curl_setopt($curlHandler,CURLOPT_HTTPGET, true);
+                //curl_setopt($curlHandler,CURLOPT_HTTPGET, true);
                 break;}
         }
         //set the headers
@@ -189,9 +193,9 @@ class common_http_Request
    static function postEncode($parameters){
         
         //todo
-        $content_type = isset($this->headers['Content-Type']) ? $this->headers['Content-Type'] : 'text/plain';
+        //$content_type = isset($this->headers['Content-Type']) ? $this->headers['Content-Type'] : 'text/plain';
         //should detect suitable encoding
-		$format = $content_type;
+		$format = 'text/plain';
 		switch($format)
 		{
 			default:
@@ -203,8 +207,9 @@ class common_http_Request
         $encodedHeaders = array();
         //todo using aray_walk
         foreach ($headers as $key => $value) {
-            $encodedHeaders[]=$key.': '.$value;
+            $encodedHeaders[]=$key.": ".$value."";
         }
+       //print_r($encodedHeaders);
         return $encodedHeaders;
     }
 }
