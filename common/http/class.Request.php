@@ -86,12 +86,13 @@ class common_http_Request
 
     private $body;
 
-    public function __construct($url, $method = self::METHOD_POST, $params = array(), $headers = array())
+    public function __construct($url, $method = self::METHOD_POST, $params = array(), $headers = array(), $body = "")
     {
         $this->url = $url;
         $this->method = $method;
         $this->params = $params;
         $this->headers = $headers;
+        $this->body = $body;
     }
 
     public function getUrl()
@@ -137,6 +138,11 @@ class common_http_Request
     public function send(){
 
         $curlHandler = curl_init($this->getUrl());
+
+          //set the headers
+        if ((is_array($this->headers)) and (count($this->headers)>0)) {
+             curl_setopt($curlHandler,CURLOPT_HTTPHEADER, self::headerEncode($this->headers));
+        }
         switch ($this->getMethod()) {
             case "HEAD":{
                     curl_setopt($curlHandler,CURLOPT_NOBODY, true);
@@ -144,14 +150,16 @@ class common_http_Request
                 break;
             }
              case "POST":{
-                    curl_setopt($curlHandler,CURLOPT_POST, true);
+                    curl_setopt($curlHandler,CURLOPT_POST, 1);
+                    
                     if (is_array($this->params) and (count($this->params)>0)) {
                         $params =  $this->postEncode($this->params);
                          //application/x-www-form-urlencoded
                          curl_setopt($curlHandler,CURLOPT_POSTFIELDS, $params);
                     } else {
+                        //common_Logger::i(serialize($this->getBody()));
                         if (!is_null(($this->getBody()))) {
-                        
+                      
                         curl_setopt($curlHandler, CURLOPT_POSTFIELDS, ($this->getBody()));
                         }
                     }
@@ -167,10 +175,7 @@ class common_http_Request
                 //curl_setopt($curlHandler,CURLOPT_HTTPGET, true);
                 break;}
         }
-        //set the headers
-        if ((is_array($this->headers)) and (count($this->headers)>0)) {
-             curl_setopt($curlHandler,CURLOPT_HTTPHEADER, self::headerEncode($this->headers));
-        }
+      
         curl_setopt($curlHandler, CURLOPT_RETURNTRANSFER, 1);
         //curl_setopt($curlHandler, CURLINFO_HEADER_OUT, 1);
         //curl_setopt($curlHandler, CURLOPT_HEADER, true);
