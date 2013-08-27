@@ -152,29 +152,24 @@
     <rdfs:comment xml:lang="en-US"><![CDATA[Local unversioned directory]]></rdfs:comment>
     <rdfs:label xml:lang="en-US"><![CDATA[Local directory]]></rdfs:label>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#VersionedFile">
-    <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#File"/>
-    <rdfs:label xml:lang="en-US"><![CDATA[Versioned File]]></rdfs:label>
-    <rdfs:comment xml:lang="en-US"><![CDATA[Versioned File]]></rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#VersionedFilePath">
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#FilePath">
     <rdfs:label><![CDATA[Versioned File Path]]></rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
     <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
-    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#VersionedFile"/>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#File"/>
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#VersionedFileRepository">
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#FileRepository">
     <rdfs:label><![CDATA[Versioned File Repository]]></rdfs:label>
     <rdfs:range rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#VersionedRepository"/>
     <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#RadioBox"/>
-    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#VersionedFile"/>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#File"/>
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#RepositoryRootFile">
     <rdfs:label><![CDATA[Repository Root File]]></rdfs:label>
     <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#VersionedRepository"/>
-    <rdfs:range rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#VersionedFile"/>
+    <rdfs:range rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#File"/>
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.w3.org/2000/01/rdf-schema#label">

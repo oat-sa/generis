@@ -67,13 +67,13 @@ define('PROPERTY_MULTIPLE',						GENERIS_NS . '#Multiple' , true) ;
 define('PROPERTY_COMMENT',						GENERIS_NS . '#generisRessourceComment' , true);
 
 #file
-define('CLASS_GENERIS_FILE' , 					GENERIS_NS . '#VersionedFile' , true) ;
+define('CLASS_GENERIS_FILE' , 					GENERIS_NS . '#File' , true) ;
 define('PROPERTY_FILE_FILENAME' , 				GENERIS_NS . '#FileName' , true) ;
-define('PROPERTY_FILE_FILEPATH' , 				GENERIS_NS . '#VersionedFilePath' , true) ;
-define('PROPERTY_FILE_FILESYSTEM' ,				GENERIS_NS . '#VersionedFileRepository' , true) ;
+define('PROPERTY_FILE_FILEPATH' , 				GENERIS_NS . '#FilePath' , true) ;
+define('PROPERTY_FILE_FILESYSTEM' ,				GENERIS_NS . '#FileRepository' , true) ;
 
 #versioned file
-define('PROPERTY_VERSIONEDFILE_VERSION' , 		GENERIS_NS . '#VersionedFileVersion' , true) ;
+define('PROPERTY_VERSIONEDFILE_VERSION' , 		GENERIS_NS . '#FileVersion' , true) ;
 
 #Versioned Repository
 define('CLASS_GENERIS_VERSIONEDREPOSITORY' ,				GENERIS_NS . '#VersionedRepository' , true) ;
