@@ -906,7 +906,7 @@ class core_kernel_classes_Resource
         // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014CD begin
         
         if(!is_array($properties)){
-			throw new Exception('The parameter properties has to be an array');
+			throw new common_exception_InvalidArgumentType(__CLASS__, __FUNCTION__, 0, 'array', $properties);
         }
         $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getPropertiesValues($this, $properties/*, $last*/);
         
