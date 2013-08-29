@@ -88,9 +88,7 @@ class common_user_auth_Service
 				unset($allowedRoles);
 				$intersect = array_intersect($roles, $user->getRoles());
 				if (empty($intersect)) {
-				    var_dump($roles);echo '<br /><br />';
-				    var_dump($user->getRoles());
-				    common_Logger::w('missing role');
+				    common_Logger::w('User '.$user->getIdentifier().' does not have the nescessary role');
 					return false;
 				}
 			}
