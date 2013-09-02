@@ -107,8 +107,15 @@ class helpers_File
     public static function searchResourcesFromPath($path = "")
     {
         $returnValue = array();
-        
-        $fileSource = core_kernel_fileSystem_Cache::getRelatedFileSystem($path);
+		
+		foreach (helpers_FileSource::getFileSources() as $fs) {
+            $fsPath = $fs->getPath();
+        	if (substr($path, 0, strlen($fsPath)) == $fsPath) {
+        		$fileSource = $fs;
+        		break;
+        	}
+		}
+		
         if (! is_null($fileSource)) {
             $fsPath = core_kernel_fileSystem_Cache::getFileSystemPath($fileSource);
             $relPath = substr($path, strlen($fsPath));

@@ -41,9 +41,12 @@ class helpers_FileSource
      */
     public static function getFileSources()
     {
-        return core_kernel_fileSystem_Cache::getEnabledFileSystems();
+        $classRepository = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDREPOSITORY);
+        return $classRepository->searchInstances(array(
+            PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED => GENERIS_TRUE
+        ), array(
+            'like' => false
+        ));
     }
     
 }
-
-?>

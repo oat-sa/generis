@@ -29,54 +29,35 @@
  */
 class core_kernel_fileSystem_Cache
 {
-	const SERIAL = 'fileSystemMap'; 
+	const SERIAL = 'fileSystemMap';
 	
-    /**
-     * Get an associativ array of enabled FileSystems with the form:
-     * 
-     * "FileSystem URI" => "FileSystem absolute path"
-     * 
-     * @return array
-     */
-    private static function getFileSystemMap()
-    {
-    	try {
-    		$returnValue = common_cache_FileCache::singleton()->get(self::SERIAL);
-    	} catch (common_cache_NotFoundException $e) {
-    		$classRepository = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDREPOSITORY);
-			$resources = $classRepository->searchInstances(array(
-				PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED => GENERIS_TRUE
-			), array(
-				'like' => false
-			));
-    		$returnValue = array();
-	    	foreach ($resources as $resource) {
-	    		$props = $resource->getPropertiesValues(array(
-	    			PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH, PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE
-	    		)); 
-				$returnValue[$resource->getUri()] = array(
-					PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH => current($props[PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH]),
-					PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE => current($props[PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE])
-				);
-			}
-			common_cache_FileCache::singleton()->put($returnValue, self::SERIAL);
-    	}
-    	return $returnValue;
-    }
-    
+	private static $cache = null;
+	
     private static function getFSInfo(core_kernel_versioning_Repository $fileSystem) {
-    	$map = self::getFileSystemMap();
-    	return isset ($map[$fileSystem->getUri()]) ? $map[$fileSystem->getUri()] : null;
+        if (is_null(self::$cache)) {
+            try {
+                self::$cache = common_cache_FileCache::singleton()->get(self::SERIAL);
+            } catch (common_cache_NotFoundException $e) {
+                self::$cache = array();
+            }
+        }
+        if (!isset(self::$cache[$fileSystem->getUri()])) {
+            $props = $fileSystem->getPropertiesValues(array(
+                PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH, PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE
+            ));
+            if (count($props[PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH]) == 1 && count($props[PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE]) == 1) {
+                self::$cache[$fileSystem->getUri()] = array(
+                    PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH => current($props[PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH]),
+                    PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE => current($props[PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE])
+                );
+    			common_cache_FileCache::singleton()->put(self::$cache, self::SERIAL);
+            } else {
+                common_Logger::e('Filesystem '.$fileSystem->getUri().' inexisting or incorectly defined');
+            }
+        }
+    	return isset (self::$cache[$fileSystem->getUri()]) ? self::$cache[$fileSystem->getUri()] : null;
     }
-    
-    public static function getEnabledFileSystems() {
-    	$returnValue = array();
-    	foreach (self::getFileSystemMap() as $uri => $path) {
-    		$returnValue[] = new core_kernel_fileSystem_FileSystem($uri);
-    	}
-    	return $returnValue;
-    }
-    
+
     public static function getFileSystemPath(core_kernel_versioning_Repository $fileSystem) {
     	$info = self::getFSInfo($fileSystem);
     	return is_null($info) ? null : $info[PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH];
@@ -86,33 +67,10 @@ class core_kernel_fileSystem_Cache
     	$info = self::getFSInfo($fileSystem);
     	return is_null($info) ? null : $info[PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE];
     }
-    /**
-     * returns the FileSystem that contains the specified absoulte path
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param path
-     * @return core_kernel_fileSystem_FileSystem
-     */
-    public static function getRelatedFileSystem($path)
-    {
-        $returnValue = null;
-
-        foreach (self::getFileSystemMap() as $fsUri => $fsInfo) {
-        	$fsPath = $fsInfo[PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH];
-        	if (substr($path, 0, strlen($fsPath)) == $fsPath) {
-        		$returnValue = new core_kernel_fileSystem_FileSystem($fsUri);
-        		break;
-        	}
-        }
-
-        return $returnValue;
-    }
     
     public static function flushCache() {
     	common_cache_FileCache::singleton()->remove(self::SERIAL);
+    	self::$cache = array();
     }
 
 }
-
-?>
