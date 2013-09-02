@@ -131,7 +131,28 @@ class core_kernel_file_File
     	return @file_get_contents($this->getAbsolutePath());
         // section 127-0-1-1--77b1997d:12bf34c2951:-8000:0000000000001386 end
     }
+    
+    /**
+     * Returns the filesystem this file is associated to 
+     * 
+     * @return core_kernel_fileSystem_FileSystem
+     */
+    public function getFileSystem()
+    {
+        $fs = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_FILE_FILESYSTEM));
+        return new core_kernel_fileSystem_FileSystem($fs);
+    }
 
+    /**
+     * Returns the relativ path to this file
+     *
+     * @return string
+     */
+    public function getRelativePath()
+    {
+        return $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH));
+    }
+    
     /**
      * Short description of method delete
      *
