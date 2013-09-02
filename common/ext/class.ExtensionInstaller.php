@@ -159,7 +159,7 @@ class common_ext_ExtensionInstaller
 	{
 		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A26 begin
 		$sampleFile	= $this->extension->getDir().'includes/config.php.sample';
-		$finalFile	= $this->extension->getDir().'/includes/config.php';
+		$finalFile	= $this->extension->getDir().'includes/config.php';
 		
 		if (file_exists($sampleFile)) {
 			common_Logger::d('Writing config '.$finalFile.' for '.$this->extension->getID(), 'INSTALL');
@@ -173,7 +173,10 @@ class common_ext_ExtensionInstaller
 			if ($this->extension->getID() == 'tao') {
 				require_once($finalFile);
 			}
+		} elseif (file_exists($finalFile)){
+		    helpers_File::remove($finalFile);
 		}
+		
 		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A26 end
 	}
 
