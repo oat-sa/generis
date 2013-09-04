@@ -58,7 +58,7 @@ class common_session_DefaultSession implements common_session_StatefulSession
         $label = '';
         $first = $this->user->getPropertyValues(PROPERTY_USER_FIRSTNAME);
         $label .= empty($first) ? '' : current($first);
-        $last = $this->user->getPropertyValues(PROPERTY_USER_FIRSTNAME);
+        $last = $this->user->getPropertyValues(PROPERTY_USER_LASTNAME);
         $label .= empty($last) ? '' : ' '.current($last);
         $label = trim($label);
         if (empty($label)) {
