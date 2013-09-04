@@ -30,7 +30,8 @@
  */
 class core_kernel_fileSystem_FileSystemFactory
 {
-
+    const DENY_ACCESS_HTACCESS = "<Directory />\n\tAllowOverride None\n\tDeny from All\n</Directory>";
+    
     /**
      * creates a new FileSystem
      *
@@ -60,6 +61,19 @@ class core_kernel_fileSystem_FileSystemFactory
         	PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED	=> ($enabled ? GENERIS_TRUE : GENERIS_FALSE)
         ));
         core_kernel_fileSystem_Cache::flushCache();
+        
+        $filePath = $path . '.htaccess';
+        if (false !== ($fp = @fopen($filePath, 'c')) && true === flock($fp, LOCK_EX)){
+        
+            // We first need to truncate.
+            ftruncate($fp, 0);
+        
+            fwrite($fp, self::DENY_ACCESS_HTACCESS);
+            @flock($fp, LOCK_UN);
+            @fclose($fp);
+        } else {
+            throw new common_exception_Error('Could not secure newly created filesource \''.$resource->getUri().'\' for folder \''.$path.'\'');
+        }
         return new core_kernel_fileSystem_FileSystem($resource);
     }
 
