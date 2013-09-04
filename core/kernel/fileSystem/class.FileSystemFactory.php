@@ -30,7 +30,7 @@
  */
 class core_kernel_fileSystem_FileSystemFactory
 {
-    const DENY_ACCESS_HTACCESS = "<Directory />\n\tAllowOverride None\n\tDeny from All\n</Directory>";
+    const DENY_ACCESS_HTACCESS = "Deny from All";
     
     /**
      * creates a new FileSystem
