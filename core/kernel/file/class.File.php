@@ -70,11 +70,11 @@ class core_kernel_file_File
     }
 
     /**
-     * Short description of method getAbsolutePath
+     * Get the absolute path to the directory where the file is stored.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return string
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @return string A path.
      */
     public function getAbsolutePath()
     {
