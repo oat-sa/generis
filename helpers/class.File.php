@@ -108,6 +108,7 @@ class helpers_File
     {
         $returnValue = array();
 		
+        $fileSource = null;
 		foreach (helpers_FileSource::getFileSources() as $fs) {
             $fsPath = $fs->getPath();
         	if (substr($path, 0, strlen($fsPath)) == $fsPath) {
@@ -116,7 +117,7 @@ class helpers_File
         	}
 		}
 		
-        if (! is_null($fileSource)) {
+        if (!is_null($fileSource)) {
             $fsPath = core_kernel_fileSystem_Cache::getFileSystemPath($fileSource);
             $relPath = substr($path, strlen($fsPath));
             $lastDirSep = strrpos($relPath, DIRECTORY_SEPARATOR);
