@@ -28,7 +28,9 @@ class FileSourceLocalTestCase extends UnitTestCase {
     /**
      * @var core_kernel_versioning_Repository
      */
-    private static $repository = null;
+    private $repository = null;
+    
+    private $directory = null;
     
 	public function __construct()
 	{
@@ -38,24 +40,29 @@ class FileSourceLocalTestCase extends UnitTestCase {
     public function setUp()
     {
 	    GenerisTestRunner::initTest();
-		self::$repository = core_kernel_fileSystem_FileSystemFactory::createFileSystem(
+	    $this->directory = sys_get_temp_dir().DIRECTORY_SEPARATOR."testrepo".DIRECTORY_SEPARATOR;
+	    mkdir($this->directory);
+		$this->repository = core_kernel_fileSystem_FileSystemFactory::createFileSystem(
 			new core_kernel_classes_Resource(INSTANCE_GENERIS_VCS_TYPE_LOCAL),
-			'', '', '', sys_get_temp_dir().DIRECTORY_SEPARATOR."testrepo", 'UnitTestRepository', true
+			'', '', '', $this->directory, 'UnitTestRepository', true
 		);
     }
 	
     public function tearDown()
     {
-	    self::$repository->delete();
+        $directory = $this->repository->getPath();
+	    $this->repository->delete();
+	    helpers_File::remove($this->directory);
 	    parent::tearDown();
 	}
 
 	protected function getTestRepository () {
-		return self::$repository;
+		return $this->repository;
 	}
 
     public function testRepository() {
     	$this->assertIsA($this->getTestRepository(), 'core_kernel_versioning_Repository');
+    	$this->assertEqual($this->getTestRepository()->getPath(), $this->directory);
     }
 	
 }
