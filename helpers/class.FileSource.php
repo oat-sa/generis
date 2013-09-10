@@ -42,11 +42,16 @@ class helpers_FileSource
     public static function getFileSources()
     {
         $classRepository = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDREPOSITORY);
-        return $classRepository->searchInstances(array(
+        $resources = $classRepository->searchInstances(array(
             PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED => GENERIS_TRUE
         ), array(
             'like' => false
         ));
+        $fileSystems = array();
+        foreach ($resources as $resource) {
+            $fileSystems[] = new core_kernel_fileSystem_FileSystem($resource);
+        }
+        return $fileSystems;
     }
     
 }
