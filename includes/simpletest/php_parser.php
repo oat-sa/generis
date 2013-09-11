@@ -9,8 +9,7 @@
 /**#@+
  * Lexer mode stack constants
  */
-foreach (array('LEXER_
- * ', 'LEXER_MATCHED',
+foreach (array('LEXER_ENTER', 'LEXER_MATCHED',
                 'LEXER_UNMATCHED', 'LEXER_EXIT',
                 'LEXER_SPECIAL') as $i => $constant) {
     if (! defined($constant)) {
@@ -363,8 +362,7 @@ class SimpleLexer {
             return $this->mode->leave();
         }
         $this->mode->enter($mode);
-        return $this->invokeParser($matched, LEXER_
- * );
+        return $this->invokeParser($matched, LEXER_ENTER);
     }
 
     /**
@@ -595,8 +593,7 @@ class SimpleHtmlSaxParser {
      *    @access public
      */
     function acceptStartToken($token, $event) {
-        if ($event == LEXER_
- * ) {
+        if ($event == LEXER_ENTER) {
             $this->tag = strtolower(substr($token, 1));
             return true;
         }

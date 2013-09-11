@@ -188,8 +188,7 @@ class TestOfLexerModes extends UnitTestCase {
         $handler->expectAt(2, "a", array("aa", LEXER_MATCHED));
         $handler->expectAt(3, "a", array("b", LEXER_UNMATCHED));
         $handler->expectAt(4, "a", array("aaa", LEXER_MATCHED));
-        $handler->expectAt(0, "b", array(":", LEXER_
- * ));
+        $handler->expectAt(0, "b", array(":", LEXER_ENTER));
         $handler->expectAt(1, "b", array("a", LEXER_UNMATCHED));
         $handler->expectAt(2, "b", array("b", LEXER_MATCHED));
         $handler->expectAt(3, "b", array("a", LEXER_UNMATCHED));
@@ -216,8 +215,7 @@ class TestOfLexerModes extends UnitTestCase {
         $handler->expectAt(1, "a", array("b", LEXER_UNMATCHED));
         $handler->expectAt(2, "a", array("aa", LEXER_MATCHED));
         $handler->expectAt(3, "a", array("b", LEXER_UNMATCHED));
-        $handler->expectAt(0, "b", array("(", LEXER_
- * ));
+        $handler->expectAt(0, "b", array("(", LEXER_ENTER));
         $handler->expectAt(1, "b", array("bb", LEXER_MATCHED));
         $handler->expectAt(2, "b", array("a", LEXER_UNMATCHED));
         $handler->expectAt(3, "b", array("bb", LEXER_MATCHED));
@@ -271,8 +269,7 @@ class TestOfLexerHandlers extends UnitTestCase {
         $handler = new MockTestParser();
         $handler->setReturnValue("a", true);
         $handler->expectAt(0, "a", array("aa", LEXER_MATCHED));
-        $handler->expectAt(1, "a", array("(", LEXER_
- * ));
+        $handler->expectAt(1, "a", array("(", LEXER_ENTER));
         $handler->expectAt(2, "a", array("bb", LEXER_MATCHED));
         $handler->expectAt(3, "a", array("a", LEXER_UNMATCHED));
         $handler->expectAt(4, "a", array("bb", LEXER_MATCHED));
