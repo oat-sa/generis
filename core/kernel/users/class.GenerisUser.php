@@ -73,7 +73,7 @@ class core_kernel_users_GenerisUser extends common_user_User
 	    	        if ($resource instanceof core_kernel_classes_Resource) {
                         return array($resource->getUniquePropertyValue(new core_kernel_classes_Property(RDF_VALUE)));
 	    	        } else {
-	    	            common_Logger::w('Language '.$property.' is not a resource');
+	    	            common_Logger::w('Language '.$resource.' is not a resource');
 	    	            return array(DEFAULT_LANG);
 	    	        }
 	    	    } else {

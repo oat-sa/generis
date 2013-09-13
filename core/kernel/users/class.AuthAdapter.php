@@ -60,7 +60,7 @@ class core_kernel_users_AuthAdapter
     	}
     	if (count($users) > 1){
     		// Multiple users matching or not at all.
-    		throw new common_exception_Error("Multiple Users found with the same password for login '${$this->username}'.");
+    		throw new common_exception_InconsistentData("Multiple Users found with the same password for login '".$this->username."'.");
     	}
     	
 		$userResource = current($users);
