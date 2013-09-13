@@ -29,8 +29,4 @@
  */
 interface common_session_StatefulSession extends common_session_Session
 {
-    /**
-     * refreshes the information stored in the current session
-     */
-    public function refresh();
 }

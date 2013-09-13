@@ -74,4 +74,10 @@ interface common_session_Session
      * @return string
      */
     public function getInterfaceLanguage();
+    
+    /**
+     * refreshes the information stored in the current session
+     */
+    public function refresh();
+    
 }

@@ -69,6 +69,14 @@ class common_session_AnonymousSession implements common_session_StatelessSession
      */
     public function getInterfaceLanguage() {
         return DEFAULT_LANG;
-    }    
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see common_session_Session::refresh()
+     */
+    public function refresh() {
+        // nothing to do here
+    }
 
 }
