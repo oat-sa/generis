@@ -52,9 +52,11 @@ if(PHP_SAPI == 'cli'){
 else{
 	$reporter =  new HtmlReporter();
 }
-
+//spikeCoverage throw error
+error_reporting(0);
 require_once  PHPCOVERAGE_HOME. "CoverageRecorder.php";
 require_once PHPCOVERAGE_HOME . "reporter/HtmlCoverageReporter.php";
+error_reporting(E_ALL);
 $includePaths = array(ROOT_PATH.'generis/core',ROOT_PATH.'generis/common',ROOT_PATH.'generis/helpers');
 $excludePaths = array(ROOT_PATH.'generis/common/conf',ROOT_PATH.'generis/common/exception');
 $covReporter = new HtmlCoverageReporter("Code Coverage Report Generis", "", PHPCOVERAGE_REPORTS."generis/");
