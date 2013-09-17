@@ -75,11 +75,13 @@ class ApiModelTestCase extends UnitTestCase {
 	public function testGetMetaClasses(){
 		$metaClasses = $this->object->getMetaClasses();
 		$this->assertIsA($metaClasses,'core_kernel_classes_ContainerCollection');
-		$metaClass = $metaClasses->get(0);
-		$this->assertIsA($metaClass,'core_kernel_classes_Class');
-		$this->assertEqual($metaClass->getUri(),RDFS_DATATYPE);
-		$this->assertEqual($metaClass->getLabel(),'Datatype');
-		$this->assertEqual($metaClass->getComment(),'The class of RDF datatypes.');
+		foreach ($metaClasses as $metaClass){
+		    if ($metaClass->getUri() == RDFS_DATATYPE) {
+        		$this->assertIsA($metaClass,'core_kernel_classes_Class');
+        		$this->assertEqual($metaClass->getLabel(),'Datatype');
+        		$this->assertEqual($metaClass->getComment(),'The class of RDF datatypes.');
+		    }
+		}
 	}
 	
 	public function testSetStatement(){
