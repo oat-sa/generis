@@ -493,7 +493,7 @@ class ResourceTestCase extends UnitTestCase{
 	    $this->assertTrue($labelChange  > $now);
 	    $typeChnge = $newInstance->getLastModificationDate(new core_kernel_classes_Property(RDF_TYPE));
 	    $this->assertTrue($labelChange  > $typeChnge);
-	    $this->assertTrue($now ==  $typeChnge);
+	    $this->assertEqual($now , $typeChnge);
 	    $newInstance->delete();
 	}
 	
