@@ -72,10 +72,9 @@ class common_log_Dispatcher
      */
     public function log( common_log_Item $item)
     {
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000435D begin
-        foreach ($this->appenders as $appender)
+        foreach ($this->appenders as $appender) {
         	$appender->log($item);
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000435D end
+        }
     }
 
     /**
