@@ -145,8 +145,9 @@ class common_Profiler
 			$sumDurations = 0;
 			foreach ($this->elapsedTimeLogs as $event => $duration) {
 					$this->implementor->logTimer($event, $duration, $total);
-					if ($event == 'start' || $event == 'dispatch')
+					if ($event == 'start' || $event == 'dispatch'){
 						$sumDurations += $duration;
+					}
 			}
 			$uncovered = $total - $sumDurations;
 				$this->implementor->logTimer('???', $uncovered, $total);
@@ -252,7 +253,9 @@ class common_Profiler
      * @author Somsack Sipasseuth ,<sam@taotesting.com>
      */
     public function startSlowQuery(){
-		if($this->isEnabled()) $this->slowQueryTimer = $this->getCurrentTime();
+		if($this->isEnabled()) {
+		    $this->slowQueryTimer = $this->getCurrentTime();
+		}
 	}
 	
 	public function isEnabled($appenderName = ''){
