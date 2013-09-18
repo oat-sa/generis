@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -22,7 +22,7 @@
  * 
  *
  * @access public
- * @author Sam, <sam@taotesting.com>
+ * @author Sam Sipasseuth, <sam@taotesting.com>
  * @package common
  * @subpackage profiler
  */
@@ -39,6 +39,9 @@ class common_profiler_archiver_FtpArchiver implements common_profiler_archiver_A
 	protected $maxFileSize = 1048576;
 	protected $sentInterval = 3600;
 	
+	/* (non-PHPdoc)
+	 * @see common_profiler_archiver_Archiver::init()
+	 */
 	public function init($configuration){
 		
 		$returnValue = false;
@@ -89,6 +92,9 @@ class common_profiler_archiver_FtpArchiver implements common_profiler_archiver_A
 		return $returnValue;
 	}
 	
+	/* (non-PHPdoc)
+	 * @see common_profiler_archiver_Archiver::store()
+	 */
 	public function store($profileData){
 		
 		$systemDataStr = '';
@@ -129,6 +135,9 @@ class common_profiler_archiver_FtpArchiver implements common_profiler_archiver_A
 		
 	}
 	
+	/**
+	 * @author "Sam Sipasseuth, <sam@taotesting.com>"
+	 */
 	protected function send(){
 		
 		// set up a connection or die
@@ -151,11 +160,20 @@ class common_profiler_archiver_FtpArchiver implements common_profiler_archiver_A
 		
 	}
 	
+	/**
+	 * @author "Sam Sipasseuth, <sam@taotesting.com>"
+	 */
 	protected function clear(){
 		
-		if(file_exists($this->file)) helpers_File::remove($this->file);
-		if(file_exists($this->counterFile)) helpers_File::remove($this->counterFile);
-		if(file_exists($this->sentFolder)) helpers_File::remove($this->sentFolder);
+		if(file_exists($this->file)) {
+		    helpers_File::remove($this->file);
+		}
+		if(file_exists($this->counterFile)) {
+		    helpers_File::remove($this->counterFile);
+		}
+		if(file_exists($this->sentFolder)) {
+		    helpers_File::remove($this->sentFolder);
+		}
 		
 	}
 
