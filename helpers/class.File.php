@@ -314,10 +314,11 @@ class helpers_File
                     if (! is_null($only)) {
                         if ($only == self::$DIR && $fileinfo->isDir()) {
                             array_push($returnValue, $fileinfo->getFilename());
-                        } else 
+                        } else {
                             if ($only == self::$FILE && $fileinfo->isFile()) {
                                 array_push($returnValue, $fileinfo->getFilename());
                             }
+                        }
                     } else {
                         array_push($returnValue, $fileinfo->getFilename());
                     }
