@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -18,51 +18,7 @@
  *               
  * 
  */
-?>
-<?php
 
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API -
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 03.01.2013, 10:59:32 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package core
- * @subpackage kernel_persistence_virtuoso
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * include core_kernel_persistence_PersistenceImpl
- *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- */
-require_once('core/kernel/persistence/class.PersistenceImpl.php');
-
-/**
- * include core_kernel_persistence_ClassInterface
- *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- */
-require_once('core/kernel/persistence/interface.ClassInterface.php');
-
-/* user defined includes */
-// section 127-0-1-1--3a4c22:13104bcfe8d:-8000:00000000000022E9-includes begin
-// section 127-0-1-1--3a4c22:13104bcfe8d:-8000:00000000000022E9-includes end
-
-/* user defined constants */
-// section 127-0-1-1--3a4c22:13104bcfe8d:-8000:00000000000022E9-constants begin
-// section 127-0-1-1--3a4c22:13104bcfe8d:-8000:00000000000022E9-constants end
 
 /**
  * Short description of class core_kernel_persistence_virtuoso_Class
@@ -625,7 +581,9 @@ class core_kernel_persistence_virtuoso_Class
 
 										$object = trim($patternToken);
 
-										if(!$validLanguageMatching && common_Utils::isUri($object)) $validLanguageMatching = false;//no resource available for language dependent check
+										if(!$validLanguageMatching && common_Utils::isUri($object)) {
+										    $validLanguageMatching = false;//no resource available for language dependent check
+										}
 
 										if (!$like) {
 												$object = preg_match('/^\^/', $object)? $object : '^'.$object;
@@ -693,7 +651,9 @@ class core_kernel_persistence_virtuoso_Class
 							FILTER (';
 					$i = 0;
 					foreach($filters as $filter){
-						if($i>0) $query .= ' || ';
+						if($i>0) {
+						    $query .= ' || ';
+						}
 						$query .= $filter;
 						$i++;
 					}
