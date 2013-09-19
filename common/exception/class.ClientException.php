@@ -24,7 +24,9 @@
  * @package common
  * @subpackage exception
  */
-abstract class common_exception_ClientException extends common_exception implements common_exception_UserReadableException
+abstract class common_exception_ClientException
+    extends common_exception
+    implements common_exception_UserReadableException
 {
 
     public function __construct($message = null, $code = 0)

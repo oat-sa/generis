@@ -37,7 +37,9 @@ class common_exception_Unauthorized
     extends common_exception_ClientException
 {
 
-   
+   public function getUserMessage(){
+       return __("You are not authorized to perform this operation");
+   }
    
 } /* end of class common_exception_InvalidArgumentType */
 

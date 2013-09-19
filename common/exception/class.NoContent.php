@@ -35,7 +35,9 @@
 class common_exception_NoContent
     extends common_exception_ClientException
 {
-  
+    public function getUserMessage(){
+       return __("No content was found for your request");
+   }
    
 } /* end of class common_exception_InvalidArgumentType */
 
