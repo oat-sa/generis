@@ -16,31 +16,6 @@
  *
  *
  */
-/**
- * Generis Object Oriented API - common/exception/class.InvalidArgumentType.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 30.01.2012, 16:44:05 with ArgoUML PHP module
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author patrick,
- * @package common
- * @subpackage exception
- */
-
-
-require_once('common/exception/class.Error.php');
-
-/* user defined includes */
-// section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FA-includes begin
-// section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FA-includes end
-
-/* user defined constants */
-// section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FA-constants begin
-// section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FA-constants end
 
 /**
  * a useful exception
@@ -50,10 +25,8 @@ require_once('common/exception/class.Error.php');
  * @subpackage exception
  */
 class common_exception_NotImplemented
-    extends common_exception_ClientException
+    extends common_Exception
 {
   
    
-} /* end of class common_exception_InvalidArgumentType */
-
-?>
+}
