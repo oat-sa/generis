@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -18,44 +18,7 @@
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  * 
  */
-?>
-<?php
 
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API - core\kernel\rules\class.Operation.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 04.01.2013, 17:05:09 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package core
- * @subpackage kernel_rules
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * include core_kernel_rules_Term
- *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- */
-require_once('core/kernel/rules/class.Term.php');
-
-/* user defined includes */
-// section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DFF-includes begin
-// section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DFF-includes end
-
-/* user defined constants */
-// section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DFF-constants begin
-// section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DFF-constants end
 
 /**
  * Short description of class core_kernel_rules_Operation
