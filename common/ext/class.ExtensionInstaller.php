@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -18,46 +18,7 @@
  *			   2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
 
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API - common/ext/class.ExtensionInstaller.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 19.02.2013, 13:10:26 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author lionel.lecaque@tudor.lu
- * @package common
- * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
- * @subpackage ext
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-	die('This file was generated for PHP 5');
-}
-
-/**
- * EXtension Wrapper
- *
- * @author lionel.lecaque@tudor.lu
- * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
- */
-require_once('common/ext/class.ExtensionHandler.php');
-
-/* user defined includes */
-// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017B9-includes begin
-// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017B9-includes end
-
-/* user defined constants */
-// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017B9-constants begin
-// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017B9-constants end
 
 /**
  * Short description of class common_ext_ExtensionInstaller
