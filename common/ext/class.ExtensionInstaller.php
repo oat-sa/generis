@@ -107,7 +107,7 @@ class common_ext_ExtensionInstaller
 		try{
 			// not yet installed? 
 			if ($this->extension->isInstalled()) {
-				throw new common_ext_AlreadyInstalledException('Problem installing extension ' . $this->extension->getID() .' : '. 'Already installed',
+				throw new common_ext_AlreadyInstalledException('Problem installing extension ' . $this->extension->getID() .' : Already installed',
 															   $this->extension->getID());
 			}
 			else{
