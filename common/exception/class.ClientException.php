@@ -25,7 +25,7 @@
  * @subpackage exception
  */
 abstract class common_exception_ClientException
-    extends common_exception
+    extends common_Exception
     implements common_exception_UserReadableException
 {
 
