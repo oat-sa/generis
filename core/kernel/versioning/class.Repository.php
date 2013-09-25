@@ -471,9 +471,13 @@ class core_kernel_versioning_Repository
         
         $destination = $this->getPath() . $fileName;
         $source = $filePath;
-        if(tao_helpers_File::move($source, $destination)){
+        if(tao_helpers_File::copy($source, $destination)){
         	
-        	$returnValue = $this->createFile($fileName);
+            if ($fileInfo->isDir()) {
+                $returnValue = $this->createFile('', $fileName);
+            } else {
+                $returnValue = $this->createFile($fileName);
+            }
         	
         	if (!empty($label)){
         		$returnValue->setLabel($label);
@@ -518,7 +522,7 @@ class core_kernel_versioning_Repository
         $returnValue = (string) '';
 
         // section 127-0-1-1-18201a84:13d170d1914:-8000:0000000000001FE2 begin
-        $returnValue = hash('crc32', $originalName) . rand(0, 1000);
+        $returnValue = uniqid(hash('crc32', $originalName));
         
         $ext = @pathinfo($originalName, PATHINFO_EXTENSION);
         if (!empty($ext)){
