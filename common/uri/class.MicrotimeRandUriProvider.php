@@ -89,7 +89,7 @@ class common_uri_MicrotimeRandUriProvider
 		$uriExist = false;
 		do{
 			list($usec, $sec) = explode(" ", microtime());
-        	$uri = $modelUri .'#i'. (str_replace(".","",$sec."".$usec)) . rand(0, 1000);
+        	$uri = $modelUri .'i'. (str_replace(".","",$sec."".$usec)) . rand(0, 1000);
 			$sqlResult = $dbWrapper->query("SELECT COUNT(subject) AS num FROM statements WHERE subject = '".$uri."'"
 			);
 			if ($row = $sqlResult->fetch()){
