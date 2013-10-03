@@ -104,8 +104,8 @@ class DbWrapperTestCase extends UnitTestCase {
             $i++;
             $this->assertTrue(is_array($value));
             $this->assertTrue($value['id'] == $i);
-            $this->assertTrue($value['uri'] = 'http://uri'.$i);
-            $this->assertTrue($value['value'] = 'value'.$i);
+            $this->assertTrue($value['uri'] == 'http://uri'.$i);
+            $this->assertTrue($value['column1'] == 'value'.$i);
         }
 
 
