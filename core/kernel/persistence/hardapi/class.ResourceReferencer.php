@@ -384,7 +384,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         $returnValue = (bool) false;
 
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001655 begin
-        common_logger::d('Referencing: '.$class->getUri());
+        common_Logger::d('Referencing: '.$class->getUri());
         
         // Get optional parameters
         $table = isset($options['table']) ? $options['table'] : '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
