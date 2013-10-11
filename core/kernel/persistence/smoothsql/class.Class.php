@@ -818,8 +818,7 @@ class core_kernel_persistence_smoothsql_Class
 				    switch (gettype($value)) {
 					    case 'string' :
 					    case 'numeric':
-						    $patternToken = trim($dbWrapper->dbConnector->quote($value));
-						    $object = trim(str_replace('*', '%', $patternToken));
+						    $object = trim(str_replace('*', '%', $value));
 
 						    if($like){
 							    if(!preg_match("/^%/", $object)){
@@ -828,12 +827,12 @@ class core_kernel_persistence_smoothsql_Class
 							    if(!preg_match("/%$/", $object)){
 								    $object = $object."%";
 							    }
-							    $sub[] .= '"object" LIKE '.$object;
+							    $sub[] .= '"object" LIKE '.$dbWrapper->dbConnector->quote($object);
 						    }
 						    else {
 							    $sub[] = (strpos($object, '%') !== false)
-								    ? '"object" LIKE '.$object
-								    : '"object" = '.$patternToken;
+								    ? '"object" LIKE '.$dbWrapper->dbConnector->quote($object)
+								    : '"object" = '.$dbWrapper->dbConnector->quote($value);
 						    }
 					    break;
 
