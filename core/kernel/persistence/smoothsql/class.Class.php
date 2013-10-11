@@ -811,14 +811,14 @@ class core_kernel_persistence_smoothsql_Class
 		    $conditions = array();
 		    foreach($propertyFilters as $propUri => $pattern){
 
-			    $propUri = trim($dbWrapper->dbConnector->quote($propUri), "'\"");
+			    $propUri = trim($dbWrapper->dbConnector->quote($propUri));
 			    $values = is_array($pattern) ? $pattern : array($pattern);
 			    $sub = array();
 			    foreach ($values as $value) {
 				    switch (gettype($value)) {
 					    case 'string' :
 					    case 'numeric':
-						    $patternToken = trim($dbWrapper->dbConnector->quote($value), "'\"");
+						    $patternToken = trim($dbWrapper->dbConnector->quote($value));
 						    $object = trim(str_replace('*', '%', $patternToken));
 
 						    if($like){
@@ -828,12 +828,12 @@ class core_kernel_persistence_smoothsql_Class
 							    if(!preg_match("/%$/", $object)){
 								    $object = $object."%";
 							    }
-							    $sub[] .= '"object" LIKE \''.$object.'\'';
+							    $sub[] .= '"object" LIKE '.$object;
 						    }
 						    else {
 							    $sub[] = (strpos($object, '%') !== false)
-								    ? '"object" LIKE \''.$object.'\''
-								    : '"object" = \''.$patternToken.'\'';
+								    ? '"object" LIKE '.$object
+								    : '"object" = '.$patternToken;
 						    }
 					    break;
 
@@ -851,9 +851,9 @@ class core_kernel_persistence_smoothsql_Class
 				    }
 			    }
 			    if (empty($sub)) {
-				    $conditions[] = "(\"predicate\" = '{$propUri}'{$langToken})";
+				    $conditions[] = "(\"predicate\" = {$propUri}{$langToken})";
 			    } else {
-				    $conditions[] = "(\"predicate\" = '{$propUri}' AND (".implode(" OR ", $sub)."){$langToken})";
+				    $conditions[] = "(\"predicate\" = {$propUri} AND (".implode(" OR ", $sub)."){$langToken})";
 			    }
 		    }
 		
