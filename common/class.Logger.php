@@ -199,7 +199,9 @@ class common_Logger
         // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432A begin
 		if ($this->enabled && $this->implementor->getLogThreshold() <= $level) {
 			$this->disable();
-			$stack = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+			$stack = defined('DEBUG_BACKTRACE_IGNORE_ARGS')
+                ? debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)
+                : debug_backtrace(FALSE);
 			array_shift($stack);
 			// retrieving the user can be a complex procedure, leading to missing log informations
 			$user = null;
