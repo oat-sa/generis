@@ -37,7 +37,7 @@ class common_profiler_System
 	}
 	
 	public function getTaoInstanceId(){
-		$key = LOCAL_NAMESPACE.GENERIS_INSTANCE_NAME.GENERIS_SESSION_NAME.SYS_USER_LOGIN.SYS_USER_PASS;
+		$key = LOCAL_NAMESPACE.GENERIS_INSTANCE_NAME.GENERIS_SESSION_NAME;
 		return md5($key);
 	}
 	

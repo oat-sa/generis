@@ -27,11 +27,15 @@ require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 	
 class UserServiceTestCase extends UnitTestCase {
+    
+    const TESTCASE_USER_LOGIN = 'testcase_user';
 	
 	/**
 	 * @var core_kernel_users_Service
 	 */
 	protected $service;
+	
+	private $sampleUser;
 	
 	public function __construct($label = false){
 		parent::__construct($label);
@@ -41,6 +45,12 @@ class UserServiceTestCase extends UnitTestCase {
 	public function setUp(){
         GenerisTestRunner::initTest();
 		$this->service = core_kernel_users_Service::singleton();
+		$this->sampleUser = $this->service->addUser(self::TESTCASE_USER_LOGIN, 'pwd'.rand());
+	}
+	
+	public function tearDown() {
+	    parent::tearDown();
+	    $this->sampleUser->delete();
 	}
 	
 	public function initRoles(){
@@ -106,13 +116,13 @@ class UserServiceTestCase extends UnitTestCase {
 	}
 	
 	public function testGetOneUser(){
-		$sysUser = $this->service->getOneUser(SYS_USER_LOGIN);
+		$sysUser = $this->service->getOneUser(self::TESTCASE_USER_LOGIN);
 		$this->assertFalse(empty($sysUser));
 		$this->assertIsA($sysUser, 'core_kernel_classes_Resource');
 		$loginProperty = new core_kernel_classes_Property(PROPERTY_USER_LOGIN);
 		$login = $sysUser->getUniquePropertyValue($loginProperty);
 		$this->assertIsA($login, 'core_kernel_classes_Literal');
-		$this->assertEqual($login->literal, SYS_USER_LOGIN);
+		$this->assertEqual($login->literal, self::TESTCASE_USER_LOGIN);
 		
 		$unknownUser = $this->service->getOneUser('unknown');
 		$this->assertTrue(empty($unknownUser));
@@ -155,7 +165,7 @@ class UserServiceTestCase extends UnitTestCase {
 	}
 	
 	public function testLoginExists(){
-		$this->assertTrue($this->service->loginExists(SYS_USER_LOGIN));
+		$this->assertTrue($this->service->loginExists(self::TESTCASE_USER_LOGIN));
 		$this->assertFalse($this->service->loginExists('toto'));
 	}
 	

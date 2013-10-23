@@ -53,10 +53,6 @@ define('DEBUG_MODE', false);
 #application state
 define('SYS_READY', true);
 
-# background user: to be used only for system related tasks
-define('SYS_USER_LOGIN', 'generis');
-define('SYS_USER_PASS', md5('g3n3r1s'));
-
 #the time zone, required since PHP5.3
 define("TIME_ZONE", 'Europe/Paris');
 
