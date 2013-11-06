@@ -93,26 +93,6 @@ class core_kernel_persistence_smoothsql_Resource
     // --- OPERATIONS ---
 
     /**
-     * Please use getTypes instead
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @deprecated
-     * @param  Resource resource
-     * @return array
-     */
-    public function getType( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = array();
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 begin
-        throw new core_kernel_persistence_ProhibitedFunctionException('getType() called, RessourceProxy should have delegated this to getTypes()');
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 end
-
-        return (array) $returnValue;
-    }
-
-    /**
      * returns an array of types the ressource has
      *
      * @access public
@@ -737,86 +717,6 @@ class core_kernel_persistence_smoothsql_Resource
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 end
 
         return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method getLastModificationDate
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return core_kernel_persistence_doc_date
-     */
-    public function getLastModificationDate( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property = null)
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 begin
-        
-    	$sqlQuery = 'SELECT "epoch" FROM "statements" WHERE "subject" = \''. $resource->getUri().'\' ';
-
-        if(!is_null($property) && $property instanceof core_kernel_classes_Property){
-            $sqlQuery = $sqlQuery.' AND "predicate" = \''. $property->getUri().'\' ';
-        }
-
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sqlResult = $dbWrapper->query($sqlQuery);
-		$rows = $sqlResult->fetchAll();
-		
-        if(!is_null($property) && count($rows) == 0){
-            throw new common_Exception("The resource does not have the specified property.");
-        }
-
-        foreach ($rows as $row){
-            $last = $row['epoch'];
-            $lastDate = date_create($last);
-            if($returnValue == null ) {
-                $returnValue = $lastDate;
-            }
-            else {
-                if($returnValue < $lastDate) {
-                    $returnValue = $lastDate;
-                }
-            }
-        }
-        
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 end
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method getLastModificationUser
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @return string
-     */
-    public function getLastModificationUser( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = (string) '';
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC begin
-        
-        $sqlQuery = "SELECT author FROM statements WHERE subject = ? and predicate = ?";
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sqlResult = $dbWrapper->query($sqlQuery, array (
-        	$resource->getUri(),
-        	RDF_TYPE
-        ));
-        
-        if ($row = $sqlResult->fetch()){
-        	$returnValue = $row['author'];	
-        }
-        else{
-        	$returnValue = null;
-        }
-        
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC end
-
-        return (string) $returnValue;
     }
 
     /**

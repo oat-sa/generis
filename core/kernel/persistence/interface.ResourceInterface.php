@@ -65,17 +65,6 @@ interface core_kernel_persistence_ResourceInterface
     // --- OPERATIONS ---
 
     /**
-     * Please use getTypes instead
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @deprecated
-     * @param  Resource resource
-     * @return array
-     */
-    public function getType( core_kernel_classes_Resource $resource);
-
-    /**
      * returns an array of types the ressource has
      *
      * @access public
@@ -236,27 +225,6 @@ interface core_kernel_persistence_ResourceInterface
      * @return boolean
      */
     public function delete( core_kernel_classes_Resource $resource, $deleteReference = false);
-
-    /**
-     * Short description of method getLastModificationDate
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return core_kernel_persistence_doc_date
-     */
-    public function getLastModificationDate( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property = null);
-
-    /**
-     * Short description of method getLastModificationUser
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @return string
-     */
-    public function getLastModificationUser( core_kernel_classes_Resource $resource);
 
     /**
      * Short description of method getPropertiesValues

@@ -246,26 +246,6 @@ class core_kernel_classes_Resource
     }
 
     /**
-     * please use getTypes() instead
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @deprecated
-     * @return array
-     */
-    public function getType()
-    {
-        $returnValue = array();
-
-        // section 127-0-1-1-62cf85dc:12bab18dc39:-8000:000000000000135F begin
-        common_Logger::d('Use of deprecated function getType() please use getTypes().', 'DEPRECATED');
-        $returnValue = $this->getTypes();
-        // section 127-0-1-1-62cf85dc:12bab18dc39:-8000:000000000000135F end
-
-        return (array) $returnValue;
-    }
-
-    /**
      * Returns all the types of the ressource
      *
      * @access public
@@ -802,47 +782,6 @@ class core_kernel_classes_Resource
         // section -87--2--3--76--148ee98a:12452773959:-8000:00000000000017DD end
 
         return (array) $returnValue;
-    }
-
-    /**
-     * Short description of method getLastModificationDate
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Property property
-     * @return doc_date
-     */
-    public function getLastModificationDate( core_kernel_classes_Property $property = null)
-    {
-        $returnValue = null;
-
-        // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000235D begin
-        
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getLastModificationDate($this, $property);
-        
-        // section -87--2--3--76--148ee98a:12452773959:-8000:000000000000235D end
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method getLastModificationUser
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return string
-     */
-    public function getLastModificationUser()
-    {
-        $returnValue = (string) '';
-
-        // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002361 begin
-        
-        $returnValue = core_kernel_persistence_ResourceProxy::singleton()->getLastModificationUser($this);
-        
-        // section -87--2--3--76--148ee98a:12452773959:-8000:0000000000002361 end
-
-        return (string) $returnValue;
     }
 
     /**

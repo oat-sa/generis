@@ -90,27 +90,6 @@ class core_kernel_persistence_hardsql_Resource
     public static $instance = null;
 
     // --- OPERATIONS ---
-
-    /**
-     * Please use getTypes instead
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @deprecated
-     * @param  Resource resource
-     * @return array
-     */
-    public function getType( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = array();
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 begin
-        throw new core_kernel_persistence_ProhibitedFunctionException('getType() called, RessourceProxy should have delegated this to getTypes()');
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001298 end
-
-        return (array) $returnValue;
-    }
-
     /**
      * returns an array of types the ressource has
      *
@@ -1190,45 +1169,6 @@ class core_kernel_persistence_hardsql_Resource
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D2 end
 
         return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method getLastModificationDate
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return core_kernel_persistence_doc_date
-     */
-    public function getLastModificationDate( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property = null)
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 begin
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012D7 end
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method getLastModificationUser
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @return string
-     */
-    public function getLastModificationUser( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = (string) '';
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC begin
-		throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012DC end
-
-        return (string) $returnValue;
     }
 
     /**
