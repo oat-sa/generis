@@ -34,6 +34,12 @@ abstract class common_session_SessionManager
 
     private static $session = null;
 
+    /**
+     * Retrurns the current session
+     * 
+     * @throws common_exception_Error
+     * @return common_session_Session
+     */
     public static function getSession()
     {
         if (is_null(self::$session)) {
