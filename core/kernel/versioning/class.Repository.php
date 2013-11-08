@@ -178,15 +178,7 @@ class core_kernel_versioning_Repository
         $returnValue = (string) '';
 
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016D9 begin
-        
-        // try the cache first
         $returnValue = core_kernel_fileSystem_Cache::getFileSystemPath($this);
-    	if (empty($returnValue)) {
-    		common_Logger::i('FileSystem '.$this->getUri().' not found in Cache');
-    		$returnValue = (string) $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH));
-    	}
-
-        return (string) $returnValue;
         // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016D9 end
 
         return (string) $returnValue;

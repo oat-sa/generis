@@ -52,20 +52,22 @@ class core_kernel_fileSystem_Cache
                 );
     			common_cache_FileCache::singleton()->put(self::$cache, self::SERIAL);
             } else {
-                common_Logger::e('Filesystem '.$fileSystem->getUri().' inexisting or incorectly defined');
+                throw new common_exception_InconsistentData('Filesystem '.$fileSystem->getUri().' has '.
+                    count($props[PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH]).' path entries and '.
+                    count($props[PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH]).' type entries');
             }
         }
-    	return isset (self::$cache[$fileSystem->getUri()]) ? self::$cache[$fileSystem->getUri()] : null;
+    	return self::$cache[$fileSystem->getUri()];
     }
 
     public static function getFileSystemPath(core_kernel_versioning_Repository $fileSystem) {
     	$info = self::getFSInfo($fileSystem);
-    	return is_null($info) ? null : $info[PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH];
+    	return $info[PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH];
     }
     
     public static function getFileSystemType(core_kernel_versioning_Repository $fileSystem) {
     	$info = self::getFSInfo($fileSystem);
-    	return is_null($info) ? null : $info[PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE];
+    	return $info[PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE];
     }
     
     public static function flushCache() {
