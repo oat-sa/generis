@@ -27,30 +27,36 @@ class SqlInjectionTestCase extends UnitTestCase {
 	public function testInject() {
         $generisClass = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
         $testClass = $generisClass->createSubClass();
-        $testInstance = $testClass->createInstance('test resource');
-        $testInstance->removePropertyValues(new core_kernel_classes_Property(RDFS_LABEL));
         try {
-            $testInstance->setPropertiesValues(array(
+            $testInstance = $testClass->createInstanceWithProperties(array(
                 RDFS_LABEL => '"hi"'
+            ));
+            $testInstance->setPropertiesValues(array(
+                RDFS_COMMENT => '"hi"'
             ));
             $this->assertEqual($testInstance->getUniquePropertyValue(new core_kernel_classes_Property(RDFS_LABEL)), "\"hi\"");
         } catch (PDOException $e) {
             $this->fail('SQL Error: '.$e->getMessage());
         }
+        $testInstance->delete();
         
         $switcher = new core_kernel_persistence_Switcher();
         $switcher->hardify($testClass);
-        $testInstance->removePropertyValues(new core_kernel_classes_Property(RDFS_LABEL));
+        
         try {
-            $testInstance->setPropertiesValues(array(
+            $testInstance = $testClass->createInstanceWithProperties(array(
                 RDFS_LABEL => '"hi"'
+            ));
+            $testInstance->setPropertiesValues(array(
+                RDFS_COMMENT => '"hi"'
             ));
             $this->assertEqual($testInstance->getUniquePropertyValue(new core_kernel_classes_Property(RDFS_LABEL)), "\"hi\"");
         } catch (core_kernel_persistence_hardsql_Exception $e) {
             $this->fail('SQL Error: '.$e->getMessage());
         }
-
         $testInstance->delete();
+        $switcher->unhardify($testClass);
+        
         $generisClass->delete();
 
 	}
