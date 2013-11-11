@@ -82,3 +82,6 @@ define('GENERIS_CACHE_USERS_ROLES', true);
 
 # profiling
 define('PROFILING', true);
+
+# enable Lock, Extensions may rely on the lock mechanism
+define('ENABLE_LOCK', true);
