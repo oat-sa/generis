@@ -372,21 +372,21 @@ class core_kernel_persistence_smoothsql_Resource
 					
 					$formatedValues = array();
 					if($value instanceof core_kernel_classes_Resource){
-						$formatedValues[] = $value->getUri();
+						$formatedValues[] = $dbWrapper->dbConnector->quote($value->getUri());
 					}else if(is_array($value)){
 						foreach($value as $val){
 							if($val instanceof core_kernel_classes_Resource){
-								$formatedValues[] = $val->getUri();
+								$formatedValues[] = $dbWrapper->dbConnector->quote($val->getUri());
 							}else{
-								$formatedValues[] = trim($dbWrapper->dbConnector->quote($val), "'\"");
+								$formatedValues[] = $dbWrapper->dbConnector->quote($val);
 							}
 						}
 					}else{
-						$formatedValues[] = trim($dbWrapper->dbConnector->quote($value), "'\"");
+						$formatedValues[] = $dbWrapper->dbConnector->quote($value);
 					}
 					
 					foreach($formatedValues as $object){
-						$query .= " ($modelId, '{$resource->getUri()}', '{$property->getUri()}', '{$object}', '{$lang}', '{$user}', '{$mask}','{$mask}','{$mask}', CURRENT_TIMESTAMP),";
+						$query .= " ($modelId, '{$resource->getUri()}', '{$property->getUri()}', {$object}, '{$lang}', '{$user}', '{$mask}','{$mask}','{$mask}', CURRENT_TIMESTAMP),";
 					}
 	       		}
 	       		

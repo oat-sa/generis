@@ -811,7 +811,7 @@ class core_kernel_persistence_smoothsql_Class
 		    $conditions = array();
 		    foreach($propertyFilters as $propUri => $pattern){
 
-			    $propUri = trim($dbWrapper->dbConnector->quote($propUri));
+			    $propUri = $dbWrapper->dbConnector->quote($propUri);
 			    $values = is_array($pattern) ? $pattern : array($pattern);
 			    $sub = array();
 			    foreach ($values as $value) {

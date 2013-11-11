@@ -486,26 +486,26 @@ class core_kernel_persistence_hardsql_Resource
 						$lang = ($property->isLgDependent() ? $session->getDataLanguage() : '');
 						$formatedValues = array();
 						if ($value instanceof core_kernel_classes_Resource) {
-							$formatedValues[] = $value->getUri();
+							$formatedValues[] = $dbWrapper->dbConnector->quote($value->getUri());
 						} else if (is_array($value)) {
 							foreach ($value as $val) {
 								if ($val instanceof core_kernel_classes_Resource) {
-									$formatedValues[] = $val->getUri();
+									$formatedValues[] = $dbWrapper->dbConnector->quote($val->getUri());
 								} else {
-									$formatedValues[] = trim($dbWrapper->dbConnector->quote($val), "'\"");
+									$formatedValues[] = $dbWrapper->dbConnector->quote($val);
 								}
 							}
 						} else {
-							$formatedValues[] = trim($dbWrapper->dbConnector->quote($value), "'\"");
+							$formatedValues[] = $dbWrapper->dbConnector->quote($value);
 						}
 
 						if ($propertyRange instanceof core_kernel_classes_Class && $propertyRange->getUri() == RDFS_LITERAL) {
 							foreach ($formatedValues as $formatedValue) {
-								$queryProps .= " ({$instanceId}, '{$property->getUri()}', '{$formatedValue}', null, '{$lang}'),";
+								$queryProps .= " ({$instanceId}, '{$property->getUri()}', {$formatedValue}, null, '{$lang}'),";
 							}
 						} else {
 							foreach ($formatedValues as $formatedValue) {
-								$queryProps .= " ({$instanceId}, '{$property->getUri()}', null, '{$formatedValue}', '{$lang}'),";
+								$queryProps .= " ({$instanceId}, '{$property->getUri()}', null, {$formatedValue}, '{$lang}'),";
 							}
 						}
 					} else {
@@ -516,7 +516,7 @@ class core_kernel_persistence_hardsql_Resource
 						} else if (is_array($value)) {
 							throw new core_kernel_persistence_hardsql_Exception("try setting multivalue for the non multiple property {$property->getLabel()} ({$property->getUri()})");
 						} else {
-							$value = trim($dbWrapper->dbConnector->quote($value), "'\"");
+							$value = $value; // no need to quote passed as variable
 						}
 
 						$hardPropertyNames[$propertyName] = $value;

@@ -963,27 +963,27 @@ class core_kernel_persistence_hardsql_Class
 						$lang = ($property->isLgDependent() ? $session->getDataLanguage() : '');
 						$formatedValues = array();
 						if ($value instanceof core_kernel_classes_Resource) {
-							$formatedValues[] = $value->getUri();
+							$formatedValues[] = $dbWrapper->dbConnector->quote($value->getUri());
 						} else if (is_array($value)) {
 							foreach ($value as $val) {
 								if ($val instanceof core_kernel_classes_Resource) {
-									$formatedValues[] = $val->getUri();
+									$formatedValues[] = $dbWrapper->dbConnector->quote($val->getUri());
 								} else {
-									$formatedValues[] = trim($dbWrapper->dbConnector->quote($val), "'\"");
+									$formatedValues[] = $dbWrapper->dbConnector->quote($val);
 								}
 							}
 						} else {
-							$formatedValues[] = trim($dbWrapper->dbConnector->quote($value), "'\"");
+							$formatedValues[] = $dbWrapper->dbConnector->quote($value);
 						}
 
 						if (is_null($propertyRange) || $propertyRange->getUri() == RDFS_LITERAL) {
 							
 							foreach ($formatedValues as $formatedValue) {
-								$queryProps[] = "'{$property->getUri()}', '{$formatedValue}', null, '{$lang}'";
+								$queryProps[] = "'{$property->getUri()}', {$formatedValue}, null, '{$lang}'";
 							}
 						} else {
 							foreach ($formatedValues as $formatedValue) {
-								$queryProps[] = "'{$property->getUri()}', null, '{$formatedValue}', '{$lang}'";
+								$queryProps[] = "'{$property->getUri()}', null, {$formatedValue}, '{$lang}'";
 							}
 						}
 					} else {
@@ -994,7 +994,7 @@ class core_kernel_persistence_hardsql_Class
 						} else if (is_array($value)) {
 							throw new core_kernel_persistence_hardsql_Exception("try setting multivalue for the non multiple property {$property->getLabel()} ({$property->getUri()})");
 						} else {
-							$value = trim($dbWrapper->dbConnector->quote($value), "'\"");
+							$value = $value; // no need to quote, passed to prepared statement
 						}
 
 						$hardPropertyNames[$propertyName] = $value;

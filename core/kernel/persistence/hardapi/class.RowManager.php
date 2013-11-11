@@ -169,8 +169,8 @@ class core_kernel_persistence_hardapi_RowManager
 								$query.= ", '{$value->getUri()}'";
 							}
 							else{	//the value is a literal
-								$value = trim($dbWrapper->dbConnector->quote($value), "'\"");
-								$query.= ", '{$value}'";
+								$value = $dbWrapper->dbConnector->quote($value);
+								$query.= ", {$value}";
 							}
 						}
 					}
