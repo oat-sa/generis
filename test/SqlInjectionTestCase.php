@@ -20,8 +20,7 @@
  */
 ?>
 <?php
-require_once dirname(__FILE__) . '/TaoTestRunner.php';
-include_once dirname(__FILE__) . '/../includes/raw_start.php';
+require_once dirname(__FILE__) . '/GenerisTestRunner.php';
 
 class SqlInjectionTestCase extends UnitTestCase {
 	
