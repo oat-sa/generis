@@ -97,7 +97,7 @@ class common_session_DefaultSession implements common_session_StatefulSession
      */
     public function getDataLanguage() {
         $lang = $this->user->getPropertyValues(PROPERTY_USER_DEFLG);
-        return empty($lang) ? DEFAULT_LANG : current($lang);
+        return empty($lang) ? DEFAULT_LANG : (string)current($lang);
     }
     
     /**
@@ -106,7 +106,7 @@ class common_session_DefaultSession implements common_session_StatefulSession
      */
     public function getInterfaceLanguage() {
         $lang = $this->user->getPropertyValues(PROPERTY_USER_UILG);
-        return empty($lang) ? DEFAULT_LANG : current($lang);
+        return empty($lang) ? DEFAULT_LANG : (string)current($lang);
     }
     
     public function refresh() {
