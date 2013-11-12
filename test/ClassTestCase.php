@@ -330,7 +330,7 @@ class ClassTestCase extends UnitTestCase {
         $options = array('like' => false, 'recursive' => 0, 'offset' => 0, 'limit' => 2); //User 2 & 3
         $languagesDependantProp = $userClass->searchInstances($propertyFilter, $options);
         $nfound = count($languagesDependantProp);
-        $this->assertEqual($nfound, 2);
+        $this->assertEqual($nfound, 2,'Problem with limit in search');
         
         $options = array('order' => 'prop3', 'orderdir' => 'ASC');
         $result = $userClass->searchInstances($propertyFilter, $options);
