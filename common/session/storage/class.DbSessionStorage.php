@@ -47,17 +47,15 @@ class common_session_storage_DbSessionStorage
     implements common_session_storage_SessionStorage
 {
     private $dbWrapper = null;
-
     public function open($savePath, $sessionName){
-        
-        $this->dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
+        $this->dbWrapper = core_kernel_classes_DbWrapper::singleton();
         //checks if the session table is existing and performs a local upgrade if needed
         //should be removed on tao 2.6 release
         try{
        $statement =
            "
-           CREATE TABLE if not exists session(
+           CREATE TABLE if not exists sessions(
            session_id varchar(255) NOT NULL,
            session_value text NOT NULL,
            session_time int(11) NOT NULL,
@@ -65,7 +63,6 @@ class common_session_storage_DbSessionStorage
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
            ";
        $this->dbWrapper->query($statement);
-      
        }
 		catch (PDOException $e){
 			throw new common_Exception("Unable to create session storage table in the database");
@@ -83,14 +80,13 @@ class common_session_storage_DbSessionStorage
     public function read($id)
     {
        try{
-        $statement = 'SELECT session_value FROM session WHERE session_id = ? LIMIT 1';
+        $statement = 'SELECT session_value FROM sessions WHERE session_id = ? LIMIT 1';
         $sessionValue = $this->dbWrapper->query($statement, array($id));
         while ($row = $sessionValue->fetch()) {
          return $row["session_value"];
         }
        }
 		catch (PDOException $e){
-           
 			throw new common_Exception("Unable to read session value");
 		}
         return false;
@@ -98,9 +94,8 @@ class common_session_storage_DbSessionStorage
 
     public function write($id, $data)
     {
-    
        try{
-       $statement = 'REPLACE INTO session (session_id, session_value, session_time) VALUES(?, ?)';
+       $statement = 'REPLACE INTO sessions (session_id, session_value, session_time) VALUES(?, ?, ?)';
        $sessionValue = $this->dbWrapper->query($statement, array($id, $data, time()));
        return (bool)$sessionValue->rowCount();
        }
@@ -113,7 +108,7 @@ class common_session_storage_DbSessionStorage
     public function destroy($id){
 
         try{
-       $statement = 'DELETE FROM session  WHERE session_id = ?';
+       $statement = 'DELETE FROM sessions  WHERE session_id = ?';
        $sessionValue = $this->dbWrapper->query($statement, array($id));
        return (bool)$sessionValue->rowCount();
        }
@@ -126,7 +121,7 @@ class common_session_storage_DbSessionStorage
     public function gc($maxlifetime)
     {   
         $statement =
-            'DELETE FROM session WHERE session_time <  ?';
+            'DELETE FROM sessions WHERE session_time <  ?';
         $timeOut = (time()-$maxlifetime);
         $this->dbWrapper->query($statement, array($timeOut));
         return true;
@@ -134,6 +129,4 @@ class common_session_storage_DbSessionStorage
     }
    
  }
-
-
 ?>
