@@ -127,7 +127,7 @@ class common_session_storage_DbSessionStorage
     {   
         $statement =
             'DELETE FROM session WHERE session_time <  ?';
-        $timeOut = (time()-0);
+        $timeOut = (time()-$maxlifetime);
         $this->dbWrapper->query($statement, array($timeOut));
         return true;
         
