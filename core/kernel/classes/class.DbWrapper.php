@@ -213,19 +213,19 @@ abstract class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Used to close the database connection on destruction
+     * Used to close the database connection
+     * __destruct is being called before session gets stored in the database
      *
      * @access public
      * @author C�dric Alfonsi, <cedric.alfonsi@tudor.lu>
      *
      */
-    public function __destruct()
+    public function destruct()
     {
     	if(!is_null($this->dbConnector)){
     		$this->dbConnector = null;
     	}
     }
-
     /**
      * Will throw an exception. Singleton instances must not be cloned.
      *
