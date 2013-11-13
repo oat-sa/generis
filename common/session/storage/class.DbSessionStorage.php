@@ -100,8 +100,8 @@ class common_session_storage_DbSessionStorage
     {
     
        try{
-       $statement = 'REPLACE INTO session (session_id, session_value) VALUES(?, ?)';
-       $sessionValue = $this->dbWrapper->query($statement, array($id, $data));
+       $statement = 'REPLACE INTO session (session_id, session_value, session_time) VALUES(?, ?)';
+       $sessionValue = $this->dbWrapper->query($statement, array($id, $data, time()));
        return (bool)$sessionValue->rowCount();
        }
 		catch (PDOException $e){
@@ -124,22 +124,15 @@ class common_session_storage_DbSessionStorage
     }
 
     public function gc($maxlifetime)
-    {   /*
-        foreach (glob("$this->savePath/sess_*") as $file) {
-            if (filemtime($file) + $maxlifetime < time() && file_exists($file)) {
-                unlink($file);
-            }
-        }
-        */
+    {   
+        $statement =
+            'DELETE FROM session WHERE session_time <  ?';
+        $timeOut = (time()-0);
+        $this->dbWrapper->query($statement, array($timeOut));
         return true;
         
     }
-    /*
-    public function __destruct(){
-        $this->dbWrapper->destruct();
-    }
-     *
-     */
+   
  }
 
 
