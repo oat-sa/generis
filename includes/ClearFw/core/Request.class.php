@@ -28,12 +28,14 @@
  */
 class Request
 {	
-	protected $parameters = array();
-	protected $method;
+        protected $parameters = array();
+        protected $rawParameters = array();
+        protected $method;
 	
 	public function __construct()
 	{
 		$this->parameters = array_merge($_GET, $_POST);
+                $this->rawParameters = array_merge($_GET, $_POST);
 		$this->secureParameters();
 		
 		$this->method = $this->defineMethod();
@@ -107,6 +109,51 @@ class Request
  	{
  		return $_SERVER['REQUEST_URI'];
  	}
+        
+        /**
+         * Get the parameters as they was sent. <br>
+         * <strong>Use this method only if you know what you're doing, otherwise use {@link Request::getParameters} instead.</strong>
+         * @return array the request parameters.
+         */
+        public function getRawParameters(){
+            return $this->rawParameters;
+        }
+        
+        /**
+         * Does the request contains the type in the Accept header?
+         * @param string $type - ie text/html, application/json, etc.
+         * @return true is the type is contained in the header
+         */
+        public function accept($mime){
+            
+            //extract the mime-types
+            $accepts = array_map(function($value) {
+                if (strpos($value, ';')) {
+                    //remove the priority ie. q=0.3
+                    $value = substr($value, 0, strrpos($value, ';'));
+                }
+                return trim($value);
+            }, explode(',', $_SERVER['HTTP_ACCEPT']));
+
+            foreach ($accepts as $accept) {
+                if ($accept == $mime) {
+                    return true;
+                }
+                //check the star type
+                if (preg_match("/^\*\//", $accept)) {
+                    return true;
+                }
+                //check the star sub-type
+                if (preg_match("/\/\*$/", $accept)) {
+                    $acceptType = substr($accept, 0, strpos($accept, '/'));
+                    $checkType = substr($mime, 0, strpos($mime, '/'));
+                    if ($acceptType == $checkType) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
  	
  	private function defineMethod()
  	{	
