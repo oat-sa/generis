@@ -85,3 +85,6 @@ define('PROFILING', true);
 
 # enable Lock, Extensions may rely on the lock mechanism
 define('ENABLE_LOCK', true);
+
+# default will use defautl php session handling
+define('PHP_SESSION_HANDLER', 'common_session_storage_DbSessionStorage');
