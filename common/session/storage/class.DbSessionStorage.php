@@ -73,7 +73,6 @@ class common_session_storage_DbSessionStorage
 
     public function close()
     {
-        $this->dbWrapper->destruct();
         return true;
     }
 
