@@ -60,7 +60,7 @@ class common_session_storage_DbSessionStorage
            session_value text NOT NULL,
            session_time int(11) NOT NULL,
            PRIMARY KEY (session_id)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ) ENGINE=MyIsam DEFAULT CHARSET=utf8;
            ";
        $this->dbWrapper->query($statement);
        }
