@@ -57,7 +57,7 @@ class core_persistence_Manager
            'pdo_oci'    => 'core_persistence_SqlDriver',
            'pdo_ibm'    => 'core_persistence_SqlDriver',
            'pdo_sqlsrv' => 'core_persistence_SqlDriver',
-
+           'phpredis'   => 'core_persistence_PhpRedisDriver'
     );
 
 
