@@ -68,10 +68,13 @@ class core_persistence_Manager
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param unknown $configuration
      */
-    private function __construct($configuration){
-        $this->configuration = $configuration;
+    private function __construct(){
+        if(!isset($GLOBALS['generis_persistences'])) {
+            throw new common_Exception('Persistence Configuration not found');
+        }
+        $this->configuration = $GLOBALS['generis_persistences'];
         foreach($this->configuration as $persistenceId => $config){
-            common_Logger::d('Checking persistence ' . $persistenceId);
+            //common_Logger::d('Checking persistence ' . $persistenceId);
             $driverStr = $config['driver'];
             $driverClassName = self::$driverMap[$driverStr];
             if (class_exists($driverClassName)){
@@ -99,11 +102,12 @@ class core_persistence_Manager
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param unknown $configuration
      */
-    public static function singleton($configuration){
+    public static function singleton(){
         $returnValue = null;
 		if (!isset(self::$instance)) {
+
             $c = __CLASS__;
-            self::$instance = new $c($configuration);
+            self::$instance = new $c();
         }
         return self::$instance;
     }
