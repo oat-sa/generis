@@ -45,6 +45,13 @@ class GenerisActionEnforcer extends ActionEnforcer
 		
     	// get the action
 		$action = $this->context->getActionName() ? Camelizer::firstToLower($this->context->getActionName()) : DEFAULT_ACTION_NAME;
+		
+		// Are we authorized to execute this action?
+		$requestParameters = $this->context->getRequest()->getParameters(); 
+		if (!tao_models_classes_accessControl_AclProxy::hasAccess($extension->getID(), $moduleName, $action, $requestParameters)) {
+		    $userUri = common_session_SessionManager::getSession()->getUserUri();
+		    throw new tao_models_classes_AccessDeniedException($userUri, $extension->getID(), $moduleName, $action);
+		}
     	
     	// if the method related to the specified action exists, call it
     	if (method_exists($module, $action)) {

@@ -102,7 +102,9 @@ define('PROPERTY_USER_MAIL' ,					GENERIS_NS . '#userMail' , true);
 define('PROPERTY_USER_FIRSTNAME' , 				GENERIS_NS . '#userFirstName' , true) ;
 define('PROPERTY_USER_LASTNAME' , 				GENERIS_NS . '#userLastName' , true);
 define('PROPERTY_USER_ROLES',					GENERIS_NS . '#userRoles' , true);
+
 define('INSTANCE_ROLE_GENERIS',					GENERIS_NS . '#GenerisRole' , true);
+define('INSTANCE_ROLE_ANONYMOUS',				GENERIS_NS . '#AnonymousRole' , true);
 
 define('CLASS_SUBCRIPTION',						GENERIS_NS . '#Subscription' , true) ;
 define('PROPERTY_SUBCRIPTION_URL', 				GENERIS_NS . '#SubscriptionUrl' , true) ;

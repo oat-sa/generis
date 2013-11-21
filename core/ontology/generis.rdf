@@ -344,6 +344,12 @@
   	<rdfs:comment xml:lang="en-US"><![CDATA[The Generis Role]]></rdfs:comment>
   	<generis:isSystem rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#False"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#AnonymousRole">
+   	<rdf:type rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#AbstractRole"/>
+   	<rdfs:label xml:lang="en-US"><![CDATA[Anonymous]]></rdfs:label>
+	<rdfs:comment xml:lang="en-US"><![CDATA[Anonymous Role]]></rdfs:comment>
+	<generis:includesRole rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#GenerisRole"/>
+  </rdf:Description>
   
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#comment">
     <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource"/>

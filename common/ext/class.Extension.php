@@ -343,6 +343,12 @@ class common_ext_Extension
         return (string) $returnValue;
     }
 
+    public function hasConstant($key)
+    {
+        $constants = $this->getConstants();
+        return isset($constants[$key]);
+    }
+    
     /**
      * Retrieves a constant from the manifest.php file of the extension.
      *
@@ -380,7 +386,7 @@ class common_ext_Extension
     {
         $returnValue = array();
 
-        if (file_exists($this->getConstant('DIR_ACTIONS'))) {
+        if ($this->hasConstant('DIR_ACTIONS') && file_exists($this->getConstant('DIR_ACTIONS'))) {
 			$dir = new DirectoryIterator($this->getConstant('DIR_ACTIONS'));
 		    foreach ($dir as $fileinfo) {
 				if(preg_match('/^class\.[^.]*\.php$/', $fileinfo->getFilename())) {

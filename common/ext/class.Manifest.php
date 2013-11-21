@@ -176,6 +176,12 @@ class common_ext_Manifest
      */
     private $optimizableProperties = array();
 
+    /**
+     * The Access Control Layer table
+     * @access private
+     * @var array
+     */
+    private $acl = array();
 
     /**
      * Creates a new instance of Manifest.
@@ -237,6 +243,10 @@ class common_ext_Manifest
     		
     		if (!empty($array['modelsRight'])){
     			$this->setModelsRights($array['modelsRight']);
+    		}
+    		
+    		if (!empty($array['acl'])){
+    		    $this->setAclTable($array['acl']);
     		}
     		
     		if (!empty($array['install'])){
@@ -419,7 +429,25 @@ class common_ext_Manifest
     {
         $this->author = $author;
     }
-
+    
+    /**
+     * Sets the Access Controll Layer table
+     * @param array $table
+     */
+    private function setAclTable($table)
+    {
+        $this->acl = $table;
+    }
+    
+    /**
+     * Returns the Access Controll Layer table
+     * @return array
+     */
+    public function getAclTable()
+    {
+        return $this->acl;
+    }
+    
     /**
      * Get the version of the Extension the manifest describes.
      *

@@ -51,8 +51,7 @@ class common_session_AnonymousSession implements common_session_StatelessSession
      * @see common_session_Session::getUserRoles()
      */
     public function getUserRoles() {
-        // @todo return baseaccess role
-        return array();
+        return array(new core_kernel_classes_Resource(INSTANCE_ROLE_ANONYMOUS));
     }
     
     /**

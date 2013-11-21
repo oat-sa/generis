@@ -87,7 +87,6 @@ class common_session_DefaultSession implements common_session_StatefulSession
                 $returnValue[$role->getUri()] = $role;
             }
         }
-//        var_dump($returnValue);
         return $returnValue;
     }
     

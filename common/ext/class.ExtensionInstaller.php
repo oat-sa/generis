@@ -313,8 +313,7 @@ class common_ext_ExtensionInstaller
 	public function installExtensionModel()
 	{
 		// section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FD1 begin
-		common_Logger::i("Spawning Extension/Module/Action model for extension '" . $this->extension->getID() . "'");
-		tao_helpers_funcACL_Model::spawnExtensionModel($this->extension);
+		//common_Logger::i("Spawning Extension/Module/Action model for extension '" . $this->extension->getID() . "'");
 		// section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FD1 end
 	}
 
