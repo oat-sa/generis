@@ -60,7 +60,7 @@ class core_persistence_KeyValuePersistence extends core_persistence_Persistence
         return $this->getConnection()->exists($id);
     }
     
-    public function del($userId) {
+    public function del($id) {
         return $this->getConnection()->del($id);
     }
     
