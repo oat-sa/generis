@@ -47,9 +47,9 @@ class core_persistence_KeyValuePersistence extends core_persistence_Persistence
         return 'KEY VALUE PERSISTENCE';
     }
     
-    public function set($id, $value)
+    public function set($id, $value, $ttl = null)
     {
-        return $this->getConnection()->set($id, $value);
+        return $this->getConnection()->set($id, $value, $ttl);
     }
     
     public function get($id) {
@@ -63,5 +63,7 @@ class core_persistence_KeyValuePersistence extends core_persistence_Persistence
     public function del($id) {
         return $this->getConnection()->del($id);
     }
+    
+
     
 }

@@ -62,9 +62,14 @@ class core_persistence_PhpRedisDriver implements core_persistence_Driver
         return "core_persistence_KeyValuePersistence";
     }
     
-    public function set($id, $value)
+    public function set($id, $value, $ttl = null)
     {
-        return $this->connection->set($id, $value);
+        if (! is_null($ttl)) {
+        return $this->connection->set($id, $value, $ttl);
+        } else {
+            return $this->connection->set($id, $value);
+        }
+        
     }
     
     public function get($id) {
@@ -78,6 +83,7 @@ class core_persistence_PhpRedisDriver implements core_persistence_Driver
     public function del($userId) {
         return $this->connection->del($id);
     }
+
     
 
 }
