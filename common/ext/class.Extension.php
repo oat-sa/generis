@@ -197,7 +197,9 @@ class common_ext_Extension
      */
     public function setConfig($key, $value)
     {
-		$this->fileConfig[$key] = $value;
+        // ensure config loaded
+        $this->getConfigs();
+        $this->fileConfig[$key] = $value;
 		$handle = fopen($this->getConfigFilePath(), 'w');
         $success = fwrite($handle, '<?php return '.common_Utils::toPHPVariableString($this->fileConfig).';');
         fclose($handle);
@@ -239,6 +241,8 @@ class common_ext_Extension
      */
     public function unsetConfig($key)
     {
+        // ensure config loaded
+        $this->getConfigs();
         unset($this->fileConfig[$key]);
         $handle = fopen($this->getConfigFilePath(), 'w');
         fwrite($handle, '<? return '.common_Utils::toPHPVariableString($this->fileConfig).';');
