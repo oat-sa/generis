@@ -1,0 +1,24 @@
+{
+	"name" : "tao/generis",
+	"description" : "TAO generis library",
+	"type" : "library",
+	"authors" : [{
+			"name" : "OAT",
+			"homepage" : "http://www.taotesting.com"
+		}
+	],
+	"keywords" : [
+		"tao",
+		"doctrine-dbal"
+	],
+	"homepage" : "taotesting.com",
+	"license" : [
+		"GPL-2.0"
+	],
+	"require" : {
+		"easyrdf/easyrdf" : "*",
+		"doctrine/dbal" : ">=2.2.0,<2.4",
+		"php" : ">=5.3.2"
+	},
+	"minimum-stability" : "dev"
+}
