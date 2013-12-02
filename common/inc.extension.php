@@ -54,6 +54,8 @@ $GLOBALS['default_lang']	= 'EN';
 require_once dirname(__FILE__)	. '/ext/class.ClassLoader.php';
 require_once INCLUDES_PATH		. '/ClearFw/clearbricks/common/lib.l10n.php';
 
+// 3rd part lib autoload
+require_once VENDOR_PATH		. '/autoload.php';
 
 $classLoader = common_ext_ClassLoader::singleton();
 $classLoader->addPackage(DIR_CORE);
