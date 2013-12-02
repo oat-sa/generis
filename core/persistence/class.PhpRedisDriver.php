@@ -80,7 +80,7 @@ class core_persistence_PhpRedisDriver implements core_persistence_Driver
         return $this->connection->exists($id);
     }
     
-    public function del($userId) {
+    public function del($id) {
         return $this->connection->del($id);
     }
 
