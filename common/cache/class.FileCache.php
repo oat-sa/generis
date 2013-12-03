@@ -18,10 +18,6 @@
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);              2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
 
 /**
  * Generis Object Oriented API - common\cache\class.FileCache.php
@@ -57,14 +53,6 @@ require_once('common/cache/interface.Cache.php');
  */
 require_once('common/interface.Serializable.php');
 
-/* user defined includes */
-// section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ED0-includes begin
-// section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ED0-includes end
-
-/* user defined constants */
-// section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ED0-constants begin
-// section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ED0-constants end
-
 /**
  * Short description of class common_cache_FileCache
  *
@@ -76,10 +64,6 @@ require_once('common/interface.Serializable.php');
 class common_cache_FileCache
         implements common_cache_Cache
 {
-    // --- ASSOCIATIONS ---
-    // generateAssociationEnd : 
-
-    // --- ATTRIBUTES ---
 
     /**
      * Short description of attribute instance
@@ -88,8 +72,6 @@ class common_cache_FileCache
      * @var FileCache
      */
     private static $instance = null;
-
-    // --- OPERATIONS ---
 
     /**
      * puts "something" into the cache,
@@ -105,7 +87,6 @@ class common_cache_FileCache
      */
     public function put($mixed, $serial = null)
     {
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F34 begin
         if ($mixed instanceof common_Serializable) {
         	if (!is_null($serial) && $serial != $mixed->getSerial()) {
         		throw new common_exception_Error('Serial mismatch for Serializable '.$mixed->getSerial());
@@ -140,7 +121,6 @@ class common_cache_FileCache
         	
         	throw new common_cache_Exception($msg);
         }
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F34 end
     }
 
     /**
@@ -154,8 +134,6 @@ class common_cache_FileCache
     public function get($serial)
     {
         $returnValue = null;
-
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F3C begin
         
         // Acquire a shared lock for reading on the main lock file.
         // We acquire the lock here because we have a critical section below:
@@ -172,8 +150,6 @@ class common_cache_FileCache
         	$msg = "Unable to read cache file '${filePath}'.";
         	throw new common_cache_NotFoundException($msg);
         }
-    	
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F3C end
 
         return $returnValue;
     }
@@ -189,10 +165,7 @@ class common_cache_FileCache
     public function has($serial)
     {
         $returnValue = (bool) false;
-
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F40 begin
         $returnValue = file_exists($this->getFilePath($serial));
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F40 end
 
         return (bool) $returnValue;
     }
@@ -207,9 +180,7 @@ class common_cache_FileCache
      */
     public function remove($serial)
     {
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F44 begin
         @unlink($this->getFilePath($serial));
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F44 end
     }
 
     /**
@@ -223,7 +194,6 @@ class common_cache_FileCache
     {
         $returnValue = null;
 
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F48 begin
     	$cachepath =  GENERIS_CACHE_PATH;
         if (false !== ($files = scandir($cachepath))){
             foreach ($files as $f) {
@@ -233,7 +203,6 @@ class common_cache_FileCache
                 }
             }
         }
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F48 end
 
         return $returnValue;
     }
@@ -249,10 +218,7 @@ class common_cache_FileCache
     private function getFilePath($serial)
     {
         $returnValue = (string) '';
-
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EFA begin
         $returnValue = GENERIS_CACHE_PATH . $serial;
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EFA end
 
         return (string) $returnValue;
     }
@@ -268,17 +234,15 @@ class common_cache_FileCache
     {
         $returnValue = null;
 
-        // section 10-13-1-85-4b3a31bc:13c4dd4402a:-8000:0000000000001F30 begin
         if (!isset(self::$instance)){
         	self::$instance = new self();
         }
         
         return self::$instance;
-        // section 10-13-1-85-4b3a31bc:13c4dd4402a:-8000:0000000000001F30 end
 
         return $returnValue;
     }
 
-} /* end of class common_cache_FileCache */
+}
 
 ?>
