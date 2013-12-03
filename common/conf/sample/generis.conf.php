@@ -21,7 +21,6 @@
  */
 
 
-
 /**
  * Generis Configuration
  *
@@ -58,6 +57,11 @@ define("TIME_ZONE", 'Europe/Paris');
 
 # Cache
 define('CACHE_MAX_SIZE', 64000);
+
+# Passsword Hash Preferences
+define('PASSWORD_HASH_ALGORITHM', 'sha256');
+define('PASSWORD_HASH_SALT_LENGTH', 10);
+
 
 #if there is a .htaccess with an http auth, used for Curl request or virtual http requests
 define('USE_HTTP_AUTH', false);

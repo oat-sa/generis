@@ -76,7 +76,7 @@ class core_kernel_users_Service
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string login A specific login for the User to create.
-     * @param  string password A password for the User to create (md5 hash).
+     * @param  string password A password for the User to create (raw).
      * @param  Resource role A Role to grant to the new User.
      * @return core_kernel_classes_Resource
      */
@@ -91,20 +91,15 @@ class core_kernel_users_Service
         	$role = (empty($role)) ? new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS) : $role;
         	
         	$userClass = (!empty($class)) ? $class : new core_kernel_classes_Class(CLASS_GENERIS_USER);
-        	$newUser = $userClass->createInstance("User ${login}" , 'User Created on ' . date(DATE_ISO8601));
+        	$returnValue = $userClass->createInstanceWithProperties(array(
+        	    RDFS_LABEL => "User ${login}",
+        	    RDFS_COMMENT => 'User Created on ' . date(DATE_ISO8601),
+        	    PROPERTY_USER_LOGIN => $login,
+        	    PROPERTY_USER_PASSWORD => core_kernel_users_AuthAdapter::getPasswordHash()->encrypt($password),
+        	    PROPERTY_USER_ROLES => $role
+        	));
         	
-        	if (!empty($newUser)){
-        		$loginProperty = new core_kernel_classes_Property(PROPERTY_USER_LOGIN);
-        		$passwordProperty = new core_kernel_classes_Property(PROPERTY_USER_PASSWORD);
-        		$userRolesProperty = new core_kernel_classes_Property(PROPERTY_USER_ROLES);
-        		
-        		$newUser->setPropertyValue($loginProperty, $login);
-        		$newUser->setPropertyValue($passwordProperty, $password);
-        		$newUser->setPropertyValue($userRolesProperty, $role);
-        		
-        		$returnValue = $newUser;
-        	}
-        	else{
+        	if (empty($returnValue)){
         		throw new core_kernel_users_Exception("Unable to create user with login = '${login}'.");
         	}
         }
@@ -198,8 +193,8 @@ class core_kernel_users_Service
 			throw new core_kernel_users_Exception('The password must be of "string" type, got '.gettype($password));
 		}
 		
-		$userPass = $user->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD));
-		$returnValue = md5($password) == $userPass;
+		$hash = $user->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD));
+		$returnValue = helpers_PasswordHash::getGenerisHash()->verify($password, $hash);
 
         return (bool) $returnValue;
     }
@@ -218,7 +213,7 @@ class core_kernel_users_Service
 			throw new core_kernel_users_Exception('The password must be of "string" type, got '.gettype($password));
 		}
 		
-		$user->editPropertyValues(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD),md5($password));
+		$user->editPropertyValues(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD),core_kernel_users_AuthAdapter::getPasswordHash()->encrypt($password));
     }
 
     /**

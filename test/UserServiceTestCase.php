@@ -143,7 +143,7 @@ class UserServiceTestCase extends UnitTestCase {
 	
 	public function testIsPasswordValid(){
 		$role = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
-		$user = $this->service->addUser('passwordValid', md5('passwordValid'), $role);
+		$user = $this->service->addUser('passwordValid', 'passwordValid', $role);
 		$this->assertIsA($user, 'core_kernel_classes_Resource');
 		$this->assertTrue($this->service->isPasswordValid('passwordValid', $user));
 		$this->assertTrue($user->delete());
@@ -151,7 +151,7 @@ class UserServiceTestCase extends UnitTestCase {
 
 	public function testLogin(){
 		$role = $this->service->addRole('LOGINROLE');
-		$user = $this->service->addUser('login', md5('password'), $role);
+		$user = $this->service->addUser('login', 'password', $role);
 		$taoManagerRole = new core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAO.rdf#TaoManagerRole');
 		
 		$this->assertTrue($this->service->login('login', 'password', $role));
@@ -174,7 +174,7 @@ class UserServiceTestCase extends UnitTestCase {
 		
 		// single role.
 		$role1 = $this->service->addRole('ADDUSERROLE 1');
-		$user = $this->service->addUser('user1', md5('password1'), $role1);
+		$user = $this->service->addUser('user1', 'password1', $role1);
 		
 		$this->assertTrue($this->service->loginExists('user1'));
 		$userRoles = $user->getUniquePropertyValue($userRolesProperty);
@@ -190,7 +190,7 @@ class UserServiceTestCase extends UnitTestCase {
 		$this->assertFalse($role1->exists());
 		
 		// No role provided. Will be given the genuine GENERIS ROLE.
-		$user = $this->service->addUser('user2', md5('password2'));
+		$user = $this->service->addUser('user2', 'password2');
 		$this->assertTrue($this->service->loginExists('user2'));
 		$userRoles = $user->getUniquePropertyValue($userRolesProperty);
 		$this->assertEqual($userRoles->getUri(), INSTANCE_ROLE_GENERIS);
@@ -229,7 +229,7 @@ class UserServiceTestCase extends UnitTestCase {
 		$prefix = LOCAL_NAMESPACE . '#';
 		
 		$subRole2 = new core_kernel_classes_Resource($prefix . 'subRole2');
-		$user = $this->service->addUser('user', md5('password'), $subRole2);
+		$user = $this->service->addUser('user', 'password', $subRole2);
 		$userRoles = $this->service->getUserRoles($user);
 		
 		$this->assertEqual(count($userRoles), 2);
@@ -238,7 +238,7 @@ class UserServiceTestCase extends UnitTestCase {
 		$user->delete();
 		
 		$subRole11 = new core_kernel_classes_Resource($prefix . 'subRole11');
-		$user = $this->service->addUser('user', md5('password'), $subRole11);
+		$user = $this->service->addUser('user', 'password', $subRole11);
 		$userRoles = $this->service->getUserRoles($user);
 		
 		$this->assertEqual(count($userRoles), 3);
@@ -262,12 +262,12 @@ class UserServiceTestCase extends UnitTestCase {
 		$this->assertTrue($baseRole->exists());
 		$this->assertTrue($subRole1->exists());
 		
-		$user = $this->service->addUser('user', md5('password'), $baseRole);
+		$user = $this->service->addUser('user', 'password', $baseRole);
 		$this->assertTrue($this->service->userHasRoles($user, $baseRole));
 		$this->assertFalse($this->service->userHasRoles($user, array($baseRole, $subRole1)));
 		$user->delete();
 		
-		$user = $this->service->addUser('user', md5('password'), $subRole1);
+		$user = $this->service->addUser('user', 'password', $subRole1);
 		$this->assertTrue($this->service->userHasRoles($user, $baseRole));
 		$this->assertTrue($this->service->userHasRoles($user, $subRole1));
 		$this->assertFalse($this->service->userHasRoles($user, $subRole2));
@@ -275,7 +275,7 @@ class UserServiceTestCase extends UnitTestCase {
 		$this->assertFalse($this->service->userHasRoles($user, array($baseRole, $subRole1, $subRole2)));
 		$user->delete();
 
-		$user = $this->service->addUser('user', md5('password'), $subRole13);
+		$user = $this->service->addUser('user', 'password', $subRole13);
 		$this->assertTrue($this->service->userHasRoles($user, $subRole13));
 		$this->assertTrue($this->service->userHasRoles($user, $baseRole));
 		$this->assertTrue($this->service->userHasRoles($user, $allRolesOf13));
@@ -285,7 +285,7 @@ class UserServiceTestCase extends UnitTestCase {
 	public function testIncludeRole(){
 		$prefix = LOCAL_NAMESPACE . '#';
 		$role = new core_kernel_classes_Resource($prefix . 'subRole3');
-		$user = $this->service->addUser('user', md5('password'), $role);
+		$user = $this->service->addUser('user', 'password', $role);
 		
 		$userRoles = $this->service->getUserRoles($user);
 		$this->assertEqual(count($userRoles), 2);
@@ -306,7 +306,7 @@ class UserServiceTestCase extends UnitTestCase {
 	public function testUnincludeRole(){
 		$prefix = LOCAL_NAMESPACE . '#';
 		$role = new core_kernel_classes_Resource($prefix . 'subRole11');
-		$user = $this->service->addUser('user', md5('password'), $role);
+		$user = $this->service->addUser('user', 'password', $role);
 		
 		$userRoles = $this->service->getUserRoles($user);
 		$baseRole = new core_kernel_classes_Resource($prefix . 'baseRole');
@@ -336,7 +336,7 @@ class UserServiceTestCase extends UnitTestCase {
 		$prefix = LOCAL_NAMESPACE . '#';
 		
 		$subRole13 = new core_kernel_classes_Resource($prefix . 'subRole13');
-		$user = $this->service->addUser('user', md5('password'), $subRole13);
+		$user = $this->service->addUser('user', 'password', $subRole13);
 		$this->assertTrue($this->service->userHasRoles($user, $subRole13));
 		
 		$this->assertTrue($this->service->removeRole($subRole13));
@@ -349,7 +349,7 @@ class UserServiceTestCase extends UnitTestCase {
 	
 	public function testRemoveUser(){
 		$role = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
-		$user = $this->service->addUser('removeUser', md5('removeUser'), $role);
+		$user = $this->service->addUser('removeUser', 'removeUser', $role);
 		$this->assertTrue($user->exists());
 		$this->service->removeUser($user);
 		$this->assertFalse($user->exists());
@@ -357,7 +357,7 @@ class UserServiceTestCase extends UnitTestCase {
 	
 	public function testSetPassword(){
 		$role = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
-		$user = $this->service->addUser('passwordUser', md5('passwordUser'), $role);
+		$user = $this->service->addUser('passwordUser', 'passwordUser', $role);
 		$this->assertTrue($user->exists());
 		$this->assertTrue($this->service->isPasswordValid('passwordUser', $user));
 		$this->assertFalse($this->service->isPasswordValid('password', $user));
@@ -369,7 +369,7 @@ class UserServiceTestCase extends UnitTestCase {
 	
 	public function testAttachUnnatachRole(){
 		$prefix = LOCAL_NAMESPACE . '#';
-		$user = $this->service->addUser('attachUser', md5('attachUser'));
+		$user = $this->service->addUser('attachUser', 'attachUser');
 		
 		$role = new core_kernel_classes_Resource($prefix . 'baseRole');
 		$this->service->attachRole($user, $role);

@@ -30,8 +30,22 @@
 class core_kernel_users_AuthAdapter
 	implements common_user_auth_Adapter
 {
-	private $username;
-	
+    CONST LEGACY_ALGORITHM = 'md5';
+    CONST LEGACY_SALT_LENGTH = 0;
+
+    /**
+     * Returns the hashing algorithm defined in generis configuration
+     * 
+     * @return helpers_PasswordHash
+     */
+    public static function getPasswordHash() {
+        return new helpers_PasswordHash(
+            defined('PASSWORD_HASH_ALGORITHM') ? PASSWORD_HASH_ALGORITHM : self::LEGACY_ALGORITHM,
+            defined('PASSWORD_HASH_SALT_LENGTH') ? PASSWORD_HASH_SALT_LENGTH : self::LEGACY_SALT_LENGTH
+        );
+    }    
+    
+    private $username;
 	private $password;
 	
 	/**
@@ -41,7 +55,7 @@ class core_kernel_users_AuthAdapter
 	 */
 	public function __construct($username, $password) {
 		$this->username = $username;
-		$this->password = md5($password);
+		$this->password = $password;
 	}
 	
 	/**
@@ -51,19 +65,32 @@ class core_kernel_users_AuthAdapter
     public function authenticate() {
     	
     	$userClass = new core_kernel_classes_Class(CLASS_GENERIS_USER);
-    	$filters = array(PROPERTY_USER_LOGIN => $this->username, PROPERTY_USER_PASSWORD => $this->password);
+    	$filters = array(PROPERTY_USER_LOGIN => $this->username);
     	$options = array('like' => false, 'recursive' => true);
     	$users = $userClass->searchInstances($filters, $options);
     	
-    	if (empty($users)){
+    	
+    	if (count($users) > 1){
+    		// Multiple users matching
+    		throw new common_exception_InconsistentData("Multiple Users found with the same login '".$this->username."'.");
+    	}
+        if (empty($users)){
+            // fake code execution to prevent timing attacks
+            $label = new core_kernel_classes_Property(RDFS_LABEL);
+            $hash = $label->getUniquePropertyValue($label);
+            if (!self::getPasswordHash()->verify($this->password, $hash)) {
+                throw new core_kernel_users_InvalidLoginException();
+            }
+            // should never happen, added for integrity
     		throw new core_kernel_users_InvalidLoginException();
     	}
-    	if (count($users) > 1){
-    		// Multiple users matching or not at all.
-    		throw new common_exception_InconsistentData("Multiple Users found with the same password for login '".$this->username."'.");
-    	}
     	
-		$userResource = current($users);
+	    $userResource = current($users);
+	    $hash = $userResource->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD));
+	    if (!self::getPasswordHash()->verify($this->password, $hash)) {
+	        throw new core_kernel_users_InvalidLoginException();
+	    }
+    	
     	return new core_kernel_users_GenerisUser($userResource);
     }
 }
