@@ -14,7 +14,7 @@ class helpers_Random {
      * @param integer $length The length of the token to be generated.
      * @return string A randomly generated alphanumeric token.
      */
-    static public function generateToken($length) {
+    static public function generateString($length) {
         $token = '';
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $maxIndex = strlen($chars) - 1;
