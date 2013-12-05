@@ -39,8 +39,11 @@ if(PHP_SAPI == 'cli'){
 	$_SERVER['HTTP_HOST'] = 'http://localhost';
 	$_SERVER['DOCUMENT_ROOT'] = dirname(__FILE__).'/../..';
 }
+//load config
+require_once  dirname(__FILE__). '/class.Config.php';
+common_Config::load();
 
-require_once  dirname(__FILE__). '/configLoader.php';
+//load constants
 require_once  dirname(__FILE__). '/constants.php';
 
 //set the time zone
@@ -76,7 +79,6 @@ function generis_extension_autoload($pClassName) {
 	
 	$classLoader = common_ext_ClassLoader::singleton();
 	
-	
 	if(strpos($pClassName, '_') !== false){
 		$tokens = explode("_", $pClassName);
 		$size = count($tokens);
@@ -84,16 +86,18 @@ function generis_extension_autoload($pClassName) {
 		for ( $i = 0 ; $i<$size-1 ; $i++){
 			$path .= $tokens[$i].'/';
 		}
+		
 		$filePath = '/' . $path . 'class.'.$tokens[$size-1] . '.php';
 		if (file_exists(GENERIS_BASE_PATH .$filePath)){
 			require_once GENERIS_BASE_PATH .$filePath;
 			return;
 		}
-		$filePath = '/' . $path . 'interface.'.$tokens[$size-1] . '.php';
-		if (file_exists(GENERIS_BASE_PATH .$filePath)){
-			require_once GENERIS_BASE_PATH .$filePath;
+		$filePathInterface = '/' . $path . 'interface.'.$tokens[$size-1] . '.php';
+		if (file_exists(GENERIS_BASE_PATH .$filePathInterface)){
+			require_once GENERIS_BASE_PATH .$filePathInterface;
 			return;
 		}
+		
 		if (file_exists(ROOT_PATH .$filePath)){
 			require_once ROOT_PATH .$filePath;
 			return;
