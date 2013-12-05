@@ -38,7 +38,7 @@ abstract class common_persistence_Persistence
      */
     private $params = array();
     
-    public static function getPersistance($driverId) {
+    public static function getPersistence($driverId) {
         $returnValue = common_persistence_Manager::getPersistence($driverId);
         $class = get_called_class();
         if (!$returnValue instanceof $class) {
