@@ -22,7 +22,7 @@
  * @subpackage 
  *
  */
-class core_persistence_PhpRedisDriver implements core_persistence_Driver
+class common_persistence_PhpRedisDriver implements common_persistence_Driver
 {
 
     const DEFAULT_PORT = 6379;
@@ -34,7 +34,7 @@ class core_persistence_PhpRedisDriver implements core_persistence_Driver
 
     /**
      * (non-PHPdoc)
-     * @see core_persistence_Driver::connect()
+     * @see common_persistence_Driver::connect()
      */
     function connect(array $params)
     {
@@ -51,15 +51,7 @@ class core_persistence_PhpRedisDriver implements core_persistence_Driver
         if (isset($params['password'])) {
             $this->connection->auth($params['password']);
         }
-        return $this;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see core_persistence_Driver::getPersistenceClass()
-     */
-    public function getPersistenceClass() {
-        return "core_persistence_KeyValuePersistence";
+        return new common_persistence_KeyValuePersistence($params, $this);
     }
     
     public function set($id, $value, $ttl = null)

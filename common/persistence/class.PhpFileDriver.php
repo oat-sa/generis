@@ -22,7 +22,7 @@
  * @subpackage 
  *
  */
-class core_persistence_PhpFileDriver implements core_persistence_Driver
+class common_persistence_PhpFileDriver implements common_persistence_Driver
 {
     private $directory;
     private $levels;
@@ -36,7 +36,7 @@ class core_persistence_PhpFileDriver implements core_persistence_Driver
 
     /**
      * (non-PHPdoc)
-     * @see core_persistence_Driver::connect()
+     * @see common_persistence_Driver::connect()
      */
     function connect(array $params)
     {
@@ -45,15 +45,7 @@ class core_persistence_PhpFileDriver implements core_persistence_Driver
         }
         $this->directory = $params['dir'].($params['dir'][strlen($params['dir'])-1] == DIRECTORY_SEPARATOR ? '' : DIRECTORY_SEPARATOR);
         $this->levels = isset($params['levels']) ? $params['levels'] : self::DEFAULT_LEVELS;
-        return $this;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see core_persistence_Driver::getPersistenceClass()
-     */
-    public function getPersistenceClass() {
-        return "core_persistence_KeyValuePersistence";
+        return new common_persistence_KeyValuePersistence($params, $this);
     }
     
     public function set($id, $value, $ttl = null)

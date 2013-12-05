@@ -22,48 +22,30 @@
  * @subpackage persistence
  *
  */
-abstract class core_persistence_Persistence
+abstract class common_persistence_Persistence
 {
-    /**
-     * connection to the persistence 
-     * 
-     * @var mixed
-     */
-    private $connection;
     /**
      * Driver of the persistence
      * 
-     * @var core_persistence_Driver
+     * @var common_persistence_Driver
      */
     private $driver;
+    
     /**
      * Persistence parameters
      * 
      * @var array
      */
     private $params = array();
-    /**
-     * Is this persistence actually connect
-     * 
-     * @var boolean
-     */
-    private $isConnected = false;
-
-    /**
-     * Connect the persistence
-     * 
-     * @access public
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     */
-    public abstract function connect();
     
-    /**
-     * Name of the persistence
-     * 
-     * @access public
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     */
-    public abstract function getName();
+    public static function getPersistance($driverId) {
+        $returnValue = common_persistence_Manager::getPersistence($driverId);
+        $class = get_called_class();
+        if (!$returnValue instanceof $class) {
+            common_Logger::w('Got a ',get_class($returnValue).' instead of '.$class);
+        }
+        return $returnValue;
+    }
 
     /**
      * Constructor
@@ -71,16 +53,11 @@ abstract class core_persistence_Persistence
      * @access public
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param array $params
-     * @param core_persistence_driver $driver
+     * @param common_persistence_driver $driver
      */
-    public function __construct($params = array(), core_persistence_driver $driver){
+    public function __construct($params = array(), common_persistence_driver $driver){
         $this->setParams($params);
         $this->setDriver($driver);
-
-        if (isset($params['connection'])) {
-            $this->setConnection($params['connection']);
-            $this->setConnected(true);
-        }
     }
 
     /**
@@ -88,21 +65,10 @@ abstract class core_persistence_Persistence
      * 
      * @access public
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @return core_persistence_Driver
+     * @return common_persistence_Driver
      */
     public function getDriver(){
         return $this->driver;
-    }
-
-    /**
-     * Retrieve persistence'c connection
-     * 
-     * @access public
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     */
-    public function getConnection()
-    {
-        return $this->connection;
     }
 
     /**
@@ -110,22 +76,10 @@ abstract class core_persistence_Persistence
      * 
      * @access protected
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param core_persistence_Driver $driver
+     * @param common_persistence_Driver $driver
      */
-    protected  function setDriver(core_persistence_Driver $driver){
+    protected  function setDriver(common_persistence_Driver $driver){
         $this->driver=$driver;
-    }
-
-    /**
-     * Set the connection
-     * 
-     * @access protected
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param unknown $connection
-     */
-    protected function setConnection($connection)
-    {
-        $this->connection = $connection;
     }
 
     /**
@@ -149,28 +103,5 @@ abstract class core_persistence_Persistence
     protected function setParams($params){
         $this->params = $params;
     }
-
-    /**
-     * change actual persistence status to connected
-     * 
-     * @access public
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param unknown $isConnected
-     */
-    protected function setConnected($isConnected)
-    {
-        $this->isConnected = $isConnected;
-    }
-
-    /**
-     * retrieve persistence status
-     * 
-     * @access protected
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @return boolean
-     */
-    protected function isConnected()
-    {
-        return $this->isConnected;
-    }
 }
+

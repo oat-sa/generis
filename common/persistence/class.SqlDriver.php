@@ -18,39 +18,48 @@
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
- * @package core
- * @subpackage persistence
+ * @package 
+ * @subpackage 
  *
  */
-class core_persistence_SqlPersistence extends core_persistence_Persistence
+class common_persistence_SqlDriver implements common_persistence_Driver
 {
 
-    /* (non-PHPdoc)
-     * @see core_persistence_Persistence::connect()
-     */
-    public function connect()
-    {
-        if ($this->isConnected()) {
-            return false;
-        }
-        $params = $this->getParams();
-        $this->setConnection($this->getDriver()->connect($params));
-        if(isset($params["driver"]) && $params["driver"]== 'pdo_mysql'){
-            //activate mysql ansi quotes support
-            $this->getConnection()->exec('SET SESSION SQL_MODE=\'ANSI_QUOTES\';');
-        }
-        return $this->getConnection();
+    private $connection;
 
+    /**
+     * @param array $params
+     * @return \Doctrine\DBAL\Connection;
+     */
+    function connect(array $params)
+    {
+        $config = new \Doctrine\DBAL\Configuration();
+        $this->connection = \Doctrine\DBAL\DriverManager::getConnection($params,$config);
+        return new common_persistence_SqlPersistence($params, $this);
+    }
+    
+    /**
+     * 
+     * @return string
+     */
+    public function getPersistenceClass(){
+        return "common_persistence_SqlPersistence";
     }
 
-    /* (non-PHPdoc)
-     * @see core_persistence_Persistence::getName()
+    /**
+     * @return \Doctrine\DBAL\Schema\AbstractSchemaManager;
      */
-    public function getName()
-    {
-        return 'SQL PERSISTENCE';
+    public function getSchemaManager(){
+        return $this->connection->getSchemaManager();
     }
 
+    /**
+     * @return \Doctrine\DBAL\Doctrine\DBAL\Platforms;
+     */
+    public function getDatabasePlatform(){
+        return $this->connection->getDatabasePlatform();
+    }
+    
     /**
      * @access
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
@@ -58,10 +67,10 @@ class core_persistence_SqlPersistence extends core_persistence_Persistence
      */
     public function exec($statement)
     {
-        return $this->getConnection()->exec($statement);
+        return $this->connection->exec($statement);
     }
-
-
+    
+    
     /**
      * @access
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
@@ -69,6 +78,8 @@ class core_persistence_SqlPersistence extends core_persistence_Persistence
      */
     public function query($statement)
     {
-        return $this->getConnection()->query($statement);
+        return $this->connection->query($statement);
     }
+
+
 }

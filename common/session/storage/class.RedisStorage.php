@@ -7,11 +7,7 @@ class common_session_storage_RedisStorage
 {
     private $server = null;
     private function initRedisPersistence() {
-        $manager = core_persistence_Manager::singleton();
-        $old = $manager->getPersistenceId();
-        $manager->selectPersistence('redis');
-        $this->server = $manager->getCurrentPersistence();
-        $manager->selectPersistence($old);
+        $this->server = common_persistence_Manager::getPersistence('redis');
     }
     public function open($savePath, $sessionName){
         

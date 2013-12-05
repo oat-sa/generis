@@ -30,7 +30,12 @@ $GLOBALS['generis_persistences'] = array(
 				'dbname' => DATABASE_NAME,
 				'user' => DATABASE_LOGIN,
 				'password' => DATABASE_PASS
-		)/*,
+		),
+		'serviceState' => array(
+		    'driver' => 'phpfile',
+		    'dir' => ROOT_PATH.'tao'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'serviceStorage'.DIRECTORY_SEPARATOR,
+		),
+		/*,
 		'alternate' => array(
 				'driver' => 'pdo_pgsql',
 				'host' => 'DATABASE_URL','localhost');

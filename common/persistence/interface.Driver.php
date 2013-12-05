@@ -18,47 +18,21 @@
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
- * @package 
- * @subpackage 
+ * @package core
+ * @subpackage persistence
  *
  */
-class core_persistence_SqlDriver implements core_persistence_Driver
+
+
+interface common_persistence_Driver
 {
 
-    private $connection;
-
     /**
-     * @param array $params
-     * @return \Doctrine\DBAL\Connection;
-     */
-    function connect(array $params)
-    {
-        $config = new \Doctrine\DBAL\Configuration();
-        $this->connection = \Doctrine\DBAL\DriverManager::getConnection($params,$config);
-        return $this->connection;
-
-    }
-    /**
+     * Allow to connect the driver and return the connection
      * 
-     * @return string
+     * @param array $params
+     * @return common_persistence_Persistence
      */
-    public function getPersistenceClass(){
-        return "core_persistence_SqlPersistence";
-    }
-
-    /**
-     * @return \Doctrine\DBAL\Schema\AbstractSchemaManager;
-     */
-    public function getSchemaManager(){
-        return $this->connection->getSchemaManager();
-    }
-
-    /**
-     * @return \Doctrine\DBAL\Doctrine\DBAL\Platforms;
-     */
-    public function getDatabasePlatform(){
-        return $this->connection->getDatabasePlatform();
-    }
-
+    function connect(array $params);
 
 }

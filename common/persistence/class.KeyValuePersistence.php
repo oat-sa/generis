@@ -22,46 +22,24 @@
  * @subpackage persistence
  *
  */
-class core_persistence_KeyValuePersistence extends core_persistence_Persistence
+class common_persistence_KeyValuePersistence extends common_persistence_Persistence
 {
-    
-    /* (non-PHPdoc)
-     * @see core_persistence_Persistence::connect()
-     */
-    public function connect()
-    {
-        if ($this->isConnected()) {
-            return false;
-        }
-        $params = $this->getParams();
-        $this->setConnection($this->getDriver()->connect($params));
-        return $this->getConnection();
-
-    }
-
-    /* (non-PHPdoc)
-     * @see core_persistence_Persistence::getName()
-     */
-    public function getName()
-    {
-        return 'KEY VALUE PERSISTENCE';
-    }
     
     public function set($id, $value, $ttl = null)
     {
-        return $this->getConnection()->set($id, $value, $ttl);
+        return $this->getDriver()->set($id, $value, $ttl);
     }
     
     public function get($id) {
-        return $this->getConnection()->get($id);
+        return $this->getDriver()->get($id);
     }
     
     public function exists($id) {
-        return $this->getConnection()->exists($id);
+        return $this->getDriver()->exists($id);
     }
     
     public function del($id) {
-        return $this->getConnection()->del($id);
+        return $this->getDriver()->del($id);
     }
     
 

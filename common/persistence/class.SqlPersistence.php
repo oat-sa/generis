@@ -22,28 +22,35 @@
  * @subpackage persistence
  *
  */
-
-
-interface core_persistence_Driver
+class common_persistence_SqlPersistence extends common_persistence_Persistence
 {
 
-    /**
-     * Allow to connect the driver and return the connection
-     * 
-     * @param array $params
-     * @return core_persistence_Connection
-     */
-    function connect(array $params);
+    public function __construct($params, common_persistence_driver $driver){
+        parent::__construct($params, $driver);
+        if(isset($params["driver"]) && $params["driver"]== 'pdo_mysql'){
+            //activate mysql ansi quotes support
+            $this->exec('SET SESSION SQL_MODE=\'ANSI_QUOTES\';');
+        }
+    }
 
     /**
-     * Provides the Persistence Class that suits to use the driver
-     *  
-     * @return string
+     * @access
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param mixed $statement
      */
-    public function getPersistenceClass();
+    public function exec($statement)
+    {
+        return $this->getDriver()->exec($statement);
+    }
 
 
-
-
-
+    /**
+     * @access
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param mixed $statement
+     */
+    public function query($statement)
+    {
+        return $this->getDriver()->query($statement);
+    }
 }
