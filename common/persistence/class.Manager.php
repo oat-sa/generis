@@ -45,7 +45,8 @@ class common_persistence_Manager
         'pdo_ibm'    => 'common_persistence_SqlDriver',
         'pdo_sqlsrv' => 'common_persistence_SqlDriver',
         'phpredis'   => 'common_persistence_PhpRedisDriver',
-        'phpfile'    => 'common_persistence_PhpFileDriver'
+        'phpfile'    => 'common_persistence_PhpFileDriver',
+        'SqlKvWrapper' => 'common_persistence_SqlKvDriver'
     );
 
     /**
@@ -79,7 +80,7 @@ class common_persistence_Manager
             $driver = new $driverClassName();
         }
         else{
-            common_Logger::e('Driver not found check your database configuration');
+            common_Logger::e('Driver '.$driverStr.' not found check your database configuration');
         }
         return $driver->connect($config);
     }
