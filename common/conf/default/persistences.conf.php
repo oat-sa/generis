@@ -35,6 +35,10 @@ $GLOBALS['generis_persistences'] = array(
 		    'driver' => 'phpfile',
 		    'dir' => ROOT_PATH.'tao'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'serviceStorage'.DIRECTORY_SEPARATOR,
 		),
+		'session' => array(
+		    'driver' => 'SqlKvWrapper',
+		    'sqlPersistence' => 'default'
+		)
 		/*,
 		'alternate' => array(
 				'driver' => 'pdo_pgsql',

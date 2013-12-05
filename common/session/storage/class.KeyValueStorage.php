@@ -37,7 +37,7 @@ class common_session_storage_KeyValueStorage
      * @see common_session_storage_SessionStorage::open()
      */
     public function open($savePath, $sessionName){
-        $this->server = common_persistence_KeyValuePersistence::getPersistence('redis');
+        $this->server = common_persistence_KeyValuePersistence::getPersistence('session');
         return true;
     }
 
