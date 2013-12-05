@@ -32,14 +32,6 @@ interface common_persistence_KvDriver extends common_persistence_Driver
 {
 
     /**
-     * Allow to connect the driver and return the connection
-     * 
-     * @param array $params
-     * @return common_persistence_Persistence
-     */
-    function connect(array $params);
-    
-    /**
      * Stores a value, implementing time to live is optional
      * 
      * @param string $id

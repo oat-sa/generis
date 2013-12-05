@@ -38,12 +38,11 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
      * (non-PHPdoc)
      * @see common_persistence_Driver::connect()
      */
-    function connect(array $params)
+    function connect($id, array $params)
     {
-        if (!isset($params['dir'])) {
-            throw new common_exception_Error('Missing directory parameter("dir") for PHP file driver');
-        }
-        $this->directory = $params['dir'].($params['dir'][strlen($params['dir'])-1] == DIRECTORY_SEPARATOR ? '' : DIRECTORY_SEPARATOR);
+        $this->directory = isset($params['dir']) 
+            ? $params['dir'].($params['dir'][strlen($params['dir'])-1] == DIRECTORY_SEPARATOR ? '' : DIRECTORY_SEPARATOR)
+            : GENERIS_FILES_PATH.$id.DIRECTORY_SEPARATOR;
         $this->levels = isset($params['levels']) ? $params['levels'] : self::DEFAULT_LEVELS;
         return new common_persistence_KeyValuePersistence($params, $this);
     }

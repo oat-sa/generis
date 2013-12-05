@@ -36,7 +36,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_KvDriver
      * (non-PHPdoc)
      * @see common_persistence_Driver::connect()
      */
-    function connect(array $params)
+    function connect($id, array $params)
     {
         $this->connection = new Redis();
         if ($this->connection == false) {

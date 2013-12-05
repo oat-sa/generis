@@ -44,7 +44,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
      * (non-PHPdoc)
      * @see common_persistence_Driver::connect()
      */
-    function connect(array $params)
+    function connect($id, array $params)
     {
         if (!isset($params['sqlPersistence'])) {
             throw new common_exception_Error('Missing underlying sql persistence');

@@ -24,36 +24,20 @@
  */
 
 $GLOBALS['generis_persistences'] = array(
-		'default' => array(
-				'driver' => SGBD_DRIVER,
-				'host' => DATABASE_URL,
-				'dbname' => DATABASE_NAME,
-				'user' => DATABASE_LOGIN,
-				'password' => DATABASE_PASS
-		),
-		'serviceState' => array(
-		    'driver' => 'phpfile',
-		    'dir' => ROOT_PATH.'tao'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'serviceStorage'.DIRECTORY_SEPARATOR,
-		),
-		'session' => array(
-		    'driver' => 'SqlKvWrapper',
-		    'sqlPersistence' => 'default'
-		)
-		/*,
-		'alternate' => array(
-				'driver' => 'pdo_pgsql',
-				'host' => 'DATABASE_URL','localhost');
-'dbname' => 'DATABASE_NAME','taoUnitTest');
-'user' => 'DATABASE_LOGIN','taoUnitTest');
-'password' => 'DATABASE_PASS','tao');
-)*/
-		/*,
-		 'virutoso' => array(
-		 		'driver' => '',
-		 		'host' => '',
-		 		'name' => '',
-		 		'login' => '',
-		 		'pass' => ''
-		 )
-*/
+	'default' => array(
+			'driver' => SGBD_DRIVER,
+			'host' => DATABASE_URL,
+			'dbname' => DATABASE_NAME,
+			'user' => DATABASE_LOGIN,
+			'password' => DATABASE_PASS
+	),
+	'serviceState' => array(
+	    'driver' => 'phpfile',
+	),
+	/*
+	'session' => array(
+	    'driver' => 'SqlKvWrapper',
+	    'sqlPersistence' => 'default'
+	)
+	*/
 );

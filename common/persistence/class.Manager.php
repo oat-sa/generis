@@ -82,7 +82,7 @@ class common_persistence_Manager
         else{
             common_Logger::e('Driver '.$driverStr.' not found check your database configuration');
         }
-        return $driver->connect($config);
+        return $driver->connect($persistenceId, $config);
     }
     
 }

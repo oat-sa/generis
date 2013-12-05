@@ -31,7 +31,7 @@ class common_persistence_SqlDriver implements common_persistence_Driver
      * @param array $params
      * @return \Doctrine\DBAL\Connection;
      */
-    function connect(array $params)
+    function connect($id, array $params)
     {
         $config = new \Doctrine\DBAL\Configuration();
         $this->connection = \Doctrine\DBAL\DriverManager::getConnection($params,$config);

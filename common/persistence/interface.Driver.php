@@ -29,10 +29,11 @@ interface common_persistence_Driver
 
     /**
      * Allow to connect the driver and return the connection
-     * 
+     *
+     * @param string $id
      * @param array $params
      * @return common_persistence_Persistence
      */
-    function connect(array $params);
+    function connect($id, array $params);
 
 }
