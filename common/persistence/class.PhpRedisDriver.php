@@ -22,7 +22,7 @@
  * @subpackage 
  *
  */
-class common_persistence_PhpRedisDriver implements common_persistence_Driver
+class common_persistence_PhpRedisDriver implements common_persistence_KvDriver
 {
 
     const DEFAULT_PORT = 6379;

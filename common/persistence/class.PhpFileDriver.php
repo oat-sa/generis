@@ -22,7 +22,7 @@
  * @subpackage 
  *
  */
-class common_persistence_PhpFileDriver implements common_persistence_Driver
+class common_persistence_PhpFileDriver implements common_persistence_KvDriver
 {
     private $directory;
     private $levels;
