@@ -106,7 +106,7 @@ class core_kernel_persistence_PropertyProxy
      * Short description of attribute instance
      *
      * @access public
-     * @var PersistanceProxy
+     * @var PersistenceProxy
      */
     public static $instance = null;
 
@@ -327,7 +327,7 @@ class core_kernel_persistence_PropertyProxy
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return core_kernel_persistence_PersistanceProxy
+     * @return core_kernel_persistence_PersistenceProxy
      */
     public static function singleton()
     {

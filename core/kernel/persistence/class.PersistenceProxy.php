@@ -109,7 +109,7 @@ abstract class core_kernel_persistence_PersistenceProxy
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return core_kernel_persistence_PersistanceProxy
+     * @return core_kernel_persistence_PersistenceProxy
      */
     public static function singleton()
     {

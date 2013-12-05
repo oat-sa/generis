@@ -106,7 +106,7 @@ class core_kernel_persistence_ResourceProxy
      * Short description of attribute instance
      *
      * @access public
-     * @var PersistanceProxy
+     * @var PersistenceProxy
      */
     public static $instance = null;
 
@@ -535,7 +535,7 @@ class core_kernel_persistence_ResourceProxy
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return core_kernel_persistence_PersistanceProxy
+     * @return core_kernel_persistence_PersistenceProxy
      */
     public static function singleton()
     {
