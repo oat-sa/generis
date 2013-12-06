@@ -21,23 +21,40 @@
 ?>
 <?php
 
-require_once dirname(__FILE__).'/../../common/inc.extension.php';
-require_once INCLUDES_PATH.'/simpletest/autorun.php';
-require_once INCLUDES_PATH.'/ClearFw/core/simpletestRunner/_main.php';
+require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
 
-$testSuite = new TestSuite('Versioning unit tests');
-$testSuite->addFile(dirname(__FILE__).'/VersioningEnabledTestCase.php');
-//$testSuite->addFile(dirname(__FILE__).'/../../../wfEngine/test/TranslationProcessExecutionTestCase.php');
-
-//add the reporter regarding the context
-if(PHP_SAPI == 'cli'){
-	$reporter = new XmlTimeReporter();
+class FileHelperTest extends GenerisPHPUnitTestRunner {
+    
+    protected function setUp()
+    {
+        GenerisPHPUnitTestRunner::initTest();
+    }
+    
+	public function testRemoveFile()
+	{
+		$basedir	= $this->mkdir(sys_get_temp_dir());
+		$this->assertTrue(is_dir($basedir));
+		$file01		= tempnam($basedir, 'testdir');
+		$file02		= tempnam($basedir, 'testdir');
+		
+		$subDir1	= $this->mkdir($basedir);
+		
+		$subDir2	= $this->mkdir($basedir);
+		$file21		= tempnam($subDir2, 'testdir');
+		$subDir21	= $this->mkdir($subDir2);
+		$file211	= tempnam($subDir21, 'testdir');
+		$subDir22	= $this->mkdir($subDir2);
+		$this->assertTrue(helpers_File::remove($basedir));
+		$this->assertFalse(is_dir($basedir));
+	}
+	
+	private function mkdir($basePath) {
+		$file = tempnam($basePath, 'dir');
+		$this->assertTrue(unlink($file));
+		$this->assertTrue(mkdir($file));
+		return $file;
+	}
+	
 }
-else{
-	$reporter = new HtmlReporter();
-}
-
-//run the unit test suite
-$testSuite->run($reporter);
-?>
+	
