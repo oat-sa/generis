@@ -24,13 +24,13 @@
 require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
 
-class LogTest extends GenerisPHPUnitTestRunner {
+class LogTest extends GenerisPhpUnitTestRunner {
 	
 	const RUNS = 1000;
     
     protected function setUp()
     {
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
 	}
 	
 	public function testFileAppender()

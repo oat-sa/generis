@@ -24,11 +24,11 @@ error_reporting(E_ALL);
 
 require_once dirname(__FILE__) . '/../GenerisPhpUnitTestRunner.php';
 
-class TermFactoryTest extends GenerisPHPUnitTestRunner {
+class TermFactoryTest extends GenerisPhpUnitTestRunner {
 
 
 	public function setUp(){
-		GenerisPHPUnitTestRunner::initTest();
+		GenerisPhpUnitTestRunner::initTest();
 	}
 	
 	public function testCreateConst(){

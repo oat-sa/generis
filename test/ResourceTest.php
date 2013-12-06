@@ -25,13 +25,13 @@ require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
 
 
-class ResourceTest extends GenerisPHPUnitTestRunner{
+class ResourceTest extends GenerisPhpUnitTestRunner{
 
 	protected $object;
 	
 	public function setUp()
 	{
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
 
 		$this->object = new core_kernel_classes_Resource(GENERIS_BOOLEAN);
 		
@@ -70,7 +70,7 @@ class ResourceTest extends GenerisPHPUnitTestRunner{
 	
 	public function testGetPropertyValuesCollection()
 	{
-		$session = GenerisPHPUnitTestRunner::getTestSession();
+		$session = GenerisPhpUnitTestRunner::getTestSession();
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = new core_kernel_classes_Property(RDFS_SEEALSO,__METHOD__);
@@ -348,7 +348,7 @@ class ResourceTest extends GenerisPHPUnitTestRunner{
 	
 	public function testRemovePropertyValues()
 	{
-		$session = GenerisPHPUnitTestRunner::getTestSession();
+		$session = GenerisPhpUnitTestRunner::getTestSession();
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test', 'test');
 		$instance2 = $class->createInstance('test2', 'test2');
@@ -424,7 +424,7 @@ class ResourceTest extends GenerisPHPUnitTestRunner{
 
 	public function testGetOnePropertyValue()
 	{
-		$session = GenerisPHPUnitTestRunner::getTestSession();
+		$session = GenerisPhpUnitTestRunner::getTestSession();
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = $class->createProperty('seeAlsoDo','multilingue',true);

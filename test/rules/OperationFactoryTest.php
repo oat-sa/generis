@@ -24,11 +24,11 @@ error_reporting(E_ALL);
 require_once dirname(__FILE__) . '/../GenerisPhpUnitTestRunner.php';
 
 
-class OperationFactoryTestCase extends GenerisPHPUnitTestRunner {
+class OperationFactoryTestCase extends GenerisPhpUnitTestRunner {
 
 
 	public function setUp(){
-		GenerisPHPUnitTestRunner::initTest();
+		GenerisPhpUnitTestRunner::initTest();
 	}
 	
 	public function testCreateOperation(){

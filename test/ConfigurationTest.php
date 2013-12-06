@@ -23,13 +23,13 @@
 
 require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
-class ConfigurationTest extends GenerisPHPUnitTestRunner {
+class ConfigurationTest extends GenerisPhpUnitTestRunner {
 	
 	const TESTKEY = 'config_test_key';
     
     protected function setUp()
     {
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
     }
     
     public function testPHPIniValues(){

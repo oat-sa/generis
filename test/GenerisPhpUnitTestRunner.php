@@ -28,7 +28,7 @@ require_once dirname(__FILE__).'/../common/inc.extension.php';
  *
  */
 
-abstract class GenerisPHPUnitTestRunner extends PHPUnit_Framework_TestCase
+abstract class GenerisPhpUnitTestRunner extends PHPUnit_Framework_TestCase
 {
     /**
      *

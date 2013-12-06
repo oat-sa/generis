@@ -22,7 +22,7 @@
 <?php
 require_once dirname(__FILE__) . '/../GenerisPhpUnitTestRunner.php';
 
-class ExpressionTest extends GenerisPHPUnitTestRunner {
+class ExpressionTest extends GenerisPhpUnitTestRunner {
 
     public function testEvaluate(){
         $constantResource1 = core_kernel_rules_TermFactory::createConst('test1');

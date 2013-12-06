@@ -26,14 +26,14 @@ require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
  * HardApiTestCase enables you to test the classes that manage data storage 
  * in hard database
  */
-class HardApiTest extends GenerisPHPUnitTestRunner {
+class HardApiTest extends GenerisPhpUnitTestRunner {
 	
 	/**
      * Make test case initializations
 	 * @see SimpleTestCase::setUp()
 	 */
 	protected function setUp(){
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
 	}
 	
 	/**

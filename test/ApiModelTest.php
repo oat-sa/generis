@@ -21,7 +21,7 @@
 
 include_once dirname(__FILE__). '/GenerisPhpUnitTestRunner.php';
 
-class ApiModelTest extends GenerisPHPUnitTestRunner {
+class ApiModelTest extends GenerisPhpUnitTestRunner {
 	protected $object;
 
 	function __construct() {
@@ -33,7 +33,7 @@ class ApiModelTest extends GenerisPHPUnitTestRunner {
      *
      */
     protected function setUp(){
-		GenerisPHPUnitTestRunner::initTest();
+		GenerisPhpUnitTestRunner::initTest();
     	
 		$this->object = core_kernel_impl_ApiModelOO::singleton();
 		core_kernel_classes_DbWrapper::singleton()->dbConnector->debug=false;

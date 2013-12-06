@@ -27,7 +27,7 @@ require_once dirname(__FILE__) . '/../GenerisPhpUnitTestRunner.php';
 /**
  *
  */
-class ExpressionFactoryTestCase extends GenerisPHPUnitTestRunner {
+class ExpressionFactoryTestCase extends GenerisPhpUnitTestRunner {
 
     /**
      *

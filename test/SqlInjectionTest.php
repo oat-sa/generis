@@ -22,7 +22,7 @@
 <?php
 require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
-class SqlInjectionTestCase extends GenerisPHPUnitTestRunner {
+class SqlInjectionTestCase extends GenerisPhpUnitTestRunner {
 	
 	public function testInject() {
         $generisClass = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);

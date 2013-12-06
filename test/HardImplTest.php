@@ -22,7 +22,7 @@
 <?php
 require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
-class HardImplTest extends GenerisPHPUnitTestRunner {
+class HardImplTest extends GenerisPhpUnitTestRunner {
 	
 	/**
 	 * 
@@ -91,7 +91,7 @@ class HardImplTest extends GenerisPHPUnitTestRunner {
 	
 	protected function setUp(){
 
-		GenerisPHPUnitTestRunner::initTest();
+		GenerisPhpUnitTestRunner::initTest();
 		$this->createContextOfThetest();
 
 	}

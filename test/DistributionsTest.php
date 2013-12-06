@@ -23,7 +23,7 @@
 
 require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
-class DistributionsTest extends GenerisPHPUnitTestRunner {
+class DistributionsTest extends GenerisPhpUnitTestRunner {
     
 	const DIR_SAMPLES = '/../test/samples/distributions/';
 	const SAMPLE_DISTRIBUTIONS = 'distributions.php';
@@ -33,7 +33,7 @@ class DistributionsTest extends GenerisPHPUnitTestRunner {
     protected function setUp()
     {
     	parent::setUp();
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
     }
     
     public function tearDown(){

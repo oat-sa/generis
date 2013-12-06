@@ -33,12 +33,12 @@ require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
  */
 
 
-class CreateInstanceTest extends GenerisPHPUnitTestRunner {
+class CreateInstanceTest extends GenerisPhpUnitTestRunner {
 	protected $class;
 	
 	protected function setUp(){
 
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
 	    $classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDFS_CLASS), 'TestClass');
 	    $this->class = new core_kernel_classes_Class($classres->getUri());
 	    $this->assertIsA($this->class, 'core_kernel_classes_Class');

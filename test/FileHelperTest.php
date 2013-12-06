@@ -24,11 +24,11 @@
 require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
 
-class FileHelperTest extends GenerisPHPUnitTestRunner {
+class FileHelperTest extends GenerisPhpUnitTestRunner {
     
     protected function setUp()
     {
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
     }
     
 	public function testRemoveFile()

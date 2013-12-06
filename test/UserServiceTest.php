@@ -26,7 +26,7 @@ error_reporting(E_ALL);
 require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
 	
-class UserServiceTestCase extends GenerisPHPUnitTestRunner {
+class UserServiceTestCase extends GenerisPhpUnitTestRunner {
     
     const TESTCASE_USER_LOGIN = 'testcase_user';
 	
@@ -43,7 +43,7 @@ class UserServiceTestCase extends GenerisPHPUnitTestRunner {
 	}
 	
 	public function setUp(){
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
 		$this->service = core_kernel_users_Service::singleton();
 		$this->sampleUser = $this->service->addUser(self::TESTCASE_USER_LOGIN, 'pwd'.rand());
 		

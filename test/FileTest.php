@@ -24,7 +24,7 @@
 require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
 
-class FileTest extends GenerisPHPUnitTestRunner {
+class FileTest extends GenerisPhpUnitTestRunner {
 	
 	private $fsPath;
 	/**
@@ -34,7 +34,7 @@ class FileTest extends GenerisPHPUnitTestRunner {
     
     public function setUp()
     {
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
         $this->fsPath = sys_get_temp_dir().DIRECTORY_SEPARATOR.'taoFileTestCase'.DIRECTORY_SEPARATOR;
         mkdir($this->fsPath);
         $this->fileSource = core_kernel_fileSystem_FileSystemFactory::createFileSystem(

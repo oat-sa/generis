@@ -23,7 +23,7 @@
 
 require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
-class FileSourceLocalTest extends GenerisPHPUnitTestRunner {
+class FileSourceLocalTest extends GenerisPhpUnitTestRunner {
     
     /**
      * @var core_kernel_versioning_Repository
@@ -39,7 +39,7 @@ class FileSourceLocalTest extends GenerisPHPUnitTestRunner {
 	
     protected function setUp()
     {
-	    GenerisPHPUnitTestRunner::initTest();
+	    GenerisPhpUnitTestRunner::initTest();
 	    $this->directory = sys_get_temp_dir().DIRECTORY_SEPARATOR."testrepo".DIRECTORY_SEPARATOR;
 	    mkdir($this->directory);
 		$this->repository = core_kernel_fileSystem_FileSystemFactory::createFileSystem(

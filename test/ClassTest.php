@@ -34,12 +34,12 @@ require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
  */
 
 
-class ClassTest extends GenerisPHPUnitTestRunner {
+class ClassTest extends GenerisPhpUnitTestRunner {
 	protected $object;
 	
 	protected function setUp(){
 
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
 
 		$this->object = new core_kernel_classes_Class(RDFS_RESOURCE);
 		$this->object->debug = __METHOD__;

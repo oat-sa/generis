@@ -23,7 +23,7 @@
 require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
 
-class ManifestTest extends GenerisPHPUnitTestRunner {
+class ManifestTest extends GenerisPhpUnitTestRunner {
 	
 	const SAMPLES_PATH = '/../test/samples/manifests/';
 	const MANIFEST_PATH_DOES_NOT_EXIST = 'idonotexist.php';
@@ -31,7 +31,7 @@ class ManifestTest extends GenerisPHPUnitTestRunner {
 	const MANIFEST_PATH_COMPLEX = 'complexManifest.php';
 	
 	public function setUp(){
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
 	}
 	
 	public function testManifestLoading(){

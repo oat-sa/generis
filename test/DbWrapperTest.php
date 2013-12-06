@@ -30,10 +30,10 @@ require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
  * @package generis
  * @subpackage test
  */
-class DbWrapperTest extends GenerisPHPUnitTestRunner {
+class DbWrapperTest extends GenerisPhpUnitTestRunner {
 
     protected function setUp(){
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         //TODO need to connect to a dbWrapper a function createTable that currently not exists
         $dbWrapper->exec('

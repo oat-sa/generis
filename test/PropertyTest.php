@@ -23,12 +23,12 @@
 require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
 
-class PropertyTest extends GenerisPHPUnitTestRunner{
+class PropertyTest extends GenerisPhpUnitTestRunner{
 	
 	protected $object;
 	
 	public function setUp(){
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
 		$this->object = new core_kernel_classes_Property(PROPERTY_WIDGET);
 	}
 	

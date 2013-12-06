@@ -29,10 +29,10 @@ require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
  * @package generis
  * @subpackage test
  */
-class NamespaceTest extends GenerisPHPUnitTestRunner {
+class NamespaceTest extends GenerisPhpUnitTestRunner {
 	
 	public function setUp(){
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
 	}
 
 	/**

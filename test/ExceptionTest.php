@@ -24,11 +24,11 @@
 require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
 
-class ExceptionTest extends GenerisPHPUnitTestRunner {
+class ExceptionTest extends GenerisPhpUnitTestRunner {
     
     public function setUp()
     {
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
 	}
     
     // Method used in the testInvalidArgumentTypeException

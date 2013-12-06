@@ -23,10 +23,10 @@
 require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
 
-class ModelsRightTest extends GenerisPHPUnitTestRunner {
+class ModelsRightTest extends GenerisPhpUnitTestRunner {
 	
 	public function setUp(){
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
 	}
 	
 	public function testRightModels(){

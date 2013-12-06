@@ -23,14 +23,14 @@
 require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
 
-class HardDbSubjectTestCase extends GenerisPHPUnitTestRunner {
+class HardDbSubjectTestCase extends GenerisPhpUnitTestRunner {
 
 	protected $targetSubjectClass = null;
 	protected $targetSubjectSubClass = null;
 	protected $dataIntegrity = array ();
 
 	public function setUp(){
-        GenerisPHPUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
         $this->createContextOfThetest();
 	}
 	
