@@ -28,6 +28,14 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
     private $levels;
     
     /**
+     * Workaround to prevent opcaches from providing
+     * deprecated values
+     * 
+     * @var array
+     */
+    private $cache = array();
+    
+    /**
      * Nr of subfolder levels in order to prevent filesystem bottlenecks 
      * 
      * @var int
@@ -47,6 +55,10 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
         return new common_persistence_KeyValuePersistence($params, $this);
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see common_persistence_KvDriver::set()
+     */
     public function set($id, $value, $ttl = null)
     {
         if (!is_null($ttl)) {
@@ -68,6 +80,10 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
                 $success = fwrite($fp, $string);
                 @flock($fp, LOCK_UN);
                 @fclose($fp);
+                if ($success) {
+                    // OPcache workaround
+                    $this->cache[$id] = $value;
+                }
                 return $success !== false;
             } else {
                 return false;
@@ -76,7 +92,15 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
         
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see common_persistence_KvDriver::get()
+     */
     public function get($id) {
+        if (isset($this->cache[$id])) {
+            // OPcache workaround
+            return $this->cache[$id];
+        }
         $value = @include $this->getPath($id);
         if ($value === false) {
             $value = $this->exists($id) ? $value : null;
@@ -84,14 +108,32 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
         return $value;
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see common_persistence_KvDriver::exists()
+     */
     public function exists($id) {
         return file_exists($this->getPath($id));
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see common_persistence_KvDriver::del()
+     */
     public function del($id) {
+        if (isset($this->cache[$id])) {
+            // OPcache workaround
+            unset($this->cache[$id]);
+        }
         return @unlink($this->getPath($id));
     }
 
+    /**
+     * Map the provided key to a relativ path
+     * 
+     * @param string $key
+     * @return string
+     */
     private function getPath($key) {
         $encoded = md5($key);
         $returnValue = "";
@@ -105,6 +147,5 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
         }
         return  $this->directory.$returnValue.'.php';
     }
-    
 
 }
