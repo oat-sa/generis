@@ -65,16 +65,23 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
                 // We first need to truncate.
                 ftruncate($fp, 0);
             
-                fwrite($fp, $string);
+                $success = fwrite($fp, $string);
                 @flock($fp, LOCK_UN);
                 @fclose($fp);
+                return $success !== false;
+            } else {
+                return false;
             }
         }
         
     }
     
     public function get($id) {
-        return @include $this->getPath($id);
+        $value = @include $this->getPath($id);
+        if ($value === false) {
+            $value = $this->exists($id) ? $value : null;
+        }
+        return $value;
     }
     
     public function exists($id) {
@@ -82,7 +89,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
     }
     
     public function del($id) {
-        return unlink($this->getPath($id));
+        return @unlink($this->getPath($id));
     }
 
     private function getPath($key) {
