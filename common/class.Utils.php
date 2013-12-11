@@ -127,7 +127,7 @@ class common_Utils
         		$returnValue = 'null';
 				break;
         	case "object" :
-        		$returnValue = 'unserialize(\''.serialize($value).'\')';
+        		$returnValue =  'unserialize(\''.str_replace('\'', '\\\'', str_replace('\\', '\\\\', serialize($value))).'\')';
         		break;
         	default:
     			// resource and unexpected types
