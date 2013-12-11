@@ -51,9 +51,7 @@ class Resolver {
 	 * The constructor
 	 */
     public function __construct($url = null) {
-		if($url == null)
- 			 $this->url = $_SERVER['REQUEST_URI'];
-		else $this->url = $url;
+    	$this->url = is_null($url) ? $_SERVER['REQUEST_URI'] : $url;
 
     	$this->module		= null;
     	$this->action		= null;
