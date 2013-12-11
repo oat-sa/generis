@@ -30,7 +30,7 @@ require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
  * Test class for Expression.
 */
 
-class UtilsTest extends GenerisPhpUnitTestRunner {
+class generis_test_UtilsTest extends GenerisPhpUnitTestRunner {
 	
 	
 	public function testIsUri(){
