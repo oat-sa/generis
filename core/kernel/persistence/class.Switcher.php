@@ -163,7 +163,7 @@ class core_kernel_persistence_Switcher
 		$existingInstances = array ();
 		do{
 			//reset timeout:
-			set_time_limit(30);
+			//set_time_limit(300);
 
 			// lionel did that :d le salop
 			core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
@@ -411,7 +411,7 @@ class core_kernel_persistence_Switcher
 			$notDeletedInstances = array ();
 			do{
 				//reset timeout:
-				set_time_limit(30);
+				//set_time_limit(300);
 			
 				$rows = array();
 			
