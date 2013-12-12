@@ -220,9 +220,12 @@ class common_Logger
 			}
 			
 			//reformat input
-			if(is_object($message) || is_array($message)){
-				$message = print_r($message, true);
+			if(is_object($message)){
+				$message = 'Message is object of type ' . gettype($message) ;
+			}else if (is_array($message)){
+		        $message = 'Message is an array '  ;		    
 			}else{
+			    
 				$message = (string) $message;
 			}
 			if(is_string($tags)){
