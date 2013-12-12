@@ -163,7 +163,7 @@ class core_kernel_persistence_Switcher
 		$existingInstances = array ();
 		do{
 			//reset timeout:
-			//set_time_limit(300);
+			helpers_TimeOutHelper::setTimeOutLimit(helpers_TimeOutHelper::MEDIUM);
 
 			// lionel did that :d le salop
 			core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_SMOOTH);
@@ -273,7 +273,7 @@ class core_kernel_persistence_Switcher
 			}
 
 			$count = count($instances);
-
+			helpers_TimeOutHelper::reset();
 		}while($count > 0);
 
 		// Unreference the class
@@ -411,7 +411,8 @@ class core_kernel_persistence_Switcher
 			$notDeletedInstances = array ();
 			do{
 				//reset timeout:
-				//set_time_limit(300);
+				//set_time_limit(30);
+			    helpers_TimeOutHelper::setTimeOutLimit(helpers_TimeOutHelper::MEDIUM);
 			
 				$rows = array();
 			
@@ -467,7 +468,7 @@ class core_kernel_persistence_Switcher
 				}
 			
 				$count = count($instances);
-			
+				helpers_TimeOutHelper::reset();
 			} while($count> 0);
 			
 			$returnValue = true;
