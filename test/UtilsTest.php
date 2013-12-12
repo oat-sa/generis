@@ -48,6 +48,55 @@ class generis_test_UtilsTest extends GenerisPhpUnitTestRunner {
 		$this->assertNotSame($toto,$tata);
 	}
 	
+	public function testPhpStringEscaping(){
+	    
+	    // normal chars
+	    $utf = 'ÆýЉϿϫ˲ ˦ˈŒ\'"\\\\';
+	    $value = eval("return ".common_Utils::toPHPVariableString($utf).";");
+	    $this->assertEquals($utf,$value);
+
+        // test binary safe
+        $binaryString = $this->buildBinString();
+        $value = eval("return ".common_Utils::toPHPVariableString($binaryString).";");
+        $this->assertEquals($binaryString,$value);
+        
+        $all = '';
+        for ($i = 0; $i <= 255; $i++) {
+            $all .= chr($i);
+        }
+        $value = eval("return ".common_Utils::toPHPVariableString($all).";");
+        $this->assertEquals($all,$value);
+        
+        $serialized = serialize(new Exception("te\0st \\ "));
+        $value = eval("return ".common_Utils::toPHPVariableString($serialized).";");
+        $this->assertEquals($serialized,$value);
+	}
+	
+	public function testSerialisation(){
+        $serialized = new Exception("te\0st \\ ");
+        $value = eval("return ".common_Utils::toPHPVariableString($serialized).";");
+        $this->assertEquals($serialized,$value);
+	}
+	
+	private function buildBinString() {
+	     
+	    $position = pack('S', 0); // Q01
+	    $state = "\x01"; // INTERACTING
+	    $navigationMode = "\x00"; // LINEAR
+	    $submissionMode = "\x00"; // INDIVIDUAL
+	    $attempting = "\x00"; // false
+	    $hasItemSessionControl = "\x00"; // false
+	    $numAttempts = "\x02"; // 2
+	    $duration = pack('S', 4) . 'PT0S'; // 0 seconds recorded yet.
+	    $completionStatus = pack('S', 10) . 'incomplete';
+	    $timeReference = pack('l', 1378302030); //  Wednesday, September 4th 2013, 13:40:30 (GMT)
+	    $varCount = "\x02"; // 2 variables (SCORE & RESPONSE).
+	     
+	    $score = "\x01" . pack('S', 8) . "\x00" . "\x01" . pack('d', 1.0);
+	    $response = "\x00" . pack('S', 0) . "\x00" . "\x01" . pack('S', 7) . 'ChoiceA';
+	     
+	    return implode('', array($position, $state, $navigationMode, $submissionMode, $attempting, $hasItemSessionControl, $numAttempts, $duration, $completionStatus, $timeReference, $varCount, $score, $response));
+	}
 
 }
 ?>

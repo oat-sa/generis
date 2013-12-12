@@ -106,8 +106,7 @@ class common_Utils
     {
 		switch (gettype($value)) {
         	case "string" :
-        		// replace \ by \\ and then ' by \'
-        	    $returnValue =  '"'.addslashes($value).'"';
+        	    $returnValue = '\''.str_replace('\'', '\\\'', str_replace('\\', '\\\\', $value)).'\'';
         		break;
         	case "boolean" :
         		$returnValue = $value ? 'true' : 'false';
@@ -127,7 +126,7 @@ class common_Utils
         		$returnValue = 'null';
 				break;
         	case "object" :
-        	    $returnValue =  'unserialize("'.addslashes(serialize($value)).'")';
+        	    $returnValue =  'unserialize('.self::toPHPVariableString(serialize($value)).')';
         		break;
         	default:
     			// resource and unexpected types
