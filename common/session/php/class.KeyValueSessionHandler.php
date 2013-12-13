@@ -19,26 +19,29 @@
  */
 
 /**
- * Session implementation using the persistence
+ * Session implementation as a Key Value storage and using the persistence
  * 
  * @author Joel Bout <joel@taotesting.com>
  * @package generis
  */
-class common_session_storage_KeyValueStorage
-    implements common_session_storage_SessionStorage
+class common_session_php_KeyValueSessionHandler
+    implements common_session_php_SessionHandler
 {
     /**
      * @var common_persistence_KeyValuePersistence
      */
-    private $server = null;
+    private $sessionPersistence = null;
 
+    public function __construct($sessionPersistence){
+        $this->sessionPersistence = $sessionPersistence;
+    }
+    
     /**
      * (non-PHPdoc)
      * @see common_session_storage_SessionStorage::open()
      */
     public function open($savePath, $sessionName){
-        $this->server = common_persistence_KeyValuePersistence::getPersistence('session');
-        return true;
+           return true;
     }
 
     /**
@@ -56,7 +59,7 @@ class common_session_storage_KeyValueStorage
      */
     public function read($id)
     {
-        return $this->server->get($id);
+        return $this->sessionPersistence->get($id);
     }
 
     /**
@@ -65,7 +68,7 @@ class common_session_storage_KeyValueStorage
      */
     public function write($id, $data)
     {  
-        return $this->server->set($id, $data, (int) ini_get('session.gc_maxlifetime'));
+        return $this->sessionPersistence->set($id, $data, (int) ini_get('session.gc_maxlifetime'));
     }
 
     /**
@@ -73,7 +76,7 @@ class common_session_storage_KeyValueStorage
      * @see common_session_storage_SessionStorage::destroy()
      */
     public function destroy($id){
-        $this->server->del($id);
+        $this->sessionPersistence->del($id);
     }
 
     /**
@@ -82,6 +85,10 @@ class common_session_storage_KeyValueStorage
      */
     public function gc($maxlifetime)
     { 
-        //ttl set when writing to storage
+        //
+        //problem here either 
+        // solution 1 : do two explicit handlers for each specific persistence (Redis, SQL) 
+        // solution 2 : Check if the eprsistence is capable of autonomous garbage  
+        //
     }
 }
