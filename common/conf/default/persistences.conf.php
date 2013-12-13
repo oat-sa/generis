@@ -34,10 +34,16 @@ $GLOBALS['generis_persistences'] = array(
 	'serviceState' => array(
 	    'driver' => 'phpfile',
 	),
-	/*
-	'session' => array(
+	
+	
+    	'session' => array(
 	    'driver' => 'SqlKvWrapper',
 	    'sqlPersistence' => 'default'
-	)
-	*/
+	),/*
+        'session' => array(
+	    'driver' => 'phpredis',
+            'host' => '127.0.0.1',
+            'port' => 6379
+	)*/
+	
 );
