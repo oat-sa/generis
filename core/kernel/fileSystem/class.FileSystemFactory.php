@@ -30,8 +30,6 @@
  */
 class core_kernel_fileSystem_FileSystemFactory
 {
-    const DENY_ACCESS_HTACCESS = "Deny from All";
-    
     /**
      * creates a new FileSystem
      *
@@ -49,19 +47,6 @@ class core_kernel_fileSystem_FileSystemFactory
     public static function createFileSystem( core_kernel_classes_Resource $type, $url, $login, $password, $path, $label, $enabled = false)
     {
         $path = rtrim($path, "\\/") . DIRECTORY_SEPARATOR;
-        
-        $filePath = $path . '.htaccess';
-        if (false !== ($fp = @fopen($filePath, 'c')) && true === flock($fp, LOCK_EX)){
-        
-            // We first need to truncate.
-            ftruncate($fp, 0);
-        
-            fwrite($fp, self::DENY_ACCESS_HTACCESS);
-            @flock($fp, LOCK_UN);
-            @fclose($fp);
-        } else {
-            throw new common_exception_Error('Could not create .htaccess in directory \''.$path.'\'');
-        }
         
         $versioningRepositoryClass = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDREPOSITORY);
         $resource = $versioningRepositoryClass->createInstanceWithProperties(array(
