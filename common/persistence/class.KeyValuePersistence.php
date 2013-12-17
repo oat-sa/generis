@@ -56,7 +56,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     }
     //Time complexity: O(1)
     public function hSet($key, $field, $value){
-        return $this->getDriver()->hGet($key, $field, $value);
+        return $this->getDriver()->hSet($key, $field, $value);
     }
     //Time complexity: O(1)
     public function hGet($key, $field){
