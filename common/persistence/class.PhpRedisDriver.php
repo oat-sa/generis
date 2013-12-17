@@ -36,7 +36,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_KvDriver
      * (non-PHPdoc)
      * @see common_persistence_Driver::connect()
      */
-    function connect($id, array $params)
+    function connect($key, array $params)
     {
         $this->connection = new Redis();
         if ($this->connection == false) {
@@ -54,28 +54,51 @@ class common_persistence_PhpRedisDriver implements common_persistence_KvDriver
         return new common_persistence_KeyValuePersistence($params, $this);
     }
     
-    public function set($id, $value, $ttl = null)
+    public function set($key, $value, $ttl = null)
     {
         if (! is_null($ttl)) {
-        return $this->connection->set($id, $value, $ttl);
+        return $this->connection->set($key, $value, $ttl);
         } else {
-            return $this->connection->set($id, $value);
+            return $this->connection->set($key, $value);
         }
         
     }
     
-    public function get($id) {
-        return $this->connection->get($id);
+    public function get($key) {
+        return $this->connection->get($key);
     }
     
-    public function exists($id) {
-        return $this->connection->exists($id);
+    public function exists($key) {
+        return $this->connection->exists($key);
     }
     
-    public function del($id) {
-        return $this->connection->del($id);
+    public function del($key) {
+        return $this->connection->del($key);
     }
 
-    
+    //O(N) where N is the number of fields being set.
+    public function hmSet($key, $fields) {
+        return $this->connection->hmSet($key, $fields);
+    }
+    //Time complexity: O(1)
+    public function hExists($key, $field){
+        return (bool) $this->connection->hExists($key, $field);
+    }
+    //Time complexity: O(1)
+    public function hSet($key, $field, $value){
+        return $this->connection->hGet($key, $field, $value);
+    }
+    //Time complexity: O(1)
+    public function hGet($key, $field){
+        return $this->connection->hGet($key, $field);
+    }
+    //Time complexity: O(N) where N is the size of the hash.
+    public function hGetAll($key){
+        return $this->connection->hGetAll($key);
+    }
+    //Time complexity: O(N)
+    public function keys($pattern) {
+        return $this->connection->keys($pattern);
+    }
 
 }

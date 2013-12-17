@@ -25,23 +25,51 @@
 class common_persistence_KeyValuePersistence extends common_persistence_Persistence
 {
     
-    public function set($id, $value, $ttl = null)
+    public function set($key, $value, $ttl = null)
     {
-        return $this->getDriver()->set($id, $value, $ttl);
+        return $this->getDriver()->set($key, $value, $ttl);
     }
     
-    public function get($id) {
-        return $this->getDriver()->get($id);
+    public function get($key) {
+        return $this->getDriver()->get($key);
     }
     
-    public function exists($id) {
-        return $this->getDriver()->exists($id);
+    public function exists($key) {
+        return $this->getDriver()->exists($key);
     }
     
-    public function del($id) {
-        return $this->getDriver()->del($id);
+    public function del($key) {
+        return $this->getDriver()->del($key);
     }
     
-
+    /**
+     * check if relevant for all Key Value drivers
+     **/
+    
+    //O(N) where N is the number of fields being set.
+    public function hmSet($key, $fields) {
+        return $this->getDriver()->hmSet($key, $fields);
+    }
+    //Time complexity: O(1)
+    public function hExists($key, $field){
+        return (bool) $this->getDriver()->hExists($key, $field);
+    }
+    //Time complexity: O(1)
+    public function hSet($key, $field, $value){
+        return $this->getDriver()->hGet($key, $field, $value);
+    }
+    //Time complexity: O(1)
+    public function hGet($key, $field){
+        return $this->getDriver()->hGet($key, $field);
+    }
+    //Time complexity: O(N) where N is the size of the hash.
+    public function hGetAll($key){
+        return $this->getDriver()->hGetAll($key);
+    }
+    //o(n)
+    public function keys($pattern) {
+        return $this->getDriver()->keys($pattern);
+    }
+    
     
 }
