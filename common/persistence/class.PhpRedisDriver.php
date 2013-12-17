@@ -78,6 +78,8 @@ class common_persistence_PhpRedisDriver implements common_persistence_KvDriver
 
     //O(N) where N is the number of fields being set.
     public function hmSet($key, $fields) {
+        
+        
         return $this->connection->hmSet($key, $fields);
     }
     //Time complexity: O(1)
@@ -86,7 +88,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_KvDriver
     }
     //Time complexity: O(1)
     public function hSet($key, $field, $value){
-        return $this->connection->hGet($key, $field, $value);
+        return $this->connection->hSet($key, $field, $value);
     }
     //Time complexity: O(1)
     public function hGet($key, $field){
