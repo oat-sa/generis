@@ -54,14 +54,6 @@ $GLOBALS['generis_persistences'] = array(
 	    'driver' => 'MongoDB'
 	),
         /*
-        'resultsKeyValueStorage' => array(
-	    'driver' => 'phpredis',
-            'host' => '127.0.0.1',
-            'port' => 6379
-	),
-         * 
-         */
-        /*
         'session' => array(
 	    'driver' => 'phpredis',
             'host' => '127.0.0.1',
