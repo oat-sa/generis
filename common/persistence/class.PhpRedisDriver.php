@@ -100,9 +100,8 @@ class common_persistence_PhpRedisDriver implements common_persistence_KvDriver
     public function keys($pattern) {
         return $this->connection->keys($pattern);
     }
-    
-    
-     public function incr($key) {
+    //Time complexity: O(1)
+    public function incr($key) {
        return $this->getDriver()->incr($key); 
     }
 }
