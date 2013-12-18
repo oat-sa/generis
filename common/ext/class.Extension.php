@@ -330,6 +330,17 @@ class common_ext_Extension
 
         return (bool) $returnValue;
     }
+    
+    /**
+     * Updates the status of the Extension
+     * 
+     * @param boolean $installed
+     */
+    public function updateStatus($installed)
+    {
+        $this->installed = $installed;
+    }
+    
 
     /**
      * returns the base dir of the extension

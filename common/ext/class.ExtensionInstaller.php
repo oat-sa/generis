@@ -230,9 +230,8 @@ class common_ext_ExtensionInstaller
 		
 		common_Logger::d($this->extension->getID() . ' registered', 'INSTALL');
 		
-		//flush Manager
-		common_ext_ExtensionsManager::singleton()->reset();
-		common_Logger::d('Extension manager flush');
+		//update Extension
+		$this->extension->updateStatus(true);
 		
 		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A28 end
 	}
@@ -298,8 +297,7 @@ class common_ext_ExtensionInstaller
 	{
 		// section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FCE begin
 		common_Logger::i("Loading constants for extension '" . $this->extension->getID() . "'");
-		$extLoader = new common_ext_ExtensionLoader($this->extension);
-		$extLoader->load();
+		$this->extension->load();
 		// section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FCE end
 	}
 

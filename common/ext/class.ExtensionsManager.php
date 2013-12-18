@@ -160,16 +160,13 @@ class common_ext_ExtensionsManager
     public function loadExtensions()
     {
 		foreach($this->extensions as $extension) {
-			$extensionLoader = new common_ext_ExtensionLoader($extension);
-
 			//handle dependances requirement
 			foreach ($extension->getManifest()->getDependencies() as $ext) {
 				if(!array_key_exists($ext, $this->extensions) && $ext != 'generis') {
 					throw new common_ext_ExtensionException('Required Extension is Missing : ' . $ext);
 				}
 			}
-			
-			$extensionLoader->load();
+			$extension->load();
 		}
     }
 
@@ -226,17 +223,6 @@ class common_ext_ExtensionsManager
 			$ext = $this->getExtensionById($id);
 			$configuration->save($ext);
 		}
-    }
-
-    /**
-     * Reset the manager in order to take into account current extensions states
-     *
-     * @access public
-     * @author Joel Bout, <joel@taotesting.com>
-     */
-    public function reset()
-    {
-		$this->loadInstalledExtensions();
     }
 
     /**
