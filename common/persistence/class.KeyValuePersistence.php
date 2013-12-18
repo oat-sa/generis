@@ -72,4 +72,9 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     }
     
     
+    public function incr($key) {
+       return $this->getDriver()->incr($key); 
+    }
+    
+    
 }
