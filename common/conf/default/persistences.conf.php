@@ -40,11 +40,14 @@ $GLOBALS['generis_persistences'] = array(
 	    'driver' => 'SqlKvWrapper',
 	    'sqlPersistence' => 'default'
 	),
+        /*
         'session' => array(
-	    'driver' => 'SqlKvWrapper',
-	    'sqlPersistence' => 'default'
+	    'driver' => 'phpredis',
+            'host' => '127.0.0.1',
+            'port' => 6379
 	),
-    
+         */
+        /*
         'keyValueResult' => array(
 	    'driver' => 'phpredis',
             'host' => '127.0.0.1',
@@ -53,11 +56,8 @@ $GLOBALS['generis_persistences'] = array(
         'docBasedResult' => array(
 	    'driver' => 'MongoDB'
 	),
-        /*
-        'session' => array(
-	    'driver' => 'phpredis',
-            'host' => '127.0.0.1',
-            'port' => 6379
-	)*/
+         * 
+         */
+        
 	
 );
