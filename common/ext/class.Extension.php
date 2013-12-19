@@ -526,6 +526,11 @@ class common_ext_Extension
 		$manifest = $this->getManifest();
 		return $manifest->getOptimizableProperties();
 	}
+	
+	public function getEntryPoints()
+	{
+	    return $this->getManifest()->getEntryPoints();
+	}
 
 	/**
 	 * Whenever or not the extension and it's constants have been loaded
