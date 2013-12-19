@@ -70,4 +70,8 @@ abstract class common_session_SessionManager
         self::startSession(new common_session_AnonymousSession());
     }
     
+    public static function isAnonymous() {
+        return self::getSession() instanceof common_session_AnonymousSession;
+    }    
+    
 }
