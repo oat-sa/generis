@@ -245,7 +245,7 @@ class common_ext_Extension
         $this->getConfigs();
         unset($this->fileConfig[$key]);
         $handle = fopen($this->getConfigFilePath(), 'w');
-        fwrite($handle, '<? return '.common_Utils::toPHPVariableString($this->fileConfig).';');
+        fwrite($handle, '<?php return '.common_Utils::toPHPVariableString($this->fileConfig).';');
         fclose($handle);
     }
 
