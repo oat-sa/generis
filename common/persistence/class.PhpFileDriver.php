@@ -102,9 +102,6 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
             return $this->cache[$id];
         }
         $value = @include $this->getPath($id);
-        if ($value === false) {
-            $value = $this->exists($id) ? $value : null;
-        }
         return $value;
     }
     

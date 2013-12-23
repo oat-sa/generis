@@ -30,6 +30,12 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
         return $this->getDriver()->set($key, $value, $ttl);
     }
     
+    /**
+     * Returns the value stored for the identifier $key
+     * or FALSE if nothing found
+     * 
+     * @param string $key
+     */
     public function get($key) {
         return $this->getDriver()->get($key);
     }
