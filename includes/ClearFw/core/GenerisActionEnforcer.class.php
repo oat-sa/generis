@@ -28,29 +28,39 @@
  */
 class GenerisActionEnforcer extends ActionEnforcer
 {
-
-	public function execute()
+    /**
+     * Gets the controller class from the context
+     * 
+     * @throws ActionEnforcingException
+     * @return string
+     */
+    protected function getControllerClass()
 	{
-		// get the extension of the action
-		$extension	= common_ext_ExtensionsManager::singleton()->getExtensionById($this->context->getExtensionName());
-		
-		// get the module of the action
-		$moduleName = $this->context->getModuleName() ? Camelizer::firstToUpper($this->context->getModuleName()) : DEFAULT_MODULE_NAME;
-		$module		= $extension->getModule($moduleName);
-		if (is_null($module)) {
-			throw new ActionEnforcingException('Module "'.$moduleName.'" could not be loaded.',
-											   	   $this->context->getModuleName(),
-											       $this->context->getActionName());
+	    $extensionId = $this->context->getExtensionName();
+		$moduleId = $this->context->getModuleName() ? Camelizer::firstToUpper($this->context->getModuleName()) : DEFAULT_MODULE_NAME;
+        return '\\'.$extensionId.'_actions_'.$moduleId;
+	}
+	
+    public function execute()
+	{
+		// get the controller
+		$controllerClass = $this->getControllerClass();
+		if(class_exists($controllerClass)) {
+		    $module = new $controllerClass;
+		} else {
+		    throw new ActionEnforcingException('Module "'.$moduleName.'" could not be loaded.', $moduleName, $this->context->getActionName());
 		}
 		
-    	// get the action
-		$action = $this->context->getActionName() ? Camelizer::firstToLower($this->context->getActionName()) : DEFAULT_ACTION_NAME;
+    	// get the action, module, extension of the action
+		$extensionId  = $this->context->getExtensionName();
+		$moduleName   = $this->context->getModuleName() ? Camelizer::firstToUpper($this->context->getModuleName()) : DEFAULT_MODULE_NAME;
+		$action       = $this->context->getActionName() ? Camelizer::firstToLower($this->context->getActionName()) : DEFAULT_ACTION_NAME;
 		
 		// Are we authorized to execute this action?
 		$requestParameters = $this->context->getRequest()->getParameters(); 
-		if (!tao_models_classes_accessControl_AclProxy::hasAccess($extension->getID(), $moduleName, $action, $requestParameters)) {
+		if (!tao_models_classes_accessControl_AclProxy::hasAccess($extensionId, $moduleName, $action, $requestParameters)) {
 		    $userUri = common_session_SessionManager::getSession()->getUserUri();
-		    throw new tao_models_classes_AccessDeniedException($userUri, $extension->getID(), $moduleName, $action);
+		    throw new tao_models_classes_AccessDeniedException($userUri, $extensionId, $moduleName, $action);
 		}
     	
     	// if the method related to the specified action exists, call it

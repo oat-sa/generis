@@ -56,11 +56,31 @@ class common_ext_ExtensionLoader
      */
     public function load($extraConstants = array())
     {
-        // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017AD begin
         common_Logger::t('Loading extension ' . $this->extension->getID());
         
         $this->loadConstants($extraConstants);
-        // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017AD end
+        
+        $map = $this->extension->getManifest()->getAutoloaders();
+        if (!empty($map)) {
+            $classLoader = new \Composer\Autoload\ClassLoader();
+            foreach ($map as $autoloader => $config) {
+                switch ($autoloader) {
+                	case "psr-0" :
+                	    foreach ($config as $ns => $dir) {
+                	        $classLoader->add($ns, $dir);
+                	    }
+                	    break;
+                    case "psr-4" :
+                	    foreach ($config as $ns => $dir) {
+                	        $classLoader->addPsr4($ns, $dir);
+                	    }
+                	    break;
+                	default :
+                	    common_Logger::w('unknown autoloader '.$autoloader);
+                }
+            }
+            $classLoader->register();
+        }
     }
 
 

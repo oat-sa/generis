@@ -93,6 +93,26 @@ class Resolver {
     	
     	return is_null($this->action) ? $defaultActionName : $this->action;
     }
+    
+    /**
+     * Returns the current relative call url
+     *
+     * @throws ResolverException
+     * @return string
+     */
+    public function getRelativeUrl() {
+        $request = $this->url;
+        if (preg_match('/^\/\/+/', $request)) {
+            common_Logger::w('Multiple leading slashes in request URI: '.$request);
+            $request = '/'.ltrim($request, '/');
+        }
+        $rootUrlPath	= parse_url(ROOT_URL, PHP_URL_PATH);
+        $absPath		= parse_url($request, PHP_URL_PATH);
+        if (substr($absPath, 0, strlen($rootUrlPath)) != $rootUrlPath ) {
+            throw new ResolverException('Request Uri '.$request.' outside of TAO path '.ROOT_URL);
+        }
+        return substr($absPath, strlen($rootUrlPath));
+    }
 
 	/**
 	 * Parse the framework-object requested into the URL
@@ -100,20 +120,7 @@ class Resolver {
 	 * @param String $request A sub part of the requested URL
 	 */
 	protected function resolveRequest($request){
-		if(empty($request)) {
-			throw new ResolverException('Empty request URI in Resolver');
-		}
-		if (preg_match('/^\/\/+/', $request)) {
-			common_Logger::w('Multiple leading slashes in request URI: '.$request);
-			$request = '/'.ltrim($request, '/');
-		}
-		$rootUrlPath	= parse_url(ROOT_URL, PHP_URL_PATH);
-		$absPath		= parse_url($request, PHP_URL_PATH);
-		if (substr($absPath, 0, strlen($rootUrlPath)) != $rootUrlPath ) {
-			throw new ResolverException('Request Uri '.$request.' outside of TAO path '.ROOT_URL);
-		}
-		$relPath		= substr($absPath, strlen($rootUrlPath));
-		$relPath		= ltrim($relPath, '/');
+		$relPath		= ltrim($this->getRelativeUrl(), '/');
 		$tab = explode('/', $relPath);
 		
 		if (count($tab) > 0) {

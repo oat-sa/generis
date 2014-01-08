@@ -50,11 +50,6 @@ return array(
 			array('type' => 'CheckFileSystemComponent', 'value' => array('id' => 'fs_root','location' => '.', 'rights' => 'rw', 'name' => 'fs_root')),
 		)
 	),
-	'classLoaderPackages' => array(
-		'extension/path/actions/',
-		'extension/path/helpers/',
-		'extension/path/helpers/form'
-	 ),
 	 'constants' => array(
 		 // web services
          'WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/',

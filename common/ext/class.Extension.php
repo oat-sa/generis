@@ -401,25 +401,49 @@ class common_ext_Extension
     {
         $returnValue = array();
 
+        // routes
+        $namespaces = array();
+        foreach ($this->getManifest()->getRoutes() as $mapedPath => $ns) {
+            $namespaces[] = trim($ns, '\\');
+        }
+        if (!empty($ns)) {
+            $classes = array();
+            $recDir = new RecursiveDirectoryIterator($this->getDir());
+            $recIt = new RecursiveIteratorIterator($recDir);
+            $regexIt = new RegexIterator($recIt, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
+            foreach ($regexIt as $entry) {
+                $info = helpers_PhpTools::getClassInfo($entry[0]);
+                if (!empty($info['ns'])) {
+                    $ns = trim($info['ns'], '\\');
+                    if (!empty($info['ns']) && in_array($ns, $namespaces)) {
+                        $returnValue[$info['class']] = $ns.'\\'.$info['class'];
+                    }
+                }
+            }
+        } 
+        // legacy
         if ($this->hasConstant('DIR_ACTIONS') && file_exists($this->getConstant('DIR_ACTIONS'))) {
 			$dir = new DirectoryIterator($this->getConstant('DIR_ACTIONS'));
 		    foreach ($dir as $fileinfo) {
 				if(preg_match('/^class\.[^.]*\.php$/', $fileinfo->getFilename())) {
 					$module = substr($fileinfo->getFilename(), 6, -4);
-					$class = $this->getID().'_actions_'.$module;
-					if (class_exists($class)) {
-						if (is_subclass_of($class, 'Module')) {
-							$returnValue[$module] = $class;
-						} else {
-							common_Logger::w($class.' does not inherit Module');
-						}
-					} else {
-						common_Logger::w($class.' not found for file \''.$fileinfo->getFilename().'\'');
-					}
+					$returnValue[$module] = $this->getID().'_actions_'.$module;
 				}
 			}
         }
-
+        
+        // validate the classes
+        foreach (array_keys($returnValue) as $key) {
+            $class = $returnValue[$key];
+            if (!class_exists($class)) {
+				common_Logger::w($class.' not found');
+				unset($returnValue[$key]);
+            } elseif (!is_subclass_of($class, 'Module')) {
+				common_Logger::w($class.' does not inherit Module');
+				unset($returnValue[$key]);
+            }
+        }
+        
         return (array) $returnValue;
     }
 
@@ -513,6 +537,11 @@ class common_ext_Extension
 		$manifest = $this->getManifest();
 		return $manifest->getOptimizableClasses();
 	}
+	
+	public function getPhpNamespace()
+	{
+	    return $this->getManifest()->getPhpNamespace();
+	}	
 
 	/**
 	 * Get an array of Property URIs (as strings) that are considered optimizable by the Extension.

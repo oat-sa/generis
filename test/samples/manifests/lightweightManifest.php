@@ -35,8 +35,5 @@ return array(
 	'version' => '1.0',
 	'author' => 'TAO Team',
 	'dependencies' => array('tao'),
-	'classLoaderPackages' => array(
-		dirname(__FILE__).'/actions/'
-	 )
 );
 ?>

@@ -121,13 +121,21 @@ class common_ext_Manifest
     private $installChecks = array();
 
     /**
-     * The folders that contain PHP classes for the Extension described by the manifest.
+     * The PHP autoload configuration for the Extension described by the manifest.
      *
      * @access private
      * @var array
      */
-    private $classLoaderPackages = array();
-
+    private $autoload = array();
+    
+    /**
+     * The routes to the controllers described by the manifest.
+     *
+     * @access private
+     * @var array
+     */
+    private $routes = array();
+    
     /**
      * The constants to be defined for the described extension.
      *
@@ -277,10 +285,11 @@ class common_ext_Manifest
     			$this->localData = $array['local']; 
     		}
     		
-    		
-    		// mandatory
-    		if (!empty($array['classLoaderPackages'])){
-    			$this->setClassLoaderPackages($array['classLoaderPackages']);
+    		if (!empty($array['autoload'])){
+    		    $this->setAutoloaders($array['autoload']);
+    		}
+    		if (!empty($array['routes'])){
+    		    $this->setRoutes($array['routes']);
     		}
     		
     		if (!empty($array['constants'])){
@@ -780,31 +789,43 @@ class common_ext_Manifest
     }
 
     /**
-     * Get the folders that contain classes to be loaded automatically for the described Extension.
-     *
-     * @access public
-     * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @return array
+     * Sets the autoloaders for this extension.
+     *  
+     * @param string $namespace
      */
-    public function getClassLoaderPackages()
+    private function setAutoloaders($autoloadMap)
     {
-        $returnValue = array();
-
-        $returnValue = $this->classLoaderPackages;
-
-        return (array) $returnValue;
+        return $this->autoload = $autoloadMap;
+    }
+    
+    /**
+     * Gets the autoloader config used by the php classes of this extension.
+     * 
+     * @return string
+     */
+    public function getAutoloaders()
+    {
+        return $this->autoload;
     }
 
     /**
-     * Set the folders that have to be inspected for class autoloading.
+     * Sets the routes for this extension.
      *
-     * @access private
-     * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  array classLoaderPackages
+     * @param string $namespace
      */
-    private function setClassLoaderPackages($classLoaderPackages)
+    private function setRoutes($routes)
     {
-        $this->classLoaderPackages = $classLoaderPackages;
+        return $this->routes = $routes;
+    }
+    
+    /**
+     * Gets the controller routes of this extension.
+     *
+     * @return string
+     */
+    public function getRoutes()
+    {
+        return $this->routes;
     }
 
     /**
