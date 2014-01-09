@@ -73,7 +73,6 @@ class ManifestTest extends GenerisPhpUnitTestRunner {
 			$this->assertEquals($manifest->getDependencies(), array('taoItemBank', 'taoDocuments'));
 			$this->assertEquals($manifest->getInstallModelFiles(), array('/extension/path/models/ontology/taofuncacl.rdf',
 																  		'/extension/path/models/ontology/taoitembank.rdf'));
-			$this->assertEquals($manifest->getClassLoaderPackages(), array('extension/path/actions/', 'extension/path/helpers/', 'extension/path/helpers/form'));
 			$this->assertEquals($manifest->getConstants(), array('WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/', 'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php'));
 			$this->assertEquals($manifest->getOptimizableClasses(), array('http://www.linkeddata.org/ontologies/data.rdf#myClass1','http://www.linkeddata.org/ontologies/data.rdf#myClass2'));
 			$this->assertEquals($manifest->getOptimizableProperties(), array('http://www.linkeddata.org/ontologies/props.rdf#myProp1','http://www.linkeddata.org/ontologies/props.rdf#myProp2'));

@@ -19,14 +19,15 @@ class helpers_PhpTools {
         $fp = fopen($file, 'r');
         $class = $namespace = $buffer = '';
         $i = 0;
-        while (!$class) {
-            if (feof($fp)) break;
+        while (!$class && !feof($fp)) {
         
             $buffer .= fread($fp, 512);
             // supress errors due to partially parsing
             $tokens = @token_get_all($buffer);
         
-            if (strpos($buffer, '{') === false) continue;
+            if (strpos($buffer, '{') === false) {
+                continue;
+            }
         
             for (;$i<count($tokens);$i++) {
                 if ($tokens[$i][0] === T_NAMESPACE) {

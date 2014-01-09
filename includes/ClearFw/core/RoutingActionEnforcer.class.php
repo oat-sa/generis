@@ -49,15 +49,21 @@ class RoutingActionEnforcer extends GenerisActionEnforcer
 	    $relUrl = $resolver->getRelativeUrl();
 
 	    $controllerClass = null;
-	    foreach ($this->getRoutes() as $path => $routingInfo) {
+	    foreach ($this->getRoutes() as $path => $ns) {
 	        $path = trim($path, '/');
 	        if (substr($relUrl, 0, strlen($path)) == $path) {
 	            $rest = trim(substr($relUrl, strlen($path)), '/');
-	            list ($controllerName, $rest) = explode('/', $rest, 2);
-	            $controllerClass = $routingInfo.'\\'.$controllerName;
-	            return $controllerClass;
+	            if (!empty($rest)) {
+                    $parts = explode('/', $rest, 2);
+                    $controllerClass = $ns.'\\'.$parts;
+    	            return $controllerClass;
+	            } elseif (defined('DEFAULT_MODULE_NAME')) {
+                    return $ns.'\\'.DEFAULT_MODULE_NAME;
+                }
 	        }
 	    }
+	    // DEFAULT_MODULE_NAME
+	    
 	    // no explicit route found
 	    return parent::getControllerClass();
 	}
