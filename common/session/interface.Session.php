@@ -53,7 +53,7 @@ interface common_session_Session
      *
      * @access public
      * @author Joel Bout, <joel@taotesting.com>
-     * @return array An array of core_kernel_classes_Resource
+     * @return array An array of strings
      */
     public function getUserRoles();
 

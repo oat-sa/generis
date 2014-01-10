@@ -82,9 +82,10 @@ class common_session_BasicSession implements common_session_Session
         $returnValue = array();
         // We use a Depth First Search approach to flatten the Roles Graph.
         foreach ($this->user->getPropertyValues(PROPERTY_USER_ROLES) as $roleUri){
-            $returnValue[$roleUri] = new core_kernel_classes_Resource($roleUri);
-            foreach (core_kernel_users_Service::singleton()->getIncludedRoles($returnValue[$roleUri]) as $role) {
-                $returnValue[$role->getUri()] = $role;
+            $returnValue[$roleUri] = $roleUri;
+            $role = new core_kernel_classes_Resource($roleUri);
+            foreach (core_kernel_users_Service::singleton()->getIncludedRoles($role) as $incRole) {
+                $returnValue[$incRole->getUri()] = $incRole->getUri();
             }
         }
         return $returnValue;

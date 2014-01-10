@@ -34,6 +34,7 @@ abstract class common_user_User
 	abstract public function getPropertyValues($property);
 
 	abstract public function refresh();
+	
 	/**
 	 * Extends the users explizit roles with the implizit rules
 	 * of the local system

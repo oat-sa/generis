@@ -267,7 +267,7 @@ class core_kernel_users_Service
     	
         if (common_session_SessionManager::getSession()->getUserUri() == $user->getUri()){
             foreach (common_session_SessionManager::getSession()->getUserRoles() as $role) {
-                if (in_array($role->getUri(), $searchRoles)) {
+                if (in_array($role, $searchRoles)) {
                     $returnValue = true;
                     break;
                 }
