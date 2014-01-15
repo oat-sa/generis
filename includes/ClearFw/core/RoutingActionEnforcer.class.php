@@ -55,8 +55,7 @@ class RoutingActionEnforcer extends GenerisActionEnforcer
 	            $rest = trim(substr($relUrl, strlen($path)), '/');
 	            if (!empty($rest)) {
                     $parts = explode('/', $rest, 2);
-                    $controllerClass = $ns.'\\'.$parts;
-    	            return $controllerClass;
+                    return $ns.'\\'.$parts[0];
 	            } elseif (defined('DEFAULT_MODULE_NAME')) {
                     return $ns.'\\'.DEFAULT_MODULE_NAME;
                 }
