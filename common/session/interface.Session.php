@@ -76,6 +76,14 @@ interface common_session_Session
     public function getInterfaceLanguage();
     
     /**
+     * Generic information retrieval of user data
+     * 
+     * @param string $property
+     * @return array
+     */
+    public function getUserPropertyValues($property);
+    
+    /**
      * refreshes the information stored in the current session
      */
     public function refresh();

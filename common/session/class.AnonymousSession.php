@@ -72,6 +72,14 @@ class common_session_AnonymousSession implements common_session_StatelessSession
     
     /**
      * (non-PHPdoc)
+     * @see common_session_Session::getUserPropertyValues()
+     */
+    public function getUserPropertyValues($property) {
+       return array(); 
+    }
+    
+    /**
+     * (non-PHPdoc)
      * @see common_session_Session::refresh()
      */
     public function refresh() {

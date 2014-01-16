@@ -51,6 +51,14 @@ class common_session_BasicSession implements common_session_Session
     }
     
     /**
+     * @param string $property
+     * @return mixed
+     */
+    public function getUserPropertyValues($property) {
+        return $this->user->getPropertyValues($property);
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see common_session_Session::getUserLabel()
      */
