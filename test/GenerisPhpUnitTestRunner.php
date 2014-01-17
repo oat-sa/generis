@@ -82,7 +82,7 @@ abstract class GenerisPhpUnitTestRunner extends PHPUnit_Framework_TestCase
         }
     }
     
-    public static function restoreTestSession() {
+    public function restoreTestSession() {
         return common_session_SessionManager::startSession(new common_test_TestUserSession());
     }
     

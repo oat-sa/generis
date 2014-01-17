@@ -26,10 +26,22 @@ require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 class ConfigurationTest extends GenerisPhpUnitTestRunner {
 	
 	const TESTKEY = 'config_test_key';
+	
+	/**
+	 * A version of php that we can be sure will not be present on the system
+	 * and that we can use in our test cases as not supposed to be installed
+	 * 
+	 * @var int
+	 */
+	const UNSUPPORTED_PHP_MAJOR_VERSION = 9;
     
     protected function setUp()
     {
         GenerisPhpUnitTestRunner::initTest();
+    }
+    
+    public function testPhPConstant() {
+        $this->assertNotEquals(PHP_MAJOR_VERSION, self::UNSUPPORTED_PHP_MAJOR_VERSION, 'Current php major version equals our assummed unsupported php version');
     }
     
     public function testPHPIniValues(){
@@ -88,12 +100,12 @@ class ConfigurationTest extends GenerisPhpUnitTestRunner {
         $this->assertTrue($php->isOptional());
         
         // max & min test.
-        $php = new common_configuration_PHPRuntime('5.3', '5.5');
+        $php = new common_configuration_PHPRuntime('5.3', '5.5.x');
         $report = $php->check();
         $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
         
-        $php->setMin('5.5');
-        $php->setMax('5.5.6.3');
+        $php->setMin(self::UNSUPPORTED_PHP_MAJOR_VERSION.'.5');
+        $php->setMax(self::UNSUPPORTED_PHP_MAJOR_VERSION.'.5.6.3');
         $report = $php->check();
         $this->assertEquals($report->getStatus(), common_configuration_Report::INVALID);
         
@@ -102,12 +114,12 @@ class ConfigurationTest extends GenerisPhpUnitTestRunner {
         $report = $php->check();
         $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
         
-        $php->setMin('5.5.3');
+        $php->setMin(self::UNSUPPORTED_PHP_MAJOR_VERSION.'.5.3');
         $report = $php->check();
         $this->assertEquals($report->getStatus(), common_configuration_Report::INVALID);
         
         // max test.
-        $php = new common_configuration_PHPRuntime(null, '5.5');
+        $php = new common_configuration_PHPRuntime(null, self::UNSUPPORTED_PHP_MAJOR_VERSION.'.5');
         $report = $php->check();
         $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
         
@@ -297,10 +309,11 @@ class ConfigurationTest extends GenerisPhpUnitTestRunner {
     }
     
     public function testComponentFactory(){
-    	$component = common_configuration_ComponentFactory::buildPHPRuntime('5.0', '5.5', true);
+    	$component = common_configuration_ComponentFactory::buildPHPRuntime('5.0', '5.5.x', true);
     	$this->assertIsA($component, 'common_configuration_PHPRuntime');
     	$this->assertEquals($component->getMin(), '5.0');
-    	$this->assertEquals($component->getMax(), '5.5');
+    	// 5.5.x will be replaced internally
+    	//$this->assertEquals($component->getMax(), '5.5.x');
     	$this->assertTrue($component->isOptional());
     	$report = $component->check();
     	$this->assertIsA($report, 'common_configuration_Report');
@@ -354,11 +367,12 @@ class ConfigurationTest extends GenerisPhpUnitTestRunner {
     	$this->assertFalse($component->isOptional());*/
     	
     	
-    	$array = array('type' => 'PHPRuntime', 'value' => array('min' => '5.0', 'max' => '5.5', 'optional' => true));
+    	$array = array('type' => 'PHPRuntime', 'value' => array('min' => '5.0', 'max' => '5.5.x', 'optional' => true));
     	$component = common_configuration_ComponentFactory::buildFromArray($array);
     	$this->assertIsA($component, 'common_configuration_PHPRuntime');
     	$this->assertEquals($component->getMin(), '5.0');
-    	$this->assertEquals($component->getMax(), '5.5');
+    	// 5.5.x will be replaced internally
+    	// $this->assertEquals($component->getMax(), '5.5');
     	$this->assertTrue($component->isOptional());
     	$report = $component->check();
     	$this->assertIsA($report, 'common_configuration_Report');

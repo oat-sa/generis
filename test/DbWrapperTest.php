@@ -62,7 +62,7 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner {
 	public function testGetColumnNames(){
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$columns = $dbWrapper->getColumnNames('dbTestCase');
-        $this->assertTrue(count($columns) == 3);
+        $this->assertEquals(count($columns),3);
         $possibleValues = array('id','uri','column1');
         $this->assertTrue(in_array($columns[0],$possibleValues));
         $this->assertTrue(in_array($columns[1],$possibleValues));
@@ -73,7 +73,7 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner {
     public function testGetTables(){
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $tables = $dbWrapper->getTables();
-        $this->assertTrue(count($tables) == 9);
+        $this->assertEquals(count($tables),10);
         $this->assertTrue(in_array('class_additional_properties', $tables));
         $this->assertTrue(in_array('class_to_table', $tables));
         $this->assertTrue(in_array('dbTestCase', $tables));
