@@ -62,6 +62,15 @@ class common_test_TestUserSession implements common_session_StatelessSession
         return array();
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see common_session_Session::getUserPropertyValues()
+     */
+    public function getUserPropertyValues($property) {
+        return array();
+    }
+    
+    
     public function setDataLanguage($languageCode) {
         $this->dataLanguage = $languageCode;
     }
