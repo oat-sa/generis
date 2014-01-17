@@ -83,9 +83,15 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
                 if ($success) {
                     // OPcache workaround
                     $this->cache[$id] = $value;
+                    if (function_exists('opcache_invalidate')) {
+                        opcache_invalidate($filePath, true);
+                    }
+                } else {
+                    common_Logger::w('Could not write '.$filePath);
                 }
                 return $success !== false;
             } else {
+                common_Logger::w('Could not obtain lock on '.$filePath);
                 return false;
             }
         }
