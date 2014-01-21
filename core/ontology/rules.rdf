@@ -18,10 +18,6 @@
     <rdfs:label xml:lang="en-US"><![CDATA[empty]]></rdfs:label>
     <rdf:type rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Term"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#i121982992121794">
-    <rule:SecondExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#i121983992618500"/>
-    <rule:FirstExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#i121983986043032"/>
-  </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#SecondExpression">
     <rdfs:range rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Expression"/>
     <rdfs:label xml:lang="en-US"><![CDATA[secondExpression]]></rdfs:label>
@@ -35,9 +31,6 @@
     <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox"/>
     <rdfs:domain rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Expression"/>
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#i1220022251038775700">
-    <rule:FirstExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#i121983986043032"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#ConstrcuctedSet">
     <rdfs:subClassOf rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Set"/>
@@ -72,29 +65,17 @@
     <rdfs:label xml:lang="en-US"><![CDATA[==]]></rdfs:label>
     <rdf:type rdf:resource="http://www.tao.lu/middleware/Rules.rdf#LogicalOperator"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#i12198302209804">
-    <rule:TermValue xml:lang="en-US"><![CDATA[98]]></rule:TermValue>
-  </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#DynamicText">
     <rdfs:subClassOf rdf:resource="http://www.tao.lu/middleware/Rules.rdf#RuleEngine"/>
     <rdfs:label xml:lang="en-US"><![CDATA[Dynamic Text]]></rdfs:label>
     <rdfs:subClassOf rdf:resource="http://www.tao.lu/middleware/Rules.rdf#RuleEngine"/>
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#i1221149247008773400">
-    <rule:Debug xml:lang="en-US"/>
-    <rule:FirstExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#i1221150285024417100"/>
-    <rule:SecondExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#i122053092858596"/>
-  </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#Predicate">
     <rdfs:subPropertyOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate"/>
     <rdfs:label xml:lang="en-US"><![CDATA[predicate]]></rdfs:label>
     <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox"/>
-    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TreeView"/>
-    <rdfs:domain rdf:resource="http://www.tao.lu/middleware/Rules.rdf#i121966626025350"/>
-    <rdfs:domain rdf:resource="http://www.tao.lu/middleware/Rules.rdf#XPredicateObject"/>
-    <rdfs:domain rdf:resource="http://www.tao.lu/middleware/Rules.rdf#SubjectPredicateX"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdfs:domain rdf:resource="http://www.tao.lu/middleware/Rules.rdf#TrippleMask"/>
     <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
@@ -102,9 +83,7 @@
     <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     <rdfs:subPropertyOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#subject"/>
     <rdfs:label xml:lang="en-US"><![CDATA[subject]]></rdfs:label>
-    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TreeView"/>
     <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox"/>
-    <rdfs:domain rdf:resource="http://www.tao.lu/middleware/Rules.rdf#i121966626025350"/>
     <rdfs:domain rdf:resource="http://www.tao.lu/middleware/Rules.rdf#SubjectPredicateX"/>
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
@@ -159,9 +138,6 @@
     <rdfs:label xml:lang="en-US"><![CDATA[Subject-Predicate-X]]></rdfs:label>
     <rdfs:subClassOf rdf:resource="http://www.tao.lu/middleware/Rules.rdf#TrippleMask"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#i121924593527220">
-    <rule:Debug xml:lang="en-US"><![CDATA[Litteral et toc]]></rule:Debug>
-  </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#Debug">
     <rdfs:label xml:lang="en-US"><![CDATA[debug]]></rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
@@ -215,8 +191,6 @@
     <rdfs:subClassOf rdf:resource="http://www.tao.lu/middleware/Rules.rdf#RuleEngine"/>
     <rdfs:subClassOf rdf:resource="http://www.tao.lu/middleware/Rules.rdf#RuleEngine"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#i122115224931756">
-  </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#XPredicateObject">
     <rdfs:subClassOf rdf:resource="http://www.tao.lu/middleware/Rules.rdf#TrippleMask"/>
     <rdfs:label xml:lang="en-US"><![CDATA[X-Predicate-Object]]></rdfs:label>
@@ -227,12 +201,6 @@
     <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
     <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     <rdfs:label xml:lang="en-US"><![CDATA[object]]></rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#i121924601829426">
-    <rule:TermValue xml:lang="en-US"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#i121924609115866">
-    <rule:TermValue xml:lang="en-US"><![CDATA[32]]></rule:TermValue>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#Quantifier">
     <rdfs:subClassOf rdf:resource="http://www.tao.lu/middleware/Rules.rdf#LogicalOperator"/>
@@ -338,4 +306,5 @@
     <rdfs:label xml:lang="en-US"><![CDATA[Rule Engine]]></rdfs:label>
     <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource"/>
   </rdf:Description>
+
 </rdf:RDF>
