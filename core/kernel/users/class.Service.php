@@ -194,7 +194,7 @@ class core_kernel_users_Service
 		}
 		
 		$hash = $user->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD));
-		$returnValue = helpers_PasswordHash::getGenerisHash()->verify($password, $hash);
+		$returnValue = core_kernel_users_AuthAdapter::getPasswordHash()->verify($password, $hash);
 
         return (bool) $returnValue;
     }
