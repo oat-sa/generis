@@ -79,6 +79,15 @@ class common_ext_Manifest
      * @var string
      */
     private $version = '';
+    
+    /**
+     * The license of the Extension the manifest describes.
+     *
+     * @access private
+     * @var string
+     */
+    private $license = 'unknown';
+    
 
     /**
      * The dependencies of the Extension the manifest describes.
@@ -232,6 +241,10 @@ class common_ext_Manifest
     		
     		if (!empty($array['description'])){
     			$this->setDescription($array['description']);
+    		}
+    		
+    		if (!empty($array['license'])){
+    		    $this->setLicense($array['license']);
     		}
     		
     		if (!empty($array['author'])){
@@ -395,6 +408,28 @@ class common_ext_Manifest
     private function setName($name)
     {
         $this->name = $name;
+    }
+    
+    /**
+     * Get the license of the Extension the manifest describes.
+     *
+     * @access public
+     * @return string
+     */
+    public function getLicense()
+    {
+        return $this->license;
+    }
+    
+    /**
+     * Set the license of the Extension the manifest describes.
+     *
+     * @access private
+     * @param  string name the livense
+     */
+    private function setLicense($license)
+    {
+        $this->license = $license;
     }
 
     /**
