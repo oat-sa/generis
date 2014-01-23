@@ -28,6 +28,7 @@ class ReportTest extends GenerisPhpUnitTestRunner {
 	    $report = new common_report_Report(common_report_Report::TYPE_SUCCESS, 'test message');
 	    $this->assertFalse($report->hasChildren());
 	    $this->assertEquals('test message', (string)$report);
+	    $this->assertEquals('test message', $report->getMessage());	    
 	    $this->assertEquals(common_report_Report::TYPE_SUCCESS, $report->getType());
 	    foreach ($report as $child) {
 	        $this->fail('Should not contain children');
@@ -77,6 +78,9 @@ class ReportTest extends GenerisPhpUnitTestRunner {
 	    foreach ($second as $child) {
 	        $this->fail('Should not contain children');
 	    }
-	     
+
+        $this->assertFalse($report->contains(common_report_Report::TYPE_SUCCESS));
+        $this->assertTrue($report->contains(common_report_Report::TYPE_INFO));
+	    $this->assertTrue($report->contains(common_report_Report::TYPE_ERROR));
 	}
 }

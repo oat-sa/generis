@@ -96,10 +96,11 @@ class common_report_Report implements IteratorAggregate
 	
 	/**
 	 * Change the title of the report
+	 * @deprecated
 	 * @param string $title
 	 */
 	public function setTitle($message) {
-		$this->message = $message;
+		$this->setMessage($message);
 	}
 	
 	/**
@@ -113,6 +114,15 @@ class common_report_Report implements IteratorAggregate
 	}
 	
 	/**
+	 * Change the message
+	 * 
+	 * @param string $title
+	 */
+	public function setMessage($message) {
+	    $this->message = $message;
+	}
+	
+	/**
 	 * Get report message
 	 * 
 	 * @return string
@@ -121,6 +131,14 @@ class common_report_Report implements IteratorAggregate
 	    return $this->message;
 	}
 	
+	/**
+	 * change the type of the report
+	 * 
+	 * @return int
+	 */
+	public function setType($type) {
+	    $this->type = $type;
+	}
 	
 	/**
 	 * returns the type of the report
@@ -167,14 +185,7 @@ class common_report_Report implements IteratorAggregate
 	 * @return boolean
 	 */
     public function containsError() {
-	    $found = false;
-		foreach ($this->elements as $element) {
-		    if ($element->getType == self::TYPE_ERROR) {
-                $found = true;
-		        break;
-		    }
-		}
-		return $found;
+	    return $this->contains(self::TYPE_ERROR);
     }
     
 	/**
@@ -182,15 +193,24 @@ class common_report_Report implements IteratorAggregate
 	 * @return boolean
 	 */
     public function containsSuccess() {
-	    $found = false;
-        foreach ($this->elements as $element) {
-		    if ($element->getType == self::TYPE_ERROR) {
-                $found = true;
-		        break;
-		    }
-		}
-		return $found;
+	    return $this->contains(self::TYPE_SUCCESS);
 	}
+	
+	/**
+	 * Whenever or not the type can be found in the report
+	 * 
+	 * @param int $type
+	 * @return boolean
+	 */
+	public function contains($type) {
+	    foreach ($this as $child) {
+	        if ($child->getType() == $type || $child->contains($type)) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
 	
 	/**
 	 * Add something to the report
