@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -14,9 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
 
@@ -31,18 +29,37 @@
  */
 class common_report_Report
 {
+    const TYPE_SUCCESS = 1;
+    
+    const TYPE_INFO = 2;
+    
+    const TYPE_WARNING = 4;
+    
+    const TYPE_ERROR = 8;
+    
     /**
-     * title of the report
+     * type of the report
+     * @var int
+     */
+	private $type;
+	
+    /**
+     * message of the report
      * @var string
      */
-	private $title;
+	private $message;
 
 	/**
 	 * elements of the report
-	 * @see common_report_ReportElement
 	 * @var array
 	 */
 	private $elements;
+	
+	/**
+	 * Attached data
+	 * @var mixed
+	 */
+    private $data = null;
 	
 	/**
 	 * convenience methode to create a simple success report
@@ -51,12 +68,8 @@ class common_report_Report
 	 * @param mixed $data
 	 * @return common_report_Report
 	 */
-	public static function createSuccess($title = '', $data = null) {
-	    common_Logger::i($title);
-		$report = new static($title);
-	    $successElement = new common_report_SuccessElement($title, $data);
-	    $report->add($successElement);
-		return $report;
+	public static function createSuccess($message = '', $data = null) {
+	    return new static(self::TYPE_SUCCESS, $message, $data);
 	}
 	
 	/**
@@ -66,36 +79,27 @@ class common_report_Report
 	 * @param mixed $errors
 	 * @return common_report_Report
 	 */
-	public static function createFailure($title, $errors = array()) {
-	    if (strlen($title) > 0) {
-		    common_Logger::w($title);
+	public static function createFailure($message, $errors = array()) {
+	    $report = new static(self::TYPE_ERROR, $message);
+	    foreach ($errors as $error) {
+	        $report->add($error);
 	    }
-	    
-	    if ($title == '' && empty($errors)) {
-	        throw new common_Exception('Cannot create failure report without error');
-	    }
-	    
-		if (!empty($errors)) {
-		    $report = new static($title);
-		    $report->add($errors);
-		} else {
-		    $report = new static();
-		    $report->add(new common_report_ErrorElement($title));
-		}
-		return $report;
+	    return $report;
 	}
 	
-	public function __construct($title = '') {
+	public function __construct($type, $message = '', $data = null) {
+	    $this->type = $type;
+		$this->message = $message;
 	    $this->elements = array();
-		$this->title = $title;
+	    $this->data = $data;
 	}
 	
 	/**
 	 * Change the title of the report
 	 * @param string $title
 	 */
-	public function setTitle($title) {
-		$this->title = $title;
+	public function setTitle($message) {
+		$this->message = $message;
 	}
 	
 	/**
@@ -103,7 +107,19 @@ class common_report_Report
 	 * @return string
 	 */
 	public function getTitle() {
-		return $this->title;
+		return $this->message;
+	}
+	
+	/**
+	 * returns the type of the report
+	 * @return int
+	 */
+	public function getType() {
+	    return $this->type;
+	}
+	
+	public function getData() {
+	    return $this->data;
 	}
 	
 	/**
@@ -112,8 +128,8 @@ class common_report_Report
 	 */
 	public function getSuccesses() {
         $successes = array();
-		foreach ($this->elements as $element) {
-		    if ($element instanceof common_report_SuccessElement) {
+		foreach ($this as $element) {
+		    if ($element->getType == self::TYPE_SUCCESS) {
 		        $successes[] = $element;
 		    }
 		}
@@ -126,10 +142,10 @@ class common_report_Report
 	 */
 	public function getErrors() {
         $errors = array();
-		foreach ($this->elements as $element) {
-		    if ($element instanceof common_report_ErrorElement) {
-		        $errors[] = $element;
-		    }
+		foreach ($this as $element) {
+    		if ($element->getType == self::TYPE_ERROR) {
+                $successes[] = $element;
+            }
 		}
 		return $errors;
 	}
@@ -141,8 +157,8 @@ class common_report_Report
     public function containsError() {
 	    $found = false;
 		foreach ($this->elements as $element) {
-		    if ($element instanceof common_report_ErrorElement) {
-		        $found = true;
+		    if ($element->getType == self::TYPE_ERROR) {
+                $found = true;
 		        break;
 		    }
 		}
@@ -155,9 +171,9 @@ class common_report_Report
 	 */
     public function containsSuccess() {
 	    $found = false;
-		foreach ($this->elements as $element) {
-		    if ($element instanceof common_report_SuccessElement) {
-		        $found = true;
+        foreach ($this->elements as $element) {
+		    if ($element->getType == self::TYPE_ERROR) {
+                $found = true;
 		        break;
 		    }
 		}
@@ -171,18 +187,17 @@ class common_report_Report
 	public function add($mixed) {
 	    $mixedArray = is_array($mixed) ? $mixed : array($mixed);
 		foreach ($mixedArray as $element) {
-		    if ($element instanceof common_report_ReportElement) {
+		    if ($element instanceof common_report_Report) {
 		        $this->elements[] = $element;
-		    } elseif ($element instanceof common_report_Report) {
-    		    foreach ($element->elements as $subElement) {
-        	        $this->add($subElement);
-        	    }
 		    } elseif ($element instanceof common_exception_UserReadableException) {
-		        $this->elements[] = new common_report_ExceptionElement($element);
+		        $this->elements[] = new static(self::TYPE_ERROR, $element->getUserMessage());
 		    } else {
 		        throw new common_exception_Error('Tried to add '.(is_object($element) ? get_class($element) : gettype($element)).' to report');
 		    }
 		}
 	}
 
+	public function __toString() {
+	    return $this->message;
+	}
 }
