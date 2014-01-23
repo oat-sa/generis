@@ -27,7 +27,7 @@
  * @package common
  * @subpackage report
  */
-class common_report_Report
+class common_report_Report implements IteratorAggregate
 {
     const TYPE_SUCCESS = 1;
     
@@ -103,12 +103,24 @@ class common_report_Report
 	}
 	
 	/**
-	 * returns the tile of the report
+	 * please use getMessage instead
+	 * 
+	 * @deprecated
 	 * @return string
 	 */
 	public function getTitle() {
-		return $this->message;
+		return $this->getMessage();
 	}
+	
+	/**
+	 * Get report message
+	 * 
+	 * @return string
+	 */
+	public function getMessage() {
+	    return $this->message;
+	}
+	
 	
 	/**
 	 * returns the type of the report
@@ -197,7 +209,31 @@ class common_report_Report
 		}
 	}
 
+	/**
+	 * user feedback message
+	 * 
+	 * @return string
+	 */
 	public function __toString() {
 	    return $this->message;
 	}
+	
+	/**
+	 * Returns an iterator over the children 
+	 * 
+	 * @return ArrayIterator
+	 */
+	public function getIterator() {
+	    return new ArrayIterator($this->elements);
+	}
+	
+	/**
+	 * Whenever or not there are child reports
+	 * 
+	 * @return boolean
+	 */
+	public function hasChildren() {
+	    return count($this->elements) > 0;
+	}
+	
 }
