@@ -152,6 +152,10 @@ class common_report_Report implements IteratorAggregate
 	    return $this->data;
 	}
 	
+	public function setData($data = null) {
+	    $this->data = $data;
+	}
+	
 	/**
 	 * returns all success elements
 	 * @return array
