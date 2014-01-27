@@ -27,6 +27,8 @@
 class common_session_php_KeyValueSessionHandler
     implements common_session_php_SessionHandler
 {
+    const KEY_NAMESPACE = "generis:session:";
+    
     /**
      * @var common_persistence_KeyValuePersistence
      */
@@ -59,7 +61,7 @@ class common_session_php_KeyValueSessionHandler
      */
     public function read($id)
     {
-        return $this->sessionPersistence->get($id);
+        return $this->sessionPersistence->get(self::KEY_NAMESPACE.$id);
     }
 
     /**
@@ -68,7 +70,7 @@ class common_session_php_KeyValueSessionHandler
      */
     public function write($id, $data)
     {  
-        return $this->sessionPersistence->set($id, $data, (int) ini_get('session.gc_maxlifetime'));
+        return $this->sessionPersistence->set(self::KEY_NAMESPACE.$id, $data, (int) ini_get('session.gc_maxlifetime'));
     }
 
     /**
@@ -76,7 +78,7 @@ class common_session_php_KeyValueSessionHandler
      * @see common_session_storage_SessionStorage::destroy()
      */
     public function destroy($id){
-        $this->sessionPersistence->del($id);
+        $this->sessionPersistence->del(self::KEY_NAMESPACE.$id);
     }
 
     /**
