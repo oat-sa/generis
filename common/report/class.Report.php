@@ -163,7 +163,7 @@ class common_report_Report implements IteratorAggregate
 	public function getSuccesses() {
         $successes = array();
 		foreach ($this as $element) {
-		    if ($element->getType == self::TYPE_SUCCESS) {
+		    if ($element->getType() == self::TYPE_SUCCESS) {
 		        $successes[] = $element;
 		    }
 		}
@@ -177,7 +177,7 @@ class common_report_Report implements IteratorAggregate
 	public function getErrors() {
         $errors = array();
 		foreach ($this as $element) {
-    		if ($element->getType == self::TYPE_ERROR) {
+    		if ($element->getType() == self::TYPE_ERROR) {
                 $successes[] = $element;
             }
 		}
