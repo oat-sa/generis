@@ -56,5 +56,33 @@ class FileHelperTest extends GenerisPhpUnitTestRunner {
 		return $file;
 	}
 	
+	
+	/**
+	 * @dataProvider scandirDataProvider
+	 * 
+	 * @param string $toScan Directory path to be scanned
+	 * @param array $expectedResult The expected return value of helpers_File::scanDir().
+	 * @param boolean $recursive Value of the 'recursive' option.
+	 * @param boolean $absolute Value of the 'absolute' option.
+	 */
+	public function testScandir($toScan, $expectedResult, $recursive = false, $absolute = false) {
+        $result = helpers_File::scanDir($toScan, array('recursive' => $recursive, 'absolute' => $absolute));
+        
+        $this->assertEquals(count($expectedResult), count($result));
+        
+        // The order might vary depending on the file system implementation...
+        foreach ($expectedResult as $expected) {
+            $this->assertTrue(in_array($expected, $result));
+        }
+    }
+    
+    public function scandirDataProvider() {
+
+        $ds = DIRECTORY_SEPARATOR;
+
+        return array(
+            array(dirname(__FILE__) . $ds . 'rules', array('ExpressionFactoryTest.php', 'ExpressionTest.php', 'OperationFactoryTest.php', 'OperationTest.php', 'TermFactoryTest.php', 'TermTest.php')),
+        );
+    }
 }
 	

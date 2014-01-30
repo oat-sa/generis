@@ -296,7 +296,13 @@ class helpers_File
     }
 
     /**
-     * Scan directory depending on option
+     * Scan directory depending on option.
+     * 
+     * Options are the following:
+     * 
+     * * 'recursive' -> boolean
+     * * 'only' -> boolean (unknown behavior)
+     * * 'absolute' -> boolean (returns absolute path or file name)
      *
      * @access public
      * @author Lionel Lecaque, <lionel@taotesting.com>
@@ -310,21 +316,27 @@ class helpers_File
         
         $recursive = isset($options['recursive']) ? $options['recursive'] : false;
         $only = isset($options['only']) ? $options['only'] : null;
+        $absolute = isset($options['absolute']) ? $options['absolute'] : false;
         
         if (is_dir($path)) {
             $iterator = new DirectoryIterator($path);
             foreach ($iterator as $fileinfo) {
+                $fileName = $fileinfo->getFilename();
+                if ($absolute === true) {
+                    $fileName = $fileinfo->getPathname();
+                }
+                
                 if (! $fileinfo->isDot()) {
                     if (! is_null($only)) {
                         if ($only == self::$DIR && $fileinfo->isDir()) {
-                            array_push($returnValue, $fileinfo->getFilename());
+                            array_push($returnValue, $fileName);
                         } else {
                             if ($only == self::$FILE && $fileinfo->isFile()) {
-                                array_push($returnValue, $fileinfo->getFilename());
+                                array_push($returnValue, $fileName);
                             }
                         }
                     } else {
-                        array_push($returnValue, $fileinfo->getFilename());
+                        array_push($returnValue, $fileName);
                     }
                     
                     if ($fileinfo->isDir() && $recursive) {
