@@ -301,7 +301,7 @@ class helpers_File
      * Options are the following:
      * 
      * * 'recursive' -> boolean
-     * * 'only' -> boolean (unknown behavior)
+     * * 'only' -> boolean ($FILE or $DIR)
      * * 'absolute' -> boolean (returns absolute path or file name)
      *
      * @access public
