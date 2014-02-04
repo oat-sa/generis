@@ -412,6 +412,8 @@ class core_kernel_classes_Resource
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property property
+     * @throws common_Exception
+     * @throws common_exception_EmptyProperty
      * @return core_kernel_classes_Container
      */
     public function getUniquePropertyValue( core_kernel_classes_Property $property)
