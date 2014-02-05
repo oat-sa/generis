@@ -103,6 +103,15 @@ class common_session_RestrictedSession implements common_session_StatefulSession
     
     /**
      * (non-PHPdoc)
+     * @see common_session_Session::getUserPropertyValues()
+     */
+    public function getUserPropertyValues($property) {
+        return $this->internalSession->getUserPropertyValues($property);
+    }
+    
+    
+    /**
+     * (non-PHPdoc)
      * @see common_session_Session::refresh()
      */
     public function refresh() {
