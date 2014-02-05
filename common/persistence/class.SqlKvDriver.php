@@ -82,10 +82,12 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     
     public function get($id) {
         try{
-            $statement = 'SELECT "session_value" FROM "sessions" WHERE "session_id" = \''.$id.'\' LIMIT 1';
+            $statement = 'SELECT "session_value", "session_time" FROM "sessions" WHERE "session_id" = \''.$id.'\' LIMIT 1';
             $sessionValue = $this->sqlPeristence->query($statement);
             while ($row = $sessionValue->fetch()) {
-                return $row["session_value"];
+                if ($row["session_time"] >= time()) {
+                    return $row["session_value"];
+                }
             }
         }
         catch (PDOException $e){
