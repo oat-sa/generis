@@ -670,7 +670,7 @@ class common_ext_Manifest
 			} elseif (is_array($row) && isset($row['file'])) {
 				$rdfpath = $row['file'];
 			} else {
-				throw new common_ext_InstallationException('Error in definition of model to add into the ontology for '.$this->extension->getID(), 'INSTALL');
+				throw new common_ext_InstallationException('Error in definition of model to add into the ontology for '.$this->extension->getId(), 'INSTALL');
 			}
     		$this->installModelFiles[] = $rdfpath;
 		}

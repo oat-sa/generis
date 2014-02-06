@@ -56,7 +56,7 @@ class common_ext_ExtensionLoader
      */
     public function load($extraConstants = array())
     {
-        common_Logger::t('Loading extension ' . $this->extension->getID());
+        common_Logger::t('Loading extension ' . $this->extension->getId());
         
         $this->loadConstants($extraConstants);
         
@@ -96,10 +96,9 @@ class common_ext_ExtensionLoader
     {
         // section 127-0-1-1-62ede985:13d2586a59c:-8000:0000000000001FE8 begin
         common_Logger::t('Loading extension ' . $this->extension->getId() . ' constants');
-        $ctxPath = ROOT_PATH . '/' . $this->extension->getID();
     	
     	// load the constants from the manifest
-        if ($this->extension->getID() != "generis"){
+        if ($this->extension->getId() != "generis"){
    			foreach ($this->extension->getConstants() as $key => $value) {
    				if(!defined($key) && !is_array($value)){
    					define($key, $value);
@@ -115,7 +114,7 @@ class common_ext_ExtensionLoader
    		$extensions = array_merge($extensions, $extraConstants);
    		
    		// add the current extension (as well !)
-    	$extensions = array_merge(array($this->extension->getID()), $extensions);
+    	$extensions = array_merge(array($this->extension->getId()), $extensions);
     	
     	foreach($extensions as $extension){
     	

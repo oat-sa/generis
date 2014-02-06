@@ -58,18 +58,18 @@ class common_ext_ExtensionInstaller
 	{
 		// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017C4 begin
 		
-		common_Logger::i('Installing '.$this->extension->getID(), 'INSTALL');
+		common_Logger::i('Installing '.$this->extension->getId(), 'INSTALL');
 		
-		if ($this->extension->getID() == 'generis') {
+		if ($this->extension->getId() == 'generis') {
 			throw new common_ext_ForbiddenActionException('Tried to install generis using the ExtensionInstaller',
-														  $this->extension->getID());
+														  $this->extension->getId());
 		}
 		
 		try{
 			// not yet installed? 
 			if ($this->extension->isInstalled()) {
-				throw new common_ext_AlreadyInstalledException('Problem installing extension ' . $this->extension->getID() .' : Already installed',
-															   $this->extension->getID());
+				throw new common_ext_AlreadyInstalledException('Problem installing extension ' . $this->extension->getId() .' : Already installed',
+															   $this->extension->getId());
 			}
 			else{
 				// we purge the whole cache.
@@ -123,7 +123,7 @@ class common_ext_ExtensionInstaller
 		$finalFile	= $this->extension->getDir().'includes/config.php';
 		
 		if (file_exists($sampleFile)) {
-			common_Logger::d('Writing config '.$finalFile.' for '.$this->extension->getID(), 'INSTALL');
+			common_Logger::d('Writing config '.$finalFile.' for '.$this->extension->getId(), 'INSTALL');
 			$myConfigWriter = new tao_install_utils_ConfigWriter(
 				$sampleFile,
 				$finalFile
@@ -131,7 +131,7 @@ class common_ext_ExtensionInstaller
 			$myConfigWriter->createConfig();
 			
 			// @todo solve this
-			if ($this->extension->getID() == 'tao') {
+			if ($this->extension->getId() == 'tao') {
 				require_once($finalFile);
 			}
 		} elseif (file_exists($finalFile)){
@@ -165,11 +165,11 @@ class common_ext_ExtensionInstaller
 					$ns = (string) $attrs['base'];
 					if($ns != 'LOCAL_NAMESPACE##'){
 					    //import the model in the ontology
-					    common_Logger::d('Inserting model '.$rdfpath.' for '.$this->extension->getID(), 'INSTALL');
+					    common_Logger::d('Inserting model '.$rdfpath.' for '.$this->extension->getId(), 'INSTALL');
 					    $modelCreator->insertModelFile($ns, $rdfpath);
 					  
 					}else{
-					    common_Logger::d('Inserting model '.$rdfpath.' for '.$this->extension->getID() . ' in LOCAL NAMESPACE', 'INSTALL');
+					    common_Logger::d('Inserting model '.$rdfpath.' for '.$this->extension->getId() . ' in LOCAL NAMESPACE', 'INSTALL');
 					    $modelCreator->insertLocalModelFile($rdfpath);
 					}
 					foreach ($this->getTranslatedModelFiles($rdfpath) as $translation) {
@@ -221,14 +221,14 @@ class common_ext_ExtensionInstaller
 	protected function installRegisterExt()
 	{
 		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A28 begin
-		common_Logger::d('Registering '.$this->extension->getID(), 'INSTALL');
+		common_Logger::d('Registering '.$this->extension->getId(), 'INSTALL');
 		
 		//add extension to db
 		$db = core_kernel_classes_DbWrapper::singleton();
-		$sql = "INSERT INTO extensions (id, name, version, loaded, \"loadAtStartUp\") VALUES ('".$this->extension->getID()."', '".$this->extension->getName()."', '".$this->extension->getVersion()."', 1, 1);";
+		$sql = "INSERT INTO extensions (id, name, version, loaded, \"loadAtStartUp\") VALUES ('".$this->extension->getId()."', '".$this->extension->getName()."', '".$this->extension->getVersion()."', 1, 1);";
 		$db->exec($sql);
 		
-		common_Logger::d($this->extension->getID() . ' registered', 'INSTALL');
+		common_Logger::d($this->extension->getId() . ' registered', 'INSTALL');
 		
 		//update Extension
 		$this->extension->updateStatus(true);
@@ -249,7 +249,7 @@ class common_ext_ExtensionInstaller
 		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A2C begin
 		//install script
 		foreach ($this->extension->getManifest()->getInstallPHPFiles() as $script) {
-			common_Logger::d('Running custom install script '.$script.' for ext '.$this->extension->getID(), 'INSTALL');
+			common_Logger::d('Running custom install script '.$script.' for ext '.$this->extension->getId(), 'INSTALL');
 			require_once $script;
 		}
 		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A2C end
@@ -270,7 +270,7 @@ class common_ext_ExtensionInstaller
 			$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
 			foreach ($localData['rdf'] as $rdfpath) {
 				if(file_exists($rdfpath)){
-					common_Logger::d('Inserting local data rdf '.$rdfpath.' for '.$this->extension->getID(), 'INSTALL');
+					common_Logger::d('Inserting local data rdf '.$rdfpath.' for '.$this->extension->getId(), 'INSTALL');
 					$modelCreator->insertLocalModelFile($rdfpath);
 				}
 			}
@@ -279,7 +279,7 @@ class common_ext_ExtensionInstaller
 			$scripts = $localData['php'];
 			$scripts = is_array($scripts) ? $scripts : array($scripts);
 			foreach ($scripts as $script) {
-				common_Logger::d('Running local data script '.$script.' for ext '.$this->extension->getID(), 'INSTALL');
+				common_Logger::d('Running local data script '.$script.' for ext '.$this->extension->getId(), 'INSTALL');
 				require_once $script;
 			}
 		}
@@ -296,7 +296,7 @@ class common_ext_ExtensionInstaller
 	public function installLoadConstants()
 	{
 		// section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FCE begin
-		common_Logger::i("Loading constants for extension '" . $this->extension->getID() . "'");
+		common_Logger::i("Loading constants for extension '" . $this->extension->getId() . "'");
 		$this->extension->load();
 		// section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FCE end
 	}
@@ -311,7 +311,7 @@ class common_ext_ExtensionInstaller
 	public function installExtensionModel()
 	{
 		// section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FD1 begin
-		//common_Logger::i("Spawning Extension/Module/Action model for extension '" . $this->extension->getID() . "'");
+		//common_Logger::i("Spawning Extension/Module/Action model for extension '" . $this->extension->getId() . "'");
 		// section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FD1 end
 	}
 

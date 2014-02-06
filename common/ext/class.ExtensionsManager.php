@@ -87,7 +87,7 @@ class common_ext_ExtensionsManager
 
         foreach ($this->extensions as $ext) {
         	if ($ext->isInstalled()) {
-        		$returnValue[$ext->getID()] = $ext;
+        		$returnValue[$ext->getId()] = $ext;
         	}
         }
 
@@ -108,7 +108,7 @@ class common_ext_ExtensionsManager
 
         foreach ($this->extensions as $ext) {
         	if ($ext->isEnabled()) {
-        		$returnValue[$ext->getID()] = $ext;
+        		$returnValue[$ext->getId()] = $ext;
         	}
         }
 

@@ -120,7 +120,7 @@ class common_ext_Extension
      * @author firstname and lastname of author, <author@example.org>
      * @return string
      */
-    public function getID()
+    public function getId()
     {
         $returnValue = (string) '';
 
@@ -166,7 +166,7 @@ class common_ext_Extension
 				$this->dbConfig = $row;
 				$sth->closeCursor();	
 			} else {
-				common_Logger::w('Unable to load dbconfig for '.$this->getID());
+				common_Logger::w('Unable to load dbconfig for '.$this->getId());
 				$this->dbConfig = array();
 			}
 			
@@ -204,7 +204,7 @@ class common_ext_Extension
         $success = fwrite($handle, '<?php return '.common_Utils::toPHPVariableString($this->fileConfig).';');
         fclose($handle);
         if (!$success) {
-			throw new common_exception_Error('Unable to write config for extension '.$this->getID());
+			throw new common_exception_Error('Unable to write config for extension '.$this->getId());
         }
     }
 
@@ -225,7 +225,7 @@ class common_ext_Extension
         if (isset($config[$key])) {
         	$returnValue = $config[$key]; 
         } else {
-        	common_Logger::w('Unknown config key '.$key.' used for extension '.$this->getID());
+        	common_Logger::w('Unknown config key '.$key.' used for extension '.$this->getId());
         }
 
         return $returnValue;
@@ -353,7 +353,7 @@ class common_ext_Extension
     {
         $returnValue = (string) '';
 
-		$returnValue = EXTENSION_PATH.$this->getID().DIRECTORY_SEPARATOR;
+		$returnValue = EXTENSION_PATH.$this->getId().DIRECTORY_SEPARATOR;
 
         return (string) $returnValue;
     }
@@ -427,7 +427,7 @@ class common_ext_Extension
 		    foreach ($dir as $fileinfo) {
 				if(preg_match('/^class\.[^.]*\.php$/', $fileinfo->getFilename())) {
 					$module = substr($fileinfo->getFilename(), 6, -4);
-					$returnValue[$module] = $this->getID().'_actions_'.$module;
+					$returnValue[$module] = $this->getId().'_actions_'.$module;
 				}
 			}
         }
@@ -459,7 +459,7 @@ class common_ext_Extension
     {
         $returnValue = null;
 
-    	$className = $this->getID().'_actions_'.$id;
+    	$className = $this->getId().'_actions_'.$id;
 		if(class_exists($className)) {
 			$returnValue = new $className;
 		} else {
