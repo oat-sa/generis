@@ -43,7 +43,12 @@ class helpers_PhpTools {
                 if ($tokens[$i][0] === T_CLASS) {
                     for ($j=$i+1;$j<count($tokens);$j++) {
                         if ($tokens[$j] === '{') {
-                            $class = $tokens[$i+2][1];
+                            if (!isset($tokens[$i+2][1])) {
+                                common_Logger::i($file.' does not contain a valid class definition');
+                                break;
+                            } else { 
+                                $class = $tokens[$i+2][1];
+                            }
                         }
                     }
                 }
