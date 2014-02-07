@@ -77,6 +77,8 @@ class core_kernel_api_ModelFactory{
              
             foreach ($propertiesValues as $prop=>$values){
                 foreach ($values as $k => $v) { 
+                    $datetime = new \DateTime();
+                    $date= $datetime->format('Y-m-d H:i:s');
                     $dbWrapper->insert('statements',
                         array(
                             '"modelID"' =>  $modelId,
@@ -88,7 +90,7 @@ class core_kernel_api_ModelFactory{
                             'stedit' => 'yyy[admin,administrators,authors]',
                             'stread' => 'yyy[admin,administrators,authors]',
                             'stdelete' => 'yyy[admin,administrators,authors]',
-                            'epoch' => new \DateTime()
+                            'epoch' => $date
                         ),
                         array(
                             PDO::PARAM_INT,
