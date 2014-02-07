@@ -35,7 +35,7 @@ error_reporting(E_ALL);
  * @package core
  * @subpackage kernel_classes
  */
-abstract class core_kernel_classes_DbWrapper
+class core_kernel_classes_DbWrapper
 {
     // --- ASSOCIATIONS ---
 
@@ -50,13 +50,6 @@ abstract class core_kernel_classes_DbWrapper
      */
     private static $instance = null;
 
-    /**
-     * An established PDO connection object.
-     *
-     * @access public
-     * @var PDO
-     */
-    public $dbConnector = null;
 
     /**
      * The number of queries executed by the wrapper since its instantiation.
@@ -66,14 +59,7 @@ abstract class core_kernel_classes_DbWrapper
      */
     private $nrQueries = 0;
 
-    /**
-     * States if the last statement executed by the wrapper was a prepared
-     * or not.
-     *
-     * @access public
-     * @var boolean
-     */
-    public $preparedExec = false;
+
 
     /**
      * The very last PDOStatement instance that was prepared by the wrapper.
@@ -83,14 +69,6 @@ abstract class core_kernel_classes_DbWrapper
      */
     public $lastPreparedExecStatement = null;
 
-    /**
-     * A prepared statement store used by the prepare() method to reuse
-     * at most.
-     *
-     * @access public
-     * @var array
-     */
-    public $statements = array();
 
     /**
      * The number of statement reused in the statement store since the
@@ -117,6 +95,12 @@ abstract class core_kernel_classes_DbWrapper
      * @var boolean
      */
     public $debug = false;
+    
+    /**
+     * 
+     * @var common_persistence_SqlPersistence
+     */
+    private $persistence;
 
     // --- OPERATIONS ---
 
@@ -133,35 +117,11 @@ abstract class core_kernel_classes_DbWrapper
     {
         $returnValue = null;
 
-
-		if (!isset(self::$instance)) {
-			$driver = strtolower(SGBD_DRIVER);
-			$driverName = ucfirst($driver);
-			$className = 'core_kernel_classes_' . $driverName .'DbWrapper';
-			
-			if (class_exists($className)){
-				self::$instance = new $className;
-			}
-			else{
-				// maybe a 'pdo_' named driver?
-				$driverName = str_replace('pdo_', '', $driver);
-				$driverName = ucfirst($driverName);
-				$className = $className = 'core_kernel_classes_' . $driverName .'DbWrapper';
-				
-				if (class_exists($className)){
-					self::$instance = new $className();	
-				}
-				else
-				{
-					$driver = SGBD_DRIVER;
-					$msg = "Unable to load the DBWrapper sub-class related to the '${driver}' database driver.";
-					throw new core_kernel_persistence_Exception($msg);
-				}
-			}
-            
-
-        }
-        $returnValue = self::$instance;
+        if (!isset(self::$instance)) {
+			$c = __CLASS__;
+			self::$instance = new $c();
+		}
+		$returnValue = self::$instance;
 
 
 
@@ -173,43 +133,12 @@ abstract class core_kernel_classes_DbWrapper
      *
      * @access private
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @throws PDOException
      * @return core_kernel_classes_DbWrapper
      */
     private function __construct()
     {
-
-        $connLimit = 3; // Max connection attempts.
-        $counter = 0; // Connection attemps counter.
-        
-        while (true){
-	        $dsn = $this->getDSN();
-	        $options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_BOTH,
-	        				 PDO::ATTR_PERSISTENT => false,
-	        				 PDO::ATTR_EMULATE_PREPARES => false);
-	        				 
-	     	
-	        foreach ($this->getExtraConfiguration() as $k => $v){
-	        	$options[$k] = $v;
-	        }
-	       
-	        try{
-	        	$this->dbConnector = @new PDO($dsn, DATABASE_LOGIN, DATABASE_PASS, $options);
-	        	$this->afterConnect();	
-		        // We are connected. Get out of the loop.
-		        break;
-	        }
-	        catch (PDOException $e){
-	        	$this->dbConnector = null;
-	        	$counter++;
-	        	
-	        	if ($counter == $connLimit){
-	        		// Connection attempts exceeded.
-	        		throw $e;
-	        	}
-	        }
-        }
-
+        $this->persistence = common_persistence_SqlPersistence::getPersistence('default');
+       
     }
 
     /**
@@ -251,19 +180,11 @@ abstract class core_kernel_classes_DbWrapper
     public function query($statement, $params = array())
     {
         $returnValue = null;
-        $this->preparedExec = false;
+
         
         $this->debug($statement);
         common_Profiler::queryStart();
-		
-        if (count($params) > 0){
-        	$sth = $this->dbConnector->prepare($statement);
-        	$sth->execute($params);
-        }
-        else{
-        	$sth = $this->dbConnector->query($statement);
-        }
-		
+       	$sth = $this->persistence->query($statement,$params);		
         common_Profiler::queryStop($statement, $params);
 		
         if (!empty($sth)){
@@ -289,49 +210,17 @@ abstract class core_kernel_classes_DbWrapper
         $this->debug($statement);
 		
 		common_Profiler::queryStart();
-        if (count($params) > 0){
-        	$sth = $this->dbConnector->prepare($statement);
-        	$this->preparedExec = true;
-        	$this->lastPreparedExecStatement = $sth;
-        	$sth->execute($params);
-        	$returnValue = $sth->rowCount();
-        }
-        else{
-        	$this->preparedExec = false;
-        	try {
-        	    $returnValue = $this->dbConnector->exec($statement);
-        	} catch (PDOException $e) {
-        	    common_Logger::w('Error in statement: '.$statement);
-        	    throw $e;
-        	}
-        }
+        $returnValue = $this->persistence->exec($statement,$params);
         common_Profiler::queryStop($statement, $params);
 		
         $this->incrementNrOfQueries();
         return (int) $returnValue;
     }
-
-    /**
-     * Creates a prepared PDOStatement.
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string statement
-     * @return PDOStatement
-     */
-    public function prepare($statement)
-    {
-		common_Profiler::queryStart();
-		
-        $returnValue = null;
-        $this->preparedExec = false;
-        $this->debug($statement);
-        $returnValue = $this->getStatement($statement);
-        $this->incrementNrOfQueries();
-		
-		common_Profiler::queryStop($statement);
-        return $returnValue;
+    
+    public function insert($tableName, array $data){
+        return $this->persistence->insert($tableName,$data);
     }
+
 
     /**
      * Returns the last error code generated by the wrapped PDO object. Please
@@ -341,8 +230,9 @@ abstract class core_kernel_classes_DbWrapper
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
-    public function errorCode()
+    private function errorCode()
     {
+        common_Logger::w(__FUNCTION__ . 'looking for call stack');
         if ($this->preparedExec == false){
     		$returnValue = $this->dbConnector->errorCode();
     	}
@@ -360,10 +250,10 @@ abstract class core_kernel_classes_DbWrapper
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
-    public function errorMessage()
+    private function errorMessage()
     {
 
-
+        common_Logger::w(__FUNCTION__ . 'looking for call stack');
         if ($this->preparedExec == false){
     		$info = $this->dbConnector->errorInfo();
     	}
@@ -396,7 +286,9 @@ abstract class core_kernel_classes_DbWrapper
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return array
      */
-    public abstract function getTables();
+    public function getTables() {
+        return $this->persistence->getSchemaManager()->getTables();
+    }
 
     /**
      * Returns the column names of a given table
@@ -407,7 +299,9 @@ abstract class core_kernel_classes_DbWrapper
      * @param  string table
      * @return array
      */
-    public abstract function getColumnNames($table);
+    public function getColumnNames($table){
+        return $this->persistence->getSchemaManager()->getColumnNames($table);
+    }
 
     /**
      * Get a statement in the statement store regarding the provided statement.
@@ -420,6 +314,7 @@ abstract class core_kernel_classes_DbWrapper
      */
     protected function getStatement($statement)
     {
+        common_Logger::w(__FUNCTION__ . 'looking for call stack');
         $key = $this->getStatementKey($statement);
     	$sth = null;
     	
@@ -536,28 +431,10 @@ abstract class core_kernel_classes_DbWrapper
      * @param  int offset Limit upper bound.
      * @return string
      */
-    public abstract function limitStatement($statement, $limit, $offset = 0);
+    public function limitStatement($statement, $limit, $offset = 0){
+        return $this->persistence->getPlatform()->limitStatement($statement, $limit, $offset);
+    }
 
-    /**
-     * Retrieve Extra Configuration for the driver
-     *
-     * @abstract
-     * @access protected
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return array
-     */
-    protected abstract function getExtraConfiguration();
-
-    /**
-     * The error code returned by PDO in when a table is not found in a query
-     * a given DBMS implementation.
-     *
-     * @abstract
-     * @access public
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return string
-     */
-    public abstract function getTableNotFoundErrorCode();
 
     /**
      * Returns the error code corresponding to a column not found in a query
@@ -568,18 +445,24 @@ abstract class core_kernel_classes_DbWrapper
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
-    public abstract function getColumnNotFoundErrorCode();
+    public function getColumnNotFoundErrorCode(){
+
+       return $this->persistence->getSchemaManager()->getColumnNotFoundErrorCode();
+    }
 
     /**
-     * Should contain any instructions that must be executed right after the
-     * to a given DBMS implementation.
-     *
-     * @abstract
-     * @access protected
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return void
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
      */
-    protected abstract function afterConnect();
+    public function getPlatForm(){
+        return $this->persistence->getPlatForm();
+    }
+    
+    /**
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     */
+    public function getSchemaManager(){
+        return $this->persistence->getSchemaManager();
+    }
 
     /**
      * The error code returned by PDO in when an Index already exists in a table
@@ -590,17 +473,11 @@ abstract class core_kernel_classes_DbWrapper
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
-    public abstract function getIndexAlreadyExistsErrorCode();
+    public function getIndexAlreadyExistsErrorCode(){
+        return $this->persistence->getSchemaManager()->getIndexAlreadyExistsErrorCode();
+    }
 
-    /**
-     * Returns the DSN to Connect with PDO to the database.
-     *
-     * @abstract
-     * @access protected
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return string
-     */
-    protected abstract function getDSN();
+
 
     /**
      * Create an index on a given table and selected columns. This method throws
@@ -614,7 +491,9 @@ abstract class core_kernel_classes_DbWrapper
      * @param  array columns An associative array that represents the columns on which the index applies. The keys of the array are the name of the columns, the values are the length of the data to index in the column. If there is no length limitation, set the value of the array cell to null.
      * @return void
      */
-    public abstract function createIndex($indexName, $tableName, $columns);
+    public function createIndex($indexName, $tableName, $columns){
+        return $this->persistence->getSchemaManager()->createIndex($indexName, $tableName, $columns);
+    }
 
     /**
      * Rebuild the indexes of a given table. This method throws PDOExceptions in
@@ -626,7 +505,9 @@ abstract class core_kernel_classes_DbWrapper
      * @param  string tableName
      * @return void
      */
-    public abstract function rebuildIndexes($tableName);
+    public function rebuildIndexes($tableName){
+        return $this->persistence->getSchemaManager()->rebuildIndexes($tableName);
+    }
 
     /**
      * Flush a particular table (query cache, ...). This method throws
@@ -638,7 +519,10 @@ abstract class core_kernel_classes_DbWrapper
      * @param  string tableName
      * @return void
      */
-    public abstract function flush($tableName);
+    public function flush($tableName){
+        return $this->persistence->getSchemaManager()->flush($tableName);
+        
+    }
 
     /**
      * Get the row count of a given table. The column to count is specified for
@@ -653,22 +537,37 @@ abstract class core_kernel_classes_DbWrapper
     public function getRowCount($tableName, $column = 'id')
     {
         $sql = 'SELECT count("' . $column . '") FROM "' . $tableName . '"';
-        $result = $this->dbConnector->query($sql);
+        $result = $this->persistence->query($sql);
         $returnValue = intval($result->fetchColumn(0));
         $result->closeCursor();
         return (int) $returnValue;
     }
     
     /**
-     * Convenience access to PDO::quote.
+     * Convenience access to lastInsertId.
+     *
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param string $name
+     * @return string The quoted string.
+     */
+    public function lastInsertId($name = null){
+        return $this->persistence->lastInsertId($name);
+    }
+    
+    /**
+     * Convenience access to platForm quote.
      * 
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param string $parameter The parameter to quote.
      * @param int $parameter_type A PDO PARAM_XX constant.
      * @return string The quoted string.
      */
-    public function quote($parameter, $parameter_type = PDO::PARAM_STR){
-    	return $this->dbConnector->quote($parameter, $parameter_type);
+    public function quote($parameter){
+    	return $this->persistence->quote($parameter);
+    }
+    
+    public function quoteIdentifier($parameter){
+        return $this->persistence->getPlatForm()->quoteIdentifier($parameter);
     }
 
 }

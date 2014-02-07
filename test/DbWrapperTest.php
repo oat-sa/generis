@@ -64,9 +64,15 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner {
 		$columns = $dbWrapper->getColumnNames('dbTestCase');
         $this->assertEquals(count($columns),3);
         $possibleValues = array('id','uri','column1');
-        $this->assertTrue(in_array($columns[0],$possibleValues));
-        $this->assertTrue(in_array($columns[1],$possibleValues));
-        $this->assertTrue(in_array($columns[2],$possibleValues));
+        foreach ($columns as $col){
+            if($col instanceof Doctrine\DBAL\Schema\Column){          
+                $this->assertTrue(in_array($col->getName(),$possibleValues));
+            }
+            else {
+                //legacy mode
+                $this->assertTrue(in_array($col,$possibleValues));
+            }
+        }
 
 	}
 
@@ -111,7 +117,33 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner {
 
 
     }
+    
 
+    public function testCreateIndex(){
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $dbWrapper->getSchemaManager();
+        
+        $schema = new \Doctrine\DBAL\Schema\Schema();
+        $table = $schema->createTable('dbTestCase2');
+        $table->addColumn("id", "integer",array("notnull" => true,"autoincrement" => true));
+        $table->setPrimaryKey(array("id"));
+        $table->addColumn("uri", "string",array("length" => 255, "notnull" => true));
+        $table->addColumn("content", "text",array("notnull" => false));
+        
+        
+        
+        
+        $sql = $dbWrapper->getPlatform()->schemaToSql($schema);
+        
+
+        foreach ($sql as $q){
+            $dbWrapper->exec($q);    
+        }
+        $dbWrapper->createIndex('idx_content', $table->getName(), array("content" => 255));
+
+        $dbWrapper->exec('DROP TABLE "dbTestCase2";');
+    }
+    
     protected function tearDown(){
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         //TODO need to connect to a dbWrapper a function dropTable that currently not exists

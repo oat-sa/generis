@@ -25,12 +25,36 @@
 class common_persistence_SqlPersistence extends common_persistence_Persistence
 {
 
-    public function __construct($params, common_persistence_driver $driver){
-        parent::__construct($params, $driver);
-        if(isset($params["driver"]) && $params["driver"]== 'pdo_mysql'){
-            //activate mysql ansi quotes support
-            $this->exec('SET SESSION SQL_MODE=\'ANSI_QUOTES\';');
-        }
+    /**
+     * @access
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param mixed $statement
+     */
+    public function exec($statement,$params = array())
+    {
+        return $this->getDriver()->exec($statement,$params);
+    }
+
+    
+    /**
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     */
+    public function getSchemaManager(){
+        return $this->getDriver()->getSchemaManager();
+    }
+    
+    /**
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     */
+    public function getPlatForm(){
+        //common_Logger::i('Temporary platform is driver before separation');
+        return $this->getDriver()->getPlatform();
+    }
+    
+    
+    public function insert($tableName, array $data)
+    {
+        return $this->getDriver()->insert($tableName,$data);
     }
 
     /**
@@ -38,19 +62,33 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param mixed $statement
      */
-    public function exec($statement)
+    public function query($statement,$params= array())
     {
-        return $this->getDriver()->exec($statement);
+        return $this->getDriver()->query($statement,$params);
     }
-
+    
 
     /**
-     * @access
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param mixed $statement
+     * Convenience access to quote.
+     *
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param string $parameter The parameter to quote.
+     * @param int $parameter_type A PDO PARAM_XX constant.
+     * @return string The quoted string.
      */
-    public function query($statement)
-    {
-        return $this->getDriver()->query($statement);
+    public function quote($parameter, $parameter_type = PDO::PARAM_STR){
+        return $this->getDriver()->quote($parameter, $parameter_type);
     }
+    
+    
+    /**
+     * Convenience access to lastInsertId.
+     *
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param string $name
+     * @return string The quoted string.
+     */
+      public function lastInsertId($name = null){
+          return $this->getDriver()->lastInsertId($name);
+      }
 }

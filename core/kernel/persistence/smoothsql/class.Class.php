@@ -660,7 +660,8 @@ class core_kernel_persistence_smoothsql_Class
         
         foreach ($resources as $r){
         	$uri = (($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r);
-        	$uris[] = $dbWrapper->dbConnector->quote($uri);
+
+        	$uris[] = $dbWrapper->quote($uri);
         }
         
         if ($class->exists()){
@@ -811,7 +812,7 @@ class core_kernel_persistence_smoothsql_Class
 		    $conditions = array();
 		    foreach($propertyFilters as $propUri => $pattern){
 
-			    $propUri = $dbWrapper->dbConnector->quote($propUri);
+			    $propUri = trim($dbWrapper->quote($propUri));
 			    $values = is_array($pattern) ? $pattern : array($pattern);
 			    $sub = array();
 			    foreach ($values as $value) {
@@ -827,12 +828,12 @@ class core_kernel_persistence_smoothsql_Class
 							    if(!preg_match("/%$/", $object)){
 								    $object = $object."%";
 							    }
-							    $sub[] .= '"object" LIKE '.$dbWrapper->dbConnector->quote($object);
+							    $sub[] .= '"object" LIKE '.$dbWrapper->quote($object);
 						    }
 						    else {
 							    $sub[] = (strpos($object, '%') !== false)
-								    ? '"object" LIKE '.$dbWrapper->dbConnector->quote($object)
-								    : '"object" = '.$dbWrapper->dbConnector->quote($value);
+								    ? '"object" LIKE '.$dbWrapper->quote($object)
+								    : '"object" = '.$dbWrapper->quote($value);
 						    }
 					    break;
 
@@ -861,18 +862,7 @@ class core_kernel_persistence_smoothsql_Class
 			$intersect = false;
 		}
 
-		$queryLimit = "";
-                if(isset($options['limit'])){
-                    $offset = 0;
-                    $limit = intval($options['limit']);
-                    if ($limit==0){
-                            $limit = 1000000;
-                    }
-                    if(isset($options['offset'])){
-                            $offset = intval($options['offset']);
-                    }
-                    $queryLimit = $dbWrapper->limitStatement($queryLimit, $limit, $offset);
-		}
+
 		
 		$q = '';
 		if ($intersect) {
@@ -897,24 +887,40 @@ class core_kernel_persistence_smoothsql_Class
 		}
 		
 	
-	if (count($propertyFilters) > 0){
-	$query .= ' "subject" IN (SELECT "subject" FROM "statements" WHERE "predicate" = \''.RDF_TYPE.'\' AND "object" in (\''.implode('\',\'', $rdftypes).'\'))';
-	} else {
-	    $query = 'SELECT "subject" FROM "statements" WHERE "predicate" = \''.RDF_TYPE.'\' AND "object" in (\''.implode('\',\'', $rdftypes).'\')';
-	}
+		if (count ( $propertyFilters ) > 0) {
+			$query .= ' "subject" IN (SELECT "subject" FROM "statements" WHERE "predicate" = \'' . RDF_TYPE . '\' AND "object" in (\'' . implode ( '\',\'', $rdftypes ) . '\'))';
+		} else {
+			$query = 'SELECT "subject" FROM "statements" WHERE "predicate" = \'' . RDF_TYPE . '\' AND "object" in (\'' . implode ( '\',\'', $rdftypes ) . '\')';
+		}
 		// sorting
-        if (isset($options['order']) && !empty($options['order'])) {
-        	$orderUri = $options['order'];
-        	$orderDir = isset($options['orderdir']) && strtoupper($options['orderdir']) == 'DESC' ? 'DESC' : 'ASC';
-        	$orderQuery = 'SELECT "subject","object" FROM "statements" WHERE "predicate" = \''.$orderUri.'\'';
-			$query = 'SELECT DISTINCT "mainq"."subject", "orderq"."object" from ('.$query.') AS mainq
-			          LEFT JOIN ('.$orderQuery.') AS orderq ON ("mainq"."subject" = "orderq"."subject")
-			          ORDER BY "orderq"."object" '.$orderDir;
-        } else if (isset($options['limit'])) {
-        	$query .= ' ORDER BY "id"';
-        }
-         
-        $returnValue = $query . $queryLimit;
+		if (isset ( $options ['order'] ) && ! empty ( $options ['order'] )) {
+			$orderUri = $options ['order'];
+			$orderDir = isset ( $options ['orderdir'] ) && strtoupper ( $options ['orderdir'] ) == 'DESC' ? 'DESC' : 'ASC';
+			$orderQuery = 'SELECT "subject","object" FROM "statements" WHERE "predicate" = \'' . $orderUri . '\'';
+			$query = 'SELECT DISTINCT "mainq"."subject", "orderq"."object" from (' . $query . ') AS mainq
+			          LEFT JOIN (' . $orderQuery . ') AS orderq ON ("mainq"."subject" = "orderq"."subject")
+			          ORDER BY "orderq"."object" ' . $orderDir;
+		} else if (isset ( $options ['limit'] )) {
+			$query .= ' ORDER BY "id"';
+		}
+
+		if (isset ( $options ['limit'] )) {
+			$offset = 0;
+			$limit = intval( $options ['limit'] );
+			if ($limit == 0) {
+				$limit = 1000000;
+			}
+			if (isset( $options ['offset'] )) {
+				$offset = intval( $options ['offset'] );
+			}
+				
+			$returnValue = $dbWrapper->limitStatement($query, $limit, $offset );
+		}
+		else {
+			$returnValue = $query ;
+		}
+		
+
         // section 127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CC end
 
         return (string) $returnValue;

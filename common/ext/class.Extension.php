@@ -159,12 +159,11 @@ class common_ext_Extension
         if(is_null($this->dbConfig)) {
         	$db = core_kernel_classes_DbWrapper::singleton();
 			$query = "SELECT loaded,\"loadAtStartUp\",ghost FROM extensions WHERE id = ?";
-			$sth = $db->prepare($query);
-			$success = $sth->execute(array($this->id));
 
-			if ($success && $row = $sth->fetch()){
+			$result = $db->query($query,array($this->id));
+			if ($row = $result->fetch()){
 				$this->dbConfig = $row;
-				$sth->closeCursor();	
+				
 			} else {
 				common_Logger::w('Unable to load dbconfig for '.$this->getId());
 				$this->dbConfig = array();

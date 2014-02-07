@@ -69,7 +69,6 @@ class FileHelperTest extends GenerisPhpUnitTestRunner {
         $result = helpers_File::scanDir($toScan, array('recursive' => $recursive, 'absolute' => $absolute));
         
         $this->assertEquals(count($expectedResult), count($result));
-        
         // The order might vary depending on the file system implementation...
         foreach ($expectedResult as $expected) {
             $this->assertTrue(in_array($expected, $result));

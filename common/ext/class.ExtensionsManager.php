@@ -319,6 +319,7 @@ class common_ext_ExtensionsManager
         $this->extensions = array();
         
     	$db = core_kernel_classes_DbWrapper::singleton();
+    	//var_dump($db->getTables());
 		$query = 'SELECT * FROM "extensions"';
 		$result = $db->query($query);
 

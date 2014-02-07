@@ -51,11 +51,15 @@ class FileSourceLocalTest extends GenerisPhpUnitTestRunner {
 	
     protected function tearDown()
     {
-       
-        $directory = $this->repository->getPath();
- 	    $this->repository->delete();
- 	    helpers_File::remove($this->directory);
- 	    parent::tearDown();
+        helpers_File::remove($this->directory);
+        if($this->repository != null) {
+            $directory = $this->repository->getPath();
+     	    $this->repository->delete();
+     	    parent::tearDown();
+ 	    }
+ 	    else {
+            throw new common_Exception('Repository should never be null');
+        }
 	}
 
 	protected function getTestRepository () {

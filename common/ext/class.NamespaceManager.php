@@ -103,11 +103,11 @@ class common_ext_NamespaceManager
         
         if(count($this->namespaces) == 0){
         	$db = core_kernel_classes_DbWrapper::singleton();
-        	$query = 'SELECT "modelID", "baseURI" FROM "models"';
+        	$query = 'SELECT "modelID", "modelURI" FROM "models"';
 			$result = $db->query($query);
 			while ($row = $result->fetch()){
 				$id 	= $row['modelID'];
-				$uri 	= $row['baseURI'];
+				$uri 	= $row['modelURI'];
 				$this->namespaces[$id] = $uri;
 			}
         }

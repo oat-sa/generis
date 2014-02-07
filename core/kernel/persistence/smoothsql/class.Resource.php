@@ -107,8 +107,7 @@ class core_kernel_persistence_smoothsql_Resource
         // section 127-0-1-1--1ee05ee5:13611d6d34c:-8000:000000000000196B begin
 		$sqlQuery = 'SELECT "object" FROM "statements" WHERE "subject" = ? and predicate = ?;';
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sth = $dbWrapper->prepare($sqlQuery);
-        $sth->execute(array($resource->getUri(), RDF_TYPE));
+        $sth = $dbWrapper->query($sqlQuery,array($resource->getUri(), RDF_TYPE));
         while ($row = $sth->fetch()){
             $uri = $row['object'];
             $returnValue[$uri] = new core_kernel_classes_Class($uri);
@@ -163,33 +162,31 @@ class core_kernel_persistence_smoothsql_Resource
 		if($one){
 			$query .= ' ORDER BY "id" DESC';
 			$query = $dbWrapper->limitStatement($query, 1, 0);
-			$sth = $dbWrapper->prepare($query);
-			$result = $sth->execute(array($resource->getUri(), $property->getUri(), $lang));
+			
+			$result = $dbWrapper->query($query,array($resource->getUri(), $property->getUri(), $lang));
 		}
 		// Select Last
 		else if($last){
 			$query .= ' ORDER BY "id" ASC';
 			$query = $dbWrapper->limitStatement($query, 1, 0);
-			$sth = $dbWrapper->prepare($query);
-			$result = $sth->execute(array($resource->getUri(), $property->getUri(), $lang));
+			$result = $dbWrapper->query($query,array($resource->getUri(), $property->getUri(), $lang));
 		}
 		// Select All
 		else{
-			$sth = $dbWrapper->prepare($query);
-			$result = $sth->execute(array($resource->getUri(), $property->getUri(), $lang));
+			$result = $dbWrapper->query($query,array($resource->getUri(), $property->getUri(), $lang));
 		}
         
 		// Treat the query result
         if ($result == true) {
         	// If a language has been defined, do not filter result by language
         	if(isset($options['lg'])){
-		    	while ($row = $sth->fetch()){
+		    	while ($row = $result->fetch()){
 					$returnValue[] = $row['object'];
 				}
         	} 
         	// Filter result by language and return one set of values (User language in top priority, default language in second and the fallback language (null) in third)
         	else {
-        		 $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage($sth->fetchAll(), 'l_language');
+        		 $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage($result->fetchAll(), 'l_language');
         	}
         }
         
@@ -372,21 +369,22 @@ class core_kernel_persistence_smoothsql_Resource
 					
 					$formatedValues = array();
 					if($value instanceof core_kernel_classes_Resource){
-						$formatedValues[] = $dbWrapper->dbConnector->quote($value->getUri());
+						$formatedValues[] = $dbWrapper->quote($value->getUri());
 					}else if(is_array($value)){
 						foreach($value as $val){
 							if($val instanceof core_kernel_classes_Resource){
-								$formatedValues[] = $dbWrapper->dbConnector->quote($val->getUri());
+								$formatedValues[] = $dbWrapper->quote($val->getUri());
 							}else{
-								$formatedValues[] = $dbWrapper->dbConnector->quote($val);
+								$formatedValues[] = $dbWrapper->quote($val);
 							}
 						}
 					}else{
-						$formatedValues[] = $dbWrapper->dbConnector->quote($value);
+						$formatedValues[] = $dbWrapper->quote($value);
 					}
 					
 					foreach($formatedValues as $object){
 						$query .= " ($modelId, '{$resource->getUri()}', '{$property->getUri()}', {$object}, '{$lang}', '{$user}', '{$mask}','{$mask}','{$mask}', CURRENT_TIMESTAMP),";
+
 					}
 	       		}
 	       		

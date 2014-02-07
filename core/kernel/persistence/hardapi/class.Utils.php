@@ -269,18 +269,18 @@ class core_kernel_persistence_hardapi_Utils
 				    if(!preg_match("/%$/", $object)){
 					    $object = $object . "%";
 				    }
-				    $returnValue .= ' LIKE '. $dbWrapper->dbConnector->quote($object);
+				    $returnValue .= ' LIKE '. $dbWrapper->quote($object);
 			    }
 			    else {
 				    $returnValue = (strpos($object, '%') !== false)
-					    ? 'LIKE '. $dbWrapper->dbConnector->quote($object)
-					    : '= '. $dbWrapper->dbConnector->quote($patternToken);
+					    ? 'LIKE '. $dbWrapper->quote($object)
+					    : '= '. $dbWrapper->quote($patternToken);
 			    }
 		    break;
 
 		    case 'object' :
 			    if($pattern instanceof core_kernel_classes_Resource) {
-				    $returnValue = ' = ' . $dbWrapper->dbConnector->quote($pattern->getUri());
+				    $returnValue = ' = ' . $dbWrapper->quote($pattern->getUri());
 			    } else {
 				    common_Logger::w('non ressource as search parameter: '. get_class($pattern), 'GENERIS');
 			    }
@@ -376,7 +376,6 @@ class core_kernel_persistence_hardapi_Utils
 	        			$sql  = 'INSERT INTO "' . $tblname . 'Props" ';
 	        			$sql .= '("property_uri", "property_value", "property_foreign_uri", "l_language", "instance_id") ';
 	        			$sql .= 'VALUES (?, ?, ?, ?, ?)';
-	        			$sth = $dbWrapper->prepare($sql);
 	        			
 	        			while ($row = $result->fetch()){
 	        				// Transfer to the 'properties table'.
@@ -384,7 +383,7 @@ class core_kernel_persistence_hardapi_Utils
 	        				$propertyValue = ($setPropertyValue == true) ? $row['val'] : null;
 	        				$propertyForeignUri = ($setPropertyValue == false) ? $row['val'] : null;
 	        				
-	        				$sth->execute(array($propUri, $propertyValue, $propertyForeignUri, $lang, $row['id'])); 
+	        				$dbWrapper->exec($sql,array($propUri, $propertyValue, $propertyForeignUri, $lang, $row['id'])); 
 	        			}
 	        			
 	        			$offset += $batchSize;
@@ -471,13 +470,13 @@ class core_kernel_persistence_hardapi_Utils
 		        			$result = $dbWrapper->query($sql, array($propUri));
 		        			// prepare the update statement.
 		        			$sql  = 'UPDATE "' . $baseTableName . '" SET "' . $shortName . '" = ? WHERE "id" = ?';
-		        			$sth = $dbWrapper->prepare($sql);
 		        			
 		        			while ($row = $result->fetch()){
 		        				// Transfer to the 'base table'.
 		        				$hasResult = true;
 		        				$propertyValue = ($retrievePropertyValue == true) ? $row['property_value'] : $row['property_foreign_uri'];
-		        				$sth->execute(array($propertyValue, $row['instance_id']));
+		        				$dbWrapper->exec($sql,array($propertyValue, $row['instance_id']));
+
 		        				$toDelete[] = $row['id'];
 		        			}
 		        			

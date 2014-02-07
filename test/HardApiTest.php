@@ -44,7 +44,7 @@ class HardApiTest extends GenerisPhpUnitTestRunner {
 		
 		$class = new core_kernel_classes_Class(CLASS_ROLE);
 		$shortName = core_kernel_persistence_hardapi_Utils::getShortName($class);
-		$this->assertEquals($shortName, "07ClassRole");
+		$this->assertEquals($shortName, "06ClassRole");
 		
 		$longName = core_kernel_persistence_hardapi_Utils::getLongName($shortName);
 		$this->assertEquals($longName, $class->getUri());

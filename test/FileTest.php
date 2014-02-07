@@ -45,8 +45,12 @@ class FileTest extends GenerisPhpUnitTestRunner {
     
     public function tearDown()
     {
-       
-        $this->fileSource->delete();
+        if(!is_null($this->fileSource)){
+            $this->fileSource->delete();
+        }
+        else {
+            throw new common_Exception('should not be null, something wrong happen during test');
+        }
         helpers_File::remove($this->fsPath);
     }
     

@@ -85,27 +85,23 @@ class common_uri_DatabaseSerialUriProvider
         $returnValue = (string) '';
 
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:00000000000019A5 begin
-        $driver = $this->getDriver();
-        switch ($driver){
-            case 'pdo_pgsql':
-            case 'pdo_mysql':
+
                 $dbWrapper = core_kernel_classes_DbWrapper::singleton();
                 $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
-                $sth = $dbWrapper->prepare("SELECT generis_sequence_uri_provider(?)");
-        		if ($sth->execute(array($modelUri)) !== false){
+
+                $sth = $dbWrapper->query("SELECT generis_sequence_uri_provider(?)",array($modelUri));
+        		if ($sth !== false){
+
         			$row = $sth->fetch();
-        			$returnValue = $row[0];
+
+        			$returnValue = current($row);
         			$sth->closeCursor();
         		}
         		else{
         			throw new common_uri_UriProviderException("An error occured while calling the stored procedure for driver '${driver}': " . $dbWrapper->errorMessage() . ".");	
         		}
-                
-            break;
-        	default:
-        		throw new common_uri_UriProviderException("Unknown database driver : ".$driver);
-        	break;
-        }
+
+        
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:00000000000019A5 end
 
         return (string) $returnValue;

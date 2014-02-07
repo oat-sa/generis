@@ -95,7 +95,7 @@ class common_ext_GenerisInstaller
 		//$this->installLocalData();
 		//$this->installWriteConfig();
 		//$this->installModuleModel();
-		//$this->installRegisterExt();
+		$this->installRegisterExt();
 		
 		common_cache_FileCache::singleton()->purge();
         // section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A40 end

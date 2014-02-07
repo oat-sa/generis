@@ -130,7 +130,8 @@ class core_kernel_persistence_hardapi_RowManager
 				if(isset($column['multi']) && $column['multi'] === true){
 					continue;
 				}
-				$query .= ', "'.$column['name'].'"';
+
+				$query .= ', '.$dbWrapper->quoteIdentifier($column['name']).'';
 			}
 			$query .= ') VALUES ';
 			
@@ -156,7 +157,7 @@ class core_kernel_persistence_hardapi_RowManager
 								$query .= ", '{$foreignResource->getUri()}'";
 							}
 							else if (!empty($foreignResource)){
-								$query.= ", " . $dbWrapper->dbConnector->quote($foreignResource);
+								$query.= ", " . $dbWrapper->quote($foreignResource);
 							}
 							else{
 								$query.= ", NULL";
@@ -169,8 +170,8 @@ class core_kernel_persistence_hardapi_RowManager
 								$query.= ", '{$value->getUri()}'";
 							}
 							else{	//the value is a literal
-								$value = $dbWrapper->dbConnector->quote($value);
-								$query.= ", {$value}";
+								$value = trim($dbWrapper->quote($value), "'\"");
+								$query.= ", '{$value}'";
 							}
 						}
 					}
@@ -213,8 +214,8 @@ class core_kernel_persistence_hardapi_RowManager
 					}
 					
 					$multiQuery = 'SELECT "object", "l_language" FROM "statements" WHERE "subject" = ? AND "predicate" = ?';
-					$multiResult = $dbWrapper->prepare($multiQuery);
-					$multiResult->execute(array($row['uri'], $multiplePropertyUri));
+					$multiResult = $dbWrapper->query($multiQuery,array($row['uri'], $multiplePropertyUri));
+					
 					
 
 					while ($t = $multiResult->fetch()){
@@ -222,13 +223,14 @@ class core_kernel_persistence_hardapi_RowManager
 							$queryRows .= ',';
 						}
 						
-						$object = $dbWrapper->dbConnector->quote($t['object']);
+						$object = $dbWrapper->quote($t['object']);
 						
 						if (common_Utils::isUri($t['object'])){
 							$queryRows .= "({$instanceIds[$row['uri']]}, '{$multiplePropertyUri}', NULL, {$object}, '{$t['l_language']}')";	
 						}
 						else{
 							$queryRows .= "({$instanceIds[$row['uri']]}, '{$multiplePropertyUri}', {$object}, NULL, '{$t['l_language']}')";
+
 						}
 					}
 				}

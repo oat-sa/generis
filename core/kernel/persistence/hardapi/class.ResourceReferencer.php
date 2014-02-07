@@ -321,12 +321,13 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				case self::CACHE_NONE:
 					$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 					if(is_null($table)){
-						$result = $dbWrapper->prepare('SELECT "id" FROM "class_to_table" WHERE "uri" = ?');
-						$result->execute(array($class->getUri()));
+
+						$result = $dbWrapper->query('SELECT "id" FROM "class_to_table" WHERE "uri" = ?',array($class->getUri()));
+
 					}
 					else{
-						$result = $dbWrapper->prepare('SELECT "id" FROM "class_to_table" WHERE "uri" = ? AND "table" = ?');
-						$result->execute(array($class->getUri(), $table));
+						$result = $dbWrapper->query('SELECT "id" FROM "class_to_table" WHERE "uri" = ? AND "table" = ?',array($class->getUri(), $table));
+
 					}
 					
 					if($row = $result->fetch()){
@@ -399,13 +400,13 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
 			$query = 'INSERT INTO "class_to_table" ("uri", "table", "topClass") VALUES (?,?,?)';
-			$result = $dbWrapper->prepare($query);
-			$result->execute(array($class->getUri(), $table, $topClassUri));
+			$result = $dbWrapper->exec($query,array($class->getUri(), $table, $topClassUri));
+
 			
 			// Get last inserted id
 			$query = 'SELECT "id" FROM "class_to_table" WHERE "uri" = ? AND "table" = ?';
-			$result = $dbWrapper->prepare($query);
-			$result->execute(array($class->getUri(), $table));
+			$result = $dbWrapper->query($query,array($class->getUri(), $table));
+			
 			
 			if ($row = $result->fetch()){
 				$classId = $row['id'];
@@ -449,7 +450,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				throw new core_kernel_persistence_hardapi_Exception("Unable to reference the additional properties of the class {$class->getUri()} in class_additional_properties: " . $e->getMessage());
 			}
 		}
-        
+
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001655 end
 
         return (bool) $returnValue;
@@ -703,8 +704,8 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 							
 							foreach($rows as $row){
 								$query = "INSERT INTO resource_has_class (resource_id, class_id) VALUES (?,?)";
-								$sth = $dbWrapper->prepare($query);
-								$sth->execute(array($row['id'], $classLocation['id']));
+								$sth = $dbWrapper->exec($query,array($row['id'], $classLocation['id']));
+
 							}
 						}
 					}
@@ -1038,8 +1039,9 @@ class core_kernel_persistence_hardapi_ResourceReferencer
          			AND subject IN (SELECT subject FROM statements 
         						WHERE predicate = ? 
         						AND object = ?)";
-        $result = $dbWrapper->prepare($query);
-        $result->execute(array(RDF_TYPE, $class->getUri(), RDF_TYPE, $class->getUri()));
+        $result = $dbWrapper->query($query,array(RDF_TYPE, $class->getUri(), RDF_TYPE, $class->getUri()));
+
+
 
 		$types = array();
         while($row = $result->fetch()){

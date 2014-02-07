@@ -45,7 +45,12 @@ class generis_test_UtilsTest extends GenerisPhpUnitTestRunner {
 	public function testGetNewUri(){
 		$toto = common_Utils::getNewUri();
 		$tata = common_Utils::getNewUri();
+		
 		$this->assertNotSame($toto,$tata);
+		
+		
+		
+		
 	}
 	
 	public function testPhpStringEscaping(){

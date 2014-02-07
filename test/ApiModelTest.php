@@ -36,7 +36,6 @@ class ApiModelTest extends GenerisPhpUnitTestRunner {
 		GenerisPhpUnitTestRunner::initTest();
     	
 		$this->object = core_kernel_impl_ApiModelOO::singleton();
-		core_kernel_classes_DbWrapper::singleton()->dbConnector->debug=false;
 	}
 	
 	public function testGetRootClass(){

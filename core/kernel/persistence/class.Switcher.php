@@ -550,7 +550,7 @@ class core_kernel_persistence_Switcher
 			foreach($referencer->propertyLocation($property) as $table){
 				if(!preg_match("/Props$/", $table) && preg_match("/^_[0-9]{2,}/", $table)){
 					try{
-						$dbWrapper->createIndex('idx_'.$propertyAlias, $table, array($propertyAlias => 255));
+					    $dbWrapper->createIndex('idx_'.$propertyAlias, $table, array($propertyAlias => 255));
 					}
 					catch (PDOException $e){
 						if($e->getCode() != $dbWrapper->getIndexAlreadyExistsErrorCode() && $e->getCode() != '00000'){

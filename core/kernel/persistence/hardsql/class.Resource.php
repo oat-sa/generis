@@ -486,17 +486,17 @@ class core_kernel_persistence_hardsql_Resource
 						$lang = ($property->isLgDependent() ? $session->getDataLanguage() : '');
 						$formatedValues = array();
 						if ($value instanceof core_kernel_classes_Resource) {
-							$formatedValues[] = $dbWrapper->dbConnector->quote($value->getUri());
+							$formatedValues[] = $dbWrapper->quote($value->getUri());
 						} else if (is_array($value)) {
 							foreach ($value as $val) {
 								if ($val instanceof core_kernel_classes_Resource) {
-									$formatedValues[] = $dbWrapper->dbConnector->quote($val->getUri());
+									$formatedValues[] = $val->getUri();
 								} else {
-									$formatedValues[] = $dbWrapper->dbConnector->quote($val);
+									$formatedValues[] = trim($dbWrapper->quote($val), "'\"");
 								}
 							}
 						} else {
-							$formatedValues[] = $dbWrapper->dbConnector->quote($value);
+							$formatedValues[] = $dbWrapper->quote($value);
 						}
 
 						if ($propertyRange instanceof core_kernel_classes_Class && $propertyRange->getUri() == RDFS_LITERAL) {
@@ -817,7 +817,7 @@ class core_kernel_persistence_hardsql_Resource
 				$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 				// We get the triples for cardinality = multiple or lg dependent properties
 				// as usual...
-				$quotedUri = $dbWrapper->dbConnector->quote($resource->getUri());
+				$quotedUri = $dbWrapper->quote($resource->getUri());
 				$propsQuery  = 'SELECT "b"."id", "b"."uri", "p"."property_uri" AS "property_uri", COALESCE("p"."property_value", "p"."property_foreign_uri") as "property_value", "p"."l_language"  FROM "' . $tableName . '" "b" ';
 				$propsQuery .= 'INNER JOIN "' . $propertiesTableName . '" "p" ON ("b"."id" = "p"."instance_id") WHERE "b"."uri" = ' . $quotedUri;
 				
@@ -828,7 +828,7 @@ class core_kernel_persistence_hardsql_Resource
 					// have to be crafty...
 					$baseQueries = array();
 					foreach ($propertyColumns as $k => $pC){
-						$quotedPropUri = $dbWrapper->dbConnector->quote($pC);
+						$quotedPropUri = $dbWrapper->quote($pC);
 						$baseQueries[] = 'SELECT "b"."id", "b"."uri", ' . $quotedPropUri . ' AS "property_uri", "b"."' . $k . '" AS "property_value", \'\' AS "l_language" FROM "' . $tableName . '" "b" WHERE "b"."uri" = ' . $quotedUri . ' AND "b"."' . $k . '" IS NOT NULL';
 					}
 					
@@ -940,13 +940,12 @@ class core_kernel_persistence_hardsql_Resource
 		$query = 'SELECT * FROM "'.$tableName.'" WHERE "uri" = ?';
 		$result = $dbWrapper->query($query, array($resource->getUri()));
 		$rows = $result->fetchAll();
+	
 		if(count($rows) > 0){
-				
 			//get the columns to duplicate
 			$columnProps = array();
 			for($i=0; $i < $result->columnCount(); $i++){
 				$column = $result->getColumnMeta($i);
-
 				if(preg_match("/^[0-9]{2,}/", $column['name'])){
 					$propertyUri = core_kernel_persistence_hardapi_Utils::getLongName($column['name']);
 					if(!in_array($propertyUri, $excludedProperties)){	//check if the property is excluded
@@ -960,6 +959,9 @@ class core_kernel_persistence_hardsql_Resource
 			//build the insert query
 			$insertQuery ='INSERT INTO "'.$tableName.'" ("uri"';
 			foreach($columnProps as $column){
+			    if(!is_string($column)){
+			        throw new core_kernel_persistence_hardsql_Exception('columns should be a string');
+			    }
 				$insertQuery .= ', "'.$column.'"';
 			}
 			$insertQuery .= ') VALUES (';
@@ -968,7 +970,7 @@ class core_kernel_persistence_hardsql_Resource
 				$insertQuery .= ", '".$rows[0][$column]."'";
 			}
 			$insertQuery .= ')';
-				
+
 			$insertResult = $dbWrapper->exec($insertQuery);
 			if($insertResult !== false  && $instanceId > -1){
 
@@ -1318,7 +1320,8 @@ class core_kernel_persistence_hardsql_Resource
         		$rowsAffected1 = $dbWrapper->exec($sql, array($resource->getUri(), $classInfo['table']));
         		
         		$sql = 'INSERT INTO "resource_has_class" ("resource_id", "class_id") VALUES (?, ?)';
-        		$rowsAffected2 = $dbWrapper->exec($sql, array($dbWrapper->dbConnector->lastInsertId('resource_to_table_id_seq'), $classInfo['id']));
+        		$id = $dbWrapper->lastInsertId('resource_to_table');
+        		$rowsAffected2 = $dbWrapper->exec($sql, array($id, $classInfo['id']));
 
         		$sql = 'INSERT INTO "' . $classInfo['table'] . '" ("uri") VALUES (?)';
         		$dbWrapper->exec($sql, array($resource->getUri())); 

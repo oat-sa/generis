@@ -95,6 +95,7 @@ class core_kernel_classes_Resource
 				throw new common_exception_Error('cannot construct the resource because the uri is not a "string", but a '.gettype($uri).' debug: '.$debug);
 			}
 		}else if(empty($uri)){
+		    
 			throw new common_exception_Error('cannot construct the resource because the uri cannot be empty, debug: '.$debug);
 		}
 		

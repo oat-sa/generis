@@ -297,7 +297,7 @@ class core_kernel_impl_ApiModelOO
         
         
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$subject = $dbWrapper->dbConnector->quote($uriResource);
+		$subject = $dbWrapper->quote($uriResource);
 		
 		$baseNs = array(
 						'xmlns:rdf'		=> 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',

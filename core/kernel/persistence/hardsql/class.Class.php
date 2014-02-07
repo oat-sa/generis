@@ -576,7 +576,7 @@ class core_kernel_persistence_hardsql_Class
 					else {
 						// The property to search is stored in the properties table
 						// or might be simply unknown.
-						$pUri = $dbWrapper->dbConnector->quote($propUri);
+						$pUri = $dbWrapper->quote($propUri);
 						$condition = '("p"."property_uri" = ' . $pUri . ' AND (';
 						$subConditions = array();
 						foreach ($patterns as $pattern){
@@ -585,7 +585,7 @@ class core_kernel_persistence_hardsql_Class
 							
 							// Deal with the language.
 							if(preg_match('/^[a-zA-Z]{2,4}$/', $lang)){
-								$quotedLang = $dbWrapper->dbConnector->quote($lang);
+								$quotedLang = $dbWrapper->quote($lang);
 								$langToken = ' AND ("p"."l_language" = \'\' OR "p"."l_language" = ' . $quotedLang . ')';
 								$subCondition .= $langToken;
 							}
@@ -599,7 +599,7 @@ class core_kernel_persistence_hardsql_Class
 					// else do nothing, the property is not referenced anywhere.
 				}
 				
-				$quotedTblName = $dbWrapper->dbConnector->quote($baseTableName);
+				$quotedTblName = $dbWrapper->quote($baseTableName);
 				$query .= 'SELECT "b"."id", "b"."uri", ' . $quotedTblName . ' AS "tblname" FROM "' . $baseTableName . '" "b" ';
 				
 				if (empty($propsConditions) && !empty($baseConditions)){
@@ -687,7 +687,7 @@ class core_kernel_persistence_hardsql_Class
 						// Deal with the language.
 						$langToken = '';
 						if(preg_match('/^[a-zA-Z]{2,4}$/', $lang)){
-							$quotedLang = $dbWrapper->dbConnector->quote($lang);
+							$quotedLang = $dbWrapper->quote($lang);
 							$langToken = ' AND ("p".l_language" = \'\' OR "p".l_language" = ' . $quotedLang . ')';
 						}
 						
@@ -963,17 +963,17 @@ class core_kernel_persistence_hardsql_Class
 						$lang = ($property->isLgDependent() ? $session->getDataLanguage() : '');
 						$formatedValues = array();
 						if ($value instanceof core_kernel_classes_Resource) {
-							$formatedValues[] = $dbWrapper->dbConnector->quote($value->getUri());
+							$formatedValues[] = $dbWrapper->quote($value->getUri());
 						} else if (is_array($value)) {
 							foreach ($value as $val) {
 								if ($val instanceof core_kernel_classes_Resource) {
-									$formatedValues[] = $dbWrapper->dbConnector->quote($val->getUri());
+									$formatedValues[] = $dbWrapper->quote($val->getUri());
 								} else {
-									$formatedValues[] = $dbWrapper->dbConnector->quote($val);
+									$formatedValues[] = $dbWrapper->quote($val);
 								}
 							}
 						} else {
-							$formatedValues[] = $dbWrapper->dbConnector->quote($value);
+							$formatedValues[] = $dbWrapper->quote($value);
 						}
 
 						if (is_null($propertyRange) || $propertyRange->getUri() == RDFS_LITERAL) {

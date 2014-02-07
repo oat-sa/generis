@@ -76,7 +76,7 @@ abstract class GenerisPhpUnitTestRunner extends PHPUnit_Framework_TestCase
      */
     public static function initTest(){
         //connect the API
-        if(!self::$connected){
+        if(!self::$connected){          
             common_session_SessionManager::startSession(new common_test_TestUserSession());
             self::$connected = true;
         }
