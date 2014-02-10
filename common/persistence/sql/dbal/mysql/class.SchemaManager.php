@@ -34,7 +34,7 @@ class common_persistence_sql_dbal_mysql_SchemaManager extends common_persistence
      */
     public function getIndexAlreadyExistsErrorCode()
     {
-        $return '42000';
+        return '42000';
     }
     
 }
