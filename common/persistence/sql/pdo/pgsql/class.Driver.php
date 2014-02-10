@@ -103,7 +103,7 @@ class common_persistence_sql_pdo_pgsql_Driver
         if($this->schemamanger == null){
             $this->schemamanger = new common_persistence_sql_pdo_pgsql_SchemaManager($this);
         }
-        
+        return $this->schemamanger;
     }
 
     /* (non-PHPdoc)
