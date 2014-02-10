@@ -399,20 +399,6 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
     }
 
 
-    /* (non-PHPdoc)
-     * @see common_persistence_sql_pdo_Driver::getPlatform()
-    */
-    abstract public function getPlatform();
-    
-    
-    /* (non-PHPdoc)
-     * @see common_persistence_sql_pdo_Driver::getSchemaManager()
-    */
-    abstract public function getSchemaManager();
-
-
-
-
     /**
      * Retrieve Extra Configuration for the driver
      *
