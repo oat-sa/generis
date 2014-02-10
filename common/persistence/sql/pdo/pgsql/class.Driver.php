@@ -69,14 +69,15 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * @package core
  * @subpackage kernel_classes
  */
-class common_persistence_pdo_pgsql_Driver
+class common_persistence_sql_pdo_pgsql_Driver
     extends common_persistence_sql_pdo_Driver
 {
     // --- ASSOCIATIONS ---
 
 
     // --- ATTRIBUTES ---
-
+    private $platform = null;
+    private $schemamanger = null;
     // --- OPERATIONS ---
 
     /**
@@ -99,14 +100,20 @@ class common_persistence_pdo_pgsql_Driver
      * @see common_persistence_sql_pdo_Driver::getSchemaManager()
     */
     public function getSchemaManager(){
-        return new common_persistence_sql_pdo_pgsql_SchemaManager($this);
+        if($this->schemamanger == null){
+            $this->schemamanger = new common_persistence_sql_pdo_pgsql_SchemaManager($this);
+        }
+        
     }
 
     /* (non-PHPdoc)
      * @see common_persistence_sql_pdo_Driver::getSchemaManager()
     */
     public function getPlatform(){
-        return new common_persistence_sql_pdo_Platform(new \Doctrine\DBAL\Platforms\PostgreSqlPlatform());
+        if($this->platform == null){
+            $this->platform = new common_persistence_sql_pdo_Platform(new \Doctrine\DBAL\Platforms\PostgreSqlPlatform());
+        }
+        return $this->platform;
     }
 
     /**
@@ -119,7 +126,7 @@ class common_persistence_pdo_pgsql_Driver
     public function afterConnect()
     {
         // section 10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC9 begin
-        $this->dbConnector->exec("SET NAMES 'UTF8'");
+        $this->exec("SET NAMES 'UTF8'");
         // section 10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC9 end
     }
 
