@@ -81,8 +81,7 @@ class core_kernel_impl_ApiModelOO
 			if(!preg_match("/\#$/", $namespace)){
 				$namespace .= "#";
 			}
-			$result = $dbWrapper->query('SELECT * FROM "models"  WHERE "modelURI" = ? OR "baseURI" = ?', array(
-				$namespace,
+			$result = $dbWrapper->query('SELECT * FROM "models"  WHERE "modelURI" = ?', array(
 				$namespace
 			));
 			if ($row = $result->fetch(PDO::FETCH_ASSOC)){
