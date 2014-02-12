@@ -51,63 +51,8 @@ if(function_exists("date_default_timezone_set") && defined('TIME_ZONE')){
 	date_default_timezone_set(TIME_ZONE);
 }
 
-//used for backward compat
-$GLOBALS['default_lang']	= 'EN';
-
 require_once INCLUDES_PATH		. '/ClearFw/clearbricks/common/lib.l10n.php';
 
-// 3rd part lib autoload
-require_once VENDOR_PATH		. 'autoload.php';
-
-/**
- * permits to include classes automatically
- *
- * @function generis_autoload
- * @param 	string		$pClassName		Name of the class
- * @package generis
- * @subpackage common
- *
- */
-
-function generis_extension_autoload($pClassName) {
-	
-    if(strpos($pClassName, '_') !== false){
-		$tokens = explode("_", $pClassName);
-		$size = count($tokens);
-		$path = '';
-		for ( $i = 0 ; $i<$size-1 ; $i++){
-			$path .= $tokens[$i].'/';
-		}
-		
-		$filePath = '/' . $path . 'class.'.$tokens[$size-1] . '.php';
-		if (file_exists(GENERIS_BASE_PATH .$filePath)){
-			require_once GENERIS_BASE_PATH .$filePath;
-			return;
-		}
-		$filePathInterface = '/' . $path . 'interface.'.$tokens[$size-1] . '.php';
-		if (file_exists(GENERIS_BASE_PATH .$filePathInterface)){
-			require_once GENERIS_BASE_PATH .$filePathInterface;
-			return;
-		}
-		
-		if (file_exists(ROOT_PATH .$filePath)){
-			require_once ROOT_PATH .$filePath;
-			return;
-		} elseif (file_exists(ROOT_PATH .$filePathInterface)){
-		        require_once ROOT_PATH .$filePathInterface;
-		        return;
-		}
-	}
-	else{
-		$packages = array(DIR_CORE,DIR_CORE_HELPERS,DIR_CORE_UTILS);
-		foreach($packages as $path) {
-			if (file_exists($path. $pClassName . '.class.php')) {
-				require_once $path . $pClassName . '.class.php';
-				return;
-			}
-		}
-	}
-}
-
-spl_autoload_register("generis_extension_autoload");
-set_include_path(get_include_path() . PATH_SEPARATOR . GENERIS_BASE_PATH);
+// classloader
+require_once dirname(__FILE__)	. '/oatbox/AutoLoader.php';
+oat\oatbox\AutoLoader::register();
