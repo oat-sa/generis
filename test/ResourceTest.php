@@ -519,5 +519,26 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 		$level1a->delete();
 	}
 	
+	public function testDuplicate(){
+        $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+        $instance = $class->createInstance('test' , 'test');
+        $prop = $this->createTestProperty();
+        $instance->setPropertyValue($prop,'plop');
+        
+        
+        $duplicate = $instance->duplicate();
+        $this->assertNotEquals($duplicate->getUri(),$instance->getUri());
+        $this->assertEquals($duplicate->getLabel(),$instance->getLabel());
+        $result = $instance->getPropertiesValues(array($prop));
+        $this->assertTrue(in_array('plop', $result[$prop->getUri()]));
+        
+        
+        $duplicate->delete();
+        $instance->delete();
+        $prop->delete();
+    }
+
+	
+	
 }
 ?>
