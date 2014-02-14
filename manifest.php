@@ -33,14 +33,19 @@ return array(
     'license' => 'GPL-2.0',
     'version' => '2.4',
 	'author' => 'Open Assessment Technologies, CRP Henri Tudor',
-	'dependencies' 	=> array(),
+	'requires' 	=> array(),
 	'models' => array(
-			'http://www.w3.org/1999/02/22-rdf-syntax-ns',
-			'http://www.w3.org/2000/01/rdf-schema',
-			'http://www.tao.lu/datatypes/WidgetDefinitions.rdf',
-			'http://www.tao.lu/middleware/Rules.rdf',
-			'http://www.tao.lu/Ontologies/generis.rdf'
-		),
+		'http://www.w3.org/1999/02/22-rdf-syntax-ns',
+		'http://www.w3.org/2000/01/rdf-schema',
+		'http://www.tao.lu/datatypes/WidgetDefinitions.rdf',
+		'http://www.tao.lu/middleware/Rules.rdf',
+		'http://www.tao.lu/Ontologies/generis.rdf'
+	),
+    'autoload' => array (
+        'psr-4' => array(
+            'oat\\generis\\model\\' => dirname(__FILE__).DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR
+        )
+    ),
 	'install' => array(
 		'php' => dirname(__FILE__). '/install/install.php',
 		'rdf' => array(
