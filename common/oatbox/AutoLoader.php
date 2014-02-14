@@ -179,5 +179,16 @@ class AutoLoader
     		}
     	}
     }
+    
+    /**
+     * Reloads the extension autoloader
+     * 
+     * This will result in having several autoloaders, but this should not be a problem
+     * 
+     */
+    public static function reload() {
+        \common_cache_FileCache::singleton()->remove(self::CACHE_KEY);
+        self::registerExtensionAutoloader();
+    }
 
 }

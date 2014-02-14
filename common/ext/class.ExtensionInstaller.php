@@ -19,6 +19,7 @@
  * 
  */
 
+use oat\oatbox\AutoLoader;
 
 /**
  * Short description of class common_ext_ExtensionInstaller
@@ -90,6 +91,9 @@ class common_ext_ExtensionInstaller
 					
 				core_kernel_classes_Session::singleton()->update();
 					
+				//reload the autoloader
+				AutoLoader::reload();
+				
 				$this->installCustomScript();
 					
 				if ($this->getLocalData() == true){

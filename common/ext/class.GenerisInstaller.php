@@ -18,29 +18,9 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
 
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API - common/ext/class.GenerisInstaller.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 14.06.2012, 11:18:54 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Joel Bout, <joel.bout@tudor.lu>
- * @package common
- * @subpackage ext
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
+use oat\oatbox\AutoLoader;
+use oat\generis\model\data\ModelManager;
 
 /**
  * include common_ext_ExtensionInstaller
@@ -98,7 +78,11 @@ class common_ext_GenerisInstaller
 		$this->installRegisterExt();
 		
 		common_cache_FileCache::singleton()->purge();
-        // section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A40 end
+        
+		AutoLoader::reload();
+        
+		ModelManager::setModel(new \core_kernel_persistence_smoothsql_SmoothModel(array()));
+		// section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A40 end
     }
 
 } /* end of class common_ext_GenerisInstaller */
