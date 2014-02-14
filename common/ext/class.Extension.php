@@ -224,7 +224,7 @@ class common_ext_Extension
         if (isset($config[$key])) {
         	$returnValue = $config[$key]; 
         } else {
-        	common_Logger::w('Unknown config key '.$key.' used for extension '.$this->getId());
+        	common_Logger::i('Unknown config key '.$key.' used for extension '.$this->getId());
         }
 
         return $returnValue;
@@ -481,8 +481,8 @@ class common_ext_Extension
         $returnValue = array();
 
         $returnValue = array();
-        foreach ($this->getManifest()->getDependencies() as $id) {
-        	$returnValue[] = $id;
+        foreach ($this->getManifest()->getDependencies() as $id => $version) {
+        	$returnValue[$id] = $version;
         	$dependence = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
         	$returnValue = array_unique(array_merge($returnValue, $dependence->getDependencies()));
         }

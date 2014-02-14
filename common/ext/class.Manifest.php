@@ -259,11 +259,13 @@ class common_ext_Manifest
     			throw new common_ext_MalformedManifestException("The 'version' component is mandatory in manifest located at '{$this->getFilePath()}'.");
     		}
     		
-    		if (!empty($array['dependencies'])){
-    			$this->setDependencies($array['dependencies']);
+    		if (!empty($array['requires'])){
+    			$this->setDependencies($array['requires']);
+    		} elseif (!empty($array['dependencies'])){
+    			$this->setDependencies(array_fill_keys($array['dependencies'], '*'));
     		} elseif (!empty($array['dependances'])){
     			// legacy
-    			$this->setDependencies($array['dependances']);
+    			$this->setDependencies(array_fill_keys($array['dependances'], '*'));
     		} 
     		
     		if (!empty($array['models'])){

@@ -161,7 +161,7 @@ class common_ext_ExtensionsManager
     {
 		foreach($this->extensions as $extension) {
 			//handle dependances requirement
-			foreach ($extension->getManifest()->getDependencies() as $ext) {
+			foreach ($extension->getManifest()->getDependencies() as $ext => $version) {
 				if(!array_key_exists($ext, $this->extensions) && $ext != 'generis') {
 					throw new common_ext_ExtensionException('Required Extension is Missing : ' . $ext);
 				}

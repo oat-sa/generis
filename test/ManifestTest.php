@@ -70,7 +70,7 @@ class ManifestTest extends GenerisPhpUnitTestRunner {
 			$this->assertEquals($manifest->getDescription(), 'complex testing manifest');
 			$this->assertEquals($manifest->getVersion(), '1.0');
 			$this->assertEquals($manifest->getAuthor(), 'TAO Team');
-			$this->assertEquals($manifest->getDependencies(), array('taoItemBank', 'taoDocuments'));
+			$this->assertEquals(array_keys($manifest->getDependencies()), array('taoItemBank', 'taoDocuments'));
 			$this->assertEquals($manifest->getInstallModelFiles(), array('/extension/path/models/ontology/taofuncacl.rdf',
 																  		'/extension/path/models/ontology/taoitembank.rdf'));
 			$this->assertEquals($manifest->getConstants(), array('WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/', 'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php'));

@@ -85,7 +85,7 @@ class common_ext_ExtensionLoader
     	// we will load the constant file of the current extension and all it's dependancies
     	
     	// get the dependancies
-    	$extensions = $this->extension->getDependencies();
+    	$extensions = array_keys($this->extension->getDependencies());
     	
     	// merge them with the additional constants (defined in the options)
    		$extensions = array_merge($extensions, $extraConstants);

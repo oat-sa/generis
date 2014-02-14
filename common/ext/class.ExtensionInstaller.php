@@ -329,7 +329,7 @@ class common_ext_ExtensionInstaller
 		// section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A2 begin
 		$extensionManager = common_ext_ExtensionsManager::singleton();
 		$installedExtArray = $extensionManager->getInstalledExtensions();
-		foreach ($this->extension->getDependencies() as $requiredExt) {
+		foreach ($this->extension->getDependencies() as $requiredExt => $requiredVersion) {
 			if(!array_key_exists($requiredExt,$installedExtArray)){
 				throw new common_ext_MissingExtensionException('Extension '. $requiredExt . ' is needed by the extension to be installed but is missing.',
 															   $requiredExt);
