@@ -105,7 +105,7 @@ class core_kernel_persistence_hardapi_TableManager
 			$result = $dbWrapper->query('SELECT DISTINCT "table" FROM class_to_table');
 			while($row = $result->fetch()){
 				self::$_tables[] = $row['table'];
-				self::$_tables[] = $row['table'] . 'Props';
+				self::$_tables[] = $row['table'] . 'props';
 			}
 		}
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AA end
@@ -124,7 +124,6 @@ class core_kernel_persistence_hardapi_TableManager
         $returnValue = (bool) false;
 
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AD begin
-
 		$returnValue = in_array($this->name, self::$_tables);
 
         // section 127-0-1-1--5a63b0fb:12f72879be9:-8000:00000000000015AD end
@@ -154,50 +153,52 @@ class core_kernel_persistence_hardapi_TableManager
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
 			//build the query to create the main table
+			
 			$schema = new \Doctrine\DBAL\Schema\Schema() ;
-			$table = $schema->createTable($this->name);
+				
+			$table = $schema->createTable($dbWrapper->quoteIdentifier($this->name));
 			$table->addColumn("id", "integer",array("notnull" => true,"autoincrement" => true));
 			$table->setPrimaryKey(array("id"));
             $table->addColumn("uri", "string",array("length" => 255, "notnull" => true));
             $table->addOption('engine' , 'MyISAM');
 
-
 			
 			foreach($columns as $column){
 				if(isset($column['name'])){
 					if(!isset($column['multi'])){
-						$table->addColumn($column['name'], "text",array("notnull" => false));
+
+						$table->addColumn($dbWrapper->quoteIdentifier($column['name']), "text",array("notnull" => false));
 					}
 				}
 			}
 			// create table index
 			$table->addIndex(array("uri"),"idx_" . $this->name);
 			
-            
-			
-			
-			
-			$multiPro = $schema->createTable($this->name.'Props');
+    			
+			$multiPro = $schema->createTable($dbWrapper->quoteIdentifier($this->name.'props'));
 			$multiPro->addColumn("id", "integer",array("notnull" => true,"autoincrement" => true));
 			$multiPro->addColumn("property_uri", "string",array("length" => 255));
 			$multiPro->addColumn('property_value', "text",array("notnull" => false));
 			$multiPro->addColumn("property_foreign_uri", "string",array("length" => 255,"notnull" => false));
-			$multiPro->addColumn("l_language", "string",array("length" => 5,"notnull" => false));
+			$multiPro->addColumn("l_language", "string",array("length" => 10,"notnull" => false));
 			$multiPro->addColumn("instance_id", "integer",array("notnull" => true));
 			$multiPro->setPrimaryKey(array("id"));
 			$multiPro->addOption('engine' , 'MyISAM');
-			$multiPro->addIndex(array("l_language"),"idx_props_l_language");
+
+			
+			//$multiPro->addIndex(array("l_language"),"idx_props_l_language");
 			$multiPro->addIndex(array("property_uri"),"idx_props_property_uri");
 			$multiPro->addIndex(array("property_foreign_uri"),"idx_props_property_foreign_uri");
 			$multiPro->addIndex(array("instance_id"),"idx_props_instance_id");
 			
 			//$query = $schema->toSql();
 			
+           
             $query = $dbWrapper->getPlatform()->schemaToSql($schema);
-			
+            
 
 
-			self::$_tables[] = "{$this->name}Props";
+			self::$_tables[] = "{$this->name}props";
 			
 			// Create multiples properties table indexes
 			try{
@@ -205,10 +206,14 @@ class core_kernel_persistence_hardapi_TableManager
 			         $dbWrapper->exec($q);
 			    }
 			}
-			catch(PDOException $e){
+			catch(Exception $e){
 				if($e->getCode() != $dbWrapper->getIndexAlreadyExistsErrorCode() && $e->getCode() != '00000'){
 					//the user may not have the right to create the table index or it already exists.
 					throw new core_kernel_persistence_hardapi_Exception("Unable to create the multiples properties table indexes  {$this->name} : " .$e->getMessage());
+				}
+				else {
+				    common_Logger::i('index already exist ' . $e->getMessage());
+				    
 				}
 			}
 			
@@ -239,17 +244,18 @@ class core_kernel_persistence_hardapi_TableManager
 		if(!empty($name) && $this->exists()){
 			
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-
 			//remove the multi properties table
 			try{
-				$dbWrapper->exec('DROP TABLE "'.$name.'Props"');
-				$tblKey = array_search("{$name}Props", self::$_tables);
+			   
+				$dbWrapper->exec('DROP TABLE '. $dbWrapper->quoteIdentifier($name.'props'));
+				$tblKey = array_search("{$name}props", self::$_tables);
 				if($tblKey !== false){
 					unset(self::$_tables[$tblKey]);
 				}
-				
+
 				//remove the table
-				$result = $dbWrapper->exec('DROP TABLE "'.$name.'";');
+				$dbWrapper->exec('DROP TABLE '.$dbWrapper->quoteIdentifier($name));
+				
 				$tblKey = array_search($name, self::$_tables);
 				if($tblKey !== false){
 					unset(self::$_tables[$tblKey]);
@@ -258,6 +264,7 @@ class core_kernel_persistence_hardapi_TableManager
 				$returnValue = true;
 			}
 			catch (PDOException $e){
+			    common_Logger::e('sommething go wrong when removing table : ' . $name);
 				$returnValue = false;
 			}
 		}
@@ -330,8 +337,14 @@ class core_kernel_persistence_hardapi_TableManager
         if ($this->isBaseTable()){
         	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
         	$rawColumns = $dbWrapper->getColumnNames($name);
-        	$propertyColumns = array_diff(array_keys($rawColumns), array('id', 'uri'));
-        	
+        	$propertyColumns = array();
+        	foreach ($rawColumns as $col){
+        	    $colName = $col->getName();
+        	    if(!in_array($colName,array('id', 'uri'))){
+        	        $propertyColumns[] = $colName;
+        	    }
+        	}
+       	
         	foreach ($propertyColumns as $pC){
         		$longName = core_kernel_persistence_hardapi_Utils::getLongName($pC);
         		if (!empty($longName)){
@@ -363,7 +376,7 @@ class core_kernel_persistence_hardapi_TableManager
         // section 10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DE5 begin
         $name = $this->getName();
         if ($this->isBaseTable()){
-        	$propsTableName = $name . 'Props';
+        	$propsTableName = $name . 'props';
         	$tblmanager = new core_kernel_persistence_hardapi_TableManager($propsTableName);
         	if ($tblmanager->exists()){
         		$returnValue = $propsTableName;	
@@ -398,7 +411,7 @@ class core_kernel_persistence_hardapi_TableManager
         // section 10-13-1-85-60c76063:13b8f97825a:-8000:0000000000001DE9 begin
         $name = $this->getName();
         if ($this->isPropertiesTable()){
-        	$baseTableName = preg_replace("/Props$/i", '', $name);
+        	$baseTableName = preg_replace("/props$/i", '', $name);
         	$tblmgr = new core_kernel_persistence_hardapi_TableManager($baseTableName);
         	if ($tblmgr->exists()){
         		$returnValue = $baseTableName;	
@@ -559,8 +572,7 @@ class core_kernel_persistence_hardapi_TableManager
         			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
         			$actualSchema = $dbWrapper->getSchemaManager()->createSchema();
         			$newSchema = $dbWrapper->getSchemaManager()->addColumnToTable($actualSchema,$tblname, $dbWrapper->quoteIdentifier($column['name']));
-        			$sql = $dbWrapper->getPlatForm()->getMigrateSchemaSql($actualSchema,$newSchema);
-       			
+        			$sql = $dbWrapper->getPlatForm()->getMigrateSchemaSql($actualSchema,$newSchema); 
         			
         			try{
         				
@@ -597,9 +609,10 @@ class core_kernel_persistence_hardapi_TableManager
         $returnValue = (bool) false;
 
         // section 10-13-1-85--2619f144:13ba9352ee6:-8000:0000000000001E1E begin
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         if (!empty($name)){
         	$tblname = $this->getName();
-        	$sql = 'ALTER TABLE "' . $tblname . '" DROP COLUMN "' . $name . '"';
+        	$sql = 'ALTER TABLE "' . $tblname . '" DROP COLUMN ' . $dbWrapper->quoteIdentifier($name);
 
         	try{
         		$dbWrapper = core_kernel_classes_DbWrapper::singleton();

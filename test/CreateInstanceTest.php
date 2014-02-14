@@ -183,7 +183,7 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner {
 		
 		$switcher = new core_kernel_persistence_Switcher();
 		$switcher->hardify($this->class, array(
-			'topClass'		=> $this->class,
+			'topclass'		=> $this->class,
 		));
 		unset($switcher);
 		

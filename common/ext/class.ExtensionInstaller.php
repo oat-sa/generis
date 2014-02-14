@@ -229,7 +229,7 @@ class common_ext_ExtensionInstaller
 		
 		//add extension to db
 		$db = core_kernel_classes_DbWrapper::singleton();
-		$sql = "INSERT INTO extensions (id, name, version, loaded, \"loadAtStartUp\") VALUES ('".$this->extension->getId()."', '".$this->extension->getName()."', '".$this->extension->getVersion()."', 1, 1);";
+		$sql = "INSERT INTO extensions (id, name, version, loaded, \"loadatstartup\") VALUES ('".$this->extension->getId()."', '".$this->extension->getName()."', '".$this->extension->getVersion()."', 1, 1);";
 		$db->exec($sql);
 		
 		common_Logger::d($this->extension->getId() . ' registered', 'INSTALL');

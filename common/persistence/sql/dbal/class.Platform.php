@@ -27,6 +27,10 @@ class common_persistence_sql_dbal_Platform{
     private $dbalPlatform;
     
     
+    /**
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param unknown $dbalPlatform
+     */
     public function __construct($dbalPlatform){
         $this->dbalPlatform = $dbalPlatform;
     }
@@ -51,14 +55,27 @@ class common_persistence_sql_dbal_Platform{
     
     
     
+    /**
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param string $parameter
+     */
     public function quoteIdentifier($parameter){
         return $this->dbalPlatform->quoteIdentifier($parameter);
     }
     
+    /**
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param \Doctrine\DBAL\Schema\Schema $schema
+     */
     public function schemaToSql($schema){
         return $schema->toSql($this->dbalPlatform);
     }
     
+    /**
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param \Doctrine\DBAL\Schema\Schema $fromSchema
+     * @param \Doctrine\DBAL\Schema\Schema $toSchema
+     */
     public function getMigrateSchemaSql($fromSchema,$toSchema){
         return $fromSchema->getMigrateToSql($toSchema,$this->dbalPlatform);     
     }

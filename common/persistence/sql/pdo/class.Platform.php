@@ -58,17 +58,30 @@ class common_persistence_sql_pdo_Platform{
         return (string) $returnValue;
     }
 
+    /**
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param \Doctrine\DBAL\Schema\Schema $schema
+     */
     public function schemaToSql($schema){
         common_Logger::d('Legacy mode,  schema to sql use dbal');    
         return $schema->toSql($this->dbalPlatform);
     }
     
+    /**
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param \Doctrine\DBAL\Schema\Schema $fromSchema
+     * @param \Doctrine\DBAL\Schema\Schema $toSchema
+     */
     public function getMigrateSchemaSql($fromSchema,$toSchema){
         return $fromSchema->getMigrateToSql($toSchema,$this->dbalPlatform);
     }
     
+    /**
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param string $parameter
+     */
     public function quoteIdentifier($parameter){
-        return "${parameter}";
+        return $this->dbalPlatform->quoteIdentifier($parameter);
     }
     
 }

@@ -81,7 +81,8 @@ class core_kernel_impl_ApiModelOO
 			if(!preg_match("/\#$/", $namespace)){
 				$namespace .= "#";
 			}
-			$result = $dbWrapper->query('SELECT * FROM "models"  WHERE "modelURI" = ?', array(
+
+			$result = $dbWrapper->query('SELECT * FROM "models"  WHERE "modeluri" = ?', array(
 				$namespace
 			));
 			if ($row = $result->fetch(PDO::FETCH_ASSOC)){
@@ -91,7 +92,7 @@ class core_kernel_impl_ApiModelOO
 		}
 		
 		$allModels = array();
-		$result = $dbWrapper->query("SELECT * FROM `models`");
+		$result = $dbWrapper->query('SELECT * FROM "models"');
 		while($row = $result->fetch(PDO::FETCH_ASSOC)){
 			$allModels[] = $row;
 		}
@@ -108,19 +109,19 @@ class core_kernel_impl_ApiModelOO
 			if(count($models) == 1){
 				$currentNs['xml:base'] = $namespace;
 				$model = $models[0];
-				$currentNs["xmlns:ns{$model['modelID']}"] = $namespace;
+				$currentNs["xmlns:ns{$model['modelid']}"] = $namespace;
 			}
 			foreach($models as $i => $model){
-				if(!preg_match("/#$/", $model['modelURI'])){
-					$model['modelURI'] .= '#';
+				if(!preg_match("/#$/", $model['modeluri'])){
+					$model['modeluri'] .= '#';
 				}
-				$currentNs["xmlns:ns{$model['modelID']}"] = $model['modelURI'];
+				$currentNs["xmlns:ns{$model['modelid']}"] = $model['modeluri'];
 			}
 			$currentNs = array_merge($baseNs, $currentNs);
 			
 			$allNs = array();
 			foreach($allModels as $i => $model){
-				$allNs["xmlns:ns{$model['modelID']}"] = $model['modelURI'];
+				$allNs["xmlns:ns{$model['modelid']}"] = $model['modeluri'];
 			}
 			$allNs = array_merge($baseNs, $allNs);
 				
@@ -137,19 +138,20 @@ class core_kernel_impl_ApiModelOO
 					
 				foreach($models as $i => $model){
 					
-					$modelId = $model['modelID'];
-					$modelUri = $model['modelURI'];
+					$modelId = $model['modelid'];
+					$modelUri = $model['modeluri'];
 					
 					$subjects = array();
-					$result = $dbWrapper->query("SELECT DISTINCT `subject` FROM `statements` WHERE `modelID`=$modelId");
+					$result = $dbWrapper->query('SELECT DISTINCT "subject" FROM "statements" WHERE "modelid"='.$modelId);
+					
 					while($r = $result->fetch()){
 						$subjects[] = $r['subject'];
 					}
 					foreach($subjects as $subject){
 						$description = $dom->createElement('rdf:Description');
 						$description->setAttribute('rdf:about', $subject);
-						
-							$result = $dbWrapper->query("SELECT * FROM `statements` WHERE `subject`= '{$subject}'");
+							$result = $dbWrapper->query('SELECT * FROM "statements" WHERE "subject" = '. $dbWrapper->quote($subject));
+							
 							while($t = $result->fetch()){
 								
 								$predicate 	= trim($t['predicate']);
@@ -215,6 +217,7 @@ class core_kernel_impl_ApiModelOO
 				$returnValue = $dom->saveXml();
 			}
 			catch(Exception $e){
+			    common_Logger::e('Problem exporting models : ' . implode(',',$sourceNamespaces) . ' : ' . $e->getMessage());
 				print $e;
 			}
 		}
@@ -237,41 +240,18 @@ class core_kernel_impl_ApiModelOO
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C4 begin
-        
-        require_once(RDFAPI_INCLUDE_DIR . "RdfAPI.php");
+        if(!file_exists($fileLocation) || !is_readable($fileLocation)){
+            throw new common_Exception("Unable to load ontology : $fileLocation");
+        }
         $session = core_kernel_classes_Session::singleton();
         
 	    if(!preg_match("/#$/", $targetNameSpace)){
 			$targetNameSpace .= '#';
 		}
+		$modFactory = new core_kernel_api_ModelFactory();
+		$returnValue = $modFactory->createModel($targetNameSpace, file_get_contents($fileLocation));
+		
 
-		// Init RDF API for PHP
-		$modFactory = new ModelFactory();
-		$memModel 	= $modFactory->getMemModel();
-		$dbModel	= $modFactory->getDefaultDbModel($targetNameSpace);
-		
-		// Load and parse document
-		$memModel->load($fileLocation);
-		
-		$added = 0;
-		
-		$it = $memModel->getStatementIterator();
-		$size = $memModel->size();
-		while ($it->hasNext()) {
-			$statement = $it->next();
-			if($dbModel->add($statement, $session->getUserUri()) === true){
-				$added++;
-			}
-		}
-		
-		error_reporting(E_ALL);
-		
-        if($size > 0 && $added > 0){
-			$returnValue = true;
-        }
-		
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C4 end
 
         return (bool) $returnValue;
     }
@@ -303,13 +283,13 @@ class core_kernel_impl_ApiModelOO
 						'xmlns:rdfs'	=> 'http://www.w3.org/2000/01/rdf-schema#'
 					);
 		
-		$query = 'SELECT "models"."modelID", "models"."modelURI" FROM "models" INNER JOIN "statements" ON "statements"."modelID" = "models"."modelID"
+		$query = 'SELECT "models"."modelid", "models"."modeluri" FROM "models" INNER JOIN "statements" ON "statements"."modelid" = "models"."modelid"
 											WHERE "statements"."subject" = ' . $subject;
 		$query = $dbWrapper->limitStatement($query, 1);
 		$result = $dbWrapper->query($query);
 		if($row = $result->fetch()){
-			$modelId  = $row['modelID'];
-			$modelUri =  $row['modelURI'];
+			$modelId  = $row['modelid'];
+			$modelUri =  $row['modeluri'];
 			if(!preg_match("/#$/", $modelUri)){
 				$modelUri .= '#';
 			}
@@ -328,10 +308,10 @@ class core_kernel_impl_ApiModelOO
 		
 		$allNs = array();
 		foreach($allModels as $i => $model){
-			if(!preg_match("/#$/", $model['modelURI'])){
-				$model['modelURI'] .= '#';
+			if(!preg_match("/#$/", $model['modeluri'])){
+				$model['modeluri'] .= '#';
 			}
-			$allNs["xmlns:ns{$model['modelID']}"] = $model['modelURI'];
+			$allNs["xmlns:ns{$model['modelid']}"] = $model['modeluri'];
 		}
 		$allNs = array_merge($baseNs, $allNs);
 				
@@ -501,7 +481,7 @@ class core_kernel_impl_ApiModelOO
         $session 	= core_kernel_classes_Session::singleton();
         $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
         $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
-        $query = 'INSERT INTO "statements" ("modelID","subject","predicate","object","l_language","author","stread","stedit","stdelete","epoch")
+        $query = 'INSERT INTO "statements" ("modelid","subject","predicate","object","l_language","author","stread","stedit","stdelete","epoch")
         			VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP);';
 
         try{

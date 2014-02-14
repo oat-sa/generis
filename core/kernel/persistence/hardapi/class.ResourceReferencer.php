@@ -284,7 +284,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         
     	if(is_null(self::$_classes) || $force){
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-			$result = $dbWrapper->query('SELECT "id", "uri", "table", "topClass" FROM "class_to_table"');
+			$result = $dbWrapper->query('SELECT "id", "uri", "table", "topclass" FROM "class_to_table"');
 
 			self::$_classes = array();
 			while ($row = $result->fetch()) {
@@ -292,7 +292,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 	        		'id'	=> $row['id'],
 	        		'uri' 	=> $row['uri'],
 	        		'table' => $row['table'],
-	        		'topClass' => $row['topClass']
+	        		'topclass' => $row['topclass']
 	        	);
 	        }
 	}
@@ -389,18 +389,18 @@ class core_kernel_persistence_hardapi_ResourceReferencer
         
         // Get optional parameters
         $table = isset($options['table']) ? $options['table'] : '_'.core_kernel_persistence_hardapi_Utils::getShortName($class);
-        $topClass = isset($options['topClass']) ? $options['topClass'] : new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
+        $topclass = isset($options['topclass']) ? $options['topclass'] : new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
         $additionalProperties = isset($options['additionalProperties']) ? $options['additionalProperties'] : array ();
         $classId = null;
         
         // Is the class is not already referenced
         if(!$this->isClassReferenced($class, $table)){
         	
-        	$topClassUri = $topClass->getUri();
+        	$topclassUri = $topclass->getUri();
 			$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			
-			$query = 'INSERT INTO "class_to_table" ("uri", "table", "topClass") VALUES (?,?,?)';
-			$result = $dbWrapper->exec($query,array($class->getUri(), $table, $topClassUri));
+			$query = 'INSERT INTO "class_to_table" ("uri", "table", "topclass") VALUES (?,?,?)';
+			$result = $dbWrapper->exec($query,array($class->getUri(), $table, $topclassUri));
 
 			
 			// Get last inserted id
@@ -430,7 +430,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 					
 					$returnValue = true;
 					if($this->cacheModes['class'] == self::CACHE_MEMORY && !is_null(self::$_classes)){
-						$memQuery = 'SELECT "id", "uri", "table", "topClass" 
+						$memQuery = 'SELECT "id", "uri", "table", "topclass" 
 							FROM "class_to_table" 
 							WHERE "uri" = ? 
 							AND "table" = ?';
@@ -440,7 +440,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				        		'id'		=> $row['id'],
 				        		'uri' 		=> $row['uri'],
 				        		'table' 	=> $row['table'],
-								'topClass' 	=> $row['topClass']
+								'topclass' 	=> $row['topclass']
 				        	);
 						}
 					}
@@ -554,7 +554,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 				case self::CACHE_NONE:
 			        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
 			        
-			        $query = "SELECT id, uri, table, topClass FROM class_to_table WHERE uri=? ";
+			        $query = "SELECT id, uri, table, topclass FROM class_to_table WHERE uri=? ";
 			    	$result = $dbWrapper->query($query, array ($class->getUri()));
 
 					while($row = $result->fetch()){
@@ -562,7 +562,7 @@ class core_kernel_persistence_hardapi_ResourceReferencer
 							'id'	=> $row['id'],
 			        		'uri' 	=> $row['uri'],
 			        		'table' => $row['table'],
-			        		'topClass' => $row['topClass']
+			        		'topclass' => $row['topclass']
 						);
 					}
 			        break;
@@ -881,20 +881,20 @@ class core_kernel_persistence_hardapi_ResourceReferencer
     					 
     					$classUri = core_kernel_persistence_hardapi_Utils::getLongName($table);
     					$class = new core_kernel_classes_Class($classUri);
-    					$topClassUri = self::$_classes[$classUri]['topClass'];
-    					$topClass = new core_kernel_classes_Class($topClassUri);
-    					$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topClass);
+    					$topclassUri = self::$_classes[$classUri]['topclass'];
+    					$topclass = new core_kernel_classes_Class($topclassUri);
+    					$ps = new core_kernel_persistence_switcher_PropertySwitcher($class, $topclass);
     					$properties = $ps->getProperties($additionalProperties);
     					foreach ($properties as $property){
     						$propertyUri = $property->getUri();
     						if ($property->isMultiple() || $property->isLgDependent()){
     							
     							if(isset(self::$_properties[$propertyUri])) {
-    								if (!in_array("{$table}Props", self::$_properties[$propertyUri])){
-    									self::$_properties[$propertyUri][] = "{$table}Props";
+    								if (!in_array("{$table}props", self::$_properties[$propertyUri])){
+    									self::$_properties[$propertyUri][] = "{$table}props";
     								}
     							} else {
-    								self::$_properties[$propertyUri] = array("{$table}Props");
+    								self::$_properties[$propertyUri] = array("{$table}props");
     							}
     				
     						} else {

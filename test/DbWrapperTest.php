@@ -40,10 +40,10 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner {
                 CREATE TABLE "dbTestCase" (
                     "id" INT,
                     "uri" VARCHAR(255) NOT NULL,
-                    "column1"VARCHAR(255) )'
+                    "coluMn1" VARCHAR(255) )'
         );
         for($i = 0;$i<4;$i++){
-            $dbWrapper->exec('INSERT INTO  "dbTestCase" (id,uri,column1) VALUES (?,?,?) ;',array($i,'http://uri'.$i,'value'.$i));
+            $dbWrapper->exec('INSERT INTO  "dbTestCase" (id,uri,"coluMn1") VALUES (?,?,?) ;',array($i,'http://uri'.$i,'value'.$i));
         }
 	}
 
@@ -53,7 +53,7 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner {
 		$rowCount = $dbWrapper->getRowCount('dbTestCase');
 		$this->assertTrue(is_int($rowCount));
 		$this->assertTrue($rowCount == 4);
-        $dbWrapper->exec('INSERT INTO "dbTestCase" (id,uri,column1) VALUES (?,?,?) ;',array('12','http://uri','value'));
+        $dbWrapper->exec('INSERT INTO "dbTestCase" (id,uri,"coluMn1") VALUES (?,?,?) ;',array('12','http://uri','value'));
         $rowCount = $dbWrapper->getRowCount('dbTestCase');
         $this->assertTrue(is_int($rowCount));
         $this->assertTrue($rowCount == 5);
@@ -63,10 +63,10 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner {
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$columns = $dbWrapper->getColumnNames('dbTestCase');
         $this->assertEquals(count($columns),3);
-        $possibleValues = array('id','uri','column1');
+        $possibleValues = array('id','uri','coluMn1');
         foreach ($columns as $col){
             if($col instanceof Doctrine\DBAL\Schema\Column){          
-                $this->assertTrue(in_array($col->getName(),$possibleValues));
+                $this->assertTrue(in_array($col->getName(),$possibleValues),$col->getName() . ' is not a correct value');
             }
             else {
                 //legacy mode
@@ -111,7 +111,7 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner {
             $this->assertTrue(is_array($value));
             $this->assertTrue($value['id'] == $i);
             $this->assertTrue($value['uri'] == 'http://uri'.$i);
-            $this->assertTrue($value['column1'] == 'value'.$i);
+            $this->assertTrue($value['coluMn1'] == 'value'.$i);
         }
 
 
@@ -124,13 +124,11 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner {
         $dbWrapper->getSchemaManager();
         
         $schema = new \Doctrine\DBAL\Schema\Schema();
-        $table = $schema->createTable('dbTestCase2');
+        $table = $schema->createTable('dbtestcase2');
         $table->addColumn("id", "integer",array("notnull" => true,"autoincrement" => true));
         $table->setPrimaryKey(array("id"));
         $table->addColumn("uri", "string",array("length" => 255, "notnull" => true));
         $table->addColumn("content", "text",array("notnull" => false));
-        
-        
         
         
         $sql = $dbWrapper->getPlatform()->schemaToSql($schema);
@@ -141,7 +139,13 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner {
         }
         $dbWrapper->createIndex('idx_content', $table->getName(), array("content" => 255));
 
-        $dbWrapper->exec('DROP TABLE "dbTestCase2";');
+        $indexes = $dbWrapper->getSchemaManager()->getTableIndexes('dbtestcase2');
+        foreach($indexes as $index){
+            $this->assertTrue(in_array($index->getName(),array('idx_content','dbtestcase2_pkey','PRIMARY')),$index->getName() . 'is missing');
+            
+        }
+        
+        $dbWrapper->exec('DROP TABLE dbtestcase2');
     }
     
     protected function tearDown(){

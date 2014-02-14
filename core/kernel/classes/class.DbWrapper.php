@@ -217,8 +217,14 @@ class core_kernel_classes_DbWrapper
         return (int) $returnValue;
     }
     
+    /**
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param string $tableName
+     * @param array $data
+     */
     public function insert($tableName, array $data){
         return $this->persistence->insert($tableName,$data);
+        
     }
 
 
@@ -314,7 +320,6 @@ class core_kernel_classes_DbWrapper
      */
     protected function getStatement($statement)
     {
-        common_Logger::w(__FUNCTION__ . 'looking for call stack');
         $key = $this->getStatementKey($statement);
     	$sth = null;
     	
@@ -436,19 +441,6 @@ class core_kernel_classes_DbWrapper
     }
 
 
-    /**
-     * Returns the error code corresponding to a column not found in a query
-     * on a given DBMS implementation.
-     *
-     * @abstract
-     * @access public
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return string
-     */
-    public function getColumnNotFoundErrorCode(){
-
-       return $this->persistence->getSchemaManager()->getColumnNotFoundErrorCode();
-    }
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"

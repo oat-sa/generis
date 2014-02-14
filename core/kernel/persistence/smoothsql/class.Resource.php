@@ -156,7 +156,7 @@ class core_kernel_persistence_smoothsql_Resource
 		    		WHERE "subject" = ? 
 		    		AND "predicate" = ?
 					AND ( "l_language" = ? OR "l_language" = \'\' '.$defaultLg.')
-		    		AND "modelID" IN ('.$modelIds.')';
+		    		AND "modelid" IN ('.$modelIds.')';
         
     	// Select first
 		if($one){
@@ -315,7 +315,7 @@ class core_kernel_persistence_smoothsql_Resource
         	}
         }
         
-        $query = 'INSERT INTO statements ("modelID", "subject", "predicate", "object", "l_language", "author", "stread", "stedit", "stdelete", "epoch")
+        $query = 'INSERT INTO statements ("modelid", "subject", "predicate", "object", "l_language", "author", "stread", "stedit", "stdelete", "epoch")
         			VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP);';
 
         $returnValue = $dbWrapper->exec($query, array(
@@ -361,7 +361,7 @@ class core_kernel_persistence_smoothsql_Resource
 	        	$mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
 	        	$user		= $session->getUserUri();
 	       		
-	       		$query = 'INSERT INTO "statements" ("modelID","subject","predicate","object","l_language","author","stread","stedit","stdelete","epoch") VALUES ';
+	       		$query = 'INSERT INTO "statements" ("modelid","subject","predicate","object","l_language","author","stread","stedit","stdelete","epoch") VALUES ';
 	       		
 	       		foreach($properties as $propertyUri => $value){
 	       			$property = new core_kernel_classes_Property($propertyUri);
@@ -420,7 +420,7 @@ class core_kernel_persistence_smoothsql_Resource
         $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
         $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
         
-        $query = 'INSERT INTO "statements" ("modelID","subject","predicate","object","l_language","author","stread","stedit","stdelete","epoch")
+        $query = 'INSERT INTO "statements" ("modelid","subject","predicate","object","l_language","author","stread","stedit","stdelete","epoch")
         			VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP);';
 
         $returnValue = $dbWrapper->exec($query, array(
@@ -491,7 +491,7 @@ class core_kernel_persistence_smoothsql_Resource
         
 		//be sure the property we try to remove is included in an updatable model
     	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
-		$query .= ' AND "modelID" IN ('.$modelIds.')';
+		$query .= ' AND "modelid" IN ('.$modelIds.')';
 		
         if($property->isLgDependent()){
         	
@@ -541,7 +541,7 @@ class core_kernel_persistence_smoothsql_Resource
         $sqlQuery = 'DELETE FROM "statements" WHERE "subject" = ? and "predicate" = ? and "l_language" = ?';
         //be sure the property we try to remove is included in an updatable model
     	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
-		$sqlQuery .= ' AND "modelID" IN ('.$modelIds.')';
+		$sqlQuery .= ' AND "modelid" IN ('.$modelIds.')';
         
         $returnValue = $dbWrapper->exec($sqlQuery, array (
         	$resource->getUri(),
@@ -577,7 +577,7 @@ class core_kernel_persistence_smoothsql_Resource
 	     $namespaces = common_ext_NamespaceManager::singleton()->getAllNamespaces();
 	     $namespace = $namespaces[substr($resource->getUri(), 0, strpos($resource->getUri(), '#') + 1)];
 	
-	     $query = 'SELECT * FROM "statements" WHERE "subject" = ? AND "modelID" = ? ORDER BY "predicate"';
+	     $query = 'SELECT * FROM "statements" WHERE "subject" = ? AND "modelid" = ? ORDER BY "predicate"';
 	     $result = $dbWrapper->query($query, array(
 	    	 $resource->getUri(),
 	     	$namespace->getModelId()
@@ -586,7 +586,7 @@ class core_kernel_persistence_smoothsql_Resource
 	     $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
 	     while($statement = $result->fetch()){
 	     	$triple = new core_kernel_classes_Triple();
-	     	$triple->modelID = $statement["modelID"];
+	     	$triple->modelid = $statement["modelid"];
 	     	$triple->subject = $statement["subject"];
 	     	$triple->predicate = $statement["predicate"];
 	     	$triple->object = $statement["object"];
@@ -660,7 +660,7 @@ class core_kernel_persistence_smoothsql_Resource
 	       	$modelId = $localNs->getModelId();
     		$user = $session->getUserUri();
     		
-	    	$insert = 'INSERT INTO "statements" ("modelID", "subject", "predicate", "object", "l_language", "author", "stread", "stedit", "stdelete") VALUES ';
+	    	$insert = 'INSERT INTO "statements" ("modelid", "subject", "predicate", "object", "l_language", "author", "stread", "stedit", "stdelete") VALUES ';
     		foreach($collection->getIterator() as $triple){
     			if(!in_array($triple->predicate, $excludedProperties)){
 	    			$insert .= "({$modelId}, '$newUri', '{$triple->predicate}', " . $dbWrapper->quote($triple->object) . ",  '{$triple->lg}', '{$user}', '{$triple->readPrivileges}', '{$triple->editPrivileges}', '{$triple->deletePrivileges}'),"; 
@@ -697,7 +697,7 @@ class core_kernel_persistence_smoothsql_Resource
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
     	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
-		$query = 'DELETE FROM "statements" WHERE "subject" = ? AND "modelID" IN ('.$modelIds.')';
+		$query = 'DELETE FROM "statements" WHERE "subject" = ? AND "modelid" IN ('.$modelIds.')';
         $returnValue = $dbWrapper->exec($query, array($resource->getUri()));
 
         //if no rows affected return false
@@ -705,7 +705,7 @@ class core_kernel_persistence_smoothsql_Resource
         	$returnValue = false;
         } 
         else if($deleteReference){
-        	$sqlQuery = 'DELETE FROM "statements" WHERE "object" = ? AND "modelID" IN ('.$modelIds.')';
+        	$sqlQuery = 'DELETE FROM "statements" WHERE "object" = ? AND "modelid" IN ('.$modelIds.')';
         	$return = $dbWrapper->exec($sqlQuery, array ($resource->getUri()));
         	
         	if ($return !== false){
@@ -763,7 +763,7 @@ class core_kernel_persistence_smoothsql_Resource
                 AND ("l_language" = \'\' 
                     OR "l_language" = \''.DEFAULT_LANG.'\' 
                     OR "l_language" = \''.$session->getDataLanguage().'\') 
-                AND "modelID" IN ('.$modelIds.')';
+                AND "modelid" IN ('.$modelIds.')';
         
         $result	= $dbWrapper->query($query);
         
@@ -826,7 +826,7 @@ class core_kernel_persistence_smoothsql_Resource
         
         //be sure the property we try to remove is included in an updatable model
     	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
-		$query .= ' AND "modelID" IN ('.$modelIds.')';
+		$query .= ' AND "modelid" IN ('.$modelIds.')';
         
         $returnValue = $dbWrapper->exec($query,array(
         	$resource->getUri(),

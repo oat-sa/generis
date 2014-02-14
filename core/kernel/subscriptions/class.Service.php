@@ -114,22 +114,22 @@ class core_kernel_subscriptions_Service
 	 * @access public
 	 * @author firstname and lastname of author, <author@example.org>
 	 * @param  Resource subscription
-	 * @param  Class topClass
+	 * @param  Class topclass
 	 * @return array
 	 */
-	public function getInstancesFromSubscription( core_kernel_classes_Resource $subscription,  core_kernel_classes_Class $topClass)
+	public function getInstancesFromSubscription( core_kernel_classes_Resource $subscription,  core_kernel_classes_Class $topclass)
 	{
 		$returnValue = array();
 
 		// section 127-0-1-1--5f676de6:12cea59c091:-8000:000000000000141B begin
-		$topClassArray = isset($this->subscriptionArray[$subscription->getUri()]['object']) ? $this->subscriptionArray[$subscription->getUri()]['object']  : null;
+		$topclassArray = isset($this->subscriptionArray[$subscription->getUri()]['object']) ? $this->subscriptionArray[$subscription->getUri()]['object']  : null;
 
-		if($topClassArray != null && in_array($topClass->getUri(),$topClassArray)){
+		if($topclassArray != null && in_array($topclass->getUri(),$topclassArray)){
 
 			$mask = $subscription->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_SUBCRIPTION_MASK));
 			$subscriptionUrl = $subscription->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_SUBCRIPTION_URL));
 				
-			$url = $subscriptionUrl . 'RestClass/instances?clazz=' .  urlencode($topClass->getUri());
+			$url = $subscriptionUrl . 'RestClass/instances?clazz=' .  urlencode($topclass->getUri());
 			$fileContent = file_get_contents($url);
 			$xml = new DOMDocument('1.0', 'UTF-8');
 			$xml->loadXML($fileContent);

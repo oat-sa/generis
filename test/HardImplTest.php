@@ -84,6 +84,8 @@ class HardImplTest extends GenerisPhpUnitTestRunner {
 	 */
 	protected $targetRelatedMoviesProperty = null;
 	
+	
+	
 	protected function tearDown(){
 		$this->clean();
 	}
@@ -144,6 +146,9 @@ class HardImplTest extends GenerisPhpUnitTestRunner {
 		$this->targetRelatedMoviesProperty = $this->targetMovieClass->createProperty('Related Movies', 'Movies related to the movie.');
 		$this->targetRelatedMoviesProperty->setRange($this->targetMovieClass);
 		$this->targetRelatedMoviesProperty->setMultiple(true);
+		
+		//$this->generisUser = core_kernel_users_Service::singleton()->addUser('testCaseUser','testCasepass');
+		
 	}
 	
 	private function hardify (){
@@ -155,6 +160,23 @@ class HardImplTest extends GenerisPhpUnitTestRunner {
 		$switcher->hardify($this->targetWorkClass, array(
 			'recursive' => true,
 		));
+		
+		
+	
+	}
+	
+	
+	public function testCreateIndex(){
+	    $this->hardify();
+	    core_kernel_persistence_Switcher::createIndex(array($this->targetAuthorProperty->getUri()));
+	    $sm = core_kernel_classes_DbWrapper::singleton()->getSchemaManager();
+	    $shortName = core_kernel_persistence_hardapi_Utils::getShortName($this->targetWorkClass);
+	    $indexes = $sm->getTableIndexes('_'.$shortName);
+	    
+	    $this->assertFalse(empty($indexes));
+        $indexToFind = 'idx__'.$shortName.'_'.core_kernel_persistence_hardapi_Utils::getShortName($this->targetAuthorProperty); 
+        $this->assertTrue(array_key_exists($indexToFind,$indexes));
+
 	}
 	
 	public function testHardSwitchOK(){
@@ -203,6 +225,7 @@ class HardImplTest extends GenerisPhpUnitTestRunner {
 		    $this->targetSongClass->delete(true);
 		}
 
+		
 		//$this->assertFalse($referencer->isClassReferenced($this->targetWorkClass));
 		//$this->assertFalse($referencer->isClassReferenced($this->targetMovieClass));
 		//$this->assertFalse($referencer->isClassReferenced($this->targetSongClass));
@@ -268,6 +291,24 @@ class HardImplTest extends GenerisPhpUnitTestRunner {
 		$this->assertEquals(count($this->targetSubjectClass->getInstances(true)), 2);
 		$this->assertEquals(count($this->targetWorkClass->getInstances(true)), 0);
 		$this->assertEquals(count($this->targetMovieClass->getInstances()), 0);
+		
+		$userClass = new core_kernel_classes_Class(CLASS_GENERIS_USER);
+		$users = $userClass->getInstances();
+		$this->assertEquals(count($users), 1);
+		$user = $userClass->createInstance('toto','toto');
+		
+		$switcher = new core_kernel_persistence_Switcher();
+		$switcher->hardify($userClass, array(
+		    'recursive'	=> false,
+		));
+		$users = $userClass->getInstances();
+		$this->assertEquals(count($users), 2);
+		
+		
+		$switcher->unhardify($userClass, array(
+		    'recursive'	=> false,
+		));
+		$this->assertTrue($user->delete());
 	}
 	
 	
@@ -608,7 +649,11 @@ class HardImplTest extends GenerisPhpUnitTestRunner {
 			$testPropertyLocations = $referencer->propertyLocation($testProperty);
 			$movieClassLocations = $referencer->classLocations($movieClass);
 			$movieClassTable = $movieClassLocations[0]['table'];
-			$movieClassTableColumns = $dbWrapper->getColumnNames($movieClassTable);
+			$movieClassTableColumns = array();
+			foreach ($dbWrapper->getColumnNames($movieClassTable) as $col){
+			    $movieClassTableColumns[]=$col->getName();
+			}
+			
 			$workClassLocations = $referencer->classLocations($workClass);
 			$workClassTable = $movieClassLocations[0]['table'];
 			$workClassTableColumns = $dbWrapper->getColumnNames($workClassTable);
@@ -617,14 +662,17 @@ class HardImplTest extends GenerisPhpUnitTestRunner {
 			
 			// test delegation and presence of the column.
 			$this->assertFalse($testProperty->isMultiple());
-			$this->assertTrue(in_array($testPropertyShortName, array_keys($movieClassTableColumns)));
+			$this->assertTrue(in_array($testPropertyShortName, $movieClassTableColumns));
 			$this->assertIsA($propertyProxy->getImpToDelegateTo($testProperty), 'core_kernel_persistence_hardsql_Property');
 	
 			// set language dependency of the test property to true.
 			$testProperty->setLgDependent(true);
 			$this->assertTrue($testProperty->isLgDependent());
-			$movieClassTableColumns = $dbWrapper->getColumnNames($movieClassTable);
-			$this->assertFalse(in_array($testPropertyShortName, array_keys($movieClassTableColumns)));
+		    $movieClassTableColumns = array();
+			foreach ($dbWrapper->getColumnNames($movieClassTable) as $col){
+			    $movieClassTableColumns[]=$col->getName();
+			}
+			$this->assertFalse(in_array($testPropertyShortName, $movieClassTableColumns));
 			
 			// create some property values for the test property.
 			$testMovie = $movieClass->createInstance('A Test Movie');
@@ -641,18 +689,24 @@ class HardImplTest extends GenerisPhpUnitTestRunner {
 			// set back the language dependency of the test property to false.
 			$testProperty->setLgDependent(false);
 			$this->assertFalse($testProperty->isLgDependent());
-			$movieClassTableColumns = $dbWrapper->getColumnNames($movieClassTable);
-			$this->assertTrue(in_array($testPropertyShortName, array_keys($movieClassTableColumns)));
+		    $movieClassTableColumns = array();
+			foreach ($dbWrapper->getColumnNames($movieClassTable) as $col){
+			    $movieClassTableColumns[]=$col->getName();
+			}
+			$this->assertTrue(in_array($testPropertyShortName, $movieClassTableColumns));
 			$testPropertyValues = $testMovie->getPropertyValues($testProperty);
 			$this->assertEquals(count($testPropertyValues), 1);
 			
 			// set the author property to multiple.
-			$this->assertTrue(in_array($authorPropertyShortName, array_keys($movieClassTableColumns)));
+			$this->assertTrue(in_array($authorPropertyShortName, $movieClassTableColumns));
 			$this->assertFalse($authorProperty->isMultiple());
 			$authorProperty->setMultiple(true);
 			$this->assertTrue($authorProperty->isMultiple());
-			$movieClassTableColumns = $dbWrapper->getColumnNames($movieClassTable);
-			$this->assertFalse(in_array($authorPropertyShortName, array_keys($movieClassTableColumns)));
+		    $movieClassTableColumns = array();
+			foreach ($dbWrapper->getColumnNames($movieClassTable) as $col){
+			    $movieClassTableColumns[]=$col->getName();
+			}
+			$this->assertFalse(in_array($authorPropertyShortName, $movieClassTableColumns));
 			// Add a fake value to make it multi valued
 			$theHobbit->setPropertyValue($authorProperty, 'The Clone of Peter Jackson');
 			
@@ -667,8 +721,11 @@ class HardImplTest extends GenerisPhpUnitTestRunner {
 			// reset the author property to scalar.
 			$authorProperty->setMultiple(false);
 			$this->assertFalse($authorProperty->isMultiple());
-			$movieClassTableColumns = $dbWrapper->getColumnNames($movieClassTable);
-			$this->assertTrue(in_array($authorPropertyShortName, array_keys($movieClassTableColumns)));
+		    $movieClassTableColumns = array();
+			foreach ($dbWrapper->getColumnNames($movieClassTable) as $col){
+			    $movieClassTableColumns[]=$col->getName();
+			}
+			$this->assertTrue(in_array($authorPropertyShortName, $movieClassTableColumns));
 			$authors = $theHobbit->getPropertyValues($authorProperty);
 			$this->assertEquals(count($authors), 1);
 			$this->assertEquals(current($authors), 'Peter Jackson');

@@ -158,7 +158,7 @@ class common_ext_Extension
 
         if(is_null($this->dbConfig)) {
         	$db = core_kernel_classes_DbWrapper::singleton();
-			$query = "SELECT loaded,\"loadAtStartUp\",ghost FROM extensions WHERE id = ?";
+			$query = "SELECT loaded,\"loadatstartup\",ghost FROM extensions WHERE id = ?";
 
 			$result = $db->query($query,array($this->id));
 			if ($row = $result->fetch()){

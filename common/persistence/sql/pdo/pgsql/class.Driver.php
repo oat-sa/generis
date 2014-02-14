@@ -132,7 +132,9 @@ class common_persistence_sql_pdo_pgsql_Driver
 
 
 
-
+    public function lastInsertId($name = null){
+        return parent::lastInsertId($name.'_id_seq');
+    }
 
 
 

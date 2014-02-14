@@ -65,6 +65,7 @@ class HardApiTest extends GenerisPhpUnitTestRunner {
 		$this->assertFalse($myTblMgr->exists());
 	}
 	
+	
 	/**
 	 * test the creation of a complex table with the TableManager
 	 * @see core_kernel_persistence_hardapi_TableManager
@@ -92,6 +93,8 @@ class HardApiTest extends GenerisPhpUnitTestRunner {
 		
 		$this->assertTrue($myRoleTblMgr->remove());
 		$this->assertFalse($myRoleTblMgr->exists());
+		
+		
 	}
 	
 	public function testFailures(){
@@ -245,5 +248,7 @@ class HardApiTest extends GenerisPhpUnitTestRunner {
 		$cache->remove($serial);
 		$this->assertFalse($cache->has($serial));
 	}
+	
+
 }
 ?>

@@ -103,11 +103,11 @@ class common_ext_NamespaceManager
         
         if(count($this->namespaces) == 0){
         	$db = core_kernel_classes_DbWrapper::singleton();
-        	$query = 'SELECT "modelID", "modelURI" FROM "models"';
+        	$query = 'SELECT "modelid", "modeluri" FROM "models"';
 			$result = $db->query($query);
 			while ($row = $result->fetch()){
-				$id 	= $row['modelID'];
-				$uri 	= $row['modelURI'];
+				$id 	= $row['modelid'];
+				$uri 	= $row['modeluri'];
 				$this->namespaces[$id] = $uri;
 			}
         }
@@ -156,10 +156,10 @@ class common_ext_NamespaceManager
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  modelID
+     * @param  modelid
      * @return common_ext_Namespace
      */
-    public function getNamespace($modelID)
+    public function getNamespace($modelid)
     {
         $returnValue = null;
 
@@ -170,14 +170,14 @@ class common_ext_NamespaceManager
        	}
         
         //get modelId from modelUri
-        if(is_string($modelID)){
-        	$modelID = array_search($modelID, $this->namespaces);
+        if(is_string($modelid)){
+        	$modelid = array_search($modelid, $this->namespaces);
         }
         
     	//get namespace from modelId
-    	if(is_int($modelID)){
-        	if(isset($this->namespaces[$modelID])){
-        		$returnValue = new common_ext_Namespace($modelID, $this->namespaces[$modelID]);
+    	if(is_int($modelid)){
+        	if(isset($this->namespaces[$modelid])){
+        		$returnValue = new common_ext_Namespace($modelid, $this->namespaces[$modelid]);
         	}
         }
         

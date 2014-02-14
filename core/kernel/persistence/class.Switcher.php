@@ -131,12 +131,12 @@ class core_kernel_persistence_Switcher
 
 		//if defined, we take all the properties of the class and it's parents till the topclass
 		$classLocations = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->classLocations($class);
-		$topClass = null;
+		$topclass = null;
 		if (count($classLocations)>1){
 			throw new core_kernel_persistence_hardapi_Exception("Try to unhardify the class {$class->getUri()} which has multiple locations");
 		}
 		else {
-			$topClass = new core_kernel_classes_Class($classLocations[0]['topClass']);
+			$topclass = new core_kernel_classes_Class($classLocations[0]['topclass']);
 		}
 
 		//recursive will unhardify the class and it's subclasses in the same table!
@@ -207,13 +207,13 @@ class core_kernel_persistence_Switcher
 					if (isset($column['multi']) && $column['multi']) {
 
 						$sqlQuery = 'SELECT
-								"'.$tableName.'Props"."property_value",
-								"'.$tableName.'Props"."property_foreign_uri", 
-								"'.$tableName.'Props"."l_language" 
-							FROM "'.$tableName.'Props"
-							LEFT JOIN "'.$tableName.'" ON "'.$tableName.'"."id" = "'.$tableName.'Props"."instance_id"
+								"'.$tableName.'props"."property_value",
+								"'.$tableName.'props"."property_foreign_uri", 
+								"'.$tableName.'props"."l_language" 
+							FROM "'.$tableName.'props"
+							LEFT JOIN "'.$tableName.'" ON "'.$tableName.'"."id" = "'.$tableName.'props"."instance_id"
 							WHERE "'.$tableName.'"."uri" = ? 
-								AND "'.$tableName.'Props"."property_uri" = ?';
+								AND "'.$tableName.'props"."property_uri" = ?';
 						$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 						$sqlResult = $dbWrapper->query($sqlQuery, array(
 						$instance->getUri(),
@@ -357,7 +357,7 @@ class core_kernel_persistence_Switcher
 			(isset($options['rmSources'])) ? $rmSources = (bool) $options['rmSources'] : $rmSources = false;
 			
 			//if defined, we took all the properties of the class and it's parents till the topclass
-			(isset($options['topClass'])) ? $topClass = $options['topClass'] : $topClass = new core_kernel_classes_Class(RDFS_RESOURCE);
+			(isset($options['topclass'])) ? $topclass = $options['topclass'] : $topclass = new core_kernel_classes_Class(RDFS_RESOURCE);
 			
 			//if defined, compile the additional properties
 			(isset($options['additionalProperties'])) ? $additionalProperties = $options['additionalProperties'] : $additionalProperties = array();
@@ -394,7 +394,7 @@ class core_kernel_persistence_Switcher
 			
 				//reference the class
 				$referencer->referenceClass($class, array (
-						"topClass" 				=> $topClass,
+						"topclass" 				=> $topclass,
 						"additionalProperties" 	=> $additionalProperties
 				));
 			
@@ -548,13 +548,16 @@ class core_kernel_persistence_Switcher
 			$property = new core_kernel_classes_Property($indexProperty);
 			$propertyAlias = core_kernel_persistence_hardapi_Utils::getShortName($property);
 			foreach($referencer->propertyLocation($property) as $table){
-				if(!preg_match("/Props$/", $table) && preg_match("/^_[0-9]{2,}/", $table)){
+				if(!preg_match("/props$/", $table) && preg_match("/^_[0-9]{2,}/", $table)){
 					try{
-					    $dbWrapper->createIndex('idx_'.$propertyAlias, $table, array($propertyAlias => 255));
+					    $dbWrapper->createIndex('idx_'.$table.'_'.$propertyAlias, $dbWrapper->quoteIdentifier($table), array($dbWrapper->quoteIdentifier($propertyAlias) => 255));
 					}
-					catch (PDOException $e){
+					catch (Exception $e){
 						if($e->getCode() != $dbWrapper->getIndexAlreadyExistsErrorCode() && $e->getCode() != '00000'){
 							throw new core_kernel_persistence_hardapi_Exception("Unable to create index 'idx_${propertyAlias}' for property alias '${propertyAlias}' on table '${table}': {$e->getMessage()}");
+						}
+						else {
+						    common_Logger::e('something go wrong when creating index idx_' . $propertyAlias . ' on table ' . $table . ' : '.$e->getMessage() );
 						}
 					}
 				}

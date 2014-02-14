@@ -588,7 +588,7 @@ class core_kernel_persistence_virtuoso_Resource
                 for($i = 0; $i<$count; $i++){
                         if(isset($resultArray[$i][0])){
                                 $triple = new core_kernel_classes_Triple();
-                                $triple->modelID = $resource->modelID;
+                                $triple->modelid = $resource->modelid;
                                 $triple->subject = $resource->getUri();
                                 $triple->predicate = (string) $resultArray[$i][0];
                                 $triple->object = (string) $resultArray[$i][1];

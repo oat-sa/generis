@@ -22,7 +22,7 @@
  * @subpackage 
  *
  */
-	 class common_persistence_sql_dbal_SchemaManager extends common_persistence_sql_SchemaManager{
+ class common_persistence_sql_dbal_SchemaManager extends common_persistence_sql_SchemaManager{
     
     private $dbalSchemaManager;
     
@@ -43,6 +43,18 @@
         return $this->dbalSchemaManager;
     }
     
+    
+    /**
+     * Short description of method getIndexAlreadyExistsErrorCode
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @return string
+     */
+    public function getIndexAlreadyExistsErrorCode()
+    {
+        return '42P07';
+    }
        
 
 

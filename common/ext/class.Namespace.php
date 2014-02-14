@@ -187,11 +187,11 @@ class common_ext_Namespace
 
         // section 10-13-1-85--11334893:135aa33a460:-8000:000000000000193A begin
         $db = core_kernel_classes_DbWrapper::singleton();
-        if (false === $db->exec("DELETE FROM statements WHERE modelID = ?", array($this->getModelId()))){
+        if (false === $db->exec("DELETE FROM statements WHERE modelid = ?", array($this->getModelId()))){
         	$returnValue = false;
         }
         else{
-        	if (false === $db->exec("DELETE FROM models WHERE modelID = ?", array($this->getModelId()))){
+        	if (false === $db->exec("DELETE FROM models WHERE modelid = ?", array($this->getModelId()))){
         		$returnValue = false;
         	}
         	else{

@@ -73,7 +73,7 @@ class HardDbSubjectTestCase extends GenerisPhpUnitTestRunner {
 		
 		$switcher = new core_kernel_persistence_Switcher();
 		$switcher->hardify($this->targetSubjectClass, array(
-			'topClass'		=> new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#User'),
+			'topclass'		=> new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#User'),
 			'recursive'		=> true,
 			'createForeigns'=> false,
 			'rmSources'		=> true

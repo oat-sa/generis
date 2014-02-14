@@ -79,7 +79,7 @@ class core_kernel_persistence_switcher_PropertySwitcher
      * @access protected
      * @var Class
      */
-    protected $topClass = null;
+    protected $topclass = null;
 
     /**
      * Short description of attribute _properties
@@ -97,18 +97,18 @@ class core_kernel_persistence_switcher_PropertySwitcher
      * @access public
      * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
      * @param  Class class
-     * @param  Class topClass Instanciate the property swicther with 
+     * @param  Class topclass Instanciate the property swicther with 
 the class that belongs the properties to switch.
-The topClass enables you to define an interval
+The topclass enables you to define an interval
 bewteen a class and it's parent to retrieve the properties.
      * @return mixed
      */
-    public function __construct( core_kernel_classes_Class $class,  core_kernel_classes_Class $topClass = null)
+    public function __construct( core_kernel_classes_Class $class,  core_kernel_classes_Class $topclass = null)
     {
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001609 begin
         
     	$this->class = $class;
-        $this->topClass = $topClass;
+        $this->topclass = $topclass;
     	
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001609 end
     }
@@ -116,8 +116,8 @@ bewteen a class and it's parent to retrieve the properties.
     /**
      * Found all the properties of the class. 
      * It gets also the parent's properties between
-     * the class and the topClass. 
-     * If the topClass is not defined, the GenerisResource class is used.
+     * the class and the topclass. 
+     * If the topclass is not defined, the GenerisResource class is used.
      * If there is more than one parent's class, the best path is calculated.
      *
      * @access protected
@@ -130,7 +130,7 @@ bewteen a class and it's parent to retrieve the properties.
 
         // section 127-0-1-1-8da8919:12f7878e80a:-8000:0000000000001612 begin
         
-        if(is_null($this->topClass)){
+        if(is_null($this->topclass)){
 			$parents = $this->class->getParentClasses(true);
 		}
 		else{
@@ -156,14 +156,14 @@ bewteen a class and it's parent to retrieve the properties.
 					if($parentClass->getUri() == RDFS_CLASS){
 						continue;
 					}
-					if($parentClass->equals($this->topClass)) {
+					if($parentClass->equals($this->topclass)) {
 						$parents[$parentClass->getUri()] = $parentClass;	
 						$top = true;
 						break;
 					}
 					
 					$allParentClasses = $parentClass->getParentClasses(true);
-					if(array_key_exists($this->topClass->getUri(), $allParentClasses)){
+					if(array_key_exists($this->topclass->getUri(), $allParentClasses)){
 						 $parents[$parentClass->getUri()] = $parentClass;
 					}
 					$lastLevelParents[$parentClass->getUri()] = $parentClass;

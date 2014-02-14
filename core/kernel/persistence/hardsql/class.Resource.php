@@ -152,7 +152,7 @@ class core_kernel_persistence_hardsql_Resource
 		$propertyLocation = $referencer->propertyLocation($property);
 		
 		// Select in the properties table of the class
-		if (in_array("{$table}Props", $propertyLocation)
+		if (in_array("{$table}props", $propertyLocation)
 		|| ! $referencer->isPropertyReferenced($property)){
 
 			try{
@@ -160,7 +160,7 @@ class core_kernel_persistence_hardsql_Resource
 				$one = isset($options['one']) && $options['one'] == true ? true : false;
 				$last = isset($options['last']) && $options['last'] == true ? true : false;
 				
-				$tableProps = $table."Props";
+				$tableProps = $table."props";
 				$session = core_kernel_classes_Session::singleton();
 				// Define language if required
 				$lang = '';
@@ -390,7 +390,7 @@ class core_kernel_persistence_hardsql_Resource
 		}
 		
 		$propertyLocation = $referencer->propertyLocation($property);
-		if (in_array("{$tableName}Props", $propertyLocation)
+		if (in_array("{$tableName}props", $propertyLocation)
 		|| !$referencer->isPropertyReferenced($property)){
 			
 			$session 	= core_kernel_classes_Session::singleton();
@@ -405,7 +405,7 @@ class core_kernel_persistence_hardsql_Resource
 			}
 
 			try{
-				$query = 'INSERT INTO "'.$tableName.'Props"
+				$query = 'INSERT INTO "'.$tableName.'props"
 	        		("instance_id", "property_uri", "property_value", "property_foreign_uri", "l_language") 
 	        		VALUES (?, ?, ?, ?, ?)';
 				$result	= $dbWrapper->exec($query, array(
@@ -479,7 +479,7 @@ class core_kernel_persistence_hardsql_Resource
 					$property = new core_kernel_classes_Property($propertyUri);
 					$propertyLocation = $referencer->propertyLocation($property);
 
-					if (in_array("{$tableName}Props", $propertyLocation)
+					if (in_array("{$tableName}props", $propertyLocation)
 						|| !$referencer->isPropertyReferenced($property)) {
 
 						$propertyRange = $property->getRange();
@@ -525,7 +525,7 @@ class core_kernel_persistence_hardsql_Resource
 
 				if (!empty($queryProps)) {
 					try{
-						$query = 'INSERT INTO "' . $tableName . 'Props" ("instance_id", "property_uri", "property_value", "property_foreign_uri", "l_language") VALUES ' . $queryProps;
+						$query = 'INSERT INTO "' . $tableName . 'props" ("instance_id", "property_uri", "property_value", "property_foreign_uri", "l_language") VALUES ' . $queryProps;
 						$query = substr($query, 0, strlen($query) - 1);
 						$result = $dbWrapper->exec($query);
 						$returnValue = true;
@@ -621,14 +621,14 @@ class core_kernel_persistence_hardsql_Resource
 		$like = isset($options['like']) && $options['like'] == true ? true : false;
 
 		$propertyLocation = $referencer->propertyLocation($property);
-		if (in_array("{$tableName}Props", $propertyLocation)
+		if (in_array("{$tableName}props", $propertyLocation)
 		|| !$referencer->isPropertyReferenced($property, $tableName)){
 			 
                         $resourceId = core_kernel_persistence_hardapi_Utils::getResourceIdByTable($resource, $tableName);
                         
                         if($resourceId){
                                 
-                                $propsTableName = $tableName.'Props';
+                                $propsTableName = $tableName.'props';
                                 $query = 'DELETE FROM "'.$propsTableName.'" WHERE "property_uri" = \''.$property->getUri().'\' AND "instance_id" = \''.$resourceId.'\' ';
 
                                 //build additionnal conditions:
@@ -745,7 +745,7 @@ class core_kernel_persistence_hardsql_Resource
                         $resourceId = core_kernel_persistence_hardapi_Utils::getResourceIdByTable($resource, $tableName);
                         if($resourceId){
                                 
-                                $propsTableName = $tableName.'Props';
+                                $propsTableName = $tableName.'props';
                                 $query = 'DELETE FROM "'.$propsTableName.'"
                                         WHERE "property_uri" = \''.$property->getUri().'\' 
                                         AND "instance_id" = \''.$resourceId.'\'
@@ -818,6 +818,7 @@ class core_kernel_persistence_hardsql_Resource
 				// We get the triples for cardinality = multiple or lg dependent properties
 				// as usual...
 				$quotedUri = $dbWrapper->quote($resource->getUri());
+
 				$propsQuery  = 'SELECT "b"."id", "b"."uri", "p"."property_uri" AS "property_uri", COALESCE("p"."property_value", "p"."property_foreign_uri") as "property_value", "p"."l_language"  FROM "' . $tableName . '" "b" ';
 				$propsQuery .= 'INNER JOIN "' . $propertiesTableName . '" "p" ON ("b"."id" = "p"."instance_id") WHERE "b"."uri" = ' . $quotedUri;
 				
@@ -848,7 +849,6 @@ class core_kernel_persistence_hardsql_Resource
 						
 						$returnValue->add($triple);
 					}
-					
 					// In hard mode, the rdf:type given to resources is defined by
 					// 'the table' their are belonging to. In this case, we need to
 					// manually add these triples to the end result.
@@ -893,10 +893,10 @@ class core_kernel_persistence_hardsql_Resource
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012C9 begin
 		
 		$tableName = core_kernel_persistence_hardapi_ResourceReferencer::singleton()->resourceLocation($resource);
-		$sqlQuery = 'SELECT "'.$tableName.'Props"."l_language" FROM "'.$tableName.'Props" 
-			LEFT JOIN "'.$tableName.'" ON "'.$tableName.'".id = "'.$tableName.'Props".instance_id
+		$sqlQuery = 'SELECT "'.$tableName.'props"."l_language" FROM "'.$tableName.'props" 
+			LEFT JOIN "'.$tableName.'" ON "'.$tableName.'".id = "'.$tableName.'props".instance_id
 			WHERE "'.$tableName.'"."uri" = ? 
-				AND "'.$tableName.'Props"."property_uri" = ?';
+				AND "'.$tableName.'props"."property_uri" = ?';
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$sqlResult = $dbWrapper->query($sqlQuery, array (
 			$resource->getUri(),
@@ -990,13 +990,13 @@ class core_kernel_persistence_hardsql_Resource
 				$excludedPropertyList = substr($excludedPropertyList, 0, strlen($excludedPropertyList) -1);
 
 				//query templates of the 3 ways to insert the props rows
-				$insertPropValueQuery = 'INSERT INTO "'.$tableName.'Props" ("property_uri", "property_value", "l_language", "instance_id") VALUES (?,?,?,?)';
-				$insertPropForeignQuery = 'INSERT INTO "'.$tableName.'Props" ("property_uri", "property_foreign_uri", "l_language", "instance_id") VALUES (?,?,?,?)';
-				$insertPropEmptyQuery = 'INSERT INTO "'.$tableName.'Props" ("property_uri", "l_language", "instance_id") VALUES (?,?,?)';
+				$insertPropValueQuery = 'INSERT INTO "'.$tableName.'props" ("property_uri", "property_value", "l_language", "instance_id") VALUES (?,?,?,?)';
+				$insertPropForeignQuery = 'INSERT INTO "'.$tableName.'props" ("property_uri", "property_foreign_uri", "l_language", "instance_id") VALUES (?,?,?,?)';
+				$insertPropEmptyQuery = 'INSERT INTO "'.$tableName.'props" ("property_uri", "l_language", "instance_id") VALUES (?,?,?)';
 
 				//get the rows to duplicate
 				try{
-					$propsQuery = 'SELECT * FROM "'.$tableName.'Props" WHERE "instance_id" = ? ';
+					$propsQuery = 'SELECT * FROM "'.$tableName.'props" WHERE "instance_id" = ? ';
 					$propsQuery .= empty($excludedPropertyList)?'':' AND "property_uri" NOT IN ('.$excludedPropertyList.') ';
 					$propsResult = $dbWrapper->query($propsQuery, array($instanceId));
 				}
@@ -1119,7 +1119,7 @@ class core_kernel_persistence_hardsql_Resource
 
 								if($property->isMultiple()){
 									//delete the row in the props table
-									$query = 'DELETE FROM "'.$classLocation['table'].'Props"
+									$query = 'DELETE FROM "'.$classLocation['table'].'props"
 												WHERE "property_uri" = ? 
 												AND ("property_value" = ? OR "property_foreign_uri" = ?)';
 									$dbWrapper->exec($query, array(
@@ -1148,7 +1148,7 @@ class core_kernel_persistence_hardsql_Resource
 		// Delete records in the main table 
 		$queries[] = 'DELETE FROM "'.$tableName.'" WHERE "id" = \''.$resourceId.'\'';
 		// Delete records in the properties table
-        $queries[] = 'DELETE FROM "'.$tableName.'Props" WHERE "instance_id" = \''.$resourceId.'\'';
+        $queries[] = 'DELETE FROM "'.$tableName.'props" WHERE "instance_id" = \''.$resourceId.'\'';
 		
 		foreach ($queries as $query) {
 			try{
@@ -1192,7 +1192,7 @@ class core_kernel_persistence_hardsql_Resource
 		if (empty($table)) {
 			return $returnValue;
 		}
-		$tableProps = $table . 'Props';
+		$tableProps = $table . 'props';
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$propertiesMain = '';
 		$propertiesProps = '';
@@ -1328,7 +1328,7 @@ class core_kernel_persistence_hardsql_Resource
         		
         		$referencer->clearCaches();
         		
-        		$sql = 'SELECT * FROM "statements" WHERE "modelID" = ? AND "subject" = ?';
+        		$sql = 'SELECT * FROM "statements" WHERE "modelid" = ? AND "subject" = ?';
         		$result = $dbWrapper->query($sql, array(99999, $resource->getUri()));
         			
         		while ($row = $result->fetch()){
@@ -1375,7 +1375,7 @@ class core_kernel_persistence_hardsql_Resource
 				$resource->delete(false);
 				$referencer->unReferenceResource($resource);
 				
-				$query = 'INSERT INTO "statements" ("modelID", "subject", "predicate", "object", "l_language", "epoch") VALUES  (?, ?, ?, ?, ?, CURRENT_TIMESTAMP);';
+				$query = 'INSERT INTO "statements" ("modelid", "subject", "predicate", "object", "l_language", "epoch") VALUES  (?, ?, ?, ?, ?, CURRENT_TIMESTAMP);';
 
 				foreach ($triples as $t){
 					$dbWrapper->exec($query, array(99999, $t->subject, $t->predicate, $t->object, $t->lg));

@@ -25,23 +25,28 @@
 class core_kernel_api_ModelFactory{
     
     
+    /**
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param string $namespace
+     * @return string
+     */
     private function getModelId($namespace){
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $query = 'SELECT "modelID" FROM "models" WHERE ("modelURI" = ?)';
+        
+        $query = 'SELECT "modelid" FROM "models" WHERE ("modeluri" = ?)';
         $results = $dbWrapper->query($query, array($namespace));
-        $result =  current($results->fetchAll());
-        if(isset($result['modelID'])){
-            return $result['modelID'];
-        }
-        else {
-            return false;
-        }
+       
+        return $results->fetchColumn(0);
+
     }
     
+    /**
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param string $namespace
+     */
     private function addNewModel($namespace){
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sql = 'INSERT INTO models ("modelURI") VALUES (?)';
-        $results = $dbWrapper->insert('models', array('modelURI' =>$namespace));
+        $results = $dbWrapper->insert('models', array('modeluri' =>$namespace));
         
         
     }
@@ -49,13 +54,18 @@ class core_kernel_api_ModelFactory{
     
     
     
+    /**
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param string $namespace
+     * @param string $data xml content
+     */
     public function createModel($namespace, $data){
 
         $modelId = $this->getModelId($namespace);
-
         if($modelId === false){
+            common_Logger::d('modelId not found, need to add namespace '. $namespace);
             $this->addNewModel($namespace);
-            //bad way, need to find better
+            //TODO bad way, need to find better
             $modelId = $this->getModelId($namespace);
         }
         $modelDefinition = new EasyRdf_Graph($namespace);
@@ -81,7 +91,7 @@ class core_kernel_api_ModelFactory{
                     $date= $datetime->format('Y-m-d H:i:s');
                     $dbWrapper->insert('statements',
                         array(
-                            '"modelID"' =>  $modelId,
+                            '"modelid"' =>  $modelId,
                             'subject' =>$subjectUri,
                             'predicate'=> $prop,
                             'object' => $v['value'],
@@ -108,6 +118,8 @@ class core_kernel_api_ModelFactory{
                 }
             }
         }
+        
+        return true;
     }
     
     

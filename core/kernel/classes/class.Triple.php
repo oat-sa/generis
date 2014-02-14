@@ -75,12 +75,12 @@ class core_kernel_classes_Triple
     // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute modelID
+     * Short description of attribute modelid
      *
      * @access public
      * @var int
      */
-    public $modelID = 0;
+    public $modelid = 0;
 
     /**
      * Short description of attribute subject

@@ -65,13 +65,12 @@ require_once('common/uri/class.AbstractUriProvider.php');
 class common_uri_DatabaseSerialUriProvider
     extends common_uri_AbstractUriProvider
 {
-    // --- ASSOCIATIONS ---
-
-
+        // --- ASSOCIATIONS ---
+        
     // --- ATTRIBUTES ---
-
+        
     // --- OPERATIONS ---
-
+    
     /**
      * Generates a URI based on a serial stored in the database.
      *
@@ -83,23 +82,28 @@ class common_uri_DatabaseSerialUriProvider
     public function provide()
     {
         $returnValue = (string) '';
-
+        
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:00000000000019A5 begin
+        
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
+        try {
+            $sth = $dbWrapper->query("SELECT generis_sequence_uri_provider(?)", array(
+                $modelUri
+            ));
+            if ($sth !== false) {
+                
+                $row = $sth->fetch();
+                
+                $returnValue = current($row);
+                $sth->closeCursor();
+            } else {
+                throw new common_uri_UriProviderException("An error occured while calling the stored procedure for driver '${driver}': " . $dbWrapper->errorMessage() . ".");
+            }
+        } catch (Exception $e) {
+        	throw new common_uri_UriProviderException("An error occured while calling the stored ': " . $e->getMessage() . ".");
 
-                $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-                $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
-
-                $sth = $dbWrapper->query("SELECT generis_sequence_uri_provider(?)",array($modelUri));
-        		if ($sth !== false){
-
-        			$row = $sth->fetch();
-
-        			$returnValue = current($row);
-        			$sth->closeCursor();
-        		}
-        		else{
-        			throw new common_uri_UriProviderException("An error occured while calling the stored procedure for driver '${driver}': " . $dbWrapper->errorMessage() . ".");	
-        		}
+        }
 
         
         // section 10-13-1-85--341437fc:13634d84b3e:-8000:00000000000019A5 end

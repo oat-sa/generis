@@ -87,7 +87,7 @@ class core_kernel_persistence_hardapi_Utils
 
     /**
      * Get the namespace identifier of an URI,
-     * using the modelID/baseUri mapping
+     * using the modelid/baseUri mapping
      *
      * @access private
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -146,6 +146,7 @@ class core_kernel_persistence_hardapi_Utils
     				throw new common_exception_UnknownNamespace($namespace);
     			}
 				$returnValue = $namespaceId . substr($resource->getUri(), strlen($namespace));
+				
 				self::$shortNames[$resource->getUri()] = $returnValue;
     		}
 		}
@@ -155,6 +156,10 @@ class core_kernel_persistence_hardapi_Utils
         return (string) $returnValue;
     }
 
+
+
+
+    
     /**
      * Get the long name (full URI) by providing a short name.
      *
@@ -171,10 +176,10 @@ class core_kernel_persistence_hardapi_Utils
         
         if (!empty($shortName) && strlen($shortName)>2){
         	$shortName = preg_replace("/^_/", '', $shortName);
-        	$modelID = intval (substr($shortName, 0, 2));
+        	$modelid = intval (substr($shortName, 0, 2));
         	
-        	if ($modelID != null && $modelID >0){
-	        	$nsUri = common_ext_NamespaceManager::singleton()->getNamespace ($modelID);
+        	if ($modelid != null && $modelid >0){
+	        	$nsUri = common_ext_NamespaceManager::singleton()->getNamespace ($modelid);
 	         	$returnValue = $nsUri . substr($shortName, 2);
         	}
         }
@@ -373,7 +378,7 @@ class core_kernel_persistence_hardapi_Utils
 	        			$result = $dbWrapper->query($sql);
 	        			
 	        			// Prepare the insert statement.
-	        			$sql  = 'INSERT INTO "' . $tblname . 'Props" ';
+	        			$sql  = 'INSERT INTO "' . $tblname . 'props" ';
 	        			$sql .= '("property_uri", "property_value", "property_foreign_uri", "l_language", "instance_id") ';
 	        			$sql .= 'VALUES (?, ?, ?, ?, ?)';
 	        			
@@ -450,7 +455,7 @@ class core_kernel_persistence_hardapi_Utils
         			$toDelete = array(); // will contain ids of rows to delete in the 'properties table' after data transfer.
         			
         			// Add a column to the base table to receive single value.
-        			$baseTableName = str_replace('Props', '', $tblname);
+        			$baseTableName = str_replace('props', '', $tblname);
         			$tblmgr->setName($baseTableName);
         			$shortName = core_kernel_persistence_hardapi_Utils::getShortName($property);
         			$columnAdded = $tblmgr->addColumn(array('name' => $shortName,

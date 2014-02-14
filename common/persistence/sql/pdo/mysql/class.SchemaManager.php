@@ -53,15 +53,15 @@ class common_persistence_sql_pdo_mysql_SchemaManager extends common_persistence_
     public function createIndex($indexName, $tableName, $columns)
     {
         // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BED begin
-        $sql = 'CREATE INDEX "' . $indexName . '" ON "' . $tableName . '" (';
+        $sql = 'CREATE INDEX ' . $indexName . ' ON ' . $tableName . ' (';
         $colsSql = array();
         foreach ($columns as $n => $l){
             // $n = name, $l = length
             if (!empty($l)){
-                $colsSql[] = '"' . $n . '"(' . $l . ')';
+                $colsSql[] =  $n . '(' . $l . ')';
             }
             else{
-                $colsSql[] = '"' . $n . '"';
+                $colsSql[] =  $n ;
             }
         }
     

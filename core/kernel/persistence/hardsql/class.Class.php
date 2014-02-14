@@ -506,8 +506,8 @@ class core_kernel_persistence_hardsql_Class
 			$limit = intval($options['limit']);
 		}
 		
-		// 'offset' option. If not provided, we set it to null.
-		$offset = null;
+		// 'offset' option. If not provided, we set it to 0.
+		$offset = 0;
 		if (isset($options['offset'])){
 			$offset = intval($options['offset']);
 			if (empty($limit)) {
@@ -553,7 +553,7 @@ class core_kernel_persistence_hardsql_Class
 			if (isset($classLocations[0])){
 				// table to query located.
 				$baseTableName = $classLocations[0]['table'];
-				$propsTableName = $baseTableName . 'Props';
+				$propsTableName = $baseTableName . 'props';
 				$baseConditions = array(); 		// Conditions to apply on base table.
 				$propsConditions = array(); 	// Conditions to apply on properties table.
 				
@@ -648,16 +648,12 @@ class core_kernel_persistence_hardsql_Class
 			$finalQuery = implode(' UNION ', $queries);
 			$finalQuery .= ' GROUP BY "b"."id", "b"."uri", "tblname"';
 			
-			if (!empty($limit)){
-				$finalQuery .= ' LIMIT ' . $limit;
-			}
-			
-			if (!empty($offset)){
-				$finalQuery .= ' OFFSET ' . $offset;
+			if (!empty($limit) || !empty($offset)){
+				
+				$finalQuery = $dbWrapper->limitStatement($finalQuery, $limit,$offset);
 			}
 			
 			try{
-				
 				$result = $dbWrapper->query($finalQuery);
 				$idUris = array();
 				while ($row = $result->fetch()){
@@ -667,7 +663,6 @@ class core_kernel_persistence_hardsql_Class
 					
 					$idUris[$row['tblname']][$row['id']] = $row['uri'];
 				}
-				
 				// Order if needed.
 				if (!empty($order) && !empty($idUris)){
 					
@@ -678,7 +673,7 @@ class core_kernel_persistence_hardsql_Class
 						$orderProp = new core_kernel_classes_Property($order);
 						$propertyLocation = $referencer->propertyLocation($orderProp);
 						$orderPropShortName = core_kernel_persistence_hardapi_Utils::getShortName($orderProp);
-						$propstblname = $tblname . 'Props';
+						$propstblname = $tblname . 'props';
 						
 						$sqlQuery  = 'SELECT "id", "uri", "property_value" FROM (';
 						$sqlQuery .= 'SELECT "b"."id", "b"."uri", "p"."property_uri" AS "property_uri", COALESCE("p"."property_value", "p"."property_foreign_uri") AS "property_value" FROM "' . $tblname . '" "b" ';
@@ -711,7 +706,6 @@ class core_kernel_persistence_hardsql_Class
 					$finalQuery = 'SELECT "uri", "property_value" FROM (' . $finalQuery;
 					$finalQuery .= ') AS "search" GROUP BY "uri", "property_value" ORDER by "property_value"';
 					$idUris = array();
-					
 					$sqlResult = $dbWrapper->query($finalQuery);
 					while ($row = $sqlResult->fetch()){
 						$instance = new core_kernel_classes_Resource($row['uri']);
@@ -826,10 +820,10 @@ class core_kernel_persistence_hardsql_Class
 			$propertyLocation = $referencer->propertyLocation($property);
 	
 			// Select in the properties table of the class
-			if (in_array("{$table}Props", $propertyLocation)
+			if (in_array("{$table}props", $propertyLocation)
 			|| ! $referencer->isPropertyReferenced($property)){
 				
-				$tableProps = $table."Props";
+				$tableProps = $table."props";
 				$session = core_kernel_classes_Session::singleton();
 				// Define language if required
 				$lang = '';
@@ -956,7 +950,7 @@ class core_kernel_persistence_hardsql_Class
 					$property = new core_kernel_classes_Property($propertyUri);
 					$propertyLocation = $referencer->propertyLocation($property);
 
-					if (in_array("{$table}Props", $propertyLocation)
+					if (in_array("{$table}props", $propertyLocation)
 						|| !$referencer->isPropertyReferenced($property)) {
 
 						$propertyRange = $property->getRange();
@@ -1025,7 +1019,7 @@ class core_kernel_persistence_hardsql_Class
 				}
 				
 				try{
-					$query = 'INSERT INTO "' . $table . 'Props" ("instance_id", "property_uri", "property_value", "property_foreign_uri", "l_language") VALUES ' . implode(',', $prefixed);
+					$query = 'INSERT INTO "' . $table . 'props" ("instance_id", "property_uri", "property_value", "property_foreign_uri", "l_language") VALUES ' . implode(',', $prefixed);
 					$result = $dbWrapper->exec($query);
 				}
 				catch (PDOException $e){

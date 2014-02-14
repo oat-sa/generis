@@ -206,7 +206,7 @@ class core_kernel_persistence_smoothsql_Property
 	        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
 	        
 	    	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
-			$query = 'DELETE FROM "statements" WHERE "predicate" = ? AND "modelID" IN ('.$modelIds.')';
+			$query = 'DELETE FROM "statements" WHERE "predicate" = ? AND "modelid" IN ('.$modelIds.')';
 	        $returnValue = $dbWrapper->exec($query, array($resource->getUri()));
         }
         $returnValue = core_kernel_persistence_smoothsql_Resource::singleton()->delete($resource, $deleteReference);

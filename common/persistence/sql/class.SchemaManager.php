@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +48,8 @@ abstract class common_persistence_sql_SchemaManager {
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      */
     public function createSchema(){
-        return $this->getSchemaManager()->createSchema();
+        $tables = $this->getSchemaManager()->listTables();
+        return new \Doctrine\DBAL\Schema\Schema($tables,array(),$this->getSchemaManager()->createSchemaConfig());
     }
      
     
@@ -78,6 +80,13 @@ abstract class common_persistence_sql_SchemaManager {
         return $this->getSchemaManager()->listTableNames();
     }
     
+    /**
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param string $tableName
+     */
+    public function getTableIndexes($tableName){
+        return $this->getSchemaManager()->listTableIndexes($tableName);
+    }
     
      /**
      * Create an index on a given table and selected columns. This method throws

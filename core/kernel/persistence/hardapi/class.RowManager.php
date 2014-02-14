@@ -182,7 +182,7 @@ class core_kernel_persistence_hardapi_RowManager
 				}
 			}
 
-			// Insert rows of the main table
+			// Insert rows of the main table			
 			$dbWrapper->exec($query);
 			
 			
@@ -237,7 +237,7 @@ class core_kernel_persistence_hardapi_RowManager
 				
 				if (!empty($queryRows)){
 					
-					$queryMultiple = 'INSERT INTO "'.$this->table.'Props"
+					$queryMultiple = 'INSERT INTO "'.$this->table.'props"
 						("instance_id", "property_uri", "property_value", "property_foreign_uri", "l_language") VALUES ' . $queryRows;
 					
 					$multiplePropertiesResult = $dbWrapper->exec($queryMultiple);
