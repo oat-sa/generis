@@ -31,7 +31,12 @@ namespace oat\oatbox;
  */
 class AutoLoader
 {
-    const CONFIG_KEY = 'oat_autoloader';
+    /**
+     * Key to use for the caching of the autoloader config
+     * 
+     * @var string
+     */
+    const CACHE_KEY = 'oat_autoloader';
 
     /**
      * Register this instance of ClassLoader as a php autoloader
@@ -51,17 +56,26 @@ class AutoLoader
         self::registerExtensionAutoloader();
     }
     
+    /**
+     * register the generis autoloader
+     */
     protected static function registerGenerisAutoloader() {
         $classLoader = new static();
         spl_autoload_register(array($classLoader, 'autoload'));
         set_include_path(get_include_path() . PATH_SEPARATOR . GENERIS_BASE_PATH);
     }
     
+    /**
+     * register the composer autoloader
+     * for 3rd party libraries
+     */
     protected static function registerComposerAutoloader() {
-        // 3rd part lib autoload
-        require_once VENDOR_PATH		. 'autoload.php';
+        require_once VENDOR_PATH . 'autoload.php';
     }
     
+    /**
+     * register the extensions autoloader
+     */
     protected static function registerExtensionAutoloader()
     {
         $classLoader = new \Composer\Autoload\ClassLoader();
@@ -85,10 +99,15 @@ class AutoLoader
         $classLoader->register();
     }
     
+    /**
+     * Get the autload config from cache if available
+     * 
+     * @return array autoload config
+     */
     private static function getAutloadConfig()
     {
         try {
-            $returnValue = \common_cache_FileCache::singleton()->get(self::CONFIG_KEY);
+            $returnValue = \common_cache_FileCache::singleton()->get(self::CACHE_KEY);
         } catch (\common_cache_NotFoundException $e) {
             $returnValue = array();
             foreach (\common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $ext) {
@@ -102,7 +121,7 @@ class AutoLoader
                     }
                 }
             }
-            \common_cache_FileCache::singleton()->put($returnValue, self::CONFIG_KEY);
+            \common_cache_FileCache::singleton()->put($returnValue, self::CACHE_KEY);
         }
         return $returnValue;
     }
@@ -111,7 +130,6 @@ class AutoLoader
      * protect the cunstructer, objects should only be initialised via registerGenerisAutoloader()
      */
     protected function __construct() {
-        
     }
     
     /**
