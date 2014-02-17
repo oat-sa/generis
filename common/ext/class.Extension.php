@@ -484,7 +484,7 @@ class common_ext_Extension
         foreach ($this->getManifest()->getDependencies() as $id => $version) {
         	$returnValue[$id] = $version;
         	$dependence = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
-        	$returnValue = array_unique(array_merge($returnValue, $dependence->getDependencies()));
+        	$returnValue = array_merge($returnValue, $dependence->getDependencies());
         }
 
         return (array) $returnValue;
