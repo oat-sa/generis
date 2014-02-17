@@ -19,37 +19,6 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API -
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 20.07.2011, 08:42:00 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
- * @package core
- * @subpackage kernel_persistence_smoothsql
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/* user defined includes */
-// section 10-13-1-85-61dcfc6d:1301cc5c657:-8000:000000000000190D-includes begin
-// section 10-13-1-85-61dcfc6d:1301cc5c657:-8000:000000000000190D-includes end
-
-/* user defined constants */
-// section 10-13-1-85-61dcfc6d:1301cc5c657:-8000:000000000000190D-constants begin
-// section 10-13-1-85-61dcfc6d:1301cc5c657:-8000:000000000000190D-constants end
 
 /**
  * Short description of class core_kernel_persistence_smoothsql_Utils
@@ -187,6 +156,55 @@ class core_kernel_persistence_smoothsql_Utils
         return (string) $returnValue;
     }
 
-} /* end of class core_kernel_persistence_smoothsql_Utils */
-
-?>
+    /**
+     * Build a SQL search pattern on basis of a pattern and a comparison mode.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  string pattern A value to compare.
+     * @param  boolean like The manner to compare values. If set to true, the LIKE SQL operator will be used. If set to false, the = (equal) SQL operator will be used.
+     * @return string
+     */
+    public static function buildSearchPattern($pattern, $like = true)
+    {
+        $returnValue = (string) '';
+    
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+    
+        switch (gettype($pattern)) {
+        	case 'string' :
+        	case 'numeric':
+        	    $patternToken = $pattern;
+        	    $object = trim(str_replace('*', '%', $patternToken));
+    
+        	    if($like){
+        	        if(!preg_match("/^%/", $object)){
+        	            $object = "%" . $object;
+        	        }
+        	        if(!preg_match("/%$/", $object)){
+        	            $object = $object . "%";
+        	        }
+        	        $returnValue .= ' LIKE '. $dbWrapper->quote($object);
+        	    }
+        	    else {
+        	        $returnValue = (strpos($object, '%') !== false)
+        	        ? 'LIKE '. $dbWrapper->quote($object)
+        	        : '= '. $dbWrapper->quote($patternToken);
+        	    }
+        	    break;
+    
+        	case 'object' :
+        	    if($pattern instanceof core_kernel_classes_Resource) {
+        	        $returnValue = ' = ' . $dbWrapper->quote($pattern->getUri());
+        	    } else {
+        	        common_Logger::w('non ressource as search parameter: '. get_class($pattern), 'GENERIS');
+        	    }
+        	    break;
+    
+        	default:
+        	    throw new common_Exception("Unsupported type for searchinstance array: " . gettype($value));
+        }
+    
+        return (string) $returnValue;
+    }
+}

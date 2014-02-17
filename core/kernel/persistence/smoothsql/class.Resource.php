@@ -406,14 +406,14 @@ class core_kernel_persistence_smoothsql_Resource
 		$conditions = array();
 		if(is_string($pattern)){
 			if(!is_null($pattern)){
-				$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($pattern, $like);
+				$searchPattern = core_kernel_persistence_smoothsql_Utils::buildSearchPattern($pattern, $like);
 				$conditions[] = '( "object" '.$searchPattern.' )';
 			}
 		}else if(is_array($pattern)){
 			if(count($pattern) > 0){
 				$multiCondition =  "( ";
 				foreach($pattern as $i => $patternToken){
-					$searchPattern = core_kernel_persistence_hardapi_Utils::buildSearchPattern($patternToken, $like);
+					$searchPattern = core_kernel_persistence_smoothsql_Utils::buildSearchPattern($patternToken, $like);
 					if($i > 0) {
                         $multiCondition .= " OR ";
                     }
