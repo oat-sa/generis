@@ -198,30 +198,6 @@ class core_kernel_persistence_subscription_Resource
     }
 
     /**
-     * Short description of method getOnePropertyValue
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  boolean last
-     * @return core_kernel_classes_Container
-     */
-    public function getOnePropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $last = false)
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
-
-		throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 end
-
-        return $returnValue;
-    }
-
-    /**
      * Short description of method getPropertyValuesByLg
      *
      * @access public

@@ -250,68 +250,6 @@ class core_kernel_persistence_hardsql_Resource
     }
 
     /**
-     * Short description of method getPropertyValuesCollection
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return core_kernel_classes_ContainerCollection
-     */
-    public function getPropertyValuesCollection( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F begin
-
-		$returnValue = new core_kernel_classes_ContainerCollection($resource);
-		$values = $resource->getAllPropertyValues($property);
-			
-		foreach ($values as $value){
-			$returnValue->add($value);
-		}
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F end
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method getOnePropertyValue
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  boolean last
-     * @return core_kernel_classes_Container
-     */
-    public function getOnePropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $last = false)
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
-
-		$options = array(
-			'forceDefaultLg' => true
-		);  
-		if($last){
-			$options['last'] = true;
-		}else{
-			$options['one'] = true;
-		}
-
-		$value = $resource->getAllPropertyValues($property, $options);
-		if (count($value)){
-			$returnValue = $value[0];
-		}
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 end
-
-        return $returnValue;
-    }
-
-    /**
      * Short description of method getPropertyValuesByLg
      *
      * @access public
@@ -329,8 +267,9 @@ class core_kernel_persistence_hardsql_Resource
 
 		$options = array('lg'=>$lg);
 		$returnValue = new core_kernel_classes_ContainerCollection($resource);
-        $propertiesValues = $resource->getAllPropertyValues($property, $options);
-        $returnValue->sequence = $propertiesValues;
+		foreach ($resource->getPropertyValues($property, $options) as $value){
+		    $returnValue->add(common_Utils::toResource($value));
+		}
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 end
 

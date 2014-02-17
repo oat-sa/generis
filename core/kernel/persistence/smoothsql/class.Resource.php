@@ -133,7 +133,9 @@ class core_kernel_persistence_smoothsql_Resource
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129B begin
         $one = isset($options['one']) && $options['one'] == true ? true : false;
-		$last = isset($options['last']) && $options['last'] == true ? true : false;
+        if (isset($options['last'])) {
+            throw new core_kernel_persistence_Exception('Option \'last\' no longer supported');
+        }
 		$session = core_kernel_classes_Session::singleton();
 		
     	// Define language if required
@@ -165,12 +167,6 @@ class core_kernel_persistence_smoothsql_Resource
 			
 			$result = $dbWrapper->query($query,array($resource->getUri(), $property->getUri(), $lang));
 		}
-		// Select Last
-		else if($last){
-			$query .= ' ORDER BY "id" ASC';
-			$query = $dbWrapper->limitStatement($query, 1, 0);
-			$result = $dbWrapper->query($query,array($resource->getUri(), $property->getUri(), $lang));
-		}
 		// Select All
 		else{
 			$result = $dbWrapper->query($query,array($resource->getUri(), $property->getUri(), $lang));
@@ -196,65 +192,6 @@ class core_kernel_persistence_smoothsql_Resource
     }
 
     /**
-     * Short description of method getPropertyValuesCollection
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return core_kernel_classes_ContainerCollection
-     */
-    public function getPropertyValuesCollection( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F begin
-        
-        $returnValue = new core_kernel_classes_ContainerCollection($resource);
-        $propertiesValues = $resource->getAllPropertyValues($property);
-        $returnValue->sequence = $propertiesValues;
-        
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F end
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method getOnePropertyValue
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  boolean last
-     * @return core_kernel_classes_Container
-     */
-    public function getOnePropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $last = false)
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
-        
-    	$options = array(
-			'forceDefaultLg' => true
-		);  
-		if($last){
-			$options['last'] = true;
-		}else{
-			$options['one'] = true;
-		}
-
-		$value = $resource->getAllPropertyValues($property, $options);
-		if (count($value)){
-			$returnValue = $value[0];
-		}
-        
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 end
-
-        return $returnValue;
-    }
-
-    /**
      * Short description of method getPropertyValuesByLg
      *
      * @access public
@@ -275,8 +212,9 @@ class core_kernel_persistence_smoothsql_Resource
         );
         
         $returnValue = new core_kernel_classes_ContainerCollection($resource);
-        $propertiesValues = $resource->getAllPropertyValues($property, $options);
-        $returnValue->sequence = $propertiesValues;
+        foreach ($resource->getPropertyValues($property, $options) as $value){
+            $returnValue->add(common_Utils::toResource($value));
+        }
         
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A9 end
 

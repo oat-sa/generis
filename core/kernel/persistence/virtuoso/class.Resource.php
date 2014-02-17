@@ -169,48 +169,6 @@ class core_kernel_persistence_virtuoso_Resource
     }
 
     /**
-     * Short description of method getPropertyValuesCollection
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return core_kernel_classes_ContainerCollection
-     */
-    public function getPropertyValuesCollection( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F begin
-        $propertyValues = $this->getPropertyValues($resource, $property);
-        
-        $returnValue = new core_kernel_classes_ContainerCollection($resource);
-        
-        $count = count($propertyValues);
-        for($i=0;$i<$count;$i++){
-
-            $value = $propertyValues[$i];
-            
-            if(!common_Utils::isUri($value)) {
-                $container = new core_kernel_classes_Literal($value);
-            }
-            else {
-                $container = new core_kernel_classes_Resource($value);
-            }
-
-            if(DEBUG_MODE){
-            	$container->debug = __METHOD__ .'|' . $property->debug;
-            }
-            $returnValue->add($container);
-        }
-        
-        
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F end
-
-        return $returnValue;
-    }
-
-    /**
      * Short description of method getOnePropertyValue
      *
      * @access public
