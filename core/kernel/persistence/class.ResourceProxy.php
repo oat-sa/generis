@@ -172,59 +172,6 @@ class core_kernel_persistence_ResourceProxy
     }
 
     /**
-     * Short description of method getPropertyValuesCollection
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return core_kernel_classes_ContainerCollection
-     */
-    public function getPropertyValuesCollection( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F begin
-
-        $delegate = $this->getImpToDelegateTo($resource);
-        $returnValue = $delegate->getPropertyValuesCollection($resource, $property);
-
-        if($this->isValidContext('subscription', $resource)){
-                $delegate = core_kernel_persistence_subscription_Resource::singleton();
-                $subscriptionValue = $delegate->getPropertyValuesCollection($resource, $property);
-                $returnValue = $returnValue->union($subscriptionValue);
-        }
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000129F end
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method getOnePropertyValue
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  boolean last
-     * @return core_kernel_classes_Container
-     */
-    public function getOnePropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $last = false)
-    {
-        $returnValue = null;
-
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 begin
-        
-        $delegate = $this->getImpToDelegateTo($resource);
-        $returnValue = $delegate->getOnePropertyValue($resource, $property, $last);
-        
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000012A3 end
-
-        return $returnValue;
-    }
-
-    /**
      * Short description of method getPropertyValuesByLg
      *
      * @access public
@@ -640,40 +587,4 @@ class core_kernel_persistence_ResourceProxy
 
         return (bool) $returnValue;
     }
-
-    /**
-     * Short description of method getAllPropertyValues
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  array options
-     * @return array
-     */
-    public function getAllPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $options = array())
-    {
-        $returnValue = array();
-
-        // section 127-0-1-1-3b11b49e:1323ea85daa:-8000:0000000000003DBC begin
-        
-        $propertyValues = $this->getPropertyValues($resource, $property, $options);
-		
-		// Format output data
-        
-    	foreach ($propertyValues as $propertyValue){
-			if(!common_Utils::isUri($propertyValue)) {
-				$returnValue[] = new core_kernel_classes_Literal($propertyValue);
-			} else {
-				$returnValue[] = new core_kernel_classes_Resource($propertyValue);
-			}
-		}
-		
-        // section 127-0-1-1-3b11b49e:1323ea85daa:-8000:0000000000003DBC end
-
-        return (array) $returnValue;
-    }
-
-} /* end of class core_kernel_persistence_ResourceProxy */
-
-?>
+}

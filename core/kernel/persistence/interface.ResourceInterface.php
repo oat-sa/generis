@@ -18,37 +18,6 @@
  *               
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API -
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 14.03.2012, 16:36:03 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Joel Bout, <joel.bout@tudor.lu>
- * @package core
- * @subpackage kernel_persistence
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/* user defined includes */
-// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297-includes begin
-// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297-includes end
-
-/* user defined constants */
-// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297-constants begin
-// section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001297-constants end
 
 /**
  * Short description of class core_kernel_persistence_ResourceInterface
@@ -85,29 +54,6 @@ interface core_kernel_persistence_ResourceInterface
      * @return array
      */
     public function getPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $options = array());
-
-    /**
-     * Short description of method getPropertyValuesCollection
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return core_kernel_classes_ContainerCollection
-     */
-    public function getPropertyValuesCollection( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property);
-
-    /**
-     * Short description of method getOnePropertyValue
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  boolean last
-     * @return core_kernel_classes_Container
-     */
-    public function getOnePropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $last = false);
 
     /**
      * Short description of method getPropertyValuesByLg
@@ -259,6 +205,4 @@ interface core_kernel_persistence_ResourceInterface
      */
     public function removeType( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $class);
 
-} /* end of interface core_kernel_persistence_ResourceInterface */
-
-?>
+}

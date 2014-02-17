@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -19,41 +19,8 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
 
-error_reporting(E_ALL);
-
-/**
- * uriProperty must be a valid property otherwis return false, add this as a
- * of uriProperty
- *
- * @author patrick.plichart@tudor.lu
- * @package core
- * @subpackage kernel_classes
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * Resource implements rdf:resource container identified by an uri (a string).
- * Methods enable meta data management for this resource
- *
- * @author patrick.plichart@tudor.lu
- * @see http://www.w3.org/RDF/
- * @version v1.0
- */
-require_once('core/kernel/classes/class.Resource.php');
-
-/* user defined includes */
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769-includes begin
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769-includes end
-
-/* user defined constants */
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769-constants begin
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000769-constants end
+use oat\generis\model\data\ModelManager;
 
 /**
  * uriProperty must be a valid property otherwis return false, add this as a
@@ -114,6 +81,13 @@ class core_kernel_classes_Property
     public $multiple = false;
 
     // --- OPERATIONS ---
+    /**
+     * @return core_kernel_persistence_PropertyInterface
+     */
+    private function getImplementation() {
+        return ModelManager::getModel()->getRdfsInterface()->getPropertyImplementation();
+    }
+    
 
     /**
      * Short description of method __construct
@@ -167,7 +141,7 @@ class core_kernel_classes_Property
 
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000780 begin
         
-        $returnValue = core_kernel_persistence_PropertyProxy::singleton()->getSubProperties($this, $recursive);
+        $returnValue = $this->getImplementation()->getSubProperties($this, $recursive);
         
         // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000780 end
 
@@ -296,7 +270,7 @@ class core_kernel_classes_Property
 
         // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AB7 begin
         
-        $returnValue = core_kernel_persistence_PropertyProxy::singleton()->setRange($this, $class);
+        $returnValue = $this->getImplementation()->setRange($this, $class);
         if ($returnValue){
         	$this->range = $class;
         }
@@ -373,7 +347,7 @@ class core_kernel_classes_Property
     public function setLgDependent($isLgDependent)
     {
         // section 10-13-1--99--152a2f30:1201eae099d:-8000:000000000000157E begin
-        core_kernel_persistence_PropertyProxy::singleton()->setLgDependent($this, $isLgDependent);
+        $this->getImplementation()->setLgDependent($this, $isLgDependent);
     	$this->lgDependent = $isLgDependent;
         // section 10-13-1--99--152a2f30:1201eae099d:-8000:000000000000157E end
     }
@@ -423,7 +397,7 @@ class core_kernel_classes_Property
     public function setMultiple($isMultiple)
     {
         // section 127-0-1-1-2ada041a:12fde2cecc0:-8000:00000000000016F8 begin
-    	core_kernel_persistence_PropertyProxy::singleton()->setMultiple($this, $isMultiple);
+    	$this->getImplementation()->setMultiple($this, $isMultiple);
     	$this->multiple = $isMultiple;
         // section 127-0-1-1-2ada041a:12fde2cecc0:-8000:00000000000016F8 end
     }
@@ -442,7 +416,7 @@ class core_kernel_classes_Property
 
         // section 127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001646 begin
         
-        $returnValue = core_kernel_persistence_PropertyProxy::singleton()->delete($this, $deleteReference);
+        $returnValue = $this->getImplementation()->delete($this, $deleteReference);
         
         // section 127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001646 end
 

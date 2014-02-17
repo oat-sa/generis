@@ -20,7 +20,7 @@
  * 
  */
 
-error_reporting(E_ALL);
+use oat\generis\model\data\ModelManager;
 
 /**
  * The class of rdfs:classes. It implements basic tests like isSubClassOf(Class
@@ -35,7 +35,6 @@ error_reporting(E_ALL);
  * @see http://www.w3.org/TR/rdf-schema/
  *
  */
-
 class core_kernel_classes_Class
     extends core_kernel_classes_Resource
 {
@@ -45,7 +44,15 @@ class core_kernel_classes_Class
     // --- ATTRIBUTES ---
 
     // --- OPERATIONS ---
-
+    /**
+     * 
+     * @return core_kernel_persistence_ClassInterface
+     */
+    private function getImplementation() {
+        return ModelManager::getModel()->getRdfsInterface()->getClassImplementation();
+    }
+    
+    
     /**
      * returns the collection of direct subClasses (see getIndirectSubClassesOf
      * a complete list of subclasses)
@@ -58,7 +65,7 @@ class core_kernel_classes_Class
      */
     public function getSubClasses($recursive = false)
     {
-        return (array) core_kernel_persistence_ClassProxy::singleton()->getSubClasses($this, $recursive);
+        return (array) $this->getImplementation()->getSubClasses($this, $recursive);
     }
 
     /**
@@ -71,7 +78,7 @@ class core_kernel_classes_Class
      */
     public function isSubClassOf( core_kernel_classes_Class $parentClass)
     {
-        return (bool) core_kernel_persistence_ClassProxy::singleton()->isSubClassOf($this, $parentClass);
+        return (bool) $this->getImplementation()->isSubClassOf($this, $parentClass);
     }
 
     /**
@@ -84,7 +91,7 @@ class core_kernel_classes_Class
      */
     public function getParentClasses($recursive = false)
     {
-       return (array) core_kernel_persistence_ClassProxy::singleton()->getParentClasses($this, $recursive);
+       return (array) $this->getImplementation()->getParentClasses($this, $recursive);
     }
 
     /**
@@ -99,7 +106,7 @@ class core_kernel_classes_Class
      */
     public function getProperties($recursive = false)
     {
-        return (array) core_kernel_persistence_ClassProxy::singleton()->getProperties($this, $recursive);
+        return (array) $this->getImplementation()->getProperties($this, $recursive);
     }
 
     /**
@@ -113,7 +120,7 @@ class core_kernel_classes_Class
      */
     public function getInstances($recursive = false, $params = array())
     {
-        return (array) core_kernel_persistence_ClassProxy::singleton()->getInstances($this, $recursive, $params);
+        return (array) $this->getImplementation()->getInstances($this, $recursive, $params);
     }
 
     /**
@@ -131,7 +138,7 @@ class core_kernel_classes_Class
 
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000978 begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->setInstance($this, $instance);
+        $returnValue = $this->getImplementation()->setInstance($this, $instance);
         
         // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000978 end
 
@@ -149,7 +156,7 @@ class core_kernel_classes_Class
      */
     public function setSubClassOf( core_kernel_classes_Class $iClass)
     {
-        return (bool) core_kernel_persistence_ClassProxy::singleton()->setSubClassOf($this, $iClass);
+        return (bool) $this->getImplementation()->setSubClassOf($this, $iClass);
     }
 
     /**
@@ -163,7 +170,7 @@ class core_kernel_classes_Class
      */
     public function setProperty( core_kernel_classes_Property $property)
     {
-        return (bool) core_kernel_persistence_ClassProxy::singleton()->setProperty($this, $property);
+        return (bool) $this->getImplementation()->setProperty($this, $property);
     }
 
     /**
@@ -199,7 +206,7 @@ class core_kernel_classes_Class
 
         // section 10-13-1--99-5d680c37:11e406b020f:-8000:0000000000000F23 begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->createInstance($this, $label, $comment, $uri);
+        $returnValue = $this->getImplementation()->createInstance($this, $label, $comment, $uri);
 
         // section 10-13-1--99-5d680c37:11e406b020f:-8000:0000000000000F23 end
 
@@ -222,7 +229,7 @@ class core_kernel_classes_Class
 
         // section 10-13-1--99-3835caab:11e45736d24:-8000:0000000000000F2A begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->createSubClass($this, $label, $comment, $uri);
+        $returnValue = $this->getImplementation()->createSubClass($this, $label, $comment, $uri);
         
         // section 10-13-1--99-3835caab:11e45736d24:-8000:0000000000000F2A end
 
@@ -245,7 +252,7 @@ class core_kernel_classes_Class
 
         // section 10-13-1--99--47c96501:11e4ab45b34:-8000:0000000000000F34 begin
 		
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->createProperty($this, $label, $comment, $isLgDependent);
+        $returnValue = $this->getImplementation()->createProperty($this, $label, $comment, $isLgDependent);
         
         // section 10-13-1--99--47c96501:11e4ab45b34:-8000:0000000000000F34 end
 
@@ -285,7 +292,7 @@ class core_kernel_classes_Class
      */
     public function searchInstances($propertyFilters = array(), $options = array())
     {
-        return (array) core_kernel_persistence_ClassProxy::singleton()->searchInstances($this, $propertyFilters, $options);
+        return (array) $this->getImplementation()->searchInstances($this, $propertyFilters, $options);
     }
 
     /**
@@ -299,7 +306,7 @@ class core_kernel_classes_Class
      */
     public function countInstances($propertyFilters = array(), $options = array())
     {
-		return core_kernel_persistence_ClassProxy::singleton()->countInstances($this, $propertyFilters, $options);
+		return $this->getImplementation()->countInstances($this, $propertyFilters, $options);
     }
 
     /**
@@ -315,7 +322,7 @@ class core_kernel_classes_Class
      */
     public function getInstancesPropertyValues( core_kernel_classes_Property $property, $propertyFilters = array(), $options = array())
     {
-        return (array) core_kernel_persistence_ClassProxy::singleton()->getInstancesPropertyValues($this, $property, $propertyFilters, $options);
+        return (array) $this->getImplementation()->getInstancesPropertyValues($this, $property, $propertyFilters, $options);
     }
 
     /**
@@ -327,7 +334,7 @@ class core_kernel_classes_Class
      */
     public function unsetProperty( core_kernel_classes_Property $property)
     {
-        core_kernel_persistence_ClassProxy::singleton()->unsetProperty($this, $property);
+        $this->getImplementation()->unsetProperty($this, $property);
     }
 
     /**
@@ -360,7 +367,7 @@ class core_kernel_classes_Class
         	unset($properties[RDF_TYPE]);
         }
         // create the instance
-        $returnValue = core_kernel_persistence_ClassProxy::singleton()->createInstanceWithProperties($this, $properties);
+        $returnValue = $this->getImplementation()->createInstanceWithProperties($this, $properties);
         
         foreach ($additonalTypes as $type) {
         	$returnValue->setType($type);
@@ -380,7 +387,7 @@ class core_kernel_classes_Class
      */
     public function deleteInstances($resources, $deleteReference = false)
     {
-        return (bool) core_kernel_persistence_ClassProxy::singleton()->deleteInstances($this, $resources, $deleteReference);
+        return (bool) $this->getImplementation()->deleteInstances($this, $resources, $deleteReference);
     }
 
     /**
@@ -393,7 +400,7 @@ class core_kernel_classes_Class
      */
     public function delete($deleteReference = false)
     {
-        return (bool) core_kernel_persistence_ClassProxy::singleton()->delete($this, $deleteReference);
+        return (bool) $this->getImplementation()->delete($this, $deleteReference);
     }
 
     /**

@@ -62,6 +62,22 @@ class common_Utils
         }
         return (bool) $returnValue;
     }
+    
+    public static function toResource($value) {
+        if (is_array($value)) {
+            $returnValue = array();
+            foreach ($value as $val) {
+                $returnValue[] = self::toResource($val);
+            }
+            return $returnValue;
+        } else {
+            if (common_Utils::isUri($value)) {
+                return new core_kernel_classes_Resource($value);
+            } else {
+                return new core_kernel_classes_Literal($value);
+            }
+        }
+    }
 
     /**
      * Removes starting/ending spaces, strip html tags out, remove any \r and \n
@@ -136,8 +152,6 @@ class common_Utils
         return (string) $returnValue;
     }
 
-
-
-} /* end of class common_Utils */
+}
 
 ?>
