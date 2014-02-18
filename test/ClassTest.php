@@ -376,48 +376,6 @@ class ClassTest extends GenerisPhpUnitTestRunner {
         $this->assertTrue(array_key_exists($sub1ClazzInstance->getUri(), $instances));
         $this->assertTrue(array_key_exists($sub2ClazzInstance->getUri(), $instances));
         $this->assertTrue(array_key_exists($sub3ClazzInstance->getUri(), $instances));
-        
-        common_Logger::d('starting hardify');
-        //Test the search instances on the hard impl
-        $switcher = new core_kernel_persistence_Switcher();
-        $switcher->hardify($sub1Clazz, $options);
-        unset ($switcher); //Required to update cache data
-        common_Logger::d('done hardify');
-        
-        $propertyFilter = array(
-            RDFS_LABEL => 'test case instance'
-        );
-        $instances = $sub1Clazz->searchInstances($propertyFilter, array('recursive'=>true));
-        $this->assertTrue(array_key_exists($sub1ClazzInstance->getUri(), $instances));
-        $this->assertTrue(array_key_exists($sub2ClazzInstance->getUri(), $instances));
-        $this->assertTrue(array_key_exists($sub3ClazzInstance->getUri(), $instances));
-        
-        $switcher = new core_kernel_persistence_Switcher();
-        $switcher->unhardify($sub1Clazz, $options);
-        unset ($switcher); //Required to update cache data
-        //Test the search instances on a shared model (smooth + hard)
-        //Disable recursivity on hardify, and hardify the sub2Clazz
-        
-        $switcher = new core_kernel_persistence_Switcher();
-        $options['recursive'] = false;
-        $switcher->hardify($sub2Clazz, $options);
-        unset ($switcher); //Required to update cache data
-        
-        $instances = $sub1Clazz->searchInstances($propertyFilter, array('recursive'=>true));
-        $this->assertTrue(array_key_exists($sub1ClazzInstance->getUri(), $instances));
-        $this->assertTrue(array_key_exists($sub2ClazzInstance->getUri(), $instances));
-        $this->assertTrue(array_key_exists($sub3ClazzInstance->getUri(), $instances));
-        
-        try{
-            $instances = $sub1Clazz->searchInstances($propertyFilter, array('recursive'=>true, 'offset'=>1));
-            $this->assertTrue(false);
-        }catch(common_Exception $e){
-            $this->assertTrue(true);
-        }
-        
-        $switcher = new core_kernel_persistence_Switcher();
-        $switcher->unhardify($sub2Clazz, $options);
-        unset ($switcher); //Required to update cache data
 
         //clean data test
         foreach($sub1Clazz->getInstances(true) as $instance){ $instance->delete(); }
@@ -425,87 +383,6 @@ class ClassTest extends GenerisPhpUnitTestRunner {
         $sub2Clazz->delete(true);
         $sub3Clazz->delete(true);
     }
-    
-	
-	public function testSearchInstancesHard($hard = true){
-		
-		if(!$hard) return;
-		
-		core_kernel_persistence_PersistenceProxy::forceMode(PERSISTENCE_HARD);
-		
-		$class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAO.rdf#Languages');
-		if(core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($class)){
-		
-			$propertyFilter = array(
-				RDFS_LABEL => 'English'
-			);
-			$options = array('like' => false, 'recursive' => 0);
-					
-			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
-			
-			$found = count($languagesDependantProp);
-			$this->assertTrue($found > 0);
-			
-			$propertyFilter = array(
-				RDF_VALUE => 'EN',
-				RDF_TYPE	=> 'http://www.tao.lu/Ontologies/TAO.rdf#Languages'
-			);
-			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
-			$nfound = count($languagesDependantProp);
-			$this->assertTrue($nfound > 0);
-			$this->assertEquals($found, $nfound);
-			
-		}
-		
-		core_kernel_persistence_PersistenceProxy::restoreImplementation();
-		
-	}
-	
-	public function testSearchInstancesVeryHard($hard=true){
-		
-		if(!$hard) return;
-		
-		$class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOSubject.rdf#Subject');
-		if(core_kernel_persistence_hardapi_ResourceReferencer::singleton()->isClassReferenced($class)){
-			
-			//test simple search:
-			$propertyFilter = array(
-				'http://www.tao.lu/Ontologies/generis.rdf#login' => 's1',
-				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'e10adc3949ba59abbe56e057f20f883e'
-			);
-			$options = array('like' => false, 'recursive' => 0);
-			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
-			$nfound = count($languagesDependantProp);
-			$this->assertTrue($nfound > 0);
-			
-			//test like option
-			$propertyFilter = array(
-				'http://www.tao.lu/Ontologies/generis.rdf#login' => '%s1',
-				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'e10adc3949ba59abbe56e057f20f883e'
-			);
-			$options = array('like' => true, 'recursive' => 0);
-			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
-			$likeFound = count($languagesDependantProp);
-			$this->assertTrue($likeFound > 0);
-			$this->assertEquals($nfound, $likeFound);
-			
-			//test reference resource prop value:
-			$propertyFilter = array(
-				'http://www.tao.lu/Ontologies/generis.rdf#login' => '%s1',
-				'http://www.tao.lu/Ontologies/generis.rdf#password'	=> 'e10adc3949ba59abbe56e057f20f883e',
-				'http://www.tao.lu/Ontologies/generis.rdf#userDefLg' => '%FR%'
-			);
-			
-			$options = array('like' => true, 'recursive' => false);
-			//test language filter (property 'http://www.tao.lu/Ontologies/generis.rdf#userDefLg' must be set to language dependent first!):
-			// $options['lang'] = 'EN';
-			
-			$languagesDependantProp = $class->searchInstances($propertyFilter, $options);
-			$refFound = count($languagesDependantProp);
-			$this->assertTrue($refFound > 0);
-			$this->assertEquals($nfound, $refFound);
-		}
-	}
 	
 	//Test the function getInstancesPropertyValues of the class Class with literal properties
 	public function testGetInstancesPropertyValuesWithLiteralProperties () {

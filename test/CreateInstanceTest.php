@@ -171,35 +171,6 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner {
 		$class2->delete();
 		$class3->delete();
 	}
-	// -- Removed until this extreme test case is unmisticalized in hard mode.
-	/*
-	 * 
-	public function testCreateInstanceHardified() {
-		
-		$rr = core_kernel_persistence_hardapi_ResourceReferencer::singleton();
-		$this->assertFalse($rr->isClassReferenced($this->class));
-		$softinstance = core_kernel_classes_ResourceFactory::create($this->class);
-		$this->assertFalse($rr->isResourceReferenced($softinstance));
-		
-		$switcher = new core_kernel_persistence_Switcher();
-		$switcher->hardify($this->class, array(
-			'topclass'		=> $this->class,
-		));
-		unset($switcher);
-		
-		$this->assertTrue($rr->isClassReferenced($this->class));
-		common_Logger::i('creating hardified');
-		$hardinstance = core_kernel_classes_ResourceFactory::create($this->class);
-		$this->assertTrue($rr->isResourceReferenced($hardinstance), 'Instance created from harmode class was added in softmode');
-		
-		$softinstance->delete();
-		$hardinstance->delete();
-		
-		$switcher = new core_kernel_persistence_Switcher();
-		$switcher->unhardify($this->class);
-		unset($switcher);
-	}
-	*/
 	
 	public function after($pMethode) {
 		common_Logger::i('Cleaning up class '.$this->class->getUri().' for Create instance Tests');

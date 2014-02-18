@@ -18,8 +18,7 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
+
 require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
 
 class SqlInjectionTestCase extends GenerisPhpUnitTestRunner {
@@ -39,24 +38,6 @@ class SqlInjectionTestCase extends GenerisPhpUnitTestRunner {
             $this->fail('SQL Error: '.$e->getMessage());
         }
         $testInstance->delete();
-        
-        $switcher = new core_kernel_persistence_Switcher();
-        $switcher->hardify($testClass);
-        
-        try {
-            $testInstance = $testClass->createInstanceWithProperties(array(
-                RDFS_LABEL => '"hi"'
-            ));
-            $testInstance->setPropertiesValues(array(
-                RDFS_COMMENT => '"hi"'
-            ));
-            $this->assertEquals($testInstance->getUniquePropertyValue(new core_kernel_classes_Property(RDFS_LABEL)), "\"hi\"");
-        } catch (core_kernel_persistence_hardsql_Exception $e) {
-            $this->fail('SQL Error: '.$e->getMessage());
-        }
-        $testInstance->delete();
-        $switcher->unhardify($testClass);
-        
         $generisClass->delete();
 
 	}
