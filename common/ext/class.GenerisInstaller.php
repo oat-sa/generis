@@ -65,7 +65,6 @@ class common_ext_GenerisInstaller
      */
     public function install()
     {
-        // section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A40 begin
     	if ($this->extension->getId() != 'generis') {
     		throw new common_ext_ExtensionException('Tried to install "'.$this->extension->getId().'" using the GenerisInstaller');
     	}
@@ -81,8 +80,7 @@ class common_ext_GenerisInstaller
         
 		AutoLoader::reload();
         
-		ModelManager::setModel(new \core_kernel_persistence_smoothsql_SmoothModel(array()));
-		// section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A40 end
+		ModelManager::setModel(new \core_kernel_persistence_smoothsql_SmoothModel(array('persistence' => 'default')));
     }
 
 } /* end of class common_ext_GenerisInstaller */
