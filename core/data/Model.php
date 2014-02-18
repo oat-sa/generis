@@ -45,11 +45,16 @@ interface Model
 	function getConfig();
 
 	/**
+	 * Experimental interface to access the data of the model
+	 * Will throw an exception on all current implementations
+	 * 
 	 * @return RdfInterface
 	 */
 	function getRdfInterface();
 	
 	/**
+	 * Expected interface to access the data of the model
+	 * 
 	 * @return RdfsInterface
 	 */
 	function getRdfsInterface();

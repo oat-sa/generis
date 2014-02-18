@@ -21,7 +21,8 @@
 namespace oat\generis\model\data;
 
 /**
- * Rdf interface to access the ontology 
+ * Rdf interface to access the ontology
+ * This is an experimental interface that has not been implemented yet
  *
  * @author Joel Bout, <joel@taotesting.com>
  * @package core
@@ -29,11 +30,39 @@ namespace oat\generis\model\data;
  */
 interface RdfDriver
 {
-    public function set($subject, $property, $value);
+    /**
+     * Adds a triple to the ontology
+     * 
+     * @param string $subject
+     * @param string $predicate
+     * @param string $value$object
+     */
+    public function set($subject, $predicate, $object);
     
-    public function get($subject, $property);
+    /**
+     * Returns an array of the objects of all triples with the given subject, predicate
+     * 
+     * @param string $subject
+     * @param string $predicate
+     * @return array
+     */
+    public function get($subject, $predicate);
     
-    public function remove($subject, $property, $value);
+    /**
+     * Removes the triple with the given subject, predicate, object
+     * 
+     * @param string $subject
+     * @param string $predicate
+     * @param string $object
+     */
+    public function remove($subject, $predicate, $object);
     
-    public function search($property, $value);
+    /**
+     * Returns an array of the subjects of all triples with the given predicate, object
+     * 
+     * @param string $predicate
+     * @param string $object
+     * @return array
+     */
+    public function search($predicate, $object);
 }
