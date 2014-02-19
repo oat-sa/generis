@@ -1,4 +1,5 @@
 <?php
+use oat\oatbox\PhpSerializable;
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,7 +143,11 @@ class common_Utils
         		$returnValue = 'null';
 				break;
         	case "object" :
-        	    $returnValue =  'unserialize('.self::toPHPVariableString(serialize($value)).')';
+        	    if (false && $value instanceof PhpSerializable) {
+        	       $returnValue = $value->__toPhpCode();
+        	    } else {
+        	       $returnValue =  'unserialize('.self::toPHPVariableString(serialize($value)).')';
+        	    }
         		break;
         	default:
     			// resource and unexpected types

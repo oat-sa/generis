@@ -43,7 +43,8 @@ return array(
 	),
     'autoload' => array (
         'psr-4' => array(
-            'oat\\generis\\model\\' => dirname(__FILE__).DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR
+            'oat\\generis\\model\\' => dirname(__FILE__).DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR,
+            'oat\\oatbox\\' => dirname(__FILE__).DIRECTORY_SEPARATOR.'common'.DIRECTORY_SEPARATOR.'oatbox'.DIRECTORY_SEPARATOR
         )
     ),
 	'install' => array(
