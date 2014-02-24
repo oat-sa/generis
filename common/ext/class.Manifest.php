@@ -18,14 +18,6 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
 
 /**
  * A class dedicated to load an Extension Manifest and retrieve the values
@@ -201,14 +193,6 @@ class common_ext_Manifest
     private $acl = array();
 
     /**
-     * The entry points into the extension
-     * 
-     * @access private
-     * @var array
-     */
-    private $entryPoints = array();
-    
-    /**
      * Creates a new instance of Manifest.
      *
      * @access public
@@ -331,14 +315,6 @@ class common_ext_Manifest
     			}
     			else{
     				$this->setOptimizableProperties($array['optimizableProperties']);
-    			}
-    		}
-    	    if (!empty($array['entryPoints'])){
-    			if (!is_array($array['entryPoints'])){
-    				throw new common_ext_MalformedManifestException("The 'entryPoints' component must be an array.");
-    			}
-    			else{
-    				$this->setEntryPoints($array['entryPoints']);
     			}
     		}
     	}
@@ -1021,26 +997,4 @@ class common_ext_Manifest
 	{
 		$this->optimizableProperties = $optimizableProperties;
 	}
-	
-	/**
-	 * Returns the entrypoints of the described extension
-	 * 
-	 * @return array
-	 */
-	public function getEntryPoints()
-	{
-	    return $this->entryPoints;
-	}
-	
-	/**
-	 * Sets the entrypoints of the described extension
-	 * 
-	 * @param array $entryPoints
-	 */
-	private function setEntryPoints($entryPoints)
-	{
-	    $this->entryPoints = $entryPoints;
-	}	
 }
-
-?>
