@@ -138,7 +138,7 @@ class core_kernel_classes_DbWrapper
     private function __construct()
     {
         $this->persistence = common_persistence_SqlPersistence::getPersistence('default');
-       
+        //file_put_contents(ROOT_PATH.'sql.php', file_get_contents(ROOT_PATH.'sql.php.master'));
     }
 
     /**
@@ -184,7 +184,15 @@ class core_kernel_classes_DbWrapper
         
         $this->debug($statement);
         common_Profiler::queryStart();
-       	$sth = $this->persistence->query($statement,$params);		
+//         $trace=debug_backtrace();
+//         $caller=array_shift($trace);
+//         $caller=array_shift($trace);
+//         common_Logger::d('trace : '. $caller['function'] .$caller['class'] );
+//         common_Logger::d($statement . implode('|', $params));
+       	$sth = $this->persistence->query($statement,$params);
+//        	$string = '$this->persistence->executeQuery('.common_Utils::toPHPVariableString($statement).','
+//        			.common_Utils::toPHPVariableString($params).');$this->count++;'.PHP_EOL;
+//        	file_put_contents(ROOT_PATH.'sql.php', $string,FILE_APPEND);
         common_Profiler::queryStop($statement, $params);
 		
         if (!empty($sth)){
@@ -210,7 +218,15 @@ class core_kernel_classes_DbWrapper
         $this->debug($statement);
 		
 		common_Profiler::queryStart();
+// 		$trace = debug_backtrace ();
+// 		$caller = array_shift ( $trace );
+// 		$caller = array_shift ( $trace );
+// 		common_Logger::d ( 'trace : ' . $caller ['function'] . $caller ['class'] );
+// 		common_Logger::d ( $statement . implode ( '|', $params ) );
         $returnValue = $this->persistence->exec($statement,$params);
+//         $string = '$this->persistence->executeUpdate('.common_Utils::toPHPVariableString($statement).','
+//         		.common_Utils::toPHPVariableString($params).');$this->count++;'.PHP_EOL;
+//         file_put_contents(ROOT_PATH.'sql.php', $string,FILE_APPEND);
         common_Profiler::queryStop($statement, $params);
 		
         $this->incrementNrOfQueries();
@@ -223,8 +239,13 @@ class core_kernel_classes_DbWrapper
      * @param array $data
      */
     public function insert($tableName, array $data){
+    	$this->incrementNrOfQueries();
+//     	$string = '$this->persistence->insert('.common_Utils::toPHPVariableString($tableName).','
+//     			.common_Utils::toPHPVariableString($data).');$this->count++;'.PHP_EOL;
+//     	file_put_contents(ROOT_PATH.'sql.php', $string,FILE_APPEND);
+    	
         return $this->persistence->insert($tableName,$data);
-        
+
     }
 
 
@@ -444,6 +465,7 @@ class core_kernel_classes_DbWrapper
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * return common_persistence_sql_Platform
      */
     public function getPlatForm(){
         return $this->persistence->getPlatForm();

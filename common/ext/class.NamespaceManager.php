@@ -103,9 +103,10 @@ class common_ext_NamespaceManager
         
         if(count($this->namespaces) == 0){
         	$db = core_kernel_classes_DbWrapper::singleton();
-        	$query = 'SELECT "modelid", "modeluri" FROM "models"';
+        	$query = 'SELECT modelid, modeluri FROM models';
 			$result = $db->query($query);
-			while ($row = $result->fetch()){
+			
+			while ($row = $result->fetch()){	
 				$id 	= $row['modelid'];
 				$uri 	= $row['modeluri'];
 				$this->namespaces[$id] = $uri;
@@ -115,7 +116,7 @@ class common_ext_NamespaceManager
         foreach($this->namespaces as $id => $uri){
         	$returnValue[$uri] = new common_ext_Namespace($id, $uri);
         }
-        
+
         // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001595 end
 
         return (array) $returnValue;

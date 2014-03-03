@@ -41,7 +41,7 @@ class common_persistence_Manager
         'dbal_pdo_mysql'  => 'common_persistence_sql_dbal_mysql_Driver',
         'dbal_pdo_sqlite' => 'common_persistence_sql_dbal_Driver',
         'dbal_pdo_pgsql'  => 'common_persistence_sql_dbal_Driver',
-        'dbal_pdo_oci'    => 'common_persistence_sql_dbal_Driver',
+        'pdo_oci'    => 'common_persistence_sql_dbal_oracle_Driver',
         'dbal_pdo_ibm'    => 'common_persistence_sql_dbal_Driver',
         'pdo_sqlsrv' => 'common_persistence_sql_dbal_Driver',
         'pdo_mysql'  => 'common_persistence_sql_pdo_mysql_Driver',

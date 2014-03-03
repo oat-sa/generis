@@ -37,5 +37,5 @@ interface common_persistence_sql_Driver extends common_persistence_Driver{
     public function lastInsertId($name = null);
     
     public function quote($parameter, $parameter_type = PDO::PARAM_STR);
-
+    
 }

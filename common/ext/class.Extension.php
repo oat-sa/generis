@@ -158,7 +158,7 @@ class common_ext_Extension
 
         if(is_null($this->dbConfig)) {
         	$db = core_kernel_classes_DbWrapper::singleton();
-			$query = "SELECT loaded,\"loadatstartup\",ghost FROM extensions WHERE id = ?";
+			$query = "SELECT loaded,loadatstartup,ghost FROM extensions WHERE id = ?";
 
 			$result = $db->query($query,array($this->id));
 			if ($row = $result->fetch()){
@@ -405,7 +405,8 @@ class common_ext_Extension
         foreach ($this->getManifest()->getRoutes() as $mapedPath => $ns) {
             $namespaces[] = trim($ns, '\\');
         }
-        if (!empty($ns)) {
+        if (!empty($namespaces)) {
+        	common_Logger::d('Ns not empty '. $this->getId() );
             $classes = array();
             $recDir = new RecursiveDirectoryIterator($this->getDir());
             $recIt = new RecursiveIteratorIterator($recDir);
@@ -440,7 +441,7 @@ class common_ext_Extension
             } elseif (!is_subclass_of($class, 'Module')) {
 				common_Logger::w($class.' does not inherit Module');
 				unset($returnValue[$key]);
-            }
+            } 
         }
         
         return (array) $returnValue;

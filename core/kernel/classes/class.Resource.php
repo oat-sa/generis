@@ -98,10 +98,14 @@ class core_kernel_classes_Resource
         // section 127-0-0-1-59fa2263:1193cca7051:-8000:0000000000000AFB begin
         //we should check using utils if the uri is short or long always use long uri inside the api (nevertheless the api may be called with short )
         if(!is_string($uri)){
-			//var_dump(debug_backtrace());
+			
 			if($uri instanceof self){
 				$uri = $uri->getUri();
 			} else {
+				$trace=debug_backtrace();
+				$caller=array_shift($trace);
+
+				common_Logger::e('could nout create ressource' . $uri . $caller['function'] .$caller['class'] );
 				throw new common_exception_Error('cannot construct the resource because the uri is not a "string", but a '.gettype($uri).' debug: '.$debug);
 			}
 		}else if(empty($uri)){

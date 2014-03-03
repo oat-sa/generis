@@ -319,7 +319,7 @@ class core_kernel_classes_Property
 	        $lgDependentProperty = new core_kernel_classes_Property(PROPERTY_IS_LG_DEPENDENT,__METHOD__);
 			$lgDependent = $this->getOnePropertyValue($lgDependentProperty);
 			 
-			if (is_null($lgDependent)){
+			if (is_null($lgDependent) || !$lgDependent instanceof  core_kernel_classes_Resource){
 				$returnValue = false;
 			}
 			else{

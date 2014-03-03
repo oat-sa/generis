@@ -320,7 +320,7 @@ class common_ext_ExtensionsManager
         
     	$db = core_kernel_classes_DbWrapper::singleton();
     	//var_dump($db->getTables());
-		$query = 'SELECT * FROM "extensions"';
+		$query = 'SELECT * FROM extensions';
 		$result = $db->query($query);
 
 		while ($row = $result->fetch()){

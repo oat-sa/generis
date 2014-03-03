@@ -33,7 +33,7 @@ class core_kernel_api_ModelFactory{
     private function getModelId($namespace){
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
-        $query = 'SELECT "modelid" FROM "models" WHERE ("modeluri" = ?)';
+        $query = 'SELECT modelid FROM models WHERE (modeluri = ?)';
         $results = $dbWrapper->query($query, array($namespace));
        
         return $results->fetchColumn(0);
@@ -91,7 +91,7 @@ class core_kernel_api_ModelFactory{
                     $date= $datetime->format('Y-m-d H:i:s');
                     $dbWrapper->insert('statements',
                         array(
-                            '"modelid"' =>  $modelId,
+                            'modelid' =>  $modelId,
                             'subject' =>$subjectUri,
                             'predicate'=> $prop,
                             'object' => $v['value'],
@@ -100,7 +100,7 @@ class core_kernel_api_ModelFactory{
                             'stedit' => 'yyy[admin,administrators,authors]',
                             'stread' => 'yyy[admin,administrators,authors]',
                             'stdelete' => 'yyy[admin,administrators,authors]',
-                            'epoch' => $date
+                           // 'epoch' => $date
                         ),
                         array(
                             PDO::PARAM_INT,
@@ -112,7 +112,7 @@ class core_kernel_api_ModelFactory{
                             PDO::PARAM_STR,
                             PDO::PARAM_STR,
                             PDO::PARAM_STR,
-                            'datetime'
+                            //'datetime'
                         )
                     );
                 }

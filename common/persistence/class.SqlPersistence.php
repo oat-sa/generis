@@ -45,9 +45,9 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
     
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @return common_persistence_sql_Platform
      */
     public function getPlatForm(){
-        //common_Logger::i('Temporary platform is driver before separation');
         return $this->getDriver()->getPlatform();
     }
     

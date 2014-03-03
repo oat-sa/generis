@@ -63,7 +63,7 @@ class core_kernel_persistence_smoothsql_Class
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014EB begin
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlQuery = 'SELECT "subject" FROM "statements" WHERE "predicate" = ? and "object" = ?';
+		$sqlQuery = 'SELECT subject FROM statements WHERE predicate = ? and '.$dbWrapper->getPlatForm()->getObjectTypeCondition() .' = ?';
 		$sqlResult = $dbWrapper->query($sqlQuery, array(RDFS_SUBCLASSOF, $resource->getUri()));
 		
 		while ($row = $sqlResult->fetch()){
@@ -97,9 +97,9 @@ class core_kernel_persistence_smoothsql_Class
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
-		$query = 'SELECT "object" FROM "statements"
-					WHERE "subject" = ?
-					AND "predicate" = ? AND "object" = ?';
+		$query = 'SELECT object FROM statements
+					WHERE subject = ?
+					AND predicate = ? AND ' . $dbWrapper->getPlatForm()->getObjectTypeCondition() . ' = ?';
 		$result = $dbWrapper->query($query, array(
 			$resource->getUri(),
 			RDFS_SUBCLASSOF,
@@ -141,9 +141,9 @@ class core_kernel_persistence_smoothsql_Class
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014F5 begin
         $returnValue =  array();
 		
-        $sqlQuery = 'SELECT "object" FROM "statements" 
-        			WHERE "subject" = ? 
-        			AND ("predicate" = ? OR "predicate" = ?)';
+        $sqlQuery = 'SELECT object FROM statements
+        			WHERE subject = ? 
+        			AND (predicate = ? OR predicate = ?)';
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$sqlResult = $dbWrapper->query($sqlQuery, array($resource->getUri(), RDFS_SUBCLASSOF, RDF_TYPE));
@@ -178,9 +178,10 @@ class core_kernel_persistence_smoothsql_Class
         $returnValue = array();
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:00000000000014FA begin
-		$sqlQuery = 'SELECT "subject" FROM "statements"
-			WHERE "predicate" = ? 
-			AND "object" = ?';
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+		$sqlQuery = 'SELECT subject FROM statements
+			WHERE predicate = ? 
+			AND '. $dbWrapper->getPlatForm()->getObjectTypeCondition() .' = ?';
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$sqlResult = $dbWrapper->query($sqlQuery, array(
 			RDFS_DOMAIN,
@@ -221,9 +222,9 @@ class core_kernel_persistence_smoothsql_Class
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001500 begin
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sqlQuery = 'SELECT "subject" FROM "statements" 
-						WHERE "predicate" = ?  
-							AND "object" = ? ';
+        $sqlQuery = 'SELECT subject FROM statements 
+						WHERE predicate = ?  
+							AND ' . $dbWrapper->getPlatForm()->getObjectTypeCondition(). ' = ? ';
 		if(isset($params['limit'])){
 			$limit = intval($params['limit']);
 			$offset = isset($params['offset']) ? intval($params['offset']) : 0;
@@ -376,6 +377,9 @@ class core_kernel_persistence_smoothsql_Class
 		if (!$returnValue->hasType($resource)){
 			$returnValue->setType($resource);
 		}
+		else {
+			common_Logger::e('already had type '. $resource);
+		}
 
 		if (!empty($label)) {
 			$returnValue->setLabel($label);
@@ -504,8 +508,8 @@ class core_kernel_persistence_smoothsql_Class
                 unset($options['limit']);
             }
 			$query = $this->getFilteredQuery($resource, $propertyFilters, $options);
-			if (substr($query, 0, strlen('SELECT "subject"')) == 'SELECT "subject"') {
-				$query = 'SELECT count(*) as count'.substr($query, strlen('SELECT "subject"'));
+			if (substr($query, 0, strlen('SELECT subject')) == 'SELECT subject') {
+				$query = 'SELECT count(*) as count'.substr($query, strlen('SELECT subject'));
 				$sqlResult = $dbWrapper->query($query);
 				if ($row = $sqlResult->fetch()) {
 					$returnValue = $row['count'];
@@ -518,9 +522,9 @@ class core_kernel_persistence_smoothsql_Class
 			}
 		}
 		else {
-			$sqlQuery = 'SELECT count("subject") as count FROM "statements"
-							WHERE "predicate" = ?  
-								AND "object" = ? ';
+			$sqlQuery = 'SELECT count(subject) as count FROM statements
+							WHERE predicate = ?  
+								AND '.$dbWrapper->getPlatForm()->getObjectTypeCondition(). ' = ? ';
 			
 			$sqlResult = $dbWrapper->query($sqlQuery, array(
 				RDF_TYPE,
@@ -566,17 +570,12 @@ class core_kernel_persistence_smoothsql_Class
 	if($distinct){
 		$query .= ' DISTINCT';
 	}
-	$query .= ' "object" FROM "statements"
-		WHERE "predicate" = ?
-		AND "subject" IN ('.$filteredQuery.')';
+	$query .= ' object FROM statements
+		WHERE predicate = ?
+		AND subject IN ('.$filteredQuery.')';
 	$sqlResult = $dbWrapper->query($query, array($property->getUri()));
 	while ($row = $sqlResult->fetch()){
-	    if(!common_Utils::isUri($row['object'])) {
-	    $returnValue[] = new core_kernel_classes_Literal($row['object']);
-	    }
-	    else {
-		$returnValue[] = new core_kernel_classes_Resource($row['object']);
-	    }
+		$returnValue[] = common_Utils::toResource($row['object']);
 	}
         // section 127-0-1-1--120bf54f:13142fdf597:-8000:000000000000312D end
         return (array) $returnValue;
@@ -667,11 +666,11 @@ class core_kernel_persistence_smoothsql_Class
         if ($class->exists()){
         	
         	$inValues = implode(',', $uris);
-        	$query = 'DELETE FROM "statements" WHERE "subject" IN (' . $inValues . ')';
+        	$query = 'DELETE FROM statements WHERE subject IN (' . $inValues . ')';
         	
         	if (true === $deleteReference){
         		$params[] = $resource->getUri();
-        		$query .= ' OR "object" IN (' . $inValues . ')';
+        		$query .= ' OR object IN (' . $inValues . ')';
         	}
         	
         	try{
@@ -770,7 +769,7 @@ class core_kernel_persistence_smoothsql_Class
 
         // section 127-0-1-1--1bdaa580:13412f85251:-8000:00000000000017CC begin"
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		
+		$platform = $dbWrapper->getPlatForm();
 		//add the type check to the filters
 		/*if (isset($propertyFilters[RDF_TYPE])) {
 			if (!is_array($propertyFilters[RDF_TYPE])) $propertyFilters[RDF_TYPE] = array($propertyFilters[RDF_TYPE], $resource->getUri());
@@ -800,7 +799,7 @@ class core_kernel_persistence_smoothsql_Class
 		$langToken = '';
 		if(isset($options['lang'])){
 			if(preg_match('/^[a-zA-Z]{2,4}$/', $options['lang'])){
-				$langToken = ' AND ("l_language" = \'\' OR "l_language" = \''.$options['lang'].'\')';
+				$langToken = ' AND ('. $platform->isNullCondition('l_language') . ' OR l_language = '.$options['lang'].')';
 			}
 		}
 		$like = true;
@@ -808,7 +807,7 @@ class core_kernel_persistence_smoothsql_Class
 			$like = ($options['like'] === true);
 		}
 		
-		    $query = 'SELECT "subject" FROM "statements" WHERE ';
+		    $query = 'SELECT subject FROM statements WHERE ';
 		    $conditions = array();
 		    foreach($propertyFilters as $propUri => $pattern){
 
@@ -828,18 +827,18 @@ class core_kernel_persistence_smoothsql_Class
 							    if(!preg_match("/%$/", $object)){
 								    $object = $object."%";
 							    }
-							    $sub[] .= '"object" LIKE '.$dbWrapper->quote($object);
+							    $sub[] .= $platform->getObjectTypeCondition() . ' LIKE '.$dbWrapper->quote($object);
 						    }
 						    else {
 							    $sub[] = (strpos($object, '%') !== false)
-								    ? '"object" LIKE '.$dbWrapper->quote($object)
-								    : '"object" = '.$dbWrapper->quote($value);
+								    ? $platform->getObjectTypeCondition() . ' LIKE '.$dbWrapper->quote($object)
+								    : $platform->getObjectTypeCondition() . ' = '.$dbWrapper->quote($value);
 						    }
 					    break;
 
 					    case 'object' :
 						    if($value instanceof core_kernel_classes_Resource) {
-							    $sub[] = '"object" = \''.$value->getUri().'\'';
+							    $sub[] = $platform->getObjectTypeCondition(). ' = '.$dbWrapper->quote($value->getUri());
 						    } else {
 							    common_Logger::w('non ressource as search parameter: '.get_class($value), 'GENERIS');
 						    }
@@ -851,9 +850,9 @@ class core_kernel_persistence_smoothsql_Class
 				    }
 			    }
 			    if (empty($sub)) {
-				    $conditions[] = "(\"predicate\" = {$propUri}{$langToken})";
+				    $conditions[] = "(predicate = {$propUri}{$langToken})";
 			    } else {
-				    $conditions[] = "(\"predicate\" = {$propUri} AND (".implode(" OR ", $sub)."){$langToken})";
+				    $conditions[] = "(predicate = {$propUri} AND (".implode(" OR ", $sub)."){$langToken})";
 			    }
 		    }
 		
@@ -871,7 +870,7 @@ class core_kernel_persistence_smoothsql_Class
 				    $q = $query . $condition;
 				}
 				else {
-                    $q = $query . $condition . ' AND "subject" IN (' . $q . ')';
+                    $q = $query . $condition . ' AND subject IN (' . $q . ')';
                 }
 			}
                         if(!empty($q)){
@@ -888,20 +887,20 @@ class core_kernel_persistence_smoothsql_Class
 		
 	
 		if (count ( $propertyFilters ) > 0) {
-			$query .= ' "subject" IN (SELECT "subject" FROM "statements" WHERE "predicate" = \'' . RDF_TYPE . '\' AND "object" in (\'' . implode ( '\',\'', $rdftypes ) . '\'))';
+			$query .= ' subject IN (SELECT subject FROM statements WHERE predicate = ' . $dbWrapper->quote(RDF_TYPE) . ' AND '. $platform->getObjectTypeCondition(). ' in (\'' . implode ( '\',\'', $rdftypes ) . '\'))';
 		} else {
-			$query = 'SELECT "subject" FROM "statements" WHERE "predicate" = \'' . RDF_TYPE . '\' AND "object" in (\'' . implode ( '\',\'', $rdftypes ) . '\')';
+			$query = 'SELECT subject FROM statements WHERE predicate = ' . $dbWrapper->quote(RDF_TYPE) . ' AND '. $platform->getObjectTypeCondition().' in (\'' . implode ( '\',\'', $rdftypes ) . '\')';
 		}
 		// sorting
 		if (isset ( $options ['order'] ) && ! empty ( $options ['order'] )) {
 			$orderUri = $options ['order'];
 			$orderDir = isset ( $options ['orderdir'] ) && strtoupper ( $options ['orderdir'] ) == 'DESC' ? 'DESC' : 'ASC';
-			$orderQuery = 'SELECT "subject","object" FROM "statements" WHERE "predicate" = \'' . $orderUri . '\'';
-			$query = 'SELECT DISTINCT "mainq"."subject", "orderq"."object" from (' . $query . ') AS mainq
-			          LEFT JOIN (' . $orderQuery . ') AS orderq ON ("mainq"."subject" = "orderq"."subject")
-			          ORDER BY "orderq"."object" ' . $orderDir;
+			$orderQuery = 'SELECT subject,object FROM statements WHERE predicate = ' . $dbWrapper->quote($orderUri) ;
+			$query = 'SELECT DISTINCT mainq.subject, orderq.object from (' . $query . ') AS mainq
+			          LEFT JOIN (' . $orderQuery . ') AS orderq ON (mainq.subject = orderq.subject)
+			          ORDER BY orderq.object ' . $orderDir;
 		} else if (isset ( $options ['limit'] )) {
-			$query .= ' ORDER BY "id"';
+			$query .= ' ORDER BY id';
 		}
 
 		if (isset ( $options ['limit'] )) {

@@ -51,6 +51,7 @@ class core_kernel_persistence_smoothsql_Utils
         $returnValue = array();
 
         // section 10-13-1-85-61dcfc6d:1301cc5c657:-8000:000000000000190E begin
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $session = core_kernel_classes_Session::singleton(); 
     	$selectedLanguage = $session->getDataLanguage();
     	$defaultLanguage = DEFAULT_LANG;
@@ -61,7 +62,7 @@ class core_kernel_persistence_smoothsql_Utils
     						   $fallbackLanguage => array());
     					  
     	foreach ($dataset as $row) {
-    		$sortedResults[$row[$langColname]][] = array('value' => $row['object'], 
+    		$sortedResults[$row[$langColname]][] = array('value' => $dbWrapper->getPlatForm()->getPhpTextValue($row['object']), 
     													 'language' => $row[$langColname]);
     	}
     	

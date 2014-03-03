@@ -36,6 +36,8 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         common_Logger::d('Running Dbal Driver');
         $params['driver'] = str_replace('dbal_', '', $params['driver']);
         $config = new \Doctrine\DBAL\Configuration();
+//         $logger = new Doctrine\DBAL\Logging\EchoSQLLogger();
+//         $config->setSQLLogger($logger);
         $this->connection = \Doctrine\DBAL\DriverManager::getConnection($params,$config);
         return new common_persistence_SqlPersistence($params,$this);
     }
@@ -47,7 +49,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * @see common_persistence_sql_Driver::getPlatForm()
      */
     public function getPlatForm(){
-        return new common_persistence_sql_dbal_Platform($this->connection->getDatabasePlatform());
+        return new common_persistence_sql_Platform($this->connection->getDatabasePlatform());
     }
     
     /* (non-PHPdoc)
@@ -57,6 +59,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return new common_persistence_sql_dbal_SchemaManager($this->connection->getSchemaManager());
     }
+    
    
     /**
      * @access
@@ -93,7 +96,10 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     
     
 
-    
+    /**
+     * (non-PHPdoc)
+     * @see common_persistence_sql_Driver::insert()
+     */
     public function insert($tableName, array $data){
         return $this->connection->insert($tableName, $data);
     }

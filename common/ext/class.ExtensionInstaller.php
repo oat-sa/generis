@@ -93,20 +93,27 @@ class common_ext_ExtensionInstaller
 					
 				//reload the autoloader
 				AutoLoader::reload();
-				
+				common_Logger::d('install custom scrip for ' . $this->extension->getId());
 				$this->installCustomScript();
-					
+				common_Logger::d('Done install custom scrip for ' . $this->extension->getId());
+				
 				if ($this->getLocalData() == true){
+					common_Logger::d('installLocalData  for ' . $this->extension->getId());
 					$this->installLocalData();
+					common_Logger::d('Done installLocalData for ' . $this->extension->getId());
+						
 				}
+				common_Logger::d('extendedInstall  for ' . $this->extension->getId());
 					
 				// Method to be overriden by subclasses
 				// to extend the installation mechanism.
 				$this->extendedInstall();
+				common_Logger::d('Done extendedInstall  for ' . $this->extension->getId());
 			}
 				
 		}catch (common_ext_ExtensionException $e){
 			// Rethrow
+			common_Logger::e('Exception raised ' . $e->getMessage());
 			throw $e;
 		}
 
@@ -229,8 +236,17 @@ class common_ext_ExtensionInstaller
 		
 		//add extension to db
 		$db = core_kernel_classes_DbWrapper::singleton();
-		$sql = "INSERT INTO extensions (id, name, version, loaded, \"loadatstartup\") VALUES ('".$this->extension->getId()."', '".$this->extension->getName()."', '".$this->extension->getVersion()."', 1, 1);";
-		$db->exec($sql);
+		$sql = "INSERT INTO extensions (id, name, version, loaded, \"loadatstartup\") VALUES ('".$this->extension->getId()."', 	'".$this->extension->getName()."', '".$this->extension->getVersion()."', 1, 1);";
+		//$db->exec($sql);
+		$db->insert('extensions', array(
+			'id' => $this->extension->getId(),
+			'name' => $this->extension->getName(),
+			'version' => $this->extension->getVersion()	,
+			'loaded' => '1',
+			'loadatstartup' => '1'
+			
+		));
+
 		
 		common_Logger::d($this->extension->getId() . ' registered', 'INSTALL');
 		
