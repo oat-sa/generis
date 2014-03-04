@@ -870,6 +870,26 @@ class common_ext_Manifest
     {
         $this->constants = $constants;
     }
+    
+    /**
+     * Extract checks from a given manifest file.
+     *
+     * @access public
+     * @author Jerome Bogaerts <jerome@taotesting.com>
+     * @param  string file The path to a manifest.php file.
+     * @return common_configuration_ComponentCollection
+     */
+    public static function extractDependencies($file)
+    {
+        $manifest = @include $file;
+        return isset($manifest['requires']) && is_array($manifest['requires'])
+            ? array_keys($manifest['requires'])
+            : (isset($manifest['dependencies']) && is_array($manifest['dependencies'])
+                ? $manifest['dependencies']
+                : array()
+        );
+        
+    }
 
     /**
      * Extract checks from a given manifest file.
