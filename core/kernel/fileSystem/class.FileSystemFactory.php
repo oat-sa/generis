@@ -47,6 +47,11 @@ class core_kernel_fileSystem_FileSystemFactory
     public static function createFileSystem( core_kernel_classes_Resource $type, $url, $login, $password, $path, $label, $enabled = false)
     {
         $path = rtrim($path, "\\/") . DIRECTORY_SEPARATOR;
+        if (!file_exists($path)) {
+            if (! mkdir($path, 0700, true)) {
+                throw new common_exception_Error("Could not create path '".$path."' for filesystem '".$label."'");
+            }
+        }
         
         $versioningRepositoryClass = new core_kernel_classes_Class(CLASS_GENERIS_VERSIONEDREPOSITORY);
         $resource = $versioningRepositoryClass->createInstanceWithProperties(array(
