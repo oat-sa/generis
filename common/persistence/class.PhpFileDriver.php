@@ -50,7 +50,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
     {
         $this->directory = isset($params['dir']) 
             ? $params['dir'].($params['dir'][strlen($params['dir'])-1] == DIRECTORY_SEPARATOR ? '' : DIRECTORY_SEPARATOR)
-            : GENERIS_FILES_PATH.$id.DIRECTORY_SEPARATOR;
+            : FILES_PATH.'generis'.DIRECTORY_SEPARATOR.$id.DIRECTORY_SEPARATOR;
         $this->levels = isset($params['levels']) ? $params['levels'] : self::DEFAULT_LEVELS;
         return new common_persistence_KeyValuePersistence($params, $this);
     }
