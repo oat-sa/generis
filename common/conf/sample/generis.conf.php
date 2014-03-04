@@ -73,8 +73,11 @@ define('INCLUDES_PATH' , GENERIS_BASE_PATH.DIRECTORY_SEPARATOR.'includes');
 define('VENDOR_PATH' , GENERIS_BASE_PATH.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR);
 define('EXTENSION_PATH' , ROOT_PATH);
 define('MANIFEST_NAME' , 'manifest.php');
+define('FILES_PATH' , '');
+define('GENERIS_CACHE_PATH', FILES_PATH.'generis'.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR);
+
+// @todo legacy constant, to be removed in 2.7
 define('GENERIS_FILES_PATH' , GENERIS_BASE_PATH.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR);
-define('GENERIS_CACHE_PATH', GENERIS_FILES_PATH.'cache'.DIRECTORY_SEPARATOR);
 
 # uri providers ('MicrotimeUriProvider'|'MicrotimeRandUriProvider'|'DatabaseSerialUriProvider')
 define('GENERIS_URI_PROVIDER', 'DatabaseSerialUriProvider');
