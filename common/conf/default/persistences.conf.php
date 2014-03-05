@@ -34,30 +34,32 @@ $GLOBALS['generis_persistences'] = array(
 	'serviceState' => array(
 	    'driver' => 'phpfile',
 	),
-	
-	
-    	'session' => array(
+	'config' => array(
+    	'driver' => 'phpfile',
+    	'dir' => FILES_PATH . DIRECTORY_SEPARATOR . 'generis' . DIRECTORY_SEPARATOR . 'config',
+    	'humanReadable' => true
+    )
+/*	
+    'session' => array(
 	    'driver' => 'SqlKvWrapper',
 	    'sqlPersistence' => 'default'
 	),
-        /*
-        'session' => array(
+*/
+/*
+    'session' => array(
 	    'driver' => 'phpredis',
             'host' => '127.0.0.1',
             'port' => 6379
 	),
-         */
-        /*
-        'keyValueResult' => array(
+*/
+/*
+    'keyValueResult' => array(
 	    'driver' => 'phpredis',
             'host' => '127.0.0.1',
             'port' => 6379
 	),
-        'docBasedResult' => array(
+    'docBasedResult' => array(
 	    'driver' => 'MongoDB'
 	),
-         * 
-         */
-        
-	
+*/
 );

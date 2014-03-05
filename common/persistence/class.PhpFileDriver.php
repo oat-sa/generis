@@ -24,8 +24,35 @@
  */
 class common_persistence_PhpFileDriver implements common_persistence_KvDriver
 {
+    /**
+     * List of characters permited in filename
+     * @var array
+     */
+    private static $ALLOWED_CHARACTERS = array('A' => '','B' => '','C' => '','D' => '','E' => '','F' => '','G' => '','H' => '','I' => '','J' => '','K' => '','L' => '','M' => '','N' => '','O' => '','P' => '','Q' => '','R' => '','S' => '','T' => '','U' => '','V' => '','W' => '','X' => '','Y' => '','Z' => '','a' => '','b' => '','c' => '','d' => '','e' => '','f' => '','g' => '','h' => '','i' => '','j' => '','k' => '','l' => '','m' => '','n' => '','o' => '','p' => '','q' => '','r' => '','s' => '','t' => '','u' => '','v' => '','w' => '','x' => '','y' => '','z' => '',0 => '',1 => '',2 => '',3 => '',4 => '',5 => '',6 => '',7 => '',8 => '',9 => '','_' => '','-' => '');
+
+    /**
+     * absolute path of the directory to use
+     * ending on a directory seperator
+     * 
+     * @var string
+     */
     private $directory;
+    
+    /**
+     * Nr of subfolder levels in order to prevent filesystem bottlenecks
+     * Only used in non human readable mode
+     * 
+     * @var int
+     */
     private $levels;
+    
+    /**
+     * Whenever or not the filenames should be human readable
+     * FALSE by default for performance issues with many keys
+     * 
+     * @var boolean
+     */
+    private $humanReadable;
     
     /**
      * Workaround to prevent opcaches from providing
@@ -36,7 +63,8 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
     private $cache = array();
     
     /**
-     * Nr of subfolder levels in order to prevent filesystem bottlenecks 
+     * Using 3 default levels, so the files get split up into
+     * 16^3 = 4096 induvidual directories 
      * 
      * @var int
      */
@@ -52,6 +80,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
             ? $params['dir'].($params['dir'][strlen($params['dir'])-1] == DIRECTORY_SEPARATOR ? '' : DIRECTORY_SEPARATOR)
             : FILES_PATH.'generis'.DIRECTORY_SEPARATOR.$id.DIRECTORY_SEPARATOR;
         $this->levels = isset($params['levels']) ? $params['levels'] : self::DEFAULT_LEVELS;
+        $this->humanReadable = isset($params['humanReadable']) ? $params['humanReadable'] : false;
         return new common_persistence_KeyValuePersistence($params, $this);
     }
     
@@ -138,17 +167,16 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
      * @return string
      */
     private function getPath($key) {
-        $encoded = md5($key);
-        $returnValue = "";
-        $len = strlen($encoded);
-        for ($i = 0; $i < $len; $i++) {
-            if ($i < $this->levels) {
-                $returnValue .= $encoded[$i].DIRECTORY_SEPARATOR;
-            } else {
-                $returnValue .= $encoded[$i];
-            } 
+        if ($this->humanReadable) {
+            $path = '';
+            foreach (str_split($key) as $char) {
+                $path .= isset(self::$ALLOWED_CHARACTERS[$char]) ? $char : base64_encode($char);
+            }
+        } else {
+            $encoded = md5($key);
+            $path = implode(DIRECTORY_SEPARATOR,str_split(substr($encoded, 0, $this->levels))).DIRECTORY_SEPARATOR.substr($encoded, $this->levels);
         }
-        return  $this->directory.$returnValue.'.php';
+        return  $this->directory.$path.'.php';
     }
 
 }
