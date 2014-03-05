@@ -68,7 +68,7 @@ class common_ext_ExtensionInstaller
 		
 		try{
 			// not yet installed? 
-			if ($this->extension->isInstalled()) {
+			if (common_ext_ExtensionsManager::singleton()->isInstalled($this->extension->getId())) {
 				throw new common_ext_AlreadyInstalledException('Problem installing extension ' . $this->extension->getId() .' : Already installed',
 															   $this->extension->getId());
 			}
@@ -233,25 +233,8 @@ class common_ext_ExtensionInstaller
 	{
 		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A28 begin
 		common_Logger::d('Registering '.$this->extension->getId(), 'INSTALL');
-		
-		//add extension to db
-		$db = core_kernel_classes_DbWrapper::singleton();
-		$sql = "INSERT INTO extensions (id, name, version, loaded, \"loadatstartup\") VALUES ('".$this->extension->getId()."', 	'".$this->extension->getName()."', '".$this->extension->getVersion()."', 1, 1);";
-		//$db->exec($sql);
-		$db->insert('extensions', array(
-			'id' => $this->extension->getId(),
-			'name' => $this->extension->getName(),
-			'version' => $this->extension->getVersion()	,
-			'loaded' => '1',
-			'loadatstartup' => '1'
-			
-		));
-
-		
-		common_Logger::d($this->extension->getId() . ' registered', 'INSTALL');
-		
-		//update Extension
-		$this->extension->updateStatus(true);
+		common_ext_ExtensionsManager::singleton()->registerExtension($this->extension);
+		common_ext_ExtensionsManager::singleton()->setEnabled($this->extension->getId());
 		
 		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A28 end
 	}

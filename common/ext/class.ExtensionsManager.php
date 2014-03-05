@@ -34,6 +34,7 @@
  */
 class common_ext_ExtensionsManager
 {
+    const EXTENSIONS_CONFIG_KEY = 'extension'; 
 
     /**
      * The extensions currently loaded. The array contains
@@ -51,7 +52,6 @@ class common_ext_ExtensionsManager
      * @var common_ext_ExtensionsManager
      */
     private static $instance = null;
-
 
     /**
      * Obtain a reference on a unique common_ext_ExtensionsManager
@@ -85,29 +85,9 @@ class common_ext_ExtensionsManager
     {
         $returnValue = array();
 
+        $installed = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         foreach ($this->extensions as $ext) {
-        	if ($ext->isInstalled()) {
-        		$returnValue[$ext->getId()] = $ext;
-        	}
-        }
-
-        return (array) $returnValue;
-    }
-    
-    /**
-     * Get the set of currently enabled extensions. This method
-     * returns an array of common_ext_Extension.
-     *
-     * @access public
-     * @author Joel Bout, <joel@taotesting.com>
-     * @return array
-     */
-    public function getEnabledExtensions()
-    {
-        $returnValue = array();
-
-        foreach ($this->extensions as $ext) {
-        	if ($ext->isEnabled()) {
+        	if ($installed !== false && in_array($ext->getId(), array_keys($installed))) {
         		$returnValue[$ext->getId()] = $ext;
         	}
         }
@@ -196,13 +176,13 @@ class common_ext_ExtensionsManager
 		foreach ($dir as $fileinfo) {
 			if ($fileinfo->isDir() && !$fileinfo->isDot() && substr($fileinfo->getBasename(), 0, 1) != '.') {
 				$extId = $fileinfo->getBasename();
-				try {
-					$ext = $this->getExtensionById($extId);
-					if (!$ext->isInstalled()) {
-						$returnValue[] = $ext;
-					}
-				} catch (common_ext_ExtensionException $exception) {
-					common_Logger::d($extId.' is not an extension');
+				if (!$this->isInstalled($extId)) {
+    				try {
+    					$ext = $this->getExtensionById($extId);
+    					$returnValue[] = $ext;
+    				} catch (common_ext_ExtensionException $exception) {
+    					common_Logger::d($extId.' is not an extension');
+    				}
 				}
 			}
 		}
@@ -306,6 +286,52 @@ class common_ext_ExtensionsManager
 
         return $returnValue;
     }
+    
+    public function isEnabled($extensionId)
+    {
+        $exts = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+        return isset($exts[$extensionId]['enabled']) ? $exts[$extensionId]['enabled'] : false;
+    }
+    
+    public function isInstalled($extensionId)
+    {
+        $exts = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+        return isset($exts[$extensionId]);
+    }
+    
+
+    public function setEnabled($extensionId, $enabled = true)
+    {
+        $exts = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+        if (!isset($exts[$extensionId])) {
+            throw new common_exception_Error('Extension '.$extensionId.' unkown, cannot enable/disable');
+        }
+        $exts[$extensionId]['enabled'] = (boolean) $enabled;
+        return $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $exts);
+    }
+    
+    /**
+     * Get the set of currently enabled extensions. This method
+     * returns an array of common_ext_Extension.
+     *
+     * @access public
+     * @author Joel Bout, <joel@taotesting.com>
+     * @return array
+     */
+    public function getEnabledExtensions()
+    {
+        $returnValue = array();
+
+        $enabled = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+        foreach ($this->extensions as $ext) {
+            if (isset($enabled[$ext->getId()]) && $enabled[$ext->getId()]['enabled']) {
+                $returnValue[$ext->getId()] = $ext;
+            }
+        }
+    
+        return (array) $returnValue;
+    }
+    
 
     /**
      * Short description of method loadInstalledExtensions
@@ -317,19 +343,30 @@ class common_ext_ExtensionsManager
     private function loadInstalledExtensions()
     {
         $this->extensions = array();
-        
-    	$db = core_kernel_classes_DbWrapper::singleton();
-    	//var_dump($db->getTables());
-		$query = 'SELECT * FROM extensions';
-		$result = $db->query($query);
-
-		while ($row = $result->fetch()){
-			$id = $row["id"];
-			$extension = new common_ext_Extension($id, true, $row);
-			$this->extensions[$id] = $extension;
-		}
+        $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+        if ($extensions !== false) {
+            foreach ($extensions as $id => $settings) {
+                $this->extensions[$id] = new common_ext_Extension($id, true);
+            }
+        }
     }
-
+    
+    /**
+     * Add the end of an installation register the new extension
+     *
+     * @access private
+     * @author Joel Bout, <joel@taotesting.com>
+     * @param common_ext_Extension $extension
+     * @return boolean
+     */
+    public function registerExtension(common_ext_Extension $extension)
+    {
+        $entry = array(
+        	'installed' => $extension->getManifest()->getVersion(),
+            'enabled' => false 
+        );
+        $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+        $extensions[$extension->getId()] = $entry;
+        return $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $extensions);
+    }
 }
-
-?>

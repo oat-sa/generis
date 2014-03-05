@@ -1,5 +1,5 @@
 <?php
-/*  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -17,10 +17,9 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ * 				 2013-2014 (update and modification) Open Assessment Technologies SA;
+ *
  */
-?>
-<?php
 
 /**
  * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
@@ -28,10 +27,10 @@
  */
 return array(
 	'name' => 'generis',
-	'description' => 'Core extension',
+	'description' => 'Core',
     'longdesc' => 'Core extension, provide the low level framework and an API to manage ontologies',
     'license' => 'GPL-2.0',
-    'version' => '2.4',
+    'version' => '2.6',
 	'author' => 'Open Assessment Technologies, CRP Henri Tudor',
 	'requires' 	=> array(),
 	'models' => array(
@@ -48,14 +47,18 @@ return array(
         )
     ),
 	'install' => array(
-		'php' => dirname(__FILE__). '/install/install.php',
+//		'php' => dirname(__FILE__). '/scripts/postInstall.php',
 		'rdf' => array(
 				array('ns' => 'http://www.w3.org/1999/02/22-rdf-syntax-ns', 'file' => dirname(__FILE__). '/core/ontology/22-rdf-syntax-ns.rdf'),
 				array('ns' => 'http://www.w3.org/2000/01/rdf-schema', 'file' => dirname(__FILE__). '/core/ontology/rdf-schema.rdf'),
 				array('ns' => 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf', 'file' => dirname(__FILE__). '/core/ontology/widgetdefinitions.rdf'),
 				array('ns' => 'http://www.tao.lu/middleware/Rules.rdf', 'file' => dirname(__FILE__). '/core/ontology/rules.rdf'),
 				array('ns' => 'http://www.tao.lu/Ontologies/generis.rdf', 'file' => dirname(__FILE__). '/core/ontology/generis.rdf'),
-		)
+		),
+	    'checks' => array(
+				array('type' => 'CheckFileSystemComponent', 'value' => array('id' => 'fs_generis_data_cache', 'location' =>  'generis/data/cache', 'rights' => 'rw')),
+				//array('type' => 'CheckFileSystemComponent', 'value' => array('id' => 'fs_generis_data', 'location' =>  'generis/data', 'rights' => 'rw'))
+        )
 	),
 	'optimizableClasses' => array(
 		'http://www.tao.lu/Ontologies/generis.rdf#User',
@@ -66,4 +69,3 @@ return array(
 		'http://www.tao.lu/Ontologies/generis.rdf#password'
 	)
 );
-?>

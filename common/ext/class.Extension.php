@@ -16,7 +16,8 @@
  * 
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ * 				 2013-2014 (update and modification) Open Assessment Technologies SA;
+ *
  */
 
 
@@ -31,7 +32,6 @@
  */
 class common_ext_Extension
 {
-
     /**
      * Short description of attribute id
      *
@@ -41,28 +41,12 @@ class common_ext_Extension
     private $id = '';
 
     /**
-     * Short description of attribute manifest
+     * The manifest of the extension
      *
      * @access public
-     * @var Manifest
+     * @var common_ext_Manifest
      */
     public $manifest = null;
-
-    /**
-     * configuration array read from db
-     *
-     * @access private
-     * @var array
-     */
-    private $dbConfig = null;
-
-    /**
-     * configuration array read from file
-     *
-     * @access private
-     * @var array
-     */
-    private $fileConfig = null;
 
     /**
      * Whenever or not an extension has already been loaded
@@ -76,16 +60,15 @@ class common_ext_Extension
      * Should not be called directly, please use ExtensionsManager
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  string id
-     * @param  boolean installed
-     * @param  array data array to preload the dbconfiguration
-     * @return mixed
+     * @author Joel Bout, <joel@taotesting.com>
+     * @param string id
+     * @param string $deprecated1
+     * @param string $deprecated2
+     * 
      */
-    public function __construct($id, $installed = false, $data = null)
+    public function __construct($id, $deprecated1 = null, $deprecated2 = null)
     {
 		$this->id = $id;
-		$this->installed = $installed;
     	$manifestFile = $this->getDir().MANIFEST_NAME;
 		if(is_file($manifestFile)){
 			$this->manifest = new common_ext_Manifest($manifestFile);
@@ -93,24 +76,6 @@ class common_ext_Extension
 			//Here the extension is set unvalided to not be displayed by the view
 			throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '${id}'.", $id);
 		}
-		$this->dbConfig = $data;
-    }
-
-    /**
-     * returns the path to the config file
-     * used for instalation specific configurations
-     *
-     * @access private
-     * @author firstname and lastname of author, <author@example.org>
-     * @return string
-     */
-    private function getConfigFilePath()
-    {
-        $returnValue = (string) '';
-
-        $returnValue = $this->getDir().'includes'.DIRECTORY_SEPARATOR.'config.php';
-
-        return (string) $returnValue;
     }
 
     /**
@@ -146,45 +111,31 @@ class common_ext_Extension
     }
 
     /**
-     * returns all configuration key/value pairs
-     *
-     * @access private
-     * @author firstname and lastname of author, <author@example.org>
-     * @return array
+     * CONFIGURATION 
      */
-    private function getConfigs()
-    {
-        $returnValue = array();
 
-        if(is_null($this->dbConfig)) {
-        	$db = core_kernel_classes_DbWrapper::singleton();
-			$query = "SELECT loaded,loadatstartup,ghost FROM extensions WHERE id = ?";
-
-			$result = $db->query($query,array($this->id));
-			if ($row = $result->fetch()){
-				$this->dbConfig = $row;
-				
-			} else {
-				common_Logger::w('Unable to load dbconfig for '.$this->getId());
-				$this->dbConfig = array();
-			}
-			
-        }
-        if (is_null($this->fileConfig)) {
-			$this->fileConfig = array();
-        	$configFile = $this->getConfigFilePath();
-			if (file_exists($configFile)) {
-				$data = include $configFile;
-				if (is_array($data)) {
-					$this->fileConfig = $data;
-				}
-			}
-        }
-        $returnValue = array_merge($this->dbConfig, $this->fileConfig);
-
-        return (array) $returnValue;
+    /**
+     * Returns the KV persistence to use for configurations 
+     * @return common_persistence_KeyValuePersistence
+     */
+    private function getConfigPersistence() {
+        return common_persistence_KeyValuePersistence::getPersistence('config');
     }
-
+    
+    /**
+     * Builds a KV persistance key from a config key
+     * @param string $key
+     * @return string
+     */
+    private function getConfigKey($key) {
+        return $this->getId().'_'.$key;
+    }
+    
+    public function hasConfig($key)
+    {
+        return $this->getConfigPersistence()->exists($this->getConfigKey($key));
+    }
+    
     /**
      * sets a configuration value
      *
@@ -192,24 +143,16 @@ class common_ext_Extension
      * @author firstname and lastname of author, <author@example.org>
      * @param  string key
      * @param  value
-     * @return mixed
+     * @return boolean
      */
     public function setConfig($key, $value)
     {
-        // ensure config loaded
-        $this->getConfigs();
-        $this->fileConfig[$key] = $value;
-		$handle = fopen($this->getConfigFilePath(), 'w');
-        $success = fwrite($handle, '<?php return '.common_Utils::toPHPVariableString($this->fileConfig).';');
-        fclose($handle);
-        if (!$success) {
-			throw new common_exception_Error('Unable to write config for extension '.$this->getId());
-        }
+        return $this->getConfigPersistence()->set($this->getConfigKey($key), $value);
     }
 
     /**
      * retrieves a configuration value
-	 * returns null if not found
+	 * returns false if not found
      *
      * @access public
      * @author firstname and lastname of author, <author@example.org>
@@ -218,16 +161,7 @@ class common_ext_Extension
      */
     public function getConfig($key)
     {
-        $returnValue = null;
-
-        $config = $this->getConfigs();
-        if (isset($config[$key])) {
-        	$returnValue = $config[$key]; 
-        } else {
-        	common_Logger::i('Unknown config key '.$key.' used for extension '.$this->getId());
-        }
-
-        return $returnValue;
+        return $this->getConfigPersistence()->get($this->getConfigKey($key));
     }
 
     /**
@@ -240,12 +174,7 @@ class common_ext_Extension
      */
     public function unsetConfig($key)
     {
-        // ensure config loaded
-        $this->getConfigs();
-        unset($this->fileConfig[$key]);
-        $handle = fopen($this->getConfigFilePath(), 'w');
-        fwrite($handle, '<?php return '.common_Utils::toPHPVariableString($this->fileConfig).';');
-        fclose($handle);
+        return $this->getConfigPersistence()->del($this->getConfigKey($key));
     }
 
     /**
@@ -300,18 +229,12 @@ class common_ext_Extension
      * returns whenever or not the extension is enabled
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
      * @return boolean
+     * @deprecated
      */
     public function isEnabled()
     {
-        $returnValue = (bool) false;
-
-    	if ($this->isInstalled()) {
-        	$returnValue = !$this->getConfig('ghost');
-        }
-
-        return (bool) $returnValue;
+        return common_ext_ExtensionsManager::singleton()->isEnabled($this->getId());
     }
 
     /**
@@ -320,26 +243,12 @@ class common_ext_Extension
      * @access public
      * @author firstname and lastname of author, <author@example.org>
      * @return boolean
+     * @deprecated
      */
     public function isInstalled()
     {
-        $returnValue = (bool) false;
-
-        $returnValue = $this->installed;
-
-        return (bool) $returnValue;
+        return common_ext_ExtensionsManager::singleton()->isInstalled($this->getId());
     }
-    
-    /**
-     * Updates the status of the Extension
-     * 
-     * @param boolean $installed
-     */
-    public function updateStatus($installed)
-    {
-        $this->installed = $installed;
-    }
-    
 
     /**
      * returns the base dir of the extension
