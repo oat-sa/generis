@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -16,6 +16,7 @@
  * 
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * 				 2013-2014 (update and modification) Open Assessment Technologies SA;
  * 
  */
 
@@ -23,23 +24,7 @@ use oat\oatbox\AutoLoader;
 use oat\generis\model\data\ModelManager;
 
 /**
- * include common_ext_ExtensionInstaller
- *
- * @author lionel.lecaque@tudor.lu
- * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
- */
-require_once('common/ext/class.ExtensionInstaller.php');
-
-/* user defined includes */
-// section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A3E-includes begin
-// section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A3E-includes end
-
-/* user defined constants */
-// section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A3E-constants begin
-// section 127-0-1-1-2805dfc8:137ea47ddc3:-8000:0000000000001A3E-constants end
-
-/**
- * Short description of class common_ext_GenerisInstaller
+ * Custom extension installer for generis
  *
  * @access public
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -79,10 +64,11 @@ class common_ext_GenerisInstaller
 		common_cache_FileCache::singleton()->purge();
         
 		AutoLoader::reload();
+		common_Logger::d('install custom scrip for ' . $this->extension->getId());
+		$this->installCustomScript();
+		
         
 		ModelManager::setModel(new \core_kernel_persistence_smoothsql_SmoothModel(array('persistence' => 'default')));
     }
 
-} /* end of class common_ext_GenerisInstaller */
-
-?>
+}
