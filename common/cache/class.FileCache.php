@@ -20,32 +20,6 @@
  */
 
 /**
- * Generis Object Oriented API - common\cache\class.FileCache.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 18.01.2013, 15:31:57 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package common
- * @subpackage cache
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * basic interface a cache implementation has to implement
- *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- */
-require_once('common/cache/interface.Cache.php');
-
-/**
  * Classes that implement this class claims their instances are serializable and
  * be identified by a unique serial string.
  *
@@ -108,6 +82,9 @@ class common_cache_FileCache
         		fwrite($fp, $data);
         		@flock($fp, LOCK_UN);
         		@fclose($fp);
+        		if (function_exists('opcache_invalidate')) {
+        		    opcache_invalidate($filePath, true);
+        		}
         	}
         	else{
         		$msg = "Unable to write cache file '${filePath}'.";
@@ -244,5 +221,3 @@ class common_cache_FileCache
     }
 
 }
-
-?>
