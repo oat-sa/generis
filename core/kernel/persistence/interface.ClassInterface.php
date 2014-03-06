@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -27,105 +27,89 @@
  * @package core
  * @subpackage kernel_persistence
  */
-interface core_kernel_persistence_ClassInterface
+interface core_kernel_persistence_ClassInterface extends core_kernel_persistence_ResourceInterface
 {
 
 
     // --- OPERATIONS ---
 
     /**
-     * Short description of method getSubClasses
+     * Retrieve all subclass of the class
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
+     * @param  core_kernel_classes_Class $resource
      * @param  boolean recursive
      * @return array
      */
-    public function getSubClasses( core_kernel_classes_Resource $resource, $recursive = false);
+    public function getSubClasses( core_kernel_classes_Class $resource, $recursive = false);
 
     /**
-     * Short description of method isSubClassOf
-     *
+     * 
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  Class parentClass
+     * @param core_kernel_classes_Class $resource
+     * @param core_kernel_classes_Class $iClass
      * @return boolean
      */
-    public function isSubClassOf( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $parentClass);
-
+    public function setSubClassOf( core_kernel_classes_Class $resource,  core_kernel_classes_Class $iClass);
+    
+    
     /**
-     * Short description of method getParentClasses
+     * check if the resource is a subclass of given parentClass
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
+     * @param  core_kernel_classes_Class resource
+     * @param  core_kernel_classes_Class parentClass
+     * @return boolean
+     */
+    public function isSubClassOf( core_kernel_classes_Class $resource,  core_kernel_classes_Class $parentClass);
+
+    /**
+     * retrieve parent Classes
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @param  core_kernel_classes_Class $resource
      * @param  boolean recursive
      * @return array
      */
-    public function getParentClasses( core_kernel_classes_Resource $resource, $recursive = false);
+    public function getParentClasses( core_kernel_classes_Class $resource, $recursive = false);
 
     /**
-     * Short description of method getProperties
+     * retrieve properties
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
+     * @param  Resource $resource
      * @param  boolean recursive
      * @return array
      */
-    public function getProperties( core_kernel_classes_Resource $resource, $recursive = false);
+    public function getProperties( core_kernel_classes_Class $resource, $recursive = false);
 
     /**
-     * Short description of method getInstances
+     * retrieve all instances
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
+     * @param  Resource $resource
      * @param  boolean recursive
      * @param  array params
      * @return array
      */
-    public function getInstances( core_kernel_classes_Resource $resource, $recursive = false, $params = array());
-
-    /**
-     * Short description of method setInstance
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  Resource instance
-     * @return core_kernel_classes_Resource
-     */
-    public function setInstance( core_kernel_classes_Resource $resource,  core_kernel_classes_Resource $instance);
-
-    /**
-     * Short description of method setSubClassOf
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  Class iClass
-     * @return boolean
-     */
-    public function setSubClassOf( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $iClass);
-
-    /**
-     * Short description of method setProperty
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return boolean
-     */
-    public function setProperty( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property);
+    public function getInstances( core_kernel_classes_Class $resource, $recursive = false, $params = array());
 
     /**
      * Should not be called by application code, please use
+     * core_kernel_classes_ResourceFactory::create() 
+     * or core_kernel_classes_Class::createInstanceWithProperties()
      * instead
-     *
+     * 
+     * Creates a new instance using the properties provided.
+     * May NOT contain additional types in the properties array
+     * 
+     * 
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource resource
@@ -133,8 +117,9 @@ interface core_kernel_persistence_ClassInterface
      * @param  string comment
      * @param  string uri
      * @return core_kernel_classes_Resource
+     * @see core_kernel_classes_ResourceFactory
      */
-    public function createInstance( core_kernel_classes_Resource $resource, $label = '', $comment = '', $uri = '');
+    public function createInstance( core_kernel_classes_Class $resource, $label = '', $comment = '', $uri = '');
 
     /**
      * Short description of method createSubClass
@@ -147,68 +132,57 @@ interface core_kernel_persistence_ClassInterface
      * @param  string uri
      * @return core_kernel_classes_Class
      */
-    public function createSubClass( core_kernel_classes_Resource $resource, $label = '', $comment = '', $uri = '');
+    public function createSubClass( core_kernel_classes_Class $resource, $label = '', $comment = '', $uri = '');
 
     /**
      * Short description of method createProperty
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
+     * @param  core_kernel_classes_Class $resource
      * @param  string label
      * @param  string comment
      * @param  boolean isLgDependent
      * @return core_kernel_classes_Property
      */
-    public function createProperty( core_kernel_classes_Resource $resource, $label = '', $comment = '', $isLgDependent = false);
+    public function createProperty( core_kernel_classes_Class $resource, $label = '', $comment = '', $isLgDependent = false);
 
     /**
      * Short description of method searchInstances
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
+     * @param  core_kernel_classes_Class $resource
      * @param  array propertyFilters
      * @param  array options
      * @return array
      */
-    public function searchInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array());
+    public function searchInstances( core_kernel_classes_Class $resource, $propertyFilters = array(), $options = array());
 
     /**
      * Short description of method countInstances
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
+     * @param  core_kernel_classes_Class $resource
      * @param  array propertyFilters
      * @param  array options
      * @return Integer
      */
-    public function countInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array());
+    public function countInstances( core_kernel_classes_Class $resource, $propertyFilters = array(), $options = array());
 
     /**
      * Short description of method getInstancesPropertyValues
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
+     * @param  core_kernel_classes_Class $resource
      * @param  Property property
      * @param  array propertyFilters
      * @param  array options
      * @return array
      */
-    public function getInstancesPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $propertyFilters = array(), $options = array());
-
-    /**
-     * Short description of method unsetProperty
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return boolean
-     */
-    public function unsetProperty( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property);
+    public function getInstancesPropertyValues( core_kernel_classes_Class $resource,  core_kernel_classes_Property $property, $propertyFilters = array(), $options = array());
 
     /**
      * Should not be called by application code, please use
@@ -221,7 +195,7 @@ interface core_kernel_persistence_ClassInterface
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Class type
+     * @param  core_kernel_classes_Class type
      * @param  array properties
      * @return core_kernel_classes_Resource
      * @see core_kernel_classes_ResourceFactory
@@ -233,24 +207,15 @@ interface core_kernel_persistence_ClassInterface
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource The resource (class) on which to apply the deletion.
+     * @param  Resource $resource The resource (class) on which to apply the deletion.
      * @param  array resources An array containing core_kernel_classes_Resource objects or URIs.
      * @param  boolean deleteReference If set to true, references to instances will be deleted accross the database.
      * @return boolean
      */
-    public function deleteInstances( core_kernel_classes_Resource $resource, $resources, $deleteReference = false);
+    public function deleteInstances( core_kernel_classes_Class $resource, $resources, $deleteReference = false);
 
-    /**
-     * Short description of method delete
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  boolean deleteReference
-     * @return boolean
-     */
-    public function delete( core_kernel_classes_Resource $resource, $deleteReference = false);
 
-} /* end of interface core_kernel_persistence_ClassInterface */
+
+} 
 
 ?>

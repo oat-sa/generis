@@ -130,7 +130,7 @@ class core_kernel_classes_ClassFactory
 		$property = new core_kernel_classes_Class(RDF_PROPERTY);
 		$propertyInstance = self::createInstance($property, $label, $comment, $uri);
 		$returnValue = new core_kernel_classes_Property($propertyInstance->getUri());
-		if (!$clazz->setProperty($returnValue)){
+		if (!$returnValue->setDomain($clazz)){
 			throw new common_Exception('An error occured during Property creation.');
 		}
 		else{

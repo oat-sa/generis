@@ -74,7 +74,7 @@ require_once('core/kernel/persistence/interface.PropertyInterface.php');
  * @subpackage kernel_persistence_smoothsql
  */
 class core_kernel_persistence_smoothsql_Property
-    extends core_kernel_persistence_PersistenceImpl
+    extends core_kernel_persistence_smoothsql_Resource
         implements core_kernel_persistence_PropertyInterface
 {
     // --- ASSOCIATIONS ---

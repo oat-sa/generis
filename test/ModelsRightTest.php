@@ -36,12 +36,10 @@ class ModelsRightTest extends GenerisPhpUnitTestRunner {
 		$this->assertTrue(array_search(LOCAL_NAMESPACE, $updatableModels) !== false);
 		
 		// Try to delete a resource of a locked model
-		$clazz = new core_kernel_classes_Class(RDFS_RESOURCE);
-		$this->assertFalse ($clazz->delete());
-		
-		// Try to remove a property of a locked model
 		$property = new core_kernel_classes_Property(RDFS_LABEL);
-		$this->assertNull($clazz->unsetProperty($property));
+        $domain = new core_kernel_classes_Property(RDFS_DOMAIN, __METHOD__);
+		$this->assertFalse( $property->removePropertyValues($domain, array('pattern' => RDFS_LABEL)));
+		
 		
 		// Try to remove a property value which is lg dependent of a locked model
 		$clazz = new core_kernel_classes_Class('http://www.tao.lu/middleware/Rules.rdf#And');

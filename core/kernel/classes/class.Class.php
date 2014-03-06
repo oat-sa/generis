@@ -131,6 +131,7 @@ class core_kernel_classes_Class
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Resource instance
      * @return core_kernel_classes_Resource
+     * @deprecated
      */
     public function setInstance( core_kernel_classes_Resource $instance)
     {
@@ -167,6 +168,7 @@ class core_kernel_classes_Class
      * @author patrick.plichart@tudor.lu
      * @param  Property property
      * @return boolean
+     * @deprecated
      */
     public function setProperty( core_kernel_classes_Property $property)
     {
@@ -331,6 +333,7 @@ class core_kernel_classes_Class
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  Property property
+     * @deprecated
      */
     public function unsetProperty( core_kernel_classes_Property $property)
     {

@@ -29,7 +29,7 @@
  * @subpackage kernel_persistence_smoothsql
  */
 class core_kernel_persistence_smoothsql_Class
-    extends core_kernel_persistence_PersistenceImpl
+    extends core_kernel_persistence_smoothsql_Resource
         implements core_kernel_persistence_ClassInterface
 {
     // --- ASSOCIATIONS ---
@@ -48,15 +48,10 @@ class core_kernel_persistence_smoothsql_Class
     // --- OPERATIONS ---
 
     /**
-     * Short description of method getSubClasses
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  boolean recursive
-     * @return array
+     * (non-PHPdoc)
+     * @see core_kernel_persistence_ClassInterface::getSubClasses()
      */
-    public function getSubClasses( core_kernel_classes_Resource $resource, $recursive = false)
+    public function getSubClasses( core_kernel_classes_Class $resource, $recursive = false)
     {
         $returnValue = array();
 
@@ -81,15 +76,10 @@ class core_kernel_persistence_smoothsql_Class
     }
 
     /**
-     * Short description of method isSubClassOf
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  Class parentClass
-     * @return boolean
+     * (non-PHPdoc)
+     * @see core_kernel_persistence_ClassInterface::isSubClassOf()
      */
-    public function isSubClassOf( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $parentClass)
+    public function isSubClassOf( core_kernel_classes_Class $resource,  core_kernel_classes_Class $parentClass)
     {
         $returnValue = (bool) false;
 
@@ -126,15 +116,10 @@ class core_kernel_persistence_smoothsql_Class
     }
 
     /**
-     * Short description of method getParentClasses
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  boolean recursive
-     * @return array
+     * (non-PHPdoc)
+     * @see core_kernel_persistence_ClassInterface::getParentClasses()
      */
-    public function getParentClasses( core_kernel_classes_Resource $resource, $recursive = false)
+    public function getParentClasses( core_kernel_classes_Class $resource, $recursive = false)
     {
         $returnValue = array();
 
@@ -165,15 +150,10 @@ class core_kernel_persistence_smoothsql_Class
     }
 
     /**
-     * Short description of method getProperties
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  boolean recursive
-     * @return array
+     * (non-PHPdoc)
+     * @see core_kernel_persistence_ClassInterface::getProperties()
      */
-    public function getProperties( core_kernel_classes_Resource $resource, $recursive = false)
+    public function getProperties( core_kernel_classes_Class $resource, $recursive = false)
     {
         $returnValue = array();
 
@@ -206,17 +186,11 @@ class core_kernel_persistence_smoothsql_Class
         return (array) $returnValue;
     }
 
-    /**
-     * Short description of method getInstances
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  boolean recursive
-     * @param  array params
-     * @return array
+   
+    /* (non-PHPdoc)
+     * @see core_kernel_persistence_ClassInterface::getInstances()
      */
-    public function getInstances( core_kernel_classes_Resource $resource, $recursive = false, $params = array())
+    public function getInstances( core_kernel_classes_Class $resource, $recursive = false, $params = array())
     {
         $returnValue = array();
 
@@ -272,26 +246,26 @@ class core_kernel_persistence_smoothsql_Class
     }
 
     /**
-     * Short description of method setInstance
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  Resource instance
+     * 
+     * @access
+     * @author lionel
+     * @param core_kernel_classes_Class $resource
+     * @param core_kernel_classes_Resource $instance
      * @return core_kernel_classes_Resource
+     * @deprecated
      */
-    public function setInstance( core_kernel_classes_Resource $resource,  core_kernel_classes_Resource $instance)
+    public function setInstance( core_kernel_classes_Class $resource,  core_kernel_classes_Resource $instance)
     {
         $returnValue = null;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001506 begin
+       throw new common_exception_DeprecatedApiMethod(__METHOD__ . ' is deprecated. ');
 		$rdfType = new core_kernel_classes_Property(RDF_TYPE);
 		$newInstance = clone $instance;	//call Resource::__clone
 		$newInstance->setPropertyValue($rdfType, $resource->getUri());
 
 		$returnValue = $newInstance;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001506 end
+        
 
         return $returnValue;
     }
@@ -301,16 +275,16 @@ class core_kernel_persistence_smoothsql_Class
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
+     * @param  core_kernel_classes_Class resource
      * @param  Class iClass
      * @return boolean
+     * 
      */
-    public function setSubClassOf( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $iClass)
+    public function setSubClassOf( core_kernel_classes_Class $resource,  core_kernel_classes_Class $iClass)
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000150F begin
-
 		$subClassOf = new core_kernel_classes_Property(RDFS_SUBCLASSOF);
 		$returnValue = $resource->setPropertyValue($subClassOf, $iClass->getUri());
 
@@ -324,16 +298,18 @@ class core_kernel_persistence_smoothsql_Class
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
+     * @param  core_kernel_classes_Class resource
      * @param  Property property
      * @return boolean
+     * @deprecated
+     * 
      */
-    public function setProperty( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
+    public function setProperty( core_kernel_classes_Class $resource,  core_kernel_classes_Property $property)
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 begin
-
+        throw new common_exception_DeprecatedApiMethod(__METHOD__ . ' is deprecated. ');
 		$domain = new core_kernel_classes_Property(RDFS_DOMAIN, __METHOD__);
 		$instanceProperty = new core_kernel_classes_Resource($property->getUri(), __METHOD__);
 		$returnValue = $instanceProperty->setPropertyValue($domain, $resource->getUri());
@@ -344,18 +320,10 @@ class core_kernel_persistence_smoothsql_Class
     }
 
     /**
-     * Should not be called by application code, please use
-     * instead
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  string label
-     * @param  string comment
-     * @param  string uri
-     * @return core_kernel_classes_Resource
+     * (non-PHPdoc)
+     * @see core_kernel_persistence_ClassInterface::createInstance()
      */
-    public function createInstance( core_kernel_classes_Resource $resource, $label = '', $comment = '', $uri = '')
+    public function createInstance( core_kernel_classes_Class $resource, $label = '', $comment = '', $uri = '')
     {
         $returnValue = null;
 
@@ -394,17 +362,10 @@ class core_kernel_persistence_smoothsql_Class
     }
 
     /**
-     * Short description of method createSubClass
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  string label
-     * @param  string comment
-     * @param  string uri
-     * @return core_kernel_classes_Class
+     * (non-PHPdoc)
+     * @see core_kernel_persistence_ClassInterface::createSubClass()
      */
-    public function createSubClass( core_kernel_classes_Resource $resource, $label = '', $comment = '', $uri = '')
+    public function createSubClass( core_kernel_classes_Class $resource, $label = '', $comment = '', $uri = '')
     {
         $returnValue = null;
 
@@ -421,17 +382,10 @@ class core_kernel_persistence_smoothsql_Class
     }
 
     /**
-     * Short description of method createProperty
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  string label
-     * @param  string comment
-     * @param  boolean isLgDependent
-     * @return core_kernel_classes_Property
+     * (non-PHPdoc)
+     * @see core_kernel_persistence_ClassInterface::createProperty()
      */
-    public function createProperty( core_kernel_classes_Resource $resource, $label = '', $comment = '', $isLgDependent = false)
+    public function createProperty( core_kernel_classes_Class $resource, $label = '', $comment = '', $isLgDependent = false)
     {
         $returnValue = null;
 
@@ -442,7 +396,7 @@ class core_kernel_persistence_smoothsql_Class
 		$returnValue = new core_kernel_classes_Property($propertyInstance->getUri(), __METHOD__);
 		$returnValue->setLgDependent($isLgDependent);
 
-		if (!$resource->setProperty($returnValue)){
+		if (!$returnValue->setDomain($resource)){
 			throw new common_Exception('problem creating property');
 		}
         
@@ -452,16 +406,10 @@ class core_kernel_persistence_smoothsql_Class
     }
 
     /**
-     * Short description of method searchInstances
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  array propertyFilters
-     * @param  array options
-     * @return array
+     * (non-PHPdoc)
+     * @see core_kernel_persistence_ClassInterface::searchInstances()
      */
-    public function searchInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array())
+    public function searchInstances( core_kernel_classes_Class $resource, $propertyFilters = array(), $options = array())
     {
         $returnValue = array();
 
@@ -483,16 +431,10 @@ class core_kernel_persistence_smoothsql_Class
     }
 
     /**
-     * Short description of method countInstances
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  array propertyFilters
-     * @param  array options
-     * @return Integer
+     * (non-PHPdoc)
+     * @see core_kernel_persistence_ClassInterface::countInstances()
      */
-    public function countInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array())
+    public function countInstances( core_kernel_classes_Class $resource, $propertyFilters = array(), $options = array())
     {
         $returnValue = null;
 
@@ -544,17 +486,10 @@ class core_kernel_persistence_smoothsql_Class
     }
 
     /**
-     * Short description of method getInstancesPropertyValues
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @param  array propertyFilters
-     * @param  array options
-     * @return array
+     * (non-PHPdoc)
+     * @see core_kernel_persistence_ClassInterface::getInstancesPropertyValues()
      */
-    public function getInstancesPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $propertyFilters = array(), $options = array())
+    public function getInstancesPropertyValues( core_kernel_classes_Class $resource,  core_kernel_classes_Property $property, $propertyFilters = array(), $options = array())
     {
         $returnValue = array();
         // section 127-0-1-1--120bf54f:13142fdf597:-8000:000000000000312D begin
@@ -589,37 +524,23 @@ class core_kernel_persistence_smoothsql_Class
      * @param  Resource resource
      * @param  Property property
      * @return boolean
+     * @deprecated
      */
-    public function unsetProperty( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
+    public function unsetProperty( core_kernel_classes_Class $resource,  core_kernel_classes_Property $property)
     {
         $returnValue = (bool) false;
 
         // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:00000000000031F8 begin
         
-		$domain = new core_kernel_classes_Property(RDFS_DOMAIN, __METHOD__);
-		$instanceProperty = new core_kernel_classes_Resource($property->getUri(), __METHOD__);
-		$returnValue = $instanceProperty->removePropertyValues($domain, array('pattern' => $resource->getUri()));
-        
+        throw new common_exception_DeprecatedApiMethod(__METHOD__ . ' is deprecated. ');
         // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:00000000000031F8 end
 
         return (bool) $returnValue;
     }
 
     /**
-     * Should not be called by application code, please use
-     * core_kernel_classes_ResourceFactory::create() 
-     * or core_kernel_classes_Class::createInstanceWithProperties()
-     * instead
-     *
-     * Creates a new instance using the properties provided.
-     * May NOT contain additional types in the properties array
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Class type
-     * @param  array properties
-     * @return core_kernel_classes_Resource
-     * @see core_kernel_classes_ResourceFactory
+     * (non-PHPdoc)
+     * @see core_kernel_persistence_ClassInterface::createInstanceWithProperties()
      */
     public function createInstanceWithProperties( core_kernel_classes_Class $type, $properties)
     {
@@ -639,16 +560,10 @@ class core_kernel_persistence_smoothsql_Class
     }
 
     /**
-     * Delete a collection of instances of the Class.
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource The resource (class) on which to apply the deletion.
-     * @param  array resources An array containing core_kernel_classes_Resource objects or URIs.
-     * @param  boolean deleteReference If set to true, references to instances will be deleted accross the database.
-     * @return boolean
+     * (non-PHPdoc)
+     * @see core_kernel_persistence_ClassInterface::deleteInstances()
      */
-    public function deleteInstances( core_kernel_classes_Resource $resource, $resources, $deleteReference = false)
+    public function deleteInstances( core_kernel_classes_Class $resource, $resources, $deleteReference = false)
     {
         $returnValue = (bool) false;
 
@@ -688,25 +603,6 @@ class core_kernel_persistence_smoothsql_Class
         return (bool) $returnValue;
     }
 
-    /**
-     * Short description of method delete
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  boolean deleteReference
-     * @return boolean
-     */
-    public function delete( core_kernel_classes_Resource $resource, $deleteReference = false)
-    {
-        $returnValue = (bool) false;
-
-        // section 10-13-1-85--2c835591:13bffd6ae29:-8000:0000000000001E78 begin
-        $returnValue = core_kernel_persistence_smoothsql_Resource::singleton()->delete($resource, $deleteReference);
-        // section 10-13-1-85--2c835591:13bffd6ae29:-8000:0000000000001E78 end
-
-        return (bool) $returnValue;
-    }
 
     /**
      * Short description of method singleton
@@ -763,7 +659,7 @@ class core_kernel_persistence_smoothsql_Class
      * @return string
      * @version 1.0
      */
-    public function getFilteredQuery( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array())
+    public function getFilteredQuery( core_kernel_classes_Class $resource, $propertyFilters = array(), $options = array())
     {
         $returnValue = (string) '';
 

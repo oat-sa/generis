@@ -73,7 +73,7 @@ require_once('core/kernel/persistence/interface.ClassInterface.php');
  * @subpackage kernel_persistence_subscription
  */
 class core_kernel_persistence_subscription_Class
-    extends core_kernel_persistence_PersistenceImpl
+    extends core_kernel_persistence_subscription_Resource
         implements core_kernel_persistence_ClassInterface
 {
     // --- ASSOCIATIONS ---
@@ -100,7 +100,7 @@ class core_kernel_persistence_subscription_Class
      * @param  boolean recursive
      * @return array
      */
-    public function getSubClasses( core_kernel_classes_Resource $resource, $recursive = false)
+    public function getSubClasses( core_kernel_classes_Class $resource, $recursive = false)
     {
         $returnValue = array();
 
@@ -122,7 +122,7 @@ class core_kernel_persistence_subscription_Class
      * @param  Class parentClass
      * @return boolean
      */
-    public function isSubClassOf( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $parentClass)
+    public function isSubClassOf( core_kernel_classes_Class $resource,  core_kernel_classes_Class $parentClass)
     {
         $returnValue = (bool) false;
 
@@ -145,7 +145,7 @@ class core_kernel_persistence_subscription_Class
      * @param  boolean recursive
      * @return array
      */
-    public function getParentClasses( core_kernel_classes_Resource $resource, $recursive = false)
+    public function getParentClasses( core_kernel_classes_Class $resource, $recursive = false)
     {
         $returnValue = array();
 
@@ -168,7 +168,7 @@ class core_kernel_persistence_subscription_Class
      * @param  boolean recursive
      * @return array
      */
-    public function getProperties( core_kernel_classes_Resource $resource, $recursive = false)
+    public function getProperties( core_kernel_classes_Class $resource, $recursive = false)
     {
         $returnValue = array();
 
@@ -192,7 +192,7 @@ class core_kernel_persistence_subscription_Class
      * @param  array params
      * @return array
      */
-    public function getInstances( core_kernel_classes_Resource $resource, $recursive = false, $params = array())
+    public function getInstances( core_kernel_classes_Class $resource, $recursive = false, $params = array())
     {
         $returnValue = array();
 
@@ -212,28 +212,7 @@ class core_kernel_persistence_subscription_Class
         return (array) $returnValue;
     }
 
-    /**
-     * Short description of method setInstance
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  Resource instance
-     * @return core_kernel_classes_Resource
-     */
-    public function setInstance( core_kernel_classes_Resource $resource,  core_kernel_classes_Resource $instance)
-    {
-        $returnValue = null;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001506 begin
-        
-        throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        
-        
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001506 end
-
-        return $returnValue;
-    }
 
     /**
      * Short description of method setSubClassOf
@@ -244,7 +223,7 @@ class core_kernel_persistence_subscription_Class
      * @param  Class iClass
      * @return boolean
      */
-    public function setSubClassOf( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $iClass)
+    public function setSubClassOf( core_kernel_classes_Class $resource,  core_kernel_classes_Class $iClass)
     {
         $returnValue = (bool) false;
 
@@ -258,27 +237,7 @@ class core_kernel_persistence_subscription_Class
         return (bool) $returnValue;
     }
 
-    /**
-     * Short description of method setProperty
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return boolean
-     */
-    public function setProperty( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
-    {
-        $returnValue = (bool) false;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 begin
-        
-        throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 end
-
-        return (bool) $returnValue;
-    }
 
     /**
      * Should not be called by application code, please use
@@ -292,7 +251,7 @@ class core_kernel_persistence_subscription_Class
      * @param  string uri
      * @return core_kernel_classes_Resource
      */
-    public function createInstance( core_kernel_classes_Resource $resource, $label = '', $comment = '', $uri = '')
+    public function createInstance( core_kernel_classes_Class $resource, $label = '', $comment = '', $uri = '')
     {
         $returnValue = null;
 
@@ -317,7 +276,7 @@ class core_kernel_persistence_subscription_Class
      * @param  string uri
      * @return core_kernel_classes_Class
      */
-    public function createSubClass( core_kernel_classes_Resource $resource, $label = '', $comment = '', $uri = '')
+    public function createSubClass( core_kernel_classes_Class $resource, $label = '', $comment = '', $uri = '')
     {
         $returnValue = null;
 
@@ -341,7 +300,7 @@ class core_kernel_persistence_subscription_Class
      * @param  boolean isLgDependent
      * @return core_kernel_classes_Property
      */
-    public function createProperty( core_kernel_classes_Resource $resource, $label = '', $comment = '', $isLgDependent = false)
+    public function createProperty( core_kernel_classes_Class $resource, $label = '', $comment = '', $isLgDependent = false)
     {
         $returnValue = null;
 
@@ -365,7 +324,7 @@ class core_kernel_persistence_subscription_Class
      * @param  array options
      * @return array
      */
-    public function searchInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array())
+    public function searchInstances( core_kernel_classes_Class $resource, $propertyFilters = array(), $options = array())
     {
         $returnValue = array();
 
@@ -385,7 +344,7 @@ class core_kernel_persistence_subscription_Class
      * @param  array options
      * @return Integer
      */
-    public function countInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array())
+    public function countInstances( core_kernel_classes_Class $resource, $propertyFilters = array(), $options = array())
     {
         $returnValue = null;
 
@@ -407,7 +366,7 @@ class core_kernel_persistence_subscription_Class
      * @param  array options
      * @return array
      */
-    public function getInstancesPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $propertyFilters = array(), $options = array())
+    public function getInstancesPropertyValues( core_kernel_classes_Class $resource,  core_kernel_classes_Property $property, $propertyFilters = array(), $options = array())
     {
         $returnValue = array();
 
@@ -429,7 +388,7 @@ class core_kernel_persistence_subscription_Class
      * @param  Property property
      * @return boolean
      */
-    public function unsetProperty( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
+    public function unsetProperty( core_kernel_classes_Class $resource,  core_kernel_classes_Property $property)
     {
         $returnValue = (bool) false;
 
@@ -481,7 +440,7 @@ class core_kernel_persistence_subscription_Class
      * @param  boolean deleteReference If set to true, references to instances will be deleted accross the database.
      * @return boolean
      */
-    public function deleteInstances( core_kernel_classes_Resource $resource, $resources, $deleteReference = false)
+    public function deleteInstances( core_kernel_classes_Class $resource, $resources, $deleteReference = false)
     {
         $returnValue = (bool) false;
 
@@ -492,25 +451,7 @@ class core_kernel_persistence_subscription_Class
         return (bool) $returnValue;
     }
 
-    /**
-     * Short description of method delete
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  boolean deleteReference
-     * @return boolean
-     */
-    public function delete( core_kernel_classes_Resource $resource, $deleteReference = false)
-    {
-        $returnValue = (bool) false;
 
-        // section 10-13-1-85--2c835591:13bffd6ae29:-8000:0000000000001E78 begin
-        throw new core_kernel_persistence_ProhibitedFunctionException("The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        // section 10-13-1-85--2c835591:13bffd6ae29:-8000:0000000000001E78 end
-
-        return (bool) $returnValue;
-    }
 
     /**
      * Short description of method singleton

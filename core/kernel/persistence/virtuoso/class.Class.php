@@ -29,7 +29,7 @@
  * @subpackage kernel_persistence_virtuoso
  */
 class core_kernel_persistence_virtuoso_Class
-    extends core_kernel_persistence_PersistenceImpl
+    extends core_kernel_persistence_virtuoso_Resource
         implements core_kernel_persistence_ClassInterface
 {
     // --- ASSOCIATIONS ---
@@ -293,33 +293,7 @@ class core_kernel_persistence_virtuoso_Class
         return (array) $returnValue;
     }
 
-    /**
-     * Short description of method setInstance
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  Resource instance
-     * @return core_kernel_classes_Resource
-     */
-    public function setInstance( core_kernel_classes_Resource $resource,  core_kernel_classes_Resource $instance)
-    {
-        $returnValue = null;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001506 begin
-        
-        $newInstance = $instance->duplicate();
-        
-        if(!is_null($newInstance)){
-                if($newInstance->setType($resource)){
-                        $returnValue = $newInstance; 
-                }
-        }
-                
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001506 end
-
-        return $returnValue;
-    }
 
     /**
      * Short description of method setSubClassOf
@@ -344,29 +318,7 @@ class core_kernel_persistence_virtuoso_Class
         return (bool) $returnValue;
     }
 
-    /**
-     * Short description of method setProperty
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return boolean
-     */
-    public function setProperty( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
-    {
-        $returnValue = (bool) false;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 begin
-        
-        $domain = new core_kernel_classes_Property(RDFS_DOMAIN,__METHOD__);
-        $instanceProperty = new core_kernel_classes_Resource($property->getUri(),__METHOD__);
-        $returnValue = $instanceProperty->setPropertyValue($domain, $resource->getUri());
-                
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001512 end
-
-        return (bool) $returnValue;
-    }
 
     /**
      * Should not be called by application code, please use
@@ -700,7 +652,7 @@ class core_kernel_persistence_virtuoso_Class
      * @param  array options
      * @return Integer
      */
-    public function countInstances( core_kernel_classes_Resource $resource, $propertyFilters = array(), $options = array())
+    public function countInstances( core_kernel_classes_Class $resource, $propertyFilters = array(), $options = array())
     {
         $returnValue = null;
 
@@ -732,7 +684,7 @@ class core_kernel_persistence_virtuoso_Class
      * @param  array options
      * @return array
      */
-    public function getInstancesPropertyValues( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $propertyFilters = array(), $options = array())
+    public function getInstancesPropertyValues( core_kernel_classes_Class $resource,  core_kernel_classes_Property $property, $propertyFilters = array(), $options = array())
     {
         $returnValue = array();
 
@@ -743,29 +695,7 @@ class core_kernel_persistence_virtuoso_Class
         return (array) $returnValue;
     }
 
-    /**
-     * Short description of method unsetProperty
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return boolean
-     */
-    public function unsetProperty( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
-    {
-        $returnValue = (bool) false;
 
-        // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:00000000000031F8 begin
-        
-		$domain = new core_kernel_classes_Property(RDFS_DOMAIN,__METHOD__);
-		$instanceProperty = new core_kernel_classes_Resource($property->getUri(),__METHOD__);
-		$returnValue = $instanceProperty->removePropertyValues($domain, array('pattern' => $resource->getUri()));
-		
-        // section 127-0-1-1-4f08ff91:131764e4b1f:-8000:00000000000031F8 end
-
-        return (bool) $returnValue;
-    }
 
     /**
      * Should not be called by application code, please use
@@ -810,7 +740,7 @@ class core_kernel_persistence_virtuoso_Class
      * @param  boolean deleteReference If set to true, references to instances will be deleted accross the database.
      * @return boolean
      */
-    public function deleteInstances( core_kernel_classes_Resource $resource, $resources, $deleteReference = false)
+    public function deleteInstances( core_kernel_classes_Class $resource, $resources, $deleteReference = false)
     {
         $returnValue = (bool) false;
 
@@ -830,7 +760,7 @@ class core_kernel_persistence_virtuoso_Class
      * @param  boolean deleteReference
      * @return boolean
      */
-    public function delete( core_kernel_classes_Resource $resource, $deleteReference = false)
+    public function delete( core_kernel_classes_Class $resource, $deleteReference = false)
     {
         $returnValue = (bool) false;
 
@@ -872,7 +802,7 @@ class core_kernel_persistence_virtuoso_Class
      * @param  Resource resource
      * @return boolean
      */
-    public function isValidContext( core_kernel_classes_Resource $resource)
+    public function isValidContext( core_kernel_classes_Class $resource)
     {
         $returnValue = (bool) false;
 
