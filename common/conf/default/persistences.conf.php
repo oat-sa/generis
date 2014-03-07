@@ -24,20 +24,20 @@
  */
 
 $GLOBALS['generis_persistences'] = array(
-	'default' => array(
-			'driver' => SGBD_DRIVER,
-			'host' => DATABASE_URL,
-			'dbname' => DATABASE_NAME,
-			'user' => DATABASE_LOGIN,
-			'password' => DATABASE_PASS
-	),
-	'serviceState' => array(
-	    'driver' => 'phpfile',
-	),
-	'config' => array(
-    	'driver' => 'phpfile',
-    	'dir' => FILES_PATH . DIRECTORY_SEPARATOR . 'generis' . DIRECTORY_SEPARATOR . 'config',
-    	'humanReadable' => true
+    'default' => array(
+        'driver' => SGBD_DRIVER,
+        'host' => DATABASE_URL,
+        'dbname' => DATABASE_NAME,
+        'user' => DATABASE_LOGIN,
+        'password' => DATABASE_PASS
+    ),
+    'serviceState' => array(
+        'driver' => 'phpfile',
+    ),
+    'config' => array(
+        'driver' => 'phpfile',
+        'dir' => FILES_PATH . DIRECTORY_SEPARATOR . 'generis' . DIRECTORY_SEPARATOR . 'config',
+        'humanReadable' => true
     )
 /*	
     'session' => array(
