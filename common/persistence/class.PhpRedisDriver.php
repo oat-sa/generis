@@ -51,7 +51,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         if (isset($params['password'])) {
             $this->connection->auth($params['password']);
         }
-        return new common_persistence_KeyValuePersistence($params, $this);
+        return new common_persistence_AdvKeyValuePersistence($params, $this);
     }
     
     public function set($key, $value, $ttl = null)
