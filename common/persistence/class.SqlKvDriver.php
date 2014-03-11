@@ -119,49 +119,17 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
         return false;
     }
     
+    /**
+     * Should be moved to another interface (session handler) than the persistence, 
+     * this class implementing only the persistence side and another class implementing 
+     * the handler interface and relying on the persitence.
+     */
     protected function gc()
     {
         common_Logger::d('SQL key/value storage garbage collection triggered');
         $statement = 'DELETE FROM sessions WHERE session_time < '.time();
         return (bool)$this->sqlPeristence->exec($statement);
     }
-    
-    
 
-    
-    public function hmSet($key, $fields) {
-        throw new common_exception_NoImplementation(__METHOD__ ." arising from modern KV hasn't been impl. in SQL'");
-        return false;
-    }
-
-    public function hExists($key, $field){
-        throw new common_exception_NoImplementation(__METHOD__ ." arising from modern KV hasn't been impl. in SQL'");
-        return false;
-    }
    
-    public function hSet($key, $field, $value){
-        throw new common_exception_NoImplementation(__METHOD__ ." arising from modern KV hasn't been impl. in SQL'");
-        return false;
-    }
-   
-    public function hGet($key, $field){
-        throw new common_exception_NoImplementation(__METHOD__ ." arising from modern KV hasn't been impl. in SQL'");
-        return false;
-    }
-    
-    public function hGetAll($key){
-        throw new common_exception_NoImplementation(__METHOD__ ." arising from modern KV hasn't been impl. in SQL'");
-        return false;
-    }
-
-    public function keys($pattern) {
-        throw new common_exception_NoImplementation(__METHOD__ ." arising from modern KV hasn't been impl. in SQL'");
-        return false;
-    }
-
-    public function incr($key) {
-        throw new common_exception_NoImplementation(__METHOD__ ." arising from modern KV hasn't been impl. in SQL'");
-       return false; 
-    }
-
 }
