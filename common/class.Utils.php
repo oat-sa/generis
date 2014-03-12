@@ -143,7 +143,7 @@ class common_Utils
         		$returnValue = 'null';
 				break;
         	case "object" :
-        	    if (false && $value instanceof PhpSerializable) {
+        	    if ($value instanceof PhpSerializable) {
         	       $returnValue = $value->__toPhpCode();
         	    } else {
         	       $returnValue =  'unserialize('.self::toPHPVariableString(serialize($value)).')';
