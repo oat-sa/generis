@@ -1,17 +1,19 @@
 {
-	"name" : "tao/generis",
+	"name" : "oat/generis",
 	"description" : "TAO generis library",
 	"type" : "library",
 	"authors" : [{
-			"name" : "OAT",
+			"name" : "Open Assessment Technologies S.A.",
 			"homepage" : "http://www.taotesting.com"
 		}
 	],
 	"keywords" : [
 		"tao",
-		"doctrine-dbal"
+		"oat",
+		"doctrine-dbal",
+		"computer-based-assessment"
 	],
-	"homepage" : "taotesting.com",
+	"homepage" : "http://www.taotesting.com",
 	"license" : [
 		"GPL-2.0"
 	],
