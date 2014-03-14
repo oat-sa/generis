@@ -30,12 +30,16 @@ class helpers_ExtensionHelper{
             $unsorted[$ext->getId()] = array_keys($ext->getDependencies());
         }
         while (!empty($unsorted)) {
+            $before = count($unsorted);
             foreach (array_keys($unsorted) as $id) {
                 $missing = array_diff($unsorted[$id], $sorted);
                 if (empty($missing)) {
                     $sorted[] = $id;
                     unset($unsorted[$id]);
                 }
+            }
+            if (count($unsorted) == $before) {
+                throw new common_exception_Error('Unable to resolve extension dependencies');
             }
         }
         
