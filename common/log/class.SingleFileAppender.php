@@ -171,7 +171,7 @@ class common_log_SingleFileAppender
 	    		$map['%b'] = 'Backtrace not yet supported';
 	    	}
 	    	
-	    	$str = strtr($this->format, $map)."\n";
+	    	$str = strtr($this->format, $map).PHP_EOL;
 	    	
 	    	@fwrite($this->filehandle, $str);
     	}
