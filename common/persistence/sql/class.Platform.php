@@ -113,5 +113,13 @@ class common_persistence_sql_Platform{
         return $fromSchema->getMigrateToSql($toSchema,$this->dbalPlatform);     
     }
     
+    /**
+     * Return driver name mysql, postgresql, oracle, mssql
+     * 
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     */
+    public function getName(){
+        return $this->dbalPlatform->getName();
+    }
     
 }

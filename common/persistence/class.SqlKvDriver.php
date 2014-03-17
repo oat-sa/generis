@@ -40,6 +40,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
      */
     private $garbageCollection;
     
+   
     /**
      * (non-PHPdoc)
      * @see common_persistence_Driver::connect()
@@ -52,69 +53,119 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
         
         $this->sqlPeristence = common_persistence_SqlPersistence::getPersistence($params['sqlPersistence']);
         $this->garbageCollection = isset($params['gc']) ? $params['gc'] : self::DEFAULT_GC_PROBABILITY;
-        
-        $statement =" CREATE TABLE if not exists sessions(
-                        session_id varchar(255) NOT NULL,
-                        session_value text NOT NULL,
-                        session_time int(11) NOT NULL,
-                        PRIMARY KEY (session_id)
-                    ) ENGINE=MyIsam DEFAULT CHARSET=utf8;";
-        $this->sqlPeristence->exec($statement);
+
         
         return new common_persistence_KeyValuePersistence($params, $this);
     }
-    
+    /**
+     * 
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param string $id
+     * @param string $value
+     * @param int $ttl
+     * @throws common_Exception
+     * @return boolean
+     */
     public function set($id, $value, $ttl = null) {
+       
         $returnValue = false;
         try{
-            $expire = is_null($ttl) ? 'NULL' : time()+$ttl;
-            $statement = 'REPLACE INTO "sessions" ("session_id", "session_value", "session_time") VALUES(\''.$id.'\', \''.$value.'\', '.$expire.')';
-            $returnValue = $this->sqlPeristence->exec($statement);
+            
+            $expire = is_null($ttl) ? 'NULL' : time() + $ttl;
+            
+            $encoded = base64_encode($value);
+            $platformName = $this->sqlPeristence->getPlatForm()->getName();
+            $params = array(':data' => $encoded, ':time' => $expire, ':id' => $id);
+            
+            
+            if($platformName == 'mysql'){
+                //query found in Symfony PdoSessionHandler
+                $statement = "INSERT INTO kv_store (kv_id, kv_value, kv_time) VALUES (:id, :data, :time) " .
+                    "ON DUPLICATE KEY UPDATE kv_value = VALUES(kv_value), kv_time = VALUES(kv_time)";
+                $returnValue = $this->sqlPeristence->exec($statement,$params);
+                
+            } else if($platformName == 'oracle'){
+                $statement = "MERGE INTO kv_store USING DUAL ON(kv_id = :id) ".
+                "WHEN NOT MATCHED THEN INSERT (kv_id, kv_value, kv_time) VALUES (:id, :data, sysdate) " .
+                "WHEN MATHED THEN UPDATE SET kv_value = :data WHERE kv_id = :id";
+            }
+            
+            else {
+                $statement = 'UPDATE kv_store SET kv_value = :data , kv_time = :time WHERE kv_id = :id';
+                $returnValue = $this->sqlPeristence->exec($statement,$params);
+                if ($returnValue == 0){
+                    $returnValue = $this->sqlPeristence->insert('kv_store', array('kv_id' => $id, 'kv_time' => $expire, 'kv_value' => $encoded));
+                }
+            }
+            
+          
             if ($this->garbageCollection != 0 && rand(0, $this->garbageCollection) == 1) {
                 $this->gc();
             } 
         }
-        catch (PDOException $e){
-            throw new common_Exception("Unable to write the session storage table in the database");
+        catch (Exception $e){
+            throw new common_Exception("Unable to write the key value storage table in the database "  .$e->getMessage());
         }
         return (boolean)$returnValue;
     }
-    
+    /**
+     * 
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param string $id
+     * @throws common_Exception
+     * @return string|boolean
+     */
     public function get($id) {
         try{
-            $statement = 'SELECT "session_value", "session_time" FROM "sessions" WHERE "session_id" = \''.$id.'\' LIMIT 1';
-            $sessionValue = $this->sqlPeristence->query($statement);
+           
+            $statement = 'SELECT kv_value, kv_time FROM kv_store WHERE kv_id = ?';
+            $statement = $this->sqlPeristence->getPlatForm()->limitStatement($statement,1);
+            $sessionValue = $this->sqlPeristence->query($statement,array($id));
             while ($row = $sessionValue->fetch()) {
-                if ($row["session_time"] >= time()) {
-                    return $row["session_value"];
+                if ($row["kv_time"] >= time() ) {
+                    return base64_decode($row["kv_value"]);
                 }
             }
         }
-        catch (PDOException $e){
-            throw new common_Exception("Unable to read session value");
+        catch (Exception $e){
+            throw new common_Exception("Unable to read value from key value storage");
         }
         return false;
     }
-    
+    /**
+     * 
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param string $id
+     * @throws common_Exception
+     * @return boolean
+     */
     public function exists($id) {
         try{
-            $statement = 'SELECT "session_value" FROM "sessions" WHERE "session_id" = \''.$id.'\' LIMIT 1';
-            $sessionValue = $this->sqlPeristence->query($statement);
+           
+            $statement = 'SELECT kv_value FROM kv_store WHERE kv_id = ?';
+            $statement = $this->sqlPeristence->getPlatForm()->limitStatement($statement,1);
+            $sessionValue = $this->sqlPeristence->query($statement,array($id));
             return ($sessionValue->fetch() !== false);
         }
-        catch (PDOException $e){
-            throw new common_Exception("Unable to read session value");
+        catch (Exception $e){
+            throw new common_Exception("Unable to read value from key value storage");
         }
     }
-    
+    /**
+     * 
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param string $id
+     * @throws common_Exception
+     * @return boolean
+     */
     public function del($id) {
         try{
-            $statement = 'DELETE FROM "sessions" WHERE "session_id" = \''.$id.'\'';
-            $sessionValue = $this->sqlPeristence->exec($statement);
+            $statement = 'DELETE FROM kv_store WHERE kv_id = ?';
+            $sessionValue = $this->sqlPeristence->exec($statement,array($id));
             return (boolean)$sessionValue;
         }
-        catch (PDOException $e){
-            throw new common_Exception("Unable to write the session storage table in the database");
+        catch (Exception $e){
+            throw new common_Exception("Unable to write the key value table in the database " .$e->getMessage());
         }
         return false;
     }
@@ -126,9 +177,8 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
      */
     protected function gc()
     {
-        common_Logger::d('SQL key/value storage garbage collection triggered');
-        $statement = 'DELETE FROM sessions WHERE session_time < '.time();
-        return (bool)$this->sqlPeristence->exec($statement);
+        $statement = 'DELETE FROM kv_store WHERE kv_time <  ? ';
+        return (bool)$this->sqlPeristence->exec($statement, array(time()));
     }
 
    
