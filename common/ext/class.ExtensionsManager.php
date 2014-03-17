@@ -271,8 +271,6 @@ class common_ext_ExtensionsManager
      */
     public function getExtensionById($id)
     {
-        $returnValue = null;
-
         if (empty($id)) {
         	throw new common_ext_ExtensionException('No id specified for getExtensionById()');
         }
@@ -282,9 +280,7 @@ class common_ext_ExtensionsManager
         // loads the extension if it hasn't been loaded yet
         $this->extensions[$id]->load();
         
-        $returnValue = $this->extensions[$id];
-
-        return $returnValue;
+        return $this->extensions[$id];
     }
     
     public function isEnabled($extensionId)
@@ -298,6 +294,13 @@ class common_ext_ExtensionsManager
         $exts = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         return isset($exts[$extensionId]);
     }
+    
+    public function getInstalledVersion($extensionId)
+    {
+        $exts = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+        return isset($exts[$extensionId]) ? $exts[$extensionId]['installed'] : null;
+    }
+    
     
 
     public function setEnabled($extensionId, $enabled = true)

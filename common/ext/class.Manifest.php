@@ -122,6 +122,22 @@ class common_ext_Manifest
     private $installChecks = array();
 
     /**
+     * The paths to PHP Scripts to be run at installation time.
+     *
+     * @access private
+     * @var array
+     */
+    private $installPHPFiles = array();
+    
+    /**
+     * The data associated with the uninstall
+     *
+     * @access private
+     * @var array
+     */
+    private $uninstallData = null;
+    
+    /**
      * The PHP autoload configuration for the Extension described by the manifest.
      *
      * @access private
@@ -144,14 +160,6 @@ class common_ext_Manifest
      * @var array
      */
     private $constants = array();
-
-    /**
-     * The paths to PHP Scripts to be run at installation time.
-     *
-     * @access private
-     * @var array
-     */
-    private $installPHPFiles = array();
 
     /**
      * The Management Role of the extension described by the manifest.
@@ -280,6 +288,11 @@ class common_ext_Manifest
     				$this->setInstallPHPFiles($files);
     			}
     		}
+    		
+    		if (isset($array['uninstall'])){
+    		    $this->uninstallData = $array['uninstall']; 
+    		}
+    		
     		if (!empty($array['local'])){
     			$this->localData = $array['local']; 
     		}
@@ -774,6 +787,17 @@ class common_ext_Manifest
 
         return (array) $returnValue;
     }
+    
+    /**
+     * Return the uninstall data as an array if present, or null if not
+     * 
+     * @return multitype:
+     */
+    public function getUninstallData()
+    {
+        return  $this->uninstallData;
+    }
+    
     
    /**
      * PHP scripts to execute in order to add some sample data to an install
