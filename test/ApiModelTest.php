@@ -56,8 +56,11 @@ class ApiModelTest extends GenerisPhpUnitTestRunner {
 			$this->assertInstanceOf('core_kernel_classes_Class',$rootClass);
 			
 			$parentClasses = $rootClass->getParentClasses(true);
-			$this->assertEquals(count($parentClasses), 1);
-			foreach($parentClasses as $uri => $parent){
+			$this->assertEquals(0, count($parentClasses));
+			
+			$types = $rootClass->getTypes(true);
+			$this->assertEquals(1, count($types));
+			foreach($types as $uri => $parent){
 				$this->assertEquals($uri,  RDFS_CLASS);
 			}
 			//don't check the user root classes

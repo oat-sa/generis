@@ -128,10 +128,10 @@ class core_kernel_persistence_smoothsql_Class
 		
         $sqlQuery = 'SELECT object FROM statements
         			WHERE subject = ? 
-        			AND (predicate = ? OR predicate = ?)';
+        			AND predicate = ?';
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->query($sqlQuery, array($resource->getUri(), RDFS_SUBCLASSOF, RDF_TYPE));
+		$sqlResult = $dbWrapper->query($sqlQuery, array($resource->getUri(), RDFS_SUBCLASSOF));
 
 		while ($row = $sqlResult->fetch()){
 

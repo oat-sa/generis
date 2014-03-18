@@ -92,7 +92,7 @@ class ClassTest extends GenerisPhpUnitTestRunner {
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN);
 		$indirectParentClasses = $class->getParentClasses(true);
 
-		$this->assertTrue(count($indirectParentClasses) == 2);
+		$this->assertEquals(2,count($indirectParentClasses));
 		$expectedResult = array (CLASS_GENERIS_RESOURCE , RDFS_RESOURCE);
 		foreach ($indirectParentClasses  as $parentClass) {
 			$this->assertInstanceOf('core_kernel_classes_Class',$parentClass);	
@@ -100,12 +100,11 @@ class ClassTest extends GenerisPhpUnitTestRunner {
 		}
 		
 		$directParentClass = $class->getParentClasses(); 
-		$this->assertTrue(count($directParentClass) == 1);
+		$this->assertEquals(1,count($directParentClass));
 		foreach ($directParentClass  as $parentClass) {
 			$this->assertInstanceOf('core_kernel_classes_Class', $parentClass);	
-			$this->assertEquals($parentClass->getUri(), CLASS_GENERIS_RESOURCE); 
+			$this->assertEquals(CLASS_GENERIS_RESOURCE, $parentClass->getUri()); 
 		}
-
 	}
 	
 

@@ -445,14 +445,14 @@ class ConfigurationTest extends GenerisPhpUnitTestRunner {
 	{
 		$generis = common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
 		
-		$this->assertNull($generis->getConfig(self::TESTKEY));
+		$this->assertFalse($generis->getConfig(self::TESTKEY));
 		
 		$random = rand(0, 999999);
 		$generis->setConfig(self::TESTKEY, $random);
 		$this->assertEquals($generis->getConfig(self::TESTKEY), $random);
 		
 		$generis->unsetConfig(self::TESTKEY);
-		$this->assertNull($generis->getConfig(self::TESTKEY));
+		$this->assertFalse($generis->getConfig(self::TESTKEY));
 		
 	}
 }
