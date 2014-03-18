@@ -367,17 +367,17 @@ class core_kernel_persistence_smoothsql_Class
      */
     public function createSubClass( core_kernel_classes_Class $resource, $label = '', $comment = '', $uri = '')
     {
-        $returnValue = null;
-
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 begin
-        
-        $class = new core_kernel_classes_Class(RDFS_CLASS, __METHOD__);
-		$intance = $class->createInstance($label, $comment, $uri);
-		$returnValue = new core_kernel_classes_Class($intance->getUri());
-		$returnValue->setSubClassOf($resource);
-        
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F32 end
-
+        if (!empty($uri)) {
+            common_Logger::w('Use of parameter uri in '.__METHOD__.' is deprecated');
+        }
+        $uri = empty($uri) ? common_Utils::getNewUri() : $uri;
+        $returnValue = new core_kernel_classes_Class($uri, __METHOD__);
+        $properties = array(
+            RDFS_SUBCLASSOF => $resource,
+            RDFS_LABEL => $label,
+            RDFS_COMMENT => $comment
+        );
+        $returnValue->setPropertiesValues($properties);
         return $returnValue;
     }
 
