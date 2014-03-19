@@ -36,8 +36,8 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         common_Logger::d('Running Dbal Driver');
         $params['driver'] = str_replace('dbal_', '', $params['driver']);
         $config = new \Doctrine\DBAL\Configuration();
-         $logger = new Doctrine\DBAL\Logging\EchoSQLLogger();
-         $config->setSQLLogger($logger);
+//          $logger = new Doctrine\DBAL\Logging\EchoSQLLogger();
+//          $config->setSQLLogger($logger);
         $this->connection = \Doctrine\DBAL\DriverManager::getConnection($params,$config);
         return new common_persistence_SqlPersistence($params,$this);
     }
