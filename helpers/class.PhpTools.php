@@ -1,13 +1,31 @@
 <?php
-
-/**
- * A utility class handling php language related tasks
+/**  
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
  * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * 
+ * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
+ *               
+ * 
+ */
+ 
+ /**
+ * A utility class handling php language related tasks
  */
 class helpers_PhpTools {
     
     /**
-     * Generate a random alphanumeric token with a specific $length.
+     * Returns an array that contains namespace and name of the class defined in the file
      * 
      * Code losely based on http://stackoverflow.com/questions/7153000/get-class-name-from-file
      * by user http://stackoverflow.com/users/492901/netcoder
