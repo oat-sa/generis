@@ -589,10 +589,7 @@ class core_kernel_classes_Resource
      */
     public function editPropertyValues( core_kernel_classes_Property $property, $object)
     {
-        $returnValue = (bool) false;
-
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:00000000000009D5 begin
-        $this->removePropertyValues($property);
+        $returnValue =  $this->removePropertyValues($property);
         if(is_array($object)){
             foreach($object as $value){
                 $returnValue = $this->setPropertyValue($property, $value);
@@ -600,8 +597,6 @@ class core_kernel_classes_Resource
         }else{
             $returnValue = $this->setPropertyValue($property, $object);
         }
-
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:00000000000009D5 end
 
         return (bool) $returnValue;
     }
