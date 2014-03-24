@@ -82,9 +82,6 @@ define('GENERIS_FILES_PATH' , GENERIS_BASE_PATH.DIRECTORY_SEPARATOR.'data'.DIREC
 # uri providers ('MicrotimeUriProvider'|'MicrotimeRandUriProvider'|'DatabaseSerialUriProvider')
 define('GENERIS_URI_PROVIDER', 'DatabaseSerialUriProvider');
 
-# path to RDFAPI-PHP
-define('RDFAPI_INCLUDE_DIR', INCLUDES_PATH.'/rdfapi-php/api/');
-
 # users cache
 define('GENERIS_CACHE_USERS_ROLES', true);
 
