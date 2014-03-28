@@ -350,4 +350,41 @@ class helpers_File
         
         return (array) $returnValue;
     }
+    
+    /**
+     * An alternative way to resolve the real path of a path. The resulting
+     * path might point to something non-existant on the file system contrary to
+     * PHP's realpath function.
+     * 
+     * @param string $path The original path.
+     * @return string The resolved path.
+     */
+    public static function truePath($path) {
+        // From Magento Mass Import utils (MIT)
+        // http://sourceforge.net/p/magmi/git/ci/master/tree/magmi-0.8/inc/magmi_utils.php
+        
+        // whether $path is unix or not
+        $unipath = strlen( $path ) == 0 || $path{0} != '/';
+        // attempts to detect if path is relative in which case, add cwd
+        if ( strpos( $path, ':' ) === false && $unipath )
+            $path = getcwd() . DIRECTORY_SEPARATOR . $path;
+        // resolve path parts (single dot, double dot and double delimiters)
+        $path      = str_replace( array( '/', '\\' ), DIRECTORY_SEPARATOR, $path );
+        $parts     = array_filter( explode( DIRECTORY_SEPARATOR, $path ), 'strlen' );
+        $absolutes = array();
+        foreach ( $parts as $part ) {
+            if ( '.' == $part ) continue;
+            if ( '..' == $part ) {
+                array_pop( $absolutes );
+            } else {
+                $absolutes[ ] = $part;
+            }
+        }
+        $path = implode( DIRECTORY_SEPARATOR, $absolutes );
+        // resolve any symlinks
+        if ( file_exists( $path ) && linkinfo( $path ) > 0 ) $path = readlink( $path );
+        // put initial separator that could have been lost
+        $path = !$unipath ? '/' . $path : $path;
+        return $path;
+    }
 }
