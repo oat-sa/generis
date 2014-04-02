@@ -79,15 +79,7 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner {
     public function testGetTables(){
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $tables = $dbWrapper->getTables();
-        $this->assertEquals(count($tables),10);
-        $this->assertTrue(in_array('class_additional_properties', $tables));
-        $this->assertTrue(in_array('class_to_table', $tables));
-        $this->assertTrue(in_array('dbTestCase', $tables));
-        $this->assertTrue(in_array('extensions', $tables));
-        $this->assertTrue(in_array('models', $tables));
-        $this->assertTrue(in_array('resource_has_class', $tables));
-        $this->assertTrue(in_array('resource_to_table', $tables));
-        $this->assertTrue(in_array('sequence_uri_provider', $tables));
+        $this->assertTrue(count($tables) > 1);
         $this->assertTrue(in_array('statements', $tables));
     }
 
