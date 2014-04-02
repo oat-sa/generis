@@ -78,9 +78,16 @@ class generis_test_UtilsTest extends GenerisPhpUnitTestRunner {
 	}
 	
 	public function testSerialisation(){
-        $serialized = new Exception("te\0st \\ ");
-        $value = eval("return ".common_Utils::toPHPVariableString($serialized).";");
-        $this->assertEquals($serialized,$value);
+	    
+	    $toSerialize = array(
+	    	'a' => "te\0st \\ ",
+	        'b' => new core_kernel_classes_Resource('doesnotexist'),
+	        'c' => array(
+	    	    '1', '2', array(common_user_auth_Service::singleton()) 
+	        )
+	    );
+	    $value = eval("return ".common_Utils::toPHPVariableString($toSerialize).";");
+        $this->assertEquals($toSerialize,$value);
 	}
 	
 	private function buildBinString() {
