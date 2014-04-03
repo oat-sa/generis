@@ -33,7 +33,6 @@
  *
  * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
  * @package generis
- * @subpacakge common
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
  */
 
