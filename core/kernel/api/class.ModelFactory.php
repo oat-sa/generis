@@ -18,8 +18,8 @@
  *
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
- * @package core
- * @subpackage kernel_api
+ * @package generis
+ 
  *
  */
 class core_kernel_api_ModelFactory{

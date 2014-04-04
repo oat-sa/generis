@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -18,31 +18,6 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * EXtension Wrapper
- *
- * @author lionel.lecaque@tudor.lu
- * @package common
- * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
- * @subpackage ext
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/* user defined includes */
-// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017BD-includes begin
-// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017BD-includes end
-
-/* user defined constants */
-// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017BD-constants begin
-// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017BD-constants end
 
 /**
  * EXtension Wrapper
@@ -50,9 +25,9 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * @abstract
  * @access public
  * @author lionel.lecaque@tudor.lu
- * @package common
+ * @package generis
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
- * @subpackage ext
+ 
  */
 abstract class common_ext_ExtensionHandler
 {

@@ -18,8 +18,7 @@
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
- * @package 
- * @subpackage 
+ * @package generis
  *
  */
 class common_persistence_sql_dbal_Driver implements common_persistence_sql_Driver

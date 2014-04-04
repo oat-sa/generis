@@ -23,8 +23,8 @@
  *
  * @access public
  * @author Jerome Bogaerts, <jerome@taotesting.com>
- * @package core
- * @subpackage kernel_users
+ * @package generis
+ 
  */
 class common_user_auth_Service
 {

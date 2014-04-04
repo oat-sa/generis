@@ -25,7 +25,7 @@
  * @access public
  * @author Patrick Plichart
  * @package generis
- * @subpackage common_http
+ 
  */
 class common_http_Response
 {

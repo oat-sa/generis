@@ -21,8 +21,8 @@
  *
  * @access public
  * @author Patrick Plichart
- * @package common
- * @subpackage exception
+ * @package generis
+ 
  */
 abstract class common_exception_ClientException
     extends common_Exception

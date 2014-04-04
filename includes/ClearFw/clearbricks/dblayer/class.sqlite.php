@@ -16,7 +16,7 @@
 * See the {@link dbLayer} documentation for common methods.
 * 
 * @package Clearbricks
-* @subpackage DBLayer
+
 */
 class sqliteConnection extends dbLayer implements i_dbLayer
 {

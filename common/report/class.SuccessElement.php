@@ -23,8 +23,8 @@
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
- * @package common
- * @subpackage report
+ * @package generis
+ 
  */
 class common_report_SuccessElement extends common_report_Report
 {

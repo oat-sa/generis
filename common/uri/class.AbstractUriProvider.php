@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -19,33 +19,6 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * Any implementation of the AbstractUriProvider class aims at providing unique
- * to client code. It should take into account the state of the Knowledge Base
- * avoid collisions. The AbstractUriProvider::provide method must be implemented
- * subclasses to return a valid URI.
- *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package common
- * @subpackage uri
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/* user defined includes */
-// section 10-13-1-85--341437fc:13634d84b3e:-8000:0000000000001978-includes begin
-// section 10-13-1-85--341437fc:13634d84b3e:-8000:0000000000001978-includes end
-
-/* user defined constants */
-// section 10-13-1-85--341437fc:13634d84b3e:-8000:0000000000001978-constants begin
-// section 10-13-1-85--341437fc:13634d84b3e:-8000:0000000000001978-constants end
 
 /**
  * Any implementation of the AbstractUriProvider class aims at providing unique
@@ -56,8 +29,8 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * @abstract
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package common
- * @subpackage uri
+ * @package generis
+ 
  */
 abstract class common_uri_AbstractUriProvider
 {

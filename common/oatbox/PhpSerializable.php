@@ -27,8 +27,8 @@ namespace oat\oatbox;
  *
  * @access public
  * @author joel bout <joel@taotesting.com>
- * @package common
- * @subpackage cache
+ * @package generis
+ 
  */
 interface PhpSerializable
 {

@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -18,55 +18,15 @@
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  * 
  */
-?>
-<?php
 
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API - core\kernel\rules\class.Rule.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 23.03.2010, 15:58:21 with ArgoUML PHP module 
- * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
- *
- * @author firstname and lastname of author, <author@example.org>
- * @package core
- * @subpackage kernel_rules
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * Resource implements rdf:resource container identified by an uri (a string).
- * Methods enable meta data management for this resource
- *
- * @author patrick.plichart@tudor.lu
- * @see http://www.w3.org/RDF/
- * @version v1.0
- */
-require_once('core/kernel/classes/class.Resource.php');
-
-/* user defined includes */
-// section 10-13-1--99-6bb5697e:11bda1bbfa6:-8000:000000000000133B-includes begin
-// section 10-13-1--99-6bb5697e:11bda1bbfa6:-8000:000000000000133B-includes end
-
-/* user defined constants */
-// section 10-13-1--99-6bb5697e:11bda1bbfa6:-8000:000000000000133B-constants begin
-// section 10-13-1--99-6bb5697e:11bda1bbfa6:-8000:000000000000133B-constants end
 
 /**
  * Short description of class core_kernel_rules_Rule
  *
  * @access public
  * @author firstname and lastname of author, <author@example.org>
- * @package core
- * @subpackage kernel_rules
+ * @package generis
+ 
  */
 class core_kernel_rules_Rule
     extends core_kernel_classes_Resource

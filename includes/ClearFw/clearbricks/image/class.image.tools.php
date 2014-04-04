@@ -17,7 +17,7 @@
 * {@link https://dev.media-box.net/big/}
 *
 * @package Clearbricks
-* @subpackage Images
+
 */
 class imageTools
 {

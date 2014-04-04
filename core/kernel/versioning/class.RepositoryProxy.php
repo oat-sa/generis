@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -18,52 +18,14 @@
  *               
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API -
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 25.01.2012, 15:38:16 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
- * @package core
- * @subpackage kernel_versioning
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * include core_kernel_versioning_RepositoryInterface
- *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
- */
-require_once('core/kernel/versioning/interface.RepositoryInterface.php');
-
-/* user defined includes */
-// section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002501-includes begin
-// section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002501-includes end
-
-/* user defined constants */
-// section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002501-constants begin
-// section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002501-constants end
 
 /**
  * Short description of class core_kernel_versioning_RepositoryProxy
  *
  * @access public
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
- * @package core
- * @subpackage kernel_versioning
+ * @package generis
+ 
  */
 class core_kernel_versioning_RepositoryProxy
         implements core_kernel_versioning_RepositoryInterface

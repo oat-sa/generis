@@ -19,8 +19,8 @@
  *
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
- * @package common
- * @subpackage persistence_sql
+ * @package generis
+ 
  *
  */
 abstract class common_persistence_sql_SchemaManager {

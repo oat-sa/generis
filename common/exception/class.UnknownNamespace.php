@@ -26,8 +26,8 @@
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
- * @package common
- * @subpackage exception
+ * @package generis
+ 
  */
 class common_exception_UnknownNamespace
     extends common_Exception

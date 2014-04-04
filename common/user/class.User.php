@@ -24,8 +24,8 @@
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
- * @package core
- * @subpackage kernel_auth_adapter
+ * @package generis
+ 
  */
 abstract class common_user_User
 {

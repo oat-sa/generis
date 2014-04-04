@@ -25,8 +25,8 @@
  *
  * @access public
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
- * @package core
- * @subpackage kernel_persistence_smoothsql
+ * @package generis
+ 
  */
 class core_kernel_persistence_smoothsql_Utils
 {

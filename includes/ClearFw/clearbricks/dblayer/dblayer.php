@@ -14,7 +14,7 @@
 * Clearbricks DBLayer
 *
 * @package Clearbricks
-* @subpackage DBLayer
+
 */
 
 require dirname(__FILE__).'/class.cursor.php';
@@ -28,7 +28,7 @@ require dirname(__FILE__).'/class.cursor.php';
 * {@link i_dbLayer} and has a name of the form (driver name)Connection.
 *
 * @package Clearbricks
-* @subpackage DBLayer
+
 */
 interface i_dbLayer
 {
@@ -225,7 +225,7 @@ interface i_dbLayer
 * implements {@link i_dbLayer} interface.
 *
 * @package Clearbricks
-* @subpackage DBLayer
+
 */
 class dbLayer
 {
@@ -632,7 +632,7 @@ class dbLayer
 * fill PHP process memory.
 *
 * @package Clearbricks
-* @subpackage DBLayer
+
 */
 class record
 {
@@ -997,7 +997,7 @@ class record
 * Unlike record class, this one contains all results in an associative array.
 *
 * @package Clearbricks
-* @subpackage DBLayer
+
 */
 class staticRecord extends record
 {

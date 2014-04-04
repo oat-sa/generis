@@ -20,8 +20,8 @@
  * Content type accepted can't be satisfied
  * @access public
  * @author Patrick Plichart
- * @package common
- * @subpackage exception
+ * @package generis
+ 
  */
 class common_exception_NotAcceptable extends common_exception_BadRequest
 {

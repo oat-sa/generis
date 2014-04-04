@@ -30,7 +30,7 @@
  * @authorlionel@taotesting.com
  * @package generis
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
- * @subpackage common_ext
+ 
  */
 class common_ext_ExtensionsManager
 {

@@ -24,8 +24,8 @@
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
- * @package core
- * @subpackage kernel_auth_exception
+ * @package generis
+ 
  */
 abstract class common_user_auth_AuthFailedException extends common_Exception 
 	implements common_exception_UserReadableException

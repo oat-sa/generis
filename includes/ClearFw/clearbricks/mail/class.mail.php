@@ -14,7 +14,7 @@
 * Email utilities
 *
 * @package Clearbricks
-* @subpackage Mail
+
 */
 class mail
 {

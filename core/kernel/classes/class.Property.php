@@ -28,8 +28,8 @@ use oat\generis\model\data\ModelManager;
  *
  * @access public
  * @author patrick.plichart@tudor.lu
- * @package core
- * @subpackage kernel_classes
+ * @package generis
+ 
  */
 class core_kernel_classes_Property
     extends core_kernel_classes_Resource

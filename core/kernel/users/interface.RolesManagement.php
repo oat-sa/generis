@@ -25,8 +25,8 @@
  *
  * @access public
  * @author Jerome Bogaerts, <jerome@taotesting.com>
- * @package core
- * @subpackage kernel_users
+ * @package generis
+ 
  */
 interface core_kernel_users_RolesManagement
 {

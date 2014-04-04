@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -23,7 +23,6 @@
 
 /**
  * Generis Object Oriented API - common\class.Object.php
-
  * This file is part of Generis Object Oriented API.
  *
  * Short description of class common_Object
@@ -31,7 +30,6 @@
  * @access public
  * @author lionel.lecaque@tudor.lu
  * @package generis
- * @subpackage common
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
  */
 class common_Object

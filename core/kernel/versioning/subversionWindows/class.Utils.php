@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -18,45 +18,14 @@
  *               
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API -
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 25.01.2012, 15:55:00 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
- * @package core
- * @subpackage kernel_versioning_subversionWindows
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/* user defined includes */
-// section 127-0-1-1-a831e14:134415460c1:-8000:000000000000189C-includes begin
-// section 127-0-1-1-a831e14:134415460c1:-8000:000000000000189C-includes end
-
-/* user defined constants */
-// section 127-0-1-1-a831e14:134415460c1:-8000:000000000000189C-constants begin
-// section 127-0-1-1-a831e14:134415460c1:-8000:000000000000189C-constants end
 
 /**
  * Short description of class core_kernel_versioning_subversionWindows_Utils
  *
  * @access public
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
- * @package core
- * @subpackage kernel_versioning_subversionWindows
+ * @package generis
+ 
  */
 class core_kernel_versioning_subversionWindows_Utils
 {

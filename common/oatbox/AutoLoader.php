@@ -26,8 +26,8 @@ namespace oat\oatbox;
  *
  * @access public
  * @author Joel Bout <joel@taotesting.com>
- * @package common
- * @subpackage oatbox
+ * @package generis
+ 
  */
 class AutoLoader
 {

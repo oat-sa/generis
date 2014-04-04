@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -18,52 +18,14 @@
  *               
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API - core/kernel/versioning/class.FileProxy.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 02.02.2012, 16:53:22 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
- * @package core
- * @subpackage kernel_versioning
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * include core_kernel_versioning_FileInterface
- *
- * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
- */
-require_once('core/kernel/versioning/interface.FileInterface.php');
-
-/* user defined includes */
-// section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032DB-includes begin
-// section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032DB-includes end
-
-/* user defined constants */
-// section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032DB-constants begin
-// section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032DB-constants end
 
 /**
  * Short description of class core_kernel_versioning_FileProxy
  *
  * @access public
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
- * @package core
- * @subpackage kernel_versioning
+ * @package generis
+ 
  */
 class core_kernel_versioning_FileProxy
         implements core_kernel_versioning_FileInterface

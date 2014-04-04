@@ -25,8 +25,8 @@
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
- * @package common
- * @subpackage exception
+ * @package generis
+ 
  */
 interface common_exception_UserReadableException {
 	

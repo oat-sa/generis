@@ -27,7 +27,7 @@
  * @access private
  * @author patrick@taotesting.com
  * @package generis
- * @subpackage core_kernel_classes
+ 
  */
 class core_kernel_classes_Session
 {

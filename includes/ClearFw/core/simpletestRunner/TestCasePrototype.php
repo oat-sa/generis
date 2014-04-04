@@ -26,8 +26,8 @@
  * @author Joel Bout, <taosupport@tudor.lu>
  * @author Jehan Bihin
  * @package ClearFw
- * @subpackage core
- * @subpackage helpers
+ 
+ 
  */
 
 

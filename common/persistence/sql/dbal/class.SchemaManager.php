@@ -18,8 +18,7 @@
  *
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
- * @package package_name
- * @subpackage 
+ * @package generis
  *
  */
  class common_persistence_sql_dbal_SchemaManager extends common_persistence_sql_SchemaManager{

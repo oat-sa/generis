@@ -18,8 +18,8 @@
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
- * @package core
- * @subpackage persistence
+ * @package generis
+ 
  *
  */
 class common_persistence_SqlPersistence extends common_persistence_Persistence

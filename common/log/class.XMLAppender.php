@@ -17,7 +17,7 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *               2013 (update and modification) Open Assessment Techonologies SA (under the project TAO-PRODUCT);
+ *               2013 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
 
@@ -26,8 +26,8 @@
  *
  * @access public
  * @author Joel Bout, <joel.bout@tudor.lu>
- * @package common
- * @subpackage log
+ * @package generis
+ 
  */
 class common_log_XMLAppender
     extends common_log_BaseAppender

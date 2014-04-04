@@ -27,7 +27,7 @@ require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
  * 
  * @author Bertrand Chevrier <bertrand.chevrier@tudor.lu>
  * @package generis
- * @subpackage test
+ 
  */
 class NamespaceTest extends GenerisPhpUnitTestRunner {
 	

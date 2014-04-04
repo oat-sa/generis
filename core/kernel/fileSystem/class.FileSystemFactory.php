@@ -25,8 +25,8 @@
  *
  * @access public
  * @author Joel bout, <joel@taotesting.com>
- * @package core
- * @subpackage kernel_filesystem
+ * @package generis
+ 
  */
 class core_kernel_fileSystem_FileSystemFactory
 {

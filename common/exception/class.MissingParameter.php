@@ -27,8 +27,8 @@
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
- * @package common
- * @subpackage exception
+ * @package generis
+ 
  */
 
 
@@ -46,8 +46,8 @@ require_once('common/exception/class.Error.php');
  * Missing Parameter are thrown for missing parameters that are not strongly passed (sub protocols)
  * @access public
  * @author Patrick Plichart
- * @package common
- * @subpackage exception
+ * @package generis
+ 
  */
 class common_exception_MissingParameter
     extends common_exception_BadRequest

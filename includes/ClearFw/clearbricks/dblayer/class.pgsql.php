@@ -18,7 +18,7 @@
 * This class adds a method for PostgreSQL only: {@link callFunction()}.
 *
 * @package Clearbricks
-* @subpackage DBLayer
+
 */
 class pgsqlConnection extends dbLayer implements i_dbLayer
 {

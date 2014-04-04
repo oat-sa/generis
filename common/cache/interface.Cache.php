@@ -24,8 +24,8 @@
  * basic interface a cache implementation has to implement
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package common
- * @subpackage cache
+ * @package generis
+ 
  */
 
 
@@ -34,8 +34,8 @@
  *
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package common
- * @subpackage cache
+ * @package generis
+ 
  */
 interface common_cache_Cache
 {

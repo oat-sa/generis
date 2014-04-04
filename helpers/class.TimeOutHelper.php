@@ -18,8 +18,8 @@
  *
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
- * @package package_name
- * @subpackage 
+ * @package generis
+ 
  *
  */
 class helpers_TimeOutHelper{

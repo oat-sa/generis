@@ -36,8 +36,8 @@ error_reporting(E_ALL);
  *
  * @access public
  * @author firstname and lastname of author, <author@example.org>
- * @package core
- * @subpackage kernel_impl
+ * @package generis
+ 
  */
 class core_kernel_impl_ApiModelOO
     extends core_kernel_impl_Api

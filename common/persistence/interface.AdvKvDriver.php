@@ -18,8 +18,8 @@
  *
  * @author Patrick Plichart  <patrick@taotesting.com>
  * @license GPLv2
- * @package core
- * @subpackage persistence
+ * @package generis
+ 
  *
  */
 

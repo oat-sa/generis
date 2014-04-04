@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -18,62 +18,14 @@
  *               
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API - core/kernel/versioning/class.Repository.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 01.03.2013, 10:36:30 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Jerome Bogaerts, <jerome@taotesting.com>
- * @package core
- * @subpackage kernel_versioning
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * Resource implements rdf:resource container identified by an uri (a string).
- * Methods enable meta data management for this resource
- *
- * @author patrick.plichart@tudor.lu
- * @see http://www.w3.org/RDF/
- * @version v1.0
- */
-require_once('core/kernel/classes/class.Resource.php');
-
-/**
- * include core_kernel_versioning_RepositoryProxy
- *
- * @author Jerome Bogaerts, <jerome@taotesting.com>
- */
-require_once('core/kernel/versioning/class.RepositoryProxy.php');
-
-/* user defined includes */
-// section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002519-includes begin
-// section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002519-includes end
-
-/* user defined constants */
-// section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002519-constants begin
-// section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002519-constants end
 
 /**
  * Short description of class core_kernel_versioning_Repository
  *
  * @access public
  * @author Jerome Bogaerts, <jerome@taotesting.com>
- * @package core
- * @subpackage kernel_versioning
+ * @package generis
+ 
  */
 class core_kernel_versioning_Repository
     extends core_kernel_classes_Resource

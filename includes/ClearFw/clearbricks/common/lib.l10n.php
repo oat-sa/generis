@@ -14,7 +14,7 @@
 * Localization tools
 *
 * @package Clearbricks
-* @subpackage Common
+
 */
 
 /**

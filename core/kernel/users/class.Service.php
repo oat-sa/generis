@@ -25,8 +25,8 @@
  *
  * @access public
  * @author Jerome Bogaerts, <jerome@taotesting.com>
- * @package core
- * @subpackage kernel_users
+ * @package generis
+ 
  */
 class core_kernel_users_Service
         implements core_kernel_users_UsersManagement,

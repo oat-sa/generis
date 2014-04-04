@@ -25,8 +25,8 @@
  *
  * @access public
  * @author Joel Bout, <joel.bout@tudor.lu>
- * @package common
- * @subpackage exception
+ * @package generis
+ 
  */
 class common_exception_Error
     extends common_Exception

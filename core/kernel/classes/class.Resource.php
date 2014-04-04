@@ -28,9 +28,9 @@ use oat\generis\model\data\ModelManager;
  *
  * @access public
  * @author patrick.plichart@tudor.lu
- * @package core
+ * @package generis
  * @see http://www.w3.org/RDF/
- * @subpackage kernel_classes
+ 
  * @version v1.0
  */
 class core_kernel_classes_Resource

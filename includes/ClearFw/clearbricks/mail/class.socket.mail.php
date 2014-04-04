@@ -14,7 +14,7 @@
 * Send email through socket
 *
 * @package Clearbricks
-* @subpackage Mail
+
 */
 class socketMail
 {

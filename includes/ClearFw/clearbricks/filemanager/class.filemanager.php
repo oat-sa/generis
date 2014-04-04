@@ -16,7 +16,7 @@
 * Files management class
 *
 * @package Clearbricks
-* @subpackage Filemanager
+
 */
 class filemanager
 {
@@ -506,7 +506,7 @@ class filemanager
 * be either a file or a directory.
 *
 * @package Clearbricks
-* @subpackage Filemanager
+
 */
 class fileItem
 {

@@ -25,8 +25,8 @@ namespace oat\generis\model\data;
  * Rdfs interface to access the ontology 
  *
  * @author Joel Bout, <joel@taotesting.com>
- * @package core
- * @subpackage kernel_persistence
+ * @package generis
+ 
  */
 interface RdfsInterface
 {

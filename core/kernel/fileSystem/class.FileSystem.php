@@ -25,8 +25,8 @@
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
- * @package core
- * @subpackage kernel_fileSystem
+ * @package generis
+ 
  */
 class core_kernel_fileSystem_FileSystem extends core_kernel_versioning_Repository
 {

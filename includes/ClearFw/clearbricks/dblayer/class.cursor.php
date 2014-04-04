@@ -16,7 +16,7 @@
 * This class implements facilities to insert or update in a table.
 *
 * @package Clearbricks
-* @subpackage DBLayer
+
 */
 class cursor
 {

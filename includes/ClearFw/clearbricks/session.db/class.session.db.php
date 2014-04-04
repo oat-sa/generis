@@ -16,7 +16,7 @@
 * This class allows you to handle session data in database.
 *
 * @package Clearbricks
-* @subpackage Session
+
 */
 class sessionDB
 {

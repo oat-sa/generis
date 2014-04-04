@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -19,38 +19,7 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
 
-error_reporting(E_ALL);
-
-/**
- * A mock configuration component for which you can specify the type of report.
- * for testing purpose.
- *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package common
- * @subpackage configuration
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * include common_configuration_Component
- *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- */
-require_once('common/configuration/class.Component.php');
-
-/* user defined includes */
-// section 10-13-1-85--ca6619b:13af946abe3:-8000:0000000000001C72-includes begin
-// section 10-13-1-85--ca6619b:13af946abe3:-8000:0000000000001C72-includes end
-
-/* user defined constants */
-// section 10-13-1-85--ca6619b:13af946abe3:-8000:0000000000001C72-constants begin
-// section 10-13-1-85--ca6619b:13af946abe3:-8000:0000000000001C72-constants end
 
 /**
  * A mock configuration component for which you can specify the type of report.
@@ -58,8 +27,8 @@ require_once('common/configuration/class.Component.php');
  *
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package common
- * @subpackage configuration
+ * @package generis
+ 
  */
 class common_configuration_Mock
     extends common_configuration_Component

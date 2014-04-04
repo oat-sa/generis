@@ -28,8 +28,8 @@ error_reporting(E_ALL);
  *
  * @access public
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
- * @package core
- * @subpackage kernel_versioning_subversion
+ * @package generis
+ 
  */
 class core_kernel_versioning_subversion_Repository
 		implements core_kernel_versioning_RepositoryInterface

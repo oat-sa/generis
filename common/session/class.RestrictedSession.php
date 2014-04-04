@@ -26,7 +26,7 @@
  * @access private
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- * @subpackage common_session
+ 
  */
 class common_session_RestrictedSession implements common_session_StatefulSession
 {

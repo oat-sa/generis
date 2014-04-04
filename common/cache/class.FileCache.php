@@ -33,8 +33,8 @@ require_once('common/interface.Serializable.php');
  *
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package common
- * @subpackage cache
+ * @package generis
+ 
  */
 class common_cache_FileCache
         implements common_cache_Cache

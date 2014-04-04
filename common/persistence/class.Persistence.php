@@ -18,8 +18,7 @@
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
- * @package core
- * @subpackage persistence
+ * @package generis
  *
  */
 abstract class common_persistence_Persistence

@@ -21,8 +21,8 @@
  * a useful exception
  * @access public
  * @author Patrick Plichart
- * @package common
- * @subpackage exception
+ * @package generis
+ 
  */
 class common_exception_NotImplemented
     extends common_Exception

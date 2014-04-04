@@ -24,8 +24,8 @@
  * 
  * @access public
  * @author Patrick Plichart
- * @package common
- * @subpackage exception
+ * @package generis
+ 
  */
 abstract class common_exception_BadRequest
     extends common_exception_ClientException

@@ -17,7 +17,7 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *               2013 (update and modification) Open Assessment Techonologies SA (under the project TAO-PRODUCT);
+ *               2013 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
 
@@ -27,7 +27,7 @@
  * @access public
  * @author Joel Bout, <joel.bout@tudor.lu>
  * @package generis
- * @subpackage common
+ 
  */
 class common_Logger
 {
@@ -187,11 +187,11 @@ class common_Logger
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  int level
-     * @param  string message
-     * @param  array tags
-     * @param  string errorFile
-     * @param  int errorLine
+     * @param  int $level
+     * @param  string $message
+     * @param  array $tags
+     * @param  string $errorFile
+     * @param  int $errorLine
      * @return mixed
      */
     public function log($level, $message, $tags, $errorFile = '', $errorLine = 0)
@@ -291,8 +291,8 @@ class common_Logger
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  string message
-     * @param  array tags
+     * @param  string $message
+     * @param  array $tags
      * @return mixed
      */
     public static function t($message, $tags = array())
@@ -307,8 +307,8 @@ class common_Logger
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  string message
-     * @param  array tags
+     * @param  string $message
+     * @param  array $tags
      * @return mixed
      */
     public static function d($message, $tags = array())
@@ -318,27 +318,15 @@ class common_Logger
         // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004337 end
     }
 
-	public static function dt($message, $tags = array()){
-//		$stack = debug_backtrace();
-//		array_shift($stack);
-//		$keys = array_keys($stack);
-//		$current = $stack[$keys[0]];
-//		if ( (isset($current['file'])||isset($current['class'])) && isset($current['line'])) {
-//			$errorLoc = isset($current['class'])?$current['class']:$current['file'];
-//			$errorLine = $current['line'];
-//			$errorFunc = isset($current['function'])?$current['function']:'body';
-//			self::w($errorLoc.'::'.$errorFunc.' (line '.$errorLine.')', $tags);
-//		}
-		self::w($message,$tags);
-	}
+
 
     /**
      * info logs high level system events
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  string message
-     * @param  array tags
+     * @param  string $message
+     * @param  array $tags
      * @return mixed
      */
     public static function i($message, $tags = array())
@@ -353,8 +341,8 @@ class common_Logger
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  string message
-     * @param  array tags
+     * @param  string $message
+     * @param  array $tags
      * @return mixed
      */
     public static function w($message, $tags = array())
@@ -369,8 +357,8 @@ class common_Logger
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  string message
-     * @param  array tags
+     * @param  string $message
+     * @param  array $tags
      * @return mixed
      */
     public static function e($message, $tags = array())
@@ -385,8 +373,8 @@ class common_Logger
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  string message
-     * @param  array tags
+     * @param  string $message
+     * @param  array $tags
      * @return mixed
      */
     public static function f($message, $tags = array()
@@ -402,7 +390,7 @@ class common_Logger
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Exception exception
+     * @param  Exception $exception
      * @return mixed
      */
     public function handleException( Exception $exception)
@@ -418,11 +406,11 @@ class common_Logger
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  int errorNumber
-     * @param  string errorString
-     * @param  string errorFile
-     * @param  mixed  errorLine
-     * @param  array errorContext
+     * @param  int $errorNumber
+     * @param  string $errorString
+     * @param  string $errorFile
+     * @param  mixed  $errorLine
+     * @param  array $errorContext
      * @return boolean
      */
     public function handlePHPErrors($errorNumber, $errorString, $errorFile = null, $errorLine = null, $errorContext = array())

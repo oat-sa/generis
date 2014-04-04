@@ -25,7 +25,7 @@
  * @access private
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- * @subpackage common_session
+ 
  */
 abstract class common_session_SessionManager
 {

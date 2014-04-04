@@ -26,9 +26,9 @@ use oat\oatbox\AutoLoader;
  *
  * @access public
  * @author lionel.lecaque@tudor.lu
- * @package common
+ * @package generis
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
- * @subpackage ext
+ 
  */
 class common_ext_ExtensionInstaller
 	extends common_ext_ExtensionHandler

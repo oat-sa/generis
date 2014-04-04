@@ -18,7 +18,7 @@
 * - Contributor: Mathieu Lecarme.
 *
 * @package Clearbricks
-* @subpackage Images
+
 */
 class imageMeta
 {

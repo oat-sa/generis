@@ -30,7 +30,7 @@ use oat\generis\model\data\ModelManager;
  *
  * @author patrick.plichart@tudor.lu
  * @package generis
- * @subpackage core_kernel_classes
+ 
  * @see http://www.w3.org/RDF/
  * @see http://www.w3.org/TR/rdf-schema/
  *

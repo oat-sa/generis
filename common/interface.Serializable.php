@@ -26,7 +26,7 @@
  *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
- * @subpackage common
+ 
  */
 interface common_Serializable
 {

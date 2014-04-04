@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -19,29 +19,7 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
 
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API - core\kernel\classes\class.PgsqlDbWrapper.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 07.02.2013, 11:16:20 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Jerome Bogaerts, <jerome@taotesting.com>
- * @package core
- * @subpackage kernel_classes
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
 
 /**
  * Simple utility class that allow you to wrap the database connector.
@@ -50,24 +28,9 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * This database wrapper uses PDO.
  *
  * @author Jerome Bogaerts, <jerome@taotesting.com>
- */
-
-
-/* user defined includes */
-// section 10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1-includes begin
-// section 10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1-includes end
-
-/* user defined constants */
-// section 10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1-constants begin
-// section 10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC1-constants end
-
-/**
- * Short description of class core_kernel_classes_PgsqlDbWrapper
- *
  * @access public
  * @author Jerome Bogaerts, <jerome@taotesting.com>
- * @package core
- * @subpackage kernel_classes
+ * @package generis
  */
 class common_persistence_sql_pdo_pgsql_Driver
     extends common_persistence_sql_pdo_Driver

@@ -24,8 +24,8 @@
  *
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package common
- * @subpackage ext
+ * @package generis
+ 
  */
 class common_ext_ManifestNotFoundException
     extends common_ext_ManifestException

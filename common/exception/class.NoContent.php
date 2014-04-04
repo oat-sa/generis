@@ -19,8 +19,8 @@
 /*
  *
  * @author patrick,
- * @package common
- * @subpackage exception
+ * @package generis
+ 
  */
 
 
@@ -29,8 +29,8 @@
  * 
  * @access public
  * @author Patrick Plichart
- * @package common
- * @subpackage exception
+ * @package generis
+ 
  */
 class common_exception_NoContent
     extends common_exception_ClientException

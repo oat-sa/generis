@@ -24,8 +24,8 @@
  *
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package core
- * @subpackage kernel_persistence
+ * @package generis
+ 
  */
 interface core_kernel_persistence_ClassInterface extends core_kernel_persistence_ResourceInterface
 {

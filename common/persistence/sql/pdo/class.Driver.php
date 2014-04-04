@@ -32,8 +32,8 @@ error_reporting(E_ALL);
  * @abstract
  * @access public
  * @author Jerome Bogaerts, <jerome@taotesting.com>
- * @package core
- * @subpackage kernel_classes
+ * @package generis
+ 
  */
 abstract class common_persistence_sql_pdo_Driver implements common_persistence_sql_Driver
 {

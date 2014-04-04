@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -18,37 +18,6 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API - common\ext\class.AbstractExtension.php
- *
- *
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 26.10.2009, 14:49:10 with ArgoUML PHP module 
- * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
- *
- * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
- * @package common
- * @subpackage ext
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/* user defined includes */
-// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017A8-includes begin
-// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017A8-includes end
-
-/* user defined constants */
-// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017A8-constants begin
-// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017A8-constants end
 
 /**
  * Short description of class common_ext_AbstractExtension
@@ -56,8 +25,8 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * @abstract
  * @access public
  * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
- * @package common
- * @subpackage ext
+ * @package generis
+ 
  */
 abstract class common_ext_AbstractExtension
 {

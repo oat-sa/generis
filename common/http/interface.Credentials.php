@@ -27,7 +27,7 @@
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package tao
- * @subpackage models_classes_oauth
+ 
  */
 interface common_http_Credentials
 {

@@ -27,8 +27,8 @@
  * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
  *
  * @author patrick,
- * @package common
- * @subpackage exception
+ * @package generis
+ 
  */
 
 
@@ -45,8 +45,8 @@
  * a useful exception
  * @access public
  * @author Patrick Plichart
- * @package common
- * @subpackage exception
+ * @package generis
+ 
  */
 class common_exception_PreConditionFailure
     extends common_exception_ClientException

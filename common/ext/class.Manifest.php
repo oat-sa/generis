@@ -25,9 +25,9 @@
  *
  * @access public
  * @author Jerome Bogaerts <jerome@taotesting.com>
- * @package common
+ * @package generis
  * @since 2.3
- * @subpackage ext
+ 
  */
 class common_ext_Manifest
 {

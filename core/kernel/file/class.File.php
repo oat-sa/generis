@@ -25,8 +25,8 @@
  *
  * @access public
  * @author Joel bout, <joel@taotesting.com>
- * @package core
- * @subpackage kernel_file
+ * @package generis
+ 
  */
 class core_kernel_file_File
     extends core_kernel_classes_Resource

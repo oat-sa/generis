@@ -24,8 +24,8 @@
  *
  * @access public
  * @author Joel Bout, <joel.bout@tudor.lu>
- * @package core
- * @subpackage kernel_persistence
+ * @package generis
+ 
  */
 interface core_kernel_persistence_ResourceInterface
 {

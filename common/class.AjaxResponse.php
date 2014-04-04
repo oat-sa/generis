@@ -29,7 +29,7 @@
  * @access public
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
  * @package generis
- * @subpackage common
+ 
  */
 class common_AjaxResponse
 {

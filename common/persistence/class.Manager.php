@@ -18,13 +18,15 @@
  *
  */
 
+
+
  /**
  * A factory for our perstences
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
- * @package core
- * @subpackage persistence
+ * @package generis
+ 
  *
  */
 class common_persistence_Manager

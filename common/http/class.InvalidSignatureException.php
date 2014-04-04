@@ -25,7 +25,7 @@
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- * @subpackage common_http
+ 
  */
 class common_http_InvalidSignatureException
     extends common_Exception

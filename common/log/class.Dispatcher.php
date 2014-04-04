@@ -25,8 +25,8 @@
  *
  * @access public
  * @author Joel Bout, <joel.bout@tudor.lu>
- * @package common
- * @subpackage log
+ * @package generis
+ 
  */
 class common_log_Dispatcher
         implements common_log_Appender

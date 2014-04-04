@@ -46,8 +46,8 @@ const VERSIONING_FILE_VERSION_BASE              = 'base';
  *
  * @access public
  * @author Lionel Lecaque, <lionel.lecaque@tudor.lu>
- * @package core
- * @subpackage kernel_versioning
+ * @package generis
+ 
  */
 class core_kernel_versioning_File
     extends core_kernel_file_File

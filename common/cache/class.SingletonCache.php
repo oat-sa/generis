@@ -1,33 +1,22 @@
 <?php
-
-error_reporting(E_ALL);
-
 /**
- * Generis Object Oriented API - common/cache/class.SingletonCache.php
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
  *
- * $Id$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * This file is part of Generis Object Oriented API.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Automatically generated on 07.03.2013, 15:43:51 with ArgoUML PHP module 
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author Joel Bout, <joel@taotesting.com>
- * @package common
- * @subpackage cache
+ * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * 
  */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/* user defined includes */
-// section 10-30-1--78--412d45c0:13d453d515d:-8000:0000000000002006-includes begin
-// section 10-30-1--78--412d45c0:13d453d515d:-8000:0000000000002006-includes end
-
-/* user defined constants */
-// section 10-30-1--78--412d45c0:13d453d515d:-8000:0000000000002006-constants begin
-// section 10-30-1--78--412d45c0:13d453d515d:-8000:0000000000002006-constants end
 
 /**
  * Short description of class common_cache_SingletonCache
@@ -35,8 +24,8 @@ if (0 > version_compare(PHP_VERSION, '5')) {
  * @abstract
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
- * @package common
- * @subpackage cache
+ * @package generis
+ 
  */
 abstract class common_cache_SingletonCache
 {

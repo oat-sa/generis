@@ -28,8 +28,8 @@ use oat\generis\model\data\ModelManager;
  *
  * @access public
  * @author Joel Bout, <joel.bout@tudor.lu>
- * @package common
- * @subpackage ext
+ * @package generis
+ 
  */
 class common_ext_GenerisInstaller
     extends common_ext_ExtensionInstaller

@@ -25,8 +25,8 @@
  *
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package core
- * @subpackage kernel_persistence_smoothsql
+ * @package generis
+ 
  */
 class core_kernel_persistence_smoothsql_Class
     extends core_kernel_persistence_smoothsql_Resource

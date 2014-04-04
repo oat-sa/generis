@@ -24,8 +24,8 @@
  *
  * @access public
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
- * @package core
- * @subpackage kernel_versioning_exception
+ * @package generis
+ 
  */
 class core_kernel_versioning_exception_Exception
     extends common_exception_Error

@@ -24,8 +24,8 @@
  *
  * @access public
  * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
- * @package common
- * @subpackage report
+ * @package generis
+ 
  */
 class common_report_Report implements IteratorAggregate
 {

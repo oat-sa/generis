@@ -25,8 +25,8 @@ namespace oat\generis\model\data;
  * This is an experimental interface that has not been implemented yet
  *
  * @author Joel Bout, <joel@taotesting.com>
- * @package core
- * @subpackage data
+ * @package generis
+ 
  */
 interface RdfDriver
 {

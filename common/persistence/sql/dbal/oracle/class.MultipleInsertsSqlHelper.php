@@ -18,8 +18,8 @@
  *
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
- * @package common
- * @subpackage persistence_sql_dbal_oracle
+ * @package generis
+ 
  *
  */
 

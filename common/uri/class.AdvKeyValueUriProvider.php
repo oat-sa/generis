@@ -25,8 +25,8 @@
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
- * @package common
- * @subpackage uri
+ * @package generis
+ 
  */
 class common_uri_AdvKeyValueUriProvider
     extends common_uri_AbstractUriProvider

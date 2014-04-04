@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -19,59 +19,13 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * Generis Object Oriented API - core\kernel\classes\class.Literal.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 29.03.2010, 15:15:24 with ArgoUML PHP module 
- * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
- *
- * @author firstname and lastname of author, <author@example.org>
- * @package core
- * @subpackage kernel_classes
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * include core_kernel_classes_Container
- *
- * @author patrick.plichart@tudor.lu
- */
-require_once('core/kernel/classes/class.Container.php');
-
-/**
- * should inherit from standard collection provided in php
- *
- * @author patrick.plichart@tudor.lu
- */
-require_once('core/kernel/classes/class.ContainerCollection.php');
-
-/* user defined includes */
-// section 10-13-1--99--32cd3c54:11be55033bf:-8000:0000000000000D6F-includes begin
-// section 10-13-1--99--32cd3c54:11be55033bf:-8000:0000000000000D6F-includes end
-
-/* user defined constants */
-// section 10-13-1--99--32cd3c54:11be55033bf:-8000:0000000000000D6F-constants begin
-// section 10-13-1--99--32cd3c54:11be55033bf:-8000:0000000000000D6F-constants end
 
 /**
  * Short description of class core_kernel_classes_Literal
  *
  * @access public
  * @author firstname and lastname of author, <author@example.org>
- * @package core
- * @subpackage kernel_classes
+ * @package generis
  */
 class core_kernel_classes_Literal
     extends core_kernel_classes_Container

@@ -25,8 +25,8 @@
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
- * @package core
- * @subpackage kernel_users
+ * @package generis
+ 
  */
 class core_kernel_users_GenerisUser extends common_user_User
 {

@@ -25,7 +25,7 @@
  * @access private
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- * @subpackage common_session
+ 
  */
 class common_session_RestSession extends common_session_BasicSession implements common_session_StatelessSession
 {    

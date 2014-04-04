@@ -18,8 +18,8 @@
  *
  * @author Patrick Plichart <patrick@taotesting.com>
  * @license GPLv2
- * @package core
- * @subpackage persistence
+ * @package generis
+ 
  *
  */
 class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyValuePersistence

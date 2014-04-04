@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -19,53 +19,14 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * should inherit from standard collection provided in php
- *
- * @author patrick.plichart@tudor.lu
- * @package core
- * @subpackage kernel_classes
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * include common_Collection
- *
- * @author lionel.lecaque@tudor.lu
- * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
- */
-require_once('common/class.Collection.php');
-
-/**
- * include core_kernel_classes_Container
- *
- * @author patrick.plichart@tudor.lu
- */
-require_once('core/kernel/classes/class.Container.php');
-
-/* user defined includes */
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000078B-includes begin
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000078B-includes end
-
-/* user defined constants */
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000078B-constants begin
-// section 10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000078B-constants end
 
 /**
  * should inherit from standard collection provided in php
  *
  * @access public
  * @author patrick.plichart@tudor.lu
- * @package core
- * @subpackage kernel_classes
+ * @package generis
+ 
  */
 class core_kernel_classes_ContainerCollection
     extends common_Collection

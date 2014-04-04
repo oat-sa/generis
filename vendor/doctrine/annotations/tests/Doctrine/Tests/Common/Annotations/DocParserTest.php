@@ -109,7 +109,7 @@ DOCBLOCK;
  * Some nifty class.
  *
  * @package foo
- * @subpackage bar
+ 
  * @author Mr.X <mr@x.com>
  * @Doctrine\Tests\Common\Annotations\Name(foo="bar")
  * @ignore

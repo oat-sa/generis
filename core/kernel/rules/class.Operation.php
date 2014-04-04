@@ -25,8 +25,8 @@
  *
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package core
- * @subpackage kernel_rules
+ * @package generis
+ 
  */
 class core_kernel_rules_Operation
     extends core_kernel_rules_Term
