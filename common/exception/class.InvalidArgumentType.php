@@ -19,7 +19,7 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?
+
 /**
  * Short description of class common_exception_InvalidArgumentType
  *
