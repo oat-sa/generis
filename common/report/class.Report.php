@@ -180,7 +180,7 @@ class common_report_Report implements IteratorAggregate
         $errors = array();
 		foreach ($this as $element) {
     		if ($element->getType() == self::TYPE_ERROR) {
-                $successes[] = $element;
+                $errors[] = $element;
             }
 		}
 		return $errors;
