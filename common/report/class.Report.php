@@ -159,6 +159,7 @@ class common_report_Report implements IteratorAggregate
 	/**
 	 * returns all success elements
 	 * @return array
+	 * @deprecated
 	 */
 	public function getSuccesses() {
         $successes = array();
@@ -173,6 +174,7 @@ class common_report_Report implements IteratorAggregate
 	/**
 	 * returns all error elements
 	 * @return array
+	 * @deprecated
 	 */
 	public function getErrors() {
         $errors = array();
