@@ -96,26 +96,6 @@ class common_ext_ExtensionsManager
     }
 
     /**
-     * Add (it actually installs) an extension on the platform from a
-     * ZIP archive containing it.
-     *
-     *
-     * @access public
-     * @author Joel Bout, <joel@taotesting.com>
-     * @param  string id The ID that will be used by the platform to identify the extension.
-     * @param  string extensionsZipPath The path to the ZIP file containing the source code of the extension.
-     * @throws common_ext_ExtensionException If the extension cannot be installed correctly.
-     */
-    public function addExtension($id, $extensionsZipPath)
-    {
-		$fileUnzip = new fileUnzip($package_zip);
-		$fileUnzip->unzipAll(EXTENSION_PATH);
-		$newExt = $this->getExtensionById($id);
-		$extInstaller = new common_ext_ExtensionInstaller($newExt);
-		$extInstaller->install();
-    }
-
-    /**
      * Load all extensions that have to be loaded
      *
      * @access public
