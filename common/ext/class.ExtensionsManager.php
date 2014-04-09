@@ -116,22 +116,6 @@ class common_ext_ExtensionsManager
     }
 
     /**
-     * remove Extension from the database, filesystem is not change
-     *
-     * @access public
-     * @author Joel Bout, <joel@taotesting.com>
-     * @param  extension
-     */
-    public function removeExtension($extension)
-    {
-		foreach($this->getExtensionList() as $ext) {
-			$required = $ext->getRequiredExtensions();
-
-			throw new Exception('Extension removal not implemented.');
-		}
-    }
-
-    /**
      * Load all extensions that have to be loaded
      *
      * @access public
@@ -188,21 +172,6 @@ class common_ext_ExtensionsManager
 		}
 		
 		return $returnValue;
-    }
-
-    /**
-     * modify the configuration.
-     *
-     * @access public
-     * @author Joel Bout, <joel@taotesting.com>
-     * @param  array configurationArray array(extensionid => configuration)
-     */
-    public function modifyConfigurations($configurationArray)
-    {
-		foreach ($configurationArray as $id => $configuration) {
-			$ext = $this->getExtensionById($id);
-			$configuration->save($ext);
-		}
     }
 
     /**
@@ -357,7 +326,7 @@ class common_ext_ExtensionsManager
     /**
      * Add the end of an installation register the new extension
      *
-     * @access private
+     * @access public
      * @author Joel Bout, <joel@taotesting.com>
      * @param common_ext_Extension $extension
      * @return boolean
@@ -371,5 +340,20 @@ class common_ext_ExtensionsManager
         $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         $extensions[$extension->getId()] = $entry;
         return $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $extensions);
+    }
+    
+    /**
+     * Add the end of an uninstallation unregister the extension
+     *
+     * @access public
+     * @author Joel Bout, <joel@taotesting.com>
+     * @param common_ext_Extension $extension
+     * @return boolean
+     */
+    public function unregisterExtension(common_ext_Extension $extension)
+    {
+        $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+        unset($extensions[$extension->getId()]);
+        $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $extensions);
     }
 }
