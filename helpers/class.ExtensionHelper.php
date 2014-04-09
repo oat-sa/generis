@@ -62,13 +62,30 @@ class helpers_ExtensionHelper{
     }
     
     /**
-     * Whenever or not the extension is required by other
-     * enabled extensions
+     * Whenever or not the extension is required by other installed extensions
      * 
      * @param common_ext_Extension $extension
      * @return boolean
      */
     public static function isRequired(common_ext_Extension $extension) {
+        foreach (common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $ext) {
+            foreach ($ext->getDependencies() as $extId => $version) {
+                if ($extId == $extension->getId()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Whenever or not the extension is required to be enabled
+     * by other enabled extensions
+     * 
+     * @param common_ext_Extension $extension
+     * @return boolean
+     */
+    public static function mustBeEnabled(common_ext_Extension $extension) {
         foreach (common_ext_ExtensionsManager::singleton()->getEnabledExtensions() as $ext) {
             foreach ($ext->getDependencies() as $extId => $version) {
                 if ($extId == $extension->getId()) {
@@ -78,4 +95,5 @@ class helpers_ExtensionHelper{
         }
         return false;
     }
+    
 }
