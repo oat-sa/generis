@@ -89,9 +89,8 @@ define('GENERIS_CACHE_USERS_ROLES', true);
 define('PROFILING', true);
 
 # enable Lock, Extensions may rely on the lock mechanism
-if (!defined('ENABLE_LOCK')){
-    define('ENABLE_LOCK', false);
-}
+define('ENABLE_LOCK', false);
+
 
 # default will use defautl php session handling
 # define('PHP_SESSION_HANDLER', 'common_session_php_KeyValueSessionHandler');
