@@ -41,7 +41,7 @@ class core_kernel_rules_TermFactory
      *
      * @access public
      * @author firstname and lastname of author, <author@example.org>
-     * @param  string constant
+     * @param  string $constant
      * @return core_kernel_rules_Term
      */
     public static function createConst($constant)
@@ -72,8 +72,8 @@ class core_kernel_rules_TermFactory
      *
      * @access public
      * @author firstname and lastname of author, <author@example.org>
-     * @param  Resource subject
-     * @param  Property predicate
+     * @param  Resource $subject
+     * @param  Property $predicate
      * @return core_kernel_rules_Term
      */
     public static function createSPX( core_kernel_classes_Resource $subject,  core_kernel_classes_Property $predicate)

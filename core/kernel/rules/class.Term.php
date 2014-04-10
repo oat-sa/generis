@@ -42,7 +42,7 @@ class core_kernel_rules_Term
      *
      * @access public
      * @author firstname and lastname of author, <author@example.org>
-     * @param  array variable
+     * @param  array $variable
      * @return mixed
      */
     public function evaluate($variable = array())
@@ -92,9 +92,9 @@ class core_kernel_rules_Term
      *
      * @access public
      * @author firstname and lastname of author, <author@example.org>
-     * @param  Resource setOperator
-     * @param  Collection actualSet
-     * @param  ContainerCollection newSet
+     * @param  Resource $setOperator
+     * @param  Collection $actualSet
+     * @param  ContainerCollection $newSet
      * @return core_kernel_classes_ContainerCollection
      */
     public function evalutateSetOperation( core_kernel_classes_Resource $setOperator,  common_Collection $actualSet,  core_kernel_classes_ContainerCollection $newSet)
@@ -121,7 +121,7 @@ class core_kernel_rules_Term
      *
      * @access protected
      * @author firstname and lastname of author, <author@example.org>
-     * @param  array variable
+     * @param  array $variable
      * @return mixed
      */
     protected function evaluateSPX($variable = array())
@@ -285,7 +285,7 @@ class core_kernel_rules_Term
      *
      * @access public
      * @author firstname and lastname of author, <author@example.org>
-     * @param  array variable
+     * @param  array $variable
      * @return mixed
      */
     public function evaluateArithmOperation($variable = array())
