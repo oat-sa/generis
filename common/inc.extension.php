@@ -51,7 +51,7 @@ if(function_exists("date_default_timezone_set") && defined('TIME_ZONE')){
 	date_default_timezone_set(TIME_ZONE);
 }
 
-require_once INCLUDES_PATH		. '/ClearFw/clearbricks/common/lib.l10n.php';
+require_once VENDOR_PATH		. '/clearbricks/lib.l10n.php';
 
 // classloader
 require_once dirname(__FILE__)	. '/oatbox/AutoLoader.php';

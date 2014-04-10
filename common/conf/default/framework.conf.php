@@ -33,7 +33,7 @@
 define('SESSION_NAMESPACE', 'ClearFw');
 
 # core directory
-define("DIR_CORE"			, INCLUDES_PATH . "/ClearFw/core/");
+define("DIR_CORE"			, VENDOR_PATH . "/ClearFw/core/");
 
 # core helpers directory
 define("DIR_CORE_HELPERS"	, DIR_CORE . "helpers/");
