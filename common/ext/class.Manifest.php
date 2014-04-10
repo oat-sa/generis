@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -205,7 +205,7 @@ class common_ext_Manifest
      *
      * @access public
      * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  string filePath The path to the manifest.php file to parse.
+     * @param  string $filePath The path to the manifest.php file to parse.
      */
     public function __construct($filePath)
     {
@@ -361,7 +361,7 @@ class common_ext_Manifest
      *
      * @access private
      * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  string filePath An absolute path.
+     * @param  string $filePath An absolute path.
      */
     private function setFilePath($filePath)
     {
@@ -394,7 +394,7 @@ class common_ext_Manifest
      *
      * @access private
      * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  string name A name
+     * @param  string $name A name
      */
     private function setName($name)
     {
@@ -416,7 +416,7 @@ class common_ext_Manifest
      * Set the license of the Extension the manifest describes.
      *
      * @access private
-     * @param  string name the livense
+     * @param  string $license the livense
      */
     private function setLicense($license)
     {
@@ -446,7 +446,7 @@ class common_ext_Manifest
      *
      * @access private
      * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  string description A description
+     * @param  string $description A description
      */
     private function setDescription($description)
     {
@@ -474,7 +474,7 @@ class common_ext_Manifest
      *
      * @access private
      * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  string author The author name
+     * @param  string $author The author name
      */
     private function setAuthor($author)
     {
@@ -522,7 +522,7 @@ class common_ext_Manifest
      *
      * @access private
      * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  string version A version number
+     * @param  string $version A version number
      */
     private function setVersion($version)
     {
@@ -552,7 +552,7 @@ class common_ext_Manifest
      *
      * @access private
      * @author @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  array dependencies The dependencies
+     * @param  array $dependencies The dependencies
      */
     private function setDependencies($dependencies)
     {
@@ -584,7 +584,7 @@ class common_ext_Manifest
      *
      * @access private
      * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  array models
+     * @param  array $models
      */
     private function setModels($models)
     {
@@ -618,7 +618,7 @@ class common_ext_Manifest
      *
      * @access private
      * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  array modelsRights
+     * @param  array $modelsRights
      */
     private function setModelsRights($modelsRights)
     {
@@ -649,7 +649,7 @@ class common_ext_Manifest
      *
      * @access private
      * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  array installModelFiles
+     * @param  array $installModelFiles
      */
     private function setInstallModelFiles($installModelFiles)
     {
@@ -688,7 +688,7 @@ class common_ext_Manifest
      *
      * @access private
      * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  array installChecks
+     * @param  array $installChecks
      */
     private function setInstallChecks($installChecks)
     {
@@ -818,7 +818,7 @@ class common_ext_Manifest
      *
      * @access private
      * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  array installPHPFiles
+     * @param  array $installPHPFiles
      */
     private function setInstallPHPFiles($installPHPFiles)
     {
@@ -828,7 +828,7 @@ class common_ext_Manifest
     /**
      * Sets the autoloaders for this extension.
      *  
-     * @param string $namespace
+     * @param string $autoloadMap
      */
     private function setAutoloaders($autoloadMap)
     {
@@ -848,7 +848,7 @@ class common_ext_Manifest
     /**
      * Sets the routes for this extension.
      *
-     * @param string $namespace
+     * @param string $routes
      */
     private function setRoutes($routes)
     {
@@ -888,7 +888,7 @@ class common_ext_Manifest
      *
      * @access private
      * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  array constants
+     * @param  array $constants
      */
     private function setConstants($constants)
     {
@@ -900,7 +900,7 @@ class common_ext_Manifest
      *
      * @access public
      * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  string file The path to a manifest.php file.
+     * @param  string $file The path to a manifest.php file.
      * @return common_configuration_ComponentCollection
      */
     public static function extractDependencies($file)
@@ -920,7 +920,7 @@ class common_ext_Manifest
      *
      * @access public
      * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  string file The path to a manifest.php file.
+     * @param  $string $file The path to a manifest.php file.
      * @return common_configuration_ComponentCollection
      */
     public static function extractChecks($file)
@@ -977,7 +977,7 @@ class common_ext_Manifest
      *
      * @access private
      * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  Resource managementRole The Management Role of the Extension as a Generis Resource.
+     * @param  Resource $managementRole The Management Role of the Extension as a Generis Resource.
      */
     private function setManagementRole( core_kernel_classes_Resource $managementRole)
     {
