@@ -16,19 +16,26 @@
  *
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
+ *
+ */
+
+
+/**
+ * Persistence base on SQL
+ * 
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
- * @package generis
- 
+ * @package generis 
  *
  */
 class common_persistence_SqlPersistence extends common_persistence_Persistence
 {
 
     /**
-     * @access
+     * 
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param mixed $statement
+     * @param unknown $statement
+     * @param unknown $params
      */
     public function exec($statement,$params = array())
     {
@@ -38,29 +45,36 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
     
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @return common_persistence_sql_SchemaManager
      */
     public function getSchemaManager(){
         return $this->getDriver()->getSchemaManager();
     }
     
     /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @return common_persistence_sql_Platform
      */
     public function getPlatForm(){
         return $this->getDriver()->getPlatform();
     }
     
-    
+    /**
+     * 
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param unknown $tableName
+     * @param array $data
+     */
     public function insert($tableName, array $data)
     {
         return $this->getDriver()->insert($tableName,$data);
     }
 
     /**
-     * @access
+     * 
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param mixed $statement
+     * @param unknown $statement
+     * @param unknown $params
      */
     public function query($statement,$params= array())
     {
