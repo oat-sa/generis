@@ -135,8 +135,16 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
                 try{
                     $this->dbConnector = @new PDO($dsn, $dbLogin, $dbpass, $options);
                     $this->afterConnect();
-                    //$maxBuffer = (is_int(ini_get('upload_max_filesize'))) ? (ini_get('upload_max_filesize')* 1.5) : 10485760 ;
-                    //$this->dbConnector->setAttribute(PDO::MYSQL_ATTR_MAX_BUFFER_SIZE, $maxBuffer);
+                   
+                    // https://bugs.php.net/bug.php?id=52623 ; 
+                    // if the constant for max buffering, mysqlnd or similar driver
+                    // is being used without need to adapt buffer size as it is atutomatically adapted for all the data. 
+                    
+                    if (defined("PDO::MYSQL_ATTR_MAX_BUFFER_SIZE")) {
+                        $maxBuffer = (is_int(ini_get('upload_max_filesize'))) ? (ini_get('upload_max_filesize')* 1.5) : 10485760 ;
+                        $this->dbConnector->setAttribute(PDO::MYSQL_ATTR_MAX_BUFFER_SIZE, $maxBuffer);
+                    } 
+                    
                     // We are connected. Get out of the loop.
                     break;
                 }
