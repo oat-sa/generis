@@ -56,6 +56,15 @@ class common_persistence_sql_dbal_oracle_Platform extends common_persistence_sql
 		return $doctrineType->convertToPHPValue($text, $this->dbalPlatform);
 	}
 	
+	/**
+	 *
+	 * @author "Lionel Lecaque, <lionel@taotesting.com>"
+	 * @param string $functionName
+	 */
+	public function getSqlFunction($functionName){
+	    return "SELECT " . $functionName . '(?) from dual';
+	}
+	
 // 	public function getObjectTypeCondition(){
 // 		return 'to_char(object) ';
 // 	}

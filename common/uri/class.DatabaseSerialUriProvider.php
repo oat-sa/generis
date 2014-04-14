@@ -54,9 +54,11 @@ class common_uri_DatabaseSerialUriProvider
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
         try {
-            $sth = $dbWrapper->query("SELECT generis_sequence_uri_provider(?)", array(
-                $modelUri
+            $sth = $dbWrapper->query($dbWrapper->getPlatForm()->getSqlFunction("generis_sequence_uri_provider"), array(
+                    $modelUri
             ));
+
+       
             if ($sth !== false) {
                 
                 $row = $sth->fetch();

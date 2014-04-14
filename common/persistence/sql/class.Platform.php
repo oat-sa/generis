@@ -121,5 +121,13 @@ class common_persistence_sql_Platform{
     public function getName(){
         return $this->dbalPlatform->getName();
     }
+    /**
+     * 
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param string $functionName
+     */
+    public function getSqlFunction($functionName){
+        return "SELECT " . $functionName . '(?)';
+    }
     
 }
