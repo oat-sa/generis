@@ -291,6 +291,14 @@
     <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#User"/>
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#userTimezone">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <generis:is_language_dependent rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#False"/>
+    <rdfs:comment xml:lang="en-US"><![CDATA[User timezone]]></rdfs:comment>
+    <rdfs:label xml:lang="en-US"><![CDATA[Timezone]]></rdfs:label>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#User"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#userRoles">
   	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   	<rdfs:label xml:lang="en-US"><![CDATA[Roles]]></rdfs:label>

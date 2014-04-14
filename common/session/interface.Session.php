@@ -76,6 +76,15 @@ interface common_session_Session
     public function getInterfaceLanguage();
     
     /**
+     * returns the timezone to use for times
+     *
+     * @access public
+     * @author Joel Bout, <joel@taotesting.com>
+     * @return string
+     */
+    public function getTimeZone();
+    
+    /**
      * Generic information retrieval of user data
      * 
      * @param string $property

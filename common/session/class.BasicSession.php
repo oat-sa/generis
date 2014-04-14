@@ -117,6 +117,15 @@ class common_session_BasicSession implements common_session_Session
         return empty($lang) ? DEFAULT_LANG : (string)current($lang);
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see common_session_Session::getTimeZone()
+     */
+    public function getTimeZone() {
+        $tz = $this->user->getPropertyValues(PROPERTY_USER_TIMEZONE);
+        return empty($tz) ? TIME_ZONE : (string)current($tz);
+    }
+    
     public function refresh() {
         $this->user->refresh();
     }    

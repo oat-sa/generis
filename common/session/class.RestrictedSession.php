@@ -109,6 +109,14 @@ class common_session_RestrictedSession implements common_session_StatefulSession
         return $this->internalSession->getUserPropertyValues($property);
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see common_session_Session::getTimeZone()
+     */
+    public function getTimeZone() {
+        return $this->internalSession->getTimeZone();
+    }
+    
     
     /**
      * (non-PHPdoc)

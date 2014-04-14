@@ -72,6 +72,14 @@ class common_session_AnonymousSession implements common_session_StatelessSession
     
     /**
      * (non-PHPdoc)
+     * @see common_session_Session::getTimeZone()
+     */
+    public function getTimeZone() {
+        return TIME_ZONE;
+    }
+    
+    /**
+     * (non-PHPdoc)
      * @see common_session_Session::getUserPropertyValues()
      */
     public function getUserPropertyValues($property) {
