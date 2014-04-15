@@ -45,19 +45,12 @@ class common_exception_IsAjaxAction
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  string service
-     * @return mixed
+     * @param  string method
      */
-    public function __construct($service = "")
+    public function __construct($method = "")
     {
-        // section 127-0-1-1-641a0ff0:1359a3da29e:-8000:0000000000001B24 begin
-        
-        $message = 'The following service ('.$path.') is an Ajax service';
+        $message = 'The following service ('.$method.') is an Ajax service';
         parent::__construct($message);
-        
-        // section 127-0-1-1-641a0ff0:1359a3da29e:-8000:0000000000001B24 end
     }
 
-} /* end of class common_exception_IsAjaxAction */
-
-?>
+}
