@@ -21,7 +21,8 @@
  * @package generis
  
  *
- */class common_persistence_sql_dbal_oracle_Driver extends common_persistence_sql_dbal_Driver{
+ */
+ class common_persistence_sql_dbal_oracle_Driver extends common_persistence_sql_dbal_Driver{
 	
 	/**
 	 * 
