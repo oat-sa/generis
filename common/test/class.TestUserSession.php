@@ -35,6 +35,13 @@ class common_test_TestUserSession implements common_session_StatelessSession
     
     private $uiLanguage = DEFAULT_LANG;
     
+    /**
+     * Code of the timezone to use during the test
+     * 
+     * @var string
+     */
+    private $timezone = TIME_ZONE;
+    
     public function __construct() {
     }
     
@@ -71,6 +78,11 @@ class common_test_TestUserSession implements common_session_StatelessSession
     }
     
     
+    /**
+     * changes the current data language
+     * 
+     * @param string $languageCode
+     */
     public function setDataLanguage($languageCode) {
         $this->dataLanguage = $languageCode;
     }
@@ -83,9 +95,15 @@ class common_test_TestUserSession implements common_session_StatelessSession
         return $this->dataLanguage;
     }
     
+    /**
+     * Changes the current interface language
+     * 
+     * @param string $languageCode
+     */
     public function setInterfaceLanguage($languageCode) {
         $this->uiLanguage = $languageCode;
     }
+    
     /**
      * (non-PHPdoc)
      * @see common_session_Session::getInterfaceLanguage()
@@ -94,6 +112,27 @@ class common_test_TestUserSession implements common_session_StatelessSession
         $lang = $this->uiLanguage;
     }
     
+    /**
+     * Changes the timezone of the test session
+     * 
+     * @param string $timezone
+     */
+    public function setTimeZone($timezone) {
+        $this->timezone = $timezone;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see common_session_Session::getTimeZone()
+     */
+    public function getTimeZone() {
+        $lang = $this->timezone;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see common_session_Session::refresh()
+     */
     public function refresh() {
         // nothign to do
     }
