@@ -49,6 +49,7 @@ class common_exception_IsAjaxAction
      */
     public function __construct($method = "")
     {
+        
         $message = 'The following service ('.$method.') is an Ajax service';
         parent::__construct($message);
     }
