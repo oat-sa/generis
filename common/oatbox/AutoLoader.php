@@ -18,8 +18,10 @@
  *               
  * 
  */
-
 namespace oat\oatbox;
+
+require_once ROOT_PATH.'generis/common/legacy/class.LegacyAutoLoader.php';
+use common_legacy_LegacyAutoLoader;
 
 /**
  * the generis autoloader
@@ -47,21 +49,13 @@ class AutoLoader
     public static function register()
     {
         // init the autloader for generis
-        self::registerGenerisAutoloader();
+        common_legacy_LegacyAutoLoader::register();
         
         // init the composer autoloader for libraries
         self::registerComposerAutoloader();
         
         // init the autoloader of the extensions, requires composer
         self::registerExtensionAutoloader();
-    }
-    
-    /**
-     * register the generis autoloader
-     */
-    protected static function registerGenerisAutoloader() {
-        $classLoader = new static();
-        spl_autoload_register(array($classLoader, 'autoload'));
     }
     
     /**
@@ -91,7 +85,12 @@ class AutoLoader
             	        $classLoader->addPsr4($ns, $dir);
             	    }
             	    break;
-            	default :
+            	case "legacy" :
+            	    foreach ($config as $prefix => $namespace) {
+            	        \common_legacy_LegacyAutoLoader::supportLegacyPrefix($prefix, $namespace);
+            	    }
+            	    break;
+        	    default :
             	    common_Logger::w('unknown autoloader '.$autoloader);
             }
         }
@@ -129,54 +128,6 @@ class AutoLoader
      * protect the cunstructer, objects should only be initialised via registerGenerisAutoloader()
      */
     protected function __construct() {
-    }
-    
-    /**
-     * Attempt to autload classes in tao
-     *
-     * @access public
-     * @author Joel Bout <joel@taotesting.com>
-     * @param  string pClassName
-     * @return void
-     */
-    public function autoload($pClassName)
-    {
-        if(strpos($pClassName, '_') !== false){
-    		$tokens = explode("_", $pClassName);
-    		$size = count($tokens);
-    		$path = '';
-    		for ( $i = 0 ; $i<$size-1 ; $i++){
-    			$path .= $tokens[$i].'/';
-    		}
-    		
-    		$filePath = '/' . $path . 'class.'.$tokens[$size-1] . '.php';
-    		if (file_exists(GENERIS_BASE_PATH .$filePath)){
-    			require_once GENERIS_BASE_PATH .$filePath;
-    			return;
-    		}
-    		$filePathInterface = '/' . $path . 'interface.'.$tokens[$size-1] . '.php';
-    		if (file_exists(GENERIS_BASE_PATH .$filePathInterface)){
-    			require_once GENERIS_BASE_PATH .$filePathInterface;
-    			return;
-    		}
-    		
-    		if (file_exists(ROOT_PATH .$filePath)){
-    			require_once ROOT_PATH .$filePath;
-    			return;
-    		} elseif (file_exists(ROOT_PATH .$filePathInterface)){
-    		        require_once ROOT_PATH .$filePathInterface;
-    		        return;
-    		}
-    	}
-    	else{
-    		$packages = array(DIR_CORE,DIR_CORE_HELPERS,DIR_CORE_UTILS);
-    		foreach($packages as $path) {
-    			if (file_exists($path. $pClassName . '.class.php')) {
-    				require_once $path . $pClassName . '.class.php';
-    				return;
-    			}
-    		}
-    	}
     }
     
     /**
