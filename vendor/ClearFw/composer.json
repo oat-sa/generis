@@ -1,0 +1,21 @@
+{
+    "name": "ClearFw",
+    "description": "ClearFw is a legacy framework build upon clearbricks.",
+    "version" : "1.0.0.custom",
+    "type": "library",
+    "support": {
+		"forum": "http://forum.taotesting.com",
+		"issues": "http://forge.taotesting.com"
+	},
+	"keywords" : [
+		"tao",
+		"computer-based-assessment"
+	],
+	"homepage" : "http://www.taotesting.com",
+	"license" : [
+		"GPL-2.0"
+	],
+    "autoload": {
+        "classmap": [ "core", "core/helpers", "core/util"]
+    }
+}
