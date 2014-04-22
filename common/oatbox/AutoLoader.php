@@ -62,7 +62,6 @@ class AutoLoader
     protected static function registerGenerisAutoloader() {
         $classLoader = new static();
         spl_autoload_register(array($classLoader, 'autoload'));
-        set_include_path(get_include_path() . PATH_SEPARATOR . GENERIS_BASE_PATH);
     }
     
     /**
