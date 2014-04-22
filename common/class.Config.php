@@ -19,9 +19,9 @@
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
  * @package generis
- 
  *
  */
+
 class common_Config {
 	/**
 	 * @access
