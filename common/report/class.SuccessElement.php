@@ -24,7 +24,7 @@
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- 
+ * @deprecated
  */
 class common_report_SuccessElement extends common_report_Report
 {
