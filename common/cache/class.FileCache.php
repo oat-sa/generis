@@ -21,15 +21,7 @@
  */
 
 /**
- * Classes that implement this class claims their instances are serializable and
- * be identified by a unique serial string.
- *
- * @author Jerome Bogaerts, <jerome@taotesting.com>
- */
-require_once('common/interface.Serializable.php');
-
-/**
- * Short description of class common_cache_FileCache
+ * Caches data in php files
  *
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>

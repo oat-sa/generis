@@ -28,19 +28,7 @@
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
  * @package generis
- 
  */
-
-
-require_once('common/exception/class.Error.php');
-
-/* user defined includes */
-// section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FA-includes begin
-// section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FA-includes end
-
-/* user defined constants */
-// section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FA-constants begin
-// section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FA-constants end
 
 /**
  * Missing Parameter are thrown for missing parameters that are not strongly passed (sub protocols)
