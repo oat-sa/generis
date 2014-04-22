@@ -58,7 +58,7 @@ class GenerisActionEnforcer extends ActionEnforcer
 		
 		// Are we authorized to execute this action?
 		$requestParameters = $this->context->getRequest()->getParameters(); 
-		if (!tao_models_classes_accessControl_AclProxy::hasAccess($extensionId, $moduleName, $action, $requestParameters)) {
+		if (!tao_models_classes_accessControl_AclProxy::hasAccess($action, $moduleName, $extensionId, $requestParameters)) {
 		    $userUri = common_session_SessionManager::getSession()->getUserUri();
 		    throw new tao_models_classes_AccessDeniedException($userUri, $extensionId, $moduleName, $action);
 		}
