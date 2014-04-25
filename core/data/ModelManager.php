@@ -38,7 +38,7 @@ class ModelManager
     public static function getModel() {
         if (is_null(self::$model)) {
             $array = \common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig(self::CONFIG_KEY);
-            if (!is_null($array)) {
+            if (is_array($array)) {
                 self::$model = self::array2model($array);
             } else {
                 \common_Logger::w('No data model found, falling back to smooth');
