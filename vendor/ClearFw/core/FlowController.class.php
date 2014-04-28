@@ -18,13 +18,12 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
+
 /**
  * FlowController class
  * TODO FlowController class documentation.
  * 
- * @author Jérôme Bogaerts <jerome.bogaerts@tudor.lu> <jerome.bogaerts@gmail.com>
+ * @author Jï¿½rï¿½me Bogaerts <jerome.bogaerts@tudor.lu> <jerome.bogaerts@gmail.com>
  */
 class FlowController
 {
@@ -33,7 +32,7 @@ class FlowController
 
 	}
 	
-	public function forward($moduleName, $actionName)
+	public function forward($action, $controller, $extension = null)
 	{
 		$context = Context::getInstance();
 		
@@ -64,4 +63,3 @@ class FlowController
 											 $context->getActionName());
 	}
 }
-?>

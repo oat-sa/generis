@@ -32,10 +32,10 @@ class Module extends Actions implements IFlowControl, IViewable
 	 */
 	protected $renderer;
 	
-	public function forward($moduleName, $actionName)
+	public function forward($action, $controller, $extension = null)
 	{
 		$flowController = new FlowController();
-		$flowController->forward($moduleName, $actionName);
+		$flowController->forward($action, $controller, $extension = null);
 	}
 	
 	public function redirect($url)

@@ -18,17 +18,16 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
+
 /**
  * IFlowControl interface
  * TODO IFlowControl class documentation.
  * 
- * @author Jérôme Bogaerts <jerome.bogaerts@tudor.lu> <jerome.bogaerts@gmail.com>
+ * @author Jï¿½rï¿½me Bogaerts <jerome.bogaerts@tudor.lu> <jerome.bogaerts@gmail.com>
  */
 interface IFlowControl
 {
-	public function forward($module, $action);
+	public function forward($action, $controller, $extension = null);
+	
 	public function redirect($url);
 }
-?>
