@@ -66,8 +66,7 @@ class FileHelperTest extends GenerisPhpUnitTestRunner {
 	 * @param boolean $absolute Value of the 'absolute' option.
 	 */
 	public function testScandir($toScan, $expectedResult, $recursive = false, $absolute = false) {
-        $result = helpers_File::scanDir($toScan, array('recursive' => $recursive, 'absolute' => $absolute));
-        
+        $result = helpers_File::scanDir($toScan, array('recursive' => $recursive, 'absolute' => $absolute , 'only' => helpers_File::$FILE));
         $this->assertEquals(count($expectedResult), count($result));
         // The order might vary depending on the file system implementation...
         foreach ($expectedResult as $expected) {
