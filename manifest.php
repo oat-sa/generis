@@ -27,8 +27,8 @@
  */
 return array(
 	'name' => 'generis',
-	'description' => 'Core',
-    'longdesc' => 'Core extension, provide the low level framework and an API to manage ontologies',
+	'label' => 'Core',
+    'description' => 'Core extension, provide the low level framework and an API to manage ontologies',
     'license' => 'GPL-2.0',
     'version' => '2.6',
 	'author' => 'Open Assessment Technologies, CRP Henri Tudor',

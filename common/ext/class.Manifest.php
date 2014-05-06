@@ -49,6 +49,14 @@ class common_ext_Manifest
     private $name = '';
 
     /**
+     * The human readable name of the extension
+     *
+     * @access private
+     * @var string
+     */
+    private $label = '';
+    
+    /**
      * The description of the Extension the manifest describes.
      *
      * @access private
@@ -231,6 +239,10 @@ class common_ext_Manifest
     			throw new common_ext_MalformedManifestException("The 'name' component is mandatory in manifest located at '{$this->getFilePath()}'.");
     		}
     		
+    		
+    		if (!empty($array['label'])){
+    		    $this->setLabel($array['label']);
+    		}
     		if (!empty($array['description'])){
     			$this->setDescription($array['description']);
     		}
@@ -479,6 +491,30 @@ class common_ext_Manifest
     private function setAuthor($author)
     {
         $this->author = $author;
+    }
+    
+    /**
+     * Get the human readable label of the Extension the manifest describes.
+     *
+     * @access public
+     * @author Jerome Bogaerts <jerome@taotesting.com>
+     * @return string
+     */
+    public function getLabel()
+    {
+        return (string) $this->label;
+    }
+    
+    /**
+     * Set the human readable label of the Extension the manifest describes.
+     *
+     * @access private
+     * @author Jerome Bogaerts <jerome@taotesting.com>
+     * @param  string $label The extensions label
+     */
+    private function setLabel($label)
+    {
+        $this->label = $label;
     }
     
     /**
