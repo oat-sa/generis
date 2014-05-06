@@ -90,6 +90,25 @@ abstract class GenerisPhpUnitTestRunner extends PHPUnit_Framework_TestCase
     public function assertIsA($var,$className){
     	$this->assertInstanceOf($className,$var);
     }
+    
+    public function installExtension($extid){
+        $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extid);
+        
+        if(!$extension->isInstalled()){
+           
+            $installer = new common_ext_ExtensionInstaller($extension);
+            $installer->install();
+        }
+    }
+    
+    public function uninstallExtension($extid){
+        $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extid);
+        if($extension->isInstalled()){
+            $installer = new common_ext_ExtensionUninstaller($extension);
+            $installer->uninstall();
+        }
+    }
+    
     /**
      * Returns the test session if available
      * @throws common_exception_Error
