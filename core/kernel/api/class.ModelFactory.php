@@ -51,9 +51,6 @@ class core_kernel_api_ModelFactory{
         
     }
     
-    
-    
-    
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $namespace
@@ -78,43 +75,12 @@ class core_kernel_api_ModelFactory{
         $resources = $modelDefinition->resources();
         $format = EasyRdf_Format::getFormat('php');
         
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        
         $data = $modelDefinition->serialise($format);
-
         
         foreach ($data as $subjectUri => $propertiesValues){
-             
             foreach ($propertiesValues as $prop=>$values){
-                foreach ($values as $k => $v) { 
-                    $datetime = new \DateTime();
-                    $date= $datetime->format('Y-m-d H:i:s');
-                    $dbWrapper->insert('statements',
-                        array(
-                            'modelid' =>  $modelId,
-                            'subject' =>$subjectUri,
-                            'predicate'=> $prop,
-                            'object' => $v['value'],
-                            'l_language' => isset($v['lang']) ? $v['lang'] : '',
-                            'author' => 'http://www.tao.lu/Ontologies/TAO.rdf#installator',
-                            'stedit' => 'yyy[admin,administrators,authors]',
-                            'stread' => 'yyy[admin,administrators,authors]',
-                            'stdelete' => 'yyy[admin,administrators,authors]',
-                           // 'epoch' => $date
-                        ),
-                        array(
-                            PDO::PARAM_INT,
-                            PDO::PARAM_STR,
-                            PDO::PARAM_STR,
-                            PDO::PARAM_STR,
-                            PDO::PARAM_STR,
-                            PDO::PARAM_STR,
-                            PDO::PARAM_STR,
-                            PDO::PARAM_STR,
-                            PDO::PARAM_STR,
-                            //'datetime'
-                        )
-                    );
+                foreach ($values as $k => $v) {
+                    $this->addStatement($modelId, $subjectUri, $prop, $v['value'], isset($v['lang']) ? $v['lang'] : null);
                 }
             }
         }
@@ -122,7 +88,52 @@ class core_kernel_api_ModelFactory{
         return true;
     }
     
-    
+    /**
+     * Adds a statement to the ontology if it does not exist yet
+     * 
+     * @author "Joel Bout, <joel@taotesting.com>"
+     * @param int $modelId
+     * @param string $subject
+     * @param string $predicate
+     * @param string $object
+     * @param string $lang
+     */
+    private function addStatement($modelId, $subject, $predicate, $object, $lang = null) {
+        $result = core_kernel_classes_DbWrapper::singleton()->query(
+            'SELECT modelid FROM statements WHERE modelid = ? AND subject = ? AND predicate = ? AND object = ? AND l_language = ? LIMIT 1'
+            ,array($modelId, $subject, $predicate, $object, $lang)
+        );
+        if ($result->rowCount() == 0) {
+            $datetime = new \DateTime();
+            $date= $datetime->format('Y-m-d H:i:s');
+            core_kernel_classes_DbWrapper::singleton()->insert('statements',
+                array(
+                    'modelid' =>  $modelId,
+                    'subject' =>$subject,
+                    'predicate'=> $predicate,
+                    'object' => $object,
+                    'l_language' => is_null($lang) ? '' : $lang,
+                    'author' => 'http://www.tao.lu/Ontologies/TAO.rdf#installator',
+                    'stedit' => 'yyy[admin,administrators,authors]',
+                    'stread' => 'yyy[admin,administrators,authors]',
+                    'stdelete' => 'yyy[admin,administrators,authors]',
+                    // 'epoch' => $date
+                ),
+                array(
+                    PDO::PARAM_INT,
+                    PDO::PARAM_STR,
+                    PDO::PARAM_STR,
+                    PDO::PARAM_STR,
+                    PDO::PARAM_STR,
+                    PDO::PARAM_STR,
+                    PDO::PARAM_STR,
+                    PDO::PARAM_STR,
+                    PDO::PARAM_STR,
+                    //'datetime'
+                )
+            );
+        }
+    }
     
 
 }
