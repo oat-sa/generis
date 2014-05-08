@@ -23,6 +23,14 @@
  */
 class helpers_ExtensionHelper{
     
+    /**
+     * Sorts a list of extensions by dependencies,
+     * starting with independent extensions  
+     * 
+     * @param array $extensions
+     * @throws common_exception_Error
+     * @return array
+     */
     public static function sortByDependencies($extensions) {
         $sorted = array();
         $unsorted = array();
