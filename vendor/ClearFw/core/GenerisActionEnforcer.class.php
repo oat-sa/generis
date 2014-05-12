@@ -46,8 +46,14 @@ class GenerisActionEnforcer extends ActionEnforcer
 		// get the controller
 		$controllerClass = $this->getControllerClass();
 		if(class_exists($controllerClass)) {
-		    $module = new $controllerClass;
-		} else {
+		    // namespaced?
+		    $module = new $controllerClass();
+		}
+        else if (($str = substr($controllerClass, 1)) && class_exists($str)) {
+            // non namespaced?
+            $module = new $str();
+        }
+		 else {
 		    throw new ActionEnforcingException('Controller "'.$controllerClass.'" could not be loaded.', $this->context->getModuleName(), $this->context->getActionName());
 		}
 		
