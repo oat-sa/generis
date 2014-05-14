@@ -48,12 +48,12 @@ class common_exception_FileAlreadyExists
      */
     public function __construct($path = "")
     {
-        // section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018F5 begin
+        
         
         $message = 'A file/folder already exists at the location ('.$path.')';
         parent::__construct($message);
         
-        // section 127-0-1-1-3aa96a80:134c2ca4f13:-8000:00000000000018F5 end
+        
     }
 
 } /* end of class common_exception_FileAlreadyExists */

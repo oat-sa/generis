@@ -97,14 +97,14 @@ class common_configuration_Report
      */
     public function __construct($status, $message,  common_configuration_Component $component = null)
     {
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ABF begin
+        
         $this->setStatus($status);
         $this->setMessage($message);
         
         if (!empty($component)){
             $this->setComponent($component);    
         }
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ABF end
+        
     }
 
     /**
@@ -118,9 +118,9 @@ class common_configuration_Report
     {
         $returnValue = (int) 0;
 
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AC3 begin
+        
         $returnValue = $this->status;
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AC3 end
+        
 
         return (int) $returnValue;
     }
@@ -135,9 +135,9 @@ class common_configuration_Report
      */
     public function setStatus($status)
     {
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AC5 begin
+        
         $this->status = $status;
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AC5 end
+        
     }
 
     /**
@@ -151,7 +151,7 @@ class common_configuration_Report
     {
         $returnValue = (string) '';
 
-        // section -64--88-56-1-339f972e:1389f397ef8:-8000:0000000000001B28 begin
+        
         switch ($this->getStatus()){
             case self::INVALID:
                 $returnValue = 'invalid';
@@ -165,7 +165,7 @@ class common_configuration_Report
                 $returnValue = 'valid';
             break;
         }
-        // section -64--88-56-1-339f972e:1389f397ef8:-8000:0000000000001B28 end
+        
 
         return (string) $returnValue;
     }
@@ -181,9 +181,9 @@ class common_configuration_Report
     {
         $returnValue = (string) '';
 
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AC8 begin
+        
         $returnValue = $this->message;
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AC8 end
+        
 
         return (string) $returnValue;
     }
@@ -198,9 +198,9 @@ class common_configuration_Report
      */
     public function setMessage($message)
     {
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ACA begin
+        
         $this->message = $message;
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ACA end
+        
     }
 
     /**
@@ -214,9 +214,9 @@ class common_configuration_Report
     {
         $returnValue = null;
 
-        // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B24 begin
+        
         $returnValue = $this->component;
-        // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B24 end
+        
 
         return $returnValue;
     }
@@ -231,9 +231,9 @@ class common_configuration_Report
      */
     protected function setComponent( common_configuration_Component $component)
     {
-        // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B26 begin
+        
         $this->component = $component;
-        // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B26 end
+        
     }
 
 } /* end of class common_configuration_Report */

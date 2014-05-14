@@ -67,9 +67,9 @@ class common_configuration_ComponentFactory
     {
         $returnValue = null;
 
-        // section 10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D74 begin
+        
         $returnValue = new common_configuration_PHPRuntime($min, $max, $optional);
-        // section 10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D74 end
+        
 
         return $returnValue;
     }
@@ -89,9 +89,9 @@ class common_configuration_ComponentFactory
     {
         $returnValue = null;
 
-        // section 10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D84 begin
+        
         $returnValue = new common_configuration_PHPExtension($min, $max, $name, $optional);
-        // section 10-13-1-85-54b22cba:13b2c6aa086:-8000:0000000000001D84 end
+        
 
         return $returnValue;
     }
@@ -110,9 +110,9 @@ class common_configuration_ComponentFactory
     {
         $returnValue = null;
 
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D8A begin
+        
         $returnValue = new common_configuration_PHPINIValue($expectedValue, $name, $optional);
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D8A end
+        
 
         return $returnValue;
     }
@@ -130,9 +130,9 @@ class common_configuration_ComponentFactory
     {
         $returnValue = null;
 
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D94 begin
+        
         $returnValue = new common_configuration_PHPDatabaseDriver(null, null, $name, $optional);
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D94 end
+        
 
         return $returnValue;
     }
@@ -151,11 +151,11 @@ class common_configuration_ComponentFactory
     {
         $returnValue = null;
 
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D9D begin
+        
         $returnValue = new common_configuration_FileSystemComponent($location, $expectedRights, $optional = false);
         self::incrementFileSystemCount();
         $returnValue->setName('FileSystemComponentCheck_' . self::getFileSystemCount());
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001D9D end
+        
 
         return $returnValue;
     }
@@ -174,7 +174,7 @@ class common_configuration_ComponentFactory
     {
         $returnValue = null;
 
-        // section 10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB0 begin
+        
     	// Camelize the name to find it in the checks folder.
         $name = explode('_', $name);
         for ($i = 0; $i < count($name); $i++){
@@ -198,7 +198,7 @@ class common_configuration_ComponentFactory
 	        $msg .= $e->getMessage();
 	        throw new common_configuration_ComponentFactoryException($msg);
         }
-        // section 10-13-1-85-4f783fb:13b2cada0cf:-8000:0000000000001DB0 end
+        
 
         return $returnValue;
     }
@@ -216,11 +216,11 @@ class common_configuration_ComponentFactory
     {
         $returnValue = null;
 
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DA7 begin
+        
         self::incrementMockCount();
         $returnValue = new common_configuration_Mock($expectedStatus, 'MockComponentCheck_' . self::getMockCount());
         $returnValue->setOptional($optional);
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DA7 end
+        
 
         return $returnValue;
     }
@@ -237,7 +237,7 @@ class common_configuration_ComponentFactory
     {
         $returnValue = null;
 
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB0 begin
+        
         if (!empty($array)){
         	if (!empty($array['type'])){
         		$acceptedTypes = array('PHPRuntime', 'PHPINIValue', 'PHPExtension', 'PHPDatabaseDriver', 'FileSystemComponent', 'Custom', 'Mock');
@@ -367,7 +367,7 @@ class common_configuration_ComponentFactory
         	$msg = 'Cannot build a Configuration Component with an empty array.';
         	throw new common_configuration_ComponentFactoryException($msg);
         }
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB0 end
+        
 
         return $returnValue;
     }
@@ -383,9 +383,9 @@ class common_configuration_ComponentFactory
     {
         $returnValue = (int) 0;
 
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB3 begin
+        
         $returnValue = self::$fileSystemCount;
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB3 end
+        
 
         return (int) $returnValue;
     }
@@ -400,9 +400,9 @@ class common_configuration_ComponentFactory
      */
     private static function setFileSystemCount($fileSystemCount)
     {
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB5 begin
+        
         self::$fileSystemCount = $fileSystemCount;
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB5 end
+        
     }
 
     /**
@@ -414,11 +414,11 @@ class common_configuration_ComponentFactory
      */
     private static function incrementFileSystemCount()
     {
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB8 begin
+        
         $count = self::getFileSystemCount();
         $count++;
         self::setFileSystemCount($count);
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DB8 end
+        
     }
 
     /**
@@ -432,9 +432,9 @@ class common_configuration_ComponentFactory
     {
         $returnValue = (int) 0;
 
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DBA begin
+        
         $returnValue = self::$mockCount;
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DBA end
+        
 
         return (int) $returnValue;
     }
@@ -449,9 +449,9 @@ class common_configuration_ComponentFactory
      */
     private static function setMockCount($mockCount)
     {
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DBC begin
+        
         self::$mockCount = $mockCount;
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DBC end
+        
     }
 
     /**
@@ -463,11 +463,11 @@ class common_configuration_ComponentFactory
      */
     private static function incrementMockCount()
     {
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DBF begin
+        
         $count = self::getMockCount();
         $count++;
         self::setMockCount($count);
-        // section 10-13-1-85-14a261be:13b2c72d816:-8000:0000000000001DBF end
+        
     }
 
 } /* end of class common_configuration_ComponentFactory */

@@ -62,9 +62,9 @@ abstract class common_cache_Proxy
      */
     public function put($mixed, $serial = null)
     {
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F34 begin
+        
         $this->implementation->put($mixed, $serial);
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F34 end
+        
     }
 
     /**
@@ -79,9 +79,9 @@ abstract class common_cache_Proxy
     {
         $returnValue = null;
 
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F3C begin
+        
         $returnValue = $this->implementation->get($serial);
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F3C end
+        
 
         return $returnValue;
     }
@@ -98,9 +98,9 @@ abstract class common_cache_Proxy
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F40 begin
+        
         $returnValue = $this->implementation->has($serial);
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F40 end
+        
 
         return (bool) $returnValue;
     }
@@ -115,9 +115,9 @@ abstract class common_cache_Proxy
      */
     public function remove($serial)
     {
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F44 begin
+        
         $this->implementation->remove($serial);
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F44 end
+        
     }
 
     /**
@@ -131,9 +131,9 @@ abstract class common_cache_Proxy
     {
         $returnValue = null;
 
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F48 begin
+        
         $this->implementation->purge();
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F48 end
+        
 
         return $returnValue;
     }
@@ -147,9 +147,9 @@ abstract class common_cache_Proxy
      */
     public function __construct()
     {
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F22 begin
+        
         $this->implementation = $this->getImplementation();
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F22 end
+        
     }
 
     /**

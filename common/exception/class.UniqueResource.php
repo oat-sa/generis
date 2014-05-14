@@ -50,14 +50,14 @@ class common_exception_UniqueResource
      */
     public function __construct( core_kernel_classes_Resource $resource, $message = "")
     {
-        // section 127-0-1-1-602f558a:134cbda6031:-8000:00000000000018FA begin
+        
         
         if(empty($message)){
             $message = 'The resource ('.$resource->getUri().') should be unique';
         }
         parent::__construct($message);
         
-        // section 127-0-1-1-602f558a:134cbda6031:-8000:00000000000018FA end
+        
     }
 
 } /* end of class common_exception_UniqueResource */

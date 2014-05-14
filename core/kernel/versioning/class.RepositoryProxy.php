@@ -60,10 +60,10 @@ class core_kernel_versioning_RepositoryProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002503 begin
+        
         $delegate = $this->getImplementationToDelegateTo($vcs);
         $returnValue = $delegate->checkout($vcs, $url, $path, $revision);
-        // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002503 end
+        
 
         return (bool) $returnValue;
     }
@@ -82,10 +82,10 @@ class core_kernel_versioning_RepositoryProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E6 begin
+        
         $delegate = $this->getImplementationToDelegateTo($vcs);
         $returnValue = $delegate->authenticate($vcs, $login, $password);
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E6 end
+        
 
         return (bool) $returnValue;
     }
@@ -105,10 +105,10 @@ class core_kernel_versioning_RepositoryProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C begin
+        
         $delegate = $this->getImplementationToDelegateTo($vcs);
         $returnValue = $delegate->export($vcs, $src, $target, $revision);
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C end
+        
 
         return (bool) $returnValue;
     }
@@ -129,10 +129,10 @@ class core_kernel_versioning_RepositoryProxy
     {
         $returnValue = null;
 
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 begin
+        
         $delegate = $this->getImplementationToDelegateTo($vcs);
         $returnValue = $delegate->import($vcs, $src, $target, $message, $options);
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 end
+        
 
         return $returnValue;
     }
@@ -151,10 +151,10 @@ class core_kernel_versioning_RepositoryProxy
     {
         $returnValue = array();
 
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 begin
+        
         $delegate = $this->getImplementationToDelegateTo($vcs);
         $returnValue = $delegate->listContent($vcs, $path, $revision);
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 end
+        
 
         return (array) $returnValue;
     }
@@ -171,7 +171,7 @@ class core_kernel_versioning_RepositoryProxy
     {
         $returnValue = null;
 
-        // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002513 begin
+        
     	$VCStype = $resource->getVCSType();
         $implClass = '';
         
@@ -191,7 +191,7 @@ class core_kernel_versioning_RepositoryProxy
 			default:
         		throw new common_exception_Error('unknown Version Control System '.$VCStype->getLabel().'('.$VCStype.')');
         }
-        // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002513 end
+        
 
         return $returnValue;
     }
@@ -207,12 +207,12 @@ class core_kernel_versioning_RepositoryProxy
     {
         $returnValue = null;
 
-        // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002517 begin
+        
 		if(is_null(self::$instance)){
 			self::$instance = new core_kernel_versioning_RepositoryProxy();
 		}
 		$returnValue = self::$instance;
-        // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002517 end
+        
 
         return $returnValue;
     }

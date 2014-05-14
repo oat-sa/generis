@@ -47,12 +47,12 @@ class helpers_Time
     {
         $returnValue = (float) 0.0;
 
-        // section 127-0-1-1--51e2e300:1355214e1e7:-8000:00000000000047C8 begin
+        
         
         list($ms, $s) = explode(" ", microtime());
         $returnValue = $s+$ms;
         
-        // section 127-0-1-1--51e2e300:1355214e1e7:-8000:00000000000047C8 end
+        
 
         return (float) $returnValue;
     }

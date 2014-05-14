@@ -50,7 +50,7 @@ class core_kernel_persistence_smoothsql_Utils
     {
         $returnValue = array();
 
-        // section 10-13-1-85-61dcfc6d:1301cc5c657:-8000:000000000000190E begin
+        
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $session = core_kernel_classes_Session::singleton(); 
     	$selectedLanguage = $session->getDataLanguage();
@@ -69,7 +69,7 @@ class core_kernel_persistence_smoothsql_Utils
     	$returnValue = array_merge($sortedResults[$selectedLanguage], 
     							   (count($sortedResults) > 2) ? $sortedResults[$defaultLanguage] : array(),
     							   $sortedResults[$fallbackLanguage]);
-        // section 10-13-1-85-61dcfc6d:1301cc5c657:-8000:000000000000190E end
+        
 
         return (array) $returnValue;
     }
@@ -86,7 +86,7 @@ class core_kernel_persistence_smoothsql_Utils
     {
         $returnValue = array();
 
-        // section 10-13-1-85-61dcfc6d:1301cc5c657:-8000:0000000000001912 begin
+        
    		if (count($values) > 0) {
     		$previousLanguage = $values[0]['language'];
 
@@ -99,7 +99,7 @@ class core_kernel_persistence_smoothsql_Utils
     			}
     		}
     	}
-        // section 10-13-1-85-61dcfc6d:1301cc5c657:-8000:0000000000001912 end
+        
 
         return (array) $returnValue;
     }
@@ -117,10 +117,10 @@ class core_kernel_persistence_smoothsql_Utils
     {
         $returnValue = array();
 
-        // section 10-13-1-85-61dcfc6d:1301cc5c657:-8000:0000000000001915 begin
+        
         $result = self::sortByLanguage($dataset, $langColname);
     	$returnValue = self::getFirstLanguage($result);
-        // section 10-13-1-85-61dcfc6d:1301cc5c657:-8000:0000000000001915 end
+        
 
         return (array) $returnValue;
     }
@@ -137,7 +137,7 @@ class core_kernel_persistence_smoothsql_Utils
     {
         $returnValue = (string) '';
 
-        // section 10-13-1-85--4651ba20:1301d2ffa69:-8000:0000000000001915 begin
+        
     	if (count($values) > 0) {
     		$previousLanguage = $values[0]['language'];
     		$returnValue = $previousLanguage;
@@ -152,7 +152,7 @@ class core_kernel_persistence_smoothsql_Utils
     			}
     		}
     	}
-        // section 10-13-1-85--4651ba20:1301d2ffa69:-8000:0000000000001915 end
+        
 
         return (string) $returnValue;
     }

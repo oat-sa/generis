@@ -61,7 +61,7 @@ class core_kernel_versioning_subversionWindows_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A begin
+        
         
         try {
             $rStr = !$recursive ? '--non-recursive' : '';
@@ -71,7 +71,7 @@ class core_kernel_versioning_subversionWindows_File
         	die('Error code `svn_error_commit` in ' . $e->getMessage());
         }
 
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A end
+        
 
         return (bool) $returnValue;
     }
@@ -91,14 +91,14 @@ class core_kernel_versioning_subversionWindows_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165C begin
+        
         try {
         	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'update "' . $path .'"');
         } 
         catch (Exception $e) {
         	die('Error code `svn_error_update` in ' . $e->getMessage());
         }
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165C end
+        
 
         return (bool) $returnValue;
     }
@@ -118,7 +118,7 @@ class core_kernel_versioning_subversionWindows_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165E begin
+        
         
         /**
          * @todo make all the functions coherent
@@ -132,7 +132,7 @@ class core_kernel_versioning_subversionWindows_File
         catch (Exception $e) {
         	die('Error code `svn_error_revert` in ' . $e->getMessage());
         }
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165E end
+        
 
         return (bool) $returnValue;
     }
@@ -151,7 +151,7 @@ class core_kernel_versioning_subversionWindows_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 begin
+        
         
         try {
         	$returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'delete "' . $path.'" --force');
@@ -160,7 +160,7 @@ class core_kernel_versioning_subversionWindows_File
         	die('Error code `svn_error_delete` in ' . $e->getMessage());
         }
         
-        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 end
+        
 
         return (bool) $returnValue;
     }
@@ -181,7 +181,7 @@ class core_kernel_versioning_subversionWindows_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 begin
+        
         
         try {
             $rStr = !$recursive ? '--non-recursive' : '';
@@ -191,7 +191,7 @@ class core_kernel_versioning_subversionWindows_File
         	die('Error code `svn_error_add` in ' . $e->getMessage());
         }
         
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 end
+        
 
         return (bool) $returnValue;
     }
@@ -210,7 +210,7 @@ class core_kernel_versioning_subversionWindows_File
     {
         $returnValue = array();
 
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016FB begin
+        
         
         $xmlStr = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'log "' . $path .'" --xml');
         //$xmlStr = implode('', $arrayLog);
@@ -230,7 +230,7 @@ class core_kernel_versioning_subversionWindows_File
             );
         }
         
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016FB end
+        
 
         return (array) $returnValue;
     }
@@ -249,7 +249,7 @@ class core_kernel_versioning_subversionWindows_File
     {
         $returnValue = (int) 0;
 
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001902 begin
+        
         
         $returnValue = null;
         $resourceStatus = null;
@@ -302,7 +302,7 @@ class core_kernel_versioning_subversionWindows_File
         }
         }
         
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001902 end
+        
 
         return (int) $returnValue;
     }
@@ -321,11 +321,11 @@ class core_kernel_versioning_subversionWindows_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 begin
+        
         
         $returnValue = core_kernel_versioning_subversionWindows_Utils::exec($resource, 'resolve --accept '.$version.' "' . $path .'"');
         
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 end
+        
 
         return (bool) $returnValue;
     }
@@ -341,14 +341,14 @@ class core_kernel_versioning_subversionWindows_File
     {
         $returnValue = null;
 
-        // section 127-0-1-1-a831e14:134415460c1:-8000:000000000000188E begin
+        
         
         if (self::$instance == null){
 			self::$instance = new self();
 		}
 		$returnValue = self::$instance;
         
-        // section 127-0-1-1-a831e14:134415460c1:-8000:000000000000188E end
+        
 
         return $returnValue;
     }

@@ -60,10 +60,10 @@ class core_kernel_versioning_local_Repository
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002503 begin
+        
         common_Logger::i(__FUNCTION__.' called on local directory', 'LOCALVCS');
         $returnValue = true;
-        // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002503 end
+        
 
         return (bool) $returnValue;
     }
@@ -82,10 +82,10 @@ class core_kernel_versioning_local_Repository
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E6 begin
+        
         common_Logger::i(__FUNCTION__.' called on local directory', 'LOCALVCS');
         $returnValue = is_dir($vcs->getPath());
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E6 end
+        
 
         return (bool) $returnValue;
     }
@@ -105,9 +105,9 @@ class core_kernel_versioning_local_Repository
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C begin
+        
         throw new core_kernel_versioning_exception_Exception(__METHOD__.' not supported by Local Directory');
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C end
+        
 
         return (bool) $returnValue;
     }
@@ -128,9 +128,9 @@ class core_kernel_versioning_local_Repository
     {
         $returnValue = null;
 
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 begin
+        
         throw new core_kernel_versioning_exception_Exception(__METHOD__.' not supported by Local Directory');
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 end
+        
 
         return $returnValue;
     }
@@ -149,9 +149,9 @@ class core_kernel_versioning_local_Repository
     {
         $returnValue = array();
 
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 begin
+        
         throw new core_kernel_versioning_exception_Exception(__METHOD__.' not supported by Local Directory');
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 end
+        
 
         return (array) $returnValue;
     }
@@ -167,12 +167,12 @@ class core_kernel_versioning_local_Repository
     {
         $returnValue = null;
 
-        // section 10-30-1--78-73b2f78e:13bb35d7c97:-8000:0000000000001E45 begin
+        
         if(is_null(self::$instance)){
 			self::$instance = new core_kernel_versioning_local_Repository();
 		}
 		$returnValue = self::$instance;
-        // section 10-30-1--78-73b2f78e:13bb35d7c97:-8000:0000000000001E45 end
+        
 
         return $returnValue;
     }

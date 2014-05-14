@@ -51,7 +51,7 @@ class core_kernel_classes_ResourceFactory
     {
         $returnValue = null;
 
-        // section 10-13-1--99--2e5efe17:11fffe7b282:-8000:0000000000001519 begin
+        
         $propertiesValues = array();
         
         if (!empty($label)){
@@ -63,7 +63,7 @@ class core_kernel_classes_ResourceFactory
         }
         
 		$returnValue = $type->createInstanceWithProperties($propertiesValues);
-        // section 10-13-1--99--2e5efe17:11fffe7b282:-8000:0000000000001519 end
+        
 
         return $returnValue;
     }

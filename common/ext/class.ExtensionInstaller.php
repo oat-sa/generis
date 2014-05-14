@@ -57,7 +57,7 @@ class common_ext_ExtensionInstaller
 	 */
 	public function install()
 	{
-		// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017C4 begin
+		
 		
 		common_Logger::i('Installing '.$this->extension->getId(), 'INSTALL');
 		
@@ -117,7 +117,7 @@ class common_ext_ExtensionInstaller
 			throw $e;
 		}
 
-		// section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017C4 end
+		
 	}
 
 	/**
@@ -129,7 +129,7 @@ class common_ext_ExtensionInstaller
 	 */
 	protected function installWriteConfig()
 	{
-		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A26 begin
+		
 		$sampleFile	= $this->extension->getDir().'includes/config.php.sample';
 		$finalFile	= $this->extension->getDir().'includes/config.php';
 		
@@ -149,7 +149,7 @@ class common_ext_ExtensionInstaller
 		    helpers_File::remove($finalFile);
 		}
 		
-		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A26 end
+		
 	}
 
 	/**
@@ -162,7 +162,7 @@ class common_ext_ExtensionInstaller
 	 */
 	protected function installOntology()
 	{
-		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A24 begin
+		
 		// insert model
 		$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
 		foreach ($this->extension->getManifest()->getInstallModelFiles() as $rdfpath) {
@@ -195,7 +195,7 @@ class common_ext_ExtensionInstaller
 				throw new common_ext_InstallationException("Unable to load ontology in '${rdfpath}' because the file does not exist.");
 			}
 		}
-		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A24 end
+		
 	}
 
 	/**
@@ -231,12 +231,12 @@ class common_ext_ExtensionInstaller
 	 */
 	protected function installRegisterExt()
 	{
-		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A28 begin
+		
 		common_Logger::d('Registering '.$this->extension->getId(), 'INSTALL');
 		common_ext_ExtensionsManager::singleton()->registerExtension($this->extension);
 		common_ext_ExtensionsManager::singleton()->setEnabled($this->extension->getId());
 		
-		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A28 end
+		
 	}
 
 	/**
@@ -249,13 +249,13 @@ class common_ext_ExtensionInstaller
 	 */
 	protected function installCustomScript()
 	{
-		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A2C begin
+		
 		//install script
 		foreach ($this->extension->getManifest()->getInstallPHPFiles() as $script) {
 			common_Logger::d('Running custom install script '.$script.' for ext '.$this->extension->getId(), 'INSTALL');
 			require_once $script;
 		}
-		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A2C end
+		
 	}
 
 	/**
@@ -267,7 +267,7 @@ class common_ext_ExtensionInstaller
 	 */
 	protected function installLocalData()
 	{
-		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A22 begin
+		
 		$localData = $this->extension->getManifest()->getLocalData();
 		if(isset($localData['rdf'])){
 			$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
@@ -286,7 +286,7 @@ class common_ext_ExtensionInstaller
 				require_once $script;
 			}
 		}
-		// section 127-0-1-1-6cdd9365:137e5078659:-8000:0000000000001A22 end
+		
 	}
 
 	/**
@@ -298,10 +298,10 @@ class common_ext_ExtensionInstaller
 	 */
 	public function installLoadConstants()
 	{
-		// section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FCE begin
+		
 		common_Logger::i("Loading constants for extension '" . $this->extension->getId() . "'");
 		$this->extension->load();
-		// section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FCE end
+		
 	}
 
 	/**
@@ -313,9 +313,9 @@ class common_ext_ExtensionInstaller
 	 */
 	public function installExtensionModel()
 	{
-		// section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FD1 begin
+		
 		//common_Logger::i("Spawning Extension/Module/Action model for extension '" . $this->extension->getId() . "'");
-		// section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FD1 end
+		
 	}
 
 	/**
@@ -329,7 +329,7 @@ class common_ext_ExtensionInstaller
 	{
 		$returnValue = (bool) false;
 
-		// section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A2 begin
+		
 		$extensionManager = common_ext_ExtensionsManager::singleton();
 		$installedExtArray = $extensionManager->getInstalledExtensions();
 		foreach ($this->extension->getDependencies() as $requiredExt => $requiredVersion) {
@@ -339,7 +339,7 @@ class common_ext_ExtensionInstaller
 			}
 		}
 		$returnValue = true;
-		// section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A2 end
+		
 
 		return (bool) $returnValue;
 	}
@@ -355,10 +355,10 @@ class common_ext_ExtensionInstaller
 	 */
 	public function __construct( common_ext_Extension $extension, $localData = true)
 	{
-		// section -64--88-56-1--cf3e319:137e64d7097:-8000:0000000000001A2B begin
+		
 		parent::__construct($extension);
 		$this->setLocalData($localData);
-		// section -64--88-56-1--cf3e319:137e64d7097:-8000:0000000000001A2B end
+		
 	}
 
 	/**
@@ -371,9 +371,9 @@ class common_ext_ExtensionInstaller
 	 */
 	public function setLocalData($value)
 	{
-		// section -64--88-56-1--cf3e319:137e64d7097:-8000:0000000000001A3A begin
+		
 		$this->localData = $value;
-		// section -64--88-56-1--cf3e319:137e64d7097:-8000:0000000000001A3A end
+		
 	}
 
 	/**
@@ -387,9 +387,9 @@ class common_ext_ExtensionInstaller
 	{
 		$returnValue = (bool) false;
 
-		// section -64--88-56-1--cf3e319:137e64d7097:-8000:0000000000001A3D begin
+		
 		$returnValue = $this->localData;
-		// section -64--88-56-1--cf3e319:137e64d7097:-8000:0000000000001A3D end
+		
 
 		return (bool) $returnValue;
 	}
@@ -403,9 +403,9 @@ class common_ext_ExtensionInstaller
 	 */
 	public function extendedInstall()
 	{
-		// section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FD6 begin
+		
 		return;
-		// section 127-0-1-1--38c6d12c:13cf1e375c3:-8000:0000000000001FD6 end
+		
 	}
 
 } /* end of class common_ext_ExtensionInstaller */

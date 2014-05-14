@@ -82,7 +82,7 @@ class common_log_ArchiveFileAppender
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-7b882644:1342260c2b6:-8000:0000000000001866 begin
+        
         if (isset($configuration['directory']) && $configuration['directory']) {
         	$this->directory = rtrim($configuration['directory'],DIRECTORY_SEPARATOR);
         } elseif (isset($configuration['file'])) {
@@ -111,7 +111,7 @@ class common_log_ArchiveFileAppender
         else{
         	$returnValue = false;
         }
-        // section 127-0-1-1-7b882644:1342260c2b6:-8000:0000000000001866 end
+        
 
         return (bool) $returnValue;
     }
@@ -125,7 +125,7 @@ class common_log_ArchiveFileAppender
      */
     public function initFile()
     {
-        // section 127-0-1-1-7b882644:1342260c2b6:-8000:0000000000001868 begin
+        
     	if ($this->maxFileSize > 0 && file_exists($this->filename) && filesize($this->filename) >= $this->maxFileSize) {
 	    	
 	    	if ($this->compression == self::COMPRESSION_ZIP) {
@@ -151,7 +151,7 @@ class common_log_ArchiveFileAppender
 	    	}
     	}
     	$this->filehandle = @fopen($this->filename, 'a');
-        // section 127-0-1-1-7b882644:1342260c2b6:-8000:0000000000001868 end
+        
 
     }
 
@@ -166,7 +166,7 @@ class common_log_ArchiveFileAppender
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1-57e432c8:135336d8bea:-8000:0000000000004762 begin
+        
     	$filebase = basename($this->filename);
     	$dotpos = strrpos($filebase, ".");
     	if ($dotpos === false) {
@@ -180,7 +180,7 @@ class common_log_ArchiveFileAppender
     		$count_string = "_".++$count;
     	}
         $returnValue = $prefix.$count_string.$sufix;
-        // section 127-0-1-1-57e432c8:135336d8bea:-8000:0000000000004762 end
+        
 
         return (string) $returnValue;
     }

@@ -60,7 +60,7 @@ class core_kernel_versioning_subversionWindows_Repository
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002503 begin
+        
         
         try {
         	$url = (string) $vcs->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL));
@@ -80,7 +80,7 @@ class core_kernel_versioning_subversionWindows_Repository
         	die('Error code `svn_error_checkout` in ' . $e->getMessage());
         }
 
-        // section 127-0-1-1--548d6005:132d344931b:-8000:0000000000002503 end
+        
 
         return (bool) $returnValue;
     }
@@ -99,9 +99,9 @@ class core_kernel_versioning_subversionWindows_Repository
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E6 begin
+        
         throw new core_kernel_versioning_exception_Exception("The function (".__METHOD__.") is not available in this versioning implementation (".__CLASS__.")");
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016E6 end
+        
 
         return (bool) $returnValue;
     }
@@ -121,10 +121,10 @@ class core_kernel_versioning_subversionWindows_Repository
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C begin
+        
         $r=!is_null($revision)?' -r '.$revision:'';
         $returnValue = core_kernel_versioning_subversionWindows_Utils::exec($vcs, 'export --force "' . $src . '" "' . $target.'"'.$r);
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:000000000000290C end
+        
 
         return (bool) $returnValue;
     }
@@ -145,7 +145,7 @@ class core_kernel_versioning_subversionWindows_Repository
     {
         $returnValue = null;
 
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 begin
+        
         
         $saveResource = isset($options['saveResource']) && $options['saveResource'] ? true : false;
         $result = core_kernel_versioning_subversionWindows_Utils::exec($vcs, 'import -m "'.stripslashes($message).'" "' . $src . '" "' . $target.'"');
@@ -158,7 +158,7 @@ class core_kernel_versioning_subversionWindows_Repository
             $returnValue = $folder;
         }
         
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002912 end
+        
 
         return $returnValue;
     }
@@ -177,7 +177,7 @@ class core_kernel_versioning_subversionWindows_Repository
     {
         $returnValue = array();
 
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 begin
+        
         
         $r=!is_null($revision)?' -r '.$revision:'';
         $xmlStr = core_kernel_versioning_subversionWindows_Utils::exec($vcs, 'list --xml "' . $path.'"'.$r);
@@ -198,7 +198,7 @@ class core_kernel_versioning_subversionWindows_Repository
             );
         }
 
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002916 end
+        
 
         return (array) $returnValue;
     }
@@ -214,12 +214,12 @@ class core_kernel_versioning_subversionWindows_Repository
     {
         $returnValue = null;
 
-        // section 127-0-1-1-a831e14:134415460c1:-8000:0000000000001894 begin
+        
         if (self::$instance == null){
 			self::$instance = new self();
 		}
 		$returnValue = self::$instance;
-        // section 127-0-1-1-a831e14:134415460c1:-8000:0000000000001894 end
+        
 
         return $returnValue;
     }

@@ -73,14 +73,14 @@ class core_kernel_rules_Operation
     {
         $returnValue = null;
 
-        // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000E23 begin
+        
         if(empty($this->firstOperation)){
         	$property = new core_kernel_classes_Property(PROPERTY_OPERATION_FIRST_OP);
         	$resource = $this->getUniquePropertyValue($property);
         	$this->firstOperation = new core_kernel_rules_Term($resource->getUri());
         }
         $returnValue = $this->firstOperation;
-        // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000E23 end
+        
 
         return $returnValue;
     }
@@ -96,14 +96,14 @@ class core_kernel_rules_Operation
     {
         $returnValue = null;
 
-        // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000E25 begin
+        
         if(empty($this->secondOperation)){
         	$property = new core_kernel_classes_Property(PROPERTY_OPERATION_SECND_OP);
         	$resource = $this->getUniquePropertyValue($property);
         	$this->secondOperation = new core_kernel_rules_Term($resource->getUri());
         }
         $returnValue = $this->secondOperation;
-        // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000E25 end
+        
 
         return $returnValue;
     }
@@ -119,13 +119,13 @@ class core_kernel_rules_Operation
     {
         $returnValue = null;
 
-        // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000E27 begin
+        
         if(empty($this->arithmeticOperator)){
         	$property = new core_kernel_classes_Property(PROPERTY_OPERATION_OPERATOR);
         	$this->arithmeticOperator = $this->getUniquePropertyValue($property);
         }
         $returnValue = $this->arithmeticOperator;
-        // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000E27 end
+        
 
         return $returnValue;
     }
@@ -140,7 +140,7 @@ class core_kernel_rules_Operation
      */
     public function evaluate($variable = array())
     {
-        // section 10-13-1--99-1a35566c:11edfbb4d4b:-8000:0000000000000F3A begin
+        
         common_Logger::i('Evaluating Operation uri : '. $this->getUri(), array('Generis Operation'));
         common_Logger::i('Evaluating Operation name : '. $this->getLabel(), array('Generis Operation'));
         
@@ -194,7 +194,7 @@ class core_kernel_rules_Operation
     	common_Logger::i('Operation value: '. $returnValue, array('Generis Operation'));
     	
     	return $returnValue;
-        // section 10-13-1--99-1a35566c:11edfbb4d4b:-8000:0000000000000F3A end
+        
     }
 
     /**
@@ -209,7 +209,7 @@ class core_kernel_rules_Operation
      */
     public function evaluateRecursiveOperation( core_kernel_classes_Literal $first,  core_kernel_classes_Literal $second,  core_kernel_classes_Resource $operator)
     {
-        // section 10-13-1--99-1a35566c:11edfbb4d4b:-8000:0000000000000F43 begin
+        
         
         switch ($operator->getUri()) {
         	case INSTANCE_OPERATOR_ADD: {
@@ -243,7 +243,7 @@ class core_kernel_rules_Operation
         }
         $returnValue->debug = __METHOD__;
         return $returnValue;
-        // section 10-13-1--99-1a35566c:11edfbb4d4b:-8000:0000000000000F43 end
+        
     }
 
 } /* end of class core_kernel_rules_Operation */

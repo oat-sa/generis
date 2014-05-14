@@ -66,11 +66,11 @@ class common_configuration_FileSystemComponent
      */
     public function __construct($location, $expectedRights, $optional = false)
     {
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B11 begin
+        
         parent::__construct('tao.configuration.filesystem', $optional);
         $this->setExpectedRights($expectedRights);
         $this->setLocation($location);
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B11 end
+        
     }
 
     /**
@@ -84,9 +84,9 @@ class common_configuration_FileSystemComponent
     {
         $returnValue = (string) '';
 
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B1D begin
+        
         $returnValue = $this->location;
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B1D end
+        
 
         return (string) $returnValue;
     }
@@ -101,9 +101,9 @@ class common_configuration_FileSystemComponent
      */
     public function setLocation($location)
     {
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B1F begin
+        
         $this->location = $location;
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B1F end
+        
     }
 
     /**
@@ -117,9 +117,9 @@ class common_configuration_FileSystemComponent
     {
         $returnValue = (bool) false;
 
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B22 begin
+        
         $returnValue = @file_exists($this->getLocation());
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B22 end
+        
 
         return (bool) $returnValue;
     }
@@ -135,9 +135,9 @@ class common_configuration_FileSystemComponent
     {
         $returnValue = (string) '';
 
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B27 begin
+        
         $returnValue = $this->expectedRights;
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B27 end
+        
 
         return (string) $returnValue;
     }
@@ -152,14 +152,14 @@ class common_configuration_FileSystemComponent
      */
     public function setExpectedRights($expectedRights)
     {
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B29 begin
+        
         if (!empty($expectedRights) && preg_match('/^r*w*x*$/', $expectedRights) !== 0){
             $this->expectedRights = $expectedRights;    
         }
         else{
             throw new common_configuration_MalformedRightsException("Malformed rights. Expected format is r|rw|rwx.");
         }
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B29 end
+        
     }
 
     /**
@@ -173,7 +173,7 @@ class common_configuration_FileSystemComponent
     {
         $returnValue = null;
 
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B95 begin
+        
         $expectedRights = $this->getExpectedRights();
         $location = $this->getLocation();
         $name = $this->getName();
@@ -206,7 +206,7 @@ class common_configuration_FileSystemComponent
                                                    "File system component '${name}' in '${location} is compliant with expected rights (${expectedRights}).'",
                                                    $this);
         } 
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B95 end
+        
 
         return $returnValue;
     }
@@ -222,9 +222,9 @@ class common_configuration_FileSystemComponent
     {
         $returnValue = (bool) false;
 
-        // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B1B begin
+        
         $returnValue = @is_readable($this->getLocation());
-        // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B1B end
+        
 
         return (bool) $returnValue;
     }
@@ -240,9 +240,9 @@ class common_configuration_FileSystemComponent
     {
         $returnValue = (bool) false;
 
-        // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B1D begin
+        
         $returnValue = @is_writable($this->getLocation());
-        // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B1D end
+        
 
         return (bool) $returnValue;
     }
@@ -258,9 +258,9 @@ class common_configuration_FileSystemComponent
     {
         $returnValue = (bool) false;
 
-        // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B1F begin
+        
         $returnValue = @is_executable($this->getLocation());
-        // section -64--88-56-1--47c93c5c:1389911de50:-8000:0000000000001B1F end
+        
 
         return (bool) $returnValue;
     }

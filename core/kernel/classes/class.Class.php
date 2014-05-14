@@ -137,11 +137,11 @@ class core_kernel_classes_Class
     {
         $returnValue = null;
 
-        // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000978 begin
+        
 		
         $returnValue = $this->getImplementation()->setInstance($this, $instance);
         
-        // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000978 end
+        
 
         return $returnValue;
     }
@@ -185,9 +185,9 @@ class core_kernel_classes_Class
      */
     public function __construct($uri, $debug = '')
     {
-        // section 10-5-2-6-d9cdd2e:11b0c43cdd8:-8000:0000000000000D4D begin
+        
 		parent::__construct($uri, $debug);
-        // section 10-5-2-6-d9cdd2e:11b0c43cdd8:-8000:0000000000000D4D end
+        
     }
 
 
@@ -206,11 +206,11 @@ class core_kernel_classes_Class
     {
         $returnValue = null;
 
-        // section 10-13-1--99-5d680c37:11e406b020f:-8000:0000000000000F23 begin
+        
 		
         $returnValue = $this->getImplementation()->createInstance($this, $label, $comment, $uri);
 
-        // section 10-13-1--99-5d680c37:11e406b020f:-8000:0000000000000F23 end
+        
 
         return $returnValue;
     }
@@ -229,11 +229,11 @@ class core_kernel_classes_Class
     {
         $returnValue = null;
 
-        // section 10-13-1--99-3835caab:11e45736d24:-8000:0000000000000F2A begin
+        
 		
         $returnValue = $this->getImplementation()->createSubClass($this, $label, $comment, $uri);
         
-        // section 10-13-1--99-3835caab:11e45736d24:-8000:0000000000000F2A end
+        
 
         return $returnValue;
     }
@@ -252,11 +252,11 @@ class core_kernel_classes_Class
     {
         $returnValue = null;
 
-        // section 10-13-1--99--47c96501:11e4ab45b34:-8000:0000000000000F34 begin
+        
 		
         $returnValue = $this->getImplementation()->createProperty($this, $label, $comment, $isLgDependent);
         
-        // section 10-13-1--99--47c96501:11e4ab45b34:-8000:0000000000000F34 end
+        
 
         return $returnValue;
     }

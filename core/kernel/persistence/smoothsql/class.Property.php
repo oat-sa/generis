@@ -60,7 +60,7 @@ class core_kernel_persistence_smoothsql_Property
     {
         $returnValue = array();
 
-        // section 127-0-1-1-7b8668ff:12f77d22c39:-8000:000000000000144D begin
+        
         
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$sqlQuery = "SELECT subject FROM statements WHERE predicate = '" . RDF_SUBPROPERTYOF . "' AND object = '".$resource->getUri()."'";
@@ -75,7 +75,7 @@ class core_kernel_persistence_smoothsql_Property
 			}
 		}
         
-        // section 127-0-1-1-7b8668ff:12f77d22c39:-8000:000000000000144D end
+        
 
         return (array) $returnValue;
     }
@@ -92,11 +92,11 @@ class core_kernel_persistence_smoothsql_Property
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014DB begin
+        
 
         throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         
-        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014DB end
+        
 
         return (bool) $returnValue;
     }
@@ -113,11 +113,11 @@ class core_kernel_persistence_smoothsql_Property
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014DD begin
+        
         
         throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
         
-        // section 127-0-1-1--bedeb7e:12fb15494a5:-8000:00000000000014DD end
+        
 
         return (bool) $returnValue;
     }
@@ -134,9 +134,9 @@ class core_kernel_persistence_smoothsql_Property
     {
         $returnValue = null;
 
-        // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001539 begin
+        
         throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        // section 127-0-1-1-7a0c731b:12fbfab7535:-8000:0000000000001539 end
+        
 
         return $returnValue;
     }
@@ -154,7 +154,7 @@ class core_kernel_persistence_smoothsql_Property
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001641 begin
+        
         
         //delete all values of the property to delete
         if ($deleteReference){
@@ -166,7 +166,7 @@ class core_kernel_persistence_smoothsql_Property
         }
         $returnValue = core_kernel_persistence_smoothsql_Resource::singleton()->delete($resource, $deleteReference);
         
-        // section 127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001641 end
+        
 
         return (bool) $returnValue;
     }
@@ -184,10 +184,10 @@ class core_kernel_persistence_smoothsql_Property
     {
         $returnValue = null;
 
-        // section 10-13-1-85-36aaae10:13bad44a267:-8000:0000000000001E25 begin
+        
         $rangeProp = new core_kernel_classes_Property(RDFS_RANGE, __METHOD__);
         $returnValue = $resource->setPropertyValue($rangeProp, $class->getUri());
-        // section 10-13-1-85-36aaae10:13bad44a267:-8000:0000000000001E25 end
+        
 
         return $returnValue;
     }
@@ -203,12 +203,12 @@ class core_kernel_persistence_smoothsql_Property
      */
     public function setMultiple( core_kernel_classes_Resource $resource, $isMultiple)
     {
-        // section 10-13-1-85-71dc1cdd:13bade8452c:-8000:0000000000001E32 begin
+        
     	$multipleProperty = new core_kernel_classes_Property(PROPERTY_MULTIPLE);
         $value = ((bool)$isMultiple) ?  GENERIS_TRUE : GENERIS_FALSE ;
         core_kernel_persistence_smoothsql_Resource::singleton()->removePropertyValues($resource, $multipleProperty);
         core_kernel_persistence_smoothsql_Resource::singleton()->setPropertyValue($resource, $multipleProperty, $value);
-        // section 10-13-1-85-71dc1cdd:13bade8452c:-8000:0000000000001E32 end
+        
     }
 
     /**
@@ -222,12 +222,12 @@ class core_kernel_persistence_smoothsql_Property
      */
     public function setLgDependent( core_kernel_classes_Resource $resource, $isLgDependent)
     {
-        // section 10-13-1-85-4a20f448:13bdca46e9a:-8000:0000000000001E45 begin
+        
     	$lgDependentProperty = new core_kernel_classes_Property(PROPERTY_IS_LG_DEPENDENT,__METHOD__);
         $value = ((bool)$isLgDependent) ?  GENERIS_TRUE : GENERIS_FALSE ;
         core_kernel_persistence_smoothsql_Resource::singleton()->removePropertyValues($resource, $lgDependentProperty);
         core_kernel_persistence_smoothsql_Resource::singleton()->setPropertyValue($resource, $lgDependentProperty, $value);
-        // section 10-13-1-85-4a20f448:13bdca46e9a:-8000:0000000000001E45 end
+        
     }
 
     /**
@@ -241,14 +241,14 @@ class core_kernel_persistence_smoothsql_Property
     {
         $returnValue = null;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001497 begin
+        
 
 		if (core_kernel_persistence_smoothsql_Property::$instance == null){
 			core_kernel_persistence_smoothsql_Property::$instance = new core_kernel_persistence_smoothsql_Property();
 		}
 		$returnValue = core_kernel_persistence_smoothsql_Property::$instance;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:0000000000001497 end
+        
 
         return $returnValue;
     }
@@ -265,11 +265,11 @@ class core_kernel_persistence_smoothsql_Property
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F51 begin
+        
 
 		$returnValue = true;
 
-        // section 127-0-1-1--6705a05c:12f71bd9596:-8000:0000000000001F51 end
+        
 
         return (bool) $returnValue;
     }

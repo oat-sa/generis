@@ -47,13 +47,13 @@ class common_exception_UniqueFileResource
      */
     public function __construct( core_kernel_file_File $resource)
     {
-        // section 127-0-1-1-602f558a:134cbda6031:-8000:0000000000001900 begin
+        
 
         $path = $resource->getAbsolutePath();
         $message = 'A resource file ('.$resource->getUri().') has already been defined for the path ('.$path.')';
         parent::__construct($resource, $message);
         
-        // section 127-0-1-1-602f558a:134cbda6031:-8000:0000000000001900 end
+        
     }
 
 } /* end of class common_exception_UniqueFileResource */

@@ -47,7 +47,7 @@ class core_kernel_rules_Term
      */
     public function evaluate($variable = array())
     {
-        // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DBD begin
+        
       	common_Logger::i('Evaluating Term uri : '. $this->getUri(), array('Generis Term'));
       	common_Logger::i('Evaluating Term name : '. $this->getLabel(), array('Generis Term'));
 		$termType = $this->getUniquePropertyValue(new core_kernel_classes_Property(RDF_TYPE));
@@ -83,7 +83,7 @@ class core_kernel_rules_Term
     	}
     	
 		return $returnValue;
-        // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DBD end
+        
     }
 
 
@@ -101,7 +101,7 @@ class core_kernel_rules_Term
     {
         $returnValue = null;
 
-        // section 10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EBA begin
+        
     	if($setOperator->getUri() == INSTANCE_OPERATOR_UNION) {
 			$returnValue = $actualSet->union($newSet);
     	}
@@ -111,7 +111,7 @@ class core_kernel_rules_Term
     	else {
     		throw new common_Exception('unknow set operator');
 		}
-        // section 10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EBA end
+        
 
         return $returnValue;
     }
@@ -126,7 +126,7 @@ class core_kernel_rules_Term
      */
     protected function evaluateSPX($variable = array())
     {
-        // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015BC begin
+        
     	common_Logger::d('SPX TYPE', array('Generis Term evaluateSPX'));
     	$resource = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_TERM_SPX_SUBJET));
     	if($resource instanceof core_kernel_classes_Resource){
@@ -176,7 +176,7 @@ class core_kernel_rules_Term
        		
     	}
     	return $returnValue;
-        // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015BC end
+        
     }
 
     /**
@@ -188,7 +188,7 @@ class core_kernel_rules_Term
      */
     protected function evaluateXPO()
     {
-        // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015BF begin
+        
         common_Logger::d('XPO TYPE', array('Generis Term evaluateXPO'));
 		$classTerm = new core_kernel_classes_Class(CLASS_TERM_X_PREDICATE_OBJECT);
 		$obj = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_TERM_XPO_OBJECT));
@@ -206,7 +206,7 @@ class core_kernel_rules_Term
 			$returnValue->add($term);
 		}
     	return $returnValue;
-        // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015BF end
+        
     }
 
     /**
@@ -218,7 +218,7 @@ class core_kernel_rules_Term
      */
     protected function evaluateSet()
     {
-        // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015C1 begin
+        
         common_Logger::d('Constructed Set TYPE', array('Generis Term evaluateSet'));
     	$operator = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_SET_OPERATOR));
     	$subSets = $this->getPropertyValuesCollection(new core_kernel_classes_Property(PROPERTY_SUBSET));
@@ -245,7 +245,7 @@ class core_kernel_rules_Term
     	}    		
     	
     	return $returnValue;
-        // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015C1 end
+        
     }
 
     /**
@@ -257,11 +257,11 @@ class core_kernel_rules_Term
      */
     protected function evaluateConst()
     {
-        // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015C3 begin
+        
         common_Logger::d('CONSTANTE TYPE', array('Generis Term evaluateConst'));
 	    $property = new core_kernel_classes_Property(PROPERTY_TERM_VALUE);
 	    return $this->getUniquePropertyValue($property); 
-        // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015C3 end
+        
     }
 
     /**
@@ -274,10 +274,10 @@ class core_kernel_rules_Term
      */
     protected function evaluateOperation($variable = array())
     {
-        // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015C5 begin
+        
         common_Logger::d('OPERATION TYPE', array('Generis Term evaluateOperation'));
     	return $this->evaluateArithmOperation($variable);
-        // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015C5 end
+        
     }
 
     /**
@@ -290,10 +290,10 @@ class core_kernel_rules_Term
      */
     public function evaluateArithmOperation($variable = array())
     {
-        // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015CA begin
+        
         $operation = new core_kernel_rules_Operation($this->getUri(), __METHOD__);
     	return  $operation->evaluate($variable);
-        // section 10-13-1-85-7aec1e58:1201f62f271:-8000:00000000000015CA end
+        
     }
 
 } /* end of class core_kernel_rules_Term */

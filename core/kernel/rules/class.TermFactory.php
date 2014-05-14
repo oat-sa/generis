@@ -48,7 +48,7 @@ class core_kernel_rules_TermFactory
     {
         $returnValue = null;
 
-        // section 10-13-1--99-2335bfbb:1207fc834f5:-8000:0000000000001757 begin
+        
         $termConstClass = new core_kernel_classes_Class(CLASS_TERM_CONST,__METHOD__); 
 		$termValueProperty = new core_kernel_classes_Property(PROPERTY_TERM_VALUE,__METHOD__);
 		$logicalOperatorProperty = new core_kernel_classes_Property(PROPERTY_HASLOGICALOPERATOR,__METHOD__);
@@ -62,7 +62,7 @@ class core_kernel_rules_TermFactory
 		$returnValue->setPropertyValue($logicalOperatorProperty,INSTANCE_EXISTS_OPERATOR_URI);
 		$returnValue->setPropertyValue($termValueProperty,$constant);
 		$returnValue->debug = __METHOD__;
-        // section 10-13-1--99-2335bfbb:1207fc834f5:-8000:0000000000001757 end
+        
 
         return $returnValue;
     }
@@ -80,7 +80,7 @@ class core_kernel_rules_TermFactory
     {
         $returnValue = null;
 
-        // section 10-13-1--99-2335bfbb:1207fc834f5:-8000:000000000000175A begin
+        
         $termSPXClass = new core_kernel_classes_Class(CLASS_TERM_SUJET_PREDICATE_X,__METHOD__);
 		$label = 'Def Term SPX Label : ' .$subject->getLabel() . ' - ' . $predicate->getLabel();
 		$comment = 'Def Term SPX Label : ' .$subject->getUri() . ' ' . $predicate->getUri();
@@ -91,7 +91,7 @@ class core_kernel_rules_TermFactory
 		$predicateProperty = new core_kernel_classes_Property(PROPERTY_TERM_SPX_PREDICATE,__METHOD__);
      	$returnValue->setPropertyValue($subjectProperty,$subject->getUri());
      	$returnValue->setPropertyValue($predicateProperty,$predicate->getUri());
-        // section 10-13-1--99-2335bfbb:1207fc834f5:-8000:000000000000175A end
+        
 
         return $returnValue;
     }

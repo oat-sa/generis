@@ -60,10 +60,10 @@ class common_configuration_Mock
      */
     public function __construct($expectedStatus, $name)
     {
-        // section 10-13-1-85--ca6619b:13af946abe3:-8000:0000000000001C78 begin
+        
         $this->setExpectedStatus($expectedStatus);
         $this->setName($name);
-        // section 10-13-1-85--ca6619b:13af946abe3:-8000:0000000000001C78 end
+        
     }
 
     /**
@@ -75,11 +75,11 @@ class common_configuration_Mock
      */
     public function check()
     {
-        // section 10-13-1-85--ca6619b:13af946abe3:-8000:0000000000001C7C begin
+        
         $message = 'Mock configuration report.';
         $report = new common_configuration_Report($this->getExpectedStatus(), $message, $this);
         return $report;
-        // section 10-13-1-85--ca6619b:13af946abe3:-8000:0000000000001C7C end
+        
     }
 
     /**
@@ -94,9 +94,9 @@ class common_configuration_Mock
     {
         $returnValue = (int) 0;
 
-        // section 10-13-1-85--ca6619b:13af946abe3:-8000:0000000000001C83 begin
+        
         $returnValue = $this->expectedStatus;
-        // section 10-13-1-85--ca6619b:13af946abe3:-8000:0000000000001C83 end
+        
 
         return (int) $returnValue;
     }
@@ -111,9 +111,9 @@ class common_configuration_Mock
      */
     public function setExpectedStatus($expectedStatus)
     {
-        // section 10-13-1-85--ca6619b:13af946abe3:-8000:0000000000001C87 begin
+        
         $this->expectedStatus = $expectedStatus;
-        // section 10-13-1-85--ca6619b:13af946abe3:-8000:0000000000001C87 end
+        
     }
 
 } /* end of class common_configuration_Mock */

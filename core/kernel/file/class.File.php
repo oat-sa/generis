@@ -49,9 +49,9 @@ class core_kernel_file_File
     {
         $returnValue = null;
 
-        // section 10-30-1--78--1698032:13afe62e559:-8000:00000000000030B4 begin
+        
         $returnValue = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
-        // section 10-30-1--78--1698032:13afe62e559:-8000:00000000000030B4 end
+        
 
         return $returnValue;
     }
@@ -80,7 +80,7 @@ class core_kernel_file_File
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001367 begin
+        
 	    $props = $this->getPropertiesValues(array(
 	    	new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH),
 	    	new core_kernel_classes_Property(PROPERTY_FILE_FILENAME),
@@ -110,7 +110,7 @@ class core_kernel_file_File
         } else {
 	        $returnValue = $path . $fileName;
         }
-        // section 127-0-1-1-128d31a3:12bab34f1f7:-8000:0000000000001367 end
+        
 
         return (string) $returnValue;
     }
@@ -124,12 +124,12 @@ class core_kernel_file_File
      */
     public function getFileContent()
     {
-        // section 127-0-1-1--77b1997d:12bf34c2951:-8000:0000000000001386 begin
+        
         if (!file_exists($this->getAbsolutePath())){
         	throw new common_exception_FileSystemError(__('File not found '.$this->getAbsolutePath()));
         }
     	return @file_get_contents($this->getAbsolutePath());
-        // section 127-0-1-1--77b1997d:12bf34c2951:-8000:0000000000001386 end
+        
     }
     
     /**
@@ -165,7 +165,7 @@ class core_kernel_file_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001672 begin
+        
         /*if(file_exists($this->getAbsolutePath())){
         	if (!@unlink($this->getAbsolutePath())){
         		throw new Exception(__('Unable to remove the file '.$this->getAbsolutePath()));
@@ -173,7 +173,7 @@ class core_kernel_file_File
         }*/
         parent::delete($deleteReference);
         $returnValue = true;
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001672 end
+        
 
         return (bool) $returnValue;
     }
@@ -187,9 +187,9 @@ class core_kernel_file_File
      */
     public function getFileInfo()
     {
-        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001671 begin
+        
     	return new SplFileInfo($this->getAbsolutePath());
-        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001671 end
+        
     }
 
     /**
@@ -204,7 +204,7 @@ class core_kernel_file_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001675 begin
+        
         
         $filePath = $this->getAbsolutePath();
         $path = explode(DIRECTORY_SEPARATOR, dirname($filePath));
@@ -222,7 +222,7 @@ class core_kernel_file_File
             $returnValue = true;
         }
         
-        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001675 end
+        
 
         return (bool) $returnValue;
     }
@@ -238,9 +238,9 @@ class core_kernel_file_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016EB begin
+        
         $returnValue = file_exists($this->getAbsolutePath());        
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016EB end
+        
 
         return (bool) $returnValue;
     }

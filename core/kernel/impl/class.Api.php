@@ -54,13 +54,13 @@ class core_kernel_impl_Api
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--31--1e8cf08b:11927b92513:-8000:00000000000009AF begin
+        
         if($role === true) {
         	$role = new core_kernel_classes_Resource(INSTANCE_ROLE_GLOBALMANAGER);
         }
        
         core_kernel_users_Service::singleton()->login($login, $password, $role);
-        // section 10-13-1--31--1e8cf08b:11927b92513:-8000:00000000000009AF end
+        
 
         return (bool) $returnValue;
     }
@@ -76,9 +76,9 @@ class core_kernel_impl_Api
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--31--1e8cf08b:11927b92513:-8000:00000000000009B5 begin
+        
         core_kernel_users_Service::singleton()->logout();
-        // section 10-13-1--31--1e8cf08b:11927b92513:-8000:00000000000009B5 end
+        
 
         return (bool) $returnValue;
     }

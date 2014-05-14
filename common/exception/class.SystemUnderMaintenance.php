@@ -47,9 +47,9 @@ class common_exception_SystemUnderMaintenance
      */
     public function __construct()
     {
-        // section 127-0-1-1--4a441dc4:135c963290f:-8000:0000000000001961 begin
+        
         parent::__construct(__('TAO is under maintenance'));
-        // section 127-0-1-1--4a441dc4:135c963290f:-8000:0000000000001961 end
+        
     }
 
 } /* end of class common_exception_SystemUnderMaintenance */

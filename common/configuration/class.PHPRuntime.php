@@ -49,7 +49,7 @@ class common_configuration_PHPRuntime
     {
         $returnValue = null;
 
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AD9 begin
+        
         $validity = null;
         $message = null;
         $min = $this->getMin();
@@ -89,7 +89,7 @@ class common_configuration_PHPRuntime
         }
         
         $returnValue = new common_configuration_Report($validity, $message, $this);
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AD9 end
+        
 
         return $returnValue;
     }
@@ -105,9 +105,9 @@ class common_configuration_PHPRuntime
     {
         $returnValue = (string) '';
 
-        // section -64--88-56-1-1c6f58d0:1389fa4346a:-8000:0000000000001B2E begin
+        
         $returnValue = phpversion();
-        // section -64--88-56-1-1c6f58d0:1389fa4346a:-8000:0000000000001B2E end
+        
 
         return (string) $returnValue;
     }
@@ -124,9 +124,9 @@ class common_configuration_PHPRuntime
      */
     public function __construct($min, $max, $optional = false)
     {
-        // section 10-13-1-85-3dfb9289:13b0907d621:-8000:0000000000001CF4 begin
+        
         parent::__construct($min, $max, 'tao.configuration.phpruntime', $optional);
-        // section 10-13-1-85-3dfb9289:13b0907d621:-8000:0000000000001CF4 end
+        
     }
 
 } /* end of class common_configuration_PHPRuntime */

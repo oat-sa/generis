@@ -98,7 +98,7 @@ class common_configuration_ComponentCollection
      */
     public function addComponent( common_configuration_Component $component)
     {
-        // section 10-13-1-85--478659bd:13afeb85455:-8000:0000000000001C95 begin
+        
         $components = $this->getComponents();
         
         // Search for a similar...
@@ -113,7 +113,7 @@ class common_configuration_ComponentCollection
         $components[] = $component;
         $this->setComponents($components);
         
-        // section 10-13-1-85--478659bd:13afeb85455:-8000:0000000000001C95 end
+        
     }
 
     /**
@@ -127,7 +127,7 @@ class common_configuration_ComponentCollection
      */
     public function addDependency( common_configuration_Component $component,  common_configuration_Component $dependency)
     {
-        // section 10-13-1-85--478659bd:13afeb85455:-8000:0000000000001CA8 begin
+        
         $dependencies = $this->getDependencies();
         
     	$found = false;
@@ -142,7 +142,7 @@ class common_configuration_ComponentCollection
         	$dependencies[] = array('component' => $dependency, 'isDependencyOf' => $component);
         	$this->setDependencies($dependencies);
         }
-        // section 10-13-1-85--478659bd:13afeb85455:-8000:0000000000001CA8 end
+        
     }
 
     /**
@@ -154,12 +154,12 @@ class common_configuration_ComponentCollection
      */
     public function reset()
     {
-        // section 10-13-1-85--478659bd:13afeb85455:-8000:0000000000001C97 begin
+        
         $this->setComponents(array());
         $this->setDependencies(array());
         $this->setCheckedComponents(array());
         $this->setSilentComponents(array());
-        // section 10-13-1-85--478659bd:13afeb85455:-8000:0000000000001C97 end
+        
     }
 
     /**
@@ -173,7 +173,7 @@ class common_configuration_ComponentCollection
     {
         $returnValue = array();
 
-        // section 10-13-1-85--478659bd:13afeb85455:-8000:0000000000001C9D begin
+        
         // Reset what should be reset for another check on the same instance.
         $this->setCheckedComponents(array());
         $this->setReports(array());
@@ -240,7 +240,7 @@ class common_configuration_ComponentCollection
 	        }
 		}
         
-        // section 10-13-1-85--478659bd:13afeb85455:-8000:0000000000001C9D end
+        
 
         return (array) $returnValue;
     }
@@ -256,7 +256,7 @@ class common_configuration_ComponentCollection
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CAE begin
+        
         
         // To detect if the dependency graph is acyclic or not,
     	// we first perform a usual Topological Sorting algorithm.
@@ -312,7 +312,7 @@ class common_configuration_ComponentCollection
     	}
     	
     	$returnValue = count($dependencies) == 0;
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CAE end
+        
 
         return (bool) $returnValue;
     }
@@ -329,14 +329,14 @@ class common_configuration_ComponentCollection
     {
         $returnValue = array();
 
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CB0 begin
+        
     	$dependencies = $this->dependencies;
     	foreach($dependencies as $d){
     		if ($d['component'] === $component){
     			array_push($returnValue, $d);
     		}
     	}
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CB0 end
+        
 
         return (array) $returnValue;
     }
@@ -352,7 +352,7 @@ class common_configuration_ComponentCollection
     {
         $returnValue = array();
 
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CB3 begin
+        
     	// Sort the checked components to make them ordered in the same
         // way the related components where added.
         $components = $this->getComponents();
@@ -367,7 +367,7 @@ class common_configuration_ComponentCollection
         
         
         $returnValue = $checkedComponents;
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CB3 end
+        
 
         return (array) $returnValue;
     }
@@ -383,7 +383,7 @@ class common_configuration_ComponentCollection
     {
         $returnValue = array();
 
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CB5 begin
+        
         $rootMock = $this->getRootComponent();
     	foreach($this->getComponents() as $c){
     		if (false === in_array($c, $this->getCheckedComponents()) && $c !== $rootMock){
@@ -404,7 +404,7 @@ class common_configuration_ComponentCollection
         }
         
         $returnValue = $uncheckedComponents;
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CB5 end
+        
 
         return (array) $returnValue;
     }
@@ -422,13 +422,13 @@ class common_configuration_ComponentCollection
     {
         $returnValue = array();
 
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CB7 begin
+        
     	foreach ($transitions as $t){
     		array_push($stack, $t);
     	}
     	
     	$returnValue = $stack;
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CB7 end
+        
 
         return (array) $returnValue;
     }
@@ -443,9 +443,9 @@ class common_configuration_ComponentCollection
      */
     public function setComponents($components)
     {
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CBB begin
+        
         $this->components = $components;
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CBB end
+        
     }
 
     /**
@@ -459,9 +459,9 @@ class common_configuration_ComponentCollection
     {
         $returnValue = array();
 
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CBE begin
+        
         $returnValue = $this->components;
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CBE end
+        
 
         return (array) $returnValue;
     }
@@ -476,9 +476,9 @@ class common_configuration_ComponentCollection
      */
     private function setCheckedComponents($checkedComponents)
     {
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CC0 begin
+        
         $this->checkedComponents = $checkedComponents;
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CC0 end
+        
     }
 
     /**
@@ -491,9 +491,9 @@ class common_configuration_ComponentCollection
      */
     private function setDependencies($dependencies)
     {
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CC3 begin
+        
         $this->dependencies = $dependencies;
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CC3 end
+        
     }
 
     /**
@@ -507,9 +507,9 @@ class common_configuration_ComponentCollection
     {
         $returnValue = array();
 
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CC6 begin
+        
         $returnValue = $this->dependencies;
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CC6 end
+        
 
         return (array) $returnValue;
     }
@@ -524,9 +524,9 @@ class common_configuration_ComponentCollection
      */
     private function setReports($reports)
     {
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CC8 begin
+        
         $this->reports = $reports;
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CC8 end
+        
     }
 
     /**
@@ -540,7 +540,7 @@ class common_configuration_ComponentCollection
     {
         $returnValue = array();
 
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CCB begin
+        
         if (count($this->reports) == 0){
         	return $returnValue;
         }
@@ -559,7 +559,7 @@ class common_configuration_ComponentCollection
         }
         
         $returnValue = $reports;
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CCB end
+        
 
         return (array) $returnValue;
     }
@@ -574,9 +574,9 @@ class common_configuration_ComponentCollection
      */
     private function addReport( common_configuration_Report $report)
     {
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CCD begin
+        
         array_push($this->reports, $report);
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CCD end
+        
     }
 
     /**
@@ -589,11 +589,11 @@ class common_configuration_ComponentCollection
      */
     private function componentChecked( common_configuration_Component $component)
     {
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CD0 begin
+        
         if ($component !== $this->getRootComponent()){
         	array_push($this->checkedComponents, $component);
         }
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CD0 end
+        
     }
 
     /**
@@ -608,7 +608,7 @@ class common_configuration_ComponentCollection
     {
         $returnValue = (int) 0;
 
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CD3 begin
+        
         $report = $component->check(); // Check the node.
 	    $this->componentChecked($component); // Mark the node as 'checked'.
 	    
@@ -618,7 +618,7 @@ class common_configuration_ComponentCollection
 	    }
 	    
 	    $returnValue = $report->getStatus();
-        // section 10-13-1-85--28000a38:13b0433526f:-8000:0000000000001CD3 end
+        
 
         return (int) $returnValue;
     }
@@ -634,9 +634,9 @@ class common_configuration_ComponentCollection
     {
         $returnValue = array();
 
-        // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CD9 begin
+        
         $returnValue = $this->silentComponents;
-        // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CD9 end
+        
 
         return (array) $returnValue;
     }
@@ -651,9 +651,9 @@ class common_configuration_ComponentCollection
      */
     private function setSilentComponents($silentComponents)
     {
-        // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CDB begin
+        
         $this->silentComponents = $silentComponents;
-        // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CDB end
+        
     }
 
     /**
@@ -666,7 +666,7 @@ class common_configuration_ComponentCollection
      */
     public function silent( common_configuration_Component $component)
     {
-        // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CDE begin
+        
         $silentComponents = $this->getSilentComponents();
         foreach ($silentComponents as $silent){
         	if ($silent === $component){
@@ -676,7 +676,7 @@ class common_configuration_ComponentCollection
         
         $silentComponents[] = $component;
         $this->setSilentComponents($silentComponents);
-        // section 10-13-1-85--679af6fa:13b04699c03:-8000:0000000000001CDE end
+        
     }
 
     /**
@@ -689,7 +689,7 @@ class common_configuration_ComponentCollection
      */
     public function noisy( common_configuration_Component $component)
     {
-        // section 10-13-1-85--5a4dc0f:13b04700805:-8000:0000000000001CE1 begin
+        
         $silentComponents = $this->getSilentComponents();
         
         foreach ($silentComponents as $k => $silent){
@@ -699,7 +699,7 @@ class common_configuration_ComponentCollection
         }
         
         $this->setSilentComponents($silentComponents);
-        // section 10-13-1-85--5a4dc0f:13b04700805:-8000:0000000000001CE1 end
+        
     }
 
     /**
@@ -714,9 +714,9 @@ class common_configuration_ComponentCollection
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85--49d83475:13b04767aaf:-8000:0000000000001CE4 begin
+        
         $returnValue = in_array($component, $this->getSilentComponents());
-        // section 10-13-1-85--49d83475:13b04767aaf:-8000:0000000000001CE4 end
+        
 
         return (bool) $returnValue;
     }
@@ -733,9 +733,9 @@ class common_configuration_ComponentCollection
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85--2caf879e:13b048739e9:-8000:0000000000001CE7 begin
+        
         $returnValue = !in_array($component, $this->getSilentComponents());
-        // section 10-13-1-85--2caf879e:13b048739e9:-8000:0000000000001CE7 end
+        
 
         return (bool) $returnValue;
     }
@@ -749,7 +749,7 @@ class common_configuration_ComponentCollection
      */
     public function __construct()
     {
-        // section 10-13-1-85-34a1d86b:13b04927ae9:-8000:0000000000001CEA begin
+        
         
         // A mock root check on which any added component has a dependence. The goal
         // of this is to make sure that components will not stay alone with no
@@ -758,7 +758,7 @@ class common_configuration_ComponentCollection
         $root = new common_configuration_Mock($rootStatus, 'tao.dependencies.root');
         $this->setRootComponent($root);
     	
-        // section 10-13-1-85-34a1d86b:13b04927ae9:-8000:0000000000001CEA end
+        
     }
 
     /**
@@ -771,13 +771,13 @@ class common_configuration_ComponentCollection
      */
     private function setRootComponent( common_configuration_Component $component)
     {
-        // section 10-13-1-85--42a1af85:13b049949ca:-8000:0000000000001CEF begin�
+        
         $this->rootComponent = $component;
         $components = $this->getComponents();
         $components[] = $component;
         $this->setComponents($components);
         $this->silent($component);
-        // section 10-13-1-85--42a1af85:13b049949ca:-8000:0000000000001CEF end
+        
     }
 
     /**
@@ -791,9 +791,9 @@ class common_configuration_ComponentCollection
     {
         $returnValue = null;
 
-        // section 10-13-1-85--42a1af85:13b049949ca:-8000:0000000000001CF2 begin
+        
         $returnValue = $this->rootComponent;
-        // section 10-13-1-85--42a1af85:13b049949ca:-8000:0000000000001CF2 end
+        
 
         return $returnValue;
     }

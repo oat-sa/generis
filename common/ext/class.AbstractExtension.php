@@ -46,8 +46,8 @@ abstract class common_ext_AbstractExtension
      */
     public function getAuthor()
     {
-        // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017A6 begin
-        // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017A6 end
+        
+        
     }
 
     /**
@@ -59,8 +59,8 @@ abstract class common_ext_AbstractExtension
      */
     public function getName()
     {
-        // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017A2 begin
-        // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017A2 end
+        
+        
     }
 
     /**
@@ -72,9 +72,9 @@ abstract class common_ext_AbstractExtension
      */
     public function getRequiredExtensions()
     {
-        // section -87--2--3--76--959adf5:123ebfc12cd:-8000:000000000000179A begin
+        
 
-        // section -87--2--3--76--959adf5:123ebfc12cd:-8000:000000000000179A end
+        
     }
 
     /**
@@ -86,8 +86,8 @@ abstract class common_ext_AbstractExtension
      */
     public function getVersion()
     {
-        // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017A4 begin
-        // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017A4 end
+        
+        
     }
 
 } /* end of abstract class common_ext_AbstractExtension */

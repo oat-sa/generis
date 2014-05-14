@@ -65,9 +65,9 @@ class core_kernel_versioning_Repository
     {
         $returnValue = null;
 
-        // section 127-0-1-1--548d6005:132d344931b:-8000:000000000000251D begin
+        
         $returnValue = core_kernel_fileSystem_FileSystemFactory::createFileSystem($type, $url, $login, $password, $path, $label);
-        // section 127-0-1-1--548d6005:132d344931b:-8000:000000000000251D end
+        
 
         return $returnValue;
     }
@@ -84,7 +84,7 @@ class core_kernel_versioning_Repository
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--548d6005:132d344931b:-8000:000000000000251A begin
+        
         $VersioningRepositoryUrlProp = new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL);
 		$url = (string)$this->getOnePropertyValue($VersioningRepositoryUrlProp);
 		
@@ -95,7 +95,7 @@ class core_kernel_versioning_Repository
         	$returnValue = core_kernel_versioning_RepositoryProxy::singleton()->checkout($this, $url, $path, $revision);
 //        }
         
-        // section 127-0-1-1--548d6005:132d344931b:-8000:000000000000251A end
+        
 
         return (bool) $returnValue;
     }
@@ -111,9 +111,9 @@ class core_kernel_versioning_Repository
     {
         $returnValue = null;
 
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016D7 begin
+        
         $returnValue = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE));
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016D7 end
+        
 
         return $returnValue;
     }
@@ -129,9 +129,9 @@ class core_kernel_versioning_Repository
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016D9 begin
+        
         $returnValue = core_kernel_fileSystem_Cache::getFileSystemPath($this);
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016D9 end
+        
 
         return (string) $returnValue;
     }
@@ -147,7 +147,7 @@ class core_kernel_versioning_Repository
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016EB begin
+        
           
         if($this->authenticated){
         	
@@ -165,7 +165,7 @@ class core_kernel_versioning_Repository
 
         }
 		
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016EB end
+        
 
         return (bool) $returnValue;
     }
@@ -184,7 +184,7 @@ class core_kernel_versioning_Repository
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F7 begin
+        
         
         $path = $this->getPath();
         /* remove the resource implies other consequence, do not remove 
@@ -196,7 +196,7 @@ class core_kernel_versioning_Repository
         $returnValue = parent::delete();
 		core_kernel_fileSystem_Cache::flushCache();
         
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F7 end
+        
 
         return (bool) $returnValue;
     }
@@ -215,9 +215,9 @@ class core_kernel_versioning_Repository
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:00000000000028FD begin
+        
         $returnValue = core_kernel_versioning_RepositoryProxy::singleton()->export($this, $src, $target, $revision);
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:00000000000028FD end
+        
 
         return (bool) $returnValue;
     }
@@ -239,7 +239,7 @@ class core_kernel_versioning_Repository
     {
         $returnValue = null;
 
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002904 begin
+        
         //the src has to be a folder for the moment
         if(!is_dir($src)){
             throw new core_kernel_versioning_exception_Exception('The first parameter has to be a valid folder');
@@ -252,7 +252,7 @@ class core_kernel_versioning_Repository
         
         $returnValue = core_kernel_versioning_RepositoryProxy::singleton()->import($this, $src, $target, $message, $options);
         
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002904 end
+        
 
         return $returnValue;
     }
@@ -270,9 +270,9 @@ class core_kernel_versioning_Repository
     {
         $returnValue = array();
 
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002908 begin
+        
         $returnValue = core_kernel_versioning_RepositoryProxy::singleton()->listContent($this, $path, $revision);
-        // section 127-0-1-1--7db71b94:134477a2b9c:-8000:0000000000002908 end
+        
 
         return (array) $returnValue;
     }
@@ -288,11 +288,11 @@ class core_kernel_versioning_Repository
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1-6006a946:134f026c0e2:-8000:00000000000018FF begin
+        
         
         $returnValue = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL));
         
-        // section 127-0-1-1-6006a946:134f026c0e2:-8000:00000000000018FF end
+        
 
         return (string) $returnValue;
     }
@@ -308,7 +308,7 @@ class core_kernel_versioning_Repository
     {
         $returnValue = (bool) false;
 
-        // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F63 begin
+        
         if ($this->authenticate()) {
         	if($this->checkout()){
         		// has root file?
@@ -327,7 +327,7 @@ class core_kernel_versioning_Repository
         		$returnValue = true;
         	}
         }
-        // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F63 end
+        
 
         return (bool) $returnValue;
     }
@@ -343,7 +343,7 @@ class core_kernel_versioning_Repository
     {
         $returnValue = (bool) false;
 
-        // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F65 begin
+        
         $classVersionedFiles = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
         $files = $classVersionedFiles->searchInstances(array(
         	PROPERTY_FILE_FILESYSTEM => $this
@@ -364,7 +364,7 @@ class core_kernel_versioning_Repository
         } else {
 			common_Logger::w("The remote versioning repository ".$this->getUri()." could not be disabled, because it is in use by ".$file->getUri());
         }
-        // section 10-30-1--78-1b01f2ef:13ac03fd34f:-8000:0000000000004F65 end
+        
 
         return (bool) $returnValue;
     }
@@ -380,7 +380,7 @@ class core_kernel_versioning_Repository
     {
         $returnValue = null;
 
-        // section 10-30-1--78-6daf7732:13aff506135:-8000:0000000000001CA6 begin
+        
         $rootFiles = $this->getPropertyValues(new core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_ROOTFILE));
         if (count($rootFiles) == 1) {
         	$returnValue = new core_kernel_versioning_File(current($rootFiles));
@@ -389,7 +389,7 @@ class core_kernel_versioning_Repository
         		throw new common_Exception("Repository ".$this->getLabel()." has multiple root file");
         	}
 		}
-        // section 10-30-1--78-6daf7732:13aff506135:-8000:0000000000001CA6 end
+        
 
         return $returnValue;
     }
@@ -409,7 +409,7 @@ class core_kernel_versioning_Repository
     {
         $returnValue = null;
 
-        // section 127-0-1-1-18201a84:13d170d1914:-8000:0000000000001FD7 begin
+        
         $fileInfo = new SplFileInfo($filePath);
         $fileName = self::createFileName($fileInfo->getFilename());
         
@@ -427,7 +427,7 @@ class core_kernel_versioning_Repository
         		$returnValue->setLabel($label);
         	}
         }
-        // section 127-0-1-1-18201a84:13d170d1914:-8000:0000000000001FD7 end
+        
 
         return $returnValue;
     }
@@ -465,14 +465,14 @@ class core_kernel_versioning_Repository
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1-18201a84:13d170d1914:-8000:0000000000001FE2 begin
+        
         $returnValue = uniqid(hash('crc32', $originalName));
         
         $ext = @pathinfo($originalName, PATHINFO_EXTENSION);
         if (!empty($ext)){
         	$returnValue .= '.' . $ext;
         }
-        // section 127-0-1-1-18201a84:13d170d1914:-8000:0000000000001FE2 end
+        
 
         return (string) $returnValue;
     }

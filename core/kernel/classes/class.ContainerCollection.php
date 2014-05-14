@@ -48,9 +48,9 @@ class core_kernel_classes_ContainerCollection
      */
     public function add( common_Object $element)
     {
-        // section 10-13-1--31-7253183:11993fa4132:-8000:0000000000000ACF begin
+        
         parent::add($element);
-        // section 10-13-1--31-7253183:11993fa4132:-8000:0000000000000ACF end
+        
     }
 
     /**
@@ -64,8 +64,8 @@ class core_kernel_classes_ContainerCollection
     {
         $returnValue = (string) '';
 
-        // section 10-13-1--31--3bf74db1:119c3d777ef:-8000:0000000000000B41 begin
-        // section 10-13-1--31--3bf74db1:119c3d777ef:-8000:0000000000000B41 end
+        
+        
 
         return (string) $returnValue;
     }
@@ -82,10 +82,10 @@ class core_kernel_classes_ContainerCollection
     {
         $returnValue = null;
 
-        // section 10-13-1--99-666b4abd:1205836518e:-8000:00000000000016DC begin
+        
         $returnValue = new core_kernel_classes_ContainerCollection($this);     
         $returnValue->sequence = array_merge($this->sequence, $collection->sequence );      
-        // section 10-13-1--99-666b4abd:1205836518e:-8000:00000000000016DC end
+        
 
         return $returnValue;
     }
@@ -102,10 +102,10 @@ class core_kernel_classes_ContainerCollection
     {
         $returnValue = null;
 
-        // section 10-13-1--99-666b4abd:1205836518e:-8000:00000000000020E1 begin
+        
          $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
          $returnValue->sequence = array_uintersect($this->sequence, $collection->sequence, 'core_kernel_classes_ContainerComparator::compare');
-        // section 10-13-1--99-666b4abd:1205836518e:-8000:00000000000020E1 end
+        
 
         return $returnValue;
     }
@@ -122,7 +122,7 @@ class core_kernel_classes_ContainerCollection
     {
         $returnValue = null;
 
-        // section 10-13-1--99-666b4abd:1205836518e:-8000:00000000000020E4 begin
+        
         $returnValue = -1;
         foreach($this->sequence as $index => $_resource){
         	if ($_resource instanceof  core_kernel_classes_Resource){
@@ -131,7 +131,7 @@ class core_kernel_classes_ContainerCollection
 				}
         	}
 		}
-        // section 10-13-1--99-666b4abd:1205836518e:-8000:00000000000020E4 end
+        
 
         return $returnValue;
     }
@@ -147,9 +147,9 @@ class core_kernel_classes_ContainerCollection
     {
         $returnValue = (string) '';
 
-        // section 10-13-1--99--150f74b9:12066be2698:-8000:000000000000172C begin
+        
         $returnValue = 'Collection containning ' . $this->count() . ' elements' ;
-        // section 10-13-1--99--150f74b9:12066be2698:-8000:000000000000172C end
+        
 
         return (string) $returnValue;
     }

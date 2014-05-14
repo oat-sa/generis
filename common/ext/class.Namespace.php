@@ -63,7 +63,7 @@ class common_ext_Namespace
      */
     public function __construct($id = 0, $uri = '')
     {
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:00000000000015AA begin
+        
         
     	if($id > 0){
     		$this->modelId = $id;
@@ -72,7 +72,7 @@ class common_ext_Namespace
     		$this->uri = $uri;
     	}
     	
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:00000000000015AA end
+        
     }
 
     /**
@@ -86,11 +86,11 @@ class common_ext_Namespace
     {
         $returnValue = (int) 0;
 
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:00000000000015B4 begin
+        
         
         $returnValue = $this->modelId;
         
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:00000000000015B4 end
+        
 
         return (int) $returnValue;
     }
@@ -106,11 +106,11 @@ class common_ext_Namespace
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:00000000000015B6 begin
+        
         
         $returnValue = $this->uri;
         
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:00000000000015B6 end
+        
 
         return (string) $returnValue;
     }
@@ -126,11 +126,11 @@ class common_ext_Namespace
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:00000000000015B8 begin
+        
         
         $returnValue = $this->getUri();
         
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:00000000000015B8 end
+        
 
         return (string) $returnValue;
     }
@@ -147,7 +147,7 @@ class common_ext_Namespace
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85--11334893:135aa33a460:-8000:000000000000193A begin
+        
         $db = core_kernel_classes_DbWrapper::singleton();
         if (false === $db->exec("DELETE FROM statements WHERE modelid = ?", array($this->getModelId()))){
         	$returnValue = false;
@@ -161,7 +161,7 @@ class common_ext_Namespace
         	}
         }
         
-        // section 10-13-1-85--11334893:135aa33a460:-8000:000000000000193A end
+        
 
         return (bool) $returnValue;
     }

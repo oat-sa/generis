@@ -56,9 +56,9 @@ abstract class common_ext_ExtensionHandler
      */
     public function __construct( common_ext_Extension $extension)
     {
-        // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017C6 begin
+        
 		$this->extension = $extension;
-        // section -87--2--3--76--959adf5:123ebfc12cd:-8000:00000000000017C6 end
+        
     }
 
 } /* end of abstract class common_ext_ExtensionHandler */

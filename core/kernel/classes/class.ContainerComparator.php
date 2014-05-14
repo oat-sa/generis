@@ -50,7 +50,7 @@ class core_kernel_classes_ContainerComparator
     {
         $returnValue = (int) 0;
 
-        // section 10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EB4 begin
+        
         if($o1 instanceof core_kernel_classes_Literal && $o2 instanceof core_kernel_classes_Literal) {
         	$returnValue = strcasecmp($o1->literal,$o2->literal);
         }
@@ -60,7 +60,7 @@ class core_kernel_classes_ContainerComparator
         else {
            	throw new common_Exception('try to compared not implemented type');
         }
-        // section 10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EB4 end
+        
 
         return (int) $returnValue;
     }

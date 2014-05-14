@@ -52,9 +52,9 @@ class common_persistence_sql_pdo_pgsql_Driver
      */
     public function getExtraConfiguration()
     {
-        // section 10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC3 begin
+        
     	$returnValue = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
-        // section 10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC3 end
+        
 
         return (array) $returnValue;
     }
@@ -88,9 +88,9 @@ class common_persistence_sql_pdo_pgsql_Driver
      */
     public function afterConnect()
     {
-        // section 10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC9 begin
+        
         $this->exec("SET NAMES 'UTF8'");
-        // section 10-13-1-85-4bd695b6:13ad101fca1:-8000:0000000000001BC9 end
+        
     }
 
 
@@ -112,13 +112,13 @@ class common_persistence_sql_pdo_pgsql_Driver
     {
         $returnValue = (string) '';
 
-        // section 10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD9 begin
+        
         $driver = str_replace('pdo_', '', SGBD_DRIVER);
         $dbName = DATABASE_NAME;
         $dbUrl = DATABASE_URL;
         
         $returnValue = $driver . ':dbname=' . $dbName . ';host=' . $dbUrl;
-        // section 10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD9 end
+        
 
         return (string) $returnValue;
     }

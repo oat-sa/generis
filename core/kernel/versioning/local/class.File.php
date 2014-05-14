@@ -61,10 +61,10 @@ class core_kernel_versioning_local_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A begin
+        
         common_Logger::i(__FUNCTION__.' called on local directory', 'LOCALVCS');
         $returnValue = true;
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A end
+        
 
         return (bool) $returnValue;
     }
@@ -84,10 +84,10 @@ class core_kernel_versioning_local_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165C begin
+        
         common_Logger::i(__FUNCTION__.' called on local directory', 'LOCALVCS');
         $returnValue = true;
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165C end
+        
 
         return (bool) $returnValue;
     }
@@ -107,9 +107,9 @@ class core_kernel_versioning_local_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165E begin
+        
 		throw new core_kernel_versioning_exception_Exception(__METHOD__.' not supported by Local Directory');
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165E end
+        
 
         return (bool) $returnValue;
     }
@@ -128,10 +128,10 @@ class core_kernel_versioning_local_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 begin
+        
         common_Logger::i(__FUNCTION__.' called on local directory', 'LOCALVCS');
         $returnValue = helpers_File::remove($path);
-        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 end
+        
 
         return (bool) $returnValue;
     }
@@ -152,9 +152,9 @@ class core_kernel_versioning_local_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 begin
+        
         common_Logger::i(__FUNCTION__.' called on local directory ', 'LOCALVCS');
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 end
+        
 
         return (bool) $returnValue;
     }
@@ -173,9 +173,9 @@ class core_kernel_versioning_local_File
     {
         $returnValue = array();
 
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016FB begin
+        
 		throw new core_kernel_versioning_exception_Exception(__METHOD__.' not supported by local directory');
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016FB end
+        
 
         return (array) $returnValue;
     }
@@ -194,10 +194,10 @@ class core_kernel_versioning_local_File
     {
         $returnValue = (int) 0;
 
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001902 begin
+        
         common_Logger::i(__FUNCTION__.' called on local directory', 'LOCALVCS');
         $returnValue = VERSIONING_FILE_STATUS_NORMAL;
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001902 end
+        
 
         return (int) $returnValue;
     }
@@ -216,9 +216,9 @@ class core_kernel_versioning_local_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 begin
+        
 		throw new core_kernel_versioning_exception_Exception(__METHOD__.' not supported by Local Directory');
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 end
+        
 
         return (bool) $returnValue;
     }
@@ -234,12 +234,12 @@ class core_kernel_versioning_local_File
     {
         $returnValue = null;
 
-        // section 10-30-1--78-73b2f78e:13bb35d7c97:-8000:0000000000001E43 begin
+        
         if(is_null(self::$instance)){
 			self::$instance = new self();
 		}
 		$returnValue = self::$instance;
-		// section 10-30-1--78-73b2f78e:13bb35d7c97:-8000:0000000000001E43 end
+		
 
         return $returnValue;
     }

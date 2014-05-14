@@ -54,7 +54,7 @@ class core_kernel_classes_ClassFactory
     {
         $returnValue = null;
 
-        // section 127-0-1-1-3c0ae01:12c2c9debde:-8000:000000000000138D begin
+        
 		$newUri = (!empty($uri)) ? self::checkProvidedUri($uri) : common_Utils::getNewUri();
 		$newResource = new core_kernel_classes_Class($newUri);
 		$propertiesValues = array(RDF_TYPE => $clazz->getUri());
@@ -76,7 +76,7 @@ class core_kernel_classes_ClassFactory
 			throw new common_Exception($msg);
 			common_Logger::e($msg);
 		}
-        // section 127-0-1-1-3c0ae01:12c2c9debde:-8000:000000000000138D end
+        
 
         return $returnValue;
     }
@@ -97,7 +97,7 @@ class core_kernel_classes_ClassFactory
     {
         $returnValue = null;
 
-        // section 127-0-1-1-3c0ae01:12c2c9debde:-8000:0000000000001393 begin
+        
 		$property = new core_kernel_classes_Class(RDF_PROPERTY);
 		$propertyInstance = self::createInstance($property, $label, $comment, $uri);
 		$returnValue = new core_kernel_classes_Property($propertyInstance->getUri());
@@ -108,7 +108,7 @@ class core_kernel_classes_ClassFactory
 			$returnValue->setLgDependent($isLgDependent);
 		}
 
-        // section 127-0-1-1-3c0ae01:12c2c9debde:-8000:0000000000001393 end
+        
 
         return $returnValue;
     }
@@ -128,13 +128,13 @@ class core_kernel_classes_ClassFactory
     {
         $returnValue = null;
 
-        // section 127-0-1-1-3c0ae01:12c2c9debde:-8000:00000000000013A2 begin
+        
 		$class = new core_kernel_classes_Class(RDFS_CLASS);
 		$instance =  self::createInstance($class, $label, $comment, $uri);
 		$returnValue = new core_kernel_classes_Class($instance->getUri());
 		$returnValue->setSubClassOf($clazz);
 
-        // section 127-0-1-1-3c0ae01:12c2c9debde:-8000:00000000000013A2 end
+        
 
         return $returnValue;
     }
@@ -151,7 +151,7 @@ class core_kernel_classes_ClassFactory
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1-706d7d33:138909bcd61:-8000:0000000000001B14 begin
+        
         if($uri != '') {
         	if(common_Utils::isUri($uri)){
         		$returnValue = $uri;
@@ -163,7 +163,7 @@ class core_kernel_classes_ClassFactory
         else{
         	$returnValue = common_Utils::getNewUri();
         }
-        // section 127-0-1-1-706d7d33:138909bcd61:-8000:0000000000001B14 end
+        
 
         return (string) $returnValue;
     }

@@ -62,9 +62,9 @@ class helpers_Versioning
     {
         $returnValue = array();
 
-        // section 10-30-1--78--774a33b7:13ad0ae6f5f:-8000:0000000000001BB9 begin
+        
         $returnValue = helpers_FileSource::getFileSources();
-        // section 10-30-1--78--774a33b7:13ad0ae6f5f:-8000:0000000000001BB9 end
+        
 
         return (array) $returnValue;
     }

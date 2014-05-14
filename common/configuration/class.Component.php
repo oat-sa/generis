@@ -65,10 +65,10 @@ abstract class common_configuration_Component
      */
     public function __construct($name = 'unknown', $optional = false)
     {
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001A8B begin
+        
         $this->setName($name);
         $this->setOptional($optional);
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001A8B end
+        
     }
 
     /**
@@ -92,9 +92,9 @@ abstract class common_configuration_Component
     {
         $returnValue = (bool) false;
 
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AA1 begin
+        
         $returnValue = $this->optional;
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AA1 end
+        
 
         return (bool) $returnValue;
     }
@@ -109,9 +109,9 @@ abstract class common_configuration_Component
      */
     public function setOptional($optional)
     {
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AA3 begin
+        
         $this->optional = $optional;
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AA3 end
+        
     }
 
     /**
@@ -125,9 +125,9 @@ abstract class common_configuration_Component
     {
         $returnValue = (string) '';
 
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AA6 begin
+        
         $returnValue = $this->name;
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AA6 end
+        
 
         return (string) $returnValue;
     }
@@ -142,9 +142,9 @@ abstract class common_configuration_Component
      */
     public function setName($name)
     {
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AA8 begin
+        
         $this->name = $name;
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001AA8 end
+        
     }
 
 } /* end of abstract class common_configuration_Component */

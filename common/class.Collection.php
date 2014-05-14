@@ -73,10 +73,10 @@ class common_Collection
      */
     public function __construct( common_Object $container, $debug = '')
     {
-        // section 10-13-1--99--4fdec042:11a2a3b44dc:-8000:00000000000010A2 begin
+        
         $this->sequence = array();
 		$this->container = $container;	
-        // section 10-13-1--99--4fdec042:11a2a3b44dc:-8000:00000000000010A2 end
+        
     }
 
     /**
@@ -90,9 +90,9 @@ class common_Collection
     {
         $returnValue = (int) 0;
 
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB7 begin
+        
         $returnValue = count($this->sequence);
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB7 end
+        
 
         return (int) $returnValue;
     }
@@ -109,14 +109,14 @@ class common_Collection
     {
         $returnValue = (int) 0;
 
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB9 begin
+        
     	$returnValue = -1;
         foreach($this->sequence as $index => $_object){
 			if($object === $_object){
 				return $index;
 			}
 		}
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BB9 end
+        
 
         return (int) $returnValue;
     }
@@ -133,13 +133,13 @@ class common_Collection
     {
         $returnValue = null;
 
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BBC begin
+        
 			
 		$returnValue = isset($this->sequence[$index]) ? $this->sequence[$index] : null;
 		if($returnValue == null) {
 			throw new common_Exception('index is out of range');
 		}
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BBC end
+        
 
         return $returnValue;
     }
@@ -155,9 +155,9 @@ class common_Collection
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BC8 begin
+        
         $returnValue = (count($this->sequence) == 0);
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BC8 end
+        
 
         return (bool) $returnValue;
     }
@@ -173,9 +173,9 @@ class common_Collection
      */
     public function offsetSet( common_Object $key,  common_Object $value)
     {
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BCA begin
+        
         $this->sequence[$key] = $value;
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BCA end
+        
     }
 
     /**
@@ -190,9 +190,9 @@ class common_Collection
     {
         $returnValue = null;
 
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BCE begin
+        
         $returnValue = $this->sequence[$key];
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BCE end
+        
 
         return $returnValue;
     }
@@ -207,9 +207,9 @@ class common_Collection
      */
     public function offsetUnset( common_Object $key)
     {
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BD1 begin
+        
         unset($this->sequence[$key]);
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BD1 end
+        
     }
 
     /**
@@ -224,9 +224,9 @@ class common_Collection
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BD4 begin
+        
         $returnValue = isset($this->sequence[$key]);
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BD4 end
+        
 
         return (bool) $returnValue;
     }
@@ -240,9 +240,9 @@ class common_Collection
      */
     public function getIterator()
     {
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BD6 begin
+        
          return new ArrayIterator($this->sequence);
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BD6 end
+        
     }
 
     /**
@@ -255,10 +255,10 @@ class common_Collection
      */
     public function add( common_Object $node)
     {
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BF6 begin
+        
 		$this->sequence[] = $node;
 		$returnValue = $node;
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:0000000000000BF6 end
+        
     }
 
     /**
@@ -273,7 +273,7 @@ class common_Collection
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:00000000000013CC begin
+        
         foreach($this->sequence as $index => $_node){
 			if($_node === $object){
 				unset($this->sequence[$index]);
@@ -282,7 +282,7 @@ class common_Collection
 			}		
 		}
 		return false;
-        // section 10-13-1--99-2f1559da:11a15934f36:-8000:00000000000013CC end
+        
 
         return (bool) $returnValue;
     }
@@ -299,10 +299,10 @@ class common_Collection
     {
         $returnValue = null;
 
-        // section 10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EA4 begin
+        
         $returnValue = new common_Collection($this);     
         $returnValue->sequence = array_merge($this->sequence, $collection->sequence );      
-        // section 10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EA4 end
+        
 
         return $returnValue;
     }
@@ -319,10 +319,10 @@ class common_Collection
     {
         $returnValue = null;
 
-        // section 10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EA7 begin
+        
          $returnValue = new common_Collection(new common_Object(__METHOD__));
          $returnValue->sequence = array_uintersect($this->sequence, $collection->sequence, 'core_kernel_classes_ContainerComparator::compare');
-        // section 10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EA7 end
+        
 
         return $returnValue;
     }
@@ -338,11 +338,11 @@ class common_Collection
     {
         $returnValue = array();
 
-        // section -87--2--3--76--8049d3c:12424ebfe97:-8000:00000000000017D1 begin
+        
         foreach ($this->getIterator() as $it){
         	$returnValue[] = $it;
         }
-        // section -87--2--3--76--8049d3c:12424ebfe97:-8000:00000000000017D1 end
+        
 
         return (array) $returnValue;
     }

@@ -74,7 +74,7 @@ class core_kernel_rules_Expression
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--99-6bb5697e:11bda1bbfa6:-8000:0000000000001349 begin
+        
         
         common_Logger::i('Evaluating Expression uri: '. $this->getUri(), array('Generis Expression'));
         common_Logger::i('Evaluating Expression name: '. $this->getLabel(), array('Generis Expression'));
@@ -87,7 +87,7 @@ class core_kernel_rules_Expression
 		$returnValue = $this->expEval($variable);
 		$logValue = $returnValue ? ' TRUE ' : ' FALSE ';
 		common_Logger::i('Value : '. $logValue, array('Generis Expression'));
-        // section 10-13-1--99-6bb5697e:11bda1bbfa6:-8000:0000000000001349 end
+        
 
         return (bool) $returnValue;
     }
@@ -103,11 +103,11 @@ class core_kernel_rules_Expression
      */
     public function __construct($uri, $debug = '')
     {
-        // section 10-13-1--99-6bb5697e:11bda1bbfa6:-8000:000000000000138A begin
+        
         parent::__construct($uri);
         $this->debug = $debug;
 
-        // section 10-13-1--99-6bb5697e:11bda1bbfa6:-8000:000000000000138A end
+        
     }
 
     /**
@@ -121,13 +121,13 @@ class core_kernel_rules_Expression
     {
         $returnValue = null;
 
-        // section 10-13-1--99-6bb5697e:11bda1bbfa6:-8000:000000000000138F begin
+        
          if(empty($this->logicalOperator)){
          	$property = new core_kernel_classes_Property(PROPERTY_HASLOGICALOPERATOR);
 			$this->logicalOperator = $this->getUniquePropertyValue($property);
          }
          $returnValue = $this->logicalOperator;
-        // section 10-13-1--99-6bb5697e:11bda1bbfa6:-8000:000000000000138F end
+        
 
         return $returnValue;
     }
@@ -143,7 +143,7 @@ class core_kernel_rules_Expression
     {
         $returnValue = null;
 
-        // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DB5 begin
+        
         $property = new core_kernel_classes_Property(PROPERTY_TERMINAL_EXPRESSION);
         $propertyValue = $this->getUniquePropertyValue($property);
         if ($propertyValue instanceof core_kernel_classes_Resource ) {
@@ -153,7 +153,7 @@ class core_kernel_rules_Expression
         else {
         	throw new common_Exception('property retrieve should be a Resource');
         }
-        // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DB5 end
+        
 
         return $returnValue;
     }
@@ -169,13 +169,13 @@ class core_kernel_rules_Expression
     {
         $returnValue = null;
 
-        // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DE3 begin
+        
         if(empty($this->firstExpression)){
         	$property = new core_kernel_classes_Property(PROPERTY_FIRST_EXPRESSION);
 			$this->firstExpression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->getUri());
         }
 		$returnValue = $this->firstExpression;
-        // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DE3 end
+        
 
         return $returnValue;
     }
@@ -191,13 +191,13 @@ class core_kernel_rules_Expression
     {
         $returnValue = null;
 
-        // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DE5 begin
+        
         if(empty($this->secondExpression)){
 	        $property = new core_kernel_classes_Property(PROPERTY_SECOND_EXPRESSION);
 			$this->secondExpression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->getUri());
         }
         $returnValue = $this->secondExpression;
-        // section 10-13-1--99-20158b09:11bfa8bc7dd:-8000:0000000000000DE5 end
+        
 
         return $returnValue;
     }
@@ -212,7 +212,7 @@ class core_kernel_rules_Expression
      */
     public function expEval($variable = array())
     {
-        // section 10-13-1--99-70c2c3a5:11c28370080:-8000:0000000000000E4D begin
+        
 		$terminalExpression = $this->getTerminalExpression();
 		
 
@@ -341,7 +341,7 @@ class core_kernel_rules_Expression
 			
 		}
 		return $returnValue;
-        // section 10-13-1--99-70c2c3a5:11c28370080:-8000:0000000000000E4D end
+        
     }
 
     /**
@@ -357,11 +357,11 @@ class core_kernel_rules_Expression
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--99-70c2c3a5:11c28370080:-8000:0000000000000E50 begin
+        
         if($first instanceof core_kernel_classes_Literal && $second instanceof core_kernel_classes_Literal)  {
     		$returnValue = $first->literal == $second->literal;
         }
-        // section 10-13-1--99-70c2c3a5:11c28370080:-8000:0000000000000E50 end
+        
 
         return (bool) $returnValue;
     }
@@ -379,11 +379,11 @@ class core_kernel_rules_Expression
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--99-70c2c3a5:11c28370080:-8000:0000000000000E54 begin
+        
         if($first instanceof core_kernel_classes_Literal && $second instanceof core_kernel_classes_Literal)  {
     		$returnValue = $first->literal != $second->literal;
         }
-        // section 10-13-1--99-70c2c3a5:11c28370080:-8000:0000000000000E54 end
+        
 
         return (bool) $returnValue;
     }
@@ -401,12 +401,12 @@ class core_kernel_rules_Expression
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--99-70c2c3a5:11c28370080:-8000:0000000000000E60 begin
+        
         if($first instanceof core_kernel_classes_Literal && $second instanceof core_kernel_classes_Literal)  {
         	$returnValue = $first->literal <= $second->literal;
         }
         
-        // section 10-13-1--99-70c2c3a5:11c28370080:-8000:0000000000000E60 end
+        
 
         return (bool) $returnValue;
     }
@@ -424,11 +424,11 @@ class core_kernel_rules_Expression
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--99-70c2c3a5:11c28370080:-8000:0000000000000E64 begin
+        
          if($first instanceof core_kernel_classes_Literal && $second instanceof core_kernel_classes_Literal)  {
      		$returnValue = $first->literal < $second->literal;
          }
-        // section 10-13-1--99-70c2c3a5:11c28370080:-8000:0000000000000E64 end
+        
 
         return (bool) $returnValue;
     }
@@ -446,11 +446,11 @@ class core_kernel_rules_Expression
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--99-70c2c3a5:11c28370080:-8000:0000000000000E68 begin
+        
          if($first instanceof core_kernel_classes_Literal && $second instanceof core_kernel_classes_Literal)  {
              $returnValue = $first->literal > $second->literal;       
          }
-        // section 10-13-1--99-70c2c3a5:11c28370080:-8000:0000000000000E68 end
+        
 
         return (bool) $returnValue;
     }
@@ -468,11 +468,11 @@ class core_kernel_rules_Expression
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--99-70c2c3a5:11c28370080:-8000:0000000000000E6C begin
+        
          if($first instanceof core_kernel_classes_Literal && $second instanceof core_kernel_classes_Literal)  {
 	        $returnValue = $first->literal >= $second->literal;
          }
-        // section 10-13-1--99-70c2c3a5:11c28370080:-8000:0000000000000E6C end
+        
 
         return (bool) $returnValue;
     }
@@ -490,7 +490,7 @@ class core_kernel_rules_Expression
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EA0 begin
+        
         if ($firstPart instanceof core_kernel_classes_Resource ) {
         	$firstPart = new core_kernel_classes_Literal($firstPart->getUri());
 		}
@@ -536,7 +536,7 @@ class core_kernel_rules_Expression
 		
 		$logValue = $returnValue ? ' TRUE ' : ' FALSE ';
 		common_Logger::d('Expression Value : '. $logValue, array('Generis Expression'));
-        // section 10-13-1--99--1201ed7f:11c6b266eba:-8000:0000000000000EA0 end
+        
 
         return (bool) $returnValue;
     }

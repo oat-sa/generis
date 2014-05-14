@@ -49,7 +49,7 @@ class core_kernel_versioning_subversionWindows_Utils
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1-a831e14:134415460c1:-8000:000000000000189D begin
+        
         $username = "";
         $password = "";
         $repository = null;
@@ -82,7 +82,7 @@ class core_kernel_versioning_subversionWindows_Utils
         catch (Exception $e){
         	die('Error code `svn_error_command` in ' . $e->getMessage());
         }
-        // section 127-0-1-1-a831e14:134415460c1:-8000:000000000000189D end
+        
 
         return (string) $returnValue;
     }

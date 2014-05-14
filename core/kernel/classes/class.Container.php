@@ -49,8 +49,8 @@ class core_kernel_classes_Container
     {
         $returnValue = (string) '';
 
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000828 begin
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000828 end
+        
+        
 
         return (string) $returnValue;
     }
@@ -67,8 +67,8 @@ class core_kernel_classes_Container
     {
         $returnValue = (bool) false;
 
-        // section 127-0-0-1-71ce5466:11938f47d30:-8000:0000000000000AD5 begin
-        // section 127-0-0-1-71ce5466:11938f47d30:-8000:0000000000000AD5 end
+        
+        
 
         return (bool) $returnValue;
     }
@@ -82,8 +82,8 @@ class core_kernel_classes_Container
      */
     public function feed()
     {
-        // section 10-5-2-6--89b5018:11b0b8ddfb0:-8000:0000000000000D65 begin
-        // section 10-5-2-6--89b5018:11b0b8ddfb0:-8000:0000000000000D65 end
+        
+        
     }
 
 } /* end of class core_kernel_classes_Container */

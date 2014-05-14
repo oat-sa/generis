@@ -48,9 +48,9 @@ abstract class core_kernel_persistence_PersistenceImpl
     {
         $returnValue = null;
 
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000140F begin
+        
         throw new Exception('Must be implemented by subclasses.');
-        // section 127-0-1-1--30506d9:12f6daaa255:-8000:000000000000140F end
+        
 
         return $returnValue;
     }

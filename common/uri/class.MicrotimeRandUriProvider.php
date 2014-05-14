@@ -50,7 +50,7 @@ class common_uri_MicrotimeRandUriProvider
     {
         $returnValue = (string) '';
 
-        // section 10-13-1-85--341437fc:13634d84b3e:-8000:000000000000199E begin
+        
         $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$uriExist = false;
@@ -70,7 +70,7 @@ class common_uri_MicrotimeRandUriProvider
 		}while($uriExist);
 		
 		$returnValue = $uri;
-        // section 10-13-1-85--341437fc:13634d84b3e:-8000:000000000000199E end
+        
 
         return (string) $returnValue;
     }

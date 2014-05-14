@@ -49,7 +49,7 @@ class common_configuration_PHPExtension
     {
         $returnValue = null;
 
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ADB begin
+        
         $name = $this->getName();
         $min = $this->getMin();
         $max = $this->getMax();
@@ -105,7 +105,7 @@ class common_configuration_PHPExtension
         }
 
         $returnValue = new common_configuration_Report($validity, $message, $this);
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ADB end
+        
 
         return $returnValue;
     }
@@ -121,9 +121,9 @@ class common_configuration_PHPExtension
     {
         $returnValue = (string) '';
 
-        // section -64--88-56-1-1c6f58d0:1389fa4346a:-8000:0000000000001B30 begin
+        
         $returnValue = phpversion($this->getName());
-        // section -64--88-56-1-1c6f58d0:1389fa4346a:-8000:0000000000001B30 end
+        
 
         return (string) $returnValue;
     }

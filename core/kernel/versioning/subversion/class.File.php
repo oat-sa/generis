@@ -92,14 +92,14 @@ class core_kernel_versioning_subversion_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165C begin
+        
         
         common_Logger::i('svn_update '.$path. ' revision='.$revision);
         if($resource->getRepository()->authenticate()){
             $returnValue = svn_update($path, $revision)===false ? false : true;
         }
         
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165C end
+        
 
         return (bool) $returnValue;
     }
@@ -206,7 +206,7 @@ class core_kernel_versioning_subversion_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 begin
+        
         
         $startTime = helpers_Time::getMicroTime();
         if($resource->getRepository()->authenticate()){
@@ -215,7 +215,7 @@ class core_kernel_versioning_subversion_File
         $endTime =  helpers_Time::getMicroTime();
         common_Logger::i("svn_delete (".$path.') ->'.($endTime - $startTime).'s');
         
-        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 end
+        
 
         return (bool) $returnValue;
     }
@@ -236,7 +236,7 @@ class core_kernel_versioning_subversion_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 begin
+        
         
         $startTime = helpers_Time::getMicroTime();
 	    if($resource->getRepository()->authenticate()){
@@ -247,7 +247,7 @@ class core_kernel_versioning_subversion_File
         $endTime = helpers_Time::getMicroTime();
         common_Logger::i("svn_add (".$path.') recursive='.($recursive?'true':'false').' -> '.($endTime-$startTime).'s');
         
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 end
+        
 
         return (bool) $returnValue;
     }
@@ -266,7 +266,7 @@ class core_kernel_versioning_subversion_File
     {
         $returnValue = array();
 
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016FB begin
+        
         
         $startTime = helpers_Time::getMicroTime();
         if($resource->getRepository()->authenticate()){
@@ -275,7 +275,7 @@ class core_kernel_versioning_subversion_File
         $endTime = helpers_Time::getMicroTime();
         common_Logger::i('svn_getHistory ('.$path.') -> '.($endTime-$startTime).'s');
         
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016FB end
+        
 
         return (array) $returnValue;
     }

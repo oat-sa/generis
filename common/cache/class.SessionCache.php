@@ -76,7 +76,7 @@ class common_cache_SessionCache
      */
     public function put($mixed, $serial = null)
     {
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F34 begin
+        
         if ($mixed instanceof common_Serializable) {
         	if (!is_null($serial) && $serial != $mixed->getSerial()) {
         		throw new common_exception_Error('Serial mismatch for Serializable '.$mixed->getSerial());
@@ -84,7 +84,7 @@ class common_cache_SessionCache
         	$serial = $mixed->getSerial();
         }
         $this->items[$serial] = $mixed;
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F34 end
+        
     }
 
     /**
@@ -99,7 +99,7 @@ class common_cache_SessionCache
     {
         $returnValue = null;
 
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F3C begin
+        
         if (!isset($this->items[$serial])) {
         	if ($this->has($serial)) {
         		$storage = PHPSession::singleton()->getAttribute(static::SESSION_KEY);
@@ -115,7 +115,7 @@ class common_cache_SessionCache
         	}
         }
         $returnValue = $this->items[$serial];
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F3C end
+        
 
         return $returnValue;
     }
@@ -132,7 +132,7 @@ class common_cache_SessionCache
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F40 begin
+        
         $session = PHPSession::singleton();
         
     	if (isset($this->items[$serial])) {
@@ -144,7 +144,7 @@ class common_cache_SessionCache
 				$returnValue = isset($storage[$serial]);
 			}
 		}
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F40 end
+        
 
         return (bool) $returnValue;
     }
@@ -159,12 +159,12 @@ class common_cache_SessionCache
      */
     public function remove($serial)
     {
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F44 begin
+        
     	if (isset($this->items[$serial])) {
 	        unset($this->items[$serial]);
 	        unset($_SESSION[SESSION_NAMESPACE][static::SESSION_KEY][$serial]);
         }
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F44 end
+        
     }
 
     /**
@@ -178,10 +178,10 @@ class common_cache_SessionCache
     {
         $returnValue = null;
 
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F48 begin
+        
         PHPSession::singleton()->removeAttribute(static::SESSION_KEY);
         $this->items = array();
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F48 end
+        
 
         return $returnValue;
     }
@@ -195,13 +195,13 @@ class common_cache_SessionCache
      */
     public function __destruct()
     {
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F2C begin
+        
     	foreach ($this->items as $key => $value) {
 			// not clean put reading the session and then adding data to the session causses concurrency problems
 			// therefore this DOES NOT WORK: session::setAttribute(static::SESSION_KEY, $storage)
         	$_SESSION[SESSION_NAMESPACE][static::SESSION_KEY][$key] = serialize($value);
     	}
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F2C end
+        
     }
 
     /**
@@ -215,7 +215,7 @@ class common_cache_SessionCache
     {
         $returnValue = array();
 
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F2E begin
+        
         $session = PHPSession::singleton();
         
         if ($session->hasAttribute(static::SESSION_KEY)) {
@@ -227,7 +227,7 @@ class common_cache_SessionCache
 	        }
     	}
     	$returnValue = $this->items;
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F2E end
+        
 
         return (array) $returnValue;
     }
@@ -244,7 +244,7 @@ class common_cache_SessionCache
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F30 begin
+        
         $session = PHPSession::singleton();
         
     	if (isset($this->items[$serial])) {
@@ -254,7 +254,7 @@ class common_cache_SessionCache
         	$storage = $session->getAttribute(static::SESSION_KEY);
         	$returnValue = isset($storage[$serial]);
         }
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F30 end
+        
 
         return (bool) $returnValue;
     }
@@ -270,13 +270,13 @@ class common_cache_SessionCache
     {
         $returnValue = null;
 
-        // section 10-13-1-85-73eaea5c:13c4ddaf54d:-8000:0000000000001F32 begin
+        
         if (!isset(self::$instance)){
         	self::$instance = new self();
         }
         
         return self::$instance;
-        // section 10-13-1-85-73eaea5c:13c4ddaf54d:-8000:0000000000001F32 end
+        
 
         return $returnValue;
     }

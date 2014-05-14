@@ -57,9 +57,9 @@ class common_ext_ExtensionException extends common_Exception
      */
     public function setExtensionId($extensionId)
     {
-        // section -64--88-56-1--5ed7f181:1380f260043:-8000:0000000000001A65 begin
+        
         $this->extensionId = $extensionId;
-        // section -64--88-56-1--5ed7f181:1380f260043:-8000:0000000000001A65 end
+        
     }
 
     /**
@@ -73,9 +73,9 @@ class common_ext_ExtensionException extends common_Exception
     {
         $returnValue = (string) '';
 
-        // section -64--88-56-1--5ed7f181:1380f260043:-8000:0000000000001A6B begin
+        
         $returnValue = $this->extensionId;
-        // section -64--88-56-1--5ed7f181:1380f260043:-8000:0000000000001A6B end
+        
 
         return (string) $returnValue;
     }
@@ -91,10 +91,10 @@ class common_ext_ExtensionException extends common_Exception
      */
     public function __construct($message, $extensionId = 'unknown')
     {
-        // section -64--88-56-1--5ed7f181:1380f260043:-8000:0000000000001A6F begin
+        
         parent::__construct($message);
         $this->setExtensionId($extensionId);
-        // section -64--88-56-1--5ed7f181:1380f260043:-8000:0000000000001A6F end
+        
     }
 
 } /* end of class common_ext_ExtensionException */

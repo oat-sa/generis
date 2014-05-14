@@ -88,9 +88,9 @@ class common_log_Dispatcher
     {
         $returnValue = (int) 0;
 
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017C6 begin
+        
         $returnValue = $this->minLevel;
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017C6 end
+        
 
         return (int) $returnValue;
     }
@@ -107,7 +107,7 @@ class common_log_Dispatcher
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000183B begin
+        
     	$this->appenders = array();
     	$this->minLevel = null;
     	foreach ($configuration as $appenderConfig) {
@@ -126,7 +126,7 @@ class common_log_Dispatcher
     		}
     	}
     	$returnValue = (count($this->appenders) > 0);
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000183B end
+        
 
         return (bool) $returnValue;
     }
@@ -142,12 +142,12 @@ class common_log_Dispatcher
     {
         $returnValue = null;
 
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000182B begin
+        
         if (is_null(self::$instance)) {
         	self::$instance = new common_log_Dispatcher();
         }
         $returnValue = self::$instance;
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000182B end
+        
 
         return $returnValue;
     }
@@ -161,7 +161,7 @@ class common_log_Dispatcher
      */
     private function __construct()
     {
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001829 begin
+        
     	if (isset($GLOBALS['COMMON_LOGGER_CONFIG'])) {
     		$this->init($GLOBALS['COMMON_LOGGER_CONFIG']);
     	} elseif (isset($GLOBALS['config_log'])) {
@@ -185,7 +185,7 @@ class common_log_Dispatcher
         } else {
         	$this->init(array());
         }
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001829 end
+        
     }
 
     /**
@@ -198,12 +198,12 @@ class common_log_Dispatcher
      */
     public function addAppender( common_log_Appender $appender)
     {
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001820 begin
+        
         $this->appenders[] = $appender;
         if (is_null($this->minLevel) || $this->minLevel > $appender->getLogThreshold()) {
         	$this->minLevel = $appender->getLogThreshold();
         }
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001820 end
+        
     }
 
 } /* end of class common_log_Dispatcher */

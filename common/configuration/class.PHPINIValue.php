@@ -58,10 +58,10 @@ class common_configuration_PHPINIValue
      */
     public function __construct($expectedValue, $name = 'unknown', $optional = false)
     {
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B42 begin
+        
         parent::__construct($name, $optional);
         $this->setExpectedValue($expectedValue);
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B42 end
+        
     }
 
     /**
@@ -75,7 +75,7 @@ class common_configuration_PHPINIValue
     {
         $returnValue = null;
 
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ADD begin
+        
         $validity = null;
         $name = $this->getName();
         if (($value = ini_get($name)) !== false){
@@ -96,7 +96,7 @@ class common_configuration_PHPINIValue
         }
 
         $returnValue = new common_configuration_Report($validity, $message, $this);
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001ADD end
+        
 
         return $returnValue;
     }
@@ -112,9 +112,9 @@ class common_configuration_PHPINIValue
     {
         $returnValue = (string) '';
 
-        // section -64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0C begin
+        
         return $this->expectedValue;
-        // section -64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0C end
+        
 
         return (string) $returnValue;
     }
@@ -129,9 +129,9 @@ class common_configuration_PHPINIValue
      */
     public function setExpectedValue($expectedValue)
     {
-        // section -64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0E begin
+        
         $this->expectedValue = $expectedValue;
-        // section -64--88-56-1--5c6a901d:1387b387fec:-8000:0000000000001B0E end
+        
     }
 
     /**
@@ -145,9 +145,9 @@ class common_configuration_PHPINIValue
     {
         $returnValue = (string) '';
 
-        // section -64--88-56-1-5ea63367:1389f6907aa:-8000:0000000000001B2A begin
+        
         $returnValue = ini_get($this->getName());
-        // section -64--88-56-1-5ea63367:1389f6907aa:-8000:0000000000001B2A end
+        
 
         return (string) $returnValue;
     }

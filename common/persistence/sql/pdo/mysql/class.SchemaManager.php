@@ -52,7 +52,7 @@ class common_persistence_sql_pdo_mysql_SchemaManager extends common_persistence_
      */
     public function createIndex($indexName, $tableName, $columns)
     {
-        // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BED begin
+        
         $sql = 'CREATE INDEX ' . $indexName . ' ON ' . $tableName . ' (';
         $colsSql = array();
         foreach ($columns as $n => $l){
@@ -69,7 +69,7 @@ class common_persistence_sql_pdo_mysql_SchemaManager extends common_persistence_
         $sql .= $colsSql . ')';
     
         $this->getDriver()->exec($sql);
-        // section 10-13-1-85-69bd0289:13adae4f080:-8000:0000000000001BED end
+        
     }
     
     

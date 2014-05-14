@@ -100,11 +100,11 @@ class core_kernel_classes_Property
      */
     public function __construct($uri, $debug = '')
     {
-        // section 10-5-2-6--89b5018:11b0b8ddfb0:-8000:0000000000000D5E begin
+        
 		parent::__construct($uri,$debug);
 		$this->lgDependent = null;
 		$this->multiple = null;
-        // section 10-5-2-6--89b5018:11b0b8ddfb0:-8000:0000000000000D5E end
+        
     }
 
     /**
@@ -116,7 +116,7 @@ class core_kernel_classes_Property
      */
     public function feed()
     {
-        // section 10-5-2-6--89b5018:11b0b8ddfb0:-8000:0000000000000D60 begin
+        
 		
     	parent::feed();
 		$this->getWidget();
@@ -124,7 +124,7 @@ class core_kernel_classes_Property
 		$this->getDomain();
 		$this->isLgDependent();
 		
-        // section 10-5-2-6--89b5018:11b0b8ddfb0:-8000:0000000000000D60 end
+        
     }
 
     /**
@@ -139,11 +139,11 @@ class core_kernel_classes_Property
     {
         $returnValue = array();
 
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000780 begin
+        
         
         $returnValue = $this->getImplementation()->getSubProperties($this, $recursive);
         
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000780 end
+        
 
         return (array) $returnValue;
     }
@@ -160,9 +160,9 @@ class core_kernel_classes_Property
     {
         $returnValue = (bool) false;
 
-        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000ABC begin
+        
        
-        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000ABC end
+        
 
         return (bool) $returnValue;
     }
@@ -178,7 +178,7 @@ class core_kernel_classes_Property
     {
         $returnValue = null;
 
-        // section 10-13-1--31--64270bf:11918ad765e:-8000:0000000000000972 begin
+        
         if (is_null($this->domain)){
         	$this->domain = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
 			$domainValues = $this->getPropertyValues(new core_kernel_classes_Property(RDFS_DOMAIN));
@@ -187,7 +187,7 @@ class core_kernel_classes_Property
 			}
 		}
 		$returnValue = $this->domain;
-        // section 10-13-1--31--64270bf:11918ad765e:-8000:0000000000000972 end
+        
 
         return $returnValue;
     }
@@ -204,7 +204,7 @@ class core_kernel_classes_Property
     {
         $returnValue = (bool) false;
 
-        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AB4 begin
+        
         
         if(!is_null($class)){
         	foreach($this->getDomain()->getIterator() as $domainClass){
@@ -222,7 +222,7 @@ class core_kernel_classes_Property
         	}
         }
         
-        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AB4 end
+        
 
         return (bool) $returnValue;
     }
@@ -238,7 +238,7 @@ class core_kernel_classes_Property
     {
         $returnValue = null;
 
-        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000ABA begin
+        
         
 		if (is_null($this->range)){
 			$rangeProperty = new core_kernel_classes_Property(RDFS_RANGE,__METHOD__);
@@ -251,7 +251,7 @@ class core_kernel_classes_Property
 		}
 		$returnValue = $this->range;
 		
-        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000ABA end
+        
 
         return $returnValue;
     }
@@ -268,14 +268,14 @@ class core_kernel_classes_Property
     {
         $returnValue = (bool) false;
 
-        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AB7 begin
+        
         
         $returnValue = $this->getImplementation()->setRange($this, $class);
         if ($returnValue){
         	$this->range = $class;
         }
         
-        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AB7 end
+        
 
         return (bool) $returnValue;
     }
@@ -291,13 +291,13 @@ class core_kernel_classes_Property
     {
         $returnValue = null;
 
-        // section 10-5-2-6--89b5018:11b0b8ddfb0:-8000:0000000000000D5C begin
+        
 		
         if (!(isset($this->widget))){
 			$returnValue = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_WIDGET));
 		}
 		
-        // section 10-5-2-6--89b5018:11b0b8ddfb0:-8000:0000000000000D5C end
+        
 
         return $returnValue;
     }
@@ -313,7 +313,7 @@ class core_kernel_classes_Property
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--99--152a2f30:1201eae099d:-8000:000000000000157A begin
+        
 
         if (is_null($this->lgDependent )){
 	        $lgDependentProperty = new core_kernel_classes_Property(PROPERTY_IS_LG_DEPENDENT,__METHOD__);
@@ -331,7 +331,7 @@ class core_kernel_classes_Property
  
         $returnValue = $this->lgDependent;
         
-        // section 10-13-1--99--152a2f30:1201eae099d:-8000:000000000000157A end
+        
 
         return (bool) $returnValue;
     }
@@ -346,10 +346,10 @@ class core_kernel_classes_Property
      */
     public function setLgDependent($isLgDependent)
     {
-        // section 10-13-1--99--152a2f30:1201eae099d:-8000:000000000000157E begin
+        
         $this->getImplementation()->setLgDependent($this, $isLgDependent);
     	$this->lgDependent = $isLgDependent;
-        // section 10-13-1--99--152a2f30:1201eae099d:-8000:000000000000157E end
+        
     }
 
     /**
@@ -363,7 +363,7 @@ class core_kernel_classes_Property
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--7856c56:12f911716ca:-8000:00000000000014C8 begin
+        
         
         if(is_null($this->multiple )){
         	$multipleProperty = new core_kernel_classes_Property(PROPERTY_MULTIPLE,__METHOD__);
@@ -380,7 +380,7 @@ class core_kernel_classes_Property
  
         $returnValue = $this->multiple;
         
-        // section 127-0-1-1--7856c56:12f911716ca:-8000:00000000000014C8 end
+        
 
         return (bool) $returnValue;
     }
@@ -396,10 +396,10 @@ class core_kernel_classes_Property
      */
     public function setMultiple($isMultiple)
     {
-        // section 127-0-1-1-2ada041a:12fde2cecc0:-8000:00000000000016F8 begin
+        
     	$this->getImplementation()->setMultiple($this, $isMultiple);
     	$this->multiple = $isMultiple;
-        // section 127-0-1-1-2ada041a:12fde2cecc0:-8000:00000000000016F8 end
+        
     }
 
     /**
@@ -414,11 +414,11 @@ class core_kernel_classes_Property
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001646 begin
+        
         
         $returnValue = $this->getImplementation()->delete($this, $deleteReference);
         
-        // section 127-0-1-1--330ca9de:1318ac7ca9f:-8000:0000000000001646 end
+        
 
         return (bool) $returnValue;
     }

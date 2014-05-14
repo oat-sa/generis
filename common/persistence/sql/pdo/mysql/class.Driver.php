@@ -53,9 +53,9 @@ class common_persistence_sql_pdo_mysql_Driver
      */
     protected function getExtraConfiguration()
     {
-        // section 10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001BE8 begin
+        
     	$returnValue = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
-        // section 10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001BE8 end
+        
 
         return (array) $returnValue;
     }
@@ -71,9 +71,9 @@ class common_persistence_sql_pdo_mysql_Driver
      */
     protected function afterConnect()
     {
-        // section 10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001BEE begin
+        
         $this->exec('SET SESSION SQL_MODE=\'ANSI_QUOTES\';');
-        // section 10-13-1-85-523dfafc:13ab1680fba:-8000:0000000000001BEE end
+        
     }
 
 
@@ -92,13 +92,13 @@ class common_persistence_sql_pdo_mysql_Driver
     {
         $returnValue = (string) '';
 
-        // section 10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD7 begin
+        
         $driver = str_replace('pdo_', '', SGBD_DRIVER);
         $dbName = DATABASE_NAME;
         $dbUrl = DATABASE_URL;
         
         $returnValue = $driver . ':dbname=' . $dbName . ';host=' . $dbUrl . ';charset=utf8';
-        // section 10-13-1-85-1b0119e:13ad126c698:-8000:0000000000001BD7 end
+        
 
         return (string) $returnValue;
     }

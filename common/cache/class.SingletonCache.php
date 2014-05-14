@@ -55,14 +55,14 @@ abstract class common_cache_SingletonCache
     {
         $returnValue = null;
 
-        // section 10-30-1--78--412d45c0:13d453d515d:-8000:0000000000002008 begin
+        
         $cacheName = get_called_class();
         if (!isset(self::$instances[$cacheName])) {
         	self::$instances[$cacheName] = new $cacheName();
         }
         
         $returnValue = self::$instances[$cacheName];
-        // section 10-30-1--78--412d45c0:13d453d515d:-8000:0000000000002008 end
+        
 
         return $returnValue;
     }
@@ -78,7 +78,7 @@ abstract class common_cache_SingletonCache
     {
         $returnValue = null;
 
-        // section 10-30-1--78--412d45c0:13d453d515d:-8000:000000000000200A begin
+        
 		$args = func_get_args();
 		array_shift($args);
         if (!is_string($function)){
@@ -97,7 +97,7 @@ abstract class common_cache_SingletonCache
 	        $returnValue = call_user_func_array($fn, $args);
 	        static::singleton()->put($serial, $returnValue);
         }
-        // section 10-30-1--78--412d45c0:13d453d515d:-8000:000000000000200A end
+        
 
         return $returnValue;
     }
@@ -111,8 +111,8 @@ abstract class common_cache_SingletonCache
      */
     private function __construct()
     {
-        // section 10-30-1--78--412d45c0:13d453d515d:-8000:0000000000002011 begin
-        // section 10-30-1--78--412d45c0:13d453d515d:-8000:0000000000002011 end
+        
+        
     }
 
 } /* end of abstract class common_cache_SingletonCache */

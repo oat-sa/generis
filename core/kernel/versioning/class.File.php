@@ -20,7 +20,7 @@
  */
 
 /* user defined constants */
-// section 127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001668-constants begin
+
 
 const VERSIONING_FILE_STATUS_UNVERSIONED        = 2;
 const VERSIONING_FILE_STATUS_NORMAL             = 3;
@@ -39,7 +39,7 @@ const VERSIONING_FILE_VERSION_THEIRS            = 'theirs-full';
 const VERSIONING_FILE_VERSION_WORKING           = 'working';
 const VERSIONING_FILE_VERSION_BASE              = 'base';
 
-// section 127-0-1-1-6b8f17d3:132493e0488:-8000:0000000000001668-constants end
+
 
 /**
  * Manage your versioned files as resources in TAO
@@ -70,9 +70,9 @@ class core_kernel_versioning_File
     {
         $returnValue = null;
 
-        // section 10-30-1--78--1698032:13afe62e559:-8000:00000000000030B6 begin
+        
         $returnValue = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
-        // section 10-30-1--78--1698032:13afe62e559:-8000:00000000000030B6 end
+        
 
         return $returnValue;
     }
@@ -155,11 +155,11 @@ class core_kernel_versioning_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000024B1 begin
+        
         
         $returnValue = $resource->hasType(new core_kernel_classes_Class(CLASS_GENERIS_FILE));
         
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000024B1 end
+        
 
         return (bool) $returnValue;
     }
@@ -187,7 +187,7 @@ class core_kernel_versioning_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F5 begin
+        
         $status = $this->getStatus();
         
         //check that the file does not remain in conflict
@@ -207,7 +207,7 @@ class core_kernel_versioning_File
         
         $returnValue = core_kernel_versioning_FileProxy::singleton()->commit($this, $message, $this->getAbsolutePath(), $recursive);
         
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F5 end
+        
 
         return (bool) $returnValue;
     }
@@ -226,7 +226,7 @@ class core_kernel_versioning_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F7 begin
+        
         $status = $this->getStatus();
         
         //if a revision has been given
@@ -245,7 +245,7 @@ class core_kernel_versioning_File
             $returnValue = true;
         }
         
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F7 end
+        
 
         return (bool) $returnValue;
     }
@@ -265,14 +265,14 @@ class core_kernel_versioning_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F9 begin
+        
         if($this->fileExists()){
         	if($this->isVersioned()){
         		$returnValue = core_kernel_versioning_FileProxy::singleton()->revert($this, $revision, $msg);
         	}
         }
         
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F9 end
+        
 
         return (bool) $returnValue;
     }
@@ -291,7 +291,7 @@ class core_kernel_versioning_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032FC begin
+        
         
         if($this->fileExists()){
         	$filePath = $this->getAbsolutePath();
@@ -332,7 +332,7 @@ class core_kernel_versioning_File
         //delete the tao resource
         $returnValue &= parent::delete($deleteReference);
         
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032FC end
+        
 
         return (bool) $returnValue;
     }
@@ -348,14 +348,14 @@ class core_kernel_versioning_File
     {
         $returnValue = null;
 
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016DB begin
+        
         
         $repository = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_FILE_FILESYSTEM));
         if(!is_null($repository)){
         	$returnValue = new core_kernel_versioning_Repository($repository);
         }
         
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016DB end
+        
 
         return $returnValue;
     }
@@ -375,7 +375,7 @@ class core_kernel_versioning_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F5 begin
+        
         
         //Check if the path is versioned
         $relativePath = (string) $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH));
@@ -408,7 +408,7 @@ class core_kernel_versioning_File
         
         $returnValue = core_kernel_versioning_FileProxy::singleton()->add($this, $this->getAbsolutePath(), $recursive, $force);
         
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F5 end
+        
 
         return (bool) $returnValue;
     }
@@ -424,7 +424,7 @@ class core_kernel_versioning_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F8 begin
+        
         $status = $this->getStatus(array('SHOW_UPDATES'=>false));
         if($status
 			&& $status	!= VERSIONING_FILE_STATUS_UNVERSIONED
@@ -432,7 +432,7 @@ class core_kernel_versioning_File
             $returnValue = true;
         }
         
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F8 end
+        
 
         return (bool) $returnValue;
     }
@@ -450,12 +450,12 @@ class core_kernel_versioning_File
     {
         $returnValue = array();
 
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F9 begin
+        
         if(!is_null($this->getRepository())){
         	$returnValue = core_kernel_versioning_FileProxy::singleton()->gethistory($this, $this->getAbsolutePath());
         }
         
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016F9 end
+        
 
         return (array) $returnValue;
     }
@@ -471,12 +471,12 @@ class core_kernel_versioning_File
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:0000000000001708 begin
+        
         
        	$versionedFilePathProp = new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH);
 	    $returnValue = $this->getOnePropertyValue($versionedFilePathProp);
         
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:0000000000001708 end
+        
 
         return (string) $returnValue;
     }
@@ -495,11 +495,11 @@ class core_kernel_versioning_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-50a804cb:13317e3246f:-8000:0000000000001712 begin
+        
     
         $returnValue = $this->getStatus() == VERSIONING_FILE_STATUS_MODIFIED;
         
-        // section 127-0-1-1-50a804cb:13317e3246f:-8000:0000000000001712 end
+        
 
         return (bool) $returnValue;
     }
@@ -515,12 +515,12 @@ class core_kernel_versioning_File
     {
         $returnValue = (int) 0;
 
-        // section 127-0-1-1-750fdd52:133644e7bdd:-8000:0000000000001740 begin
+        
         
         $history = $this->getHistory();
         $returnValue = count($history);
         
-        // section 127-0-1-1-750fdd52:133644e7bdd:-8000:0000000000001740 end
+        
 
         return (int) $returnValue;
     }
@@ -537,7 +537,7 @@ class core_kernel_versioning_File
     {
         $returnValue = (int) 0;
 
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001900 begin
+        
 		try{
 		
 			$svnStatusOptions = array();
@@ -547,7 +547,7 @@ class core_kernel_versioning_File
 			$returnValue = core_kernel_versioning_FileProxy::singleton()->getStatus($this, $this->getAbsolutePath(), $svnStatusOptions);
 		
 		}catch(core_kernel_versioning_exception_FileUnversionedException $e){}
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001900 end
+        
 
         return (int) $returnValue;
     }
@@ -564,7 +564,7 @@ class core_kernel_versioning_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001926 begin
+        
         
         switch($version){
             case VERSIONING_FILE_VERSION_MINE:
@@ -578,7 +578,7 @@ class core_kernel_versioning_File
         
         $returnValue = core_kernel_versioning_FileProxy::singleton()->resolve($this, $this->getAbsolutePath(), $version);
         
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001926 end
+        
 
         return (bool) $returnValue;
     }
@@ -594,11 +594,11 @@ class core_kernel_versioning_File
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001929 begin
+        
         
         $returnValue = $this->getStatus()==VERSIONING_FILE_STATUS_CONFLICTED;
         
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001929 end
+        
 
         return (bool) $returnValue;
     }

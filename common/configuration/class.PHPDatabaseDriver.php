@@ -49,7 +49,7 @@ class common_configuration_PHPDatabaseDriver
     {
         $returnValue = null;
 
-        // section -64--88-56-1--4c174f22:138be969f09:-8000:0000000000001B34 begin
+        
         $report = parent::check();
         $name = $this->getName();
         
@@ -61,7 +61,7 @@ class common_configuration_PHPDatabaseDriver
         }
 
         $returnValue = $report;
-        // section -64--88-56-1--4c174f22:138be969f09:-8000:0000000000001B34 end
+        
 
         return $returnValue;
     }

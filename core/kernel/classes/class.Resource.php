@@ -95,7 +95,7 @@ class core_kernel_classes_Resource
      */
     public function __construct($uri, $debug = '')
     {
-        // section 127-0-0-1-59fa2263:1193cca7051:-8000:0000000000000AFB begin
+        
         //we should check using utils if the uri is short or long always use long uri inside the api (nevertheless the api may be called with short )
         if(!is_string($uri)){
 			
@@ -118,7 +118,7 @@ class core_kernel_classes_Resource
         if(DEBUG_MODE){
         	$this->debug = $debug;
         }
-        // section 127-0-0-1-59fa2263:1193cca7051:-8000:0000000000000AFB end
+        
     }
 
 
@@ -195,11 +195,11 @@ class core_kernel_classes_Resource
     {
         $returnValue = null;
 
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000082A begin
+        
         
         $returnValue = $this->duplicate();
         
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:000000000000082A end
+        
 
         return $returnValue;
     }
@@ -216,7 +216,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--31--647ec317:119141cd117:-8000:0000000000000913 begin
+        
         if (count($this->getPropertyValues(new core_kernel_classes_Property(RDFS_SUBCLASSOF))) > 0) {
         	$returnValue = true;
         } else {
@@ -228,7 +228,7 @@ class core_kernel_classes_Resource
 	        }
         }
 
-        // section 10-13-1--31--647ec317:119141cd117:-8000:0000000000000913 end
+        
 
         return (bool) $returnValue;
     }
@@ -246,7 +246,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--31--647ec317:119141cd117:-8000:0000000000000915 begin
+        
         
         foreach($this->getTypes() as $type){
         	if($type->getUri() == RDF_PROPERTY){
@@ -255,7 +255,7 @@ class core_kernel_classes_Resource
         	}
         }
         
-        // section 10-13-1--31--647ec317:119141cd117:-8000:0000000000000915 end
+        
 
         return (bool) $returnValue;
     }
@@ -271,9 +271,9 @@ class core_kernel_classes_Resource
     {
         $returnValue = array();
 
-        // section 127-0-1-1--7529374:136154ebbc3:-8000:0000000000001971 begin
+        
         $returnValue = $this->getImplementation()->getTypes($this);
-        // section 127-0-1-1--7529374:136154ebbc3:-8000:0000000000001971 end
+        
 
         return (array) $returnValue;
     }
@@ -292,7 +292,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (string) '';
 
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000840 begin
+        
         
         if($this->label == '') {
             $label =  $this->getOnePropertyValue(new core_kernel_classes_Property(RDFS_LABEL));
@@ -300,7 +300,7 @@ class core_kernel_classes_Resource
         }
         $returnValue = $this->label;
         
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:0000000000000840 end
+        
 
         return (string) $returnValue;
     }
@@ -317,13 +317,13 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AA6 begin
+        
 
         $this->removePropertyValues(new core_kernel_classes_Property(RDFS_LABEL));
         $this->setPropertyValue(new core_kernel_classes_Property(RDFS_LABEL), $label);
         $this->label = $label;
         
-        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AA6 end
+        
 
         return (bool) $returnValue;
     }
@@ -339,14 +339,14 @@ class core_kernel_classes_Resource
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1--f4ec538:12c30e15fc8:-8000:00000000000013A8 begin
+        
         if($this->comment == '') {
             $comment =  $this->getOnePropertyValue(new core_kernel_classes_Property(RDFS_COMMENT));
             $this->comment = $comment != null ? $comment->literal : '';
              
         }
         $returnValue = $this->comment;
-        // section 127-0-1-1--f4ec538:12c30e15fc8:-8000:00000000000013A8 end
+        
 
         return (string) $returnValue;
     }
@@ -363,13 +363,13 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AA8 begin
+        
         
         $this->removePropertyValues(new core_kernel_classes_Property(RDFS_COMMENT));
         $this->setPropertyValue(new core_kernel_classes_Property(RDFS_COMMENT), $comment);
         $this->comment = $comment;
         
-        // section 127-0-0-1-6c221a5e:1193c8e5541:-8000:0000000000000AA8 end
+        
 
         return (bool) $returnValue;
     }
@@ -389,11 +389,11 @@ class core_kernel_classes_Resource
     {
         $returnValue = array();
 
-        // section 127-0-0-1-71ce5466:11938f47d30:-8000:0000000000000A99 begin
+        
     	
         $returnValue = $this->getImplementation()->getPropertyValues($this, $property, $options);
 
-        // section 127-0-0-1-71ce5466:11938f47d30:-8000:0000000000000A99 end
+        
 
         return (array) $returnValue;
     }
@@ -429,7 +429,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = null;
 
-        // section 10-13-1--99--2465c76a:11c0440e8db:-8000:0000000000001466 begin
+        
  		
         $collection = $this->getPropertyValuesCollection($property);
 
@@ -446,7 +446,7 @@ class core_kernel_classes_Resource
             							has more than one value do not use getUniquePropertyValue but use getPropertyValue instead");
         }
         	
-        // section 10-13-1--99--2465c76a:11c0440e8db:-8000:0000000000001466 end
+        
 
         return $returnValue;
     }
@@ -498,11 +498,11 @@ class core_kernel_classes_Resource
     {
         $returnValue = null;
 
-        // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A4 begin
+        
         
         $returnValue = $this->getImplementation()->getPropertyValuesByLg($this, $property, $lg);
         
-        // section -87--2--3--76--570dd3e1:12507aae5fa:-8000:00000000000023A4 end
+        
 
         return $returnValue;
     }
@@ -522,11 +522,11 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:00000000000007AC begin
+        
         
         $returnValue = $this->getImplementation()->setPropertyValue($this, $property, $object);
         
-        // section 10-13-1--31-64e54c36:1190f0455d3:-8000:00000000000007AC end
+        
 
         return (bool) $returnValue;
     }
@@ -544,11 +544,11 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-44e4845c:12f4ef0414d:-8000:0000000000001437 begin
+        
         
         $returnValue = $this->getImplementation()->setPropertiesValues($this, $propertiesValues);
         
-        // section 127-0-1-1-44e4845c:12f4ef0414d:-8000:0000000000001437 end
+        
 
         return (bool) $returnValue;
     }
@@ -567,11 +567,11 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section -87--2--3--76-2d6cca2d:12579c74420:-8000:0000000000001831 begin
+        
         
         $returnValue = $this->getImplementation()->setPropertyValueByLg($this, $property, $value, $lg);
         
-        // section -87--2--3--76-2d6cca2d:12579c74420:-8000:0000000000001831 end
+        
 
         return (bool) $returnValue;
     }
@@ -615,10 +615,10 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section -87--2--3--76-18452630:1270a514a71:-8000:00000000000023F0 begin
+        
         $returnValue = $this->removePropertyValueByLg($prop, $lg);
         $returnValue &= $this->setPropertyValueByLg($prop, $value, $lg);
-        // section -87--2--3--76-18452630:1270a514a71:-8000:00000000000023F0 end
+        
 
         return (bool) $returnValue;
     }
@@ -636,14 +636,14 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--31--64270bf:11918ad765e:-8000:000000000000097C begin
+        
 
         $returnValue = $this->getImplementation()->removePropertyValues($this, $property, array(
         	'pattern'	=> (is_object($value) && $value instanceof self ? $value->getUri() : $value),
         	'like'		=> false 
         ));
         
-        // section 10-13-1--31--64270bf:11918ad765e:-8000:000000000000097C end
+        
 
         return (bool) $returnValue;
     }    
@@ -661,11 +661,11 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--31--64270bf:11918ad765e:-8000:000000000000097C begin
+        
 
         $returnValue = $this->getImplementation()->removePropertyValues($this, $property, $options);
         
-        // section 10-13-1--31--64270bf:11918ad765e:-8000:000000000000097C end
+        
 
         return (bool) $returnValue;
     }
@@ -684,11 +684,11 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section -87--2--3--76-18452630:1270a514a71:-8000:00000000000023EC begin
+        
        
         $returnValue = $this->getImplementation()->removePropertyValueByLg($this, $prop, $lg, $options);
         
-        // section -87--2--3--76-18452630:1270a514a71:-8000:00000000000023EC end
+        
 
         return (bool) $returnValue;
     }
@@ -706,11 +706,11 @@ class core_kernel_classes_Resource
     {
         $returnValue = null;
 
-        // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B29 begin
+        
         
         $returnValue = $this->getImplementation()->getRdfTriples($this);
         
-        // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B29 end
+        
 
         return $returnValue;
     }
@@ -727,11 +727,11 @@ class core_kernel_classes_Resource
     {
         $returnValue = array();
 
-        // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B13 begin
+        
         
         $returnValue = $this->getImplementation()->getUsedLanguages($this, $property);
 
-        // section 10-13-1--31--63d751b4:11914bbbbc4:-8000:0000000000000B13 end
+        
 
         return (array) $returnValue;
     }
@@ -750,11 +750,11 @@ class core_kernel_classes_Resource
     {
         $returnValue = null;
 
-        // section 127-0-1-1-440a1f14:12e71f49661:-8000:000000000000141E begin
+        
         
         $returnValue = $this->getImplementation()->duplicate($this, $excludedProperties);
         
-        // section 127-0-1-1-440a1f14:12e71f49661:-8000:000000000000141E end
+        
 
         return $returnValue;
     }
@@ -771,11 +771,11 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000976 begin
+        
         
         $returnValue = $this->getImplementation()->delete($this, $deleteReference);
         
-        // section 10-13-1--31-5c77d5ee:119187ec9d2:-8000:0000000000000976 end
+        
 
         return (bool) $returnValue;
     }
@@ -791,13 +791,13 @@ class core_kernel_classes_Resource
     {
         $returnValue = array();
 
-        // section -87--2--3--76--148ee98a:12452773959:-8000:00000000000017DD begin
+        
         $returnValue = array(
        						'u' => array('r' => true, 'w' => true),
         		 			'g' => array('r' => true, 'w' => true),
         		 			'a' => array('r' => true, 'w' => true)
         );
-        // section -87--2--3--76--148ee98a:12452773959:-8000:00000000000017DD end
+        
 
         return (array) $returnValue;
     }
@@ -813,7 +813,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (string) '';
 
-        // section 10-13-1--31--3bf74db1:119c3d777ef:-8000:0000000000000B3F begin
+        
         $returnValue .= '<span style="postition:relative;margin:5px;display:block;align:center;border: #9c9c9c 1px solid;border-color:black;font-family:Verdana;background-color:#Ffffcc;width:32%;height:9%;">';
         $returnValue .= '<span style="display:block;height=10px;border: #9c9c9c 1px solid;border-color:black;font-weight:bold;text-align:center;background-color:#ffcc99;font-size:10;">';
         $returnValue .= ''.$this->getLabel();
@@ -825,7 +825,7 @@ class core_kernel_classes_Resource
 
         $returnValue .= '</span>';
 
-        // section 10-13-1--31--3bf74db1:119c3d777ef:-8000:0000000000000B3F end
+        
 
         return (string) $returnValue;
     }
@@ -841,9 +841,9 @@ class core_kernel_classes_Resource
     {
         $returnValue = (string) '';
 
-        // section 10-13-1--99-20ac9d48:11a723d33d6:-8000:0000000000001253 begin
+        
         $returnValue = $this->getUri().'<br/>' . $this->getLabel() . '<br/>' ;
-        // section 10-13-1--99-20ac9d48:11a723d33d6:-8000:0000000000001253 end
+        
 
         return (string) $returnValue;
     }
@@ -860,14 +860,14 @@ class core_kernel_classes_Resource
     {
         $returnValue = array();
 
-        // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014CD begin
+        
         
         if(!is_array($properties)){
 			throw new common_exception_InvalidArgumentType(__CLASS__, __FUNCTION__, 0, 'array', $properties);
         }
         $returnValue = $this->getImplementation()->getPropertiesValues($this, $properties/*, $last*/);
         
-        // section 127-0-1-1-77557f59:12fa87873f4:-8000:00000000000014CD end
+        
 
         return (array) $returnValue;
     }
@@ -884,11 +884,11 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001550 begin
+        
         
         $returnValue = $this->getImplementation()->setType($this, $type);
         
-        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001550 end
+        
 
         return (bool) $returnValue;
     }
@@ -905,11 +905,11 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001553 begin
+        
         
         $returnValue = $this->getImplementation()->removeType($this, $type);
         
-        // section 127-0-1-1--398d2ad6:12fd3f7ebdd:-8000:0000000000001553 end
+        
 
         return (bool) $returnValue;
     }
@@ -926,14 +926,14 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--72f5bf1f:12fd500f94d:-8000:0000000000001552 begin
+        
     	foreach($this->getTypes() as $type){
         	if ($class->equals($type)){
         		$returnValue = true;
         		break;
         	}
         }
-        // section 127-0-1-1--72f5bf1f:12fd500f94d:-8000:0000000000001552 end
+        
 
         return (bool) $returnValue;
     }
@@ -949,7 +949,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-7c36bc99:13092a153cd:-8000:0000000000001599 begin
+        
         try{
         	$returnValue = count($this->getTypes())?true:false;
         }
@@ -957,7 +957,7 @@ class core_kernel_classes_Resource
         	;//return false by default
         }
                
-        // section 127-0-1-1-7c36bc99:13092a153cd:-8000:0000000000001599 end
+        
 
         return (bool) $returnValue;
     }
@@ -973,9 +973,9 @@ class core_kernel_classes_Resource
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1--9a19b46:135a440c85f:-8000:0000000000001BD6 begin
+        
         $returnValue = $this->uriResource;
-        // section 127-0-1-1--9a19b46:135a440c85f:-8000:0000000000001BD6 end
+        
 
         return (string) $returnValue;
     }
@@ -992,12 +992,12 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--1f554305:136e33138a4:-8000:0000000000001DA5 begin
+        
         if (is_null($resource)) {
         	throw new common_exception_Error('Null parameter in equals call on ressource '.$this->getUri());
         }
         $returnValue = $this->getUri() == $resource->getUri();
-        // section 127-0-1-1--1f554305:136e33138a4:-8000:0000000000001DA5 end
+        
 
         return (bool) $returnValue;
     }
@@ -1015,14 +1015,14 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-4723dbde:1373bc88899:-8000:00000000000019E8 begin
+        
         foreach($this->getTypes() as $type){
         	if ($class->equals($type) || $type->isSubClassOf($class)){
         		$returnValue = true;
         		break;
         	}
         }
-        // section 127-0-1-1-4723dbde:1373bc88899:-8000:00000000000019E8 end
+        
 
         return (bool) $returnValue;
     }

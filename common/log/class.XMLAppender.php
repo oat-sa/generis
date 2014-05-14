@@ -59,14 +59,14 @@ class common_log_XMLAppender
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001851 begin
+        
     	if (isset($configuration['file'])) {
     		$this->filename = $configuration['file'];
     		$returnValue = parent::init($configuration);
     	} else {
     		$returnValue = false;
     	}
-        // section 127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001851 end
+        
 
         return (bool) $returnValue;
     }
@@ -81,7 +81,7 @@ class common_log_XMLAppender
      */
     public function doLog( common_log_Item $item)
     {
-        // section 127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001854 begin
+        
     	$doc = new DOMDocument();
 		$doc->preserveWhiteSpace = false;
 		$doc->formatOutput = true;
@@ -125,7 +125,7 @@ class common_log_XMLAppender
 		
 		$doc->documentElement->appendChild($event_element);
 		@$doc->save($this->filename);
-        // section 127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001854 end
+        
     }
 
 }

@@ -138,12 +138,12 @@ class common_Logger
     {
         $returnValue = null;
 
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004328 begin
+        
 		if (is_null(self::$instance)){
 			self::$instance = new self();
         }
 		$returnValue = self::$instance;
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004328 end
+        
 
         return $returnValue;
     }
@@ -157,9 +157,9 @@ class common_Logger
      */
     private function __construct()
     {
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004362 begin
+        
 		$this->implementor = common_log_Dispatcher::singleton();
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004362 end
+        
     }
 
     /**
@@ -172,14 +172,14 @@ class common_Logger
      */
     public function register()
     {
-        // section 10-30-1--78--3a1a6c41:13a1b46a114:-8000:0000000000001B4A begin
+        
         
 		// initialize the logger here to prevent fatal errors that occure if:
 		// while autoloading any class, an error gets thrown
 		// the logger initializes to handle this error,  and failes to autoload his files
         set_error_handler(array($this, 'handlePHPErrors'));
 		register_shutdown_function(array($this, 'handlePHPShutdown'));
-        // section 10-30-1--78--3a1a6c41:13a1b46a114:-8000:0000000000001B4A end
+        
     }
 
     /**
@@ -196,7 +196,7 @@ class common_Logger
      */
     public function log($level, $message, $tags, $errorFile = '', $errorLine = 0)
     {
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432A begin
+        
 		if ($this->enabled && $this->implementor->getLogThreshold() <= $level) {
 			$this->disable();
 			$stack = defined('DEBUG_BACKTRACE_IGNORE_ARGS')
@@ -235,7 +235,7 @@ class common_Logger
 			$this->implementor->log(new common_log_Item($message, $level, time(), $stack, $tags, $requestURI, $errorFile, $errorLine));
 			$this->restore();
 		};
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432A end
+        
     }
 
     /**
@@ -247,10 +247,10 @@ class common_Logger
      */
     public function enable()
     {
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432F begin
+        
 		$this->stateStack[] = self::singleton()->enabled;
 		$this->enabled = true;
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000432F end
+        
     }
 
     /**
@@ -262,10 +262,10 @@ class common_Logger
      */
     public function disable()
     {
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004331 begin
+        
 		$this->stateStack[] = self::singleton()->enabled;
 		$this->enabled = false;
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004331 end
+        
     }
 
     /**
@@ -277,13 +277,13 @@ class common_Logger
      */
     public function restore()
     {
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004333 begin
+        
 		if (count($this->stateStack) > 0) {
 			$this->enabled = array_pop($this->stateStack);
 		} else {
 			self::e("Tried to restore Log state that was never changed");
 		}
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004333 end
+        
     }
 
     /**
@@ -297,9 +297,9 @@ class common_Logger
      */
     public static function t($message, $tags = array())
     {
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004335 begin
+        
 		self::singleton()->log(self::TRACE_LEVEL, $message, $tags);
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004335 end
+        
     }
 
     /**
@@ -313,9 +313,9 @@ class common_Logger
      */
     public static function d($message, $tags = array())
     {
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004337 begin
+        
 		self::singleton()->log(self::DEBUG_LEVEL, $message, $tags);
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004337 end
+        
     }
 
 
@@ -331,9 +331,9 @@ class common_Logger
      */
     public static function i($message, $tags = array())
     {
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000433D begin
+        
 		self::singleton()->log(self::INFO_LEVEL, $message, $tags);
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000433D end
+        
     }
 
     /**
@@ -347,9 +347,9 @@ class common_Logger
      */
     public static function w($message, $tags = array())
     {
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000433F begin
+        
 		self::singleton()->log(self::WARNING_LEVEL, $message, $tags);
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000433F end
+        
     }
 
     /**
@@ -363,9 +363,9 @@ class common_Logger
      */
     public static function e($message, $tags = array())
     {
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004341 begin
+        
 		self::singleton()->log(self::ERROR_LEVEL, $message, $tags);
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:0000000000004341 end
+        
     }
 
     /**
@@ -380,9 +380,9 @@ class common_Logger
     public static function f($message, $tags = array()
 )
     {
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:00000000000043A1 begin
+        
 		self::singleton()->log(self::FATAL_LEVEL, $message, $tags);
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:00000000000043A1 end
+        
     }
 
     /**
@@ -395,10 +395,10 @@ class common_Logger
      */
     public function handleException( Exception $exception)
     {
-        // section 127-0-1-1-7b882644:1342260c2b6:-8000:000000000000186D begin
+        
         $severity = method_exists($exception, 'getSeverity') ? $exception->getSeverity() : self::INFO_LEVEL;
         self::singleton()->log($severity, $exception->getMessage(), array(get_class($exception)), $exception->getFile(), $exception->getLine());
-        // section 127-0-1-1-7b882644:1342260c2b6:-8000:000000000000186D end
+        
     }
 
     /**
@@ -417,7 +417,7 @@ class common_Logger
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001848 begin
+        
         if (error_reporting() != 0){
         	if ($errorNumber == E_STRICT) {
         		foreach ($this->ACCEPTABLE_WARNINGS as $pattern) {
@@ -452,7 +452,7 @@ class common_Logger
         	}
         	self::singleton()->log($severity, 'php error('.$errorNumber.'): '.$errorString, array('PHPERROR'), $errorFile, $errorLine);
         }
-        // section 127-0-1-1--209aa8b7:134195b5554:-8000:0000000000001848 end
+        
 
         return (bool) $returnValue;
     }
@@ -467,7 +467,7 @@ class common_Logger
      */
     public function handlePHPShutdown()
     {
-        // section 127-0-1-1-56e04748:1341d1d0e41:-8000:000000000000182B begin
+        
     	$error = error_get_last();
     	if (($error['type'] & (E_COMPILE_ERROR | E_ERROR | E_PARSE | E_CORE_ERROR)) != 0) {
     		if (isset($error['file']) && isset($error['line'])) {
@@ -476,7 +476,7 @@ class common_Logger
     			self::singleton()->log(self::FATAL_LEVEL, 'php error('.$error['type'].'): '.$error['message'], array('PHPERROR'));
     		}
     	}
-        // section 127-0-1-1-56e04748:1341d1d0e41:-8000:000000000000182B end
+        
     }
 
 }

@@ -68,11 +68,11 @@ abstract class common_configuration_BoundableComponent
      */
     public function __construct($min, $max, $name = 'unknown', $optional = false)
     {
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B55 begin
+        
         parent::__construct($name, $optional);
         $this->setMin($min);
         $this->setMax($max);
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B55 end
+        
     }
 
     /**
@@ -85,9 +85,9 @@ abstract class common_configuration_BoundableComponent
      */
     public function setMin($min)
     {
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B04 begin
+        
         $this->min = $min;
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B04 end
+        
     }
 
     /**
@@ -101,9 +101,9 @@ abstract class common_configuration_BoundableComponent
     {
         $returnValue = (string) '';
 
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B07 begin
+        
         return $this->min;
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B07 end
+        
 
         return (string) $returnValue;
     }
@@ -118,7 +118,7 @@ abstract class common_configuration_BoundableComponent
      */
     public function setMax($max)
     {
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B09 begin
+        
     	// Support .x notation.
     	if (!empty($max)){
         	$this->max = preg_replace('/x/u', '99999', $max);
@@ -126,7 +126,7 @@ abstract class common_configuration_BoundableComponent
     	else{
     		$this->max = null;
     	}
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B09 end
+        
     }
 
     /**
@@ -140,9 +140,9 @@ abstract class common_configuration_BoundableComponent
     {
         $returnValue = (string) '';
 
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B0C begin
+        
         return $this->max;
-        // section -64--88-56-1--548fa03:1387a8a40e2:-8000:0000000000001B0C end
+        
 
         return (string) $returnValue;
     }

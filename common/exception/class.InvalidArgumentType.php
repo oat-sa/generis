@@ -52,12 +52,12 @@ class common_exception_InvalidArgumentType
      */
     public function __construct($class = null, $function = 0, $position = 0, $expectedType = '', $object = null)
     {
-        // section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FF begin
+        
         $object = is_object($object) ? get_class($object) : gettype($object);
         $message = 'Argument '.$position.' passed to '.$class.'::'.$function.'() must be an '.$expectedType.', '.$object.' given';
         parent::__construct($message);
         
-        // section 127-0-1-1--7d7a54ea:134896cda52:-8000:00000000000044FF end
+        
     }
 
 } /* end of class common_exception_InvalidArgumentType */

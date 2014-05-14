@@ -92,7 +92,7 @@ class common_log_SingleFileAppender
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001855 begin
+        
     	if (isset($configuration['file'])) {
     		$this->filename = $configuration['file'];
     	}
@@ -111,7 +111,7 @@ class common_log_SingleFileAppender
     	else{
     		$returnValue = false;
         }
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001855 end
+        
 
         return (bool) $returnValue;
     }
@@ -125,7 +125,7 @@ class common_log_SingleFileAppender
      */
     protected function initFile()
     {
-        // section 127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001828 begin
+        
         if ($this->maxFileSize > 0 && file_exists($this->filename) && filesize($this->filename) >= $this->maxFileSize) {
         	
         	// need to reduce the file size
@@ -138,7 +138,7 @@ class common_log_SingleFileAppender
         } else {
     		$this->filehandle = @fopen($this->filename, 'a');
         }
-        // section 127-0-1-1-56e04748:1341d1d0e41:-8000:0000000000001828 end
+        
     }
 
     /**
@@ -151,7 +151,7 @@ class common_log_SingleFileAppender
      */
     public function dolog( common_log_Item $item)
     {
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001852 begin
+        
     	if (is_null($this->filehandle)) {
     		$this->initFile();
     	}
@@ -175,7 +175,7 @@ class common_log_SingleFileAppender
 	    	
 	    	@fwrite($this->filehandle, $str);
     	}
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001852 end
+        
     }
 
     /**
@@ -187,11 +187,11 @@ class common_log_SingleFileAppender
      */
     public function __destruct()
     {
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001850 begin
+        
     	if (!is_null($this->filehandle) && $this->filehandle !== false) {
     		@fclose($this->filehandle);
     	}
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:0000000000001850 end
+        
     }
 
 }

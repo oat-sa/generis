@@ -72,7 +72,7 @@ class core_kernel_impl_ApiModelOO
     {
         $returnValue = (string) '';
 
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C0 begin
+        
 		
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$models = array();
@@ -222,7 +222,7 @@ class core_kernel_impl_ApiModelOO
 			}
 		}
 		
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009C0 end
+        
 
         return (string) $returnValue;
     }
@@ -271,7 +271,7 @@ class core_kernel_impl_ApiModelOO
     {
         $returnValue = (string) '';
 
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009CD begin
+        
         
         
         
@@ -399,7 +399,7 @@ class core_kernel_impl_ApiModelOO
 		}
         
         
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009CD end
+        
 
         return (string) $returnValue;
     }
@@ -415,14 +415,14 @@ class core_kernel_impl_ApiModelOO
     {
         $returnValue = null;
 
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009CF begin
+        
         $returnValue = new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(__METHOD__),__METHOD__);
         
         $classClass = new core_kernel_classes_Class(RDFS_CLASS);
         foreach($classClass->getSubClasses(true) as $uri => $subClass){
         	$returnValue->add($subClass);
         }
-		// section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009CF end
+		
 
         return $returnValue;
     }
@@ -438,7 +438,7 @@ class core_kernel_impl_ApiModelOO
     {
         $returnValue = null;
 
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009D6 begin
+        
     
         $returnValue = new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(__METHOD__),__METHOD__);
         
@@ -456,7 +456,7 @@ class core_kernel_impl_ApiModelOO
        		$returnValue->add(new core_kernel_classes_Class($row['subject']));
         }
 		
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009D6 end
+        
 
         return $returnValue;
     }
@@ -476,7 +476,7 @@ class core_kernel_impl_ApiModelOO
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009E8 begin
+        
         $dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
         $session 	= core_kernel_classes_Session::singleton();
         $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
@@ -503,7 +503,7 @@ class core_kernel_impl_ApiModelOO
 			}
         }
         
-        // section 10-13-1--31--741da406:11928f5acb9:-8000:00000000000009E8 end
+        
 
         return (bool) $returnValue;
     }
@@ -521,7 +521,7 @@ class core_kernel_impl_ApiModelOO
     {
         $returnValue = null;
 
-        // section 10-13-1--99-c056755:11a5428ab79:-8000:00000000000010B8 begin
+        
 		$factory = core_kernel_classes_TreeFactory::singleton();
 		$factory->setOptions(array("properties" => 'true',"instances" =>'true'));
 		$factory->setRootClass($uriResource);
@@ -529,7 +529,7 @@ class core_kernel_impl_ApiModelOO
 		$factory->setDepth($depth);
 		$returnValue = $factory->getTree();
 
-        // section 10-13-1--99-c056755:11a5428ab79:-8000:00000000000010B8 end
+        
 
         return $returnValue;
     }
@@ -545,7 +545,7 @@ class core_kernel_impl_ApiModelOO
     {
         $returnValue = null;
 
-        // section 10-13-1--99--f2ea6d:11b36a6e31a:-8000:00000000000019AD begin
+        
     	
         $returnValue = new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(__METHOD__),__METHOD__);
         
@@ -562,7 +562,7 @@ class core_kernel_impl_ApiModelOO
         	$returnValue->add(new core_kernel_classes_Class($row['subject']));
         }
 		
-        // section 10-13-1--99--f2ea6d:11b36a6e31a:-8000:00000000000019AD end
+        
 
         return $returnValue;
     }
@@ -580,7 +580,7 @@ class core_kernel_impl_ApiModelOO
     {
         $returnValue = null;
 
-        // section 10-13-1--99--65c50b00:11c66591411:-8000:0000000000000E9A begin
+        
 		
 		$sqlQuery = "SELECT subject FROM statements WHERE predicate = ? AND object= ? ";
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
@@ -595,7 +595,7 @@ class core_kernel_impl_ApiModelOO
 			$returnValue->add($container);
 		}
 
-        // section 10-13-1--99--65c50b00:11c66591411:-8000:0000000000000E9A end
+        
 
         return $returnValue;
     }
@@ -615,7 +615,7 @@ class core_kernel_impl_ApiModelOO
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1--99--152a2f30:1201eae099d:-8000:0000000000001EAE begin
+        
         $dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
     
         $query = "DELETE FROM statements WHERE subject = ?
@@ -629,7 +629,7 @@ class core_kernel_impl_ApiModelOO
        		$language
         ));
         
-        // section 10-13-1--99--152a2f30:1201eae099d:-8000:0000000000001EAE end
+        
 
         return (bool) $returnValue;
     }
@@ -647,7 +647,7 @@ class core_kernel_impl_ApiModelOO
     {
         $returnValue = null;
 
-        // section -87--2--3--76-51a982f1:1278aabc987:-8000:000000000000891E begin
+        
     	$sqlQuery = "SELECT object FROM statements WHERE subject = ? AND predicate = ?";
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$sqlResult = $dbWrapper->query($sqlQuery, array (
@@ -667,7 +667,7 @@ class core_kernel_impl_ApiModelOO
 			$container->debug = __METHOD__ ;
 			$returnValue->add($container);
 		}
-        // section -87--2--3--76-51a982f1:1278aabc987:-8000:000000000000891E end
+        
 
         return $returnValue;
     }
@@ -683,13 +683,13 @@ class core_kernel_impl_ApiModelOO
     {
         $returnValue = null;
 
-        // section 10-13-1--31-4da692cc:119bcf499fd:-8000:0000000000000E92 begin
+        
 		if (!isset(self::$instance)) {
 			$c = __CLASS__;
 			self::$instance = new $c();
 		}
 		$returnValue = self::$instance;
-        // section 10-13-1--31-4da692cc:119bcf499fd:-8000:0000000000000E92 end
+        
 
         return $returnValue;
     }
@@ -703,8 +703,8 @@ class core_kernel_impl_ApiModelOO
      */
     private function __construct()
     {
-        // section 10-13-1--31-4da692cc:119bcf499fd:-8000:0000000000000E96 begin
-        // section 10-13-1--31-4da692cc:119bcf499fd:-8000:0000000000000E96 end
+        
+        
     }
 
 } /* end of class core_kernel_impl_ApiModelOO */

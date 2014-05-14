@@ -75,7 +75,7 @@ class common_ext_NamespaceManager
     {
         $returnValue = null;
 
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001593 begin
+        
         
         if(is_null(self::$instance)){
         	$class = __CLASS__;				//used in case of subclassing
@@ -83,7 +83,7 @@ class common_ext_NamespaceManager
         }
         $returnValue = self::$instance;
         
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001593 end
+        
 
         return $returnValue;
     }
@@ -99,7 +99,7 @@ class common_ext_NamespaceManager
     {
         $returnValue = array();
 
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001595 begin
+        
         
         if(count($this->namespaces) == 0){
         	$db = core_kernel_classes_DbWrapper::singleton();
@@ -117,7 +117,7 @@ class common_ext_NamespaceManager
         	$returnValue[$uri] = new common_ext_Namespace($id, $uri);
         }
 
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001595 end
+        
 
         return (array) $returnValue;
     }
@@ -133,7 +133,7 @@ class common_ext_NamespaceManager
     {
         $returnValue = null;
 
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001597 begin
+        
         
         $session = core_kernel_classes_Session::singleton();
 		$localModel = $session->getNameSpace();
@@ -147,7 +147,7 @@ class common_ext_NamespaceManager
         	$returnValue = new common_ext_Namespace($modeId, $this->namespaces[$modeId]);
         }
         
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001597 end
+        
 
         return $returnValue;
     }
@@ -164,7 +164,7 @@ class common_ext_NamespaceManager
     {
         $returnValue = null;
 
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001599 begin
+        
     
         if(count($this->namespaces) == 0){
         	$this->getAllNamespaces();	//load the namespaces attribute 
@@ -182,7 +182,7 @@ class common_ext_NamespaceManager
         	}
         }
         
-        // section 127-0-1-1-1cf6e8c2:12dbd7e3b2a:-8000:0000000000001599 end
+        
 
         return $returnValue;
     }
@@ -196,9 +196,9 @@ class common_ext_NamespaceManager
      */
     public function reset()
     {
-        // section 10-13-1-85--470bb007:135aad37aa4:-8000:0000000000001944 begin
+        
         $this->namespaces = array();
-        // section 10-13-1-85--470bb007:135aad37aa4:-8000:0000000000001944 end
+        
     }
 
 }

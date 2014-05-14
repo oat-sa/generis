@@ -56,12 +56,12 @@ class core_kernel_classes_Literal
      */
     public function __construct($literal, $debug = '')
     {
-        // section 10-13-1--99--32cd3c54:11be55033bf:-8000:0000000000000D7C begin
+        
         $this->literal = strval($literal);
         if(DEBUG_MODE){
     		$this->debug = $debug;
         }
-        // section 10-13-1--99--32cd3c54:11be55033bf:-8000:0000000000000D7C end
+        
     }
 
     /**
@@ -75,9 +75,9 @@ class core_kernel_classes_Literal
     {
         $returnValue = (string) '';
 
-        // section -87--2--3--76-51a982f1:1278aabc987:-8000:0000000000008921 begin
+        
         $returnValue = $this->literal;
-        // section -87--2--3--76-51a982f1:1278aabc987:-8000:0000000000008921 end
+        
 
         return (string) $returnValue;
     }

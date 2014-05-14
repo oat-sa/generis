@@ -68,12 +68,12 @@ abstract class common_log_BaseAppender
      */
     public function log( common_log_Item $item)
     {
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000435D begin
+        
     	if ((1<<$item->getSeverity() & $this->mask) > 0
     		&& (empty($this->tags) || count(array_intersect($item->getTags(), $this->tags))) > 0) {
         	$this->doLog($item);
     	}
-        // section 127-0-1-1--5509896f:133feddcac3:-8000:000000000000435D end
+        
     }
 
     /**
@@ -87,13 +87,13 @@ abstract class common_log_BaseAppender
     {
         $returnValue = (int) 0;
 
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017C6 begin
+        
         $threshold = 0;
         while (($this->mask & 1<<$threshold) == 0){
         	$threshold++;
         }
         $returnValue = $threshold;
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:00000000000017C6 end
+        
 
         return (int) $returnValue;
     }
@@ -110,7 +110,7 @@ abstract class common_log_BaseAppender
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000183B begin
+        
     	if (isset($configuration['mask']) && is_numeric($configuration['mask'])) {
     		// take over the mask
     		$this->mask = intval($configuration['mask']);
@@ -126,7 +126,7 @@ abstract class common_log_BaseAppender
     		$this->tags = is_array($configuration['tags']) ? $configuration['tags'] : array($configuration['tags']);
     	}
     	$returnValue = true;
-        // section 127-0-1-1--13fe8a1d:134184f8bc0:-8000:000000000000183B end
+        
 
         return (bool) $returnValue;
     }

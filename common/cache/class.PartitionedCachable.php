@@ -66,12 +66,12 @@ abstract class common_cache_PartitionedCachable
     {
         $returnValue = (string) '';
 
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ECB begin
+        
         if (empty($this->serial)){
 			$this->serial = $this->buildSerial();
 		}
 		$returnValue = $this->serial;
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001ECB end
+        
 
         return (string) $returnValue;
     }
@@ -85,11 +85,11 @@ abstract class common_cache_PartitionedCachable
      */
     public function __construct()
     {
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EFD begin
+        
     	if (!is_null($this->getCache())) {
         	$this->getCache()->put($this);
         }
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001EFD end
+        
     }
 
     /**
@@ -103,7 +103,7 @@ abstract class common_cache_PartitionedCachable
     {
         $returnValue = array();
 
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F05 begin
+        
     	$this->serializedProperties = array();
         $reflection = new ReflectionClass($this);
 		foreach($reflection->getProperties() as $property){
@@ -139,7 +139,7 @@ abstract class common_cache_PartitionedCachable
 				}
 			}
 		}
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F05 end
+        
 
         return (array) $returnValue;
     }
@@ -153,7 +153,7 @@ abstract class common_cache_PartitionedCachable
      */
     public function __wakeup()
     {
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F08 begin
+        
         foreach ($this->serializedProperties as $key => $value) {
 			if (is_array($value)) {
 				$restored = array();
@@ -166,7 +166,7 @@ abstract class common_cache_PartitionedCachable
 			$this->$key = $restored;
 		}
 		$this->serializedProperties = array();
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F08 end
+        
     }
 
     /**
@@ -178,13 +178,13 @@ abstract class common_cache_PartitionedCachable
      */
     public function _remove()
     {
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F0A begin
+        
     	//usefull only when persistance is enabled
 		if (!is_null($this->getCache())){
 			//clean session
 			$this->getCache()->remove($this->getSerial());
 		}
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F0A end
+        
     }
 
     /**
@@ -198,7 +198,7 @@ abstract class common_cache_PartitionedCachable
     {
         $returnValue = array();
 
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F0C begin
+        
     	$reflection = new ReflectionClass($this);
 		foreach($reflection->getProperties() as $property){
 			if(!$property->isStatic() && !$property->isPrivate()){
@@ -215,7 +215,7 @@ abstract class common_cache_PartitionedCachable
 					}
 				}
 		}
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F0C end
+        
 
         return (array) $returnValue;
     }
@@ -232,7 +232,7 @@ abstract class common_cache_PartitionedCachable
     {
         $returnValue = array();
 
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F0E begin
+        
     	foreach ($this->getCache()->getAll() as $serial => $instance) {
 			
 			if (($classFilter == null || $instance instanceof $classFilter)
@@ -241,7 +241,7 @@ abstract class common_cache_PartitionedCachable
 				break;
 			}
 		}
-        // section 10-13-1-85--38a3ebee:13c4cf6d12a:-8000:0000000000001F0E end
+        
 
         return (array) $returnValue;
     }

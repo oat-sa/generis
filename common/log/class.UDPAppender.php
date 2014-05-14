@@ -74,7 +74,7 @@ class common_log_UDPAppender
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--508f6d44:1341e7d80d4:-8000:0000000000001859 begin
+        
     	if (isset($configuration['host'])) {
     		$this->host = $configuration['host'];
     	}
@@ -84,7 +84,7 @@ class common_log_UDPAppender
     	}
     	
     	$returnValue = parent::init($configuration);
-        // section 127-0-1-1--508f6d44:1341e7d80d4:-8000:0000000000001859 end
+        
 
         return (bool) $returnValue;
     }
@@ -99,7 +99,7 @@ class common_log_UDPAppender
      */
     public function doLog( common_log_Item $item)
     {
-        // section 127-0-1-1--508f6d44:1341e7d80d4:-8000:000000000000184D begin
+        
         if (is_null($this->resource)) {
         	$this->resource  = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
         	socket_set_nonblock($this->resource);
@@ -116,7 +116,7 @@ class common_log_UDPAppender
         	@socket_sendto($this->resource, $message, strlen($message), 0, $this->host, $this->port);
         	//ignore errors, socket might already be closed because php is shutting down
         }
-        // section 127-0-1-1--508f6d44:1341e7d80d4:-8000:000000000000184D end
+        
     }
 
     /**
@@ -128,7 +128,7 @@ class common_log_UDPAppender
      */
     public function __destruct()
     {
-        // section 127-0-1-1--508f6d44:1341e7d80d4:-8000:000000000000184F begin
+        
         // don't close since we might still need it
         /*
         if (!is_null($this->resource) && $this->resource !== false) {
@@ -136,7 +136,7 @@ class common_log_UDPAppender
         }
         parent::__destruct();
         */
-        // section 127-0-1-1--508f6d44:1341e7d80d4:-8000:000000000000184F end
+        
     }
 
 } /* end of class common_log_UDPAppender */

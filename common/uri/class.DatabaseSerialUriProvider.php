@@ -49,7 +49,7 @@ class common_uri_DatabaseSerialUriProvider
     {
         $returnValue = (string) '';
         
-        // section 10-13-1-85--341437fc:13634d84b3e:-8000:00000000000019A5 begin
+        
         
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
@@ -74,7 +74,7 @@ class common_uri_DatabaseSerialUriProvider
         }
 
         
-        // section 10-13-1-85--341437fc:13634d84b3e:-8000:00000000000019A5 end
+        
 
         return (string) $returnValue;
     }

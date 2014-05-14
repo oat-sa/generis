@@ -48,8 +48,8 @@ class helpers_VersionedFile
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--3ab6260f:13542827269:-8000:0000000000001922 begin
-        // section 127-0-1-1--3ab6260f:13542827269:-8000:0000000000001922 end
+        
+        
 
         return (bool) $returnValue;
     }
@@ -67,7 +67,7 @@ class helpers_VersionedFile
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B36 begin
+        
 		
 		if (is_file($path)) {
 			if(preg_match('/^\//', $path)){
@@ -87,7 +87,7 @@ class helpers_VersionedFile
 			}
 		}
 						
-        // section 127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B36 end
+        
 
         return (bool) $returnValue;
     }
@@ -107,7 +107,7 @@ class helpers_VersionedFile
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B39 begin
+        
 		
 		if (file_exists($source)) {
 			if (is_dir($source) && $recursive) {
@@ -131,7 +131,7 @@ class helpers_VersionedFile
 			}
 		}
 		
-        // section 127-0-1-1-46a4369a:136f329950b:-8000:0000000000004B39 end
+        
 
         return (bool) $returnValue;
     }

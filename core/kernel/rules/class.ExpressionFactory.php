@@ -48,7 +48,7 @@ class core_kernel_rules_ExpressionFactory
     {
         $returnValue = null;
 
-        // section 10-13-1--99-2335bfbb:1207fc834f5:-8000:0000000000001747 begin
+        
         if ($term == null ) {
         	var_dump($term);
         	throw new common_Exception('paramaters could not be null');
@@ -61,7 +61,7 @@ class core_kernel_rules_ExpressionFactory
         $returnValue = new core_kernel_rules_Expression($expressionInst->getUri());
         $returnValue->setPropertyValue($terminalExpressionProperty,$term->getUri());
         $returnValue->debug = __METHOD__;
-        // section 10-13-1--99-2335bfbb:1207fc834f5:-8000:0000000000001747 end
+        
 
         return $returnValue;
     }
@@ -80,7 +80,7 @@ class core_kernel_rules_ExpressionFactory
     {
         $returnValue = null;
 
-        // section 10-13-1--99-2335bfbb:1207fc834f5:-8000:000000000000174A begin
+        
         if ($exp1 == null || $exp2 == null  || $operator == null) {
         	var_dump($exp1,$exp2,$operator);
         	throw new common_Exception('paramaters could not be null');
@@ -100,7 +100,7 @@ class core_kernel_rules_ExpressionFactory
 		$returnValue->setPropertyValue($firstExpressionProperty,$exp1->getUri());
 		$returnValue->setPropertyValue($secondExpressionProperty,$exp2->getUri());
 		$returnValue->setPropertyValue($logicalOperatorProperty,$operator->getUri()); 
-		// section 10-13-1--99-2335bfbb:1207fc834f5:-8000:000000000000174A end
+		
 
         return $returnValue;
     }

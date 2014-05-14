@@ -61,10 +61,10 @@ class core_kernel_versioning_FileProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A begin
+        
         $delegate = $this->getImplementationToDelegateTo($resource);
 		$returnValue = $delegate->commit($resource, $message, $path, $recursive);
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165A end
+        
 
         return (bool) $returnValue;
     }
@@ -84,10 +84,10 @@ class core_kernel_versioning_FileProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165C begin
+        
         $delegate = $this->getImplementationToDelegateTo($resource);
 		$returnValue = $delegate->update($resource, $path, $revision);
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165C end
+        
 
         return (bool) $returnValue;
     }
@@ -107,10 +107,10 @@ class core_kernel_versioning_FileProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165E begin
+        
         $delegate = $this->getImplementationToDelegateTo($resource);
 		$returnValue = $delegate->revert($resource, $revision, $msg);
-        // section 127-0-1-1-6b8f17d3:132493e0488:-8000:000000000000165E end
+        
 
         return (bool) $returnValue;
     }
@@ -129,13 +129,13 @@ class core_kernel_versioning_FileProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 begin
+        
         //update before delete, else we get an out of date exception
         $resource->update();
         //and delete
         $delegate = $this->getImplementationToDelegateTo($resource);
 		$returnValue = $delegate->delete($resource, $path);
-        // section 127-0-1-1-7caa4aeb:1324dd0a1a4:-8000:0000000000001678 end
+        
 
         return (bool) $returnValue;
     }
@@ -156,10 +156,10 @@ class core_kernel_versioning_FileProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 begin
+        
         $delegate = $this->getImplementationToDelegateTo($resource);
 		$returnValue = $delegate->add($resource, $path, $recursive, $force);
-        // section 127-0-1-1-13a27439:132dd89c261:-8000:00000000000016F1 end
+        
 
         return (bool) $returnValue;
     }
@@ -178,10 +178,10 @@ class core_kernel_versioning_FileProxy
     {
         $returnValue = array();
 
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016FB begin
+        
         $delegate = $this->getImplementationToDelegateTo($resource);
 		$returnValue = $delegate->getHistory($resource, $path);
-        // section 127-0-1-1--57fd8084:132ecf4b934:-8000:00000000000016FB end
+        
 
         return (array) $returnValue;
     }
@@ -200,10 +200,10 @@ class core_kernel_versioning_FileProxy
     {
         $returnValue = (int) 0;
 
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001902 begin
+        
         $delegate = $this->getImplementationToDelegateTo($resource);
 		$returnValue = $delegate->getStatus($resource, $path, $options);
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001902 end
+        
 
         return (int) $returnValue;
     }
@@ -222,10 +222,10 @@ class core_kernel_versioning_FileProxy
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 begin
+        
         $delegate = $this->getImplementationToDelegateTo($resource);
 		$returnValue = $delegate->resolve($resource, $path, $version);
-        // section 127-0-1-1-7a3aeccb:1351527b8af:-8000:0000000000001921 end
+        
 
         return (bool) $returnValue;
     }
@@ -242,7 +242,7 @@ class core_kernel_versioning_FileProxy
     {
         $returnValue = null;
 
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032E2 begin
+        
         
 		$repository = $resource->getRepository();
 		if(!is_null($repository)){
@@ -276,7 +276,7 @@ class core_kernel_versioning_FileProxy
 			throw new core_kernel_versioning_exception_FileUnversionedException('no repository associated to the aledged versioned file');
 		}
 
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032E2 end
+        
 
         return $returnValue;
     }
@@ -292,12 +292,12 @@ class core_kernel_versioning_FileProxy
     {
         $returnValue = null;
 
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F0 begin
+        
 		if(is_null(self::$instance)){
 			self::$instance = new core_kernel_versioning_FileProxy();
 		}
 		$returnValue = self::$instance;
-        // section 127-0-1-1--a63bd74:132c9c69076:-8000:00000000000032F0 end
+        
 
         return $returnValue;
     }

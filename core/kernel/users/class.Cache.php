@@ -57,7 +57,7 @@ class core_kernel_users_Cache
     {
         $returnValue = array();
 
-        // section 10-13-1-85--1142a8d8:13c5c9f800e:-8000:0000000000001F4D begin
+        
         try{
         	$serial = self::buildIncludedRolesSerial($role);
         	$fileCache = common_cache_FileCache::singleton();
@@ -72,7 +72,7 @@ class core_kernel_users_Cache
         	$msg = "Includes roles related to Role with URI '${roleUri}' is not in the Cache memory.";
         	throw new core_kernel_users_CacheException($msg);
         }
-        // section 10-13-1-85--1142a8d8:13c5c9f800e:-8000:0000000000001F4D end
+        
 
         return (array) $returnValue;
     }
@@ -90,7 +90,7 @@ class core_kernel_users_Cache
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3B begin
+        
         // Make a simple array of URIs with the included roles.
         $toCache = array();
         foreach ($includedRoles as $resource){
@@ -109,7 +109,7 @@ class core_kernel_users_Cache
         	$msg.= $e->getMessage();
         	throw new core_kernel_users_CacheException($msg);
         }
-        // section 10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3B end
+        
 
         return (bool) $returnValue;
     }
@@ -126,7 +126,7 @@ class core_kernel_users_Cache
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3E begin
+        
         $serial = self::buildIncludedRolesSerial($role);
         $fileCache = common_cache_FileCache::singleton();
         $fileCache->remove($serial);
@@ -135,7 +135,7 @@ class core_kernel_users_Cache
         // removed due to race conditions.
         // $returnValue = (file_exists(GENERIS_CACHE_PATH . $serial)) ? false : true;
         $returnValue = true;
-        // section 10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F3E end
+        
 
         return (bool) $returnValue;
     }
@@ -153,11 +153,11 @@ class core_kernel_users_Cache
     {
         $returnValue = (bool) false;
 
-        // section 10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F43 begin
+        
         $serial = self::buildIncludedRolesSerial($role);
         $fileCache = common_cache_FileCache::singleton();
         $returnValue = $fileCache->has($serial);
-        // section 10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F43 end
+        
 
         return (bool) $returnValue;
     }
@@ -175,9 +175,9 @@ class core_kernel_users_Cache
     {
         $returnValue = (string) '';
 
-        // section 10-13-1-85-7aff3a42:13c4e6071d5:-8000:0000000000001F45 begin
+        
         $returnValue = self::SERIAL_PREFIX_INCLUDED_ROLES . urlencode($role->getUri());
-        // section 10-13-1-85-7aff3a42:13c4e6071d5:-8000:0000000000001F45 end
+        
 
         return (string) $returnValue;
     }
@@ -191,7 +191,7 @@ class core_kernel_users_Cache
      */
     public static function flush()
     {
-        // section 10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F41 begin
+        
         $cacheDir = GENERIS_CACHE_PATH;
         $matching = self::SERIAL_PREFIX_INCLUDED_ROLES;
         if (@is_readable($cacheDir) && @is_dir($cacheDir)){
@@ -213,7 +213,7 @@ class core_kernel_users_Cache
         	$msg = 'The Users Cache is not readable or is not a directory.';
         	throw new core_kernel_users_CacheException($msg);
         }
-        // section 10-13-1-85--436aa729:13c4e543eba:-8000:0000000000001F41 end
+        
     }
 
 } /* end of class core_kernel_users_Cache */

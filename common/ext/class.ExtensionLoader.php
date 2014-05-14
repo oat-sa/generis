@@ -71,7 +71,7 @@ class common_ext_ExtensionLoader
      */
     protected function loadConstants($extraConstants)
     {
-        // section 127-0-1-1-62ede985:13d2586a59c:-8000:0000000000001FE8 begin
+        
         common_Logger::t('Loading extension ' . $this->extension->getId() . ' constants');
     	
     	// load the constants from the manifest
@@ -102,7 +102,7 @@ class common_ext_ExtensionLoader
     		//load the config of the extension
     		$this->loadConstantsFile($extension);
     	}
-        // section 127-0-1-1-62ede985:13d2586a59c:-8000:0000000000001FE8 end
+        
     }
 
     /**
@@ -115,7 +115,7 @@ class common_ext_ExtensionLoader
      */
     private function loadConstantsFile($extensionId)
     {
-        // section 127-0-1-1-62ede985:13d2586a59c:-8000:0000000000001FEB begin
+        
     	$constantFile = ROOT_PATH . $extensionId .DIRECTORY_SEPARATOR. 'includes' .DIRECTORY_SEPARATOR. 'constants.php';
     	$loadedFiles = $this->getLoadedFiles();
     	if(file_exists($constantFile) && !in_array($constantFile, $loadedFiles)){
@@ -135,7 +135,7 @@ class common_ext_ExtensionLoader
     			unset($todefine);
     		}
     	}
-        // section 127-0-1-1-62ede985:13d2586a59c:-8000:0000000000001FEB end
+        
     }
 
     /**
@@ -150,9 +150,9 @@ class common_ext_ExtensionLoader
     {
         $returnValue = array();
 
-        // section 127-0-1-1-62ede985:13d2586a59c:-8000:0000000000001FF4 begin
+        
         $returnValue = $this->loadedFiles;
-        // section 127-0-1-1-62ede985:13d2586a59c:-8000:0000000000001FF4 end
+        
 
         return (array) $returnValue;
     }
@@ -167,10 +167,10 @@ class common_ext_ExtensionLoader
      */
     protected function addLoadedFile($filePath)
     {
-        // section 127-0-1-1-62ede985:13d2586a59c:-8000:0000000000001FF7 begin
+        
         array_push($this->loadedFiles, $filePath);
         $this->loadedFiles = array_unique($this->loadedFiles);
-        // section 127-0-1-1-62ede985:13d2586a59c:-8000:0000000000001FF7 end
+        
     }
 
 }
