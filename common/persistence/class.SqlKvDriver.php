@@ -80,14 +80,14 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
             
             if($platformName == 'mysql'){
                 //query found in Symfony PdoSessionHandler
-                $statement = "INSERT INTO kv_store (kv_id, kv_value, kv_time) VALUES (:id, :data, :time) " .
-                    "ON DUPLICATE KEY UPDATE kv_value = VALUES(kv_value), kv_time = VALUES(kv_time)";
+                $statement = "INSERT INTO kv_store (kv_id, kv_value, kv_time) VALUES (:id, :data, :time) 
+                    ON DUPLICATE KEY UPDATE kv_value = VALUES(kv_value), kv_time = VALUES(kv_time)";
                 $returnValue = $this->sqlPeristence->exec($statement,$params);
                 
             } else if($platformName == 'oracle'){
-                $statement = "MERGE INTO kv_store USING DUAL ON(kv_id = :id) ".
-                "WHEN NOT MATCHED THEN INSERT (kv_id, kv_value, kv_time) VALUES (:id, :data, sysdate) " .
-                "WHEN MATHED THEN UPDATE SET kv_value = :data WHERE kv_id = :id";
+                $statement = "MERGE INTO kv_store USING DUAL ON(kv_id = :id) 
+                    WHEN NOT MATCHED THEN INSERT (kv_id, kv_value, kv_time) VALUES (:id, :data, sysdate) 
+                    WHEN MATHED THEN UPDATE SET kv_value = :data WHERE kv_id = :id";
             }
             
             else {
