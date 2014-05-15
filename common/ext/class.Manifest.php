@@ -87,7 +87,6 @@ class common_ext_Manifest
      * @var string
      */
     private $license = 'unknown';
-    
 
     /**
      * The dependencies of the Extension the manifest describes.
@@ -207,6 +206,14 @@ class common_ext_Manifest
      * @var array
      */
     private $acl = array();
+    
+    /**
+     * Extra information, not consumed by the framework
+     * @access private
+     * @var array
+     */
+    private $extra = array();
+    
 
     /**
      * Creates a new instance of Manifest.
@@ -318,6 +325,10 @@ class common_ext_Manifest
     		
     		if (!empty($array['constants'])){
     			$this->setConstants($array['constants']);
+    		}
+    		
+    		if (!empty($array['extra'])){
+    		    $this->setExtra($array['extra']);
     		}
     		
     		if (!empty($array['managementRole'])){
@@ -930,6 +941,30 @@ class common_ext_Manifest
     {
         $this->constants = $constants;
     }
+    
+    /**
+     * Get the array with unformated extra data
+     *
+     * @access public
+     * @author Jerome Bogaerts <jerome@taotesting.com>
+     * @return array
+     */
+    public function getExtra()
+    {
+        return $this->extra;
+    }
+    
+    /**
+     * Set an array with extra data
+     *
+     * @access private
+     * @author Jerome Bogaerts <jerome@taotesting.com>
+     * @param  array $constants
+     */
+    private function setExtra($extra)
+    {
+        $this->extra = $extra;
+    }    
     
     /**
      * Extract checks from a given manifest file.
