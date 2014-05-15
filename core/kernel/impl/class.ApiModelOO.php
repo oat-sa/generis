@@ -63,6 +63,7 @@ class core_kernel_impl_ApiModelOO
      * build xml rdf containing rdf:Description of all meta-data the conected
      * may get
      *
+     * @deprecated
      * @access public
      * @author firstname and lastname of author, <author@example.org>
      * @param  array sourceNamespaces
@@ -70,14 +71,8 @@ class core_kernel_impl_ApiModelOO
      */
     public function exportXmlRdf($sourceNamespaces = array())
     {
-        $returnValue = (string) '';
-
-        
-		
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$models = array();
-		
-		foreach($sourceNamespaces as $namespace){
+        $modelIds = array();
+    	foreach($sourceNamespaces as $namespace){
 			if(!preg_match("/\#$/", $namespace)){
 				$namespace .= "#";
 			}
@@ -86,145 +81,12 @@ class core_kernel_impl_ApiModelOO
 				$namespace
 			));
 			if ($row = $result->fetch(PDO::FETCH_ASSOC)){
-				$models[] = $row;
+			    $modelIds[] = $row['modelid'];
 				$result->closeCursor();
 			}
 		}
-		
-		$allModels = array();
-		$result = $dbWrapper->query('SELECT * FROM "models"');
-		while($row = $result->fetch(PDO::FETCH_ASSOC)){
-			$allModels[] = $row;
-		}
-		
-		
-		if(count($models) > 0){
-		
-			$baseNs = array(
-						'xmlns:rdf'		=> 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-						'xmlns:rdfs'	=> 'http://www.w3.org/2000/01/rdf-schema#'
-					);
-					
-			$currentNs = array();
-			if(count($models) == 1){
-				$currentNs['xml:base'] = $namespace;
-				$model = $models[0];
-				$currentNs["xmlns:ns{$model['modelid']}"] = $namespace;
-			}
-			foreach($models as $i => $model){
-				if(!preg_match("/#$/", $model['modeluri'])){
-					$model['modeluri'] .= '#';
-				}
-				$currentNs["xmlns:ns{$model['modelid']}"] = $model['modeluri'];
-			}
-			$currentNs = array_merge($baseNs, $currentNs);
-			
-			$allNs = array();
-			foreach($allModels as $i => $model){
-				$allNs["xmlns:ns{$model['modelid']}"] = $model['modeluri'];
-			}
-			$allNs = array_merge($baseNs, $allNs);
-				
-			try{
-				
-				$dom = new DOMDocument();
-				$dom->formatOutput = true;
-				$root = $dom->createElement('rdf:RDF');
-				
-				foreach($currentNs as $namespaceId => $namespaceUri){
-					$root->setAttribute($namespaceId, $namespaceUri);
-				}
-				$dom->appendChild($root);
-					
-				foreach($models as $i => $model){
-					
-					$modelId = $model['modelid'];
-					$modelUri = $model['modeluri'];
-					
-					$subjects = array();
-					$result = $dbWrapper->query('SELECT DISTINCT "subject" FROM "statements" WHERE "modelid"='.$modelId);
-					
-					while($r = $result->fetch()){
-						$subjects[] = $r['subject'];
-					}
-					foreach($subjects as $subject){
-						$description = $dom->createElement('rdf:Description');
-						$description->setAttribute('rdf:about', $subject);
-							$result = $dbWrapper->query('SELECT * FROM "statements" WHERE "subject" = '. $dbWrapper->quote($subject));
-							
-							while($t = $result->fetch()){
-								
-								$predicate 	= trim($t['predicate']);
-								$object 	= trim($t['object']);
-								$lang 		= trim($t['l_language']);
-								
-								$nodeName = null;
-								
-								foreach($allNs as $namespaceId => $namespaceUri){
-									if($namespaceId == 'xml:base') {
-                                        continue;
-                                    }
-									if(preg_match("/^".preg_quote($namespaceUri, '/')."/", $predicate)){
-										if(!array_key_exists($namespaceId, $currentNs)){
-											$currentNs[$namespaceId] = $namespaceUri;
-											$root->setAttribute($namespaceId, $namespaceUri);
-										}
-										$nodeName = str_replace('xmlns:', '', $namespaceId).':'.str_replace($namespaceUri, '', $predicate);
-										break;
-									}
-								}
-								$resourceValue = false;
-								foreach($allNs as $namespaceId => $namespaceUri){
-									if( preg_match("/^".preg_quote($namespaceUri, '/')."/", $object) || 
-										preg_match("/^http\:\/\/(.*)\#[a-zA-Z1-9]*/", $object)){
-										$resourceValue = true;
-										break;
-									}
-								}
-								if(!is_null($nodeName)){
-									try{
-										$node = $dom->createElement($nodeName);
-										if(!empty($lang)){
-											$node->setAttribute('xml:lang', $lang);
-										}
-										if($resourceValue){
-												$node->setAttribute('rdf:resource', $object);
-										}
-										else{
-											if(!empty($object) && !is_null($object)){
-												
-												/**
-												 * Replace the CDATA section inside XML fields by a replacement tag:
-												 * <![CDATA[ ]]> to <CDATA></CDATA>
-												 * @todo check if this behavior is the right
-												 */
-												$object = str_replace('<![CDATA[', '<CDATA>', $object);
-												$object = str_replace(']]>', '</CDATA>', $object);
-
-												$node->appendChild($dom->createCDATASection($object));
-											}
-										}
-										$description->appendChild($node);
-									}
-									catch(DOMException $de){
-										//print $de;
-									}
-								}
-							}
-						$root->appendChild($description);
-					}
-				}
-				$returnValue = $dom->saveXml();
-			}
-			catch(Exception $e){
-			    common_Logger::e('Problem exporting models : ' . implode(',',$sourceNamespaces) . ' : ' . $e->getMessage());
-				print $e;
-			}
-		}
-		
-        
-
-        return (string) $returnValue;
+		return $xml = core_kernel_api_ModelExporter::exportXmlRdf($modelIds);
+       
     }
 
     /**
