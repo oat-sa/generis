@@ -484,11 +484,11 @@ class core_kernel_persistence_smoothsql_Resource
     }
 
     /**
-     * Short description of method getRdfTriples
+     * returns the triples having as subject the current resource
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
+     * @author Joel Bout, <joel@taotesting.com>
+     * @param  core_kernel_classes_Resource resource
      * @return core_kernel_classes_ContainerCollection
      */
     public function getRdfTriples( core_kernel_classes_Resource $resource)
@@ -498,12 +498,10 @@ class core_kernel_persistence_smoothsql_Resource
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $modelIds = '('.implode(',', array_keys(core_kernel_classes_Session::singleton()->getLoadedModels())).')';
         $query = 'SELECT * FROM statements WHERE subject = ? AND modelid IN '.$modelIds.' ORDER BY predicate';
-        $result = $dbWrapper->query($query, array(
-         $resource->getUri()
-        ));
+        $result = $dbWrapper->query($query, array($resource->getUri()));
         
         $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
-        while($statement = $result->fetch()){
+        while ($statement = $result->fetch()) {
             $triple = new core_kernel_classes_Triple();
             $triple->modelid = $statement["modelid"];
             $triple->subject = $statement["subject"];
@@ -516,8 +514,6 @@ class core_kernel_persistence_smoothsql_Resource
             $triple->deletePrivileges = $statement["stdelete"];
             $returnValue->add($triple);
         }
-    
-        
 
         return $returnValue;
     }
