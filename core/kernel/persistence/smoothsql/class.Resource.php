@@ -494,35 +494,29 @@ class core_kernel_persistence_smoothsql_Resource
     public function getRdfTriples( core_kernel_classes_Resource $resource)
     {
         $returnValue = null;
-
         
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $modelIds = '('.implode(',', array_keys(core_kernel_classes_Session::singleton()->getLoadedModels())).')';
+        $query = 'SELECT * FROM statements WHERE subject = ? AND modelid IN '.$modelIds.' ORDER BY predicate';
+        $result = $dbWrapper->query($query, array(
+         $resource->getUri()
+        ));
         
-    	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-	
-	     $namespaces = common_ext_NamespaceManager::singleton()->getAllNamespaces();
-	     $namespace = $namespaces[substr($resource->getUri(), 0, strpos($resource->getUri(), '#') + 1)];
-	
-	     $query = 'SELECT * FROM statements WHERE subject = ? AND modelid = ? ORDER BY predicate';
-	     $result = $dbWrapper->query($query, array(
-	    	 $resource->getUri(),
-	     	$namespace->getModelId()
-	     ));
-	
-	     $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
-	     while($statement = $result->fetch()){
-	     	$triple = new core_kernel_classes_Triple();
-	     	$triple->modelid = $statement["modelid"];
-	     	$triple->subject = $statement["subject"];
-	     	$triple->predicate = $statement["predicate"];
-	     	$triple->object = $statement["object"];
-	     	$triple->id = $statement["id"];
-	     	$triple->lg = $statement["l_language"];
-	     	$triple->readPrivileges = $statement["stread"];
-	     	$triple->editPrivileges = $statement["stedit"];
-	     	$triple->deletePrivileges = $statement["stdelete"];
-	     	$returnValue->add($triple);
-	     }
-        
+        $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
+        while($statement = $result->fetch()){
+            $triple = new core_kernel_classes_Triple();
+            $triple->modelid = $statement["modelid"];
+            $triple->subject = $statement["subject"];
+            $triple->predicate = $statement["predicate"];
+            $triple->object = $statement["object"];
+            $triple->id = $statement["id"];
+            $triple->lg = $statement["l_language"];
+            $triple->readPrivileges = $statement["stread"];
+            $triple->editPrivileges = $statement["stedit"];
+            $triple->deletePrivileges = $statement["stdelete"];
+            $returnValue->add($triple);
+        }
+    
         
 
         return $returnValue;
