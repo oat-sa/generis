@@ -802,33 +802,7 @@ class core_kernel_classes_Resource
         return (array) $returnValue;
     }
 
-    /**
-     * Short description of method toHtml
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return string
-     */
-    public function toHtml()
-    {
-        $returnValue = (string) '';
 
-        
-        $returnValue .= '<span style="postition:relative;margin:5px;display:block;align:center;border: #9c9c9c 1px solid;border-color:black;font-family:Verdana;background-color:#Ffffcc;width:32%;height:9%;">';
-        $returnValue .= '<span style="display:block;height=10px;border: #9c9c9c 1px solid;border-color:black;font-weight:bold;text-align:center;background-color:#ffcc99;font-size:10;">';
-        $returnValue .= ''.$this->getLabel();
-        $returnValue .= '</span>';
-        $returnValue .= '<span style="display:block;height=90px;font-weight:normal;font-style:italic;font-size:9;">';
-        $returnValue .= ''.$this->getComment()."<br />";
-        $returnValue .= '<span style="font-size:5;">'.$this->getUri().'</span>';
-        $returnValue .= '</span>';
-
-        $returnValue .= '</span>';
-
-        
-
-        return (string) $returnValue;
-    }
 
     /**
      * Short description of method __toString
@@ -839,13 +813,7 @@ class core_kernel_classes_Resource
      */
     public function __toString()
     {
-        $returnValue = (string) '';
-
-        
-        $returnValue = $this->getUri().'<br/>' . $this->getLabel() . '<br/>' ;
-        
-
-        return (string) $returnValue;
+        return $this->getUri()."\n" . $this->getLabel() ;
     }
 
     /**

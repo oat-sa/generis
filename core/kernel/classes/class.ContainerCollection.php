@@ -53,22 +53,6 @@ class core_kernel_classes_ContainerCollection
         
     }
 
-    /**
-     * Short description of method toHtml
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return string
-     */
-    public function toHtml()
-    {
-        $returnValue = (string) '';
-
-        
-        
-
-        return (string) $returnValue;
-    }
 
     /**
      * Short description of method union
