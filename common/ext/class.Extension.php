@@ -315,7 +315,7 @@ class common_ext_Extension
             $namespaces[] = trim($ns, '\\');
         }
         if (!empty($namespaces)) {
-        	common_Logger::d('Ns not empty '. $this->getId() );
+        	common_Logger::d('Namespace not empty for extension '. $this->getId() );
             $classes = array();
             $recDir = new RecursiveDirectoryIterator($this->getDir());
             $recIt = new RecursiveIteratorIterator($recDir);

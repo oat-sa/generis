@@ -51,7 +51,7 @@ class common_ext_GenerisInstaller
     public function install()
     {
     	if ($this->extension->getId() != 'generis') {
-    		throw new common_ext_ExtensionException('Tried to install "'.$this->extension->getId().'" using the GenerisInstaller');
+    		throw new common_ext_ExtensionException('Tried to install "'.$this->extension->getId().'" extension using the GenerisInstaller');
     	}
         //$this->installCustomScript();
 		//$this->installWriteConfig();
@@ -64,7 +64,7 @@ class common_ext_GenerisInstaller
 		common_cache_FileCache::singleton()->purge();
         
 		AutoLoader::reload();
-		common_Logger::d('install custom scrip for ' . $this->extension->getId());
+		common_Logger::d('Installing custom script for extension ' . $this->extension->getId());
 		$this->installCustomScript();
 		
         

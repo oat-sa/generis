@@ -59,7 +59,7 @@ class common_ext_ExtensionInstaller
 	{
 		
 		
-		common_Logger::i('Installing '.$this->extension->getId(), 'INSTALL');
+		common_Logger::i('Installing extension '.$this->extension->getId(), 'INSTALL');
 		
 		if ($this->extension->getId() == 'generis') {
 			throw new common_ext_ForbiddenActionException('Tried to install generis using the ExtensionInstaller',
@@ -93,22 +93,22 @@ class common_ext_ExtensionInstaller
 					
 				//reload the autoloader
 				AutoLoader::reload();
-				common_Logger::d('install custom scrip for ' . $this->extension->getId());
+				common_Logger::d('Installing custom script for extension ' . $this->extension->getId());
 				$this->installCustomScript();
-				common_Logger::d('Done install custom scrip for ' . $this->extension->getId());
+				common_Logger::d('Done installing custom script for extension ' . $this->extension->getId());
 				
 				if ($this->getLocalData() == true){
-					common_Logger::d('installLocalData  for ' . $this->extension->getId());
+					common_Logger::d('Installing local data for extension ' . $this->extension->getId());
 					$this->installLocalData();
-					common_Logger::d('Done installLocalData for ' . $this->extension->getId());
+					common_Logger::d('Done installing local data for extension ' . $this->extension->getId());
 						
 				}
-				common_Logger::d('extendedInstall  for ' . $this->extension->getId());
+				common_Logger::d('Extended install for extension ' . $this->extension->getId());
 					
 				// Method to be overriden by subclasses
 				// to extend the installation mechanism.
 				$this->extendedInstall();
-				common_Logger::d('Done extendedInstall  for ' . $this->extension->getId());
+				common_Logger::d('Done extended install for extension ' . $this->extension->getId());
 			}
 				
 		}catch (common_ext_ExtensionException $e){
@@ -232,7 +232,7 @@ class common_ext_ExtensionInstaller
 	protected function installRegisterExt()
 	{
 		
-		common_Logger::d('Registering '.$this->extension->getId(), 'INSTALL');
+		common_Logger::d('Registering extension '.$this->extension->getId(), 'INSTALL');
 		common_ext_ExtensionsManager::singleton()->registerExtension($this->extension);
 		common_ext_ExtensionsManager::singleton()->setEnabled($this->extension->getId());
 		
@@ -252,7 +252,7 @@ class common_ext_ExtensionInstaller
 		
 		//install script
 		foreach ($this->extension->getManifest()->getInstallPHPFiles() as $script) {
-			common_Logger::d('Running custom install script '.$script.' for ext '.$this->extension->getId(), 'INSTALL');
+			common_Logger::d('Running custom install script '.$script.' for extension '.$this->extension->getId(), 'INSTALL');
 			require_once $script;
 		}
 		
@@ -282,7 +282,7 @@ class common_ext_ExtensionInstaller
 			$scripts = $localData['php'];
 			$scripts = is_array($scripts) ? $scripts : array($scripts);
 			foreach ($scripts as $script) {
-				common_Logger::d('Running local data script '.$script.' for ext '.$this->extension->getId(), 'INSTALL');
+				common_Logger::d('Running local data script '.$script.' for extension '.$this->extension->getId(), 'INSTALL');
 				require_once $script;
 			}
 		}
@@ -299,7 +299,7 @@ class common_ext_ExtensionInstaller
 	public function installLoadConstants()
 	{
 		
-		common_Logger::i("Loading constants for extension '" . $this->extension->getId() . "'");
+		common_Logger::i("Loading constants for extension " . $this->extension->getId());
 		$this->extension->load();
 		
 	}
