@@ -278,29 +278,25 @@
     <rdfs:comment xml:lang="en-US"><![CDATA[concat]]></rdfs:comment>
     <rdfs:label xml:lang="en-US"><![CDATA[.]]></rdfs:label>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#True">
+  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#TrueExpression">
     <rdf:type rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Expression"/>
     <rule:TerminalExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Empty"/>
     <rule:HasLogicalOperator rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Exists"/>
     <rule:Debug xml:lang="en-US"/>
     <rule:FirstExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#True"/>
     <rule:SecondExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#True"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#TrueExpression">
-   <rdfs:label xml:lang="en-US"><![CDATA[True]]></rdfs:label>
+    <rdfs:label xml:lang="en-US"><![CDATA[True]]></rdfs:label>
     <rdfs:comment xml:lang="en-US"><![CDATA[Expression that is always True]]></rdfs:comment>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#FalseExpression">
-    <rdfs:comment xml:lang="en-US"><![CDATA[Expression that is always False]]></rdfs:comment>
-    <rdfs:label xml:lang="en-US"><![CDATA[False]]></rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#False">
     <rdf:type rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Expression"/>
     <rule:TerminalExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Empty"/>
     <rule:HasLogicalOperator rdf:resource="http://www.tao.lu/middleware/Rules.rdf#Exists"/>
     <rule:Debug xml:lang="en-US"/>
     <rule:FirstExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#True"/>
     <rule:SecondExpression rdf:resource="http://www.tao.lu/middleware/Rules.rdf#True"/>
+    <rdfs:comment xml:lang="en-US"><![CDATA[Expression that is always False]]></rdfs:comment>
+    <rdfs:label xml:lang="en-US"><![CDATA[False]]></rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/middleware/Rules.rdf#RuleEngine">
     <rdfs:label xml:lang="en-US"><![CDATA[Rule Engine]]></rdfs:label>

@@ -78,6 +78,7 @@
   </rdf:Description>
   
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#VersionedRepository">
+    <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource"/>
     <rdfs:label xml:lang="en-US"><![CDATA[Repository]]></rdfs:label>
     <rdfs:comment xml:lang="en-US"><![CDATA[generis_VersionedRepository]]></rdfs:comment>
   </rdf:Description>
