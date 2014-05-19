@@ -122,8 +122,9 @@ class common_session_BasicSession implements common_session_Session
      * @see common_session_Session::getTimeZone()
      */
     public function getTimeZone() {
-        $tz = $this->user->getPropertyValues(PROPERTY_USER_TIMEZONE);
-        return empty($tz) ? TIME_ZONE : (string)current($tz);
+        $tzs = $this->user->getPropertyValues(PROPERTY_USER_TIMEZONE);
+        $tz = empty($tz) ? '' : (string)current($tzs);
+        return empty($tz) ? TIME_ZONE : $tz;
     }
     
     public function refresh() {
