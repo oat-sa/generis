@@ -247,7 +247,6 @@ class core_kernel_persistence_smoothsql_Class
 
     /**
      * 
-     * @access
      * @author lionel
      * @param core_kernel_classes_Class $resource
      * @param core_kernel_classes_Resource $instance
@@ -613,39 +612,21 @@ class core_kernel_persistence_smoothsql_Class
      */
     public static function singleton()
     {
-        $returnValue = null;
-
-        
-        
+       
         if (core_kernel_persistence_smoothsql_Class::$instance == null){
         	core_kernel_persistence_smoothsql_Class::$instance = new core_kernel_persistence_smoothsql_Class();
         }
-        $returnValue = core_kernel_persistence_smoothsql_Class::$instance;
-        
-        
+        return  core_kernel_persistence_smoothsql_Class::$instance;
 
-        return $returnValue;
     }
 
     /**
-     * Short description of method isValidContext
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @return boolean
+     * (non-PHPdoc)
+     * @see core_kernel_persistence_smoothsql_Resource::isValidContext()
      */
     public function isValidContext( core_kernel_classes_Resource $resource)
     {
-        $returnValue = (bool) false;
-
-        
-        
-        $returnValue = true;
-        
-        
-
-        return (bool) $returnValue;
+        return true;
     }
 
     /**
