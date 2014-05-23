@@ -201,7 +201,7 @@ class common_Logger
 			$this->disable();
 			$stack = defined('DEBUG_BACKTRACE_IGNORE_ARGS')
                 ? debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)
-                : debug_backtrace(FALSE);
+                : debug_backtrace(false);
 			array_shift($stack);
 			// retrieving the user can be a complex procedure, leading to missing log informations
 			$user = null;
