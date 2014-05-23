@@ -366,8 +366,9 @@ class helpers_File
         // whether $path is unix or not
         $unipath = strlen( $path ) == 0 || $path{0} != '/';
         // attempts to detect if path is relative in which case, add cwd
-        if ( strpos( $path, ':' ) === false && $unipath )
+        if ( strpos( $path, ':' ) === false && $unipath ){
             $path = getcwd() . DIRECTORY_SEPARATOR . $path;
+        }
         // resolve path parts (single dot, double dot and double delimiters)
         $path      = str_replace( array( '/', '\\' ), DIRECTORY_SEPARATOR, $path );
         $parts     = array_filter( explode( DIRECTORY_SEPARATOR, $path ), 'strlen' );
