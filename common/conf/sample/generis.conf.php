@@ -79,7 +79,7 @@ define('GENERIS_CACHE_PATH', FILES_PATH.'generis'.DIRECTORY_SEPARATOR.'cache'.DI
 // @todo legacy constant, to be removed in 2.7
 define('GENERIS_FILES_PATH' , GENERIS_BASE_PATH.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR);
 
-# uri providers ('MicrotimeUriProvider'|'MicrotimeRandUriProvider'|'DatabaseSerialUriProvider')
+# uri providers ('MicrotimeUriProvider'|'MicrotimeRandUriProvider'|'DatabaseSerialUriProvider'|'AdvKeyValueUriProvider')
 define('GENERIS_URI_PROVIDER', 'DatabaseSerialUriProvider');
 
 # users cache
