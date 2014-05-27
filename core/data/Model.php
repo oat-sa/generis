@@ -37,8 +37,8 @@ interface Model
     function __construct($configuration);
     
 	/**
-	 * Returns a configuration array that can be used the model, should only contain
-	 * scalars as values
+	 * Returns a configuration array that can be used to instanciate the model
+	 * should only contain scalars as values
 	 * 
 	 * @return array
 	 */
