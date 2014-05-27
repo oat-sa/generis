@@ -105,8 +105,7 @@ class core_kernel_classes_Resource
 				$trace=debug_backtrace();
 				$caller=array_shift($trace);
 
-				common_Logger::e('could nout create ressource' . $uri . $caller['function'] .$caller['class'] );
-				throw new common_exception_Error('cannot construct the resource because the uri is not a "string", but a '.gettype($uri).' debug: '.$debug);
+				throw new common_exception_Error('could nout create resource from ' . (is_object($uri) ? get_class($uri) : gettype($uri)).' debug: '.$debug);
 			}
 		}else if(empty($uri)){
 		    
