@@ -38,7 +38,7 @@ $GLOBALS['generis_persistences'] = array(
         'driver' => 'phpfile',
         'dir' => FILES_PATH . DIRECTORY_SEPARATOR . 'generis' . DIRECTORY_SEPARATOR . 'config',
         'humanReadable' => true
-    )
+    ),
 /*	
     'session' => array(
 	    'driver' => 'SqlKvWrapper',
@@ -52,12 +52,13 @@ $GLOBALS['generis_persistences'] = array(
             'port' => 6379
 	),
 */
-/*
+
     'keyValueResult' => array(
 	    'driver' => 'phpredis',
             'host' => '127.0.0.1',
             'port' => 6379
 	),
+/*
     'docBasedResult' => array(
 	    'driver' => 'MongoDB'
 	),
