@@ -183,11 +183,9 @@ class core_kernel_versioning_Repository
     public function delete($deleteReference = false)
     {
         $returnValue = (bool) false;
-
         
-        
-        $path = $this->getPath();
         /* remove the resource implies other consequence, do not remove 
+        $path = $this->getPath();
         if(is_dir($path)){
         	// Remove the local copy
         	helpers_File::remove($path);
