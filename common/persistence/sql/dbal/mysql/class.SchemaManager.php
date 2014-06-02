@@ -36,5 +36,12 @@ class common_persistence_sql_dbal_mysql_SchemaManager extends common_persistence
     {
         return '42000';
     }
+    /**
+     * (non-PHPdoc)
+     * @see common_persistence_sql_dbal_SchemaManager::getColumnNotFoundErrorCode()
+     */
+    public function getColumnNotFoundErrorCode(){
+        return '42S22';
+    }
     
 }

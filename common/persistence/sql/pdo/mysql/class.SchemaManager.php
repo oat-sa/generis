@@ -38,7 +38,13 @@ class common_persistence_sql_pdo_mysql_SchemaManager extends common_persistence_
         return '42000';    
     }
 
-    
+    /**
+     * (non-PHPdoc)
+     * @see common_persistence_sql_SchemaManager::getColumnNotFoundErrorCode()
+     */
+    public function getColumnNotFoundErrorCode(){
+        return '42S22';
+    }
     
     /**
      * Short description of method createIndex

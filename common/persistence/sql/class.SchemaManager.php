@@ -115,6 +115,11 @@ abstract class common_persistence_sql_SchemaManager {
      */
     public abstract function getIndexAlreadyExistsErrorCode();
     
+    /**
+     * 
+     * @author Lionel Lecaque, lionel@taotesting.com
+     */
+    public abstract function getColumnNotFoundErrorCode();
 
     
 }

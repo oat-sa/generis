@@ -54,6 +54,18 @@
     {
         return '42P07';
     }
+    
+    /**
+     * Short description of method getIndexAlreadyExistsErrorCode
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @return string
+     */
+    public function getColumnNotFoundErrorCode()
+    {
+        return '42703';
+    }
        
 
 

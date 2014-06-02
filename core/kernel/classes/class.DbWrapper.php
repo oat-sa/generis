@@ -491,7 +491,13 @@ class core_kernel_classes_DbWrapper
         return $this->persistence->getSchemaManager()->getIndexAlreadyExistsErrorCode();
     }
 
-
+    /**
+     * 
+     * @author Lionel Lecaque, lionel@taotesting.com
+     */
+     public function getColumnNotFoundErrorCode(){
+         return $this->persistence->getSchemaManager()->getColumnNotFoundErrorCode();
+     }
 
     /**
      * Create an index on a given table and selected columns. This method throws

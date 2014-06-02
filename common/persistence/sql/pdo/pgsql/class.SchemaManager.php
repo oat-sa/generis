@@ -39,6 +39,12 @@ class common_persistence_sql_pdo_pgsql_SchemaManager extends common_persistence_
         return (string) "42P07";
     }
 
-    
+    /**
+     * (non-PHPdoc)
+     * @see common_persistence_sql_SchemaManager::getColumnNotFoundErrorCode()
+     */
+    public function getColumnNotFoundErrorCode(){
+        return '42703';
+    }
 
 }
