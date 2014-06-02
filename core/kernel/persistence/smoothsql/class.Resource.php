@@ -539,8 +539,10 @@ class core_kernel_persistence_smoothsql_Resource
         	$resource->getUri(),
         	$property->getUri()
         ));
-        while ($row = $sqlResult->fetch()){
-            $returnValue[] = $row['l_language'];
+        while ($row = $sqlResult->fetch()) {
+            if (!empty($row['l_language'])) {
+                $returnValue[] = $row['l_language'];
+            }
         }
         
         
