@@ -323,23 +323,23 @@ class core_kernel_classes_Property
 
         if (is_null($this->lgDependent )){
 
-            $lgDependent = helpers_PropertyLgCacheHelper::getLgDependencyCache($this->getUri());
+            $this->lgDependent  = helpers_PropertyLgCacheHelper::getLgDependencyCache($this->getUri());
 
-            if (is_null($lgDependent)) {
+            if (is_null($this->lgDependent)) {
                 $lgDependentProperty = new core_kernel_classes_Property(PROPERTY_IS_LG_DEPENDENT,__METHOD__);
                 $lgDependent = $this->getOnePropertyValue($lgDependentProperty);
 
-            }
 
 			 
-			if (is_null($lgDependent) || !$lgDependent instanceof  core_kernel_classes_Resource){
-				$returnValue = false;
-			}
-			else{
-				$returnValue = ($lgDependent->getUri() == GENERIS_TRUE);
-			}
-            helpers_PropertyLgCacheHelper::setLgDependencyCache($this->getUri(), $returnValue);    
-        	$this->lgDependent = $returnValue;
+    			if (is_null($lgDependent) || !$lgDependent instanceof  core_kernel_classes_Resource){
+    				$returnValue = false;
+    			}
+    			else{
+    				$returnValue = ($lgDependent->getUri() == GENERIS_TRUE);
+    			}
+                helpers_PropertyLgCacheHelper::setLgDependencyCache($this->getUri(), $returnValue);    
+            	$this->lgDependent = $returnValue;
+            }
         }
  
         $returnValue = $this->lgDependent;
