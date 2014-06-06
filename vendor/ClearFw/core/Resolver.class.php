@@ -102,10 +102,6 @@ class Resolver {
      */
     public function getRelativeUrl() {
         $request = $this->url;
-        if (preg_match('/^\/\/+/', $request)) {
-            common_Logger::w('Multiple leading slashes in request URI: '.$request);
-            $request = '/'.ltrim($request, '/');
-        }
         $rootUrlPath	= parse_url(ROOT_URL, PHP_URL_PATH);
         $absPath		= parse_url($request, PHP_URL_PATH);
         if (substr($absPath, 0, strlen($rootUrlPath)) != $rootUrlPath ) {
@@ -132,4 +128,3 @@ class Resolver {
 		}
 	}
 }
-?>
