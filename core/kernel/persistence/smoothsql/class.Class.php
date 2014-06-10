@@ -139,8 +139,13 @@ class core_kernel_persistence_smoothsql_Class
 
 			$returnValue[$parentClass->getUri()] = $parentClass ;
 			if($recursive == true && $parentClass->getUri() != RDFS_CLASS && $parentClass->getUri() != RDFS_RESOURCE){
-				$plop = $parentClass->getParentClasses(true);
-				$returnValue = array_merge($returnValue, $plop);
+				if($parentClass->getUri() == CLASS_GENERIS_RESOURCE){
+				    $returnValue[RDFS_RESOURCE] = new core_kernel_classes_Class(RDFS_RESOURCE);
+				}
+			    else {
+    			    $plop = $parentClass->getParentClasses(true);
+    				$returnValue = array_merge($returnValue, $plop);
+			    }
 			}
 		}
 
