@@ -221,9 +221,10 @@ class common_Logger
 			
 			//reformat input
 			if(is_object($message)){
-				$message = 'Message is object of type ' . gettype($message) ;
+				$message = 'Message is object of type ' . gettype($message) . ' : ' . PHP_EOL . var_export($message, true);
+
 			}else if (is_array($message)){
-		        $message = 'Message is an array '  ;		    
+		        $message = 'Message is an array : ' . PHP_EOL . var_export($message, true);
 			}else{
 			    
 				$message = (string) $message;
