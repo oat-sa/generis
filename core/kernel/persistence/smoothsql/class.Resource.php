@@ -613,6 +613,7 @@ class core_kernel_persistence_smoothsql_Resource
 	    							//"stread" => $dbWrapper->quote($triple->readPrivileges),
 	    							//"stedit" => $dbWrapper->quote($triple->editPrivileges),
 	    							//"stdelete" => $dbWrapper->quote($triple->deletePrivileges),
+	    					          "epoch" => $dbWrapper->quote($platform->getNowExpression())
 	    					));
     			}
 	    	}
