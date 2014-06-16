@@ -195,6 +195,7 @@ class core_kernel_persistence_smoothsql_Resource
         
         $object  = $object instanceof core_kernel_classes_Resource ? $object->getUri() : (string) $object;
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
+    	$platform = $dbWrapper->getPlatForm();
         $session 	= core_kernel_classes_Session::singleton();
         $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
         $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
@@ -208,8 +209,8 @@ class core_kernel_persistence_smoothsql_Resource
         	}
         }
         
-        $query = 'INSERT INTO statements (modelid, subject, predicate, object, l_language, author, stread, stedit, stdelete)
-        			VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        $query = 'INSERT INTO statements (modelid, subject, predicate, object, l_language, author,epoch)
+        			VALUES  (?, ?, ?, ?, ?, ? , ?)';
 
         $returnValue = $dbWrapper->exec($query, array(
        		$localNs->getModelId(),
@@ -218,9 +219,10 @@ class core_kernel_persistence_smoothsql_Resource
        		$object,
        		$lang,
        		$session->getUserUri(),
-       		$mask,
-       		$mask,
-       		$mask
+//        		$mask,
+//        		$mask,
+//        		$mask,
+            $platform->getNowExpression()
         ));
         
         
@@ -266,9 +268,10 @@ class core_kernel_persistence_smoothsql_Resource
 	       							"object",
 	       							"l_language",
 	       							"author",
-	       							"stread",
-	       							"stedit",
-	       							"stdelete"
+// 	       							"stread",
+// 	       							"stedit",
+// 	       							"stdelete",
+				                    "epoch"
 				);
 	       		$query = $multipleInsertQueryHelper->getFirstStaticPart('statements', $columns);
 
@@ -306,9 +309,10 @@ class core_kernel_persistence_smoothsql_Resource
 										"object" => $object,
 										"l_language" => $lang,
 										"author" => $user,
-										"stread" => $dbWrapper->quote($mask),
-										"stedit" => $dbWrapper->quote($mask),
-										"stdelete" => $dbWrapper->quote($mask)		
+// 										"stread" => $dbWrapper->quote($mask),
+// 										"stedit" => $dbWrapper->quote($mask),
+// 										"stdelete" => $dbWrapper->quote($mask),
+								     "epoch" =>	$dbWrapper->quote($platform->getNowExpression() )
 								));
 					}
 	       		}
@@ -342,12 +346,13 @@ class core_kernel_persistence_smoothsql_Resource
         
 
 		$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
+		$platform = $dbWrapper->getPlatForm();
         $session 	= core_kernel_classes_Session::singleton();
         $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
         $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
         
-        $query = 'INSERT INTO statements (modelid,subject,predicate,object,l_language,author,stread,stedit,stdelete)
-        			VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        $query = 'INSERT INTO statements (modelid,subject,predicate,object,l_language,author,epoch)
+        			VALUES  (?, ?, ?, ?, ?, ?, ?)';
 
         $returnValue = $dbWrapper->exec($query, array(
        		$localNs->getModelId(),
@@ -356,9 +361,10 @@ class core_kernel_persistence_smoothsql_Resource
        		$value,
        		($property->isLgDependent() ? $lg : ''),
        		$session->getUserUri(),
-       		$mask,
-       		$mask,
-       		$mask
+//        		$mask,
+//        		$mask,
+//        		$mask,
+            $platform->getNowExpression()
         ));
 		
         
@@ -509,9 +515,9 @@ class core_kernel_persistence_smoothsql_Resource
             $triple->object = $statement["object"];
             $triple->id = $statement["id"];
             $triple->lg = $statement["l_language"];
-            $triple->readPrivileges = $statement["stread"];
-            $triple->editPrivileges = $statement["stedit"];
-            $triple->deletePrivileges = $statement["stdelete"];
+//             $triple->readPrivileges = $statement["stread"];
+//             $triple->editPrivileges = $statement["stedit"];
+//             $triple->deletePrivileges = $statement["stdelete"];
             $returnValue->add($triple);
         }
 
@@ -587,9 +593,10 @@ class core_kernel_persistence_smoothsql_Resource
 	    			"object",
 	    			"l_language",
 	    			"author",
-	    			"stread",
-	    			"stedit",
-	    			"stdelete"
+// 	    			"stread",
+// 	    			"stedit",
+// 	    			"stdelete",
+                    "epoch"
 	    	);
 	    	$query = $multipleInsertQueryHelper->getFirstStaticPart('statements', $columns);
     		
@@ -603,9 +610,9 @@ class core_kernel_persistence_smoothsql_Resource
 	    							"object" => $triple->object == null ? $platform->getNullString() : $dbWrapper->quote($triple->object),
 	    							"l_language" => $triple->lg == null ? $platform->getNullString() : $dbWrapper->quote($triple->lg),
 	    							"author" => $user,
-	    							"stread" => $dbWrapper->quote($triple->readPrivileges),
-	    							"stedit" => $dbWrapper->quote($triple->editPrivileges),
-	    							"stdelete" => $dbWrapper->quote($triple->deletePrivileges)
+	    							//"stread" => $dbWrapper->quote($triple->readPrivileges),
+	    							//"stedit" => $dbWrapper->quote($triple->editPrivileges),
+	    							//"stdelete" => $dbWrapper->quote($triple->deletePrivileges),
 	    					));
     			}
 	    	}

@@ -340,11 +340,12 @@ class core_kernel_impl_ApiModelOO
 
         
         $dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
+        $platform   = $dbWrapper->getPlatForm();
         $session 	= core_kernel_classes_Session::singleton();
         $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
         $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
-        $query = 'INSERT INTO "statements" ("modelid","subject","predicate","object","l_language","author","stread","stedit","stdelete","epoch")
-        			VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP);';
+        $query = 'INSERT INTO statements (modelid,subject,predicate,object,l_language,author,epoch)
+        			VALUES  (?, ?, ?, ?, ?, ? , ?);';
 
         try{
 	        $returnValue = $dbWrapper->exec($query, array(
@@ -354,9 +355,8 @@ class core_kernel_impl_ApiModelOO
 	       		$object,
 	       		$language,
 	       		$session->getUserUri(),
-	       		$mask,
-	       		$mask,
-	       		$mask
+	            $platform->getNowExpression()
+	             
 	        ));
         }
         catch (PDOException $e){

@@ -67,7 +67,11 @@ class common_persistence_sql_Platform{
     	return $text;
     }
     
-    
+    /**
+     * 
+     * @author Lionel Lecaque, lionel@taotesting.com
+     * @return string
+     */
 	public function getObjectTypeCondition(){
 		return 'object ';
 	}
@@ -120,6 +124,17 @@ class common_persistence_sql_Platform{
      */
     public function getName(){
         return $this->dbalPlatform->getName();
+    }
+    /**
+     * 
+     * @author Lionel Lecaque, lionel@taotesting.com
+     * @return string
+     */
+    public function getNowExpression(){
+        $datetime = new DateTime();
+        $date = $datetime->format('Y-m-d H:i:s');
+       // return $this->dbalPlatform->getNowExpression();
+       return $date;
     }
     /**
      * 
