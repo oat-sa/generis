@@ -221,12 +221,17 @@ class common_Logger
 			
 			//reformat input
 			if(is_object($message)){
-				$message = 'Message is object of type ' . gettype($message) . ' : ' . PHP_EOL . var_export($message, true);
+				$message = 'Message is object of type ' . gettype($message);
 
-			}else if (is_array($message)){
-		        $message = 'Message is an array : ' . PHP_EOL . var_export($message, true);
+                //show content of logged object only from debug level
+                if($level <= self::DEBUG_LEVEL){
+                    $message .= ' : ' . PHP_EOL . var_export($message, true);
+                }
+            //same for arrays
+		    }else if (is_array($message) && $level <= self::DEBUG_LEVEL){
+                
+				$message = 'Message is an array : ' . PHP_EOL . var_export($message, true);
 			}else{
-			    
 				$message = (string) $message;
 			}
 			if(is_string($tags)){
