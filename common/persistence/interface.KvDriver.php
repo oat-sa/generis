@@ -43,9 +43,10 @@ interface common_persistence_KvDriver extends common_persistence_Driver
 
     /**
      * Returns a value from storage
+     * or false if not found
      * 
      * @param string $id
-     * @return boolean
+     * @return string
      */
     public function get($id);
     
