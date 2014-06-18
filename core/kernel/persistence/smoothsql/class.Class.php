@@ -378,9 +378,14 @@ class core_kernel_persistence_smoothsql_Class
         $returnValue = new core_kernel_classes_Class($uri, __METHOD__);
         $properties = array(
             RDFS_SUBCLASSOF => $resource,
-            RDFS_LABEL => $label,
-            RDFS_COMMENT => $comment
         );
+        if (!empty($label)) {
+            $properties[RDFS_LABEL] = $label;
+        }
+        if (!empty($comment)) {
+            $properties[RDFS_COMMENT] = $comment;
+        }
+            
         $returnValue->setPropertiesValues($properties);
         return $returnValue;
     }
