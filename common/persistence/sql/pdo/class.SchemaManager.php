@@ -69,9 +69,9 @@ abstract class common_persistence_sql_pdo_SchemaManager extends common_persisten
             $config = new \Doctrine\DBAL\Configuration();
             $params = $this->getDriver()->getParams();
             $connection = \Doctrine\DBAL\DriverManager::getConnection($params, $config);
-            $this->schemaManger = $connection->getSchemaManager();
+            $this->schemaManager = $connection->getSchemaManager();
         }
-        return $this->schemaManger;
+        return $this->schemaManager;
     }
     
 
