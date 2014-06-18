@@ -100,10 +100,18 @@ class core_kernel_classes_DbWrapper
      * 
      * @var common_persistence_SqlPersistence
      */
-    private $persistence;
+    private $persistence = null;
 
-    // --- OPERATIONS ---
-
+    /**
+     * 
+     * @var common_persistence_sql_Platform
+     */
+    private $platform = null;
+    /**
+     * 
+     * @var common_persistence_sql_SchemaManager
+     */
+    private $schemaManager = null;
     /**
      * Entry point.
      * Enables you to retrieve staticly the DbWrapper instance.
@@ -304,9 +312,12 @@ class core_kernel_classes_DbWrapper
      * @return array
      */
     public function getTables() {
-        return $this->persistence->getSchemaManager()->getTables();
+        return $this->getSchemaManager()->getTables();
     }
 
+
+    
+    
     /**
      * Returns the column names of a given table
      *
@@ -317,7 +328,7 @@ class core_kernel_classes_DbWrapper
      * @return array
      */
     public function getColumnNames($table){
-        return $this->persistence->getSchemaManager()->getColumnNames($table);
+        return $this->getSchemaManager()->getColumnNames($table);
     }
 
     /**
@@ -448,7 +459,7 @@ class core_kernel_classes_DbWrapper
      * @return string
      */
     public function limitStatement($statement, $limit, $offset = 0){
-        return $this->persistence->getPlatform()->limitStatement($statement, $limit, $offset);
+        return $this->getPlatform()->limitStatement($statement, $limit, $offset);
     }
 
 
@@ -458,27 +469,34 @@ class core_kernel_classes_DbWrapper
      * return common_persistence_sql_Platform
      */
     public function getPlatForm(){
-        return $this->persistence->getPlatForm();
+        if($this->platform == null){
+            $this->platform =  $this->persistence->getPlatForm();
+        }
+        return $this->platform;
     }
     
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * return common_persistence_sql_SchemaManager
      */
     public function getSchemaManager(){
-        return $this->persistence->getSchemaManager();
+        if($this->schemaManager == null){
+            $this->schemaManager = $this->persistence->getSchemaManager();
+        }
+        return $this->schemaManager;
     }
 
     /**
      * The error code returned by PDO in when an Index already exists in a table
      * a given DBMS implementation.
      *
-     * @abstract
+     *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
     public function getIndexAlreadyExistsErrorCode(){
-        return $this->persistence->getSchemaManager()->getIndexAlreadyExistsErrorCode();
+        return $this->getSchemaManager()->getIndexAlreadyExistsErrorCode();
     }
 
     /**
@@ -486,7 +504,7 @@ class core_kernel_classes_DbWrapper
      * @author Lionel Lecaque, lionel@taotesting.com
      */
      public function getColumnNotFoundErrorCode(){
-         return $this->persistence->getSchemaManager()->getColumnNotFoundErrorCode();
+         return $this->getSchemaManager()->getColumnNotFoundErrorCode();
      }
 
     /**
@@ -502,7 +520,7 @@ class core_kernel_classes_DbWrapper
      * @return void
      */
     public function createIndex($indexName, $tableName, $columns){
-        return $this->persistence->getSchemaManager()->createIndex($indexName, $tableName, $columns);
+        return $this->getSchemaManager()->createIndex($indexName, $tableName, $columns);
     }
 
     /**
@@ -516,7 +534,7 @@ class core_kernel_classes_DbWrapper
      * @return void
      */
     public function rebuildIndexes($tableName){
-        return $this->persistence->getSchemaManager()->rebuildIndexes($tableName);
+        return $this->getSchemaManager()->rebuildIndexes($tableName);
     }
 
     /**
@@ -530,7 +548,7 @@ class core_kernel_classes_DbWrapper
      * @return void
      */
     public function flush($tableName){
-        return $this->persistence->getSchemaManager()->flush($tableName);
+        return $this->getSchemaManager()->flush($tableName);
         
     }
 
