@@ -70,7 +70,7 @@ class common_ext_ExtensionUninstaller
 		$cache->purge();
 		
 		// reload session (for readable models)
-		core_kernel_classes_Session::singleton()->update();
+		core_kernel_persistence_smoothsql_SmoothModel::forceReloadModelIds();
 		
 		common_Logger::i('Uninstalled ' . $this->extension->getId());
 		return true;

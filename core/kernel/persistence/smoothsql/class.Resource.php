@@ -107,7 +107,7 @@ class core_kernel_persistence_smoothsql_Resource
 		}
 		
         $session = core_kernel_classes_Session::singleton();
-       	$modelIds = implode(',',array_keys($session->getLoadedModels()));
+       	$modelIds = implode(',',core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds());
     	
         $query =  'SELECT object, l_language
         			FROM statements 
@@ -422,7 +422,7 @@ class core_kernel_persistence_smoothsql_Resource
 		}
         
 		//be sure the property we try to remove is included in an updatable model
-    	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
+    	$modelIds	= implode(',',core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds());
 		$query .= ' AND modelid IN ('.$modelIds.')';
 		
         if($property->isLgDependent()){
@@ -471,7 +471,7 @@ class core_kernel_persistence_smoothsql_Resource
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $sqlQuery = 'DELETE FROM statements WHERE subject = ? and predicate = ? and l_language = ?';
         //be sure the property we try to remove is included in an updatable model
-    	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
+    	$modelIds	= implode(',',core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds());
 		$sqlQuery .= ' AND modelid IN ('.$modelIds.')';
         
         $returnValue = $dbWrapper->exec($sqlQuery, array (
@@ -502,7 +502,7 @@ class core_kernel_persistence_smoothsql_Resource
         $returnValue = null;
         
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $modelIds = '('.implode(',', array_keys(core_kernel_classes_Session::singleton()->getLoadedModels())).')';
+        $modelIds = '('.implode(',', core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds()).')';
         $query = 'SELECT * FROM statements WHERE subject = ? AND modelid IN '.$modelIds.' ORDER BY predicate';
         $result = $dbWrapper->query($query, array($resource->getUri()));
         
@@ -648,7 +648,7 @@ class core_kernel_persistence_smoothsql_Resource
         
     	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
-    	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
+    	$modelIds	= implode(',',core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds());
 		$query = 'DELETE FROM statements WHERE subject = ? AND modelid IN ('.$modelIds.')';
         $returnValue = $dbWrapper->exec($query, array($resource->getUri()));
 
@@ -703,7 +703,7 @@ class core_kernel_persistence_smoothsql_Resource
 		}
     	$predicatesQuery=substr($predicatesQuery, 1);
         $session 	= core_kernel_classes_Session::singleton();
-    	$modelIds	= implode(',', array_keys($session->getLoadedModels()));
+    	$modelIds	= implode(',', core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds());
 
  		$platform = $dbWrapper->getPlatForm();
     	//the unique sql query
@@ -776,7 +776,7 @@ class core_kernel_persistence_smoothsql_Resource
 		    		WHERE subject = ? AND predicate = ? AND '. $dbWrapper->getPlatForm()->getObjectTypeCondition() .' = ?';
         
         //be sure the property we try to remove is included in an updatable model
-    	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
+    	$modelIds	= implode(',',core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds());
 		$query .= ' AND modelid IN ('.$modelIds.')';
         
         $returnValue = $dbWrapper->exec($query,array(

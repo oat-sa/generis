@@ -31,7 +31,7 @@ class ModelsRightTest extends GenerisPhpUnitTestRunner {
 	
 	public function testRightModels(){
 		// In tao context, the only one model which is updatable
-		$updatableModels = core_kernel_classes_Session::singleton()->getUpdatableModels();
+		$updatableModels = core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds();
 		$this->assertEquals(count($updatableModels), 1);
 		$this->assertTrue(array_search(LOCAL_NAMESPACE, $updatableModels) !== false);
 		

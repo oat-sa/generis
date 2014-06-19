@@ -160,7 +160,7 @@ class core_kernel_persistence_smoothsql_Property
         if ($deleteReference){
 	        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
 	        
-	    	$modelIds	= implode(',',array_keys(core_kernel_classes_Session::singleton()->getUpdatableModels()));
+	    	$modelIds	= implode(',',core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds());
 			$query = 'DELETE FROM "statements" WHERE "predicate" = ? AND "modelid" IN ('.$modelIds.')';
 	        $returnValue = $dbWrapper->exec($query, array($resource->getUri()));
         }

@@ -89,7 +89,7 @@ class common_ext_ExtensionInstaller
 				$this->installLoadConstants();
 				$this->installExtensionModel();
 					
-				core_kernel_classes_Session::singleton()->update();
+				core_kernel_persistence_smoothsql_SmoothModel::forceReloadModelIds();
 					
 				//reload the autoloader
 				AutoLoader::reload();
