@@ -37,6 +37,10 @@ class core_kernel_persistence_smoothsql_SmoothModel
      */
     private $persistanceId;
     
+    private static $readableSubModels = null;
+    
+    private static $updatableSubModels = null;
+    
     /**
      * Constructor of the smooth model, expects a persistence in the configuration
      * 
@@ -74,5 +78,73 @@ class core_kernel_persistence_smoothsql_SmoothModel
      */
     public function getRdfsInterface() {
         return new core_kernel_persistence_smoothsql_SmoothRdfs();
+    }
+    
+    // Manage the sudmodels of the smooth mode
+    
+    /**
+     * Returns the submodel ids that are readable
+     * 
+     * @return array()
+     */
+    public static function getReadableModelIds() {
+        if (is_null(self::$readableSubModels)) {
+            self::loadReadableModelIds();
+        }
+        return self::$readableSubModels;
+    }
+    
+    /**
+     * Returns the submodel ids that are updatable
+     * 
+     * @return array()
+     */
+    public static function getUpdatableModelIds() {
+        if (is_null(self::$updatableSubModels)) {
+            $extensionManager = common_ext_ExtensionsManager::singleton();
+            self::$updatableSubModels = array_keys($extensionManager->getUpdatableModels());
+        }
+        return self::$updatableSubModels;
+    }
+    
+    /**
+     * @ignore
+     */
+    private static function loadReadableModelIds()
+    {
+        $extensionManager = common_ext_ExtensionsManager::singleton();
+        common_ext_NamespaceManager::singleton()->reset();
+        
+        $uris = array(LOCAL_NAMESPACE.'#');
+        foreach ($extensionManager->getModelsToLoad() as $subModelUri){
+            if(!preg_match("/#$/", $subModelUri)){
+                $subModelUri .= '#';
+            }
+            $uris[] = $subModelUri;
+        }
+
+        $ids = array();
+        foreach(common_ext_NamespaceManager::singleton()->getAllNamespaces() as $namespace){
+            if(in_array($namespace->getUri(), $uris)){
+                $ids[] = $namespace->getModelId();
+            }
+        }
+
+        self::$readableSubModels = array_unique($ids);
+    }
+    
+    /**
+     * For hardification we need to ba able to bypass the model restriction
+     * 
+     * @param array $ids
+     */
+    public static function forceUpdatableModelIds($ids)
+    {
+        self::$updatableSubModels = $ids;
+    }
+    
+    public static function forceReloadModelIds() {
+        self::$updatableSubModels = null;
+        self::$readableSubModels = null;
     }
 }

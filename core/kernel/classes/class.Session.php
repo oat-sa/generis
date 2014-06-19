@@ -128,19 +128,6 @@ class core_kernel_classes_Session
      */
     private function __construct()
     {
-		
-		//active  models needed by extension
-    	$extensionManager = common_ext_ExtensionsManager::singleton();
-		foreach ($extensionManager->getModelsToLoad() as $model){
-			$this->loadModel($model);
-		}
-		
-		//load local model
-		$this->loadModel(LOCAL_NAMESPACE);
-		
-		//get updatable models
-		$this->updatableModels = $extensionManager->getUpdatableModels ();
-		
     }
 
     /**
@@ -194,108 +181,6 @@ class core_kernel_classes_Session
     }    
     
     /**
-     * Load a particular model depending on the provided URI.
-     *
-     * @access protected
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  string model A URI.
-     * @return boolean true if the model was correctly loaded, false otherwise.
-     */
-    protected function loadModel($model)
-    {
-        $returnValue = (bool) false;
-        
-        if(!preg_match("/#$/", $model)){
-        	$model .= '#';
-        }
-        if(in_array($model, $this->loadedModels)){
-        	$returnValue = true;
-        }
-        else{
-        	$nsManager = common_ext_NamespaceManager::singleton();
-        	foreach($nsManager->getAllNamespaces() as $namespace){
-        		if($namespace->getUri() == $model){
-        			$this->loadedModels[$namespace->getModelId()] = $model;
-        			$returnValue = true;
-        			break;
-        		}
-        	}
-        }
-        if (!$returnValue) {
-            common_Logger::w('Unable to load '.$model);
-        }
-
-        return (bool) $returnValue;
-    }
-
-    /**
-     * Obtain the list of the models loaded for the authenticated user.
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @return array An array of URIs as strings
-     */
-    public function getLoadedModels()
-    {
-        $returnValue = array();
-        
-        $returnValue = $this->loadedModels;
-
-        return (array) $returnValue;
-    }
-
-    /**
-     * Get the list of models that are updatable (editable) by the currently
-     * authenticated user.
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @return array An associative array where keys Uare integers and values are URI strings.
-     */
-    public function getUpdatableModels()
-    {
-        $returnValue = array();
-        
-        $returnValue = $this->updatableModels;        
-
-        return (array) $returnValue;
-    }
-    
-    /**
-     * Set the list of models that are updatable by the currently authenticated
-     * user.
-     * 
-     * @param array $updatableModels An associative array where keys Uare integers and values are URI strings.
-     */
-    public function setUpdatableModels(array $updatableModels)
-    {
-    	$this->updatableModels = $updatableModels;
-    }
-
-    /**
-     * Unload a model from the current session.
-     *
-     * @access public
-     * @author Joel Bout, <joel@taotesting.com>
-     * @param  string model The model URI.
-     * @return boolean
-     */
-    public function unloadModel($model)
-    {
-        $returnValue = (bool) false;
-
-        foreach ($this->loadedModels as $loadedModel){
-        	if ($loadedModel == $model){
-        		unset($loadedModel);
-        		$returnValue = true;
-        		break;
-        	}
-        }
-
-        return (bool) $returnValue;
-    }
-    
-    /**
      * Refreshes the user session to empty the cashed
      * roles and data 
      *
@@ -311,38 +196,44 @@ class core_kernel_classes_Session
     }
 
     /**
+     * @deprecated
+     */
+    public function getLoadedModels() {
+        common_Logger::w('The function '.__FUNCTION__.' is deprecated');
+        $ids = core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds();
+        $models = array();
+        foreach ($ids as $id) {
+            $model = common_ext_NamespaceManager::singleton()->getNamespace($id);
+            $models[$id] = $model;
+        }
+        return $models;
+    }
+    
+    /**
+     * @deprecated
+     */
+    public function getUpdatableModels() {
+        common_Logger::w('The function '.__FUNCTION__.' is deprecated');
+        $ids = core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds();
+        $models = array();
+        foreach ($ids as $id) {
+            $model = common_ext_NamespaceManager::singleton()->getNamespace($id);
+            $models[$id] = $model;
+        }
+        return $models;
+    }
+    
+    /**
      * Updates the session by reloading references to models.
      *
      * @access public
      * @author Joel Bout, <joel@taotesting.com>
+     * @deprecated
      */
     public function update()
     {
-        $this->loadedModels = array();
-        $extensionManager = common_ext_ExtensionsManager::singleton();
-        common_ext_NamespaceManager::singleton()->reset();
-		foreach ($extensionManager->getModelsToLoad() as $model){
-			$this->loadModel($model);
-		}
-		
-		//load local model
-		$this->loadModel(LOCAL_NAMESPACE);
-		
-		//get updatable models
-		$this->updatableModels = array();
-		$this->updatableModels = $extensionManager->getUpdatableModels ();
-    }
-
-    /**
-     * Behaviour to adopt at PHP __wakup time.
-     *
-     * @access public
-     * @author Joel Bout, <joel@taotesting.com>
-     * @return void
-     */
-    public function __wakeup()
-    {
-        $this->update();
+        common_Logger::w('The function '.__FUNCTION__.' is deprecated');
+        core_kernel_persistence_smoothsql_SmoothModel::forceReloadModelIds();
     }
 
     /**
