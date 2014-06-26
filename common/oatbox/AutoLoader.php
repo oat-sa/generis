@@ -85,6 +85,10 @@ class AutoLoader
             	        $classLoader->addPsr4($ns, $dir);
             	    }
             	    break;
+            	case "files" :   
+            	    foreach ($config as $file) {
+            	        require $file;        
+            	    }
             	case "legacy" :
             	    foreach ($config as $prefix => $namespace) {
             	        \common_legacy_LegacyAutoLoader::supportLegacyPrefix($prefix, $namespace);
