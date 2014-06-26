@@ -79,7 +79,13 @@ class common_persistence_Manager
         }
         $config = $GLOBALS['generis_persistences'][$persistenceId];
         $driverStr = $config['driver'];
-        $driverClassName = self::$driverMap[$driverStr];
+        
+        if (isset(self::$driverMap[$driverStr])) {
+            $driverClassName = self::$driverMap[$driverStr];
+        } else {
+                $driverClassName = $driverStr;
+        }
+               
         if (class_exists($driverClassName)){
             $driver = new $driverClassName();
         }
