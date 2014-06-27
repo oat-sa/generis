@@ -33,6 +33,13 @@
 class common_ext_Extension
 {
     /**
+     * Filename of the manifest
+     * 
+     * @var string
+     */
+    const MANIFEST_NAME = 'manifest.php';
+    
+    /**
      * Short description of attribute id
      *
      * @access private
@@ -69,7 +76,7 @@ class common_ext_Extension
     public function __construct($id, $deprecated1 = null, $deprecated2 = null)
     {
 		$this->id = $id;
-    	$manifestFile = $this->getDir().MANIFEST_NAME;
+    	$manifestFile = $this->getDir().self::MANIFEST_NAME;
 		if(is_file($manifestFile)){
 			$this->manifest = new common_ext_Manifest($manifestFile);
 		} else {
