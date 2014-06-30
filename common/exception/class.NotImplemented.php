@@ -18,8 +18,9 @@
  */
 
 /**
- * a useful exception
- * @access public
+ * An Exception to be thrown to describe that a feature, or a software component
+ * is not implemented yet.
+ * 
  * @author Patrick Plichart
  * @package generis
  
