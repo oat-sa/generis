@@ -216,8 +216,7 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
         $returnValue = null;
         $this->preparedExec = false;
 
-        \common_Logger::d('mem : '. __FILE__. __LINE__ . ' mem : '. memory_get_usage() );
-        
+       
         if (count($params) > 0){
         	$sth = $this->dbConnector->prepare($statement);
         	$sth->execute($params);
@@ -225,7 +224,6 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
         else{
         	$sth = $this->dbConnector->query($statement);
         }
-        \common_Logger::d('mem : '. __FILE__. __LINE__ . ' mem : '. memory_get_usage(true) );
         
 		
         if (!empty($sth)){
