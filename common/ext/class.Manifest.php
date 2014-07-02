@@ -174,7 +174,7 @@ class common_ext_Manifest
      * @access private
      * @var Resource
      */
-    private $managementRole = null;
+    private $managementRoleUri = null;
 
     /**
      * Local data which can be added as an example
@@ -332,8 +332,7 @@ class common_ext_Manifest
     		}
     		
     		if (!empty($array['managementRole'])){
-    			$role = new core_kernel_classes_Resource($array['managementRole']);
-    			$this->setManagementRole($role);
+    			$this->setManagementRole($array['managementRole']);
     		}
     		
     		if (!empty($array['optimizableClasses'])){
@@ -721,7 +720,7 @@ class common_ext_Manifest
      * @author Jerome Bogaerts <jerome@taotesting.com>
      * @return array
      */
-    public function getInstallChekcs()
+    public function getInstallChecks()
     {
         $returnValue = array();
 
@@ -1036,11 +1035,7 @@ class common_ext_Manifest
      */
     public function getManagementRole()
     {
-        $returnValue = null;
-
-        $returnValue = $this->managementRole;
-
-        return $returnValue;
+        return is_null($this->managementRoleUri) ? null : new core_kernel_classes_Resource($this->managementRoleUri);
     }
 
     /**
@@ -1048,11 +1043,11 @@ class common_ext_Manifest
      *
      * @access private
      * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  Resource $managementRole The Management Role of the Extension as a Generis Resource.
+     * @param  string $managementRole The URI of the Management Role of the Extension.
      */
-    private function setManagementRole( core_kernel_classes_Resource $managementRole)
+    private function setManagementRole($managementRoleUri)
     {
-        $this->managementRole = $managementRole;
+        $this->managementRoleUri = $managementRoleUri;
     }
     
     /**
