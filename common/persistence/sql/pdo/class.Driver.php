@@ -136,15 +136,7 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
                     $this->dbConnector = @new PDO($dsn, $dbLogin, $dbpass, $options);
                     $this->afterConnect();
                    
-                    // https://bugs.php.net/bug.php?id=52623 ; 
-                    // if the constant for max buffering, mysqlnd or similar driver
-                    // is being used without need to adapt buffer size as it is atutomatically adapted for all the data. 
-                    
-                    if (defined("PDO::MYSQL_ATTR_MAX_BUFFER_SIZE")) {
-                        $maxBuffer = (is_int(ini_get('upload_max_filesize'))) ? (ini_get('upload_max_filesize')* 1.5) : 5485760 ;
-                       // $this->dbConnector->setAttribute(PDO::MYSQL_ATTR_MAX_BUFFER_SIZE, $maxBuffer);
-                    } 
-                    
+                   
                     // We are connected. Get out of the loop.
                     break;
                 }
@@ -164,9 +156,11 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
         return $returnValue;
     }
 
+
     /**
+     *  HACK to set "PDO::MYSQL_ATTR_MAX_BUFFER_SIZE" for fileupload
      *  add attribute to the connection
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param string $name
      * @param string $value
@@ -174,16 +168,15 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
      */
     public function setAttribute($name,$value){
         try{
-            if (defined($name)) {
-                $this->dbConnector->setAttribute($name, $value);
-            }
+            common_Logger::d('setattri ' . $name . ' => ' . $value);
+            $this->dbConnector->setAttribute($name, $value);
+            
         } catch (PDOException $e){
             common_Logger::e('Fail to set attribute ' . $name . ' with value ' . $value);
             throw $e;
         }
-        
-    }
     
+    }
     
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
