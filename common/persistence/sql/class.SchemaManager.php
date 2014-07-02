@@ -26,6 +26,18 @@
 abstract class common_persistence_sql_SchemaManager {
     
     /**
+     * HACK to set "PDO::MYSQL_ATTR_MAX_BUFFER_SIZE" for fileupload
+     *  
+     * @author Lionel Lecaque, lionel@taotesting.com
+     * @param unknown $name
+     * @param unknown $value
+     * @throws core_kernel_persistence_Exception
+     */
+    public function setAttribute($name,$value){
+        throw new core_kernel_persistence_Exception('setattribute only availlable for mysql pdo implementation');
+    }
+    
+    /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      */
     protected abstract function getSchemaManager();
