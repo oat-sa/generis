@@ -1,4 +1,5 @@
 /.project
 /.settings/
 /.buildpath
+/data/*
 common/conf/*.conf.php
