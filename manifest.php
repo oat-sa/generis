@@ -56,7 +56,6 @@ return array(
 				array('ns' => 'http://www.tao.lu/Ontologies/generis.rdf', 'file' => dirname(__FILE__). '/core/ontology/generis.rdf'),
 		),
 	    'checks' => array(
-				array('type' => 'CheckFileSystemComponent', 'value' => array('id' => 'fs_generis_data_cache', 'location' =>  'generis/data/cache', 'rights' => 'rw')),
 				//array('type' => 'CheckFileSystemComponent', 'value' => array('id' => 'fs_generis_data', 'location' =>  'generis/data', 'rights' => 'rw'))
         )
 	),
