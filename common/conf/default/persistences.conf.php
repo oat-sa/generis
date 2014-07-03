@@ -59,8 +59,11 @@ $GLOBALS['generis_persistences'] = array(
             'port' => 6379
 	),
 /*
-    'docBasedResult' => array(
-	    'driver' => 'MongoDB'
+ * Used for key value user authentication see authKeyValue
+    'authKeyValue' => array(
+	    'driver' => 'phpredis',
+            'host' => '127.0.0.1',
+            'port' => 6379
 	),
 */
 );
