@@ -170,7 +170,6 @@ class core_kernel_versioning_subversion_Repository
 			throw new core_kernel_versioning_exception_Exception('Authentication failed on fileSource '.$vcs->getUri());
 		}
 		
-		$importFolderAlreadyExists = false;
 		$repositoryUrl = $vcs->getUrl();
 		$relativePath = substr($target, strlen($repositoryUrl));
 		$absolutePath = $vcs->getPath().$relativePath;
@@ -191,14 +190,8 @@ class core_kernel_versioning_subversion_Repository
 		//Copy the src folder to the target destination
 		helpers_File::copy($src, $absolutePath);
 
-		//Get the resource folder if it already exists in the onthology	 
-		$importFolder = helpers_File::getResource($absolutePath);
-		if(is_null($importFolder)){
-			//else create it
-			$importFolder = $vcs->createFile('', $relativePath);
-		}else{
-			$importFolderAlreadyExists = true;
-		}
+		// Create the importFolder	 
+        $importFolder = $vcs->createFile('', $relativePath);
 			
 //			//Get status of the imported folder
 //			$importFolderStatus = $importFolder->getStatus(array('SHOW_UPDATES'=>false));
