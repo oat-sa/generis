@@ -80,8 +80,18 @@ class common_persistence_sql_pdo_mysql_SchemaManager extends common_persistence_
     
     
 
-    
-   
+    /**
+     * 
+     * Set specific attribute to the connection
+	 * HACK to set "PDO::MYSQL_ATTR_MAX_BUFFER_SIZE" for fileupload
+     * 
+     * @author Lionel Lecaque, lionel@taotesting.com
+     * @param string $name
+     * @param string $value
+     */
+    public function setAttribute($name,$value){
+        $this->getDriver()->setAttribute($name,$value);
+    }
     
 
 
