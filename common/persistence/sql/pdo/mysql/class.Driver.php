@@ -126,6 +126,4 @@ class common_persistence_sql_pdo_mysql_Driver
 
 
 
-} /* end of class core_kernel_classes_MysqlDbWrapper */
-
-?>
+}

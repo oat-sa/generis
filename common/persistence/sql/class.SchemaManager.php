@@ -31,10 +31,10 @@ abstract class common_persistence_sql_SchemaManager {
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param unknown $name
      * @param unknown $value
-     * @throws core_kernel_persistence_Exception
+     * @throws common_exception_NotImplemented
      */
     public function setAttribute($name,$value){
-        throw new core_kernel_persistence_Exception('setattribute only availlable for mysql pdo implementation');
+        throw new common_exception_NotImplemented('setattribute only availlable for mysql pdo implementation');
     }
     
     /**
