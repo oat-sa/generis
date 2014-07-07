@@ -44,7 +44,6 @@ define('ROOT_URL',  '');
 
 # language
 define('DEFAULT_LANG', '');
-$GLOBALS['default_lang']	= DEFAULT_LANG;
 
 #mode
 define('DEBUG_MODE', false);
@@ -74,9 +73,6 @@ define('VENDOR_PATH' , GENERIS_BASE_PATH.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_
 define('EXTENSION_PATH' , ROOT_PATH);
 define('FILES_PATH' , '');
 define('GENERIS_CACHE_PATH', FILES_PATH.'generis'.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR);
-
-// @todo legacy constant, to be removed in 2.7
-define('GENERIS_FILES_PATH' , GENERIS_BASE_PATH.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR);
 
 # uri providers ('MicrotimeUriProvider'|'MicrotimeRandUriProvider'|'DatabaseSerialUriProvider'|'AdvKeyValueUriProvider')
 define('GENERIS_URI_PROVIDER', 'DatabaseSerialUriProvider');
