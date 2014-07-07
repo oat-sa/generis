@@ -86,10 +86,10 @@ class common_ext_ExtensionsManager
         $returnValue = array();
 
         $installed = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
-        foreach ($this->extensions as $ext) {
-        	if ($installed !== false && in_array($ext->getId(), array_keys($installed))) {
-        		$returnValue[$ext->getId()] = $ext;
-        	}
+        if (is_array($installed)) {
+            foreach (array_keys($installed) as $extId) {
+                $returnValue[$extId] = $this->getExtensionById($extId);
+            }
         }
 
         return (array) $returnValue;
@@ -122,7 +122,6 @@ class common_ext_ExtensionsManager
      */
     private function __construct()
     {
-		$this->loadInstalledExtensions();
     }
 
     /**
@@ -275,32 +274,13 @@ class common_ext_ExtensionsManager
         $returnValue = array();
 
         $enabled = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
-        foreach ($this->extensions as $ext) {
+        foreach ($this->getInstalledExtensions() as $ext) {
             if (isset($enabled[$ext->getId()]) && $enabled[$ext->getId()]['enabled']) {
                 $returnValue[$ext->getId()] = $ext;
             }
         }
     
         return (array) $returnValue;
-    }
-    
-
-    /**
-     * Short description of method loadInstalledExtensions
-     *
-     * @access private
-     * @author Joel Bout, <joel@taotesting.com>
-     * @return mixed
-     */
-    private function loadInstalledExtensions()
-    {
-        $this->extensions = array();
-        $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
-        if ($extensions !== false) {
-            foreach ($extensions as $id => $settings) {
-                $this->extensions[$id] = new common_ext_Extension($id, true);
-            }
-        }
     }
     
     /**

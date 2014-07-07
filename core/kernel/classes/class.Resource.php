@@ -421,7 +421,7 @@ class core_kernel_classes_Resource
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Property property
      * @throws common_Exception
-     * @throws common_exception_EmptyProperty
+     * @throws core_kernel_classes_EmptyProperty
      * @return core_kernel_classes_Container
      */
     public function getUniquePropertyValue( core_kernel_classes_Property $property)
@@ -433,7 +433,7 @@ class core_kernel_classes_Resource
         $collection = $this->getPropertyValuesCollection($property);
 
         if($collection->isEmpty()){
-        	throw new common_exception_EmptyProperty($this, $property);
+        	throw new core_kernel_classes_EmptyProperty($this, $property);
         }
         if($collection->count() == 1 ) {
             $returnValue= $collection->get(0);

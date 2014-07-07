@@ -123,10 +123,4 @@ class common_persistence_sql_pdo_pgsql_Driver
         return (string) $returnValue;
     }
 
-
-
-
-
-} /* end of class core_kernel_classes_PgsqlDbWrapper */
-
-?>
+}

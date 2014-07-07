@@ -21,82 +21,15 @@
  */
 
 /**
- * Thrown when retrieving an expected property
- * and not finding it (usualy via getUniqueProperty()) 
+ * Moved to core_kernel_classes_EmptyProperty 
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
- * @package generis
- 
+ * @deprecated
+ * @see core_kernel_classes_EmptyProperty
  */
-class common_exception_EmptyProperty
+abstract class common_exception_EmptyProperty
     extends common_Exception
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
-    /**
-     * @access private
-     * @var core_kernel_classes_Property
-     */
-    private $property = null;
-
-    /**
-     * @access private
-     * @var core_kenel_classes_Resource
-     */
-    private $resource = null;
-
-    // --- OPERATIONS ---
-
-    /**
-     * Short description of method __construct
-     *
-     * @access public
-     * @param  core_kernel_classes_Resource resource
-     * @param  core_kernel_classes_Property property
-     * @return mixed
-     */
-    public function __construct( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property)
-    {
-        $this->resource = $resource;
-        $this->property = $property;
-        parent::__construct("Property {$property->getLabel()} ({$property->getUri()}) of resource {$resource->getLabel()} ({$resource->getUri()})
-            							 should not be empty");
-    }
-
-    /**
-     * Returns the property that was empty
-     *
-     * @access public
-     * @return core_kernel_classes_Property
-     */
-    public function getProperty()
-    {
-        return $this->property;
-    }
-
-    /**
-     * Returns the resource with the empty property
-     *
-     * @access public
-     * @return core_kernel_classes_Resource
-     */
-    public function getResource()
-    {
-        return $this->resource;
-    }
-
-    /**
-     * Returns the severity of the exception
-     * Used in the common/Logger
-     * 
-     * @return number
-     */
-    public function getSeverity() {
-        return common_Logger::WARNING_LEVEL;
-    }
 
 }

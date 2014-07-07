@@ -101,13 +101,11 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
     // --- OPERATIONS ---
 
     /**
-     * Entry point.
-     * Enables you to retrieve staticly the DbWrapper instance.
+     * Connect the SQL driver
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @throws core_kernel_persistence_Exception
-     * @return core_kernel_classes_DbWrapper
+     * @author Joel Bout, <joel@taotesting.com>
+     * @return common_persistence_SqlPersistence
      */
     public function connect($id, array $params)
     {

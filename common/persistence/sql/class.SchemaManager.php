@@ -35,7 +35,7 @@ abstract class common_persistence_sql_SchemaManager {
      */
     public function setAttribute($name,$value){
         throw new core_kernel_persistence_Exception('setattribute only availlable for mysql pdo implementation');
-    }
+     */
     
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"

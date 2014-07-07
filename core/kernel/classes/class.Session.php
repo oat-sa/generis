@@ -22,12 +22,14 @@
 
 
 /**
- * Represents a Session on Generis.
+ * Represents a old generis session.
+ * 
+ * Please use the frmework session common\session\SessionManager instead
  *
  * @access private
  * @author patrick@taotesting.com
  * @package generis
- 
+ * @deprecated
  */
 class core_kernel_classes_Session
 {
@@ -41,33 +43,6 @@ class core_kernel_classes_Session
     private static $instance = null;
 
     /**
-     * The login of the currently authenticated user.
-     *
-     * @access private
-     * @var string
-     */
-    private $userLogin = '';
-
-    /**
-     * The RDF models currently loaded for the authenticated user. This associative array
-     * contains keys that are model IDs and values are URIs as strings.
-     *
-     * @access protected
-     * @var array
-     */
-    protected $loadedModels = array();
-
-    /**
-     * The models that can be updated (modified) by the currently authenticated
-     * user. This associative array contains keys that are model IDs and values 
-     * are URIs as strings.
-     *
-     * @access protected
-     * @var array
-     */
-    protected $updatableModels = array();
-
-    /**
      * returns the current user session
      * 
      * @return common_session_Session
@@ -75,7 +50,6 @@ class core_kernel_classes_Session
     private static function getCurrentUserSession() {
         return common_session_SessionManager::getSession();
     }
-    
     
     /**
      * Obtain a single core_kernel_classes_Session instance.
@@ -86,21 +60,10 @@ class core_kernel_classes_Session
      */
     public static function singleton()
     {
-        $returnValue = null;
-
-        $session = PHPSession::singleton();
-        
-		if (!isset(self::$instance) || is_null(self::$instance)) {
-			if ($session->hasAttribute('generis_session')) {
-				self::$instance = $session->getAttribute('generis_session');
-			} else {
-				self::$instance = new self();
-				$session->setAttribute('generis_session', self::$instance);
-			}
+		if (is_null(self::$instance)) {
+			self::$instance = new self();
 		}
-		$returnValue = self::$instance;
-
-        return $returnValue;
+		return self::$instance;
     }
 
     /**
@@ -115,8 +78,6 @@ class core_kernel_classes_Session
 		common_Logger::d('resetting session');
 		common_session_SessionManager::endSession();
 
-		$this->userLogin	= '';
-		$this->userUri		= null;
 		$this->update();
     }
 
@@ -136,14 +97,11 @@ class core_kernel_classes_Session
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return string
+     * @deprecated
      */
     public function getNameSpace()
     {
-        $returnValue = (string) '';
-
-		$returnValue= LOCAL_NAMESPACE;
-
-        return (string) $returnValue;
+        return common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
     }
 
     /**
@@ -193,34 +151,6 @@ class core_kernel_classes_Session
         if ($session instanceof common_session_StatefulSession) {
             $session->refresh();
         }
-    }
-
-    /**
-     * @deprecated
-     */
-    public function getLoadedModels() {
-        common_Logger::w('The function '.__FUNCTION__.' is deprecated');
-        $ids = core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds();
-        $models = array();
-        foreach ($ids as $id) {
-            $model = common_ext_NamespaceManager::singleton()->getNamespace($id);
-            $models[$id] = $model;
-        }
-        return $models;
-    }
-    
-    /**
-     * @deprecated
-     */
-    public function getUpdatableModels() {
-        common_Logger::w('The function '.__FUNCTION__.' is deprecated');
-        $ids = core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds();
-        $models = array();
-        foreach ($ids as $id) {
-            $model = common_ext_NamespaceManager::singleton()->getNamespace($id);
-            $models[$id] = $model;
-        }
-        return $models;
     }
     
     /**
