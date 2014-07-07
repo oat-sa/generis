@@ -71,7 +71,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
         $returnValue = false;
         try{
             
-            $expire = is_null($ttl) ? 'NULL' : time() + $ttl;
+            $expire = is_null($ttl) ? 0 : time() + $ttl;
             
             $encoded = base64_encode($value);
             $platformName = $this->sqlPeristence->getPlatForm()->getName();
@@ -122,7 +122,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
             $statement = $this->sqlPeristence->getPlatForm()->limitStatement($statement,1);
             $sessionValue = $this->sqlPeristence->query($statement,array($id));
             while ($row = $sessionValue->fetch()) {
-                if ($row["kv_time"] >= time() ) {
+                if ($row["kv_time"] == 0 || $row["kv_time"] >= time() ) {
                     return base64_decode($row["kv_value"]);
                 }
             }
@@ -177,7 +177,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
      */
     protected function gc()
     {
-        $statement = 'DELETE FROM kv_store WHERE kv_time <  ? ';
+        $statement = 'DELETE FROM kv_store WHERE kv_time > 0 AND kv_time <  ? ';
         return (bool)$this->sqlPeristence->exec($statement, array(time()));
     }
 

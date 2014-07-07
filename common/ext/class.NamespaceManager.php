@@ -131,25 +131,11 @@ class common_ext_NamespaceManager
      */
     public function getLocalNamespace()
     {
-        $returnValue = null;
-
-        
-        
-        $session = core_kernel_classes_Session::singleton();
-		$localModel = $session->getNameSpace();
-		if(!preg_match("/#$/", $localModel)){
-			$localModel.= '#';
+		$localModelUri = LOCAL_NAMESPACE;
+		if (substr($localModelUri, -1) != '#') {
+		    $localModelUri.= '#';
 		}
-    	if(count($this->namespaces) == 0){
-        	$this->getAllNamespaces();	//load the namespaces attribute 
-        }
-        if( ($modeId = array_search($localModel, $this->namespaces, true)) !== false ){
-        	$returnValue = new common_ext_Namespace($modeId, $this->namespaces[$modeId]);
-        }
-        
-        
-
-        return $returnValue;
+		return $this->getNamespace($localModelUri);
     }
 
     /**
@@ -163,8 +149,6 @@ class common_ext_NamespaceManager
     public function getNamespace($modelid)
     {
         $returnValue = null;
-
-        
     
         if(count($this->namespaces) == 0){
         	$this->getAllNamespaces();	//load the namespaces attribute 
@@ -181,8 +165,6 @@ class common_ext_NamespaceManager
         		$returnValue = new common_ext_Namespace($modelid, $this->namespaces[$modelid]);
         	}
         }
-        
-        
 
         return $returnValue;
     }

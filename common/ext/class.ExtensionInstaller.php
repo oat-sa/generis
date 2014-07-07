@@ -327,21 +327,32 @@ class common_ext_ExtensionInstaller
 	 */
 	protected function checkRequiredExtensions()
 	{
-		$returnValue = (bool) false;
 
-		
-		$extensionManager = common_ext_ExtensionsManager::singleton();
-		$installedExtArray = $extensionManager->getInstalledExtensions();
+	    $extensionManager = common_ext_ExtensionsManager::singleton();
+	    
 		foreach ($this->extension->getDependencies() as $requiredExt => $requiredVersion) {
-			if(!array_key_exists($requiredExt,$installedExtArray)){
-				throw new common_ext_MissingExtensionException('Extension '. $requiredExt . ' is needed by the extension to be installed but is missing.',
-															   $requiredExt);
-			}
+		    $installedVersion = $extensionManager->getInstalledVersion($requiredExt);
+		    if (is_null($installedVersion)) {
+		        throw new common_ext_MissingExtensionException('Extension '. $requiredExt . ' is needed by the extension to be installed but is missing.',
+		            'GENERIS');
+		    }
+		    if ($requiredVersion != '*') {
+    		    $matches = array();
+    		    preg_match('/[0-9\.]+/', $requiredVersion, $matches, PREG_OFFSET_CAPTURE);
+    		    if (count($matches) == 1) {
+    		        $match = current($matches);
+    		        $nr = $match[0];
+    		        $operator = $match[1] > 0 ? substr($requiredVersion, 0, $match[1]) : '=';
+    		        if (!version_compare($installedVersion, $nr, $operator)) {
+    		            throw new common_exception_Error('Installed version of '.$requiredExt.' '.$installedVersion.' does not satisfy required '.$requiredVersion.' for '.$this->extension->getId());
+    		        }
+    		    } else {
+    		        throw new common_exception_Error('Unsupported version requirement: "'.$requiredVersion.'"');
+    		    }
+		    }
 		}
-		$returnValue = true;
-		
-
-		return (bool) $returnValue;
+		// always return true, or throws an exception
+		return true;
 	}
 
 	/**

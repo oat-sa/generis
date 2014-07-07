@@ -135,36 +135,5 @@ class FileTest extends GenerisPhpUnitTestRunner {
 	    $this->assertTrue($file->delete());
 	}
     
-    //The the resource file exists function
-    public function testResourceFileExists()
-    {
-    	// Create a correct path...
-    	$file = 'FileTestCase_testResourceFileExists';
-    	$dir = '';
-    	$path = $this->fsPath . $dir . $file;
-    	
-        $this->assertFalse(helpers_File::resourceExists($path));
-        $file = $this->fileSource->createFile($file, $dir);
-        $this->assertTrue(helpers_File::resourceExists($path));
-        $this->assertFalse(helpers_File::resourceExists('test'));
-        $file->delete();
-    }
-    
-    //The the resource get resource file function
-    public function testGetResourceFile()
-    {
-    	$file = 'FileTestCase_testResourceFileExists'; 
-    	$dir = 'subdir' . DIRECTORY_SEPARATOR;
-    	$path = $this->fsPath . $dir . $file;
-    	    	
-        $this->assertNull(helpers_File::getResource($path));
-        $file = $this->fileSource->createFile($file, $dir);
-        $searchedFile = helpers_File::getResource($path);
-        $this->assertNotNull($searchedFile);
-        $this->assertTrue($searchedFile instanceof core_kernel_file_File);
-        $file->delete();
-        $this->assertNull(helpers_File::getResource($path));
-    }
-    
 }
 	
