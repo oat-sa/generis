@@ -28,7 +28,7 @@
  * @package generis
  
  */
-class common_uri_UuidUriProvider
+class common_uri_Bin2HexUriProvider
     extends common_uri_AbstractUriProvider
 {
     const PERSISTENCE_KEY = 'generis_uriProvider';
