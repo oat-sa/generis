@@ -233,31 +233,6 @@ class common_ext_Extension
     }
 
     /**
-     * returns whenever or not the extension is enabled
-     *
-     * @access public
-     * @return boolean
-     * @deprecated
-     */
-    public function isEnabled()
-    {
-        return common_ext_ExtensionsManager::singleton()->isEnabled($this->getId());
-    }
-
-    /**
-     * returns whenever or not the extension is installed
-     *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @return boolean
-     * @deprecated
-     */
-    public function isInstalled()
-    {
-        return common_ext_ExtensionsManager::singleton()->isInstalled($this->getId());
-    }
-
-    /**
      * returns the base dir of the extension
      *
      * @access public
@@ -426,10 +401,14 @@ class common_ext_Extension
     /**
      * Get the Management Role of the Extension. Returns null in case of no
      * Role for the Extension.
+     * 
+     * Removing all generis references from framework, please use the Manifest::getManagementRoleUri()
      *
      * @access public
      * @author firstname and lastname of author, <author@example.org>
      * @return core_kernel_classes_Resource
+     * @deprecated
+     * @see common_ext_Manifest::getManagementRoleUri()
      */
     public function getManagementRole()
     {

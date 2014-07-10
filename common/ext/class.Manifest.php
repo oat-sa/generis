@@ -1026,17 +1026,29 @@ class common_ext_Manifest
     }
 
     /**
-     * Get the Role dedicated to manage this extension. Returns null if there is
-     * Management Role.
+     * Removing all generis references from framework
      *
      * @access public
      * @author Jerome Bogaerts <jerome@taotesting.com>
      * @return core_kernel_classes_Resource
+     * @deprecated
+     * @see common_ext_Manifest::getManagementRoleUri()
      */
     public function getManagementRole()
     {
         return is_null($this->managementRoleUri) ? null : new core_kernel_classes_Resource($this->managementRoleUri);
     }
+    
+    /**
+     * Get the Role dedicated to manage this extension. Returns null if there is
+     * 
+     * @return string
+     */
+    public function getManagementRoleUri()
+    {
+        return $this->managementRoleUri;
+    }
+    
 
     /**
      * Set the Management Role of the Extension Manifest.
