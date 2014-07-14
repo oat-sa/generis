@@ -206,11 +206,7 @@ class core_kernel_classes_Class
     {
         $returnValue = null;
 
-        
-		
         $returnValue = $this->getImplementation()->createInstance($this, $label, $comment, $uri);
-
-        
 
         return $returnValue;
     }

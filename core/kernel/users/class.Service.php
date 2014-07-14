@@ -20,6 +20,8 @@
  * 
  */
 
+use oat\oatbox\user\LoginService;
+
 /**
  * The UserService aims at providing an API to manage Users and Roles within Generis.
  *
@@ -32,7 +34,10 @@ class core_kernel_users_Service
         implements core_kernel_users_UsersManagement,
                    core_kernel_users_RolesManagement
 {
-
+    
+    CONST LEGACY_ALGORITHM = 'md5';
+    CONST LEGACY_SALT_LENGTH = 0;
+    
     /**
      *
      * @access private
@@ -40,6 +45,18 @@ class core_kernel_users_Service
      */
     private static $instance = null;
 
+
+    /**
+     * Returns the hashing algorithm defined in generis configuration
+     *
+     * @return helpers_PasswordHash
+     */
+    public static function getPasswordHash() {
+        return new helpers_PasswordHash(
+            defined('PASSWORD_HASH_ALGORITHM') ? PASSWORD_HASH_ALGORITHM : self::LEGACY_ALGORITHM,
+            defined('PASSWORD_HASH_SALT_LENGTH') ? PASSWORD_HASH_SALT_LENGTH : self::LEGACY_SALT_LENGTH
+        );
+    }
 
     /**
      * Returns true if a user with login = $login is currently in the
@@ -95,7 +112,7 @@ class core_kernel_users_Service
         	    RDFS_LABEL => "User ${login}",
         	    RDFS_COMMENT => 'User Created on ' . date(DATE_ISO8601),
         	    PROPERTY_USER_LOGIN => $login,
-        	    PROPERTY_USER_PASSWORD => core_kernel_users_AuthAdapter::getPasswordHash()->encrypt($password),
+        	    PROPERTY_USER_PASSWORD => core_kernel_users_Service::getPasswordHash()->encrypt($password),
         	    PROPERTY_USER_ROLES => $role
         	));
         	
@@ -194,7 +211,7 @@ class core_kernel_users_Service
 		}
 		
 		$hash = $user->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD));
-		$returnValue = core_kernel_users_AuthAdapter::getPasswordHash()->verify($password, $hash);
+		$returnValue = core_kernel_users_Service::getPasswordHash()->verify($password, $hash);
 
         return (bool) $returnValue;
     }
@@ -213,7 +230,7 @@ class core_kernel_users_Service
 			throw new core_kernel_users_Exception('The password must be of "string" type, got '.gettype($password));
 		}
 		
-		$user->editPropertyValues(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD),core_kernel_users_AuthAdapter::getPasswordHash()->encrypt($password));
+		$user->editPropertyValues(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD),core_kernel_users_Service::getPasswordHash()->encrypt($password));
     }
 
     /**
@@ -560,8 +577,7 @@ class core_kernel_users_Service
      */
     public function login($login, $password, $allowedRoles)
     {
-        $adapter = new core_kernel_users_AuthAdapter($login, $password);
-        return common_user_auth_Service::singleton()->login($adapter, $allowedRoles);
+        return LoginService::login($login, $password);
     }
 
     /**
