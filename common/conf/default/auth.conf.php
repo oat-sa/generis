@@ -24,7 +24,7 @@
 
 $GLOBALS['generis_auth'] = array(
     array(
-        'driver' => 'core_kernel_users_AuthAdapter',
+        'driver' => 'oat\\generis\\model\\user\\AuthAdapter',
     ),
     /*
     array(
