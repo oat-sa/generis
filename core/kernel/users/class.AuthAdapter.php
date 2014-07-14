@@ -16,8 +16,9 @@
  * 
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *               
- * 
  */
+
+use oat\oatbox\user\auth\LoginAdapter;
 
 /**
  * Authentication adapter interface to be implemented by authentication methodes
@@ -25,37 +26,50 @@
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- 
  */
 class core_kernel_users_AuthAdapter
-	implements common_user_auth_Adapter
+	implements LoginAdapter
 {
-    CONST LEGACY_ALGORITHM = 'md5';
-    CONST LEGACY_SALT_LENGTH = 0;
-
     /**
      * Returns the hashing algorithm defined in generis configuration
+     * use core_kernel_users_Service::getPasswordHash() instead
      * 
      * @return helpers_PasswordHash
+     * @deprecated
      */
     public static function getPasswordHash() {
-        return new helpers_PasswordHash(
-            defined('PASSWORD_HASH_ALGORITHM') ? PASSWORD_HASH_ALGORITHM : self::LEGACY_ALGORITHM,
-            defined('PASSWORD_HASH_SALT_LENGTH') ? PASSWORD_HASH_SALT_LENGTH : self::LEGACY_SALT_LENGTH
-        );
+        return core_kernel_users_Service::getPasswordHash();
     }    
     
+    /**
+     * Username to verify
+     * 
+     * @var string
+     */
     private $username;
+    
+    /**
+     * Password to verify
+     * 
+     * @var $password
+     */
 	private $password;
 	
 	/**
 	 * 
-	 * @param string $username
-	 * @param string $password
+	 * @param array $configuration
 	 */
-	public function __construct($username, $password) {
-		$this->username = $username;
-		$this->password = $password;
+	public function __construct(array $configuration) {
+	    // nothing to configure
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \oat\oatbox\user\auth\LoginAdapter::setCredentials()
+	 */
+	public function setCredentials($login, $password) {
+	    $this->username = $login;
+	    $this->password = $password;
 	}
 	
 	/**
@@ -78,7 +92,7 @@ class core_kernel_users_AuthAdapter
             // fake code execution to prevent timing attacks
             $label = new core_kernel_classes_Property(RDFS_LABEL);
             $hash = $label->getUniquePropertyValue($label);
-            if (!self::getPasswordHash()->verify($this->password, $hash)) {
+            if (!core_kernel_users_Service::getPasswordHash()->verify($this->password, $hash)) {
                 throw new core_kernel_users_InvalidLoginException();
             }
             // should never happen, added for integrity
@@ -87,7 +101,7 @@ class core_kernel_users_AuthAdapter
     	
 	    $userResource = current($users);
 	    $hash = $userResource->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD));
-	    if (!self::getPasswordHash()->verify($this->password, $hash)) {
+	    if (!core_kernel_users_Service::getPasswordHash()->verify($this->password, $hash)) {
 	        throw new core_kernel_users_InvalidLoginException();
 	    }
     	

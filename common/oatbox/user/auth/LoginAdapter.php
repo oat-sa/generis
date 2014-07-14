@@ -20,13 +20,14 @@
 
 namespace oat\oatbox\user\auth;
 
+use common_user_auth_Adapter;
+
 /**
- * Authentication adapter interface to be implemented by authentication methodes
+ * Authentication adapter interface for login/password based authentication adapters
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- 
  */
 interface LoginAdapter extends common_user_auth_Adapter
 {
