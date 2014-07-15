@@ -98,7 +98,10 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
             if (!file_exists($dirname)) {
                 mkdir($dirname, 0700, true);
             }
-            $string = "<?php return ".common_Utils::toPHPVariableString($value).";";
+            
+            $string = $this->humanReadable
+                ? "<?php return ".common_Utils::toHumanReadablePhpString($value).";".PHP_EOL
+                : "<?php return ".common_Utils::toPHPVariableString($value).";";
             // we first open with 'c' in case the flock fails
             // 'w' would empty the file that someone else might be working on
             if (false !== ($fp = @fopen($filePath, 'c')) && true === flock($fp, LOCK_EX)){
