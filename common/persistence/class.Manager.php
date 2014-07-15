@@ -83,15 +83,13 @@ class common_persistence_Manager
         if (isset(self::$driverMap[$driverStr])) {
             $driverClassName = self::$driverMap[$driverStr];
         } else {
-                $driverClassName = $driverStr;
+            $driverClassName = $driverStr;
         }
                
-        if (class_exists($driverClassName)){
-            $driver = new $driverClassName();
+        if (!class_exists($driverClassName)){
+            throw new common_exception_Error('Driver '.$driverStr.' not found check your database configuration');
         }
-        else{
-            common_Logger::e('Driver '.$driverStr.' not found check your database configuration');
-        }
+        $driver = new $driverClassName();
         return $driver->connect($persistenceId, $config);
     }
     
