@@ -27,7 +27,6 @@
  * @access public
  * @author Joel Bout, <joel.bout@tudor.lu>
  * @package generis
- 
  */
 class common_Logger
 {
@@ -61,12 +60,12 @@ class common_Logger
     private static $instance = null;
 
     /**
-     * The implementation of the Logger
+     * The dispatcher of the Logger
      *
      * @access private
      * @var Appender
      */
-    private $implementor = null;
+    private $dispatcher = null;
 
     /**
      * the lowest level of events representing the finest-grained processes
@@ -149,7 +148,7 @@ class common_Logger
     }
 
     /**
-     * Short description of method __construct
+     * Private constructor for singleton pattern
      *
      * @access private
      * @author Joel Bout, <joel.bout@tudor.lu>
@@ -157,9 +156,20 @@ class common_Logger
      */
     private function __construct()
     {
-        
-		$this->implementor = common_log_Dispatcher::singleton();
-        
+    }
+    
+    /**
+     * Returns the dispatcher 
+     * 
+     * @return Appender
+     */
+    private function getDispatcher() {
+        if (is_null($this->dispatcher)) {
+            $this->disable();
+            $this->dispatcher = common_log_Dispatcher::singleton();
+            $this->restore();
+        }
+        return $this->dispatcher;
     }
 
     /**
@@ -172,8 +182,6 @@ class common_Logger
      */
     public function register()
     {
-        
-        
 		// initialize the logger here to prevent fatal errors that occure if:
 		// while autoloading any class, an error gets thrown
 		// the logger initializes to handle this error,  and failes to autoload his files
@@ -197,7 +205,7 @@ class common_Logger
     public function log($level, $message, $tags, $errorFile = '', $errorLine = 0)
     {
         
-		if ($this->enabled && $this->implementor->getLogThreshold() <= $level) {
+		if ($this->enabled && $this->getDispatcher()->getLogThreshold() <= $level) {
 			$this->disable();
 			$stack = defined('DEBUG_BACKTRACE_IGNORE_ARGS')
                 ? debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)
@@ -238,7 +246,7 @@ class common_Logger
 				$tags = array($tags);
 			}
 			
-			$this->implementor->log(new common_log_Item($message, $level, time(), $stack, $tags, $requestURI, $errorFile, $errorLine));
+			$this->getDispatcher()->log(new common_log_Item($message, $level, time(), $stack, $tags, $requestURI, $errorFile, $errorLine));
 			$this->restore();
 		};
         
