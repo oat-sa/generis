@@ -116,9 +116,6 @@ class common_legacy_LegacyAutoLoader
     		    }
     		}
     	}
-    	else{
-    		$this->autoloadClearFw($pClassName);
-    	}
     }
     
     private function wrapClass($legacyClass, $realClass) {
@@ -127,16 +124,6 @@ class common_legacy_LegacyAutoLoader
         }
         $classDefinition = 'class '.$legacyClass.' extends '.$realClass.' {}';
         eval($classDefinition);
-    }
-    
-    protected function autoloadClearFw($pClassName) {
-        $packages = array(DIR_CORE,DIR_CORE_HELPERS,DIR_CORE_UTILS);
-        foreach($packages as $path) {
-            if (file_exists($path. $pClassName . '.class.php')) {
-				require_once $path . $pClassName . '.class.php';
-				return;
-            }
-        }
     }
     
 }

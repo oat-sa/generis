@@ -32,15 +32,6 @@
 # session namespace
 define('SESSION_NAMESPACE', 'ClearFw');
 
-# core directory
-define("DIR_CORE"			, VENDOR_PATH . "/ClearFw/core/");
-
-# core helpers directory
-define("DIR_CORE_HELPERS"	, DIR_CORE . "helpers/");
-
-# core utils directory
-define("DIR_CORE_UTILS"		, DIR_CORE . "util/");
-
 # constants definition
 define('HTTP_GET', 		'GET');
 define('HTTP_POST', 	'POST');
