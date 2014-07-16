@@ -1,7 +1,7 @@
 {
-	"name" : "oat/generis",
+	"name" : "oat-sa/generis",
 	"description" : "TAO generis library",
-	"type" : "library",
+    "type" : "tao-extension",
 	"authors" : [
 		{
 			"name" : "Open Assessment Technologies S.A.",
@@ -50,9 +50,19 @@
 	"license" : [
 		"GPL-2.0"
 	],
+	"extra" : {
+    	"tao-extension-name" : "generis"
+    },
+    "repositories": [
+      {
+		"type": "vcs",
+		"url": "git@github.com:oat-sa/oatbox-extension-installer.git"
+		}
+     ],
 	"require" : {
 		"easyrdf/easyrdf" : "*",
 		"doctrine/dbal" : ">=2.2.0,<2.4",
+		"oatbox/extension-installer": "dev-master",
 		"php" : ">=5.3.2"
 	},
 	"minimum-stability" : "dev"
