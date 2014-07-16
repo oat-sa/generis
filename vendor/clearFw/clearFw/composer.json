@@ -1,8 +1,0 @@
-{
-	"name" : "clearFw/clearFw",
-	"description" : "ClearFw",
-	"version" : "1.0",
-	"autoload": {
-		"classmap" : ["core/", "core/helpers/" , "core/util"]
-	} 
-}
