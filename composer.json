@@ -1,5 +1,5 @@
 {
-	"name" : "oat-sa/generis",
+	"name" : "oat/generis",
 	"description" : "TAO generis library",
     "type" : "tao-extension",
 	"authors" : [
@@ -60,6 +60,7 @@
 		}
      ],
 	"require" : {
+		"clearFw/clearFw" : "*",
 		"easyrdf/easyrdf" : "*",
 		"doctrine/dbal" : ">=2.2.0,<2.4",
 		"oatbox/extension-installer": "dev-master",
