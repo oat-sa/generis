@@ -27,10 +27,16 @@
  * @author J�r�me Bogaerts <jerome.bogaerts@tudor.lu> <jerome.bogaerts@gmail.com>
  */
 class Request
-{	
-        protected $parameters = array();
-        protected $rawParameters = array();
-        protected $method;
+{
+    const HTTP_GET = 'GET';
+    const HTTP_POST = 'POST';
+    const HTTP_PUT ='PUT';
+    const HTTP_DELETE = 'DELETE';
+    const HTTP_HEAD = 'HEAD';
+        
+    protected $parameters = array();
+    protected $rawParameters = array();
+    protected $method;
 	
 	public function __construct()
 	{
@@ -72,27 +78,27 @@ class Request
 	
 	public function isGet()
 	{
-		return $this->getMethod() == HTTP_GET;
+		return $this->getMethod() == self::HTTP_GET;
 	}
 	
 	public function isPost()
 	{
-		return $this->getMethod() == HTTP_POST;
+		return $this->getMethod() == self::HTTP_POST;
  	}
  	
  	public function isPut()
  	{
- 		return $this->getMethod() == HTTP_PUT;
+ 		return $this->getMethod() == self::HTTP_PUT;
  	}
  	
  	public function isDelete()
  	{
- 		return $this->getMethod() == HTTP_DELETE;
+ 		return $this->getMethod() == self::HTTP_DELETE;
  	}
  	
  	public function isHead()
  	{
- 		return $this->getMethod() == HTTP_HEAD;
+ 		return $this->getMethod() == self::HTTP_HEAD;
  	}
  	
  	public function getUserAgent()
@@ -162,23 +168,23 @@ class Request
  		switch ($methodAsString)
  		{
  			case 'GET':
- 				$method = HTTP_GET;
+ 				$method = self::HTTP_GET;
  				break;
  			
  			case 'POST':
- 				$method = HTTP_POST;
+ 				$method = self::HTTP_POST;
  				break;
  			
  			case 'PUT':
- 				$method = HTTP_PUT;
+ 				$method = self::HTTP_PUT;
  				break;
  			
  			case 'DELETE':
- 				$method = HTTP_DELETE;
+ 				$method = self::HTTP_DELETE;
  				break;
  			
  			case 'HEAD':
- 				$method = HTTP_HEAD;
+ 				$method = self::HTTP_HEAD;
  				break;
  		}
  		
