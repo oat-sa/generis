@@ -94,3 +94,5 @@ $GLOBALS['COMMON_PROFILER_CONFIG'] = array(
 		$defaultConfig
 	)*/
 );
+
+return $GLOBALS['COMMON_PROFILER_CONFIG'];

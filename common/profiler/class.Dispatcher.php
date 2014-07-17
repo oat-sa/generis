@@ -187,11 +187,8 @@ class common_profiler_Dispatcher
      */
     private function __construct()
     {
-    	if(isset($GLOBALS['COMMON_PROFILER_CONFIG'])) {
-    		$this->init($GLOBALS['COMMON_PROFILER_CONFIG']);
-		}else{
-        	$this->init(array());
-        }
+        $config = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig('profiler');
+        $this->init($config === false ? array() : $config);
     }
 
     /**

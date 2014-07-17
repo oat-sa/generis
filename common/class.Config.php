@@ -45,4 +45,34 @@ class common_Config {
 			}
 		}
 	}
+	
+	public static function loadDefaults() {
+	    $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
+	    
+	    $defaultIterator = new DirectoryIterator ( $ext->getDir() . 'common/conf/default' );
+	    foreach ( $defaultIterator as $fileinfo ) {
+	        if (! $fileinfo->isDot () && strpos ( $fileinfo->getFilename (), '.conf.php' ) > 0) {
+	    
+	            $overide = dirname($fileinfo->getPath()).DIRECTORY_SEPARATOR.$fileinfo->getFilename();
+	            $path = file_exists($overide) ? $overide : $fileinfo->getPathname();
+	    
+	            $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
+	            $config = include $path;
+	            $ext->setConfig($confKey, $config);
+	        }
+	    }
+	}
+	
+	public static function update() {
+	    $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
+	    
+	    $defaultIterator = new DirectoryIterator ( $ext->getDir() . 'common/conf' );
+	    foreach ( $defaultIterator as $fileinfo ) {
+	        if (! $fileinfo->isDot () && strpos ( $fileinfo->getFilename (), '.conf.php' ) > 0) {
+	            $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
+	            $config = $fileinfo->getPathname();
+	            $ext->setConfig($confKey, $config);
+	        }
+	    }
+	}
 }

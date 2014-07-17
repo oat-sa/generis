@@ -58,3 +58,5 @@ array(
 		)
 		/**/
 );
+
+return $GLOBALS['COMMON_LOGGER_CONFIG'];

@@ -21,8 +21,7 @@
  * @package generis
  *
  */
-
-$GLOBALS['generis_auth'] = array(
+return array(
     array(
         'driver' => 'oat\\generis\\model\\user\\AuthAdapter',
     ),
@@ -33,5 +32,3 @@ $GLOBALS['generis_auth'] = array(
 	),
 	*/
 );
-
-return $GLOBALS['generis_auth'];

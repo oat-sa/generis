@@ -26,9 +26,10 @@
  
  * @license GPLv2  http://www.opensource.org/licenses/gpl-2.0.php
  */
-
-define('SMTP_HOST', 'localhost');
-define('SMTP_PORT', 25);
-define('SMTP_AUTH', false);
-define('SMTP_USER', '');
-define('SMTP_PASS', '');
+return array(
+    'SMTP_HOST' => 'localhost',
+    'SMTP_PORT' => 25,
+    'SMTP_AUTH' => false,
+    'SMTP_USER' => '',
+    'SMTP_PASS' => ''	
+);

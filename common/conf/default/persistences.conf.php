@@ -19,11 +19,11 @@
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
  * @package generis
- 
  *
  */
 
 $GLOBALS['generis_persistences'] = array(
+    
     'default' => array(
         'driver' => SGBD_DRIVER,
         'host' => DATABASE_URL,
@@ -31,9 +31,11 @@ $GLOBALS['generis_persistences'] = array(
         'user' => DATABASE_LOGIN,
         'password' => DATABASE_PASS
     ),
+    
     'serviceState' => array(
         'driver' => 'phpfile',
     ),
+    
     'config' => array(
         'driver' => 'phpfile',
         'dir' => FILES_PATH . DIRECTORY_SEPARATOR . 'generis' . DIRECTORY_SEPARATOR . 'config',
@@ -67,3 +69,4 @@ $GLOBALS['generis_persistences'] = array(
 	),
 */
 );
+return $GLOBALS['generis_persistences'];
