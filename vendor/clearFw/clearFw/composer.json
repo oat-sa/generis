@@ -3,6 +3,8 @@
 	"description" : "ClearFw",
 	"version" : "1.0",
 	"autoload": {
-		"classmap" : ["core/", "core/helpers/" , "core/util"]
+		"classmap" : ["core/", "core/helpers/" , "core/util"],
+		"files" : ["clearbricks/init.php"]
+	 
 	} 
 }
