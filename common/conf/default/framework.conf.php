@@ -32,9 +32,6 @@
 # session namespace
 define('SESSION_NAMESPACE', 'ClearFw');
 
-# constants definition
-define('HTTP_GET', 		'GET');
-define('HTTP_POST', 	'POST');
-define('HTTP_PUT', 		'PUT');
-define('HTTP_DELETE', 	'DELETE');
-define('HTTP_HEAD', 	'HEAD');
+return array(
+    'SESSION_NAMESPACE' => 'ClearFw'
+);
