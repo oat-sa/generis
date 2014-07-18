@@ -89,9 +89,10 @@ class AutoLoader
             	    foreach ($config as $file) {
             	        require $file;        
             	    }
+            	    break;
             	case "legacy" :
             	    foreach ($config as $prefix => $namespace) {
-            	        \common_legacy_LegacyAutoLoader::supportLegacyPrefix($prefix, $namespace);
+            	        common_legacy_LegacyAutoLoader::supportLegacyPrefix($prefix, $namespace);
             	    }
             	    break;
         	    default :
