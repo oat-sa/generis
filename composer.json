@@ -1,5 +1,5 @@
 {
-	"name" : "oat/generis",
+	"name" : "oat-sa/generis",
 	"description" : "TAO generis library",
     "type" : "tao-extension",
 	"authors" : [
@@ -54,6 +54,10 @@
     	"tao-extension-name" : "generis"
     },
     "repositories": [
+      {
+			"type": "vcs",
+	        "url": "http://clearfw.googlecode.com/svn/branches/taoClearFw"
+      },
       {
 		"type": "vcs",
 		"url": "git@github.com:oat-sa/oatbox-extension-installer.git"
