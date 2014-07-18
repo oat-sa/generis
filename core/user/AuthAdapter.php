@@ -17,8 +17,16 @@
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *               
  */
+namespace oat\generis\model\user;
 
 use oat\oatbox\user\auth\LoginAdapter;
+use core_kernel_users_Service;
+use core_kernel_classes_Class;
+use common_exception_InconsistentData;
+use core_kernel_classes_Property;
+use core_kernel_users_InvalidLoginException;
+use core_kernel_users_GenerisUser;
+
 
 /**
  * Authentication adapter interface to be implemented by authentication methodes
@@ -27,8 +35,8 @@ use oat\oatbox\user\auth\LoginAdapter;
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
  */
-class core_kernel_users_AuthAdapter
-	implements common_user_auth_Adapter
+class AuthAdapter
+	implements LoginAdapter
 {
     /**
      * Returns the hashing algorithm defined in generis configuration
@@ -57,10 +65,17 @@ class core_kernel_users_AuthAdapter
 	
 	/**
 	 * 
-	 * @param unknown $login
-	 * @param unknown $password
+	 * @param array $configuration
 	 */
-	public function __construct($login, $password) {
+	public function __construct(array $configuration) {
+	    // nothing to configure
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \oat\oatbox\user\auth\LoginAdapter::setCredentials()
+	 */
+	public function setCredentials($login, $password) {
 	    $this->username = $login;
 	    $this->password = $password;
 	}

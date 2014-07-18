@@ -156,7 +156,32 @@ class common_Utils
 
         return (string) $returnValue;
     }
+    
+    /**
+     * Same as toPHPVariableString except the sting
+     * is easier for humans to read
+     * 
+     * @param mixed $value
+     * @param number indentation
+     * @return string
+     */
+    public static function toHumanReadablePhpString($value, $indentation = 0)
+    {
+        if (gettype($value) == "array") {
+            $string = "";
+            foreach ($value as $key => $val) {
+            	$string .= str_repeat('    ', $indentation+1)
+                   .self::toPHPVariableString($key)
+            	   ." => "
+                   .self::toHumanReadablePhpString($val, $indentation+1).","
+                   .PHP_EOL;
+            }
+            $returnValue = "array(".PHP_EOL.substr($string, 0, -1).PHP_EOL.str_repeat('    ', $indentation).")";
+        } else {
+            $returnValue = self::toPHPVariableString($value);
+        }
+        
+        return (string) $returnValue;
+    }
 
 }
-
-?>

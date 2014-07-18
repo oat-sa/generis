@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -19,31 +19,38 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
+
 /**
- * framework config
+ * UriProvider implementation based on an advanced key value storage
  *
- * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
+ * @access public
+ * @author Joel Bout, <joel@taotesting.com>
  * @package generis
  
- * @license GPLv2  http://www.opensource.org/licenses/gpl-2.0.php
  */
+class common_uri_Bin2HexUriProvider
+    extends common_uri_AbstractUriProvider
+{
+    const PERSISTENCE_KEY = 'generis_uriProvider';
+    
+    /**
+     * Generates a URI based on a serial stored in the database.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return string
+     * @throws common_UriProviderException
+     */
+    public function provide()
+    {
+        $returnValue = (string) '';
+        
+        $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
+        
+       
+        $uri = $modelUri . uniqid('i'). getmypid(). bin2hex(openssl_random_pseudo_bytes(8));
 
+        return (string) $uri;
+    }
 
-# session namespace
-define('SESSION_NAMESPACE', 'ClearFw');
-
-# core directory
-define("DIR_CORE"			, VENDOR_PATH . "/ClearFw/core/");
-
-# core helpers directory
-define("DIR_CORE_HELPERS"	, DIR_CORE . "helpers/");
-
-# core utils directory
-define("DIR_CORE_UTILS"		, DIR_CORE . "util/");
-
-# constants definition
-define('HTTP_GET', 		'GET');
-define('HTTP_POST', 	'POST');
-define('HTTP_PUT', 		'PUT');
-define('HTTP_DELETE', 	'DELETE');
-define('HTTP_HEAD', 	'HEAD');
+}
