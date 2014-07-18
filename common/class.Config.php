@@ -70,7 +70,7 @@ class common_Config {
 	    foreach ( $defaultIterator as $fileinfo ) {
 	        if (! $fileinfo->isDot () && strpos ( $fileinfo->getFilename (), '.conf.php' ) > 0) {
 	            $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
-	            $config = $fileinfo->getPathname();
+	            $config = include $fileinfo->getPathname();
 	            $ext->setConfig($confKey, $config);
 	        }
 	    }
