@@ -20,7 +20,6 @@
  * 
  */
 
-use oat\oatbox\AutoLoader;
 use oat\generis\model\data\ModelManager;
 
 /**
@@ -63,7 +62,6 @@ class common_ext_GenerisInstaller
 		
 		common_cache_FileCache::singleton()->purge();
         
-		AutoLoader::reload();
 		common_Logger::d('Installing custom script for extension ' . $this->extension->getId());
 		$this->installCustomScript();
 		

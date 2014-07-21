@@ -19,8 +19,6 @@
  * 
  */
 
-use oat\oatbox\AutoLoader;
-
 /**
  * Short description of class common_ext_ExtensionInstaller
  *
@@ -91,8 +89,6 @@ class common_ext_ExtensionInstaller
 					
 				core_kernel_persistence_smoothsql_SmoothModel::forceReloadModelIds();
 					
-				//reload the autoloader
-				AutoLoader::reload();
 				common_Logger::d('Installing custom script for extension ' . $this->extension->getId());
 				$this->installCustomScript();
 				common_Logger::d('Done installing custom script for extension ' . $this->extension->getId());
