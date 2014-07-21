@@ -145,14 +145,6 @@ class common_ext_Manifest
     private $uninstallData = null;
     
     /**
-     * The PHP autoload configuration for the Extension described by the manifest.
-     *
-     * @access private
-     * @var array
-     */
-    private $autoload = array();
-    
-    /**
      * The routes to the controllers described by the manifest.
      *
      * @access private
@@ -316,9 +308,6 @@ class common_ext_Manifest
     			$this->localData = $array['local']; 
     		}
     		
-    		if (!empty($array['autoload'])){
-    		    $this->setAutoloaders($array['autoload']);
-    		}
     		if (!empty($array['routes'])){
     		    $this->setRoutes($array['routes']);
     		}
@@ -869,26 +858,6 @@ class common_ext_Manifest
     private function setInstallPHPFiles($installPHPFiles)
     {
         $this->installPHPFiles = $installPHPFiles;
-    }
-
-    /**
-     * Sets the autoloaders for this extension.
-     *  
-     * @param string $autoloadMap
-     */
-    private function setAutoloaders($autoloadMap)
-    {
-        return $this->autoload = $autoloadMap;
-    }
-    
-    /**
-     * Gets the autoloader config used by the php classes of this extension.
-     * 
-     * @return string
-     */
-    public function getAutoloaders()
-    {
-        return $this->autoload;
     }
 
     /**

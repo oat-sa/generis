@@ -51,6 +51,9 @@ if(function_exists("date_default_timezone_set") && defined('TIME_ZONE')){
 	date_default_timezone_set(TIME_ZONE);
 }
 
-// classloader
-require_once dirname(__FILE__)	. '/oatbox/AutoLoader.php';
-oat\oatbox\AutoLoader::register();
+// init legacy autoloader for non composer packages
+require_once ROOT_PATH.'generis/common/legacy/class.LegacyAutoLoader.php';
+common_legacy_LegacyAutoLoader::register();
+
+// autoloader
+require_once ROOT_PATH.'vendor/autoload.php';
