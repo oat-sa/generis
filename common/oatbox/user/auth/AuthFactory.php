@@ -38,7 +38,7 @@ class AuthFactory
         $adapters = array();
         $config = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig('auth');
         if (is_array($config)) {
-            foreach ($GLOBALS['generis_auth'] as $key => $adapterConf) {
+            foreach ($config as $key => $adapterConf) {
                 if (isset($adapterConf['driver'])) {
                     $className = $adapterConf['driver'];
                     unset($adapterConf['driver']);
