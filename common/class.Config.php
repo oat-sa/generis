@@ -29,27 +29,13 @@ class common_Config {
 	 */
 	public static function load() {
 		define ( 'GENERIS_BASE_PATH', realpath ( dirname ( __FILE__ ) . '/../' ) );
-		include_once dirname ( __FILE__ ) . '/conf/generis.conf.php';
-		include_once dirname ( __FILE__ ) . '/conf/db.conf.php';
-		
-		$defaultIterator = new DirectoryIterator ( dirname ( __FILE__ ) . '/conf/default' );
-		
-		foreach ( $defaultIterator as $fileinfo ) {
-			if (! $fileinfo->isDot () && strpos ( $fileinfo->getFilename (), '.conf.php' ) > 0) {
-				$conf = $fileinfo->getFilename ();
-				if (file_exists ( dirname ( __FILE__ ) . '/conf/' . $conf )) {
-					include_once dirname ( __FILE__ ) . '/conf/' . $conf;
-				} else {
-					include_once dirname ( __FILE__ ) . '/conf/default/' . $conf;
-				}
-			}
-		}
+		include_once dirname ( __FILE__ ) . '/../../config/generis.conf.php';
 	}
 	
 	public static function loadDefaults() {
 	    $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
 	    
-	    $defaultIterator = new DirectoryIterator ( $ext->getDir() . 'common/conf/default' );
+	    $defaultIterator = new DirectoryIterator ( $ext->getDir() . 'config/default' );
 	    foreach ( $defaultIterator as $fileinfo ) {
 	        if (! $fileinfo->isDot () && strpos ( $fileinfo->getFilename (), '.conf.php' ) > 0) {
 	    
@@ -58,19 +44,6 @@ class common_Config {
 	    
 	            $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
 	            $config = include $path;
-	            $ext->setConfig($confKey, $config);
-	        }
-	    }
-	}
-	
-	public static function update() {
-	    $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
-	    
-	    $defaultIterator = new DirectoryIterator ( $ext->getDir() . 'common/conf' );
-	    foreach ( $defaultIterator as $fileinfo ) {
-	        if (! $fileinfo->isDot () && strpos ( $fileinfo->getFilename (), '.conf.php' ) > 0) {
-	            $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
-	            $config = include $fileinfo->getPathname();
 	            $ext->setConfig($confKey, $config);
 	        }
 	    }

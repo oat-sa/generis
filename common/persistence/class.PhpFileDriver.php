@@ -99,9 +99,8 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
                 mkdir($dirname, 0700, true);
             }
             
-            $string = $this->humanReadable
-                ? "<?php return ".common_Utils::toHumanReadablePhpString($value).";".PHP_EOL
-                : "<?php return ".common_Utils::toPHPVariableString($value).";";
+            $string = $this->getContent($id, $value);
+            
             // we first open with 'c' in case the flock fails
             // 'w' would empty the file that someone else might be working on
             if (false !== ($fp = @fopen($filePath, 'c')) && true === flock($fp, LOCK_EX)){
@@ -127,7 +126,6 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
                 return false;
             }
         }
-        
     }
     
     /**
@@ -169,7 +167,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
      * @param string $key
      * @return string
      */
-    private function getPath($key) {
+    protected function getPath($key) {
         if ($this->humanReadable) {
             $path = '';
             foreach (str_split($key) as $char) {
@@ -180,6 +178,12 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
             $path = implode(DIRECTORY_SEPARATOR,str_split(substr($encoded, 0, $this->levels))).DIRECTORY_SEPARATOR.substr($encoded, $this->levels);
         }
         return  $this->directory.$path.'.php';
+    }
+    
+    protected function getContent($key, $value) {
+        return $this->humanReadable
+            ? "<?php return ".common_Utils::toHumanReadablePhpString($value).";".PHP_EOL
+            : "<?php return ".common_Utils::toPHPVariableString($value).";";
     }
 
 }

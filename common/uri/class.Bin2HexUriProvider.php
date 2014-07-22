@@ -29,7 +29,7 @@
  
  */
 class common_uri_Bin2HexUriProvider
-    extends common_uri_AbstractUriProvider
+    implements common_uri_UriProvider
 {
     const PERSISTENCE_KEY = 'generis_uriProvider';
     

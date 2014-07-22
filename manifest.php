@@ -41,7 +41,6 @@ return array(
 		'http://www.tao.lu/Ontologies/generis.rdf'
 	),
 	'install' => array(
-		'php' => dirname(__FILE__). '/install/scripts/setDefaultConfig.php',
 		'rdf' => array(
 				array('ns' => 'http://www.w3.org/1999/02/22-rdf-syntax-ns', 'file' => dirname(__FILE__). '/core/ontology/22-rdf-syntax-ns.rdf'),
 				array('ns' => 'http://www.w3.org/2000/01/rdf-schema', 'file' => dirname(__FILE__). '/core/ontology/rdf-schema.rdf'),

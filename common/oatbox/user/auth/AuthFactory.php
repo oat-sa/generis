@@ -23,12 +23,11 @@ namespace oat\oatbox\user\auth;
 use common_ext_ExtensionsManager;
 
 /**
- * Create the auth adapters configured in common/conf/auth.conf.php
+ * Create the configured auth adapters
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- 
  */
 class AuthFactory
 {

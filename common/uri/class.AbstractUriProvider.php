@@ -32,7 +32,7 @@
  * @package generis
  
  */
-abstract class common_uri_AbstractUriProvider
+abstract class common_uri_AbstractUriProvider implements common_uri_UriProvider
 {
     // --- ASSOCIATIONS ---
 
@@ -82,16 +82,6 @@ abstract class common_uri_AbstractUriProvider
         $this->driver = strtolower($driver);
         
     }
-
-    /**
-     * Provides a URI.
-     *
-     * @abstract
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return string
-     */
-    public abstract function provide();
 
     /**
      * Instantiates an instance of UriProvider for a given database driver.

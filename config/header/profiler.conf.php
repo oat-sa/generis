@@ -17,6 +17,7 @@
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
+
 /**
  * Profiler config
  *
@@ -73,26 +74,3 @@ $udpArchiver = array(
 	'udp_host'		=> '192.168.2.21',
 	'udp_port'		=> 27072
 );
-
-$GLOBALS['COMMON_PROFILER_CONFIG'] = array(
-	/*array_merge(
-		array(
-			'class'		=> 'LoggerAppender',
-			'tag'		=> 'PROFILER'
-		), 
-		$defaultConfig,
-		array()
-	)
-	,array_merge(
-		array(
-			'class'			=> 'SystemProfileAppender',
-			'local_server_comment'=> "This is Sam's computer",
-			'archivers'		=> array(
-				$udpArchiver
-			)
-		), 
-		$defaultConfig
-	)*/
-);
-
-return $GLOBALS['COMMON_PROFILER_CONFIG'];

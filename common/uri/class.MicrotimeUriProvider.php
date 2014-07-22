@@ -29,7 +29,7 @@
  
  */
 class common_uri_MicrotimeUriProvider
-    extends common_uri_AbstractUriProvider
+    implements common_uri_UriProvider
 {
     // --- ASSOCIATIONS ---
 

@@ -92,10 +92,10 @@ class common_persistence_sql_pdo_mysql_Driver
     {
         $returnValue = (string) '';
 
-        
-        $driver = str_replace('pdo_', '', SGBD_DRIVER);
-        $dbName = DATABASE_NAME;
-        $dbUrl = DATABASE_URL;
+        $params = $this->getParams();
+        $driver = str_replace('pdo_', '', $params['driver']);
+        $dbName = $params['dbname'];
+        $dbUrl = $params['host'];
         
         $returnValue = $driver . ':dbname=' . $dbName . ';host=' . $dbUrl . ';charset=utf8';
         

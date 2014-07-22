@@ -110,17 +110,14 @@ class common_persistence_sql_pdo_pgsql_Driver
      */
     protected function getDSN()
     {
-        $returnValue = (string) '';
-
         
-        $driver = str_replace('pdo_', '', SGBD_DRIVER);
-        $dbName = DATABASE_NAME;
-        $dbUrl = DATABASE_URL;
+        $params = $this->getParams();
+        $driver = str_replace('pdo_', '', $params['driver']);
+        $dbName = $params['dbname'];
+        $dbUrl = $params['host'];
         
-        $returnValue = $driver . ':dbname=' . $dbName . ';host=' . $dbUrl;
+        return $driver . ':dbname=' . $dbName . ';host=' . $dbUrl;
         
-
-        return (string) $returnValue;
     }
 
 }

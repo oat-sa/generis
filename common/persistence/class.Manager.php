@@ -31,6 +31,8 @@
  */
 class common_persistence_Manager
 {
+    const CONFIG_KEY = 'persistences';
+    
     /**
      * @var array
      */
@@ -64,6 +66,21 @@ class common_persistence_Manager
         }
         return self::$persistences[$persistenceId];
     }
+    
+    /**
+     * Add a new persistence to the system
+     * 
+     * @param string $persistenceId
+     * @param array $persistenceConf
+     */
+    public static function addPersistence($persistenceId, array $persistenceConf) {
+        $generis = common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
+        $configs = $generis->hasConfig(self::CONFIG_KEY)
+            ? $generis->getConfig(self::CONFIG_KEY)
+            : array();
+        $configs[$persistenceId] = $persistenceConf;
+        $generis->setConfig(self::CONFIG_KEY, $configs);
+    }
 
     /**
      * @param string $persistenceId
@@ -71,26 +88,28 @@ class common_persistence_Manager
      * @return common_persistence_Persistence
      */
     private static function createPersistence($persistenceId) {
-        if(!isset($GLOBALS['generis_persistences'])) {
+        $generis = common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
+        if ($generis->hasConfig(self::CONFIG_KEY)) {
+            $configs = $generis->getConfig(self::CONFIG_KEY);
+            if (isset($configs[$persistenceId])) {
+                $config = $configs[$persistenceId];
+                $driverStr = $config['driver'];
+                
+                $driverClassName = isset(self::$driverMap[$driverStr])
+                    ? self::$driverMap[$driverStr]
+                    : $driverStr;
+                 
+                if (!class_exists($driverClassName)){
+                    throw new common_exception_Error('Driver '.$driverStr.' not found check your database configuration');
+                }
+                $driver = new $driverClassName();
+                return $driver->connect($persistenceId, $config);
+            } else {
+                throw new common_Exception('Persistence Configuration for persistence '.$persistenceId.' not found');
+            }
+        } else {
             throw new common_Exception('Persistence Configuration not found');
         }
-        if(!isset($GLOBALS['generis_persistences'][$persistenceId])) {
-            throw new common_Exception('Persistence Configuration for persistence '.$persistenceId.' not found');
-        }
-        $config = $GLOBALS['generis_persistences'][$persistenceId];
-        $driverStr = $config['driver'];
-        
-        if (isset(self::$driverMap[$driverStr])) {
-            $driverClassName = self::$driverMap[$driverStr];
-        } else {
-            $driverClassName = $driverStr;
-        }
-               
-        if (!class_exists($driverClassName)){
-            throw new common_exception_Error('Driver '.$driverStr.' not found check your database configuration');
-        }
-        $driver = new $driverClassName();
-        return $driver->connect($persistenceId, $config);
     }
     
 }
