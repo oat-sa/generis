@@ -36,6 +36,8 @@ class KeyValueTest extends GenerisPhpUnitTestRunner {
     
     public function testSet() {
         $this->assertTrue( self::$driver->set('phpUnitTestKey', 1) );
+        $this->assertTrue( self::$driver->set('phpUnitTestKey3', '') );
+        $this->assertTrue( self::$driver->set('phpUnitTestKey3', NULL) );
     }
     
     public function testGet() {
@@ -60,6 +62,7 @@ class KeyValueTest extends GenerisPhpUnitTestRunner {
     public function testDel() {
         $this->assertTrue( self::$driver->del('phpUnitTestKey') );
         $this->assertTrue( self::$driver->del('phpUnitTestKey2') );
+        $this->assertTrue( self::$driver->del('phpUnitTestKey3') );
     }
     
     
