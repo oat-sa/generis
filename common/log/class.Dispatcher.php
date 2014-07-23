@@ -31,9 +31,13 @@
 class common_log_Dispatcher
         implements common_log_Appender
 {
-    // --- ASSOCIATIONS ---
-    // generateAssociationEnd : 
-
+    /**
+     * Identifer of the configuration that stores the log configuration
+     * 
+     * @var string
+     */
+    const CONFIG_ID = 'log';
+    
     // --- ATTRIBUTES ---
 
     /**
@@ -161,13 +165,13 @@ class common_log_Dispatcher
      */
     private function __construct()
     {
-        $config = array();
-        try {
-            $config = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig('log');
-        } catch (common_Exception $e) {
-            // config not yet set
+        // workaround to prevent errors during install
+        if (defined('EXTENSION_PATH')) {
+            $config = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig(self::CONFIG_ID);
+            if (is_array($config)) {
+                $this->init($config);
+            }
         }
-        $this->init(is_array($config) ? $config : array());
     }
 
     /**
