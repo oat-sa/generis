@@ -31,21 +31,4 @@ class common_Config {
 		define ( 'GENERIS_BASE_PATH', realpath ( dirname ( __FILE__ ) . '/../' ) );
 		include_once dirname ( __FILE__ ) . '/../../config/generis.conf.php';
 	}
-	
-	public static function loadDefaults() {
-	    $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
-	    
-	    $defaultIterator = new DirectoryIterator ( $ext->getDir() . 'config/default' );
-	    foreach ( $defaultIterator as $fileinfo ) {
-	        if (! $fileinfo->isDot () && strpos ( $fileinfo->getFilename (), '.conf.php' ) > 0) {
-	    
-	            $overide = dirname($fileinfo->getPath()).DIRECTORY_SEPARATOR.$fileinfo->getFilename();
-	            $path = file_exists($overide) ? $overide : $fileinfo->getPathname();
-	    
-	            $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
-	            $config = include $path;
-	            $ext->setConfig($confKey, $config);
-	        }
-	    }
-	}
 }

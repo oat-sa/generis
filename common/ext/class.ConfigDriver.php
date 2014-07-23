@@ -82,4 +82,8 @@ class common_ext_ConfigDriver extends common_persistence_PhpFileDriver
             .' * To replace this add a file '.basename($this->getExtension()->getDir()).'/conf/header/'.$key.'.conf.php'.PHP_EOL
             .' */'.PHP_EOL;
     }
+    
+    protected function getPath($key) {
+        return substr(parent::getPath($key), 0, -4).'.conf.php';
+    }
 }
