@@ -64,6 +64,22 @@ class common_persistence_Manager
         }
         return self::$persistences[$persistenceId];
     }
+    
+    /**
+     * Get an array containing all available persistances
+     * @return array 
+     */
+    public static function getAllPersistances() {
+        $persistances = array();
+        foreach ( $GLOBALS['generis_persistences'] as $pKey=>$pConf ) {
+            try {
+                $persistances[$pKey] = self::createPersistence($pKey);
+            } catch (Exception $ex) {
+                //
+            }
+        }
+        return $persistances;
+    }
 
     /**
      * @param string $persistenceId
