@@ -3,3 +3,4 @@
 /.buildpath
 /data/*
 /common/conf/*.conf.php
+composer.lock

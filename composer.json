@@ -45,6 +45,19 @@
 		"oat",
 		"doctrine-dbal",
 		"computer-based-assessment"
+			],
+		"homepage" : "http://www.taotesting.com",
+		"license" : [
+			"GPL-2.0"
+			],
+		"extra" : {
+			"tao-extension-name" : "generis"
+		},
+		"repositories": [
+		{
+	            	"type": "composer",
+			"url": "http://packages.taocloud.org/"
+		}
 	],
 	"homepage" : "http://www.taotesting.com",
 	"license" : [
@@ -53,22 +66,19 @@
 	"extra" : {
     	"tao-extension-name" : "generis"
     },
-    "repositories": [
-      {
-			"type": "vcs",
-	        "url": "http://clearfw.googlecode.com/svn/branches/taoClearFw"
-      },
-      {
-		"type": "vcs",
-		"url": "git@github.com:oat-sa/oatbox-extension-installer.git"
-		}
-     ],
+
 	"require" : {
 		"clearFw/clearFw" : "*",
 		"easyrdf/easyrdf" : "*",
 		"doctrine/dbal" : ">=2.2.0,<2.4",
-		"oatbox/extension-installer": "dev-master",
+		"oat-sa/oatbox-extension-installer": "dev-master",
 		"php" : ">=5.3.2"
 	},
+    "autoload" : {
+        "psr-4" : {
+            "oat\\generis\\model\\" : "core/",
+            "oat\\oatbox\\" : "common/oatbox/"
+        }
+    },
 	"minimum-stability" : "dev"
 }
