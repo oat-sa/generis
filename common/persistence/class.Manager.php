@@ -71,16 +71,22 @@ class common_persistence_Manager
      */
     public static function getAllPersistances() {
         $persistances = array();
+        $addedPersistances = array();
         foreach ( $GLOBALS['generis_persistences'] as $pKey=>$pConf ) {
-            try {
-                $persistances[$pKey] = self::createPersistence($pKey);
-            } catch (Exception $ex) {
-                //
+            $pHash = serialize($pConf);
+            // we don't need persistances with exactly the same configuration more than once
+            if (!in_array($pHash, $addedPersistances)) {
+                $addedPersistances[] = $pHash;
+                try {
+                    $persistances[$pKey] = array( 'driver'=>self::createPersistence($pKey), 'driverName'=>$pConf['driver'] );
+                } catch (Exception $ex) {
+                    //
+                }
             }
         }
         return $persistances;
     }
-
+    
     /**
      * @param string $persistenceId
      * @throws common_Exception
