@@ -28,7 +28,7 @@ namespace oat\generis\model\data;
  */
 class ModelManager
 {
-    const CONFIG_KEY = 'oat_generis_model';
+    const CONFIG_KEY = 'ontology';
     
     private static $model = null;
     

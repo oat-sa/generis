@@ -2,7 +2,7 @@
 /**
  * Auth config
  *
- * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
+ * @author Open Assessment Technologies SA
  * @package generis
  * @license GPLv2  http://www.opensource.org/licenses/gpl-2.0.php
  */

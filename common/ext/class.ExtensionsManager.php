@@ -34,7 +34,7 @@
  */
 class common_ext_ExtensionsManager
 {
-    const EXTENSIONS_CONFIG_KEY = 'installed'; 
+    const EXTENSIONS_CONFIG_KEY = 'installation'; 
 
     /**
      * The extensions currently loaded. The array contains
