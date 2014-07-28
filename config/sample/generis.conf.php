@@ -68,11 +68,13 @@ define('USE_HTTP_USER', '');
 define('USE_HTTP_PASS', '');
 
 #generis paths
-define('INCLUDES_PATH' , GENERIS_BASE_PATH.DIRECTORY_SEPARATOR.'includes');
 define('VENDOR_PATH' , ROOT_PATH.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR);
 define('EXTENSION_PATH' , ROOT_PATH);
 define('FILES_PATH' , '');
 define('GENERIS_CACHE_PATH', FILES_PATH.'generis'.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR);
+
+#path to read configs from
+define('CONFIG_PATH', ROOT_PATH.'config/');
 
 # uri providers ('MicrotimeUriProvider'|'MicrotimeRandUriProvider'|'DatabaseSerialUriProvider'|'AdvKeyValueUriProvider')
 define('GENERIS_URI_PROVIDER', 'DatabaseSerialUriProvider');

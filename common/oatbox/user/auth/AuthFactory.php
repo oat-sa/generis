@@ -20,29 +20,35 @@
 
 namespace oat\oatbox\user\auth;
 
+use common_ext_ExtensionsManager;
+
 /**
- * Create the auth adapters configured in common/conf/auth.conf.php
+ * Create the configured auth adapters
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- 
  */
 class AuthFactory
 {
+    const CONFIG_KEY = 'auth';
+    
     public static function createAdapters() {
         $adapters = array();
-        foreach ($GLOBALS['generis_auth'] as $key => $adapterConf) {
-            if (isset($adapterConf['driver'])) {
-                $className = $adapterConf['driver'];
-                unset($adapterConf['driver']);
-                if (class_exists($className) && in_array(__NAMESPACE__.'\LoginAdapter', class_implements($className))) {
-                    $adapters[] = new $className($adapterConf);
+        $config = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig('auth');
+        if (is_array($config)) {
+            foreach ($config as $key => $adapterConf) {
+                if (isset($adapterConf['driver'])) {
+                    $className = $adapterConf['driver'];
+                    unset($adapterConf['driver']);
+                    if (class_exists($className) && in_array(__NAMESPACE__.'\LoginAdapter', class_implements($className))) {
+                        $adapters[] = new $className($adapterConf);
+                    } else {
+                        \common_Logger::e($className.' is not a valid LoginAdapter');
+                    }
                 } else {
-                    \common_Logger::e($className.' is not a valid LoginAdapter');
+                    \common_Logger::e('No driver for auth adapter '.$key);
                 }
-            } else {
-                \common_Logger::e('No driver for auth adapter '.$key);
             }
         }
         return $adapters;

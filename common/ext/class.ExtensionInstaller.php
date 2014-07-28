@@ -81,7 +81,7 @@ class common_ext_ExtensionInstaller
 				}
 					
 				// deprecated, but might still be used
-				$this->installWriteConfig();
+				$this->installLoadDefaultConfig();
 				$this->installOntology();
 				$this->installRegisterExt();
 				$this->installLoadConstants();
@@ -123,29 +123,23 @@ class common_ext_ExtensionInstaller
 	 * @author Jerome Bogaerts, <jerome@taotesting.com>
 	 * @return void
 	 */
-	protected function installWriteConfig()
+	protected function installLoadDefaultConfig()
 	{
-		
-		$sampleFile	= $this->extension->getDir().'includes/config.php.sample';
-		$finalFile	= $this->extension->getDir().'includes/config.php';
-		
-		if (file_exists($sampleFile)) {
-			common_Logger::d('Writing config '.$finalFile.' for '.$this->extension->getId(), 'INSTALL');
-			$myConfigWriter = new tao_install_utils_ConfigWriter(
-				$sampleFile,
-				$finalFile
-			);
-			$myConfigWriter->createConfig();
-			
-			// @todo solve this
-			if ($this->extension->getId() == 'tao') {
-				require_once($finalFile);
-			}
-		} elseif (file_exists($finalFile)){
-		    helpers_File::remove($finalFile);
-		}
-		
-		
+	    $defaultsPath = $this->extension->getDir() . 'config/default';
+	    if (is_dir($defaultsPath)) {
+    		$defaultIterator = new DirectoryIterator ($defaultsPath);
+    		foreach ($defaultIterator as $fileinfo) {
+    		    if (!$fileinfo->isDot () && strpos($fileinfo->getFilename(), '.conf.php') > 0) {
+    		         
+    		        $overide = dirname($fileinfo->getPath()).DIRECTORY_SEPARATOR.$fileinfo->getFilename();
+    		        $path = file_exists($overide) ? $overide : $fileinfo->getPathname();
+    		         
+    		        $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
+    		        $config = include $path;
+    		        $this->extension->setConfig($confKey, $config);
+    		    }
+    		}
+	    }
 	}
 
 	/**

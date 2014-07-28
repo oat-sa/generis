@@ -62,6 +62,8 @@ class common_ext_Extension
      * @var boolean
      */
     protected $loaded = false;
+    
+    private $configPersistence = null;
 
     /**
      * Should not be called directly, please use ExtensionsManager
@@ -126,21 +128,15 @@ class common_ext_Extension
      * @return common_persistence_KeyValuePersistence
      */
     private function getConfigPersistence() {
-        return common_persistence_KeyValuePersistence::getPersistence('config');
-    }
-    
-    /**
-     * Builds a KV persistance key from a config key
-     * @param string $key
-     * @return string
-     */
-    private function getConfigKey($key) {
-        return $this->getId().'_'.$key;
+        if (is_null($this->configPersistence)) {
+            $this->configPersistence = common_ext_ConfigDriver::getPersistence($this);
+        }
+        return $this->configPersistence;
     }
     
     public function hasConfig($key)
     {
-        return $this->getConfigPersistence()->exists($this->getConfigKey($key));
+        return $this->getConfigPersistence()->exists($key);
     }
     
     /**
@@ -154,7 +150,7 @@ class common_ext_Extension
      */
     public function setConfig($key, $value)
     {
-        return $this->getConfigPersistence()->set($this->getConfigKey($key), $value);
+        return $this->getConfigPersistence()->set($key, $value);
     }
 
     /**
@@ -168,7 +164,7 @@ class common_ext_Extension
      */
     public function getConfig($key)
     {
-        return $this->getConfigPersistence()->get($this->getConfigKey($key));
+        return $this->getConfigPersistence()->get($key);
     }
 
     /**
@@ -181,7 +177,7 @@ class common_ext_Extension
      */
     public function unsetConfig($key)
     {
-        return $this->getConfigPersistence()->del($this->getConfigKey($key));
+        return $this->getConfigPersistence()->del($key);
     }
 
     /**

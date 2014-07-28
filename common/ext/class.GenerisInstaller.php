@@ -53,10 +53,9 @@ class common_ext_GenerisInstaller
     		throw new common_ext_ExtensionException('Tried to install "'.$this->extension->getId().'" extension using the GenerisInstaller');
     	}
         //$this->installCustomScript();
-		//$this->installWriteConfig();
+		$this->installLoadDefaultConfig();
 		$this->installOntology();
 		//$this->installLocalData();
-		//$this->installWriteConfig();
 		//$this->installModuleModel();
 		$this->installRegisterExt();
 		
