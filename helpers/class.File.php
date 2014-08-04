@@ -122,16 +122,23 @@ class helpers_File
         return (bool) $returnValue;
     }
 
+    /**
+     * Empty a directory without deleting it
+     * 
+     * @param string $path
+     * @return boolean
+     */
     public static function emptyDirectory($path)
     {
-        $returnValue = (bool) false;
+        $success = true;
         $handle = opendir($path);
         while (false !== ($entry = readdir($handle))) {
             if ($entry != "." && $entry != "..") {
-                self::remove($path . DIRECTORY_SEPARATOR . $entry);
+                $success = self::remove($path . DIRECTORY_SEPARATOR . $entry) ? $success : false;
             }
         }
         closedir($handle);
+        return $success;
     }
 
     /**
