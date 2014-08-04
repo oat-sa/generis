@@ -48,4 +48,12 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
         return $this->getDriver()->del($key);
     }
     
+    public function purge() {
+        if ($this->getDriver() instanceof common_persistence_Purgable) {
+            return $this->getDriver()->purge();
+        } else {
+            throw new common_exception_NotImplemented("purge not implemented ");
+        }
+    }
+    
 }

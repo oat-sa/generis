@@ -22,7 +22,7 @@
  
  *
  */
-class common_persistence_PhpFileDriver implements common_persistence_KvDriver
+class common_persistence_PhpFileDriver implements common_persistence_KvDriver, common_persistence_Purgable
 {
     /**
      * List of characters permited in filename
@@ -159,6 +159,17 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver
             unset($this->cache[$id]);
         }
         return @unlink($this->getPath($id));
+    }
+
+    /**
+     * purge the persistence directory
+     * 
+     * @return boolean
+     */
+    public function purge() {
+        return file_exists($this->directory)
+            ? helpers_File::emptyDirectory($this->directory)
+            : false;
     }
 
     /**
