@@ -59,7 +59,7 @@ class common_cache_FileCache
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  mixed
      * @param  string serial
-     * @return mixed
+     * @return boolean
      */
     public function put($mixed, $serial = null)
     {
@@ -69,7 +69,7 @@ class common_cache_FileCache
         	}
         	$serial = $mixed->getSerial();
         }
-        $this->persistence->set($serial, $mixed);
+        return $this->persistence->set($serial, $mixed);
     }
 
     /**
