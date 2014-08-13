@@ -39,6 +39,15 @@ class common_cache_FileCache
      * @var FileCache
      */
     private static $instance = null;
+    
+    /**
+     * @var common_persistence_KeyValuePersistence
+     */
+    private $persistence;
+    
+    private function __construct() {
+        $this->persistence = common_persistence_KeyValuePersistence::getPersistence('cache');
+    }
 
     /**
      * puts "something" into the cache,
@@ -50,7 +59,7 @@ class common_cache_FileCache
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  mixed
      * @param  string serial
-     * @return mixed
+     * @return boolean
      */
     public function put($mixed, $serial = null)
     {
@@ -60,37 +69,7 @@ class common_cache_FileCache
         	}
         	$serial = $mixed->getSerial();
         }
-        
-        $data = "<?php return ".common_Utils::toPHPVariableString($mixed).";";
-       	
-        try{
-        	// Acquire the lock and open with mode 'c'. Indeed, we do not use mode 'w' because
-        	// it could truncate the file before it gets the lock!
-        	$filePath = $this->getFilePath($serial);
-        	if (false !== ($fp = @fopen($filePath, 'c')) && true === flock($fp, LOCK_EX)){
-        		
-        		// We first need to truncate.
-        		ftruncate($fp, 0);
-        		
-        		fwrite($fp, $data);
-        		@flock($fp, LOCK_UN);
-        		@fclose($fp);
-        		if (function_exists('opcache_invalidate')) {
-        		    opcache_invalidate($filePath, true);
-        		}
-        	}
-        	else{
-        		$msg = "Unable to write cache file '${filePath}'.";
-        		throw new common_exception_FileSystemError($msg);
-        	}
-        	
-        }
-        catch (common_exception_FileSystemError $e){
-        	$msg  = "An unexpected error occured while creating a temporary ";
-        	$msg .= "file to cache data with serial '${serial}': " . $e->getMessage();
-        	
-        	throw new common_cache_Exception($msg);
-        }
+        return $this->persistence->set($serial, $mixed);
     }
 
     /**
@@ -103,24 +82,11 @@ class common_cache_FileCache
      */
     public function get($serial)
     {
-        $returnValue = null;
-        
-        // Acquire a shared lock for reading on the main lock file.
-        // We acquire the lock here because we have a critical section below:
-        // 1. Check if we have something for this serial.
-        // 2. Include the file corresponding to the serial. 
-        $filePath = $this->getFilePath($serial);
-        if (false !== ($fp = @fopen($filePath, 'r')) && true === flock($fp, LOCK_SH)){
-        	$returnValue = include $this->getFilePath($serial);
-        	
-        	@flock($fp, LOCK_UN);
-        	@fclose($fp);
+        $returnValue = $this->persistence->get($serial);
+        if ($returnValue === false && !$this->has($serial)) {
+            $msg = "Unable to read cache for '".$serial."'.";
+            throw new common_cache_NotFoundException($msg);
         }
-        else{
-        	$msg = "Unable to read cache file '${filePath}'.";
-        	throw new common_cache_NotFoundException($msg);
-        }
-
         return $returnValue;
     }
 
@@ -134,10 +100,7 @@ class common_cache_FileCache
      */
     public function has($serial)
     {
-        $returnValue = (bool) false;
-        $returnValue = file_exists($this->getFilePath($serial));
-
-        return (bool) $returnValue;
+        return $this->persistence->exists($serial);
     }
 
     /**
@@ -150,7 +113,7 @@ class common_cache_FileCache
      */
     public function remove($serial)
     {
-        @unlink($this->getFilePath($serial));
+        return $this->persistence->del($serial);
     }
 
     /**
@@ -162,35 +125,7 @@ class common_cache_FileCache
      */
     public function purge()
     {
-        $returnValue = null;
-
-    	$cachepath =  GENERIS_CACHE_PATH;
-        if (false !== ($files = scandir($cachepath))){
-            foreach ($files as $f) {
-                $filePath = $cachepath . $f;
-                if (substr($f, 0, 1) != '.' && file_exists($filePath)){
-                    @unlink($filePath);
-                }
-            }
-        }
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method getFilePath
-     *
-     * @access private
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  string serial
-     * @return string
-     */
-    private function getFilePath($serial)
-    {
-        $returnValue = (string) '';
-        $returnValue = GENERIS_CACHE_PATH . $serial;
-
-        return (string) $returnValue;
+        return $this->persistence->purge();
     }
 
     /**
@@ -202,15 +137,11 @@ class common_cache_FileCache
      */
     public static function singleton()
     {
-        $returnValue = null;
-
         if (!isset(self::$instance)){
         	self::$instance = new self();
         }
         
         return self::$instance;
-
-        return $returnValue;
     }
 
 }
