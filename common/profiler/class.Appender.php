@@ -220,3 +220,4 @@ abstract class common_profiler_Appender
 		
 	}
 } /* end of interface common_profiler_Appender */
+	

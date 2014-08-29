@@ -59,7 +59,7 @@ class common_cache_FileCache
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  mixed
      * @param  string serial
-     * @return mixed
+     * @return boolean
      * @throws common_exception_Error
      */
     public function put($mixed, $serial = null)
@@ -70,7 +70,7 @@ class common_cache_FileCache
         	}
         	$serial = $mixed->getSerial();
         }
-        $this->persistence->set($serial, $mixed);
+        return $this->persistence->set($serial, $mixed);
     }
 
     /**
@@ -85,7 +85,7 @@ class common_cache_FileCache
     public function get($serial)
     {
         $returnValue = $this->persistence->get($serial);
-        if ($returnValue === false) {
+        if ($returnValue === false && !$this->has($serial)) {
             $msg = "Unable to read cache for '".$serial."'.";
             throw new common_cache_NotFoundException($msg);
         }
