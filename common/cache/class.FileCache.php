@@ -60,6 +60,7 @@ class common_cache_FileCache
      * @param  mixed
      * @param  string serial
      * @return mixed
+     * @throws common_exception_Error
      */
     public function put($mixed, $serial = null)
     {
@@ -79,6 +80,7 @@ class common_cache_FileCache
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string serial
      * @return common_Serializable
+     * @throws common_cache_NotFoundException
      */
     public function get($serial)
     {
@@ -91,7 +93,7 @@ class common_cache_FileCache
     }
 
     /**
-     * test whenever an entry associted to the serial exists
+     * test whenever an entry associated to the serial exists
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
