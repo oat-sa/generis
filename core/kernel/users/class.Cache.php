@@ -191,29 +191,7 @@ class core_kernel_users_Cache
      */
     public static function flush()
     {
-        
-        $cacheDir = GENERIS_CACHE_PATH;
-        $matching = self::SERIAL_PREFIX_INCLUDED_ROLES;
-        if (@is_readable($cacheDir) && @is_dir($cacheDir)){
-        	$files = scandir($cacheDir);
-        	if ($files !== false){
-        		foreach ($files as $f){
-        			$canonicalPath = GENERIS_CACHE_PATH . $f;
-        			if ($f[0] != '.' && @is_writable($canonicalPath) && preg_match("/^${matching}/", $f)){
-        				unlink($canonicalPath);
-        			}
-        		}
-        	}
-        	else{
-        		$msg = 'The Users Cache cannot be scanned.';
-        		throw new core_kernel_users_CacheException($msg);
-        	}
-        }
-        else{
-        	$msg = 'The Users Cache is not readable or is not a directory.';
-        	throw new core_kernel_users_CacheException($msg);
-        }
-        
+        common_cache_FileCache::singleton()->purge();
     }
 
 } /* end of class core_kernel_users_Cache */
