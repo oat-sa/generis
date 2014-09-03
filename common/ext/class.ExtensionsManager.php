@@ -219,7 +219,7 @@ class common_ext_ExtensionsManager
      */
     public function getExtensionById($id)
     {
-        if (empty($id)) {
+        if (!is_string($id) || strlen($id) == 0) {
         	throw new common_ext_ExtensionException('No id specified for getExtensionById()');
         }
         if (!isset($this->extensions[$id])) {
