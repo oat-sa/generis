@@ -46,8 +46,14 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
             throw new common_exception_Error('Missing host information for Redis driver');
         }
         $host = $params['host'];
-        $port = $params['port'] ? $params['port'] : self::DEFAULT_PORT;
-        $this->connection->connect($host, $port);
+        $port = isset($params['port']) ? $params['port'] : self::DEFAULT_PORT;
+        $persist = isset($params['pconnect']) ? $params['pconnect'] : true;
+        
+        if ($persist) {
+            $this->connection->pconnect($host, $port);
+        } else {
+            $this->connection->connect($host, $port);
+        }
         if (isset($params['password'])) {
             $this->connection->auth($params['password']);
         }
