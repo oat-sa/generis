@@ -28,7 +28,6 @@ class common_Config {
 	 * @author "Lionel Lecaque, <lionel@taotesting.com>"
 	 */
 	public static function load() {
-		define ( 'GENERIS_BASE_PATH', realpath ( dirname ( __FILE__ ) . '/../' ) );
 		include_once dirname ( __FILE__ ) . '/../../config/generis.conf.php';
 	}
 }
