@@ -30,7 +30,7 @@
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
  
  */
-class common_ext_ExtensionException extends common_Exception
+class common_ext_ExtensionException extends common_Exception implements common_log_SeverityLevel
 {
     // --- ASSOCIATIONS ---
 
@@ -96,7 +96,16 @@ class common_ext_ExtensionException extends common_Exception
         $this->setExtensionId($extensionId);
         
     }
+    
+    /**
+     * Get the severity of the error.
+     *
+     * @access public
+     * @return int
+     */
+    public function getSeverity()
+    {
+        return common_Logger::ERROR_LEVEL;
+    }
 
-} /* end of class common_ext_ExtensionException */
-
-?>
+}
