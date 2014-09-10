@@ -21,6 +21,7 @@
  */
 
 use oat\generis\model\data\ModelManager;
+use oat\generis\model\data\permission\PermissionManager;
 
 /**
  * The class of rdfs:classes. It implements basic tests like isSubClassOf(Class
@@ -207,6 +208,7 @@ class core_kernel_classes_Class
         $returnValue = null;
 
         $returnValue = $this->getImplementation()->createInstance($this, $label, $comment, $uri);
+        PermissionManager::getPermissionModel()->onResourceCreated($returnValue);
 
         return $returnValue;
     }
@@ -371,6 +373,7 @@ class core_kernel_classes_Class
         foreach ($additonalTypes as $type) {
         	$returnValue->setType($type);
         }
+        PermissionManager::getPermissionModel()->onResourceCreated($returnValue);
 
         return $returnValue;
     }
