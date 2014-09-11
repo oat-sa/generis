@@ -19,15 +19,16 @@
  * 
  */
 
+use oat\oatbox\user\User;
+
 /**
  * Abstract User
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- 
  */
-abstract class common_user_User
+abstract class common_user_User implements User
 {
 	abstract public function getIdentifier();
 	

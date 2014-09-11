@@ -44,21 +44,45 @@ class LoginService
      */
     public static function login($userLogin, $userPassword)
     {
-        $loggedIn = false;
-        $adapters = AuthFactory::createAdapters();
+        try {
+            $user = self::authenticate($userLogin, $userPassword);
+            $loggedIn = self::startSession($user);
+        } catch (common_user_auth_AuthFailedException $e) {
+            $loggedIn = false;
+        }
+        return $loggedIn;
+    }
+    
+    /**
+     * 
+     * @param string $userLogin
+     * @param string $userPassword
+     * @throws LoginFailedException
+     * @return common_user_User
+     */
+    public static function authenticate($userLogin, $userPassword)
+    {
+        $user = null;
         
-        while (!empty($adapters) && !$loggedIn) {
+        $adapters = AuthFactory::createAdapters();
+        $exceptions = array();
+        while (!empty($adapters) && is_null($user)) {
             $adapter = array_shift($adapters);
             $adapter->setCredentials($userLogin, $userPassword);
             try {
                 $user = $adapter->authenticate();
-                $loggedIn = self::startSession($user);
             } catch (common_user_auth_AuthFailedException $exception) {
                 // try next adapter or login failed
+                $exceptions[] = $exception;
             }
         }
-        return $loggedIn;
+        if (!is_null($user)) {
+            return $user;
+        } else {
+            throw new LoginFailedException($exceptions);
+        }
     }
+    
     
     /**
      * Start a session for a provided user
