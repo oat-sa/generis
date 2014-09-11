@@ -20,6 +20,7 @@
  */               
 namespace oat\generis\model\data\permission;
 
+use oat\oatbox\user\User;
 /**
  * Rdf interface to access the ontology
  * This is an experimental interface that has not been implemented yet
@@ -44,13 +45,11 @@ interface PermissionInterface
      * This function should return an associativ array with the resourceIds
      * as keys an the permission arrays as values
      * 
-     * @todo Pass users as objects that allow for easy role retrieval
-     * 
-     * @param string $user
+     * @param User $user
      * @param array $resourceIds
      * @return array
      */
-    public function getPermissions($user, array $resourceIds);
+    public function getPermissions(User $user, array $resourceIds);
     
     /**
      * Hook to set initial permissions

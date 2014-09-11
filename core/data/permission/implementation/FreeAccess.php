@@ -21,6 +21,7 @@
 namespace oat\generis\model\data\permission\implementation;
 
 use oat\generis\model\data\permission\PermissionInterface;
+use oat\oatbox\user\User;
 
 /**
  * Simple permissible Permission model
@@ -44,7 +45,7 @@ class FreeAccess
      * (non-PHPdoc)
      * @see \oat\generis\model\data\PermissionInterface::getPermissions()
      */
-    public function getPermissions($user, array $resourceIds) {
+    public function getPermissions(User $user, array $resourceIds) {
         return array_fill_keys($resourceIds, array(PermissionInterface::RIGHT_UNSUPPORTED));
     }
     
