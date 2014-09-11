@@ -38,7 +38,7 @@ class common_session_BasicSession implements common_session_Session
         $this->user = $user;
     }
     
-    protected function getUser() {
+    public function getUser() {
         return $this->user;
     }
     

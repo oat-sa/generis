@@ -71,7 +71,7 @@ abstract class common_session_SessionManager
     }
     
     public static function isAnonymous() {
-        return self::getSession() instanceof common_session_AnonymousSession;
+        return is_null(self::getSession()->getUserUri());
     }    
     
 }

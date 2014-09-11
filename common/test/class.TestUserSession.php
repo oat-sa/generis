@@ -45,6 +45,10 @@ class common_test_TestUserSession implements common_session_StatelessSession
     public function __construct() {
     }
     
+    public function getUser() {
+        new core_kernel_users_GenerisUser(LOCAL_NAMESPACE.'virtualTestUser');
+    }
+    
     /**
      * (non-PHPdoc)
      * @see common_session_AbstractSession::getUserUri()

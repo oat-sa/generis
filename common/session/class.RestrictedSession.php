@@ -56,6 +56,14 @@ class common_session_RestrictedSession implements common_session_StatefulSession
     
     /**
      * (non-PHPdoc)
+     * @see common_session_Session::getUser()
+     */
+    public function getUser() {
+        return $this->internalSession->getUser();
+    }
+    
+    /**
+     * (non-PHPdoc)
      * @see common_session_AbstractSession::getUserUri()
      */
     public function getUserUri() {

@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -18,6 +18,7 @@
  * 
  */
 
+use oat\oatbox\user\AnonymousUser;
 
 /**
  * Represents a userless Session.
@@ -29,7 +30,14 @@
  */
 class common_session_AnonymousSession implements common_session_StatelessSession
 {
-
+    /**
+     * (non-PHPdoc)
+     * @see common_session_Session::getUser()
+     */
+    public function getUser() {
+        return new AnonymousUser();
+    }
+    
     /**
      * (non-PHPdoc)
      * @see common_session_Session::getUserUri()
