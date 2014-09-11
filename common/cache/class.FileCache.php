@@ -86,7 +86,7 @@ class common_cache_FileCache
     {
         $returnValue = $this->persistence->get($serial);
         if ($returnValue === false && !$this->has($serial)) {
-            $msg = "Unable to read cache for '".$serial."'.";
+            $msg = "No cache entry found for '".$serial."'.";
             throw new common_cache_NotFoundException($msg);
         }
         return $returnValue;

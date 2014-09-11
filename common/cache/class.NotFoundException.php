@@ -29,14 +29,9 @@
  */
 class common_cache_NotFoundException
     extends common_cache_Exception
+        implements common_log_SeverityLevel
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
-    // --- OPERATIONS ---
-
-} /* end of class common_cache_NotFoundException */
-
-?>
+    public function getSeverity() {
+        return common_Logger::DEBUG_LEVEL;
+    }
+}
