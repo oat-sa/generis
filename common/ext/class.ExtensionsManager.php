@@ -34,7 +34,11 @@
  */
 class common_ext_ExtensionsManager
 {
-    const EXTENSIONS_CONFIG_KEY = 'installation'; 
+    const EXTENSIONS_CONFIG_KEY = 'installation';
+
+    public static $RESERVED_WORDS = array(
+    	'config', 'data', 'vendor'
+    );
 
     /**
      * The extensions currently loaded. The array contains
@@ -139,7 +143,7 @@ class common_ext_ExtensionsManager
 		foreach ($dir as $fileinfo) {
 			if ($fileinfo->isDir() && !$fileinfo->isDot() && substr($fileinfo->getBasename(), 0, 1) != '.') {
 				$extId = $fileinfo->getBasename();
-				if (!$this->isInstalled($extId)) {
+				if (!in_array($extId, self::$RESERVED_WORDS) && !$this->isInstalled($extId)) {
     				try {
     					$ext = $this->getExtensionById($extId);
     					$returnValue[] = $ext;
