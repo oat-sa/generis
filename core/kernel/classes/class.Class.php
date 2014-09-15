@@ -226,13 +226,10 @@ class core_kernel_classes_Class
     public function createSubClass($label = '', $comment = '', $uri = "")
     {
         $returnValue = null;
-
-        
 		
         $returnValue = $this->getImplementation()->createSubClass($this, $label, $comment, $uri);
+        PermissionManager::getPermissionModel()->onResourceCreated($returnValue);
         
-        
-
         return $returnValue;
     }
 
