@@ -59,6 +59,9 @@ abstract class common_session_SessionManager
     public static function startSession(common_session_Session $session) {
         self::$session = $session;
         if ($session instanceof common_session_StatefulSession) {
+            // prevent session fixation.
+            session_regenerate_id();
+            
             PHPSession::singleton()->setAttribute(self::PHPSESSION_SESSION_KEY, $session);
         } else {
             PHPSession::singleton()->removeAttribute(self::PHPSESSION_SESSION_KEY);
@@ -67,6 +70,9 @@ abstract class common_session_SessionManager
     }
     
     public static function endSession() {
+        // clean session data.
+        session_destroy();
+        
         self::startSession(new common_session_AnonymousSession());
     }
     
