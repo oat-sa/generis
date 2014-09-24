@@ -18,11 +18,9 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-error_reporting(E_ALL);
-require_once dirname(__FILE__) . '/../GenerisPhpUnitTestRunner.php';
 
+error_reporting(E_ALL);
+use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class OperationFactoryTestCase extends GenerisPhpUnitTestRunner {
 

@@ -19,9 +19,7 @@
  *               2013      (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
-?>
-<?php
-require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
+use oat\generis\test\GenerisPhpUnitTestRunner;
 
 /**
  * Test of the DbWrappers.
@@ -146,5 +144,3 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner {
         $dbWrapper->exec('DROP TABLE "dbTestCase";');
     }
 }
-
-?>

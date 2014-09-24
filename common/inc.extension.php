@@ -53,7 +53,7 @@ if(function_exists("date_default_timezone_set") && defined('TIME_ZONE')){
 
 // init legacy autoloader for non composer packages
 require_once ROOT_PATH.'generis/common/legacy/class.LegacyAutoLoader.php';
-define( 'GENERIS_BASE_PATH' , ROOT_PATH.'generis' );
+defined('GENERIS_BASE_PATH') or define( 'GENERIS_BASE_PATH' , ROOT_PATH.'generis' );
 common_legacy_LegacyAutoLoader::register();
 
 // autoloader

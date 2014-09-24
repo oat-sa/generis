@@ -19,7 +19,7 @@
  * 
  */
 
-require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
+use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class RdfExportTest extends GenerisPhpUnitTestRunner {
     

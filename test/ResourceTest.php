@@ -18,12 +18,8 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
 
-require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
-
-
+use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class ResourceTest extends GenerisPhpUnitTestRunner{
 
@@ -541,4 +537,3 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	
 	
 }
-?>
