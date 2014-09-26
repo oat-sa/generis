@@ -77,7 +77,7 @@ define('GENERIS_CACHE_PATH', FILES_PATH.'generis'.DIRECTORY_SEPARATOR.'cache'.DI
 define('CONFIG_PATH', ROOT_PATH.'config/');
 
 # uri providers ('MicrotimeUriProvider'|'MicrotimeRandUriProvider'|'DatabaseSerialUriProvider'|'AdvKeyValueUriProvider')
-define('GENERIS_URI_PROVIDER', 'MicrotimeRandUriProvider');
+define('GENERIS_URI_PROVIDER', 'DatabaseSerialUriProvider');
 
 # users cache
 define('GENERIS_CACHE_USERS_ROLES', true);
