@@ -20,9 +20,11 @@
  */
 namespace oat\generis\test;
 
-ini_set('max_execution_time', 0);
-ini_set('memory_limit', '-1');
-require_once dirname(__FILE__).'/../common/inc.extension.php';
+use \common_session_SessionManager;
+use \common_test_TestUserSession;
+use \common_ext_ExtensionsManager;
+use \common_ext_ExtensionInstaller;
+use \common_ext_ExtensionUninstaller;
 
 
 /**
@@ -40,7 +42,7 @@ abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
     private static $connected = false;
     
     private $files = array();
-
+    
     /**
      * Create a new temporary file
      * @param string $pContent
@@ -80,13 +82,13 @@ abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
     public static function initTest(){
         //connect the API
         if(!self::$connected){          
-            \common_session_SessionManager::startSession(new \common_test_TestUserSession());
+            common_session_SessionManager::startSession(new common_test_TestUserSession());
             self::$connected = true;
         }
     }
     
     public function restoreTestSession() {
-        return \common_session_SessionManager::startSession(new \common_test_TestUserSession());
+        return common_session_SessionManager::startSession(new common_test_TestUserSession());
     }
     
     
@@ -95,35 +97,35 @@ abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
     }
     
     public function installExtension($extid){
-        $extension = \common_ext_ExtensionsManager::singleton()->getExtensionById($extid);
+        $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extid);
         
         if(!$extension->isInstalled()){
            
-            $installer = new \common_ext_ExtensionInstaller($extension);
+            $installer = new common_ext_ExtensionInstaller($extension);
             $installer->install();
         }
     }
     
     public function uninstallExtension($extid){
-        $extension = \common_ext_ExtensionsManager::singleton()->getExtensionById($extid);
+        $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extid);
         if($extension->isInstalled()){
-            $installer = new \common_ext_ExtensionUninstaller($extension);
+            $installer = new common_ext_ExtensionUninstaller($extension);
             $installer->uninstall();
         }
     }
-
+    
     /**
      * Returns the test session if available
-     * @throws \common_exception_Error
+     * @throws common_exception_Error
      * @return common_test_TestUserSession
      */
     public static function getTestSession() {
         if(!self::$connected){
-            throw new \common_exception_Error('Trying to retrieve TestSession without initialising it first via initTest()');
+            throw new common_exception_Error('Trying to retrieve TestSession without initialising it first via initTest()');
         }
-        $session = \common_session_SessionManager::getSession();
-        if(!$session instanceof \common_test_TestUserSession){
-            throw new \common_exception_Error('current session is no longer a common_test_TestUserSession');
+        $session = common_session_SessionManager::getSession();
+        if(!$session instanceof common_test_TestUserSession){
+            throw new common_exception_Error('current session is no longer a common_test_TestUserSession');
         }
         return $session;
     }
