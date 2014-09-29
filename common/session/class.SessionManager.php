@@ -60,7 +60,7 @@ abstract class common_session_SessionManager
         self::$session = $session;
         if ($session instanceof common_session_StatefulSession) {
             // prevent session fixation.
-            session_regenerate_id();
+            //session_regenerate_id();
             
             PHPSession::singleton()->setAttribute(self::PHPSESSION_SESSION_KEY, $session);
         } else {
