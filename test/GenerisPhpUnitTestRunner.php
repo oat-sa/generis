@@ -18,9 +18,7 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-ini_set('max_execution_time', 0);
-ini_set('memory_limit', '-1');
-//require_once dirname(__FILE__).'/../common/inc.extension.php';
+
 
 
 /**
