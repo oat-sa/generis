@@ -71,7 +71,10 @@ abstract class common_session_SessionManager
     
     public static function endSession() {
         // clean session data.
-        session_destroy();
+
+        if (session_id() != ''){
+            session_destroy();
+        }
         
         self::startSession(new common_session_AnonymousSession());
     }

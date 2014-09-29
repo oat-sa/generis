@@ -18,9 +18,8 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-require_once dirname(__FILE__) . '/GenerisPhpUnitTestRunner.php';
+
+use oat\generis\test\GenerisPhpUnitTestRunner;
 
 /**
  * Test of the common_ext_Namespace and common_ext_NamesapceManager
@@ -70,4 +69,3 @@ class NamespaceTest extends GenerisPhpUnitTestRunner {
 	}
 	
 }
-?>

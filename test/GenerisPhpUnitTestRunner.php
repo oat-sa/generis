@@ -18,7 +18,7 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-namespace  oat\generis\test;
+namespace oat\generis\test;
 
 use \common_session_SessionManager;
 use \common_test_TestUserSession;
@@ -46,7 +46,8 @@ abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
     /**
      * Create a new temporary file
      * @param string $pContent
-    */
+     * @return string
+     */
     public function createFile($pContent = '', $name = null) {
     	if (is_null($name)) {
     		$tmpfname = tempnam(sys_get_temp_dir(), "tst");
