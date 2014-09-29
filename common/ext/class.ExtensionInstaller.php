@@ -174,7 +174,22 @@ class common_ext_ExtensionInstaller
 					    $modelCreator->insertLocalModelFile($rdfpath);
 					}
 					foreach ($this->getTranslatedModelFiles($rdfpath) as $translation) {
-						$modelCreator->insertModelFile($ns, $translation);
+
+						$translationFileReader = new tao_helpers_translation_POFileReader($translation);
+						$translationFileReader->read();
+						$translationFile = $translationFileReader->getTranslationFile();
+						/** @var  tao_helpers_translation_POTranslationUnit $tu */
+						foreach ($translationFile->getTranslationUnits() as $tu) {
+							$about = isset($tu->getAnnotations()['po-translator-comments'])? $tu->getAnnotations()['po-translator-comments'] : null;
+							if ($about && strpos($about, $ns) === 0 && in_array($tu->getContext(),
+									array(RDFS_LABEL, RDFS_COMMENT))
+							) {
+								$subject = new core_kernel_classes_Resource($about);
+								$property = new core_kernel_classes_Property($tu->getContext());
+								$subject->setPropertyValueByLg($property,
+									$tu->getTarget() ? $tu->getTarget() : $tu->getSource(), $tu->getTargetLanguage());
+							}
+						}
 					}
 				}
 				else{
@@ -199,7 +214,7 @@ class common_ext_ExtensionInstaller
 		$returnValue = array();
 		$localesPath = $this->extension->getDir() . 'locales' . DIRECTORY_SEPARATOR;
 		if (file_exists($localesPath)) {
-			$fileName = basename($rdfpath);
+			$fileName = basename($rdfpath) .'.po';
 			foreach (new DirectoryIterator($localesPath) as $fileinfo) {
 				if (!$fileinfo->isDot() && $fileinfo->isDir() && $fileinfo->getFilename() != '.svn' && $fileinfo->getFilename() != 'en-US') {
 					$candidate = $fileinfo->getPathname() . DIRECTORY_SEPARATOR . $fileName;

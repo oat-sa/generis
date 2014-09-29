@@ -67,7 +67,7 @@
         "psr-4" : {
             "oat\\generis\\model\\" : "core/",
             "oat\\oatbox\\" : "common/oatbox/",
-            "oat\\generis\\test\\": "generis/test/"
+            "oat\\generis\\test\\": "test/"
         }
     },
 
