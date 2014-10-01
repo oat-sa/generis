@@ -91,7 +91,13 @@ abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
         return common_session_SessionManager::startSession(new common_test_TestUserSession());
     }
     
-    
+    /**
+     * 
+     * @author Lionel Lecaque, lionel@taotesting.com
+     * @param string $var
+     * @param string $className
+     * @deprecated use assertInstanceOf instead
+     */
     public function assertIsA($var,$className){
     	$this->assertInstanceOf($className,$var);
     }
