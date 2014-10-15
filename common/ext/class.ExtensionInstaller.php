@@ -180,7 +180,8 @@ class common_ext_ExtensionInstaller
 						$translationFile = $translationFileReader->getTranslationFile();
 						/** @var  tao_helpers_translation_POTranslationUnit $tu */
 						foreach ($translationFile->getTranslationUnits() as $tu) {
-							$about = isset($tu->getAnnotations()['po-translator-comments'])? $tu->getAnnotations()['po-translator-comments'] : null;
+						    $annotations = $tu->getAnnotations();
+							$about = isset($annotations['po-translator-comments']) ? $annotations['po-translator-comments'] : null;
 							if ($about && strpos($about, $ns) === 0 && in_array($tu->getContext(),
 									array(RDFS_LABEL, RDFS_COMMENT))
 							) {
