@@ -425,6 +425,4 @@ class common_ext_ExtensionInstaller
 		
 	}
 
-} /* end of class common_ext_ExtensionInstaller */
-
-?>
+}
