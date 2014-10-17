@@ -62,6 +62,9 @@ class common_ext_ExtensionUninstaller
 		common_Logger::d('uninstall script for ' . $this->extension->getId());
 		$this->uninstallScripts();
 		
+		// hook
+		$this->extendedUninstall();
+		
 		common_Logger::d('unregister extension ' . $this->extension->getId());
 		$this->unregister();
 		
@@ -105,5 +108,13 @@ class common_ext_ExtensionUninstaller
 		        require_once $script;
 		    }
 		}
+	}
+	
+	/**
+	 * Hook to extend the uninstall procedure 
+	 */
+	public function extendedUninstall()
+	{
+	    return;
 	}
 }
