@@ -50,8 +50,11 @@ class common_http_Request
         
         $method = $_SERVER['REQUEST_METHOD'];
         
-        $params = $_POST;
-        
+        if($_SERVER['REQUEST_METHOD'] == self::METHOD_GET){
+            $params = $_GET;
+        } else { 
+            $params = $_POST;
+        }
         if (function_exists('apache_request_headers')) {
             $headers = apache_request_headers();
         } else {
