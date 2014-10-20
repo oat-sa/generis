@@ -126,14 +126,19 @@ class helpers_File
      * Empty a directory without deleting it
      * 
      * @param string $path
+     * @param boolean $ignoreSystemFiles 
      * @return boolean
      */
-    public static function emptyDirectory($path)
+    public static function emptyDirectory($path, $ignoreSystemFiles = false)
     {
         $success = true;
         $handle = opendir($path);
         while (false !== ($entry = readdir($handle))) {
             if ($entry != "." && $entry != "..") {
+                if ($entry[0] === '.' && $ignoreSystemFiles === true) {
+                    continue;
+                }
+                
                 $success = self::remove($path . DIRECTORY_SEPARATOR . $entry) ? $success : false;
             }
         }
