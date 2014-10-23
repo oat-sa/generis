@@ -64,7 +64,6 @@ define('PROPERTY_IS_LG_DEPENDENT',				GENERIS_NS . '#is_language_dependent' , tr
 define('CLASS_GENERIS_USER' , 					GENERIS_NS . '#User' , true) ;
 define('CLASS_GENERIS_RESOURCE' , 				GENERIS_NS . '#generis_Ressource' , true) ;
 define('PROPERTY_MULTIPLE',						GENERIS_NS . '#Multiple' , true) ;
-define('PROPERTY_COMMENT',						GENERIS_NS . '#generisRessourceComment' , true);
 
 #file
 define('CLASS_GENERIS_FILE' , 					GENERIS_NS . '#File' , true) ;
