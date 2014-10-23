@@ -22,7 +22,8 @@
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 
-class FileHelperTest extends GenerisPhpUnitTestRunner {
+class FileHelperTest extends GenerisPhpUnitTestRunner 
+{
     
     protected function setUp()
     {
@@ -47,7 +48,8 @@ class FileHelperTest extends GenerisPhpUnitTestRunner {
 		$this->assertFalse(is_dir($basedir));
 	}
 	
-	private function mkdir($basePath) {
+	private function mkdir($basePath) 
+	{
 		$file = tempnam($basePath, 'dir');
 		$this->assertTrue(unlink($file));
 		$this->assertTrue(mkdir($file));
@@ -72,12 +74,46 @@ class FileHelperTest extends GenerisPhpUnitTestRunner {
         }
     }
     
-    public function scandirDataProvider() {
+    public function scandirDataProvider() 
+    {
 
         $ds = DIRECTORY_SEPARATOR;
 
         return array(
             array(dirname(__FILE__) . $ds . 'rules', array('ExpressionFactoryTest.php', 'ExpressionTest.php', 'OperationFactoryTest.php', 'OperationTest.php', 'TermFactoryTest.php', 'TermTest.php')),
+        );
+    }
+    
+    /**
+     * @dataProvider containsFileTypeProvider
+     * 
+     * @param string $toScan The directory to be scanned.
+     * @param string|array $types The types to check for e.g. 'php', 'js', ...
+     * @param boolean $recursive Whether or not to check recursively in the directory.
+     * @param boolean $expectedResult The expected result of the containsFileType helper method.
+     */
+    public function testContainsFileType($toScan, $types, $recursive, $expectedResult)
+    {
+        $this->assertSame($expectedResult, helpers_File::containsFileType($toScan, $types, $recursive));
+    }
+    
+    public function containsFileTypeProvider()
+    {
+        return array(
+            array(dirname(__FILE__), 'php', true, true),
+            array(dirname(__FILE__), 'php', false, true),
+            array(dirname(__FILE__), 'js', true, false),
+            array(dirname(__FILE__), 'js', false, false),
+            array(dirname(__FILE__) . '/..', 'rdf', false, false),
+            array(dirname(__FILE__) . '/..', 'rdf', true, true),
+                        
+            // edge cases.
+            // - unexisting directory.
+            array(dirname(__FILE__) . '/foo', 'php', false, false),
+            array(dirname(__FILE__) . '/foo', 'php', true, false),
+            // - scan a file.
+            array(dirname(__FILE__) . '/../index.php', 'php', false, false),
+            array(dirname(__FILE__) . '/../index.php', 'php', true, false),
         );
     }
 }

@@ -64,7 +64,7 @@ class helpers_File
      * @param string to
      * @return string
      */
-    public static function getRelPath($from, $to)
+    static public function getRelPath($from, $to)
     {
         $returnValue = (string) '';
         
@@ -92,7 +92,7 @@ class helpers_File
      * @param string path
      * @return boolean
      */
-    public static function remove($path)
+    static public function remove($path)
     {
         $returnValue = (bool) false;
         
@@ -129,7 +129,7 @@ class helpers_File
      * @param boolean $ignoreSystemFiles 
      * @return boolean
      */
-    public static function emptyDirectory($path, $ignoreSystemFiles = false)
+    static public function emptyDirectory($path, $ignoreSystemFiles = false)
     {
         $success = true;
         $handle = opendir($path);
@@ -157,7 +157,7 @@ class helpers_File
      * @param boolean ignoreSystemFiles
      * @return boolean
      */
-    public static function copy($source, $destination, $recursive = true, $ignoreSystemFiles = true)
+    static public function copy($source, $destination, $recursive = true, $ignoreSystemFiles = true)
     {
         $returnValue = (bool) false;
         
@@ -215,7 +215,7 @@ class helpers_File
     }
 
     /**
-     * Scan directory depending on option.
+     * Scan directory located at $path depending on given $options array.
      * 
      * Options are the following:
      * 
@@ -227,9 +227,9 @@ class helpers_File
      * @author Lionel Lecaque, <lionel@taotesting.com>
      * @param string path
      * @param array options
-     * @return array
+     * @return array An array of paths.
      */
-    public static function scandir($path, $options = array())
+    static public function scandir($path, $options = array())
     {
         $returnValue = array();
         
@@ -278,7 +278,8 @@ class helpers_File
      * @param string $path The original path.
      * @return string The resolved path.
      */
-    public static function truePath($path) {
+    static public function truePath($path) 
+    {
         // From Magento Mass Import utils (MIT)
         // http://sourceforge.net/p/magmi/git/ci/master/tree/magmi-0.8/inc/magmi_utils.php
         
@@ -310,5 +311,41 @@ class helpers_File
         // put initial separator that could have been lost
         $path = !$unipath ? '/' . $path : $path;
         return $path;
+    }
+    
+    /**
+     * Whether or not a given directory located at $path
+     * contains one or more files with extension $types.
+     * 
+     * If $path is not readable or not a directory, false is returned.
+     * 
+     * @param string $path
+     * @param string|array $types Types to look for with no dot. e.g. 'php', 'js', ...
+     * @param boolean $recursive Whether or not scan the directory recursively.
+     * @return boolean
+     */
+    static public function containsFileType($path, $types = array(), $recursive = true)
+    {
+        if (!is_array($types)) {
+            $types = array($types);
+        }
+        
+        if (!is_dir($path)) {
+            return false;
+        }
+        
+        foreach (self::scandir($path, array('absolute' => true, 'recursive' => $recursive)) as $item) {
+            if (is_file($item)) {
+                $pathParts = pathinfo($item);
+                
+                // if .inc.php, returns 'php' as extension, so no worries with composed types
+                // if you are looking for some php code.
+                if (isset($pathParts['extension']) && in_array($pathParts['extension'], $types)) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
 }
