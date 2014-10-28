@@ -74,3 +74,6 @@ $udpArchiver = array(
 	'udp_host'		=> '192.168.2.21',
 	'udp_port'		=> 27072
 );
+$logArchiver = array(
+    'class'			=> 'LoggerAppender'
+);

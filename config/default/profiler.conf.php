@@ -74,8 +74,9 @@ $udpArchiver = array(
 	'udp_port'		=> 27072
 );
 
-$GLOBALS['COMMON_PROFILER_CONFIG'] = array(
-	/*array_merge(
+/*
+return array(
+	array_merge(
 		array(
 			'class'		=> 'LoggerAppender',
 			'tag'		=> 'PROFILER'
@@ -92,7 +93,9 @@ $GLOBALS['COMMON_PROFILER_CONFIG'] = array(
 			)
 		), 
 		$defaultConfig
-	)*/
+	)
 );
+*/
 
-return $GLOBALS['COMMON_PROFILER_CONFIG'];
+return array(array(
+));
