@@ -260,47 +260,35 @@ class core_kernel_classes_Resource
     }
 
     /**
-     * Returns all the types of the ressource
+     * Returns all the types of this resource as core_kernel_classes_Class objects.
      *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return array
+     * @author Joel Bout <joel@taotesting.com>
+     * @return core_kernel_classes_Class[] An associative array where keys are class URIs and values are core_kernel_classes_Class objects.
      */
     public function getTypes()
     {
-        $returnValue = array();
-
-        
-        $returnValue = $this->getImplementation()->getTypes($this);
-        
-
-        return (array) $returnValue;
+        return $this->getImplementation()->getTypes($this);
     }
 
     /**
-     * returns label of the resources as string, alias to getPropertyValues
-     * rdfs:label property
-     *
-     * @access public
-     * @author patrick.plichart
-     * @return string
-     * @see www.generis.lu/documentation/design#getLabel
-     * @version 1.0
+     * Returns the label of this resource as a string. This method is a convenience
+     * method preventing to call the get getPropertyValues() method for a such common
+     * operation. 
+     * 
+     * @author Patrick Plichart <patrick@taotesting.com>
+     * @return string A Uniform Resource Identifier (URI).
      */
     public function getLabel()
     {
         $returnValue = (string) '';
 
-        
-        
-        if($this->label == '') {
+        if ($this->label == '') {
             $label =  $this->getOnePropertyValue(new core_kernel_classes_Property(RDFS_LABEL));
             $this->label = ($label != null) ? $label->literal : '';
         }
+        
         $returnValue = $this->label;
         
-        
-
         return (string) $returnValue;
     }
 
