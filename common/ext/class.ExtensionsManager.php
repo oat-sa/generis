@@ -37,7 +37,7 @@ class common_ext_ExtensionsManager
     const EXTENSIONS_CONFIG_KEY = 'installation';
 
     public static $RESERVED_WORDS = array(
-    	'config', 'data', 'vendor'
+    	'config', 'data', 'vendor', 'tests'
     );
 
     /**
