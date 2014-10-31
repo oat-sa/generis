@@ -282,32 +282,22 @@ class core_kernel_classes_Property
     }
 
     /**
-     * Short description of method getWidget
+     * Get the Property object corresponding to the widget of this Property.
      *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @return core_kernel_classes_Property
+     * @author Cédric Alfonsi <cedric.alfonsi@tudor.lu>
+     * @author Antoine Delamarre <antoine.delamarre@vesperiagroup.com>
+     * @author Jérôme Bogaerts <jerome@taotesting.com>
+     * @return core_kernel_classes_Property The Property object corresponding to the widget of this Property.
      */
     public function getWidget()
     {
-        $returnValue = null;
-
-        
-		
-        if (!(isset($this->widget))){
-			$returnValue = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_WIDGET));
+        if (isset($this->widget) === false) {
+			$this->widget = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_WIDGET));
 		}
 		
-        
-
-        return $returnValue;
+		return $this->widget;
     }
 
-    
-
-    
-
-    
     /**
      * Is the property translatable?
      *
