@@ -57,12 +57,16 @@ class core_kernel_classes_Property
     public $range = null;
 
     /**
-     * The widget the can be used to represents the property
+     * The widget the can be used to represents the property.
+     * 
+     * Dev note: this property is set to false because null is also a possible
+     * valid value for this property. This will prevent the widget to be property
+     * to be retrieved even if in cache, when no widget is set for the property.
      *
      * @access public
      * @var Property
      */
-    public $widget = null;
+    public $widget = false;
 
     /**
      * Short description of attribute lgDependent
@@ -291,7 +295,7 @@ class core_kernel_classes_Property
      */
     public function getWidget()
     {
-        if (isset($this->widget) === false) {
+        if ($this->widget === false) {
 			$this->widget = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_WIDGET));
 		}
 		

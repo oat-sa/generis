@@ -61,7 +61,7 @@ class core_kernel_classes_Resource
      * @var string
      * @deprecated
      */
-    public $label = '';
+    public $label = null;
 
     /**
      * The resource comment
@@ -280,16 +280,13 @@ class core_kernel_classes_Resource
      */
     public function getLabel()
     {
-        $returnValue = (string) '';
-
-        if ($this->label == '') {
+        if (is_null($this->label)) {
+            
             $label =  $this->getOnePropertyValue(new core_kernel_classes_Property(RDFS_LABEL));
-            $this->label = ($label != null) ? $label->literal : '';
+            $this->label = ((is_null($label) === false) ? $label->literal : '');
         }
         
-        $returnValue = $this->label;
-        
-        return (string) $returnValue;
+        return $this->label;
     }
 
     /**
