@@ -87,6 +87,4 @@ class core_kernel_versioning_subversionWindows_Utils
         return (string) $returnValue;
     }
 
-} /* end of class core_kernel_versioning_subversionWindows_Utils */
-
-?>
+}
