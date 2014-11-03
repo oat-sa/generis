@@ -37,6 +37,4 @@ class common_ext_ManifestException
 
     // --- OPERATIONS ---
 
-} /* end of class common_ext_ManifestException */
-
-?>
+}

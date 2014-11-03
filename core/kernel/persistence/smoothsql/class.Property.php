@@ -274,6 +274,4 @@ class core_kernel_persistence_smoothsql_Property
         return (bool) $returnValue;
     }
 
-} /* end of class core_kernel_persistence_smoothsql_Property */
-
-?>
+}

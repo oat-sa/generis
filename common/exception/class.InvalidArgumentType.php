@@ -60,6 +60,4 @@ class common_exception_InvalidArgumentType
         
     }
 
-} /* end of class common_exception_InvalidArgumentType */
-
-?>
+} 

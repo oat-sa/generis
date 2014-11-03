@@ -37,6 +37,4 @@ class core_kernel_versioning_exception_FileUnversionedException
 
     // --- OPERATIONS ---
 
-} /* end of class core_kernel_versioning_exception_FileUnversionedException */
-
-?>
+}

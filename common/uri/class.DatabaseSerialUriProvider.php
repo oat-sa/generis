@@ -79,6 +79,4 @@ class common_uri_DatabaseSerialUriProvider
         return (string) $returnValue;
     }
 
-} /* end of class common_uri_DatabaseSerialUriProvider */
-
-?>
+}

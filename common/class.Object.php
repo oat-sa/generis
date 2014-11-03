@@ -35,6 +35,4 @@
 class common_Object
 {
 
-} /* end of class common_Object */
-
-?>
+}

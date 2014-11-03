@@ -69,6 +69,4 @@ class core_kernel_rules_Rule
         return $returnValue;
     }
 
-} /* end of class core_kernel_rules_Rule */
-
-?>
+} 

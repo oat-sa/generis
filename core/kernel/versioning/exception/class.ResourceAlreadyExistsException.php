@@ -37,6 +37,4 @@ class core_kernel_versioning_exception_ResourceAlreadyExistsException
 
     // --- OPERATIONS ---
 
-} /* end of class core_kernel_versioning_exception_ResourceAlreadyExistsException */
-
-?>
+}

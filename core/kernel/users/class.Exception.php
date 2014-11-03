@@ -70,6 +70,4 @@ class core_kernel_users_Exception
 
     // --- OPERATIONS ---
 
-} /* end of class core_kernel_users_Exception */
-
-?>
+}

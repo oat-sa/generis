@@ -68,6 +68,4 @@ class core_kernel_classes_ResourceFactory
         return $returnValue;
     }
 
-} /* end of class core_kernel_classes_ResourceFactory */
-
-?>
+}

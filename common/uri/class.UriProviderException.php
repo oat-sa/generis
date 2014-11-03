@@ -38,6 +38,4 @@ class common_uri_UriProviderException
 
     // --- OPERATIONS ---
 
-} /* end of class common_uri_UriProviderException */
-
-?>
+}

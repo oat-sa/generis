@@ -37,6 +37,4 @@ class core_kernel_persistence_Exception
 
     // --- OPERATIONS ---
 
-} /* end of class core_kernel_persistence_Exception */
-
-?>
+}

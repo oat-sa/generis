@@ -194,6 +194,4 @@ class core_kernel_users_Cache
         common_cache_FileCache::singleton()->purge();
     }
 
-} /* end of class core_kernel_users_Cache */
-
-?>
+}

@@ -166,6 +166,4 @@ class common_ext_Namespace
         return (bool) $returnValue;
     }
 
-} /* end of class common_ext_Namespace */
-
-?>
+}

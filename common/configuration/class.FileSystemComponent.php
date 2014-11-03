@@ -265,6 +265,4 @@ class common_configuration_FileSystemComponent
         return (bool) $returnValue;
     }
 
-} /* end of class common_configuration_FileSystemComponent */
-
-?>
+}

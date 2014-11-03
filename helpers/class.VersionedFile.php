@@ -136,6 +136,4 @@ class helpers_VersionedFile
         return (bool) $returnValue;
     }
 
-} /* end of class helpers_VersionedFile */
-
-?>
+}

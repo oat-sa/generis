@@ -37,6 +37,4 @@ class core_kernel_versioning_exception_FileRemainsInConflictException
 
     // --- OPERATIONS ---
 
-} /* end of class core_kernel_versioning_exception_FileRemainsInConflictException */
-
-?>
+} 

@@ -138,6 +138,4 @@ class core_kernel_classes_ContainerCollection
         return (string) $returnValue;
     }
 
-} /* end of class core_kernel_classes_ContainerCollection */
-
-?>
+}

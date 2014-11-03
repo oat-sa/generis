@@ -139,6 +139,4 @@ class common_log_UDPAppender
         
     }
 
-} /* end of class common_log_UDPAppender */
-
-?>
+}

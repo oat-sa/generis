@@ -244,6 +244,4 @@ class core_kernel_versioning_local_File
         return $returnValue;
     }
 
-} /* end of class core_kernel_versioning_local_File */
-
-?>
+}

@@ -192,6 +192,4 @@ class common_log_Dispatcher
         
     }
 
-} /* end of class common_log_Dispatcher */
-
-?>
+}

@@ -347,6 +347,4 @@ class common_Collection
         return (array) $returnValue;
     }
 
-} /* end of class common_Collection */
-
-?>
+}

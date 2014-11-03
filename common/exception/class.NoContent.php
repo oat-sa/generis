@@ -39,6 +39,4 @@ class common_exception_NoContent
        return __("No content was found for your request");
    }
    
-} /* end of class common_exception_InvalidArgumentType */
-
-?>
+} 

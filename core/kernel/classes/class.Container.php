@@ -86,6 +86,4 @@ class core_kernel_classes_Container
         
     }
 
-} /* end of class core_kernel_classes_Container */
-
-?>
+}

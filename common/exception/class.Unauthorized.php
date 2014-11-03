@@ -41,6 +41,4 @@ class common_exception_Unauthorized
        return __("You are not authorized to perform this operation");
    }
    
-} /* end of class common_exception_InvalidArgumentType */
-
-?>
+}

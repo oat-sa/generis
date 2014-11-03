@@ -128,6 +128,4 @@ class common_configuration_PHPExtension
         return (string) $returnValue;
     }
 
-} /* end of class common_configuration_PHPExtension */
-
-?>
+}

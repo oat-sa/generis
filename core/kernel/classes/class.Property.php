@@ -430,6 +430,4 @@ class core_kernel_classes_Property
         return (bool) $returnValue;
     }
 
-} /* end of class core_kernel_classes_Property */
-
-?>
+}

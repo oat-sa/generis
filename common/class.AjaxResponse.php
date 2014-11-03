@@ -74,6 +74,4 @@ class common_AjaxResponse
 
     }
 
-} /* end of class common_AjaxResponse */
-
-?>
+} 

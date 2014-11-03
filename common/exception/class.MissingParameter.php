@@ -67,6 +67,4 @@ class common_exception_MissingParameter
 	return __("At least one mandatory parameter was required but found missing in your request");
     }
     
-} /* end of class common_exception_InvalidArgumentType */
-
-?>
+}

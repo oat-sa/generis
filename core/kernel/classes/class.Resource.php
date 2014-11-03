@@ -979,6 +979,4 @@ class core_kernel_classes_Resource
         return (bool) $returnValue;
     }
   
-} /* end of class core_kernel_classes_Resource */
-
-?>
+}

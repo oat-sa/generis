@@ -603,6 +603,4 @@ class core_kernel_versioning_File
         return (bool) $returnValue;
     }
 
-} /* end of class core_kernel_versioning_File */
-
-?>
+}

@@ -105,6 +105,4 @@ class core_kernel_rules_ExpressionFactory
         return $returnValue;
     }
 
-} /* end of class core_kernel_rules_ExpressionFactory */
-
-?>
+}

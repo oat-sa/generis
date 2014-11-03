@@ -116,6 +116,4 @@ class common_configuration_Mock
         
     }
 
-} /* end of class common_configuration_Mock */
-
-?>
+} 

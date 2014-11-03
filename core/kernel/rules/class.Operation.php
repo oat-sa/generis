@@ -246,6 +246,4 @@ class core_kernel_rules_Operation
         
     }
 
-} /* end of class core_kernel_rules_Operation */
-
-?>
+}

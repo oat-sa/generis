@@ -38,6 +38,4 @@ class common_exception_FileSystemError
 
     // --- OPERATIONS ---
 
-} /* end of class common_exception_FileSystemError */
-
-?>
+}

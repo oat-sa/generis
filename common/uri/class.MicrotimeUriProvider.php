@@ -74,6 +74,4 @@ class common_uri_MicrotimeUriProvider
         return (string) $returnValue;
     }
 
-} /* end of class common_uri_MicrotimeUriProvider */
-
-?>
+}

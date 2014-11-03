@@ -38,6 +38,4 @@ class common_configuration_CyclicDependencyException
 
     // --- OPERATIONS ---
 
-} /* end of class common_configuration_CyclicDependencyException */
-
-?>
+}

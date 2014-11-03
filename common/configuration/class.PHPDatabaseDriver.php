@@ -66,6 +66,4 @@ class common_configuration_PHPDatabaseDriver
         return $returnValue;
     }
 
-} /* end of class common_configuration_PHPDatabaseDriver */
-
-?>
+}

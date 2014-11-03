@@ -110,6 +110,4 @@ class core_kernel_classes_Triple
 
     // --- OPERATIONS ---
 
-} /* end of class core_kernel_classes_Triple */
-
-?>
+}

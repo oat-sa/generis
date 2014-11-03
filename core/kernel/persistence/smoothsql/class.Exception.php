@@ -38,6 +38,4 @@ class core_kernel_persistence_smoothsql_Exception
 
     // --- OPERATIONS ---
 
-} /* end of class core_kernel_persistence_smoothsql_Exception */
-
-?>
+}

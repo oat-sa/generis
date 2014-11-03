@@ -37,6 +37,4 @@ class common_cache_Exception
 
     // --- OPERATIONS ---
 
-} /* end of class common_cache_Exception */
-
-?>
+} 

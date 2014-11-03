@@ -217,6 +217,4 @@ class core_kernel_versioning_RepositoryProxy
         return $returnValue;
     }
 
-} /* end of class core_kernel_versioning_RepositoryProxy */
-
-?>
+}

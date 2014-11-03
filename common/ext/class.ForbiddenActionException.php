@@ -37,6 +37,4 @@ class common_ext_ForbiddenActionException
 
     // --- OPERATIONS ---
 
-} /* end of class common_ext_ForbiddenActionException */
-
-?>
+} 

@@ -541,6 +541,4 @@ class core_kernel_rules_Expression
         return (bool) $returnValue;
     }
 
-} /* end of class core_kernel_rules_Expression */
-
-?>
+}

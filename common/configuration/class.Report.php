@@ -236,6 +236,4 @@ class common_configuration_Report
         
     }
 
-} /* end of class common_configuration_Report */
-
-?>
+} 

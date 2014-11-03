@@ -69,6 +69,4 @@ class helpers_Versioning
         return (array) $returnValue;
     }
 
-} /* end of class helpers_Versioning */
-
-?>
+}

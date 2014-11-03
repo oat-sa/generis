@@ -177,6 +177,4 @@ class core_kernel_versioning_local_Repository
         return $returnValue;
     }
 
-} /* end of class core_kernel_versioning_local_Repository */
-
-?>
+}

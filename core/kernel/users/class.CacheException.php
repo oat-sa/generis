@@ -38,6 +38,4 @@ class core_kernel_users_CacheException
 
     // --- OPERATIONS ---
 
-} /* end of class core_kernel_users_CacheException */
-
-?>
+}

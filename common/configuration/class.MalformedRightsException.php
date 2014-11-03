@@ -38,6 +38,4 @@ class common_configuration_MalformedRightsException
 
     // --- OPERATIONS ---
 
-} /* end of class common_configuration_MalformedRightsException */
-
-?>
+}

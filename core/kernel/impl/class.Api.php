@@ -83,6 +83,4 @@ class core_kernel_impl_Api
         return (bool) $returnValue;
     }
 
-} /* end of class core_kernel_impl_ApiI */
-
-?>
+}

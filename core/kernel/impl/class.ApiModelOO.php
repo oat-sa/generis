@@ -569,6 +569,4 @@ class core_kernel_impl_ApiModelOO
         
     }
 
-} /* end of class core_kernel_impl_ApiModelOO */
-
-?>
+}

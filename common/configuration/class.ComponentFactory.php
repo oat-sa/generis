@@ -470,6 +470,4 @@ class common_configuration_ComponentFactory
         
     }
 
-} /* end of class common_configuration_ComponentFactory */
-
-?>
+} 

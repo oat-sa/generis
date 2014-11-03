@@ -168,6 +168,4 @@ class core_kernel_classes_ClassFactory
         return (string) $returnValue;
     }
 
-} /* end of class core_kernel_classes_ClassFactory */
-
-?>
+}

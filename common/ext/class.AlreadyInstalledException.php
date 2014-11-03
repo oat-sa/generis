@@ -37,6 +37,4 @@ class common_ext_AlreadyInstalledException
 
     // --- OPERATIONS ---
 
-} /* end of class common_ext_AlreadyInstalledException */
-
-?>
+} 

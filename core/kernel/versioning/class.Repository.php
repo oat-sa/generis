@@ -475,6 +475,4 @@ class core_kernel_versioning_Repository
         return (string) $returnValue;
     }
 
-} /* end of class core_kernel_versioning_Repository */
-
-?>
+}

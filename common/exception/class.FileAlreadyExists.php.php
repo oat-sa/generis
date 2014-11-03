@@ -56,6 +56,4 @@ class common_exception_FileAlreadyExists
         
     }
 
-} /* end of class common_exception_FileAlreadyExists */
-
-?>
+} 

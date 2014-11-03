@@ -836,6 +836,4 @@ class core_kernel_persistence_smoothsql_Resource
         return (bool) $returnValue;
     }
 
-} /* end of class core_kernel_persistence_smoothsql_Resource */
-
-?>
+}

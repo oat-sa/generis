@@ -55,6 +55,4 @@ class common_exception_PreConditionFailure
        public function getUserMessage() {
 	return __("One of the precondition for this type of request was not satisfied");
     }
-} /* end of class common_exception_InvalidArgumentType */
-
-?>
+} 

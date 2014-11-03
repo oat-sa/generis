@@ -52,6 +52,4 @@ class common_exception_SystemUnderMaintenance
         
     }
 
-} /* end of class common_exception_SystemUnderMaintenance */
-
-?>
+}

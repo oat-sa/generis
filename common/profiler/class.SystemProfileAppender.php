@@ -148,4 +148,3 @@ class common_profiler_SystemProfileAppender extends common_profiler_Appender
     }
 
 }
-/* end of class common_profiler_SystemAppender */

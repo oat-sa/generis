@@ -296,6 +296,4 @@ class core_kernel_rules_Term
         
     }
 
-} /* end of class core_kernel_rules_Term */
-
-?>
+}

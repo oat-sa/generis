@@ -302,6 +302,4 @@ class core_kernel_versioning_FileProxy
         return $returnValue;
     }
 
-} /* end of class core_kernel_versioning_FileProxy */
-
-?>
+}

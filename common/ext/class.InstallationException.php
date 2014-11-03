@@ -37,6 +37,4 @@ class common_ext_InstallationException
 
     // --- OPERATIONS ---
 
-} /* end of class common_ext_InstallationException */
-
-?>
+}

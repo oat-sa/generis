@@ -798,6 +798,4 @@ class common_configuration_ComponentCollection
         return $returnValue;
     }
 
-} /* end of class common_configuration_ComponentCollection */
-
-?>
+}

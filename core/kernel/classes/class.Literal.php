@@ -82,6 +82,4 @@ class core_kernel_classes_Literal
         return (string) $returnValue;
     }
 
-} /* end of class core_kernel_classes_Literal */
-
-?>
+}

@@ -310,6 +310,4 @@ class core_kernel_versioning_subversion_Repository
 		return $returnValue;
 	}
 
-} /* end of class core_kernel_versioning_subversion_Repository */
-
-?>
+}

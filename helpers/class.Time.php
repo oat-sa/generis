@@ -57,6 +57,4 @@ class helpers_Time
         return (float) $returnValue;
     }
 
-} /* end of class helpers_Time */
-
-?>
+}

@@ -129,6 +129,4 @@ class common_configuration_PHPRuntime
         
     }
 
-} /* end of class common_configuration_PHPRuntime */
-
-?>
+}

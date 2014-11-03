@@ -34,6 +34,4 @@ abstract class common_exception_BadRequest
     // --- ATTRIBUTES ---
   
 
-} /* end of class common_exception_InvalidArgumentType */
-
-?>
+} 

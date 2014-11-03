@@ -96,6 +96,4 @@ class core_kernel_rules_TermFactory
         return $returnValue;
     }
 
-} /* end of class core_kernel_rules_TermFactory */
-
-?>
+} 

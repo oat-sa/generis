@@ -231,6 +231,4 @@ class core_kernel_versioning_subversionWindows_Repository
         return $returnValue;
     }
 
-} /* end of class core_kernel_versioning_subversionWindows_Repository */
-
-?>
+}

@@ -38,6 +38,4 @@ class common_configuration_ComponentFactoryException
 
     // --- OPERATIONS ---
 
-} /* end of class common_configuration_ComponentFactoryException */
-
-?>
+}

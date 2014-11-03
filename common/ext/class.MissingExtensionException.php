@@ -38,6 +38,4 @@ class common_ext_MissingExtensionException
 
     // --- OPERATIONS ---
 
-} /* end of class common_ext_MissingExtensionException */
-
-?>
+}

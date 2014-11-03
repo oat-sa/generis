@@ -152,6 +152,4 @@ class common_configuration_PHPINIValue
         return (string) $returnValue;
     }
 
-} /* end of class common_configuration_PHPINIValue */
-
-?>
+}

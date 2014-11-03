@@ -270,6 +270,4 @@ class common_profiler_Dispatcher
 		}
 	}
 
-} /* end of class common_profiler_Dispatcher */
-
-?>
+}

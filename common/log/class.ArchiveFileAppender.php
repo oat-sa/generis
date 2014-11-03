@@ -185,6 +185,4 @@ class common_log_ArchiveFileAppender
         return (string) $returnValue;
     }
 
-} /* end of class common_log_ArchiveFileAppender */
-
-?>
+}

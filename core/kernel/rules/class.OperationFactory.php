@@ -68,6 +68,4 @@ class core_kernel_rules_OperationFactory
         return $returnValue;
     }
 
-} /* end of class core_kernel_rules_OperationFactory */
-
-?>
+}

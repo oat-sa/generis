@@ -353,6 +353,4 @@ class core_kernel_versioning_subversionWindows_File
         return $returnValue;
     }
 
-} /* end of class core_kernel_versioning_subversionWindows_File */
-
-?>
+}

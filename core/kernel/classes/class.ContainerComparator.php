@@ -65,6 +65,4 @@ class core_kernel_classes_ContainerComparator
         return (int) $returnValue;
     }
 
-} /* end of class core_kernel_classes_ContainerComparator */
-
-?>
+}
