@@ -145,6 +145,14 @@ class common_ext_Manifest
     private $uninstallData = null;
     
     /**
+     * The update handler
+     *
+     * @access private
+     * @var string
+     */
+    private $updateHandler = null;
+    
+    /**
      * The routes to the controllers described by the manifest.
      *
      * @access private
@@ -302,6 +310,10 @@ class common_ext_Manifest
     		
     		if (isset($array['uninstall'])){
     		    $this->uninstallData = $array['uninstall']; 
+    		}
+    		
+    		if (isset($array['update'])){
+    		    $this->updateHandler = $array['update'];
     		}
     		
     		if (!empty($array['local'])){
@@ -833,6 +845,15 @@ class common_ext_Manifest
         return  $this->uninstallData;
     }
     
+    /**
+     * Return the className of the updateHandler
+     *
+     * @return string
+     */
+    public function getUpdateHandler()
+    {
+        return $this->updateHandler;
+    }
     
    /**
      * PHP scripts to execute in order to add some sample data to an install
