@@ -426,7 +426,6 @@ class core_kernel_persistence_smoothsql_Class
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$query = $this->getFilteredQuery($resource, $propertyFilters, $options);
-		var_dump($query);
 		$result = $dbWrapper->query($query);
 		
 
