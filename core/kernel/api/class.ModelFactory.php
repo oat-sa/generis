@@ -100,19 +100,16 @@ class core_kernel_api_ModelFactory{
      */
     private function addStatement($modelId, $subject, $predicate, $object, $lang = null) {
         $result = core_kernel_classes_DbWrapper::singleton()->query(
-            'SELECT modelid FROM statements WHERE modelid = ? AND subject = ? AND predicate = ? AND object = ? AND l_language = ?'
-            ,array($modelId, $subject, $predicate, $object, $lang)
+            'SELECT count(*) FROM statements WHERE modelid = ? AND subject = ? AND predicate = ? AND object = ? AND l_language = ?',
+            array($modelId, $subject, $predicate, $object, (is_null($lang)) ? '' : $lang)
         );
-        if ($result->rowCount() == 0) {
-           
+        
+        if (intval($result->fetchColumn()) === 0) {
             $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-            //$datetime = new \DateTime();
-            //$date = $datetime->format('Y-m-d H:i:s');
             $date = $dbWrapper->getPlatForm()->getNowExpression();
-          
-            
-            //common_Logger::d();
-            $dbWrapper->insert('statements',
+
+            $dbWrapper->insert(
+                'statements',
                 array(
                     'modelid' =>  $modelId,
                     'subject' =>$subject,
@@ -120,23 +117,8 @@ class core_kernel_api_ModelFactory{
                     'object' => $object,
                     'l_language' => is_null($lang) ? '' : $lang,
                     'author' => 'http://www.tao.lu/Ontologies/TAO.rdf#installator',
-//                     'stedit' => 'yyy[admin,administrators,authors]',
-//                     'stread' => 'yyy[admin,administrators,authors]',
-//                     'stdelete' => 'yyy[admin,administrators,authors]',
-                     'epoch' => $date
+                    'epoch' => $date
                 )
-              /*  array(
-                    PDO::PARAM_INT,
-                    PDO::PARAM_STR,
-                    PDO::PARAM_STR,
-                    PDO::PARAM_STR,
-                    PDO::PARAM_STR,
-                    PDO::PARAM_STR,
-//                     PDO::PARAM_STR,
-//                     PDO::PARAM_STR,
-//                     PDO::PARAM_STR,
-                    'datetime'
-                )*/
             );
         }
     }
