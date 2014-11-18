@@ -17,21 +17,25 @@
  *
  */
 
-
-
-
 /**
- * 
+ *
  * @access public
  * @author Patrick Plichart
  * @package generis
- 
  */
-abstract class common_exception_BadRequest
+class common_exception_BadRequest
     extends common_exception_ClientException
 {
-    // --- ASSOCIATIONS ---
-    // --- ATTRIBUTES ---
-  
+    /**
+     * Get the human-readable message for the end-user. It is supposed
+     * to be translated and does not contain any confidential information
+     * about the system and its sensitive data.
+     *
+     * @return string A human-readable message.
+     */
+    public function getUserMessage()
+    {
+        return __("Wrong request type, try again please or contact your system administrator");
+    }
 
 } 
