@@ -289,7 +289,7 @@ class ClassTest extends GenerisPhpUnitTestRunner {
         $propertyFilter = array(
             PROPERTY_IS_LG_DEPENDENT => GENERIS_TRUE
         );
-        $options = array('like' => false, 'recursive' => 0);
+        $options = array('like' => false, 'recursive' => false);
         $languagesDependantProp = $propertyClass->searchInstances($propertyFilter, $options);
 
         $found = count($languagesDependantProp);
@@ -321,13 +321,14 @@ class ClassTest extends GenerisPhpUnitTestRunner {
         $propertyFilter = array(
             'prop1' => 'toto'
         );
-        $options = array('like' => false, 'recursive' => 0, 'offset' => 0, 'limit' => 2); //User 2 & 3
-        $languagesDependantProp = $userClass->searchInstances($propertyFilter, $options);
+        $options = array('like' => false, 'recursive' => false, 'offset' => 0, 'limit' => 2); //User 2 & 3
+        $languagesDependantProp = $userClass->searchInstances(array(), $options);
         $nfound = count($languagesDependantProp);
         $this->assertEquals($nfound, 2);
         
         $options = array('order' => 'prop3', 'orderdir' => 'ASC');
-        $result = $userClass->searchInstances($propertyFilter, $options);
+        $result = $userClass->searchInstances(array(), $options);
+        
         $this->assertEquals($user3->getUri(), key($result)); next($result);
         $this->assertEquals($user2->getUri(), key($result)); next($result);
         $this->assertEquals($user1->getUri(), key($result));

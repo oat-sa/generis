@@ -36,7 +36,7 @@ class core_kernel_persistence_smoothsql_Utils
      * @param string langColname The name of the column corresponding to the language of results.
      * @return array An array representing the sorted $dataset.
      */
-    public static function sortByLanguage($dataset, $langColname)
+    static public function sortByLanguage($dataset, $langColname)
     {
         $returnValue = array();
         
@@ -74,7 +74,7 @@ class core_kernel_persistence_smoothsql_Utils
      * @param  array values
      * @return array
      */
-    public static function getFirstLanguage($values)
+    static public function getFirstLanguage($values)
     {
         $returnValue = array();
 
@@ -100,7 +100,7 @@ class core_kernel_persistence_smoothsql_Utils
      * @param string langColname
      * @return array
      */
-    public static function filterByLanguage($dataset, $langColname)
+    static public function filterByLanguage($dataset, $langColname)
     {
         $returnValue = array();
         
@@ -118,7 +118,7 @@ class core_kernel_persistence_smoothsql_Utils
      * @param  array values
      * @return string
      */
-    public static function identifyFirstLanguage($values)
+    static public function identifyFirstLanguage($values)
     {
         $returnValue = '';
 
@@ -146,45 +146,158 @@ class core_kernel_persistence_smoothsql_Utils
      * @param  boolean like The manner to compare values. If set to true, the LIKE SQL operator will be used. If set to false, the = (equal) SQL operator will be used.
      * @return string
      */
-    public static function buildSearchPattern($pattern, $like = true)
+    static public function buildSearchPattern($pattern, $like = true)
     {
         $returnValue = '';
         
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
         switch (gettype($pattern)) {
-            case 'string' :
-            case 'numeric':
-                $patternToken = $pattern;
-                $object = trim(str_replace('*', '%', $patternToken));
-                
-                if ($like){
-                    if (!preg_match("/^%/", $object)) {
-                        $object = "%" . $object;
-                    }
-                    if (!preg_match("/%$/", $object)) {
-                        $object = $object . "%";
-                    }
-                    $returnValue .= ' LIKE '. $dbWrapper->quote($object);
-                } else {
-                    $returnValue = (strpos($object, '%') !== false)
-                    ? 'LIKE '. $dbWrapper->quote($object)
-                    : '= '. $dbWrapper->quote($patternToken);
-                }
-                break;
-            
             case 'object' :
                 if ($pattern instanceof core_kernel_classes_Resource) {
-                    $returnValue = ' = ' . $dbWrapper->quote($pattern->getUri());
+                    $returnValue = '= ' . $dbWrapper->quote($pattern->getUri());
                 } else {
                     common_Logger::w('non ressource as search parameter: '. get_class($pattern), 'GENERIS');
                 }
                 break;
             
             default:
-                throw new common_Exception("Unsupported type for searchinstance array: " . gettype($value));
+                $patternToken = $pattern;
+                $wildcard = mb_strpos($patternToken, '*', 0, 'UTF-8') !== false;
+                $object = trim(str_replace('*', '%', $patternToken));
+                
+                if ($like) {
+                    if (!$wildcard && !preg_match("/^%/", $object)) {
+                        $object = "%" . $object;
+                    }
+                    if (!$wildcard && !preg_match("/%$/", $object)) {
+                        $object = $object . "%";
+                    }
+                    if (!$wildcard && $object === '%') {
+                        $object = '%%';
+                    }
+                    $returnValue .= 'LIKE '. $dbWrapper->quote($object);
+                } else {
+                    $returnValue .= '= '. $dbWrapper->quote($patternToken);
+                }
+                break;
         }
         
         return $returnValue;
+    }
+    
+    static public function buildPropertyQuery($propertyUri, $values, $like, $lang = '')
+    {
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        
+        // Deal with predicate...
+        $predicate = $dbWrapper->quote($propertyUri);
+        
+        // Deal with values...
+        if (is_array($values) === false) {
+            $values = array($values);
+        }
+        
+        $valuePatterns = array();
+        foreach ($values as $val) {
+            $valuePatterns[] = 'object ' . self::buildSearchPattern($val, $like);
+        }
+        
+        $sqlValues = implode(' OR ', $valuePatterns);
+        
+        // Deal with language...
+        $sqlLang = '';
+        if (empty($lang) === false) {
+            $sqlLang = ' AND (' . self::buildLanguagePattern($lang) . ')';
+        }
+        
+        $query = "SELECT DISTINCT subject FROM statements WHERE (predicate = ${predicate}) AND (${sqlValues}${sqlLang})";
+        
+        return $query;
+    }
+    
+    static public function buildLanguagePattern($lang = '')
+    {
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        
+        $languagePattern = '';
+        
+        if (empty($lang) === false) {
+            $sqlEmpty = $dbWrapper->quote('');
+            $sqlLang = $dbWrapper->quote($lang);
+            $languagePattern = "l_language = ${sqlEmpty} OR l_language = ${sqlLang}";
+        }
+        
+        return $languagePattern;
+    }
+    
+    static public function buildUnionQuery($propertyQueries) {
+        
+        if (count($propertyQueries) === 0) {
+            return false;
+        } else if (count($propertyQueries) === 1) {
+            return $propertyQueries[0];
+        } else {
+            // Add parenthesis.
+            $finalPropertyQueries = array();
+            foreach ($propertyQueries as $query) {
+                $finalPropertyQueries[] = "(${query})";
+            }
+            
+            return implode(' UNION ALL ', $finalPropertyQueries);
+        }
+    }
+    
+    static public function buildFilterQuery($classUri, array $propertyFilters, $and = true, $like = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC')
+    {
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        
+        // Deal with target classes.
+        if (is_array($classUri) === false) {
+            $classUri = array($classUri);
+        }
+        
+        $propertyQueries = array(self::buildPropertyQuery(RDF_TYPE, $classUri, false));
+        foreach ($propertyFilters as $propertyUri => $filterValues) {
+            $propertyQueries[] = self::buildPropertyQuery($propertyUri, $filterValues, $like, $lang);
+        }
+        
+        $unionQuery = self::buildUnionQuery($propertyQueries);
+        
+        if (($propCount = count($propertyFilters)) === 0) {
+            $query = self::buildPropertyQuery(RDF_TYPE, $classUri, $like, $lang);
+        } else {
+            $unionCount = ($and === true) ? ($propCount + 1) : 2;
+            $query = "SELECT subject FROM (${unionQuery}) AS unionq GROUP BY subject HAVING count(*) >= ${unionCount}";
+        }
+
+        // Order...
+        if (empty($order) === false) {
+            $orderPredicate = $dbWrapper->quote($order);
+            
+            $sqlLang = '';
+            if (empty($lang) === false) {
+                $sqlEmptyLang = $dbWrapper->quote('');
+                $sqlRequestedLang = $dbWrapper->quote($lang);
+                $sqlLang = " AND (l_language = ${sqlEmptyLang} OR l_language = ${sqlRequestedLang})";
+            }
+            
+            $sqlOrderFilter = "mainq.subject = orderq.subject AND predicate = ${orderPredicate}${sqlLang}";
+            
+            $query = "SELECT mainq.subject, orderq.object FROM (${query}) AS mainq JOIN ";
+            $query .= "statements AS orderq ON (${sqlOrderFilter}) ORDER BY orderq.object ${orderDir}";
+        }
+        
+        // Limit...
+        if ($limit > 0) {
+            $query = $dbWrapper->limitStatement($query, $limit, $offset);
+        }
+        
+        // Suffix order...
+        if (empty($order) === false) {
+            $query = "SELECT subject FROM (${query}) as rootq";
+        }
+        
+        return $query;
     }
 }

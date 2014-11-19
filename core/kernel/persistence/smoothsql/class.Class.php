@@ -17,25 +17,15 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2012-2014 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
 /**
  * Short description of class core_kernel_persistence_smoothsql_Class
  *
- * @access public
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package generis
- 
  */
-class core_kernel_persistence_smoothsql_Class
-    extends core_kernel_persistence_smoothsql_Resource
-        implements core_kernel_persistence_ClassInterface
+class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_smoothsql_Resource implements core_kernel_persistence_ClassInterface
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
 
     /**
      * Short description of attribute instance
@@ -45,8 +35,6 @@ class core_kernel_persistence_smoothsql_Class
      */
     public static $instance = null;
 
-    // --- OPERATIONS ---
-
     /**
      * (non-PHPdoc)
      * @see core_kernel_persistence_ClassInterface::getSubClasses()
@@ -54,24 +42,20 @@ class core_kernel_persistence_smoothsql_Class
     public function getSubClasses( core_kernel_classes_Class $resource, $recursive = false)
     {
         $returnValue = array();
-
         
-
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlQuery = 'SELECT subject FROM statements WHERE predicate = ? and '.$dbWrapper->getPlatForm()->getObjectTypeCondition() .' = ?';
-		$sqlResult = $dbWrapper->query($sqlQuery, array(RDFS_SUBCLASSOF, $resource->getUri()));
-		
-		while ($row = $sqlResult->fetch()){
-			$subClass = new core_kernel_classes_Class($row['subject']);
-			$returnValue[$subClass->getUri()] = $subClass;
-			if($recursive == true ){
-				$plop = $subClass->getSubClasses(true);
-				$returnValue = array_merge($returnValue, $plop);
-			}
-		}
-
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ? and '.$dbWrapper->getPlatForm()->getObjectTypeCondition() .' = ?';
+        $sqlResult = $dbWrapper->query($sqlQuery, array(RDFS_SUBCLASSOF, $resource->getUri()));
         
-
+        while ($row = $sqlResult->fetch()) {
+            $subClass = new core_kernel_classes_Class($row['subject']);
+            $returnValue[$subClass->getUri()] = $subClass;
+            if ($recursive == true) {
+            	$plop = $subClass->getSubClasses(true);
+            	$returnValue = array_merge($returnValue, $plop);
+            }
+        }
+        
         return (array) $returnValue;
     }
 
@@ -81,38 +65,33 @@ class core_kernel_persistence_smoothsql_Class
      */
     public function isSubClassOf( core_kernel_classes_Class $resource,  core_kernel_classes_Class $parentClass)
     {
-        $returnValue = (bool) false;
-
+        $returnValue = false;
         
-
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-
-		$query = 'SELECT object FROM statements
-					WHERE subject = ?
-					AND predicate = ? AND ' . $dbWrapper->getPlatForm()->getObjectTypeCondition() . ' = ?';
-		$result = $dbWrapper->query($query, array(
-			$resource->getUri(),
-			RDFS_SUBCLASSOF,
-			$parentClass->getUri()
-		));
-		while($row = $result->fetch()){
-			
-			$returnValue =  true;
-			break;
-		}
-		if(!$returnValue){
-			$parentSubClasses = $parentClass->getSubClasses(true);
-			foreach ($parentSubClasses as $subClass){
-				if ($subClass->getUri() == $resource->getUri()) {
-					$returnValue =  true;
-					break;
-				}
-			}
-		}
-
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
-
-        return (bool) $returnValue;
+        $query = 'SELECT object FROM statements WHERE subject = ? AND predicate = ? AND ' . $dbWrapper->getPlatForm()->getObjectTypeCondition() . ' = ?';
+        $result = $dbWrapper->query($query, array(
+            $resource->getUri(),
+            RDFS_SUBCLASSOF,
+            $parentClass->getUri()
+        ));
+        
+        while ($row = $result->fetch()) {
+            $returnValue =  true;
+            break;
+        }
+        
+        if (!$returnValue) {
+            $parentSubClasses = $parentClass->getSubClasses(true);
+            foreach ($parentSubClasses as $subClass) {
+                if ($subClass->getUri() == $resource->getUri()) {
+                    $returnValue =  true;
+                    break;
+                }
+            }
+        }
+        
+        return $returnValue;
     }
 
     /**
@@ -122,36 +101,28 @@ class core_kernel_persistence_smoothsql_Class
     public function getParentClasses( core_kernel_classes_Class $resource, $recursive = false)
     {
         $returnValue = array();
-
-        
-        $returnValue =  array();
 		
-        $sqlQuery = 'SELECT object FROM statements
-        			WHERE subject = ? 
-        			AND predicate = ?';
+        $sqlQuery = 'SELECT object FROM statements WHERE subject = ?  AND predicate = ?';
 
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
 		$sqlResult = $dbWrapper->query($sqlQuery, array($resource->getUri(), RDFS_SUBCLASSOF));
 
 		while ($row = $sqlResult->fetch()){
 
-			$parentClass = new core_kernel_classes_Class($row['object']);
-
-			$returnValue[$parentClass->getUri()] = $parentClass ;
-			if($recursive == true && $parentClass->getUri() != RDFS_CLASS && $parentClass->getUri() != RDFS_RESOURCE){
-				if($parentClass->getUri() == CLASS_GENERIS_RESOURCE){
-					$returnValue[RDFS_RESOURCE] = new core_kernel_classes_Class(RDFS_RESOURCE);
-				}
-				else {
-    			    $plop = $parentClass->getParentClasses(true);
-    				$returnValue = array_merge($returnValue, $plop);
-				}
-			}
+            $parentClass = new core_kernel_classes_Class($row['object']);
+            
+            $returnValue[$parentClass->getUri()] = $parentClass ;
+            if ($recursive == true && $parentClass->getUri() != RDFS_CLASS && $parentClass->getUri() != RDFS_RESOURCE) {
+                if ($parentClass->getUri() == CLASS_GENERIS_RESOURCE) {
+                    $returnValue[RDFS_RESOURCE] = new core_kernel_classes_Class(RDFS_RESOURCE);
+                } else {
+                    $plop = $parentClass->getParentClasses(true);
+                	$returnValue = array_merge($returnValue, $plop);
+                }
+            }
 		}
 
-        
-
-        return (array) $returnValue;
+        return $returnValue;
     }
 
     /**
@@ -161,117 +132,65 @@ class core_kernel_persistence_smoothsql_Class
     public function getProperties( core_kernel_classes_Class $resource, $recursive = false)
     {
         $returnValue = array();
-
         
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlQuery = 'SELECT subject FROM statements
-			WHERE predicate = ? 
-			AND '. $dbWrapper->getPlatForm()->getObjectTypeCondition() .' = ?';
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->query($sqlQuery, array(
-			RDFS_DOMAIN,
-			$resource->getUri()
-		));
-
-		while ($row = $sqlResult->fetch()){
-			$property = new core_kernel_classes_Property($row['subject']);
-			$returnValue[$property->getUri()] = $property;
-		}
-		if($recursive == true) {
-			$parentClasses = $resource->getParentClasses(true);
-			foreach ($parentClasses as $parent) {
-				if($parent->getUri() != RDFS_CLASS) {
-					$returnValue = array_merge($returnValue, $parent->getProperties(true));
-				}
-			}
-		}
-
+        $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ?  AND '. $dbWrapper->getPlatForm()->getObjectTypeCondition() .' = ?';
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $sqlResult = $dbWrapper->query($sqlQuery, array(
+            RDFS_DOMAIN,
+            $resource->getUri()
+        ));
         
-
-        return (array) $returnValue;
+        while ($row = $sqlResult->fetch()) {
+            $property = new core_kernel_classes_Property($row['subject']);
+            $returnValue[$property->getUri()] = $property;
+        }
+        
+        if ($recursive == true) {
+            $parentClasses = $resource->getParentClasses(true);
+            foreach ($parentClasses as $parent) {
+                if($parent->getUri() != RDFS_CLASS) {
+                	$returnValue = array_merge($returnValue, $parent->getProperties(true));
+                }
+            }
+        }
+        
+        return $returnValue;
     }
 
-   
-    /* (non-PHPdoc)
+    /**
+     * (non-PHPdoc)
      * @see core_kernel_persistence_ClassInterface::getInstances()
      */
-    public function getInstances( core_kernel_classes_Class $resource, $recursive = false, $params = array())
+    public function getInstances(core_kernel_classes_Class $resource, $recursive = false, $params = array())
     {
         $returnValue = array();
-
         
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sqlQuery = 'SELECT subject FROM statements 
-						WHERE predicate = ?  
-							AND ' . $dbWrapper->getPlatForm()->getObjectTypeCondition(). ' = ? ';
-		if(isset($params['limit'])){
-			$limit = intval($params['limit']);
-			$offset = isset($params['offset']) ? intval($params['offset']) : 0;
-			if ($limit == 0) {
-				throw new common_exception_InvalidArgumentType('Invalid limit in '.__FUNCTION__.': '.$params['limit']);
-			}
-			$sqlQuery = $dbWrapper->limitStatement($sqlQuery, $limit, $offset);
-		}
-		
-		
-		$sqlResult = $dbWrapper->query($sqlQuery, array (
-			RDF_TYPE,
-			$resource->getUri()
-		));
-
-		while ($row = $sqlResult->fetch()){
-
-			$instance = new core_kernel_classes_Resource($row['subject']);
-			$returnValue[$instance->getUri()] = $instance;
-
-			//In case of a meta class, subclasses of instances may be returned*/
-			if (($instance->getUri() != RDFS_CLASS)
-			&& ($resource->getUri() == RDFS_CLASS)
-			&& ($instance->getUri() != RDFS_RESOURCE)) {
-
-				$instanceClass = new core_kernel_classes_Class($instance->getUri());
-				$subClasses = $instanceClass->getSubClasses(true);
-
-				foreach($subClasses as $subClass) {
-					$returnValue[$subClass->getUri()] = $subClass;
-				}
-			}
-		}
-		
-		if($recursive == true){
-			$subClasses = $resource->getSubClasses(true);
-			foreach ($subClasses as $subClass){
-				$returnValue = array_merge($returnValue, $subClass->getInstances(false));
-			}
-		}
-
+        $params = array_merge($params, array('like' => false, 'recursive' => $recursive));
         
-
-        return (array) $returnValue;
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $query = $this->getFilteredQuery($resource, array(), $params);
+        $result = $dbWrapper->query($query);
+        
+        while ($row = $result->fetch()) {
+            $foundInstancesUri = $row['subject'];
+            $returnValue[$foundInstancesUri] = new core_kernel_classes_Resource($foundInstancesUri);
+        }
+        
+        return $returnValue;
     }
 
     /**
      * 
-     * @author lionel
      * @param core_kernel_classes_Class $resource
      * @param core_kernel_classes_Resource $instance
+     * @throws common_exception_DeprecatedApiMethod
      * @return core_kernel_classes_Resource
      * @deprecated
      */
     public function setInstance( core_kernel_classes_Class $resource,  core_kernel_classes_Resource $instance)
     {
-        $returnValue = null;
-
-       throw new common_exception_DeprecatedApiMethod(__METHOD__ . ' is deprecated. ');
-		$rdfType = new core_kernel_classes_Property(RDF_TYPE);
-		$newInstance = clone $instance;	//call Resource::__clone
-		$newInstance->setPropertyValue($rdfType, $resource->getUri());
-
-		$returnValue = $newInstance;
-
-        
-
-        return $returnValue;
+        throw new common_exception_DeprecatedApiMethod(__METHOD__ . ' is deprecated. ');
     }
 
     /**
@@ -288,11 +207,8 @@ class core_kernel_persistence_smoothsql_Class
     {
         $returnValue = (bool) false;
 
-        
 		$subClassOf = new core_kernel_classes_Property(RDFS_SUBCLASSOF);
 		$returnValue = $resource->setPropertyValue($subClassOf, $iClass->getUri());
-
-        
 
         return (bool) $returnValue;
     }
@@ -310,17 +226,7 @@ class core_kernel_persistence_smoothsql_Class
      */
     public function setProperty( core_kernel_classes_Class $resource,  core_kernel_classes_Property $property)
     {
-        $returnValue = (bool) false;
-
-        
         throw new common_exception_DeprecatedApiMethod(__METHOD__ . ' is deprecated. ');
-		$domain = new core_kernel_classes_Property(RDFS_DOMAIN, __METHOD__);
-		$instanceProperty = new core_kernel_classes_Resource($property->getUri(), __METHOD__);
-		$returnValue = $instanceProperty->setPropertyValue($domain, $resource->getUri());
-
-        
-
-        return (bool) $returnValue;
     }
 
     /**
@@ -331,8 +237,6 @@ class core_kernel_persistence_smoothsql_Class
     {
         $returnValue = null;
 
-        
-        
     	$subject = '';
     	if ($uri == ''){
 			$subject = common_Utils::getNewUri();
@@ -359,8 +263,6 @@ class core_kernel_persistence_smoothsql_Class
 		if (!empty($comment)) {
 			$returnValue->setComment($comment);
 		}
-		
-        
 
         return $returnValue;
     }
@@ -398,8 +300,7 @@ class core_kernel_persistence_smoothsql_Class
     {
         $returnValue = null;
 
-        
-        
+
     	$property = new core_kernel_classes_Class(RDF_PROPERTY, __METHOD__);
 		$propertyInstance = $property->createInstance($label,$comment);
 		$returnValue = new core_kernel_classes_Property($propertyInstance->getUri(), __METHOD__);
@@ -409,8 +310,6 @@ class core_kernel_persistence_smoothsql_Class
 			throw new common_Exception('problem creating property');
 		}
         
-        
-
         return $returnValue;
     }
 
@@ -418,26 +317,25 @@ class core_kernel_persistence_smoothsql_Class
      * (non-PHPdoc)
      * @see core_kernel_persistence_ClassInterface::searchInstances()
      */
-    public function searchInstances( core_kernel_classes_Class $resource, $propertyFilters = array(), $options = array())
+    public function searchInstances(core_kernel_classes_Class $resource, $propertyFilters = array(), $options = array())
     {
         $returnValue = array();
-
         
-
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$query = $this->getFilteredQuery($resource, $propertyFilters, $options);
-		//var_dump($query);
-		$result = $dbWrapper->query($query);
-		
-
-		while ($row = $result->fetch()){	
-			$foundInstancesUri = $row['subject'];
-			$returnValue[$foundInstancesUri] = new core_kernel_classes_Resource($foundInstancesUri);
-		}
-
+        // Avoid a 'like' search on RDF_TYPE!
+        if (count($propertyFilters) === 0) {
+            $options = array_merge($options, array('like' => false));
+        }
         
-
-        return (array) $returnValue;
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $query = $this->getFilteredQuery($resource, $propertyFilters, $options);
+        $result = $dbWrapper->query($query);
+        
+        while ($row = $result->fetch()) {	
+            $foundInstancesUri = $row['subject'];
+            $returnValue[$foundInstancesUri] = new core_kernel_classes_Resource($foundInstancesUri);
+        }
+        
+        return $returnValue;
     }
 
     /**
@@ -446,53 +344,22 @@ class core_kernel_persistence_smoothsql_Class
      */
     public function countInstances( core_kernel_classes_Class $resource, $propertyFilters = array(), $options = array())
     {
-        $returnValue = null;
-
-        
-
 		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-
-		if (isset($propertyFilters) && count($propertyFilters)) {
-			if (isset($options['offset'])) {
-                unset($options['offset']);
-            }
-			if (isset($options['limit'])) {
-                unset($options['limit']);
-            }
-			$query = $this->getFilteredQuery($resource, $propertyFilters, $options);
-			if (substr($query, 0, strlen('SELECT subject')) == 'SELECT subject') {
-				$query = 'SELECT count(*) as count'.substr($query, strlen('SELECT subject'));
-				$sqlResult = $dbWrapper->query($query);
-				if ($row = $sqlResult->fetch()) {
-					$returnValue = $row['count'];
-					$sqlResult->closeCursor();
-				}
-			} else {
-				common_Logger::w('getFilteredQuery was updated, please update countInstances as well');
-				$sqlResult = $dbWrapper->query($query);
-				$returnValue = count($sqlResult->fetchAll());
-			}
-		}
-		else {
-			$sqlQuery = 'SELECT count(subject) as count FROM statements
-							WHERE predicate = ?  
-								AND '.$dbWrapper->getPlatForm()->getObjectTypeCondition(). ' = ? ';
-			
-			$sqlResult = $dbWrapper->query($sqlQuery, array(
-				RDF_TYPE,
-				$resource->getUri()
-			));
-
-			if ($row = $sqlResult->fetch()) {
-				$returnValue = $row['count'];
-				$sqlResult->closeCursor();
-			}
-		}
-
+		    
+		if (isset($options['offset'])) {
+            unset($options['offset']);
+        }
         
+		if (isset($options['limit'])) {
+            unset($options['limit']);
+        }
         
-
-        return $returnValue;
+        if (isset($options['order'])) {
+            unset($options['order']);
+        }
+        
+		$query = 'SELECT count(subject) FROM (' . $this->getFilteredQuery($resource, $propertyFilters, $options) . ') as countq';
+		return $dbWrapper->query($query)->fetchColumn();
     }
 
     /**
@@ -503,49 +370,42 @@ class core_kernel_persistence_smoothsql_Class
     {
         $returnValue = array();
         
-    	$distinct = isset($options['distinct']) ? $options['distinct'] : false;
+        $distinct = isset($options['distinct']) ? $options['distinct'] : false;
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-	
-	
-	$filteredQuery = $this->getFilteredQuery($resource, $propertyFilters, $options);
-	
-	//echo $filteredQuery;
-	// Get all the available property values in the subset of instances
-	$query = 'SELECT';
-	if($distinct){
-		$query .= ' DISTINCT';
-	}
-	$query .= ' object FROM statements
-		WHERE predicate = ?
-		AND subject IN ('.$filteredQuery.')';
-	$sqlResult = $dbWrapper->query($query, array($property->getUri()));
-	while ($row = $sqlResult->fetch()){
-		$returnValue[] = common_Utils::toResource($row['object']);
-	}
+        
+        if (count($propertyFilters) === 0) {
+            $options = array_merge($options, array('like' => false));
+        }
+        
+        $filteredQuery = $this->getFilteredQuery($resource, $propertyFilters, $options);
+        
+        // Get all the available property values in the subset of instances
+        $query = 'SELECT';
+        if ($distinct) {
+            $query .= ' DISTINCT';
+        }
+        
+        $query .= " object FROM (SELECT overq.subject, valuesq.object FROM (${filteredQuery}) as overq JOIN statements AS valuesq ON (overq.subject = valuesq.subject AND valuesq.predicate = ?)) AS overrootq";
+        
+        $sqlResult = $dbWrapper->query($query, array($property->getUri()));
+        while ($row = $sqlResult->fetch()) {
+            $returnValue[] = common_Utils::toResource($row['object']);
+        }
         
         return (array) $returnValue;
     }
 
     /**
-     * Short description of method unsetProperty
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  Property property
-     * @return boolean
+     * Remove a Property from its Class definition.
+     * 
+     * @param core_kernel_classes_Class $resource
+     * @param core_kernel_classes_Property $property
      * @deprecated
+     * @throws common_exception_DeprecatedApiMethod
      */
     public function unsetProperty( core_kernel_classes_Class $resource,  core_kernel_classes_Property $property)
     {
-        $returnValue = (bool) false;
-
-        
-        
         throw new common_exception_DeprecatedApiMethod(__METHOD__ . ' is deprecated. ');
-        
-
-        return (bool) $returnValue;
     }
 
     /**
@@ -556,16 +416,14 @@ class core_kernel_persistence_smoothsql_Class
     {
         $returnValue = null;
 
-        
         if (isset($properties[RDF_TYPE])) {
-        	throw new core_kernel_persistence_Exception('Additional types in createInstanceWithProperties not permited');
+            throw new core_kernel_persistence_Exception('Additional types in createInstanceWithProperties not permited');
         }
         
         $properties[RDF_TYPE] = $type;
 		$returnValue = new core_kernel_classes_Resource(common_Utils::getNewUri(), __METHOD__);
 		$returnValue->setPropertiesValues($properties);
         
-
         return $returnValue;
     }
 
@@ -575,42 +433,37 @@ class core_kernel_persistence_smoothsql_Class
      */
     public function deleteInstances( core_kernel_classes_Class $resource, $resources, $deleteReference = false)
     {
-        $returnValue = (bool) false;
+        $returnValue = false;
 
-        
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $class = new core_kernel_classes_Class($resource->getUri());
         $uris = array();
         
-        foreach ($resources as $r){
-        	$uri = (($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r);
-
-        	$uris[] = $dbWrapper->quote($uri);
+        foreach ($resources as $r) {
+            $uri = (($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r);
+            $uris[] = $dbWrapper->quote($uri);
         }
         
-        if ($class->exists()){
+        if ($class->exists()) {
+            $inValues = implode(',', $uris);
+            $query = 'DELETE FROM statements WHERE subject IN (' . $inValues . ')';
         	
-        	$inValues = implode(',', $uris);
-        	$query = 'DELETE FROM statements WHERE subject IN (' . $inValues . ')';
+            if (true === $deleteReference) {
+                $params[] = $resource->getUri();
+                $query .= ' OR object IN (' . $inValues . ')';
+            }
         	
-        	if (true === $deleteReference){
-        		$params[] = $resource->getUri();
-        		$query .= ' OR object IN (' . $inValues . ')';
-        	}
-        	
-        	try{
+            try {
         		// Even if now rows are affected, we consider the resources
         		// as deleted.
         		$dbWrapper->exec($query);	
         		$returnValue = true;
-        	}
-        	catch (PDOException $e){
-        		throw new core_kernel_persistence_smoothsql_Exception("An error occured while deleting resources: " . $e->getMessage());
-        	}
+            } catch (PDOException $e) {
+        	    throw new core_kernel_persistence_smoothsql_Exception("An error occured while deleting resources: " . $e->getMessage());
+            }
         }
-        
 
-        return (bool) $returnValue;
+        return $returnValue;
     }
 
 
@@ -623,12 +476,11 @@ class core_kernel_persistence_smoothsql_Class
      */
     public static function singleton()
     {
-       
-        if (core_kernel_persistence_smoothsql_Class::$instance == null){
-        	core_kernel_persistence_smoothsql_Class::$instance = new core_kernel_persistence_smoothsql_Class();
+        if (core_kernel_persistence_smoothsql_Class::$instance == null) {
+            core_kernel_persistence_smoothsql_Class::$instance = new core_kernel_persistence_smoothsql_Class();
         }
+        
         return  core_kernel_persistence_smoothsql_Class::$instance;
-
     }
 
     /**
@@ -641,174 +493,46 @@ class core_kernel_persistence_smoothsql_Class
     }
 
     /**
-     * Short description of method getFilteredQuery
-     *
-     * @access public
-     * @author Jehan Bihin
-     * @param  Resource resource
-     * @param  array propertyFilters
-     * @param  array options
+     * 
+     * @param core_kernel_classes_Class $resource
+     * @param array $propertyFilters
+     * @param array $options
      * @return string
-     * @version 1.0
      */
-    public function getFilteredQuery( core_kernel_classes_Class $resource, $propertyFilters = array(), $options = array())
+    public function getFilteredQuery(core_kernel_classes_Class $resource, $propertyFilters = array(), $options = array())
     {
-        $returnValue = (string) '';
-
+        $rdftypes = array();
         
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$platform = $dbWrapper->getPlatForm();
-		//add the type check to the filters
-		/*if (isset($propertyFilters[RDF_TYPE])) {
-			if (!is_array($propertyFilters[RDF_TYPE])) $propertyFilters[RDF_TYPE] = array($propertyFilters[RDF_TYPE], $resource->getUri());
-			else $propertyFilters[RDF_TYPE] = array_merge($propertyFilters[RDF_TYPE], array($resource->getUri()));
-		}
-		else $propertyFilters[RDF_TYPE] = $resource->getUri();*/
-
-		$rdftypes = array();
-        //If recursive, get the subclasses of the given class
+        // Check recursivity...
 		if (isset($options['recursive']) && $options['recursive']) {
             foreach($this->getSubClasses($resource, $options['recursive']) as $subClass){
                 $rdftypes[] = $subClass->getUri();
             }
 		}
-        //If additionalClasses are required
-        if(isset($options['additionalClasses'])){
-        	foreach ($options['additionalClasses'] as $aC){
+	
+		// Check additional classes...
+        if (isset($options['additionalClasses'])) {
+        	foreach ($options['additionalClasses'] as $aC) {
         		$rdftypes[] = ($aC instanceof core_kernel_classes_Resource) ? $aC->getUri() : $aC;
         		$rdftypes = array_unique($rdftypes);
         	}
         }
-        //Add the class type of the given class
-        if(!in_array($resource->getUri(), $rdftypes)){
+        
+        // Add the class type of the given class
+        if (!in_array($resource->getUri(), $rdftypes)) {
             $rdftypes[] = $resource->getUri();
         }
-           
-		$langToken = '';
-		if(isset($options['lang'])){
-				$langToken = ' AND ('. $platform->isNullCondition('l_language') . ' OR l_language = ' . $dbWrapper->quote($options['lang']) . ')';
-		}
-		$like = true;
-		if(isset($options['like'])){
-			$like = ($options['like'] === true);
-		}
-		
-		    $query = 'SELECT subject FROM statements WHERE ';
-		    $conditions = array();
-		    foreach($propertyFilters as $propUri => $pattern){
-
-			    $propUri = trim($dbWrapper->quote($propUri));
-			    $values = is_array($pattern) ? $pattern : array($pattern);
-			    $sub = array();
-			    foreach ($values as $value) {
-				    switch (gettype($value)) {
-					    case 'string' :
-					    case 'numeric':
-						    $object = trim(str_replace('*', '%', $value));
-
-						    if($like){
-							    if(!preg_match("/^%/", $object)){
-								    $object = "%".$object;
-							    }
-							    if(!preg_match("/%$/", $object)){
-								    $object = $object."%";
-							    }
-							    $sub[] .= $platform->getObjectTypeCondition() . ' LIKE '.$dbWrapper->quote($object);
-						    }
-						    else {
-							    $sub[] = (strpos($object, '%') !== false)
-								    ? $platform->getObjectTypeCondition() . ' LIKE '.$dbWrapper->quote($object)
-								    : $platform->getObjectTypeCondition() . ' = '.$dbWrapper->quote($value);
-						    }
-					    break;
-
-					    case 'object' :
-						    if($value instanceof core_kernel_classes_Resource) {
-							    $sub[] = $platform->getObjectTypeCondition(). ' = '.$dbWrapper->quote($value->getUri());
-						    } else {
-							    common_Logger::w('non ressource as search parameter: '.get_class($value), 'GENERIS');
-						    }
-					    break;
-
-					    default:
-						    throw new common_Exception("Unsupported type for searchinstance array: ".gettype($value));
-
-				    }
-			    }
-			    if (empty($sub)) {
-				    $conditions[] = "(predicate = {$propUri}{$langToken})";
-			    } else {
-				    $conditions[] = "(predicate = {$propUri} AND (".implode(" OR ", $sub)."){$langToken})";
-			    }
-		    }
-		
-		$intersect = true;
-		if (isset($options['chaining']) && $options['chaining'] == 'or') {
-			$intersect = false;
-		}
-
-
-		
-		$q = '';
-		if ($intersect) {
-			foreach ($conditions as $condition) {
-				if (!strlen($q)) {
-				    $q = $query . $condition;
-				}
-				else {
-                    $q = $query . $condition . ' AND subject IN (' . $q . ')';
-                }
-			}
-                        if(!empty($q)){
-                            $query = $q;
-                        }
-		}
-		else {
-            $query .= join(' OR ', $conditions);
-        }
-
-		if(!empty($conditions)){
-			$query .= ' AND';
-		}
-		
-	
-		if (count ( $propertyFilters ) > 0) {
-			$query .= ' subject IN (SELECT subject FROM statements WHERE predicate = ' . $dbWrapper->quote(RDF_TYPE) . ' AND '. $platform->getObjectTypeCondition(). ' in (\'' . implode ( '\',\'', $rdftypes ) . '\'))';
-		} else {
-			$query = 'SELECT subject FROM statements WHERE predicate = ' . $dbWrapper->quote(RDF_TYPE) . ' AND '. $platform->getObjectTypeCondition().' in (\'' . implode ( '\',\'', $rdftypes ) . '\')';
-		}
-		// sorting
-		if (isset ( $options ['order'] ) && ! empty ( $options ['order'] )) {
-			$orderUri = $options ['order'];
-			$orderDir = isset ( $options ['orderdir'] ) && strtoupper ( $options ['orderdir'] ) == 'DESC' ? 'DESC' : 'ASC';
-			$orderQuery = 'SELECT subject,object FROM statements WHERE predicate = ' . $dbWrapper->quote($orderUri) . $langToken;
-			$query = 'SELECT DISTINCT mainq.subject, orderq.object from (' . $query . ') AS mainq
-			          LEFT JOIN (' . $orderQuery . ') AS orderq ON (mainq.subject = orderq.subject)
-			          ORDER BY orderq.object ' . $orderDir;
-		} else if (isset ( $options ['limit'] )) {
-			$query .= ' ORDER BY id';
-		}
-
-		if (isset ( $options ['limit'] )) {
-			$offset = 0;
-			$limit = intval( $options ['limit'] );
-			if ($limit == 0) {
-				$limit = 1000000;
-			}
-			if (isset( $options ['offset'] )) {
-				$offset = intval( $options ['offset'] );
-			}
-				
-			$returnValue = $dbWrapper->limitStatement($query, $limit, $offset );
-		}
-		else {
-			$returnValue = $query ;
-		}
-		
-
         
-
-        return (string) $returnValue;
+        $and = (isset($options['chaining']) === false) ? true : $options['chaining'];
+        $like = (isset($options['like']) === false) ? true : $options['like'];
+        $lang = (isset($options['lang']) === false) ? '' : $options['lang'];
+        $offset = (isset($options['offset']) === false) ? 0 : $options['offset'];
+        $limit = (isset($options['limit']) === false) ? 0 : $options['limit'];
+        $order = (isset($options['order']) === false) ? '' : $options['order'];
+        $orderdir = (isset($options['orderdir']) === false) ? 'ASC' : $options['orderdir'];
+           
+        $query = core_kernel_persistence_smoothsql_Utils::buildFilterQuery($rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
+        
+        return $query;
     }
-
 }
