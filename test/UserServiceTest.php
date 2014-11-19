@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -16,10 +16,8 @@
  * 
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2012-2014 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
-
-error_reporting(E_ALL);
 
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
@@ -301,6 +299,9 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner {
 		$this->assertFalse($user->exists());
 	}
 	
+	/**
+	 * @depends testLoginExists
+	 */
 	public function testUnincludeRole(){
 		$prefix = LOCAL_NAMESPACE . '#';
 		$role = new core_kernel_classes_Resource($prefix . 'subRole11');

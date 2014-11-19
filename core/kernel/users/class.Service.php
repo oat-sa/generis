@@ -77,8 +77,9 @@ class core_kernel_users_Service
         }
         $users = $class->searchInstances(
         	array(PROPERTY_USER_LOGIN => $login), 
-        	array('like' => false, 'recursive' => 1)
+        	array('like' => false, 'recursive' => true)
         );
+        
         if(count($users) > 0){
         	$returnValue = true;
         }
