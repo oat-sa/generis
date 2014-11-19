@@ -523,7 +523,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
             $rdftypes[] = $resource->getUri();
         }
         
-        $and = (isset($options['chaining']) === false) ? true : $options['chaining'];
+        $and = (isset($options['chaining']) === false) ? true : ((strtolower($options['chaining']) === 'and') ? true : false);
         $like = (isset($options['like']) === false) ? true : $options['like'];
         $lang = (isset($options['lang']) === false) ? '' : $options['lang'];
         $offset = (isset($options['offset']) === false) ? 0 : $options['offset'];
