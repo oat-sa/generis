@@ -166,7 +166,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     {
         $returnValue = array();
         
-        $params = array_merge($params, array('like' => false));
+        $params = array_merge($params, array('like' => false, 'recursive' => $recursive));
         
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $query = $this->getFilteredQuery($resource, array(), $params);
