@@ -515,9 +515,6 @@ class core_kernel_persistence_smoothsql_Resource
             $triple->object = $statement["object"];
             $triple->id = $statement["id"];
             $triple->lg = $statement["l_language"];
-//             $triple->readPrivileges = $statement["stread"];
-//             $triple->editPrivileges = $statement["stedit"];
-//             $triple->deletePrivileges = $statement["stdelete"];
             $returnValue->add($triple);
         }
 
@@ -593,9 +590,6 @@ class core_kernel_persistence_smoothsql_Resource
 	    			"object",
 	    			"l_language",
 	    			"author",
-// 	    			"stread",
-// 	    			"stedit",
-// 	    			"stdelete",
                     "epoch"
 	    	);
 	    	$query = $multipleInsertQueryHelper->getFirstStaticPart('statements', $columns);
@@ -610,10 +604,7 @@ class core_kernel_persistence_smoothsql_Resource
 	    							"object" => $triple->object == null ? $platform->getNullString() : $dbWrapper->quote($triple->object),
 	    							"l_language" => $triple->lg == null ? $platform->getNullString() : $dbWrapper->quote($triple->lg),
 	    							"author" => $user,
-	    							//"stread" => $dbWrapper->quote($triple->readPrivileges),
-	    							//"stedit" => $dbWrapper->quote($triple->editPrivileges),
-	    							//"stdelete" => $dbWrapper->quote($triple->deletePrivileges),
-	    					          "epoch" => $dbWrapper->quote($platform->getNowExpression())
+     					            "epoch" => $dbWrapper->quote($platform->getNowExpression())
 	    					));
     			}
 	    	}

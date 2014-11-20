@@ -84,30 +84,6 @@ class core_kernel_classes_Triple
      */
     public $lg = '';
 
-    /**
-     * Short description of attribute readPrivileges
-     *
-     * @access public
-     * @var string
-     */
-    public $readPrivileges = '';
 
-    /**
-     * Short description of attribute editPrivileges
-     *
-     * @access public
-     * @var string
-     */
-    public $editPrivileges = '';
-
-    /**
-     * Short description of attribute deletePrivileges
-     *
-     * @access public
-     * @var string
-     */
-    public $deletePrivileges = '';
-
-    // --- OPERATIONS ---
 
 }
