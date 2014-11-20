@@ -87,7 +87,6 @@ class core_kernel_classes_ClassIterator implements \Iterator
             $newUri = array_shift($this->todoClasses);
             $this->classes[] = $newUri;
             $class = new \core_kernel_classes_Class($newUri);
-            \common_Logger::i('loaded class '.$class->getLabel());
             foreach ($class->getSubClasses(false) as $subClass) {
                 if (!in_array($subClass->getUri(), $this->classes) && !in_array($subClass->getUri(), $this->todoClasses)) {
                     $this->todoClasses[] = $subClass->getUri();

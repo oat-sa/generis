@@ -150,8 +150,6 @@ class core_kernel_classes_ResourceIterator implements \Iterator
      * @return boolean
      */
     protected function load(core_kernel_classes_Class $class, $offset) {
-        \common_Logger::i('loaded '.$class->getLabel().': '.$offset);
-        
         $results = $class->searchInstances(array(), array(
             'recursive' => false,
             'limit' => self::CACHE_SIZE,
