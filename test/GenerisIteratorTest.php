@@ -90,7 +90,8 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner {
         foreach ($iterator as $instance) {
             $found2[] = $instance->getUri();
         }
-        
+
+        $this->assertEquals(1,$iterator->key());
         $this->assertEquals(array($this->emptyClass->getUri()),$found2);
         
     }
@@ -123,6 +124,8 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner {
 	    
 	    $iterator = new core_kernel_classes_ResourceIterator($this->emptyClass);
 	    $this->assertFalse($iterator->valid());
+	    $this->assertEquals('1#0',$iterator->key());
+
 	   
 	}
 	
