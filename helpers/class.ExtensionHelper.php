@@ -22,6 +22,28 @@
  *
  */
 class helpers_ExtensionHelper{
+
+    /**
+     * Based on a list of extensions we generate an array of missing extensions 
+     * 
+     * @param array $extensions
+     * @return array array of missing extensions ids
+     */
+    public static function getMissingExtensionIds($extensions) {
+        $inList = array();
+        foreach ($extensions as $ext) {
+            $inList[] = $ext->getId();
+        }
+        $missing = array();
+        foreach ($extensions as $ext) {
+            foreach ($ext->getDependencies() as $extId => $version) {
+                if (!in_array($extId, $inList) && !in_array($extId, $missing)) {
+                    $missing[] = $extId; 
+                }
+            }
+        }
+        return $missing;
+    }
     
     /**
      * Sorts a list of extensions by dependencies,
