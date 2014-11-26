@@ -22,6 +22,7 @@
 
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use \core_kernel_classes_Resource;
+use \core_kernel_classes_Literal;
 use \core_kernel_classes_DbWrapper;
 use \core_kernel_persistence_smoothsql_Utils;
 
@@ -138,31 +139,13 @@ class generis_test_SmootsqlUtilsTest extends GenerisPhpUnitTestRunner {
 	    );
 	}
 	
-	/**
-	 * @dataProvider buildFilterQueryProvider
-	 * 
-	 * @param unknown_type $expected
-	 * @param array $propertyFilters
-	 * @param unknown_type $and
-	 * @param unknown_type $like
-	 * @param unknown_type $lang
-	 * @param unknown_type $offset
-	 * @param unknown_type $limit
-	 * @param unknown_type $order
-	 * @param unknown_type $orderDir
-	 */
-	public function testBuildFilterQuery($expected, $classUri, array $propertyFilters, $and = true, $like = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC')
-	{
-	    //var_dump(core_kernel_persistence_smoothsql_Utils::buildFilterQuery($classUri, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderDir), "\n\n");
-	}
-	
 	public function buildFilterQueryProvider() {
 	    return array(
 	        array(
 	            'proot',
 	            'http://www.taotesting.com/movies.rdf#Movie',
 	            array(
-	                'http://www.w3.org/2000/01/rdf-schema#label' => 'Dallas'
+	                'http://www.w3.org/2000/01/rdf-schema#label' => new core_kernel_classes_Literal('Dallas')
 	            )                
 	        ),
             array(
