@@ -152,6 +152,11 @@ class core_kernel_persistence_smoothsql_Utils
         
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
+        // Take care of RDFS Literals!
+        if ($pattern instanceof core_kernel_classes_Literal) {
+            $pattern = $pattern->__toString();
+        }
+        
         switch (gettype($pattern)) {
             case 'object' :
                 if ($pattern instanceof core_kernel_classes_Resource) {
