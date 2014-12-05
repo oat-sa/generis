@@ -22,13 +22,26 @@ namespace oat\oatbox;
 
 use \common_ext_ExtensionsManager;
 
+/**
+ * Simple Registry for testing purpose
+ *
+ * @author Lionel Lecaque <lionel@taotesting.com>
+ */
 class BasicRegistry extends AbstractRegistry
 {
+    /**
+     * 
+     * @see \oat\oatbox\AbstractRegistry::getConfigId()
+     */
     protected  function getConfigId()
     {
         return 'basic_registry';
     }
     
+    /** 
+     * 
+     * @see \oat\oatbox\AbstractRegistry::getExtension()
+     */
     protected  function getExtension()
     {
         return common_ext_ExtensionsManager::singleton()->getExtensionById('generis');

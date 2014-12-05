@@ -22,6 +22,8 @@ namespace oat\oatbox;
 
 /**
  *
+ * Registry allows any extension to store specific arrays of data into extension config file
+ *
  * @author Lionel Lecaque <lionel@taotesting.com>
  */
 abstract class AbstractRegistry
@@ -58,6 +60,7 @@ abstract class AbstractRegistry
     }
 
     /**
+     * Specify in which extensions the config will be stored
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      * @return common_ext_Extension
@@ -66,12 +69,16 @@ abstract class AbstractRegistry
     
     /**
      * 
+     * config file in which the data will be stored 
+     * 
      * @author Lionel Lecaque, lionel@taotesting.com
      * @return string
      */
     protected abstract function getConfigId();
 
     /**
+     * 
+     * Get the config of dedicated extensions
      * 
      * @author Lionel Lecaque, lionel@taotesting.com
      */
@@ -92,6 +99,8 @@ abstract class AbstractRegistry
 
     /**
      * 
+     * Remove a element from the array
+     * 
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param string $id
      */
@@ -105,6 +114,7 @@ abstract class AbstractRegistry
     }
 
     /**
+     * Get the complete array 
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      * @return array
@@ -116,6 +126,7 @@ abstract class AbstractRegistry
     }
 
     /**
+     * Add a value to the config with given id
      * 
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param string $id
@@ -129,6 +140,7 @@ abstract class AbstractRegistry
     }
 
     /**
+     * Check if the config element exist
      * 
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param unknown $id
@@ -140,6 +152,8 @@ abstract class AbstractRegistry
     
     
     /**
+     * 
+     * Retrieve the given element from the array in config
      * 
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param string $id
