@@ -21,7 +21,7 @@
 namespace oat\generis\test;
 
 
-use oat\oatbox\ClientLibRegistry;
+use oat\oatbox\BasicRegistry;
 
 class RegistryTest extends GenerisPhpUnitTestRunner 
 {
