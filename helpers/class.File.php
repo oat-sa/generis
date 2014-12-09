@@ -159,11 +159,16 @@ class helpers_File
      */
     static public function copy($source, $destination, $recursive = true, $ignoreSystemFiles = true)
     {
+        if(!is_readable($source)){
+            return false;
+        }
+
         $returnValue = (bool) false;
+
         
         // Check for System File
         $basename = basename($source);
-        if ($basename[0] == '.' && $ignoreSystemFiles == true) {
+        if ($basename[0] === '.' && $ignoreSystemFiles === true) {
             return false;
         }
         
@@ -184,32 +189,33 @@ class helpers_File
             
             return copy($source, $destination);
         }
-        
+
         // Make destination directory
         if ($recursive == true) {
             if (! is_dir($destination)) {
                 // 0777 is default. See mkdir PHP Official documentation.
                 mkdir($destination, 0777, true);
             }
-            
+
             // Loop through the folder
             $dir = dir($source);
             while (false !== $entry = $dir->read()) {
                 // Skip pointers
-                if ($entry == '.' || $entry == '..') {
+                if ($entry === '.' || $entry === '..') {
                     continue;
                 }
-                
+
                 // Deep copy directories
                 self::copy("${source}/${entry}", "${destination}/${entry}", $recursive, $ignoreSystemFiles);
             }
-            
+
             // Clean up
             $dir->close();
             return true;
         } else {
             return false;
         }
+
         
         return (bool) $returnValue;
     }
