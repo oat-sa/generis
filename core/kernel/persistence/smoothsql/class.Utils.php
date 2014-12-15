@@ -270,7 +270,7 @@ class core_kernel_persistence_smoothsql_Utils
         $unionQuery = self::buildUnionQuery($propertyQueries);
         
         if (($propCount = count($propertyFilters)) === 0) {
-            $query = self::buildPropertyQuery(RDF_TYPE, $classUri, $like, $lang);
+            $query = self::buildPropertyQuery(RDF_TYPE, $classUri, false, $lang);
         } else {
             $unionCount = ($and === true) ? ($propCount + 1) : 2;
             $query = "SELECT subject FROM (${unionQuery}) AS unionq GROUP BY subject HAVING count(*) >= ${unionCount}";
