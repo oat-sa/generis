@@ -168,7 +168,7 @@ class common_ext_ExtensionsManager
     {
         $returnValue = array();
 
-		foreach ($this->getInstalledExtensions() as $ext) {
+		foreach ($this->getEnabledExtensions() as $ext) {
 			$returnValue = array_merge($returnValue, $ext->getManifest()->getModels());
 		}
 		$returnValue = array_unique($returnValue);
