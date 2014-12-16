@@ -57,10 +57,17 @@ abstract class common_session_SessionManager
     } 
     
     public static function startSession(common_session_Session $session) {
+
         self::$session = $session;
         if ($session instanceof common_session_StatefulSession) {
-            // prevent session fixation.
-            //session_regenerate_id();
+            // start session if not yet started
+            if (session_id() === '') {
+                session_name(GENERIS_SESSION_NAME);
+                session_start();
+            } else {
+                // prevent session fixation.
+                session_regenerate_id();
+            }
             
             PHPSession::singleton()->setAttribute(self::PHPSESSION_SESSION_KEY, $session);
         } else {
