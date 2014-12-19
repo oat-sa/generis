@@ -24,18 +24,32 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 class ModelsRightTest extends GenerisPhpUnitTestRunner {
 	
 	public function setUp(){
-        GenerisPhpUnitTestRunner::initTest();
+        	GenerisPhpUnitTestRunner::initTest();
 	}
 	
 	public function testRightModels(){
+		
+		$namespaces = common_ext_NamespaceManager::singleton()->getAllNamespaces();
+		$localNamespace = $namespaces[LOCAL_NAMESPACE.'#'];
+
 		// In tao context, the only one model which is updatable
-		$updatableModels = core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds();
-		$this->assertEquals(count($updatableModels), 1);
-		$this->assertTrue(array_search(LOCAL_NAMESPACE, $updatableModels) !== false);
+		$updatableModels = core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds();
+		$this->assertEquals(1, count($updatableModels));
+		$this->assertEquals(1, $localNamespace->getModelId());
+
+		
+		$readableModels = core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds();
+		
+		$this->assertTrue(count($readableModels) > 3);
+		$this->assertTrue(array_search(1, $readableModels) !== false);
+		$this->assertTrue(array_search(2, $readableModels) !== false);
+		$this->assertTrue(array_search(3, $readableModels) !== false);
+		$this->assertTrue(array_search(4, $readableModels) !== false);
+
 		
 		// Try to delete a resource of a locked model
 		$property = new core_kernel_classes_Property(RDFS_LABEL);
-        $domain = new core_kernel_classes_Property(RDFS_DOMAIN, __METHOD__);
+        	$domain = new core_kernel_classes_Property(RDFS_DOMAIN, __METHOD__);
 		$this->assertFalse( $property->removePropertyValues($domain, array('pattern' => RDFS_LABEL)));
 		
 		
