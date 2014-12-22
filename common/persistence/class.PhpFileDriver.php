@@ -159,10 +159,13 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             unset($this->cache[$id]);
         }
         $filePath = $this->getPath($id);
-        $success = @unlink($filePath);
-        if ($success && function_exists('opcache_invalidate')) {
+        
+        // invalidate opcache first, fails on already deleted file
+        if  (function_exists('opcache_invalidate')) {
             opcache_invalidate($filePath, true);
         }
+        $success = @unlink($filePath);
+        
         return $success;
     }
 
@@ -172,6 +175,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * @return boolean
      */
     public function purge() {
+        // @todo opcache invalidation
         return file_exists($this->directory)
             ? helpers_File::emptyDirectory($this->directory)
             : false;
@@ -196,6 +200,13 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
         return  $this->directory.$path.'.php';
     }
     
+    /**
+     * Generate the php code that returns the provided value
+     * 
+     * @param string $key
+     * @param mixed $value
+     * @return string
+     */
     protected function getContent($key, $value) {
         return $this->humanReadable
             ? "<?php return ".common_Utils::toHumanReadablePhpString($value).";".PHP_EOL
