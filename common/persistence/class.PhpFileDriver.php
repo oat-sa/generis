@@ -138,7 +138,6 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             return $this->cache[$id];
         }
         $value = @include $this->getPath($id);
-        common_Logger::d('filekv: '.gettype($value));
         return $value;
     }
     
