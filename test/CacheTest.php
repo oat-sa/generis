@@ -34,6 +34,8 @@ class CacheTest extends GenerisPhpUnitTestRunner {
 	    $this->assertTrue($cache->has($key));
 	    $this->assertEquals('data', $cache->get($key));
 	    $this->assertTrue($cache->remove($key));
+	    $this->setExpectedException('common_cache_NotFoundException');
+	    $cache->get($key);
 	    $this->assertFalse($cache->has($key));
 	}
 	
