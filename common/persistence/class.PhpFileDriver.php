@@ -138,6 +138,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             return $this->cache[$id];
         }
         $value = @include $this->getPath($id);
+        common_Logger::d('filekv: '.gettype($value));
         return $value;
     }
     
@@ -158,7 +159,12 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             // OPcache workaround
             unset($this->cache[$id]);
         }
-        return @unlink($this->getPath($id));
+        $filePath = $this->getPath($id);
+        $success = @unlink($filePath);
+        if ($success && function_exists('opcache_invalidate')) {
+            opcache_invalidate($filePath, true);
+        }
+        return $success;
     }
 
     /**
