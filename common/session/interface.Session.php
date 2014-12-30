@@ -18,8 +18,6 @@
  * 
  */
 
-use oat\oatbox\user\User;
-
 /**
  * Represents a Session.
  *
@@ -37,7 +35,7 @@ interface common_session_Session
      *
      * @access public
      * @author Joel Bout, <joel@taotesting.com>
-     * @return User
+     * @return oat\oatbox\user\User
      */
     public function getUser();
     
