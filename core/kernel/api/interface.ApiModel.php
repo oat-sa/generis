@@ -146,18 +146,4 @@ interface core_kernel_api_ApiModel
      */
     public function getObject($subject, $predicate);
 
-    /**
-     * Short description of method getResourceTree
-     *
-     * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
-     * @deprecated
-     * @param  string uriResource
-     * @param  int depth
-     * @return mixed
-     */
-    public function getResourceTree($uriResource, $depth);
-
 } /* end of interface core_kernel_api_ApiModel */
-
-?>

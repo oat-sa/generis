@@ -105,7 +105,6 @@ class core_kernel_impl_ApiModelOO
         if(!file_exists($fileLocation) || !is_readable($fileLocation)){
             throw new common_Exception("Unable to load ontology : $fileLocation");
         }
-        $session = core_kernel_classes_Session::singleton();
         
 	    if(!preg_match("/#$/", $targetNameSpace)){
 			$targetNameSpace .= '#';
@@ -341,7 +340,6 @@ class core_kernel_impl_ApiModelOO
         
         $dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
         $platform   = $dbWrapper->getPlatForm();
-        $session 	= core_kernel_classes_Session::singleton();
         $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
         $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
         $query = 'INSERT INTO statements (modelid,subject,predicate,object,l_language,author,epoch)
@@ -354,7 +352,7 @@ class core_kernel_impl_ApiModelOO
 	       		$predicate,
 	       		$object,
 	       		$language,
-	       		$session->getUserUri(),
+	       		\common_session_SessionManager::getSession()->getUserUri(),
 	            $platform->getNowExpression()
 	             
 	        ));
@@ -368,32 +366,6 @@ class core_kernel_impl_ApiModelOO
         
 
         return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method getResourceTree
-     *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  string uriResource
-     * @param  int depth
-     * @return common_Tree
-     */
-    public function getResourceTree($uriResource, $depth)
-    {
-        $returnValue = null;
-
-        
-		$factory = core_kernel_classes_TreeFactory::singleton();
-		$factory->setOptions(array("properties" => 'true',"instances" =>'true'));
-		$factory->setRootClass($uriResource);
-		$factory->setSession(core_kernel_classes_Session::singleton());
-		$factory->setDepth($depth);
-		$returnValue = $factory->getTree();
-
-        
-
-        return $returnValue;
     }
 
     /**
