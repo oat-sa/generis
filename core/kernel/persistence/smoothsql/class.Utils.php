@@ -41,8 +41,7 @@ class core_kernel_persistence_smoothsql_Utils
         $returnValue = array();
         
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $session = core_kernel_classes_Session::singleton(); 
-        $selectedLanguage = $session->getDataLanguage();
+        $selectedLanguage = \common_session_SessionManager::getSession()->getDataLanguage();
         $defaultLanguage = DEFAULT_LANG;
         $fallbackLanguage = '';
         				  

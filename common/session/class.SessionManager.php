@@ -56,6 +56,12 @@ abstract class common_session_SessionManager
         return self::$session;
     } 
     
+    /**
+     * Starts a new session and stores it in the session if stateful
+     * 
+     * @param common_session_Session $session
+     * @return boolean
+     */
     public static function startSession(common_session_Session $session) {
 
         self::$session = $session;
@@ -80,16 +86,26 @@ abstract class common_session_SessionManager
         return true;
     }
     
+    /**
+     * Ends the session by replacing it with an anonymous session
+     * 
+     * @return boolean
+     */
     public static function endSession() {
-        // clean session data.
 
+        // clean session data.
         if (session_id() != ''){
             session_destroy();
         }
         
-        self::startSession(new common_session_AnonymousSession());
+        return self::startSession(new common_session_AnonymousSession());
     }
     
+    /**
+     * Is the current session anonymous or associated to a user?
+     * 
+     * @return boolean
+     */
     public static function isAnonymous() {
         return is_null(self::getSession()->getUserUri());
     }    

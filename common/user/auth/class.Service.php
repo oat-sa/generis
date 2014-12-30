@@ -110,12 +110,7 @@ class common_user_auth_Service
      */
     public function isASessionOpened()
     {
-    	$returnValue = (bool) false;
-    
-    	$userUri = core_kernel_classes_Session::singleton()->getUserUri();
-    	$returnValue = !is_null($userUri);
-    
-    	return (bool) $returnValue;
+        return !common_session_SessionManager::isAnonymous();
     }
     
     /**
@@ -127,12 +122,7 @@ class common_user_auth_Service
      */
     public function logout()
     {
-        $returnValue = (bool) false;
-
-        core_kernel_classes_Session::singleton()->reset();
-        $returnValue = true;
-
-        return (bool) $returnValue;
+        return \common_session_SessionManager::endSession();
     }
     
     /**
@@ -146,8 +136,7 @@ class common_user_auth_Service
     public function startSession(common_user_User $user)
     {
         $session = new common_session_DefaultSession($user);
-        core_kernel_classes_Session::singleton()->setSession($session);
-		return true;
+        return \common_session_SessionManager::startSession($session);
     }
 
 }

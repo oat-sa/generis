@@ -185,12 +185,7 @@ class core_kernel_users_Service
      */
     public function isASessionOpened()
     {
-        $returnValue = (bool) false;
-
-        $userUri = core_kernel_classes_Session::singleton()->getUserUri();
-        $returnValue = !is_null($userUri);
-
-        return (bool) $returnValue;
+        return !\common_session_SessionManager::isAnonymous();
     }
 
     /**
@@ -621,12 +616,7 @@ class core_kernel_users_Service
      */
     public function logout()
     {
-        $returnValue = (bool) false;
-
-        core_kernel_classes_Session::singleton()->reset();
-        $returnValue = true;
-
-        return (bool) $returnValue;
+        \common_session_SessionManager::endSession();
     }
 
     /**
@@ -640,5 +630,3 @@ class core_kernel_users_Service
     	return $roleClass->getInstances(true);
     }
 }
-
-?>

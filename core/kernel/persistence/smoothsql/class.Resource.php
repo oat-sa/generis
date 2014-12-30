@@ -102,7 +102,7 @@ class core_kernel_persistence_smoothsql_Resource
 			$lang = $options['lg'];
 		}
 		else{
-			$lang = $session->getDataLanguage();
+			$lang = \common_session_SessionManager::getSession()->getDataLanguage();
 			$defaultLg = ' OR l_language = '.$dbWrapper->quote(DEFAULT_LANG).' ';
 		}
 		
@@ -196,7 +196,6 @@ class core_kernel_persistence_smoothsql_Resource
         $object  = $object instanceof core_kernel_classes_Resource ? $object->getUri() : (string) $object;
     	$dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
     	$platform = $dbWrapper->getPlatForm();
-        $session 	= core_kernel_classes_Session::singleton();
         $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
         $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
         $lang = "";
@@ -205,7 +204,7 @@ class core_kernel_persistence_smoothsql_Resource
         	if ($lg!=null){
         		$lang = $lg;
         	} else {
-        		$lang = $session->getDataLanguage();
+        		$lang = \common_session_SessionManager::getSession()->getDataLanguage();
         	}
         }
         
@@ -218,7 +217,7 @@ class core_kernel_persistence_smoothsql_Resource
        		$property->getUri(),
        		$object,
        		$lang,
-       		$session->getUserUri(),
+       		\common_session_SessionManager::getSession()->getUserUri(),
 //        		$mask,
 //        		$mask,
 //        		$mask,
@@ -277,7 +276,7 @@ class core_kernel_persistence_smoothsql_Resource
 
 	       		foreach($properties as $propertyUri => $value){
 	       			$property = new core_kernel_classes_Property($propertyUri);
-	       			$lang 	= ($property->isLgDependent() ? $dbWrapper->quote($session->getDataLanguage()) : $platform->getNullString()  );
+	       			$lang 	= ($property->isLgDependent() ? $dbWrapper->quote(\common_session_SessionManager::getSession()->getDataLanguage()) : $platform->getNullString()  );
 
 					$formatedValues = array();
 					if($value instanceof core_kernel_classes_Resource){
@@ -432,7 +431,7 @@ class core_kernel_persistence_smoothsql_Resource
         	$returnValue = $dbWrapper->exec($query,array(
 	        		$resource->getUri(),
 	        		$property->getUri(),
-	        		$session->getDataLanguage()
+	        		\common_session_SessionManager::getSession()->getDataLanguage()
 	        ));
         }
         else{
@@ -580,7 +579,9 @@ class core_kernel_persistence_smoothsql_Resource
     		$session = core_kernel_classes_Session::singleton();
     		$localNs = common_ext_NamespaceManager::singleton()->getLocalNamespace();
 	       	$modelId = $localNs->getModelId();
-        	$user		= $session->getUserUri()!= null ?  $dbWrapper->quote($session->getUserUri()) : $platform->getNullString();
+        	$user    = common_session_SessionManager::isAnonymous()
+        	   ? $platform->getNullString()
+        	   : $dbWrapper->quote(\common_session_SessionManager::getSession()->getUser()->getIdentifier());
 	       		
     		   		
 	    	$columns = array(
@@ -705,7 +706,7 @@ class core_kernel_persistence_smoothsql_Resource
                 AND predicate IN ('.$predicatesQuery.')
                 AND ('. $platform->isNullCondition('l_language') . 
                     ' OR l_language = '.$dbWrapper->quote(DEFAULT_LANG). 
-                    ' OR l_language = '.$dbWrapper->quote($session->getDataLanguage()).') 
+                    ' OR l_language = '.$dbWrapper->quote(\common_session_SessionManager::getSession()->getDataLanguage()).') 
                 AND modelid IN ('.$modelIds.')';
         $result	= $dbWrapper->query($query);
         
