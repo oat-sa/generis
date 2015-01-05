@@ -103,18 +103,16 @@ abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
     }
     
     public function installExtension($extid){
-        $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extid);
-        
-        if(!$extension->isInstalled()){
-           
+        if (!common_ext_ExtensionsManager::singleton()->isInstalled($extid)) {
+            $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extid);
             $installer = new common_ext_ExtensionInstaller($extension);
             $installer->install();
         }
     }
     
     public function uninstallExtension($extid){
-        $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extid);
-        if($extension->isInstalled()){
+        if (common_ext_ExtensionsManager::singleton()->isInstalled($extid)) {
+            $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extid);
             $installer = new common_ext_ExtensionUninstaller($extension);
             $installer->uninstall();
         }
