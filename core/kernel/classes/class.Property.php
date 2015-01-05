@@ -247,11 +247,11 @@ class core_kernel_classes_Property
         
 		if (is_null($this->range)){
 			$rangeProperty = new core_kernel_classes_Property(RDFS_RANGE,__METHOD__);
-                        $rangeValues = $this->getPropertyValues($rangeProperty);
+            $rangeValues = $this->getPropertyValues($rangeProperty);
 
-                        if(sizeOf($rangeValues)>0){
-                                $returnValue = new core_kernel_classes_Class($rangeValues[0]);
-                        }
+            if(sizeOf($rangeValues)>0){
+                $returnValue = new core_kernel_classes_Class($rangeValues[0]);
+            }
 			$this->range = $returnValue;
 		}
 		$returnValue = $this->range;
