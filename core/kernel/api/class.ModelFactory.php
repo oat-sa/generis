@@ -88,6 +88,36 @@ class core_kernel_api_ModelFactory{
         return true;
     }
     
+    public function disposeModel($data) {
+        // circumvent locked models
+        core_kernel_persistence_smoothsql_SmoothModel::forceUpdatableModelIds(
+            core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds()
+        );
+                
+        $modelDefinition = new EasyRdf_Graph();
+        if(is_file($data)){
+            $modelDefinition->parseFile($data);
+        } else {
+            $modelDefinition->parse($data);
+        }
+        
+        $data = $modelDefinition->serialise(EasyRdf_Format::getFormat('php'));
+        
+        foreach ($data as $subjectUri => $propertiesValues){
+            $subject = new core_kernel_classes_Resource($subjectUri);
+            foreach ($propertiesValues as $predicateUri => $values){
+                $property = new core_kernel_classes_Property($predicateUri);
+                foreach ($values as $k => $v) {
+                    $subject->removePropertyValue($property, $v['value']);
+                }
+            }
+        }
+        
+        core_kernel_persistence_smoothsql_SmoothModel::forceReloadModelIds();
+        
+        return true;
+    }
+    
     /**
      * Adds a statement to the ontology if it does not exist yet
      * 
