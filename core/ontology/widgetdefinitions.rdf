@@ -13,6 +13,13 @@
     <rdfs:range rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetClass"/>
     <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#identifier">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Widget identifier]]></rdfs:label>
+    <rdfs:domain rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetClass"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#rangeConstraint">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
     <rdfs:label xml:lang="en-US"><![CDATA[Widget Range Constraint]]></rdfs:label>
@@ -41,6 +48,31 @@
     <rdfs:label xml:lang="en-US"><![CDATA[Widget Class]]></rdfs:label>
     <rdfs:comment xml:lang="en-US"><![CDATA[The class of all possible widgets]]></rdfs:comment>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetRenderer">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Widget Renderer]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[Renderer of a widget]]></rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#renderedWidget">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Widget]]></rdfs:label>
+    <rdfs:domain rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetRenderer"/>
+    <rdfs:range rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#widget"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#renderMode">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Render Mode]]></rdfs:label>
+    <rdfs:domain rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetRenderer"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#implementation">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Implementation]]></rdfs:label>
+    <rdfs:domain rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetRenderer"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+  </rdf:Description>
+  
+  <!-- Widgets -->
   <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox">
     <rdf:type rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetClass"/>
     <rdfs:label xml:lang="en-US"><![CDATA[Drop down menu]]></rdfs:label>
@@ -79,6 +111,12 @@
     <widget:textHeight><![CDATA[1]]></widget:textHeight>
     <widget:textLength><![CDATA[3]]></widget:textLength>
     <widget:textLength><![CDATA[255]]></widget:textLength>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#Label">
+    <rdf:type rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetClass"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Text Label]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[Content is read only]]></rdfs:comment>
+    <widget:rangeConstraint rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#rangeConstraint-Literal"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#HiddenBox">
     <rdf:type rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetClass"/>

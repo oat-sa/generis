@@ -128,6 +128,12 @@ define('WIDGET_TREEVIEW',						'http://www.tao.lu/datatypes/WidgetDefinitions.rd
 define('WIDGET_LABEL',							'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#Label',true);
 define('WIDGET_CONSTRAINT_TYPE',				'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#rangeConstraintTypes',true);
 
+define('PROPERTY_WIDGET_ID',					'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#identifier',true);
+define('CLASS_WIDGETRENDERER',					'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetRenderer',true);
+define('PROPERTY_WIDGETRENDERER_WIDGET',		'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#renderedWidget',true);
+define('PROPERTY_WIDGETRENDERER_MODE',			'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#renderMode',true);
+define('PROPERTY_WIDGETRENDERER_IMPLEMENTATION','http://www.tao.lu/datatypes/WidgetDefinitions.rdf#implementation',true);
+
 #Rules
 define('RULES_NS', 								'http://www.tao.lu/middleware/Rules.rdf',true);
 
