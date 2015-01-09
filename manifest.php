@@ -30,7 +30,7 @@ return array(
 	'label' => 'Core',
     'description' => 'Core extension, provide the low level framework and an API to manage ontologies',
     'license' => 'GPL-2.0',
-    'version' => '2.7',
+    'version' => '2.7.1',
 	'author' => 'Open Assessment Technologies, CRP Henri Tudor',
 	'requires' 	=> array(),
 	'models' => array(
@@ -52,6 +52,7 @@ return array(
 				//array('type' => 'CheckFileSystemComponent', 'value' => array('id' => 'fs_generis_data', 'location' =>  'generis/data', 'rights' => 'rw'))
         )
 	),
+	'update' => 'oat\\generis\\scripts\\update\\Updater',
 	'optimizableClasses' => array(
 		'http://www.tao.lu/Ontologies/generis.rdf#User',
 		'http://www.tao.lu/Ontologies/generis.rdf#ClassRole'
