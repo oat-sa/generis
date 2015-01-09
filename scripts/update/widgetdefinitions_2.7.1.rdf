@@ -36,5 +36,16 @@
     <rdfs:comment xml:lang="en-US">Content is read only</rdfs:comment>
     <ns0:rangeConstraint rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#rangeConstraint-Literal"/>
   </ns0:WidgetClass>
+  
+  <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#AsyncFile">
+    <ns0:identifier><![CDATA[AsyncFile]]></ns0:identifier>
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#AsyncFileXhtmlRenderer">
+    <rdf:type rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetRenderer"/>
+    <ns0:renderedWidget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#AsyncFile"/>
+  	<ns0:renderMode><![CDATA[xhtml]]></ns0:renderMode>
+  	<ns0:implementation><![CDATA[tao_helpers_form_elements_xhtml_GenerisAsyncFile]]></ns0:implementation>
+  </rdf:Description>
 
 </rdf:RDF>
