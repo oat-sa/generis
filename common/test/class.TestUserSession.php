@@ -46,7 +46,7 @@ class common_test_TestUserSession implements common_session_StatelessSession
     }
     
     public function getUser() {
-        new core_kernel_users_GenerisUser(LOCAL_NAMESPACE.'virtualTestUser');
+        return new core_kernel_users_GenerisUser(new core_kernel_classes_Resource(LOCAL_NAMESPACE.'virtualTestUser'));
     }
     
     /**
