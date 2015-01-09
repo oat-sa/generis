@@ -223,7 +223,7 @@
     <rdf:type rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetRenderer"/>
     <widget:renderedWidget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#AsyncFile"/>
   	<widget:renderMode><![CDATA[xhtml]]></widget:renderMode>
-  	<widget:implementation><![CDATA[tao_helpers_form_elements_xhtml_GenerisAsyncFile]]></widget:implementation>
+  	<widget:implementation><![CDATA[tao_helpers_form_elements_xhtml_AsyncFile]]></widget:implementation>
   </rdf:Description>
   
   
