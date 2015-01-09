@@ -68,7 +68,7 @@
             "oat\\generis\\model\\" : "core/",
             "oat\\oatbox\\" : "common/oatbox/",
             "oat\\generis\\test\\": "test/",
-            "oat\\generis\\scripts\\": "scripts/",
+            "oat\\generis\\scripts\\": "scripts/"
         }
     },
 
