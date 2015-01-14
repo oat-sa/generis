@@ -113,7 +113,7 @@ class common_test_TestUserSession implements common_session_StatelessSession
      * @see common_session_Session::getInterfaceLanguage()
      */
     public function getInterfaceLanguage() {
-        $lang = $this->uiLanguage;
+        return $this->uiLanguage;
     }
     
     /**
@@ -130,7 +130,7 @@ class common_test_TestUserSession implements common_session_StatelessSession
      * @see common_session_Session::getTimeZone()
      */
     public function getTimeZone() {
-        $lang = $this->timezone;
+        return $this->timezone;
     }
     
     /**
