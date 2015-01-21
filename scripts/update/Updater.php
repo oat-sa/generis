@@ -52,6 +52,20 @@ class Updater extends \common_ext_ExtensionUpdater {
             }
         }
         
+        if ($currentVersion == '2.7.1') {
+        
+            $file = dirname(__FILE__).DIRECTORY_SEPARATOR.'widgetdefinitions_2.7.2.rdf';
+        
+            $api = core_kernel_impl_ApiModelOO::singleton();
+            $success = $api->importXmlRdf('http://www.tao.lu/datatypes/WidgetDefinitions.rdf', $file);
+        
+            if ($success) {
+                $currentVersion = '2.7.2';
+            } else{
+                common_Logger::w('Import failed for '.$file);
+            }
+        }
+        
         
         return $currentVersion;
     }
