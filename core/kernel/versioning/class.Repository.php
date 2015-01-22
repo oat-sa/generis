@@ -413,7 +413,7 @@ class core_kernel_versioning_Repository
         
         $destination = $this->getPath() . $fileName;
         $source = $filePath;
-        if(tao_helpers_File::copy($source, $destination)){
+        if(tao_helpers_File::copy($source, $destination, true, false)){
         	
             if ($fileInfo->isDir()) {
                 $returnValue = $this->createFile('', $fileName);
