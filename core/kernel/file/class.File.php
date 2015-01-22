@@ -47,13 +47,7 @@ class core_kernel_file_File
      */
     protected static function getFileClass()
     {
-        $returnValue = null;
-
-        
-        $returnValue = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
-        
-
-        return $returnValue;
+        return new core_kernel_classes_Class(CLASS_GENERIS_FILE);
     }
 
     /**
@@ -246,5 +240,3 @@ class core_kernel_file_File
     }
 
 }
-
-?>
