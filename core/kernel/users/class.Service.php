@@ -616,7 +616,7 @@ class core_kernel_users_Service
      */
     public function logout()
     {
-        \common_session_SessionManager::endSession();
+        return \common_session_SessionManager::endSession();
     }
 
     /**

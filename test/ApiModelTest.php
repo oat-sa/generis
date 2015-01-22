@@ -46,7 +46,8 @@ class ApiModelTest extends GenerisPhpUnitTestRunner {
 		$expectedResult = 	array( 	
 			WIDGET_CONSTRAINT_TYPE,
 			CLASS_WIDGET,
-			RDFS_RESOURCE
+			RDFS_RESOURCE,
+		    CLASS_WIDGETRENDERER
 		);
 		
 		$pattern = "/^".preg_quote($localModel, '/')."/";
