@@ -146,4 +146,4 @@ interface core_kernel_api_ApiModel
      */
     public function getObject($subject, $predicate);
 
-} /* end of interface core_kernel_api_ApiModel */
+}
