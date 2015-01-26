@@ -28,7 +28,7 @@ namespace oat\generis\model\data;
  * @package generis
  
  */
-interface RdfDriver
+interface RdfInterface
 {
     /**
      * Adds a triple to the ontology
