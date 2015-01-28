@@ -532,22 +532,32 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	    $this->assertTrue($prop->isProperty());
 	    $prop->delete();
 	    
-	    $class = $this->createTestResource();
-	    $this->assertFalse($prop->isProperty());
+	    $instance = $this->createTestResource();
+	    $this->assertFalse($instance->isProperty());
+	    
+	    
+	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+	    $this->assertFalse($class->isProperty());
 	    $prop->delete();
+	    $instance->delete();
 	    
 	}
 	
 	public function testIsClass()
 	{
 	    $prop = $this->createTestProperty();
-	    $this->assertTrue($prop->isClass());
-	    $prop->delete();
-	     
-	    $class = $this->createTestResource();
 	    $this->assertFalse($prop->isClass());
 	    $prop->delete();
 	     
+	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+	    $this->assertTrue($class->isClass());
+	    
+
+	    $instance = $this->createTestResource();
+	    $this->assertFalse($instance->isClass());
+	    
+	    $prop->delete();
+	    $instance->delete();
 	}
 	
 	public function testDuplicate()
