@@ -17,25 +17,25 @@
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA
  *
  */
+namespace oat\generis\model\kernel\persistence\file;
 
 use oat\generis\model\data\RdfInterface;
-
 /**
- * Implementation of the RDF interface for the smooth sql driver
+ * Implementation of the RDF interface for the file driver
  * 
  * @author joel bout <joel@taotesting.com>
  * @package generis
  */
-class core_kernel_persistence_smoothsql_SmoothRdf
+class FileRdf
     implements RdfInterface
 {
     /**
-     * @var common_persistence_SqlPersistence
+     * @var string
      */
-    private $persistence;
+    private $file;
     
-    public function __construct(common_persistence_SqlPersistence $persistence) {
-        $this->persistence = $persistence;
+    public function __construct($file) {
+        $this->file = $file;
     }
     
     /**
@@ -51,8 +51,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf
      * @see \oat\generis\model\data\RdfInterface::add()
      */
     public function add(\core_kernel_classes_Triple $triple) {
-        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language) VALUES ( ? , ? , ? , ? , ? );";
-        return $this->persistence->exec($query, array($triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg));
+        throw new \common_Exception('Not implemented');
     }
     
     /**
@@ -60,8 +59,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf
      * @see \oat\generis\model\data\RdfInterface::remove()
      */
     public function remove(\core_kernel_classes_Triple $triple) {
-        $query = "DELETE FROM statements WHERE subject = ? AND predicate = ? AND object = ? AND l_language = ?;";
-        return $this->persistence->exec($query, array($triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg));
+        throw new \common_Exception('Not implemented');
     }
     
     /**
@@ -73,6 +71,6 @@ class core_kernel_persistence_smoothsql_SmoothRdf
     }
     
     public function getIterator() {
-        return new core_kernel_persistence_smoothsql_SmoothIterator($this->persistence);
+        return new FileIterator($this->file);
     }
 }

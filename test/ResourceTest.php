@@ -1,5 +1,5 @@
 <?php
-/**  
+/*  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -536,6 +536,18 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	    $this->assertFalse($prop->isProperty());
 	    $prop->delete();
 	    
+	}
+	
+	public function testIsClass()
+	{
+	    $prop = $this->createTestProperty();
+	    $this->assertTrue($prop->isClass());
+	    $prop->delete();
+	     
+	    $class = $this->createTestResource();
+	    $this->assertFalse($prop->isClass());
+	    $prop->delete();
+	     
 	}
 	
 	public function testDuplicate()
