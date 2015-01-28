@@ -20,7 +20,8 @@
  */
 
 /**
- * Short description of class common_ext_ExtensionInstaller
+ * Generis installer of extensions
+ * Can be extended to add advanced features
  *
  * @access public
  * @author lionel.lecaque@tudor.lu
@@ -152,7 +153,6 @@ class common_ext_ExtensionInstaller
 	 */
 	protected function installOntology()
 	{
-		
 		// insert model
 		$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
 		foreach ($this->extension->getManifest()->getInstallModelFiles() as $rdfpath) {
@@ -173,25 +173,6 @@ class common_ext_ExtensionInstaller
 					    common_Logger::d('Inserting model '.$rdfpath.' for '.$this->extension->getId() . ' in LOCAL NAMESPACE', 'INSTALL');
 					    $modelCreator->insertLocalModelFile($rdfpath);
 					}
-					foreach ($this->getTranslatedModelFiles($rdfpath) as $translation) {
-
-						$translationFileReader = new tao_helpers_translation_POFileReader($translation);
-						$translationFileReader->read();
-						$translationFile = $translationFileReader->getTranslationFile();
-						/** @var  tao_helpers_translation_POTranslationUnit $tu */
-						foreach ($translationFile->getTranslationUnits() as $tu) {
-						    $annotations = $tu->getAnnotations();
-							$about = isset($annotations['po-translator-comments']) ? $annotations['po-translator-comments'] : null;
-							if ($about && strpos($about, $ns) === 0 && in_array($tu->getContext(),
-									array(RDFS_LABEL, RDFS_COMMENT))
-							) {
-								$subject = new core_kernel_classes_Resource($about);
-								$property = new core_kernel_classes_Property($tu->getContext());
-								$subject->setPropertyValueByLg($property,
-									$tu->getTarget() ? $tu->getTarget() : $tu->getSource(), $tu->getTargetLanguage());
-							}
-						}
-					}
 				}
 				else{
 					throw new common_ext_InstallationException("Unable to load ontology in '${rdfpath}' because the file is not readable.");
@@ -201,31 +182,6 @@ class common_ext_ExtensionInstaller
 				throw new common_ext_InstallationException("Unable to load ontology in '${rdfpath}' because the file does not exist.");
 			}
 		}
-		
-	}
-
-	/**
-	 * returns the paths of the translations of a specified ontology file
-	 *
-	 * @access private
-	 * @author Joel Bout, <joel@taotesting.com>
-	 * @return array absolute paths to the translated rdf files
-	 */
-	private function getTranslatedModelFiles($rdfpath) {
-		$returnValue = array();
-		$localesPath = $this->extension->getDir() . 'locales' . DIRECTORY_SEPARATOR;
-		if (file_exists($localesPath)) {
-			$fileName = basename($rdfpath) .'.po';
-			foreach (new DirectoryIterator($localesPath) as $fileinfo) {
-				if (!$fileinfo->isDot() && $fileinfo->isDir() && $fileinfo->getFilename() != '.svn' && $fileinfo->getFilename() != 'en-US') {
-					$candidate = $fileinfo->getPathname() . DIRECTORY_SEPARATOR . $fileName;
-					if (file_exists($candidate)) {
-						$returnValue[] = $candidate;
-					} 
-				} 
-			}
-		}
-		return $returnValue;
 	}
 
 	/**
@@ -388,9 +344,7 @@ class common_ext_ExtensionInstaller
 	 */
 	public function setLocalData($value)
 	{
-		
 		$this->localData = $value;
-		
 	}
 
 	/**
@@ -402,13 +356,7 @@ class common_ext_ExtensionInstaller
 	 */
 	public function getLocalData()
 	{
-		$returnValue = (bool) false;
-
-		
-		$returnValue = $this->localData;
-		
-
-		return (bool) $returnValue;
+		return $this->localData;
 	}
 
 	/**
@@ -420,9 +368,7 @@ class common_ext_ExtensionInstaller
 	 */
 	public function extendedInstall()
 	{
-		
 		return;
-		
 	}
 
 }
