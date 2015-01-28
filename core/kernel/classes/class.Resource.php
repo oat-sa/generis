@@ -214,8 +214,6 @@ class core_kernel_classes_Resource
     public function isClass()
     {
         $returnValue = (bool) false;
-
-        
         if (count($this->getPropertyValues(new core_kernel_classes_Property(RDFS_SUBCLASSOF))) > 0) {
         	$returnValue = true;
         } else {
@@ -226,9 +224,6 @@ class core_kernel_classes_Resource
 	        	}
 	        }
         }
-
-        
-
         return (bool) $returnValue;
     }
 
@@ -244,18 +239,12 @@ class core_kernel_classes_Resource
     public function isProperty()
     {
         $returnValue = (bool) false;
-
-        
-        
         foreach($this->getTypes() as $type){
         	if($type->getUri() == RDF_PROPERTY){
         		$returnValue = true;
         		break;
         	}
         }
-        
-        
-
         return (bool) $returnValue;
     }
 

@@ -58,26 +58,8 @@ class core_kernel_persistence_smoothsql_Property
      */
     public function getSubProperties( core_kernel_classes_Resource $resource, $recursive = false)
     {
-        $returnValue = array();
+        throw new core_kernel_persistence_ProhibitedFunctionException("Deprecated function");
 
-        
-        
-    	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlQuery = "SELECT subject FROM statements WHERE predicate = '" . RDF_SUBPROPERTYOF . "' AND object = '".$resource->getUri()."'";
-		$returnValue = array();
-		$sqlResult = $dbWrapper->query($sqlQuery);
-		while ($row = $sqlResult->fetch()){
-			$property = new core_kernel_classes_Property($row['subject']);
-			$returnValue[$property->getUri()] = $property;
-
-			if($recursive == true) {
-				$returnValue = array_merge($returnValue,$property->getSubProperties(true));
-			}
-		}
-        
-        
-
-        return (array) $returnValue;
     }
 
     /**
