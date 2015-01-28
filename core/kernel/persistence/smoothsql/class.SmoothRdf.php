@@ -71,4 +71,8 @@ class core_kernel_persistence_smoothsql_SmoothRdf
     public function search($predicate, $object) {
         throw new \common_Exception('Not implemented');
     }
+    
+    public function getIterator() {
+        return new core_kernel_persistence_smoothsql_SmoothIterator($this->persistence);
+    }
 }
