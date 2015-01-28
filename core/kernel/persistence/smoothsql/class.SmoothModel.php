@@ -37,6 +37,14 @@ class core_kernel_persistence_smoothsql_SmoothModel
      */
     private $persistanceId;
     
+    /**
+     * Persistence to use for the smoothmodel
+     * 
+     * @var common_persistence_SqlPersistence
+     */
+    private $persistance;
+    
+    
     private static $readableSubModels = null;
     
     private static $updatableSubModels = null;
@@ -52,6 +60,7 @@ class core_kernel_persistence_smoothsql_SmoothModel
             throw new common_exception_MissingParameter('persistence', __CLASS__);
         }
         $this->persistanceId = $configuration['persistence']; 
+        $this->persistance = common_persistence_SqlPersistence::getPersistence($configuration['persistence']);
     }
     
     /**
@@ -69,7 +78,7 @@ class core_kernel_persistence_smoothsql_SmoothModel
      * @see \oat\generis\model\data\Model::getRdfInterface()
      */
     public function getRdfInterface() {
-        throw new \common_Exception('Not implemented');
+        return new core_kernel_persistence_smoothsql_SmoothRdf($this->persistance);
     }
     
     /**
