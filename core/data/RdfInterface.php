@@ -20,6 +20,8 @@
  */               
 namespace oat\generis\model\data;
 
+use core_kernel_classes_Triple;
+
 /**
  * Rdf interface to access the ontology
  * This is an experimental interface that has not been implemented yet
@@ -31,16 +33,7 @@ namespace oat\generis\model\data;
 interface RdfInterface
 {
     /**
-     * Adds a triple to the ontology
-     * 
-     * @param string $subject
-     * @param string $predicate
-     * @param string $value$object
-     */
-    public function set($subject, $predicate, $object);
-    
-    /**
-     * Returns an array of the objects of all triples with the given subject, predicate
+     * Returns an array of the triples with the given subject, predicate
      * 
      * @param string $subject
      * @param string $predicate
@@ -49,16 +42,21 @@ interface RdfInterface
     public function get($subject, $predicate);
     
     /**
-     * Removes the triple with the given subject, predicate, object
+     * Adds a triple to the model
      * 
-     * @param string $subject
-     * @param string $predicate
-     * @param string $object
+     * @param \core_kernel_classes_Triple $triple
      */
-    public function remove($subject, $predicate, $object);
+    public function add(\core_kernel_classes_Triple $triple);
     
     /**
-     * Returns an array of the subjects of all triples with the given predicate, object
+     * Removes the triple
+     * 
+     * @param \core_kernel_classes_Triple $triple
+     */
+    public function remove(\core_kernel_classes_Triple $triple);
+    
+    /**
+     * Returns an array of the triples with the given predicate, object
      * 
      * @param string $predicate
      * @param string $object

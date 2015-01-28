@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) 2014 Open Assessment Technologies SA
+ * Copyright (c) (original work) 2015 Open Assessment Technologies SA
  *
  */
 
@@ -37,6 +37,14 @@ class core_kernel_persistence_smoothsql_SmoothModel
      */
     private $persistanceId;
     
+    /**
+     * Persistence to use for the smoothmodel
+     * 
+     * @var common_persistence_SqlPersistence
+     */
+    private $persistance;
+    
+    
     private static $readableSubModels = null;
     
     private static $updatableSubModels = null;
@@ -52,6 +60,7 @@ class core_kernel_persistence_smoothsql_SmoothModel
             throw new common_exception_MissingParameter('persistence', __CLASS__);
         }
         $this->persistanceId = $configuration['persistence']; 
+        $this->persistance = common_persistence_SqlPersistence::getPersistence($configuration['persistence']);
     }
     
     /**
@@ -69,7 +78,7 @@ class core_kernel_persistence_smoothsql_SmoothModel
      * @see \oat\generis\model\data\Model::getRdfInterface()
      */
     public function getRdfInterface() {
-        throw new \common_Exception('Not implemented');
+        return new core_kernel_persistence_smoothsql_SmoothRdf($this->persistance);
     }
     
     /**
