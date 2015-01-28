@@ -538,14 +538,14 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	    
 	}
 	
-	public function testIsProperty()
+	public function testIsClass()
 	{
 	    $prop = $this->createTestProperty();
-	    $this->assertTrue($prop->isProperty());
+	    $this->assertTrue($prop->isClass());
 	    $prop->delete();
 	     
 	    $class = $this->createTestResource();
-	    $this->assertFalse($prop->isProperty());
+	    $this->assertFalse($prop->isClass());
 	    $prop->delete();
 	     
 	}
