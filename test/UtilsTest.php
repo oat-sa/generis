@@ -22,6 +22,7 @@
 error_reporting(E_ALL);
 
 use oat\generis\test\GenerisPhpUnitTestRunner;
+use Prophecy\Prophet;
 
 /**
 
@@ -71,7 +72,10 @@ class generis_test_UtilsTest extends GenerisPhpUnitTestRunner {
         $value = eval("return ".common_Utils::toPHPVariableString($all).";");
         $this->assertEquals($all,$value);
         
-        $serialized = serialize(new Exception("te\0st \\ "));
+        $prophet = new Prophet();
+        $e = $prophet->prophesize('generis_test_UtilsTest');
+
+        $serialized = serialize($e->reveal());
         $value = eval("return ".common_Utils::toPHPVariableString($serialized).";");
         $this->assertEquals($serialized,$value);
 	}
