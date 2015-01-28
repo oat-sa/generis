@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -16,10 +16,20 @@
  * 
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2015 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+namespace oat\generis\test;
 
 use oat\generis\test\GenerisPhpUnitTestRunner;
+use \core_kernel_classes_Class;
+use \core_kernel_classes_Resource;
+use \core_kernel_classes_Property;
+use \core_kernel_impl_ApiModelOO;
+use \common_Utils;
+use \core_kernel_classes_Literal;
+use \common_Collection;
+use \core_kernel_classes_Triple;
+use \Exception;
 
 class ResourceTest extends GenerisPhpUnitTestRunner{
 
@@ -149,7 +159,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 		try{
 			$resource->getPropertiesValues($property1);
 			$this->assertTrue(false);
-		}catch(Exception $e){
+		}catch(\Exception $e){
 			$this->assertTrue(true);
 		}
 		
@@ -515,7 +525,33 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 		$level1a->delete();
 	}
 	
-	public function testDuplicate(){
+	
+	public function testIsProperty()
+	{
+	    $prop = $this->createTestProperty();
+	    $this->assertTrue($prop->isProperty());
+	    $prop->delete();
+	    
+	    $class = $this->createTestResource();
+	    $this->assertFalse($prop->isProperty());
+	    $prop->delete();
+	    
+	}
+	
+	public function testIsProperty()
+	{
+	    $prop = $this->createTestProperty();
+	    $this->assertTrue($prop->isProperty());
+	    $prop->delete();
+	     
+	    $class = $this->createTestResource();
+	    $this->assertFalse($prop->isProperty());
+	    $prop->delete();
+	     
+	}
+	
+	public function testDuplicate()
+	{
         $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
         $instance = $class->createInstance('test' , 'test');
         $prop = $this->createTestProperty();

@@ -19,7 +19,7 @@
  *               2012-2014 (update and modification) 2012-2014 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
-namespace oat\generis\test\model\smoothsql;
+namespace oat\generis\test\model\persistence\smoothsql;
 
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use \core_kernel_classes_Resource;
