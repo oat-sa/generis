@@ -726,36 +726,8 @@ class core_kernel_classes_Resource
     public function delete($deleteReference = false)
     {
         $returnValue = (bool) false;
-
-        
-        
         $returnValue = $this->getImplementation()->delete($this, $deleteReference);
-        
-        
-
         return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method getPrivileges
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return array
-     */
-    public function getPrivileges()
-    {
-        $returnValue = array();
-
-        
-        $returnValue = array(
-       						'u' => array('r' => true, 'w' => true),
-        		 			'g' => array('r' => true, 'w' => true),
-        		 			'a' => array('r' => true, 'w' => true)
-        );
-        
-
-        return (array) $returnValue;
     }
 
 
@@ -872,17 +844,12 @@ class core_kernel_classes_Resource
     public function exists()
     {
         $returnValue = (bool) false;
-
-        
         try{
         	$returnValue = count($this->getTypes())?true:false;
         }
         catch(Exception $e){
         	;//return false by default
         }
-               
-        
-
         return (bool) $returnValue;
     }
 
@@ -896,11 +863,7 @@ class core_kernel_classes_Resource
     public function getUri()
     {
         $returnValue = (string) '';
-
-        
         $returnValue = $this->uriResource;
-        
-
         return (string) $returnValue;
     }
 
@@ -915,14 +878,7 @@ class core_kernel_classes_Resource
     public function equals( core_kernel_classes_Resource $resource)
     {
         $returnValue = (bool) false;
-
-        
-        if (is_null($resource)) {
-        	throw new common_exception_Error('Null parameter in equals call on ressource '.$this->getUri());
-        }
         $returnValue = $this->getUri() == $resource->getUri();
-        
-
         return (bool) $returnValue;
     }
 

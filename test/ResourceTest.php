@@ -374,6 +374,23 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 		$seeAlso->delete();
 	}
 
+	public function testRemovePropertyValue(){
+	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+	    $instance = $class->createInstance('test' , 'test');
+	    $seeAlso = $class->createProperty('seeAlso','multilingue');
+	    $instance->setPropertyValue($seeAlso,'foo');
+	    $instance->setPropertyValue($seeAlso,'bar');
+	    $this->assertTrue(in_array('foo', $instance->getPropertyValues($seeAlso)));
+	    $this->assertTrue(in_array('bar', $instance->getPropertyValues($seeAlso)));
+
+	    $instance->removePropertyValue($seeAlso,'foo');
+	    $this->assertEquals(array('bar'), $instance->getPropertyValues($seeAlso));
+	     
+	    
+	    $instance->delete();
+	    $seeAlso->delete();
+	}
+	
 	public function testRemovePropertyValueByLg()
 	{
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
@@ -452,6 +469,27 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 		$instance2->delete();
 	}
 
+	public function testEditPropertyValues(){
+	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+	    $instance = $class->createInstance('test' , 'test');
+	    $seeAlso = $class->createProperty('seeAlso','multilingue',true);
+	    
+	    $this->assertEquals(array(), $instance->getPropertyValues($seeAlso));
+	    $instance->editPropertyValues($seeAlso,'foo');
+	    $this->assertEquals(array('foo'), $instance->getPropertyValues($seeAlso));
+	    $instance->editPropertyValues($seeAlso,'bar');
+	    $this->assertEquals(array('bar'), $instance->getPropertyValues($seeAlso));
+	    
+	    $instance->editPropertyValues($seeAlso,array('foo2','bar'));
+	    $val = $instance->getPropertyValues($seeAlso);
+    
+	    $this->assertTrue(in_array('bar',$val));
+	    $this->assertTrue(in_array('foo2',$val));
+	     
+	    $instance->delete();
+	    $seeAlso->delete();
+	}
+	
 	public function testEditPropertyValueByLg()
 	{
 		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
