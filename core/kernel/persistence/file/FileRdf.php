@@ -17,7 +17,7 @@
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA
  *
  */
-namespace oat\generis\model\persistence\file;
+namespace oat\generis\model\kernel\persistence\file;
 
 use oat\generis\model\data\RdfInterface;
 /**

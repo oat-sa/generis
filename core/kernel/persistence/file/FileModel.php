@@ -20,8 +20,10 @@
 namespace oat\generis\model\kernel\persistence\file;
 
 use oat\generis\model\data\Model;
-use common_ext_NamespaceManager;
-use common_exception_Error;
+use \common_ext_NamespaceManager;
+use \common_exception_MissingParameter;
+use \common_exception_Error;
+use oat\generis\model\kernel\persistence\file\FileRdf;
 
 /**
  * transitory model for the smooth sql implementation
@@ -67,7 +69,7 @@ class FileModel
      * @see \oat\generis\model\data\Model::getRdfInterface()
      */
     public function getRdfInterface() {
-        return new core_kernel_persistence_smoothsql_SmoothRdf($this->persistance);
+        return new FileRdf($this->file);
     }
     
     /**
@@ -75,7 +77,7 @@ class FileModel
      * @see \oat\generis\model\data\Model::getRdfsInterface()
      */
     public function getRdfsInterface() {
-        throw new common_exception_NoImplementation('Rdfs interface not implemented for '.__CLASS__);
+        throw new \common_exception_NoImplementation('Rdfs interface not implemented for '.__CLASS__);
     }
     
     // helper
