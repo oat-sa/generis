@@ -49,30 +49,6 @@ class FileIterator implements IteratorAggregate {
     }
     
     /**
-     * 
-     * @param string $file
-     * @throws common_exception_Error
-     */
-    public static function getModelIdFromXml($file) {
-        $xml = simplexml_load_file($file);
-        $attrs = $xml->attributes('xml', true);
-        if(!isset($attrs['base']) || empty($attrs['base'])){
-            throw new common_exception_Error('The namespace of '.$file.' has to be defined with the "xml:base" attribute of the ROOT node');
-        }
-        $namespaceUri = (string) $attrs['base'];
-        $modelId = null;
-        foreach (common_ext_NamespaceManager::singleton()->getAllNamespaces() as $namespace) {
-            if ($namespace->getUri() == $namespaceUri) {
-                $modelId = $namespace->getModelId();
-            }
-        }
-        if (is_null($modelId)) {
-            throw new common_exception_Error('The model corresponding to the namespace '.$namespaceUri.' is unknown');
-        }
-        return $modelId;
-    }
-    
-    /**
      * load triples from rdf file
      * 
      * @param string $modelId
