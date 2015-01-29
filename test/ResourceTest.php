@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -30,6 +30,7 @@ use \core_kernel_classes_Literal;
 use \common_Collection;
 use \core_kernel_classes_Triple;
 use \Exception;
+use Prophecy\Prophet;
 
 class ResourceTest extends GenerisPhpUnitTestRunner{
 
@@ -73,7 +74,10 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	 * TEST CASE FUNCTIONS
 	 * 
 	 */
-	
+	/**
+	 * 
+	 * @author Lionel Lecaque, lionel@taotesting.com
+	 */
 	public function testGetPropertyValuesCollection()
 	{
 		$session = GenerisPhpUnitTestRunner::getTestSession();
@@ -182,7 +186,46 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 		$property3->delete();
 		$resource->delete();
 	}
+	/**
+	 * 
+	 * @author Lionel Lecaque, lionel@taotesting.com
+	 */
+	public function testGetUniquePropertyValue(){
+	    $resource = $this->createTestResource();
+	    $property1 = $this->createTestProperty();
+	    try {
+            $resource->getUniquePropertyValue($property1);
+            $resource = $this->createTestResource();
+            $property1 = $this->createTestProperty();
+            $this->fail('core_kernel_classes_EmptyProperty should have been thrown');
+	    }
+	    catch (\Exception $e ) {
+	        $this->assertInstanceOf('core_kernel_classes_EmptyProperty', $e);
+	        $property1->delete();        
+	        $resource->delete();
+	    }
+	    
+	    $resource = $this->createTestResource();
+	    $property1 = $this->createTestProperty();
+	    $resource->setPropertyValue($property1, 'prop1');
+	    $resource->setPropertyValue($property1, 'prop2');
+	    try {
+	        $resource->getUniquePropertyValue($property1);
+	        $this->fail('core_kernel_classes_MultiplePropertyValuesException should have been thrown');
+	    }
+	    catch (\Exception $e ) {
+	        $this->assertInstanceOf('core_kernel_classes_MultiplePropertyValuesException', $e);
+	        $property1->delete();
+	        $resource->delete(true);
+	    }
+
+	}
 	
+	
+	/**
+	 * 
+	 * @author Lionel Lecaque, lionel@taotesting.com
+	 */
 	public function testGetRdfTriples()
 	{
 		$collectionTriple = $this->object->getRdfTriples();
@@ -445,15 +488,14 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 		$one = $instance->getOnePropertyValue($seeAlso);
 		$this->assertEquals($one->literal,'plop');
 
-		// We now try with multiple property values. Which
-		// We first want to get the first inserted value for
-		// the property.
-		// !!! DOES NOT WORK, THE RETURN OF SELECT DOES NOT RESPECT THE INSERT' ORDER
-		/*$instance->setPropertyValue($seeAlso,'plip');
-		$one = $instance->getOnePropertyValue($seeAlso);
-		$this->assertEquals($one->literal, 'plop');
-		$one = $instance->getOnePropertyValue($seeAlso, true);
-		$this->assertEquals($one->literal, 'plip');*/
+        try {		
+		  $one = $instance->getOnePropertyValue($seeAlso, true);
+		  $this->fail('core_kernel_persistence_Exception should have been thrown');
+        }
+        catch(\Exception $e){
+            $this->assertInstanceOf('core_kernel_persistence_Exception', $e);
+            $this->assertEquals("parameter 'last' for getOnePropertyValue no longer supported",$e->getMessage());
+        }
 
 		// We now go multilingual.
 		$session->setDataLanguage('FR');
@@ -463,7 +505,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 		// Back to default language.
 		$session->setDataLanguage(DEFAULT_LANG);
 		$seeAlso->delete();
-		$instance->delete();
+		$instance->delete(true);
 	}
 
 	public function testGetTypes(){
@@ -474,12 +516,51 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 		$this->assertTrue(count($typeUri) == 1);
 		$instance->delete();
 	}
+	
+	public function testHasType(){
+	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+	    $file = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
+	     
+	    $instance = $class->createInstance('test' , 'test');
+	    $this->assertTrue($instance->hasType($class));
+	    $this->assertFalse($instance->hasType($file));
+	     
+	    $instance->delete();
+	}
+	
+	
+	public function testSetType(){
+	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+	    $file = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
+	
+	    $instance = $class->createInstance('test' , 'test');
+	    $this->assertTrue($instance->hasType($class));
+	    $this->assertFalse($instance->hasType($file));
+	    $instance->setType($file);
+	    $this->assertTrue($instance->hasType($class));
+	    $this->assertTrue($instance->hasType($file));
+
+	    $instance->delete();
+	}
+	
+	public function testRemoveType(){
+	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+	    $instance = $class->createInstance('test' , 'test');
+	    
+	    $file = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
+	    $instance->setType($file);
+
+	    $instance->removeType($class);
+	    $this->assertTrue($instance->hasType($file));
+	    $this->assertFalse($instance->hasType($class));
+	    
+	    $instance->delete();
+	}
 
 	public function testGetComment()
 	{
 		$inst = new core_kernel_classes_Resource(CLASS_GENERIS_RESOURCE);
 		$this->assertTrue($inst->getLabel()== 'generis_Ressource');
-	  
 		$this->assertTrue($inst->getComment() == 'generis_Ressource');
 	}
 	
@@ -543,21 +624,56 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	    
 	}
 	
+	/**
+	 * @expectedException        common_exception_Error
+	 * @expectedExceptionMessage could not create resource from NULL debug:
+	 * @author Lionel Lecaque, lionel@taotesting.com
+	 */
+	public function testConstructNull(){
+	    $new = new core_kernel_classes_Resource(null);
+	}
+	
+	/**
+	 * @expectedException        common_exception_Error
+	 * @expectedExceptionMessage cannot construct the resource because the uri cannot be empty, debug:
+	 * @author Lionel Lecaque, lionel@taotesting.com
+	 */
+	public function testConstructEmtpy(){
+	    $new = new core_kernel_classes_Resource('');
+	}
+	
 	public function testIsClass()
 	{
 	    $prop = $this->createTestProperty();
 	    $this->assertFalse($prop->isClass());
 	    $prop->delete();
 	     
-	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+	    $class = new core_kernel_classes_Class(RDFS_CLASS,__METHOD__);
+	    $sublClass = $class->createInstance('subclass','subclass');
 	    $this->assertTrue($class->isClass());
-	    
+	    $this->assertTrue($sublClass->isClass());
 
 	    $instance = $this->createTestResource();
 	    $this->assertFalse($instance->isClass());
 	    
 	    $prop->delete();
 	    $instance->delete();
+	    $sublClass->delete();
+	}
+	/**
+	 * @expectedException        common_exception_DeprecatedApiMethod
+	 * @expectedExceptionMessage Use duplicated instead, because clone resource could not share same uri that original
+	 * @author Lionel Lecaque, lionel@taotesting.com
+	 */
+	public function testClone()
+	{
+	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+	    $instance = $class->createInstance('test' , 'test');
+	    $clone = clone $instance;
+	       
+	    $instance->delete();
+	    $clone->delete();
+	    
 	}
 	
 	public function testDuplicate()
@@ -574,6 +690,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
         $result = $instance->getPropertiesValues(array($prop));
         $this->assertTrue(in_array('plop', $result[$prop->getUri()]));
         
+
         
         $duplicate->delete();
         $instance->delete();

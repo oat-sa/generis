@@ -188,19 +188,10 @@ class core_kernel_classes_Resource
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return core_kernel_classes_Resource
      */
     public function __clone()
     {
-        $returnValue = null;
-
-        
-        
-        $returnValue = $this->duplicate();
-        
-        
-
-        return $returnValue;
+        throw new common_exception_DeprecatedApiMethod('Use duplicated instead, because clone resource could not share same uri that original');
     }
 
     /**
@@ -402,8 +393,6 @@ class core_kernel_classes_Resource
     {
         $returnValue = null;
 
-        
- 		
         $collection = $this->getPropertyValuesCollection($property);
 
         if($collection->isEmpty()){
@@ -413,14 +402,8 @@ class core_kernel_classes_Resource
             $returnValue= $collection->get(0);
         }
         else {
-        	$propLabel = $property->getLabel();
-        	$label = $this->getLabel();
-            throw new common_Exception("Property {$propLabel} ({$property->getUri()}) of resource {$label} ({$this->getUri()}) 
-            							has more than one value do not use getUniquePropertyValue but use getPropertyValue instead");
+            throw new core_kernel_classes_MultiplePropertyValuesException($this,$property);
         }
-        	
-        
-
         return $returnValue;
     }
 
