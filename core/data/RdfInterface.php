@@ -30,7 +30,7 @@ use core_kernel_classes_Triple;
  * @package generis
  
  */
-interface RdfInterface
+interface RdfInterface extends \IteratorAggregate
 {
     /**
      * Returns an array of the triples with the given subject, predicate

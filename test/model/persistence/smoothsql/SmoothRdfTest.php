@@ -17,7 +17,7 @@
  * Copyright (c) (original work) 2015 Open Assessment Technologies SA
  * 
  */
-namespace oat\generis\test\model\smoothsql;
+namespace oat\generis\test\model\persistence\smoothsql;
 
 use \core_kernel_persistence_smoothsql_SmoothRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
