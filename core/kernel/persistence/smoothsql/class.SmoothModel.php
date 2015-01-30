@@ -156,4 +156,14 @@ class core_kernel_persistence_smoothsql_SmoothModel
         self::$updatableSubModels = null;
         self::$readableSubModels = null;
     }
+    
+    public function applyDiff(helpers_RdfDiff $diff) {
+        $rdf = $this->getRdfInterface();
+        foreach ($diff->getTriplesToRemove() as $triple) {
+            $rdf->remove($triple);
+        }
+        foreach ($diff->getTriplesToAdd() as $triple) {
+            $rdf->add($triple);
+        }
+    }
 }

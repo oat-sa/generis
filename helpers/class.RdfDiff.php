@@ -30,13 +30,22 @@ class helpers_RdfDiff
         }
         return $diff;
     }
-
-    public function __construct()
-    {
-
+    
+    /**
+     * @return Iterator
+     */
+    public function getTriplesToAdd() {
+        return new ArrayIterator($this->toAdd);
     }
-
-    public function add(core_kernel_classes_Triple $triple)
+    
+    /**
+     * @return Iterator
+     */
+    public function getTriplesToRemove() {
+        return new ArrayIterator($this->toRemove);
+    }
+    
+    protected function add(core_kernel_classes_Triple $triple)
     {
         $serial = $this->generateSerial($triple);
         $this->added[$serial] = true;
@@ -47,7 +56,7 @@ class helpers_RdfDiff
         }
     }
 
-    public function remove(core_kernel_classes_Triple $triple)
+    protected function remove(core_kernel_classes_Triple $triple)
     {
         $serial = $this->generateSerial($triple);
         $this->removed[$serial] = true;
@@ -84,16 +93,5 @@ class helpers_RdfDiff
             echo '- '.str_pad($triple->subject, 80).' '.str_pad($triple->predicate, 80).' '.str_pad($triple->object, 80).PHP_EOL;
         }
         
-    }
-
-    public function applyTo(core_kernel_persistence_smoothsql_SmoothModel $smoothModel)
-    {
-        $rdf = $smoothModel->getRdfInterface();
-        foreach ($this->toRemove as $triple) {
-            $rdf->remove($triple);
-        }
-        foreach ($this->toAdd as $triple) {
-            $rdf->add($triple);
-        }
     }
 }
