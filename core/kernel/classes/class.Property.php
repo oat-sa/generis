@@ -112,65 +112,7 @@ class core_kernel_classes_Property
         
     }
 
-    /**
-     * Short description of method feed
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @return void
-     */
-    public function feed()
-    {
-        
-		
-    	parent::feed();
-		$this->getWidget();
-		$this->getRange();
-		$this->getDomain();
-		$this->isLgDependent();
-		
-        
-    }
 
-    /**
-     * Short description of method getSubProperties
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  boolean recursive
-     * @return array
-     */
-    public function getSubProperties($recursive = false)
-    {
-        $returnValue = array();
-
-        
-        
-        $returnValue = $this->getImplementation()->getSubProperties($this, $recursive);
-        
-        
-
-        return (array) $returnValue;
-    }
-
-    /**
-     * Short description of method setSubPropertyOf
-     *
-     * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  Property property
-     * @return boolean
-     */
-    public function setSubPropertyOf( core_kernel_classes_Property $property)
-    {
-        $returnValue = (bool) false;
-
-        
-       
-        
-
-        return (bool) $returnValue;
-    }
 
     /**
      * return classes that are described by this property
@@ -182,8 +124,6 @@ class core_kernel_classes_Property
     public function getDomain()
     {
         $returnValue = null;
-
-        
         if (is_null($this->domain)){
         	$this->domain = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
 			$domainValues = $this->getPropertyValues(new core_kernel_classes_Property(RDFS_DOMAIN));
@@ -208,9 +148,7 @@ class core_kernel_classes_Property
     public function setDomain( core_kernel_classes_Class $class)
     {
         $returnValue = (bool) false;
-
-        
-        
+ 
         if(!is_null($class)){
         	foreach($this->getDomain()->getIterator() as $domainClass){
         		if ($class->equals($domainClass)) {
@@ -226,9 +164,6 @@ class core_kernel_classes_Property
         		$returnValue = true;
         	}
         }
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -242,9 +177,7 @@ class core_kernel_classes_Property
     public function getRange()
     {
         $returnValue = null;
-
-        
-        
+   
 		if (is_null($this->range)){
 			$rangeProperty = new core_kernel_classes_Property(RDFS_RANGE,__METHOD__);
             $rangeValues = $this->getPropertyValues($rangeProperty);
@@ -255,9 +188,6 @@ class core_kernel_classes_Property
 			$this->range = $returnValue;
 		}
 		$returnValue = $this->range;
-		
-        
-
         return $returnValue;
     }
 
@@ -271,17 +201,11 @@ class core_kernel_classes_Property
      */
     public function setRange( core_kernel_classes_Class $class)
     {
-        $returnValue = (bool) false;
-
-        
-        
+        $returnValue = (bool) false;  
         $returnValue = $this->getImplementation()->setRange($this, $class);
         if ($returnValue){
         	$this->range = $class;
         }
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -312,9 +236,6 @@ class core_kernel_classes_Property
     public function isLgDependent()
     {
         $returnValue = (bool) false;
-
-                 
-
         if (is_null($this->lgDependent )){
 
             $this->lgDependent  = helpers_PropertyLgCacheHelper::getLgDependencyCache($this->getUri());
@@ -337,9 +258,6 @@ class core_kernel_classes_Property
         }
  
         $returnValue = $this->lgDependent;
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -370,8 +288,6 @@ class core_kernel_classes_Property
     {
         $returnValue = (bool) false;
 
-        
-        
         if(is_null($this->multiple )){
         	$multipleProperty = new core_kernel_classes_Property(PROPERTY_MULTIPLE,__METHOD__);
 			$multiple = $this->getOnePropertyValue($multipleProperty);
@@ -386,9 +302,6 @@ class core_kernel_classes_Property
         }
  
         $returnValue = $this->multiple;
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -420,13 +333,7 @@ class core_kernel_classes_Property
     public function delete($deleteReference = false)
     {
         $returnValue = (bool) false;
-
-        
-        
         $returnValue = $this->getImplementation()->delete($this, $deleteReference);
-        
-        
-
         return (bool) $returnValue;
     }
 

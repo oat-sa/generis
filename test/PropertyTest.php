@@ -54,6 +54,32 @@ class PropertyTest extends GenerisPhpUnitTestRunner{
 		$this->assertEquals($domain->getLabel(),'Property');
 		$this->assertEquals($domain->getComment(),'The class of RDF properties.');
 	}
+	
+	/**
+	 *
+	 * @author Lionel Lecaque, lionel@taotesting.com
+	 */
+	public function testSetDomain(){
+	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+	    $prop = $class->createProperty('test','test');
+	    $domain = $prop->getDomain();
+	    $this->assertEquals(1, $domain->count());
+	    $this->assertEquals($class, $domain->get(0));
+	    $widget = new core_kernel_classes_Class(CLASS_WIDGET,__METHOD__);
+	     
+	    $this->assertTrue($prop->setDomain($widget));
+	    $this->assertEquals(2, $prop->getDomain()->count());
+	    $this->assertGreaterThanOrEqual(0,  $prop->getDomain()->indexOf($widget));
+	    $this->assertGreaterThanOrEqual(0,  $prop->getDomain()->indexOf($class));
+	    
+	    //if domain already set return true
+	    $this->assertTrue($prop->setDomain($class));
+	    $this->assertEquals(2, $prop->getDomain()->count());
+	    $this->assertGreaterThanOrEqual(0,  $prop->getDomain()->indexOf($widget));
+	    $this->assertGreaterThanOrEqual(0,  $prop->getDomain()->indexOf($class));
+	    
+	    $prop->delete(true);
+	}
 	/**
 	 * 
 	 * @author Lionel Lecaque, lionel@taotesting.com
@@ -137,14 +163,6 @@ class PropertyTest extends GenerisPhpUnitTestRunner{
 	    $this->assertTrue($instance->delete());
 	}
 	
-	/**
-	 * @expectedException core_kernel_persistence_ProhibitedFunctionException
-	 * @author Lionel Lecaque, lionel@taotesting.com
-	 */
-	public function testGetSubProperties()
-	{
-	    $sub = $this->object->getSubProperties();
-	}
 	
 	
 

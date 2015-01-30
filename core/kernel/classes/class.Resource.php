@@ -17,7 +17,7 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2015 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
 use oat\generis\model\data\ModelManager;
@@ -280,15 +280,9 @@ class core_kernel_classes_Resource
     public function setLabel($label)
     {
         $returnValue = (bool) false;
-
-        
-
         $this->removePropertyValues(new core_kernel_classes_Property(RDFS_LABEL));
         $this->setPropertyValue(new core_kernel_classes_Property(RDFS_LABEL), $label);
         $this->label = $label;
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -302,16 +296,12 @@ class core_kernel_classes_Resource
     public function getComment()
     {
         $returnValue = (string) '';
-
-        
         if($this->comment == '') {
             $comment =  $this->getOnePropertyValue(new core_kernel_classes_Property(RDFS_COMMENT));
             $this->comment = $comment != null ? $comment->literal : '';
              
         }
         $returnValue = $this->comment;
-        
-
         return (string) $returnValue;
     }
 
@@ -326,15 +316,9 @@ class core_kernel_classes_Resource
     public function setComment($comment)
     {
         $returnValue = (bool) false;
-
-        
-        
         $this->removePropertyValues(new core_kernel_classes_Property(RDFS_COMMENT));
         $this->setPropertyValue(new core_kernel_classes_Property(RDFS_COMMENT), $comment);
         $this->comment = $comment;
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -352,13 +336,7 @@ class core_kernel_classes_Resource
     public function getPropertyValues( core_kernel_classes_Property $property, $options = array())
     {
         $returnValue = array();
-
-        
-    	
         $returnValue = $this->getImplementation()->getPropertyValues($this, $property, $options);
-
-        
-
         return (array) $returnValue;
     }
 
@@ -453,13 +431,7 @@ class core_kernel_classes_Resource
     public function getPropertyValuesByLg( core_kernel_classes_Property $property, $lg)
     {
         $returnValue = null;
-
-        
-        
         $returnValue = $this->getImplementation()->getPropertyValuesByLg($this, $property, $lg);
-        
-        
-
         return $returnValue;
     }
 
@@ -477,13 +449,7 @@ class core_kernel_classes_Resource
     public function setPropertyValue( core_kernel_classes_Property $property, $object)
     {
         $returnValue = (bool) false;
-
-        
-        
         $returnValue = $this->getImplementation()->setPropertyValue($this, $property, $object);
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -499,13 +465,7 @@ class core_kernel_classes_Resource
     public function setPropertiesValues($propertiesValues)
     {
         $returnValue = (bool) false;
-
-        
-        
         $returnValue = $this->getImplementation()->setPropertiesValues($this, $propertiesValues);
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -522,13 +482,7 @@ class core_kernel_classes_Resource
     public function setPropertyValueByLg( core_kernel_classes_Property $property, $value, $lg)
     {
         $returnValue = (bool) false;
-
-        
-        
         $returnValue = $this->getImplementation()->setPropertyValueByLg($this, $property, $value, $lg);
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -569,13 +523,9 @@ class core_kernel_classes_Resource
      */
     public function editPropertyValueByLg( core_kernel_classes_Property $prop, $value, $lg)
     {
-        $returnValue = (bool) false;
-
-        
+        $returnValue = (bool) false;   
         $returnValue = $this->removePropertyValueByLg($prop, $lg);
         $returnValue &= $this->setPropertyValueByLg($prop, $value, $lg);
-        
-
         return (bool) $returnValue;
     }
     
@@ -591,16 +541,10 @@ class core_kernel_classes_Resource
     public function removePropertyValue( core_kernel_classes_Property $property, $value)
     {
         $returnValue = (bool) false;
-
-        
-
         $returnValue = $this->getImplementation()->removePropertyValues($this, $property, array(
         	'pattern'	=> (is_object($value) && $value instanceof self ? $value->getUri() : $value),
         	'like'		=> false 
-        ));
-        
-        
-
+        ));      
         return (bool) $returnValue;
     }    
 
@@ -616,13 +560,7 @@ class core_kernel_classes_Resource
     public function removePropertyValues( core_kernel_classes_Property $property, $options = array())
     {
         $returnValue = (bool) false;
-
-        
-
         $returnValue = $this->getImplementation()->removePropertyValues($this, $property, $options);
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -639,13 +577,7 @@ class core_kernel_classes_Resource
     public function removePropertyValueByLg( core_kernel_classes_Property $prop, $lg, $options = array())
     {
         $returnValue = (bool) false;
-
-        
-       
         $returnValue = $this->getImplementation()->removePropertyValueByLg($this, $prop, $lg, $options);
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -661,13 +593,7 @@ class core_kernel_classes_Resource
     public function getRdfTriples()
     {
         $returnValue = null;
-
-        
-        
         $returnValue = $this->getImplementation()->getRdfTriples($this);
-        
-        
-
         return $returnValue;
     }
 
@@ -682,13 +608,7 @@ class core_kernel_classes_Resource
     public function getUsedLanguages( core_kernel_classes_Property $property)
     {
         $returnValue = array();
-
-        
-        
         $returnValue = $this->getImplementation()->getUsedLanguages($this, $property);
-
-        
-
         return (array) $returnValue;
     }
 
@@ -705,13 +625,7 @@ class core_kernel_classes_Resource
     public function duplicate($excludedProperties = array())
     {
         $returnValue = null;
-
-        
-        
         $returnValue = $this->getImplementation()->duplicate($this, $excludedProperties);
-        
-        
-
         return $returnValue;
     }
 
@@ -755,16 +669,10 @@ class core_kernel_classes_Resource
     public function getPropertiesValues($properties)
     {
         $returnValue = array();
-
-        
-        
         if(!is_array($properties)){
 			throw new common_exception_InvalidArgumentType(__CLASS__, __FUNCTION__, 0, 'array', $properties);
         }
         $returnValue = $this->getImplementation()->getPropertiesValues($this, $properties/*, $last*/);
-        
-        
-
         return (array) $returnValue;
     }
 
@@ -779,13 +687,7 @@ class core_kernel_classes_Resource
     public function setType( core_kernel_classes_Class $type)
     {
         $returnValue = (bool) false;
-
-        
-        
         $returnValue = $this->getImplementation()->setType($this, $type);
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -800,13 +702,7 @@ class core_kernel_classes_Resource
     public function removeType( core_kernel_classes_Class $type)
     {
         $returnValue = (bool) false;
-
-        
-        
         $returnValue = $this->getImplementation()->removeType($this, $type);
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -821,16 +717,12 @@ class core_kernel_classes_Resource
     public function hasType( core_kernel_classes_Class $class)
     {
         $returnValue = (bool) false;
-
-        
     	foreach($this->getTypes() as $type){
         	if ($class->equals($type)){
         		$returnValue = true;
         		break;
         	}
         }
-        
-
         return (bool) $returnValue;
     }
 
@@ -894,16 +786,12 @@ class core_kernel_classes_Resource
     public function isInstanceOf( core_kernel_classes_Class $class)
     {
         $returnValue = (bool) false;
-
-        
         foreach($this->getTypes() as $type){
         	if ($class->equals($type) || $type->isSubClassOf($class)){
         		$returnValue = true;
         		break;
         	}
         }
-        
-
         return (bool) $returnValue;
     }
   
