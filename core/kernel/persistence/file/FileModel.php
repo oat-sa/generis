@@ -57,7 +57,6 @@ class FileModel
             }
         }
         $format = \EasyRdf_Format::getFormat('rdfxml');
-        echo 'WRITE '.$filePath;
         return file_put_contents($filePath, $graph->serialise($format));
     }
     
