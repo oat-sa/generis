@@ -145,7 +145,7 @@ class ResourceFormatterTest extends GenerisPhpUnitTestRunner
     {
         $formatter = new core_kernel_classes_ResourceFormatter();
         try {
-            $result = $formatter->getResourceDesciption($this->createResourceDescription(true));
+            $result = $formatter->getResourceDescription($this->createResourceDescription(true));
             $this->fail('common_exception_NoContent should have been raised');
         } catch (\Exception $e) {
             $this->assertInstanceOf('common_exception_NoContent', $e);
@@ -158,7 +158,7 @@ class ResourceFormatterTest extends GenerisPhpUnitTestRunner
     public function testGetResourceDesciptionFromDef()
     {
         $formatter = new core_kernel_classes_ResourceFormatter();
-        $result =$formatter->getResourceDesciption($this->createResourceDescription(false));
+        $result =$formatter->getResourceDescription($this->createResourceDescription(false));
          
          $this->assertInstanceOf('stdClass', $result);
          $this->assertAttributeEquals('#fakeUri', 'uri', $result);         
@@ -200,7 +200,7 @@ class ResourceFormatterTest extends GenerisPhpUnitTestRunner
         $resourceDescProphecy->getRdfTriples()->willReturn(array());
         $formatter = new core_kernel_classes_ResourceFormatter();
         
-        $result =$formatter->getResourceDesciption($resourceDescProphecy->reveal(),false);
+        $result =$formatter->getResourceDescription($resourceDescProphecy->reveal(),false);
 
     }
     /**
@@ -231,7 +231,7 @@ class ResourceFormatterTest extends GenerisPhpUnitTestRunner
         $resourceDescProphecy->getRdfTriples()->willReturn($this->generateTriple());
         $formatter = new core_kernel_classes_ResourceFormatter();
     
-        $result =$formatter->getResourceDesciption($resourceDescProphecy->reveal(),false);
+        $result =$formatter->getResourceDescription($resourceDescProphecy->reveal(),false);
                 
         $this->assertInstanceOf('stdClass', $result);
         $this->assertAttributeEquals('#fakeUri', 'uri', $result);         

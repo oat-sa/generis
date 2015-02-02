@@ -122,68 +122,6 @@ class core_kernel_classes_Resource
 
 
     /**
-     * returns all properties values describing the resource 
-     * @param fromDefinition specify if the properties should be computed from resources types (slow) or from effective values
-     * @return object {uri, properties}
-     */
-    public function getResourceDescription($fromDefinition = true){
-        $returnValue = null;
-        $properties =array();
-        if ($fromDefinition){
-            $types = $this->getTypes();
-            foreach ($types as $type){
-                foreach ($type->getProperties(true) as $property){
-                    //$this->$$property->getUri() = array($property->getLabel(),$this->getPropertyValues());
-                    $properties[$property->getUri()] = $property;
-                }
-            }
-            $properties = array_unique($properties);
-            $propertiesValues =  $this->getPropertiesValues($properties);
-            if (count($propertiesValues)==0) {
-                throw new common_exception_NoContent();
-            }
-            $propertiesValuesStdClasses = self::propertiesValuestoStdClasses($propertiesValues);
-        }
-        else	//get effective triples and map the returned information into the same structure
-        {
-            $triples = $this->getRdfTriples();
-            if (count( $triples)==0) {
-                throw new common_exception_NoContent();
-            }
-            foreach ($triples as $triple){
-                $properties[$triple->predicate][] = common_Utils::isUri($triple->object)
-                ? new core_kernel_classes_Resource($triple->object)
-                : new core_kernel_classes_Literal($triple->object);
-            }
-            $propertiesValuesStdClasses = self::propertiesValuestoStdClasses($properties);
-        }
-        $resource = new stdClass;
-        $resource->uri = $this->getUri();
-        $resource->properties = $propertiesValuesStdClasses;
-        return $resource;
-    }
-
-    /**
-     * small helper (shall it be moved) more convenient data structure for propertiesValues for exchange
-     * @return array
-     */
-    private static function propertiesValuestoStdClasses($propertiesValues = null){
-        $returnValue =array();
-        foreach ($propertiesValues as $uri => $values) {
-            $propStdClass = new stdClass;
-            $propStdClass->predicateUri = $uri;
-            foreach ($values as $value){
-                $stdValue = new stdClass;
-                $stdValue->valueType = (get_class($value)=="core_kernel_classes_Literal") ? "literal" : "resource";
-                $stdValue->value = (get_class($value)=="core_kernel_classes_Literal") ? $value->__toString() : $value->getUri();
-                $propStdClass->values[]= $stdValue;
-            }
-            $returnValue[]=$propStdClass;
-        }
-        return $returnValue;
-    }
-
-    /**
      * Conveniance method to duplicate a resource using the clone keyword
      *
      * @access public

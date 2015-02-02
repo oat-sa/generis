@@ -24,7 +24,7 @@ class core_kernel_classes_ResourceFormatter
     
 
     
-    public function getResourceDesciption(core_kernel_classes_Resource $resource,$fromDefinition = true)
+    public function getResourceDescription(core_kernel_classes_Resource $resource,$fromDefinition = true)
     {
         $returnValue = new stdClass;
         $properties =array();
