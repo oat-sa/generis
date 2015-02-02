@@ -36,6 +36,7 @@ class core_kernel_classes_ResourceFormatter
                     $properties[$property->getUri()] = $property;
                 }
             }
+            //var_dump($properties);
             $properties = array_unique($properties);
             $propertiesValues =  $resource->getPropertiesValues($properties);
             if (count($propertiesValues)==0) {
@@ -57,7 +58,7 @@ class core_kernel_classes_ResourceFormatter
             $propertiesValuesStdClasses = $this->propertiesValuestoStdClasses($properties);
         }
        
-        $returnValue->uri = $this->getUri();
+        $returnValue->uri = $resource->getUri();
         $returnValue->properties = $propertiesValuesStdClasses;
         return $returnValue;
     }
