@@ -95,7 +95,7 @@ class core_kernel_classes_Property
     
 
     /**
-     * Short description of method __construct
+     * constructor
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
@@ -112,7 +112,18 @@ class core_kernel_classes_Property
         
     }
 
-
+    /**
+     * 
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     */
+    public function feed()
+    {
+        $this->getWidget();
+        $this->getRange();
+        $this->getDomain();
+        $this->isLgDependent();
+        
+    }
 
     /**
      * return classes that are described by this property
