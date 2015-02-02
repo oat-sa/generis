@@ -14,10 +14,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *               2015 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+
 namespace oat\generis\test\model;
 
 use \core_kernel_classes_ResourceFormatter;
@@ -156,7 +155,7 @@ class ResourceFormatterTest extends GenerisPhpUnitTestRunner
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function testGetResourceDesciption()
+    public function testGetResourceDesciptionFromDef()
     {
         $formatter = new core_kernel_classes_ResourceFormatter();
         $result =$formatter->getResourceDesciption($this->createResourceDescription(false));
@@ -189,6 +188,78 @@ class ResourceFormatterTest extends GenerisPhpUnitTestRunner
          $this->assertAttributeEquals(GENERIS_BOOLEAN, 'value',  $result->properties[1]->values[0]);
 
     }
+    
+    /**
+     * @expectedException common_exception_NoContent
+     * @author Lionel Lecaque, lionel@taotesting.com
+     */
+    public function testGetResourceDesciptionNoContentTripple()
+    {
+        
+        $resourceDescProphecy = $this->createResourceProphecy('#fakeUri');
+        $resourceDescProphecy->getRdfTriples()->willReturn(array());
+        $formatter = new core_kernel_classes_ResourceFormatter();
+        
+        $result =$formatter->getResourceDesciption($resourceDescProphecy->reveal(),false);
+
+    }
+    /**
+     * 
+     * @author Lionel Lecaque, lionel@taotesting.com
+     * @return array
+     */
+    private function generateTriple(){
+        $returnValue = array();
+        for ( $i = 0; $i < 3;$i++ ){
+            $triple = new \core_kernel_classes_Triple();
+            $triple->subject = '#subject' . $i;
+            $triple->predicate = '#predicate' . $i;
+            $triple->object = $i==0 ? GENERIS_BOOLEAN : 'object' . $i;
+            $returnValue[] = $triple; 
+        }
+        return $returnValue;
+    }
+    
+    /**
+     * @author Lionel Lecaque, lionel@taotesting.com
+     */
+    public function testGetResourceDesciption()
+    {
+    
+        $resourceDescProphecy = $this->createResourceProphecy('#fakeUri');
+        
+        $resourceDescProphecy->getRdfTriples()->willReturn($this->generateTriple());
+        $formatter = new core_kernel_classes_ResourceFormatter();
+    
+        $result =$formatter->getResourceDesciption($resourceDescProphecy->reveal(),false);
+                
+        $this->assertInstanceOf('stdClass', $result);
+        $this->assertAttributeEquals('#fakeUri', 'uri', $result);         
+        $this->assertAttributeInternalType('array', 'properties', $result);
+        $this->assertAttributeCount(3, 'properties', $result);
+        
+        $this->assertInstanceOf('stdClass', $result->properties[0]);
+        $this->assertAttributeEquals('#predicate0', 'predicateUri', $result->properties[0]);
+        $this->assertAttributeInternalType('array', 'values', $result->properties[0]);
+        $this->assertAttributeCount(1, 'values', $result->properties[0]);
+        
+        $this->assertInstanceOf('stdClass', $result->properties[0]->values[0]);
+        $this->assertAttributeEquals('resource', 'valueType',  $result->properties[0]->values[0]);
+        $this->assertAttributeEquals(GENERIS_BOOLEAN, 'value',  $result->properties[0]->values[0]);
+        
+        for ( $i = 1; $i < 3;$i++ ){
+            $this->assertInstanceOf('stdClass', $result->properties[$i]);
+            $this->assertAttributeEquals('#predicate'. $i, 'predicateUri', $result->properties[$i]);
+            $this->assertAttributeInternalType('array', 'values', $result->properties[$i]);
+            $this->assertAttributeCount(1, 'values', $result->properties[$i]);
+            
+            $this->assertInstanceOf('stdClass', $result->properties[$i]->values[0]);
+            $this->assertAttributeEquals('literal', 'valueType',  $result->properties[$i]->values[0]);
+            $this->assertAttributeEquals('object'.$i, 'value',  $result->properties[$i]->values[0]);
+        }
+    
+    } 
+        
 }
 
 ?>
