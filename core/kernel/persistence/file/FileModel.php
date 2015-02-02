@@ -41,6 +41,25 @@ class FileModel
      */
     private $file;
     
+    static public function fromFile($filePath) {
+        return new self(array('file' => $filePath));
+    }
+    
+    static public function toFile($filePath, $triples) {
+        $graph = new \EasyRdf_Graph();
+        foreach ($triples as $triple) {
+            if (!empty($triple->lg)) {
+                $graph->addLiteral($triple->subject, $triple->predicate, $triple->object, $triple->lg);
+            } elseif (\common_Utils::isUri($triple->object)) {
+                $graph->add($triple->subject, $triple->predicate, $triple->object);
+            } else {
+                $graph->addLiteral($triple->subject, $triple->predicate, $triple->object);
+            }
+        }
+        $format = \EasyRdf_Format::getFormat('rdfxml');
+        return file_put_contents($filePath, $graph->serialise($format));
+    }
+    
     /**
      * Constructor of the smooth model, expects a persistence in the configuration
      * 
