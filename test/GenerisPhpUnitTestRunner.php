@@ -65,7 +65,7 @@ abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
     	return $tmpfname;
     }
     
-    public function getSampleDir(){
+    protected function getSampleDir(){
         return __DIR__.'/samples';
     }
     
