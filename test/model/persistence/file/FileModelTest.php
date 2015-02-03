@@ -131,7 +131,7 @@ class FileModelTest extends GenerisPhpUnitTestRunner
         } catch (\Exception $e) {
             $this->assertInstanceOf('\common_exception_Error', $e);
             if ($id == 100) {
-                $this->assertEquals('The namespace of /home/lionel/work/php/package-tao/generis/test/samples/rdf/nobase.rdf has to be defined with the "xml:base" attribute of the ROOT node', $e->getMessage());
+                $this->assertContains('has to be defined with the "xml:base" attribute of the ROOT node', $e->getMessage());
             } else if($id == 101) {
                 $this->assertEquals('The model corresponding to the namespace toto# is unknown', $e->getMessage());
                 
