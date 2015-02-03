@@ -31,19 +31,6 @@ interface core_kernel_persistence_PropertyInterface
 {
 
 
-    // --- OPERATIONS ---
-
-    /**
-     * Short description of method getSubProperties
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @param  boolean recursive
-     * @return array
-     */
-    public function getSubProperties( core_kernel_classes_Resource $resource, $recursive = false);
-
     /**
      * Short description of method isLgDependent
      *

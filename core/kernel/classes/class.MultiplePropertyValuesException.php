@@ -14,29 +14,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c)  2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
 
 /**
  * Thrown when retrieving an expected property
- * and not finding it (usualy via getUniqueProperty())
+ * and finding more than expected (usualy via getUniqueProperty())
  * 
- * Extends common_exception_EmptyProperty to be backwards compatible
  *
  * @access public
- * @author Joel Bout, <joel@taotesting.com>
+ * @author Lionel Lecaque, lionel@taotesting.com
  * @package generis
  */
-class core_kernel_classes_EmptyProperty
-    extends common_exception_EmptyProperty
+class core_kernel_classes_MultiplePropertyValuesException
+    extends common_Exception
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
 
     /**
      * @access private
@@ -50,7 +43,6 @@ class core_kernel_classes_EmptyProperty
      */
     private $resource = null;
 
-    // --- OPERATIONS ---
 
     /**
      * Short description of method __construct
@@ -64,7 +56,8 @@ class core_kernel_classes_EmptyProperty
     {
         $this->resource = $resource;
         $this->property = $property;
-        parent::__construct("Property ({$property->getUri()}) of resource ({$resource->getUri()}) should not be empty");
+        
+        parent::__construct('Property ( ' . $property->getUri() . ' ) of resource ' . ' ( ' . $resource->getUri() . ' ) has more than one value do not use getUniquePropertyValue but use getPropertyValue instead');
     }
 
     /**

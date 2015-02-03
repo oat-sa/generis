@@ -17,7 +17,7 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2015 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
 use oat\generis\model\data\ModelManager;
@@ -122,85 +122,14 @@ class core_kernel_classes_Resource
 
 
     /**
-     * returns all properties values describing the resource 
-     * @param fromDefinition specify if the properties should be computed from resources types (slow) or from effective values
-     * @return object {uri, properties}
-     */
-    public function getResourceDescription($fromDefinition = true){
-        $returnValue = null;
-        $properties =array();
-        if ($fromDefinition){
-            $types = $this->getTypes();
-            foreach ($types as $type){
-                foreach ($type->getProperties(true) as $property){
-                    //$this->$$property->getUri() = array($property->getLabel(),$this->getPropertyValues());
-                    $properties[$property->getUri()] = $property;
-                }
-            }
-            $properties = array_unique($properties);
-            $propertiesValues =  $this->getPropertiesValues($properties);
-            if (count($propertiesValues)==0) {
-                throw new common_exception_NoContent();
-            }
-            $propertiesValuesStdClasses = self::propertiesValuestoStdClasses($propertiesValues);
-        }
-        else	//get effective triples and map the returned information into the same structure
-        {
-            $triples = $this->getRdfTriples();
-            if (count( $triples)==0) {
-                throw new common_exception_NoContent();
-            }
-            foreach ($triples as $triple){
-                $properties[$triple->predicate][] = common_Utils::isUri($triple->object)
-                ? new core_kernel_classes_Resource($triple->object)
-                : new core_kernel_classes_Literal($triple->object);
-            }
-            $propertiesValuesStdClasses = self::propertiesValuestoStdClasses($properties);
-        }
-        $resource = new stdClass;
-        $resource->uri = $this->getUri();
-        $resource->properties = $propertiesValuesStdClasses;
-        return $resource;
-    }
-
-    /**
-     * small helper (shall it be moved) more convenient data structure for propertiesValues for exchange
-     * @return array
-     */
-    private static function propertiesValuestoStdClasses($propertiesValues = null){
-        $returnValue =array();
-        foreach ($propertiesValues as $uri => $values) {
-            $propStdClass = new stdClass;
-            $propStdClass->predicateUri = $uri;
-            foreach ($values as $value){
-                $stdValue = new stdClass;
-                $stdValue->valueType = (get_class($value)=="core_kernel_classes_Literal") ? "literal" : "resource";
-                $stdValue->value = (get_class($value)=="core_kernel_classes_Literal") ? $value->__toString() : $value->getUri();
-                $propStdClass->values[]= $stdValue;
-            }
-            $returnValue[]=$propStdClass;
-        }
-        return $returnValue;
-    }
-
-    /**
      * Conveniance method to duplicate a resource using the clone keyword
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return core_kernel_classes_Resource
      */
     public function __clone()
     {
-        $returnValue = null;
-
-        
-        
-        $returnValue = $this->duplicate();
-        
-        
-
-        return $returnValue;
+        throw new common_exception_DeprecatedApiMethod('Use duplicated instead, because clone resource could not share same uri that original');
     }
 
     /**
@@ -214,8 +143,6 @@ class core_kernel_classes_Resource
     public function isClass()
     {
         $returnValue = (bool) false;
-
-        
         if (count($this->getPropertyValues(new core_kernel_classes_Property(RDFS_SUBCLASSOF))) > 0) {
         	$returnValue = true;
         } else {
@@ -226,9 +153,6 @@ class core_kernel_classes_Resource
 	        	}
 	        }
         }
-
-        
-
         return (bool) $returnValue;
     }
 
@@ -244,18 +168,12 @@ class core_kernel_classes_Resource
     public function isProperty()
     {
         $returnValue = (bool) false;
-
-        
-        
         foreach($this->getTypes() as $type){
         	if($type->getUri() == RDF_PROPERTY){
         		$returnValue = true;
         		break;
         	}
         }
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -300,15 +218,9 @@ class core_kernel_classes_Resource
     public function setLabel($label)
     {
         $returnValue = (bool) false;
-
-        
-
         $this->removePropertyValues(new core_kernel_classes_Property(RDFS_LABEL));
         $this->setPropertyValue(new core_kernel_classes_Property(RDFS_LABEL), $label);
         $this->label = $label;
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -322,16 +234,12 @@ class core_kernel_classes_Resource
     public function getComment()
     {
         $returnValue = (string) '';
-
-        
         if($this->comment == '') {
             $comment =  $this->getOnePropertyValue(new core_kernel_classes_Property(RDFS_COMMENT));
             $this->comment = $comment != null ? $comment->literal : '';
              
         }
         $returnValue = $this->comment;
-        
-
         return (string) $returnValue;
     }
 
@@ -346,15 +254,9 @@ class core_kernel_classes_Resource
     public function setComment($comment)
     {
         $returnValue = (bool) false;
-
-        
-        
         $this->removePropertyValues(new core_kernel_classes_Property(RDFS_COMMENT));
         $this->setPropertyValue(new core_kernel_classes_Property(RDFS_COMMENT), $comment);
         $this->comment = $comment;
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -372,13 +274,7 @@ class core_kernel_classes_Resource
     public function getPropertyValues( core_kernel_classes_Property $property, $options = array())
     {
         $returnValue = array();
-
-        
-    	
         $returnValue = $this->getImplementation()->getPropertyValues($this, $property, $options);
-
-        
-
         return (array) $returnValue;
     }
 
@@ -413,8 +309,6 @@ class core_kernel_classes_Resource
     {
         $returnValue = null;
 
-        
- 		
         $collection = $this->getPropertyValuesCollection($property);
 
         if($collection->isEmpty()){
@@ -424,14 +318,8 @@ class core_kernel_classes_Resource
             $returnValue= $collection->get(0);
         }
         else {
-        	$propLabel = $property->getLabel();
-        	$label = $this->getLabel();
-            throw new common_Exception("Property {$propLabel} ({$property->getUri()}) of resource {$label} ({$this->getUri()}) 
-            							has more than one value do not use getUniquePropertyValue but use getPropertyValue instead");
+            throw new core_kernel_classes_MultiplePropertyValuesException($this,$property);
         }
-        	
-        
-
         return $returnValue;
     }
 
@@ -481,13 +369,7 @@ class core_kernel_classes_Resource
     public function getPropertyValuesByLg( core_kernel_classes_Property $property, $lg)
     {
         $returnValue = null;
-
-        
-        
         $returnValue = $this->getImplementation()->getPropertyValuesByLg($this, $property, $lg);
-        
-        
-
         return $returnValue;
     }
 
@@ -505,13 +387,7 @@ class core_kernel_classes_Resource
     public function setPropertyValue( core_kernel_classes_Property $property, $object)
     {
         $returnValue = (bool) false;
-
-        
-        
         $returnValue = $this->getImplementation()->setPropertyValue($this, $property, $object);
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -527,13 +403,7 @@ class core_kernel_classes_Resource
     public function setPropertiesValues($propertiesValues)
     {
         $returnValue = (bool) false;
-
-        
-        
         $returnValue = $this->getImplementation()->setPropertiesValues($this, $propertiesValues);
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -550,13 +420,7 @@ class core_kernel_classes_Resource
     public function setPropertyValueByLg( core_kernel_classes_Property $property, $value, $lg)
     {
         $returnValue = (bool) false;
-
-        
-        
         $returnValue = $this->getImplementation()->setPropertyValueByLg($this, $property, $value, $lg);
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -597,13 +461,9 @@ class core_kernel_classes_Resource
      */
     public function editPropertyValueByLg( core_kernel_classes_Property $prop, $value, $lg)
     {
-        $returnValue = (bool) false;
-
-        
+        $returnValue = (bool) false;   
         $returnValue = $this->removePropertyValueByLg($prop, $lg);
         $returnValue &= $this->setPropertyValueByLg($prop, $value, $lg);
-        
-
         return (bool) $returnValue;
     }
     
@@ -619,16 +479,10 @@ class core_kernel_classes_Resource
     public function removePropertyValue( core_kernel_classes_Property $property, $value)
     {
         $returnValue = (bool) false;
-
-        
-
         $returnValue = $this->getImplementation()->removePropertyValues($this, $property, array(
         	'pattern'	=> (is_object($value) && $value instanceof self ? $value->getUri() : $value),
         	'like'		=> false 
-        ));
-        
-        
-
+        ));      
         return (bool) $returnValue;
     }    
 
@@ -644,13 +498,7 @@ class core_kernel_classes_Resource
     public function removePropertyValues( core_kernel_classes_Property $property, $options = array())
     {
         $returnValue = (bool) false;
-
-        
-
         $returnValue = $this->getImplementation()->removePropertyValues($this, $property, $options);
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -667,13 +515,7 @@ class core_kernel_classes_Resource
     public function removePropertyValueByLg( core_kernel_classes_Property $prop, $lg, $options = array())
     {
         $returnValue = (bool) false;
-
-        
-       
         $returnValue = $this->getImplementation()->removePropertyValueByLg($this, $prop, $lg, $options);
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -689,13 +531,7 @@ class core_kernel_classes_Resource
     public function getRdfTriples()
     {
         $returnValue = null;
-
-        
-        
         $returnValue = $this->getImplementation()->getRdfTriples($this);
-        
-        
-
         return $returnValue;
     }
 
@@ -710,13 +546,7 @@ class core_kernel_classes_Resource
     public function getUsedLanguages( core_kernel_classes_Property $property)
     {
         $returnValue = array();
-
-        
-        
         $returnValue = $this->getImplementation()->getUsedLanguages($this, $property);
-
-        
-
         return (array) $returnValue;
     }
 
@@ -733,13 +563,7 @@ class core_kernel_classes_Resource
     public function duplicate($excludedProperties = array())
     {
         $returnValue = null;
-
-        
-        
         $returnValue = $this->getImplementation()->duplicate($this, $excludedProperties);
-        
-        
-
         return $returnValue;
     }
 
@@ -754,36 +578,8 @@ class core_kernel_classes_Resource
     public function delete($deleteReference = false)
     {
         $returnValue = (bool) false;
-
-        
-        
         $returnValue = $this->getImplementation()->delete($this, $deleteReference);
-        
-        
-
         return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method getPrivileges
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return array
-     */
-    public function getPrivileges()
-    {
-        $returnValue = array();
-
-        
-        $returnValue = array(
-       						'u' => array('r' => true, 'w' => true),
-        		 			'g' => array('r' => true, 'w' => true),
-        		 			'a' => array('r' => true, 'w' => true)
-        );
-        
-
-        return (array) $returnValue;
     }
 
 
@@ -811,16 +607,10 @@ class core_kernel_classes_Resource
     public function getPropertiesValues($properties)
     {
         $returnValue = array();
-
-        
-        
         if(!is_array($properties)){
 			throw new common_exception_InvalidArgumentType(__CLASS__, __FUNCTION__, 0, 'array', $properties);
         }
         $returnValue = $this->getImplementation()->getPropertiesValues($this, $properties/*, $last*/);
-        
-        
-
         return (array) $returnValue;
     }
 
@@ -835,13 +625,7 @@ class core_kernel_classes_Resource
     public function setType( core_kernel_classes_Class $type)
     {
         $returnValue = (bool) false;
-
-        
-        
         $returnValue = $this->getImplementation()->setType($this, $type);
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -856,13 +640,7 @@ class core_kernel_classes_Resource
     public function removeType( core_kernel_classes_Class $type)
     {
         $returnValue = (bool) false;
-
-        
-        
         $returnValue = $this->getImplementation()->removeType($this, $type);
-        
-        
-
         return (bool) $returnValue;
     }
 
@@ -877,16 +655,12 @@ class core_kernel_classes_Resource
     public function hasType( core_kernel_classes_Class $class)
     {
         $returnValue = (bool) false;
-
-        
     	foreach($this->getTypes() as $type){
         	if ($class->equals($type)){
         		$returnValue = true;
         		break;
         	}
         }
-        
-
         return (bool) $returnValue;
     }
 
@@ -900,17 +674,12 @@ class core_kernel_classes_Resource
     public function exists()
     {
         $returnValue = (bool) false;
-
-        
         try{
         	$returnValue = count($this->getTypes())?true:false;
         }
         catch(Exception $e){
         	;//return false by default
         }
-               
-        
-
         return (bool) $returnValue;
     }
 
@@ -924,11 +693,7 @@ class core_kernel_classes_Resource
     public function getUri()
     {
         $returnValue = (string) '';
-
-        
         $returnValue = $this->uriResource;
-        
-
         return (string) $returnValue;
     }
 
@@ -943,14 +708,7 @@ class core_kernel_classes_Resource
     public function equals( core_kernel_classes_Resource $resource)
     {
         $returnValue = (bool) false;
-
-        
-        if (is_null($resource)) {
-        	throw new common_exception_Error('Null parameter in equals call on ressource '.$this->getUri());
-        }
         $returnValue = $this->getUri() == $resource->getUri();
-        
-
         return (bool) $returnValue;
     }
 
@@ -966,16 +724,12 @@ class core_kernel_classes_Resource
     public function isInstanceOf( core_kernel_classes_Class $class)
     {
         $returnValue = (bool) false;
-
-        
         foreach($this->getTypes() as $type){
         	if ($class->equals($type) || $type->isSubClassOf($class)){
         		$returnValue = true;
         		break;
         	}
         }
-        
-
         return (bool) $returnValue;
     }
   

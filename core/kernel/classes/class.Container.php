@@ -21,7 +21,7 @@
  */
 
 /**
- * Short description of class core_kernel_classes_Container
+ * Could be either a core_kernel_classes_Resource or core_kernel_classes_Literal
  *
  * @access public
  * @author patrick.plichart@tudor.lu
@@ -31,12 +31,7 @@
 class core_kernel_classes_Container
     extends common_Object
 {
-    // --- ASSOCIATIONS ---
 
-
-    // --- ATTRIBUTES ---
-
-    // --- OPERATIONS ---
 
     /**
      * Short description of method __serialize
@@ -47,43 +42,10 @@ class core_kernel_classes_Container
      */
     public function __serialize()
     {
-        $returnValue = (string) '';
-
-        
-        
-
-        return (string) $returnValue;
+        return 'container';
     }
 
-    /**
-     * Short description of method setDebug
-     *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  boolean enabled
-     * @return boolean
-     */
-    public function setDebug($enabled)
-    {
-        $returnValue = (bool) false;
 
-        
-        
 
-        return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method feed
-     *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @return void
-     */
-    public function feed()
-    {
-        
-        
-    }
 
 }
