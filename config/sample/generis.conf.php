@@ -54,9 +54,6 @@ define('SYS_READY', true);
 #the time zone, required since PHP5.3
 define('TIME_ZONE', 'UTC');
 
-# Cache
-define('CACHE_MAX_SIZE', 64000);
-
 # Passsword Hash Preferences
 define('PASSWORD_HASH_ALGORITHM', 'sha256');
 define('PASSWORD_HASH_SALT_LENGTH', 10);
