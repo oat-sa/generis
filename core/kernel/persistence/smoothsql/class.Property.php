@@ -126,15 +126,11 @@ class core_kernel_persistence_smoothsql_Property
         
         //delete all values of the property to delete
         if ($deleteReference){
-	        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-	        
 	    	$modelIds	= implode(',',core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds());
 			$query = 'DELETE FROM "statements" WHERE "predicate" = ? AND "modelid" IN ('.$modelIds.')';
-	        $returnValue = $dbWrapper->exec($query, array($resource->getUri()));
+	        $returnValue = $this->persistence->exec($query, array($resource->getUri()));
         }
-        $returnValue = core_kernel_persistence_smoothsql_Resource::singleton()->delete($resource, $deleteReference);
-        
-        
+        $returnValue = parent::delete($resource, $deleteReference);
 
         return (bool) $returnValue;
     }
@@ -174,8 +170,8 @@ class core_kernel_persistence_smoothsql_Property
         
     	$multipleProperty = new core_kernel_classes_Property(PROPERTY_MULTIPLE);
         $value = ((bool)$isMultiple) ?  GENERIS_TRUE : GENERIS_FALSE ;
-        core_kernel_persistence_smoothsql_Resource::singleton()->removePropertyValues($resource, $multipleProperty);
-        core_kernel_persistence_smoothsql_Resource::singleton()->setPropertyValue($resource, $multipleProperty, $value);
+        $this->removePropertyValues($resource, $multipleProperty);
+        $this->setPropertyValue($resource, $multipleProperty, $value);
         
     }
 
@@ -193,8 +189,8 @@ class core_kernel_persistence_smoothsql_Property
         
     	$lgDependentProperty = new core_kernel_classes_Property(PROPERTY_IS_LG_DEPENDENT,__METHOD__);
         $value = ((bool)$isLgDependent) ?  GENERIS_TRUE : GENERIS_FALSE ;
-        core_kernel_persistence_smoothsql_Resource::singleton()->removePropertyValues($resource, $lgDependentProperty);
-        core_kernel_persistence_smoothsql_Resource::singleton()->setPropertyValue($resource, $lgDependentProperty, $value);
+        $this->removePropertyValues($resource, $lgDependentProperty);
+        $this->setPropertyValue($resource, $lgDependentProperty, $value);
         
     }
 
@@ -219,27 +215,6 @@ class core_kernel_persistence_smoothsql_Property
         
 
         return $returnValue;
-    }
-
-    /**
-     * Short description of method isValidContext
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource resource
-     * @return boolean
-     */
-    public function isValidContext( core_kernel_classes_Resource $resource)
-    {
-        $returnValue = (bool) false;
-
-        
-
-		$returnValue = true;
-
-        
-
-        return (bool) $returnValue;
     }
 
 }

@@ -86,7 +86,7 @@ class core_kernel_persistence_smoothsql_SmoothModel
      * @see \oat\generis\model\data\Model::getRdfsInterface()
      */
     public function getRdfsInterface() {
-        return new core_kernel_persistence_smoothsql_SmoothRdfs();
+        return new core_kernel_persistence_smoothsql_SmoothRdfs($this->persistance);
     }
     
     // Manage the sudmodels of the smooth mode
