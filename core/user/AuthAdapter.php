@@ -101,16 +101,16 @@ class AuthAdapter
             $label = new core_kernel_classes_Property(RDFS_LABEL);
             $hash = $label->getUniquePropertyValue($label);
             if (!core_kernel_users_Service::getPasswordHash()->verify($this->password, $hash)) {
-                throw new core_kernel_users_InvalidLoginException();
+                throw new core_kernel_users_InvalidLoginException('Unknown user "'.$this->username.'"');
             }
             // should never happen, added for integrity
-    		throw new core_kernel_users_InvalidLoginException();
+    		throw new core_kernel_users_InvalidLoginException('Inexisting user did not fail password check, this should not happen');
     	}
     	
 	    $userResource = current($users);
 	    $hash = $userResource->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD));
 	    if (!core_kernel_users_Service::getPasswordHash()->verify($this->password, $hash)) {
-	        throw new core_kernel_users_InvalidLoginException();
+	        throw new core_kernel_users_InvalidLoginException('Invalid password for user "'.$this->username.'"');
 	    }
     	
     	return new core_kernel_users_GenerisUser($userResource);
