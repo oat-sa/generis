@@ -60,7 +60,7 @@ class ModelManager
         $className = get_class($model);
         return array(
         	'class' => $className,
-            'config' => $model->getConfig()
+            'config' => $model->getOptions()
         );
     }
     

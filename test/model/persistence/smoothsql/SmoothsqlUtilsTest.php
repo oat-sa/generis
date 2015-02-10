@@ -24,11 +24,10 @@ namespace oat\generis\test\model\persistence\smoothsql;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use \core_kernel_classes_Resource;
 use \core_kernel_classes_Literal;
-use \core_kernel_classes_DbWrapper;
 use \core_kernel_persistence_smoothsql_Utils;
 
 class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner {
-	
+    
     /**
      * @dataProvider buildSearchPatternProvider
      * 
@@ -38,28 +37,26 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner {
      */
 	public function testBuildSearchPattern($pattern, $like, $expected)
 	{
-	    $this->assertSame($expected, core_kernel_persistence_smoothsql_Utils::buildSearchPattern($pattern, $like));
+	    $this->assertSame($expected, core_kernel_persistence_smoothsql_Utils::buildSearchPattern($this->getPersistence(), $pattern, $like));
 	}
 	
 	public function buildSearchPatternProvider()
 	{
-	    $db = core_kernel_classes_DbWrapper::singleton();
-	    
 	    return array(
-	        array('hello', false, '= ' . $db->quote('hello')),
-	        array('hello', true, 'LIKE ' . $db->quote('%hello%')),
-	        array('*hello', true, 'LIKE ' . $db->quote('%hello')),
-	        array('*hello*', true, 'LIKE ' . $db->quote('%hello%')),
-	        array('*hel*lo*', true, 'LIKE ' . $db->quote('%hel%lo%')),
-	        array('*hel*lo*', false, '= ' . $db->quote('*hel*lo*')),
-	        array(25, false, '= ' . $db->quote('25')),
-	        array(25.123, false, '= ' . $db->quote('25.123')),
-	        array(true, false, '= ' . $db->quote('1')),
-	        array(false, false, '= ' . $db->quote('')),
-	        array(false, true, 'LIKE ' . $db->quote('%%')),
-	        array('', true, 'LIKE ' . $db->quote('%%')),
-	        array(new core_kernel_classes_Resource('http://www.13.com/ontology#toto'), false, '= ' . $db->quote('http://www.13.com/ontology#toto')),
-	        array(new core_kernel_classes_Resource('http://www.13.com/ontology#toto'), true, '= ' . $db->quote('http://www.13.com/ontology#toto')),
+	        array('hello', false, '= ' . $this->quote('hello')),
+	        array('hello', true, 'LIKE ' . $this->quote('%hello%')),
+	        array('*hello', true, 'LIKE ' . $this->quote('%hello')),
+	        array('*hello*', true, 'LIKE ' . $this->quote('%hello%')),
+	        array('*hel*lo*', true, 'LIKE ' . $this->quote('%hel%lo%')),
+	        array('*hel*lo*', false, '= ' . $this->quote('*hel*lo*')),
+	        array(25, false, '= ' . $this->quote('25')),
+	        array(25.123, false, '= ' . $this->quote('25.123')),
+	        array(true, false, '= ' . $this->quote('1')),
+	        array(false, false, '= ' . $this->quote('')),
+	        array(false, true, 'LIKE ' . $this->quote('%%')),
+	        array('', true, 'LIKE ' . $this->quote('%%')),
+	        array(new core_kernel_classes_Resource('http://www.13.com/ontology#toto'), false, '= ' . $this->quote('http://www.13.com/ontology#toto')),
+	        array(new core_kernel_classes_Resource('http://www.13.com/ontology#toto'), true, '= ' . $this->quote('http://www.13.com/ontology#toto')),
 	    );
 	}
 	
@@ -73,34 +70,32 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner {
 	 */
 	public function testBuildPropertyQuery($expected, $propertyUri, $values, $like, $lang = '')
 	{
-	    $this->assertSame($expected, core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($propertyUri, $values, $like, $lang));
+	    $this->assertSame($expected, core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getPersistence(), $propertyUri, $values, $like, $lang));
 	}
 	
 	public function buildPropertyQueryProvider()
 	{
-	    $db = core_kernel_classes_DbWrapper::singleton();
-	    
 	    return array(
 	        array(
-	            "SELECT DISTINCT subject FROM statements WHERE (predicate = " . $db->quote('http://www.13.com/ontology#prop') . ") AND (object = " . $db->quote('hello') . ")",
+	            "SELECT DISTINCT subject FROM statements WHERE (predicate = " . $this->quote('http://www.13.com/ontology#prop') . ") AND (object = " . $this->quote('hello') . ")",
 	            'http://www.13.com/ontology#prop', 
 	            'hello',
 	            false
 	        ),
 	        array(
-	            "SELECT DISTINCT subject FROM statements WHERE (predicate = " . $db->quote('http://www.13.com/ontology#prop') . ") AND (object = " . $db->quote('hello') . " OR object = " . $db->quote('world') . ")",
+	            "SELECT DISTINCT subject FROM statements WHERE (predicate = " . $this->quote('http://www.13.com/ontology#prop') . ") AND (object = " . $this->quote('hello') . " OR object = " . $this->quote('world') . ")",
 	            'http://www.13.com/ontology#prop',
 	            array('hello', 'world'), 
 	            false
 	       ),
 	        array(
-	            "SELECT DISTINCT subject FROM statements WHERE (predicate = " . $db->quote('http://www.13.com/ontology#prop') . ") AND (object LIKE " . $db->quote('%hello%') . " OR object LIKE " . $db->quote('%world%') . ")",
+	            "SELECT DISTINCT subject FROM statements WHERE (predicate = " . $this->quote('http://www.13.com/ontology#prop') . ") AND (object LIKE " . $this->quote('%hello%') . " OR object LIKE " . $this->quote('%world%') . ")",
 	            'http://www.13.com/ontology#prop',
 	            array('hello', 'world'), 
 	            true
 	       ),
 	        array(
-	            "SELECT DISTINCT subject FROM statements WHERE (predicate = " . $db->quote('http://www.13.com/ontology#prop') . ") AND (object = " . $db->quote('hello') . " AND (l_language = " . $db->quote('') . " OR l_language = " . $db->quote('en-US') . "))",         
+	            "SELECT DISTINCT subject FROM statements WHERE (predicate = " . $this->quote('http://www.13.com/ontology#prop') . ") AND (object = " . $this->quote('hello') . " AND (l_language = " . $this->quote('') . " OR l_language = " . $this->quote('en-US') . "))",         
 	            'http://www.13.com/ontology#prop',
 	            'hello', 
 	            false,
@@ -125,16 +120,16 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner {
 	    return array(
 	        array(
 	            array(
-	                core_kernel_persistence_smoothsql_Utils::buildPropertyQuery('http://www.13.com/ontology#prop1', 'toto', false),
-	                core_kernel_persistence_smoothsql_Utils::buildPropertyQuery('http://www.13.com/ontology#prop2', 'tata', false),
+	                core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getPersistence(), 'http://www.13.com/ontology#prop1', 'toto', false),
+	                core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getPersistence(), 'http://www.13.com/ontology#prop2', 'tata', false),
 	            ),
-	            '(' . core_kernel_persistence_smoothsql_Utils::buildPropertyQuery('http://www.13.com/ontology#prop1', 'toto', false) . ') UNION ALL (' . core_kernel_persistence_smoothsql_Utils::buildPropertyQuery('http://www.13.com/ontology#prop2', 'tata', false) . ')'
+	            '(' . core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getPersistence(), 'http://www.13.com/ontology#prop1', 'toto', false) . ') UNION ALL (' . core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getPersistence(), 'http://www.13.com/ontology#prop2', 'tata', false) . ')'
 	        ),
 	        array(
 	            array(
-	                core_kernel_persistence_smoothsql_Utils::buildPropertyQuery('http://www.13.com/ontology#prop1', 'toto', false)       
+	                core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getPersistence(), 'http://www.13.com/ontology#prop1', 'toto', false)       
 	            ),
-	            core_kernel_persistence_smoothsql_Utils::buildPropertyQuery('http://www.13.com/ontology#prop1', 'toto', false)
+	            core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getPersistence(), 'http://www.13.com/ontology#prop1', 'toto', false)
 	        ),
 	        array(array(), false)
 	    );
@@ -167,5 +162,20 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner {
                 true, true, 'en-US', 0, 15, 'http://www.w3.org/2000/01/rdf-schema#label', 'DESC'
             )
 	    );
+	}
+	
+	/**
+	 * @return common_persistence_SqlPersistence
+	 */
+	private function getPersistence() {
+	    return \common_persistence_SqlPersistence::getPersistence('default');
+	}
+	
+	/**
+	 * @param string $string
+	 * @return string
+	 */
+	private function quote($string) {
+	    return $this->getPersistence()->quote($string);
 	}
 }

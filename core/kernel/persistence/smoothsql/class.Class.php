@@ -28,14 +28,6 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
 {
 
     /**
-     * Short description of attribute instance
-     *
-     * @access public
-     * @var Resource
-     */
-    public static $instance = null;
-
-    /**
      * (non-PHPdoc)
      * @see core_kernel_persistence_ClassInterface::getSubClasses()
      */
@@ -43,9 +35,8 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     {
         $returnValue = array();
         
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ? and '.$dbWrapper->getPlatForm()->getObjectTypeCondition() .' = ?';
-        $sqlResult = $dbWrapper->query($sqlQuery, array(RDFS_SUBCLASSOF, $resource->getUri()));
+        $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ? and '.$this->persistence->getPlatForm()->getObjectTypeCondition() .' = ?';
+        $sqlResult = $this->persistence->query($sqlQuery, array(RDFS_SUBCLASSOF, $resource->getUri()));
         
         while ($row = $sqlResult->fetch()) {
             $subClass = new core_kernel_classes_Class($row['subject']);
@@ -67,10 +58,8 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     {
         $returnValue = false;
         
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        
-        $query = 'SELECT object FROM statements WHERE subject = ? AND predicate = ? AND ' . $dbWrapper->getPlatForm()->getObjectTypeCondition() . ' = ?';
-        $result = $dbWrapper->query($query, array(
+        $query = 'SELECT object FROM statements WHERE subject = ? AND predicate = ? AND ' . $this->persistence->getPlatForm()->getObjectTypeCondition() . ' = ?';
+        $result = $this->persistence->query($query, array(
             $resource->getUri(),
             RDFS_SUBCLASSOF,
             $parentClass->getUri()
@@ -104,8 +93,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
 		
         $sqlQuery = 'SELECT object FROM statements WHERE subject = ?  AND predicate = ?';
 
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->query($sqlQuery, array($resource->getUri(), RDFS_SUBCLASSOF));
+		$sqlResult = $this->persistence->query($sqlQuery, array($resource->getUri(), RDFS_SUBCLASSOF));
 
 		while ($row = $sqlResult->fetch()){
 
@@ -133,10 +121,8 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     {
         $returnValue = array();
         
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ?  AND '. $dbWrapper->getPlatForm()->getObjectTypeCondition() .' = ?';
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $sqlResult = $dbWrapper->query($sqlQuery, array(
+        $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ?  AND '. $this->persistence->getPlatForm()->getObjectTypeCondition() .' = ?';
+        $sqlResult = $this->persistence->query($sqlQuery, array(
             RDFS_DOMAIN,
             $resource->getUri()
         ));
@@ -168,9 +154,8 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         
         $params = array_merge($params, array('like' => false, 'recursive' => $recursive));
         
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $query = $this->getFilteredQuery($resource, array(), $params);
-        $result = $dbWrapper->query($query);
+        $result = $this->persistence->query($query);
         
         while ($row = $result->fetch()) {
             $foundInstancesUri = $row['subject'];
@@ -326,9 +311,8 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
             $options = array_merge($options, array('like' => false));
         }
         
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $query = $this->getFilteredQuery($resource, $propertyFilters, $options);
-        $result = $dbWrapper->query($query);
+        $result = $this->persistence->query($query);
         
         while ($row = $result->fetch()) {	
             $foundInstancesUri = $row['subject'];
@@ -344,8 +328,6 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
      */
     public function countInstances( core_kernel_classes_Class $resource, $propertyFilters = array(), $options = array())
     {
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		    
 		if (isset($options['offset'])) {
             unset($options['offset']);
         }
@@ -359,7 +341,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         }
         
 		$query = 'SELECT count(subject) FROM (' . $this->getFilteredQuery($resource, $propertyFilters, $options) . ') as countq';
-		return $dbWrapper->query($query)->fetchColumn();
+		return $this->persistence->query($query)->fetchColumn();
     }
 
     /**
@@ -371,7 +353,6 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         $returnValue = array();
         
         $distinct = isset($options['distinct']) ? $options['distinct'] : false;
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
         if (count($propertyFilters) === 0) {
             $options = array_merge($options, array('like' => false));
@@ -387,7 +368,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         
         $query .= " object FROM (SELECT overq.subject, valuesq.object FROM (${filteredQuery}) as overq JOIN statements AS valuesq ON (overq.subject = valuesq.subject AND valuesq.predicate = ?)) AS overrootq";
         
-        $sqlResult = $dbWrapper->query($query, array($property->getUri()));
+        $sqlResult = $this->persistence->query($query, array($property->getUri()));
         while ($row = $sqlResult->fetch()) {
             $returnValue[] = common_Utils::toResource($row['object']);
         }
@@ -435,13 +416,12 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     {
         $returnValue = false;
 
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $class = new core_kernel_classes_Class($resource->getUri());
         $uris = array();
         
         foreach ($resources as $r) {
             $uri = (($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r);
-            $uris[] = $dbWrapper->quote($uri);
+            $uris[] = $this->persistence->quote($uri);
         }
         
         if ($class->exists()) {
@@ -456,7 +436,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
             try {
         		// Even if now rows are affected, we consider the resources
         		// as deleted.
-        		$dbWrapper->exec($query);	
+        		$this->persistence->exec($query);	
         		$returnValue = true;
             } catch (PDOException $e) {
         	    throw new core_kernel_persistence_smoothsql_Exception("An error occured while deleting resources: " . $e->getMessage());
@@ -464,32 +444,6 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         }
 
         return $returnValue;
-    }
-
-
-    /**
-     * Short description of method singleton
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return core_kernel_classes_Resource
-     */
-    public static function singleton()
-    {
-        if (core_kernel_persistence_smoothsql_Class::$instance == null) {
-            core_kernel_persistence_smoothsql_Class::$instance = new core_kernel_persistence_smoothsql_Class();
-        }
-        
-        return  core_kernel_persistence_smoothsql_Class::$instance;
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see core_kernel_persistence_smoothsql_Resource::isValidContext()
-     */
-    public function isValidContext( core_kernel_classes_Resource $resource)
-    {
-        return true;
     }
 
     /**
@@ -531,7 +485,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         $order = (isset($options['order']) === false) ? '' : $options['order'];
         $orderdir = (isset($options['orderdir']) === false) ? 'ASC' : $options['orderdir'];
            
-        $query = core_kernel_persistence_smoothsql_Utils::buildFilterQuery($rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
+        $query = core_kernel_persistence_smoothsql_Utils::buildFilterQuery($this->persistence, $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
         
         return $query;
     }

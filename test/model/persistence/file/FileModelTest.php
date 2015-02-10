@@ -64,7 +64,7 @@ class FileModelTest extends GenerisPhpUnitTestRunner
     {
         $this->assertEquals(array(
             'file' => 'default'
-        ), $model->getConfig());
+        ), $model->getOptions());
     }
 
     /**

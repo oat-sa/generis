@@ -66,18 +66,18 @@ class FileModel
      * @param array $configuration
      * @throws common_exception_MissingParameter
      */
-    public function __construct($configuration) {
-        if (!isset($configuration['file'])) {
+    public function __construct($options = array()) {
+        if (!isset($options['file'])) {
             throw new common_exception_MissingParameter('file', __CLASS__);
         }
-        $this->file = $configuration['file']; 
+        $this->file = $options['file']; 
     }
     
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getConfig()
      */
-    public function getConfig() {
+    public function getOptions() {
         return array(
             'file' => $this->file
         );

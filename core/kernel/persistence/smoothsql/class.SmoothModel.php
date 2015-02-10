@@ -55,19 +55,19 @@ class core_kernel_persistence_smoothsql_SmoothModel
      * @param array $configuration
      * @throws common_exception_MissingParameter
      */
-    public function __construct($configuration) {
-        if (!isset($configuration['persistence'])) {
+    public function __construct($options = array()) {
+        if (!isset($options['persistence'])) {
             throw new common_exception_MissingParameter('persistence', __CLASS__);
         }
-        $this->persistanceId = $configuration['persistence']; 
-        $this->persistance = common_persistence_SqlPersistence::getPersistence($configuration['persistence']);
+        $this->persistanceId = $options['persistence']; 
+        $this->persistance = common_persistence_SqlPersistence::getPersistence($options['persistence']);
     }
     
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getConfig()
      */
-    public function getConfig() {
+    public function getOptions() {
         return array(
             'persistence' => $this->persistanceId
         );
@@ -86,7 +86,7 @@ class core_kernel_persistence_smoothsql_SmoothModel
      * @see \oat\generis\model\data\Model::getRdfsInterface()
      */
     public function getRdfsInterface() {
-        return new core_kernel_persistence_smoothsql_SmoothRdfs();
+        return new core_kernel_persistence_smoothsql_SmoothRdfs($this->persistance);
     }
     
     // Manage the sudmodels of the smooth mode

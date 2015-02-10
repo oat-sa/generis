@@ -36,11 +36,10 @@ class core_kernel_persistence_smoothsql_Utils
      * @param string langColname The name of the column corresponding to the language of results.
      * @return array An array representing the sorted $dataset.
      */
-    static public function sortByLanguage($dataset, $langColname)
+    static public function sortByLanguage($persistence, $dataset, $langColname)
     {
         $returnValue = array();
         
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $selectedLanguage = \common_session_SessionManager::getSession()->getDataLanguage();
         $defaultLanguage = DEFAULT_LANG;
         $fallbackLanguage = '';
@@ -53,7 +52,7 @@ class core_kernel_persistence_smoothsql_Utils
 
         foreach ($dataset as $row) {
         	$sortedResults[$row[$langColname]][] = array(
-        	    'value' => $dbWrapper->getPlatForm()->getPhpTextValue($row['object']), 
+        	    'value' => $persistence->getPlatForm()->getPhpTextValue($row['object']), 
         	    'language' => $row[$langColname]
             );
         }
@@ -99,11 +98,11 @@ class core_kernel_persistence_smoothsql_Utils
      * @param string langColname
      * @return array
      */
-    static public function filterByLanguage($dataset, $langColname)
+    static public function filterByLanguage(common_persistence_SqlPersistence $persistence, $dataset, $langColname)
     {
         $returnValue = array();
         
-        $result = self::sortByLanguage($dataset, $langColname);
+        $result = self::sortByLanguage($persistence, $dataset, $langColname);
         $returnValue = self::getFirstLanguage($result);
         
         return $returnValue;
@@ -145,11 +144,9 @@ class core_kernel_persistence_smoothsql_Utils
      * @param  boolean like The manner to compare values. If set to true, the LIKE SQL operator will be used. If set to false, the = (equal) SQL operator will be used.
      * @return string
      */
-    static public function buildSearchPattern($pattern, $like = true)
+    static public function buildSearchPattern(common_persistence_SqlPersistence $persistence, $pattern, $like = true)
     {
         $returnValue = '';
-        
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
         // Take care of RDFS Literals!
         if ($pattern instanceof core_kernel_classes_Literal) {
@@ -159,7 +156,7 @@ class core_kernel_persistence_smoothsql_Utils
         switch (gettype($pattern)) {
             case 'object' :
                 if ($pattern instanceof core_kernel_classes_Resource) {
-                    $returnValue = '= ' . $dbWrapper->quote($pattern->getUri());
+                    $returnValue = '= ' . $persistence->quote($pattern->getUri());
                 } else {
                     common_Logger::w('non ressource as search parameter: '. get_class($pattern), 'GENERIS');
                 }
@@ -180,9 +177,9 @@ class core_kernel_persistence_smoothsql_Utils
                     if (!$wildcard && $object === '%') {
                         $object = '%%';
                     }
-                    $returnValue .= 'LIKE '. $dbWrapper->quote($object);
+                    $returnValue .= 'LIKE '. $persistence->quote($object);
                 } else {
-                    $returnValue .= '= '. $dbWrapper->quote($patternToken);
+                    $returnValue .= '= '. $persistence->quote($patternToken);
                 }
                 break;
         }
@@ -190,12 +187,10 @@ class core_kernel_persistence_smoothsql_Utils
         return $returnValue;
     }
     
-    static public function buildPropertyQuery($propertyUri, $values, $like, $lang = '')
+    static public function buildPropertyQuery(common_persistence_SqlPersistence $persistence, $propertyUri, $values, $like, $lang = '')
     {
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        
         // Deal with predicate...
-        $predicate = $dbWrapper->quote($propertyUri);
+        $predicate = $persistence->quote($propertyUri);
         
         // Deal with values...
         if (is_array($values) === false) {
@@ -204,7 +199,7 @@ class core_kernel_persistence_smoothsql_Utils
         
         $valuePatterns = array();
         foreach ($values as $val) {
-            $valuePatterns[] = 'object ' . self::buildSearchPattern($val, $like);
+            $valuePatterns[] = 'object ' . self::buildSearchPattern($persistence, $val, $like);
         }
         
         $sqlValues = implode(' OR ', $valuePatterns);
@@ -212,7 +207,7 @@ class core_kernel_persistence_smoothsql_Utils
         // Deal with language...
         $sqlLang = '';
         if (empty($lang) === false) {
-            $sqlLang = ' AND (' . self::buildLanguagePattern($lang) . ')';
+            $sqlLang = ' AND (' . self::buildLanguagePattern($persistence, $lang) . ')';
         }
         
         $query = "SELECT DISTINCT subject FROM statements WHERE (predicate = ${predicate}) AND (${sqlValues}${sqlLang})";
@@ -220,15 +215,13 @@ class core_kernel_persistence_smoothsql_Utils
         return $query;
     }
     
-    static public function buildLanguagePattern($lang = '')
+    static public function buildLanguagePattern(common_persistence_SqlPersistence $persistence, $lang = '')
     {
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        
         $languagePattern = '';
         
         if (empty($lang) === false) {
-            $sqlEmpty = $dbWrapper->quote('');
-            $sqlLang = $dbWrapper->quote($lang);
+            $sqlEmpty = $persistence->quote('');
+            $sqlLang = $persistence->quote($lang);
             $languagePattern = "l_language = ${sqlEmpty} OR l_language = ${sqlLang}";
         }
         
@@ -252,24 +245,22 @@ class core_kernel_persistence_smoothsql_Utils
         }
     }
     
-    static public function buildFilterQuery($classUri, array $propertyFilters, $and = true, $like = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC')
+    static public function buildFilterQuery(common_persistence_SqlPersistence $persistence, $classUri, array $propertyFilters, $and = true, $like = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC')
     {
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        
         // Deal with target classes.
         if (is_array($classUri) === false) {
             $classUri = array($classUri);
         }
         
-        $propertyQueries = array(self::buildPropertyQuery(RDF_TYPE, $classUri, false));
+        $propertyQueries = array(self::buildPropertyQuery($persistence, RDF_TYPE, $classUri, false));
         foreach ($propertyFilters as $propertyUri => $filterValues) {
-            $propertyQueries[] = self::buildPropertyQuery($propertyUri, $filterValues, $like, $lang);
+            $propertyQueries[] = self::buildPropertyQuery($persistence, $propertyUri, $filterValues, $like, $lang);
         }
         
         $unionQuery = self::buildUnionQuery($propertyQueries);
         
         if (($propCount = count($propertyFilters)) === 0) {
-            $query = self::buildPropertyQuery(RDF_TYPE, $classUri, false, $lang);
+            $query = self::buildPropertyQuery($persistence, RDF_TYPE, $classUri, false, $lang);
         } else {
             $unionCount = ($and === true) ? ($propCount + 1) : 2;
             $query = "SELECT subject FROM (${unionQuery}) AS unionq GROUP BY subject HAVING count(*) >= ${unionCount}";
@@ -277,12 +268,12 @@ class core_kernel_persistence_smoothsql_Utils
 
         // Order...
         if (empty($order) === false) {
-            $orderPredicate = $dbWrapper->quote($order);
+            $orderPredicate = $persistence->quote($order);
             
             $sqlLang = '';
             if (empty($lang) === false) {
-                $sqlEmptyLang = $dbWrapper->quote('');
-                $sqlRequestedLang = $dbWrapper->quote($lang);
+                $sqlEmptyLang = $persistence->quote('');
+                $sqlRequestedLang = $persistence->quote($lang);
                 $sqlLang = " AND (l_language = ${sqlEmptyLang} OR l_language = ${sqlRequestedLang})";
             }
             
@@ -294,7 +285,7 @@ class core_kernel_persistence_smoothsql_Utils
         
         // Limit...
         if ($limit > 0) {
-            $query = $dbWrapper->limitStatement($query, $limit, $offset);
+            $query = $persistence->getPlatForm()->limitStatement($query, $limit, $offset);
         }
         
         // Suffix order...

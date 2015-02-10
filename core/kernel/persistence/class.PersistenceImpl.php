@@ -30,30 +30,6 @@
  */
 abstract class core_kernel_persistence_PersistenceImpl
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
-    // --- OPERATIONS ---
-
-    /**
-     * Short description of method singleton
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return core_kernel_classes_Resource
-     */
-    public static function singleton()
-    {
-        $returnValue = null;
-
-        
-        throw new Exception('Must be implemented by subclasses.');
-        
-
-        return $returnValue;
-    }
 
     /**
      * Short description of method isValidContext
@@ -66,6 +42,4 @@ abstract class core_kernel_persistence_PersistenceImpl
      */
     public abstract function isValidContext( core_kernel_classes_Resource $resource);
 
-} /* end of abstract class core_kernel_persistence_PersistenceImpl */
-
-?>
+}

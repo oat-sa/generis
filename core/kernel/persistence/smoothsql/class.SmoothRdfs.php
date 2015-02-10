@@ -30,11 +30,20 @@ class core_kernel_persistence_smoothsql_SmoothRdfs
     implements RdfsInterface
 {
     /**
+     * @var common_persistence_SqlPersistence
+     */
+    private $persistence;
+    
+    public function __construct(common_persistence_SqlPersistence $persistence) {
+        $this->persistence = $persistence;
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\RdfsInterface::getClassImplementation()
      */
     public function getClassImplementation() {
-        return \core_kernel_persistence_smoothsql_Class::singleton();
+        return new \core_kernel_persistence_smoothsql_Class($this->persistence);
     }
     
     /**
@@ -42,7 +51,7 @@ class core_kernel_persistence_smoothsql_SmoothRdfs
      * @see \oat\generis\model\data\RdfsInterface::getResourceImplementation()
      */
     public function getResourceImplementation() {
-        return \core_kernel_persistence_smoothsql_Resource::singleton();
+        return new \core_kernel_persistence_smoothsql_Resource($this->persistence);
     }
     
     /**
@@ -50,7 +59,7 @@ class core_kernel_persistence_smoothsql_SmoothRdfs
      * @see \oat\generis\model\data\RdfsInterface::getPropertyImplementation()
      */
     public function getPropertyImplementation() {
-        return \core_kernel_persistence_smoothsql_Property::singleton();
+        return new  \core_kernel_persistence_smoothsql_Property($this->persistence);
     }
     
 }
