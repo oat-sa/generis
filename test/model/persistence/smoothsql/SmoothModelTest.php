@@ -63,7 +63,7 @@ class SmoothModelTest extends GenerisPhpUnitTestRunner
     {
         $this->assertEquals(array(
             'persistence' => 'default'
-        ), $model->getConfig());
+        ), $model->getOptions());
     }
 
     /**

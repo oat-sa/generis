@@ -34,7 +34,7 @@ interface Model
 	 * 
 	 * @param array $config
 	 */
-    function __construct($configuration);
+    function __construct($options = array());
     
 	/**
 	 * Returns a configuration array that can be used to instanciate the model
@@ -42,7 +42,7 @@ interface Model
 	 * 
 	 * @return array
 	 */
-	function getConfig();
+	function getOptions();
 
 	/**
 	 * Experimental interface to access the data of the model
