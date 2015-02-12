@@ -19,7 +19,7 @@
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
  * @package 
- 
+
  *
  */
 class common_persistence_PhpFileDriver implements common_persistence_KvDriver, common_persistence_Purgable
@@ -69,6 +69,8 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * @var int
      */
     const DEFAULT_LEVELS = 3;
+    
+    const DEFAULT_MASK = 0700;
 
     /**
      * (non-PHPdoc)
@@ -96,7 +98,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             $filePath = $this->getPath($id);
             $dirname = dirname($filePath);
             if (!file_exists($dirname)) {
-                mkdir($dirname, 0700, true);
+                mkdir($dirname, self::DEFAULT_MASK, true);
             }
             
             $string = $this->getContent($id, $value);

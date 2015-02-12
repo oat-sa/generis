@@ -52,7 +52,8 @@ class common_persistence_Manager
         'pdo_pgsql'  => 'common_persistence_sql_pdo_pgsql_Driver',
         'phpredis'   => 'common_persistence_PhpRedisDriver',
         'phpfile'    => 'common_persistence_PhpFileDriver',
-        'SqlKvWrapper' => 'common_persistence_SqlKvDriver'
+        'SqlKvWrapper' => 'common_persistence_SqlKvDriver',
+        'no_storage' => 'common_persistence_NoStorageKvDriver'
     );
 
     /**
