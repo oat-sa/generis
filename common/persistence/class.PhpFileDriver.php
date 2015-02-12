@@ -83,7 +83,6 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             : FILES_PATH.'generis'.DIRECTORY_SEPARATOR.$id.DIRECTORY_SEPARATOR;
         $this->levels = isset($params['levels']) ? $params['levels'] : self::DEFAULT_LEVELS;
         $this->humanReadable = isset($params['humanReadable']) ? $params['humanReadable'] : false;
-        $this->mask = isset($params['mask']) ? $params['mask'] : self::DEFAULT_MASK;
         return new common_persistence_KeyValuePersistence($params, $this);
     }
     
@@ -99,7 +98,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             $filePath = $this->getPath($id);
             $dirname = dirname($filePath);
             if (!file_exists($dirname)) {
-                mkdir($dirname, $this->mask, true);
+                mkdir($dirname, self::DEFAULT_MASK, true);
             }
             
             $string = $this->getContent($id, $value);
