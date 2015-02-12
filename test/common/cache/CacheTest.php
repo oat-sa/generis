@@ -18,8 +18,10 @@
  *               
  * 
  */
+namespace oat\generis\test\common\cache;
 
 use oat\generis\test\GenerisPhpUnitTestRunner;
+use \common_cache_FileCache;
 
 class CacheTest extends GenerisPhpUnitTestRunner {
 	
@@ -38,6 +40,7 @@ class CacheTest extends GenerisPhpUnitTestRunner {
 	    $cache->get($key);
 	    $this->assertFalse($cache->has($key));
 	}
+	
 	
 	public function keyProvider()
 	{
