@@ -19,7 +19,6 @@
  */
 namespace oat\generis\model\kernel\persistence\wrapper;
 
-use common_persistence_SqlPersistence;
 use oat\generis\model\data\RdfsInterface;
 /**
  * Wraps the RdfsInterface in a Rdf interface
