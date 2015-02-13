@@ -25,7 +25,7 @@ use \common_test_TestUserSession;
 use \common_ext_ExtensionsManager;
 use \common_ext_ExtensionInstaller;
 use \common_ext_ExtensionUninstaller;
-
+use \common_persistence_Manager;
 
 /**
  * @author CRP Henri Tudor - TAO Team
@@ -40,6 +40,8 @@ abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
      * @var boolean
      */
     private static $connected = false;
+    
+    private $config; 
     
     private $files = array();
     
@@ -122,6 +124,27 @@ abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
         }
     }
     
+    protected function disableCache()
+    {
+        $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('generis') ;
+        $this->config = $ext->getConfig(common_persistence_Manager::CONFIG_KEY);
+        $conf = $this->config;
+        if(isset($conf['cache']) && isset($conf['cache']['driver'])){
+            $conf['cache']['driver'] = 'no_storage';
+            \common_Logger::i('Set cache on NO STORAGE');
+        
+            $ext->setConfig(common_persistence_Manager::CONFIG_KEY,$conf);
+        }
+    }
+    
+    
+    protected function restoreCache()
+    {
+        \common_Logger::i('Restore cache persistence'); 
+        $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('generis') ;
+        $ext->setConfig(common_persistence_Manager::CONFIG_KEY,$this->config);
+        
+    }
     /**
      * Returns the test session if available
      * @throws common_exception_Error
