@@ -1,2 +1,2 @@
 <?php
-return 'oat\generis\model\data\permission\implementation\FreeAccess';
+return new oat\generis\model\data\permission\implementation\FreeAccess();

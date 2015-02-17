@@ -41,8 +41,8 @@ class PermissionManager
     public static function getPermissionModel() {
         if (is_null(self::$model)) {
             $implementation = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig(self::CONFIG_KEY);
-            if (class_exists($implementation)) {
-                self::$model = new $implementation();
+            if (is_object($implementation) && $implementation instanceof PermissionInterface) {
+                self::$model = $implementation;
             } else {
                 common_Logger::w('No permission implementation found');
                 self::$model = new NoAccess();
@@ -55,6 +55,6 @@ class PermissionManager
      * @param core_kernel_persistence_RdfsDriver $model
      */
     public static function setPermissionModel(PermissionInterface $model) {
-        common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->setConfig(self::CONFIG_KEY, get_class($model));
+        common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->setConfig(self::CONFIG_KEY, $model);
     }
 }
