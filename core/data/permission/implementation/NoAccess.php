@@ -46,7 +46,7 @@ class NoAccess
      * @see \oat\generis\model\data\PermissionInterface::getPermissions()
      */
     public function getPermissions(User $user, array $resourceIds) {
-        return array();
+        return array_fill_keys($resourceIds, array());
     }
     
     /**
