@@ -82,6 +82,19 @@ class IntersectionTest extends GenerisPhpUnitTestRunner
         
     }
     
+    public function testOnResourceCreated(){
+        $permissionModel = $this->prophesize('oat\generis\model\data\permission\PermissionInterface');
+        $permissionModel2 = $this->prophesize('oat\generis\model\data\permission\PermissionInterface');
+        
+        $model = Intersection::spawn(array($permissionModel->reveal(),$permissionModel2->reveal()));
+        $resourceprophecy = $this->prophesize('core_kernel_classes_Resource');
+        $resource = $resourceprophecy->reveal();
+        $model->onResourceCreated($resource);
+        $permissionModel->onResourceCreated($resource)->shouldHaveBeenCalled();
+        $permissionModel2->onResourceCreated($resource)->shouldHaveBeenCalled();
+        
+    }
+    
     public function testPhpSerialize()
     {
         // no idea how to test
