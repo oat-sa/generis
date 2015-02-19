@@ -22,6 +22,7 @@ namespace oat\generis\model\data\permission\implementation;
 
 use oat\generis\model\data\permission\PermissionInterface;
 use oat\oatbox\user\User;
+use oat\oatbox\Configurable;
 
 /**
  * Simple permissible Permission model
@@ -32,15 +33,9 @@ use oat\oatbox\user\User;
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  */
-class FreeAccess
+class FreeAccess extends Configurable
     implements PermissionInterface
 {
-    /**
-     * 
-     */
-    public function __construct() {
-    }
-    
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\PermissionInterface::getPermissions()

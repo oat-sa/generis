@@ -23,6 +23,8 @@ namespace oat\generis\scripts\update;
 
 use core_kernel_impl_ApiModelOO;
 use common_Logger;
+use common_ext_ExtensionsManager;
+use oat\generis\model\data\permission\PermissionManager;
 
 /**
  * 
@@ -66,7 +68,21 @@ class Updater extends \common_ext_ExtensionUpdater {
             }
         }
         
-        
+        if ($currentVersion == '2.7.2') {
+            $implClass = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig(PermissionManager::CONFIG_KEY);
+            if (is_string($implClass)) {
+                if (class_exists($implClass)) {
+                    $impl = new $implClass();
+                    PermissionManager::setPermissionModel($impl);
+                    $currentVersion = '2.7.3';
+                } else {
+                    common_Logger::w('Unexpected permission manager config type: '.gettype($implClass));
+                }
+            } else {
+                common_Logger::w('Unexpected permission manager config type: '.gettype($implClass));
+            }
+        }
+
         return $currentVersion;
     }
 }
