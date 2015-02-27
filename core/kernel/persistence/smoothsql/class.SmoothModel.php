@@ -37,7 +37,6 @@ class core_kernel_persistence_smoothsql_SmoothModel extends Configurable
      */
     private $persistence;
     
-    
     private static $readableSubModels = null;
     
     private static $updatableSubModels = null;
@@ -74,7 +73,7 @@ class core_kernel_persistence_smoothsql_SmoothModel extends Configurable
      */
     public static function getReadableModelIds() {
         if (is_null(self::$readableSubModels)) {
-            self::loadReadableModelIds();
+            self::$readableSubModels = self::loadReadableModelIds();
         }
         return self::$readableSubModels;
     }
@@ -86,8 +85,7 @@ class core_kernel_persistence_smoothsql_SmoothModel extends Configurable
      */
     public static function getUpdatableModelIds() {
         if (is_null(self::$updatableSubModels)) {
-            $extensionManager = common_ext_ExtensionsManager::singleton();
-            self::$updatableSubModels = array_keys($extensionManager->getUpdatableModels());
+            self::$updatableSubModels = self::loadWriteableModelIds();
         }
         return self::$updatableSubModels;
     }
@@ -115,7 +113,13 @@ class core_kernel_persistence_smoothsql_SmoothModel extends Configurable
             }
         }
 
-        self::$readableSubModels = array_unique($ids);
+        return array_unique($ids);
+    }
+    
+    private static function loadWriteableModelIds()
+    {
+        $extensionManager = common_ext_ExtensionsManager::singleton();
+        return array_keys($extensionManager->getUpdatableModels());
     }
     
     /**
