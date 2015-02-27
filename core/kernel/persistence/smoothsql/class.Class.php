@@ -35,8 +35,8 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     {
         $returnValue = array();
         
-        $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ? and '.$this->persistence->getPlatForm()->getObjectTypeCondition() .' = ?';
-        $sqlResult = $this->persistence->query($sqlQuery, array(RDFS_SUBCLASSOF, $resource->getUri()));
+        $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ? and '.$this->getPersistence()->getPlatForm()->getObjectTypeCondition() .' = ?';
+        $sqlResult = $this->getPersistence()->query($sqlQuery, array(RDFS_SUBCLASSOF, $resource->getUri()));
         
         while ($row = $sqlResult->fetch()) {
             $subClass = new core_kernel_classes_Class($row['subject']);
@@ -58,8 +58,8 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     {
         $returnValue = false;
         
-        $query = 'SELECT object FROM statements WHERE subject = ? AND predicate = ? AND ' . $this->persistence->getPlatForm()->getObjectTypeCondition() . ' = ?';
-        $result = $this->persistence->query($query, array(
+        $query = 'SELECT object FROM statements WHERE subject = ? AND predicate = ? AND ' . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ?';
+        $result = $this->getPersistence()->query($query, array(
             $resource->getUri(),
             RDFS_SUBCLASSOF,
             $parentClass->getUri()
@@ -93,7 +93,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
 		
         $sqlQuery = 'SELECT object FROM statements WHERE subject = ?  AND predicate = ?';
 
-		$sqlResult = $this->persistence->query($sqlQuery, array($resource->getUri(), RDFS_SUBCLASSOF));
+		$sqlResult = $this->getPersistence()->query($sqlQuery, array($resource->getUri(), RDFS_SUBCLASSOF));
 
 		while ($row = $sqlResult->fetch()){
 
@@ -121,8 +121,8 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     {
         $returnValue = array();
         
-        $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ?  AND '. $this->persistence->getPlatForm()->getObjectTypeCondition() .' = ?';
-        $sqlResult = $this->persistence->query($sqlQuery, array(
+        $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ?  AND '. $this->getPersistence()->getPlatForm()->getObjectTypeCondition() .' = ?';
+        $sqlResult = $this->getPersistence()->query($sqlQuery, array(
             RDFS_DOMAIN,
             $resource->getUri()
         ));
@@ -155,7 +155,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         $params = array_merge($params, array('like' => false, 'recursive' => $recursive));
         
         $query = $this->getFilteredQuery($resource, array(), $params);
-        $result = $this->persistence->query($query);
+        $result = $this->getPersistence()->query($query);
         
         while ($row = $result->fetch()) {
             $foundInstancesUri = $row['subject'];
@@ -312,7 +312,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         }
         
         $query = $this->getFilteredQuery($resource, $propertyFilters, $options);
-        $result = $this->persistence->query($query);
+        $result = $this->getPersistence()->query($query);
         
         while ($row = $result->fetch()) {	
             $foundInstancesUri = $row['subject'];
@@ -341,7 +341,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         }
         
 		$query = 'SELECT count(subject) FROM (' . $this->getFilteredQuery($resource, $propertyFilters, $options) . ') as countq';
-		return $this->persistence->query($query)->fetchColumn();
+		return $this->getPersistence()->query($query)->fetchColumn();
     }
 
     /**
@@ -368,7 +368,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         
         $query .= " object FROM (SELECT overq.subject, valuesq.object FROM (${filteredQuery}) as overq JOIN statements AS valuesq ON (overq.subject = valuesq.subject AND valuesq.predicate = ?)) AS overrootq";
         
-        $sqlResult = $this->persistence->query($query, array($property->getUri()));
+        $sqlResult = $this->getPersistence()->query($query, array($property->getUri()));
         while ($row = $sqlResult->fetch()) {
             $returnValue[] = common_Utils::toResource($row['object']);
         }
@@ -421,7 +421,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         
         foreach ($resources as $r) {
             $uri = (($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r);
-            $uris[] = $this->persistence->quote($uri);
+            $uris[] = $this->getPersistence()->quote($uri);
         }
         
         if ($class->exists()) {
@@ -436,7 +436,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
             try {
         		// Even if now rows are affected, we consider the resources
         		// as deleted.
-        		$this->persistence->exec($query);	
+        		$this->getPersistence()->exec($query);	
         		$returnValue = true;
             } catch (PDOException $e) {
         	    throw new core_kernel_persistence_smoothsql_Exception("An error occured while deleting resources: " . $e->getMessage());
@@ -485,7 +485,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         $order = (isset($options['order']) === false) ? '' : $options['order'];
         $orderdir = (isset($options['orderdir']) === false) ? 'ASC' : $options['orderdir'];
            
-        $query = core_kernel_persistence_smoothsql_Utils::buildFilterQuery($this->persistence, $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
+        $query = core_kernel_persistence_smoothsql_Utils::buildFilterQuery($this->getPersistence(), $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
         
         return $query;
     }

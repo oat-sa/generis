@@ -30,12 +30,16 @@ class core_kernel_persistence_smoothsql_SmoothRdf
     implements RdfInterface
 {
     /**
-     * @var common_persistence_SqlPersistence
+     * @var core_kernel_persistence_smoothsql_SmoothModel
      */
-    private $persistence;
+    private $model;
     
-    public function __construct(common_persistence_SqlPersistence $persistence) {
-        $this->persistence = $persistence;
+    public function __construct(core_kernel_persistence_smoothsql_SmoothModel $model) {
+        $this->model = $model;
+    }
+    
+    protected function getPersistence() {
+        return $this->model->getPersistence();
     }
     
     /**
@@ -52,7 +56,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf
      */
     public function add(\core_kernel_classes_Triple $triple) {
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language) VALUES ( ? , ? , ? , ? , ? );";
-        return $this->persistence->exec($query, array($triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg));
+        return $this->getPersistence()->exec($query, array($triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg));
     }
     
     /**
@@ -61,7 +65,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf
      */
     public function remove(\core_kernel_classes_Triple $triple) {
         $query = "DELETE FROM statements WHERE subject = ? AND predicate = ? AND object = ? AND l_language = ?;";
-        return $this->persistence->exec($query, array($triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg));
+        return $this->getPersistence()->exec($query, array($triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg));
     }
     
     /**
@@ -73,6 +77,6 @@ class core_kernel_persistence_smoothsql_SmoothRdf
     }
     
     public function getIterator() {
-        return new core_kernel_persistence_smoothsql_SmoothIterator($this->persistence);
+        return new core_kernel_persistence_smoothsql_SmoothIterator($this->getPersistence());
     }
 }

@@ -19,6 +19,7 @@
  */
 
 use oat\generis\model\data\Model;
+use oat\oatbox\Configurable;
 
 /**
  * transitory model for the smooth sql implementation
@@ -26,59 +27,34 @@ use oat\generis\model\data\Model;
  * @author joel bout <joel@taotesting.com>
  * @package generis
  */
-class core_kernel_persistence_smoothsql_SmoothModel
+class core_kernel_persistence_smoothsql_SmoothModel extends Configurable
     implements Model
 {
-    /**
-     * Id of the persistence to be used for this data-model
-     * Currently unused
-     * 
-     * @var string
-     */
-    private $persistanceId;
-    
     /**
      * Persistence to use for the smoothmodel
      * 
      * @var common_persistence_SqlPersistence
      */
-    private $persistance;
+    private $persistence;
     
     
     private static $readableSubModels = null;
     
     private static $updatableSubModels = null;
     
-    /**
-     * Constructor of the smooth model, expects a persistence in the configuration
-     * 
-     * @param array $configuration
-     * @throws common_exception_MissingParameter
-     */
-    public function __construct($options = array()) {
-        if (!isset($options['persistence'])) {
-            throw new common_exception_MissingParameter('persistence', __CLASS__);
+    public function getPersistence() {
+        if (is_null($this->persistence)) {
+            $this->persistence = common_persistence_SqlPersistence::getPersistence($this->getOption('persistence'));
         }
-        $this->persistanceId = $options['persistence']; 
-        $this->persistance = common_persistence_SqlPersistence::getPersistence($options['persistence']);
+        return $this->persistence;
     }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \oat\generis\model\data\Model::getConfig()
-     */
-    public function getOptions() {
-        return array(
-            'persistence' => $this->persistanceId
-        );
-    }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getRdfInterface()
      */
     public function getRdfInterface() {
-        return new core_kernel_persistence_smoothsql_SmoothRdf($this->persistance);
+        return new core_kernel_persistence_smoothsql_SmoothRdf($this);
     }
     
     /**
@@ -86,7 +62,7 @@ class core_kernel_persistence_smoothsql_SmoothModel
      * @see \oat\generis\model\data\Model::getRdfsInterface()
      */
     public function getRdfsInterface() {
-        return new core_kernel_persistence_smoothsql_SmoothRdfs($this->persistance);
+        return new core_kernel_persistence_smoothsql_SmoothRdfs($this);
     }
     
     // Manage the sudmodels of the smooth mode
