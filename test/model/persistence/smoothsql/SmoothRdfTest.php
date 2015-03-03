@@ -77,8 +77,7 @@ class SmoothRdfTest extends GenerisPhpUnitTestRunner
      */
     public function testAdd()
     {
-        $prophet = new Prophet();
-        $persistence = $prophet->prophesize('\common_persistence_SqlPersistence');
+        $persistence = $this->prophesize('\common_persistence_SqlPersistence');
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language) VALUES ( ? , ? , ? , ? , ? );";
         
         $triple = new \core_kernel_classes_Triple();
@@ -95,7 +94,8 @@ class SmoothRdfTest extends GenerisPhpUnitTestRunner
             ''
         ))->willReturn(true);
         
-        $model = $prophet->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
+        $model = $this->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
+        $model->getReadableModels()->willReturn(array(22));
         $model->getPersistence()->willReturn($persistence->reveal());
         
         $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
