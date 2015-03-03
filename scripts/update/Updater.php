@@ -25,6 +25,7 @@ use core_kernel_impl_ApiModelOO;
 use common_Logger;
 use common_ext_ExtensionsManager;
 use oat\generis\model\data\permission\PermissionManager;
+use oat\generis\model\data\ModelManager;
 
 /**
  * 
@@ -82,7 +83,38 @@ class Updater extends \common_ext_ExtensionUpdater {
                 common_Logger::w('Unexpected permission manager config type: '.gettype($implClass));
             }
         }
+        
+        if ($currentVersion == '2.7.3') {
+            ModelManager::setModel(new \core_kernel_persistence_smoothsql_SmoothModel(array(
+                \core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'default',
+                \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS => $this->getReadableModelIds(),
+                \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => array('1'),
+                \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => '1'
+            )));
+            $currentVersion = '2.7.4';
+        }
+            
 
         return $currentVersion;
+    }
+    
+    private function getReadableModelIds() {
+        $extensionManager = \common_ext_ExtensionsManager::singleton();
+        \common_ext_NamespaceManager::singleton()->reset();
+        
+        $uris = array(LOCAL_NAMESPACE.'#');
+        foreach ($extensionManager->getModelsToLoad() as $subModelUri){
+            if(!preg_match("/#$/", $subModelUri)){
+                $subModelUri .= '#';
+            }
+            $uris[] = $subModelUri;
+        }
+        $ids = array();
+        foreach(\common_ext_NamespaceManager::singleton()->getAllNamespaces() as $namespace){
+            if(in_array($namespace->getUri(), $uris)){
+                $ids[] = $namespace->getModelId();
+            }
+        }
+        return array_unique($ids);
     }
 }
