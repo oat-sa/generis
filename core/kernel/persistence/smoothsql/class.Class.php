@@ -133,7 +133,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         }
         
         if ($recursive == true) {
-            $parentClasses = $resource->getParentClasses(true);
+            $parentClasses = $this->getParentClasses($resource, true);
             foreach ($parentClasses as $parent) {
                 if($parent->getUri() != RDFS_CLASS) {
                 	$returnValue = array_merge($returnValue, $parent->getProperties(true));
@@ -193,7 +193,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         $returnValue = (bool) false;
 
 		$subClassOf = new core_kernel_classes_Property(RDFS_SUBCLASSOF);
-		$returnValue = $resource->setPropertyValue($subClassOf, $iClass->getUri());
+		$returnValue = $this->setPropertyValue($resource, $subClassOf, $iClass->getUri());
 
         return (bool) $returnValue;
     }

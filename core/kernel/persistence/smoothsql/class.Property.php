@@ -149,7 +149,7 @@ class core_kernel_persistence_smoothsql_Property
 
         
         $rangeProp = new core_kernel_classes_Property(RDFS_RANGE, __METHOD__);
-        $returnValue = $resource->setPropertyValue($rangeProp, $class->getUri());
+        $returnValue = $this->setPropertyValue($resource, $rangeProp, $class->getUri());
         
 
         return $returnValue;
