@@ -55,6 +55,9 @@ class core_kernel_persistence_smoothsql_SmoothRdf
      * @see \oat\generis\model\data\RdfInterface::add()
      */
     public function add(\core_kernel_classes_Triple $triple) {
+        if (!in_array($triple->modelid, $this->model->getReadableModels())) {
+            $this->model->addReadableModel($triple->modelid);
+        }
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language) VALUES ( ? , ? , ? , ? , ? );";
         return $this->getPersistence()->exec($query, array($triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg));
     }

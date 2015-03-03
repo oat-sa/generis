@@ -50,11 +50,15 @@ class core_kernel_persistence_smoothsql_Resource
     }
     
     protected function getModelReadSqlCondition() {
-        return 'modelid IN ('.implode(',',\core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds()).')';
+        return 'modelid IN ('.implode(',', $this->model->getReadableModels()).')';
     }
     
     protected function getModelWriteSqlCondition() {
-        return 'modelid IN ('.implode(',',\core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds()).')';
+        return 'modelid IN ('.implode(',',$this->model->getWritableModels()).')';
+    }
+    
+    protected function getNewTripleModelId() {
+        return $this->model->getNewTripleModelId();
     }
     
     
@@ -221,7 +225,7 @@ class core_kernel_persistence_smoothsql_Resource
         			VALUES  (?, ?, ?, ?, ?, ? , ?)';
 
         $returnValue = $this->getPersistence()->exec($query, array(
-       		$localNs->getModelId(),
+       		$this->getNewTripleModelId(),
        		$resource->getUri(),
        		$property->getUri(),
        		$object,
@@ -260,7 +264,6 @@ class core_kernel_persistence_smoothsql_Resource
 	        	$session 	= core_kernel_classes_Session::singleton();
 	        	
 	        	$localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
-	       		$modelId	= $localNs->getModelId();
 	        	$mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
 	        	$user		= $session->getUserUri()!= null ?  $this->getPersistence()->quote($session->getUserUri()) : $platform->getNullString();
 	       		
@@ -307,10 +310,9 @@ class core_kernel_persistence_smoothsql_Resource
 					}
 					
 					foreach($formatedValues as $object){
-//						$query .= " ($modelId, '{$resource->getUri()}', '{$property->getUri()}', {$object}, '{$lang}', '{$user}', '{$mask}','{$mask}','{$mask}'),";
 						$query .= $multipleInsertQueryHelper->getValuePart('statements', $columns,
 								array(
-										"modelid" => $modelId,
+										"modelid" => $this->getNewTripleModelId(),
 										"subject" => $this->getPersistence()->quote($resource->getUri()),
 										"predicate"=> $this->getPersistence()->quote($property->getUri()),
 										"object" => $object,
@@ -361,7 +363,7 @@ class core_kernel_persistence_smoothsql_Resource
         			VALUES  (?, ?, ?, ?, ?, ?, ?)';
 
         $returnValue = $this->getPersistence()->exec($query, array(
-       		$localNs->getModelId(),
+       		$this->getNewTripleModelId(),
        		$resource->getUri(),
        		$property->getUri(),
        		$value,
@@ -572,7 +574,6 @@ class core_kernel_persistence_smoothsql_Resource
     		
     		$session = core_kernel_classes_Session::singleton();
     		$localNs = common_ext_NamespaceManager::singleton()->getLocalNamespace();
-	       	$modelId = $localNs->getModelId();
         	$user    = common_session_SessionManager::isAnonymous()
         	   ? $platform->getNullString()
         	   : $this->getPersistence()->quote(\common_session_SessionManager::getSession()->getUser()->getIdentifier());
@@ -593,7 +594,7 @@ class core_kernel_persistence_smoothsql_Resource
     			if(!in_array($triple->predicate, $excludedProperties)){
 	    			$query .= $multipleInsertQueryHelper->getValuePart('statements', $columns,
 	    					array(
-	    							"modelid" => $modelId,
+	    							"modelid" => $this->getNewTripleModelId(),
 	    							"subject" => $this->getPersistence()->quote($newUri),
 	    							"predicate"=> $this->getPersistence()->quote($triple->predicate),
 	    							"object" => $triple->object == null ? $platform->getNullString() : $this->getPersistence()->quote($triple->object),
