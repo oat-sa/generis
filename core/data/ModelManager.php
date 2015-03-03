@@ -41,8 +41,7 @@ class ModelManager
             if (is_array($array)) {
                 self::$model = self::array2model($array);
             } else {
-                \common_Logger::w('No data model found, falling back to smooth');
-                self::$model = new \core_kernel_persistence_smoothsql_SmoothModel(array('persistence' => 'default'));
+                throw new \common_exception_InconsistentData('No data model found');
             }
         }
         return self::$model;
