@@ -187,8 +187,10 @@ class core_kernel_persistence_smoothsql_Utils
         return $returnValue;
     }
     
-    static public function buildPropertyQuery(common_persistence_SqlPersistence $persistence, $propertyUri, $values, $like, $lang = '')
+    static public function buildPropertyQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $propertyUri, $values, $like, $lang = '')
     {
+        $persistence = $model->getPersistence();
+        
         // Deal with predicate...
         $predicate = $persistence->quote($propertyUri);
         
@@ -210,7 +212,8 @@ class core_kernel_persistence_smoothsql_Utils
             $sqlLang = ' AND (' . self::buildLanguagePattern($persistence, $lang) . ')';
         }
         
-        $query = "SELECT DISTINCT subject FROM statements WHERE (predicate = ${predicate}) AND (${sqlValues}${sqlLang})";
+        $query = "SELECT DISTINCT subject FROM statements WHERE (predicate = ${predicate}) AND (${sqlValues}${sqlLang})"
+            .' AND modelid IN ('.implode(',', $model->getReadableModels()).')';
         
         return $query;
     }
@@ -245,22 +248,24 @@ class core_kernel_persistence_smoothsql_Utils
         }
     }
     
-    static public function buildFilterQuery(common_persistence_SqlPersistence $persistence, $classUri, array $propertyFilters, $and = true, $like = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC')
+    static public function buildFilterQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $classUri, array $propertyFilters, $and = true, $like = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC')
     {
+        $persistence = $model->getPersistence();
+        
         // Deal with target classes.
         if (is_array($classUri) === false) {
             $classUri = array($classUri);
         }
         
-        $propertyQueries = array(self::buildPropertyQuery($persistence, RDF_TYPE, $classUri, false));
+        $propertyQueries = array(self::buildPropertyQuery($model, RDF_TYPE, $classUri, false));
         foreach ($propertyFilters as $propertyUri => $filterValues) {
-            $propertyQueries[] = self::buildPropertyQuery($persistence, $propertyUri, $filterValues, $like, $lang);
+            $propertyQueries[] = self::buildPropertyQuery($model, $propertyUri, $filterValues, $like, $lang);
         }
         
         $unionQuery = self::buildUnionQuery($propertyQueries);
         
         if (($propCount = count($propertyFilters)) === 0) {
-            $query = self::buildPropertyQuery($persistence, RDF_TYPE, $classUri, false, $lang);
+            $query = self::buildPropertyQuery($model, RDF_TYPE, $classUri, false, $lang);
         } else {
             $unionCount = ($and === true) ? ($propCount + 1) : 2;
             $query = "SELECT subject FROM (${unionQuery}) AS unionq GROUP BY subject HAVING count(*) >= ${unionCount}";
