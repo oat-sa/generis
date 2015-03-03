@@ -19,6 +19,8 @@
  * 
  */
 
+use oat\generis\model\data\ModelManager;
+
 /**
  * Generis installer of extensions
  * Can be extended to add advanced features
@@ -88,8 +90,6 @@ class common_ext_ExtensionInstaller
 				$this->installLoadConstants();
 				$this->installExtensionModel();
 					
-				core_kernel_persistence_smoothsql_SmoothModel::forceReloadModelIds();
-					
 				common_Logger::d('Installing custom script for extension ' . $this->extension->getId());
 				$this->installCustomScript();
 				common_Logger::d('Done installing custom script for extension ' . $this->extension->getId());
@@ -153,35 +153,10 @@ class common_ext_ExtensionInstaller
 	 */
 	protected function installOntology()
 	{
-		// insert model
-		$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
-		foreach ($this->extension->getManifest()->getInstallModelFiles() as $rdfpath) {
-			if (file_exists($rdfpath)){
-				if (is_readable($rdfpath)){
-					$xml = simplexml_load_file($rdfpath);
-					$attrs = $xml->attributes('xml', true);
-					if(!isset($attrs['base']) || empty($attrs['base'])){
-						throw new common_ext_InstallationException('The namespace of '.$rdfpath.' has to be defined with the "xml:base" attribute of the ROOT node');
-					}
-					$ns = (string) $attrs['base'];
-					if($ns != 'LOCAL_NAMESPACE##'){
-					    //import the model in the ontology
-					    common_Logger::d('Inserting model '.$rdfpath.' for '.$this->extension->getId(), 'INSTALL');
-					    $modelCreator->insertModelFile($ns, $rdfpath);
-					  
-					}else{
-					    common_Logger::d('Inserting model '.$rdfpath.' for '.$this->extension->getId() . ' in LOCAL NAMESPACE', 'INSTALL');
-					    $modelCreator->insertLocalModelFile($rdfpath);
-					}
-				}
-				else{
-					throw new common_ext_InstallationException("Unable to load ontology in '${rdfpath}' because the file is not readable.");
-				}
-			}
-			else{
-				throw new common_ext_InstallationException("Unable to load ontology in '${rdfpath}' because the file does not exist.");
-			}
-		}
+	    $rdf = ModelManager::getModel()->getRdfInterface();
+	    foreach ($this->getExtensionModel() as $triple) {
+	        $rdf->add($triple);
+	    }
 	}
 
 	/**
@@ -278,6 +253,7 @@ class common_ext_ExtensionInstaller
 		
 		//common_Logger::i("Spawning Extension/Module/Action model for extension '" . $this->extension->getId() . "'");
 		
+		
 	}
 
 	/**
@@ -357,6 +333,16 @@ class common_ext_ExtensionInstaller
 	public function getLocalData()
 	{
 		return $this->localData;
+	}
+	
+	/**
+	 * Returns the ontology model of the extension
+	 * 
+	 * @return common_ext_ExtensionModel
+	 */
+	public function getExtensionModel()
+	{
+	    return new common_ext_ExtensionModel($this->extension);
 	}
 
 	/**
