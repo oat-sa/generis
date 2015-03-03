@@ -45,7 +45,11 @@ class SmoothRdfTest extends GenerisPhpUnitTestRunner
     {
         $prophet = new Prophet();
         $persistence = $prophet->prophesize('\common_persistence_SqlPersistence');
-        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($persistence->reveal());
+        
+        $model = $prophet->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
+        $model->getPersistence()->willReturn($persistence->reveal());
+        
+        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
         $rdf->get(null, null);
     }
 
@@ -59,17 +63,21 @@ class SmoothRdfTest extends GenerisPhpUnitTestRunner
     {
         $prophet = new Prophet();
         $persistence = $prophet->prophesize('\common_persistence_SqlPersistence');
-        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($persistence->reveal());
+        
+        $model = $prophet->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
+        $model->getPersistence()->willReturn($persistence->reveal());
+        
+        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
         $rdf->search(null, null);
     }
+    
     /**
      * 
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testAdd()
     {
-        $prophet = new Prophet();
-        $persistence = $prophet->prophesize('\common_persistence_SqlPersistence');
+        $persistence = $this->prophesize('\common_persistence_SqlPersistence');
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language) VALUES ( ? , ? , ? , ? , ? );";
         
         $triple = new \core_kernel_classes_Triple();
@@ -86,10 +94,15 @@ class SmoothRdfTest extends GenerisPhpUnitTestRunner
             ''
         ))->willReturn(true);
         
-        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($persistence->reveal());
+        $model = $this->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
+        $model->getReadableModels()->willReturn(array(22));
+        $model->getPersistence()->willReturn($persistence->reveal());
+        
+        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
         
         $this->assertTrue($rdf->add($triple));
     }
+    
     /**
      * 
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -113,7 +126,11 @@ class SmoothRdfTest extends GenerisPhpUnitTestRunner
             ''
         ))->willReturn(true);
         
-        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($persistence->reveal());
+        $model = $prophet->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
+        $model->getPersistence()->willReturn($persistence->reveal());
+        
+        
+        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
         
         $this->assertTrue($rdf->remove($triple));
     }

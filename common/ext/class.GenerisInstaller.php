@@ -54,6 +54,14 @@ class common_ext_GenerisInstaller
     	}
         //$this->installCustomScript();
 		$this->installLoadDefaultConfig();
+		
+		ModelManager::setModel(new \core_kernel_persistence_smoothsql_SmoothModel(array(
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'default',
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS => array('1'),
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => array('1'),
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => '1'
+		)));
+		
 		$this->installOntology();
 		//$this->installLocalData();
 		//$this->installModuleModel();
@@ -65,7 +73,6 @@ class common_ext_GenerisInstaller
 		$this->installCustomScript();
 		
         
-		ModelManager::setModel(new \core_kernel_persistence_smoothsql_SmoothModel(array('persistence' => 'default')));
     }
 
 }

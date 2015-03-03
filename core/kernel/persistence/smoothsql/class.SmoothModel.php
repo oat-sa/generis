@@ -19,6 +19,8 @@
  */
 
 use oat\generis\model\data\Model;
+use oat\oatbox\Configurable;
+use oat\generis\model\data\ModelManager;
 
 /**
  * transitory model for the smooth sql implementation
@@ -26,59 +28,38 @@ use oat\generis\model\data\Model;
  * @author joel bout <joel@taotesting.com>
  * @package generis
  */
-class core_kernel_persistence_smoothsql_SmoothModel
+class core_kernel_persistence_smoothsql_SmoothModel extends Configurable
     implements Model
 {
-    /**
-     * Id of the persistence to be used for this data-model
-     * Currently unused
-     * 
-     * @var string
-     */
-    private $persistanceId;
+    const OPTION_PERSISTENCE = 'persistence';
+    const OPTION_READABLE_MODELS = 'readable';
+    const OPTION_WRITEABLE_MODELS = 'writeable';
+    const OPTION_NEW_TRIPLE_MODEL = 'addTo';
     
     /**
      * Persistence to use for the smoothmodel
      * 
      * @var common_persistence_SqlPersistence
      */
-    private $persistance;
-    
+    private $persistence;
     
     private static $readableSubModels = null;
     
     private static $updatableSubModels = null;
     
-    /**
-     * Constructor of the smooth model, expects a persistence in the configuration
-     * 
-     * @param array $configuration
-     * @throws common_exception_MissingParameter
-     */
-    public function __construct($options = array()) {
-        if (!isset($options['persistence'])) {
-            throw new common_exception_MissingParameter('persistence', __CLASS__);
+    public function getPersistence() {
+        if (is_null($this->persistence)) {
+            $this->persistence = common_persistence_SqlPersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
         }
-        $this->persistanceId = $options['persistence']; 
-        $this->persistance = common_persistence_SqlPersistence::getPersistence($options['persistence']);
+        return $this->persistence;
     }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \oat\generis\model\data\Model::getConfig()
-     */
-    public function getOptions() {
-        return array(
-            'persistence' => $this->persistanceId
-        );
-    }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getRdfInterface()
      */
     public function getRdfInterface() {
-        return new core_kernel_persistence_smoothsql_SmoothRdf($this->persistance);
+        return new core_kernel_persistence_smoothsql_SmoothRdf($this);
     }
     
     /**
@@ -86,75 +67,26 @@ class core_kernel_persistence_smoothsql_SmoothModel
      * @see \oat\generis\model\data\Model::getRdfsInterface()
      */
     public function getRdfsInterface() {
-        return new core_kernel_persistence_smoothsql_SmoothRdfs($this->persistance);
+        return new core_kernel_persistence_smoothsql_SmoothRdfs($this);
     }
     
     // Manage the sudmodels of the smooth mode
     
     /**
-     * Returns the submodel ids that are readable
+     * Returns the id of the model to add to
      * 
-     * @return array()
+     * @return string
      */
-    public static function getReadableModelIds() {
-        if (is_null(self::$readableSubModels)) {
-            self::loadReadableModelIds();
-        }
-        return self::$readableSubModels;
+    public function getNewTripleModelId() {
+        return $this->getOption(self::OPTION_NEW_TRIPLE_MODEL);
     }
     
-    /**
-     * Returns the submodel ids that are updatable
-     * 
-     * @return array()
-     */
-    public static function getUpdatableModelIds() {
-        if (is_null(self::$updatableSubModels)) {
-            $extensionManager = common_ext_ExtensionsManager::singleton();
-            self::$updatableSubModels = array_keys($extensionManager->getUpdatableModels());
-        }
-        return self::$updatableSubModels;
+    public function getReadableModels() {
+        return $this->getOption(self::OPTION_READABLE_MODELS);
     }
-    
-    /**
-     * @ignore
-     */
-    private static function loadReadableModelIds()
-    {
-        $extensionManager = common_ext_ExtensionsManager::singleton();
-        common_ext_NamespaceManager::singleton()->reset();
-        
-        $uris = array(LOCAL_NAMESPACE.'#');
-        foreach ($extensionManager->getModelsToLoad() as $subModelUri){
-            if(!preg_match("/#$/", $subModelUri)){
-                $subModelUri .= '#';
-            }
-            $uris[] = $subModelUri;
-        }
 
-        $ids = array();
-        foreach(common_ext_NamespaceManager::singleton()->getAllNamespaces() as $namespace){
-            if(in_array($namespace->getUri(), $uris)){
-                $ids[] = $namespace->getModelId();
-            }
-        }
-
-        self::$readableSubModels = array_unique($ids);
-    }
-    
-    /**
-     * For hardification we need to ba able to bypass the model restriction
-     * 
-     * @param array $ids
-     */
-    public static function forceUpdatableModelIds($ids)
-    {
-        self::$updatableSubModels = $ids;
-    }
-    
-    public static function forceReloadModelIds() {
-        self::$updatableSubModels = null;
-        self::$readableSubModels = null;
+    public function getWritableModels() {
+        return $this->getOption(self::OPTION_WRITEABLE_MODELS);
     }
     
     public function applyDiff(helpers_RdfDiff $diff) {
@@ -166,4 +98,71 @@ class core_kernel_persistence_smoothsql_SmoothModel
             $rdf->add($triple);
         }
     }
+    
+    /**
+     * Defines a model as readable
+     *
+     * @param string $id
+     */
+    public function addReadableModel($id) {
+    
+        common_Logger::i('ADDING MODEL '.$id);
+    
+        $readables = $this->getOption(self::OPTION_READABLE_MODELS);
+        $this->setOption(self::OPTION_READABLE_MODELS, array_unique(array_merge($readables, array($id))));
+    
+        // update in persistence
+        ModelManager::setModel($this);
+    }
+    
+    //
+    // Deprecated functions
+    // 
+    
+    /**
+     * Returns the submodel ids that are readable
+     * 
+     * @deprecated
+     * @return array()
+     */
+    public static function getReadableModelIds() {
+        $model = ModelManager::getModel();
+        if (!$model instanceof self) {
+            throw new common_exception_Error(__FUNCTION__.' called on '.get_class($model).' model implementation');
+        }
+        return $model->getReadableModels();
+    }
+    
+    /**
+     * Returns the submodel ids that are updatable
+     * 
+     * @deprecated
+     * @return array()
+     */
+    public static function getUpdatableModelIds() {
+        $model = ModelManager::getModel();
+        if (!$model instanceof self) {
+            throw new common_exception_Error(__FUNCTION__.' called on '.get_class($model).' model implementation');
+        }
+        return $model->getWritableModels();
+    }
+    
+    /**
+     * For hardification we need to ba able to bypass the model restriction
+     *
+     * @deprecated
+     * @param array $ids
+     */
+    public static function forceUpdatableModelIds($ids)
+    {
+        throw new common_exception_Error(__FUNCTION__.' no longer supported');
+    }
+    
+    /**
+     * @deprecated
+     */
+    public static function forceReloadModelIds() {
+        common_Logger::w('Call to deprecated '.__FUNCTION__.' no longer does anything');
+    }
+
 }

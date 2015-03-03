@@ -25,6 +25,7 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 use \core_kernel_classes_Resource;
 use \core_kernel_classes_Literal;
 use \core_kernel_persistence_smoothsql_Utils;
+use oat\generis\model\data\ModelManager;
 
 class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner {
     
@@ -37,7 +38,7 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner {
      */
 	public function testBuildSearchPattern($pattern, $like, $expected)
 	{
-	    $this->assertSame($expected, core_kernel_persistence_smoothsql_Utils::buildSearchPattern($this->getPersistence(), $pattern, $like));
+	    $this->assertSame($expected, core_kernel_persistence_smoothsql_Utils::buildSearchPattern($this->getModel()->getPersistence(), $pattern, $like));
 	}
 	
 	public function buildSearchPatternProvider()
@@ -70,7 +71,10 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner {
 	 */
 	public function testBuildPropertyQuery($expected, $propertyUri, $values, $like, $lang = '')
 	{
-	    $this->assertSame($expected, core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getPersistence(), $propertyUri, $values, $like, $lang));
+	    $query = core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getModel(), $propertyUri, $values, $like, $lang);
+	    $queryWithoutModelRestrictions = substr($query, 0, strlen($expected));
+	    $this->assertSame($expected, $queryWithoutModelRestrictions);
+	    $this->assertSame(' AND modelid IN (', substr($query, strlen($expected), strlen(' AND modelid IN (')));
 	}
 	
 	public function buildPropertyQueryProvider()
@@ -120,16 +124,16 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner {
 	    return array(
 	        array(
 	            array(
-	                core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getPersistence(), 'http://www.13.com/ontology#prop1', 'toto', false),
-	                core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getPersistence(), 'http://www.13.com/ontology#prop2', 'tata', false),
+	                core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getModel(), 'http://www.13.com/ontology#prop1', 'toto', false),
+	                core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getModel(), 'http://www.13.com/ontology#prop2', 'tata', false),
 	            ),
-	            '(' . core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getPersistence(), 'http://www.13.com/ontology#prop1', 'toto', false) . ') UNION ALL (' . core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getPersistence(), 'http://www.13.com/ontology#prop2', 'tata', false) . ')'
+	            '(' . core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getModel(), 'http://www.13.com/ontology#prop1', 'toto', false) . ') UNION ALL (' . core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getModel(), 'http://www.13.com/ontology#prop2', 'tata', false) . ')'
 	        ),
 	        array(
 	            array(
-	                core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getPersistence(), 'http://www.13.com/ontology#prop1', 'toto', false)       
+	                core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getModel(), 'http://www.13.com/ontology#prop1', 'toto', false)       
 	            ),
-	            core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getPersistence(), 'http://www.13.com/ontology#prop1', 'toto', false)
+	            core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getModel(), 'http://www.13.com/ontology#prop1', 'toto', false)
 	        ),
 	        array(array(), false)
 	    );
@@ -165,10 +169,10 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner {
 	}
 	
 	/**
-	 * @return common_persistence_SqlPersistence
+	 * @return \core_kernel_persistence_smoothsql_SmoothModel
 	 */
-	private function getPersistence() {
-	    return \common_persistence_SqlPersistence::getPersistence('default');
+	private function getModel() {
+	    return ModelManager::getModel();
 	}
 	
 	/**
@@ -176,6 +180,6 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner {
 	 * @return string
 	 */
 	private function quote($string) {
-	    return $this->getPersistence()->quote($string);
+	    return $this->getModel()->getPersistence()->quote($string);
 	}
 }

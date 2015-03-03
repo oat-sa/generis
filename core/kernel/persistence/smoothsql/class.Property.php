@@ -126,9 +126,8 @@ class core_kernel_persistence_smoothsql_Property
         
         //delete all values of the property to delete
         if ($deleteReference){
-	    	$modelIds	= implode(',',core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds());
-			$query = 'DELETE FROM "statements" WHERE "predicate" = ? AND "modelid" IN ('.$modelIds.')';
-	        $returnValue = $this->persistence->exec($query, array($resource->getUri()));
+			$query = 'DELETE FROM "statements" WHERE "predicate" = ? AND '.$this->getModelWriteSqlCondition();
+	        $returnValue = $this->getPersistence()->exec($query, array($resource->getUri()));
         }
         $returnValue = parent::delete($resource, $deleteReference);
 
@@ -150,7 +149,7 @@ class core_kernel_persistence_smoothsql_Property
 
         
         $rangeProp = new core_kernel_classes_Property(RDFS_RANGE, __METHOD__);
-        $returnValue = $resource->setPropertyValue($rangeProp, $class->getUri());
+        $returnValue = $this->setPropertyValue($resource, $rangeProp, $class->getUri());
         
 
         return $returnValue;

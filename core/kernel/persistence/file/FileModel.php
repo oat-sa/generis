@@ -119,7 +119,14 @@ class FileModel
             }
         }
         if (is_null($modelId)) {
-            throw new common_exception_Error('The model corresponding to the namespace '.$namespaceUri.' is unknown');
+            \common_Logger::d('modelId not found, need to add namespace '. $namespaceUri);
+            
+            //TODO bad way, need to find better
+            $dbWrapper = \core_kernel_classes_DbWrapper::singleton();
+            $results = $dbWrapper->insert('models', array('modeluri' =>$namespaceUri));
+            $modelId = $dbWrapper->lastInsertId();
+            common_ext_NamespaceManager::singleton()->reset();
+            
         }
         return $modelId;
     }

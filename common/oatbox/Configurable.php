@@ -41,6 +41,10 @@ abstract class Configurable implements PhpSerializable
     public function __construct($options = array()) {
         $this->setOptions($options);
     }
+
+    public function setOption($name, $value) {
+        $this->options[$name] = $value;
+    }
     
     /**
      * Set options

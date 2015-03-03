@@ -34,13 +34,38 @@ class core_kernel_persistence_smoothsql_Resource
 {
 
     /**
-     * @var common_persistence_SqlPersistence
+     * @var core_kernel_persistence_smoothsql_SmoothModel
      */
-    protected $persistence;
+    private $model;
     
-    public function __construct(common_persistence_SqlPersistence $persistence) {
-        $this->persistence = $persistence;
+    public function __construct(core_kernel_persistence_smoothsql_SmoothModel $model) {
+        $this->model = $model;
     }
+    
+    protected function getModel() {
+        return $this->model;
+    }
+    
+    /**
+     * @return common_persistence_SqlPersistence
+     */
+    protected function getPersistence() {
+        return $this->model->getPersistence();
+    }
+    
+    protected function getModelReadSqlCondition() {
+        return 'modelid IN ('.implode(',', $this->model->getReadableModels()).')';
+    }
+    
+    protected function getModelWriteSqlCondition() {
+        return 'modelid IN ('.implode(',',$this->model->getWritableModels()).')';
+    }
+    
+    protected function getNewTripleModelId() {
+        return $this->model->getNewTripleModelId();
+    }
+    
+    
     
     /**
      * returns an array of types the ressource has
@@ -56,10 +81,10 @@ class core_kernel_persistence_smoothsql_Resource
 
         
 		$sqlQuery = 'SELECT object FROM statements WHERE subject = ? and predicate = ?';
-        $sth = $this->persistence->query($sqlQuery,array($resource->getUri(), RDF_TYPE));
+        $sth = $this->getPersistence()->query($sqlQuery,array($resource->getUri(), RDF_TYPE));
 
         while ($row = $sth->fetch()){
-            $uri = $this->persistence->getPlatForm()->getPhpTextValue($row['object']);
+            $uri = $this->getPersistence()->getPlatForm()->getPhpTextValue($row['object']);
             $returnValue[$uri] = new core_kernel_classes_Class($uri);
         }        
         
@@ -87,7 +112,7 @@ class core_kernel_persistence_smoothsql_Resource
             throw new core_kernel_persistence_Exception('Option \'last\' no longer supported');
         }
 		$session = core_kernel_classes_Session::singleton();
-		$platform = $this->persistence->getPlatForm();
+		$platform = $this->getPersistence()->getPlatForm();
 		
     	// Define language if required
 		$lang = '';
@@ -97,28 +122,27 @@ class core_kernel_persistence_smoothsql_Resource
 		}
 		else{
 			$lang = \common_session_SessionManager::getSession()->getDataLanguage();
-			$defaultLg = ' OR l_language = '.$this->persistence->quote(DEFAULT_LANG).' ';
+			$defaultLg = ' OR l_language = '.$this->getPersistence()->quote(DEFAULT_LANG).' ';
 		}
 		
         $session = core_kernel_classes_Session::singleton();
-       	$modelIds = implode(',',core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds());
     	
         $query =  'SELECT object, l_language
         			FROM statements 
 		    		WHERE subject = ? 
 		    		AND predicate = ?
 					AND ( l_language = ? OR ' .$platform->isNullCondition('l_language') .$defaultLg.')
-		    		AND modelid IN ('.$modelIds.')';
+		    		AND '.$this->getModelReadSqlCondition();
         
     	// Select first
 		if($one){
 			$query .= ' ORDER BY id DESC';
 			$query = $platform->limitStatement($query, 1, 0);
-			$result = $this->persistence->query($query,array($resource->getUri(), $property->getUri(), $lang));
+			$result = $this->getPersistence()->query($query,array($resource->getUri(), $property->getUri(), $lang));
 		}
 		// Select All
 		else{
-			$result = $this->persistence->query($query,array($resource->getUri(), $property->getUri(), $lang));
+			$result = $this->getPersistence()->query($query,array($resource->getUri(), $property->getUri(), $lang));
 		}
         
 		// Treat the query result
@@ -126,12 +150,12 @@ class core_kernel_persistence_smoothsql_Resource
         	// If a language has been defined, do not filter result by language
         	if(isset($options['lg'])){
 		    	while ($row = $result->fetch()){
-					$returnValue[] = $this->persistence->getPlatForm()->getPhpTextValue($row['object']);
+					$returnValue[] = $this->getPersistence()->getPlatForm()->getPhpTextValue($row['object']);
 				}
         	} 
         	// Filter result by language and return one set of values (User language in top priority, default language in second and the fallback language (null) in third)
         	else {
-        		 $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage($this->persistence, $result->fetchAll(), 'l_language');
+        		 $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage($this->getPersistence(), $result->fetchAll(), 'l_language');
         	}
         }
         
@@ -161,7 +185,7 @@ class core_kernel_persistence_smoothsql_Resource
         );
         
         $returnValue = new core_kernel_classes_ContainerCollection($resource);
-        foreach ($resource->getPropertyValues($property, $options) as $value){
+        foreach ($this->getPropertyValues($resource, $property, $options) as $value){
             $returnValue->add(common_Utils::toResource($value));
         }
         
@@ -188,7 +212,7 @@ class core_kernel_persistence_smoothsql_Resource
         
         
         $object  = $object instanceof core_kernel_classes_Resource ? $object->getUri() : (string) $object;
-    	$platform = $this->persistence->getPlatForm();
+    	$platform = $this->getPersistence()->getPlatForm();
         $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
         $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
         $lang = "";
@@ -204,8 +228,8 @@ class core_kernel_persistence_smoothsql_Resource
         $query = 'INSERT INTO statements (modelid, subject, predicate, object, l_language, author,epoch)
         			VALUES  (?, ?, ?, ?, ?, ? , ?)';
 
-        $returnValue = $this->persistence->exec($query, array(
-       		$localNs->getModelId(),
+        $returnValue = $this->getPersistence()->exec($query, array(
+       		$this->getNewTripleModelId(),
        		$resource->getUri(),
        		$property->getUri(),
        		$object,
@@ -240,13 +264,12 @@ class core_kernel_persistence_smoothsql_Resource
     	if(is_array($properties)){
         	if(count($properties) > 0){
         		
-	        	$platform = $this->persistence->getPlatForm();
+	        	$platform = $this->getPersistence()->getPlatForm();
 	        	$session 	= core_kernel_classes_Session::singleton();
 	        	
 	        	$localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
-	       		$modelId	= $localNs->getModelId();
 	        	$mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
-	        	$user		= $session->getUserUri()!= null ?  $this->persistence->quote($session->getUserUri()) : $platform->getNullString();
+	        	$user		= $session->getUserUri()!= null ?  $this->getPersistence()->quote($session->getUserUri()) : $platform->getNullString();
 	       		
 	      
 	        	$multipleInsertQueryHelper = $platform->getMultipleInsertsSqlQueryHelper();
@@ -268,17 +291,17 @@ class core_kernel_persistence_smoothsql_Resource
 
 	       		foreach($properties as $propertyUri => $value){
 	       			$property = new core_kernel_classes_Property($propertyUri);
-	       			$lang 	= ($property->isLgDependent() ? $this->persistence->quote(\common_session_SessionManager::getSession()->getDataLanguage()) : $platform->getNullString()  );
+	       			$lang 	= ($property->isLgDependent() ? $this->getPersistence()->quote(\common_session_SessionManager::getSession()->getDataLanguage()) : $platform->getNullString()  );
 
 					$formatedValues = array();
 					if($value instanceof core_kernel_classes_Resource){
-						$formatedValues[] = $this->persistence->quote($value->getUri());
+						$formatedValues[] = $this->getPersistence()->quote($value->getUri());
 					}else if(is_array($value)){
 						foreach($value as $val){
 							if($val instanceof core_kernel_classes_Resource){
-								$formatedValues[] = $this->persistence->quote($val->getUri());
+								$formatedValues[] = $this->getPersistence()->quote($val->getUri());
 							}else{
-								$formatedValues[] = $this->persistence->quote($val);
+								$formatedValues[] = $this->getPersistence()->quote($val);
 							}
 						}
 					}else{
@@ -286,31 +309,30 @@ class core_kernel_persistence_smoothsql_Resource
 							$formatedValues[] = $platform->getNullString();
 						}
 						else {
-							$formatedValues[] = $this->persistence->quote($value);
+							$formatedValues[] = $this->getPersistence()->quote($value);
 						}
 					}
 					
 					foreach($formatedValues as $object){
-//						$query .= " ($modelId, '{$resource->getUri()}', '{$property->getUri()}', {$object}, '{$lang}', '{$user}', '{$mask}','{$mask}','{$mask}'),";
 						$query .= $multipleInsertQueryHelper->getValuePart('statements', $columns,
 								array(
-										"modelid" => $modelId,
-										"subject" => $this->persistence->quote($resource->getUri()),
-										"predicate"=> $this->persistence->quote($property->getUri()),
+										"modelid" => $this->getNewTripleModelId(),
+										"subject" => $this->getPersistence()->quote($resource->getUri()),
+										"predicate"=> $this->getPersistence()->quote($property->getUri()),
 										"object" => $object,
 										"l_language" => $lang,
 										"author" => $user,
-// 										"stread" => $this->persistence->quote($mask),
-// 										"stedit" => $this->persistence->quote($mask),
-// 										"stdelete" => $this->persistence->quote($mask),
-								     "epoch" =>	$this->persistence->quote($platform->getNowExpression() )
+// 										"stread" => $this->getPersistence()->quote($mask),
+// 										"stedit" => $this->getPersistence()->quote($mask),
+// 										"stdelete" => $this->getPersistence()->quote($mask),
+								     "epoch" =>	$this->getPersistence()->quote($platform->getNowExpression() )
 								));
 					}
 	       		}
 	       		
 	       		$query = substr($query, 0, strlen($query) -1);
 	       		$query .= $multipleInsertQueryHelper->getEndStaticPart();
-	       		$returnValue = $this->persistence->exec($query);
+	       		$returnValue = $this->getPersistence()->exec($query);
         	}
         }
         
@@ -336,7 +358,7 @@ class core_kernel_persistence_smoothsql_Resource
 
         
 
-		$platform = $this->persistence->getPlatForm();
+		$platform = $this->getPersistence()->getPlatForm();
         $session 	= core_kernel_classes_Session::singleton();
         $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
         $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
@@ -344,8 +366,8 @@ class core_kernel_persistence_smoothsql_Resource
         $query = 'INSERT INTO statements (modelid,subject,predicate,object,l_language,author,epoch)
         			VALUES  (?, ?, ?, ?, ?, ?, ?)';
 
-        $returnValue = $this->persistence->exec($query, array(
-       		$localNs->getModelId(),
+        $returnValue = $this->getPersistence()->exec($query, array(
+       		$this->getNewTripleModelId(),
        		$resource->getUri(),
        		$property->getUri(),
        		$value,
@@ -382,18 +404,18 @@ class core_kernel_persistence_smoothsql_Resource
 		
 		//build query:
 		$query =  'DELETE FROM statements WHERE subject = ? AND predicate = ?';
-		$objectType = $this->persistence->getPlatForm()->getObjectTypeCondition();
+		$objectType = $this->getPersistence()->getPlatForm()->getObjectTypeCondition();
 		$conditions = array();
 		if(is_string($pattern)){
 			if(!is_null($pattern)){
-				$searchPattern = core_kernel_persistence_smoothsql_Utils::buildSearchPattern($this->persistence, $pattern, $like);
+				$searchPattern = core_kernel_persistence_smoothsql_Utils::buildSearchPattern($this->getPersistence(), $pattern, $like);
 				$conditions[] = '( '.$objectType . ' ' .$searchPattern.' )';
 			}
 		}else if(is_array($pattern)){
 			if(count($pattern) > 0){
 				$multiCondition =  "( ";
 				foreach($pattern as $i => $patternToken){
-					$searchPattern = core_kernel_persistence_smoothsql_Utils::buildSearchPattern($this->persistence, $patternToken, $like);
+					$searchPattern = core_kernel_persistence_smoothsql_Utils::buildSearchPattern($this->getPersistence(), $patternToken, $like);
 					if($i > 0) {
                         $multiCondition .= " OR ";
                     }
@@ -408,21 +430,20 @@ class core_kernel_persistence_smoothsql_Resource
 		}
         
 		//be sure the property we try to remove is included in an updatable model
-    	$modelIds	= implode(',',core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds());
-		$query .= ' AND modelid IN ('.$modelIds.')';
+		$query .= ' AND '.$this->getModelWriteSqlCondition();
 		
         if($property->isLgDependent()){
         	
         	$session = core_kernel_classes_Session::singleton();
-        	$query .=  ' AND (' . $this->persistence->getPlatForm()->isNullCondition('l_language') . ' OR l_language = ?) ';
-        	$returnValue = $this->persistence->exec($query,array(
+        	$query .=  ' AND (' . $this->getPersistence()->getPlatForm()->isNullCondition('l_language') . ' OR l_language = ?) ';
+        	$returnValue = $this->getPersistence()->exec($query,array(
 	        		$resource->getUri(),
 	        		$property->getUri(),
 	        		\common_session_SessionManager::getSession()->getDataLanguage()
 	        ));
         }
         else{
-        	$returnValue = $this->persistence->exec($query,array(
+        	$returnValue = $this->getPersistence()->exec($query,array(
 	        		$resource->getUri(),
 	        		$property->getUri()
 	        ));   
@@ -454,10 +475,9 @@ class core_kernel_persistence_smoothsql_Resource
 
         $sqlQuery = 'DELETE FROM statements WHERE subject = ? and predicate = ? and l_language = ?';
         //be sure the property we try to remove is included in an updatable model
-    	$modelIds	= implode(',',core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds());
-		$sqlQuery .= ' AND modelid IN ('.$modelIds.')';
+		$sqlQuery .= ' AND '.$this->getModelWriteSqlCondition();
         
-        $returnValue = $this->persistence->exec($sqlQuery, array (
+        $returnValue = $this->getPersistence()->exec($sqlQuery, array (
         	$resource->getUri(),
         	$property->getUri(),
         	$lg
@@ -484,9 +504,8 @@ class core_kernel_persistence_smoothsql_Resource
     {
         $returnValue = null;
         
-        $modelIds = '('.implode(',', core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds()).')';
-        $query = 'SELECT * FROM statements WHERE subject = ? AND modelid IN '.$modelIds.' ORDER BY predicate';
-        $result = $this->persistence->query($query, array($resource->getUri()));
+        $query = 'SELECT * FROM statements WHERE subject = ? AND '.$this->getModelReadSqlCondition().' ORDER BY predicate';
+        $result = $this->getPersistence()->query($query, array($resource->getUri()));
         
         $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
         while ($statement = $result->fetch()) {
@@ -519,7 +538,7 @@ class core_kernel_persistence_smoothsql_Resource
         
         
     	$sqlQuery = 'SELECT l_language FROM statements WHERE subject = ? AND predicate = ? ';
-        $sqlResult = $this->persistence->query($sqlQuery, array (
+        $sqlResult = $this->getPersistence()->query($sqlQuery, array (
         	$resource->getUri(),
         	$property->getUri()
         ));
@@ -551,18 +570,17 @@ class core_kernel_persistence_smoothsql_Resource
         
     	$newUri = common_Utils::getNewUri();
     	
-    	$collection = $resource->getRdfTriples();
+    	$collection = $this->getRdfTriples($resource);
     	if($collection->count() > 0){
     		
-    		$platform = $this->persistence->getPlatForm();
+    		$platform = $this->getPersistence()->getPlatForm();
     		$multipleInsertQueryHelper = $platform->getMultipleInsertsSqlQueryHelper();
     		
     		$session = core_kernel_classes_Session::singleton();
     		$localNs = common_ext_NamespaceManager::singleton()->getLocalNamespace();
-	       	$modelId = $localNs->getModelId();
         	$user    = common_session_SessionManager::isAnonymous()
         	   ? $platform->getNullString()
-        	   : $this->persistence->quote(\common_session_SessionManager::getSession()->getUser()->getIdentifier());
+        	   : $this->getPersistence()->quote(\common_session_SessionManager::getSession()->getUser()->getIdentifier());
 	       		
     		   		
 	    	$columns = array(
@@ -580,13 +598,13 @@ class core_kernel_persistence_smoothsql_Resource
     			if(!in_array($triple->predicate, $excludedProperties)){
 	    			$query .= $multipleInsertQueryHelper->getValuePart('statements', $columns,
 	    					array(
-	    							"modelid" => $modelId,
-	    							"subject" => $this->persistence->quote($newUri),
-	    							"predicate"=> $this->persistence->quote($triple->predicate),
-	    							"object" => $triple->object == null ? $platform->getNullString() : $this->persistence->quote($triple->object),
-	    							"l_language" => $triple->lg == null ? $platform->getNullString() : $this->persistence->quote($triple->lg),
+	    							"modelid" => $this->getNewTripleModelId(),
+	    							"subject" => $this->getPersistence()->quote($newUri),
+	    							"predicate"=> $this->getPersistence()->quote($triple->predicate),
+	    							"object" => $triple->object == null ? $platform->getNullString() : $this->getPersistence()->quote($triple->object),
+	    							"l_language" => $triple->lg == null ? $platform->getNullString() : $this->getPersistence()->quote($triple->lg),
 	    							"author" => $user,
-     					            "epoch" => $this->persistence->quote($platform->getNowExpression())
+     					            "epoch" => $this->getPersistence()->quote($platform->getNowExpression())
 	    					));
     			}
 	    	}
@@ -594,7 +612,7 @@ class core_kernel_persistence_smoothsql_Resource
 	    	$query = substr($query, 0, strlen($query) -1);
 	    	$query .= $multipleInsertQueryHelper->getEndStaticPart();
 	    	
-        	if($this->persistence->exec($query)){
+        	if($this->getPersistence()->exec($query)){
         		$returnValue = new core_kernel_classes_Resource($newUri);
         	}
     	}
@@ -617,17 +635,16 @@ class core_kernel_persistence_smoothsql_Resource
     {
         $returnValue = (bool) false;
 
-    	$modelIds	= implode(',',core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds());
-		$query = 'DELETE FROM statements WHERE subject = ? AND modelid IN ('.$modelIds.')';
-        $returnValue = $this->persistence->exec($query, array($resource->getUri()));
+		$query = 'DELETE FROM statements WHERE subject = ? AND '.$this->getModelWriteSqlCondition();
+        $returnValue = $this->getPersistence()->exec($query, array($resource->getUri()));
 
         //if no rows affected return false
         if (!$returnValue){
         	$returnValue = false;
         } 
         else if($deleteReference){
-        	$sqlQuery = 'DELETE FROM statements WHERE ' . $this->persistence->getPlatForm()->getObjectTypeCondition() . ' = ? AND modelid IN ('.$modelIds.')';
-        	$return = $this->persistence->exec($sqlQuery, array ($resource->getUri()));
+        	$sqlQuery = 'DELETE FROM statements WHERE ' . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ? AND '.$this->getModelWriteSqlCondition();
+        	$return = $this->getPersistence()->exec($sqlQuery, array ($resource->getUri()));
         	
         	if ($return !== false){
         		$returnValue = true;
@@ -667,27 +684,26 @@ class core_kernel_persistence_smoothsql_Resource
 		foreach ($properties as $property) {
 			$uri = (is_string($property) ? $property : $property->getUri());
 			$returnValue[$uri] = array();
-			$predicatesQuery .= ", " . $this->persistence->quote($uri) ;
+			$predicatesQuery .= ", " . $this->getPersistence()->quote($uri) ;
 		}
     	$predicatesQuery=substr($predicatesQuery, 1);
         $session 	= core_kernel_classes_Session::singleton();
-    	$modelIds	= implode(',', core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds());
 
- 		$platform = $this->persistence->getPlatForm();
+ 		$platform = $this->getPersistence()->getPlatForm();
     	//the unique sql query
         $query =  'SELECT predicate, object, l_language 
             FROM statements 
             WHERE 
-                subject = '.$this->persistence->quote($resource->getUri()).' 
+                subject = '.$this->getPersistence()->quote($resource->getUri()).' 
                 AND predicate IN ('.$predicatesQuery.')
                 AND ('. $platform->isNullCondition('l_language') . 
-                    ' OR l_language = '.$this->persistence->quote(DEFAULT_LANG). 
-                    ' OR l_language = '.$this->persistence->quote(\common_session_SessionManager::getSession()->getDataLanguage()).') 
-                AND modelid IN ('.$modelIds.')';
-        $result	= $this->persistence->query($query);
+                    ' OR l_language = '.$this->getPersistence()->quote(DEFAULT_LANG). 
+                    ' OR l_language = '.$this->getPersistence()->quote(\common_session_SessionManager::getSession()->getDataLanguage()).') 
+                AND '.$this->getModelReadSqlCondition();
+        $result	= $this->getPersistence()->query($query);
         
         $rows = $result->fetchAll();
-        $sortedByLg = core_kernel_persistence_smoothsql_Utils::sortByLanguage($this->persistence, $rows, 'l_language');
+        $sortedByLg = core_kernel_persistence_smoothsql_Utils::sortByLanguage($this->getPersistence(), $rows, 'l_language');
         $identifiedLg = core_kernel_persistence_smoothsql_Utils::identifyFirstLanguage($sortedByLg);
 
         foreach($rows as $row){
@@ -740,13 +756,12 @@ class core_kernel_persistence_smoothsql_Resource
         
         
         $query =  'DELETE FROM statements 
-		    		WHERE subject = ? AND predicate = ? AND '. $this->persistence->getPlatForm()->getObjectTypeCondition() .' = ?';
+		    		WHERE subject = ? AND predicate = ? AND '. $this->getPersistence()->getPlatForm()->getObjectTypeCondition() .' = ?';
         
         //be sure the property we try to remove is included in an updatable model
-    	$modelIds	= implode(',',core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds());
-		$query .= ' AND modelid IN ('.$modelIds.')';
+		$query .= ' AND '.$this->getModelWriteSqlCondition();
         
-        $returnValue = $this->persistence->exec($query,array(
+        $returnValue = $this->getPersistence()->exec($query,array(
         	$resource->getUri(),
         	RDF_TYPE,
         	$class->getUri()
