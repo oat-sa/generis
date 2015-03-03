@@ -110,10 +110,6 @@ class FileModelTest extends GenerisPhpUnitTestRunner
             array(
                 100,
                 $dir . '/rdf/nobase.rdf'
-            ),
-            array(
-                101,
-                $dir . '/rdf/nomodelid.rdf'
             )
         );
     }
@@ -132,9 +128,6 @@ class FileModelTest extends GenerisPhpUnitTestRunner
             $this->assertInstanceOf('\common_exception_Error', $e);
             if ($id == 100) {
                 $this->assertContains('has to be defined with the "xml:base" attribute of the ROOT node', $e->getMessage());
-            } else if($id == 101) {
-                $this->assertEquals('The model corresponding to the namespace toto# is unknown', $e->getMessage());
-                
             } else {
                 $this->fail('unexpected error');
             }
