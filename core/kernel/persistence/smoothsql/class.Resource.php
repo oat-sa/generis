@@ -42,6 +42,10 @@ class core_kernel_persistence_smoothsql_Resource
         $this->model = $model;
     }
     
+    protected function getModel() {
+        return $this->model;
+    }
+    
     /**
      * @return common_persistence_SqlPersistence
      */
@@ -181,7 +185,7 @@ class core_kernel_persistence_smoothsql_Resource
         );
         
         $returnValue = new core_kernel_classes_ContainerCollection($resource);
-        foreach ($resource->getPropertyValues($property, $options) as $value){
+        foreach ($this->getPropertyValues($resource, $property, $options) as $value){
             $returnValue->add(common_Utils::toResource($value));
         }
         
@@ -566,7 +570,7 @@ class core_kernel_persistence_smoothsql_Resource
         
     	$newUri = common_Utils::getNewUri();
     	
-    	$collection = $resource->getRdfTriples();
+    	$collection = $this->getRdfTriples($resource);
     	if($collection->count() > 0){
     		
     		$platform = $this->getPersistence()->getPlatForm();
