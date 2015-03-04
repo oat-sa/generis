@@ -124,7 +124,7 @@ class FileModel
             //TODO bad way, need to find better
             $dbWrapper = \core_kernel_classes_DbWrapper::singleton();
             $results = $dbWrapper->insert('models', array('modeluri' =>$namespaceUri));
-            $modelId = $dbWrapper->lastInsertId();
+            $modelId = $dbWrapper->lastInsertId('models');
             common_ext_NamespaceManager::singleton()->reset();
             
         }

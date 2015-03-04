@@ -94,9 +94,19 @@ class common_persistence_sql_pdo_pgsql_Driver
     }
 
 
+    public function lastInsertId($name = null)
+    {
+        if ($name === 'models') {
+            $name = 'models_modelid_seq';
+        } else {
+            if ($name === 'variables_storage') {
+                $name = 'variables_storage_variable_id_seq';
+            } else {
+                $name .= '_id_seq';
+            }
+        }
 
-    public function lastInsertId($name = null){
-        return parent::lastInsertId($name.'_id_seq');
+        return parent::lastInsertId($name);
     }
 
 
