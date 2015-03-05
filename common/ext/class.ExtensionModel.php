@@ -38,11 +38,14 @@ class common_ext_ExtensionModel extends AppendIterator
         foreach ($extension->getManifest()->getInstallModelFiles() as $rdfpath) {
             if (!file_exists($rdfpath)) {
                 throw new common_ext_InstallationException("Unable to load ontology in '${rdfpath}' because the file does not exist.");
-        }
-        if (!is_readable($rdfpath)) {
-            throw new common_ext_InstallationException("Unable to load ontology in '${rdfpath}' because the file is not readable.");
-        }
-        $this->append((new FileIterator($rdfpath))->getIterator());
+            }
+        
+            if (!is_readable($rdfpath)) {
+                throw new common_ext_InstallationException("Unable to load ontology in '${rdfpath}' because the file is not readable.");
+            }
+            
+            $iterator = new FileIterator($rdfpath);
+            $this->append($iterator->getIterator());
         }
     }
 }
