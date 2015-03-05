@@ -27,7 +27,7 @@
  * @package generis
  
  */
-class common_report_Report implements IteratorAggregate
+class common_report_Report implements IteratorAggregate, JsonSerializable
 {
     const TYPE_SUCCESS = 1;
     
@@ -234,15 +234,6 @@ class common_report_Report implements IteratorAggregate
 		    }
 		}
 	}
-
-	/**
-	 * user feedback message
-	 * 
-	 * @return string
-	 */
-	public function __toString() {
-	    return $this->message;
-	}
 	
 	/**
 	 * Returns an iterator over the children 
@@ -260,6 +251,43 @@ class common_report_Report implements IteratorAggregate
 	 */
 	public function hasChildren() {
 	    return count($this->elements) > 0;
+	}
+
+	/**
+	 * user feedback message
+	 * 
+	 * @return string
+	 */
+	public function __toString() {
+	    return $this->message;
+	}
+	
+	public function JsonSerialize()
+	{
+	    switch ($this->getType()) {
+	    
+	    	case common_report_Report::TYPE_SUCCESS:
+	    	    $type = 'success';
+	    	    break;
+	    
+	    	case common_report_Report::TYPE_WARNING:
+	    	    $type = 'warning';
+	    	    break;
+	    
+	    	case common_report_Report::TYPE_ERROR:
+	    	    $type = 'error';
+	    	    break;
+	    
+	    	default:
+	    	    $type = 'info';
+	    	    break;
+	    }
+	    return array(
+	        'type'      => $type,
+	        'message'    => $this->message,
+	        'data'      => $this->data,
+	        'children'  => $this->elements
+	    );
 	}
 	
 }
