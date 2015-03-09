@@ -18,6 +18,10 @@
  * 
  */
 
+if (!interface_exists('JsonSerializable')) {
+    // for php < 5.4
+    eval('interface JsonSerializable {}');
+}
 /**
  * The Report allows to return a more detailed return value
  * then a simple boolean variable denoting the success
@@ -25,7 +29,6 @@
  * @access public
  * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
  * @package generis
- 
  */
 class common_report_Report implements IteratorAggregate, JsonSerializable
 {
