@@ -305,7 +305,7 @@
   	<rdfs:label xml:lang="en-US"><![CDATA[Roles]]></rdfs:label>
   	<rdfs:comment xml:lang="en-US"><![CDATA[The roles a user has]]></rdfs:comment>
   	<rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#User"/>
-  	<rdfs:range rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#ClassRole"/>
+  	<rdfs:range rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#UserRole"/>
   	<generis:is_language_dependent rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#False"/>
   	<generis:Multiple rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#True"/>
   	<widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#CheckBox"/>
@@ -338,6 +338,11 @@
   	<rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#ClassRole"/>
     <rdfs:label xml:lang="en-US"><![CDATA[Abstract]]></rdfs:label>
     <rdfs:comment xml:lang="en-US"><![CDATA[The Abstract Role Class]]></rdfs:comment>	
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#UserRole">
+    <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#ClassRole"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[User Role]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[The user centric Role Class]]></rdfs:comment>
   </rdf:Description>
   
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#GenerisRole">
