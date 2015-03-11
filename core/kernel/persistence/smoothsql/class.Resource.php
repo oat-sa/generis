@@ -111,7 +111,6 @@ class core_kernel_persistence_smoothsql_Resource
         if (isset($options['last'])) {
             throw new core_kernel_persistence_Exception('Option \'last\' no longer supported');
         }
-		$session = core_kernel_classes_Session::singleton();
 		$platform = $this->getPersistence()->getPlatForm();
 		
     	// Define language if required
@@ -125,8 +124,6 @@ class core_kernel_persistence_smoothsql_Resource
 			$defaultLg = ' OR l_language = '.$this->getPersistence()->quote(DEFAULT_LANG).' ';
 		}
 		
-        $session = core_kernel_classes_Session::singleton();
-    	
         $query =  'SELECT object, l_language
         			FROM statements 
 		    		WHERE subject = ? 
@@ -213,7 +210,6 @@ class core_kernel_persistence_smoothsql_Resource
         
         $object  = $object instanceof core_kernel_classes_Resource ? $object->getUri() : (string) $object;
     	$platform = $this->getPersistence()->getPlatForm();
-        $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
         $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
         $lang = "";
         // Define language if required
@@ -265,11 +261,10 @@ class core_kernel_persistence_smoothsql_Resource
         	if(count($properties) > 0){
         		
 	        	$platform = $this->getPersistence()->getPlatForm();
-	        	$session 	= core_kernel_classes_Session::singleton();
-	        	
-	        	$localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
 	        	$mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
-	        	$user		= $session->getUserUri()!= null ?  $this->getPersistence()->quote($session->getUserUri()) : $platform->getNullString();
+	        	$user		= common_session_SessionManager::isAnonymous()
+                    ? $platform->getNullString()
+                    : $this->getPersistence()->quote(common_session_SessionManager::getSession()->getUser()->getIdentifier());
 	       		
 	      
 	        	$multipleInsertQueryHelper = $platform->getMultipleInsertsSqlQueryHelper();
@@ -359,8 +354,8 @@ class core_kernel_persistence_smoothsql_Resource
         
 
 		$platform = $this->getPersistence()->getPlatForm();
-        $session 	= core_kernel_classes_Session::singleton();
-        $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
+		$userId     = common_session_SessionManager::isAnonymous()
+    		? null : \common_session_SessionManager::getSession()->getUser()->getIdentifier();
         $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
         
         $query = 'INSERT INTO statements (modelid,subject,predicate,object,l_language,author,epoch)
@@ -372,7 +367,7 @@ class core_kernel_persistence_smoothsql_Resource
        		$property->getUri(),
        		$value,
        		($property->isLgDependent() ? $lg : ''),
-       		$session->getUserUri(),
+       		$userId,
 //        		$mask,
 //        		$mask,
 //        		$mask,
@@ -434,7 +429,6 @@ class core_kernel_persistence_smoothsql_Resource
 		
         if($property->isLgDependent()){
         	
-        	$session = core_kernel_classes_Session::singleton();
         	$query .=  ' AND (' . $this->getPersistence()->getPlatForm()->isNullCondition('l_language') . ' OR l_language = ?) ';
         	$returnValue = $this->getPersistence()->exec($query,array(
 	        		$resource->getUri(),
@@ -576,8 +570,6 @@ class core_kernel_persistence_smoothsql_Resource
     		$platform = $this->getPersistence()->getPlatForm();
     		$multipleInsertQueryHelper = $platform->getMultipleInsertsSqlQueryHelper();
     		
-    		$session = core_kernel_classes_Session::singleton();
-    		$localNs = common_ext_NamespaceManager::singleton()->getLocalNamespace();
         	$user    = common_session_SessionManager::isAnonymous()
         	   ? $platform->getNullString()
         	   : $this->getPersistence()->quote(\common_session_SessionManager::getSession()->getUser()->getIdentifier());
@@ -687,7 +679,6 @@ class core_kernel_persistence_smoothsql_Resource
 			$predicatesQuery .= ", " . $this->getPersistence()->quote($uri) ;
 		}
     	$predicatesQuery=substr($predicatesQuery, 1);
-        $session 	= core_kernel_classes_Session::singleton();
 
  		$platform = $this->getPersistence()->getPlatForm();
     	//the unique sql query
