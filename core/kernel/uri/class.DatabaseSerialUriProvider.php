@@ -19,6 +19,7 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
+use oat\oatbox\Configurable;
 
 /**
  * UriProvider implementation based on a serial stored in the database.
@@ -26,16 +27,25 @@
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
- 
  */
-class common_uri_DatabaseSerialUriProvider
+class core_kernel_uri_DatabaseSerialUriProvider extends Configurable
     implements common_uri_UriProvider
 {
-        // --- ASSOCIATIONS ---
+    const OPTION_PERSISTENCE = 'persistence';
+    
+    const OPTION_NAMESPACE = 'namespace';
+    // --- ASSOCIATIONS ---
         
     // --- ATTRIBUTES ---
         
     // --- OPERATIONS ---
+    
+    /**
+     * @return common_persistence_SqlPersistence
+     */
+    public function getPersistence() {
+        return common_persistence_SqlPersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
+    }
     
     /**
      * Generates a URI based on a serial stored in the database.
@@ -52,12 +62,10 @@ class common_uri_DatabaseSerialUriProvider
         
         
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
         try {
-            $sth = $dbWrapper->query($dbWrapper->getPlatForm()->getSqlFunction("generis_sequence_uri_provider"), array(
-                    $modelUri
+            $sth = $this->getPersistence()->query($this->getPersistence()->getPlatForm()->getSqlFunction("generis_sequence_uri_provider"), array(
+                    $this->getOption(self::OPTION_NAMESPACE)
             ));
-
        
             if ($sth !== false) {
                 
@@ -66,15 +74,11 @@ class common_uri_DatabaseSerialUriProvider
                 $returnValue = current($row);
                 $sth->closeCursor();
             } else {
-                throw new common_uri_UriProviderException("An error occured while calling the stored procedure for driver '${driver}': " . $dbWrapper->errorMessage() . ".");
+                throw new common_uri_UriProviderException("An error occured while calling the stored procedure for persistence ".$this->getOption(self::OPTION_PERSISTENCE).".");
             }
         } catch (Exception $e) {
         	throw new common_uri_UriProviderException("An error occured while calling the stored ': " . $e->getMessage() . ".");
-
         }
-
-        
-        
 
         return (string) $returnValue;
     }
