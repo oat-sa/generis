@@ -19,8 +19,6 @@
  *
  */
 
-use oat\tao\model\menu\MenuService;
-
 /**
  * Iterates over the resources of classes
  * 
