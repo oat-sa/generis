@@ -177,41 +177,6 @@ class common_ext_ExtensionsManager
     }
 
     /**
-     * Short description of method getUpdatableModels
-     *
-     * @access public
-     * @author Joel Bout, <joel@taotesting.com>
-     * @return array
-     */
-    public function getUpdatableModels()
-    {
-        $returnValue = array();
-
-    	foreach ($this->getInstalledExtensions() as $ext) {
-			foreach ($ext->getManifest()->getModelsRights() as $model=>$right){
-				/*
-				 *
-				 * TODO
-				 * We manage update, add read, delete ..
-				 * if the variable exist, the model is updatable!
-				 * use a code in the next investigation, such as unix right
-				 *
-				 */
-				$ns = common_ext_NamespaceManager::singleton()->getNamespace ($model.'#');
-				if ($ns == null) {
-					throw new common_ext_ExtensionException("Could not get namespace for model ".$model);
-				}
-				$modelId = $ns->getModelId();
-				if (!isset($returnValue[$modelId])){
-					$returnValue[$modelId] = $model;
-				}
-			}
-		}
-
-        return (array) $returnValue;
-    }
-
-    /**
      * Get an extension by Id. If the extension is not yet loaded, it will be
      * loaded using common_ext_Extension::load.
      *
