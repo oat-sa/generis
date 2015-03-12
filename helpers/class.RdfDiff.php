@@ -1,5 +1,6 @@
 <?php
 
+use oat\generis\model\data\Model;
 class helpers_RdfDiff
 {
     private $added = array();
@@ -71,16 +72,6 @@ class helpers_RdfDiff
         return md5(implode(' ', array($triple->subject, $triple->predicate, $triple->object, $triple->lg, $triple->modelid)));
     }
     
-    protected function shorten(core_kernel_classes_Triple $triple) {
-        return array(
-            's' => $triple->subject,
-            'p' => $triple->predicate,
-            'o' => $triple->object,
-            'l' => is_null($triple->lg) ? '' : $triple->lg,
-            'm' => $triple->modelid
-        );
-    }
-    
     public function getSummary() {
         return count($this->toAdd).' triples to add and '.count($this->toRemove).' triples to remove';
     }
@@ -93,5 +84,15 @@ class helpers_RdfDiff
             echo '- '.str_pad($triple->subject, 80).' '.str_pad($triple->predicate, 80).' '.str_pad($triple->object, 80).PHP_EOL;
         }
         
+    }
+    
+    public function applyTo(Model $model) {
+        $rdf = $model->getRdfInterface();
+        foreach ($this->getTriplesToRemove() as $triple) {
+            $rdf->remove($triple);
+        }
+        foreach ($this->getTriplesToAdd() as $triple) {
+            $rdf->add($triple);
+        }
     }
 }
