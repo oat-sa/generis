@@ -39,18 +39,33 @@ class core_kernel_uri_UriService
     
     private $uriProvider = null;
     
+    /**
+     * Generate a new URI with the UriProvider in force.
+     * 
+     * @return string
+     */
     public function generateUri()
     {
         return (string) $this->getUriProvider()->provide();
         
     }
     
+    /**
+     * Set the UriProvider in force.
+     * 
+     * @param common_uri_UriProvider $provider
+     */
     public function setUriProvider(common_uri_UriProvider $provider)
     {
         $this->uriProvider = $provider; 
         common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->setConfig(self::CONFIG_KEY, $provider);
     }
     
+    /**
+     * Get the UriProvider in force.
+     * 
+     * @return common_uri_UriProvider
+     */
     public function getUriProvider()
     {
         if (is_null($this->uriProvider)) {
