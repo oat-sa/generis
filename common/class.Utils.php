@@ -103,10 +103,7 @@ class common_Utils
      */
     public static function getNewUri()
     {
-		$uriProviderClassName = 'common_uri_' . GENERIS_URI_PROVIDER;
-		$uriProvider = new $uriProviderClassName();
-		$returnValue = $uriProvider->provide('');
-        return (string) $returnValue;
+        return core_kernel_uri_UriService::singleton()->generateUri();
     }
 
     /**
