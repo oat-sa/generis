@@ -105,14 +105,6 @@ class common_ext_Manifest
     private $models = array();
 
     /**
-     * The rights to apply on models required by the Extension the manifest describes.
-     *
-     * @access private
-     * @var array
-     */
-    private $modelsRights = array();
-
-    /**
      * The files corresponding to the RDF models to be imported at installation time.
      *
      * @access private
@@ -281,10 +273,6 @@ class common_ext_Manifest
     		
     		if (!empty($array['models'])){
     			$this->setModels($array['models']);
-    		}
-    		
-    		if (!empty($array['modelsRight'])){
-    			$this->setModelsRights($array['modelsRight']);
     		}
     		
     		if (!empty($array['acl'])){
@@ -636,40 +624,6 @@ class common_ext_Manifest
     private function setModels($models)
     {
         $this->models = $models;
-    }
-
-    /**
-     * Get the rights to be applied on the models.
-     * 
-     * The returned array have keys corresponding to model URIs and values
-     * are a string containing a unix-like mode e.g. 7 = rwx, 6 = rw, ...
-     *
-     * @access public
-     * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @return array
-     */
-    public function getModelsRights()
-    {
-        $returnValue = array();
-
-        $returnValue = $this->modelsRights;
-
-        return (array) $returnValue;
-    }
-
-    /**
-     * Set the rights to be applied on the models.
-     * 
-     * The $modelsRights have keys corresponding to model URIs and values
-     * are a string containing a unix-like mode e.g. 7 = rwx, 6 = rw, ...
-     *
-     * @access private
-     * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  array $modelsRights
-     */
-    private function setModelsRights($modelsRights)
-    {
-        $this->modelsRights = $modelsRights;
     }
 
     /**
