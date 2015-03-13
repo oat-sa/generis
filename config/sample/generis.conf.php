@@ -75,6 +75,3 @@ define('CONFIG_PATH', ROOT_PATH.'config/');
 
 # users cache
 define('GENERIS_CACHE_USERS_ROLES', true);
-
-# default will use defautl php session handling
-# define('PHP_SESSION_HANDLER', 'common_session_php_KeyValueSessionHandler');
