@@ -136,7 +136,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
             $parentClasses = $this->getParentClasses($resource, true);
             foreach ($parentClasses as $parent) {
                 if($parent->getUri() != RDFS_CLASS) {
-                	$returnValue = array_merge($returnValue, $parent->getProperties(true));
+                	$returnValue = array_merge($returnValue, $parent->getProperties(false));
                 }
             }
         }
