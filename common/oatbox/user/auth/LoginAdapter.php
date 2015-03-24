@@ -36,7 +36,7 @@ interface LoginAdapter extends common_user_auth_Adapter
      * 
      * @param array $configuration
      */
-    public function __construct(array $configuration);
+    public function setOptions(array $options);
     
     /**
      * Adapter must be able to store the login and password of the potential user
