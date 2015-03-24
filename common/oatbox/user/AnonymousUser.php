@@ -37,4 +37,12 @@ class AnonymousUser implements User
     public function getRoles() {
         return array(INSTANCE_ROLE_ANONYMOUS);
     }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \oat\oatbox\user\User::getPropertyValues()
+     */
+    public function getPropertyValues($property) {
+        return array();
+    }
 }
