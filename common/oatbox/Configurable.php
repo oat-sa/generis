@@ -52,7 +52,7 @@ abstract class Configurable implements PhpSerializable
      * @param array $options
      * @return void
      */
-    public function setOptions($options) {
+    public function setOptions(array $options) {
         if (!is_array($options)) {
             if (is_object($options) && method_exists($options, 'toArray')) {
                 $options = $options->toArray();
