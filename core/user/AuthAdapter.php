@@ -19,13 +19,13 @@
  */
 namespace oat\generis\model\user;
 
-use oat\oatbox\user\auth\LoginAdapter;
 use core_kernel_users_Service;
 use core_kernel_classes_Class;
 use common_exception_InconsistentData;
 use core_kernel_classes_Property;
 use core_kernel_users_InvalidLoginException;
 use core_kernel_users_GenerisUser;
+use oat\oatbox\user\auth\LoginAdapter;
 
 
 /**
@@ -67,7 +67,7 @@ class AuthAdapter
 	 * 
 	 * @param array $configuration
 	 */
-	public function __construct(array $configuration) {
+	public function setOptions(array $options) {
 	    // nothing to configure
 	}
 	
