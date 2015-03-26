@@ -31,7 +31,7 @@ return array(
     ),
     /*
     array(
-	    'driver' => 'oat\authKeyValue\model\AuthKeyValueAdapter',
+	    'driver' => 'oat\authKeyValue\AuthKeyValueAdapter',
 	    'persistence' => 'authKeyValue'
 	),
 	*/
