@@ -19,8 +19,6 @@
  *
  */
 
-use oat\tao\model\menu\MenuService;
-
 /**
  * Iterates over a class(es) and its subclasses 
  * 

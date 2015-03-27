@@ -75,7 +75,7 @@ class common_session_AnonymousSession implements common_session_StatelessSession
      * @see common_session_Session::getInterfaceLanguage()
      */
     public function getInterfaceLanguage() {
-        return DEFAULT_LANG;
+        return defined('DEFAULT_ANONYMOUS_INTERFACE_LANG') ? DEFAULT_ANONYMOUS_INTERFACE_LANG : DEFAULT_LANG;
     }
     
     /**

@@ -20,18 +20,28 @@
  * 
  */
 
+use oat\oatbox\Configurable;
 /**
  * UriProvider implementation based on an advanced key value storage
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- 
  */
-class common_uri_AdvKeyValueUriProvider
+class core_kernel_uri_AdvKeyValueUriProvider extends Configurable
     implements common_uri_UriProvider
 {
+    const OPTION_PERSISTENCE = 'persistence';
+    const OPTION_NAMESPACE = 'namespace';
+    
     const PERSISTENCE_KEY = 'generis_uriProvider';
+    
+    /**
+     * @return common_persistence_AdvKeyValuePersistence
+     */
+    public function getPersistence() {
+        return common_persistence_AdvKeyValuePersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
+    }
     
     /**
      * Generates a URI based on a serial stored in the database.
@@ -45,11 +55,9 @@ class common_uri_AdvKeyValueUriProvider
     {
         $returnValue = (string) '';
         
-        $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
-        $peristence = common_persistence_AdvKeyValuePersistence::getPersistence('uriProvider');
-        $nextId = $peristence->incr(self::PERSISTENCE_KEY);
+        $nextId = $this->getPersistence()->incr(self::PERSISTENCE_KEY);
         list($usec, $sec) = explode(" ", microtime());
-        $uri = $modelUri .'i'. (str_replace(".","",$sec."".$usec)) . $nextId;
+        $uri = $this->getOption(self::OPTION_NAMESPACE) .'i'. (str_replace(".","",$sec."".$usec)) . $nextId;
 
         return (string) $uri;
     }

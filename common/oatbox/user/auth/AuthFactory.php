@@ -42,7 +42,9 @@ class AuthFactory
                     $className = $adapterConf['driver'];
                     unset($adapterConf['driver']);
                     if (class_exists($className) && in_array(__NAMESPACE__.'\LoginAdapter', class_implements($className))) {
-                        $adapters[] = new $className($adapterConf);
+                        $adapter = new $className();
+                        $adapter->setOptions($adapterConf);
+                        $adapters[] = $adapter;
                     } else {
                         \common_Logger::e($className.' is not a valid LoginAdapter');
                     }

@@ -36,4 +36,12 @@ interface User
      * @return array the identifiers of the roles:
     */
     public function getRoles();
+    
+    /**
+     * Retrieve custom attributes of a user
+     *
+     * @param string $attribute
+     * @return array an array of strings
+    */
+    public function getPropertyValues($property);
 }

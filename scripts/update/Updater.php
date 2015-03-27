@@ -93,7 +93,22 @@ class Updater extends \common_ext_ExtensionUpdater {
             )));
             $currentVersion = '2.7.4';
         }
-            
+
+        if ($currentVersion == '2.7.4' && defined('GENERIS_URI_PROVIDER')) {
+            if (in_array(GENERIS_URI_PROVIDER, array('DatabaseSerialUriProvider', 'AdvKeyValueUriProvider'))) {
+                $uriProviderClassName = '\core_kernel_uri_' . GENERIS_URI_PROVIDER;
+                $options = array(
+                	\core_kernel_uri_DatabaseSerialUriProvider::OPTION_PERSISTENCE => 'default',
+                    \core_kernel_uri_DatabaseSerialUriProvider::OPTION_NAMESPACE => LOCAL_NAMESPACE.'#'
+                );
+                $provider = new $uriProviderClassName($options);
+            } else {
+                $uriProviderClassName = '\common_uri_' . GENERIS_URI_PROVIDER;
+                $provider = new $uriProviderClassName();
+            }
+            \core_kernel_uri_UriService::singleton()->setUriProvider($provider);
+            $currentVersion = '2.7.5';
+        }
 
         return $currentVersion;
     }

@@ -17,6 +17,7 @@
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
+use oat\oatbox\Configurable;
 
 /**
  * Session implementation as a Key Value storage and using the persistence
@@ -24,18 +25,23 @@
  * @author Joel Bout <joel@taotesting.com>
  * @package generis
  */
-class common_session_php_KeyValueSessionHandler
+class common_session_php_KeyValueSessionHandler extends Configurable
     implements common_session_php_SessionHandler
 {
+    const OPTION_PERSISTENCE = 'persistence'; 
+    
     const KEY_NAMESPACE = "generis:session:";
     
     /**
      * @var common_persistence_KeyValuePersistence
      */
     private $sessionPersistence = null;
-
-    public function __construct($sessionPersistence){
-        $this->sessionPersistence = $sessionPersistence;
+    
+    protected function getPersistence() {
+        if (is_null($this->sessionPersistence)) {
+            $this->sessionPersistence = common_persistence_KeyValuePersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
+        }
+        return $this->sessionPersistence;
     }
     
     /**
@@ -61,7 +67,7 @@ class common_session_php_KeyValueSessionHandler
      */
     public function read($id)
     {
-        return $this->sessionPersistence->get(self::KEY_NAMESPACE.$id);
+        return $this->getPersistence()->get(self::KEY_NAMESPACE.$id);
     }
 
     /**
@@ -70,7 +76,7 @@ class common_session_php_KeyValueSessionHandler
      */
     public function write($id, $data)
     {  
-        return $this->sessionPersistence->set(self::KEY_NAMESPACE.$id, $data, (int) ini_get('session.gc_maxlifetime'));
+        return $this->getPersistence()->set(self::KEY_NAMESPACE.$id, $data, (int) ini_get('session.gc_maxlifetime'));
     }
 
     /**
@@ -78,7 +84,7 @@ class common_session_php_KeyValueSessionHandler
      * @see common_session_storage_SessionStorage::destroy()
      */
     public function destroy($id){
-        $this->sessionPersistence->del(self::KEY_NAMESPACE.$id);
+        $this->getPersistence()->del(self::KEY_NAMESPACE.$id);
     }
 
     /**

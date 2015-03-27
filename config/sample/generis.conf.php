@@ -73,11 +73,5 @@ define('GENERIS_CACHE_PATH', FILES_PATH.'generis'.DIRECTORY_SEPARATOR.'cache'.DI
 #path to read configs from
 define('CONFIG_PATH', ROOT_PATH.'config/');
 
-# uri providers ('MicrotimeUriProvider'|'MicrotimeRandUriProvider'|'DatabaseSerialUriProvider'|'AdvKeyValueUriProvider')
-define('GENERIS_URI_PROVIDER', 'DatabaseSerialUriProvider');
-
 # users cache
 define('GENERIS_CACHE_USERS_ROLES', true);
-
-# default will use defautl php session handling
-# define('PHP_SESSION_HANDLER', 'common_session_php_KeyValueSessionHandler');
