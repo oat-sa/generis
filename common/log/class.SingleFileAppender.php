@@ -45,7 +45,7 @@ class common_log_SingleFileAppender
      * @var string
      */
     protected $filename = '';
-    
+
     /**
      * Short description of attribute filehandle
      *
@@ -99,10 +99,6 @@ class common_log_SingleFileAppender
     	
     	if (isset($configuration['format'])) {
     		$this->format = $configuration['format'];
-    	}
-        
-    	if (isset($configuration['prefix'])) {
-    		$this->prefix = $configuration['prefix'];
     	}
     	
     	if (isset($configuration['max_file_size'])) {
@@ -164,7 +160,6 @@ class common_log_SingleFileAppender
 	    	$map = array(
 	    			'%d' => date('Y-m-d H:i:s',$item->getDateTime()),
 	    			'%m' => $item->getDescription(),
-	    			'%p' => $this->prefix,
 	    			'%s' => $item->getSeverityDescriptionString(),
 	    			'%t' => $item->getDateTime(),
 	    			'%r' => $item->getRequest(),

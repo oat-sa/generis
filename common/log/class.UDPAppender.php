@@ -108,7 +108,6 @@ class common_log_UDPAppender
         	$message = json_encode(array(
         		's' => $item->getSeverity(),
         		'd' => $item->getDescription(),
-        		'p' => $item->prefix,
         		't' => $item->getTags(),
         		'f' => $item->getCallerFile(),
         		'l' => $item->getCallerLine(),

@@ -54,15 +54,7 @@ abstract class common_log_BaseAppender
      * @var array
      */
     public $tags = array();
-    
-    /**
-     * the prefix that will be added to each log message.
-     *
-     * @access protected
-     * @var string
-     */
-    protected $prefix = '';
-    
+
     // --- OPERATIONS ---
 
     /**
