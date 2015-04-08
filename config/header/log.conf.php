@@ -17,10 +17,11 @@
 
 /* Example of a Single File Appender
  array(
-    'class'			=> 'SingleFileAppender',
+    'class'		=> 'SingleFileAppender',
     'threshold'		=> 4 ,
-    'file'			=> dirname(__FILE__).'/../../log/error.txt',
-    'format'		=> '%m'
+    'file'		=> dirname(__FILE__).'/../../log/error.txt',
+    'format'		=> '%m',
+    'prefix'            => '[dev]'
 )
 */
 
@@ -31,7 +32,8 @@ array(
     'tags'			=> array('GENERIS', 'TAO')
     'file'			=> '/var/log/tao/debug.txt',
     'directory'		=> '/var/log/tao/',
-    'max_file_size'	=> 10000000
+    'max_file_size'	=> 10000000,
+    'prefix'            => '[dev]'
 )
 */
 
@@ -40,6 +42,7 @@ array(
     'class'			=> 'UDPAppender',
     'host'			=> '127.0.0.1',
     'port'			=> 5775,
-    'threshold'		=> 1
+    'threshold'		=> 1,
+    'prefix'            => '[dev]'
 )
 */
