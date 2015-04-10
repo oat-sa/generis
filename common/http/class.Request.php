@@ -42,7 +42,7 @@ class common_http_Request
     public static function currentRequest()
     {
         if (php_sapi_name() == 'cli') {
-            throw common_exception_Error('Cannot call ' . __FUNCTION__ . ' from command line');
+            throw new common_exception_Error('Cannot call ' . __FUNCTION__ . ' from command line');
         }
         
         $scheme = (! isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != "on") ? 'http' : 'https';
