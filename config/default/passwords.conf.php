@@ -5,7 +5,7 @@
 return array(
     'length'     => 4,
     'upper'      => false,
-    'number'     => true,
+    'number'     => false,
     'spec'       => false,
     //used for human readable generator
     'dictionary' => '/usr/share/dict/words',
