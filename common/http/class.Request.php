@@ -38,6 +38,7 @@ class common_http_Request
      * Creates an request from the current call
      *
      * @return common_http_Request
+     * @throws common_exception_Error
      */
     public static function currentRequest()
     {
