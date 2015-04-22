@@ -20,6 +20,7 @@
  */
 namespace oat\generis\model\user;
 
+use common_ext_ExtensionException;
 use common_ext_ExtensionsManager;
 
 /**
@@ -59,12 +60,11 @@ class PasswordConstraintsService extends \tao_models_classes_Service
 
     /**
      * Set up all validator according configuration file
-     * @throws \common_ext_ExtensionException
+     * @throws common_ext_ExtensionException
      */
     protected function register()
     {
-        $ext    = common_ext_ExtensionsManager::singleton()->getExtensionById( 'generis' );
-        $config = $ext->getConfig( 'passwords' );
+        $config = $this->getConfig();
 
         if (array_key_exists( 'length', $config ) && (int) $config['length']) {
             $this->validators[] = new \tao_helpers_form_validators_Length( array( 'min' => (int) $config['length'] ) );
@@ -134,6 +134,26 @@ class PasswordConstraintsService extends \tao_models_classes_Service
     public function getValidators()
     {
         return $this->validators;
+    }
+
+    /**
+     * Retrieve at least default config ( if extension is not yet installed )
+     * @return array
+     */
+    protected function getConfig()
+    {
+
+        try {
+            $ext = common_ext_ExtensionsManager::singleton()->getExtensionById( 'generis' );
+
+            $config = $ext->getConfig( 'passwords' );
+
+        } catch ( common_ext_ExtensionException $e ) {
+            $config = require_once( __DIR__ . '/../../config/default/passwords.conf.php' );
+
+        }
+
+        return (array) $config;
     }
 
 }
