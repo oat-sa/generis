@@ -3,15 +3,21 @@
  * Default config header
  */
 return array(
-    'length'     => 4,
-    'upper'      => false,
-    'number'     => false,
-    'spec'       => false,
-    //used for human readable generator
-    'dictionary' => '/usr/share/dict/words',
-    //excludes this characters from random password to prevent confusion
-    'similar'    => 'iIl1Oo0',
-    'chars'      => 'abcdefghijklmnopqrstuvwxyz',
-    'nums'       => '0123456789',
-    'syms'       => '!@#$%^&*()-+?'
+    'constrains' =>//constrains configuration params
+        array(
+            'length' => 4,
+            'upper'  => false,
+            'number' => false,
+            'spec'   => false
+        ),
+    'generator'  => array(
+        'chars'      => 'abcdefghijklmnopqrstuvwxyz',
+        'nums'       => '0123456789',
+        'syms'       => '!@#$%^&*()-+?',
+        //excludes this characters from random password to prevent confusion
+        'similar'    => 'iIl1Oo0',
+        //used for human readable generator
+        'dictionary' => '/usr/share/dict/words'
+    )
+
 );

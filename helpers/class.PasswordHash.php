@@ -21,26 +21,26 @@ class helpers_PasswordHash {
     /**
      * @param $password
      *
-     * @return null|string
+     * @return string
      * @throws PasswordConstraintsException
      */
     public function encrypt($password) {
-        $salt = helpers_Random::generateString($this->saltLength);
 
         if ( PasswordConstraintsService::singleton()->validate($password)){
+            $salt = helpers_Random::generateString($this->saltLength);
             return $salt.hash($this->algorithm, $salt.$password);
         }
+
         throw new PasswordConstraintsException(
             __( 'Password must be: %s' ,
             implode( ',', PasswordConstraintsService::singleton()->getErrors() )
         ));
-        return null;
     }
 
     public function verify($password, $hash) {
         $salt = substr($hash, 0, $this->saltLength);
         $hashed = substr($hash, $this->saltLength);
-        return hash($this->algorithm, $salt.$password) == $hashed;
+        return hash($this->algorithm, $salt.$password) === $hashed;
     }
 
 }

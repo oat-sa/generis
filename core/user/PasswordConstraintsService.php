@@ -37,12 +37,14 @@ class PasswordConstraintsService extends \tao_models_classes_Service
     protected function __construct()
     {
         parent::__construct();
-        $this->register();
+        $config = $this->getConfig();
+        $this->register( $config );
     }
 
 
     /**
      * Test if password pass all constraints rules
+     *
      * @param $password
      *
      * @return bool
@@ -55,16 +57,17 @@ class PasswordConstraintsService extends \tao_models_classes_Service
             $result &= $validator->evaluate( $password );
         }
 
-        return $result;
+        return (boolean) $result;
     }
 
     /**
      * Set up all validator according configuration file
-     * @throws common_ext_ExtensionException
+     *
+     * @param $config
      */
-    protected function register()
+    protected function register($config)
     {
-        $config = $this->getConfig();
+        $this->validators = array();
 
         if (array_key_exists( 'length', $config ) && (int) $config['length']) {
             $this->validators[] = new \tao_helpers_form_validators_Length( array( 'min' => (int) $config['length'] ) );
@@ -106,7 +109,7 @@ class PasswordConstraintsService extends \tao_models_classes_Service
                 array(
                     'message' => __( 'Must include at least one special letter' ),
                     'format'  => '/[^p{Ll}\p{Lu}\pL\pN]/'
-                ),'spec'
+                ), 'spec'
             );
         }
 
@@ -153,7 +156,8 @@ class PasswordConstraintsService extends \tao_models_classes_Service
 
         }
 
-        return (array) $config;
+        return (array) $config['constrains'];
+
     }
 
 }
