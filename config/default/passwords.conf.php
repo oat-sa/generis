@@ -7,6 +7,7 @@ return array(
         array(
             'length' => 4,
             'upper'  => false,
+            'lower'  => true,
             'number' => false,
             'spec'   => false
         ),

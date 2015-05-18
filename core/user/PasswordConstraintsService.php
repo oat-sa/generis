@@ -84,12 +84,19 @@ class PasswordConstraintsService extends \tao_models_classes_Service
             );
         }
 
-        if (( array_key_exists( 'upper', $config ) && $config['upper'] )
-            && ( array_key_exists( 'lower', $config ) && $config['lower'] )
-        ) {
+        if (( array_key_exists( 'upper', $config ) && $config['upper'] )) {
             $this->validators[] = new \tao_helpers_form_validators_Regex(
                 array(
-                    'message' => __( 'Must include both upper and lower case letters' ),
+                    'message' => __( 'Must include upper case letters' ),
+                    'format'  => '/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/'
+                ), 'caseSensitive'
+            );
+        }
+
+        if (( array_key_exists( 'lower', $config ) && $config['lower'] )) {
+            $this->validators[] = new \tao_helpers_form_validators_Regex(
+                array(
+                    'message' => __( 'Must include lower case letters' ),
                     'format'  => '/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/'
                 ), 'caseSensitive'
             );
