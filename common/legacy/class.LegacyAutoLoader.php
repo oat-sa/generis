@@ -49,7 +49,7 @@ class common_legacy_LegacyAutoLoader
      * protect the cunstructer, singleton pattern
      */
     private function __construct() {
-        $this->root = dirname(dirname(dirname(dirname(__FILE__)))).DIRECTORY_SEPARATOR;
+        $this->root = dirname(dirname(dirname(__DIR__))).DIRECTORY_SEPARATOR;
     }
     
     /**
@@ -121,7 +121,7 @@ class common_legacy_LegacyAutoLoader
     }
     
     private function wrapClass($legacyClass, $realClass) {
-        common_Logger::w('Wrapped '.$legacyClass);
+        common_Logger::w('Legacy classname "'.$legacyClass. '" referenced, please use "'.$realClass.'" instead');
         if(preg_match('/[^A-Za-z0-9_\\\\]/', $legacyClass) || preg_match('/[^A-Za-z0-9_\\\\]/', $realClass)){
             throw new Exception('Unknown characters in class name');
         }
