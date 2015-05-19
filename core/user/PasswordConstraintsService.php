@@ -89,7 +89,7 @@ class PasswordConstraintsService extends \tao_models_classes_Service
                 array(
                     'message' => __( 'Must include upper case letters' ),
                     'format'  => '/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/'
-                ), 'caseSensitive'
+                ), 'caseUpper'
             );
         }
 
@@ -97,8 +97,8 @@ class PasswordConstraintsService extends \tao_models_classes_Service
             $this->validators[] = new \tao_helpers_form_validators_Regex(
                 array(
                     'message' => __( 'Must include lower case letters' ),
-                    'format'  => '/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/'
-                ), 'caseSensitive'
+                    'format'  => '/(\p{Ll}+)/'
+                ), 'caseLower'
             );
         }
 
