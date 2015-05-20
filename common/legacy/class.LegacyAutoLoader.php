@@ -25,17 +25,10 @@
  * @access public
  * @author Joel Bout <joel@taotesting.com>
  * @package generis
- 
  */
 class common_legacy_LegacyAutoLoader
 {
     private static $singleton = null;
-    
-    /**
-     * protect the cunstructer, singleton pattern
-     */
-    private function __construct() {
-    }
     
     /**
      * 
@@ -49,6 +42,15 @@ class common_legacy_LegacyAutoLoader
     }
     
     private $legacyPrefixes = array();
+    
+    private $root;
+    
+    /**
+     * protect the cunstructer, singleton pattern
+     */
+    private function __construct() {
+        $this->root = dirname(dirname(dirname(__DIR__))).DIRECTORY_SEPARATOR;
+    }
     
     /**
      * Register this instance of ClassLoader as a php autoloader
@@ -89,21 +91,21 @@ class common_legacy_LegacyAutoLoader
     		}
     		
     		$filePath = '/' . $path . 'class.'.$tokens[$size-1] . '.php';
-    		if (file_exists(GENERIS_BASE_PATH .$filePath)){
-    			require_once GENERIS_BASE_PATH .$filePath;
+    		if (file_exists($this->root .'generis'.DIRECTORY_SEPARATOR .$filePath)){
+    			require_once $this->root .'generis'.DIRECTORY_SEPARATOR .$filePath;
     			return;
     		}
     		$filePathInterface = '/' . $path . 'interface.'.$tokens[$size-1] . '.php';
-    		if (file_exists(GENERIS_BASE_PATH .$filePathInterface)){
-    			require_once GENERIS_BASE_PATH .$filePathInterface;
+    		if (file_exists($this->root .'generis'.DIRECTORY_SEPARATOR .$filePathInterface)){
+    			require_once $this->root .'generis'.DIRECTORY_SEPARATOR .$filePathInterface;
     			return;
     		}
     		
-    		if (file_exists(ROOT_PATH .$filePath)){
-    			require_once ROOT_PATH .$filePath;
+    		if (file_exists($this->root .$filePath)){
+    			require_once $this->root .$filePath;
     			return;
-    		} elseif (file_exists(ROOT_PATH .$filePathInterface)){
-    		        require_once ROOT_PATH .$filePathInterface;
+    		} elseif (file_exists($this->root .$filePathInterface)){
+    		        require_once $this->root .$filePathInterface;
     		        return;
     		}
     		
@@ -119,6 +121,7 @@ class common_legacy_LegacyAutoLoader
     }
     
     private function wrapClass($legacyClass, $realClass) {
+        common_Logger::w('Legacy classname "'.$legacyClass. '" referenced, please use "'.$realClass.'" instead');
         if(preg_match('/[^A-Za-z0-9_\\\\]/', $legacyClass) || preg_match('/[^A-Za-z0-9_\\\\]/', $realClass)){
             throw new Exception('Unknown characters in class name');
         }
@@ -127,3 +130,5 @@ class common_legacy_LegacyAutoLoader
     }
     
 }
+
+common_legacy_LegacyAutoLoader::register();
