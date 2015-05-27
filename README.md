@@ -1,6 +1,4 @@
 generis
 =======
 
-
-oat-lionel -> readme
-now I am in the module and and push it back
+Core extension, provide the low level framework and an API to manage ontologies
