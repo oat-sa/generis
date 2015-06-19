@@ -43,20 +43,10 @@ if(PHP_SAPI == 'cli'){
 require_once  dirname(__FILE__). '/class.Config.php';
 common_Config::load();
 
-//load constants
-require_once  dirname(__FILE__). '/constants.php';
-
 //set the time zone
 if(function_exists("date_default_timezone_set") && defined('TIME_ZONE')){
 	date_default_timezone_set(TIME_ZONE);
 }
-
-// init legacy autoloader for non composer packages
-require_once ROOT_PATH.'generis/common/legacy/class.LegacyAutoLoader.php';
-if(!defined('GENERIS_BASE_PATH')){
-    define( 'GENERIS_BASE_PATH' , ROOT_PATH.'generis' );
-}
-common_legacy_LegacyAutoLoader::register();
 
 // autoloader
 require_once ROOT_PATH.'vendor/autoload.php';

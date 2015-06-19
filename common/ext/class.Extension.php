@@ -53,7 +53,7 @@ class common_ext_Extension
      * @access public
      * @var common_ext_Manifest
      */
-    public $manifest = null;
+    public $manifest;
 
     /**
      * Whenever or not an extension has already been loaded
@@ -63,17 +63,20 @@ class common_ext_Extension
      */
     protected $loaded = false;
     
-    private $configPersistence = null;
+    private $configPersistence;
 
     /**
      * Should not be called directly, please use ExtensionsManager
      *
      * @access public
      * @author Joel Bout, <joel@taotesting.com>
-     * @param string id
+     *
+     * @param string $id
      * @param string $deprecated1
      * @param string $deprecated2
-     * 
+     *
+     * @throws common_ext_ExtensionException
+     * @throws common_ext_ManifestNotFoundException
      */
     public function __construct($id, $deprecated1 = null, $deprecated2 = null)
     {
@@ -96,11 +99,7 @@ class common_ext_Extension
      */
     public function getId()
     {
-        $returnValue = (string) '';
-
         return $this->id;
-
-        return (string) $returnValue;
     }
 
     /**
@@ -112,11 +111,7 @@ class common_ext_Extension
      */
     public function getConstants()
     {
-        $returnValue = array();
-
-        $returnValue = $this->manifest->getConstants();
-
-        return (array) $returnValue;
+        return (array) $this->manifest->getConstants();
     }
 
     /**
@@ -144,8 +139,8 @@ class common_ext_Extension
      *
      * @access public
      * @author firstname and lastname of author, <author@example.org>
-     * @param  string key
-     * @param  value
+     * @param  string $key
+     * @param  $value
      * @return boolean
      */
     public function setConfig($key, $value)
@@ -159,7 +154,7 @@ class common_ext_Extension
      *
      * @access public
      * @author firstname and lastname of author, <author@example.org>
-     * @param  string key
+     * @param  string $key
      * @return mixed
      */
     public function getConfig($key)
@@ -172,7 +167,7 @@ class common_ext_Extension
      *
      * @access public
      * @author firstname and lastname of author, <author@example.org>
-     * @param  string key
+     * @param  string $key
      * @return mixed
      */
     public function unsetConfig($key)
@@ -189,11 +184,7 @@ class common_ext_Extension
      */
     public function getVersion()
     {
-        $returnValue = (string) '';
-
-        $returnValue = $this->manifest->getVersion();
-
-        return (string) $returnValue;
+        return (string) $this->manifest->getVersion();
     }
 
     /**
@@ -205,11 +196,7 @@ class common_ext_Extension
      */
     public function getAuthor()
     {
-        $returnValue = (string) '';
-
-        $returnValue = $this->manifest->getAuthor();
-
-        return (string) $returnValue;
+        return (string) $this->manifest->getAuthor();
     }
 
     /**
@@ -221,11 +208,7 @@ class common_ext_Extension
      */
     public function getName()
     {
-        $returnValue = (string) '';
-
-        $returnValue = $this->manifest->getName();
-
-        return (string) $returnValue;
+        return (string) $this->manifest->getName();
     }
 
     /**
@@ -234,16 +217,22 @@ class common_ext_Extension
      * @access public
      * @author firstname and lastname of author, <author@example.org>
      * @return string
+     * @throws common_ext_ExtensionException
      */
     public function getDir()
     {
-        $returnValue = (string) '';
+        if ( ! defined( 'EXTENSION_PATH' )) {
+            throw new common_ext_ExtensionException( 'System constants are not yet defined' );
+        }
 
-		$returnValue = EXTENSION_PATH.$this->getId().DIRECTORY_SEPARATOR;
-
-        return (string) $returnValue;
+        return EXTENSION_PATH . $this->getId() . DIRECTORY_SEPARATOR;
     }
 
+    /**
+     * @param $key
+     *
+     * @return bool
+     */
     public function hasConstant($key)
     {
         $constants = $this->getConstants();
@@ -254,7 +243,7 @@ class common_ext_Extension
      * Retrieves a constant from the manifest.php file of the extension.
      *
      * @author Joel Bout, <joel@taotesting.com>
-     * @param  string key
+     * @param  string $key
      * @return mixed
      * @throws common_exception_Error If the constant cannot be found.
      */
@@ -294,7 +283,6 @@ class common_ext_Extension
         }
         if (!empty($namespaces)) {
         	common_Logger::d('Namespace not empty for extension '. $this->getId() );
-            $classes = array();
             $recDir = new RecursiveDirectoryIterator($this->getDir());
             $recIt = new RecursiveIteratorIterator($recDir);
             $regexIt = new RegexIterator($recIt, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
@@ -339,7 +327,7 @@ class common_ext_Extension
      *
      * @access public
      * @author firstname and lastname of author, <author@example.org>
-     * @param  string id
+     * @param  string $id
      * @return Module
      */
     public function getModule($id)
@@ -367,8 +355,6 @@ class common_ext_Extension
     public function getDependencies()
     {
         $returnValue = array();
-
-        $returnValue = array();
         foreach ($this->getManifest()->getDependencies() as $id => $version) {
         	$returnValue[$id] = $version;
         	$dependence = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
@@ -387,11 +373,7 @@ class common_ext_Extension
      */
     public function getManifest()
     {
-        $returnValue = null;
-
-        $returnValue = $this->manifest;
-
-        return $returnValue;
+        return $this->manifest;
     }
 
     /**
@@ -408,12 +390,7 @@ class common_ext_Extension
      */
     public function getManagementRole()
     {
-        $returnValue = null;
-
-        $manifest = $this->getManifest();
-        $returnValue = $manifest->getManagementRole();
-
-        return $returnValue;
+        return $this->getManifest()->getManagementRole();
     }
     
     /**
@@ -425,8 +402,7 @@ class common_ext_Extension
      */
     public function getOptimizableClasses()
 	{
-		$manifest = $this->getManifest();
-		return $manifest->getOptimizableClasses();
+		return $this->getManifest()->getOptimizableClasses();
 	}
 	
 	public function getPhpNamespace()
@@ -443,8 +419,7 @@ class common_ext_Extension
 	 */
 	public function getOptimizableProperties()
 	{
-		$manifest = $this->getManifest();
-		return $manifest->getOptimizableProperties();
+		return $this->getManifest()->getOptimizableProperties();
 	}
 
 	/**
@@ -461,7 +436,7 @@ class common_ext_Extension
 	 */
 	public function load()
 	{
-		if (!$this->loaded) {
+		if (!$this->isLoaded()) {
 			$loader = new common_ext_ExtensionLoader($this);
 			$loader->load();
 			$this->loaded = true;
