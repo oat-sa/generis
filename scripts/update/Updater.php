@@ -113,6 +113,11 @@ class Updater extends \common_ext_ExtensionUpdater {
         if ($currentVersion == '2.7.5') {
             $currentVersion = '2.7.6';
         }
+
+        if ($currentVersion == '2.7.6') {
+            $currentVersion = '2.7.7';
+        }
+
         return $currentVersion;
     }
     
