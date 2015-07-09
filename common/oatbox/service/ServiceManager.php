@@ -49,6 +49,9 @@ class ServiceManager
             list($extId, $configId) = $parts;
             $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
             $service = $extension->getConfig($configId);
+            if (is_null($service)) {
+                throw new ServiceNotFoundException($serviceKey);
+            }
             if ($service instanceof ConfigurableService) {
                 $service->setServiceManager($this);
             }
@@ -56,6 +59,16 @@ class ServiceManager
         }
         return $this->services[$serviceKey];
     }
-        
 
+    public function register($serviceKey, $service)
+    {
+        $parts = explode('/', $serviceKey, 2);
+        if (count($parts) < 2) {
+            throw new \common_Exception('Invalid servicekey '.$serviceKey);
+        }
+        $this->services[$serviceKey] = $service;
+        list($extId, $configId) = $parts;
+        $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
+        $extension->setConfig($configId, $service);
+    }
 }
