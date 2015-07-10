@@ -46,7 +46,7 @@ class common_test_TestUserSession implements common_session_StatelessSession
     }
     
     public function getUser() {
-        return new core_kernel_users_GenerisUser(new core_kernel_classes_Resource(LOCAL_NAMESPACE.'virtualTestUser'));
+        return new common_test_TestUser();
     }
     
     /**
@@ -54,7 +54,7 @@ class common_test_TestUserSession implements common_session_StatelessSession
      * @see common_session_AbstractSession::getUserUri()
      */
     public function getUserUri() {
-        return LOCAL_NAMESPACE.'virtualTestUser';
+        return $this->getUser()->getIdentifier();
     }
     
     /**
