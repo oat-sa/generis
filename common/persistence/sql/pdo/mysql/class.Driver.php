@@ -96,8 +96,9 @@ class common_persistence_sql_pdo_mysql_Driver
         $driver = str_replace('pdo_', '', $params['driver']);
         $dbName = $params['dbname'];
         $dbUrl = $params['host'];
+        $dbPort = isset($params['port']) ? ';port='.$params['port'] : '';
         
-        $returnValue = $driver . ':dbname=' . $dbName . ';host=' . $dbUrl . ';charset=utf8';
+        $returnValue = $driver . ':dbname=' . $dbName . ';host=' . $dbUrl . $dbPort .';charset=utf8';
         
 
         return (string) $returnValue;
