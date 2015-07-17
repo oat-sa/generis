@@ -192,7 +192,7 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
         }
         
         $query = 'INSERT INTO ' . $tableName
-        . ' (' . implode(', ', $cols) . ') VALUES (' . implode(', ', $placeholders) . ')';
+        . ' ("' . implode('", "', $cols) . '") VALUES (' . implode(', ', $placeholders) . ')';
         
         return $this->exec($query, array_values($data));
         
