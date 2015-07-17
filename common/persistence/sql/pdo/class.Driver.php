@@ -187,12 +187,12 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
         $placeholders = array();
         
         foreach ($data as $columnName => $value) {
-            $cols[] = $columnName;
+            $cols[] = $this->getPlatForm()->quoteIdentifier($columnName);
             $placeholders[] = '?';
         }
         
         $query = 'INSERT INTO ' . $tableName
-        . ' ("' . implode('", "', $cols) . '") VALUES (' . implode(', ', $placeholders) . ')';
+        . ' (' . implode(', ', $cols) . ') VALUES (' . implode(', ', $placeholders) . ')';
         
         return $this->exec($query, array_values($data));
         
