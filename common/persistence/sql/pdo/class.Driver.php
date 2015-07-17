@@ -154,6 +154,36 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
         return $returnValue;
     }
 
+    /**
+     * Returns the DSN to Connect with PDO to the database.
+     *
+     * @abstract
+     * @access protected
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @return string
+     */
+    protected abstract function getDSN();
+    
+    /**
+     * Retrieve Extra Configuration for the driver
+     *
+     * @abstract
+     * @access protected
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @return array
+     */
+    protected abstract function getExtraConfiguration();
+
+    /**
+     * Should contain any instructions that must be executed right after the
+     * to a given DBMS implementation.
+     *
+     * @abstract
+     * @access protected
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @return void
+     */
+    protected abstract function afterConnect();
 
     /**
      *  HACK to set "PDO::MYSQL_ATTR_MAX_BUFFER_SIZE" for fileupload
@@ -168,67 +198,38 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
         try{
             common_Logger::d('setattri ' . $name . ' => ' . $value);
             $this->dbConnector->setAttribute($name, $value);
-            
+
         } catch (PDOException $e){
             common_Logger::e('Fail to set attribute ' . $name . ' with value ' . $value);
             throw $e;
         }
-    
+
     }
-    
+
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param unknown $tableName
      * @param array $data
      */
     public function insert($tableName, array $data){
-    
+
         $cols = array();
         $placeholders = array();
-        
+
         foreach ($data as $columnName => $value) {
             $cols[] = $columnName;
             $placeholders[] = '?';
         }
-        
+
+        foreach($cols as &$col){
+            $col = "\"{$col}\"";
+        }
+
         $query = 'INSERT INTO ' . $tableName
         . ' (' . implode(', ', $cols) . ') VALUES (' . implode(', ', $placeholders) . ')';
-        
+
         return $this->exec($query, array_values($data));
-        
-    }
 
-
-    /**
-     * Executes an SQL query on the storage engine. Should be used for SELECT
-     * only.
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string statement
-     * @param  array params
-     * @return PDOStatement
-     */
-    public function query($statement, $params = array())
-    {
-        $returnValue = null;
-        $this->preparedExec = false;
-
-       
-        if (count($params) > 0){
-        	$sth = $this->dbConnector->prepare($statement);
-        	$sth->execute($params);
-        }
-        else{
-        	$sth = $this->dbConnector->query($statement);
-        }
-        
-		
-        if (!empty($sth)){
-        	$returnValue = $sth;
-        }
-
-        return $returnValue;
     }
 
     /**
@@ -243,7 +244,7 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
      */
     public function exec($statement, $params = array())
     {
-		
+
         if (count($params) > 0){
         	$sth = $this->dbConnector->prepare($statement);
         	$this->preparedExec = true;
@@ -265,6 +266,38 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
     }
 
     /**
+     * Executes an SQL query on the storage engine. Should be used for SELECT
+     * only.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param  string statement
+     * @param  array params
+     * @return PDOStatement
+     */
+    public function query($statement, $params = array())
+    {
+        $returnValue = null;
+        $this->preparedExec = false;
+
+
+        if (count($params) > 0){
+        	$sth = $this->dbConnector->prepare($statement);
+        	$sth->execute($params);
+        }
+        else{
+        	$sth = $this->dbConnector->query($statement);
+        }
+
+
+        if (!empty($sth)){
+        	$returnValue = $sth;
+        }
+
+        return $returnValue;
+    }
+
+    /**
      * Creates a prepared PDOStatement.
      *
      * @access public
@@ -274,13 +307,92 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
      */
     public function prepare($statement)
     {
-	
+
         $returnValue = null;
         $this->preparedExec = false;
         $returnValue = $this->getStatement($statement);
 
-		
+
         return $returnValue;
+    }
+
+    /**
+     * Get a statement in the statement store regarding the provided statement.
+     * it could not be found, NULL is returned.
+     *
+     * @access protected
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param  string statement
+     * @return PDOStatement
+     */
+    protected function getStatement($statement)
+    {
+        $key = $this->getStatementKey($statement);
+    	$sth = null;
+
+    	if (!empty($this->statements[$key])){
+    		$sth = $this->statements[$key];
+    	}
+    	else{
+    		$sth = $this->dbConnector->prepare($statement);
+    		$this->statements[$key] = $sth;
+    	}
+
+    	return $sth;
+
+    }
+
+    /**
+     * Get the key of a given statement stored in the statements store.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param  string statement
+     * @return string
+     */
+    public function getStatementKey($statement)
+    {
+        return hash('crc32b', $statement);
+    }
+
+    /**
+     * Convenience access to PDO::quote.
+     *
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param string $parameter The parameter to quote.
+     * @param int $parameter_type A PDO PARAM_XX constant.
+     * @return string The quoted string.
+     */
+    public function quote($parameter, $parameter_type = PDO::PARAM_STR){
+    	return $this->dbConnector->quote($parameter, $parameter_type);
+    }
+
+    /**
+     * Convenience access to PDO::lastInsertId.
+     *
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param string $name
+     * @return string The quoted string.
+     */
+    public function lastInsertId($name = null){
+        return $this->dbConnector->lastInsertId($name);
+    }
+
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * Increment the number of misses in the statements store.
+     *
+     * @access protected
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
+     */
+    protected function incrementNrOfMisses()
+    {
+        $this->nrMisses++;
     }
 
     /**
@@ -320,7 +432,7 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
     	else{
     		$info = $this->lastPreparedExecStatement->errorInfo();
     	}
-    	
+
     	if (!empty($info[2])){
     		$returnValue = $info[2];
     	}
@@ -336,51 +448,7 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
 
         return (string) $returnValue;
     }
-
-
-
-
-    /**
-     * Get a statement in the statement store regarding the provided statement.
-     * it could not be found, NULL is returned.
-     *
-     * @access protected
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string statement
-     * @return PDOStatement
-     */
-    protected function getStatement($statement)
-    {
-        $key = $this->getStatementKey($statement);
-    	$sth = null;
-    	
-    	if (!empty($this->statements[$key])){
-    		$sth = $this->statements[$key];
-    	}
-    	else{
-    		$sth = $this->dbConnector->prepare($statement);
-    		$this->statements[$key] = $sth;
-    	}
-    	
-    	return $sth;
-
-    }
-
-    /**
-     * Get the key of a given statement stored in the statements store.
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string statement
-     * @return string
-     */
-    public function getStatementKey($statement)
-    {
-        return hash('crc32b', $statement);
-    }
-
-
-
+    
     /**
      * Returns the number of hits in the statements store.
      *
@@ -393,8 +461,6 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
         return  $this->nrHits;
     }
 
-
-
     /**
      * Returns the number of misses in the statements store.
      *
@@ -405,84 +471,6 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
     private function getNrOfMisses()
     {
         return  $this->nrMisses;
-    }
-
-    /**
-     * Increment the number of misses in the statements store.
-     *
-     * @access protected
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     *
-     */
-    protected function incrementNrOfMisses()
-    {
-        $this->nrMisses++;
-    }
-
-
-    /**
-     * Retrieve Extra Configuration for the driver
-     *
-     * @abstract
-     * @access protected
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return array
-     */
-    protected abstract function getExtraConfiguration();
-
-
-
-
-    /**
-     * Should contain any instructions that must be executed right after the
-     * to a given DBMS implementation.
-     *
-     * @abstract
-     * @access protected
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return void
-     */
-    protected abstract function afterConnect();
-
-
-
-    /**
-     * Returns the DSN to Connect with PDO to the database.
-     *
-     * @abstract
-     * @access protected
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return string
-     */
-    protected abstract function getDSN();
-
-    
-    /**
-     * Convenience access to PDO::quote.
-     * 
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param string $parameter The parameter to quote.
-     * @param int $parameter_type A PDO PARAM_XX constant.
-     * @return string The quoted string.
-     */
-    public function quote($parameter, $parameter_type = PDO::PARAM_STR){
-    	return $this->dbConnector->quote($parameter, $parameter_type);
-    }
-    
-    /**
-     * Convenience access to PDO::lastInsertId.
-     *
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param string $name
-     * @return string The quoted string.
-     */
-    public function lastInsertId($name = null){
-        return $this->dbConnector->lastInsertId($name);
-    }
-
-    public function getParams()
-    {
-        return $this->params;
     }
 	
 
