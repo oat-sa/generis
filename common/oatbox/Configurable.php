@@ -64,6 +64,16 @@ abstract class Configurable implements PhpSerializable
     }
     
     /**
+     * Returns whenever or not the option is defined
+     *
+     * @param  string $name
+     * @return boolean
+    */
+    public function hasOption($name) {
+        return isset($this->options[$name]);
+    }
+    
+    /**
      * Get an option value by name
      *
      * If the option is empty or not set a NULL value will be returned.
