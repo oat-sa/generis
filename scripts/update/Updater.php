@@ -109,6 +109,11 @@ class Updater extends \common_ext_ExtensionUpdater {
             \core_kernel_uri_UriService::singleton()->setUriProvider($provider);
             $currentVersion = '2.7.5';
         }
+        
+        // service manager support
+        if ($currentVersion == '2.7.5') {
+            $currentVersion = '2.8.0';
+        }
 
         return $currentVersion;
     }

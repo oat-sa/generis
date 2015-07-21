@@ -39,6 +39,14 @@ class ServiceManager
     
     private $services = array();
     
+    /**
+     * Returns the service configured for the serviceKey
+     * or throws a ServiceNotFoundException
+     * 
+     * @param string $serviceKey
+     * @throws \common_Exception
+     * @throws ServiceNotFoundException
+     */
     public function get($serviceKey)
     {
         if (!isset($this->services[$serviceKey])) {
@@ -60,7 +68,15 @@ class ServiceManager
         return $this->services[$serviceKey];
     }
 
-    public function register($serviceKey, $service)
+    /**
+     * Registers a service, overwritting a potentially already
+     * existing service.
+     * 
+     * @param string $serviceKey
+     * @param ConfigurableService $service
+     * @throws \common_Exception
+     */
+    public function register($serviceKey, ConfigurableService $service)
     {
         $parts = explode('/', $serviceKey, 2);
         if (count($parts) < 2) {
