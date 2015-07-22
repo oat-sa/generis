@@ -37,6 +37,14 @@ class common_configuration_FileSystemComponent
     // --- ATTRIBUTES ---
 
     /**
+     * Whether should be checked recursively (if passed location of dirrectory).
+     *
+     * @access private
+     * @var boolean
+     */
+    private $recursive = false;
+    
+    /**
      * Short description of attribute location
      *
      * @access private
@@ -64,13 +72,13 @@ class common_configuration_FileSystemComponent
      * @param  boolean optional
      * @return mixed
      */
-    public function __construct($location, $expectedRights, $optional = false)
+    public function __construct($location, $expectedRights, $optional = false, $recursive = false)
     {
         
         parent::__construct('tao.configuration.filesystem', $optional);
         $this->setExpectedRights($expectedRights);
         $this->setLocation($location);
-        
+        $this->setRecursive($recursive);
     }
 
     /**
@@ -104,6 +112,31 @@ class common_configuration_FileSystemComponent
         
         $this->location = $location;
         
+    }
+    
+    /**
+     * Set $this->recursive value 
+     * 
+     * @access public
+     * @author Aleh Hutnikau, <hutnikau@1pt.com>
+     * @param boolean $recursive
+     * @return void
+     */
+    public function setRecursive($recursive)
+    {
+        $this->recursive = $recursive;
+    }
+    
+    /**
+     * Get $this->recursive value 
+     * 
+     * @access public
+     * @author Aleh Hutnikau, <hutnikau@1pt.com>
+     * @return boolean
+     */
+    public function getRecursive()
+    {
+        return $this->recursive;
     }
 
     /**
@@ -184,19 +217,19 @@ class common_configuration_FileSystemComponent
                                                    $this);
         }
         else{
-            if (strpos($expectedRights, 'r') !== false && !is_readable($location)){
+            if (strpos($expectedRights, 'r') !== false && !$this->isReadable($location)){
                 return new common_configuration_Report(common_configuration_Report::INVALID,
                                                        "File system component '${name}' in '${location} is not readable.",
                                                        $this);
             }
             
-            if (strpos($expectedRights, 'w') !== false && !is_writable($location)){
+            if (strpos($expectedRights, 'w') !== false && !$this->isWritable($location)){
                 return new common_configuration_Report(common_configuration_Report::INVALID,
                                                        "File system component '${name}' in '${location} is not writable.",
                                                        $this);
             }
 
-            if (strpos($expectedRights, 'x') !== false && !is_executable($location)){
+            if (strpos($expectedRights, 'x') !== false && !$this->isExecutable($location)){
                 return new common_configuration_Report(common_configuration_Report::INVALID,
                                                        "File system component '${name}' in '${location} is not executable.",
                                                        $this);
@@ -212,57 +245,90 @@ class common_configuration_FileSystemComponent
     }
 
     /**
-     * Short description of method isReadable
+     * If file is readable.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Aleh Hutnikau, <hutnikau@1pt.com>
+     * @param string $location File location
      * @return boolean
      */
-    public function isReadable()
+    public function isReadable($location = null)
     {
-        $returnValue = (bool) false;
-
+        $returnValue = true;
         
-        $returnValue = @is_readable($this->getLocation());
+        if ($location === null) {
+            $location = $this->getLocation();
+        }
         
-
-        return (bool) $returnValue;
+        if (is_file($location) || !$this->getRecursive()) {
+            $returnValue = is_readable($location);
+        } else {
+            $recursiveIterator = new \RecursiveDirectoryIterator($location, \RecursiveDirectoryIterator::SKIP_DOTS);
+            $iterator = new \RecursiveIteratorIterator($recursiveIterator);
+            foreach ($iterator as $file) {
+                $returnValue = $returnValue && $file->isReadable();
+            }
+        }
+        
+        return $returnValue;
     }
 
     /**
-     * Short description of method isWritable
+     * If file is writable.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Aleh Hutnikau, <hutnikau@1pt.com>
+     * @param string $location File location
      * @return boolean
      */
-    public function isWritable()
+    public function isWritable($location = null)
     {
-        $returnValue = (bool) false;
-
+        $returnValue = true;
         
-        $returnValue = @is_writable($this->getLocation());
+        if ($location === null) {
+            $location = $this->getLocation();
+        }
         
-
-        return (bool) $returnValue;
+        if (is_file($location) || !$this->getRecursive()) {
+            $returnValue = is_writable($location);
+        } else {
+            $recursiveIterator = new \RecursiveDirectoryIterator($location, \RecursiveDirectoryIterator::SKIP_DOTS);
+            $iterator = new \RecursiveIteratorIterator($recursiveIterator);
+            foreach ($iterator as $file) {
+                $returnValue = $returnValue && $file->isWritable();
+            }
+        }
+        
+        return $returnValue;
     }
 
     /**
-     * Short description of method isExecutable
+     * If file is executable.
      *
      * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @author Aleh Hutnikau, <hutnikau@1pt.com>
+     * @param string $location File location
      * @return boolean
      */
-    public function isExecutable()
+    public function isExecutable($location = null)
     {
-        $returnValue = (bool) false;
-
+        $returnValue = true;
         
-        $returnValue = @is_executable($this->getLocation());
+        if ($location === null) {
+            $location = $this->getLocation();
+        }
         
-
-        return (bool) $returnValue;
+        if (is_file($location) || !$this->getRecursive()) {
+            $returnValue = is_executable($location);
+        } else {
+            $recursiveIterator = new \RecursiveDirectoryIterator($location, \RecursiveDirectoryIterator::SKIP_DOTS);
+            $iterator = new \RecursiveIteratorIterator($recursiveIterator);
+            foreach ($iterator as $file) {
+                $returnValue = $returnValue && $file->isExecutable();
+            }
+        }
+        
+        return $returnValue;
     }
 
 }
