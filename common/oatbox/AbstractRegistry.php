@@ -38,7 +38,7 @@ abstract class AbstractRegistry
     /**
      *
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @return AbstractInteractionRegistry
+     * @return AbstractRegistry
      */
     public static function getRegistry()
     {
@@ -166,5 +166,3 @@ abstract class AbstractRegistry
     }
     
 }
-
-?>
