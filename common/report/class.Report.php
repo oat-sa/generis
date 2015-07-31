@@ -161,29 +161,35 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
 	
 	/**
 	 * returns all success elements
+     * @param bool $recursive
 	 * @return array
-	 * @deprecated
 	 */
-	public function getSuccesses() {
+	public function getSuccesses($recursive = false) {
         $successes = array();
 		foreach ($this as $element) {
 		    if ($element->getType() == self::TYPE_SUCCESS) {
 		        $successes[] = $element;
 		    }
+            else if($recursive && $element->containsSuccess()){
+                $successes = $element->getSuccesses();
+            }
 		}
 		return $successes;
 	}
 	
 	/**
 	 * returns all error elements
+     * @param bool $recursive
 	 * @return array
-	 * @deprecated
 	 */
-	public function getErrors() {
+	public function getErrors($recursive = false) {
         $errors = array();
 		foreach ($this as $element) {
     		if ($element->getType() == self::TYPE_ERROR) {
                 $errors[] = $element;
+            }
+            else if($recursive && $element->containsError()){
+                $errors = $element->getErrors();
             }
 		}
 		return $errors;
