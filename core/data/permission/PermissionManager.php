@@ -55,6 +55,7 @@ class PermissionManager
      * @param core_kernel_persistence_RdfsDriver $model
      */
     public static function setPermissionModel(PermissionInterface $model) {
+        self::$model = $model;
         common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->setConfig(self::CONFIG_KEY, $model);
     }
 }
