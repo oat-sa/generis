@@ -65,9 +65,9 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
     private $data = null;
 	
 	/**
-	 * convenience methode to create a simple success report
+	 * convenience method to create a simple success report
 	 * 
-	 * @param string $title
+	 * @param string $message
 	 * @param mixed $data
 	 * @return common_report_Report
 	 */
@@ -76,9 +76,9 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
 	}
 	
 	/**
-	 * convenience methode to create a simple failure report
+	 * convenience method to create a simple failure report
 	 * 
-	 * @param string $title
+	 * @param string $message
 	 * @param mixed $errors
 	 * @return common_report_Report
 	 */
@@ -88,6 +88,17 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
 	        $report->add($error);
 	    }
 	    return $report;
+	}
+	
+	/**
+	 * convenience method to create a simple info report
+	 *
+	 * @param string $message
+	 * @param mixed $data
+	 * @return common_report_Report
+	 */
+	public static function createInfo($message = '', $data = null) {
+	    return new static(self::TYPE_INFO, $message, $data);
 	}
 	
 	public function __construct($type, $message = '', $data = null) {
@@ -162,7 +173,6 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
 	/**
 	 * returns all success elements
 	 * @return array
-	 * @deprecated
 	 */
 	public function getSuccesses() {
         $successes = array();
@@ -175,9 +185,22 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
 	}
 	
 	/**
+	 * returns all info elements
+	 * @return array
+	 */
+	public function getInfos() {
+	    $infos = array();
+	    foreach ($this as $element) {
+	        if ($element->getType() == self::TYPE_INFO) {
+	            $infos[] = $element;
+	        }
+	    }
+	    return $infos;
+	}
+	
+	/**
 	 * returns all error elements
 	 * @return array
-	 * @deprecated
 	 */
 	public function getErrors() {
         $errors = array();
