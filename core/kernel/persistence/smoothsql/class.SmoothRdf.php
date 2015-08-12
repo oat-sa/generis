@@ -19,6 +19,7 @@
  */
 
 use oat\generis\model\data\RdfInterface;
+use oat\generis\model\data\permission\PermissionManager;
 
 /**
  * Implementation of the RDF interface for the smooth sql driver
@@ -59,7 +60,11 @@ class core_kernel_persistence_smoothsql_SmoothRdf
             $this->model->addReadableModel($triple->modelid);
         }
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language) VALUES ( ? , ? , ? , ? , ? );";
-        return $this->getPersistence()->exec($query, array($triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg));
+        $success = $this->getPersistence()->exec($query, array($triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg));
+        if ($triple->predicate == RDFS_SUBCLASSOF || $triple->predicate == RDF_TYPE) {
+            PermissionManager::getPermissionModel()->onResourceCreated(new core_kernel_classes_Resource($triple->subject));
+        }
+        return $success;
     }
     
     /**
