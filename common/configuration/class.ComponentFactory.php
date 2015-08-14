@@ -147,12 +147,9 @@ class common_configuration_ComponentFactory
      * @param  boolean optional
      * @return common_configuration_FileSystemComponent
      */
-    public static function buildFileSystemComponent($location, $expectedRights, $optional = false)
+    public static function buildFileSystemComponent($location, $expectedRights, $optional = false, $recursive = false)
     {
-        $returnValue = null;
-
-        
-        $returnValue = new common_configuration_FileSystemComponent($location, $expectedRights, $optional = false);
+        $returnValue = new common_configuration_FileSystemComponent($location, $expectedRights, $optional = false, $recursive);
         self::incrementFileSystemCount();
         $returnValue->setName('FileSystemComponentCheck_' . self::getFileSystemCount());
         
