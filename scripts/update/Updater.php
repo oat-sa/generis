@@ -35,7 +35,7 @@ class Updater extends \common_ext_ExtensionUpdater {
     
     /**
      * 
-     * @param string $currentVersion
+     * @param string $initialVersion
      * @return string $versionUpdatedTo
      */
     public function update($initialVersion) {
@@ -113,6 +113,20 @@ class Updater extends \common_ext_ExtensionUpdater {
         // service manager support
         if ($currentVersion == '2.7.5' || $currentVersion == '2.7.6' || $currentVersion == '2.7.7') {
             $currentVersion = '2.8.0';
+        }
+
+        // Introduced tree widget support
+        if ($currentVersion == '2.8.0' ) {
+            $file = __DIR__ . DIRECTORY_SEPARATOR . 'widgetdefinitions_2.8.1.rdf';
+
+            $api = core_kernel_impl_ApiModelOO::singleton();
+            $success = $api->importXmlRdf('http://www.tao.lu/datatypes/WidgetDefinitions.rdf', $file);
+
+            if ($success) {
+                $currentVersion = '2.8.1';
+            } else{
+                common_Logger::w('Import failed for '.$file);
+            }
         }
 
         return $currentVersion;
