@@ -66,7 +66,7 @@ class core_kernel_users_GenerisUser extends common_user_User
     {
         if (!in_array($property, $this->cachedProperties)) {
             return $this->getUncached($property);
-        } else if (!isset($this->cache[$property])) {
+        } elseif (!isset($this->cache[$property])) {
             $this->cache[$property] = $this->getUncached($property);
         }
 
