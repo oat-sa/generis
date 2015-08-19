@@ -53,7 +53,8 @@ class common_persistence_Manager
         'phpredis'   => 'common_persistence_PhpRedisDriver',
         'phpfile'    => 'common_persistence_PhpFileDriver',
         'SqlKvWrapper' => 'common_persistence_SqlKvDriver',
-        'no_storage' => 'common_persistence_NoStorageKvDriver'
+        'no_storage' => 'common_persistence_NoStorageKvDriver',
+        'couchbase'  => 'common_persistence_CouchbaseDriver',
     );
 
     /**
@@ -99,7 +100,7 @@ class common_persistence_Manager
                 $driverClassName = isset(self::$driverMap[$driverStr])
                     ? self::$driverMap[$driverStr]
                     : $driverStr;
-                 
+
                 if (!class_exists($driverClassName)){
                     throw new common_exception_Error('Driver '.$driverStr.' not found check your database configuration');
                 }
