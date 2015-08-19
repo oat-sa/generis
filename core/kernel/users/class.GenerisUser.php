@@ -35,6 +35,15 @@ class core_kernel_users_GenerisUser extends common_user_User
 
     private $cache;
 
+    private $cachedProperties = array(
+        PROPERTY_USER_DEFLG,
+        PROPERTY_USER_ROLES,
+        PROPERTY_USER_UILG,
+        PROPERTY_USER_FIRSTNAME,
+        PROPERTY_USER_LASTNAME,
+        PROPERTY_USER_LOGIN
+    );
+
     public function __construct(core_kernel_classes_Resource $user)
     {
         $this->userResource = $user;
@@ -55,11 +64,14 @@ class core_kernel_users_GenerisUser extends common_user_User
 
     public function getPropertyValues($property)
     {
-        if (! isset($this->cache[$property])) {
+        if (!in_array($property, $this->cachedProperties)) {
+            return $this->getUncached($property);
+        } elseif (!isset($this->cache[$property])) {
             $this->cache[$property] = $this->getUncached($property);
         }
+
         return $this->cache[$property];
-        
+
     }
     
     private function getUncached($property)
