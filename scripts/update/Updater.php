@@ -119,14 +119,14 @@ class Updater extends \common_ext_ExtensionUpdater {
         }
 
         // Introduced tree widget support
-        if ($currentVersion == '2.8.0' ) {
-            $file = __DIR__ . DIRECTORY_SEPARATOR . 'widgetdefinitions_2.8.1.rdf';
+        if ($currentVersion == '2.9.0' ) {
+            $file = __DIR__ . DIRECTORY_SEPARATOR . 'widgetdefinitions_2.9.1.rdf';
 
             $api = core_kernel_impl_ApiModelOO::singleton();
             $success = $api->importXmlRdf('http://www.tao.lu/datatypes/WidgetDefinitions.rdf', $file);
 
             if ($success) {
-                $currentVersion = '2.8.1';
+                $currentVersion = '2.9.1';
             } else{
                 common_Logger::w('Import failed for '.$file);
             }
