@@ -111,8 +111,11 @@ class Updater extends \common_ext_ExtensionUpdater {
         }
         
         // service manager support
-        if ($currentVersion == '2.7.5' || $currentVersion == '2.7.6' || $currentVersion == '2.7.7') {
-            $currentVersion = '2.8.0';
+        if ($currentVersion == '2.7.5' 
+            || $currentVersion == '2.7.6' 
+            || $currentVersion == '2.7.7'
+            || $currentVersion == '2.8.0') {
+            $currentVersion = '2.9.0';
         }
 
         // Introduced tree widget support
