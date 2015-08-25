@@ -135,6 +135,8 @@ class Updater extends \common_ext_ExtensionUpdater {
                 $cache = new \common_cache_KeyValueCache(array(
                     \common_cache_KeyValueCache::OPTION_PERSISTENCE => 'cache'
                 ));
+                $cache->setServiceManager($this->getServiceManager());
+                
                 $this->getServiceManager()->register('generis/cache', $cache);
             }
             
