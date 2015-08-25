@@ -1,4 +1,5 @@
 <?php
+use oat\oatbox\service\ServiceManager;
 /**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,4 +39,15 @@ abstract class common_ext_ExtensionUpdater
      * @return string $versionUpdatedTo
      */
     public abstract function update($initialVersion);
+    
+    /**
+     * Temporary helper untill the service manager
+     * gets properly injected into the update scripts
+     * 
+     * @return \oat\oatbox\service\ServiceManager
+     */
+    public function getServiceManager()
+    {
+        return ServiceManager::getServiceManager();
+    }
 }

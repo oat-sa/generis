@@ -160,10 +160,6 @@ class Updater extends \common_ext_ExtensionUpdater {
         return $currentVersion;
     }
     
-    public function getServiceManager() {
-        return ServiceManager::getServiceManager()->getServiceManager();
-    }
-    
     private function getReadableModelIds() {
         $extensionManager = \common_ext_ExtensionsManager::singleton();
         \common_ext_NamespaceManager::singleton()->reset();
