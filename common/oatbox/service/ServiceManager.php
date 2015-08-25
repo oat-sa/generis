@@ -57,12 +57,14 @@ class ServiceManager
             list($extId, $configId) = $parts;
             $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
             $service = $extension->getConfig($configId);
-            if (is_null($service)) {
+            
+            if ($service === false) {
                 throw new ServiceNotFoundException($serviceKey);
             }
             if ($service instanceof ConfigurableService) {
                 $service->setServiceManager($this);
             }
+            
             $this->services[$serviceKey] = $service;
         }
         return $this->services[$serviceKey];
