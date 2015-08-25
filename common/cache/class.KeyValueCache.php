@@ -1,6 +1,4 @@
 <?php
-use oat\oatbox\service\ServiceManager;
-use oat\oatbox\service\ConfigurableService;
 /**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,23 +20,20 @@ use oat\oatbox\service\ConfigurableService;
  * 
  */
 
+use oat\oatbox\service\ServiceManager;
+use oat\oatbox\service\ConfigurableService;
 /**
- * Caches data in php files
+ * Caches data in a key-value store
  *
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
- 
  */
-class common_cache_FileCache extends ConfigurableService
+class common_cache_KeyValueCache extends ConfigurableService
         implements common_cache_Cache
 {
     const OPTION_PERSISTENCE = 'persistence';
     
-    public static function singleton()
-    {
-        return ServiceManager::getServiceManager()->get('generis/cache');
-    }
     
     /**
      * @var common_persistence_KeyValuePersistence
