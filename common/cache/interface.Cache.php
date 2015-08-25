@@ -59,11 +59,13 @@ interface common_cache_Cache
 
     /**
      * gets the entry associted to the serial
+     * throws an exception if not found
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  string serial
      * @return common_Serializable
+     * @throws common_cache_NotFoundException
      */
     public function get($serial);
 

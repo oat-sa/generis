@@ -1,4 +1,7 @@
 <?php
+use oat\oatbox\service\ServiceManager;
+use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\ServiceNotFoundException;
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,14 +32,11 @@
  
  *
  */
-class common_persistence_Manager
+class common_persistence_Manager extends ConfigurableService
 {
-    const CONFIG_KEY = 'persistences';
+    const SERVICE_KEY = 'generis/persistences';
     
-    /**
-     * @var array
-     */
-    private static $persistences = array();
+    const OPTION_PERSISTENCES = 'persistences';
 
     /**
      * @var array
@@ -55,32 +55,63 @@ class common_persistence_Manager
         'SqlKvWrapper' => 'common_persistence_SqlKvDriver',
         'no_storage' => 'common_persistence_NoStorageKvDriver'
     );
-
+    
     /**
-     * 
-     * @param string $persistenceId
-     * @return common_persistence_Persistence
+     * @return common_persistence_Manager
      */
-    public static function getPersistence($persistenceId){
-        if(!isset(self::$persistences[$persistenceId])) {
-            self::$persistences[$persistenceId] = self::createPersistence($persistenceId);
+    protected static function getDefaultManager()
+    {
+        try {
+            $manager = ServiceManager::getServiceManager()->get(self::SERVICE_KEY);
+        } catch (ServiceNotFoundException $ex) {
+            $manager = new self(array(
+                self::OPTION_PERSISTENCES => array()
+            ));
+            $manager->setServiceManager(ServiceManager::getServiceManager());
         }
-        return self::$persistences[$persistenceId];
+        return $manager;
     }
     
     /**
+     *
+     * @param string $persistenceId
+     * @return common_persistence_Persistence
+     */
+    public static function getPersistence($persistenceId)
+    {
+        return self::getDefaultManager()->getPersistenceById($persistenceId);
+    }
+
+    /**
      * Add a new persistence to the system
-     * 
+     *
      * @param string $persistenceId
      * @param array $persistenceConf
      */
-    public static function addPersistence($persistenceId, array $persistenceConf) {
-        $generis = common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
-        $configs = $generis->hasConfig(self::CONFIG_KEY)
-            ? $generis->getConfig(self::CONFIG_KEY)
-            : array();
+    public static function addPersistence($persistenceId, array $persistenceConf)
+    {
+        $manager = self::getDefaultManager();
+        $configs = $manager->getOption(self::OPTION_PERSISTENCES);
         $configs[$persistenceId] = $persistenceConf;
-        $generis->setConfig(self::CONFIG_KEY, $configs);
+        $manager->setOption(self::OPTION_PERSISTENCES, $configs);
+        
+        $manager->getServiceManager()->register(self::SERVICE_KEY, $manager);
+    }
+    
+    /**
+     * @var array
+     */
+    private $persistences = array();
+    
+    /**
+     * @return common_persistence_Persistence
+     */
+    public function getPersistenceById($persistenceId)
+    {
+        if(!isset($this->persistences[$persistenceId])) {
+            $this->persistences[$persistenceId] = $this->createPersistence($persistenceId);
+        }
+        return $this->persistences[$persistenceId];
     }
 
     /**
@@ -88,28 +119,24 @@ class common_persistence_Manager
      * @throws common_Exception
      * @return common_persistence_Persistence
      */
-    private static function createPersistence($persistenceId) {
+    private function createPersistence($persistenceId) {
         $generis = common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
-        if ($generis->hasConfig(self::CONFIG_KEY)) {
-            $configs = $generis->getConfig(self::CONFIG_KEY);
-            if (isset($configs[$persistenceId])) {
-                $config = $configs[$persistenceId];
-                $driverStr = $config['driver'];
-                
-                $driverClassName = isset(self::$driverMap[$driverStr])
-                    ? self::$driverMap[$driverStr]
-                    : $driverStr;
-                 
-                if (!class_exists($driverClassName)){
-                    throw new common_exception_Error('Driver '.$driverStr.' not found check your database configuration');
-                }
-                $driver = new $driverClassName();
-                return $driver->connect($persistenceId, $config);
-            } else {
-                throw new common_Exception('Persistence Configuration for persistence '.$persistenceId.' not found');
+        $configs = $this->getOption(self::OPTION_PERSISTENCES);
+        if (isset($configs[$persistenceId])) {
+            $config = $configs[$persistenceId];
+            $driverStr = $config['driver'];
+            
+            $driverClassName = isset(self::$driverMap[$driverStr])
+                ? self::$driverMap[$driverStr]
+                : $driverStr;
+             
+            if (!class_exists($driverClassName)){
+                throw new common_exception_Error('Driver '.$driverStr.' not found check your database configuration');
             }
+            $driver = new $driverClassName();
+            return $driver->connect($persistenceId, $config);
         } else {
-            throw new common_Exception('Persistence Configuration not found');
+            throw new common_Exception('Persistence Configuration for persistence '.$persistenceId.' not found');
         }
     }
     

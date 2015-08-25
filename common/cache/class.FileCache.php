@@ -20,130 +20,19 @@
  * 
  */
 
+use oat\oatbox\service\ServiceManager;
 /**
- * Caches data in php files
+ * Please use KeyValueCache instead
  *
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
- 
+ * @deprecated
  */
-class common_cache_FileCache
-        implements common_cache_Cache
+class common_cache_FileCache extends common_cache_KeyValueCache
 {
-
-    /**
-     * Short description of attribute instance
-     *
-     * @access private
-     * @var FileCache
-     */
-    private static $instance = null;
-    
-    /**
-     * @var common_persistence_KeyValuePersistence
-     */
-    private $persistence;
-    
-    private function __construct() {
-        $this->persistence = common_persistence_KeyValuePersistence::getPersistence('cache');
-    }
-
-    /**
-     * puts "something" into the cache,
-     *      * If this is an object and implements Serializable,
-     *      * we use the serial provided by the object
-     *      * else a serial must be provided
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  mixed
-     * @param  string serial
-     * @return boolean
-     * @throws common_exception_Error
-     */
-    public function put($mixed, $serial = null)
-    {
-        if ($mixed instanceof common_Serializable) {
-        	if (!is_null($serial) && $serial != $mixed->getSerial()) {
-        		throw new common_exception_Error('Serial mismatch for Serializable '.$mixed->getSerial());
-        	}
-        	$serial = $mixed->getSerial();
-        }
-        return $this->persistence->set($serial, $mixed);
-    }
-
-    /**
-     * gets the entry associted to the serial
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  string serial
-     * @return common_Serializable
-     * @throws common_cache_NotFoundException
-     */
-    public function get($serial)
-    {
-        $returnValue = $this->persistence->get($serial);
-        if ($returnValue === false && !$this->has($serial)) {
-            $msg = "No cache entry found for '".$serial."'.";
-            throw new common_cache_NotFoundException($msg);
-        }
-        return $returnValue;
-    }
-
-    /**
-     * test whenever an entry associated to the serial exists
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  string serial
-     * @return boolean
-     */
-    public function has($serial)
-    {
-        return $this->persistence->exists($serial);
-    }
-
-    /**
-     * removes an entry from the cache
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  string serial
-     * @return mixed
-     */
-    public function remove($serial)
-    {
-        return $this->persistence->del($serial);
-    }
-
-    /**
-     * empties the cache
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return mixed
-     */
-    public function purge()
-    {
-        return $this->persistence->purge();
-    }
-
-    /**
-     * Short description of method singleton
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return common_cache_FileCache
-     */
     public static function singleton()
     {
-        if (!isset(self::$instance)){
-        	self::$instance = new self();
-        }
-        
-        return self::$instance;
+        return ServiceManager::getServiceManager()->get('generis/cache');
     }
-
 }
