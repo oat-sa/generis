@@ -1,4 +1,6 @@
 <?php
+use oat\oatbox\service\ServiceManager;
+use oat\oatbox\service\ConfigurableService;
 /**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,27 +30,29 @@
  * @package generis
  
  */
-class common_cache_FileCache
+class common_cache_FileCache extends ConfigurableService
         implements common_cache_Cache
 {
-
-    /**
-     * Short description of attribute instance
-     *
-     * @access private
-     * @var FileCache
-     */
-    private static $instance = null;
+    const OPTION_PERSISTENCE = 'persistence';
+    
+    public static function singleton()
+    {
+        return ServiceManager::getServiceManager()->get('generis/cache');
+    }
     
     /**
      * @var common_persistence_KeyValuePersistence
      */
     private $persistence;
     
-    private function __construct() {
-        $this->persistence = common_persistence_KeyValuePersistence::getPersistence('cache');
+    protected function getPersistence()
+    {
+        if (is_null($this->persistence)) {
+            $this->persistence = $this->getServiceManager()->get('generis/persistences')->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
+        }
+        return $this->persistence;
     }
-
+    
     /**
      * puts "something" into the cache,
      *      * If this is an object and implements Serializable,
@@ -70,7 +74,7 @@ class common_cache_FileCache
         	}
         	$serial = $mixed->getSerial();
         }
-        return $this->persistence->set($serial, $mixed);
+        return $this->getPersistence()->set($serial, $mixed);
     }
 
     /**
@@ -84,7 +88,7 @@ class common_cache_FileCache
      */
     public function get($serial)
     {
-        $returnValue = $this->persistence->get($serial);
+        $returnValue = $this->getPersistence()->get($serial);
         if ($returnValue === false && !$this->has($serial)) {
             $msg = "No cache entry found for '".$serial."'.";
             throw new common_cache_NotFoundException($msg);
@@ -102,7 +106,7 @@ class common_cache_FileCache
      */
     public function has($serial)
     {
-        return $this->persistence->exists($serial);
+        return $this->getPersistence()->exists($serial);
     }
 
     /**
@@ -115,7 +119,7 @@ class common_cache_FileCache
      */
     public function remove($serial)
     {
-        return $this->persistence->del($serial);
+        return $this->getPersistence()->del($serial);
     }
 
     /**
@@ -127,23 +131,7 @@ class common_cache_FileCache
      */
     public function purge()
     {
-        return $this->persistence->purge();
-    }
-
-    /**
-     * Short description of method singleton
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return common_cache_FileCache
-     */
-    public static function singleton()
-    {
-        if (!isset(self::$instance)){
-        	self::$instance = new self();
-        }
-        
-        return self::$instance;
+        return $this->getPersistence()->purge();
     }
 
 }
