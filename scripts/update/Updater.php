@@ -121,21 +121,21 @@ class Updater extends \common_ext_ExtensionUpdater {
         }
         
         if ($currentVersion == '2.9.0') {
-            try {
-                $cache = $this->getServiceManager()->get('generis/cache');
-            } catch (ServiceNotFoundException $e) {
-                $cache = new \common_cache_KeyValueCache(array(
-                    \common_cache_KeyValueCache::OPTION_PERSISTENCE => 'cache'
-                ));
-                $this->getServiceManager()->register('generis/cache', $cache);
-            }
-            
             $persistenceConfig = $this->getServiceManager()->get('generis/persistences');
             if (is_array($persistenceConfig)) {
                 $service = new \common_persistence_Manager(array(
                     \common_persistence_Manager::OPTION_PERSISTENCES =>$persistenceConfig
                 ));
                 $this->getServiceManager()->register('generis/persistences', $service);
+            }
+            
+            try {
+                $this->getServiceManager()->get('generis/cache');
+            } catch (ServiceNotFoundException $e) {
+                $cache = new \common_cache_KeyValueCache(array(
+                    \common_cache_KeyValueCache::OPTION_PERSISTENCE => 'cache'
+                ));
+                $this->getServiceManager()->register('generis/cache', $cache);
             }
             
             $currentVersion = '2.10.0';
