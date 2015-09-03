@@ -20,6 +20,7 @@
  */
 
 use oat\oatbox\user\User;
+use oat\oatbox\Refreshable;
 
 /**
  * Abstract User
@@ -28,7 +29,7 @@ use oat\oatbox\user\User;
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
  */
-abstract class common_user_User implements User
+abstract class common_user_User implements User, Refreshable
 {
 	abstract public function getIdentifier();
 	
