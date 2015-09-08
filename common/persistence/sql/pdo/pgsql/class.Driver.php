@@ -98,12 +98,12 @@ class common_persistence_sql_pdo_pgsql_Driver
     {
         if ($name === 'models') {
             $name = 'models_modelid_seq';
-        } else {
-            if ($name === 'variables_storage') {
+        } elseif ($name === 'variables_storage') {
                 $name = 'variables_storage_variable_id_seq';
-            } else {
-                $name .= '_id_seq';
-            }
+        } elseif (!is_null($name)) {
+            $name .= '_id_seq';
+        } else {
+            throw new common_exception_MissingParameter('name', __CLASS__.'::'.__FUNCTION__);
         }
 
         return parent::lastInsertId($name);
