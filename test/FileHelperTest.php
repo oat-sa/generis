@@ -116,5 +116,13 @@ class FileHelperTest extends GenerisPhpUnitTestRunner
             array(dirname(__FILE__) . '/../index.php', 'php', true, false),
         );
     }
+    
+    public function testGetRelPath()
+    {
+        $this->assertEquals(
+            helpers_File::getRelPath('a/b/c/d', 'c/d/e/f'),
+            helpers_File::getRelPath('a\b\c\d', 'c/d/e/f')
+        );
+    }
 }
 	

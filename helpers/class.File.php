@@ -66,6 +66,10 @@ class helpers_File
      */
     static public function getRelPath($from, $to)
     {
+        //normalize paths
+        $from = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $from);
+        $to = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $to);
+        
         $returnValue = (string) '';
         
         $from = is_dir($from) ? $from : dirname($from);
