@@ -116,5 +116,22 @@ class FileHelperTest extends GenerisPhpUnitTestRunner
             array(dirname(__FILE__) . '/../index.php', 'php', true, false),
         );
     }
+
+    public function testUtlToPath()
+    {
+        $path = DIRECTORY_SEPARATOR . 'style' . DIRECTORY_SEPARATOR . 'custom' . DIRECTORY_SEPARATOR . 'tao-user-styles.css';
+
+        $urls = array(
+            '/style/custom/tao-user-styles.css',
+            'http://ex.com/style/custom/tao-user-styles.css',
+            'https://ex.com/style/custom/tao-user-styles.css',
+            'file://c/style/custom/tao-user-styles.css',
+            'file://D:/style/custom/tao-user-styles.css',
+        );
+
+        foreach ($urls as $url) {
+            $this->assertEquals(helpers_File::utlToPath($url), $path);
+        }
+    }
 }
 	

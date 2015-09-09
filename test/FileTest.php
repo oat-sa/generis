@@ -131,6 +131,6 @@ class FileTest extends GenerisPhpUnitTestRunner {
 
 	    $this->assertTrue($file->delete());
 	}
-    
+
 }
 	
