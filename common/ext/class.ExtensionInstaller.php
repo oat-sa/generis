@@ -202,15 +202,6 @@ class common_ext_ExtensionInstaller
 	{
 		
 		$localData = $this->extension->getManifest()->getLocalData();
-		if(isset($localData['rdf'])){
-			$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
-			foreach ($localData['rdf'] as $rdfpath) {
-				if(file_exists($rdfpath)){
-					common_Logger::d('Inserting local data rdf '.$rdfpath.' for '.$this->extension->getId(), 'INSTALL');
-					$modelCreator->insertLocalModelFile($rdfpath);
-				}
-			}
-		}
 		if(isset($localData['php'])) {
 			$scripts = $localData['php'];
 			$scripts = is_array($scripts) ? $scripts : array($scripts);
