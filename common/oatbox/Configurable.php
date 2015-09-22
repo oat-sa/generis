@@ -99,7 +99,8 @@ abstract class Configurable implements PhpSerializable
      * @see \oat\oatbox\PhpSerializable::__toPhpCode()
      */
     public function __toPhpCode() {
-        $params = \common_Utils::toHumanReadablePhpString($this->getOptions());
+        $options = $this->getOptions();
+        $params = empty($options) ? '' : \common_Utils::toHumanReadablePhpString($options);
         return 'new '.get_class($this).'('.$params.')';
     }
 }
