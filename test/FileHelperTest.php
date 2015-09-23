@@ -117,7 +117,7 @@ class FileHelperTest extends GenerisPhpUnitTestRunner
         );
     }
 
-    public function testUtlToPath()
+    public function testUrlToPath()
     {
         $path = DIRECTORY_SEPARATOR . 'style' . DIRECTORY_SEPARATOR . 'custom' . DIRECTORY_SEPARATOR . 'tao-user-styles.css';
 
@@ -130,7 +130,7 @@ class FileHelperTest extends GenerisPhpUnitTestRunner
         );
 
         foreach ($urls as $url) {
-            $this->assertEquals(helpers_File::utlToPath($url), $path);
+            $this->assertEquals(helpers_File::urlToPath($url), $path);
         }
     }
 }

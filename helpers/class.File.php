@@ -281,7 +281,7 @@ class helpers_File
      * @param string $path
      * @return string
      */
-    static public function utlToPath($path)
+    static public function urlToPath($path)
     {
         $path = parse_url($path);
         return $path === null ? null : str_replace('/', DIRECTORY_SEPARATOR, $path['path']);
