@@ -33,7 +33,7 @@ class helpers_PasswordHash {
 
         throw new PasswordConstraintsException(
             __( 'Password must be: %s' ,
-            implode( ',', PasswordConstraintsService::singleton()->getErrors() )
+            implode( ',', PasswordConstraintsService::singleton()->getErrors($password) )
         ));
     }
 

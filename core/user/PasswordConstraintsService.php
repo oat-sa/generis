@@ -124,14 +124,19 @@ class PasswordConstraintsService extends \tao_models_classes_Service
 
     /**
      * Any errors that was found during validation process
+     *
+     * @param string $password
+     *
      * @return array
      */
-    public function getErrors()
+    public function getErrors($password = '')
     {
         $errors = array();
         /** @var \tao_helpers_form_Validator $validator */
         foreach ($this->validators as $validator) {
-            $errors[] = $validator->getMessage();
+            if ( ! $validator->evaluate($password)) {
+                $errors[] = $validator->getMessage();
+            }
         }
 
         return $errors;
