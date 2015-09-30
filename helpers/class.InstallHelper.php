@@ -27,6 +27,7 @@ class helpers_InstallHelper
     public static function installRecursively($extensionIDs, $installData=array())
     {
 		$toInstall = array();
+		$successInstalled = array();
 		foreach ($extensionIDs as $id) {
 			try {
 				$ext = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
@@ -49,6 +50,7 @@ class helpers_InstallHelper
         		$missing	= array_diff(array_keys($extension->getDependencies()), $installed);
         		if (count($missing) == 0) {
     			    static::install($extension, $installData);
+					$successInstalled[] = $extension->getId();
                     common_Logger::i('Extension '.$extension->getId().' installed');
         			unset($toInstall[$key]);
         			$modified = true;
@@ -66,7 +68,7 @@ class helpers_InstallHelper
         		throw new \common_exception_Error('Unfulfilable/Cyclic reference found in extensions');
         	}
         }
-        return true;
+        return $successInstalled;
     }
     
     protected static function install($extension, $installData) {
