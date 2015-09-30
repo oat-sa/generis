@@ -33,7 +33,7 @@ class helpers_PasswordHash {
             return $salt.hash($this->algorithm, $salt.$password);
         }
 
-        $exception = new PasswordConstraintsException(__('Password must be: %s'), implode(',', $errors));
+        $exception = new PasswordConstraintsException('Password must be: %s' . implode(',', $errors));
         $exception->setErrors($errors);
 
         throw $exception;
