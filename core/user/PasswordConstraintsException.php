@@ -22,4 +22,17 @@ namespace oat\generis\model\user;
 
 class PasswordConstraintsException extends \common_exception_Error{
 
+    protected $errors = array();
+
+    /**
+     * @param array $errors
+     *
+     * @return PasswordConstraintsException
+     */
+    public function setErrors(array $errors)
+    {
+        $this->errors = $errors;
+
+        return $this;
+    }
 }
