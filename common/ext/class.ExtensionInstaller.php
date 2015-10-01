@@ -83,12 +83,9 @@ class common_ext_ExtensionInstaller
 					// unreachable code
 				}
 					
-				// deprecated, but might still be used
 				$this->installLoadDefaultConfig();
 				$this->installOntology();
 				$this->installRegisterExt();
-				$this->installLoadConstants();
-				$this->installExtensionModel();
 					
 				common_Logger::d('Installing custom script for extension ' . $this->extension->getId());
 				$this->installCustomScript();
@@ -210,36 +207,6 @@ class common_ext_ExtensionInstaller
 				require_once $script;
 			}
 		}
-		
-	}
-
-	/**
-	 * Loads the /extension_folder/includes/constants.php file of the extension.
-	 *
-	 * @access public
-	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @return void
-	 */
-	public function installLoadConstants()
-	{
-		
-		common_Logger::i("Loading constants for extension " . $this->extension->getId());
-		$this->extension->load();
-		
-	}
-
-	/**
-	 * Instantiate the Extension/Module/Action model in the persistent memory of
-	 *
-	 * @access public
-	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @return void
-	 */
-	public function installExtensionModel()
-	{
-		
-		//common_Logger::i("Spawning Extension/Module/Action model for extension '" . $this->extension->getId() . "'");
-		
 		
 	}
 
