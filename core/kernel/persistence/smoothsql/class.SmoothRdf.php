@@ -19,7 +19,9 @@
  */
 
 use oat\generis\model\data\RdfInterface;
-use oat\generis\model\data\permission\PermissionManager;
+use oat\oatbox\service\ServiceManager;
+use oat\oatbox\event\EventManager;
+use oat\generis\model\data\event\ResourceCreated;
 
 /**
  * Implementation of the RDF interface for the smooth sql driver
@@ -62,7 +64,8 @@ class core_kernel_persistence_smoothsql_SmoothRdf
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language) VALUES ( ? , ? , ? , ? , ? );";
         $success = $this->getPersistence()->exec($query, array($triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg));
         if ($triple->predicate == RDFS_SUBCLASSOF || $triple->predicate == RDF_TYPE) {
-            PermissionManager::getPermissionModel()->onResourceCreated(new core_kernel_classes_Resource($triple->subject));
+            $eventManager = $this->getServiceManager()->get(EventManager::CONFIG_ID);
+            $eventManager->trigger(new ResourceCreated(new core_kernel_classes_Resource($triple->subject)));
         }
         return $success;
     }
@@ -86,5 +89,10 @@ class core_kernel_persistence_smoothsql_SmoothRdf
     
     public function getIterator() {
         return new core_kernel_persistence_smoothsql_SmoothIterator($this->getPersistence());
+    }
+    
+    public function getServiceManager()
+    {
+        return ServiceManager::getServiceManager();
     }
 }

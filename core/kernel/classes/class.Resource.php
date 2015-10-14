@@ -21,6 +21,7 @@
  */
 
 use oat\generis\model\data\ModelManager;
+use oat\oatbox\service\ServiceManager;
 
 /**
  * Resource implements rdf:resource container identified by an uri (a string).
@@ -731,6 +732,11 @@ class core_kernel_classes_Resource
         	}
         }
         return (bool) $returnValue;
+    }
+    
+    public function getServiceManager()
+    {
+        return ServiceManager::getServiceManager();
     }
   
 }
