@@ -164,15 +164,23 @@ class common_Utils
     public static function toHumanReadablePhpString($value, $indentation = 0)
     {
         if (gettype($value) == "array") {
+            $array = array_keys($value);
+            $assocArray = ($array !== array_keys($array));
             $string = "";
-            foreach ($value as $key => $val) {
-            	$string .= str_repeat('    ', $indentation+1)
-                   .self::toPHPVariableString($key)
-            	   ." => "
-                   .self::toHumanReadablePhpString($val, $indentation+1).","
-                   .PHP_EOL;
+            if ($assocArray) {
+                foreach ($value as $key => $val) {
+                	$string .= PHP_EOL.str_repeat('    ', $indentation+1)
+                       .self::toPHPVariableString($key)
+                	   ." => "
+                       .self::toHumanReadablePhpString($val, $indentation+1).",";
+                }
+            } else {
+                foreach ($value as $val) {
+                    $string .= PHP_EOL.str_repeat('    ', $indentation+1)
+                        .self::toHumanReadablePhpString($val, $indentation+1).",";
+                }
             }
-            $returnValue = "array(".PHP_EOL.substr($string, 0, -1).PHP_EOL.str_repeat('    ', $indentation).")";
+            $returnValue = "array(".substr($string, 0, -1).PHP_EOL.str_repeat('    ', $indentation).")";
         } else {
             $returnValue = self::toPHPVariableString($value);
         }
