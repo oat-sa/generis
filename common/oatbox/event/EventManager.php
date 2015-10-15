@@ -31,6 +31,12 @@ class EventManager extends ConfigurableService
     
     const OPTION_LISTENERS = 'listeners';
     
+    /**
+     * Dispatch an event and trigger its listeners
+     * 
+     * @param mixed $event either an Event object or a string
+     * @param array $params
+     */
     public function trigger($event, $params = array()) {
         $eventObject = is_object($event) ? $event : new GenericEvent($event, $params);
         foreach ($this->getListeners($eventObject) as $callback) {
@@ -38,17 +44,32 @@ class EventManager extends ConfigurableService
         }
     }
     
+    /**
+     * Attach a Listener to one or multiple events
+     * 
+     * @param mixed $event either an Event object or a string
+     * @param Callable $callback
+     */
     public function attach($event, $callback) {
-        $eventObject = is_object($event) ? $event : new GenericEvent($event);
+        $events = is_array($event) ? $event : array($event);
         $listeners = $this->getOption(self::OPTION_LISTENERS);
-        if (!isset($listeners[$eventObject->getName()])) {
-            $listeners[$eventObject->getName()] = array();
+        foreach ($events as $event) {
+            $eventObject = is_object($event) ? $event : new GenericEvent($event);
+            if (!isset($listeners[$eventObject->getName()])) {
+                $listeners[$eventObject->getName()] = array();
+            }
+            $listeners[$eventObject->getName()][] = $callback;
         }
-        $listeners[$eventObject->getName()][] = $callback;
         $this->setOption(self::OPTION_LISTENERS, $listeners);
     }
     
-    protected function getListeners($eventObject) {
+    /**
+     * Get all Listeners listening to this kind of event
+     * 
+     * @param Event $eventObject
+     * @return Callable[] listeners associated with this event
+     */
+    protected function getListeners(Event $eventObject) {
         $listeners = $this->getOption(self::OPTION_LISTENERS);
         return isset($listeners[$eventObject->getName()])
             ? $listeners[$eventObject->getName()]

@@ -25,5 +25,10 @@ namespace oat\oatbox\event;
  */
 interface Event
 {
+    /**
+     * Return a unique name for this event
+     * 
+     * @return string
+     */
     public function getName();
 }
