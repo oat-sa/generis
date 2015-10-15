@@ -28,6 +28,7 @@ use oat\generis\model\data\permission\PermissionManager;
 use oat\generis\model\data\ModelManager;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ServiceNotFoundException;
+use oat\oatbox\event\EventManager;
 
 /**
  * 
@@ -156,6 +157,15 @@ class Updater extends \common_ext_ExtensionUpdater {
             $currentVersion = '2.10.0';
         }
         
+        if ($currentVersion == '2.10.0') {
+            $eventManager = new EventManager();
+            $eventManager->attach(
+                'oat\\generis\\model\\data\\event\\ResourceCreated',
+                array('oat\\generis\\model\\data\\permission\\PermissionManager', 'catchEvent')
+            );
+            $this->getServiceManager()->register(EventManager::CONFIG_ID, $eventManager);
+            $currentVersion = '2.11.0';
+        }
 
         return $currentVersion;
     }
