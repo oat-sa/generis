@@ -124,7 +124,7 @@ class core_kernel_persistence_smoothsql_SmoothIterator
             .'ORDER BY id';
 
         $query = $this->persistence->getPlatForm()->limitStatement($query, self::CACHE_SIZE);
-        $result = $this->persistence->query($query);
+        $result = $this->persistence->query($query, array($id));
 
         $this->cache = array();
         while ($statement = $result->fetch()) {
