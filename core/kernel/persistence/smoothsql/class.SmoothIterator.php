@@ -121,8 +121,10 @@ class core_kernel_persistence_smoothsql_SmoothIterator
         
         $query = 'SELECT * FROM statements WHERE id > ? '
             .(is_null($this->modelIds) ? '' : 'AND modelid IN ('.implode(',', $this->modelIds).') ')
-            .'ORDER BY id LIMIT ?';
-        $result = $this->persistence->query($query, array($id, self::CACHE_SIZE));
+            .'ORDER BY id';
+
+        $query = $this->persistence->getPlatForm()->limitStatement($query, self::CACHE_SIZE);
+        $result = $this->persistence->query($query, array($id));
 
         $this->cache = array();
         while ($statement = $result->fetch()) {
