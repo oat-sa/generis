@@ -31,32 +31,18 @@
  */
 class common_ext_ConfigDriver extends common_persistence_PhpFileDriver
 {
-    const DEFAULT_HEADER = '';
+    private static $singleton = null;
     
-    /**
-     * 
-     * @param common_ext_Extension $extension
-     * @return common_persistence_KeyValuePersistence
-     */
-    public static function getPersistence(common_ext_Extension $extension) {
-        $driver = new self($extension);
-        return $driver->connect('config_'.$extension->getId(), array(
-            'dir' => CONFIG_PATH.$extension->getId(),
-            'humanReadable' => true
-        ));
-    }
-    
-    private $extension;
-    
-    private function __construct($extension) {
-        $this->extension = $extension;
-    }
-    
-    /**
-     * @return common_ext_Extension
-     */
-    protected function getExtension() {
-        return $this->extension;
+    public static function singleton()
+    {
+        if (is_null(self::$singleton)) {
+            $driver = new self();
+            return $driver->connect('config', array(
+                'dir' => CONFIG_PATH,
+                'humanReadable' => true
+            ));
+        }
+        return self::$singleton;
     }
     
     /**
@@ -65,25 +51,63 @@ class common_ext_ConfigDriver extends common_persistence_PhpFileDriver
      * (non-PHPdoc)
      * @see common_persistence_PhpFileDriver::getContent()
      */
-    protected function getContent($key, $value) {
-        $headerPath = $this->getExtension()->getDir().'config/header/'.$key.'.conf.php';
-        $header = file_exists($headerPath)
+    protected function getContent($key, $value)
+    {
+        $headerPath = $this->getHeaderPath($key);
+        $header = !is_null($headerPath) && file_exists($headerPath)
             ? file_get_contents($headerPath)
             : $this->getDefaultHeader($key);
             
         return $header.PHP_EOL."return ".common_Utils::toHumanReadablePhpString($value).";".PHP_EOL;
     }
     
-    private function getDefaultHeader($key) {
+    /**
+     * Generates a default header
+     * 
+     * @param string $key
+     * @return string
+     */
+    private function getDefaultHeader($key)
+    {
         return '<?php'.PHP_EOL
             .'/**'.PHP_EOL
             .' * Default config header'.PHP_EOL
             .' *'.PHP_EOL
-            .' * To replace this add a file '.basename($this->getExtension()->getDir()).'/conf/header/'.$key.'.conf.php'.PHP_EOL
+            .' * To replace this add a file '.$this->getHeaderPath($key).PHP_EOL
             .' */'.PHP_EOL;
     }
     
-    protected function getPath($key) {
-        return substr(parent::getPath($key), 0, -4).'.conf.php';
+    /**
+     * Returns the path to the expected header file
+     * 
+     * @param string $key
+     * @return string|NULL
+     */
+    private function getHeaderPath($key)
+    {
+        $parts = explode('/', $key, 2);
+        if (count($parts) >= 2) {
+            list($extId, $configId) = $parts;
+            $ext = common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
+            return $ext->getDir().'config/header/'.$configId.'.conf.php';
+        } else {
+            return null;
+        }
     }
+    
+    /**
+     * (non-PHPdoc)
+     * @see common_persistence_PhpFileDriver::getPath()
+     */
+    protected function getPath($key)
+    {
+        $parts = explode('/', $key);
+        $path = substr(parent::getPath(array_shift($parts)), 0, -4);
+        foreach ($parts as $part) {
+            $path .= DIRECTORY_SEPARATOR.$this->sanitizeReadableFileName($part);
+        }
+        return $path.'.conf.php';
+    }
+    
+    
 }

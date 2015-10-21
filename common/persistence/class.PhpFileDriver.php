@@ -191,15 +191,20 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     protected function getPath($key) {
         if ($this->humanReadable) {
-            $path = '';
-            foreach (str_split($key) as $char) {
-                $path .= isset(self::$ALLOWED_CHARACTERS[$char]) ? $char : base64_encode($char);
-            }
+            $path = $this->sanitizeReadableFileName($key);
         } else {
             $encoded = md5($key);
             $path = implode(DIRECTORY_SEPARATOR,str_split(substr($encoded, 0, $this->levels))).DIRECTORY_SEPARATOR.substr($encoded, $this->levels);
         }
         return  $this->directory.$path.'.php';
+    }
+    
+    protected function sanitizeReadableFileName($key) {
+        $path = '';
+        foreach (str_split($key) as $char) {
+            $path .= isset(self::$ALLOWED_CHARACTERS[$char]) ? $char : base64_encode($char);
+        }
+        return $path;
     }
     
     /**
