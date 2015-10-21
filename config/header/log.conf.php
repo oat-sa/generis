@@ -7,43 +7,53 @@
  * @license GPLv2  http://www.opensource.org/licenses/gpl-2.0.php
  */
 
-# threshold variants
-# trace_level   = 0;
-# debug_level   = 1;
-# info_level    = 2;
-# warning_level = 3;
-# error_level   = 4;
-# fatal_level   = 5;
+/**
+ * Threshold variants
+ *
+ * trace_level   = 0;
+ * debug_level   = 1;
+ * info_level    = 2;
+ * warning_level = 3;
+ * error_level   = 4;
+ * fatal_level   = 5;
+ */
 
-// Example of a Single File Appender
-//array(
-//    'class' => 'SingleFileAppender',
-//    'threshold' => 4,
-//    'reducing' => array(
-//        'maxsize' => 1048576, // in bytes
-//        'ratio' => .5
-//    ),
-//    'file' => dirname(__FILE__) . '/../../log/error.txt',
-//    'format' => '%m',
-//    'prefix' => '[dev]'
-//);
+/*
 
-// Example of a Multiple File Appender with archiving
-//array(
-//    'class' => 'ArchiveFileAppender',
-//    'mask' => 62, // 111110
-//    'tags' => array('GENERIS', 'TAO')
-//    'file' => '/var/log/tao/debug.txt',
-//    'directory' => '/var/log/tao/',
-//    'max_file_size' => 10000000,
-//    'prefix' => '[dev]'
-//);
+Examples of logger configurations
 
-// Example of a UDP Appender
-//array(
-//    'class' => 'UDPAppender',
-//    'host' => '127.0.0.1',
-//    'port' => 5775,
-//    'threshold' => 1,
-//    'prefix' => '[dev]'
-//);
+return array(
+    // Example of a Single File Appender
+    array(
+        'class' => 'SingleFileAppender',
+        'threshold' => 4,
+        'reducing' => array(
+            'maxsize' => 1048576, // 1Mb
+            'ratio' => .5
+        ),
+        'file' => dirname(__FILE__) . '/../../log/error.txt',
+        'format' => '%m',
+        'prefix' => '[dev]'
+    ),
+
+    // Example of a Multiple File Appender with archiving
+    array(
+        'class' => 'ArchiveFileAppender',
+        'mask' => 62, // 111110
+        'tags' => array('GENERIS', 'TAO')
+        'file' => '/var/log/tao/debug.txt',
+        'directory' => '/var/log/tao/',
+        'max_file_size' => 10000000,
+        'prefix' => '[dev]'
+    );
+
+    // Example of a UDP Appender
+    array(
+        'class' => 'UDPAppender',
+        'host' => '127.0.0.1',
+        'port' => 5775,
+        'threshold' => 1,
+        'prefix' => '[dev]'
+    );
+);
+*/

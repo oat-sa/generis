@@ -23,7 +23,10 @@
 
 /**
  * Basic Appender that writes into a single file
- * If the file exceeds maxFileSize the first half is truncated
+ * If the file exceeds maxFileSize the part of file is truncated.
+ * Size of part for truncate defines in reduceRatio property.
+ * If ratio == 0 file will empty when size reaches max value.
+ * When ratio >= 1 will be used default value equal 0.5.
  *
  * @access public
  * @author Joel Bout, <joel.bout@tudor.lu>
@@ -88,8 +91,6 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
     protected $filehandler = null;
 
     /**
-     * Short description of method init
-     *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  array $configuration
@@ -114,9 +115,9 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
     	}
 
 		if (isset($configuration['reducing']['ratio'])
-			&& $configuration['reducing']['ratio'] < 1
+			&& abs($configuration['reducing']['ratio']) < 1
 		) {
-			$this->reduceRatio = $configuration['reducing']['ratio'];
+			$this->reduceRatio = 1 - abs($configuration['reducing']['ratio']);
 		}
 
 		return !empty($this->filename)
@@ -139,7 +140,7 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
 		) {
         	// need to reduce the file size
         	$file = file($this->filename);
-        	$file = array_splice($file, count($file) * $this->reduceRatio);
+        	$file = array_splice($file, ceil(count($file) * $this->reduceRatio));
         	$this->filehandler = @fopen($this->filename, 'w');
         	foreach ($file as $line) {
         		@fwrite($this->filehandler, $line);
@@ -150,14 +151,14 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
     }
 
     /**
-     * Short description of method dolog
+     * Prepares and saves log entries to file
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @param common_log_Item $item
      * @return mixed
      */
-    public function dolog(common_log_Item $item)
+    public function doLog(common_log_Item $item)
     {
     	if (is_null($this->filehandler)) {
     		$this->initFile();
@@ -186,7 +187,7 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
     }
 
     /**
-     * Short description of method __destruct
+     * Closes file descriptor when logger object was destroyed
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>

@@ -154,6 +154,4 @@ abstract class common_log_BaseAppender
      */
     public abstract function doLog( common_log_Item $item);
 
-} /* end of abstract class common_log_BaseAppender */
-
-?>
+}
