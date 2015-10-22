@@ -110,14 +110,14 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
     		$this->prefix = $configuration['prefix'];
     	}
     	
-    	if (isset($configuration['reducing']['maxsize'])) {
-    		$this->maxFileSize = $configuration['reducing']['maxsize'];
+    	if (isset($configuration['maxsize'])) {
+    		$this->maxFileSize = $configuration['maxsize'];
     	}
 
-		if (isset($configuration['reducing']['ratio'])
-			&& abs($configuration['reducing']['ratio']) < 1
+		if (isset($configuration['rotation-ratio'])
+			&& abs($configuration['rotation-ratio']) < 1
 		) {
-			$this->reduceRatio = 1 - abs($configuration['reducing']['ratio']);
+			$this->reduceRatio = 1 - abs($configuration['rotation-ratio']);
 		}
 
 		return !empty($this->filename)
