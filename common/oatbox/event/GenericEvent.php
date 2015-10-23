@@ -60,4 +60,12 @@ class GenericEvent implements Event
     public function getName() {
         return $this->eventName;
     }
+
+    /**
+     * Get parameters
+     * @return array
+     */
+    public function getParams() {
+        return $this->params;
+    }
 }
