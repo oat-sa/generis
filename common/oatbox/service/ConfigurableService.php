@@ -47,6 +47,9 @@ abstract class ConfigurableService extends Configurable
      */
     public function getServiceManager()
     {
+        if (is_null($this->serviceManager)) {
+            throw new \common_exception_Error('Missing Service Manger in '.get_class($this));
+        }
         return $this->serviceManager;
     }
 }

@@ -22,8 +22,15 @@ namespace oat\oatbox\service;
 
 class ServiceNotFoundException extends \common_Exception
 {
-
+    private $serviceKey;
+    
     public function __construct($serviceKey) {
         parent::__construct('Service "'.$serviceKey.'" not found');
+        $this->serviceKey = $serviceKey;
     }
+    
+    public function getServiceKey() {
+        return $this->serviceKey;
+    }
+    
 }
