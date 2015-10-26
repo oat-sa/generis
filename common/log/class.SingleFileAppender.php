@@ -111,7 +111,7 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
     	}
     	
     	if (isset($configuration['maxsize'])) {
-    		$this->maxFileSize = $configuration['maxsize'];
+    		$this->maxFileSize = $configuration['max_file_size'];
     	}
 
 		if (isset($configuration['rotation-ratio'])
