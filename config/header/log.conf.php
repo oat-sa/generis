@@ -27,7 +27,7 @@ return array(
     array(
         'class' => 'SingleFileAppender',
         'threshold' => 4,
-        'maxsize' => 1048576, // 1Mb
+        'max_file_size' => 1048576, // 1Mb
         'rotation-ratio' => .5,
         'file' => dirname(__FILE__) . '/../../log/error.txt',
         'format' => '%m',
