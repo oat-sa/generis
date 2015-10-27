@@ -74,7 +74,7 @@ class SmoothModelIteratorTest extends GenerisPhpUnitTestRunner
         
         $persistenceProphecy->getPlatForm()->willReturn($platform);
         $persistenceProphecy
-        ->query($finalQuery)
+        ->query($finalQuery, Argument::type('array'))
         ->willReturn($plop);
          
         $iterator = new \core_kernel_persistence_smoothsql_SmoothIterator($persistenceProphecy->reveal());
