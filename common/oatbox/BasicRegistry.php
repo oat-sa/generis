@@ -47,5 +47,3 @@ class BasicRegistry extends AbstractRegistry
         return common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
     }
 }
-
-?>

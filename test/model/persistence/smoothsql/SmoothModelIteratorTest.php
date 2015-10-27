@@ -65,16 +65,16 @@ class SmoothModelIteratorTest extends GenerisPhpUnitTestRunner
         
         $plop = $statementProphecy->reveal();
 
-        $query = 'SELECT * FROM statements WHERE id > ? ORDER BY id';
+        $query = 'SELECT * FROM statements ORDER BY id';
         $finalQuery = $query.' LIMIT 100';
 
         $platformProphecy = $this->prophesize('common_persistence_sql_Platform');
-        $platformProphecy->limitStatement($query, 100)->willReturn($finalQuery);
+        $platformProphecy->limitStatement($query, 100, 0)->willReturn($finalQuery);
         $platform = $platformProphecy->reveal();
         
         $persistenceProphecy->getPlatForm()->willReturn($platform);
         $persistenceProphecy
-        ->query($finalQuery, Argument::type('array'))
+        ->query($finalQuery)
         ->willReturn($plop);
          
         $iterator = new \core_kernel_persistence_smoothsql_SmoothIterator($persistenceProphecy->reveal());
