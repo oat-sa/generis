@@ -110,7 +110,7 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
     		$this->prefix = $configuration['prefix'];
     	}
     	
-    	if (isset($configuration['maxsize'])) {
+    	if (isset($configuration['max_file_size'])) {
     		$this->maxFileSize = $configuration['max_file_size'];
     	}
 
