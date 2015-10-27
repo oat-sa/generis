@@ -52,7 +52,7 @@ class ServiceManager
         if (!isset($this->services[$serviceKey])) {
             $parts = explode('/', $serviceKey, 2);
             if (count($parts) < 2) {
-                throw new ServiceNotFoundException('Invalid servicekey '.$serviceKey);
+                throw new ServiceNotFoundException($serviceKey, 'Invalid servicekey');
             }
             list($extId, $configId) = $parts;
             $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
