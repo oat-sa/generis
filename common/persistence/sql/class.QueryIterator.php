@@ -30,16 +30,23 @@ class common_persistence_sql_QueryIterator
     const CACHE_SIZE = 100;
     
     /**
+     * @var common_persistence_SqlPersistence
+     */
+    private $persistence;
+    
+    /**
      * Query to iterator over
-     * 
+     *
      * @var string
      */
     private $query;
     
     /**
-     * @var common_persistence_SqlPersistence
+     * Query parameters
+     *
+     * @var string
      */
-    private $persistence;
+    private $params;
     
     /**
      * Id of the current instance
@@ -60,9 +67,10 @@ class common_persistence_sql_QueryIterator
      * 
      * @param array $modelIds
      */
-    public function __construct(common_persistence_SqlPersistence $persistence, $query) {
+    public function __construct(common_persistence_SqlPersistence $persistence, $query, $params = array()) {
         $this->persistence = $persistence;
         $this->query = $query;
+        $this->params = $params;
         $this->rewind();
     }
     
@@ -121,7 +129,7 @@ class common_persistence_sql_QueryIterator
     protected function load($offset) {
 
         $query = $this->persistence->getPlatForm()->limitStatement($this->query, self::CACHE_SIZE, $offset);
-        $result = $this->persistence->query($query);
+        $result = $this->persistence->query($query, $this->params);
 
         $this->cache = array();
         $pos = $offset;
