@@ -88,7 +88,7 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
      * @access protected
      * @var resource
      */
-    protected $filehandler = null;
+    protected $filehandle = null;
 
     /**
      * @access public
@@ -110,7 +110,7 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
     		$this->prefix = $configuration['prefix'];
     	}
     	
-    	if (isset($configuration['maxsize'])) {
+    	if (isset($configuration['max_file_size'])) {
     		$this->maxFileSize = $configuration['max_file_size'];
     	}
 
@@ -141,12 +141,12 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
         	// need to reduce the file size
         	$file = file($this->filename);
         	$file = array_splice($file, ceil(count($file) * $this->reduceRatio));
-        	$this->filehandler = @fopen($this->filename, 'w');
+        	$this->filehandle = @fopen($this->filename, 'w');
         	foreach ($file as $line) {
-        		@fwrite($this->filehandler, $line);
+        		@fwrite($this->filehandle, $line);
         	}
         } else {
-    		$this->filehandler = @fopen($this->filename, 'a');
+    		$this->filehandle = @fopen($this->filename, 'a');
         }
     }
 
@@ -160,11 +160,11 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
      */
     public function doLog(common_log_Item $item)
     {
-    	if (is_null($this->filehandler)) {
+    	if (is_null($this->filehandle)) {
     		$this->initFile();
     	}
     	
-    	if ($this->filehandler !== false) {
+    	if ($this->filehandle !== false) {
 	    	$map = array(
 				'%d' => date('Y-m-d H:i:s',$item->getDateTime()),
 				'%m' => $item->getDescription(),
@@ -182,7 +182,7 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
 
 			$str = strtr($this->format, $map) . PHP_EOL;
 
-			@fwrite($this->filehandler, $str);
+			@fwrite($this->filehandle, $str);
     	}
     }
 
@@ -195,8 +195,8 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
      */
     public function __destruct()
     {
-		if (!is_null($this->filehandler) && $this->filehandler !== false) {
-    		@fclose($this->filehandler);
+		if (!is_null($this->filehandle) && $this->filehandle !== false) {
+    		@fclose($this->filehandle);
     	}
     }
 }

@@ -31,28 +31,39 @@ use oat\oatbox\Refreshable;
  */
 abstract class common_user_User implements User, Refreshable
 {
+	/**
+	 * Store roles to prevent recalculation in runtime
+	 * @var array
+	 */
+	protected $roles = array();
+
 	abstract public function getIdentifier();
 	
 	abstract public function getPropertyValues($property);
 
 	abstract public function refresh();
-	
+
 	/**
 	 * Extends the users explizit roles with the implizit rules
 	 * of the local system
-	 * 
+	 *
 	 * @return array the identifiers of the roles:
 	 */
-	public function getRoles() {
-	    $returnValue = array();
-	    // We use a Depth First Search approach to flatten the Roles Graph.
-	    foreach ($this->getPropertyValues(PROPERTY_USER_ROLES) as $roleUri){
-	        $returnValue[] = $roleUri;
-	        foreach (core_kernel_users_Service::singleton()->getIncludedRoles(new core_kernel_classes_Resource($roleUri)) as $role) {
-	            $returnValue[] = $role->getUri();
-	        }
-	    }
-	    return array_unique($returnValue);
+	public function getRoles()
+	{
+		$returnValue = array();
+		if ( ! $this->roles) {
+			// We use a Depth First Search approach to flatten the Roles Graph.
+			foreach ($this->getPropertyValues(PROPERTY_USER_ROLES) as $roleUri) {
+				$returnValue[] = $roleUri;
+				foreach (core_kernel_users_Service::singleton()->getIncludedRoles(new core_kernel_classes_Resource($roleUri)) as $role) {
+					$returnValue[] = $role->getUri();
+				}
+			}
+			$returnValue = array_unique($returnValue);
+			$this->roles = $returnValue;
+		}
+		return $this->roles;
 	}
 	
 }

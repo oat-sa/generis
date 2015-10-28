@@ -82,4 +82,50 @@ class ReportTest extends GenerisPhpUnitTestRunner {
         $this->assertTrue($report->contains(common_report_Report::TYPE_INFO));
 	    $this->assertTrue($report->contains(common_report_Report::TYPE_ERROR));
 	}
+
+	public function testJsonUnserialize()
+	{
+		$root = new common_report_Report(common_report_Report::TYPE_WARNING, 'test message3');
+		$sub1 = new common_report_Report(common_report_Report::TYPE_INFO, 'info31');
+		$sub2 = new common_report_Report(common_report_Report::TYPE_ERROR, 'error31');
+		$subsub = new common_report_Report(common_report_Report::TYPE_SUCCESS, 'success31');
+
+		// make report tree
+		$sub1->add([$subsub]);
+		$root->add([$sub1, $sub2]);
+
+		$json = json_encode($root, JSON_PRETTY_PRINT);
+
+		$report = common_report_Report::jsonUnserialize($json);
+
+		$this->assertTrue($report->hasChildren());
+		$this->assertEquals('test message3', (String)$report);
+		$this->assertEquals(common_report_Report::TYPE_WARNING, $report->getType());
+
+		$array = array();
+		foreach ($report as $child) {
+			$array[] = $child;
+		}
+		$this->assertEquals(2, count($array));
+		list($first, $second) = $array;
+
+		$this->assertTrue($first->hasChildren());
+		$this->assertEquals('info31', (string)$first);
+		$this->assertEquals(common_report_Report::TYPE_INFO, $first->getType());
+		foreach ($first as $child) {
+			$this->assertEquals('success31', (string)$child);
+			$this->assertEquals(common_report_Report::TYPE_SUCCESS, $child->getType());
+		}
+
+		$this->assertFalse($second->hasChildren());
+		$this->assertEquals('error31', (string)$second);
+		$this->assertEquals(common_report_Report::TYPE_ERROR, $second->getType());
+		foreach ($second as $child) {
+			$this->fail('Should not contain children');
+		}
+
+		$this->assertTrue($report->contains(common_report_Report::TYPE_SUCCESS));
+		$this->assertTrue($report->contains(common_report_Report::TYPE_INFO));
+		$this->assertTrue($report->contains(common_report_Report::TYPE_ERROR));
+	}
 }
