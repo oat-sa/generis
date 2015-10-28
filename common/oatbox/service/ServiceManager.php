@@ -32,12 +32,19 @@ class ServiceManager
     public static function getServiceManager()
     {
         if (is_null(self::$instance)) {
-            self::$instance = new ServiceManager();
+            self::$instance = new ServiceManager(\common_ext_ConfigDriver::singleton());
         }
         return self::$instance;
     }
     
     private $services = array();
+    
+    private $configService;
+    
+    public function __construct($configService)
+    {
+        $this->configService = $configService;
+    }
     
     /**
      * Returns the service configured for the serviceKey
@@ -50,13 +57,7 @@ class ServiceManager
     public function get($serviceKey)
     {
         if (!isset($this->services[$serviceKey])) {
-            $parts = explode('/', $serviceKey, 2);
-            if (count($parts) < 2) {
-                throw new ServiceNotFoundException('Invalid servicekey '.$serviceKey);
-            }
-            list($extId, $configId) = $parts;
-            $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
-            $service = $extension->getConfig($configId);
+            $service = $this->getConfig()->get($serviceKey);
             
             if ($service === false) {
                 throw new ServiceNotFoundException($serviceKey);
@@ -85,8 +86,14 @@ class ServiceManager
             throw new \common_Exception('Invalid servicekey '.$serviceKey);
         }
         $this->services[$serviceKey] = $service;
-        list($extId, $configId) = $parts;
-        $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
-        $extension->setConfig($configId, $service);
+        $this->getConfig()->set($serviceKey, $service);
+    }
+
+    /**
+     * @return \common_persistence_KeyValuePersistence
+     */
+    protected function getConfig()
+    {
+        return $this->configService;
     }
 }
