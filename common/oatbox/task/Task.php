@@ -26,7 +26,7 @@ interface Task
     const STATUS_RUNNING = 'running';
     const STATUS_FINISHED = 'finished';
     
-    
+    /*
     public function getLabel();
 
     public function getOwner();
@@ -34,10 +34,13 @@ interface Task
     public function getStatus();
 
     public function setStatus();
+    */
+    public function getId();
+    
+    public function getInvocable();
     
     public function getParameters();
     
     public function setParameters();
     
-    public function run();
 }

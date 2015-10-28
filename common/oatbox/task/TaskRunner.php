@@ -19,11 +19,10 @@
  * 
  */
 namespace oat\oatbox\task;
-
-use oat\taskqueue\JsonTask;
+ 
 class TaskRunner
 {
-    public function run(JsonTask $task) {
+    public function run(Task $task) {
         
         $report = new \common_report_Report(\common_report_Report::TYPE_INFO, __('Running task %s', $task->getId()));
         try {
