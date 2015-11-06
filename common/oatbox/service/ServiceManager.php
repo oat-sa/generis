@@ -57,7 +57,13 @@ class ServiceManager
     public function get($serviceKey)
     {
         if (!isset($this->services[$serviceKey])) {
-            $service = $this->getConfig()->get($serviceKey);
+            $parts = explode('/', $serviceKey, 2);
+            if (count($parts) < 2) {
+                throw new ServiceNotFoundException($serviceKey, 'Invalid servicekey');
+            }
+            list($extId, $configId) = $parts;
+            $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
+            $service = $extension->getConfig($configId);
             
             if ($service === false) {
                 throw new ServiceNotFoundException($serviceKey);

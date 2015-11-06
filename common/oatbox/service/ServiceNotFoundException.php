@@ -24,8 +24,8 @@ class ServiceNotFoundException extends \common_Exception
 {
     private $serviceKey;
     
-    public function __construct($serviceKey) {
-        parent::__construct('Service "'.$serviceKey.'" not found');
+    public function __construct($serviceKey, $message = '') {
+        parent::__construct('Service "'.$serviceKey.'" not found'. (empty($message) ? '' : ': '.$message));
         $this->serviceKey = $serviceKey;
     }
     
