@@ -420,15 +420,19 @@ class core_kernel_users_Service
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  Resource role A Generis Role.
+     *
+     * @param  core_kernel_classes_Resource $role A Generis Role.
+     *
      * @return array An associative array where keys are Role URIs and values are instances of core_kernel_classes_Resource.
+     * @throws core_kernel_users_CacheException
+     * @throws core_kernel_users_Exception
      */
     public function getIncludedRoles( core_kernel_classes_Resource $role)
     {
         $returnValue = array();
 
-    	if (GENERIS_CACHE_USERS_ROLES == true && core_kernel_users_Cache::areIncludedRolesInCache($role) == true){
-    		$returnValue = core_kernel_users_Cache::retrieveIncludedRoles($role);
+    	if (GENERIS_CACHE_USERS_ROLES === true && core_kernel_users_Cache::areIncludedRolesInCache($role) === true){
+            $returnValue = core_kernel_users_Cache::retrieveIncludedRoles($role);
         }
         else{
 	        // We use a Depth First Search approach to flatten the Roles Graph.
@@ -440,13 +444,13 @@ class core_kernel_users_Service
 	        while (!empty($s)){
 	        	$u = array_pop($s);
 	
-	        	if (false === in_array($u->getUri(), $visitedRoles)){
+	        	if (false === in_array($u->getUri(), $visitedRoles, true)){
 	        		$visitedRoles[] = $u->getUri();
 	        		$returnValue[$u->getUri()] = $u;
 	        		
 	        		$ar = $u->getPropertyValuesCollection($includesRoleProperty);
 	        		foreach ($ar->getIterator() as $w){
-	        			if (false === in_array($w->getUri(), $visitedRoles)){ // not visited
+	        			if (false === in_array($w->getUri(), $visitedRoles, true)){ // not visited
 	        				array_push($s, $w);
 	        			}
 	        		}
@@ -456,7 +460,7 @@ class core_kernel_users_Service
 	        // remove the root vertex which is actually the role we are testing.
 	        unset($returnValue[$role->getUri()]);
 	        
-	        if (GENERIS_CACHE_USERS_ROLES == true){
+	        if (GENERIS_CACHE_USERS_ROLES === true){
 	        	try{
 					core_kernel_users_Cache::cacheIncludedRoles($role, $returnValue);
 	        	}

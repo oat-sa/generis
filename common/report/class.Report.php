@@ -18,10 +18,6 @@
  * 
  */
 
-if (!interface_exists('JsonSerializable')) {
-    // for php < 5.4
-    eval('interface JsonSerializable {}');
-}
 /**
  * The Report allows to return a more detailed return value
  * then a simple boolean variable denoting the success
@@ -32,13 +28,13 @@ if (!interface_exists('JsonSerializable')) {
  */
 class common_report_Report implements IteratorAggregate, JsonSerializable
 {
-    const TYPE_SUCCESS = 1;
+    const TYPE_SUCCESS = 'success';
     
-    const TYPE_INFO = 2;
+    const TYPE_INFO = 'info';
     
-    const TYPE_WARNING = 4;
+    const TYPE_WARNING = 'warning';
     
-    const TYPE_ERROR = 8;
+    const TYPE_ERROR = 'error';
     
     /**
      * type of the report
@@ -287,33 +283,47 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
 	public function __toString() {
 	    return $this->message;
 	}
-	
+
+	/**
+	 * Recursively restores report object from json string or array
+	 *
+	 * @param Json|Array $data
+	 * @return common_report_Report|null
+	 * @throws common_exception_Error
+     */
+	public static function jsonUnserialize($data) {
+
+		$report = null;
+
+		if (!is_array($data)) {
+			$data = (Array) json_decode($data, true);
+		}
+
+		if (count(array_intersect(['type', 'message', 'data'], array_keys($data))) == 3) {
+			$report = new self($data['type'], $data['message'], $data['data']);
+			if (isset($data['children']) && is_array($data['children'])) {
+				foreach ($data['children'] as $child) {
+					$report->add(static::jsonUnserialize($child));
+				}
+			}
+		}
+
+		return $report;
+	}
+
+	/**
+	 * Prepares object data for valid converting to json
+	 *
+	 * @return array - prepared array for json_encode function
+     */
 	public function JsonSerialize()
 	{
-	    switch ($this->getType()) {
-	    
-	    	case common_report_Report::TYPE_SUCCESS:
-	    	    $type = 'success';
-	    	    break;
-	    
-	    	case common_report_Report::TYPE_WARNING:
-	    	    $type = 'warning';
-	    	    break;
-	    
-	    	case common_report_Report::TYPE_ERROR:
-	    	    $type = 'error';
-	    	    break;
-	    
-	    	default:
-	    	    $type = 'info';
-	    	    break;
-	    }
-	    return array(
-	        'type'      => $type,
-	        'message'    => $this->message,
-	        'data'      => $this->data,
-	        'children'  => $this->elements
-	    );
+	    return [
+	        'type' => $this->getType(),
+	        'message' => $this->message,
+	        'data' => $this->data,
+	        'children' => $this->elements
+	    ];
 	}
 	
 }
