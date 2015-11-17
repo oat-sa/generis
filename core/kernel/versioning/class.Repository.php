@@ -127,13 +127,7 @@ class core_kernel_versioning_Repository
      */
     public function getPath()
     {
-        $returnValue = (string) '';
-
-        
-        $returnValue = core_kernel_fileSystem_Cache::getFileSystemPath($this);
-        
-
-        return (string) $returnValue;
+        return (string) core_kernel_fileSystem_Cache::getFileSystemPath($this);
     }
 
     /**
@@ -400,23 +394,30 @@ class core_kernel_versioning_Repository
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string filePath The path to the file you want the repository to deal with.
      * @param  string label A label for the created file Resource.
+     * @param  callable $createFileName A function that generates unique file name during spawn file
      * @return core_kernel_versioning_File
      * @since 2.4
      */
-    public function spawnFile($filePath, $label = '')
+    public function spawnFile($filePath, $label = '', callable $createFileName = null)
     {
         $returnValue = null;
 
-        
+        if (!$createFileName) {
+            $createFileName = [__CLASS__, 'createFileName'];
+        }
+
         $fileInfo = new SplFileInfo($filePath);
-        $fileName = self::createFileName($fileInfo->getFilename());
-        
-        $destination = $this->getPath() . $fileName;
+        $relativePath = str_replace([$this->getPath(), $fileInfo->getFilename(), dirname($filePath)], '', $fileInfo->getPathname());
+
+        $fileName = $createFileName($fileInfo->getFilename());
+        $destination = $this->getPath() . $relativePath . $fileName;
+
         $source = $filePath;
+
         if(helpers_File::copy($source, $destination, true, false)){
         	
             if ($fileInfo->isDir()) {
-                $returnValue = $this->createFile('', $fileName);
+                $returnValue = $this->createFile('', $relativePath . $fileName);
             } else {
                 $returnValue = $this->createFile($fileName);
             }
@@ -425,7 +426,6 @@ class core_kernel_versioning_Repository
         		$returnValue->setLabel($label);
         	}
         }
-        
 
         return $returnValue;
     }
@@ -463,16 +463,13 @@ class core_kernel_versioning_Repository
     {
         $returnValue = (string) '';
 
-        
         $returnValue = uniqid(hash('crc32', $originalName));
         
         $ext = @pathinfo($originalName, PATHINFO_EXTENSION);
         if (!empty($ext)){
         	$returnValue .= '.' . $ext;
         }
-        
 
         return (string) $returnValue;
     }
-
 }
