@@ -67,7 +67,8 @@ class common_session_php_KeyValueSessionHandler extends Configurable
      */
     public function read($id)
     {
-        return $this->getPersistence()->get(self::KEY_NAMESPACE.$id);
+        $session = $this->getPersistence()->get(self::KEY_NAMESPACE.$id); 
+        return is_string($session) ? $session : '';
     }
 
     /**
@@ -85,6 +86,7 @@ class common_session_php_KeyValueSessionHandler extends Configurable
      */
     public function destroy($id){
         $this->getPersistence()->del(self::KEY_NAMESPACE.$id);
+        return true;
     }
 
     /**
