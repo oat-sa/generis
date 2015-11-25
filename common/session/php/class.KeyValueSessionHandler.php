@@ -100,5 +100,6 @@ class common_session_php_KeyValueSessionHandler extends Configurable
         // solution 1 : do two explicit handlers for each specific persistence (Redis, SQL) 
         // solution 2 : Check if the eprsistence is capable of autonomous garbage  
         //
+        return true;
     }
 }
