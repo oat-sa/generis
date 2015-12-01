@@ -35,7 +35,7 @@ abstract class common_user_User implements User, Refreshable
 	 * Store roles to prevent recalculation in runtime
 	 * @var array
 	 */
-	protected $roles = array();
+	private $roles = array();
 
 	abstract public function getIdentifier();
 	
