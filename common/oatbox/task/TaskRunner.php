@@ -20,6 +20,9 @@
  */
 namespace oat\oatbox\task;
  
+use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\ServiceManager;
+
 class TaskRunner
 {
     public function run(Task $task) {
@@ -28,6 +31,9 @@ class TaskRunner
         try {
             $invocableName = $task->getInvocable();
             $invocable = new $invocableName();
+            if ($invocable instanceof ConfigurableService) {
+                $invocable->setServiceManager(ServiceManager::getServiceManager());
+            }
             $subReport = call_user_func($invocable, $task->getParameters());
             $report->add($subReport);
         } catch (\Exception $e) {
