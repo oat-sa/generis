@@ -98,6 +98,7 @@ class core_kernel_users_GenerisUser extends common_user_User
 	}
 	
 	public function refresh() {
+	    $this->roles = false;
 	    $this->cache = array(
 	        PROPERTY_USER_DEFLG => $this->getUncached(PROPERTY_USER_DEFLG)
 	    );
