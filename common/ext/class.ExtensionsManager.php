@@ -285,4 +285,11 @@ class common_ext_ExtensionsManager
         unset($extensions[$extension->getId()]);
         $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $extensions);
     }
+    
+    public function updateVersion(common_ext_Extension $extension, $version)
+    {
+        $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+        $extensions[$extension->getId()]['installed'] = $version;
+        $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $extensions);
+    }
 }
