@@ -21,6 +21,7 @@
 namespace oat\oatbox\service;
 
 use oat\oatbox\Configurable;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 /**
  * Configurable base service
  * 
@@ -31,14 +32,11 @@ use oat\oatbox\Configurable;
  */
 abstract class ConfigurableService extends Configurable
 {
-    /**
-     * @var \oat\oatbox\service\ServiceManager
-     */
-    private $serviceManager;
+    use ServiceLocatorAwareTrait;
 
     public function setServiceManager(ServiceManager $serviceManager)
     {
-        $this->serviceManager = $serviceManager;
+        return $this->setServiceLocator($serviceManager);
     }
     
     /**
@@ -47,9 +45,6 @@ abstract class ConfigurableService extends Configurable
      */
     public function getServiceManager()
     {
-        if (is_null($this->serviceManager)) {
-            throw new \common_exception_Error('Missing Service Manger in '.get_class($this));
-        }
-        return $this->serviceManager;
+        return $this->getServiceLocator();
     }
 }
