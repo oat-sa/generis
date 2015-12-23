@@ -20,13 +20,20 @@
 
 namespace oat\oatbox\service;
 
-class ServiceNotFoundException extends \common_Exception
+use Zend\ServiceManager\Exception\ServiceNotFoundException as ZendException;
+/**
+ * 
+ * @author bout
+ *
+ */
+class ServiceNotFoundException extends ZendException
 {
     private $serviceKey;
     
     public function __construct($serviceKey, $message = '') {
         parent::__construct('Service "'.$serviceKey.'" not found'. (empty($message) ? '' : ': '.$message));
         $this->serviceKey = $serviceKey;
+        \common_Logger::singleton()->handleException($this);
     }
     
     public function getServiceKey() {

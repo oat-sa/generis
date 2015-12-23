@@ -21,11 +21,12 @@
 namespace oat\oatbox\service;
 
 use common_ext_ExtensionsManager;
+use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  * The simple placeholder ServiceManager
  * @author Joel Bout <joel@taotesting.com>
  */
-class ServiceManager
+class ServiceManager implements ServiceLocatorInterface
 {
     private static $instance;
     
@@ -75,6 +76,15 @@ class ServiceManager
             $this->services[$serviceKey] = $service;
         }
         return $this->services[$serviceKey];
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \Zend\ServiceManager\ServiceLocatorInterface::has()
+     */
+    public function has($name)
+    {
+        
     }
 
     /**

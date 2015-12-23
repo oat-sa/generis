@@ -20,6 +20,10 @@
  */
 namespace oat\oatbox\task;
  
+use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\ServiceManager;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+
 class TaskRunner
 {
     public function run(Task $task) {
@@ -28,11 +32,19 @@ class TaskRunner
         try {
             $invocableName = $task->getInvocable();
             $invocable = new $invocableName();
+            if ($invocable instanceof ServiceLocatorAwareInterface) {
+                $invocable->setServiceLocator($this->getServiceLocator());
+            }
             $subReport = call_user_func($invocable, $task->getParameters());
             $report->add($subReport);
         } catch (\Exception $e) {
             $report = new \common_report_Report(\common_report_Report::TYPE_ERROR, __('Unable to run task %s', $task->getId()));
         }
         return $report; 
+    }
+    
+    public function getServiceLocator()
+    {
+        return ServiceManager::getServiceManager();
     }
 }
