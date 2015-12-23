@@ -22,6 +22,7 @@ namespace oat\oatbox\service;
 
 use common_ext_ExtensionsManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 /**
  * The simple placeholder ServiceManager
  * @author Joel Bout <joel@taotesting.com>
@@ -69,8 +70,8 @@ class ServiceManager implements ServiceLocatorInterface
             if ($service === false) {
                 throw new ServiceNotFoundException($serviceKey);
             }
-            if ($service instanceof ConfigurableService) {
-                $service->setServiceManager($this);
+            if ($service instanceof ServiceLocatorAwareInterface) {
+                $service->setServiceLocator($this);
             }
             
             $this->services[$serviceKey] = $service;
@@ -82,9 +83,18 @@ class ServiceManager implements ServiceLocatorInterface
      * (non-PHPdoc)
      * @see \Zend\ServiceManager\ServiceLocatorInterface::has()
      */
-    public function has($name)
+    public function has($serviceKey)
     {
-        
+        if (isset($this->services[$serviceKey])) {
+            return true;
+        }
+        $parts = explode('/', $serviceKey, 2);
+        if (count($parts) < 2) {
+            return false;
+        }
+        list($extId, $configId) = $parts;
+        $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
+        return $extension->hasConfig($configId);
     }
 
     /**
