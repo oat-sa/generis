@@ -81,7 +81,7 @@ abstract class common_ext_ExtensionUpdater
     public function isLessThan($version)
     {
         $current = common_ext_ExtensionsManager::singleton()->getInstalledVersion($this->getExtension()->getId());
-        return version_compare($version, $current, 'lt');
+        return version_compare($current, $version, 'lt');
     }
     
     /**
