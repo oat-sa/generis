@@ -73,15 +73,16 @@ abstract class common_ext_ExtensionUpdater
     }
     
     /**
-     * Test if the current version is strictly less than $version
+     * Test if $minVersion <= CURRENT_VERSION <= $maxVersion
      * 
-     * @param string $version
-     * @return boolean
+     * @param string $minVersion
+     * @param string $maxVersion
+     * @return mixed
      */
-    public function isLessThan($version)
+    public function isBetween($minVersion, $maxVersion)
     {
         $current = common_ext_ExtensionsManager::singleton()->getInstalledVersion($this->getExtension()->getId());
-        return version_compare($current, $version, 'lt');
+        return version_compare($minVersion, $current, '<=') && version_compare($current, $maxVersion, '<=');
     }
     
     /**
