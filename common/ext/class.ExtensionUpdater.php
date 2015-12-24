@@ -50,14 +50,38 @@ abstract class common_ext_ExtensionUpdater
         return ServiceManager::getServiceManager();
     }
     
+    /**
+     * Update the current version of the extension to the provided version
+     * Ensures that a successfull update doesn't get executed twice
+     * 
+     * @param string $version
+     */
     public function setVersion($version)
     {
         common_ext_ExtensionsManager::singleton()->updateVersion($this->getExtension(), $version);
     }
     
+    /**
+     * Test if $version is the current version
+     * 
+     * @param string $version
+     * @return boolean
+     */
     public function isVersion($version)
     {
         return $version == common_ext_ExtensionsManager::singleton()->getInstalledVersion($this->getExtension()->getId());
+    }
+    
+    /**
+     * Test if the current version is strictly less than $version
+     * 
+     * @param string $version
+     * @return boolean
+     */
+    public function isLessThan($version)
+    {
+        $current = common_ext_ExtensionsManager::singleton()->getInstalledVersion($this->getExtension()->getId());
+        return version_compare($version, $current, 'lt');
     }
     
     /**
