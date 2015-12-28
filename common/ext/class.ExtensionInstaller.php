@@ -83,12 +83,9 @@ class common_ext_ExtensionInstaller
 					// unreachable code
 				}
 					
-				// deprecated, but might still be used
 				$this->installLoadDefaultConfig();
 				$this->installOntology();
 				$this->installRegisterExt();
-				$this->installLoadConstants();
-				$this->installExtensionModel();
 					
 				common_Logger::d('Installing custom script for extension ' . $this->extension->getId());
 				$this->installCustomScript();
@@ -202,15 +199,6 @@ class common_ext_ExtensionInstaller
 	{
 		
 		$localData = $this->extension->getManifest()->getLocalData();
-		if(isset($localData['rdf'])){
-			$modelCreator = new tao_install_utils_ModelCreator(LOCAL_NAMESPACE);
-			foreach ($localData['rdf'] as $rdfpath) {
-				if(file_exists($rdfpath)){
-					common_Logger::d('Inserting local data rdf '.$rdfpath.' for '.$this->extension->getId(), 'INSTALL');
-					$modelCreator->insertLocalModelFile($rdfpath);
-				}
-			}
-		}
 		if(isset($localData['php'])) {
 			$scripts = $localData['php'];
 			$scripts = is_array($scripts) ? $scripts : array($scripts);
@@ -219,36 +207,6 @@ class common_ext_ExtensionInstaller
 				require_once $script;
 			}
 		}
-		
-	}
-
-	/**
-	 * Loads the /extension_folder/includes/constants.php file of the extension.
-	 *
-	 * @access public
-	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @return void
-	 */
-	public function installLoadConstants()
-	{
-		
-		common_Logger::i("Loading constants for extension " . $this->extension->getId());
-		$this->extension->load();
-		
-	}
-
-	/**
-	 * Instantiate the Extension/Module/Action model in the persistent memory of
-	 *
-	 * @access public
-	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @return void
-	 */
-	public function installExtensionModel()
-	{
-		
-		//common_Logger::i("Spawning Extension/Module/Action model for extension '" . $this->extension->getId() . "'");
-		
 		
 	}
 

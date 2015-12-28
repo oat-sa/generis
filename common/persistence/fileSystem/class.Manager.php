@@ -24,6 +24,8 @@ use oat\oatbox\service\ConfigurableService;
  */
 class common_persistence_fileSystem_Manager extends ConfigurableService
 {
+    const OPTION_FILE_PATH = 'filesPath';
+    
     public static function getFileSystem($id)
     {
         return new core_kernel_fileSystem_FileSystem($id);

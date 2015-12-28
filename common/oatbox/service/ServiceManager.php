@@ -21,23 +21,32 @@
 namespace oat\oatbox\service;
 
 use common_ext_ExtensionsManager;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 /**
  * The simple placeholder ServiceManager
  * @author Joel Bout <joel@taotesting.com>
  */
-class ServiceManager
+class ServiceManager implements ServiceLocatorInterface
 {
     private static $instance;
     
     public static function getServiceManager()
     {
         if (is_null(self::$instance)) {
-            self::$instance = new ServiceManager();
+            self::$instance = new ServiceManager(\common_ext_ConfigDriver::singleton());
         }
         return self::$instance;
     }
     
     private $services = array();
+    
+    private $configService;
+    
+    public function __construct($configService)
+    {
+        $this->configService = $configService;
+    }
     
     /**
      * Returns the service configured for the serviceKey
@@ -52,20 +61,40 @@ class ServiceManager
         if (!isset($this->services[$serviceKey])) {
             $parts = explode('/', $serviceKey, 2);
             if (count($parts) < 2) {
-                throw new \common_Exception('Invalid servicekey '.$serviceKey);
+                throw new ServiceNotFoundException($serviceKey, 'Invalid servicekey');
             }
             list($extId, $configId) = $parts;
             $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
             $service = $extension->getConfig($configId);
-            if (is_null($service)) {
+            
+            if ($service === false) {
                 throw new ServiceNotFoundException($serviceKey);
             }
-            if ($service instanceof ConfigurableService) {
-                $service->setServiceManager($this);
+            if ($service instanceof ServiceLocatorAwareInterface) {
+                $service->setServiceLocator($this);
             }
+            
             $this->services[$serviceKey] = $service;
         }
         return $this->services[$serviceKey];
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \Zend\ServiceManager\ServiceLocatorInterface::has()
+     */
+    public function has($serviceKey)
+    {
+        if (isset($this->services[$serviceKey])) {
+            return true;
+        }
+        $parts = explode('/', $serviceKey, 2);
+        if (count($parts) < 2) {
+            return false;
+        }
+        list($extId, $configId) = $parts;
+        $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
+        return $extension->hasConfig($configId);
     }
 
     /**
@@ -83,8 +112,14 @@ class ServiceManager
             throw new \common_Exception('Invalid servicekey '.$serviceKey);
         }
         $this->services[$serviceKey] = $service;
-        list($extId, $configId) = $parts;
-        $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
-        $extension->setConfig($configId, $service);
+        $this->getConfig()->set($serviceKey, $service);
+    }
+
+    /**
+     * @return \common_persistence_KeyValuePersistence
+     */
+    protected function getConfig()
+    {
+        return $this->configService;
     }
 }

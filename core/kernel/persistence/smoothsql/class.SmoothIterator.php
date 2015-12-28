@@ -25,52 +25,18 @@
  * @package generis
  */
 class core_kernel_persistence_smoothsql_SmoothIterator
-    implements Iterator
+    extends common_persistence_sql_QueryIterator
 {
-    const CACHE_SIZE = 100;
-    
-    /**
-     * @var array
-     */
-    private $modelIds;
-    
-    /**
-     * @var common_persistence_SqlPersistence
-     */
-    private $persistence;
-    
-    /**
-     * Id of the current instance
-     * 
-     * @var int
-     */
-    private $currentTriple;
-
-    /**
-     * List of resource uris currently being iterated over
-     * 
-     * @var array
-     */
-    private $cache = null;
-    
     /**
      * Constructor of the iterator expecting the model ids
      * 
      * @param array $modelIds
      */
     public function __construct(common_persistence_SqlPersistence $persistence, $modelIds = null) {
-        $this->persistence = $persistence;
-        $this->modelIds = $modelIds;
-        $this->currentTriple = 0;
-        $this->load(0);
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see Iterator::rewind()
-     */
-    function rewind() {
-        $this->load(0);
+        $query = 'SELECT * FROM statements '
+            .(is_null($modelIds) ? '' : 'WHERE modelid IN ('.implode(',', $modelIds).') ')
+            .'ORDER BY id';
+        parent::__construct($persistence, $query);
     }
     
     /**
@@ -79,63 +45,15 @@ class core_kernel_persistence_smoothsql_SmoothIterator
      * @return core_kernel_classes_Triple
      */
     function current() {
-        return $this->cache[$this->currentTriple];
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see Iterator::key()
-     */
-    function key() {
-        return $this->cache[$this->currentTriple]->id;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see Iterator::next()
-     */
-    function next() {
-        if ($this->valid()) {
-            $last = $this->key();
-            $this->currentTriple++;
-            if (!isset($this->cache[$this->currentTriple])) {
-                $this->load($last);
-            }
-        }
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see Iterator::valid()
-     */
-    function valid() {
-        return !empty($this->cache);
-    }
-    
-    /**
-     * Loads the next n triples, startign with $id
-     * 
-     * @param int $id
-     */
-    protected function load($id) {
+        $statement = parent::current();
         
-        $query = 'SELECT * FROM statements WHERE id > ? '
-            .(is_null($this->modelIds) ? '' : 'AND modelid IN ('.implode(',', $this->modelIds).') ')
-            .'ORDER BY id LIMIT ?';
-        $result = $this->persistence->query($query, array($id, self::CACHE_SIZE));
-
-        $this->cache = array();
-        while ($statement = $result->fetch()) {
-            $triple = new core_kernel_classes_Triple();
-            $triple->modelid = $statement["modelid"];
-            $triple->subject = $statement["subject"];
-            $triple->predicate = $statement["predicate"];
-            $triple->object = $statement["object"];
-            $triple->id = $statement["id"];
-            $triple->lg = $statement["l_language"];
-            $this->cache[] = $triple;
-        }
-        
-        $this->currentTriple = 0;
+        $triple = new core_kernel_classes_Triple();
+        $triple->modelid = $statement["modelid"];
+        $triple->subject = $statement["subject"];
+        $triple->predicate = $statement["predicate"];
+        $triple->object = $statement["object"];
+        $triple->id = $statement["id"];
+        $triple->lg = $statement["l_language"];
+        return $triple;
     }
 }

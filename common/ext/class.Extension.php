@@ -119,60 +119,58 @@ class common_ext_Extension
      */
 
     /**
-     * Returns the KV persistence to use for configurations 
+     * Returns the KV persistence to use for configurations
      * @return common_persistence_KeyValuePersistence
      */
-    private function getConfigPersistence() {
-        if (is_null($this->configPersistence)) {
-            $this->configPersistence = common_ext_ConfigDriver::getPersistence($this);
-        }
-        return $this->configPersistence;
+    private function getConfigPersistence()
+    {
+        return common_ext_ConfigDriver::singleton();
     }
     
+    /**
+     * checks if a configuration value exists
+     *
+     * @param  string $key
+     * @return boolean
+     */
     public function hasConfig($key)
     {
-        return $this->getConfigPersistence()->exists($key);
+        return $this->getConfigPersistence()->exists($this->getId().'/'.$key);
     }
     
     /**
      * sets a configuration value
      *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
      * @param  string $key
      * @param  $value
      * @return boolean
      */
     public function setConfig($key, $value)
     {
-        return $this->getConfigPersistence()->set($key, $value);
+        return $this->getConfigPersistence()->set($this->getId().'/'.$key, $value);
     }
 
     /**
      * retrieves a configuration value
 	 * returns false if not found
      *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
      * @param  string $key
      * @return mixed
      */
     public function getConfig($key)
     {
-        return $this->getConfigPersistence()->get($key);
+        return $this->getConfigPersistence()->get($this->getId().'/'.$key);
     }
 
     /**
      * removes a configuration entry
      *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
      * @param  string $key
      * @return mixed
      */
     public function unsetConfig($key)
     {
-        return $this->getConfigPersistence()->del($key);
+        return $this->getConfigPersistence()->del($this->getId().'/'.$key);
     }
 
     /**

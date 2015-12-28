@@ -76,10 +76,10 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * (non-PHPdoc)
      * @see common_persistence_Driver::connect()
      */
-    function connect($id, array $params)
+    public function connect($id, array $params)
     {
         $this->directory = isset($params['dir']) 
-            ? $params['dir'].($params['dir'][strlen($params['dir'])-1] == DIRECTORY_SEPARATOR ? '' : DIRECTORY_SEPARATOR)
+            ? $params['dir'].($params['dir'][strlen($params['dir'])-1] === DIRECTORY_SEPARATOR ? '' : DIRECTORY_SEPARATOR)
             : FILES_PATH.'generis'.DIRECTORY_SEPARATOR.$id.DIRECTORY_SEPARATOR;
         $this->levels = isset($params['levels']) ? $params['levels'] : self::DEFAULT_LEVELS;
         $this->humanReadable = isset($params['humanReadable']) ? $params['humanReadable'] : false;
@@ -92,7 +92,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     public function set($id, $value, $ttl = null)
     {
-        if (!is_null($ttl)) {
+        if (null !== $ttl) {
             throw new common_exception_NotImplemented('TTL not implemented in '.__CLASS__);
         } else {
             $filePath = $this->getPath($id);
@@ -191,15 +191,20 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     protected function getPath($key) {
         if ($this->humanReadable) {
-            $path = '';
-            foreach (str_split($key) as $char) {
-                $path .= isset(self::$ALLOWED_CHARACTERS[$char]) ? $char : base64_encode($char);
-            }
+            $path = $this->sanitizeReadableFileName($key);
         } else {
-            $encoded = md5($key);
-            $path = implode(DIRECTORY_SEPARATOR,str_split(substr($encoded, 0, $this->levels))).DIRECTORY_SEPARATOR.substr($encoded, $this->levels);
+            $encoded = hash('md5', $key);
+            $path = implode(DIRECTORY_SEPARATOR,str_split(substr($encoded, 0, $this->levels))).DIRECTORY_SEPARATOR.$encoded;
         }
         return  $this->directory.$path.'.php';
+    }
+    
+    protected function sanitizeReadableFileName($key) {
+        $path = '';
+        foreach (str_split($key) as $char) {
+            $path .= isset(self::$ALLOWED_CHARACTERS[$char]) ? $char : base64_encode($char);
+        }
+        return $path;
     }
     
     /**

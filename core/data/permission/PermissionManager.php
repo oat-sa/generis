@@ -23,6 +23,8 @@ namespace oat\generis\model\data\permission;
 use oat\generis\model\data\permission\implementation\NoAccess;
 use common_ext_ExtensionsManager;
 use common_Logger;
+use oat\generis\model\data\event\ResourceCreated;
+use oat\oatbox\event\Event;
 
 /**
  * Proxy for the permission implementation
@@ -57,5 +59,12 @@ class PermissionManager
     public static function setPermissionModel(PermissionInterface $model) {
         self::$model = $model;
         common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->setConfig(self::CONFIG_KEY, $model);
+    }
+    
+    public static function catchEvent(Event $event)
+    {
+        if ($event instanceof ResourceCreated) {
+            self::getPermissionModel()->onResourceCreated($event->getResource());
+        }
     }
 }

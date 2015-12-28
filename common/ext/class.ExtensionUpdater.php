@@ -1,4 +1,5 @@
 <?php
+use oat\oatbox\service\ServiceManager;
 /**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,11 +32,90 @@
 abstract class common_ext_ExtensionUpdater
 	extends common_ext_ExtensionHandler
 {
-
     /**
      * 
      * @param string $currentVersion
      * @return string $versionUpdatedTo
      */
     public abstract function update($initialVersion);
+    
+    /**
+     * Temporary helper untill the service manager
+     * gets properly injected into the update scripts
+     * 
+     * @return \oat\oatbox\service\ServiceManager
+     */
+    public function getServiceManager()
+    {
+        return ServiceManager::getServiceManager();
+    }
+    
+    /**
+     * Update the current version of the extension to the provided version
+     * Ensures that a successfull update doesn't get executed twice
+     * 
+     * @param string $version
+     */
+    public function setVersion($version)
+    {
+        common_ext_ExtensionsManager::singleton()->updateVersion($this->getExtension(), $version);
+    }
+    
+    /**
+     * Test if $version is the current version
+     * 
+     * @param string $version
+     * @return boolean
+     */
+    public function isVersion($version)
+    {
+        return $version == common_ext_ExtensionsManager::singleton()->getInstalledVersion($this->getExtension()->getId());
+    }
+    
+    /**
+     * Test if $minVersion <= CURRENT_VERSION <= $maxVersion
+     * 
+     * @param string $minVersion
+     * @param string $maxVersion
+     * @return mixed
+     */
+    public function isBetween($minVersion, $maxVersion)
+    {
+        $current = common_ext_ExtensionsManager::singleton()->getInstalledVersion($this->getExtension()->getId());
+        return version_compare($minVersion, $current, '<=') && version_compare($current, $maxVersion, '<=');
+    }
+    
+    /**
+     * Loads a service in a "safe" way, trying to convert
+     * unknown classes to abstract services
+     * 
+     * @param string $configId
+     * @return 
+     */
+    public function safeLoadService($configId)
+    {
+        /**
+         * Inline autoloader that will construct a new class based on ConfigurableService
+         * @param string $class_name
+         */
+        $missingClasses = array();
+        
+        $fallbackAutoload = function($class_name) use (&$missingClasses) {
+            $missingClasses[] = $class_name;
+            $split = strrpos($class_name, '\\');
+            if ($split == false) {
+                $result = eval('class '.$class_name.' extends oat\\oatbox\\service\\ConfigurableService {}');
+            } else {
+                $namespace = substr($class_name, 0, $split);
+                $class = substr($class_name, $split+1);
+                eval('namespace '.$namespace.'; '.'class '.$class.' extends \\oat\\oatbox\\service\\ConfigurableService {}');
+            }
+        };
+        $serviceManager = $this->getServiceManager();
+        spl_autoload_register($fallbackAutoload);
+        $service = $serviceManager->get($configId);
+        spl_autoload_unregister($fallbackAutoload);
+        
+        return $service;
+    }
 }

@@ -277,6 +277,18 @@ class helpers_File
     }
     
     /**
+     * Convert url to path
+     * @param string $path
+     * @return string
+     */
+    static public function urlToPath($path)
+    {
+        $path = parse_url($path);
+        return $path === null ? null : str_replace('/', DIRECTORY_SEPARATOR, $path['path']);
+    }
+
+
+    /**
      * An alternative way to resolve the real path of a path. The resulting
      * path might point to something non-existant on the file system contrary to
      * PHP's realpath function.

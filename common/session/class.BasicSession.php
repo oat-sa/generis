@@ -27,6 +27,9 @@
  * @package generis
  
  */
+use oat\oatbox\user\User;
+use oat\oatbox\Refreshable;
+
 class common_session_BasicSession implements common_session_Session
 {
     /**
@@ -34,7 +37,7 @@ class common_session_BasicSession implements common_session_Session
      */
     private $user;
     
-    public function __construct(common_user_User $user) {
+    public function __construct(User $user) {
         $this->user = $user;
     }
     
@@ -128,6 +131,8 @@ class common_session_BasicSession implements common_session_Session
     }
     
     public function refresh() {
-        $this->user->refresh();
-    }    
+        if( $this->user instanceof Refreshable ){
+            $this->user->refresh();
+        }
+    }
 }

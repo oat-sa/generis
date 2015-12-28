@@ -31,36 +31,27 @@
  */
 abstract class common_ext_ExtensionHandler
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
     /**
-     * Short description of attribute extension
-     *
-     * @access public
      * @var common_ext_Extension
      */
     public $extension = null;
 
-    // --- OPERATIONS ---
 
     /**
-     * Short description of method __construct
+     * Initialise the extension handler
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Extension extension
-     * @return mixed
      */
     public function __construct( common_ext_Extension $extension)
     {
-        
 		$this->extension = $extension;
-        
+    }
+    
+    protected function getExtension()
+    {
+        return $this->extension;
     }
 
-} /* end of abstract class common_ext_ExtensionHandler */
-
-?>
+}

@@ -63,7 +63,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     public function set($key, $value, $ttl = null)
     {
         if (! is_null($ttl)) {
-        return $this->connection->set($key, $value, $ttl);
+            return $this->connection->set($key, $value, $ttl);
         } else {
             return $this->connection->set($key, $value);
         }
