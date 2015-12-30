@@ -1,8 +1,6 @@
 <?php
 /**
- * Default config header
- *
- * To replace this add a file generis/conf/header/FsManager.conf.php
+ * The default cache implementation
  */
 
 return new common_cache_KeyValueCache(array(

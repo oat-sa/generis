@@ -29,6 +29,7 @@ use oat\generis\model\data\ModelManager;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\event\EventManager;
+use oat\oatbox\filesystem\FileSystemService;
 
 /**
  * 
@@ -166,8 +167,24 @@ class Updater extends \common_ext_ExtensionUpdater {
             $this->getServiceManager()->register(EventManager::CONFIG_ID, $eventManager);
             $currentVersion = '2.11.0';
         }
-
-        return $currentVersion;
+        
+        $this->setVersion($currentVersion);
+        
+        if ($this->isVersion('2.11.0')) {
+            $FsManager = new FileSystemService(array(
+                FileSystemService::OPTION_FILE_PATH => FILES_PATH,
+                FileSystemService::OPTION_ADAPTERS=> array()
+            ));
+            
+            $class = new \core_kernel_classes_Class(GENERIS_NS . '#VersionedRepository');
+            foreach ($class->getInstances(true) as $resource) {
+                $oldFs = new \core_kernel_versioning_Repository($resource);
+                $FsManager->addLocalFileSystem($resource->getUri(), $oldFs->getPath());
+            }
+            $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $FsManager);
+            
+            $this->setVersion('2.12.0');
+        }
     }
     
     private function getReadableModelIds() {
