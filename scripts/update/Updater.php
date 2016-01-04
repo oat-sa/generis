@@ -123,16 +123,16 @@ class Updater extends \common_ext_ExtensionUpdater {
         }
         
         if ($currentVersion == '2.9.0') {
-            // ensure filesystem service is registeres
-            try {
-                $this->getServiceManager()->get('generis/FsManager');
-            } catch (ServiceNotFoundException $e) {
-                $FsManager = new \common_persistence_fileSystem_Manager(array(
-                    \common_persistence_fileSystem_Manager::OPTION_FILE_PATH => FILES_PATH
-                ));
-                
-                $this->getServiceManager()->register('generis/FsManager', $FsManager);
-            }
+            // skip, unused
+            //try {
+            //    $this->getServiceManager()->get('generis/FsManager');
+            //} catch (ServiceNotFoundException $e) {
+            //    $FsManager = new \common_persistence_fileSystem_Manager(array(
+            //        \common_persistence_fileSystem_Manager::OPTION_FILE_PATH => FILES_PATH
+            //    ));
+            //
+            //    $this->getServiceManager()->register('generis/FsManager', $FsManager);
+            //}
             
             // update persistences
             $persistenceConfig = $this->getServiceManager()->get('generis/persistences');
