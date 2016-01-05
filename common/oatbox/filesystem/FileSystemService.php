@@ -53,6 +53,13 @@ class FileSystemService extends ConfigurableService
         return $this->filesystems[$id];
     }
     
+    /**
+     * Create a new local file system
+     * 
+     * @param string $id
+     * @param string $path
+     * @return Filesystem
+     */
     public function createLocalFileSystem($id)
     {
         $path = $this->getOption(self::OPTION_FILE_PATH).\helpers_File::sanitizeInjectively($id);
@@ -60,7 +67,14 @@ class FileSystemService extends ConfigurableService
         return $this->getFileSystem($id);
     }
     
-    public function addLocalFileSystem($id, $path)
+    /**
+     * Registers a local file system, used for transition
+     * 
+     * @param string $id
+     * @param string $path
+     * @return boolean
+     */
+    public function registerLocalFileSystem($id, $path)
     {
         $adapters = $this->hasOption(self::OPTION_ADAPTERS) ? $this->getOption(self::OPTION_ADAPTERS) : array();
         $adapters[$id] = array(
@@ -69,6 +83,27 @@ class FileSystemService extends ConfigurableService
         );
         $this->setOption(self::OPTION_ADAPTERS, $adapters);
         return true;
+    }
+
+    /**
+     * Remove a filesystem adapter
+     * 
+     * @param string $id
+     * @return boolean
+     */
+    public function unregisterFileSystem($id)
+    {
+        $adapters = $this->getOption(self::OPTION_ADAPTERS);
+        if (isset($adapters[$id])) {
+            unset($adapters[$id]);
+            if (isset($this->filesystems[$id])) {
+                unset($this->filesystems[$id]);
+            }
+            $this->setOption(self::OPTION_ADAPTERS, $adapters);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
