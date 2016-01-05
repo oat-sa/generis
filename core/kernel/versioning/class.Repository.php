@@ -19,13 +19,14 @@
  * 
  */
 
+use oat\oatbox\filesystem\FileSystemService;
+use League\Flysystem\Adapter\Local;
 /**
  * Short description of class core_kernel_versioning_Repository
  *
  * @access public
  * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package generis
- 
  */
 class core_kernel_versioning_Repository
     extends core_kernel_classes_Resource
@@ -63,13 +64,7 @@ class core_kernel_versioning_Repository
      */
     public static function create( core_kernel_classes_Resource $type, $url, $login, $password, $path, $label, $comment, $uri = '')
     {
-        $returnValue = null;
-
-        
-        $returnValue = core_kernel_fileSystem_FileSystemFactory::createFileSystem($type, $url, $login, $password, $path, $label);
-        
-
-        return $returnValue;
+        return core_kernel_fileSystem_FileSystemFactory::createFileSystem($type, $url, $login, $password, $path, $label);
     }
 
     /**
@@ -127,7 +122,12 @@ class core_kernel_versioning_Repository
      */
     public function getPath()
     {
-        return (string) core_kernel_fileSystem_Cache::getFileSystemPath($this);
+        $service = $this->getServiceManager()->get(FileSystemService::SERVICE_ID);
+        $adapter = $service->getFileSystem($this->getUri())->getAdapter();
+        if (!$adapter instanceof Local) {
+            throw new common_exception_InconsistentData(__CLASS__.' can only handle local files');
+        }
+        return $adapter->getPathPrefix();
     }
 
     /**
@@ -176,18 +176,11 @@ class core_kernel_versioning_Repository
      */
     public function delete($deleteReference = false)
     {
-        $returnValue = (bool) false;
-        
-        /* remove the resource implies other consequence, do not remove 
-        $path = $this->getPath();
-        if(is_dir($path)){
-        	// Remove the local copy
-        	helpers_File::remove($path);
-        }*/
-        
         $returnValue = parent::delete();
-		core_kernel_fileSystem_Cache::flushCache();
         
+		$fsm = $this->getServiceManager()->get(FileSystemService::SERVICE_ID);
+		$returnValue = $returnValue && $fsm->unregisterFileSystem($this->getUri());
+		$this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fsm);
         
 
         return (bool) $returnValue;

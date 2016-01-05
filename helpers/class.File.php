@@ -37,6 +37,12 @@ class helpers_File
     // --- ATTRIBUTES ---
     
     /**
+     * matches [A-Za-z] | - | _
+     * @var array
+     */
+    private static $ALLOWED_CHARACTERS = array('A' => '','B' => '','C' => '','D' => '','E' => '','F' => '','G' => '','H' => '','I' => '','J' => '','K' => '','L' => '','M' => '','N' => '','O' => '','P' => '','Q' => '','R' => '','S' => '','T' => '','U' => '','V' => '','W' => '','X' => '','Y' => '','Z' => '','a' => '','b' => '','c' => '','d' => '','e' => '','f' => '','g' => '','h' => '','i' => '','j' => '','k' => '','l' => '','m' => '','n' => '','o' => '','p' => '','q' => '','r' => '','s' => '','t' => '','u' => '','v' => '','w' => '','x' => '','y' => '','z' => '',0 => '',1 => '',2 => '',3 => '',4 => '',5 => '',6 => '',7 => '',8 => '',9 => '','_' => '','-' => '');
+    
+    /**
      * Directory Mode
      *
      * @access public
@@ -329,6 +335,21 @@ class helpers_File
         // put initial separator that could have been lost
         $path = !$unipath ? '/' . $path : $path;
         return $path;
+    }
+
+    /**
+     * Sanitize a string using an injective function
+     * to prevent collisions
+     * 
+     * @param string $key
+     * @return string
+     */
+    static public function sanitizeInjectively($string) {
+        $sanitized = '';
+        foreach (str_split($string) as $char) {
+            $sanitized .= isset(self::$ALLOWED_CHARACTERS[$char]) ? $char : '='.base64_encode($char);
+        }
+        return $sanitized;
     }
     
     /**
