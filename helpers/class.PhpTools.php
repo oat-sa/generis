@@ -53,9 +53,10 @@ class helpers_PhpTools {
                     if ($tokens[$j] === '{') {
                         if (!isset($tokens[$i+2][1])) {
                             error_log($file.' does not contain a valid class definition');
-                            break;
+                            break(2);
                         } else {
                             $class = $tokens[$i+2][1];
+                            break(2);
                         }
                     }
                 }
