@@ -69,7 +69,7 @@ class core_kernel_fileSystem_FileSystemFactory
         
         $serviceManager = ServiceManager::getServiceManager();
         $fsm = $serviceManager->get(FileSystemService::SERVICE_ID);
-        $fsm->addLocalFileSystem($resource->getUri(), $path);
+        $fsm->registerLocalFileSystem($resource->getUri(), $path);
         $serviceManager->register(FileSystemService::SERVICE_ID, $fsm);
         
         return new core_kernel_fileSystem_FileSystem($resource);

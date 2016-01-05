@@ -57,13 +57,12 @@ class FileSystemService extends ConfigurableService
      * Create a new local file system
      * 
      * @param string $id
-     * @param string $path
      * @return Filesystem
      */
     public function createLocalFileSystem($id)
     {
         $path = $this->getOption(self::OPTION_FILE_PATH).\helpers_File::sanitizeInjectively($id);
-        $success = $this->addLocalFileSystem($id, $path);
+        $this->registerLocalFileSystem($id, $path);
         return $this->getFileSystem($id);
     }
     
