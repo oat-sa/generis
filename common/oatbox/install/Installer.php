@@ -38,6 +38,8 @@ class Installer extends ConfigurableService
      */
     public function install()
     {
+        $this->validateOptions();
+        
         $configPath = $this->getOption('root_path').'config/';
         $serviceManager = $this->setupServiceManager($configPath);
         
@@ -61,5 +63,17 @@ class Installer extends ConfigurableService
         
         return new ServiceManager($configService);
     }
+    
+    protected function validateOptions()
+    {
+        if (!$this->hasOption('root_path') || empty($this->getOption('root_path'))) {
+            throw new \common_exception_MissingParameter('root_path', __CLASS__);
+        }
+        if (!$this->hasOption('file_path') || empty($this->getOption('file_path'))) {
+            throw new \common_exception_MissingParameter('file_path', __CLASS__);
+        }
+        
+    }
+    
     
 }
