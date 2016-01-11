@@ -179,7 +179,8 @@ class Updater extends \common_ext_ExtensionUpdater {
             $class = new \core_kernel_classes_Class(GENERIS_NS . '#VersionedRepository');
             foreach ($class->getInstances(true) as $resource) {
                 $oldFs = new \core_kernel_versioning_Repository($resource);
-                $FsManager->registerLocalFileSystem($resource->getUri(), $oldFs->getPath());
+                $path = \core_kernel_fileSystem_Cache::getFileSystemPath($oldFs);
+                $FsManager->registerLocalFileSystem($resource->getUri(), $path);
             }
             $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $FsManager);
             
