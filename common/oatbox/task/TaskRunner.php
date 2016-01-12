@@ -23,23 +23,24 @@ namespace oat\oatbox\task;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceManager;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use oat\oatbox\action\ActionService;
 
 class TaskRunner
 {
     public function run(Task $task) {
         
+        \common_Logger::d('Running task '.$task->getId());
         $report = new \common_report_Report(\common_report_Report::TYPE_INFO, __('Running task %s', $task->getId()));
         try {
-            $invocableName = $task->getInvocable();
-            $invocable = new $invocableName();
-            if ($invocable instanceof ServiceLocatorAwareInterface) {
-                $invocable->setServiceLocator($this->getServiceLocator());
-            }
+            $actionService = $this->getServiceLocator()->get(ActionService::SERVICE_ID);
+            $invocable = $actionService->resolve($task->getInvocable());
             $subReport = call_user_func($invocable, $task->getParameters());
             $report->add($subReport);
         } catch (\Exception $e) {
             $report = new \common_report_Report(\common_report_Report::TYPE_ERROR, __('Unable to run task %s', $task->getId()));
         }
+        $queue = $this->getServiceLocator()->get(Queue::CONFIG_ID);
+        $queue->updateTaskStatus($task->getId(), Task::STATUS_FINISHED);
         return $report; 
     }
     
