@@ -44,49 +44,63 @@ class common_ext_UpdateExtensions implements Action
         
         $report = new common_report_Report(common_report_Report::TYPE_INFO, 'Running extension update');
         foreach ($sorted as $ext) {
-            $report->add($this->updateExtension($ext));
+            try {
+                if(!common_ext_ExtensionsManager::singleton()->isInstalled($ext->getId())) {
+                    $installer = new \tao_install_ExtensionInstaller($ext);
+                    $installer->install();
+                    $report->add(new common_report_Report(common_report_Report::TYPE_SUCCESS, 'Installed '.$ext->getName()));
+                } else {
+                    $report->add($this->updateExtension($ext));
+                }
+            } catch (common_ext_MissingExtensionException $ex) {
+                $report->add(new common_report_Report(common_report_Report::TYPE_ERROR, $ex->getMessage()));
+                break;
+            } catch (common_ext_OutdatedVersionException $ex) {
+                $report->add(new common_report_Report(common_report_Report::TYPE_ERROR, $ex->getMessage()));
+                break;
+            }
         }
         return $report;
     }
     
+    /**
+     * Update a specific extension
+     * 
+     * @param common_ext_Extension $ext
+     * @return common_report_Report
+     */
     protected function updateExtension(common_ext_Extension $ext)
     {
-        //$report = new common_report_Report(common_report_Report::TYPE_INFO,'Updating '.$ext->getName());
-        if(!common_ext_ExtensionsManager::singleton()->isInstalled($ext->getId())) {
-            $installer = new \tao_install_ExtensionInstaller($ext);
-            $installer->install();
-            $report = new common_report_Report(common_report_Report::TYPE_SUCCESS, 'Installed '.$ext->getName());
-        } else {
-            $installed = common_ext_ExtensionsManager::singleton()->getInstalledVersion($ext->getId());
-            $codeVersion = $ext->getVersion();
-            if ($installed !== $codeVersion) {
-                $report = new common_report_Report(common_report_Report::TYPE_INFO, $ext->getName().' requires update from '.$installed.' to '.$codeVersion);
-                $updaterClass = $ext->getManifest()->getUpdateHandler();
-                if (is_null($updaterClass)) {
-                    $report = new common_report_Report(common_report_Report::TYPE_WARNING, 'No Updater found for  '.$ext->getName());
-                } elseif (!class_exists($updaterClass)) {
-                    $report = new common_report_Report(common_report_Report::TYPE_ERROR, 'Updater '.$updaterClass.' not found');
-                } else {
-                    $updater = new $updaterClass($ext);
-                    $returnedVersion = $updater->update($installed);
-                    $currentVersion = common_ext_ExtensionsManager::singleton()->getInstalledVersion($ext->getId());
-                    
-                    if (!is_null($returnedVersion) && $returnedVersion != $currentVersion) {
-                        common_ext_ExtensionsManager::singleton()->updateVersion($ext, $returnedVersion);
-                        $report->add(new common_report_Report(common_report_Report::TYPE_WARNING, 'Manually saved extension version'));
-                        $currentVersion = $returnedVersion;
-                    }
-                    
-                    if ($currentVersion == $codeVersion) {
-                        $report->add(new common_report_Report(common_report_Report::TYPE_SUCCESS, 'Successfully updated '.$ext->getName().' to '.$currentVersion));
-                    } else {
-                        $report->add(new common_report_Report(common_report_Report::TYPE_WARNING, 'Update of '.$ext->getName().' exited with version '.$currentVersion));
-                    }
-                    common_cache_FileCache::singleton()->purge();
-                }
+        helpers_ExtensionHelper::checkRequiredExtensions($ext);
+        $installed = common_ext_ExtensionsManager::singleton()->getInstalledVersion($ext->getId());
+        $codeVersion = $ext->getVersion();
+        if ($installed !== $codeVersion) {
+            $report = new common_report_Report(common_report_Report::TYPE_INFO, $ext->getName().' requires update from '.$installed.' to '.$codeVersion);
+            $updaterClass = $ext->getManifest()->getUpdateHandler();
+            if (is_null($updaterClass)) {
+                $report = new common_report_Report(common_report_Report::TYPE_WARNING, 'No Updater found for  '.$ext->getName());
+            } elseif (!class_exists($updaterClass)) {
+                $report = new common_report_Report(common_report_Report::TYPE_ERROR, 'Updater '.$updaterClass.' not found');
             } else {
-                $report = new common_report_Report(common_report_Report::TYPE_INFO, $ext->getName().' already up to data');
+                $updater = new $updaterClass($ext);
+                $returnedVersion = $updater->update($installed);
+                $currentVersion = common_ext_ExtensionsManager::singleton()->getInstalledVersion($ext->getId());
+                
+                if (!is_null($returnedVersion) && $returnedVersion != $currentVersion) {
+                    common_ext_ExtensionsManager::singleton()->updateVersion($ext, $returnedVersion);
+                    $report->add(new common_report_Report(common_report_Report::TYPE_WARNING, 'Manually saved extension version'));
+                    $currentVersion = $returnedVersion;
+                }
+                
+                if ($currentVersion == $codeVersion) {
+                    $report->add(new common_report_Report(common_report_Report::TYPE_SUCCESS, 'Successfully updated '.$ext->getName().' to '.$currentVersion));
+                } else {
+                    $report->add(new common_report_Report(common_report_Report::TYPE_WARNING, 'Update of '.$ext->getName().' exited with version '.$currentVersion));
+                }
+                common_cache_FileCache::singleton()->purge();
             }
+        } else {
+            $report = new common_report_Report(common_report_Report::TYPE_INFO, $ext->getName().' already up to data');
         }
         return $report;
     }
