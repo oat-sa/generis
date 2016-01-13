@@ -20,8 +20,8 @@
 
 namespace oat\generis\test;
 
-use oat\session\SessionSubstitutionService;
-use oat\session\PretenderSession;
+use oat\oatbox\session\SessionSubstitutionService;
+use oat\oatbox\session\PretenderSession;
 use common_session_SessionManager;
 
 /**
@@ -35,6 +35,12 @@ class SessionSubstitutionServiceTest extends GenerisPhpUnitTestRunner
 
     private $testUserUri = 'http://sample/first.rdf#tessionSubstitutionServiceTestUser';
 
+    public function setUp()
+    {
+        parent::setUp();
+        common_session_SessionManager::startSession(new \common_test_TestUserSession());
+    }
+
     public static function getSubstituteSessionService()
     {
         return [[new SessionSubstitutionService()]];
@@ -43,25 +49,24 @@ class SessionSubstitutionServiceTest extends GenerisPhpUnitTestRunner
     /**
      * @param SessionSubstitutionService $service
      * @dataProvider getSubstituteSessionService
-     * @runInSeparateProcess
      */
     public function testSubstituteSession($service)
     {
         $initialSession = common_session_SessionManager::getSession();
+        $initialUser = $initialSession->getUser();
         $newUser = new \core_kernel_users_GenerisUser(new \core_kernel_classes_Resource($this->testUserUri));
 
         $service->substituteSession($newUser);
         $newSession = common_session_SessionManager::getSession();
 
-        $this->assertNotEquals($initialSession->getUserUri(), $newSession->getUserUri());
-        $this->assertEquals($newUser->getIdentifier(), $newSession->getUserUri());
+        $this->assertNotEquals($initialUser->getIdentifier(), $newSession->getUser()->getIdentifier());
+        $this->assertEquals($newUser->getIdentifier(), $newSession->getUser()->getIdentifier());
         $this->assertTrue($newSession instanceof PretenderSession);
     }
 
     /**
      * @param SessionSubstitutionService $service
      * @dataProvider getSubstituteSessionService
-     * @runInSeparateProcess
      */
     public function testIsSubstituted($service)
     {
@@ -75,7 +80,6 @@ class SessionSubstitutionServiceTest extends GenerisPhpUnitTestRunner
     /**
      * @param SessionSubstitutionService $service
      * @dataProvider getSubstituteSessionService
-     * @runInSeparateProcess
      */
     public function testRevert($service)
     {
@@ -85,12 +89,12 @@ class SessionSubstitutionServiceTest extends GenerisPhpUnitTestRunner
 
         $service->substituteSession($newUser);
         $this->assertTrue($service->isSubstituted());
-        $this->assertEquals(common_session_SessionManager::getSession()->getUserUri(), $this->testUserUri);
+        $this->assertEquals(common_session_SessionManager::getSession()->getUser()->getIdentifier(), $this->testUserUri);
 
         $service->revert();
 
         $this->assertFalse($service->isSubstituted());
-        $this->assertNotEquals(common_session_SessionManager::getSession()->getUserUri(), $this->testUserUri);
-        $this->assertEquals($initialSession->getUserUri(), common_session_SessionManager::getSession()->getUserUri());
+        $this->assertNotEquals(common_session_SessionManager::getSession()->getUser()->getIdentifier(), $this->testUserUri);
+        $this->assertEquals($initialSession->getUser()->getIdentifier(), common_session_SessionManager::getSession()->getUser()->getIdentifier());
     }
 }

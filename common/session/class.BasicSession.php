@@ -33,9 +33,9 @@ use oat\oatbox\Refreshable;
 class common_session_BasicSession implements common_session_Session
 {
     /**
-     * @var common_user_User
+     * @var User
      */
-    private $user;
+    protected $user;
     
     public function __construct(User $user) {
         $this->user = $user;

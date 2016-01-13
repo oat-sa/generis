@@ -19,11 +19,11 @@
  */
 
 
-namespace oat;
+namespace oat\oatbox\session;
 
-use oat\session\PretenderSession;
 use oat\oatbox\user\User;
 use common_session_Session;
+use common_session_SessionManager;
 
 /**
  * Interface SessionSubstitutionService
@@ -31,24 +31,45 @@ use common_session_Session;
  * @author Aleh Hutnikau <hutnikau@1pt.com>
  * @package generis
  */
-interface SessionSubstitutionService
+class SessionSubstitutionService implements \oat\oatbox\SessionSubstitutionService
 {
-    const SERVICE_ID = 'taoMp/SessionSubstitution';
-
     /**
      * @param User $user
      * @return PretenderSession new session instance
      */
-    public function substituteSession(User $user);
+    public function substituteSession(User $user)
+    {
+        $session = new PretenderSession($user);
+        $session = common_session_SessionManager::startSession($session);
+        return $session;
+    }
 
     /**
      * @return boolean
      */
-    public function isSubstituted();
+    public function isSubstituted()
+    {
+        $result = false;
+        $session = common_session_SessionManager::getSession();
+        if ($session instanceof PretenderSession) {
+            $result = true;
+        }
+        return $result;
+    }
 
     /**
      * @return void
      * @return common_session_Session original session instance
+     * @throws \Exception
      */
-    public function revert();
+    public function revert()
+    {
+        $session = common_session_SessionManager::getSession();
+        if ($session instanceof PretenderSession) {
+            $session->restoreOriginal();
+        } else {
+            throw new \Exception('Session has not been substituted.');
+        }
+        return common_session_SessionManager::getSession();
+    }
 }

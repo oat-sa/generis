@@ -18,7 +18,7 @@
  *
  */
 
-namespace oat\session;
+namespace oat\oatbox\session;
 
 use common_session_BasicSession;
 use common_session_Session;
@@ -40,11 +40,6 @@ class PretenderSession extends common_session_BasicSession
      * @var common_session_Session
      */
     private $internalSession;
-
-    /**
-     * @var User
-     */
-    private $user;
 
     /**
      * @param User $user
