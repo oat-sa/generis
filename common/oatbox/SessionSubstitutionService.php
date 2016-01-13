@@ -18,7 +18,6 @@
  *
  */
 
-
 namespace oat\oatbox;
 
 use oat\oatbox\session\PretenderSession;
@@ -33,7 +32,7 @@ use common_session_Session;
  */
 interface SessionSubstitutionService
 {
-    const SERVICE_ID = 'taoMp/SessionSubstitution';
+    const SERVICE_ID = 'generis/SessionSubstitution';
 
     /**
      * @param User $user

@@ -25,7 +25,7 @@ use oat\oatbox\session\PretenderSession;
 use common_session_SessionManager;
 
 /**
- * Interface SessionSubstitutionService
+ * Test of `\oat\oatbox\session\SessionSubstitutionService`
  *
  * @author Aleh Hutnikau <hutnikau@1pt.com>
  * @package generis\test
@@ -56,9 +56,9 @@ class SessionSubstitutionServiceTest extends GenerisPhpUnitTestRunner
         $initialUser = $initialSession->getUser();
         $newUser = new \core_kernel_users_GenerisUser(new \core_kernel_classes_Resource($this->testUserUri));
 
-        $service->substituteSession($newUser);
-        $newSession = common_session_SessionManager::getSession();
+        $newSession = $service->substituteSession($newUser);
 
+        $this->assertEquals($newSession, common_session_SessionManager::getSession());
         $this->assertNotEquals($initialUser->getIdentifier(), $newSession->getUser()->getIdentifier());
         $this->assertEquals($newUser->getIdentifier(), $newSession->getUser()->getIdentifier());
         $this->assertTrue($newSession instanceof PretenderSession);

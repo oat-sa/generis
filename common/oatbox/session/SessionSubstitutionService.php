@@ -26,7 +26,9 @@ use common_session_Session;
 use common_session_SessionManager;
 
 /**
- * Interface SessionSubstitutionService
+ * Class SessionSubstitutionService
+ *
+ * Used to temporary replace the current user session (to pretend to be another user).
  *
  * @author Aleh Hutnikau <hutnikau@1pt.com>
  * @package generis
@@ -40,7 +42,7 @@ class SessionSubstitutionService implements \oat\oatbox\SessionSubstitutionServi
     public function substituteSession(User $user)
     {
         $session = new PretenderSession($user);
-        $session = common_session_SessionManager::startSession($session);
+        common_session_SessionManager::startSession($session);
         return $session;
     }
 
