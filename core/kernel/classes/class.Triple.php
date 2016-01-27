@@ -84,6 +84,12 @@ class core_kernel_classes_Triple
      */
     public $lg = '';
 
-
+    /**
+     * Triple creation time
+     *
+     * @access public
+     * @var string
+     */
+    public $epoch = '';
 
 }
