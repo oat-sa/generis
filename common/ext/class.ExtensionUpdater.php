@@ -73,16 +73,31 @@ abstract class common_ext_ExtensionUpdater
     }
     
     /**
-     * Test if $minVersion <= CURRENT_VERSION <= $maxVersion
+     * Please use "skip" instead of inBetween.
      * 
      * @param string $minVersion
      * @param string $maxVersion
-     * @return mixed
+     * @return boolean
+     * @deprecated
      */
     public function isBetween($minVersion, $maxVersion)
     {
         $current = common_ext_ExtensionsManager::singleton()->getInstalledVersion($this->getExtension()->getId());
         return version_compare($minVersion, $current, '<=') && version_compare($current, $maxVersion, '<=');
+    }
+    
+    /**
+     * Skip from version FROM to version TO without additional required actions
+     * 
+     * @param string $from
+     * @param string $to
+     */
+    public function skip($from, $to)
+    {
+        $current = common_ext_ExtensionsManager::singleton()->getInstalledVersion($this->getExtension()->getId());
+        if (version_compare($from, $current, '<=') && version_compare($current, $to, '<')) {
+            $this->setVersion($to);
+        }
     }
     
     /**
