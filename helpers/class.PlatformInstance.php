@@ -34,4 +34,12 @@ class helpers_PlatformInstance {
     static public function isDemo() {
         return in_array(TAO_RELEASE_STATUS, array('demo', 'demoA', 'demoB', 'demoS'));
     }
+    
+    /**
+     * Returns whenever or not Tao is installed on windows
+     * @return boolean
+     */
+    static public function isWindows() {
+        return strtoupper(substr(PHP_OS, 0, 3)) == 'WIN';
+    }
 }
