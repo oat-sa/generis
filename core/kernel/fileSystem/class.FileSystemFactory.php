@@ -19,6 +19,8 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
+use oat\oatbox\service\ServiceManager;
+use oat\oatbox\filesystem\FileSystemService;
 
 /**
  * Factory to create new FileSystems
@@ -64,6 +66,11 @@ class core_kernel_fileSystem_FileSystemFactory
         	PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED	=> ($enabled ? GENERIS_TRUE : GENERIS_FALSE)
         ));
         core_kernel_fileSystem_Cache::flushCache();
+        
+        $serviceManager = ServiceManager::getServiceManager();
+        $fsm = $serviceManager->get(FileSystemService::SERVICE_ID);
+        $fsm->registerLocalFileSystem($resource->getUri(), $path);
+        $serviceManager->register(FileSystemService::SERVICE_ID, $fsm);
         
         return new core_kernel_fileSystem_FileSystem($resource);
     }

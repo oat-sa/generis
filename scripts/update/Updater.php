@@ -29,6 +29,7 @@ use oat\generis\model\data\ModelManager;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\event\EventManager;
+use oat\oatbox\filesystem\FileSystemService;
 
 /**
  * 
@@ -122,16 +123,16 @@ class Updater extends \common_ext_ExtensionUpdater {
         }
         
         if ($currentVersion == '2.9.0') {
-            // ensure filesystem service is registeres
-            try {
-                $this->getServiceManager()->get('generis/FsManager');
-            } catch (ServiceNotFoundException $e) {
-                $FsManager = new \common_persistence_fileSystem_Manager(array(
-                    \common_persistence_fileSystem_Manager::OPTION_FILE_PATH => FILES_PATH
-                ));
-                
-                $this->getServiceManager()->register('generis/FsManager', $FsManager);
-            }
+            // skip, unused
+            //try {
+            //    $this->getServiceManager()->get('generis/FsManager');
+            //} catch (ServiceNotFoundException $e) {
+            //    $FsManager = new \common_persistence_fileSystem_Manager(array(
+            //        \common_persistence_fileSystem_Manager::OPTION_FILE_PATH => FILES_PATH
+            //    ));
+            //
+            //    $this->getServiceManager()->register('generis/FsManager', $FsManager);
+            //}
             
             // update persistences
             $persistenceConfig = $this->getServiceManager()->get('generis/persistences');
@@ -166,8 +167,25 @@ class Updater extends \common_ext_ExtensionUpdater {
             $this->getServiceManager()->register(EventManager::CONFIG_ID, $eventManager);
             $currentVersion = '2.11.0';
         }
-
-        return $currentVersion;
+        
+        $this->setVersion($currentVersion);
+        
+        if ($this->isVersion('2.11.0')) {
+            $FsManager = new FileSystemService(array(
+                FileSystemService::OPTION_FILE_PATH => FILES_PATH,
+                FileSystemService::OPTION_ADAPTERS=> array()
+            ));
+            
+            $class = new \core_kernel_classes_Class(GENERIS_NS . '#VersionedRepository');
+            foreach ($class->getInstances(true) as $resource) {
+                $oldFs = new \core_kernel_versioning_Repository($resource);
+                $path = \core_kernel_fileSystem_Cache::getFileSystemPath($oldFs);
+                $FsManager->registerLocalFileSystem($resource->getUri(), $path);
+            }
+            $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $FsManager);
+            
+            $this->setVersion('2.12.0');
+        }
     }
     
     private function getReadableModelIds() {

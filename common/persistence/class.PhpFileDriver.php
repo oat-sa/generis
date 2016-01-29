@@ -199,6 +199,13 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
         return  $this->directory.$path.'.php';
     }
     
+    /**
+     * Cannot use helpers_File::sanitizeInjectively() because
+     * of backwards compatibility
+     *
+     * @param string $key
+     * @return Ambigous string
+     */
     protected function sanitizeReadableFileName($key) {
         $path = '';
         foreach (str_split($key) as $char) {
