@@ -58,8 +58,14 @@ class common_ext_UpdateExtensions implements Action
             } catch (common_ext_OutdatedVersionException $ex) {
                 $report->add(new common_report_Report(common_report_Report::TYPE_ERROR, $ex->getMessage()));
                 break;
+            } catch (Exception $e) {
+                $report->setType(common_report_Report::TYPE_ERROR);
+                $report->setTitle('Update failed');
+                $report->add(new common_report_Report(common_report_Report::TYPE_ERROR, 'Exception during update of '.$ext->getId().'.'));
+                break;
             }
         }
+        $this->logReport($report);
         return $report;
     }
     
@@ -115,5 +121,16 @@ class common_ext_UpdateExtensions implements Action
             $missingExt[$extId] = $ext;
         }
         return $missingExt;
+    }
+    
+    protected function logReport(common_report_Report $report)
+    {
+        $folder = FILES_PATH.'updates'.DIRECTORY_SEPARATOR;
+        $updateId = time();
+        while (file_exists($folder.$updateId.'.log')) {
+            $count = isset($count) ? $count + 1 : 0;
+            $updateId = time().'_'.$count;
+        }
+        file_put_contents($folder.$updateId.'.log', helpers_Report::renderToCommandline($report, false));
     }
 }
