@@ -20,6 +20,9 @@
  */
 
 use oat\generis\model\data\ModelManager;
+use oat\oatbox\action\ActionResolver;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use oat\oatbox\service\ServiceManager;
 
 /**
  * Generis installer of extensions
@@ -175,7 +178,11 @@ class common_ext_ExtensionInstaller
 			if (file_exists($script)) {
 			    require_once $script;
 			} elseif (class_exists($script) && is_subclass_of($script, 'oat\\oatbox\\action\\Action')) {
-                throw new common_ext_InstallationException('Install actions not yet supported');
+                $action = new $script();
+		        if ($action instanceof ServiceLocatorAwareInterface) {
+		            $action->setServiceLocator(ServiceManager::getServiceManager());
+		        }
+		        $report = call_user_func($action, array());
 			} else {
 			    throw new common_ext_InstallationException('Unable to run install script '.$script);
 			}
