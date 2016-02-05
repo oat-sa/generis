@@ -126,4 +126,41 @@ class helpers_ExtensionHelper{
         return false;
     }
     
+    /**
+     * Check if extension requirements are met
+     * Always returns true, but throws exception on error
+     *
+     * @param common_ext_Extension $extension
+     * @throws common_ext_MissingExtensionException
+     * @throws common_ext_OutdatedVersionException
+     * @throws common_exception_Error
+     * @return boolean
+     */
+    public static function checkRequiredExtensions(common_ext_Extension $extension)
+    {
+        $extensionManager = common_ext_ExtensionsManager::singleton();
+        foreach ($extension->getDependencies() as $requiredExt => $requiredVersion) {
+            $installedVersion = $extensionManager->getInstalledVersion($requiredExt);
+            if (is_null($installedVersion)) {
+                throw new common_ext_MissingExtensionException('Extension '. $requiredExt . ' is needed by the extension to be installed but is missing.',
+                    'GENERIS');
+            }
+            if ($requiredVersion != '*') {
+                $matches = array();
+                preg_match('/[0-9\.]+/', $requiredVersion, $matches, PREG_OFFSET_CAPTURE);
+                if (count($matches) == 1) {
+                    $match = current($matches);
+                    $nr = $match[0];
+                    $operator = $match[1] > 0 ? substr($requiredVersion, 0, $match[1]) : '=';
+                    if (!version_compare($installedVersion, $nr, $operator)) {
+                        throw new common_ext_OutdatedVersionException('Installed version of '.$requiredExt.' '.$installedVersion.' does not satisfy required '.$requiredVersion.' for '.$extension->getId());
+                    }
+                } else {
+                    throw new common_exception_Error('Unsupported version requirement: "'.$requiredVersion.'"');
+                }
+            }
+        }
+        // always return true, or throws an exception
+        return true;
+    }
 }

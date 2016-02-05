@@ -26,14 +26,14 @@
  * @license GPLv2  http://www.opensource.org/licenses/gpl-2.0.php
  */
 return array(
-	'name' => 'generis',
-	'label' => 'Core',
+    'name' => 'generis',
+    'label' => 'Core',
     'description' => 'Core extension, provide the low level framework and an API to manage ontologies',
     'license' => 'GPL-2.0',
-    'version' => '2.13.0',
-	'author' => 'Open Assessment Technologies, CRP Henri Tudor',
-	'requires' 	=> array(),
-	'models' => array(
+    'version' => '2.14.0',
+    'author' => 'Open Assessment Technologies, CRP Henri Tudor',
+    'requires' => array(),
+    'models' => array(
 		'http://www.w3.org/1999/02/22-rdf-syntax-ns',
 		'http://www.w3.org/2000/01/rdf-schema',
 		'http://www.tao.lu/datatypes/WidgetDefinitions.rdf',

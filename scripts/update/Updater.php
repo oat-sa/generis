@@ -180,16 +180,19 @@ class Updater extends \common_ext_ExtensionUpdater {
             $class = new \core_kernel_classes_Class(GENERIS_NS . '#VersionedRepository');
             foreach ($class->getInstances(true) as $resource) {
                 $oldFs = new \core_kernel_versioning_Repository($resource);
-                $FsManager->registerLocalFileSystem($resource->getUri(), $oldFs->getPath());
+                $path = \core_kernel_fileSystem_Cache::getFileSystemPath($oldFs);
+                $FsManager->registerLocalFileSystem($resource->getUri(), $path);
             }
             $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $FsManager);
             
             $this->setVersion('2.12.0');
         }
+        
+        $this->skip('2.12.0', '2.13.0');
 
-        if ($this->isVersion('2.12.0')) {
+        if ($this->isVersion('2.13.0')) {
             $this->getServiceManager()->register(ActionService::SERVICE_ID, new ActionService());
-            $this->setVersion('2.13.0');
+            $this->setVersion('2.14.0');
         }
 
     }

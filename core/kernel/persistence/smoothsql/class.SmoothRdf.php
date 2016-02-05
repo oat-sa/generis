@@ -61,8 +61,8 @@ class core_kernel_persistence_smoothsql_SmoothRdf
         if (!in_array($triple->modelid, $this->model->getReadableModels())) {
             $this->model->addReadableModel($triple->modelid);
         }
-        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language) VALUES ( ? , ? , ? , ? , ? );";
-        $success = $this->getPersistence()->exec($query, array($triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg));
+        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch) VALUES ( ? , ? , ? , ? , ? , ?);";
+        $success = $this->getPersistence()->exec($query, array($triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg, $this->getPersistence()->getPlatForm()->getNowExpression()));
         if ($triple->predicate == RDFS_SUBCLASSOF || $triple->predicate == RDF_TYPE) {
             $eventManager = $this->getServiceManager()->get(EventManager::CONFIG_ID);
             $eventManager->trigger(new ResourceCreated(new core_kernel_classes_Resource($triple->subject)));

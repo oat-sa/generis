@@ -20,6 +20,9 @@
  */
 
 use oat\generis\model\data\ModelManager;
+use oat\oatbox\action\ActionResolver;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use oat\oatbox\service\ServiceManager;
 
 /**
  * Generis installer of extensions
@@ -63,55 +66,44 @@ class common_ext_ExtensionInstaller
 		common_Logger::i('Installing extension '.$this->extension->getId(), 'INSTALL');
 		
 		if ($this->extension->getId() == 'generis') {
-			throw new common_ext_ForbiddenActionException('Tried to install generis using the ExtensionInstaller',
-														  $this->extension->getId());
+			throw new common_ext_ForbiddenActionException(
+			    'Tried to install generis using the ExtensionInstaller',$this->extension->getId()
+		    );
+		}
+		if (common_ext_ExtensionsManager::singleton()->isInstalled($this->extension->getId())) {
+		    throw new common_ext_AlreadyInstalledException(
+		        'Problem installing extension ' . $this->extension->getId() .' : Already installed', $this->extension->getId()
+	        );
 		}
 		
-		try{
-			// not yet installed? 
-			if (common_ext_ExtensionsManager::singleton()->isInstalled($this->extension->getId())) {
-				throw new common_ext_AlreadyInstalledException('Problem installing extension ' . $this->extension->getId() .' : Already installed',
-															   $this->extension->getId());
-			}
-			else{
-				// we purge the whole cache.
-				$cache = common_cache_FileCache::singleton();
-				$cache->purge();	
-			
-				//check dependances
-				if(!$this->checkRequiredExtensions()){
-					// unreachable code
-				}
-					
-				$this->installLoadDefaultConfig();
-				$this->installOntology();
-				$this->installRegisterExt();
-					
-				common_Logger::d('Installing custom script for extension ' . $this->extension->getId());
-				$this->installCustomScript();
-				common_Logger::d('Done installing custom script for extension ' . $this->extension->getId());
-				
-				if ($this->getLocalData() == true){
-					common_Logger::d('Installing local data for extension ' . $this->extension->getId());
-					$this->installLocalData();
-					common_Logger::d('Done installing local data for extension ' . $this->extension->getId());
-						
-				}
-				common_Logger::d('Extended install for extension ' . $this->extension->getId());
-					
-				// Method to be overriden by subclasses
-				// to extend the installation mechanism.
-				$this->extendedInstall();
-				common_Logger::d('Done extended install for extension ' . $this->extension->getId());
-			}
-				
-		}catch (common_ext_ExtensionException $e){
-			// Rethrow
-			common_Logger::e('Exception raised ' . $e->getMessage());
-			throw $e;
-		}
+		// we purge the whole cache.
+		$cache = common_cache_FileCache::singleton();
+		$cache->purge();	
+	
 
+		// check reuired extensions, throws exception if failed
+		helpers_ExtensionHelper::checkRequiredExtensions($this->getExtension());
+			
+		$this->installLoadDefaultConfig();
+		$this->installOntology();
+		$this->installRegisterExt();
+			
+		common_Logger::d('Installing custom script for extension ' . $this->extension->getId());
+		$this->installCustomScript();
+		common_Logger::d('Done installing custom script for extension ' . $this->extension->getId());
 		
+		if ($this->getLocalData() == true){
+			common_Logger::d('Installing local data for extension ' . $this->extension->getId());
+			$this->installLocalData();
+			common_Logger::d('Done installing local data for extension ' . $this->extension->getId());
+				
+		}
+		common_Logger::d('Extended install for extension ' . $this->extension->getId());
+			
+		// Method to be overriden by subclasses
+		// to extend the installation mechanism.
+		$this->extendedInstall();
+		common_Logger::d('Done extended install for extension ' . $this->extension->getId());
 	}
 
 	/**
@@ -146,10 +138,12 @@ class common_ext_ExtensionInstaller
 	 */
 	protected function installOntology()
 	{
+	    helpers_TimeOutHelper::setTimeOutLimit(helpers_TimeOutHelper::MEDIUM);
 	    $rdf = ModelManager::getModel()->getRdfInterface();
 	    foreach ($this->getExtensionModel() as $triple) {
 	        $rdf->add($triple);
 	    }
+	    helpers_TimeOutHelper::reset();
 	}
 
 	/**
@@ -183,7 +177,17 @@ class common_ext_ExtensionInstaller
 		//install script
 		foreach ($this->extension->getManifest()->getInstallPHPFiles() as $script) {
 			common_Logger::d('Running custom install script '.$script.' for extension '.$this->extension->getId(), 'INSTALL');
-			require_once $script;
+			if (file_exists($script)) {
+			    require_once $script;
+			} elseif (class_exists($script) && is_subclass_of($script, 'oat\\oatbox\\action\\Action')) {
+                $action = new $script();
+		        if ($action instanceof ServiceLocatorAwareInterface) {
+		            $action->setServiceLocator(ServiceManager::getServiceManager());
+		        }
+		        $report = call_user_func($action, array());
+			} else {
+			    throw new common_ext_InstallationException('Unable to run install script '.$script);
+			}
 		}
 		
 	}
@@ -208,43 +212,6 @@ class common_ext_ExtensionInstaller
 			}
 		}
 		
-	}
-
-	/**
-	 * check required extensions are not missing
-	 *
-	 * @access protected
-	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @return boolean
-	 */
-	protected function checkRequiredExtensions()
-	{
-
-	    $extensionManager = common_ext_ExtensionsManager::singleton();
-	    
-		foreach ($this->extension->getDependencies() as $requiredExt => $requiredVersion) {
-		    $installedVersion = $extensionManager->getInstalledVersion($requiredExt);
-		    if (is_null($installedVersion)) {
-		        throw new common_ext_MissingExtensionException('Extension '. $requiredExt . ' is needed by the extension to be installed but is missing.',
-		            'GENERIS');
-		    }
-		    if ($requiredVersion != '*') {
-    		    $matches = array();
-    		    preg_match('/[0-9\.]+/', $requiredVersion, $matches, PREG_OFFSET_CAPTURE);
-    		    if (count($matches) == 1) {
-    		        $match = current($matches);
-    		        $nr = $match[0];
-    		        $operator = $match[1] > 0 ? substr($requiredVersion, 0, $match[1]) : '=';
-    		        if (!version_compare($installedVersion, $nr, $operator)) {
-    		            throw new common_exception_Error('Installed version of '.$requiredExt.' '.$installedVersion.' does not satisfy required '.$requiredVersion.' for '.$this->extension->getId());
-    		        }
-    		    } else {
-    		        throw new common_exception_Error('Unsupported version requirement: "'.$requiredVersion.'"');
-    		    }
-		    }
-		}
-		// always return true, or throws an exception
-		return true;
 	}
 
 	/**
