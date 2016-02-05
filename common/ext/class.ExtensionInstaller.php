@@ -138,10 +138,12 @@ class common_ext_ExtensionInstaller
 	 */
 	protected function installOntology()
 	{
+	    helpers_TimeOutHelper::setTimeOutLimit(helpers_TimeOutHelper::MEDIUM);
 	    $rdf = ModelManager::getModel()->getRdfInterface();
 	    foreach ($this->getExtensionModel() as $triple) {
 	        $rdf->add($triple);
 	    }
+	    helpers_TimeOutHelper::reset();
 	}
 
 	/**
