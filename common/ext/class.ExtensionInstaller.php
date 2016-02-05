@@ -23,6 +23,7 @@ use oat\generis\model\data\ModelManager;
 use oat\oatbox\action\ActionResolver;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use oat\oatbox\service\ServiceManager;
+use oat\oatbox\event\EventManager;
 
 /**
  * Generis installer of extensions
@@ -104,6 +105,9 @@ class common_ext_ExtensionInstaller
 		// to extend the installation mechanism.
 		$this->extendedInstall();
 		common_Logger::d('Done extended install for extension ' . $this->extension->getId());
+		$eventManager = ServiceManager::getServiceManager()->get(EventManager::CONFIG_ID);
+		$eventManager->trigger(new common_ext_event_ExtensionInstalled($this->extension));
+
 	}
 
 	/**
