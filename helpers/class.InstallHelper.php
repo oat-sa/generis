@@ -58,11 +58,12 @@ class helpers_InstallHelper
                     common_Logger::i('Extension '.$extension->getId().' installed');
         			unset($toInstall[$key]);
         			$modified = true;
+        			break;
         		} else {
         			$missing = array_diff($missing, array_keys($toInstall));
         			foreach ($missing as $extID) {
         			    common_Logger::d('Extension ' . $extID . ' is required but missing, added to install list');
-        				$toInstall[$extID] = common_ext_ExtensionsManager::singleton()->getExtensionById($extID);
+        			    $toInstall = [$extID => common_ext_ExtensionsManager::singleton()->getExtensionById($extID)] + $toInstall;
         				$modified = true;
         			}
         		}
