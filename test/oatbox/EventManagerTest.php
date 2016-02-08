@@ -85,4 +85,18 @@ class EventManagerTest extends GenerisPhpUnitTestRunner
         $eventManager->trigger($genericEvent);
     }
     
+    /**
+     * @depends testInit
+     */
+    public function testDetatch($eventManager)
+    {
+        $callable = $this->prophesize('oat\\generis\\test\\oatbox\\EmptyClass');
+        $callable->testfunction(Argument::any())->should(new CallTimesPrediction(1));
+        $revelation = $callable->reveal();
+
+        $eventManager->attach(array('testEvent1'), array($revelation, 'testfunction'));
+        $eventManager->trigger('testEvent1');
+        $eventManager->detach(array('testEvent1'), array($revelation, 'testfunction'));
+        $eventManager->trigger('testEvent1');
+    }
 }
