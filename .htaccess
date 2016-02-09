@@ -1,5 +1,0 @@
-Options +FollowSymLinks
-RewriteEngine On
-
-#call entry point for url resolving and framework bootstrap
-RewriteRule ^(.*)$ index.php [L]
