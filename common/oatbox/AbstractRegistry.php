@@ -49,21 +49,39 @@ abstract class AbstractRegistry
         
         return self::$registries[$class];
     }
+    
+    /**
+     * Driver to use for the persistence
+     * @var common_persistence_KvDriver
+     */
+    private $driver;
 
     /**
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    protected function __construct()
+    public function __construct($persistence = null)
     {
-        // empty
+        $this->driver = is_null($persistence)
+            ? \common_ext_ConfigDriver::singleton()
+            : $persistence;
     }
-
+    
+    /**
+     * Return the storage engine to be used for the registry
+     * 
+     * @return \common_persistence_KvDriver
+     */
+    protected function getPersistence()
+    {
+        return $this->driver;
+    }
+    
     /**
      * Specify in which extensions the config will be stored
      *
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @return common_ext_Extension
+     * @return \common_ext_Extension
      */
     protected abstract  function getExtension();
     
@@ -84,7 +102,7 @@ abstract class AbstractRegistry
      */
     protected function getConfig()
     {
-        return $this->getExtension()->getConfig($this->getConfigId());
+        return $this->getPersistence()->get($this->getExtension()->getId().'/'.$this->getConfigId());
     }
 
     /**
@@ -94,7 +112,7 @@ abstract class AbstractRegistry
      */
     protected function setConfig($map)
     {
-        $this->getExtension()->setConfig($this->getConfigId(), $map);
+        return $this->getPersistence()->set($this->getExtension()->getId().'/'.$this->getConfigId(), $map);
     }
 
     /**
