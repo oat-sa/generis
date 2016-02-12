@@ -509,6 +509,7 @@ class core_kernel_persistence_smoothsql_Resource
             $triple->predicate = $statement["predicate"];
             $triple->object = $statement["object"];
             $triple->id = $statement["id"];
+            $triple->epoch = $statement["epoch"];
             $triple->lg = $statement["l_language"];
             $returnValue->add($triple);
         }
