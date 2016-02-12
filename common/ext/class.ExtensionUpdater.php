@@ -86,6 +86,20 @@ abstract class common_ext_ExtensionUpdater
     }
     
     /**
+     * Skip from version FROM to version TO without additional required actions
+     * 
+     * @param string $from
+     * @param string $to
+     */
+    public function skip($from, $to)
+    {
+        $current = common_ext_ExtensionsManager::singleton()->getInstalledVersion($this->getExtension()->getId());
+        if (version_compare($from, $current, '<=') && version_compare($current, $to, '<')) {
+            $this->setVersion($to);
+        }
+    }
+    
+    /**
      * Loads a service in a "safe" way, trying to convert
      * unknown classes to abstract services
      * 
