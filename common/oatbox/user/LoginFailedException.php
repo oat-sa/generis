@@ -23,7 +23,7 @@ class LoginFailedException extends common_user_auth_AuthFailedException
     public function getUserMessage() {
         if (count($this->exceptions) == 1) {
             $e = reset($this->exceptions);
-            return $e->getUserMessage();
+            return $e;
         } else {
             return __('Invalid login or password. Please try again.');
         }
