@@ -42,6 +42,7 @@ class common_persistence_Manager extends ConfigurableService
      * @var array
      */
     private static $driverMap = array(
+        'dbal' => 'common_persistence_sql_dbal_Driver',
         'dbal_pdo_mysql'  => 'common_persistence_sql_dbal_mysql_Driver',
         'dbal_pdo_sqlite' => 'common_persistence_sql_dbal_Driver',
         'dbal_pdo_pgsql'  => 'common_persistence_sql_dbal_Driver',
