@@ -43,6 +43,14 @@ abstract class common_ext_action_InstallAction implements Action, ServiceLocator
         $this->getServiceManager()->register(EventManager::CONFIG_ID, $eventManager);
     }
     
+    public function registerService($serviceKey, $service)
+    {
+        if ($service instanceof ServiceLocatorAwareInterface) {
+            $service->setServiceLocator($this->getServiceManager());
+        }
+        $this->getServiceManager()->register($serviceKey, $service);
+    }
+    
     /**
      * 
      * @throws common_exception_Error
