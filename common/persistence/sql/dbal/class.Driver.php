@@ -43,12 +43,17 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     function connect($id, array $params)
     {
         common_Logger::d('Running Dbal Driver');
-        $params['driver'] = str_replace('dbal_', '', $params['driver']);
+        if (isset($params['connection'])) {
+            $connectionParams = $params['connection'];
+        } else {
+            $connectionParams = $params;
+            $connectionParams['driver'] = str_replace('dbal_', '', $connectionParams['driver']);
+        }
         $config = new \Doctrine\DBAL\Configuration();
 //          $logger = new Doctrine\DBAL\Logging\EchoSQLLogger();
 //          $config->setSQLLogger($logger);
-        $this->connection = \Doctrine\DBAL\DriverManager::getConnection($params,$config);
-        return new common_persistence_SqlPersistence($params,$this);
+        $this->connection = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
+        return new common_persistence_SqlPersistence($params, $this);
     }
     
     
