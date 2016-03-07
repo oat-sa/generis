@@ -50,30 +50,34 @@ class RdfWrapper
      * @see \oat\generis\model\data\RdfInterface::add()
      */
     public function add(\core_kernel_classes_Triple $triple) {
-        $resource = new \core_kernel_classes_Resource($triple->subject);
-        switch ($triple->object) {
+        switch ($triple->predicate) {
         	case RDF_TYPE :
+                $resource = new \core_kernel_classes_Resource($triple->subject);
         	    $class = new \core_kernel_classes_Class($triple->object);
         	    return $this->rdfsInterface->getResourceImplementation()->setType($resource, $class);
         	    break;
         	    
     	    case RDFS_RANGE :
-        	    $class = new \core_kernel_classes_Class($triple->object);
+    	        $resource = new \core_kernel_classes_Property($triple->subject);
+    	        $class = new \core_kernel_classes_Class($triple->object);
         	    return $this->rdfsInterface->getPropertyImplementation()->setRange($resource, $class);
         	    break;
         	    
         	case PROPERTY_MULTIPLE :
+        	    $resource = new \core_kernel_classes_Property($triple->subject);
         	    $value = $triple->object == GENERIS_TRUE;
         	    return $this->rdfsInterface->getPropertyImplementation()->setMultiple($resource, $value);
         	    break;
         	    
     	    case PROPERTY_IS_LG_DEPENDENT :
+    	        $resource = new \core_kernel_classes_Property($triple->subject);
         	    $value = $triple->object == GENERIS_TRUE;
-        	    return $this->rdfsInterface->getPropertyImplementation()->isLgDependent($resource, $value);
+        	    return $this->rdfsInterface->getPropertyImplementation()->setLgDependent($resource, $value);
         	    break;
     	        
 	        case RDFS_DOMAIN :
 	        default:
+	            $resource = new \core_kernel_classes_Resource($triple->subject);
 	            $property = new \core_kernel_classes_Property($triple->predicate);
 	            if (empty($triple->lg)) {
 	                return $this->rdfsInterface->getResourceImplementation()->setPropertyValue($resource, $property, $triple->object);
