@@ -45,17 +45,17 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner {
 	{
 	    return array(
 	        array('hello', false, '= ' . $this->quote('hello')),
-	        array('hello', true, 'LIKE ' . $this->quote('%hello%')),
-	        array('*hello', true, 'LIKE ' . $this->quote('%hello')),
-	        array('*hello*', true, 'LIKE ' . $this->quote('%hello%')),
-	        array('*hel*lo*', true, 'LIKE ' . $this->quote('%hel%lo%')),
+	        array('hello', true, 'LIKE LOWER(' . $this->quote('%hello%').')'),
+	        array('*hello', true, 'LIKE LOWER(' . $this->quote('%hello').')'),
+	        array('*hello*', true, 'LIKE LOWER(' . $this->quote('%hello%').')'),
+	        array('*hel*lo*', true, 'LIKE LOWER(' . $this->quote('%hel%lo%').')'),
 	        array('*hel*lo*', false, '= ' . $this->quote('*hel*lo*')),
 	        array(25, false, '= ' . $this->quote('25')),
 	        array(25.123, false, '= ' . $this->quote('25.123')),
 	        array(true, false, '= ' . $this->quote('1')),
 	        array(false, false, '= ' . $this->quote('')),
-	        array(false, true, 'LIKE ' . $this->quote('%%')),
-	        array('', true, 'LIKE ' . $this->quote('%%')),
+	        array(false, true, 'LIKE LOWER(' . $this->quote('%%').')'),
+	        array('', true, 'LIKE LOWER(' . $this->quote('%%').')'),
 	        array(new core_kernel_classes_Resource('http://www.13.com/ontology#toto'), false, '= ' . $this->quote('http://www.13.com/ontology#toto')),
 	        array(new core_kernel_classes_Resource('http://www.13.com/ontology#toto'), true, '= ' . $this->quote('http://www.13.com/ontology#toto')),
 	    );
@@ -93,7 +93,7 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner {
 	            false
 	       ),
 	        array(
-	            "SELECT DISTINCT subject FROM statements WHERE (predicate = " . $this->quote('http://www.13.com/ontology#prop') . ") AND (object LIKE " . $this->quote('%hello%') . " OR object LIKE " . $this->quote('%world%') . ")",
+	            "SELECT DISTINCT subject FROM statements WHERE (predicate = " . $this->quote('http://www.13.com/ontology#prop') . ") AND (LOWER(object) LIKE LOWER(" . $this->quote('%hello%') . ") OR LOWER(object) LIKE LOWER(" . $this->quote('%world%') . "))",
 	            'http://www.13.com/ontology#prop',
 	            array('hello', 'world'), 
 	            true
