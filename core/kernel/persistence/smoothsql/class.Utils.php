@@ -177,7 +177,7 @@ class core_kernel_persistence_smoothsql_Utils
                     if (!$wildcard && $object === '%') {
                         $object = '%%';
                     }
-                    $returnValue .= 'LIKE '. $persistence->quote($object);
+                    $returnValue .= 'LIKE LOWER(' . $persistence->quote($object) . ')';
                 } else {
                     $returnValue .= '= '. $persistence->quote($patternToken);
                 }
@@ -201,7 +201,8 @@ class core_kernel_persistence_smoothsql_Utils
         
         $valuePatterns = array();
         foreach ($values as $val) {
-            $valuePatterns[] = 'object ' . self::buildSearchPattern($persistence, $val, $like);
+            $pattern = $like ? 'LOWER(object) ' : 'object ';
+            $valuePatterns[] = $pattern . self::buildSearchPattern($persistence, $val, $like);
         }
         
         $sqlValues = implode(' OR ', $valuePatterns);

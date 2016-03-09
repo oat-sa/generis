@@ -77,8 +77,12 @@ class SmoothRdfTest extends GenerisPhpUnitTestRunner
      */
     public function testAdd()
     {
+        $platform = $this->prophesize('\common_persistence_sql_Platform');
+        $platform->getNowExpression()->willReturn('now');
+        
         $persistence = $this->prophesize('\common_persistence_SqlPersistence');
-        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language) VALUES ( ? , ? , ? , ? , ? );";
+        $persistence->getPlatForm()->willReturn($platform->reveal());
+        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch) VALUES ( ? , ? , ? , ? , ? , ?);";
         
         $triple = new \core_kernel_classes_Triple();
         $triple->modelid = 22;
@@ -91,7 +95,8 @@ class SmoothRdfTest extends GenerisPhpUnitTestRunner
             'subjectUri',
             'predicateUri',
             'objectUri',
-            ''
+            '',
+            'now'
         ))->willReturn(true);
         
         $model = $this->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
