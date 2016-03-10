@@ -179,7 +179,11 @@ class core_kernel_persistence_smoothsql_Utils
                     }
                     $returnValue .= 'LIKE LOWER(' . $persistence->quote($object) . ')';
                 } else {
-                    $returnValue .= '= '. $persistence->quote($patternToken);
+                    if (preg_match('/^(?:\s*(<>|<=|>=|<|>|=))?(.*)$/', $patternToken, $matches)) {
+                        $patternToken = $matches[2];
+                        $op = $matches[1] ? $matches[1] : "=";
+                    }
+                    $returnValue .= $op . ' ' . $persistence->quote($patternToken);
                 }
                 break;
         }
