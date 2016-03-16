@@ -22,6 +22,7 @@ namespace oat\oatbox\action;
 
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceNotFoundException;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 class ActionResolver extends ConfigurableService
 {
@@ -38,8 +39,8 @@ class ActionResolver extends ConfigurableService
         } catch (ServiceNotFoundException $e) {
             if (class_exists($actionIdentifier)) {
                 $action = new $actionIdentifier();
-                if ($action instanceof ConfigurableService) {
-                    $action->setServiceManager($this->getServiceManager());
+                if ($action instanceof ServiceLocatorAwareInterface) {
+                    $action->setServiceLocator($this->getServiceLocator());
                 }
             }
         }
