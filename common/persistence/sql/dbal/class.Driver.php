@@ -42,7 +42,6 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      */
     function connect($id, array $params)
     {
-        common_Logger::d('Running Dbal Driver');
         if (isset($params['connection'])) {
             $connectionParams = $params['connection'];
         } else {
