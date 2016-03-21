@@ -121,7 +121,11 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * @see common_persistence_sql_Driver::insert()
      */
     public function insert($tableName, array $data){
-        return $this->connection->insert($tableName, $data);
+        $cleanColumns = array();
+        foreach ($data as $columnName => $value) {
+            $cleanColumns[$this->getPlatForm()->quoteIdentifier($columnName)] = $value;
+        }
+        return $this->connection->insert($tableName, $cleanColumns);
     }
     
     /**
