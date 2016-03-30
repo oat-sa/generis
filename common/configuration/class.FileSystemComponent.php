@@ -244,6 +244,40 @@ class common_configuration_FileSystemComponent
         return $returnValue;
     }
 
+    private function hasLocationAccess($location = null, $rule = 'Readable')
+    {
+        $returnValue = true;
+
+        if ($location === null) {
+            $location = $this->getLocation();
+        }
+
+        if (!file_exists($location) || !is_readable($location)) {
+            $returnValue = false;
+        } elseif (is_file($location) || !$this->getRecursive()) {
+            $funcName = 'is_' . strtolower($rule);
+            $returnValue = $funcName($location);
+        } else {
+
+            $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($location, \RecursiveDirectoryIterator::SKIP_DOTS));
+
+            try {
+                $method = 'is' . $rule;
+                foreach ($iterator as $file) {
+                    if (!$file->$method()) {
+                        $returnValue = false;
+                        break;
+                    }
+                }
+            } catch (\UnexpectedValueException  $e) {
+                $returnValue = false;
+            }
+
+        }
+
+        return $returnValue;
+    }
+
     /**
      * If file is readable.
      *
@@ -254,25 +288,7 @@ class common_configuration_FileSystemComponent
      */
     public function isReadable($location = null)
     {
-        $returnValue = true;
-        
-        if ($location === null) {
-            $location = $this->getLocation();
-        }
-
-        if (!file_exists($location) || !is_readable($location)) {
-            $returnValue = false;
-        } elseif (is_file($location) || !$this->getRecursive()) {
-            $returnValue = is_readable($location);
-        } else {
-            $recursiveIterator = new \RecursiveDirectoryIterator($location, \RecursiveDirectoryIterator::SKIP_DOTS);
-            $iterator = new \RecursiveIteratorIterator($recursiveIterator);
-            foreach ($iterator as $file) {
-                $returnValue = $returnValue && $file->isReadable();
-            }
-        }
-        
-        return $returnValue;
+        return $this->hasLocationAccess($location, 'Readable');
     }
 
     /**
@@ -285,25 +301,7 @@ class common_configuration_FileSystemComponent
      */
     public function isWritable($location = null)
     {
-        $returnValue = true;
-        
-        if ($location === null) {
-            $location = $this->getLocation();
-        }
-        
-        if (!file_exists($location) || !is_readable($location)) {
-            $returnValue = false;
-        } elseif (is_file($location) || !$this->getRecursive()) {
-            $returnValue = is_writable($location);
-        } else {
-            $recursiveIterator = new \RecursiveDirectoryIterator($location, \RecursiveDirectoryIterator::SKIP_DOTS);
-            $iterator = new \RecursiveIteratorIterator($recursiveIterator);
-            foreach ($iterator as $file) {
-                $returnValue = $returnValue && $file->isWritable();
-            }
-        }
-        
-        return $returnValue;
+        return $this->hasLocationAccess($location, 'Writable');
     }
 
     /**
@@ -316,25 +314,7 @@ class common_configuration_FileSystemComponent
      */
     public function isExecutable($location = null)
     {
-        $returnValue = true;
-        
-        if ($location === null) {
-            $location = $this->getLocation();
-        }
-        
-        if(!file_exists($location) || !is_readable($location)) {
-            $returnValue = false;
-        } elseif (is_file($location) || !$this->getRecursive()) {
-            $returnValue = is_executable($location);
-        } else {
-            $recursiveIterator = new \RecursiveDirectoryIterator($location, \RecursiveDirectoryIterator::SKIP_DOTS);
-            $iterator = new \RecursiveIteratorIterator($recursiveIterator);
-            foreach ($iterator as $file) {
-                $returnValue = $returnValue && $file->isExecutable();
-            }
-        }
-        
-        return $returnValue;
+        return $this->hasLocationAccess($location, 'Executable');
     }
 
 }
