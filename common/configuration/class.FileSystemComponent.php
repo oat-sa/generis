@@ -260,7 +260,7 @@ class common_configuration_FileSystemComponent
             $location = $this->getLocation();
         }
 
-        if (!file_exists($location)) {
+        if (!file_exists($location) || !is_readable($location)) {
             $returnValue = false;
         } elseif (is_file($location) || !$this->getRecursive()) {
             $returnValue = is_readable($location);
@@ -291,7 +291,7 @@ class common_configuration_FileSystemComponent
             $location = $this->getLocation();
         }
         
-        if (!file_exists($location)) {
+        if (!file_exists($location) || !is_readable($location)) {
             $returnValue = false;
         } elseif (is_file($location) || !$this->getRecursive()) {
             $returnValue = is_writable($location);
@@ -322,7 +322,7 @@ class common_configuration_FileSystemComponent
             $location = $this->getLocation();
         }
         
-        if(!file_exists($location)) {
+        if(!file_exists($location) || !is_readable($location)) {
             $returnValue = false;
         } elseif (is_file($location) || !$this->getRecursive()) {
             $returnValue = is_executable($location);
