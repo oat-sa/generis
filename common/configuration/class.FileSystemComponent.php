@@ -259,8 +259,10 @@ class common_configuration_FileSystemComponent
         if ($location === null) {
             $location = $this->getLocation();
         }
-        
-        if (is_file($location) || !$this->getRecursive()) {
+
+        if (!file_exists($location) || !is_readable($location)) {
+            $returnValue = false;
+        } elseif (is_file($location) || !$this->getRecursive()) {
             $returnValue = is_readable($location);
         } else {
             $recursiveIterator = new \RecursiveDirectoryIterator($location, \RecursiveDirectoryIterator::SKIP_DOTS);
@@ -289,7 +291,9 @@ class common_configuration_FileSystemComponent
             $location = $this->getLocation();
         }
         
-        if (is_file($location) || !$this->getRecursive()) {
+        if (!file_exists($location) || !is_readable($location)) {
+            $returnValue = false;
+        } elseif (is_file($location) || !$this->getRecursive()) {
             $returnValue = is_writable($location);
         } else {
             $recursiveIterator = new \RecursiveDirectoryIterator($location, \RecursiveDirectoryIterator::SKIP_DOTS);
@@ -318,7 +322,9 @@ class common_configuration_FileSystemComponent
             $location = $this->getLocation();
         }
         
-        if (is_file($location) || !$this->getRecursive()) {
+        if(!file_exists($location) || !is_readable($location)) {
+            $returnValue = false;
+        } elseif (is_file($location) || !$this->getRecursive()) {
             $returnValue = is_executable($location);
         } else {
             $recursiveIterator = new \RecursiveDirectoryIterator($location, \RecursiveDirectoryIterator::SKIP_DOTS);
