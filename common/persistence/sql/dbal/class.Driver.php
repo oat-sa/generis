@@ -42,13 +42,17 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      */
     function connect($id, array $params)
     {
-        common_Logger::d('Running Dbal Driver');
-        $params['driver'] = str_replace('dbal_', '', $params['driver']);
+        if (isset($params['connection'])) {
+            $connectionParams = $params['connection'];
+        } else {
+            $connectionParams = $params;
+            $connectionParams['driver'] = str_replace('dbal_', '', $connectionParams['driver']);
+        }
         $config = new \Doctrine\DBAL\Configuration();
 //          $logger = new Doctrine\DBAL\Logging\EchoSQLLogger();
 //          $config->setSQLLogger($logger);
-        $this->connection = \Doctrine\DBAL\DriverManager::getConnection($params,$config);
-        return new common_persistence_SqlPersistence($params,$this);
+        $this->connection = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
+        return new common_persistence_SqlPersistence($params, $this);
     }
     
     
@@ -117,7 +121,11 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * @see common_persistence_sql_Driver::insert()
      */
     public function insert($tableName, array $data){
-        return $this->connection->insert($tableName, $data);
+        $cleanColumns = array();
+        foreach ($data as $columnName => $value) {
+            $cleanColumns[$this->getPlatForm()->quoteIdentifier($columnName)] = $value;
+        }
+        return $this->connection->insert($tableName, $cleanColumns);
     }
     
     /**

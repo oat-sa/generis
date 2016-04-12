@@ -62,6 +62,26 @@ class EventManager extends ConfigurableService
         }
         $this->setOption(self::OPTION_LISTENERS, $listeners);
     }
+
+    /**
+     * Detach a Listener from one or multiple events
+     *
+     * @param mixed $event either an Event object or a string
+     * @param Callable $callback
+     */
+    public function detach($event, $callback){
+        $events = is_array($event) ? $event : array($event);
+        $listeners = $this->getOption(self::OPTION_LISTENERS);
+        foreach ($events as $event) {
+            $eventObject = is_object($event) ? $event : new GenericEvent($event);
+            if (isset($listeners[$eventObject->getName()])) {
+                if (($index = array_search($callback, array_values($listeners[$eventObject->getName()]))) !== false) {
+                    unset($listeners[$eventObject->getName()][$index]);
+                }
+            }
+        }
+        $this->setOption(self::OPTION_LISTENERS, $listeners);
+    }
     
     /**
      * Get all Listeners listening to this kind of event

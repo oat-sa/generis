@@ -14,23 +14,34 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
+ * Copyright (c) 2016 Open Assessment Technologies SA
+ * 
  */
-namespace oat\oatbox\action;
 
-use oat\oatbox\service\ServiceManager;
-use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\event\Event;
+
 /**
- * @deprecated
+ * Class ExtensionInstalled Event that contains the extension that has just been installed
  */
-class ActionResolver extends ConfigurableService
+class common_ext_event_ExtensionInstalled implements Event
 {
-    /**
-     * @deprecated please use ActionService
-     */
-    public function resolve($actionIdentifier)
-    {
-        return ServiceManager::getServiceManager()->get(ActionService::SERVICE_ID)->resolve($actionIdentifier);
-    }
+	/**
+	 * @var \common_ext_Extension
+	 */
+    private $extension;
+    
+	function __construct(\common_ext_Extension $extension)
+	{
+	    $this->extension = $extension;
+	}
+    
+	function getExtension()
+	{
+	    return $this->extension;
+	}
+
+	function getName()
+	{
+	    return __CLASS__;
+	}
 }

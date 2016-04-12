@@ -26,8 +26,9 @@ class RdfExportTest extends GenerisPhpUnitTestRunner
 	public function testFullExport()
 	{
 	    $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-	    $result = $dbWrapper->query('SELECT count(*) FROM (SELECT DISTINCT subject, predicate, object, l_language FROM statements) as supercount')->fetch();
-	    $triples = $result[0];
+	    $result = $dbWrapper->query('SELECT count(*) as count FROM (SELECT DISTINCT subject, predicate, object, l_language FROM statements) as supercount')->fetch();
+        $triples = $result['count'];
+        
 
 		$result = $dbWrapper->query('SELECT modelid FROM "models"');
 	    $modelIds = array();
