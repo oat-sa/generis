@@ -39,7 +39,7 @@ class TaskRunner
         } catch (\Exception $e) {
             $report = new \common_report_Report(\common_report_Report::TYPE_ERROR, __('Unable to run task %s', $task->getId()));
         }
-        $queue->updateTaskStatus($task->getId(), Task::STATUS_FINISHED);
+        $queue->updateTaskStatus($task->getId(), Task::STATUS_FINISHED, $report);
         return $report; 
     }
     
