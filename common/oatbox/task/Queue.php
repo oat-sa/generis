@@ -29,4 +29,6 @@ interface Queue extends \IteratorAggregate
     public function createTask($actionId, $parameters);
     
     public function getIterator();
+
+    public function updateTaskStatus($taskId, $status);
 }
