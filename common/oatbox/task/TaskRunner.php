@@ -26,14 +26,17 @@ use oat\oatbox\action\ActionService;
 class TaskRunner
 {
     public function run(Task $task) {
-        
+
         \common_Logger::d('Running task '.$task->getId());
         $report = new \common_report_Report(\common_report_Report::TYPE_INFO, __('Running task %s', $task->getId()));
         $queue = $this->getServiceLocator()->get(Queue::CONFIG_ID);
         $queue->updateTaskStatus($task->getId(), Task::STATUS_RUNNING);
         try {
             $actionService = $this->getServiceLocator()->get(ActionService::SERVICE_ID);
-            $invocable = $actionService->resolve($task->getInvocable());
+            $invocable = $task->getInvocable();
+            if (is_string($invocable)) {
+                $invocable = $actionService->resolve($task->getInvocable());
+            }
             $subReport = call_user_func($invocable, $task->getParameters());
             $report->add($subReport);
         } catch (\Exception $e) {

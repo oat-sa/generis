@@ -20,8 +20,6 @@
  */
 namespace oat\oatbox\task;
 
-use oat\oatbox\service\ConfigurableService;
-
 interface Queue extends \IteratorAggregate
 {
     const CONFIG_ID = 'generis/taskqueue';
