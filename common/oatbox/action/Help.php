@@ -20,20 +20,54 @@
 namespace oat\oatbox\action;
 
 
-use oat\oatbox\service\ServiceNotFoundException;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 class Help implements Action, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    
-    public function __invoke($params) {
+
+    /**
+     * @var string Extension id
+     */
+    private $extId;
+
+    /**
+     * Help constructor.
+     * @param string $extId
+     */
+    public function __construct($extId = null)
+    {
+        $this->extId = $extId;
+    }
+
+    /**
+     * @param $params
+     * @return \common_report_Report
+     * @throws \common_exception_Error
+     */
+    public function __invoke($params)
+    {
         $actionResolver = $this->getServiceLocator()->get(ActionService::SERVICE_ID);
         $report = new \common_report_Report(\common_report_Report::TYPE_INFO, __('Available Actions:'));
-        foreach ($actionResolver->getAvailableActions() as $actionClass) {
-            $report->add(new \common_report_Report(\common_report_Report::TYPE_INFO, '  '.$actionClass));
+        foreach ($actionResolver->getAvailableActions($this->extId) as $actionClass) {
+            $actionDescription = "-  " . $actionClass . " - " . $this->getActionDescription($actionClass);
+            $report->add(new \common_report_Report(\common_report_Report::TYPE_INFO, $actionDescription));
         }
         return $report;
+    }
+
+    /**
+     * Get phpdoc provided for action class
+     * @param $actionName
+     * @return string
+     */
+    protected function getActionDescription($actionName)
+    {
+        $rc = new \ReflectionClass($actionName);
+        $doccomment = $rc->getDocComment();
+        $doccomment = trim(substr($doccomment, 3, -2));
+        $doccomment = preg_replace('/^\s*\*\s*/mi', '', $doccomment);
+        return $doccomment;
     }
 }

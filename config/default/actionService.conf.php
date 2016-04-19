@@ -23,4 +23,14 @@
  */
 use oat\oatbox\action\ActionService;
 
-return new ActionService();
+return new ActionService([
+    'filterDirs' => [
+        'node_modules',
+        '.git',
+        'grunt',
+        'js',
+        'css',
+        'scss',
+        'img',
+    ]
+]);
