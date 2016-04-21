@@ -252,7 +252,12 @@ class common_configuration_FileSystemComponent
             $location = $this->getLocation();
         }
 
-        if (!file_exists($location) || !is_readable($location)) {
+        if (!file_exists($location) 
+            || !is_readable($location)
+            || !isset($rule) 
+            || !is_string($rule)
+            || !in_array($rule, ['Readable', 'Writable', 'Executable'])
+        ) {
             $returnValue = false;
         } elseif (is_file($location) || !$this->getRecursive()) {
             $funcName = 'is_' . strtolower($rule);
