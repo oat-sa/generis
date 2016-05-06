@@ -51,7 +51,7 @@ class core_kernel_classes_Class
      * @return core_kernel_persistence_ClassInterface
      */
     private function getImplementation() {
-        return ModelManager::getModel()->getRdfsInterface()->getClassImplementation();
+        return $this->getModel()->getRdfsInterface()->getClassImplementation();
     }
     
     
@@ -362,7 +362,7 @@ class core_kernel_classes_Class
         	foreach ($types as $type) {
         		$uri = is_object($type) ? $type->getUri() : $type;
         		if ($uri != $this->getUri()) {
-        			$additonalTypes[] = new core_kernel_classes_Class($uri);
+        			$additonalTypes[] = $this->getClass($uri);
         		}
         	}
         	unset($properties[RDF_TYPE]);

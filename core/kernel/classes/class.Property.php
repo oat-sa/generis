@@ -90,7 +90,7 @@ class core_kernel_classes_Property
      * @return core_kernel_persistence_PropertyInterface
      */
     private function getImplementation() {
-        return ModelManager::getModel()->getRdfsInterface()->getPropertyImplementation();
+        return $this->getModel()->getRdfsInterface()->getPropertyImplementation();
     }
     
 
@@ -137,9 +137,9 @@ class core_kernel_classes_Property
         $returnValue = null;
         if (is_null($this->domain)){
         	$this->domain = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
-			$domainValues = $this->getPropertyValues(new core_kernel_classes_Property(RDFS_DOMAIN));
+			$domainValues = $this->getPropertyValues($this->getProperty(RDFS_DOMAIN));
 			foreach ($domainValues as $domainValue){
-				$this->domain->add(new core_kernel_classes_Class($domainValue));
+				$this->domain->add($this->getClass($domainValue));
 			}
 		}
 		$returnValue = $this->domain;
@@ -168,7 +168,7 @@ class core_kernel_classes_Property
         		}
         	}
         	if(!$returnValue){
-        		$this->setPropertyValue(new core_kernel_classes_Property(RDFS_DOMAIN), $class->getUri());
+        		$this->setPropertyValue($this->getProperty(RDFS_DOMAIN), $class->getUri());
         		if(!is_null($this->domain)){
         			$this->domain->add($class);
         		}
@@ -190,11 +190,11 @@ class core_kernel_classes_Property
         $returnValue = null;
    
 		if (is_null($this->range)){
-			$rangeProperty = new core_kernel_classes_Property(RDFS_RANGE,__METHOD__);
+			$rangeProperty = $this->getProperty(RDFS_RANGE);
             $rangeValues = $this->getPropertyValues($rangeProperty);
 
             if(sizeOf($rangeValues)>0){
-                $returnValue = new core_kernel_classes_Class($rangeValues[0]);
+                $returnValue = $this->getClass($rangeValues[0]);
             }
 			$this->range = $returnValue;
 		}
@@ -231,7 +231,7 @@ class core_kernel_classes_Property
     public function getWidget()
     {
         if ($this->widget === false) {
-			$this->widget = $this->getOnePropertyValue(new core_kernel_classes_Property(PROPERTY_WIDGET));
+			$this->widget = $this->getOnePropertyValue($this->getProperty(PROPERTY_WIDGET));
 		}
 		
 		return $this->widget;
@@ -252,7 +252,7 @@ class core_kernel_classes_Property
             $this->lgDependent  = helpers_PropertyLgCacheHelper::getLgDependencyCache($this->getUri());
 
             if (is_null($this->lgDependent)) {
-                $lgDependentProperty = new core_kernel_classes_Property(PROPERTY_IS_LG_DEPENDENT,__METHOD__);
+                $lgDependentProperty = $this->getProperty(PROPERTY_IS_LG_DEPENDENT);
                 $lgDependent = $this->getOnePropertyValue($lgDependentProperty);
 
 
@@ -300,7 +300,7 @@ class core_kernel_classes_Property
         $returnValue = (bool) false;
 
         if(is_null($this->multiple )){
-        	$multipleProperty = new core_kernel_classes_Property(PROPERTY_MULTIPLE,__METHOD__);
+        	$multipleProperty = $this->getProperty(PROPERTY_MULTIPLE);
 			$multiple = $this->getOnePropertyValue($multipleProperty);
 			 
 			if(is_null($multiple)){
