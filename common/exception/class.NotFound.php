@@ -16,10 +16,7 @@
  *
  *
  */
-class common_exception_NotFound extends common_exception_ClientException
+class common_exception_NotFound extends common_exception
 {
-    public function getUserMessage()
-    {
-       return __("No content was found for your request");
-    }
+
 } 
