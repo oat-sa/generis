@@ -19,8 +19,8 @@
  */
 
 use oat\generis\model\data\Model;
-use oat\oatbox\Configurable;
 use oat\generis\model\data\ModelManager;
+use oat\oatbox\service\ConfigurableService;
 
 /**
  * transitory model for the smooth sql implementation
@@ -28,7 +28,7 @@ use oat\generis\model\data\ModelManager;
  * @author joel bout <joel@taotesting.com>
  * @package generis
  */
-class core_kernel_persistence_smoothsql_SmoothModel extends Configurable
+class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
     implements Model
 {
     const OPTION_PERSISTENCE = 'persistence';
