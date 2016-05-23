@@ -194,6 +194,8 @@ class Updater extends \common_ext_ExtensionUpdater {
             $this->getServiceManager()->register(ActionService::SERVICE_ID, new ActionService());
             $this->setVersion('2.17.0');
         }
+
+        $this->skip('2.17.0', '2.18.0');
     }
     
     private function getReadableModelIds() {

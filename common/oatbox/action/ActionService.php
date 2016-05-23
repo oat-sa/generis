@@ -26,12 +26,10 @@ class ActionService extends ConfigurableService
 {
     const SERVICE_ID = 'generis/actionService';
     
-    static $blackList = array(
+    static $blackList = [
         '\\oatbox\\composer\\ExtensionInstaller',
         '\\oatbox\\composer\\ExtensionInstallerPlugin',
-        '\\oat\\taoOutcomeUi\\model\\ReportService', //`require_once` of nonexistent file.
-        'taoDevTools_models_RdfExport', //warning due to private `__toString()` method
-    );
+    ];
     
     /**
      * 
