@@ -195,7 +195,38 @@ class Updater extends \common_ext_ExtensionUpdater {
             $this->setVersion('2.17.0');
         }
 
-        $this->skip('2.17.0', '2.18.0');
+        if ($this->isVersion('2.17.0')) {
+            try {
+                /** @var ActionService $service */
+                $service = $this->getServiceManager()->get(ActionService::SERVICE_ID);
+                $service->setOption('filterDirs', [
+                    'node_modules',
+                    '.git',
+                    'grunt',
+                    'js',
+                    'css',
+                    'scss',
+                    'img',
+                ]);
+            } catch (ServiceNotFoundException $e) {
+                $service = new ActionService([
+                    'filterDirs' => [
+                        'node_modules',
+                        '.git',
+                        'grunt',
+                        'js',
+                        'css',
+                        'scss',
+                        'img',
+                    ]
+                ]);
+            }
+
+            $service->setServiceManager($this->getServiceManager());
+            $this->getServiceManager()->register(ActionService::SERVICE_ID, $service);
+
+            $this->setVersion('2.18.0');
+        }
     }
     
     private function getReadableModelIds() {

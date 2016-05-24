@@ -38,21 +38,7 @@ class ActionService extends ConfigurableService
      */
     public function resolve($actionIdentifier)
     {
-        $action = null;
-        try {
-            $action = $this->getActionInstance($actionIdentifier);
-        } catch (\common_ext_ManifestNotFoundException $e) {
-            $extId = null;
-        } catch (ResolutionException $e) {
-            $parts = explode('/', $actionIdentifier);
-            $extId = $parts[0];
-        }
-
-        if ($action === null) {
-            $action = new Help($extId);
-            $action->setServiceLocator($this->getServiceLocator());
-        }
-
+        $action = $this->getActionInstance($actionIdentifier);
         return $action;
     }
 
@@ -139,7 +125,8 @@ class ActionService extends ConfigurableService
             $fullname = empty($info['ns'])
             ? $info['class']
             : $info['ns'].'\\'.$info['class'];
-            if (!in_array($fullname, self::$blackList) && is_subclass_of($fullname, Action::class)) {
+            $reflectionClass = new \ReflectionClass(Action::class);
+            if (is_subclass_of($fullname, Action::class) && !in_array($fullname, self::$blackList) && $reflectionClass->IsInstantiable()) {
                 $classNames[] = $fullname;
             }
         }

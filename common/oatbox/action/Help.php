@@ -19,7 +19,6 @@
  */
 namespace oat\oatbox\action;
 
-
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
@@ -64,10 +63,16 @@ class Help implements Action, ServiceLocatorAwareInterface
      */
     protected function getActionDescription($actionName)
     {
-        $rc = new \ReflectionClass($actionName);
-        $doccomment = $rc->getDocComment();
-        $doccomment = trim(substr($doccomment, 3, -2));
-        $doccomment = preg_replace('/^\s*\*\s*/mi', '', $doccomment);
-        return $doccomment;
+        $action = new $actionName;
+
+        if ($action instanceof DescribedAction) {
+            $result = $action->getDescription();
+        } else {
+            $rc = new \ReflectionClass($actionName);
+            $doccomment = $rc->getDocComment();
+            $doccomment = trim(substr($doccomment, 3, -2));
+            $result = preg_replace('/^\s*\*\s*/mi', '', $doccomment);
+        }
+        return $result;
     }
 }
