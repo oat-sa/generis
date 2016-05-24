@@ -88,7 +88,7 @@ class PasswordConstraintsService extends \tao_models_classes_Service
             $this->validators[] = new \tao_helpers_form_validators_Regex(
                 array(
                     'message' => __( 'Must include upper case letters' ),
-                    'format'  => '/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/'
+                    'format'  => '/(\p{Lu}+)/',
                 ), 'caseUpper'
             );
         }

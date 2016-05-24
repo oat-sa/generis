@@ -188,14 +188,9 @@ class Updater extends \common_ext_ExtensionUpdater {
             $this->setVersion('2.12.0');
         }
         
-        $this->skip('2.12.0', '2.16.2');
+        $this->skip('2.12.0', '2.18.0');
 
-        if ($this->isVersion('2.16.2')) {
-            $this->getServiceManager()->register(ActionService::SERVICE_ID, new ActionService());
-            $this->setVersion('2.17.0');
-        }
-
-        if ($this->isVersion('2.17.0')) {
+        if ($this->isVersion('2.18.0')) {
             try {
                 /** @var ActionService $service */
                 $service = $this->getServiceManager()->get(ActionService::SERVICE_ID);
@@ -225,7 +220,7 @@ class Updater extends \common_ext_ExtensionUpdater {
             $service->setServiceManager($this->getServiceManager());
             $this->getServiceManager()->register(ActionService::SERVICE_ID, $service);
 
-            $this->setVersion('2.18.0');
+            $this->setVersion('2.19.0');
         }
     }
     
