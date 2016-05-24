@@ -22,6 +22,7 @@
 
 use oat\generis\model\data\ModelManager;
 use oat\oatbox\service\ServiceManager;
+use oat\generis\model\OntologyAwareTrait;
 
 /**
  * Resource implements rdf:resource container identified by an uri (a string).
@@ -37,6 +38,7 @@ use oat\oatbox\service\ServiceManager;
 class core_kernel_classes_Resource
     extends core_kernel_classes_Container
 {
+    use OntologyAwareTrait;
     // --- ASSOCIATIONS ---
 
 
@@ -81,7 +83,7 @@ class core_kernel_classes_Resource
      * @return core_kernel_persistence_ResourceInterface
      */
     private function getImplementation() {
-        return ModelManager::getModel()->getRdfsInterface()->getResourceImplementation();
+        return $this->getModel()->getRdfsInterface()->getResourceImplementation();
     }
     
 
@@ -144,7 +146,7 @@ class core_kernel_classes_Resource
     public function isClass()
     {
         $returnValue = (bool) false;
-        if (count($this->getPropertyValues(new core_kernel_classes_Property(RDFS_SUBCLASSOF))) > 0) {
+        if (count($this->getPropertyValues($this->getProperty(RDFS_SUBCLASSOF))) > 0) {
         	$returnValue = true;
         } else {
 	        foreach($this->getTypes() as $type){
@@ -201,7 +203,7 @@ class core_kernel_classes_Resource
     {
         if (is_null($this->label)) {
             
-            $label =  $this->getOnePropertyValue(new core_kernel_classes_Property(RDFS_LABEL));
+            $label =  $this->getOnePropertyValue($this->getProperty(RDFS_LABEL));
             $this->label = ((is_null($label) === false) ? $label->literal : '');
         }
         
@@ -219,8 +221,8 @@ class core_kernel_classes_Resource
     public function setLabel($label)
     {
         $returnValue = (bool) false;
-        $this->removePropertyValues(new core_kernel_classes_Property(RDFS_LABEL));
-        $this->setPropertyValue(new core_kernel_classes_Property(RDFS_LABEL), $label);
+        $this->removePropertyValues($this->getProperty(RDFS_LABEL));
+        $this->setPropertyValue($this->getProperty(RDFS_LABEL), $label);
         $this->label = $label;
         return (bool) $returnValue;
     }
@@ -236,7 +238,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (string) '';
         if($this->comment == '') {
-            $comment =  $this->getOnePropertyValue(new core_kernel_classes_Property(RDFS_COMMENT));
+            $comment =  $this->getOnePropertyValue($this->getProperty(RDFS_COMMENT));
             $this->comment = $comment != null ? $comment->literal : '';
              
         }
@@ -255,8 +257,8 @@ class core_kernel_classes_Resource
     public function setComment($comment)
     {
         $returnValue = (bool) false;
-        $this->removePropertyValues(new core_kernel_classes_Property(RDFS_COMMENT));
-        $this->setPropertyValue(new core_kernel_classes_Property(RDFS_COMMENT), $comment);
+        $this->removePropertyValues($this->getProperty(RDFS_COMMENT));
+        $this->setPropertyValue($this->getProperty(RDFS_COMMENT), $comment);
         $this->comment = $comment;
         return (bool) $returnValue;
     }
