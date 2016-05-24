@@ -125,9 +125,11 @@ class ActionService extends ConfigurableService
             $fullname = empty($info['ns'])
             ? $info['class']
             : $info['ns'].'\\'.$info['class'];
-            $reflectionClass = new \ReflectionClass(Action::class);
-            if (is_subclass_of($fullname, Action::class) && !in_array($fullname, self::$blackList) && $reflectionClass->IsInstantiable()) {
-                $classNames[] = $fullname;
+            if (!in_array($fullname, self::$blackList) && is_subclass_of($fullname, Action::class)) {
+                $reflectionClass = new \ReflectionClass($fullname);
+                if ($reflectionClass->IsInstantiable()) {
+                    $classNames[] = $fullname;
+                }
             }
         }
         return $classNames;

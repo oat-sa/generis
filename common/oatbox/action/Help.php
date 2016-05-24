@@ -69,9 +69,8 @@ class Help implements Action, ServiceLocatorAwareInterface
             $result = $action->getDescription();
         } else {
             $rc = new \ReflectionClass($actionName);
-            $doccomment = $rc->getDocComment();
-            $doccomment = trim(substr($doccomment, 3, -2));
-            $result = preg_replace('/^\s*\*\s*/mi', '', $doccomment);
+            $phpdoc = new \phpDocumentor\Reflection\DocBlock($rc);
+            $result = $phpdoc->getShortDescription();
         }
         return $result;
     }
