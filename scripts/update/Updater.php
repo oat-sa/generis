@@ -26,11 +26,9 @@ use common_Logger;
 use common_ext_ExtensionsManager;
 use oat\generis\model\data\permission\PermissionManager;
 use oat\generis\model\data\ModelManager;
-use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\filesystem\FileSystemService;
-use oat\oatbox\action\ActionService;
 
 /**
  * 
@@ -188,12 +186,7 @@ class Updater extends \common_ext_ExtensionUpdater {
             $this->setVersion('2.12.0');
         }
         
-        $this->skip('2.12.0', '2.16.2');
-
-        if ($this->isVersion('2.16.2')) {
-            $this->getServiceManager()->register(ActionService::SERVICE_ID, new ActionService());
-            $this->setVersion('2.17.0');
-        }
+        $this->skip('2.12.0', '2.18.0');
     }
     
     private function getReadableModelIds() {
