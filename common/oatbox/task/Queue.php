@@ -20,8 +20,6 @@
  */
 namespace oat\oatbox\task;
 
-use oat\oatbox\service\ConfigurableService;
-
 interface Queue extends \IteratorAggregate
 {
     const CONFIG_ID = 'generis/taskqueue';
@@ -29,4 +27,6 @@ interface Queue extends \IteratorAggregate
     public function createTask($actionId, $parameters);
     
     public function getIterator();
+
+    public function updateTaskStatus($taskId, $status);
 }

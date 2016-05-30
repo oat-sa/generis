@@ -31,6 +31,8 @@ use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\action\ActionService;
+use oat\oatbox\task\Queue;
+use oat\oatbox\task\implementation\SyncQueue;
 
 /**
  * 
@@ -193,6 +195,18 @@ class Updater extends \common_ext_ExtensionUpdater {
         if ($this->isVersion('2.18.0')) {
             $this->getServiceManager()->register(ActionService::SERVICE_ID, new ActionService());
             $this->setVersion('2.19.0');
+        }
+
+        if ($this->isVersion('2.19.0')) {
+            try {
+                $this->getServiceManager()->get(Queue::CONFIG_ID);
+            } catch (ServiceNotFoundException $e) {
+                $service = new SyncQueue([]);
+                $service->setServiceManager($this->getServiceManager());
+
+                $this->getServiceManager()->register(Queue::CONFIG_ID, $service);
+            }
+            $this->setVersion('2.20.0');
         }
     }
     
