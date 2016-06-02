@@ -186,7 +186,7 @@ class Updater extends \common_ext_ExtensionUpdater {
             $this->setVersion('2.12.0');
         }
         
-        $this->skip('2.12.0', '2.18.0');
+        $this->skip('2.12.0', '2.19.0');
     }
     
     private function getReadableModelIds() {
