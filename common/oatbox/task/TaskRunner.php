@@ -40,8 +40,9 @@ class TaskRunner
             $subReport = call_user_func($invocable, $task->getParameters());
             $report->add($subReport);
         } catch (\Exception $e) {
-            \common_Logger::e('Task ' . $task->getId() . ' failed. Error message: ' . $e->getMessage());
-            $report = new \common_report_Report(\common_report_Report::TYPE_ERROR, __('Unable to run task %s', $task->getId()));
+            $message = 'Task ' . $task->getId() . ' failed. Error message: ' . $e->getMessage();
+            \common_Logger::e($message);
+            $report = new \common_report_Report(\common_report_Report::TYPE_ERROR, $message);
         }
         $queue->updateTaskStatus($task->getId(), Task::STATUS_FINISHED, $report);
         return $report; 
