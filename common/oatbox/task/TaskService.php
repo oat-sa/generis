@@ -21,31 +21,29 @@
 namespace oat\oatbox\task;
  
 use oat\oatbox\service\ConfigurableService;
-use oat\oatbox\service\ServiceManager;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use oat\oatbox\action\ActionService;
 use common_report_Report as Report;
 
 class TaskService extends ConfigurableService
 {
-    public function runTask(Task $task) {
-        
-        \common_Logger::d('Running task '.$task->getId());
-        $report = new \common_report_Report(\common_report_Report::TYPE_INFO, __('Running task %s', $task->getId()));
-        try {
-            $actionService = $this->getServiceLocator()->get(ActionService::SERVICE_ID);
-            $invocable = $actionService->resolve($task->getInvocable());
-            $subReport = call_user_func($invocable, $task->getParameters());
-            $report->add($subReport);
-        } catch (\Exception $e) {
-            $report = new \common_report_Report(\common_report_Report::TYPE_ERROR, __('Unable to run task %s', $task->getId()));
-        }
-        $queue = $this->getServiceLocator()->get(Queue::CONFIG_ID);
-        $queue->updateTaskStatus($task->getId(), Task::STATUS_FINISHED, $report);
-        
-        return $report; 
+    /**
+     * @var TaskRunner
+     */
+    private $taskRunner;
+
+    /**
+     * @param Task $task
+     * @return Report
+     */
+    public function runTask(Task $task)
+    {
+        $taskRunner = $this->getTaskRunner();
+        return $taskRunner->run($task);
     }
-    
+
+    /**
+     * @return Report
+     * @throws \common_exception_Error
+     */
     public function runQueue()
     {
         $statistics = array();
@@ -68,5 +66,16 @@ class TaskService extends ConfigurableService
             $report->setMessage(__('Ran %s task(s):', array_sum($statistics)));
         }
         return $report;
+    }
+
+    /**
+     * @return TaskRunner
+     */
+    private function getTaskRunner()
+    {
+        if ($this->taskRunner === null) {
+            $this->taskRunner = new TaskRunner();
+        }
+        return $this->taskRunner;
     }
 }
