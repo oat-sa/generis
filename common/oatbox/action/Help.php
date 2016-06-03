@@ -19,17 +19,21 @@
  */
 namespace oat\oatbox\action;
 
-use oat\oatbox\service\ConfigurableService;
-/**
- * @deprecated
- */
-class ActionResolver extends ConfigurableService
+
+use oat\oatbox\service\ServiceNotFoundException;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+
+class Help implements Action, ServiceLocatorAwareInterface
 {
-    /**
-     * @deprecated please use ActionService
-     */
-    public function resolve($actionIdentifier)
-    {
-        return $this->getServiceManager()->get(ActionService::SERVICE_ID)->resolve($actionIdentifier);
+    use ServiceLocatorAwareTrait;
+    
+    public function __invoke($params) {
+        $actionResolver = $this->getServiceLocator()->get(ActionService::SERVICE_ID);
+        $report = new \common_report_Report(\common_report_Report::TYPE_INFO, __('Available Actions:'));
+        foreach ($actionResolver->getAvailableActions() as $actionClass) {
+            $report->add(new \common_report_Report(\common_report_Report::TYPE_INFO, '  '.$actionClass));
+        }
+        return $report;
     }
 }
