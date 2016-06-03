@@ -53,7 +53,7 @@ class SyncQueueTest extends GenerisPhpUnitTestRunner
     {
         //not implemented
         $queue = new SyncQueue();
-        $this->assertEquals(null, $queue->getIterator());
+        $this->assertTrue($queue->getIterator() instanceof \EmptyIterator);
     }
 
     public function testUpdateTaskStatus()
