@@ -19,7 +19,6 @@
  */
 namespace oat\oatbox\action;
 
-use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ConfigurableService;
 /**
  * @deprecated
@@ -31,6 +30,6 @@ class ActionResolver extends ConfigurableService
      */
     public function resolve($actionIdentifier)
     {
-        return ServiceManager::getServiceManager()->get(ActionService::SERVICE_ID)->resolve($actionIdentifier);
+        return $this->getServiceManager()->get(ActionService::SERVICE_ID)->resolve($actionIdentifier);
     }
 }
