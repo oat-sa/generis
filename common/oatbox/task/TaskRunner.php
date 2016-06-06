@@ -20,26 +20,34 @@
  */
 namespace oat\oatbox\task;
  
-use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceManager;
+use oat\oatbox\action\ActionService;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 class TaskRunner
 {
     public function run(Task $task) {
-        
+
+        \common_Logger::d('Running task '.$task->getId());
         $report = new \common_report_Report(\common_report_Report::TYPE_INFO, __('Running task %s', $task->getId()));
+        $queue = $this->getServiceLocator()->get(Queue::CONFIG_ID);
+        $queue->updateTaskStatus($task->getId(), Task::STATUS_RUNNING);
         try {
-            $invocableName = $task->getInvocable();
-            $invocable = new $invocableName();
-            if ($invocable instanceof ServiceLocatorAwareInterface) {
+            $actionService = $this->getServiceLocator()->get(ActionService::SERVICE_ID);
+            $invocable = $task->getInvocable();
+            if (is_string($invocable)) {
+                $invocable = $actionService->resolve($task->getInvocable());
+            } else if ($invocable instanceof ServiceLocatorAwareInterface) {
                 $invocable->setServiceLocator($this->getServiceLocator());
             }
             $subReport = call_user_func($invocable, $task->getParameters());
             $report->add($subReport);
         } catch (\Exception $e) {
-            $report = new \common_report_Report(\common_report_Report::TYPE_ERROR, __('Unable to run task %s', $task->getId()));
+            $message = 'Task ' . $task->getId() . ' failed. Error message: ' . $e->getMessage();
+            \common_Logger::e($message);
+            $report = new \common_report_Report(\common_report_Report::TYPE_ERROR, $message);
         }
+        $queue->updateTaskStatus($task->getId(), Task::STATUS_FINISHED, $report);
         return $report; 
     }
     
