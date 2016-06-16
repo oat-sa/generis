@@ -79,9 +79,9 @@ class common_configuration_Report
      * Short description of attribute component
      *
      * @access private
-     * @var Component
+     * @var common_configuration_Component
      */
-    private $component = null;
+    private $component;
 
     // --- OPERATIONS ---
 
@@ -90,9 +90,9 @@ class common_configuration_Report
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  int status
-     * @param  string message
-     * @param  Component component
+     * @param  int $status
+     * @param  string $message
+     * @param  common_configuration_Component $component
      * @return mixed
      */
     public function __construct($status, $message,  common_configuration_Component $component = null)
@@ -116,13 +116,7 @@ class common_configuration_Report
      */
     public function getStatus()
     {
-        $returnValue = (int) 0;
-
-        
-        $returnValue = $this->status;
-        
-
-        return (int) $returnValue;
+        return (int) $this->status;
     }
 
     /**
@@ -130,12 +124,12 @@ class common_configuration_Report
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  int status
+     * @param  int $status
      * @return void
      */
     public function setStatus($status)
     {
-        
+
         $this->status = $status;
         
     }
@@ -179,13 +173,7 @@ class common_configuration_Report
      */
     public function getMessage()
     {
-        $returnValue = (string) '';
-
-        
-        $returnValue = $this->message;
-        
-
-        return (string) $returnValue;
+        return (string) $this->message;
     }
 
     /**
@@ -193,7 +181,7 @@ class common_configuration_Report
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  string message
+     * @param  string $message
      * @return void
      */
     public function setMessage($message)
@@ -212,13 +200,7 @@ class common_configuration_Report
      */
     public function getComponent()
     {
-        $returnValue = null;
-
-        
-        $returnValue = $this->component;
-        
-
-        return $returnValue;
+        return $this->component;
     }
 
     /**
@@ -226,14 +208,12 @@ class common_configuration_Report
      *
      * @access protected
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Component component
+     * @param  $component common_configuration_Component
      * @return void
      */
-    protected function setComponent( common_configuration_Component $component)
+    public function setComponent( common_configuration_Component $component)
     {
-        
         $this->component = $component;
-        
     }
 
 } 
