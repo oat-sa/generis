@@ -483,7 +483,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         $offset = (isset($options['offset']) === false) ? 0 : $options['offset'];
         $limit = (isset($options['limit']) === false) ? 0 : $options['limit'];
         $order = (isset($options['order']) === false) ? '' : $options['order'];
-        $orderdir = (isset($options['orderdir']) && in_array(strtoupper($options['orderdir']), ['ASC', 'DESC'])) ? $options['orderdir'] : 'ASC';
+        $orderdir = (isset($options['orderdir']) === false) ? 'ASC' : $options['orderdir'];
 
         $query = core_kernel_persistence_smoothsql_Utils::buildFilterQuery($this->getModel(), $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
         
