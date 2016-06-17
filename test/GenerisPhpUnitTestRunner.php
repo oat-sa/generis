@@ -107,6 +107,15 @@ abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
     public function assertIsA($var,$className){
     	$this->assertInstanceOf($className,$var);
     }
+
+    /**
+     * @param string $expected
+     * @param string $value
+     */
+    public function assertPathsEqual($expected, $value)
+    {
+        $this->assertEquals(realpath($expected), realpath($value));
+    }
     
     public function installExtension($extid){
         if (!common_ext_ExtensionsManager::singleton()->isInstalled($extid)) {
