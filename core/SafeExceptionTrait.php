@@ -22,8 +22,6 @@ namespace oat\generis\model;
 use Exception;
 
 /**
- * Trait for classes that want to access the ontology
- *
  * @author Mikhail Kamarouski <kamarouski@1pt.com>
  */
 trait SafeExceptionTrait
