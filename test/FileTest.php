@@ -102,7 +102,7 @@ class FileTest extends GenerisPhpUnitTestRunner {
 	    $file = $this->fileSource->createFile('toto.txt');
 	    $file->setContent('toto is kite surfing !!! le ouf');
 	    $fileInfo = $file->getFileInfo();
-	    $this->assertIsA($fileInfo, 'SplFileInfo');
+	    $this->assertInstanceOf('SplFileInfo', $fileInfo);
 		$this->assertTrue($file->delete());
 		
 		$folderName = 'folder'.crc32(time());
@@ -110,7 +110,7 @@ class FileTest extends GenerisPhpUnitTestRunner {
 		$file = $this->fileSource->createFile('', $folderName);
 		
 	    $fileInfo = $file->getFileInfo();
-	    $this->assertIsA($fileInfo,'SplFileInfo');
+	    $this->assertInstanceOf('SplFileInfo', $fileInfo);
 	    $this->assertTrue($fileInfo->isDir());
 	    $this->assertTrue($file->delete());
 	    $this->assertFalse($fileInfo->isDir());
