@@ -476,15 +476,15 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         if (!in_array($resource->getUri(), $rdftypes)) {
             $rdftypes[] = $resource->getUri();
         }
-        
+
         $and = (isset($options['chaining']) === false) ? true : ((strtolower($options['chaining']) === 'and') ? true : false);
         $like = (isset($options['like']) === false) ? true : $options['like'];
         $lang = (isset($options['lang']) === false) ? '' : $options['lang'];
         $offset = (isset($options['offset']) === false) ? 0 : $options['offset'];
         $limit = (isset($options['limit']) === false) ? 0 : $options['limit'];
         $order = (isset($options['order']) === false) ? '' : $options['order'];
-        $orderdir = (isset($options['orderdir']) === false) ? 'ASC' : $options['orderdir'];
-           
+        $orderdir = (isset($options['orderdir']) && in_array(strtoupper($options['orderdir']), ['ASC', 'DESC'])) ? $options['orderdir'] : 'ASC';
+
         $query = core_kernel_persistence_smoothsql_Utils::buildFilterQuery($this->getModel(), $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
         
         return $query;
