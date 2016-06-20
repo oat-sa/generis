@@ -251,8 +251,11 @@ class core_kernel_persistence_smoothsql_Utils
     
     static public function buildFilterQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $classUri, array $propertyFilters, $and = true, $like = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC')
     {
+
+        $orderDir =  in_array(strtoupper($orderDir), ['ASC', 'DESC']) ? $orderDir : 'ASC';
+
         $persistence = $model->getPersistence();
-        
+
         // Deal with target classes.
         if (is_array($classUri) === false) {
             $classUri = array($classUri);
