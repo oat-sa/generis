@@ -19,8 +19,7 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-
-
+use oat\generis\model\SafeExceptionTrait;
 
 
 /**
@@ -37,11 +36,8 @@
  */
 abstract class common_persistence_sql_pdo_Driver implements common_persistence_sql_Driver
 {
-    // --- ASSOCIATIONS ---
 
-
-    // --- ATTRIBUTES ---
-
+    use SafeExceptionTrait;
 
     /**
      * An established PDO connection object.
@@ -98,7 +94,6 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
 
     private $params;
 
-    // --- OPERATIONS ---
 
     /**
      * Connect the SQL driver
@@ -205,27 +200,29 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string statement
-     * @param  array params
+     * @param  string $statement
+     * @param  array $params
      * @return PDOStatement
+     * @throws Exception
      */
     public function query($statement, $params = array())
     {
         $returnValue = null;
         $this->preparedExec = false;
 
-       
-        if (count($params) > 0){
-        	$sth = $this->dbConnector->prepare($statement);
-        	$sth->execute($params);
+        try {
+            if (count($params) > 0) {
+                $sth = $this->dbConnector->prepare($statement);
+                $sth->execute($params);
+            } else {
+                $sth = $this->dbConnector->query($statement);
+            }
+        } catch (Exception $e) {
+            throw $this->sanitizeException($e);
         }
-        else{
-        	$sth = $this->dbConnector->query($statement);
-        }
-        
-		
+
         if (!empty($sth)){
-        	$returnValue = $sth;
+            $returnValue = $sth;
         }
 
         return $returnValue;
@@ -237,9 +234,10 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string statement
-     * @param  array params
+     * @param  string $statement
+     * @param  array $params
      * @return int
+     * @throws \Exception
      */
     public function exec($statement, $params = array())
     {
@@ -257,7 +255,7 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
         	    $returnValue = $this->dbConnector->exec($statement);
         	} catch (PDOException $e) {
         	    common_Logger::w('Error in statement: '.$statement);
-        	    throw $e;
+        	    throw $this->sanitizeException($e);
         	}
         }
 
@@ -269,7 +267,7 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string statement
+     * @param  string $statement
      * @return PDOStatement
      */
     public function prepare($statement)
