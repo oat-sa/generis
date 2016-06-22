@@ -19,6 +19,7 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2012-2014 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+use oat\generis\model\SqlSanitizeHelperTrait;
 
 /**
  * Utility class for package core\kernel\persistence\smoothsql.
@@ -28,6 +29,8 @@
  */
 class core_kernel_persistence_smoothsql_Utils
 {
+
+    use SqlSanitizeHelperTrait;
 
     /**
      * Sort a given $dataset by language.
@@ -252,7 +255,7 @@ class core_kernel_persistence_smoothsql_Utils
     static public function buildFilterQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $classUri, array $propertyFilters, $and = true, $like = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC')
     {
 
-        $orderDir =  in_array(strtoupper($orderDir), ['ASC', 'DESC']) ? $orderDir : 'ASC';
+        $orderDir =  self::sanitizeOrderDirection($orderDir);
 
         $persistence = $model->getPersistence();
 
