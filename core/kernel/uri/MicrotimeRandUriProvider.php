@@ -31,7 +31,7 @@ use oat\oatbox\service\ConfigurableService;
  
  */
 class MicrotimeRandUriProvider extends ConfigurableService
-    implements \common_uri_UriProvider
+    implements UriProvider
 {
     const OPTION_PERSISTENCE = 'persistence';
     
