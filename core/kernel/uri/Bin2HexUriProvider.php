@@ -17,9 +17,11 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2013      (update and modification) Open Assessment Technologies SA;
  */
+namespace oat\generis\model\kernel\uri;
 
+use oat\oatbox\service\ConfigurableService;
 /**
  * UriProvider implementation based on an advanced key value storage
  *
@@ -28,10 +30,10 @@
  * @package generis
  
  */
-class common_uri_Bin2HexUriProvider
-    implements common_uri_UriProvider
+class Bin2HexUriProvider extends ConfigurableService
+    implements \common_uri_UriProvider
 {
-    const PERSISTENCE_KEY = 'generis_uriProvider';
+    const OPTION_NAMESPACE = 'namespace';
     
     /**
      * Generates a URI based on a serial stored in the database.
@@ -43,14 +45,7 @@ class common_uri_Bin2HexUriProvider
      */
     public function provide()
     {
-        $returnValue = (string) '';
-        
-        $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
-        
-       
-        $uri = $modelUri . uniqid('i'). getmypid(). bin2hex(openssl_random_pseudo_bytes(8));
-
-        return (string) $uri;
+        return $this->getOption(self::OPTION_NAMESPACE) . uniqid('i'). getmypid(). bin2hex(openssl_random_pseudo_bytes(8));
     }
 
 }
