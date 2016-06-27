@@ -279,20 +279,24 @@ class core_kernel_persistence_smoothsql_Utils
         }
 
         // Order...
-        if (empty($order) === false) {
+        if (!empty($order)) {
             $orderPredicate = $persistence->quote($order);
             
             $sqlLang = '';
-            if (empty($lang) === false) {
+            if (!empty($lang)) {
                 $sqlEmptyLang = $persistence->quote('');
                 $sqlRequestedLang = $persistence->quote($lang);
                 $sqlLang = " AND (l_language = ${sqlEmptyLang} OR l_language = ${sqlRequestedLang})";
             }
             
-            $sqlOrderFilter = "mainq.subject = orderq.subject AND predicate = ${orderPredicate}${sqlLang}";
+            $orderQueryId = $persistence->getPlatForm()->quoteIdentifier('orderq');
+            $orderQuerySubject = $orderQueryId.'.'.$persistence->getPlatForm()->quoteIdentifier('subject');
+            $orderQueryObject = $orderQueryId.'.'.$persistence->getPlatForm()->quoteIdentifier('object');
             
-            $query = "SELECT mainq.subject, orderq.object FROM (${query}) AS mainq JOIN ";
-            $query .= "statements AS orderq ON (${sqlOrderFilter}) ORDER BY orderq.object ${orderDir}";
+            $sqlOrderFilter = "mainq.subject = ${orderQuerySubject} AND predicate = ${orderPredicate}${sqlLang}";
+            
+            $query = "SELECT mainq.subject, ${orderQueryObject} FROM (${query}) AS mainq JOIN ";
+            $query .= "statements AS ${orderQueryId} ON (${sqlOrderFilter}) ORDER BY ${orderQueryObject} ${orderDir}";
         }
         
         // Limit...
