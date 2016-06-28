@@ -17,32 +17,23 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2013      (update and modification) Open Assessment Technologies SA;
  */
+namespace oat\generis\model\kernel\uri;
 
-use oat\oatbox\Configurable;
-use oat\generis\model\kernel\uri\UriProvider;
+use oat\oatbox\service\ConfigurableService;
 /**
  * UriProvider implementation based on an advanced key value storage
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
+ 
  */
-class core_kernel_uri_AdvKeyValueUriProvider extends Configurable
+class Bin2HexUriProvider extends ConfigurableService
     implements UriProvider
 {
-    const OPTION_PERSISTENCE = 'persistence';
     const OPTION_NAMESPACE = 'namespace';
-    
-    const PERSISTENCE_KEY = 'generis_uriProvider';
-    
-    /**
-     * @return common_persistence_AdvKeyValuePersistence
-     */
-    public function getPersistence() {
-        return common_persistence_AdvKeyValuePersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
-    }
     
     /**
      * Generates a URI based on a serial stored in the database.
@@ -54,13 +45,7 @@ class core_kernel_uri_AdvKeyValueUriProvider extends Configurable
      */
     public function provide()
     {
-        $returnValue = (string) '';
-        
-        $nextId = $this->getPersistence()->incr(self::PERSISTENCE_KEY);
-        list($usec, $sec) = explode(" ", microtime());
-        $uri = $this->getOption(self::OPTION_NAMESPACE) .'i'. (str_replace(".","",$sec."".$usec)) . $nextId;
-
-        return (string) $uri;
+        return $this->getOption(self::OPTION_NAMESPACE) . uniqid('i'). getmypid(). bin2hex(openssl_random_pseudo_bytes(8));
     }
 
 }

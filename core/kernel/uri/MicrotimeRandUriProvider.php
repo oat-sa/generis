@@ -17,39 +17,59 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2013      (update and modification) Open Assessment Technologies SA;
  */
+namespace oat\generis\model\kernel\uri;
 
+use oat\oatbox\service\ConfigurableService;
 /**
- * UriProvider implementation based on an advanced key value storage
+ * UriProvider implementation based on PHP microtime and rand().
  *
  * @access public
- * @author Joel Bout, <joel@taotesting.com>
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
  
  */
-class common_uri_Bin2HexUriProvider
-    implements common_uri_UriProvider
+class MicrotimeRandUriProvider extends ConfigurableService
+    implements UriProvider
 {
-    const PERSISTENCE_KEY = 'generis_uriProvider';
+    const OPTION_PERSISTENCE = 'persistence';
+    
+    const OPTION_NAMESPACE = 'namespace';
+    // --- ASSOCIATIONS ---
+    
+    // --- ATTRIBUTES ---
+    
+    // --- OPERATIONS ---
     
     /**
-     * Generates a URI based on a serial stored in the database.
+     * @return common_persistence_SqlPersistence
+     */
+    public function getPersistence() {
+        return \common_persistence_SqlPersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
+    }
+    
+    /**
+     * Generates a URI based on the value of PHP microtime() and rand().
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
-     * @throws common_UriProviderException
      */
     public function provide()
     {
-        $returnValue = (string) '';
         
-        $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
+        $uriExist = false;
+        do {
+            list($usec, $sec) = explode(" ", microtime());
+            $uri = $this->getOption(self::OPTION_NAMESPACE) . 'i' . (str_replace(".", "", $sec . "" . $usec)) . rand(0, 1000);
+            $sqlResult = $this->getPersistence()->query("SELECT COUNT(subject) AS num FROM statements WHERE subject = '" . $uri . "'");
+            if ($row = $sqlResult->fetch()) {
+                $uriExist = $row['num'] > 0;
+                $sqlResult->closeCursor();
+            }
+        } while ($uriExist);
         
-       
-        $uri = $modelUri . uniqid('i'). getmypid(). bin2hex(openssl_random_pseudo_bytes(8));
-
         return (string) $uri;
     }
 

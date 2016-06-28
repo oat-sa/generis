@@ -20,6 +20,8 @@
  * 
  */
 use oat\oatbox\Configurable;
+use oat\generis\model\kernel\uri\UriProvider;
+use oat\generis\model\kernel\uri\UriProviderException;
 
 /**
  * UriProvider implementation based on a serial stored in the database.
@@ -29,7 +31,7 @@ use oat\oatbox\Configurable;
  * @package generis
  */
 class core_kernel_uri_DatabaseSerialUriProvider extends Configurable
-    implements common_uri_UriProvider
+    implements UriProvider
 {
     const OPTION_PERSISTENCE = 'persistence';
     
@@ -74,10 +76,10 @@ class core_kernel_uri_DatabaseSerialUriProvider extends Configurable
                 $returnValue = current($row);
                 $sth->closeCursor();
             } else {
-                throw new common_uri_UriProviderException("An error occured while calling the stored procedure for persistence ".$this->getOption(self::OPTION_PERSISTENCE).".");
+                throw new UriProviderException("An error occured while calling the stored procedure for persistence ".$this->getOption(self::OPTION_PERSISTENCE).".");
             }
         } catch (Exception $e) {
-        	throw new common_uri_UriProviderException("An error occured while calling the stored ': " . $e->getMessage() . ".");
+        	throw new UriProviderException("An error occured while calling the stored ': " . $e->getMessage() . ".");
         }
 
         return (string) $returnValue;
