@@ -26,9 +26,13 @@ use common_Logger;
 use common_ext_ExtensionsManager;
 use oat\generis\model\data\permission\PermissionManager;
 use oat\generis\model\data\ModelManager;
+use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\filesystem\FileSystemService;
+use oat\oatbox\action\ActionService;
+use oat\oatbox\task\Queue;
+use oat\oatbox\task\implementation\SyncQueue;
 
 /**
  * 
@@ -186,7 +190,26 @@ class Updater extends \common_ext_ExtensionUpdater {
             $this->setVersion('2.12.0');
         }
         
-        $this->skip('2.12.0', '2.19.0');
+        $this->skip('2.12.0', '2.18.0');
+
+        if ($this->isVersion('2.18.0')) {
+            $this->getServiceManager()->register(ActionService::SERVICE_ID, new ActionService());
+            $this->setVersion('2.19.0');
+        }
+
+        if ($this->isVersion('2.19.0')) {
+            try {
+                $this->getServiceManager()->get(Queue::CONFIG_ID);
+            } catch (ServiceNotFoundException $e) {
+                $service = new SyncQueue([]);
+                $service->setServiceManager($this->getServiceManager());
+
+                $this->getServiceManager()->register(Queue::CONFIG_ID, $service);
+            }
+            $this->setVersion('2.20.0');
+        }
+        
+        $this->skip('2.20.0', '2.24.0');
     }
     
     private function getReadableModelIds() {

@@ -20,19 +20,21 @@
  */
 namespace oat\oatbox\task;
 
-interface Queue extends \IteratorAggregate
+use oat\oatbox\service\ConfigurableService;
+use oat\Taskqueue\Persistence\RdsQueue;
+use Doctrine\DBAL\Schema\SchemaException;
+use oat\oatbox\service\ServiceManager;
+use oat\oatbox\task\Queue;
+use oat\oatbox\action\Action;
+use oat\oatbox\task\TaskRunner;
+use common_report_Report as Report;
+
+class RunTasks extends ConfigurableService implements Action
 {
-    const CONFIG_ID = 'generis/taskqueue';
-
-    /**
-     * @param $actionId
-     * @param $parameters
-     * @param boolean $repeatedly Whether task created repeatedly (for example when execution of task was failed and task puts to the queue again).
-     * @return mixed
-     */
-    public function createTask($actionId, $parameters, $repeatedly = false);
-    
-    public function getIterator();
-
-    public function updateTaskStatus($taskId, $status);
+    public function __invoke($params) {
+        $taskService = new TaskService();
+        $taskService->setServiceLocator($this->getServiceLocator());
+        $report = $taskService->runQueue();
+        return $report; 
+    }
 }

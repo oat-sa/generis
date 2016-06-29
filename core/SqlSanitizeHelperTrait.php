@@ -1,38 +1,36 @@
 <?php
-/**  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
- *               
- * 
+ *
+ * Copyright (c) 2016 (original work) Open Assessment Technologies SA
+ *
  */
-namespace oat\oatbox\task;
 
-interface Queue extends \IteratorAggregate
+namespace oat\generis\model;
+
+/**
+ * Trait for classes that want's to prepare SQL safely
+ */
+trait SqlSanitizeHelperTrait
 {
-    const CONFIG_ID = 'generis/taskqueue';
-
     /**
-     * @param $actionId
-     * @param $parameters
-     * @param boolean $repeatedly Whether task created repeatedly (for example when execution of task was failed and task puts to the queue again).
-     * @return mixed
+     * @param string $rawOrderDir
+     * @return string
      */
-    public function createTask($actionId, $parameters, $repeatedly = false);
-    
-    public function getIterator();
-
-    public function updateTaskStatus($taskId, $status);
+    static private function sanitizeOrderDirection($rawOrderDir)
+    {
+        return in_array(strtoupper($rawOrderDir), ['ASC', 'DESC']) ? $rawOrderDir : 'ASC';
+    }
 }

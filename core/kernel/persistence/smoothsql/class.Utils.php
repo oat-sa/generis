@@ -19,6 +19,7 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2012-2014 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+use oat\generis\model\SqlSanitizeHelperTrait;
 
 /**
  * Utility class for package core\kernel\persistence\smoothsql.
@@ -28,6 +29,8 @@
  */
 class core_kernel_persistence_smoothsql_Utils
 {
+
+    use SqlSanitizeHelperTrait;
 
     /**
      * Sort a given $dataset by language.
@@ -251,8 +254,11 @@ class core_kernel_persistence_smoothsql_Utils
     
     static public function buildFilterQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $classUri, array $propertyFilters, $and = true, $like = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC')
     {
+
+        $orderDir =  self::sanitizeOrderDirection($orderDir);
+
         $persistence = $model->getPersistence();
-        
+
         // Deal with target classes.
         if (is_array($classUri) === false) {
             $classUri = array($classUri);
@@ -273,20 +279,24 @@ class core_kernel_persistence_smoothsql_Utils
         }
 
         // Order...
-        if (empty($order) === false) {
+        if (!empty($order)) {
             $orderPredicate = $persistence->quote($order);
             
             $sqlLang = '';
-            if (empty($lang) === false) {
+            if (!empty($lang)) {
                 $sqlEmptyLang = $persistence->quote('');
                 $sqlRequestedLang = $persistence->quote($lang);
                 $sqlLang = " AND (l_language = ${sqlEmptyLang} OR l_language = ${sqlRequestedLang})";
             }
             
-            $sqlOrderFilter = "mainq.subject = orderq.subject AND predicate = ${orderPredicate}${sqlLang}";
+            $orderQueryId = $persistence->getPlatForm()->quoteIdentifier('orderq');
+            $orderQuerySubject = $orderQueryId.'.'.$persistence->getPlatForm()->quoteIdentifier('subject');
+            $orderQueryObject = $orderQueryId.'.'.$persistence->getPlatForm()->quoteIdentifier('object');
             
-            $query = "SELECT mainq.subject, orderq.object FROM (${query}) AS mainq JOIN ";
-            $query .= "statements AS orderq ON (${sqlOrderFilter}) ORDER BY orderq.object ${orderDir}";
+            $sqlOrderFilter = "mainq.subject = ${orderQuerySubject} AND predicate = ${orderPredicate}${sqlLang}";
+            
+            $query = "SELECT mainq.subject, ${orderQueryObject} FROM (${query}) AS mainq JOIN ";
+            $query .= "statements AS ${orderQueryId} ON (${sqlOrderFilter}) ORDER BY ${orderQueryObject} ${orderDir}";
         }
         
         // Limit...
