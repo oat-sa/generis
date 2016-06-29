@@ -85,6 +85,14 @@ class core_kernel_classes_Triple
     public $lg = '';
 
     /**
+     * User asking for the triple creation
+     *
+     * @access public
+     * @var string
+     */
+    public $author = '';
+
+    /**
      * Triple creation time
      *
      * @access public

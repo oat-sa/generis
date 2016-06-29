@@ -54,6 +54,7 @@ class core_kernel_persistence_smoothsql_SmoothIterator
         $triple->object = $statement["object"];
         $triple->id = $statement["id"];
         $triple->lg = $statement["l_language"];
+        $triple->author = $statement["author"];
         return $triple;
     }
 }
