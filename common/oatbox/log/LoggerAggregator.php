@@ -23,7 +23,7 @@ namespace oat\oatbox\log;
 use Psr\Log\LoggerInterface;
 use Psr\Log\AbstractLogger;
 /**
- * Trait for classes that want to use the Logger
+ * An aggregator that broadcast logs to multiple loggers
  * 
  * @author Joel Bout <joel@taotesting.com>
  */
@@ -34,11 +34,25 @@ class LoggerAggregator extends AbstractLogger
      */
     private $loggers;
     
+    /**
+     * Instantiate the aggregator
+     *
+     * @param LoggerInterface[] $loggers
+     */
     public function __construct($loggers)
     {
+        foreach ($loggers as $logger) {
+            if (!$logger instanceof LoggerInterface) {
+                throw new \common_Exception('Non PSR-3 compatible logger '.get_class($logger).' added to '.__CLASS__);
+            }
+        }
         $this->loggers = $loggers;
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see \Psr\Log\LoggerInterface::log()
+     */
     public function log($level, $message, array $context = array())
     {
          foreach ($this->loggers as $logger) {
