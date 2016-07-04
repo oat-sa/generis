@@ -56,7 +56,7 @@ class SyncQueue extends ConfigurableService implements Queue
     /**
      * Create and run task
      * @param \oat\oatbox\action\Action|string $action action instance, classname or callback function
-     * @param $parameters parameters to be passed to the action
+     * @param mixed $parameters parameters to be passed to the action
      * @param boolean $recall Parameter which indicates that task has been created repeatedly after fail of previous.
      * For current implementation in means that the second call will not be executed to avoid loop.
      * @return SyncTask
@@ -64,8 +64,7 @@ class SyncQueue extends ConfigurableService implements Queue
     public function createTask($action, $parameters, $recall = false)
     {
         if ($recall) {
-            \common_Logger::w("Repeated call of action'; Execution canceled.");
-            return false;
+            \common_Logger::w("Repeated call of action';");
         }
         $task = new SyncTask($action, $parameters);
         $this->tasks[$task->getId()] = $task;
