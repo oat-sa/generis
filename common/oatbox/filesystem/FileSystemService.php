@@ -42,7 +42,7 @@ class FileSystemService extends ConfigurableService
     
     /**
      * 
-     * @param unknown $id
+     * @param string $id
      * @return Filesystem
      */
     public function getFileSystem($id)

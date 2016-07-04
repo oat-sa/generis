@@ -204,7 +204,13 @@ class core_kernel_classes_Resource
         if (is_null($this->label)) {
             
             $label =  $this->getOnePropertyValue($this->getProperty(RDFS_LABEL));
-            $this->label = ((is_null($label) === false) ? $label->literal : '');
+            $this->label = is_null($label)
+                ? ''
+                : ($label instanceof core_kernel_classes_Resource
+                    ? $label->getUri()
+                    : (string)$label
+                   )
+            ;
         }
         
         return $this->label;
