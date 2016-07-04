@@ -43,7 +43,7 @@ class SyncQueueTest extends GenerisPhpUnitTestRunner
         $task = $queue->createTask('Action', []);
         $this->assertTrue($task instanceof SyncTask);
         $this->assertEquals($task->getStatus(), SyncTask::STATUS_FINISHED);
-        $this->assertEquals(false, $queue->createTask('Action', [], true));
+        $this->assertInstanceOf(SyncTask::class, $queue->createTask('Action', [], true));
 
         $this->prophet->checkPredictions();
 
@@ -72,7 +72,7 @@ class SyncQueueTest extends GenerisPhpUnitTestRunner
         $this->prophet = new Prophet();
         $taskRunnerProphet = $this->prophet->prophesize('oat\oatbox\task\TaskRunner');
         $taskRunnerProphet->run(Argument::type('oat\oatbox\task\implementation\SyncTask'))
-            ->shouldBeCalledTimes(1)
+            ->shouldBeCalledTimes(2)
             ->will(function ($args) use($queue) {
             $task = $args[0];
             $queue->updateTaskStatus($task->getId(), SyncTask::STATUS_FINISHED);
