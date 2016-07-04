@@ -144,7 +144,7 @@ class core_kernel_file_File
      */
     public function getRelativePath()
     {
-        return $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH));
+        return (string)$this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH));
     }
     
     /**
