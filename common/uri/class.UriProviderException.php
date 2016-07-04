@@ -19,6 +19,7 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
+use oat\generis\model\kernel\uri\UriProviderException;
 
 /**
  * Short description of class common_uri_UriProviderException
@@ -26,16 +27,8 @@
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
- 
+ * @deprecated pls use UriProviderException
  */
 class common_uri_UriProviderException
-    extends common_Exception
-{
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
-    // --- OPERATIONS ---
-
-}
+    extends UriProviderException
+{}

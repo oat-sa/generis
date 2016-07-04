@@ -19,60 +19,15 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-
-
+namespace oat\generis\model\kernel\uri;
 /**
- * UriProvider implementation based on PHP microtime and rand().
+ * Exception thrown during uri generation
  *
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
- 
  */
-class common_uri_MicrotimeRandUriProvider
-    implements common_uri_UriProvider
+class UriProviderException
+    extends \common_Exception
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
-    // --- OPERATIONS ---
-
-    /**
-     * Generates a URI based on the value of PHP microtime() and rand().
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return string
-     */
-    public function provide()
-    {
-        $returnValue = (string) '';
-
-        
-        $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$uriExist = false;
-		do{
-			list($usec, $sec) = explode(" ", microtime());
-        	$uri = $modelUri .'i'. (str_replace(".","",$sec."".$usec)) . rand(0, 1000);
-			$sqlResult = $dbWrapper->query("SELECT COUNT(subject) AS num FROM statements WHERE subject = '".$uri."'"
-			);
-			if ($row = $sqlResult->fetch()){
-				$found = (int)$row['num'];
-				if($found > 0){
-					$uriExist = true;
-				}
-				
-				$sqlResult->closeCursor();
-			}
-		}while($uriExist);
-		
-		$returnValue = $uri;
-        
-
-        return (string) $returnValue;
-    }
-
 }

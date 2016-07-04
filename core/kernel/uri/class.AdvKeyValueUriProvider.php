@@ -21,6 +21,7 @@
  */
 
 use oat\oatbox\Configurable;
+use oat\generis\model\kernel\uri\UriProvider;
 /**
  * UriProvider implementation based on an advanced key value storage
  *
@@ -29,7 +30,7 @@ use oat\oatbox\Configurable;
  * @package generis
  */
 class core_kernel_uri_AdvKeyValueUriProvider extends Configurable
-    implements common_uri_UriProvider
+    implements UriProvider
 {
     const OPTION_PERSISTENCE = 'persistence';
     const OPTION_NAMESPACE = 'namespace';
