@@ -122,6 +122,7 @@ class core_kernel_versioning_Repository
      */
     public function getPath()
     {
+        throw new common_exception_InconsistentData(__CLASS__.' can only handle local files');
         $service = $this->getServiceManager()->get(FileSystemService::SERVICE_ID);
         $adapter = $service->getFileSystem($this->getUri())->getAdapter();
         if (!$adapter instanceof Local) {
