@@ -58,7 +58,10 @@ class EventManager extends ConfigurableService
             if (!isset($listeners[$eventObject->getName()])) {
                 $listeners[$eventObject->getName()] = array();
             }
-            $listeners[$eventObject->getName()][] = $callback;
+
+            if (!in_array($callback, $listeners[$eventObject->getName()], true)) {
+                $listeners[$eventObject->getName()][] = $callback;
+            }
         }
         $this->setOption(self::OPTION_LISTENERS, $listeners);
     }
