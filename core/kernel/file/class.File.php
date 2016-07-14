@@ -1,4 +1,6 @@
 <?php
+use oat\oatbox\filesystem\FileSystemService;
+use League\Flysystem\Filesystem;
 /*  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,14 +129,24 @@ class core_kernel_file_File
     }
     
     /**
-     * Returns the filesystem this file is associated to 
+     * Returns the filesystem this file is associated to
+     *  
+     * Will return the deprecated core_kernel_fileSystem_FileSystem
+     * by default if the filesystem is in the form of a URI
+     * to ensure backward compatibility
      * 
-     * @return core_kernel_fileSystem_FileSystem
+     * @param string $deprecatedUse
+     * @return Filesystem
      */
-    public function getFileSystem()
+    public function getFileSystem($deprecatedUse = true)
     {
         $fs = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_FILE_FILESYSTEM));
-        return new core_kernel_fileSystem_FileSystem($fs);
+        if ($deprecatedUse && $fs instanceof core_kernel_classes_Resource) {
+            common_Logger::w('URI as filesystem is deprecated');
+            return new core_kernel_fileSystem_FileSystem($fs);
+        } else {
+            return $this->getServiceManager()->get(FileSystemService::SERVICE_ID)->getFileSystem((string)$fs);
+        }
     }
 
     /**
