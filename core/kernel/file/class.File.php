@@ -19,6 +19,8 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
+use oat\oatbox\filesystem\FileSystemService;
+use League\Flysystem\File;
 
 /**
  * generis representation of a file
@@ -135,6 +137,32 @@ class core_kernel_file_File
     {
         $fs = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_FILE_FILESYSTEM));
         return new core_kernel_fileSystem_FileSystem($fs);
+    }
+
+    public function getFlyFile()
+    {
+        $props = $this->getPropertiesValues(array(
+            new core_kernel_classes_Property(PROPERTY_FILE_FILEPATH),
+            new core_kernel_classes_Property(PROPERTY_FILE_FILENAME),
+            new core_kernel_classes_Property(PROPERTY_FILE_FILESYSTEM)
+        ));
+        if (!isset($props[PROPERTY_FILE_FILEPATH]) || count($props[PROPERTY_FILE_FILEPATH]) == 0) {
+            throw new common_Exception('filepath missing for file '.$this->getUri());
+        }
+        if (!isset($props[PROPERTY_FILE_FILENAME]) || count($props[PROPERTY_FILE_FILENAME]) == 0) {
+            throw new common_Exception('filename missing for file '.$this->getUri());
+        }
+        if (!isset($props[PROPERTY_FILE_FILESYSTEM]) || count($props[PROPERTY_FILE_FILESYSTEM]) == 0) {
+            throw new common_Exception('filesource missing for file '.$this->getUri());
+        }
+        $relFilePath = (string)current($props[PROPERTY_FILE_FILEPATH]);
+        $fileName	= (string)current($props[PROPERTY_FILE_FILENAME]);
+        $fileSystem	= current($props[PROPERTY_FILE_FILESYSTEM]);
+        $fileSystem = $fileSystem instanceof core_kernel_classes_Resource ? $fileSystem->getUri() : (string)$fileSystem;
+
+        $fsm = $this->getServiceManager()->get(FileSystemService::SERVICE_ID);
+        $fs = $fsm->getFileSystem($fileSystem);
+        return new File($fs, trim($relFilePath.$fileName, '/'));
     }
 
     /**
