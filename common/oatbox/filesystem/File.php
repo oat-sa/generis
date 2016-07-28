@@ -109,7 +109,7 @@ class File
     }
 
     /**
-     * Update a content into $this file, if exists
+     * Write a content into $this file, if not exists
      * $mixed content has to be string, resource, or PSR Stream
      * In case of Stream, $mixed has to be seekable and readable
      *
@@ -121,7 +121,7 @@ class File
      */
     public function write($mixed, $mimeType = null)
     {
-        if (! $this->exists()) {
+        if ($this->exists()) {
             throw new \FileNotFoundException('File "' . $this->getPrefix() . '" not found."');
         }
 
@@ -161,13 +161,18 @@ class File
      * $mixed content has to be string, resource, or PSR Stream
      * In case of Stream, $mixed has to be seekable and readable
      *
-     * @param string|Resource|StreamInterface $mixed
+     * @param $mixed
      * @param null $mimeType
      * @return bool
+     * @throws \FileNotFoundException
      * @throws \common_Exception
      */
     public function update($mixed, $mimeType = null)
     {
+        if (! $this->exists()) {
+            throw new \FileNotFoundException('File "' . $this->getPrefix() . '" not found."');
+        }
+
         \common_Logger::i('Writting in ' . $this->getPrefix());
         $config = (is_null($mimeType)) ? [] : ['ContentType' => $mimeType];
 
@@ -199,7 +204,7 @@ class File
     }
 
     /**
-     * Put a content into $this file, update content if exists, write if not
+     * Put a content into $this file, if exists or not
      * $mixed content has to be string, resource, or PSR Stream
      * In case of Stream, $mixed has to be seekable and readable
      *
