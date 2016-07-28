@@ -34,10 +34,10 @@ use const DEFAULT_LANG;
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class ComplexeSearchService extends ConfigurableService
+class ComplexSearchService extends ConfigurableService
 {
     
-    const SERVICE_ID = 'generis/complexeSearch';
+    const SERVICE_ID = 'generis/complexSearch';
     
     const SERVICE_SEARCH_ID = 'search.tao.gateway';
 
@@ -114,7 +114,7 @@ class ComplexeSearchService extends ConfigurableService
      * set gateway language options
      * @param type $userLanguage
      * @param type $defaultLanguage
-     * @return \oat\oatbox\search\ComplexeSearchService
+     * @return $this
      */
     public function setLanguage($userLanguage = '' , $defaultLanguage = DEFAULT_LANG) {
         $options = $this->gateway->getOptions();
