@@ -19,42 +19,181 @@
  */
 namespace oat\oatbox\filesystem;
 
-use League\Flysystem\Directory as FlyDirectory;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 
-class Directory {
-    
-    private $fileSystem;
-    
-    private $prefix;
+class Directory implements \IteratorAggregate
+{
+    const ITERATOR_RECURSIVE = '1';
+    const ITERATOR_FILE      = '2';
+    const ITERATOR_DIRECTORY = '4';
 
+    /**
+     * @var Filesystem
+     */
+    protected $fileSystem;
+
+    /**
+     * Relative prefix into $this->filesystem
+     *
+     * @var string
+     */
+    protected $prefix;
+
+    /**
+     * Directory constructor.
+     *
+     * @param $fileSystem
+     * @param $prefix
+     */
     public function __construct($fileSystem, $prefix)
     {
         $this->fileSystem = $fileSystem;
-        $this->prefix = $prefix;
+        $this->prefix = $this->sanitizePath($prefix);
     }
-    
+
+    /**
+     * Get a subDirectory of $this (existing or not)
+     *
+     * @param $path
+     * @return Directory
+     */
     public function getDirectory($path)
     {
         return new self($this->getFileSystem(), $this->getFullPath($path));
     }
-    
-    
+
+    /**
+     * Get file located into $this->directory (existing or not)
+     *
+     * @param $path
+     * @return File
+     */
     public function getFile($path)
     {
         return new File($this->getFileSystem(), $this->getFullPath($path));
     }
-    
-    public function getIterator($flags)
+
+    /**
+     * Method constraints by IteratorAggregator, wrapper to getFlyIterator
+     *
+     * @return \ArrayIterator
+     */
+    public function getIterator()
     {
+        return $this->getFlyIterator();
     }
-    
-    public function getRelPath(File $file)
+
+    /**
+     * Get an iterator of $this directory
+     * Flags are combinable like that $this->getFlyIterator(self::ITERATOR_DIRECTORY|self::ITERATOR_DIRECTORY)
+     * By default iterator is not recursive and includes directories & files
+     *
+     * @param null $flags
+     * @return \ArrayIterator
+     */
+    public function getFlyIterator($flags=null)
     {
+        $recursive = ($flags & self::ITERATOR_RECURSIVE);
+        $withDirectories = is_null($flags) || ($flags & self::ITERATOR_DIRECTORY);
+        $withFiles = is_null($flags) || ($flags & self::ITERATOR_DIRECTORY);
+
+        $iterator = array();
+        $contents = $this->getFileSystem()->listContents($this->getPrefix(), $recursive);
+
+        foreach ($contents as $content) {
+            if ($withDirectories && $content['type'] == 'dir') {
+                $iterator[] = $this->getDirectory(str_replace($this->getPrefix(), '', $content['path']));
+            }
+
+            if ($withFiles && $content['type'] == 'file') {
+                $iterator[] = $this->getFile(str_replace($this->getPrefix(), '', $content['path']));
+            }
+        }
+
+        return new \ArrayIterator($iterator);
     }
-    
-    private function getFullPath($path)
+
+    /**
+     * Get relative path from $this directory to given content
+     *
+     * @param Directory|File $content
+     * @return mixed
+     * @throws \common_Exception
+     * @throws \tao_models_classes_FileNotFoundException
+     */
+    public function getRelPath($content)
     {
-        return $this->prefix.'/'.ltrim($path, '/');
+        if (! $content instanceof File && ! $content instanceof Directory) {
+            throw new \common_Exception('Content for ' . __FUNCTION__ . ' has to be a file or directory object. ' .
+                is_object($content) ? get_class($content) : gettype($content) . ' given.');
+        }
+
+        if (! $content->exists()) {
+            throw new \tao_models_classes_FileNotFoundException($content->getPrefix());
+        }
+        return str_replace($this->getPrefix(), '', $content->getPrefix());
     }
+
+    /**
+     * Check if current directory exists
+     *
+     * @return bool
+     */
+    public function exists()
+    {
+        return $this->getFileSystem()->has($this->getPrefix());
+    }
+
+    /**
+     * Get the current prefix
+     *
+     * @return mixed|string
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
+    }
+
+    /**
+     * Get the current flysystem, should be not public
+     *
+     * @return Filesystem
+     */
+    protected function getFileSystem()
+    {
+        return $this->fileSystem;
+    }
+
+    /**
+     * Return a sanitized full path from main directory
+     *
+     * @param $path
+     * @return string
+     */
+    protected function getFullPath($path)
+    {
+        return $this->getPrefix() . '/' . $this->sanitizePath($path);
+    }
+
+    /**
+     * Sanitize path:
+     *  - by replace \ to / for windows compatibility (only on local)
+     *  - trim .
+     *  - trim / or \\
+     *
+     * @param $path
+     * @return string
+     */
+    protected function sanitizePath($path)
+    {
+        if ($this->getFileSystem()->getAdapter() instanceof Local) {
+            $path = str_replace('\\', '/', $path);
+        }
+        $path = trim($path, '.');
+        $path = trim($path, '\\/');
+
+        return $path;
+    }
+
 }
