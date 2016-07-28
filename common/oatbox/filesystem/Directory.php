@@ -129,9 +129,6 @@ class Directory implements \IteratorAggregate
                 is_object($content) ? get_class($content) : gettype($content) . ' given.');
         }
 
-        if (! $content->exists()) {
-            throw new \tao_models_classes_FileNotFoundException($content->getPrefix());
-        }
         return str_replace($this->getPrefix(), '', $content->getPrefix());
     }
 
