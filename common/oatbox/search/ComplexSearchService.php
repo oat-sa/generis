@@ -28,7 +28,6 @@ use oat\oatbox\service\ConfigurableService;
 use oat\taoSearch\model\search\SearchGateWayInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
-use const DEFAULT_LANG;
 /**
  * Complexe search service
  *
@@ -53,7 +52,7 @@ class ComplexSearchService extends ConfigurableService
     protected $gateway;
     /**
      * 
-     * @param type $options
+     * @param array $options
      */
     public function __construct($options = array()) {
         $config         = new Config($options);
@@ -70,10 +69,10 @@ class ComplexSearchService extends ConfigurableService
      * @return string
      */
     protected function getOperator($like ) {
-        $operator = 'equal';
+        $operator = 'equals';
         
         if($like) {
-            $operator = 'contain';
+            $operator = 'contains';
         } 
         
         return $operator;
@@ -112,11 +111,11 @@ class ComplexSearchService extends ConfigurableService
     
     /**
      * set gateway language options
-     * @param type $userLanguage
-     * @param type $defaultLanguage
+     * @param string $userLanguage
+     * @param string $defaultLanguage
      * @return $this
      */
-    public function setLanguage($userLanguage = '' , $defaultLanguage = DEFAULT_LANG) {
+    public function setLanguage($userLanguage = '' , $defaultLanguage = \DEFAULT_LANG) {
         $options = $this->gateway->getOptions();
         if(!empty($userLanguage)) {
             $options['language'] = $userLanguage;
