@@ -25,6 +25,7 @@ namespace  oat\oatbox\search;
 
 use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\oatbox\service\ConfigurableService;
+use oat\taoSearch\model\search\QueryBuilderInterface;
 use oat\taoSearch\model\search\SearchGateWayInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
@@ -84,15 +85,16 @@ class ComplexSearchService extends ConfigurableService
     public function getGateway() {
         return $this->gateway;
     }
+
     /**
      * return a preset query builder with types
+     * @param QueryBuilderInterface $query
      * @param string $class_uri
      * @param boolean $recursive
-     * @return \oat\taoSearch\model\search\QueryBuilderInterface
+     * @return QueryBuilderInterface
      */
-    public function searchType($class_uri , $recursive = false) {
-        $query = $this->gateway->query();
-        
+    public function searchType(QueryBuilderInterface $query , $class_uri , $recursive = false) {
+
         $Class    = new \core_kernel_classes_Class($class_uri);
         $rdftypes = [];
         
