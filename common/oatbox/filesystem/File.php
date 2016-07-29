@@ -268,7 +268,7 @@ class File
     /**
      * Return content of file as PSR-7 stream
      *
-     * @return Stream
+     * @return StreamInterface
      */
     public function readPsrStream()
     {
@@ -277,6 +277,7 @@ class File
 
     /**
      * Check if $this file exists && is file
+     *
      * @return bool
      */
     public function exists()
@@ -323,12 +324,10 @@ class File
      */
     protected function sanitize($path)
     {
-        if ($this->getFileSystem()->getAdapter() instanceof Local) {
-            $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
-        }
+        $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
 
-        $path = trim($path, '.');
-        $path = ltrim($path, '\\/');
+        $path = preg_replace('/'.preg_quote('./', '/').'/', '', $path, 1);
+        $path = trim($path, '/');
 
         return $path;
     }

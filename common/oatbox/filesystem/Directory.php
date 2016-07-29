@@ -94,9 +94,13 @@ class Directory implements \IteratorAggregate
      */
     public function getFlyIterator($flags=null)
     {
+        if (is_null($flags)) {
+            $flags = self::ITERATOR_DIRECTORY | self::ITERATOR_DIRECTORY;
+        }
+
         $recursive = ($flags & self::ITERATOR_RECURSIVE);
-        $withDirectories = is_null($flags) || ($flags & self::ITERATOR_DIRECTORY);
-        $withFiles = is_null($flags) || ($flags & self::ITERATOR_DIRECTORY);
+        $withDirectories = ($flags & self::ITERATOR_DIRECTORY);
+        $withFiles = ($flags & self::ITERATOR_DIRECTORY);
 
         $iterator = array();
         $contents = $this->getFileSystem()->listContents($this->getPrefix(), $recursive);
@@ -184,11 +188,10 @@ class Directory implements \IteratorAggregate
      */
     protected function sanitizePath($path)
     {
-        if ($this->getFileSystem()->getAdapter() instanceof Local) {
-            $path = str_replace('\\', '/', $path);
-        }
-        $path = trim($path, '.');
-        $path = trim($path, '\\/');
+        $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
+
+        $path = preg_replace('/'.preg_quote('./', '/').'/', '', $path, 1);
+        $path = trim($path, '/');
 
         return $path;
     }
