@@ -95,12 +95,12 @@ class Directory implements \IteratorAggregate
     public function getFlyIterator($flags=null)
     {
         if (is_null($flags)) {
-            $flags = self::ITERATOR_DIRECTORY | self::ITERATOR_DIRECTORY;
+            $flags = self::ITERATOR_DIRECTORY | self::ITERATOR_FILE;
         }
 
         $recursive = ($flags & self::ITERATOR_RECURSIVE);
         $withDirectories = ($flags & self::ITERATOR_DIRECTORY);
-        $withFiles = ($flags & self::ITERATOR_DIRECTORY);
+        $withFiles = ($flags & self::ITERATOR_FILE);
 
         $iterator = array();
         $contents = $this->getFileSystem()->listContents($this->getPrefix(), $recursive);
