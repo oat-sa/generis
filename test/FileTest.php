@@ -67,9 +67,8 @@ class FileTest extends GenerisPhpUnitTestRunner {
 	    $file = $this->fileSource->createFile('toto.txt');
 	    $this->assertTrue($file instanceof core_kernel_file_File);
 	    $fileNameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
-	    $fileName = $file->getOnePropertyValue($fileNameProp);
-	    $this->assertEquals($fileName,'toto.txt');
-	    $this->assertEquals($file->getAbsolutePath(),$this->fsPath.'toto.txt');
+		$fileName = $file->getOnePropertyValue($fileNameProp);
+		$this->assertEquals($fileName,'toto.txt');
 	    $this->assertTrue($file->delete());
 	    
 	    
@@ -81,20 +80,6 @@ class FileTest extends GenerisPhpUnitTestRunner {
 	    $dir = $this->fileSource->createFile('', DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'myDir');
 	    $this->assertEquals($dir->getAbsolutePath(), $this->fsPath. 'tmp' . DIRECTORY_SEPARATOR . 'myDir');
 	    $this->assertTrue($dir->delete());
-	}
-	
-	public function testGetAbsolutePath()
-	{
-	    $file = $this->fileSource->createFile('toto.txt');
-	    $absolutePath = $file->getAbsolutePath();
-	    $this->assertEquals($absolutePath, $this->fsPath.'toto.txt');
-	    $this->assertTrue($file->delete());
-	    
-	    $file = $this->fileSource->createFile('toto.txt', DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR);	    
-	    $absolutePath = $file->getAbsolutePath();
-	    $this->assertEquals($absolutePath, $this->fsPath. 'tmp' . DIRECTORY_SEPARATOR . 'toto.txt');
-	    
-	    $this->assertTrue($file->delete());
 	}
 	
 	public function testGetFileInfo()
