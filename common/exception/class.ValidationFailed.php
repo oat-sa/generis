@@ -25,8 +25,21 @@
  */
 class common_exception_ValidationFailed extends common_exception_BadRequest
 {
+    /**
+     * Name of the failed field.
+     *
+     * @var string
+     */
+    private $field;
+
+    public function __construct($field, $message = null, $code = 0)
+    {
+        parent::__construct($message, $code);
+        $this->field = $field;
+    }
+
     public function getUserMessage()
     {
-        return __("Validation failed.");
+        return __("Validation for field %s has failed.", $this->field);
     }
 }
