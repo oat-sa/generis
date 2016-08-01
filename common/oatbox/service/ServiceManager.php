@@ -105,7 +105,10 @@ class ServiceManager implements ServiceLocatorInterface
             throw new \common_Exception('Invalid servicekey '.$serviceKey);
         }
         $this->services[$serviceKey] = $service;
-        $this->getConfig()->set($serviceKey, $service);
+        $success = $this->getConfig()->set($serviceKey, $service);
+        if (!$success) {
+            throw new \common_exception_Error('Unable to write '.$serviceKey);
+        }
     }
 
     /**
