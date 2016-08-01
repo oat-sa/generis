@@ -11,9 +11,9 @@ namespace  oat\oatbox\search;
 use common_persistence_Manager;
 use common_persistence_SqlPersistence;
 use oat\oatbox\service\ServiceManager;
-use oat\taoSearch\model\search\exception\SearchGateWayExeption;
-use oat\taoSearch\model\search\QueryBuilderInterface;
-use oat\taoSearch\model\searchImp\TaoSearchGateWay;
+use oat\search\base\exception\SearchGateWayExeption;
+use oat\search\base\QueryBuilderInterface;
+use oat\search\TaoSearchGateWay;
 
 /**
  * Description of GateWay

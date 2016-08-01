@@ -25,8 +25,8 @@ namespace  oat\oatbox\search;
 
 use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\oatbox\service\ConfigurableService;
-use oat\taoSearch\model\search\QueryBuilderInterface;
-use oat\taoSearch\model\search\SearchGateWayInterface;
+use oat\search\base\QueryBuilderInterface;
+use oat\search\base\SearchGateWayInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 /**

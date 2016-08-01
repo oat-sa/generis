@@ -8,13 +8,17 @@
 
 namespace oat\oatbox\search;
 
+use core_kernel_classes_Resource;
+use oat\search\base\ResultSetInterface;
+use oat\tao\model\search\ResultSet;
+
 /**
  * Complex Search resultSet iterator
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class TaoResultSet extends \oat\tao\model\search\ResultSet 
-    implements \oat\taoSearch\model\search\ResultSetInterface 
+class TaoResultSet extends ResultSet 
+    implements ResultSetInterface 
 {
     
     
@@ -30,7 +34,7 @@ class TaoResultSet extends \oat\tao\model\search\ResultSet
     
     /**
     * return a new resource create from current subject
-    * @return \core_kernel_classes_Resource
+    * @return core_kernel_classes_Resource
     */
     public function current() {
         $index = parent::current();

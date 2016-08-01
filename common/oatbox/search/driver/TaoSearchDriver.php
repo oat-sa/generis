@@ -10,7 +10,7 @@ namespace  oat\oatbox\search\driver;
 
 use common_persistence_SqlPersistence;
 use oat\oatbox\service\ServiceManager;
-use oat\taoSearch\model\search\Query\EscaperAbstract;
+use oat\search\base\Query\EscaperAbstract;
 
 /**
  * Description of TaoSearchDriver
