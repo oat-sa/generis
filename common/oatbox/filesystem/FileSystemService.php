@@ -43,6 +43,16 @@ class FileSystemService extends ConfigurableService
     
     /**
      * 
+     * @param unknown $id
+     * @return \oat\oatbox\filesystem\Directory
+     */
+    public function getDirectory($id)
+    {
+        return new Directory($this->getFileSystem($id), '');
+    }
+    
+    /**
+     * 
      * @param string $id
      * @return Filesystem
      */
