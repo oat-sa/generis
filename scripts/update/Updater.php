@@ -210,6 +210,14 @@ class Updater extends \common_ext_ExtensionUpdater {
         }
 
         $this->skip('2.20.0', '2.27.0');
+        
+        if ($this->isVersion('2.27.0')) {
+            
+            $complexSearch = $implClass = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig('complexSearch');
+            
+            $this->getServiceManager()->register(\oat\oatbox\search\ComplexSearchService::SERVICE_ID, $complexSearch);
+            $this->setVersion('2.28.0');
+        }
     }
     
     private function getReadableModelIds() {
