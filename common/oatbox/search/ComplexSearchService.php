@@ -169,7 +169,7 @@ class ComplexSearchService extends ConfigurableService
                 $value = $value[0];
             }
             
-            $param = $criteria->addOperation($predicate , $operator , $value);
+            $param = $criteria->addCriterium($predicate , $operator , $value);
             
             foreach ($nextValue as $value) {
                 $param->addAnd($value);
