@@ -210,9 +210,9 @@ class Updater extends \common_ext_ExtensionUpdater {
         }
 
 
-        $this->skip('2.20.0', '2.27.1');
+        $this->skip('2.20.0', '2.28.0');
         
-        if ($this->isVersion('2.27.1')) {
+        if ($this->isVersion('2.28.0')) {
             
             $complexSearch = new \oat\oatbox\search\ComplexSearchService (array(
                 'shared' => array(
@@ -248,7 +248,7 @@ class Updater extends \common_ext_ExtensionUpdater {
             ));
             
             $this->getServiceManager()->register(\oat\oatbox\search\ComplexSearchService::SERVICE_ID, $complexSearch);
-            $this->setVersion('2.28.0');
+            $this->setVersion('2.29.0');
         }
     }
     
