@@ -42,7 +42,7 @@ class Updater extends \common_ext_ExtensionUpdater {
     
     /**
      * 
-     * @param string $currentVersion
+     * @param string $initialVersion
      * @return string $versionUpdatedTo
      */
     public function update($initialVersion) {
@@ -213,7 +213,44 @@ class Updater extends \common_ext_ExtensionUpdater {
         
         if ($this->isVersion('2.27.0')) {
             
-            $complexSearch = $implClass = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig('complexSearch');
+            $complexSearch = new \oat\oatbox\search\ComplexSearchService ([
+                'shared'    => 
+                    [
+                        'search.query.query'      => false,
+                        'search.query.builder'    => false,
+                        'search.query.param'      => false,
+                        'search.tao.parser'       => false,
+                        'search.tao.result'       => false,
+                    ],
+                'invokables' => 
+                    [
+                        'search.query.query'      =>  '\\oat\\taoSearch\\model\\searchImp\\Query',
+                        'search.query.builder'    =>  '\\oat\\taoSearch\\model\\searchImp\\QueryBuilder',
+                        'search.query.param'      =>  '\\oat\\taoSearch\\model\\searchImp\\QueryParam',
+                        'search.driver.postgres'  =>  '\\oat\taoSearch\\model\\searchImp\\DbSql\\Driver\\PostgreSQL',
+                        'search.driver.mysql'     =>  '\\oat\taoSearch\\model\\searchImp\\DbSql\\Driver\\MySQL',
+                        'search.driver.tao'       =>  '\\oat\\oatbox\\search\\driver\\TaoSearchDriver',
+                        'search.tao.parser'       =>  '\\oat\\taoSearch\\model\\searchImp\\DbSql\\TaoRdf\\UnionQueryParser',
+                        'search.factory.query'    =>  '\\oat\\taoSearch\\model\\factory\\QueryFactory',
+                        'search.factory.builder'  =>  '\\oat\\taoSearch\\model\\factory\\QueryBuilderFactory',
+                        'search.factory.param'    =>  '\\oat\\taoSearch\\model\\factory\\QueryParamFactory',
+                        'search.tao.gateway'      =>  '\\oat\\oatbox\\search\\GateWay',
+                        'search.tao.result'       =>  '\\oat\\oatbox\\search\\TaoResultSet',
+                    ],
+                'abstract_factories' => 
+                    [
+                        '\\oat\\taoSearch\\model\\searchImp\\Command\\OperatorAbstractfactory',
+                    ],
+                'services' => 
+                    [
+                        'search.options' => 
+                            [
+                                'table'    => 'statements',
+                                'driver'   => 'taoRdf',
+                            ]
+                    ]
+
+            ]);
             
             $this->getServiceManager()->register(\oat\oatbox\search\ComplexSearchService::SERVICE_ID, $complexSearch);
             $this->setVersion('2.28.0');
