@@ -196,4 +196,12 @@ class Directory implements \IteratorAggregate
         return $path;
     }
 
+    public function remove()
+    {
+        if (! $this->exists()) {
+            throw new \common_Exception('Unable to find dir to delete: "' . $this->getPrefix() . '"');
+        }
+        return $this->getFileSystem()->deleteDir($this->getPrefix());
+    }
+
 }
