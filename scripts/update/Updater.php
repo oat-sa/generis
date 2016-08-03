@@ -26,7 +26,7 @@ use common_Logger;
 use common_ext_ExtensionsManager;
 use oat\generis\model\data\permission\PermissionManager;
 use oat\generis\model\data\ModelManager;
-use oat\oatbox\filesystem\utils\serializer\FileSerializer;
+use oat\generis\model\kernel\fileSystem\FileReferenceSerializer;
 use oat\generis\model\kernel\fileSystem\ResourceFileSerializer;
 use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\event\EventManager;
@@ -213,7 +213,7 @@ class Updater extends \common_ext_ExtensionUpdater {
         $this->skip('2.20.0', '2.28.0');
 
         if ($this->isVersion('2.28.0')) {
-            $this->getServiceManager()->register(FileSerializer::SERVICE_ID, new ResourceFileSerializer());
+            $this->getServiceManager()->register(FileReferenceSerializer::SERVICE_ID, new ResourceFileSerializer());
             $this->setVersion('2.29.0');
         }
     }

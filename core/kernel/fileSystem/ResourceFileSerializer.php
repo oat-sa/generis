@@ -24,13 +24,12 @@ use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
 use oat\oatbox\filesystem\FileSystemService;
-use oat\oatbox\filesystem\utils\serializer\FileSerializer;
 use oat\oatbox\service\ConfigurableService;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 class ResourceFileSerializer extends ConfigurableService
-    implements FileSerializer, ServiceLocatorAwareInterface
+    implements FileReferenceSerializer, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
     use OntologyAwareTrait;

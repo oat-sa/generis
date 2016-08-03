@@ -1,10 +1,10 @@
 <?php
 
-namespace oat\oatbox\filesystem\utils\serializer;
+namespace oat\generis\model\kernel\fileSystem;
 
-interface FileSerializer
+interface FileReferenceSerializer
 {
-    const SERVICE_ID = 'generis/fileSerializer';
+    const SERVICE_ID = 'generis/fileReferenceSerializer';
 
     /**
      * Serialize filesystem abstraction to a serial
