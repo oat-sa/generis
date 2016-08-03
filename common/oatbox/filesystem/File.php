@@ -22,7 +22,6 @@ namespace oat\oatbox\filesystem;
 use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\StreamWrapper;
 use League\Flysystem\FileNotFoundException;
-use League\Flysystem\Filesystem;
 use Psr\Http\Message\StreamInterface;
 
 class File
@@ -307,7 +306,7 @@ class File
      *
      * @return Filesystem
      */
-    protected function getFileSystem()
+    public function getFileSystem()
     {
         return $this->fileSystem;
     }

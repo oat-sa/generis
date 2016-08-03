@@ -4,11 +4,29 @@ namespace oat\oatbox\filesystem\utils\serializer;
 
 interface FileSerializer
 {
-    const SERVICE_ID = 'generis/FileSerializer';
+    const SERVICE_ID = 'generis/fileSerializer';
 
-    public function serialize($filesystemId, $filepath);
+    /**
+     * Serialize filesystem abstraction to a serial
+     *
+     * @param string $abstraction
+     * @return string $serial
+     */
+    public function serialize($abstraction);
 
-    public function unserialize($fsUri, $filePath, $fileName);
+    /**
+     * Unserialize a serial, filename to a \oat\oatbox\filesystem\File
+     *
+     * @param $serial
+     * @return \oat\oatbox\filesystem\File
+     */
+    public function unserialize($serial);
 
-    public function unserializeDirectory($fsUri, $path);
+    /**
+     * Serialize a serial, path to a \oat\oatbox\filesystem\Directory
+     *
+     * @param $serial
+     * @return \oat\oatbox\filesystem\Directory
+     */
+    public function unserializeDirectory($serial);
 }

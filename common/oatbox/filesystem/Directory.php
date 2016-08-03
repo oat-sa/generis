@@ -19,9 +19,6 @@
  */
 namespace oat\oatbox\filesystem;
 
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
-
 class Directory implements \IteratorAggregate
 {
     const ITERATOR_RECURSIVE = '1';
@@ -161,7 +158,7 @@ class Directory implements \IteratorAggregate
      *
      * @return Filesystem
      */
-    protected function getFileSystem()
+    public function getFileSystem()
     {
         return $this->fileSystem;
     }
@@ -196,6 +193,12 @@ class Directory implements \IteratorAggregate
         return $path;
     }
 
+    /**
+     * Remove the current directory
+     *
+     * @return bool
+     * @throws \common_Exception
+     */
     public function remove()
     {
         if (! $this->exists()) {
@@ -204,4 +207,17 @@ class Directory implements \IteratorAggregate
         return $this->getFileSystem()->deleteDir($this->getPrefix());
     }
 
+    /**
+     * Create the current if not exists
+     *
+     * @return bool
+     * @throws \common_Exception
+     */
+    public function create()
+    {
+        if (! $this->exists()) {
+            return $this->getFileSystem()->createDir($this->getPrefix());
+        }
+        return true;
+    }
 }

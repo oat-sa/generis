@@ -59,7 +59,7 @@ class FileSystemService extends ConfigurableService
     public function getFileSystem($id)
     {
         if (!isset($this->filesystems[$id])) {
-            $this->filesystems[$id] = new Filesystem($this->getFlysystemAdapter($id));
+            $this->filesystems[$id] = new \oat\oatbox\filesystem\FileSystem($id, $this->getFlysystemAdapter($id));
         }
         return $this->filesystems[$id];
     }
