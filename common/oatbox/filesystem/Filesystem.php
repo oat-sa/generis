@@ -61,7 +61,7 @@ use \League\Flysystem\Filesystem as FlyFileSystem;
  * @method \League\Flysystem\AdapterInterface       getAdapter()
 
  */
-class Filesystem
+class FileSystem
 {
     protected $id;
 

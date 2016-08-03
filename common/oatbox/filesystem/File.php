@@ -27,7 +27,7 @@ use Psr\Http\Message\StreamInterface;
 class File
 {
     /**
-     * @var Filesystem
+     * @var FileSystem
      */
     protected $fileSystem;
 
@@ -304,7 +304,7 @@ class File
     /**
      * Return the current filesystem
      *
-     * @return Filesystem
+     * @return FileSystem
      */
     public function getFileSystem()
     {

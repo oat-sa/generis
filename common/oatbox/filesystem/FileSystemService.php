@@ -21,7 +21,6 @@ namespace oat\oatbox\filesystem;
 
 use oat\oatbox\service\ConfigurableService;
 use League\Flysystem\AdapterInterface;
-use League\Flysystem\Filesystem;
 use common_exception_Error;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
  /**
@@ -54,12 +53,12 @@ class FileSystemService extends ConfigurableService
     /**
      * 
      * @param string $id
-     * @return Filesystem
+     * @return FileSystem
      */
     public function getFileSystem($id)
     {
         if (!isset($this->filesystems[$id])) {
-            $this->filesystems[$id] = new \oat\oatbox\filesystem\FileSystem($id, $this->getFlysystemAdapter($id));
+            $this->filesystems[$id] = new FileSystem($id, $this->getFlysystemAdapter($id));
         }
         return $this->filesystems[$id];
     }
@@ -70,7 +69,7 @@ class FileSystemService extends ConfigurableService
      *
      * @param string $id
      * @param string $subPath
-     * @return \League\Flysystem\Filesystem
+     * @return FileSystem
      */
     public function createFileSystem($id, $subPath = null)
     {
@@ -89,7 +88,7 @@ class FileSystemService extends ConfigurableService
      * Create a new local file system
      * 
      * @param string $id
-     * @return Filesystem
+     * @return FileSystem
      */
     public function createLocalFileSystem($id)
     {

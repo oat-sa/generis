@@ -26,7 +26,7 @@ class Directory implements \IteratorAggregate
     const ITERATOR_DIRECTORY = '4';
 
     /**
-     * @var Filesystem
+     * @var FileSystem
      */
     protected $fileSystem;
 
@@ -156,11 +156,25 @@ class Directory implements \IteratorAggregate
     /**
      * Get the current flysystem, should be not public
      *
-     * @return Filesystem
+     * @return FileSystem
      */
     public function getFileSystem()
     {
         return $this->fileSystem;
+    }
+
+    /**
+     * Remove the current directory
+     *
+     * @return bool
+     * @throws \common_Exception
+     */
+    public function selfRemove()
+    {
+        if (! $this->exists()) {
+            throw new \common_Exception('Unable to find dir to delete: "' . $this->getPrefix() . '"');
+        }
+        return $this->getFileSystem()->deleteDir($this->getPrefix());
     }
 
     /**
@@ -193,31 +207,4 @@ class Directory implements \IteratorAggregate
         return $path;
     }
 
-    /**
-     * Remove the current directory
-     *
-     * @return bool
-     * @throws \common_Exception
-     */
-    public function remove()
-    {
-        if (! $this->exists()) {
-            throw new \common_Exception('Unable to find dir to delete: "' . $this->getPrefix() . '"');
-        }
-        return $this->getFileSystem()->deleteDir($this->getPrefix());
-    }
-
-    /**
-     * Create the current if not exists
-     *
-     * @return bool
-     * @throws \common_Exception
-     */
-    public function create()
-    {
-        if (! $this->exists()) {
-            return $this->getFileSystem()->createDir($this->getPrefix());
-        }
-        return true;
-    }
 }
