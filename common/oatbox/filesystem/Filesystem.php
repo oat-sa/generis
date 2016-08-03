@@ -59,7 +59,6 @@ use \League\Flysystem\Filesystem as FlyFileSystem;
  * @method \League\Flysystem\Handler                get(string  $path, \League\Flysystem\Handler $handler = null)
  * @method \League\Flysystem\FilesystemInterface    addPlugin(\League\Flysystem\PluginInterface $plugin)
  * @method \League\Flysystem\AdapterInterface       getAdapter()
-
  */
 class FileSystem
 {
