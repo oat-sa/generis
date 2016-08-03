@@ -18,7 +18,7 @@
  *
  */
 
-namespace oat\oatbox\filesystem\utils\serializer\implementation;
+namespace oat\generis\model\kernel\fileSystem;
 
 use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\filesystem\Directory;
