@@ -1,4 +1,22 @@
 <?php
+/**
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ *
+ */
 
 namespace oat\oatbox\filesystem\utils\serializer\implementation;
 
@@ -7,19 +25,18 @@ use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\filesystem\utils\serializer\FileSerializer;
-use oat\oatbox\service\ServiceManager;
+use oat\oatbox\service\ConfigurableService;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-class ResourceFileSerializer implements FileSerializer, ServiceLocatorAwareInterface
+class ResourceFileSerializer extends ConfigurableService
+    implements FileSerializer, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
     use OntologyAwareTrait;
 
-    public function __construct()
-    {
-        $this->setServiceLocator(ServiceManager::getServiceManager());
-    }
+    const RESOURCE_FILE_PATH            = 'path';
+    const RESOURCE_FILE_FILESYSTEM_URI  = 'fileSystemUri';
 
     /**
      * @see parent::serialize
@@ -54,58 +71,41 @@ class ResourceFileSerializer implements FileSerializer, ServiceLocatorAwareInter
     }
 
     /**
-     * This
+     * This implementation use \core_kernel_file_File URI as serial
+     *
      * @see parent::unserialize
      */
     public function unserialize($serial)
     {
-        $file = $this->getResource($serial);
+        $properties = $this->getResourceFilePropertiesValues($serial, true);
 
-        $properties = $file->getPropertiesValues(array(
-            $this->getProperty(PROPERTY_FILE_FILENAME),
-            $this->getProperty(PROPERTY_FILE_FILEPATH),
-            $this->getProperty(PROPERTY_FILE_FILESYSTEM)
-        ));
-
-        $fileName = current($properties[PROPERTY_FILE_FILENAME])->literal;
-        $filePath = current($properties[PROPERTY_FILE_FILEPATH])->literal;
-        $fileSystemProperty	=  current($properties[PROPERTY_FILE_FILESYSTEM]);
-        if ($fileSystemProperty instanceof \core_kernel_classes_Resource) {
-            $fileSystemUri = $fileSystemProperty->getUri();
-        } else {
-            $fileSystemUri = $fileSystemProperty->literal;
-        }
-
-        $fullPath = trim($filePath, '\\/') . '/' . trim($fileName, '\\/');
-        return $this->getRootDirectory($fileSystemUri)->getFile($fullPath);
-    }
-
-    public function cleanUp($serialisedFile)
-    {
+        return $this->getRootDirectory($properties[self::RESOURCE_FILE_FILESYSTEM_URI])
+            ->getDirectory($properties[self::RESOURCE_FILE_PATH]);
     }
 
     /**
+     * This implementation use \core_kernel_file_File URI as serial
+     *
      * @see parent::unserializeDirectory
      */
-    public function unserializeDirectory($serialisedFile)
+    public function unserializeDirectory($serial)
     {
-        $file = $this->getResource($serialisedFile);
+        $properties = $this->getResourceFilePropertiesValues($serial);
 
-        $properties = $file->getPropertiesValues(array(
-            $this->getProperty(PROPERTY_FILE_FILEPATH),
-            $this->getProperty(PROPERTY_FILE_FILESYSTEM)
-        ));
+        return $this->getRootDirectory($properties[self::RESOURCE_FILE_FILESYSTEM_URI])
+            ->getDirectory($properties[self::RESOURCE_FILE_PATH]);
+    }
 
-        $filePath = current($properties[PROPERTY_FILE_FILEPATH])->literal;
-        $fileSystemProperty	=  current($properties[PROPERTY_FILE_FILESYSTEM]);
-        if ($fileSystemProperty instanceof \core_kernel_classes_Resource) {
-            $fileSystemUri = $fileSystemProperty->getUri();
-        } else {
-            $fileSystemUri = $fileSystemProperty->literal;
-        }
-
-        $fullPath = trim($filePath, '\\/');
-        return $this->getRootDirectory($fileSystemUri)->getDirectory($fullPath);
+    /**
+     * This implementation use \core_kernel_file_File URI as serial
+     *
+     * @see parent::cleanUp
+     */
+    public function cleanUp($serial)
+    {
+        $resourceFile = $this->getResource($serial);
+        $file = new \core_kernel_file_File($resourceFile);
+        return $file->delete();
     }
 
     /**
@@ -116,5 +116,57 @@ class ResourceFileSerializer implements FileSerializer, ServiceLocatorAwareInter
     protected function getRootDirectory($uri)
     {
         return $this->getServiceLocator()->get(FileSystemService::SERVICE_ID)->getDirectory($uri);
+    }
+
+    /**
+     * Return an array with filesystem uri and path following serial
+     * Serial is Resource file uri, data are extracted from database
+     *
+     * This implementation use \core_kernel_file_File URI as serial
+     *
+     * @param $serial
+     * @param bool $withFilename
+     * @return array
+     * @throws \common_exception_InvalidArgumentType
+     */
+    protected function getResourceFilePropertiesValues($serial, $withFilename=false)
+    {
+        $file = $this->getResource($serial);
+
+        $propertiesDefinition = array(
+            $this->getProperty(PROPERTY_FILE_FILEPATH),
+            $this->getProperty(PROPERTY_FILE_FILESYSTEM)
+        );
+
+        if ($withFilename) {
+            array_push($propertiesDefinition, $this->getProperty(PROPERTY_FILE_FILENAME));
+        }
+
+        $propertiesValues = $file->getPropertiesValues($propertiesDefinition);
+
+        $properties = [];
+
+        $fileSystemProperty	=  current($propertiesValues[PROPERTY_FILE_FILESYSTEM]);
+        if ($fileSystemProperty instanceof \core_kernel_classes_Resource) {
+            $properties[self::RESOURCE_FILE_FILESYSTEM_URI] = $fileSystemProperty->getUri();
+        } else {
+            $properties[self::RESOURCE_FILE_FILESYSTEM_URI] = $fileSystemProperty->literal;
+        }
+
+        $filePath = current($propertiesValues[PROPERTY_FILE_FILEPATH])->literal;
+        $filePath = str_replace(DIRECTORY_SEPARATOR, '/', $filePath);
+        $filePath = trim($filePath, '/');
+
+        if ($withFilename) {
+            $fileName = current($propertiesValues[PROPERTY_FILE_FILENAME])->literal;
+            $fileName = str_replace(DIRECTORY_SEPARATOR, '/', $fileName);
+            $fileName = ltrim($fileName, '/');
+
+            $properties[self::RESOURCE_FILE_PATH] = $filePath . '/' . trim($fileName, '\\/');
+        } else {
+            $properties[self::RESOURCE_FILE_PATH] = $filePath;
+        }
+
+        return $properties;
     }
 }

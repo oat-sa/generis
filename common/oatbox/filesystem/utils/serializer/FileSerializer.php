@@ -8,6 +8,7 @@ interface FileSerializer
 
     /**
      * Serialize filesystem abstraction to a serial
+     * Abstraction should be \oat\oatbox\filesystem\Directory or \oat\oatbox\filesystem\File
      *
      * @param string $abstraction
      * @return string $serial
@@ -15,7 +16,7 @@ interface FileSerializer
     public function serialize($abstraction);
 
     /**
-     * Unserialize a serial, filename to a \oat\oatbox\filesystem\File
+     * Get the \oat\oatbox\filesystem\File associated to the serial
      *
      * @param $serial
      * @return \oat\oatbox\filesystem\File
@@ -23,10 +24,17 @@ interface FileSerializer
     public function unserialize($serial);
 
     /**
-     * Serialize a serial, path to a \oat\oatbox\filesystem\Directory
+     * Get the \oat\oatbox\filesystem\Directory associated to the serial
      *
      * @param $serial
      * @return \oat\oatbox\filesystem\Directory
      */
     public function unserializeDirectory($serial);
+
+    /**
+     * Delete
+     * @param $serial
+     * @return mixed
+     */
+    public function cleanUp($serial);
 }
