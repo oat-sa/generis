@@ -21,13 +21,12 @@ namespace oat\oatbox\filesystem\utils;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Handler;
 use League\Flysystem\PluginInterface;
-use League\Flysystem\FilesystemInterface;
 /**
  * A trait to facilitate creation of filesystem wrappers
  *
  * @author Joel Bout
  */
-class FileSystemWrapperTrait implements FilesystemInterface
+trait FileSystemWrapperTrait
 {
     /**
      * (non-PHPdoc)
