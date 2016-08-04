@@ -79,8 +79,6 @@ abstract class common_session_SessionManager
                 }
                 
                 PHPSession::singleton()->setAttribute(self::PHPSESSION_SESSION_KEY, $session);
-            } else {
-                PHPSession::singleton()->removeAttribute(self::PHPSESSION_SESSION_KEY);
             }
         }
         return true;
