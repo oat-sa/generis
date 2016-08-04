@@ -28,10 +28,8 @@ use oat\oatbox\service\ConfigurableService;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-class ResourceFileSerializer extends ConfigurableService
-    implements FileReferenceSerializer, ServiceLocatorAwareInterface
+class ResourceFileSerializer extends ConfigurableService implements FileReferenceSerializer
 {
-    use ServiceLocatorAwareTrait;
     use OntologyAwareTrait;
 
     const RESOURCE_FILE_PATH            = 'path';

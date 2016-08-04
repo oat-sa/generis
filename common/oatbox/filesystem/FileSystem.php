@@ -21,47 +21,17 @@
 namespace oat\oatbox\filesystem;
 
 use \League\Flysystem\Filesystem as FlyFileSystem;
+use League\Flysystem\FilesystemInterface;
+use oat\oatbox\filesystem\utils\FileSystemWrapperTrait;
+use League\Flysystem\AdapterInterface;
 
 /**
  * Class Filesystem
- *
- * @method bool             has(string $path)
- * @method string|false     read(string $path)
- * @method resource|false   readStream(string $path)
- * @method array            listContents(string $directory = '', bool $recursive = false)
- * @method array|false      getMetadata(string $path)
- * @method int|false        getSize(string $path)
- * @method string|false     getMimetype(string $path)
- * @method string|false     getTimestamp(string $path)
- * @method string|false     getVisibility(string $path)
- * @method bool             write(string $path, string $contents, array $config = [])
- * @method bool             writeStream(string   $path, resource $resource, array $config = [])
- * @method bool             update(string   $path, string $contents, array $config = [])
- * @method bool             updateStream(string   $path, resource $resource, array $config = [])
- * @method bool             rename(string $path, string $newpath)
- * @method bool             copy(string $path, string $newpath)
- * @method bool             delete(string $path)
- * @method bool             deleteDir(string $dirname)
- * @method bool             createDir(string $dirname, array $config = [])
- * @method bool             setVisibility(string $path, $visibility)
- * @method bool             put(string $path, string $contents, array $config = [])
- * @method bool             putStream(string $path, resource $resource, array $config = [])
- * @method string|false     readAndDelete(string  $path)
- * @method void             assertPresent(string $path)
- * @method void             assertAbsent(string $path)
- * @method array            getWithMetadata(string $path, array $metadata)
- * @method bool             forceCopy(string $path, string $newpath)
- * @method bool             forceRename(string $path, string $newpath)
- * @method array            listFiles(string $path = '', boolean $recursive = false)
- * @method array            listPaths(string $path = '', boolean $recursive = false)
- * @method array            listWith(array $keys = [], $directory = '', $recursive = false)
- *
- * @method \League\Flysystem\Handler                get(string  $path, \League\Flysystem\Handler $handler = null)
- * @method \League\Flysystem\FilesystemInterface    addPlugin(\League\Flysystem\PluginInterface $plugin)
- * @method \League\Flysystem\AdapterInterface       getAdapter()
  */
-class FileSystem
+class FileSystem implements FilesystemInterface
 {
+    use FileSystemWrapperTrait;
+
     protected $id;
 
     protected $filesystem;
@@ -87,7 +57,7 @@ class FileSystem
     }
 
     /**
-     * @return \League\Flysystem\Filesystem
+     * @return FlyFileSystem
      * @throws \common_Exception
      */
     protected function getFileSystem()
@@ -99,14 +69,13 @@ class FileSystem
         return $this->filesystem;
     }
 
-    public function __call($method, array $arguments)
+    /**
+     * Get the Adapter.
+     *
+     * @return AdapterInterface adapter
+     */
+    public function getAdapter()
     {
-        if (! method_exists($this, $method)) {
-            return call_user_func_array(
-                [$this->getFileSystem(), $method],
-                $arguments
-            );
-        }
+        return $this->getFileSystem()->getAdapter();
     }
-
 }
