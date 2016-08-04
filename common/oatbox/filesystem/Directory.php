@@ -164,16 +164,12 @@ class Directory implements \IteratorAggregate
     }
 
     /**
-     * Remove the current directory
+     * Delete the current directory
      *
      * @return bool
-     * @throws \common_Exception
      */
-    public function selfRemove()
+    public function deleteSelf()
     {
-        if (! $this->exists()) {
-            throw new \common_Exception('Unable to find dir to delete: "' . $this->getPrefix() . '"');
-        }
         return $this->getFileSystem()->deleteDir($this->getPrefix());
     }
 
