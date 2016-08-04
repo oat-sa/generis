@@ -21,19 +21,17 @@ namespace oat\oatbox\filesystem\utils;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Handler;
 use League\Flysystem\PluginInterface;
+use League\Flysystem\FilesystemInterface;
 /**
  * A trait to facilitate creation of filesystem wrappers
  *
  * @author Joel Bout
  */
-trait FileSystemWrapperTrait
+class FileSystemWrapperTrait implements FilesystemInterface
 {
     /**
-     * Check whether a file exists.
-     *
-     * @param string $path
-     *
-     * @return bool
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::has()
      */
     public function has($path) {
         return $this->getFileSystem()->has($path);
@@ -41,13 +39,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Read a file.
-     *
-     * @param string $path The path to the file.
-     *
-     * @throws FileNotFoundException
-     *
-     * @return string|false The file contents or false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::read()
      */
     public function read($path) {
         return $this->getFileSystem()->read($path);
@@ -55,13 +48,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Retrieves a read-stream for a path.
-     *
-     * @param string $path The path to the file.
-     *
-     * @throws FileNotFoundException
-     *
-     * @return resource|false The path resource or false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::readStream()
      */
     public function readStream($path) {
         return $this->getFileSystem()->readStream($path);
@@ -69,12 +57,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * List contents of a directory.
-     *
-     * @param string $directory The directory to list.
-     * @param bool   $recursive Whether to list recursively.
-     *
-     * @return array A list of file metadata.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::listContents()
      */
     public function listContents($directory = '', $recursive = false) {
         return $this->getFileSystem()->listContents($directory, $recursive);
@@ -82,13 +66,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Get a file's metadata.
-     *
-     * @param string $path The path to the file.
-     *
-     * @throws FileNotFoundException
-     *
-     * @return array|false The file metadata or false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::getMetadata()
      */
     public function getMetadata($path) {
         return $this->getFileSystem()->getMetadata($path);
@@ -96,11 +75,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Get a file's size.
-     *
-     * @param string $path The path to the file.
-     *
-     * @return int|false The file size or false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::getSize()
      */
     public function getSize($path) {
         return $this->getFileSystem()->getSize($path);
@@ -108,13 +84,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Get a file's mime-type.
-     *
-     * @param string $path The path to the file.
-     *
-     * @throws FileNotFoundException
-     *
-     * @return string|false The file mime-type or false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::getMimetype()
      */
     public function getMimetype($path) {
         return $this->getFileSystem()->getMimetype($path);
@@ -122,13 +93,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Get a file's timestamp.
-     *
-     * @param string $path The path to the file.
-     *
-     * @throws FileNotFoundException
-     *
-     * @return string|false The timestamp or false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::getTimestamp()
      */
     public function getTimestamp($path) {
         return $this->getFileSystem()->getTimestamp($path);
@@ -136,13 +102,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Get a file's visibility.
-     *
-     * @param string $path The path to the file.
-     *
-     * @throws FileNotFoundException
-     *
-     * @return string|false The visibility (public|private) or false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::getVisibility()
      */
     public function getVisibility($path) {
         return $this->getFileSystem()->getVisibility($path);
@@ -150,15 +111,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Write a new file.
-     *
-     * @param string $path     The path of the new file.
-     * @param string $contents The file contents.
-     * @param array  $config   An optional configuration array.
-     *
-     * @throws FileExistsException
-     *
-     * @return bool True on success, false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::write()
      */
     public function write($path, $contents, array $config = []) {
         return $this->getFileSystem()->write($path, $contents, $config);
@@ -166,16 +120,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Write a new file using a stream.
-     *
-     * @param string   $path     The path of the new file.
-     * @param resource $resource The file handle.
-     * @param array    $config   An optional configuration array.
-     *
-     * @throws InvalidArgumentException If $resource is not a file handle.
-     * @throws FileExistsException
-     *
-     * @return bool True on success, false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::writeStream()
      */
     public function writeStream($path, $resource, array $config = []) {
         return $this->getFileSystem()->writeStream($path, $resource, $config);
@@ -183,15 +129,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Update an existing file.
-     *
-     * @param string $path     The path of the existing file.
-     * @param string $contents The file contents.
-     * @param array  $config   An optional configuration array.
-     *
-     * @throws FileNotFoundException
-     *
-     * @return bool True on success, false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::update()
      */
     public function update($path, $contents, array $config = []) {
         return $this->getFileSystem()->update($path, $contents, $config);
@@ -199,16 +138,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Update an existing file using a stream.
-     *
-     * @param string   $path     The path of the existing file.
-     * @param resource $resource The file handle.
-     * @param array    $config   An optional configuration array.
-     *
-     * @throws InvalidArgumentException If $resource is not a file handle.
-     * @throws FileNotFoundException
-     *
-     * @return bool True on success, false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::updateStream()
      */
     public function updateStream($path, $resource, array $config = []) {
         return $this->getFileSystem()->updateStream($path, $resource, $config);
@@ -216,15 +147,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Rename a file.
-     *
-     * @param string $path    Path to the existing file.
-     * @param string $newpath The new path of the file.
-     *
-     * @throws FileExistsException   Thrown if $newpath exists.
-     * @throws FileNotFoundException Thrown if $path does not exist.
-     *
-     * @return bool True on success, false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::rename()
      */
     public function rename($path, $newpath) {
         return $this->getFileSystem()->rename($path, $newpath);
@@ -232,15 +156,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Copy a file.
-     *
-     * @param string $path    Path to the existing file.
-     * @param string $newpath The new path of the file.
-     *
-     * @throws FileExistsException   Thrown if $newpath exists.
-     * @throws FileNotFoundException Thrown if $path does not exist.
-     *
-     * @return bool True on success, false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::copy()
      */
     public function copy($path, $newpath) {
         return $this->getFileSystem()->copy($path, $newpath);
@@ -248,13 +165,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Delete a file.
-     *
-     * @param string $path
-     *
-     * @throws FileNotFoundException
-     *
-     * @return bool True on success, false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::delete()
      */
     public function delete($path) {
         return $this->getFileSystem()->delete($path);
@@ -262,13 +174,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Delete a directory.
-     *
-     * @param string $dirname
-     *
-     * @throws RootViolationException Thrown if $dirname is empty.
-     *
-     * @return bool True on success, false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::deleteDir()
      */
     public function deleteDir($dirname) {
         return $this->getFileSystem()->deleteDir($dirname);
@@ -276,12 +183,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Create a directory.
-     *
-     * @param string $dirname The name of the new directory.
-     * @param array  $config  An optional configuration array.
-     *
-     * @return bool True on success, false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::createDir()
      */
     public function createDir($dirname, array $config = []) {
         return $this->getFileSystem()->createDir($dirname, $config);
@@ -289,12 +192,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Set the visibility for a file.
-     *
-     * @param string $path       The path to the file.
-     * @param string $visibility One of 'public' or 'private'.
-     *
-     * @return bool True on success, false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::setVisibility()
      */
     public function setVisibility($path, $visibility) {
         return $this->getFileSystem()->setVisibility($path, $visibility);
@@ -302,13 +201,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Create a file or update if exists.
-     *
-     * @param string $path     The path to the file.
-     * @param string $contents The file contents.
-     * @param array  $config   An optional configuration array.
-     *
-     * @return bool True on success, false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::put()
      */
     public function put($path, $contents, array $config = []) {
         return $this->getFileSystem()->put($path, $contents, $config);
@@ -316,15 +210,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Create a file or update if exists.
-     *
-     * @param string   $path     The path to the file.
-     * @param resource $resource The file handle.
-     * @param array    $config   An optional configuration array.
-     *
-     * @throws InvalidArgumentException Thrown if $resource is not a resource.
-     *
-     * @return bool True on success, false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::putStream()
      */
     public function putStream($path, $resource, array $config = []) {
         return $this->getFileSystem()->putStream($path, $resource, $config);
@@ -332,13 +219,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Read and delete a file.
-     *
-     * @param string $path The path to the file.
-     *
-     * @throws FileNotFoundException
-     *
-     * @return string|false The file contents, or false on failure.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::readAndDelete()
      */
     public function readAndDelete($path) {
         return $this->getFileSystem()->readAndDelete($path);
@@ -346,12 +228,8 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Get a file/directory handler.
-     *
-     * @param string  $path    The path to the file.
-     * @param Handler $handler An optional existing handler to populate.
-     *
-     * @return Handler Either a file or directory handler.
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::get()
      */
     public function get($path, Handler $handler = null) {
         return $this->getFileSystem()->get($path, $handler);
@@ -359,18 +237,15 @@ trait FileSystemWrapperTrait
 
 
     /**
-     * Register a plugin.
-     *
-     * @param PluginInterface $plugin The plugin to register.
-     *
-     * @return $this
+     * (non-PHPdoc)
+     * @see \League\Flysystem\FilesystemInterface::addPlugin()
      */
     public function addPlugin(PluginInterface $plugin) {
         return $this->getFileSystem()->addPlugin($plugin);
     }
 
     /**
-     * Return the adapter implementation
+     * Return the underlying Filesystem
      *
      * @return Filesystem
      */
