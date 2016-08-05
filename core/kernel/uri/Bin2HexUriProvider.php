@@ -17,87 +17,35 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2013      (update and modification) Open Assessment Technologies SA;
  */
+namespace oat\generis\model\kernel\uri;
 
+use oat\oatbox\service\ConfigurableService;
 /**
- * Short description of class core_kernel_classes_Triple
+ * UriProvider implementation based on an advanced key value storage
  *
  * @access public
- * @author patrick.plichart@tudor.lu
+ * @author Joel Bout, <joel@taotesting.com>
  * @package generis
  
  */
-class core_kernel_classes_Triple
-    extends core_kernel_classes_Container
+class Bin2HexUriProvider extends ConfigurableService
+    implements UriProvider
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
+    const OPTION_NAMESPACE = 'namespace';
+    
     /**
-     * Short description of attribute modelid
+     * Generates a URI based on a serial stored in the database.
      *
      * @access public
-     * @var int
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     * @return string
+     * @throws common_UriProviderException
      */
-    public $modelid = 0;
-
-    /**
-     * Short description of attribute subject
-     *
-     * @access public
-     * @var string
-     */
-    public $subject = '';
-
-    /**
-     * Short description of attribute predicate
-     *
-     * @access public
-     * @var string
-     */
-    public $predicate = '';
-
-    /**
-     * Short description of attribute object
-     *
-     * @access public
-     * @var string
-     */
-    public $object = '';
-
-    /**
-     * Short description of attribute id
-     *
-     * @access public
-     * @var int
-     */
-    public $id = 0;
-
-    /**
-     * Short description of attribute lg
-     *
-     * @access public
-     * @var string
-     */
-    public $lg = '';
-
-    /**
-     * User asking for the triple creation
-     *
-     * @access public
-     * @var string
-     */
-    public $author = '';
-
-    /**
-     * Triple creation time
-     *
-     * @access public
-     * @var string
-     */
-    public $epoch = '';
+    public function provide()
+    {
+        return $this->getOption(self::OPTION_NAMESPACE) . uniqid('i'). getmypid(). bin2hex(openssl_random_pseudo_bytes(8));
+    }
 
 }

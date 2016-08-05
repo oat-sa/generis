@@ -78,7 +78,7 @@ class SyncQueue extends ConfigurableService implements Queue
      */
     public function getIterator()
     {
-        return null;
+        return new \EmptyIterator;
     }
 
     /**

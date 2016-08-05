@@ -22,6 +22,7 @@ namespace oat\oatbox\task;
  
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\action\ActionService;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 class TaskRunner
 {
@@ -36,6 +37,8 @@ class TaskRunner
             $invocable = $task->getInvocable();
             if (is_string($invocable)) {
                 $invocable = $actionService->resolve($task->getInvocable());
+            } else if ($invocable instanceof ServiceLocatorAwareInterface) {
+                $invocable->setServiceLocator($this->getServiceLocator());
             }
             $subReport = call_user_func($invocable, $task->getParameters());
             $report->add($subReport);

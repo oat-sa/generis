@@ -19,8 +19,7 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-use oat\generis\model\kernel\uri\UriProvider;
-
+namespace oat\generis\model\kernel\uri;
 /**
  * Any implementation of the UriProvider interface must provide
  * unique URI to the caller.
@@ -29,8 +28,16 @@ use oat\generis\model\kernel\uri\UriProvider;
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- * @deprecated pls use UriProvider
  */
-interface common_uri_UriProvider extends UriProvider
+interface UriProvider
 {
+    /**
+     * Provides a URI.
+     *
+     * @abstract
+     * @access public
+     * @return string
+     */
+    public function provide();
+
 }

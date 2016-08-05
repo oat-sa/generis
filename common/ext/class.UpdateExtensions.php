@@ -19,6 +19,10 @@
  */
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\action\Action;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Psr\Log\LoggerAwareInterface;
+use oat\oatbox\log\LoggerAwareTrait;
 /**
  * Run the extension updater 
  *
@@ -26,8 +30,11 @@ use oat\oatbox\action\Action;
  * @package generis
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
  */
-class common_ext_UpdateExtensions implements Action
+class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterface, LoggerAwareInterface
 {
+    use ServiceLocatorAwareTrait;
+    use LoggerAwareTrait;
+    
     /**
      * (non-PHPdoc)
      * @see \oat\oatbox\action\Action::__invoke()
@@ -59,13 +66,14 @@ class common_ext_UpdateExtensions implements Action
                 $report->add(new common_report_Report(common_report_Report::TYPE_ERROR, $ex->getMessage()));
                 break;
             } catch (Exception $e) {
+                $this->logError('Exception during update of '.$ext->getId().': '.get_class($e).' "'.$e->getMessage().'"');
                 $report->setType(common_report_Report::TYPE_ERROR);
                 $report->setTitle('Update failed');
                 $report->add(new common_report_Report(common_report_Report::TYPE_ERROR, 'Exception during update of '.$ext->getId().'.'));
                 break;
             }
         }
-        $this->logReport($report);
+        $this->logInfo(helpers_Report::renderToCommandline($report, false));
         return $report;
     }
     
@@ -121,16 +129,5 @@ class common_ext_UpdateExtensions implements Action
             $missingExt[$extId] = $ext;
         }
         return $missingExt;
-    }
-    
-    protected function logReport(common_report_Report $report)
-    {
-        $folder = FILES_PATH.'updates'.DIRECTORY_SEPARATOR;
-        $updateId = time();
-        while (file_exists($folder.$updateId.'.log')) {
-            $count = isset($count) ? $count + 1 : 0;
-            $updateId = time().'_'.$count;
-        }
-        file_put_contents($folder.$updateId.'.log', helpers_Report::renderToCommandline($report, false));
     }
 }

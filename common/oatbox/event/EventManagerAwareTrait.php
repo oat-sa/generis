@@ -14,22 +14,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
  */
-namespace oat\oatbox\action;
 
-use oat\oatbox\service\ConfigurableService;
+namespace oat\oatbox\event;
+
+use oat\oatbox\service\ServiceManager;
+
 /**
- * @deprecated
+ * Trait EventManagerAwareTrait
+ * @package tao
  */
-class ActionResolver extends ConfigurableService
+trait EventManagerAwareTrait
 {
     /**
-     * @deprecated please use ActionService
+     * @return EventManager
      */
-    public function resolve($actionIdentifier)
+    public function getEventManager()
     {
-        return $this->getServiceManager()->get(ActionService::SERVICE_ID)->resolve($actionIdentifier);
+        return ServiceManager::getServiceManager()->get(EventManager::CONFIG_ID);
     }
 }

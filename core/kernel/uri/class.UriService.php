@@ -1,4 +1,5 @@
 <?php
+use oat\generis\model\kernel\uri\UriProvider;
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,9 +54,9 @@ class core_kernel_uri_UriService
     /**
      * Set the UriProvider in force.
      * 
-     * @param common_uri_UriProvider $provider
+     * @param UriProvider $provider
      */
-    public function setUriProvider(common_uri_UriProvider $provider)
+    public function setUriProvider(UriProvider $provider)
     {
         $this->uriProvider = $provider; 
         common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->setConfig(self::CONFIG_KEY, $provider);
@@ -64,7 +65,7 @@ class core_kernel_uri_UriService
     /**
      * Get the UriProvider in force.
      * 
-     * @return common_uri_UriProvider
+     * @return UriProvider
      */
     public function getUriProvider()
     {

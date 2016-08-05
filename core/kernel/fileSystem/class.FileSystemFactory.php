@@ -45,6 +45,7 @@ class core_kernel_fileSystem_FileSystemFactory
      * @param  string label
      * @param  boolean enabled
      * @return core_kernel_versioning_Repository
+     * @deprecated
      */
     public static function createFileSystem( core_kernel_classes_Resource $type, $url, $login, $password, $path, $label, $enabled = false)
     {
@@ -69,7 +70,8 @@ class core_kernel_fileSystem_FileSystemFactory
         
         $serviceManager = ServiceManager::getServiceManager();
         $fsm = $serviceManager->get(FileSystemService::SERVICE_ID);
-        $fsm->registerLocalFileSystem($resource->getUri(), $path);
+        $path = str_replace(FILES_PATH, '', $path);
+        $fsm->createFileSystem($resource->getUri(), $path);
         $serviceManager->register(FileSystemService::SERVICE_ID, $fsm);
         
         return new core_kernel_fileSystem_FileSystem($resource);
