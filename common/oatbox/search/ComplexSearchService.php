@@ -85,8 +85,15 @@ class ComplexSearchService extends ConfigurableService
     public function getGateway() {
         return $this->gateway;
     }
-
     /**
+     * return a new query builder
+     * @return \oat\search\QueryBuilder
+     */
+    public function query() {
+        return $this->gateway->query();
+    }
+
+        /**
      * return a preset query builder with types
      * @param QueryBuilderInterface $query
      * @param string $class_uri
@@ -104,20 +111,21 @@ class ComplexSearchService extends ConfigurableService
          
         $rdftypes[] = $class_uri;
         
-        $query->criteria()
+        $criteria = $query->newQuery()
                 ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
                 ->in($rdftypes);
         
-        return $query;
+        return $criteria;
     }
     
     /**
      * set gateway language options
+     * @param QueryBuilderInterface $query
      * @param string $userLanguage
      * @param string $defaultLanguage
      * @return $this
      */
-    public function setLanguage($userLanguage = '' , $defaultLanguage = \DEFAULT_LANG) {
+    public function setLanguage(QueryBuilderInterface $query , $userLanguage = '' , $defaultLanguage = \DEFAULT_LANG) {
         $options = $this->gateway->getOptions();
         if(!empty($userLanguage)) {
             $options['language'] = $userLanguage;
@@ -126,7 +134,7 @@ class ComplexSearchService extends ConfigurableService
         
         $this->gateway->setOptions($options);
         
-        return $this;
+        return $query->newQuery();
     }
 
     /**
@@ -146,19 +154,21 @@ class ComplexSearchService extends ConfigurableService
      */
     public function getQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $classUri, array $propertyFilters, $and = true, $like = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC') 
     {
-        $query = $this->gateway->query()->setOffset( $limit , $offset );
+        $query = $this->gateway->query()->setLimit( $limit )->setOffset($offset );
         
         if(!empty($order)) {
             $query->sort([$order => strtolower($orderDir)]);
         }
         
-        $this->setLanguage($lang);
+        $this->setLanguage($query , $lang);
         
         $operator = $this->getOperator($like);
         
-        $criteria = $query->criteria()
+        $criteria = $query->newQuery()
                 ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
-                ->in($classUri)->andQuery();
+                ->in($classUri);
+        
+        $query->setCriteria($criteria);
         
         foreach ($propertyFilters as $predicate => $value ) {
 
@@ -169,21 +179,19 @@ class ComplexSearchService extends ConfigurableService
                 $value = $value[0];
             }
             
-            $param = $criteria->addCriterium($predicate , $operator , $value);
+            $criteria->addCriterion($predicate , $operator , $value);
             
             foreach ($nextValue as $value) {
-                $param->addAnd($value);
+                $criteria->addAnd($value);
             }
-            if($and) {
-                $param->andQuery();
-            } else {
-                $param->orQuery()
-                        ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
-                        ->in($classUri)
-                        ->andQuery();
+            if($and === false) {
+                $criteria = $query->newQuery()
+                ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
+                ->in($classUri);
+                $query->setOr($criteria);
             }
         }
-        $queryString = $this->gateway->parse($query)->getQuery();
+        $queryString = $this->gateway->serialyse($query)->getQuery();
 
         if(DEBUG_MODE) {
             \common_Logger::i($queryString);
