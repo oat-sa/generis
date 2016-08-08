@@ -30,8 +30,9 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
 {
     use OntologyAwareTrait;
 
-    const RESOURCE_FILE_PATH            = 'path';
     const RESOURCE_FILE_FILESYSTEM_URI  = 'fileSystemUri';
+    const RESOURCE_FILE_PATH            = 'path';
+    const RESOURCE_FILE_NAME            = 'fileName';
 
     /**
      * @see parent::serialize
@@ -72,10 +73,19 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
      */
     public function unserialize($serial)
     {
-        $properties = $this->getResourceFilePropertiesValues($serial, true);
-
+        $properties = $this->getResourceFilePropertiesValues($serial);
+        $dir = $this->getRootDirectory($properties[self::RESOURCE_FILE_FILESYSTEM_URI]);
+        return isset($properties[self::RESOURCE_FILE_NAME])
+            ? $dir->getFile($properties[self::RESOURCE_FILE_PATH].'/'.$properties[self::RESOURCE_FILE_NAME])
+            : $dir->getDirectory($properties[self::RESOURCE_FILE_PATH]);
+    }
+    
+    public function unserializeFile($serial)
+    {
+        $properties = $this->getResourceFilePropertiesValues($serial);
+    
         return $this->getRootDirectory($properties[self::RESOURCE_FILE_FILESYSTEM_URI])
-            ->getDirectory($properties[self::RESOURCE_FILE_PATH]);
+        ->getFile($properties[self::RESOURCE_FILE_PATH].'/'.self::RESOURCE_FILE_NAME);
     }
 
     /**
@@ -124,18 +134,15 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
      * @return array
      * @throws \common_exception_InvalidArgumentType
      */
-    protected function getResourceFilePropertiesValues($serial, $withFilename=false)
+    protected function getResourceFilePropertiesValues($serial)
     {
         $file = $this->getResource($serial);
 
         $propertiesDefinition = array(
             $this->getProperty(PROPERTY_FILE_FILEPATH),
-            $this->getProperty(PROPERTY_FILE_FILESYSTEM)
+            $this->getProperty(PROPERTY_FILE_FILESYSTEM),
+            $this->getProperty(PROPERTY_FILE_FILENAME)
         );
-
-        if ($withFilename) {
-            array_push($propertiesDefinition, $this->getProperty(PROPERTY_FILE_FILENAME));
-        }
 
         $propertiesValues = $file->getPropertiesValues($propertiesDefinition);
 
@@ -150,16 +157,13 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
 
         $filePath = current($propertiesValues[PROPERTY_FILE_FILEPATH])->literal;
         $filePath = str_replace(DIRECTORY_SEPARATOR, '/', $filePath);
-        $filePath = trim($filePath, '/');
+        $properties[self::RESOURCE_FILE_PATH] = trim($filePath, '/');
 
-        if ($withFilename) {
+        if (!empty($propertiesValues[PROPERTY_FILE_FILENAME])) {
             $fileName = current($propertiesValues[PROPERTY_FILE_FILENAME])->literal;
             $fileName = str_replace(DIRECTORY_SEPARATOR, '/', $fileName);
-            $fileName = ltrim($fileName, '/');
 
-            $properties[self::RESOURCE_FILE_PATH] = $filePath . '/' . trim($fileName, '\\/');
-        } else {
-            $properties[self::RESOURCE_FILE_PATH] = $filePath;
+            $properties[self::RESOURCE_FILE_NAME] = ltrim($fileName, '/');
         }
 
         return $properties;

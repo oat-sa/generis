@@ -16,13 +16,21 @@ interface FileReferenceSerializer
     public function serialize($abstraction);
 
     /**
+     * Returns the file/directory serialized
+     *
+     * @param $serial
+     * @return File|Directory
+     */
+    public function unserialize($serial);
+
+    /**
      * Get the \oat\oatbox\filesystem\File associated to the serial
      *
      * @param $serial
      * @return \oat\oatbox\filesystem\File
      */
-    public function unserialize($serial);
-
+    public function unserializeFile($serial);
+    
     /**
      * Get the \oat\oatbox\filesystem\Directory associated to the serial
      *
