@@ -2,6 +2,8 @@
 
 namespace oat\generis\model\kernel\fileSystem;
 
+use oat\oatbox\filesystem\FileSystemHandler;
+
 interface FileReferenceSerializer
 {
     const SERVICE_ID = 'generis/fileReferenceSerializer';
@@ -19,7 +21,7 @@ interface FileReferenceSerializer
      * Returns the file/directory serialized
      *
      * @param $serial
-     * @return File|Directory
+     * @return FileSystemHandler
      */
     public function unserialize($serial);
 

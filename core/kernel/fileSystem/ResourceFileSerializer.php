@@ -35,9 +35,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
     const RESOURCE_FILE_NAME            = 'fileName';
 
     /**
-     * @param string $abstraction
-     * @return string
-     * @throws \common_Exception
+     * @see FileReferenceSerializer::serialize
      */
     public function serialize($abstraction)
     {
@@ -63,7 +61,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
     /**
      * This implementation use \core_kernel_file_File URI as serial
      *
-     * @see parent::unserialize
+     * @see FileReferenceSerializer::unserialize
      */
     public function unserialize($serial)
     {
@@ -73,7 +71,12 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
             ? $dir->getFile($properties[self::RESOURCE_FILE_PATH].'/'.$properties[self::RESOURCE_FILE_NAME])
             : $dir->getDirectory($properties[self::RESOURCE_FILE_PATH]);
     }
-    
+
+    /**
+     * This implementation use \core_kernel_file_File URI as serial
+     *
+     * @see FileReferenceSerializer::unserializeFile
+     */
     public function unserializeFile($serial)
     {
         $properties = $this->getResourceFilePropertiesValues($serial);
@@ -85,7 +88,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
     /**
      * This implementation use \core_kernel_file_File URI as serial
      *
-     * @see parent::unserializeDirectory
+     * @see FileReferenceSerializer::unserializeDirectory
      */
     public function unserializeDirectory($serial)
     {
@@ -98,7 +101,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
     /**
      * This implementation use \core_kernel_file_File URI as serial
      *
-     * @see parent::cleanUp
+     * @see FileReferenceSerializer::cleanUp
      */
     public function cleanUp($serial)
     {
@@ -124,7 +127,6 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
      * This implementation use \core_kernel_file_File URI as serial
      *
      * @param $serial
-     * @param bool $withFilename
      * @return array
      * @throws \common_exception_InvalidArgumentType
      */
@@ -153,7 +155,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
         $filePath = str_replace(DIRECTORY_SEPARATOR, '/', $filePath);
         $properties[self::RESOURCE_FILE_PATH] = trim($filePath, '/');
 
-        if (!empty($propertiesValues[PROPERTY_FILE_FILENAME])) {
+        if (! empty($propertiesValues[PROPERTY_FILE_FILENAME])) {
             $fileName = current($propertiesValues[PROPERTY_FILE_FILENAME])->literal;
             $fileName = str_replace(DIRECTORY_SEPARATOR, '/', $fileName);
 
