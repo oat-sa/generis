@@ -21,9 +21,12 @@
 
 namespace oat\oatbox\filesystem;
 
-abstract class FileSystemHandler
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+
+abstract class FileSystemHandler implements ServiceLocatorAwareInterface
 {
-    use FileSystemAwareTrait;
+    use ServiceLocatorAwareTrait;
 
     /**
      * @var mixed
@@ -34,6 +37,11 @@ abstract class FileSystemHandler
      * @var string
      */
     protected $prefix;
+
+    /**
+     * @var  FileSystem
+     */
+    protected $fileSystem;
 
     /**
      * FileSystemHandler constructor.
