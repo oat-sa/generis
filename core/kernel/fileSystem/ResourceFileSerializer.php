@@ -43,15 +43,17 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
 
         if ($abstraction instanceof File) {
             $filename = $abstraction->getBasename();
+            $filePath = dirname($abstraction->getPrefix());
         } elseif ($abstraction instanceof Directory) {
             $filename = '';
+            $filePath = $abstraction->getPrefix();
         } else {
             throw new \common_Exception(__CLASS__ . '::' . __FUNCTION__ . ' expects parameter to be an instance of Directory or File');
         }
 
         $resource = $fileClass->createInstanceWithProperties(array(
             PROPERTY_FILE_FILENAME => $filename,
-            PROPERTY_FILE_FILEPATH => $abstraction->getPrefix(),
+            PROPERTY_FILE_FILEPATH => $filePath,
             PROPERTY_FILE_FILESYSTEM => $this->getResource($abstraction->getFileSystemId())
         ));
 

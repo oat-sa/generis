@@ -34,13 +34,11 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
     public function serialize($abstraction)
     {
         if ($abstraction instanceof File) {
-            $filesystem = $abstraction->getFileSystem();
-            $baseDir = $this->getRootDirectory($filesystem->getId());
-            return 'file://'.urlencode($filesystem->getId()).'/'.urlencode($baseDir->getRelPath($abstraction));
+            $baseDir = $this->getRootDirectory($abstraction->getFileSystemId());
+            return 'file://'.urlencode($abstraction->getFileSystemId()).'/'.urlencode($baseDir->getRelPath($abstraction));
         } elseif ($abstraction instanceof Directory) {
-            $filesystem = $abstraction->getFileSystem();
-            $baseDir = $this->getRootDirectory($filesystem->getId());
-            return 'dir://'.urlencode($filesystem->getId()).'/'.urlencode($baseDir->getRelPath($abstraction));
+            $baseDir = $this->getRootDirectory($abstraction->getFileSystemId());
+            return 'dir://'.urlencode($abstraction->getFileSystemId()).'/'.urlencode($baseDir->getRelPath($abstraction));
         } else {
             throw new \common_Exception(__CLASS__ . '::' . __FUNCTION__ . ' expects parameter to be an instance of Directory or File');
         }
