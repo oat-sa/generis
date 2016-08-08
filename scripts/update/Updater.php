@@ -248,7 +248,7 @@ class Updater extends \common_ext_ExtensionUpdater {
             ));
             
             $this->getServiceManager()->register(\oat\oatbox\search\ComplexSearchService::SERVICE_ID, $complexSearch);
-            $this->setVersion('2.29.0');
+            $this->setVersion('3.0.0');
         }
     }
     
