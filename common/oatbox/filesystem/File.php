@@ -17,6 +17,7 @@
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
+
 namespace oat\oatbox\filesystem;
 
 use GuzzleHttp\Psr7\Stream;
@@ -24,42 +25,8 @@ use GuzzleHttp\Psr7\StreamWrapper;
 use League\Flysystem\FileNotFoundException;
 use Psr\Http\Message\StreamInterface;
 
-class File
+class File extends FileSystemHandler
 {
-    /**
-     * @var FileSystem
-     */
-    protected $fileSystem;
-
-    /**
-     * Relative prefix into $this->filesystem
-     *
-     * @var string
-     */
-    protected $path;
-
-    /**
-     * File constructor.
-     *
-     * @param $fileSystem
-     * @param $path
-     */
-    public function __construct($fileSystem, $path)
-    {
-        $this->fileSystem = $fileSystem;
-        $this->path = $this->sanitize($path);
-    }
-
-    /**
-     * Return path of $this file
-     *
-     * @return string
-     */
-    public function getPrefix()
-    {
-        return $this->path;
-    }
-
     /**
      * Get basename of $this file
      *
@@ -79,7 +46,8 @@ class File
     {
         try {
             return $this->getFileSystem()->getMimetype($this->getPrefix());
-        } catch (FileNotFoundException $e) {}
+        } catch (FileNotFoundException $e) {
+        }
         return false;
     }
 
@@ -102,7 +70,8 @@ class File
     {
         try {
             return $this->getFileSystem()->get($this->getPrefix())->getMetadata();
-        } catch (FileNotFoundException $e) {}
+        } catch (FileNotFoundException $e) {
+        }
         return false;
     }
 
@@ -135,22 +104,22 @@ class File
         }
 
         if ($mixed instanceof StreamInterface) {
-            if (! $mixed->isReadable()) {
+            if (!$mixed->isReadable()) {
                 throw new \common_Exception('Stream is not readable. Write to filesystem aborted.');
             }
-            if (! $mixed->isSeekable()) {
+            if (!$mixed->isSeekable()) {
                 throw new \common_Exception('Stream is not seekable. Write to filesystem aborted.');
             }
             $mixed->rewind();
 
             $resource = StreamWrapper::getResource($mixed);
-            if (! is_resource($resource)) {
+            if (!is_resource($resource)) {
                 throw new \common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
             }
             return $this->getFileSystem()->writeStream($this->getPrefix(), $resource, $config);
         }
 
-        throw new \InvalidArgumentException('Value to be written has to be: string, resource or StreamInterface, '.
+        throw new \InvalidArgumentException('Value to be written has to be: string, resource or StreamInterface, ' .
             '"' . gettype($mixed) . '" given.');
     }
 
@@ -167,7 +136,7 @@ class File
      */
     public function update($mixed, $mimeType = null)
     {
-        if (! $this->exists()) {
+        if (!$this->exists()) {
             throw new \FileNotFoundException('File "' . $this->getPrefix() . '" not found."');
         }
 
@@ -183,16 +152,16 @@ class File
         }
 
         if ($mixed instanceof StreamInterface) {
-            if (! $mixed->isReadable()) {
+            if (!$mixed->isReadable()) {
                 throw new \common_Exception('Stream is not readable. Write to filesystem aborted.');
             }
-            if (! $mixed->isSeekable()) {
+            if (!$mixed->isSeekable()) {
                 throw new \common_Exception('Stream is not seekable. Write to filesystem aborted.');
             }
             $mixed->rewind();
 
             $resource = StreamWrapper::getResource($mixed);
-            if (! is_resource($resource)) {
+            if (!is_resource($resource)) {
                 throw new \common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
             }
             return $this->getFileSystem()->updateStream($this->getPrefix(), $resource, $config);
@@ -225,16 +194,16 @@ class File
         }
 
         if ($mixed instanceof StreamInterface) {
-            if (! $mixed->isReadable()) {
+            if (!$mixed->isReadable()) {
                 throw new \common_Exception('Stream is not readable. Write to filesystem aborted.');
             }
-            if (! $mixed->isSeekable()) {
+            if (!$mixed->isSeekable()) {
                 throw new \common_Exception('Stream is not seekable. Write to filesystem aborted.');
             }
             $mixed->rewind();
 
             $resource = StreamWrapper::getResource($mixed);
-            if (! is_resource($resource)) {
+            if (!is_resource($resource)) {
                 throw new \common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
             }
             return $this->getFileSystem()->putStream($this->getPrefix(), $resource, $config);
@@ -252,7 +221,7 @@ class File
     {
         return $this->getFileSystem()->read($this->getPrefix());
     }
-    
+
     /**
      * Return content of file as PHP stream (resource)
      *
@@ -262,7 +231,7 @@ class File
     {
         return $this->getFileSystem()->readStream($this->getPrefix());
     }
-    
+
     /**
      * Return content of file as PSR-7 stream
      *
@@ -284,7 +253,8 @@ class File
             if ($metadata = $this->getFileSystem()->getMetadata($this->getPrefix())) {
                 return $metadata['type'] == 'file';
             }
-        } catch (FileNotFoundException $e) {}
+        } catch (FileNotFoundException $e) {
+        }
         return false;
     }
 
@@ -298,36 +268,7 @@ class File
         try {
             return $this->getFileSystem()->delete($this->getPrefix());
         } catch (FileNotFoundException $e) {}
+
         return false;
     }
-
-    /**
-     * Return the current filesystem
-     *
-     * @return FileSystem
-     */
-    public function getFileSystem()
-    {
-        return $this->fileSystem;
-    }
-
-    /**
-     * Sanitize path:
-     *  - by replace \ to / for windows compatibility (only on local)
-     *  - trim .
-     *  - trim / or \\
-     *
-     * @param $path
-     * @return string
-     */
-    protected function sanitize($path)
-    {
-        $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
-
-        $path = preg_replace('/'.preg_quote('./', '/').'/', '', $path, 1);
-        $path = trim($path, '/');
-
-        return $path;
-    }
-
 }

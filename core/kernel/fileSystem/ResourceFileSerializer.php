@@ -34,33 +34,27 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
     const RESOURCE_FILE_FILESYSTEM_URI  = 'fileSystemUri';
 
     /**
-     * @see parent::serialize
+     * @param string $abstraction
+     * @return string
+     * @throws \common_Exception
      */
     public function serialize($abstraction)
     {
         $fileClass = $this->getClass(CLASS_GENERIS_FILE);
 
         if ($abstraction instanceof File) {
-            $filesystem = $abstraction->getFileSystem();
-            $filePath = $this->getRootDirectory($filesystem->getId())->getRelPath($abstraction);
-
-            $resource = $fileClass->createInstanceWithProperties(array(
-                PROPERTY_FILE_FILENAME => $abstraction->getBasename(),
-                PROPERTY_FILE_FILEPATH => $filePath,
-                PROPERTY_FILE_FILESYSTEM => $this->getResource($filesystem->getId())
-            ));
+            $filename = $abstraction->getBasename();
         } elseif ($abstraction instanceof Directory) {
-            $filesystem = $abstraction->getFileSystem();
-            $filePath = $this->getRootDirectory($filesystem->getId())->getRelPath($abstraction);
-
-            $resource = $fileClass->createInstanceWithProperties(array(
-                PROPERTY_FILE_FILENAME => '',
-                PROPERTY_FILE_FILEPATH => $filePath,
-                PROPERTY_FILE_FILESYSTEM => $this->getResource($filesystem->getId())
-            ));
+            $filename = '';
         } else {
             throw new \common_Exception(__CLASS__ . '::' . __FUNCTION__ . ' expects parameter to be an instance of Directory or File');
         }
+
+        $resource = $fileClass->createInstanceWithProperties(array(
+            PROPERTY_FILE_FILENAME => $filename,
+            PROPERTY_FILE_FILEPATH => $abstraction->getPrefix(),
+            PROPERTY_FILE_FILESYSTEM => $this->getResource($abstraction->getFileSystemId())
+        ));
 
         return $resource->getUri();
     }
@@ -108,9 +102,9 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
      *
      * @return Directory
      */
-    protected function getRootDirectory($uri)
+    protected function getRootDirectory($id)
     {
-        return $this->getServiceLocator()->get(FileSystemService::SERVICE_ID)->getDirectory($uri);
+        return $this->getServiceLocator()->get(FileSystemService::SERVICE_ID)->getDirectory($id);
     }
 
     /**
