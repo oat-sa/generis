@@ -96,7 +96,7 @@ abstract class FileSystemHandler implements ServiceLocatorAwareInterface
      *
      * @return FileSystem
      */
-    protected function getFileSystem()
+    public function getFileSystem()
     {
         if (! $this->fileSystem) {
             $this->fileSystem = $this->getServiceLocator()
