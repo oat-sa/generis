@@ -22,6 +22,7 @@ namespace oat\oatbox\service;
 
 use Exception;
 use Interop\Container\ContainerInterface;
+use oat\oatbox\service\exception\NotFoundException;
 
 /**
  * Description of ConfigurablePackage
@@ -52,7 +53,12 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
      * @return $this
      */
     protected function setServices() {
-        $this->services[] = $this->getServiceManager();
+        
+        $selfServiceManager = $this->getServiceManager();
+        
+        if(is_a($selfServiceManager , ContainerInterface::class)) {
+            $this->services[] = $selfServiceManager;
+        }
         
         foreach ($this->options as $Class => $config) {
             
@@ -60,6 +66,7 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
             $this->services[]          = $factory($config);
             
         }
+        return $this;
         
     }
     
@@ -72,6 +79,7 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
         if(is_object($service) && is_a($service, 'oat\\oatbox\\service\\ServiceManagerAwareInterface')) {
             $service->setServiceLocator($this);
         }
+        return $this;
     }
 
      /**
@@ -80,6 +88,7 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
      * @throws Exception
      */
     public function get($name) {
+        $message = '';
         /**
          * services breakable chain of responsability
          */
@@ -93,17 +102,14 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
                     return $this->propagation($service);
                 }
             } catch (Exception $ex) {
-                /**
-                 * if serviceManager throw an excepion
-                 */
-               $service =  false;
+                $message = $ex->getMessage();
             }
         }
         /**
          * because each catched exception must be thrown
          */
         if(isset($ex)) {
-            throw $ex;
+            throw new NotFoundException($name , $message);
         }
         return false;
     }
