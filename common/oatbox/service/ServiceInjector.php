@@ -34,26 +34,7 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
     protected $services;
     
     protected $options;
-    
-    /**
-     * return propagation method
-     * @return array
-     */
-    public function getPropagationMethod() {
-        return $this->propagationMethod;
-    }
-    
-    /**
-     * set up propagation method
-     * @param array $propagationMethod
-     * @return ServiceInjector
-     */
-    public function setPropagationMethod(array $propagationMethod) {
-        $this->propagationMethod = $propagationMethod;
-        return $this;
-    }
 
-                
     /**
      * configurable service 
      * @param array $options 
@@ -88,12 +69,12 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
      * @return type
      */
     public function propagation($service) {
-        if(is_object($service) && is_a($service, 'Zend\ServiceManager\ServiceLocatorAwareInterface')) {
+        if(is_object($service) && is_a($service, 'oat\\oatbox\\service\\ServiceManagerAwareInterface')) {
             $service->setServiceLocator($this);
         }
     }
 
-        /**
+     /**
      * @param string $name
      * @return mixed
      * @throws Exception
