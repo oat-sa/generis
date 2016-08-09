@@ -49,6 +49,7 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
     }
     
     /**
+     * configure each service manager
      * use each factory
      * @return $this
      */
@@ -71,18 +72,20 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
     }
     
     /**
-     * 
+     * propagate service manager
      * @param type $service
      * @return type
      */
     protected function propagation($service) {
-        if(is_object($service) && is_a($service, 'oat\\oatbox\\service\\ServiceManagerAwareInterface')) {
+        if(is_object($service) && is_a($service, ServiceManagerAwareInterface::class)) {
             $service->setServiceLocator($this);
         }
         return $this;
     }
 
-     /**
+    /**
+     * try each service manager with service $name
+     * @see ContainerInterface::get
      * @param string $name
      * @return mixed
      * @throws Exception
@@ -102,18 +105,20 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
                     return $this->propagation($service);
                 }
             } catch (Exception $ex) {
+                /**
+                 * if service manager throw an exception
+                 */
                 $message = $ex->getMessage();
             }
         }
         /**
          * because each catched exception must be thrown
          */
-        if(isset($ex)) {
-            throw new NotFoundException($name , $message);
-        }
-        return false;
+         throw new NotFoundException($name , $message);
+
     }
     /**
+     * @see ContainerInterface::has
      * @param string $name
      * @return boolean
      */
