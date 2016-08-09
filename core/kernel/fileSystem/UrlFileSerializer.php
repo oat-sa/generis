@@ -24,6 +24,7 @@ use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\service\ConfigurableService;
+use oat\generis\core\kernel\fileSystem\FileSerializerException;
 
 class UrlFileSerializer extends ConfigurableService implements FileReferenceSerializer
 {
@@ -40,7 +41,7 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
             $baseDir = $this->getRootDirectory($abstraction->getFileSystemId());
             return 'dir://'.urlencode($abstraction->getFileSystemId()).'/'.urlencode($baseDir->getRelPath($abstraction));
         } else {
-            throw new \common_Exception(__CLASS__ . '::' . __FUNCTION__ . ' expects parameter to be an instance of Directory or File');
+            throw new FileSerializerException(__CLASS__ . '::' . __FUNCTION__ . ' expects parameter to be an instance of Directory or File');
         }
     }
 
@@ -56,7 +57,7 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
         } elseif ($type == 'dir') {
             return $this->unserializeDirectory($serial);
         } else {
-            throw new \common_Exception('Unsupported type "'.$type.'" in '.__CLASS__);
+            throw new FileSerializerException('Unsupported type "'.$type.'" in '.__CLASS__);
         }
     }
     
