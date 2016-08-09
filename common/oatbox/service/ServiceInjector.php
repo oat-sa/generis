@@ -68,7 +68,7 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
      * @param type $service
      * @return type
      */
-    public function propagation($service) {
+    protected function propagation($service) {
         if(is_object($service) && is_a($service, 'oat\\oatbox\\service\\ServiceManagerAwareInterface')) {
             $service->setServiceLocator($this);
         }
