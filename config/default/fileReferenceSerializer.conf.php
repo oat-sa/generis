@@ -21,6 +21,6 @@
  * @package generis
  *
  */
-use oat\generis\model\kernel\fileSystem\ResourceFileSerializer;
+use oat\generis\model\fileReference\ResourceFileSerializer;
 
 return new ResourceFileSerializer();
