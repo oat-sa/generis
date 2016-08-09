@@ -20,8 +20,6 @@
 
 namespace oat\oatbox\service\factory;
 
-use oat\oatbox\service\ServiceManager as oatboxServiceManager;
-
 /**
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
@@ -34,6 +32,6 @@ interface FactoryInterface {
      * @param array $config
      * @return mixed
      */
-    public function __invoke(oatboxServiceManager $ServiceManager , array $config);
+    public function __invoke(array $config);
     
 }

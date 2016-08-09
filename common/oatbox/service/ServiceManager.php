@@ -21,13 +21,12 @@
 namespace oat\oatbox\service;
 
 use common_ext_ExtensionsManager;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+
 /**
  * The simple placeholder ServiceManager
  * @author Joel Bout <joel@taotesting.com>
  */
-class ServiceManager implements ServiceLocatorInterface
+class ServiceManager implements \Interop\Container\ContainerInterface
 {
     private static $instance;
     
