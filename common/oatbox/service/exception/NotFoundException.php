@@ -22,14 +22,14 @@ namespace oat\oatbox\service\exception;
 
 use common_Logger;
 use Exception;
-use Interop\Container\Exception\NotFoundException;
+use Interop\Container\Exception\NotFoundException as InteropNotFoundException;
 
 /**
  * Description of NotFoundException
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class NotFoundException extends Exception implements NotFoundException
+class NotFoundException extends Exception implements InteropNotFoundException
 {
     protected $serviceKey;
     

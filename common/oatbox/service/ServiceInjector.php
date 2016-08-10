@@ -33,8 +33,6 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
 {
     
     protected $services;
-    
-    protected $options;
 
     /**
      * configurable service 
@@ -60,8 +58,9 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
         if(is_a($selfServiceManager , ContainerInterface::class)) {
             $this->services[] = $selfServiceManager;
         }
-        
-        foreach ($this->options as $Class => $config) {
+        $options = $this->getOptions();
+
+        foreach ($options as $Class => $config) {
             
             $factory                   = new $Class();
             $this->services[]          = $factory($config);
@@ -74,13 +73,13 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
     /**
      * propagate service manager
      * @param type $service
-     * @return type
+     * @return mixed
      */
     protected function propagation($service) {
         if(is_object($service) && is_a($service, ServiceManagerAwareInterface::class)) {
             $service->setServiceLocator($this);
         }
-        return $this;
+        return $service;
     }
 
     /**

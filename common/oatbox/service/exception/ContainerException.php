@@ -21,14 +21,14 @@
 namespace oat\oatbox\service\exception;
 
 use Exception;
-use Interop\Container\Exception\ContainerException;
+use Interop\Container\Exception\ContainerException as InteropContainerException;
 
 /**
  * Description of ContainerException
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class ContainerException extends Exception implements ContainerException
+class ContainerException extends Exception implements InteropContainerException
 {
     
 }

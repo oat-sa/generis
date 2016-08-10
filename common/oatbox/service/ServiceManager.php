@@ -35,6 +35,12 @@ class ServiceManager implements ContainerInterface
 {
     private static $instance;
     
+    public static function setServiceManager(ContainerInterface $ServiceManager) {
+        if (is_null(self::$instance)) {
+             self::$instance = $ServiceManager;
+        }
+    }
+
     public static function getServiceManager()
     {
         if (is_null(self::$instance)) {

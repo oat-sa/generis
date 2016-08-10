@@ -20,6 +20,7 @@
 
 namespace oat\oatbox\service\factory;
 
+use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 
 /**
@@ -35,9 +36,9 @@ class ZendServiceManager implements FactoryInterface {
      * @return ServiceManager
      */
     public function __invoke(array $config) {
-
-        $zendService = new ServiceManager($config);
-        $zendService->configure($config);
+        $configZend  = new Config($config);
+        $zendService = new ServiceManager($configZend);
+        //$zendService->configure($config);
         return $zendService;
     }
     
