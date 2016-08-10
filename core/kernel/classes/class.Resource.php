@@ -295,10 +295,10 @@ class core_kernel_classes_Resource
      * @param  Property property
      * @return core_kernel_classes_ContainerCollection
      */
-    public function getPropertyValuesCollection( core_kernel_classes_Property $property)
+    public function getPropertyValuesCollection( core_kernel_classes_Property $property, $options=array())
     {
         $returnValue = new core_kernel_classes_ContainerCollection($this);
-		foreach ($this->getPropertyValues($property) as $value){
+		foreach ($this->getPropertyValues($property, $options) as $value){
 			$returnValue->add(common_Utils::toResource($value));
 		}
         return $returnValue;
