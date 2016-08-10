@@ -288,17 +288,16 @@ class core_kernel_classes_Resource
     }
 
     /**
-     * Short description of method getPropertyValuesCollection
+     * Return a collection of values associated to $property
      *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Property property
+     * @param core_kernel_classes_Property $property
+     * @param array $options
      * @return core_kernel_classes_ContainerCollection
      */
-    public function getPropertyValuesCollection( core_kernel_classes_Property $property)
+    public function getPropertyValuesCollection( core_kernel_classes_Property $property, $options=array())
     {
         $returnValue = new core_kernel_classes_ContainerCollection($this);
-		foreach ($this->getPropertyValues($property) as $value){
+		foreach ($this->getPropertyValues($property, $options) as $value){
 			$returnValue->add(common_Utils::toResource($value));
 		}
         return $returnValue;
