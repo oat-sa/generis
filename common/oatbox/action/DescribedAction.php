@@ -14,23 +14,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- * @author Bout Joel, <joel@taotesting.com>
- * @license GPLv2
- * @package generis
+ * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
-use oat\oatbox\action\ActionService;
 
-return new ActionService([
-    'filterDirs' => [
-        'node_modules',
-        '.git',
-        'grunt',
-        'js',
-        'css',
-        'scss',
-        'img',
-    ]
-]);
+namespace oat\oatbox\action;
+
+interface DescribedAction
+{
+    /**
+     * Get action description
+     * @return string
+     */
+    public function getDescription();
+}

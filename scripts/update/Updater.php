@@ -193,7 +193,35 @@ class Updater extends \common_ext_ExtensionUpdater {
         $this->skip('2.12.0', '2.18.0');
 
         if ($this->isVersion('2.18.0')) {
-            $this->getServiceManager()->register(ActionService::SERVICE_ID, new ActionService());
+            try {
+                /** @var ActionService $service */
+                $service = $this->getServiceManager()->get(ActionService::SERVICE_ID);
+                $service->setOption('filterDirs', [
+                    'node_modules',
+                    '.git',
+                    'grunt',
+                    'js',
+                    'css',
+                    'scss',
+                    'img',
+                ]);
+            } catch (ServiceNotFoundException $e) {
+                $service = new ActionService([
+                    'filterDirs' => [
+                        'node_modules',
+                        '.git',
+                        'grunt',
+                        'js',
+                        'css',
+                        'scss',
+                        'img',
+                    ]
+                ]);
+            }
+
+            $service->setServiceManager($this->getServiceManager());
+            $this->getServiceManager()->register(ActionService::SERVICE_ID, $service);
+
             $this->setVersion('2.19.0');
         }
 

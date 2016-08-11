@@ -20,14 +20,16 @@
 namespace oat\oatbox\action;
 
 use oat\oatbox\service\ConfigurableService;
-use oat\oatbox\service\ServiceNotFoundException;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 class ActionService extends ConfigurableService
 {
     const SERVICE_ID = 'generis/actionService';
     
-    static $blackList = array('\\oatbox\\composer\\ExtensionInstaller','\\oatbox\\composer\\ExtensionInstallerPlugin');
+    static $blackList = [
+        '\\oatbox\\composer\\ExtensionInstaller',
+        '\\oatbox\\composer\\ExtensionInstallerPlugin',
+    ];
     
     /**
      * 
@@ -36,10 +38,51 @@ class ActionService extends ConfigurableService
      */
     public function resolve($actionIdentifier)
     {
+        $action = $this->getActionInstance($actionIdentifier);
+        return $action;
+    }
+
+
+    /**
+     * @param string $extId
+     * @return array
+     * @throws \common_ext_ExtensionException
+     */
+    public function getAvailableActions($extId = '')
+    {
+        $cacheKey = __FUNCTION__ . $extId;
+        $extManager = \common_ext_ExtensionsManager::singleton();
+        if ($this->getCache()->has($cacheKey)) {
+            $actions = $this->getCache()->get($cacheKey);
+        } else {
+            $actions = array();
+            if ($extId !== '' && $extManager->isInstalled($extId)) {
+                $extensions = [$extId => $extManager->getExtensionById($extId)];
+            } else {
+                $extensions = $extManager->getInstalledExtensions();
+            }
+
+            foreach ($extensions as $ext) {
+                $actions = array_merge($actions, $this->getActionsInDirectory($ext->getDir()));
+            }
+            $actions = array_merge($actions, $this->getActionsInDirectory(VENDOR_PATH.'oat-sa'));
+            $this->getCache()->put($actions, $cacheKey);
+        }
+        return $actions;
+    }
+
+    /**
+     * @param string $actionIdentifier
+     * @return Action
+     * @throws ResolutionException
+     */
+    protected function getActionInstance($actionIdentifier)
+    {
         $action = null;
+
         if ($this->getServiceLocator()->has($actionIdentifier)) {
             $action = $this->getServiceManager()->get($actionIdentifier);
-        } elseif (class_exists($actionIdentifier) && is_subclass_of($actionIdentifier, Action::class)) {
+        } elseif (class_exists($actionIdentifier) && is_subclass_of($actionIdentifier, '\oat\oatbox\action\Action')) {
             $action = new $actionIdentifier();
             if ($action instanceof ServiceLocatorAwareInterface) {
                 $action->setServiceLocator($this->getServiceLocator());
@@ -47,24 +90,10 @@ class ActionService extends ConfigurableService
         } else {
             throw new ResolutionException('Unknown action '.$actionIdentifier);
         }
+
         return $action;
     }
-    
-    public function getAvailableActions()
-    {
-        if ($this->getCache()->has(__FUNCTION__)) {
-            $actions = $this->getCache()->get(__FUNCTION__);
-        } else {
-            $actions = array();
-            foreach (\common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $ext) {
-                $actions = array_merge($actions, $this->getActionsInDirectory($ext->getDir()));
-            }
-            $actions = array_merge($actions, $this->getActionsInDirectory(VENDOR_PATH.'oat-sa'));
-            $this->getCache()->put($actions, __FUNCTION__);
-        }
-        return $actions;
-    }
-    
+
     /**
      * @return \common_cache_Cache
      */
@@ -72,11 +101,24 @@ class ActionService extends ConfigurableService
     {
         return $this->getServiceManager()->get('generis/cache');
     }
-    
+
+    /**
+     * Get list of actions
+     * @param $dir
+     * @return array list of class names
+     */
     protected function getActionsInDirectory($dir)
     {
         $classNames = array();
-        $recIt = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir));
+        $filter = $this->hasOption('filterDirs') ? $this->getOption('filterDirs') : [];
+        $recIt = new \RecursiveIteratorIterator(
+            new \RecursiveCallbackFilterIterator(
+                new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
+                function ($fileInfo, $key, $iterator) use ($filter) {
+                    return $fileInfo->isFile() || !in_array($fileInfo->getBaseName(), $filter);
+                }
+            )
+        );
         $regexIt = new \RegexIterator($recIt, '/^.+\.php$/i', \RecursiveRegexIterator::GET_MATCH);
         foreach ($regexIt as $entry) {
             $info = \helpers_PhpTools::getClassInfo($entry[0]);
@@ -84,7 +126,10 @@ class ActionService extends ConfigurableService
             ? $info['class']
             : $info['ns'].'\\'.$info['class'];
             if (!in_array($fullname, self::$blackList) && is_subclass_of($fullname, Action::class)) {
-                $classNames[] = $fullname;
+                $reflectionClass = new \ReflectionClass($fullname);
+                if ($reflectionClass->IsInstantiable()) {
+                    $classNames[] = $fullname;
+                }
             }
         }
         return $classNames;
