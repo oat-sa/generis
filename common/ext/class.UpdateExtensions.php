@@ -19,8 +19,8 @@
  */
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\action\Action;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use oat\oatbox\service\ServiceManagerAwareInterface;
+use oat\oatbox\service\ServiceManagerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 use oat\oatbox\log\LoggerAwareTrait;
 /**
@@ -30,9 +30,9 @@ use oat\oatbox\log\LoggerAwareTrait;
  * @package generis
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
  */
-class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterface, LoggerAwareInterface
+class common_ext_UpdateExtensions implements Action, ServiceManagerAwareInterface, LoggerAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceManagerAwareTrait;
     use LoggerAwareTrait;
     
     /**
