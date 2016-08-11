@@ -20,7 +20,6 @@
 namespace oat\oatbox\action;
 
 use oat\oatbox\service\ConfigurableService;
-use oat\oatbox\service\ServiceNotFoundException;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 class ActionService extends ConfigurableService
