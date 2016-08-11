@@ -295,7 +295,7 @@ class core_kernel_persistence_smoothsql_Utils
             
             $sqlOrderFilter = "mainq.subject = ${orderQuerySubject} AND predicate = ${orderPredicate}${sqlLang}";
             
-            $query = "SELECT mainq.subject, ${orderQueryObject} FROM (${query}) AS mainq JOIN ";
+            $query = "SELECT mainq.subject, ${orderQueryObject} FROM (${query}) AS mainq LEFT JOIN ";
             $query .= "statements AS ${orderQueryId} ON (${sqlOrderFilter}) ORDER BY ${orderQueryObject} ${orderDir}";
         }
         
