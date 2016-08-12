@@ -17,40 +17,14 @@
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
+
 namespace oat\oatbox\filesystem;
 
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
-
-class Directory implements \IteratorAggregate
+class Directory extends FileSystemHandler implements \IteratorAggregate
 {
     const ITERATOR_RECURSIVE = '1';
     const ITERATOR_FILE      = '2';
     const ITERATOR_DIRECTORY = '4';
-
-    /**
-     * @var Filesystem
-     */
-    protected $fileSystem;
-
-    /**
-     * Relative prefix into $this->filesystem
-     *
-     * @var string
-     */
-    protected $prefix;
-
-    /**
-     * Directory constructor.
-     *
-     * @param $fileSystem
-     * @param $prefix
-     */
-    public function __construct($fileSystem, $prefix)
-    {
-        $this->fileSystem = $fileSystem;
-        $this->prefix = $this->sanitizePath($prefix);
-    }
 
     /**
      * Get a subDirectory of $this (existing or not)
@@ -60,7 +34,9 @@ class Directory implements \IteratorAggregate
      */
     public function getDirectory($path)
     {
-        return new self($this->getFileSystem(), $this->getFullPath($path));
+        $subDirectory = new self($this->getFileSystemId(), $this->getFullPath($path));
+        $subDirectory->setServiceLocator($this->getServiceLocator());
+        return $subDirectory;
     }
 
     /**
@@ -71,7 +47,9 @@ class Directory implements \IteratorAggregate
      */
     public function getFile($path)
     {
-        return new File($this->getFileSystem(), $this->getFullPath($path));
+        $file = new File($this->getFileSystemId(), $this->getFullPath($path));
+        $file->setServiceLocator($this->getServiceLocator());
+        return $file;
     }
 
     /**
@@ -147,23 +125,13 @@ class Directory implements \IteratorAggregate
     }
 
     /**
-     * Get the current prefix
+     * Delete the current directory
      *
-     * @return mixed|string
+     * @return bool
      */
-    public function getPrefix()
+    public function deleteSelf()
     {
-        return $this->prefix;
-    }
-
-    /**
-     * Get the current flysystem, should be not public
-     *
-     * @return Filesystem
-     */
-    protected function getFileSystem()
-    {
-        return $this->fileSystem;
+        return $this->getFileSystem()->deleteDir($this->getPrefix());
     }
 
     /**
@@ -176,24 +144,4 @@ class Directory implements \IteratorAggregate
     {
         return $this->getPrefix() . '/' . $this->sanitizePath($path);
     }
-
-    /**
-     * Sanitize path:
-     *  - by replace \ to / for windows compatibility (only on local)
-     *  - trim .
-     *  - trim / or \\
-     *
-     * @param $path
-     * @return string
-     */
-    protected function sanitizePath($path)
-    {
-        $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
-
-        $path = preg_replace('/'.preg_quote('./', '/').'/', '', $path, 1);
-        $path = trim($path, '/');
-
-        return $path;
-    }
-
 }
