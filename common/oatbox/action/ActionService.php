@@ -20,7 +20,7 @@
 namespace oat\oatbox\action;
 
 use oat\oatbox\service\ConfigurableService;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use oat\oatbox\service\ServiceManagerAwareInterface;
 
 class ActionService extends ConfigurableService
 {
@@ -40,7 +40,7 @@ class ActionService extends ConfigurableService
             $action = $this->getServiceManager()->get($actionIdentifier);
         } elseif (class_exists($actionIdentifier) && is_subclass_of($actionIdentifier, Action::class)) {
             $action = new $actionIdentifier();
-            if ($action instanceof ServiceLocatorAwareInterface) {
+            if ($action instanceof ServiceManagerAwareInterface) {
                 $action->setServiceLocator($this->getServiceLocator());
             }
         } else {

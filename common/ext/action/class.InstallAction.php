@@ -17,19 +17,21 @@
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
-use oat\oatbox\service\ServiceManager;
+
+use Interop\Container\ContainerInterface;
 use oat\oatbox\action\Action;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use oat\oatbox\event\EventManager;
+use oat\oatbox\service\ServiceManager;
+use oat\oatbox\service\ServiceManagerAwareInterface;
+use oat\oatbox\service\ServiceManagerAwareTrait;
 /**
  * Abstract action containing some helper functions
  * @author bout
  *
  */
-abstract class common_ext_action_InstallAction implements Action, ServiceLocatorAwareInterface
+abstract class common_ext_action_InstallAction implements Action, ServiceManagerAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceManagerAwareTrait;
     
     /**
      * 
@@ -45,7 +47,7 @@ abstract class common_ext_action_InstallAction implements Action, ServiceLocator
     
     public function registerService($serviceKey, $service)
     {
-        if ($service instanceof ServiceLocatorAwareInterface) {
+        if ($service instanceof ServiceManagerAwareInterface) {
             $service->setServiceLocator($this->getServiceManager());
         }
         $this->getServiceManager()->register($serviceKey, $service);
@@ -59,7 +61,7 @@ abstract class common_ext_action_InstallAction implements Action, ServiceLocator
     public function getServiceManager()
     {
         $serviceManager = $this->getServiceLocator();
-        if (!$serviceManager instanceof ServiceManager) {
+        if (!$serviceManager instanceof ContainerInterface ) {
             throw new common_exception_Error('Alternate service locator not compatible with '.__CLASS__);
         }
         return $serviceManager;
