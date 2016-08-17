@@ -21,25 +21,26 @@
 namespace oat\oatbox\service;
 
 use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-interface ServiceInjectorAwareInterface extends \Zend\ServiceManager\ServiceLocatorAwareInterface{
+interface ServiceInjectorAwareInterface extends ServiceLocatorAwareInterface{
     
         /**
      * Set service locator
      *
      * @param ContainerInterface $serviceLocator
      */
-    public function setServiceLocator(ContainerInterface $serviceLocator);
+    public function setServiceInjector(ContainerInterface $serviceLocator);
 
     /**
      * Get service locator
      *
      * @return ContainerInterface
      */
-    public function getServiceLocator();
+    public function getServiceInjector();
     
 }
