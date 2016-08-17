@@ -21,12 +21,12 @@ namespace oat\oatbox\action;
 
 
 use oat\oatbox\service\ServiceNotFoundException;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use oat\oatbox\service\ServiceManagerAwareTrait;
+use oat\oatbox\service\ServiceManagerAwareInterface;
 
-class Help implements Action, ServiceLocatorAwareInterface
+class Help implements Action, ServiceManagerAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceManagerAwareTrait;
     
     public function __invoke($params) {
         $actionResolver = $this->getServiceLocator()->get(ActionService::SERVICE_ID);

@@ -20,9 +20,8 @@
 
 namespace oat\oatbox\service;
 
+use Interop\Container\ContainerInterface;
 use oat\oatbox\Configurable;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 /**
  * Configurable base service
  * 
@@ -31,18 +30,18 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  *
  * @author Joel Bout <joel@taotesting.com>
  */
-abstract class ConfigurableService extends Configurable implements ServiceLocatorAwareInterface
+abstract class ConfigurableService extends Configurable implements ServiceManagerAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceManagerAwareTrait;
 
-    public function setServiceManager(ServiceManager $serviceManager)
+    public function setServiceManager(ContainerInterface $serviceManager)
     {
         return $this->setServiceLocator($serviceManager);
     }
     
     /**
      * 
-     * @return \oat\oatbox\service\ServiceManager
+     * @return ServiceManager
      */
     public function getServiceManager()
     {

@@ -20,21 +20,31 @@
 
 namespace oat\oatbox\service;
 
+use common_Exception;
+use common_ext_ConfigDriver;
 use common_ext_ExtensionsManager;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Interop\Container\ContainerInterface;
+use oat\oatbox\service\exception\ContainerException;
+use oat\oatbox\service\exception\NotFoundException;
+
 /**
  * The simple placeholder ServiceManager
  * @author Joel Bout <joel@taotesting.com>
  */
-class ServiceManager implements ServiceLocatorInterface
+class ServiceManager implements ContainerInterface
 {
     private static $instance;
     
+    public static function setServiceManager(ContainerInterface $ServiceManager) {
+        if (is_null(self::$instance)) {
+             self::$instance = $ServiceManager;
+        }
+    }
+
     public static function getServiceManager()
     {
         if (is_null(self::$instance)) {
-            self::$instance = new ServiceManager(\common_ext_ConfigDriver::singleton());
+            self::$instance = new ServiceManager(common_ext_ConfigDriver::singleton());
         }
         return self::$instance;
     }
@@ -53,7 +63,7 @@ class ServiceManager implements ServiceLocatorInterface
      * or throws a ServiceNotFoundException
      * 
      * @param string $serviceKey
-     * @throws \common_Exception
+     * @throws common_Exception
      * @throws ServiceNotFoundException
      */
     public function get($serviceKey)
@@ -61,9 +71,9 @@ class ServiceManager implements ServiceLocatorInterface
         if (!isset($this->services[$serviceKey])) {
             $service = $this->getConfig()->get($serviceKey);
             if ($service === false) {
-                throw new ServiceNotFoundException($serviceKey);
+                throw new NotFoundException($serviceKey);
             }
-            if ($service instanceof ServiceLocatorAwareInterface) {
+            if ($service instanceof ServiceManagerAwareInterface) {
                 $service->setServiceLocator($this);
             }
             
@@ -74,7 +84,7 @@ class ServiceManager implements ServiceLocatorInterface
     
     /**
      * (non-PHPdoc)
-     * @see \Zend\ServiceManager\ServiceLocatorInterface::has()
+     * @see ServiceLocatorInterface::has()
      */
     public function has($serviceKey)
     {
@@ -96,18 +106,18 @@ class ServiceManager implements ServiceLocatorInterface
      * 
      * @param string $serviceKey
      * @param ConfigurableService $service
-     * @throws \common_Exception
+     * @throws common_Exception
      */
     public function register($serviceKey, ConfigurableService $service)
     {
         $parts = explode('/', $serviceKey, 2);
         if (count($parts) < 2) {
-            throw new \common_Exception('Invalid servicekey '.$serviceKey);
+            throw new ContainerException('Invalid servicekey '.$serviceKey);
         }
         $this->services[$serviceKey] = $service;
         $success = $this->getConfig()->set($serviceKey, $service);
         if (!$success) {
-            throw new \common_exception_Error('Unable to write '.$serviceKey);
+            throw new ContainerException('Unable to write '.$serviceKey);
         }
     }
 
