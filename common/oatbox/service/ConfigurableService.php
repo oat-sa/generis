@@ -20,7 +20,6 @@
 
 namespace oat\oatbox\service;
 
-use Interop\Container\ContainerInterface;
 use oat\oatbox\Configurable;
 /**
  * Configurable base service
@@ -34,14 +33,14 @@ abstract class ConfigurableService extends Configurable implements ServiceInject
 {
     use ServiceInjectorAwareTrait;
 
-    public function setServiceManager(ContainerInterface $serviceManager)
+    public function setServiceManager(ServiceManager $serviceManager)
     {
         return $this->setServiceLocator($serviceManager);
     }
     
     /**
      * 
-     * @return ServiceManager
+     * @return \oat\oatbox\service\ServiceManager
      */
     public function getServiceManager()
     {

@@ -37,9 +37,9 @@ class TaoServiceManager implements FactoryInterface {
     public function __invoke(array $config) {
         
         $configService = $config['service'];
-        $zendService = new ServiceManager($configService);
+        $taoService = new ServiceManager($configService);
         
-        return $zendService;
+        return $taoService;
     }
     
 }
