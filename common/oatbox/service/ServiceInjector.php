@@ -25,7 +25,7 @@ use Interop\Container\ContainerInterface;
 use oat\oatbox\service\exception\NotFoundException;
 
 /**
- * Description of ConfigurablePackage
+ * adapter agregator for  ContainerInterface
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
@@ -45,8 +45,24 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
         $this->setServices();
         
     }
-    
     /**
+     * self factory
+     * @return ServiceInjector
+     */
+    public static function factory(array $config = []) {
+        $extensions =  common_ext_ExtensionsManager::singleton()->getEnabledExtensions();
+
+        /* @var $ext \common_ext_Extension */
+        foreach ($extensions as $ext) {
+            if($ext->hasConfig('dependencies')) {
+                $config = array_merge_recursive($config , $ext->getConfig('dependencies'));
+            }
+        }
+
+        return $serviceManager = new self($config);
+    }
+
+        /**
      * configure each service manager
      * use each factory
      * @return $this
@@ -76,7 +92,8 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
      * @return mixed
      */
     protected function propagation($service) {
-        if(is_object($service) && is_a($service, ServiceManagerAwareInterface::class)) {
+        if(is_object($service) && 
+                is_a($service, ServiceManagerAwareInterface::class)){
             $service->setServiceLocator($this);
         }
         return $service;
@@ -129,5 +146,4 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
         }
         return false;
     }
-
 }
