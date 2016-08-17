@@ -30,9 +30,9 @@ use oat\oatbox\Configurable;
  *
  * @author Joel Bout <joel@taotesting.com>
  */
-abstract class ConfigurableService extends Configurable implements ServiceManagerAwareInterface
+abstract class ConfigurableService extends Configurable implements ServiceInjectorAwareInterface
 {
-    use ServiceManagerAwareTrait;
+    use ServiceInjectorAwareTrait;
 
     public function setServiceManager(ContainerInterface $serviceManager)
     {

@@ -21,28 +21,27 @@
 namespace oat\oatbox\service;
 
 use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Description of ServiceManagerAwareTrait
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-trait ServiceManagerAwareTrait {
+trait ServiceInjectorAwareTrait {
     
-      /**
-     * @var \Interop\Container\ContainerInterface
-     */
-    protected $serviceLocator = null;
-
+    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
+    
+    protected $serviceInjector;
     /**
      * Set service locator
      *
-     * @param \Interop\Container\ContainerInterface $serviceLocator
+     * @param ContainerInterface $serviceLocator
      * @return mixed
      */
-    public function setServiceLocator(ContainerInterface $serviceLocator)
+    public function setServiceInjector(ContainerInterface $serviceLocator)
     {
-        $this->serviceLocator = $serviceLocator;
+        $this->serviceInjector = $serviceLocator;
 
         return $this;
     }
@@ -50,12 +49,28 @@ trait ServiceManagerAwareTrait {
     /**
      * Get service locator
      *
-     * @return \Interop\Container\ContainerInterface
+     * @return ContainerInterface
      */
-    public function getServiceLocator()
+    public function getServiceInjector()
     {
-        return $this->serviceLocator;
+        return $this->serviceInjector;
     }
     
+    /**
+     * Zend OverLoad
+     * @return ContainerInterface
+     */
+    public function getServiceLocator() {
+        return $this->getServiceInjector();
+    }
+    /**
+     * Zend OverLoad
+     * @param \oat\oatbox\service\ServiceLocatorInterface $serviceLocator
+     * @return $this
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
+        $this->setServiceInjector($serviceLocator);
+        return $this;
+    }
     
 }

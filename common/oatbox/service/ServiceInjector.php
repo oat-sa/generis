@@ -93,8 +93,8 @@ class ServiceInjector extends ConfigurableService implements ContainerInterface
      */
     protected function propagation($service) {
         if(is_object($service) && 
-                is_a($service, ServiceManagerAwareInterface::class)){
-            $service->setServiceLocator($this);
+                is_a($service, ServiceInjectorAwareInterface::class)){
+            $service->setServiceInjector($this);
         }
         return $service;
     }

@@ -26,7 +26,7 @@ use Interop\Container\ContainerInterface;
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-interface ServiceManagerAwareInterface {
+interface ServiceInjectorAwareInterface extends \Zend\ServiceManager\ServiceLocatorAwareInterface{
     
         /**
      * Set service locator
