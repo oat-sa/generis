@@ -23,7 +23,6 @@ namespace oat\oatbox\service;
 use common_Exception;
 use common_ext_ConfigDriver;
 use common_ext_ExtensionsManager;
-use Interop\Container\ContainerInterface;
 use oat\oatbox\service\exception\ContainerException;
 use oat\oatbox\service\exception\NotFoundException;
 
@@ -31,7 +30,7 @@ use oat\oatbox\service\exception\NotFoundException;
  * The simple placeholder ServiceManager
  * @author Joel Bout <joel@taotesting.com>
  */
-class ServiceManager implements ContainerInterface
+class ServiceManager implements \Zend\ServiceManager\ServiceLocatorInterface
 {
     private static $instance;
     
