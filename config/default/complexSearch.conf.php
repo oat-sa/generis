@@ -19,13 +19,13 @@ return new oat\oatbox\search\ComplexSearchService(array(
         'search.query.criterion' => '\\oat\\search\\QueryCriterion',
         'search.driver.postgres' => '\\oat\\search\\DbSql\\Driver\\PostgreSQL',
         'search.driver.mysql' => '\\oat\\search\\DbSql\\Driver\\MySQL',
-        'search.driver.tao' => '\\oat\\oatbox\\search\\driver\\TaoSearchDriver',
+        'search.driver.tao' => ' \\oat\\generis\\model\\persistence\\smoothsql\\search\\driver\\TaoSearchDriver',
         'search.tao.serialyser' => '\\oat\\search\\DbSql\\TaoRdf\\UnionQuerySerialyser',
         'search.factory.query' => '\\oat\\search\\factory\\QueryFactory',
         'search.factory.builder' => '\\oat\\search\\factory\\QueryBuilderFactory',
         'search.factory.criterion' => '\\oat\\search\\factory\\QueryCriterionFactory',
-        'search.tao.gateway' => '\\oat\\oatbox\\search\\GateWay',
-        'search.tao.result' => '\\oat\\oatbox\\search\\TaoResultSet'
+        'search.tao.gateway' => ' \\oat\\generis\\model\\persistence\\smoothsql\\search\\GateWay',
+        'search.tao.result' => ' \\oat\\generis\\model\\persistence\\smoothsql\\search\\TaoResultSet'
     ),
     'abstract_factories' => array(
         '\\oat\\search\\Command\\OperatorAbstractfactory'
