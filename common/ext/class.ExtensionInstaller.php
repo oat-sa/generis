@@ -21,7 +21,7 @@
 
 use oat\generis\model\data\ModelManager;
 use oat\oatbox\action\ActionResolver;
-use oat\oatbox\service\ServiceManagerAwareInterface;
+use oat\oatbox\service\ServiceInjectorAwareInterface;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
 
@@ -185,7 +185,7 @@ class common_ext_ExtensionInstaller
 			    require_once $script;
 			} elseif (class_exists($script) && is_subclass_of($script, 'oat\\oatbox\\action\\Action')) {
                 $action = new $script();
-		        if ($action instanceof ServiceManagerAwareInterface) {
+		        if ($action instanceof ServiceInjectorAwareInterface) {
 		            $action->setServiceLocator(ServiceManager::getServiceManager());
 		        }
 		        $report = call_user_func($action, array());

@@ -20,7 +20,7 @@
 namespace oat\oatbox\action;
 
 use oat\oatbox\service\ConfigurableService;
-use oat\oatbox\service\ServiceManagerAwareInterface;
+use oat\oatbox\service\ServiceInjectorAwareInterface;
 
 class ActionService extends ConfigurableService
 {
@@ -40,7 +40,7 @@ class ActionService extends ConfigurableService
             $action = $this->getServiceManager()->get($actionIdentifier);
         } elseif (class_exists($actionIdentifier) && is_subclass_of($actionIdentifier, Action::class)) {
             $action = new $actionIdentifier();
-            if ($action instanceof ServiceManagerAwareInterface) {
+            if ($action instanceof ServiceInjectorAwareInterface) {
                 $action->setServiceLocator($this->getServiceLocator());
             }
         } else {

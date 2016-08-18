@@ -17,7 +17,9 @@ use oat\oatbox\service\ServiceInjector;
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
 class ServiceInjectorRegistry extends ConfigurableService {
-    
+
+    const SERVICE_ID = 'generis/serviceInjector';
+
     /**
      * set up a new ServiceInjector from its options
      * @return ServiceInjector

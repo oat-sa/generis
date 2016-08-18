@@ -24,7 +24,7 @@ use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Description of ServiceManagerAwareTrait
+ * Description of ServiceInjectorAwareTrait
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */

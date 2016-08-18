@@ -22,16 +22,16 @@ use Interop\Container\ContainerInterface;
 use oat\oatbox\action\Action;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\service\ServiceManager;
-use oat\oatbox\service\ServiceManagerAwareInterface;
-use oat\oatbox\service\ServiceManagerAwareTrait;
+use oat\oatbox\service\ServiceInjectorAwareInterface;
+use oat\oatbox\service\ServiceInjectorAwareTrait;
 /**
  * Abstract action containing some helper functions
  * @author bout
  *
  */
-abstract class common_ext_action_InstallAction implements Action, ServiceManagerAwareInterface
+abstract class common_ext_action_InstallAction implements Action, ServiceInjectorAwareInterface
 {
-    use ServiceManagerAwareTrait;
+    use ServiceInjectorAwareTrait;
     
     /**
      * 
@@ -47,7 +47,7 @@ abstract class common_ext_action_InstallAction implements Action, ServiceManager
     
     public function registerService($serviceKey, $service)
     {
-        if ($service instanceof ServiceManagerAwareInterface) {
+        if ($service instanceof ServiceInjectorAwareInterface) {
             $service->setServiceLocator($this->getServiceManager());
         }
         $this->getServiceManager()->register($serviceKey, $service);

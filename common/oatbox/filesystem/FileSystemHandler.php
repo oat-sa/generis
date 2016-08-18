@@ -21,12 +21,12 @@
 
 namespace oat\oatbox\filesystem;
 
-use oat\oatbox\service\ServiceManagerAwareTrait;
-use oat\oatbox\service\ServiceManagerAwareInterface;
+use oat\oatbox\service\ServiceInjectorAwareTrait;
+use oat\oatbox\service\ServiceInjectorAwareInterface;
 
-abstract class FileSystemHandler implements ServiceManagerAwareInterface
+abstract class FileSystemHandler implements ServiceInjectorAwareInterface
 {
-    use ServiceManagerAwareTrait;
+    use ServiceInjectorAwareTrait;
 
     /**
      * @var mixed

@@ -21,12 +21,12 @@ namespace oat\oatbox\action;
 
 
 use oat\oatbox\service\ServiceNotFoundException;
-use oat\oatbox\service\ServiceManagerAwareTrait;
-use oat\oatbox\service\ServiceManagerAwareInterface;
+use oat\oatbox\service\ServiceInjectorAwareTrait;
+use oat\oatbox\service\ServiceInjectorAwareInterface;
 
-class Help implements Action, ServiceManagerAwareInterface
+class Help implements Action, ServiceInjectorAwareInterface
 {
-    use ServiceManagerAwareTrait;
+    use ServiceInjectorAwareTrait;
     
     public function __invoke($params) {
         $actionResolver = $this->getServiceLocator()->get(ActionService::SERVICE_ID);
