@@ -136,6 +136,14 @@ class ComplexSearchService extends ConfigurableService
         
         return $query->newQuery();
     }
+    
+    protected function parseValue($value) {
+        if(is_subclass_of($value, \core_kernel_classes_Resource::class)) {
+            return $value->getUri();
+        }
+        return $value;
+    }
+
 
     /**
      * serialyse a query for searchInstance
@@ -177,12 +185,13 @@ class ComplexSearchService extends ConfigurableService
             if(is_array($value)) {
                 $nextValue = array_shift($value);
                 $value = $value[0];
-            }
+            } 
             
-            $criteria->addCriterion($predicate , $operator , $value);
+            
+            $criteria->addCriterion($predicate , $operator , $this->parseValue($value));
             
             foreach ($nextValue as $value) {
-                $criteria->addAnd($value);
+                $criteria->addAnd($this->parseValue($value));
             }
             if($and === false) {
                 $criteria = $query->newQuery()
@@ -192,7 +201,12 @@ class ComplexSearchService extends ConfigurableService
             }
         }
         $queryString = $this->gateway->serialyse($query)->getQuery();
-
+        /**
+         * @todo remove before merge
+         */
+        if(DEBUG_MODE) {
+            \common_Logger::i($queryString);
+        }
         return $queryString;
     }
     
