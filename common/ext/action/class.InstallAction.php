@@ -62,7 +62,7 @@ abstract class common_ext_action_InstallAction implements Action, ServiceLocator
     public function getServiceManager()
     {
         $serviceManager = $this->getServiceLocator();
-        if (!$serviceManager instanceof ServiceLocatorInterface ) {
+        if (!$serviceManager instanceof ServiceManager) {
             throw new common_exception_Error('Alternate service locator not compatible with '.__CLASS__);
         }
         return $serviceManager;
