@@ -16,6 +16,7 @@
  * 
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ *               2012-2016 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
 
@@ -44,7 +45,7 @@ abstract class common_ext_ExtensionHandler
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Extension extension
      */
-    public function __construct( common_ext_Extension $extension)
+    public function __construct( common_ext_Extension $extension = NULL)
     {
 		$this->extension = $extension;
     }
@@ -52,6 +53,18 @@ abstract class common_ext_ExtensionHandler
     protected function getExtension()
     {
         return $this->extension;
+    }
+    /**
+     * set up extension if it's null
+     * @author Christophe GARCIA <christopheg@taotesting.com>
+     * @param common_ext_Extension $extension
+     * @return \common_ext_ExtensionHandler
+     */
+    public function setExtension(common_ext_Extension $extension) {
+        if(is_null($this->extension)) {
+            $this->extension = $extension;
+        }
+        return $this;
     }
 
 }

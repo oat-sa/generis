@@ -4,7 +4,7 @@ return new oat\oatbox\service\config\ServiceInjectorRegistry(
             [
     \oat\oatbox\service\factory\TaoServiceManager::class => 
         [
-            'service' => common_ext_ConfigDriver::singleton(),
+            'driver' => 'ConfigDriver',
         ],
     \oat\oatbox\service\factory\ZendServiceManager::class => 
         [
@@ -22,6 +22,6 @@ return new oat\oatbox\service\config\ServiceInjectorRegistry(
                     'event.manager'          => '\\oat\\oatbox\\event\\EventManager',
                 ]
         ],
-     ]
-    );
+ ]
+);
 

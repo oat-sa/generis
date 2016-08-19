@@ -28,7 +28,25 @@ use oat\oatbox\service\ServiceManager;
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
 class TaoServiceManager implements FactoryInterface {
-    
+    /**
+     * set up persistence driver
+     * @param string $driverName
+     * @return common_persistence_Driver
+     */
+    protected function getDriver($driverName) {
+        $configService = null;
+        switch ($driverName) {
+            case 'ConfigDriver' :
+                $configService = \common_ext_ConfigDriver::singleton();
+                break;
+            default :
+                $configService = \common_ext_ConfigDriver::singleton();
+                break;
+        }
+        return $configService;
+    }
+
+
     /**
      * set up a new zend service manager 
      * @param array $config
@@ -36,7 +54,8 @@ class TaoServiceManager implements FactoryInterface {
      */
     public function __invoke(array $config) {
         
-        $configService = $config['service'];
+        $driverName= $config['driver'];
+        $configService = $this->getDriver($driverName);
         $taoService = new ServiceManager($configService);
         
         return $taoService;

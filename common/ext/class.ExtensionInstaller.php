@@ -20,10 +20,12 @@
  */
 
 use oat\generis\model\data\ModelManager;
-use oat\oatbox\action\ActionResolver;
-use oat\oatbox\service\ServiceInjectorAwareInterface;
-use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
+use oat\oatbox\service\ServiceManager;
+use oat\taoDevTools\forms\Extension;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use function League\Flysystem\Util\class_exists;
+use oat\oatbox\service\config\ServiceInjectorRegistry;
 
 /**
  * Generis installer of extensions
@@ -88,7 +90,11 @@ class common_ext_ExtensionInstaller
 		$this->installLoadDefaultConfig();
 		$this->installOntology();
 		$this->installRegisterExt();
-			
+                
+                common_Logger::d('Installing serviceInjector config for extension ' . $this->extension->getId());
+		$this->installServiceInjector();
+		common_Logger::d('Done installing serviceInjector config for extension ' . $this->extension->getId());
+                
 		common_Logger::d('Installing custom script for extension ' . $this->extension->getId());
 		$this->installCustomScript();
 		common_Logger::d('Done installing custom script for extension ' . $this->extension->getId());
@@ -149,8 +155,21 @@ class common_ext_ExtensionInstaller
 	    }
 	    helpers_TimeOutHelper::reset();
 	}
+        
+        
+        protected function installServiceInjector() {
+            $config = $this->extension->getInjectorConfig();
+            if (ServiceManager::getServiceManager()->has(ServiceInjectorRegistry::SERVICE_ID)) {
+                /* @var  ServiceInjectorRegistry $injector */
+                $injector = ServiceManager::getServiceManager()->get(ServiceInjectorRegistry::SERVICE_ID);
+                $injector->overLoad($config);
+            } else {
+                $injector = new ServiceInjectorRegistry($config);
+            }
+            ServiceManager::getServiceManager()->register(ServiceInjectorRegistry::SERVICE_ID , $injector);
+        }
 
-	/**
+                /**
 	 * Registers the Extension with the extensionManager
 	 *
 	 * @access protected
@@ -185,7 +204,7 @@ class common_ext_ExtensionInstaller
 			    require_once $script;
 			} elseif (class_exists($script) && is_subclass_of($script, 'oat\\oatbox\\action\\Action')) {
                 $action = new $script();
-		        if ($action instanceof ServiceInjectorAwareInterface) {
+		        if ($action instanceof ServiceLocatorAwareInterface) {
 		            $action->setServiceLocator(ServiceManager::getServiceManager());
 		        }
 		        $report = call_user_func($action, array());
@@ -227,7 +246,7 @@ class common_ext_ExtensionInstaller
 	 * @param  boolean localData Import local data or not.
 	 * @return mixed
 	 */
-	public function __construct( common_ext_Extension $extension, $localData = true)
+	public function __construct( common_ext_Extension $extension = null, $localData = true)
 	{
 		
 		parent::__construct($extension);

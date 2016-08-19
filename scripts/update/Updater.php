@@ -228,7 +228,7 @@ class Updater extends \common_ext_ExtensionUpdater {
                     [
                         TaoServiceManager::class =>
                             [
-                                'service' => \common_ext_ConfigDriver::singleton(),
+                                'driver' => 'ConfigDriver',
                             ],
                         ZendServiceManager::class =>
                             [
