@@ -138,7 +138,7 @@ class ComplexSearchService extends ConfigurableService
     }
     
     protected function parseValue($value) {
-        if(is_subclass_of($value, \core_kernel_classes_Resource::class)) {
+        if($value instanceof \core_kernel_classes_Resource ){
             return $value->getUri();
         }
         return $value;
