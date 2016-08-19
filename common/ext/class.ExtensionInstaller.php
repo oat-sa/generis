@@ -24,8 +24,6 @@ use oat\oatbox\event\EventManager;
 use oat\oatbox\service\ServiceManager;
 use oat\taoDevTools\forms\Extension;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use function League\Flysystem\Util\class_exists;
-use oat\oatbox\service\config\ServiceInjectorRegistry;
 
 /**
  * Generis installer of extensions
@@ -91,10 +89,6 @@ class common_ext_ExtensionInstaller
 		$this->installOntology();
 		$this->installRegisterExt();
                 
-                common_Logger::d('Installing serviceInjector config for extension ' . $this->extension->getId());
-		$this->installServiceInjector();
-		common_Logger::d('Done installing serviceInjector config for extension ' . $this->extension->getId());
-                
 		common_Logger::d('Installing custom script for extension ' . $this->extension->getId());
 		$this->installCustomScript();
 		common_Logger::d('Done installing custom script for extension ' . $this->extension->getId());
@@ -155,19 +149,6 @@ class common_ext_ExtensionInstaller
 	    }
 	    helpers_TimeOutHelper::reset();
 	}
-        
-        
-        protected function installServiceInjector() {
-            $config = $this->extension->getInjectorConfig();
-            if (ServiceManager::getServiceManager()->has(ServiceInjectorRegistry::SERVICE_ID)) {
-                /* @var  ServiceInjectorRegistry $injector */
-                $injector = ServiceManager::getServiceManager()->get(ServiceInjectorRegistry::SERVICE_ID);
-                $injector->overLoad($config);
-            } else {
-                $injector = new ServiceInjectorRegistry($config);
-            }
-            ServiceManager::getServiceManager()->register(ServiceInjectorRegistry::SERVICE_ID , $injector);
-        }
 
                 /**
 	 * Registers the Extension with the extensionManager
