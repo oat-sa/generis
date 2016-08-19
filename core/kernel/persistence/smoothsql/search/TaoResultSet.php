@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace oat\generis\model\persistence\smoothsql\search;
+namespace oat\generis\model\kernel\persistence\smoothsql\search;
 
 use core_kernel_classes_Resource;
 use oat\search\base\ResultSetInterface;

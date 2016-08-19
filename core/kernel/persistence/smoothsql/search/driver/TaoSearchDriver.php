@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace  oat\generis\model\persistence\smoothsql\search\driver;
+namespace  oat\generis\model\kernel\persistence\smoothsql\search\driver;
 
 use common_persistence_SqlPersistence;
 use oat\oatbox\service\ServiceManager;

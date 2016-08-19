@@ -21,7 +21,7 @@
  * @package generis
  *
  */
-namespace   oat\generis\model\persistence\smoothsql\search;
+namespace   oat\generis\model\kernel\persistence\smoothsql\search;
 
 use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\oatbox\service\ConfigurableService;
