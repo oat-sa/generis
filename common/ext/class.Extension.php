@@ -38,7 +38,9 @@ class common_ext_Extension
      * @var string
      */
     const MANIFEST_NAME = 'manifest.php';
-    
+
+    static $dependencies = [];
+
     /**
      * Short description of attribute id
      *
@@ -352,14 +354,17 @@ class common_ext_Extension
      */
     public function getDependencies()
     {
-        $returnValue = array();
-        foreach ($this->getManifest()->getDependencies() as $id => $version) {
-        	$returnValue[$id] = $version;
-        	$dependence = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
-        	$returnValue = array_merge($returnValue, $dependence->getDependencies());
+        if (!isset(self::$dependencies[$this->getId()])) {
+            $returnValue = array();
+            foreach ($this->getManifest()->getDependencies() as $id => $version) {
+                $returnValue[$id] = $version;
+                $dependence = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
+                $returnValue = array_merge($returnValue, $dependence->getDependencies());
+            }
+            self::$dependencies[$this->getId()] = $returnValue;
         }
 
-        return (array) $returnValue;
+        return self::$dependencies[$this->getId()];
     }
 
     /**
