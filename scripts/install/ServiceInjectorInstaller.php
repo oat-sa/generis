@@ -1,9 +1,22 @@
 <?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
+ *
+ *
  */
 
 namespace oat\generis\scripts\install;
@@ -19,11 +32,11 @@ class ServiceInjectorInstaller extends \common_ext_action_InstallAction {
 
         $this->setServiceInjectorConfig(
                 [
-                        TaoServiceManager::class =>
+                        oat\oatbox\service\factory\TaoServiceManager::class =>
                             [
                                 'driver' => 'ConfigDriver',
                             ],
-                        ZendServiceManager::class =>
+                        oat\oatbox\service\factory\ZendServiceManager::class =>
                             [
                                 'shared'     =>
                                     [
