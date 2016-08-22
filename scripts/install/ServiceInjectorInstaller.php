@@ -32,11 +32,11 @@ class ServiceInjectorInstaller extends \common_ext_action_InstallAction {
 
         $this->setServiceInjectorConfig(
                 [
-                        oat\oatbox\service\factory\TaoServiceManager::class =>
+                        \oat\oatbox\service\factory\TaoServiceManager::class =>
                             [
                                 'driver' => 'ConfigDriver',
                             ],
-                        oat\oatbox\service\factory\ZendServiceManager::class =>
+                        \oat\oatbox\service\factory\ZendServiceManager::class =>
                             [
                                 'shared'     =>
                                     [
