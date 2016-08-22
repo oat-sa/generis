@@ -29,7 +29,9 @@ you must implement  \oat\oatbox\service\ServiceInjectorAwareInterface and use \o
 ### for a new extension : 
 
 An helper is available to overload tao configuration : 
-> 1. cCreate your install script :
+
+1. Create your install script :
+
 put it in scripts/install.
 ```php
 namespace myVendor\myExtension\scripts\install;
@@ -50,9 +52,10 @@ class ServiceInjectorInstaller extends \common_ext_action_InstallAction {
     }
 }
 ```
+
 see [Service Locator Usage](https://framework.zend.com/manual/2.4/en/modules/zend.service-manager.quick-start.html)
 
-> 2. Add your script in your manifest :  open manifest.php on your extension root directory
+2. Add your script in your manifest :  open manifest.php on your extension root directory
 
 example : 
 
@@ -76,9 +79,12 @@ return [
 
 ### Add your your favorite container :
 
-> 1. Create a service factory : 
+1. Create a service factory : 
+
+```php
 
 namespace myVendor\myExtension\model;
+
 class MyContainerFactory implements FactoryInterface 
 {
     public function __invoke(array $config) {
@@ -86,10 +92,12 @@ class MyContainerFactory implements FactoryInterface
     }
 }
 
-> 2. add it to your configuration :
+```
+2. add it to your configuration :
 In your install script : 
 
 ```php
+
 $this->setServiceInjectorConfig(
                 [
                         \myVendor\myExtension\model\MyContainerFactory::class =>
@@ -98,6 +106,7 @@ $this->setServiceInjectorConfig(
                             ],
                     ]
         );
+
 ```
 reminder : your container must implement [container interop interface] [containerinterop]
 ### Update an existing extension :
@@ -105,6 +114,7 @@ reminder : your container must implement [container interop interface] [containe
 In your update class :
 
 ```php
+
 $injectorConfig = [
                         \oat\oatbox\service\factory\ZendServiceManager::class => [
                             // my config
@@ -115,13 +125,15 @@ $injector = $this->getServiceManager()->get(ServiceInjectorRegistry::SERVICE_ID)
                 $injector->overLoad(
                     $injectorConfig
                 );
+
 ```
 ### Over load an other extension :
 
 is it possible to overload an other extension configuration : 
 
 example : 
-> MyExtension 1 config : 
+
+MyExtension 1 config : 
 
 ```php
  [
@@ -135,7 +147,7 @@ example :
                     ]
 ```
 
-> My Extension 2 config
+My Extension 2 config
 
 ```php
  [
