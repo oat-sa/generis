@@ -33,6 +33,7 @@ An helper is available to overload tao configuration :
 1. Create your install script :
 
 put it in scripts/install.
+
 ```php
 namespace myVendor\myExtension\scripts\install;
 
@@ -77,7 +78,7 @@ return [
 ]
 ```
 
-### Add your your favorite container :
+### Add your favorite container :
 
 1. Create a service factory : 
 
@@ -93,8 +94,8 @@ class MyContainerFactory implements FactoryInterface
 }
 
 ```
-2. add it to your configuration :
-In your install script : 
+
+2. add it to your configuration in your install script : 
 
 ```php
 
