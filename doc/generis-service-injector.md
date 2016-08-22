@@ -30,7 +30,7 @@ you must implement  \oat\oatbox\service\ServiceInjectorAwareInterface and use \o
 
 An helper is available to overload tao configuration : 
 
-1. Create your install script :
+1 . Create your install script :
 
 put it in scripts/install.
 
@@ -56,7 +56,7 @@ class ServiceInjectorInstaller extends \common_ext_action_InstallAction {
 
 see [Service Locator Usage](https://framework.zend.com/manual/2.4/en/modules/zend.service-manager.quick-start.html)
 
-2. Add your script in your manifest :  open manifest.php on your extension root directory
+2 . Add your script in your manifest :  open manifest.php on your extension root directory
 
 example : 
 
@@ -80,7 +80,7 @@ return [
 
 ### Add your favorite container :
 
-1. Create a service factory : 
+1 . Create a service factory : 
 
 ```php
 
@@ -95,7 +95,7 @@ class MyContainerFactory implements FactoryInterface
 
 ```
 
-2. add it to your configuration in your install script : 
+2 . add it to your configuration in your install script : 
 
 ```php
 
