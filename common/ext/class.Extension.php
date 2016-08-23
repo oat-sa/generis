@@ -39,6 +39,20 @@ class common_ext_Extension
      */
     const MANIFEST_NAME = 'manifest.php';
 
+    /**
+     * Cache storage
+     *
+     * @var string
+     */
+    const STORAGE = 'cache';
+
+    /**
+     * Cache storage key
+     *
+     * @var string
+     */
+    const STORAGE_KEY = 'common_ext_extension_';
+
     static $dependencies = [];
 
     /**
@@ -65,8 +79,6 @@ class common_ext_Extension
      */
     protected $loaded = false;
     
-    private $configPersistence;
-
     /**
      * Should not be called directly, please use ExtensionsManager
      *
@@ -354,6 +366,9 @@ class common_ext_Extension
      */
     public function getDependencies()
     {
+        if (empty(self::$dependencies)) {
+            self::$dependencies = $this->getStorage()->get(self::STORAGE_KEY . 'dependencies');
+        }
         if (!isset(self::$dependencies[$this->getId()])) {
             $returnValue = array();
             foreach ($this->getManifest()->getDependencies() as $id => $version) {
@@ -362,6 +377,7 @@ class common_ext_Extension
                 $returnValue = array_merge($returnValue, $dependence->getDependencies());
             }
             self::$dependencies[$this->getId()] = $returnValue;
+            $this->getStorage()->set(self::STORAGE_KEY . 'dependencies', self::$dependencies);
         }
 
         return self::$dependencies[$this->getId()];
@@ -446,4 +462,13 @@ class common_ext_Extension
 		}
 		
 	}
+
+    /**
+     * Get cache storage
+     * @return \common_persistence_KeyValuePersistence
+     */
+    protected function getStorage()
+    {
+        return \common_persistence_KeyValuePersistence::getPersistence(self::STORAGE);
+    }
 }
