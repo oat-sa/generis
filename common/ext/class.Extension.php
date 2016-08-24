@@ -428,17 +428,23 @@ class common_ext_Extension
 	{
 		return $this->loaded;
 	}
-	
-	/**
-	 * Loads the extension if it hasn't been loaded (using load), yet
-	 */
-	public function load()
-	{
-		if (!$this->isLoaded()) {
-			$loader = new common_ext_ExtensionLoader($this);
-			$loader->load();
-			$this->loaded = true;
-		}
-		
-	}
+
+    /**
+     * Loads the extension if it hasn't been loaded (using load), yet
+     * All the dependent extensions will be loaded too.
+     */
+    public function load()
+    {
+        if (!$this->isLoaded()) {
+            $loader = new common_ext_ExtensionLoader($this);
+            $loader->load();
+            //load all dependent extensions
+            $this->loaded = true;
+
+            $dependencies = $this->getDependencies();
+            foreach ($dependencies as $extId => $extVersion) {
+                \common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
+            }
+        }
+    }
 }

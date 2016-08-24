@@ -62,47 +62,37 @@ class common_ext_ExtensionLoader
 
 
     /**
-     * Load the constantfiles.
+     * Load the constant files and constants declared in manifest file.
      *
      * @access protected
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param array $extraConstants
+     * @param array $extraConstants list of extension ids
      * @return void
      */
-    protected function loadConstants($extraConstants)
+    protected function loadConstants(array $extraConstants = [])
     {
-        
         common_Logger::t('Loading extension ' . $this->extension->getId() . ' constants');
-    	
-    	// load the constants from the manifest
+
+        // load the constants from the manifest
         if ($this->extension->getId() != "generis"){
-   			foreach ($this->extension->getConstants() as $key => $value) {
-   				if(!defined($key) && !is_array($value)){
-   					define($key, $value);
-   				}
-   			}
-    	}
-    	// we will load the constant file of the current extension and all it's dependancies
-    	
-    	// get the dependancies
-    	$extensions = array_keys($this->extension->getDependencies());
-    	
-    	// merge them with the additional constants (defined in the options)
-   		$extensions = array_merge($extensions, $extraConstants);
-   		
-   		// add the current extension (as well !)
-    	$extensions = array_merge(array($this->extension->getId()), $extensions);
-    	
-    	foreach($extensions as $extension){
-    	
-    		if($extension == 'generis') {
-    			continue; //generis constants are already loaded
-    		}
-    	
-    		//load the config of the extension
-    		$this->loadConstantsFile($extension);
-    	}
-        
+            foreach ($this->extension->getConstants() as $key => $value) {
+                if(!defined($key) && !is_array($value)){
+                    define($key, $value);
+                }
+            }
+        }
+
+        // add the current extension (as well !)
+        $extensions = array_merge([$this->extension->getId()], $extraConstants);
+
+        foreach ($extensions as $extension) {
+            if ($extension == 'generis') {
+                continue; //generis constants are already loaded
+            }
+
+            //load the config of the extension
+            $this->loadConstantsFile($extension);
+        }
     }
 
     /**
@@ -115,14 +105,12 @@ class common_ext_ExtensionLoader
      */
     private function loadConstantsFile($extensionId)
     {
-        
     	$constantFile = ROOT_PATH . $extensionId .DIRECTORY_SEPARATOR. 'includes' .DIRECTORY_SEPARATOR. 'constants.php';
     	$loadedFiles = $this->getLoadedFiles();
     	if(file_exists($constantFile) && !in_array($constantFile, $loadedFiles)){
-    	
     		//include the constant file
     		include_once $constantFile;
-    		
+
     		//this variable comes from the constant file and contain the const definition
     		if(isset($todefine)){
     			foreach($todefine as $constName => $constValue){
@@ -134,6 +122,8 @@ class common_ext_ExtensionLoader
     			}
     			unset($todefine);
     		}
+
+    		$this->addLoadedFile($constantFile);
     	}
         
     }
@@ -148,13 +138,7 @@ class common_ext_ExtensionLoader
      */
     public function getLoadedFiles()
     {
-        $returnValue = array();
-
-        
-        $returnValue = $this->loadedFiles;
-        
-
-        return (array) $returnValue;
+        return $this->loadedFiles;
     }
 
     /**
@@ -167,10 +151,8 @@ class common_ext_ExtensionLoader
      */
     protected function addLoadedFile($filePath)
     {
-        
         array_push($this->loadedFiles, $filePath);
         $this->loadedFiles = array_unique($this->loadedFiles);
-        
     }
 
 }
