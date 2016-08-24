@@ -40,20 +40,11 @@ class common_ext_Extension
     const MANIFEST_NAME = 'manifest.php';
 
     /**
-     * Cache storage
+     * List of extension dependencies
      *
-     * @var string
+     * @var array
      */
-    const STORAGE = 'cache';
-
-    /**
-     * Cache storage key
-     *
-     * @var string
-     */
-    const STORAGE_KEY = 'common_ext_extension_';
-
-    static $dependencies = [];
+    private $dependencies = [];
 
     /**
      * Short description of attribute id
@@ -357,30 +348,21 @@ class common_ext_Extension
     }
 
     /**
-     * returns the extension the current extension
-     * depends on recursively
+     * Returns the extension the current extension depends on recursively
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @return array
+     * @return array Where key is name of extension and value is required version.
      */
     public function getDependencies()
     {
-        if (empty(self::$dependencies)) {
-            self::$dependencies = $this->getStorage()->get(self::STORAGE_KEY . 'dependencies');
-        }
-        if (!isset(self::$dependencies[$this->getId()])) {
-            $returnValue = array();
+        if (empty($this->dependencies)) {
             foreach ($this->getManifest()->getDependencies() as $id => $version) {
-                $returnValue[$id] = $version;
+                $this->dependencies[$id] = $version;
                 $dependence = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
-                $returnValue = array_merge($returnValue, $dependence->getDependencies());
+                $this->dependencies = array_merge($this->dependencies, $dependence->getDependencies());
             }
-            self::$dependencies[$this->getId()] = $returnValue;
-            $this->getStorage()->set(self::STORAGE_KEY . 'dependencies', self::$dependencies);
         }
-
-        return self::$dependencies[$this->getId()];
+        return $this->dependencies;
     }
 
     /**
@@ -462,13 +444,4 @@ class common_ext_Extension
 		}
 		
 	}
-
-    /**
-     * Get cache storage
-     * @return \common_persistence_KeyValuePersistence
-     */
-    protected function getStorage()
-    {
-        return \common_persistence_KeyValuePersistence::getPersistence(self::STORAGE);
-    }
 }
