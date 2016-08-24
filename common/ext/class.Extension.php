@@ -436,15 +436,15 @@ class common_ext_Extension
     public function load()
     {
         if (!$this->isLoaded()) {
+            $dependencies = $this->getManifest()->getDependencies();
+            foreach ($dependencies as $extId => $extVersion) {
+                \common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
+            }
+            
             $loader = new common_ext_ExtensionLoader($this);
             $loader->load();
             //load all dependent extensions
             $this->loaded = true;
-
-            $dependencies = $this->getDependencies();
-            foreach ($dependencies as $extId => $extVersion) {
-                \common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
-            }
         }
     }
 }

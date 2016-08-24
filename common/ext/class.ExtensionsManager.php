@@ -78,6 +78,15 @@ class common_ext_ExtensionsManager
     }
 
     /**
+     * Get list of ids of installed extensions
+     * @return mixed
+     */
+    public function getInstalledExtensionsIds()
+    {
+        return  $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+    }
+
+    /**
      * Get the set of currently installed extensions. This method
      * returns an array of common_ext_Extension.
      *
@@ -89,7 +98,7 @@ class common_ext_ExtensionsManager
     {
         $returnValue = array();
 
-        $installed = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+        $installed = $this->getInstalledExtensionsIds();
         if (is_array($installed)) {
             foreach (array_keys($installed) as $extId) {
                 $returnValue[$extId] = $this->getExtensionById($extId);
