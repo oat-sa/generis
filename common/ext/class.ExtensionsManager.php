@@ -83,7 +83,8 @@ class common_ext_ExtensionsManager
      */
     public function getInstalledExtensionsIds()
     {
-        return  $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+        $installData = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+        return is_array($installData) ? array_keys($installData) : array();
     }
 
     /**
@@ -97,15 +98,10 @@ class common_ext_ExtensionsManager
     public function getInstalledExtensions()
     {
         $returnValue = array();
-
-        $installed = $this->getInstalledExtensionsIds();
-        if (is_array($installed)) {
-            foreach (array_keys($installed) as $extId) {
-                $returnValue[$extId] = $this->getExtensionById($extId);
-            }
+        foreach ($this->getInstalledExtensionsIds() as $extId) {
+            $returnValue[$extId] = $this->getExtensionById($extId);
         }
-
-        return (array) $returnValue;
+        return $returnValue;
     }
 
     /**
