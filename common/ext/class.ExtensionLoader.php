@@ -31,21 +31,6 @@
 class common_ext_ExtensionLoader
     extends common_ext_ExtensionHandler
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
-    /**
-     * Already loaded configuration and constants file.
-     *
-     * @access private
-     * @var array
-     */
-    private $loadedFiles = array();
-
-    // --- OPERATIONS ---
-
     /**
      * Load the extension.
      *
@@ -56,22 +41,11 @@ class common_ext_ExtensionLoader
      */
     public function load($extraConstants = array())
     {
-        common_Logger::t('Loading extension ' . $this->extension->getId());
-        $this->loadConstants($extraConstants);
-    }
+        if (!empty($extraConstants)) {
+            throw new common_exception_Error('Loading extra constants in '.__CLASS__.' nolonger supported');
+        }
 
-
-    /**
-     * Load the constant files and constants declared in manifest file.
-     *
-     * @access protected
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param array $extraConstants list of extension ids
-     * @return void
-     */
-    protected function loadConstants(array $extraConstants = [])
-    {
-        common_Logger::t('Loading extension ' . $this->extension->getId() . ' constants');
+        common_Logger::t('Loading extension ' . $this->getExtension()->getId() . ' constants');
 
         // load the constants from the manifest
         if ($this->extension->getId() != "generis"){
@@ -81,33 +55,9 @@ class common_ext_ExtensionLoader
                 }
             }
         }
-
-        // add the current extension (as well !)
-        $extensions = array_merge([$this->extension->getId()], $extraConstants);
-
-        foreach ($extensions as $extension) {
-            if ($extension == 'generis') {
-                continue; //generis constants are already loaded
-            }
-
-            //load the config of the extension
-            $this->loadConstantsFile($extension);
-        }
-    }
-
-    /**
-     * Load a single constant file that belongs to a given extension
-     *
-     * @access private
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string extensionId The extension ID.
-     * @return void
-     */
-    private function loadConstantsFile($extensionId)
-    {
-    	$constantFile = ROOT_PATH . $extensionId .DIRECTORY_SEPARATOR. 'includes' .DIRECTORY_SEPARATOR. 'constants.php';
-    	$loadedFiles = $this->getLoadedFiles();
-    	if(file_exists($constantFile) && !in_array($constantFile, $loadedFiles)){
+        
+        $constantFile = $this->getExtension()->getDir(). 'includes' .DIRECTORY_SEPARATOR. 'constants.php';
+    	if (file_exists($constantFile)) {
     		//include the constant file
     		include_once $constantFile;
 
@@ -117,42 +67,11 @@ class common_ext_ExtensionLoader
     				if(!defined($constName)){
     					define($constName, $constValue);	//constants are defined there!
     				} else {
-    					common_Logger::d('Constant '.$constName.' in '.$extensionId.' has already been defined');
+    					common_Logger::d('Constant '.$constName.' in '.$this->getExtension()->getId().' has already been defined');
     				}
     			}
     			unset($todefine);
     		}
-
-    		$this->addLoadedFile($constantFile);
     	}
-        
     }
-
-    /**
-     * Get an array of file paths that represent the already loaded constants
-     * configuration files.
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return array
-     */
-    public function getLoadedFiles()
-    {
-        return $this->loadedFiles;
-    }
-
-    /**
-     * Add a file to the loaded file list.
-     *
-     * @access protected
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string filePath The path to the file.
-     * @return void
-     */
-    protected function addLoadedFile($filePath)
-    {
-        array_push($this->loadedFiles, $filePath);
-        $this->loadedFiles = array_unique($this->loadedFiles);
-    }
-
 }
