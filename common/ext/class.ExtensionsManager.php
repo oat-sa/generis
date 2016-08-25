@@ -78,6 +78,16 @@ class common_ext_ExtensionsManager
     }
 
     /**
+     * Get list of ids of installed extensions
+     * @return mixed
+     */
+    public function getInstalledExtensionsIds()
+    {
+        $installData = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+        return is_array($installData) ? array_keys($installData) : array();
+    }
+
+    /**
      * Get the set of currently installed extensions. This method
      * returns an array of common_ext_Extension.
      *
@@ -88,15 +98,10 @@ class common_ext_ExtensionsManager
     public function getInstalledExtensions()
     {
         $returnValue = array();
-
-        $installed = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
-        if (is_array($installed)) {
-            foreach (array_keys($installed) as $extId) {
-                $returnValue[$extId] = $this->getExtensionById($extId);
-            }
+        foreach ($this->getInstalledExtensionsIds() as $extId) {
+            $returnValue[$extId] = $this->getExtensionById($extId);
         }
-
-        return (array) $returnValue;
+        return $returnValue;
     }
 
     /**
@@ -192,10 +197,12 @@ class common_ext_ExtensionsManager
         	throw new common_ext_ExtensionException('No id specified for getExtensionById()');
         }
         if (!isset($this->extensions[$id])) {
-        	$this->extensions[$id] = new common_ext_Extension($id, false);
+            $ext = new common_ext_Extension($id, false);
+            // loads the extension if it hasn't been loaded yet
+            $ext->load();
+            // if successfully loaded add to list
+            $this->extensions[$id] = $ext;
         }
-        // loads the extension if it hasn't been loaded yet
-        $this->extensions[$id]->load();
         
         return $this->extensions[$id];
     }
