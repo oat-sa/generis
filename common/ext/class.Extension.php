@@ -438,6 +438,7 @@ class common_ext_Extension
         if (!$this->isLoaded()) {
             $dependencies = $this->getManifest()->getDependencies();
             foreach ($dependencies as $extId => $extVersion) {
+                // triggers loading of extensions
                 \common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
             }
             
