@@ -197,9 +197,11 @@ class common_ext_ExtensionsManager
         	throw new common_ext_ExtensionException('No id specified for getExtensionById()');
         }
         if (!isset($this->extensions[$id])) {
-        	$this->extensions[$id] = new common_ext_Extension($id, false);
+            $ext = new common_ext_Extension($id, false);
             // loads the extension if it hasn't been loaded yet
-            $this->extensions[$id]->load();
+            $ext->load();
+            // if successfully loaded add to list
+            $this->extensions[$id] = $ext;
         }
         
         return $this->extensions[$id];
