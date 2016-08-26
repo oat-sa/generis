@@ -121,6 +121,7 @@ class common_persistence_Manager extends ConfigurableService
      * @return common_persistence_Persistence
      */
     private function createPersistence($persistenceId) {
+        $generis = common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
         $configs = $this->getOption(self::OPTION_PERSISTENCES);
         if (isset($configs[$persistenceId])) {
             $config = $configs[$persistenceId];
