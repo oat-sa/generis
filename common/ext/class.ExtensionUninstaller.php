@@ -1,6 +1,4 @@
 <?php
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use oat\oatbox\service\ServiceManager;
 /**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,19 +104,7 @@ class common_ext_ExtensionUninstaller
 		$data = $this->extension->getManifest()->getUninstallData();
         if (!is_null($data) && isset($data['php']) && is_array($data['php'])) {
             foreach ($data['php'] as $script) {
-                if (file_exists($script)) {
-                    common_Logger::d('Running uninstall script '.$script.' for ext '.$this->extension->getId(), 'UNINSTALL');
-		            require_once $script;
-		        } elseif (class_exists($script) && is_subclass_of($script, 'oat\\oatbox\\action\\Action')) {
-		            $action = new $script();
-		            if ($action instanceof ServiceLocatorAwareInterface) {
-		                $action->setServiceLocator(ServiceManager::getServiceManager());
-		            }
-		            common_Logger::d('Running uninstall action '.$script.' for ext '.$this->extension->getId(), 'UNINSTALL');
-		            $report = call_user_func($action, array());
-		        } else {
-		            throw new common_ext_InstallationException('Unable to run uninstall script '.$script);
-		        }
+                $this->runExtensionScript($script);
 		    }
 		}
 	}
