@@ -22,6 +22,7 @@ namespace oat\oatbox\filesystem;
 
 use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\StreamWrapper;
+use League\Flysystem\FileExistsException;
 use League\Flysystem\FileNotFoundException;
 use Psr\Http\Message\StreamInterface;
 
@@ -83,13 +84,13 @@ class File extends FileSystemHandler
      * @param string|Resource|StreamInterface $mixed
      * @param null $mimeType
      * @return bool
-     * @throws \FileNotFoundException
+     * @throws \League\Flysystem\FileExistsException
      * @throws \common_Exception
      */
     public function write($mixed, $mimeType = null)
     {
         if ($this->exists()) {
-            throw new \FileNotFoundException('File "' . $this->getPrefix() . '" not found."');
+            throw new FileExistsException($this->getPrefix());
         }
 
         \common_Logger::i('Writting in ' . $this->getPrefix());
@@ -131,13 +132,13 @@ class File extends FileSystemHandler
      * @param $mixed
      * @param null $mimeType
      * @return bool
-     * @throws \FileNotFoundException
+     * @throws FileNotFoundException
      * @throws \common_Exception
      */
     public function update($mixed, $mimeType = null)
     {
         if (!$this->exists()) {
-            throw new \FileNotFoundException('File "' . $this->getPrefix() . '" not found."');
+            throw new FileNotFoundException($this->getPrefix());
         }
 
         \common_Logger::i('Writting in ' . $this->getPrefix());
