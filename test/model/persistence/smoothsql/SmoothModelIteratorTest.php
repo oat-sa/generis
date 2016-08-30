@@ -44,7 +44,8 @@ class SmoothModelIteratorTest extends GenerisPhpUnitTestRunner
             "predicate" => '#predicate',
             "object" => 'obb',
             "id" => 898,
-            "l_language" => 'en-US'
+            "l_language" => 'en-US',
+            "author" => 'testauthor'
         );
         $statementValue2 = array(
             "modelid" => 1,
@@ -52,8 +53,8 @@ class SmoothModelIteratorTest extends GenerisPhpUnitTestRunner
             "predicate" => '#predicate2',
             "object" => 'ob2',
             "id" =>899,
-            "l_language" => 'en-US'
-        
+            "l_language" => 'en-US',
+            "author" => 'testauthor'
         );
         $return = new ReturnPromise(array(
             $statementValue,
@@ -127,5 +128,3 @@ class SmoothModelIteratorTest extends GenerisPhpUnitTestRunner
     
 
 }
-
-?>
