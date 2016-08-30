@@ -233,7 +233,7 @@ class Updater extends common_ext_ExtensionUpdater {
 
         $this->skip('2.30.0', '2.31.3');
         
-        if ($this->isVersion('2.31.1')) {
+        if ($this->isVersion('2.31.3')) {
             
             $complexSearch = new ComplexSearchService(
                 array(
