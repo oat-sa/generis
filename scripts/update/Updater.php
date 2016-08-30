@@ -220,7 +220,7 @@ class Updater extends \common_ext_ExtensionUpdater {
             $this->setVersion('2.30.0');
         }
 
-        $this->skip('2.30.0', '2.31.1');
+        $this->skip('2.30.0', '2.31.3');
 
         if ($this->isVersion('2.31.1')) {
             $this->getServiceManager()->register(ServiceInjectorRegistry::SERVICE_ID,
