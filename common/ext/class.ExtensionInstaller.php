@@ -20,10 +20,10 @@
  */
 
 use oat\generis\model\data\ModelManager;
-use oat\oatbox\action\ActionResolver;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
+use oat\oatbox\service\ServiceManager;
+use oat\taoDevTools\forms\Extension;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * Generis installer of extensions
@@ -88,7 +88,7 @@ class common_ext_ExtensionInstaller
 		$this->installLoadDefaultConfig();
 		$this->installOntology();
 		$this->installRegisterExt();
-			
+                
 		common_Logger::d('Installing custom script for extension ' . $this->extension->getId());
 		$this->installCustomScript();
 		common_Logger::d('Done installing custom script for extension ' . $this->extension->getId());
@@ -150,7 +150,7 @@ class common_ext_ExtensionInstaller
 	    helpers_TimeOutHelper::reset();
 	}
 
-	/**
+                /**
 	 * Registers the Extension with the extensionManager
 	 *
 	 * @access protected
@@ -227,7 +227,7 @@ class common_ext_ExtensionInstaller
 	 * @param  boolean localData Import local data or not.
 	 * @return mixed
 	 */
-	public function __construct( common_ext_Extension $extension, $localData = true)
+	public function __construct( common_ext_Extension $extension = null, $localData = true)
 	{
 		
 		parent::__construct($extension);

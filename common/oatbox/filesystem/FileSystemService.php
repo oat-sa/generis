@@ -22,7 +22,7 @@ namespace oat\oatbox\filesystem;
 use oat\oatbox\service\ConfigurableService;
 use League\Flysystem\AdapterInterface;
 use common_exception_Error;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use oat\oatbox\service\ServiceInjectorAwareInterface;
  /**
  * A service to reference and retrieve filesystems
  */
@@ -173,7 +173,7 @@ class FileSystemService extends ConfigurableService
             throw new common_exception_Error('"'.$class.'" is not a flysystem adapter');
         }
         $adapter = (new \ReflectionClass($class))->newInstanceArgs($options);
-        if ($adapter instanceof ServiceLocatorAwareInterface) {
+        if ($adapter instanceof ServiceInjectorAwareInterface) {
             $adapter->setServiceLocator($this->getServiceLocator());
         }
         return $adapter;

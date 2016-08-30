@@ -17,11 +17,14 @@
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
-use oat\oatbox\service\ServiceManager;
+
 use oat\oatbox\action\Action;
+use oat\oatbox\event\EventManager;
+use oat\oatbox\service\config\ServiceInjectorRegistry;
+use oat\oatbox\service\ServiceManager;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use oat\oatbox\event\EventManager;
+use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  * Abstract action containing some helper functions
  * @author bout
@@ -63,5 +66,19 @@ abstract class common_ext_action_InstallAction implements Action, ServiceLocator
             throw new common_exception_Error('Alternate service locator not compatible with '.__CLASS__);
         }
         return $serviceManager;
+    }
+    /**
+     * set service injector config
+     * @param array $config
+     */
+    public function setServiceInjectorConfig(array $config) {
+        if($this->getServiceManager()->has(ServiceInjectorRegistry::SERVICE_ID)) {
+            /* @var $service oat\oatbox\service\config\ServiceInjectorRegistry*/
+            $injector = $this->getServiceManager()->get(ServiceInjectorRegistry::SERVICE_ID);
+            $injector->overLoad($config);
+        } else {
+            $injector = new ServiceInjectorRegistry($config);
+        }
+        $this->getServiceManager()->register(ServiceInjectorRegistry::SERVICE_ID , $injector);
     }
 }

@@ -14,20 +14,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
  */
 
-namespace oat\oatbox\service;
+namespace oat\oatbox\service\exception;
 
-use oat\oatbox\service\exception\NotFoundException;
+use Exception;
+use Interop\Container\Exception\ContainerException as InteropContainerException;
 
 /**
- * 
- * @author bout
+ * Description of ContainerException
  *
+ * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class ServiceNotFoundException extends NotFoundException
+class ContainerException extends Exception implements InteropContainerException
 {
     
 }

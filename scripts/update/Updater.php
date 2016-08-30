@@ -28,12 +28,15 @@ use oat\generis\model\data\permission\PermissionManager;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\ResourceFileSerializer;
+use oat\oatbox\service\config\ServiceInjectorRegistry;
 use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\task\Queue;
 use oat\oatbox\task\implementation\SyncQueue;
+use \oat\oatbox\service\factory\TaoServiceManager;
+use \oat\oatbox\service\factory\ZendServiceManager;
 
 /**
  * 
@@ -218,6 +221,35 @@ class Updater extends \common_ext_ExtensionUpdater {
         }
 
         $this->skip('2.30.0', '2.31.3');
+
+        if ($this->isVersion('2.31.1')) {
+            $this->getServiceManager()->register(ServiceInjectorRegistry::SERVICE_ID,
+                new ServiceInjectorRegistry(
+                    [
+                        TaoServiceManager::class =>
+                            [
+                                'driver' => 'ConfigDriver',
+                            ],
+                        ZendServiceManager::class =>
+                            [
+                                'shared'     =>
+                                    [
+                                        'common.resource'    => false,
+                                        'common.class'       => false,
+                                        'common.property'    => false,
+                                    ],
+                                'invokables' =>
+                                    [
+                                        'common.resource'        => '\\core_kernel_classes_Resource' ,
+                                        'common.class'           => '\\core_kernel_classes_Class' ,
+                                        'common.property'        => '\\core_kernel_classes_Property' ,
+                                        'event.manager'          => '\\oat\\oatbox\\event\\EventManager',
+                                    ]
+                            ],
+                    ]
+                ));
+            $this->setVersion('3.0.0');
+        }
     }
     
     private function getReadableModelIds() {

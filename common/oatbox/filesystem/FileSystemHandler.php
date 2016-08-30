@@ -21,12 +21,12 @@
 
 namespace oat\oatbox\filesystem;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use oat\oatbox\service\ServiceInjectorAwareTrait;
+use oat\oatbox\service\ServiceInjectorAwareInterface;
 
-abstract class FileSystemHandler implements ServiceLocatorAwareInterface
+abstract class FileSystemHandler implements ServiceInjectorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceInjectorAwareTrait;
 
     /**
      * @var mixed

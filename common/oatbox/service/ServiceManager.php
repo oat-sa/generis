@@ -30,7 +30,12 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 class ServiceManager implements ServiceLocatorInterface
 {
     private static $instance;
-    
+
+    /**
+     * please use serviceInjector instead this
+     * @deprecated since 3.0.0
+     * @return ServiceManager
+     */
     public static function getServiceManager()
     {
         if (is_null(self::$instance)) {
@@ -53,8 +58,8 @@ class ServiceManager implements ServiceLocatorInterface
      * or throws a ServiceNotFoundException
      * 
      * @param string $serviceKey
-     * @throws \common_Exception
      * @throws ServiceNotFoundException
+     * @return mixed
      */
     public function get($serviceKey)
     {

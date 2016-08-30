@@ -21,8 +21,6 @@
 namespace oat\oatbox\service;
 
 use oat\oatbox\Configurable;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 /**
  * Configurable base service
  * 
@@ -31,9 +29,9 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  *
  * @author Joel Bout <joel@taotesting.com>
  */
-abstract class ConfigurableService extends Configurable implements ServiceLocatorAwareInterface
+abstract class ConfigurableService extends Configurable implements ServiceInjectorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceInjectorAwareTrait;
 
     public function setServiceManager(ServiceManager $serviceManager)
     {
