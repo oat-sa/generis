@@ -42,8 +42,8 @@ use oat\oatbox\task\implementation\SyncQueue;
 class Updater extends \common_ext_ExtensionUpdater {
     
     /**
-     * 
-     * @param string $currentVersion
+     *
+     * @param string $initialVersion
      * @return string $versionUpdatedTo
      */
     public function update($initialVersion) {
@@ -217,7 +217,7 @@ class Updater extends \common_ext_ExtensionUpdater {
             $this->setVersion('2.30.0');
         }
 
-        $this->skip('2.30.0', '2.31.4');
+        $this->skip('2.30.0', '2.31.5');
     }
     
     private function getReadableModelIds() {
