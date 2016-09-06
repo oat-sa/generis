@@ -24,6 +24,7 @@ use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\StreamWrapper;
 use League\Flysystem\FileNotFoundException;
 use Psr\Http\Message\StreamInterface;
+use League\Flysystem\FileExistsException;
 
 class File extends FileSystemHandler
 {
@@ -83,27 +84,21 @@ class File extends FileSystemHandler
      * @param string|Resource|StreamInterface $mixed
      * @param null $mimeType
      * @return bool
-     * @throws \FileNotFoundException
      * @throws \common_Exception
+     * @throws FileExistsException
      */
     public function write($mixed, $mimeType = null)
     {
-        if ($this->exists()) {
-            throw new \FileNotFoundException('File "' . $this->getPrefix() . '" not found."');
-        }
-
         \common_Logger::i('Writting in ' . $this->getPrefix());
         $config = (is_null($mimeType)) ? [] : ['ContentType' => $mimeType];
 
         if (is_string($mixed)) {
             return $this->getFileSystem()->write($this->getPrefix(), $mixed, $config);
-        }
 
-        if (is_resource($mixed)) {
+        } elseif (is_resource($mixed)) {
             return $this->getFileSystem()->writeStream($this->getPrefix(), $mixed, $config);
-        }
 
-        if ($mixed instanceof StreamInterface) {
+        } elseif ($mixed instanceof StreamInterface) {
             if (!$mixed->isReadable()) {
                 throw new \common_Exception('Stream is not readable. Write to filesystem aborted.');
             }
@@ -117,10 +112,11 @@ class File extends FileSystemHandler
                 throw new \common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
             }
             return $this->getFileSystem()->writeStream($this->getPrefix(), $resource, $config);
-        }
 
-        throw new \InvalidArgumentException('Value to be written has to be: string, resource or StreamInterface, ' .
-            '"' . gettype($mixed) . '" given.');
+        } else {
+            throw new \InvalidArgumentException('Value to be written has to be: string, resource or StreamInterface, ' .
+                '"' . gettype($mixed) . '" given.');
+        }
     }
 
     /**
