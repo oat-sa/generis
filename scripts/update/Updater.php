@@ -217,7 +217,7 @@ class Updater extends \common_ext_ExtensionUpdater {
             $this->setVersion('2.30.0');
         }
 
-        $this->skip('2.30.0', '2.31.5');
+        $this->skip('2.30.0', '2.31.6');
     }
     
     private function getReadableModelIds() {

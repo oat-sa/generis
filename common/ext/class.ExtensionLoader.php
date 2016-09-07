@@ -55,7 +55,7 @@ class common_ext_ExtensionLoader
                 }
             }
         }
-        
+
         $constantFile = $this->getExtension()->getDir(). 'includes' .DIRECTORY_SEPARATOR. 'constants.php';
     	if (file_exists($constantFile)) {
     		//include the constant file
