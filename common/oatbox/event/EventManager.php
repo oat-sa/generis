@@ -78,7 +78,7 @@ class EventManager extends ConfigurableService
         foreach ($events as $event) {
             $eventObject = is_object($event) ? $event : new GenericEvent($event);
             if (isset($listeners[$eventObject->getName()])) {
-                if (($index = array_search($callback, array_values($listeners[$eventObject->getName()]))) !== false) {
+                if (($index = array_search($callback, $listeners[$eventObject->getName()])) !== false) {
                     unset($listeners[$eventObject->getName()][$index]);
                 }
             }
