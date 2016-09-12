@@ -56,7 +56,6 @@ use function League\Flysystem\Util\class_exists;
 class Updater extends common_ext_ExtensionUpdater {
     
     /**
-     * 
      * @param string $initialVersion
      * @return string $versionUpdatedTo
      */
@@ -231,9 +230,9 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('2.30.0');
         }
 
-        $this->skip('2.30.0', '2.31.3');
+        $this->skip('2.30.0', '2.31.6');
         
-        if ($this->isVersion('2.31.3')) {
+        if ($this->isVersion('2.31.6')) {
             
             $complexSearch = new ComplexSearchService(
                 array(

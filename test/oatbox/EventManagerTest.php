@@ -31,6 +31,12 @@ class EmptyClass
     public function testfunction($event) {
         
     }
+    public function testfunction2($event) {
+
+    }
+    public function testfunction3($event) {
+
+    }
 }
 
 class EventManagerTest extends GenerisPhpUnitTestRunner
@@ -91,12 +97,22 @@ class EventManagerTest extends GenerisPhpUnitTestRunner
     public function testDetatch($eventManager)
     {
         $callable = $this->prophesize('oat\\generis\\test\\oatbox\\EmptyClass');
+
         $callable->testfunction(Argument::any())->should(new CallTimesPrediction(1));
+        $callable->testfunction2(Argument::any())->should(new CallTimesPrediction(1));
+        $callable->testfunction3(Argument::any())->should(new CallTimesPrediction(1));
         $revelation = $callable->reveal();
 
-        $eventManager->attach(array('testEvent1'), array($revelation, 'testfunction'));
-        $eventManager->trigger('testEvent1');
-        $eventManager->detach(array('testEvent1'), array($revelation, 'testfunction'));
-        $eventManager->trigger('testEvent1');
+        $eventManager->attach(array('testEvent'), array($revelation, 'testfunction'));
+        $eventManager->attach(array('testEvent'), array($revelation, 'testfunction2'));
+        $eventManager->attach(array('testEvent'), array($revelation, 'testfunction3'));
+
+        $eventManager->trigger('testEvent');
+
+        $eventManager->detach(array('testEvent'), array($revelation, 'testfunction'));
+        $eventManager->detach(array('testEvent'), array($revelation, 'testfunction2'));
+        $eventManager->detach(array('testEvent'), array($revelation, 'testfunction3'));
+
+        $eventManager->trigger('testEvent');
     }
 }
