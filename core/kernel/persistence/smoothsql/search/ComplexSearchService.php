@@ -201,12 +201,6 @@ class ComplexSearchService extends ConfigurableService
             }
         }
         $queryString = $this->gateway->serialyse($query)->getQuery();
-        /**
-         * @todo remove before merge
-         */
-        if(DEBUG_MODE) {
-            \common_Logger::i($queryString);
-        }
         return $queryString;
     }
     
