@@ -154,7 +154,7 @@ class ComplexSearchService extends ConfigurableService
         if(is_array($value)) {
                 
                 if(empty($value)) {
-                    throw new exception\InvalidValueException('query filter value cann\'t be empty for ' . $predicate);
+                    throw new exception\InvalidValueException('query filter value cann\'t be empty ');
                 }
 
             } 
@@ -195,20 +195,17 @@ class ComplexSearchService extends ConfigurableService
         $query->setCriteria($criteria);
         
         foreach ($propertyFilters as $predicate => $value ) {
-
-            $nextValue = [];
             
             if(is_array($value) && $this->isValidValue($value)) {
                 
-                $nextValue = array_shift($value);
-                $value = $value[0];
+                $firstValue = array_shift($value);
             } 
             
             
-            $criteria->addCriterion($predicate , $operator , $this->parseValue($value));
+            $criteria->addCriterion($predicate , $operator , $this->parseValue($firstValue));
             
-            foreach ($nextValue as $value) {
-                $criteria->addAnd($this->parseValue($value));
+            foreach ($value as $nextValue) {
+                $criteria->addOr($this->parseValue($value));
             }
             if($and === false) {
                 $criteria = $query->newQuery()
