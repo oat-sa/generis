@@ -143,7 +143,22 @@ class ComplexSearchService extends ConfigurableService
         }
         return $value;
     }
+    
+    /**
+     * verify if value is valid
+     * @param string $value
+     * @return boolean
+     * @throws exception\InvalidValueException
+     */
+    protected function validValue($value) {
+        if(is_array($value)) {
+                
+                if(empty($value)) {
+                    throw new exception\InvalidValueException('query filter value cann\'t be empty ');
+                }
 
+            } 
+    }
 
     /**
      * serialyse a query for searchInstance
@@ -179,19 +194,20 @@ class ComplexSearchService extends ConfigurableService
         $query->setCriteria($criteria);
         
         foreach ($propertyFilters as $predicate => $value ) {
-
-            $nextValue = [];
+            
+            $this->validValue($value);
+            $firstValue = $value;
+            $nextValue  = [];
             
             if(is_array($value)) {
-                $nextValue = array_shift($value);
-                $value = $value[0];
+                $firstValue = array_shift($value);
+                $nextValue  = $value;
             } 
             
+            $criteria->addCriterion($predicate , $operator , $this->parseValue($firstValue));
             
-            $criteria->addCriterion($predicate , $operator , $this->parseValue($value));
-            
-            foreach ($nextValue as $value) {
-                $criteria->addAnd($this->parseValue($value));
+            foreach ($nextValue as $val) {
+                $criteria->addOr($this->parseValue($val));
             }
             if($and === false) {
                 $criteria = $query->newQuery()
