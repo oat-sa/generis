@@ -195,7 +195,7 @@ class ComplexSearchService extends ConfigurableService
         
         foreach ($propertyFilters as $predicate => $value ) {
             
-            $this->isValidValue($value);
+            $this->validValue($value);
             $firstValue = $value;
             $nextValue  = [];
             
