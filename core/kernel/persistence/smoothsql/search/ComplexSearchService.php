@@ -143,7 +143,23 @@ class ComplexSearchService extends ConfigurableService
         }
         return $value;
     }
+    
+    /**
+     * verify if value is valid
+     * @param string $value
+     * @return boolean
+     * @throws exception\InvalidValueException
+     */
+    protected function isValidValue($value) {
+        if(is_array($value)) {
+                
+                if(empty($value)) {
+                    throw new exception\InvalidValueException('query filter value cann\'t be empty for ' . $predicate);
+                }
 
+            } 
+            return true;
+    }
 
     /**
      * serialyse a query for searchInstance
@@ -182,7 +198,8 @@ class ComplexSearchService extends ConfigurableService
 
             $nextValue = [];
             
-            if(is_array($value)) {
+            if(is_array($value) && $this->isValidValue($value)) {
+                
                 $nextValue = array_shift($value);
                 $value = $value[0];
             } 
