@@ -150,7 +150,7 @@ class ComplexSearchService extends ConfigurableService
      * @return boolean
      * @throws exception\InvalidValueException
      */
-    protected function isValidValue($value) {
+    protected function validValue($value) {
         if(is_array($value)) {
                 
                 if(empty($value)) {
@@ -158,7 +158,6 @@ class ComplexSearchService extends ConfigurableService
                 }
 
             } 
-            return true;
     }
 
     /**
@@ -196,16 +195,19 @@ class ComplexSearchService extends ConfigurableService
         
         foreach ($propertyFilters as $predicate => $value ) {
             
-            if(is_array($value) && $this->isValidValue($value)) {
-                
-                $firstValue = array_shift($value);
-            } 
+            $this->isValidValue($value);
+            $firstValue = $value;
+            $nextValue  = [];
             
+            if(is_array($value)) {
+                $firstValue = array_shift($value);
+                $nextValue  = $value;
+            } 
             
             $criteria->addCriterion($predicate , $operator , $this->parseValue($firstValue));
             
-            foreach ($value as $nextValue) {
-                $criteria->addOr($this->parseValue($value));
+            foreach ($nextValue as $val) {
+                $criteria->addOr($this->parseValue($val));
             }
             if($and === false) {
                 $criteria = $query->newQuery()
