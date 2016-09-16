@@ -49,7 +49,7 @@ abstract class AbstractFormValidator {
      * @return $this
      */
     public function validate(array $form) {
-        
+        $this->isValid = true;
         foreach($form as $field => $value) {
             if(array_key_exists($field , $this->validation )) {
                 $this->validField($field , $value, $this->validation[$field]);
