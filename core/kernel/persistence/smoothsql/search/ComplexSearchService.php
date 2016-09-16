@@ -140,6 +140,8 @@ class ComplexSearchService extends ConfigurableService
     protected function parseValue($value) {
         if($value instanceof \core_kernel_classes_Resource ){
             return $value->getUri();
+        } else {
+            $value = preg_replace('/^\*$/', '', $value);
         }
         return $value;
     }
