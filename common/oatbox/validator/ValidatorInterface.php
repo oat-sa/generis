@@ -26,12 +26,6 @@ namespace oat\oatbox\validator;
 interface ValidatorInterface {
     
     /**
-     * constructor
-     * @param array $options
-     */
-    public function __construct(array $options = array());
-    
-    /**
      * return validator name
      * @return string
      */
