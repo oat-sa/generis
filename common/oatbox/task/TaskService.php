@@ -25,6 +25,8 @@ use common_report_Report as Report;
 
 class TaskService extends ConfigurableService
 {
+    const OPTION_LIMIT = 'limit';
+
     /**
      * @var TaskRunner
      */
@@ -46,15 +48,21 @@ class TaskService extends ConfigurableService
      */
     public function runQueue()
     {
+        $count = 0;
         $statistics = array();
         $queue = $this->getServiceManager()->get(Queue::CONFIG_ID);
         $report = new Report(Report::TYPE_SUCCESS);
+        $limit = $this->getLimit();
         foreach ($queue as $task) {
             $subReport = $this->runTask($task);
             $statistics[$subReport->getType()] = isset($statistics[$subReport->getType()])
             ? $statistics[$subReport->getType()] + 1
             : 1;
             $report->add($subReport);
+            $count++;
+            if ($limit !== 0 && $count === $limit) {
+                break;
+            }
         }
         
         if (empty($statistics)) {
@@ -66,6 +74,15 @@ class TaskService extends ConfigurableService
             $report->setMessage(__('Ran %s task(s):', array_sum($statistics)));
         }
         return $report;
+    }
+
+    /**
+     * @return int
+     */
+    private function getLimit()
+    {
+        $limit = $this->hasOption(self::OPTION_LIMIT) ? $this->getOption(self::OPTION_LIMIT) : 0;
+        return (integer) $limit;
     }
 
     /**
