@@ -45,9 +45,6 @@ use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\task\implementation\SyncQueue;
 use oat\oatbox\task\Queue;
-use const GENERIS_NS;
-use const LOCAL_NAMESPACE;
-use function League\Flysystem\Util\class_exists;
 
 /**
  * 
