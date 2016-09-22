@@ -69,7 +69,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
     {
         $properties = $this->getResourceFilePropertiesValues($serial);
         $dir = $this->getRootDirectory($properties[self::RESOURCE_FILE_FILESYSTEM_URI]);
-        return isset($properties[self::RESOURCE_FILE_NAME])
+        return (isset($properties[self::RESOURCE_FILE_NAME]) && ! empty($properties[self::RESOURCE_FILE_NAME]))
             ? $dir->getFile($properties[self::RESOURCE_FILE_PATH].'/'.$properties[self::RESOURCE_FILE_NAME])
             : $dir->getDirectory($properties[self::RESOURCE_FILE_PATH]);
     }
