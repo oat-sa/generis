@@ -21,20 +21,46 @@
 namespace oat\oatbox\task;
 
 use oat\oatbox\service\ConfigurableService;
-use oat\Taskqueue\Persistence\RdsQueue;
-use Doctrine\DBAL\Schema\SchemaException;
-use oat\oatbox\service\ServiceManager;
-use oat\oatbox\task\Queue;
 use oat\oatbox\action\Action;
-use oat\oatbox\task\TaskRunner;
-use common_report_Report as Report;
 
+/**
+ * Class RunTasks is used to run tasks in queue.
+ *
+ * Run example:
+ * ```
+ * sudo -u www-data php index.php 'oat\oatbox\task\RunTasks' 10
+ * ```
+ * @package oat\oatbox\task
+ */
 class RunTasks extends ConfigurableService implements Action
 {
-    public function __invoke($params) {
-        $taskService = new TaskService();
+    /**
+     * @var array
+     */
+    protected $params = [];
+
+    /**
+     * @param array $params
+     *              $params[0] (int) tasks limit. If parameter is not given or equals 0 then all tasks in queue will be executed.
+     * @return \common_report_Report
+     */
+    public function __invoke($params)
+    {
+        $this->params = $params;
+        $limit = $this->getLimit();
+        $taskService = new TaskService([TaskService::OPTION_LIMIT => $limit]);
         $taskService->setServiceLocator($this->getServiceLocator());
         $report = $taskService->runQueue();
         return $report; 
+    }
+
+    /**
+     * Get max amount of tasks to run.
+     * @return int
+     */
+    protected function getLimit()
+    {
+        $limit = isset($this->params[0]) ? $this->params[0] : 0;
+        return (integer) $limit;
     }
 }
