@@ -46,7 +46,7 @@ class GateWay extends TaoSearchGateWay {
      * resultSet service or className
      * @var string 
      */
-    protected $resultSetClassName = '\\oat\\oatbox\\search\\TaoResultSet';
+    protected $resultSetClassName = '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\TaoResultSet';
     
     public function __construct() {
         $this->connector = ServiceManager::getServiceManager()
