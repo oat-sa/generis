@@ -46,7 +46,7 @@ class GateWay extends TaoSearchGateWay {
      * resultSet service or className
      * @var string 
      */
-    protected $resultSetClassName = '\\oat\\oatbox\\search\\TaoResultSet';
+    protected $resultSetClassName = '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\TaoResultSet';
     
     public function __construct() {
         $this->connector = ServiceManager::getServiceManager()
@@ -70,7 +70,7 @@ class GateWay extends TaoSearchGateWay {
      * @return type
      */
     public function search(QueryBuilderInterface $Builder) {
-        $this->parse($Builder);
+        $this->serialyse($Builder);
         if(DEBUG_MODE) {
             \common_Logger::i($this->parsedQuery);
         }
@@ -100,7 +100,7 @@ class GateWay extends TaoSearchGateWay {
      * @return type
      */
     public function count(QueryBuilderInterface $Builder) {
-        $this->parsedQuery = $this->getParser()->setCriteriaList($Builder)->count(true)->parse();
+        $this->parsedQuery = $this->getSerialyser()->setCriteriaList($Builder)->count(true)->serialyse();
         if(DEBUG_MODE) {
             \common_Logger::i($this->parsedQuery);
         }
