@@ -38,7 +38,14 @@ class common_ext_Extension
      * @var string
      */
     const MANIFEST_NAME = 'manifest.php';
-    
+
+    /**
+     * List of extension dependencies
+     *
+     * @var array
+     */
+    private $dependencies = [];
+
     /**
      * Short description of attribute id
      *
@@ -63,8 +70,6 @@ class common_ext_Extension
      */
     protected $loaded = false;
     
-    private $configPersistence;
-
     /**
      * Should not be called directly, please use ExtensionsManager
      *
@@ -343,23 +348,21 @@ class common_ext_Extension
     }
 
     /**
-     * returns the extension the current extension
-     * depends on recursively
+     * Returns the extension the current extension depends on recursively
      *
      * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @return array
+     * @return array Where key is name of extension and value is required version.
      */
     public function getDependencies()
     {
-        $returnValue = array();
-        foreach ($this->getManifest()->getDependencies() as $id => $version) {
-        	$returnValue[$id] = $version;
-        	$dependence = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
-        	$returnValue = array_merge($returnValue, $dependence->getDependencies());
+        if (empty($this->dependencies)) {
+            foreach ($this->getManifest()->getDependencies() as $id => $version) {
+                $this->dependencies[$id] = $version;
+                $dependence = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
+                $this->dependencies = array_merge($this->dependencies, $dependence->getDependencies());
+            }
         }
-
-        return (array) $returnValue;
+        return $this->dependencies;
     }
 
     /**

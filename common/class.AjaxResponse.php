@@ -45,10 +45,10 @@ class common_AjaxResponse
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  array options
+     * @param  array $options
      *
      */
-    public function __construct($options = array())
+    public function __construct(array $options = array())
     {
 
         
@@ -59,7 +59,7 @@ class common_AjaxResponse
         
         //position the header of the response
         $context = Context::getInstance();
-        $context->getResponse()->setContentHeader('text/json');
+        $context->getResponse()->setContentHeader('application/json');
         //set the response object
         $response = array(
             'success'           => $success

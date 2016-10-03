@@ -21,29 +21,39 @@
 
 namespace oat\generis\scripts\update;
 
-use core_kernel_impl_ApiModelOO;
-use common_Logger;
+use common_cache_KeyValueCache;
 use common_ext_ExtensionsManager;
-use oat\generis\model\data\permission\PermissionManager;
+use common_ext_ExtensionUpdater;
+use common_ext_NamespaceManager;
+use common_Logger;
+use common_persistence_Manager;
+use core_kernel_classes_Class;
+use core_kernel_fileSystem_Cache;
+use core_kernel_impl_ApiModelOO;
+use core_kernel_persistence_smoothsql_SmoothModel;
+use core_kernel_uri_DatabaseSerialUriProvider;
+use core_kernel_uri_UriService;
+use core_kernel_versioning_Repository;
 use oat\generis\model\data\ModelManager;
+use oat\generis\model\data\permission\PermissionManager;
 use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\ResourceFileSerializer;
-use oat\oatbox\service\ServiceNotFoundException;
+use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use oat\oatbox\action\ActionService;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\filesystem\FileSystemService;
-use oat\oatbox\action\ActionService;
-use oat\oatbox\task\Queue;
+use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\task\implementation\SyncQueue;
+use oat\oatbox\task\Queue;
 
 /**
  * 
  * @author Joel Bout <joel@taotesting.com>
  */
-class Updater extends \common_ext_ExtensionUpdater {
+class Updater extends common_ext_ExtensionUpdater {
     
     /**
-     * 
-     * @param string $currentVersion
+     * @param string $initialVersion
      * @return string $versionUpdatedTo
      */
     public function update($initialVersion) {
@@ -93,11 +103,11 @@ class Updater extends \common_ext_ExtensionUpdater {
         }
         
         if ($currentVersion == '2.7.3') {
-            ModelManager::setModel(new \core_kernel_persistence_smoothsql_SmoothModel(array(
-                \core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'default',
-                \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS => $this->getReadableModelIds(),
-                \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => array('1'),
-                \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => '1'
+            ModelManager::setModel(new core_kernel_persistence_smoothsql_SmoothModel(array(
+                core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'default',
+                core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS => $this->getReadableModelIds(),
+                core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => array('1'),
+                core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => '1'
             )));
             $currentVersion = '2.7.4';
         }
@@ -106,15 +116,15 @@ class Updater extends \common_ext_ExtensionUpdater {
             if (in_array(GENERIS_URI_PROVIDER, array('DatabaseSerialUriProvider', 'AdvKeyValueUriProvider'))) {
                 $uriProviderClassName = '\core_kernel_uri_' . GENERIS_URI_PROVIDER;
                 $options = array(
-                	\core_kernel_uri_DatabaseSerialUriProvider::OPTION_PERSISTENCE => 'default',
-                    \core_kernel_uri_DatabaseSerialUriProvider::OPTION_NAMESPACE => LOCAL_NAMESPACE.'#'
+                	core_kernel_uri_DatabaseSerialUriProvider::OPTION_PERSISTENCE => 'default',
+                    core_kernel_uri_DatabaseSerialUriProvider::OPTION_NAMESPACE => LOCAL_NAMESPACE.'#'
                 );
                 $provider = new $uriProviderClassName($options);
             } else {
                 $uriProviderClassName = '\common_uri_' . GENERIS_URI_PROVIDER;
                 $provider = new $uriProviderClassName();
             }
-            \core_kernel_uri_UriService::singleton()->setUriProvider($provider);
+            core_kernel_uri_UriService::singleton()->setUriProvider($provider);
             $currentVersion = '2.7.5';
         }
         
@@ -141,8 +151,8 @@ class Updater extends \common_ext_ExtensionUpdater {
             // update persistences
             $persistenceConfig = $this->getServiceManager()->get('generis/persistences');
             if (is_array($persistenceConfig)) {
-                $service = new \common_persistence_Manager(array(
-                    \common_persistence_Manager::OPTION_PERSISTENCES =>$persistenceConfig
+                $service = new common_persistence_Manager(array(
+                    common_persistence_Manager::OPTION_PERSISTENCES =>$persistenceConfig
                 ));
                 $this->getServiceManager()->register('generis/persistences', $service);
             }
@@ -151,8 +161,8 @@ class Updater extends \common_ext_ExtensionUpdater {
             try {
                 $this->getServiceManager()->get('generis/cache');
             } catch (ServiceNotFoundException $e) {
-                $cache = new \common_cache_KeyValueCache(array(
-                    \common_cache_KeyValueCache::OPTION_PERSISTENCE => 'cache'
+                $cache = new common_cache_KeyValueCache(array(
+                    common_cache_KeyValueCache::OPTION_PERSISTENCE => 'cache'
                 ));
                 $cache->setServiceManager($this->getServiceManager());
                 
@@ -180,10 +190,10 @@ class Updater extends \common_ext_ExtensionUpdater {
                 FileSystemService::OPTION_ADAPTERS=> array()
             ));
             
-            $class = new \core_kernel_classes_Class(GENERIS_NS . '#VersionedRepository');
+            $class = new core_kernel_classes_Class(GENERIS_NS . '#VersionedRepository');
             foreach ($class->getInstances(true) as $resource) {
-                $oldFs = new \core_kernel_versioning_Repository($resource);
-                $path = \core_kernel_fileSystem_Cache::getFileSystemPath($oldFs);
+                $oldFs = new core_kernel_versioning_Repository($resource);
+                $path = core_kernel_fileSystem_Cache::getFileSystemPath($oldFs);
                 $FsManager->registerLocalFileSystem($resource->getUri(), $path);
             }
             $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $FsManager);
@@ -210,19 +220,62 @@ class Updater extends \common_ext_ExtensionUpdater {
             $this->setVersion('2.20.0');
         }
 
-        $this->skip('2.20.0', '2.29.1');
 
+        $this->skip('2.20.0', '2.29.1');
         if ($this->isVersion('2.29.1')) {
             $this->getServiceManager()->register(FileReferenceSerializer::SERVICE_ID, new ResourceFileSerializer());
             $this->setVersion('2.30.0');
         }
 
-        $this->skip('2.30.0', '2.32.0');
+        $this->skip('2.30.0', '2.31.6');
+        
+        if ($this->isVersion('2.31.6')) {
+            
+            $complexSearch = new ComplexSearchService(
+                array(
+                    'shared' => array(
+                        'search.query.query' => false,
+                        'search.query.builder' => false,
+                        'search.query.criterion' => false,
+                        'search.tao.serialyser' => false,
+                        'search.tao.result' => false
+                    ),
+                    'invokables' => array(
+                        'search.query.query' => '\\oat\\search\\Query',
+                        'search.query.builder' => '\\oat\\search\\QueryBuilder',
+                        'search.query.criterion' => '\\oat\\search\\QueryCriterion',
+                        'search.driver.postgres' => '\\oat\\search\\DbSql\\Driver\\PostgreSQL',
+                        'search.driver.mysql' => '\\oat\\search\\DbSql\\Driver\\MySQL',
+                        'search.driver.tao' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\driver\\TaoSearchDriver',
+                        'search.tao.serialyser' => '\\oat\\search\\DbSql\\TaoRdf\\UnionQuerySerialyser',
+                        'search.factory.query' => '\\oat\\search\\factory\\QueryFactory',
+                        'search.factory.builder' => '\\oat\\search\\factory\\QueryBuilderFactory',
+                        'search.factory.criterion' => '\\oat\\search\\factory\\QueryCriterionFactory',
+                        'search.tao.gateway' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\GateWay',
+                        'search.tao.result' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\TaoResultSet'
+                    ),
+                    'abstract_factories' => array(
+                        '\\oat\\search\\Command\\OperatorAbstractfactory'
+                    ),
+                    'services' => array(
+                        'search.options' => array(
+                            'table' => 'statements',
+                            'driver' => 'taoRdf'
+                        )
+                    )
+                )
+            );
+            
+            $this->getServiceManager()->register(ComplexSearchService::SERVICE_ID, $complexSearch);
+            $this->setVersion('3.0.0');
+        }
+        
+        $this->skip('3.0.0', '3.1.0');
     }
     
     private function getReadableModelIds() {
         $extensionManager = \common_ext_ExtensionsManager::singleton();
-        \common_ext_NamespaceManager::singleton()->reset();
+        common_ext_NamespaceManager::singleton()->reset();
         
         $uris = array(LOCAL_NAMESPACE.'#');
         foreach ($extensionManager->getModelsToLoad() as $subModelUri){
@@ -232,7 +285,7 @@ class Updater extends \common_ext_ExtensionUpdater {
             $uris[] = $subModelUri;
         }
         $ids = array();
-        foreach(\common_ext_NamespaceManager::singleton()->getAllNamespaces() as $namespace){
+        foreach(common_ext_NamespaceManager::singleton()->getAllNamespaces() as $namespace){
             if(in_array($namespace->getUri(), $uris)){
                 $ids[] = $namespace->getModelId();
             }

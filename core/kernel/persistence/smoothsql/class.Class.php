@@ -300,6 +300,8 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
 
     /**
      * (non-PHPdoc)
+     * prefer use 
+     * @deprecated since 3.0
      * @see core_kernel_persistence_ClassInterface::searchInstances()
      */
     public function searchInstances(core_kernel_classes_Class $resource, $propertyFilters = array(), $options = array())
@@ -484,9 +486,11 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         $limit = (isset($options['limit']) === false) ? 0 : $options['limit'];
         $order = (isset($options['order']) === false) ? '' : $options['order'];
         $orderdir = (isset($options['orderdir']) === false) ? 'ASC' : $options['orderdir'];
-
-        $query = core_kernel_persistence_smoothsql_Utils::buildFilterQuery($this->getModel(), $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
         
+        $search = \oat\oatbox\service\ServiceManager::getServiceManager()->get('generis/complexSearch');
+        $query = $search->getQuery($this->getModel(), $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
+        
+        //$query = core_kernel_persistence_smoothsql_Utils::buildFilterQuery($this->getModel(), $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
         return $query;
     }
 }
