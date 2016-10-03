@@ -65,6 +65,26 @@ class EventManager extends ConfigurableService
         }
         $this->setOption(self::OPTION_LISTENERS, $listeners);
     }
+    
+    /**
+     * remove listener from an event and delete event if it dosn't have any listeners
+     * @param array $listeners
+     * @param string $eventName
+     * @param callable $callback
+     * @return array
+     */
+    protected function removeListener(array $listeners , $eventObject , $callback) {
+        if (isset($listeners[$eventObject->getName()])) {
+                if (($index = array_search($callback, $listeners[$eventObject->getName()])) !== false) {
+                    unset($listeners[$eventObject->getName()][$index]);
+                }
+                if(empty($listeners[$eventObject->getName()])) {
+                    unset($listeners[$eventObject->getName()]);
+                }
+            }
+        return $listeners;
+    }
+
 
     /**
      * Detach a Listener from one or multiple events
@@ -77,11 +97,7 @@ class EventManager extends ConfigurableService
         $listeners = $this->getOption(self::OPTION_LISTENERS);
         foreach ($events as $event) {
             $eventObject = is_object($event) ? $event : new GenericEvent($event);
-            if (isset($listeners[$eventObject->getName()])) {
-                if (($index = array_search($callback, $listeners[$eventObject->getName()])) !== false) {
-                    unset($listeners[$eventObject->getName()][$index]);
-                }
-            }
+            $listeners = $this->removeListener($listeners, $eventObject, $callback);
         }
         $this->setOption(self::OPTION_LISTENERS, $listeners);
     }

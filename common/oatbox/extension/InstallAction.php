@@ -14,26 +14,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
-use oat\oatbox\service\ServiceManager;
-use oat\oatbox\action\Action;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+namespace oat\oatbox\extension;
+
 use oat\oatbox\event\EventManager;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+
 /**
- * Abstract action containing some helper functions
- * @author bout
- * @deprecated since version 3.2.0 please use oat\oatbox\extension\Installer instead
+ * new Abstract action containing some helper functions
  *
+ * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-abstract class common_ext_action_InstallAction implements Action, ServiceLocatorAwareInterface
-{
-    use ServiceLocatorAwareTrait;
+abstract class InstallAction extends AbstractAction {
     
     /**
-     * 
+     * add a new event Listener
      * @param mixed $event either an Event object or a string
      * @param Callable $callback
      */
@@ -44,25 +41,16 @@ abstract class common_ext_action_InstallAction implements Action, ServiceLocator
         $this->getServiceManager()->register(EventManager::CONFIG_ID, $eventManager);
     }
     
-    public function registerService($serviceKey, $service)
-    {
+    /**
+     * add a new configurable service
+     * @param string $serviceKey
+     * @param \oat\oatbox\extension\ServiceLocatorAwareInterface $service
+     */
+    public function registerService($serviceKey, $service) {
         if ($service instanceof ServiceLocatorAwareInterface) {
             $service->setServiceLocator($this->getServiceManager());
         }
         $this->getServiceManager()->register($serviceKey, $service);
     }
     
-    /**
-     * 
-     * @throws common_exception_Error
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        $serviceManager = $this->getServiceLocator();
-        if (!$serviceManager instanceof ServiceManager) {
-            throw new common_exception_Error('Alternate service locator not compatible with '.__CLASS__);
-        }
-        return $serviceManager;
-    }
 }

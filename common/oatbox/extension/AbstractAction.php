@@ -14,43 +14,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
-use oat\oatbox\service\ServiceManager;
+
+namespace oat\oatbox\extension;
+
+use common_exception_Error;
 use oat\oatbox\action\Action;
+use oat\oatbox\service\ServiceManager as ServiceManager;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use oat\oatbox\event\EventManager;
+
 /**
- * Abstract action containing some helper functions
- * @author bout
- * @deprecated since version 3.2.0 please use oat\oatbox\extension\Installer instead
+ * abstract base for extension actions
  *
+ * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-abstract class common_ext_action_InstallAction implements Action, ServiceLocatorAwareInterface
-{
-    use ServiceLocatorAwareTrait;
+abstract class AbstractAction implements Action, ServiceLocatorAwareInterface {
     
-    /**
-     * 
-     * @param mixed $event either an Event object or a string
-     * @param Callable $callback
-     */
-    public function registerEvent($event, $callback)
-    {
-        $eventManager = $this->getServiceLocator()->get(EventManager::CONFIG_ID);
-        $eventManager->attach($event, $callback);
-        $this->getServiceManager()->register(EventManager::CONFIG_ID, $eventManager);
-    }
-    
-    public function registerService($serviceKey, $service)
-    {
-        if ($service instanceof ServiceLocatorAwareInterface) {
-            $service->setServiceLocator($this->getServiceManager());
-        }
-        $this->getServiceManager()->register($serviceKey, $service);
-    }
+    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
     
     /**
      * 
@@ -65,4 +47,5 @@ abstract class common_ext_action_InstallAction implements Action, ServiceLocator
         }
         return $serviceManager;
     }
+    
 }
