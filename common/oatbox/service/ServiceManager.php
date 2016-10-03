@@ -111,6 +111,12 @@ class ServiceManager implements ServiceLocatorInterface
         }
     }
 
+    public function unregister($serviceKey)
+    {
+        unset($this->services[$serviceKey]);
+        return $this->getConfig()->del($serviceKey);
+    }
+
     /**
      * @return \common_persistence_KeyValuePersistence
      */
