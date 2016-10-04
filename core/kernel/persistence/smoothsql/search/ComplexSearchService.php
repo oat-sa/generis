@@ -211,12 +211,6 @@ class ComplexSearchService extends ConfigurableService
             foreach ($nextValue as $val) {
                 $criteria->addOr($this->parseValue($val));
             }
-            if($and === false) {
-                $criteria = $query->newQuery()
-                ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
-                ->in($classUri);
-                $query->setOr($criteria);
-            }
         }
         $queryString = $this->gateway->serialyse($query)->getQuery();
         return $queryString;
