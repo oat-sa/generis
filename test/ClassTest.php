@@ -28,7 +28,6 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
  * @package test
  */
 
-common_Config::load();
 class ClassTest extends GenerisPhpUnitTestRunner {
 	protected $object;
 	
