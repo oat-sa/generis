@@ -61,29 +61,7 @@ class FileTest extends GenerisPhpUnitTestRunner {
 	    $this->assertFalse(core_kernel_file_File::isFile($clazz));
 	    $instance->delete();
 	}
-	/**
-         * untestable method
-         */
-//	public function testCreate()
-//	{
-//	    $file = $this->fileSource->createFile('toto.txt');
-//	    $this->assertTrue($file instanceof core_kernel_file_File);
-//	    $fileNameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
-//		$fileName = $file->getOnePropertyValue($fileNameProp);
-//		$this->assertEquals($fileName,'toto.txt');
-//	    $this->assertTrue($file->delete());
-//	    
-//	    
-//	    $file = $this->fileSource->createFile('toto.txt',DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR);
-//	    $this->assertEquals($file->getAbsolutePath(),$this->fsPath.'tmp'.DIRECTORY_SEPARATOR.'toto.txt');
-//	    $this->assertTrue($file->delete());
-//	    
-//	    // Create dir
-//	    $dir = $this->fileSource->createFile('', DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'myDir');
-//	    $this->assertEquals($dir->getAbsolutePath(), $this->fsPath. 'tmp' . DIRECTORY_SEPARATOR . 'myDir');
-//	    $this->assertTrue($dir->delete());
-//	}
-	
+
 	public function testGetFileInfo()
 	{
             
