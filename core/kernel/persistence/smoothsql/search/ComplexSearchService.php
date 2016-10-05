@@ -137,13 +137,19 @@ class ComplexSearchService extends ConfigurableService
         return $query->newQuery();
     }
     
-    protected function parseValue($value) {
-        if($value instanceof \core_kernel_classes_Resource ){
-            return $value->getUri();
-        } else {
-            $value = preg_replace('/^\*$/', '', $value);
+    protected function parseValue($rawValue) {
+        $result = [];
+        if (!is_array($rawValue)) {
+            $rawValue = [$rawValue];
         }
-        return $value;
+        foreach ($rawValue as $value) {
+            if($value instanceof \core_kernel_classes_Resource ){
+                $result[] = $value->getUri();
+            } else {
+                $result[] = preg_replace('/^\*$/', '', $value);
+            }
+        }
+        return count($result) === 1 ? $result[0] : $result;
     }
     
     /**
@@ -179,38 +185,34 @@ class ComplexSearchService extends ConfigurableService
      */
     public function getQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $classUri, array $propertyFilters, $and = true, $like = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC') 
     {
-        $query = $this->gateway->query()->setLimit( $limit )->setOffset($offset );
+        $query = $this->gateway->query()->setLimit($limit)->setOffset($offset);
         
-        if(!empty($order)) {
+        if (!empty($order)) {
             $query->sort([$order => strtolower($orderDir)]);
         }
         
-        $this->setLanguage($query , $lang);
-        
-        $operator = $this->getOperator($like);
-        
+        $this->setLanguage($query, $lang);
+
         $criteria = $query->newQuery()
-                ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
-                ->in($classUri);
-        
-        $query->setCriteria($criteria);
-        
-        foreach ($propertyFilters as $predicate => $value ) {
-            
+            ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
+            ->in($classUri);
+
+        $queryBuilder = $query->setCriteria($criteria);
+
+        $count = 0;
+        foreach ($propertyFilters as $predicate => $value) {
             $this->validValue($value);
-            $firstValue = $value;
-            $nextValue  = [];
-            
-            if(is_array($value)) {
-                $firstValue = array_shift($value);
-                $nextValue  = $value;
-            } 
-            
-            $criteria->addCriterion($predicate , $operator , $this->parseValue($firstValue));
-            
-            foreach ($nextValue as $val) {
-                $criteria->addOr($this->parseValue($val));
+            $operator = is_array($value) && count($value) > 1 ? 'in' : $this->getOperator($like);
+            if ($and || $count === 0) {
+                $criteria->add($predicate)->$operator($this->parseValue($value));
+            } else {
+                $queryOr = $query->newQuery()
+                    ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
+                    ->in($classUri)
+                    ->add($predicate)->$operator($this->parseValue($value));
+                $queryBuilder->setOr($queryOr);
             }
+            $count++;
         }
         $queryString = $this->gateway->serialyse($query)->getQuery();
         return $queryString;
