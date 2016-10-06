@@ -56,6 +56,11 @@ class ComplexSearchService extends ConfigurableService
      * @param array $options
      */
     public function __construct($options = array()) {
+        /*
+         * get readable model id from TAO
+         */        
+        $option['services']['search.options']['readable'] = \core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds();
+        
         $config         = new Config($options);
         $this->services =  new ServiceManager($config);
         parent::__construct($options);
