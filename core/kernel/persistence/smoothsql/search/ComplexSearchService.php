@@ -185,36 +185,50 @@ class ComplexSearchService extends ConfigurableService
      */
     public function getQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $classUri, array $propertyFilters, $and = true, $like = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC') 
     {
-        $query = $this->gateway->query()->setLimit($limit)->setOffset($offset);
+        $query = $this->getGateway()->query()->setLimit( $limit )->setOffset($offset );
         
-        if (!empty($order)) {
+        if(!empty($order)) {
             $query->sort([$order => strtolower($orderDir)]);
         }
         
-        $this->setLanguage($query, $lang);
-
+        $this->setLanguage($query , $lang);
+        
+        $operator = $this->getOperator($like);
+        
         $criteria = $query->newQuery()
-            ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
-            ->in($classUri);
-
-        $queryBuilder = $query->setCriteria($criteria);
-
-        $count = 0;
-        foreach ($propertyFilters as $predicate => $value) {
+                ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
+                ->in($classUri);
+        
+        $query->setCriteria($criteria);
+        $count     = 0;
+        $maxLength = count($propertyFilters);
+        foreach ($propertyFilters as $predicate => $value ) {
+            
             $this->validValue($value);
-            $operator = is_array($value) && count($value) > 1 ? 'in' : $this->getOperator($like);
-            if ($and || $count === 0) {
-                $criteria->add($predicate)->$operator($this->parseValue($value));
-            } else {
-                $queryOr = $query->newQuery()
-                    ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
-                    ->in($classUri)
-                    ->add($predicate)->$operator($this->parseValue($value));
-                $queryBuilder->setOr($queryOr);
+            $firstValue = $value;
+            $nextValue  = [];
+            
+            if(is_array($value)) {
+                $firstValue = array_shift($value);
+                $nextValue  = $value;
+            } 
+            
+            $criteria->addCriterion($predicate , $operator , $this->parseValue($firstValue));
+            
+            foreach ($nextValue as $val) {
+                $criteria->addOr($this->parseValue($val));
+            }
+            
+            if($and === false && $maxLength < $count) {
+                $criteria = $query->newQuery()
+                ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
+                ->in($classUri);
+                $query->setOr($criteria);
             }
             $count++;
+            
         }
-        $queryString = $this->gateway->serialyse($query)->getQuery();
+        $queryString = $this->getGateway()->serialyse($query)->getQuery();
         return $queryString;
     }
     
