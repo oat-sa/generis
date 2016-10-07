@@ -50,7 +50,7 @@ class core_kernel_classes_Class
      * 
      * @return core_kernel_persistence_ClassInterface
      */
-    private function getImplementation() {
+    protected function getImplementation() {
         return $this->getModel()->getRdfsInterface()->getClassImplementation();
     }
     
