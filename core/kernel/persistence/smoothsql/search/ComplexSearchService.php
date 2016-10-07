@@ -147,13 +147,19 @@ class ComplexSearchService extends ConfigurableService
         return $query->newQuery();
     }
     
-    protected function parseValue($value) {
-        if($value instanceof \core_kernel_classes_Resource ){
-            return $value->getUri();
-        } else {
-            $value = preg_replace('/^\*$/', '', $value);
+    protected function parseValue($rawValue) {
+        $result = [];
+        if (!is_array($rawValue)) {
+            $rawValue = [$rawValue];
         }
-        return $value;
+        foreach ($rawValue as $value) {
+            if($value instanceof \core_kernel_classes_Resource ){
+                $result[] = $value->getUri();
+            } else {
+                $result[] = preg_replace('/^\*$/', '', $value);
+            }
+        }
+        return count($result) === 1 ? $result[0] : $result;
     }
     
     /**
@@ -204,7 +210,8 @@ class ComplexSearchService extends ConfigurableService
                 ->in($classUri);
         
         $query->setCriteria($criteria);
-        
+        $count     = 0;
+        $maxLength = count($propertyFilters);
         foreach ($propertyFilters as $predicate => $value ) {
             
             $this->validValue($value);
@@ -221,12 +228,15 @@ class ComplexSearchService extends ConfigurableService
             foreach ($nextValue as $val) {
                 $criteria->addOr($this->parseValue($val));
             }
-            if($and === false) {
+            
+            if($and === false && $maxLength < $count) {
                 $criteria = $query->newQuery()
                 ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
                 ->in($classUri);
                 $query->setOr($criteria);
             }
+            $count++;
+            
         }
         $queryString = $this->getGateway()->serialyse($query)->getQuery();
         return $queryString;
