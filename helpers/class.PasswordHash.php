@@ -26,15 +26,17 @@ class helpers_PasswordHash {
      */
     public function encrypt($password) {
 
-        if ( PasswordConstraintsService::singleton()->validate($password)){
+        $errors = PasswordConstraintsService::singleton()->getErrors($password);
+
+        if (0 === count($errors)) {
             $salt = helpers_Random::generateString($this->saltLength);
             return $salt.hash($this->algorithm, $salt.$password);
         }
 
-        throw new PasswordConstraintsException(
-            __( 'Password must be: %s' ,
-            implode( ',', PasswordConstraintsService::singleton()->getErrors() )
-        ));
+        $exception = new PasswordConstraintsException('Password must be: %s' . implode(',', $errors));
+        $exception->setErrors($errors);
+
+        throw $exception;
     }
 
     public function verify($password, $hash) {
