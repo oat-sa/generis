@@ -28,7 +28,6 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
  * @package test
  */
 
-
 class ClassTest extends GenerisPhpUnitTestRunner {
 	protected $object;
 	
@@ -281,67 +280,41 @@ class ClassTest extends GenerisPhpUnitTestRunner {
 		$property->delete();
 		$property2->delete();
 	}
-	
+        
+        /**
+         * @group SearchInstances
+         */
     public function testSearchInstances() {
-
-        $propertyClass = new core_kernel_classes_Class(RDF_PROPERTY);
-
+        
+        $instance = $this->getMockForAbstractClass(
+                \core_kernel_classes_Class::class,
+                [],
+                '',
+                false,
+                false,
+                true,
+                ['getImplementation']
+                );
+        
+        $mockResult = new \ArrayIterator([1,2,3,4,5,6]);
+        
         $propertyFilter = array(
             PROPERTY_IS_LG_DEPENDENT => GENERIS_TRUE
         );
+        
         $options = array('like' => false, 'recursive' => false);
-        $languagesDependantProp = $propertyClass->searchInstances($propertyFilter, $options);
-
-        $found = count($languagesDependantProp);
-        $this->assertTrue($found > 0);
-
-        $propertyFilter = array(
-            PROPERTY_IS_LG_DEPENDENT => GENERIS_TRUE,
-            RDF_TYPE => RDF_PROPERTY
-        );
-        $languagesDependantProp = $propertyClass->searchInstances($propertyFilter, $options);
-        $nfound = count($languagesDependantProp);
-        $this->assertTrue($nfound > 0);
-        $this->assertEquals($found, $nfound);
-
-        $userClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#User');
-        $user1 = $userClass->createInstance('user1');
-        $user1->setPropertyValue(new core_kernel_classes_Property('prop1'), 'toto');
-        $user1->setPropertyValue(new core_kernel_classes_Property('prop2'), 'titi');
-        $user1->setPropertyValue(new core_kernel_classes_Property('prop3'), 'Weeman');
-        $user2 = $userClass->createInstance('user2');
-        $user2->setPropertyValue(new core_kernel_classes_Property('prop1'), 'toto');
-        $user2->setPropertyValue(new core_kernel_classes_Property('prop2'), 'titi');
-        $user2->setPropertyValue(new core_kernel_classes_Property('prop3'), 'G-girl');
-        $user3 = $userClass->createInstance('user3');
-        $user3->setPropertyValue(new core_kernel_classes_Property('prop1'), 'toto');
-        $user3->setPropertyValue(new core_kernel_classes_Property('prop2'), 'titi');
-        $user3->setPropertyValue(new core_kernel_classes_Property('prop3'), 'Alpha');
-
-        $propertyFilter = array(
-            'prop1' => 'toto'
-        );
-        $options = array('like' => false, 'recursive' => false, 'offset' => 0, 'limit' => 2); //User 2 & 3
-        $languagesDependantProp = $userClass->searchInstances(array(), $options);
-        $nfound = count($languagesDependantProp);
-        $this->assertEquals($nfound, 2);
+       
+        $prophetImplementation = $this->prophesize(\core_kernel_persistence_smoothsql_Class::class);
         
-        $options = array('order' => 'prop3', 'orderdir' => 'ASC');
-        $result = $userClass->searchInstances(array(), $options);
+        $prophetImplementation
+                ->searchInstances($instance , $propertyFilter , $options)
+                ->willReturn($mockResult);
         
-        $this->assertEquals($user3->getUri(), key($result)); next($result);
-        $this->assertEquals($user2->getUri(), key($result)); next($result);
-        $this->assertEquals($user1->getUri(), key($result));
+        $ImplementationMock = $prophetImplementation->reveal();
         
-        $options = array_merge($options, array('orderdir' => 'DESC'));
-        $result = $userClass->searchInstances($propertyFilter, $options);
-        $this->assertEquals($user1->getUri(), key($result)); next($result);
-        $this->assertEquals($user2->getUri(), key($result)); next($result);
-        $this->assertEquals($user3->getUri(), key($result));
+        $instance->expects($this->once())->method('getImplementation')->willReturn($ImplementationMock);
+        $this->assertSame([1,2,3,4,5,6], $instance->searchInstances($propertyFilter , $options));
         
-        $user1->delete();
-        $user2->delete();
-        $user3->delete();
     }
     
     //Test search instances with a model shared between smooth and hard implentation
@@ -358,8 +331,8 @@ class ClassTest extends GenerisPhpUnitTestRunner {
         $options = array(
             'recursive'				=> true,
             'append'				=> true,
-            'createForeigns'		=> true,
-            'referencesAllTypes'	=> true,
+            'createForeigns'		        => true,
+            'referencesAllTypes'	        => true,
             'rmSources'				=> true
         );
         

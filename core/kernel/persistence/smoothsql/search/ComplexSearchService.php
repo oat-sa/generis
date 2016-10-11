@@ -29,6 +29,7 @@ use oat\search\base\QueryBuilderInterface;
 use oat\search\base\SearchGateWayInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
+use oat\generis\model\data\ModelManager;
 /**
  * Complexe search service
  *
@@ -51,19 +52,22 @@ class ComplexSearchService extends ConfigurableService
      * @var SearchGateWayInterface
      */
     protected $gateway;
+
     /**
-     * 
-     * @param array $options
+     * Returns the internal service manager
+     * @return \Zend\ServiceManager\ServiceLocatorInterface
      */
-    public function __construct($options = array()) {
-        $config         = new Config($options);
-        $this->services =  new ServiceManager($config);
-        parent::__construct($options);
-        
-        $this->gateway = $this->services->get(self::SERVICE_SEARCH_ID)
-                ->setServiceLocator($this->services)
-                ->init();
+    protected function getZendServiceManager()
+    {
+        if (is_null($this->services)) {
+            $options = $this->getOptions();
+            $options['services']['search.options']['model'] = ModelManager::getModel();
+            $config         = new Config($options);
+            $this->services =  new ServiceManager($config);
+        }
+        return $this->services;
     }
+
     /**
      * determine which operator may be used
      * @param boolean $like
@@ -78,11 +82,17 @@ class ComplexSearchService extends ConfigurableService
         
         return $operator;
     }
+
     /**
      * return search gateway
      * @return SearchGateWayInterface
      */
     public function getGateway() {
+        if (is_null($this->gateway)) {
+            $this->gateway = $this->getZendServiceManager()->get(self::SERVICE_SEARCH_ID)
+                ->setServiceLocator($this->getZendServiceManager())
+                ->init();
+        }
         return $this->gateway;
     }
     /**
@@ -90,7 +100,7 @@ class ComplexSearchService extends ConfigurableService
      * @return \oat\search\QueryBuilder
      */
     public function query() {
-        return $this->gateway->query();
+        return $this->getGateway()->query();
     }
 
         /**
@@ -126,24 +136,30 @@ class ComplexSearchService extends ConfigurableService
      * @return $this
      */
     public function setLanguage(QueryBuilderInterface $query , $userLanguage = '' , $defaultLanguage = \DEFAULT_LANG) {
-        $options = $this->gateway->getOptions();
+        $options = $this->getGateway()->getOptions();
         if(!empty($userLanguage)) {
             $options['language'] = $userLanguage;
         }
         $options['defaultLanguage'] = $defaultLanguage;
         
-        $this->gateway->setOptions($options);
+        $this->getGateway()->setOptions($options);
         
         return $query->newQuery();
     }
     
-    protected function parseValue($value) {
-        if($value instanceof \core_kernel_classes_Resource ){
-            return $value->getUri();
-        } else {
-            $value = preg_replace('/^\*$/', '', $value);
+    protected function parseValue($rawValue) {
+        $result = [];
+        if (!is_array($rawValue)) {
+            $rawValue = [$rawValue];
         }
-        return $value;
+        foreach ($rawValue as $value) {
+            if($value instanceof \core_kernel_classes_Resource ){
+                $result[] = $value->getUri();
+            } else {
+                $result[] = preg_replace('/^\*$/', '', $value);
+            }
+        }
+        return count($result) === 1 ? $result[0] : $result;
     }
     
     /**
@@ -179,7 +195,7 @@ class ComplexSearchService extends ConfigurableService
      */
     public function getQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $classUri, array $propertyFilters, $and = true, $like = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC') 
     {
-        $query = $this->gateway->query()->setLimit( $limit )->setOffset($offset );
+        $query = $this->getGateway()->query()->setLimit( $limit )->setOffset($offset );
         
         if(!empty($order)) {
             $query->sort([$order => strtolower($orderDir)]);
@@ -194,7 +210,8 @@ class ComplexSearchService extends ConfigurableService
                 ->in($classUri);
         
         $query->setCriteria($criteria);
-        
+        $count     = 0;
+        $maxLength = count($propertyFilters);
         foreach ($propertyFilters as $predicate => $value ) {
             
             $this->validValue($value);
@@ -211,14 +228,19 @@ class ComplexSearchService extends ConfigurableService
             foreach ($nextValue as $val) {
                 $criteria->addOr($this->parseValue($val));
             }
-            if($and === false) {
+            $count++;
+
+            if($and === false && $maxLength > $count) {
                 $criteria = $query->newQuery()
                 ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
                 ->in($classUri);
                 $query->setOr($criteria);
             }
+            
+            
         }
-        $queryString = $this->gateway->serialyse($query)->getQuery();
+        $queryString = $this->getGateway()->serialyse($query)->getQuery();
+
         return $queryString;
     }
     
