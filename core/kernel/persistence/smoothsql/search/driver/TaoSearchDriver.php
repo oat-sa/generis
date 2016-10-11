@@ -64,6 +64,9 @@ class TaoSearchDriver extends EscaperAbstract {
         return $this->persistence->getPlatForm()->quoteIdentifier($stringValue);
     }
     
+    /**
+     * @inherit
+     */
     public function random() {
         $random = [
             'mysql'      => 'RAND()', 
