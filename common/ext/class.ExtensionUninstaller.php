@@ -72,9 +72,6 @@ class common_ext_ExtensionUninstaller
 		$cache = common_cache_FileCache::singleton();
 		$cache->purge();
 		
-		// reload session (for readable models)
-		core_kernel_persistence_smoothsql_SmoothModel::forceReloadModelIds();
-		
 		common_Logger::i('Uninstalled ' . $this->extension->getId());
 		return true;
 	}
