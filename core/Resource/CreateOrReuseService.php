@@ -58,6 +58,7 @@ class CreateOrReuseService extends ConfigurableService
             $classname           = $serviceOption['class'];
             $options             = $serviceOption['options'];
             $serviceInstance     = new $classname($options);
+            $serviceInstance->setServiceLocator($this->getServiceLocator());
             $this->service[$id]  = $serviceInstance;
             return $serviceInstance;
         }
