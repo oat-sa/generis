@@ -39,6 +39,7 @@ use oat\generis\model\data\permission\PermissionManager;
 use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use oat\generis\model\Resource\CreateOrReuseService;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\filesystem\FileSystemService;
@@ -271,6 +272,12 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         $this->skip('3.0.0', '3.2.0');
+        
+        if ($this->isVersion('3.2.0')) {
+            $createOrReuse = new CreateOrReuseService([]);
+            $this->getServiceManager()->register($createOrReuse);
+            $this->setVersion('3.3.0');
+        }
     }
     
     private function getReadableModelIds() {
