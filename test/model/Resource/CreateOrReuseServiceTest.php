@@ -55,7 +55,13 @@ class CreateOrReuseServiceTest extends \oat\tao\test\TaoPhpUnitTestRunner {
                     'options' => ['toto' , 'titi' , 'tata'],
                 ];
         
-        $instance = $this->getMock(\oat\generis\model\Resource\CreateOrReuseService::class , ['hasOption' , 'getOption']);
+        $serviceManager = $this->prophesize(\oat\oatbox\service\ServiceManager::class)->reveal();
+        
+        $instance = $this->getMock(\oat\generis\model\Resource\CreateOrReuseService::class , ['hasOption' , 'getOption' , 'getServiceLocator']);
+        
+        $instance->expects($this->once())
+                ->method('getServiceLocator')
+                ->willReturn($serviceManager);
         
         $instance->expects($this->once())
                 ->method('hasOption')
