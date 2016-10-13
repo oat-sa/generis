@@ -275,7 +275,7 @@ class Updater extends common_ext_ExtensionUpdater {
         
         if ($this->isVersion('3.2.0')) {
             $createOrReuse = new CreateOrReuseService([]);
-            $this->getServiceManager()->register($createOrReuse);
+            $this->getServiceManager()->register(CreateOrReuseService::SERVICE_ID ,$createOrReuse);
             $this->setVersion('3.3.0');
         }
     }
