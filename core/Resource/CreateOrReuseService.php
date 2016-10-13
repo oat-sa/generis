@@ -36,7 +36,7 @@ class CreateOrReuseService extends ConfigurableService
 
     /**
      * return a configured instance of CreateOrReuseInterface 
-     * @param type $id
+     * @param string $id
      * @return CreateOrReuseInterface
      */
     public function getService($id) {
@@ -48,7 +48,7 @@ class CreateOrReuseService extends ConfigurableService
     
     /**
      * service factory
-     * @param type $id
+     * @param string $id
      * @return CreateOrReuseInterface
      */
     protected function createService($id) {
@@ -61,6 +61,15 @@ class CreateOrReuseService extends ConfigurableService
             return $serviceInstance;
         }
         throw new exception\UnknownServiceException('service ' . $id . 'isn\'t configure');
+    }
+    
+    /**
+     * return if service is configured
+     * @param string $id
+     * @return boolean
+     */
+    protected function hasService($id) {
+        return $this->hasOption($id);
     }
     
 }
