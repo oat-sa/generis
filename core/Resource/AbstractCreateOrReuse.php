@@ -59,7 +59,7 @@ abstract class AbstractCreateOrReuse
         
         $searchQueryBuilder = $this->getGateway()->query();
         
-        $searchService->searchType($searchQueryBuilder, $this->type);
+        $searchService->searchType($searchQueryBuilder, $this->type , true);
         
         $criterion = $searchQueryBuilder->newQuery();
         
