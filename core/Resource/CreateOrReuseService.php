@@ -20,6 +20,7 @@
 
 namespace oat\generis\model\Resource;
 
+use oat\generis\model\Resource\exception\UnknownServiceException;
 use oat\oatbox\service\ConfigurableService;
 
 class CreateOrReuseService extends ConfigurableService 
@@ -60,7 +61,7 @@ class CreateOrReuseService extends ConfigurableService
             $this->service[$id]  = $serviceInstance;
             return $serviceInstance;
         }
-        throw new exception\UnknownServiceException('service ' . $id . 'isn\'t configure');
+        throw new UnknownServiceException('service ' . $id . 'isn\'t configure');
     }
     
     /**
@@ -68,7 +69,7 @@ class CreateOrReuseService extends ConfigurableService
      * @param string $id
      * @return boolean
      */
-    protected function hasService($id) {
+    public function hasService($id) {
         return $this->hasOption($id);
     }
     

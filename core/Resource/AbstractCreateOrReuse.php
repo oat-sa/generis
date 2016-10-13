@@ -20,13 +20,20 @@
 
 namespace oat\generis\model\Resource;
 
+use core_kernel_classes_Class;
+use core_kernel_classes_Resource;
+use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use oat\generis\model\kernel\persistence\smoothsql\search\TaoResultSet;
+use oat\generis\model\Resource\exception\DuplicateResourceException;
+use oat\oatbox\service\ConfigurableService;
+
 /**
  * Abstract base of CreateAndReuse service
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
 abstract class AbstractCreateOrReuse 
-    extends \oat\oatbox\service\ConfigurableService
+    extends ConfigurableService
     implements CreateOrReuseInterface
 {
     /**
@@ -42,7 +49,7 @@ abstract class AbstractCreateOrReuse
     protected $uniquePredicate = [];
 
     /**
-     * @return \oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService
+     * @return ComplexSearchService
      */
     protected function getSearchService() {
         return $this->getServiceManager()->get(self::SEARCH_SERVICE_ID);
@@ -51,13 +58,14 @@ abstract class AbstractCreateOrReuse
     /**
      * 
      * @param array $values
-     * @return \oat\generis\model\kernel\persistence\smoothsql\search\TaoResultSet
+     * @return TaoResultSet
      */
     protected function searchResource(array $values) {
         
         $searchService = $this->getSearchService();
+        $gateWay       = $searchService->getGateway();
         
-        $searchQueryBuilder = $this->getGateway()->query();
+        $searchQueryBuilder = $gateWay->query();
         
         $searchService->searchType($searchQueryBuilder, $this->type , true);
         
@@ -70,16 +78,16 @@ abstract class AbstractCreateOrReuse
         
         $searchQueryBuilder->setCriteria($criterion)->setLimit(1);
         
-        return $result = $searchService->getGateway()->search($searchQueryBuilder);
+        return $result = $gateWay->search($searchQueryBuilder);
     }
     
     /**
      * return a new resource
      * @param array $values
-     * @return \core_kernel_classes_Resource
+     * @return core_kernel_classes_Resource
      */
     protected function createResource(array $values)  {
-        $class = new \core_kernel_classes_Class($this->type);
+        $class = new core_kernel_classes_Class($this->type);
         return $class->createInstanceWithProperties($values);
     }
 
@@ -90,10 +98,13 @@ abstract class AbstractCreateOrReuse
      * @throws DuplicateResourceException
      */
     public function hasResource(array $values) {
+        
         $result = $this->searchResource($values);
-        if($result->getTotalCount() === 1) {
+        $count = $result->getTotalCount();
+        
+        if($count === 1) {
             return true;
-        } elseif($result->getTotalCount() === 0) {
+        } elseif($count === 0) {
             return false;
         } else {
             throw new DuplicateResourceException($this->type , $values);
@@ -103,14 +114,17 @@ abstract class AbstractCreateOrReuse
     /**
      * 
      * @param array $values
-     * @return \core_kernel_classes_Resource
+     * @return core_kernel_classes_Resource
      * @throws DuplicateResourceException
      */
     public function getResource(array $values) {
+        
         $result = $this->searchResource($values);
-        if($result->getTotalCount() === 1) {
-            return $this->current();
-        } elseif($result->getTotalCount() === 0) {
+        $count = $result->getTotalCount();
+        
+        if($count === 1) {
+            return $result->current();
+        } elseif($count === 0) {
             return $this->createResource($values);
         } else {
             throw new DuplicateResourceException($this->type , $values);
