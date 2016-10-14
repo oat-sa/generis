@@ -269,8 +269,8 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->getServiceManager()->register(ComplexSearchService::SERVICE_ID, $complexSearch);
             $this->setVersion('3.0.0');
         }
-
-        $this->skip('3.0.0', '3.2.0');
+        
+        $this->skip('3.0.0', '3.3.0');
     }
     
     private function getReadableModelIds() {
