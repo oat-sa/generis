@@ -78,7 +78,7 @@ abstract class AbstractCreateOrReuse
         
         $searchQueryBuilder->setCriteria($criterion)->setLimit(1);
         
-        return $result = $gateWay->search($searchQueryBuilder);
+        return $gateWay->search($searchQueryBuilder);
     }
     
     /**
