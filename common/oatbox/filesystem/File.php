@@ -46,7 +46,11 @@ class File extends FileSystemHandler
     public function getMimeType()
     {
         try {
-            return $this->getFileSystem()->getMimetype($this->getPrefix());
+            $mimeType = $this->getFileSystem()->getMimetype($this->getPrefix());
+            if ($mimeType == 'text/plain' && substr($this->getPrefix(), -4) == '.css') {
+                $mimeType = 'text/css';
+            }
+            return $mimeType;
         } catch (FileNotFoundException $e) {
         }
         return false;
@@ -89,7 +93,7 @@ class File extends FileSystemHandler
      */
     public function write($mixed, $mimeType = null)
     {
-        \common_Logger::i('Writting in ' . $this->getPrefix());
+        \common_Logger::t('Writting in ' . $this->getPrefix());
         $config = (is_null($mimeType)) ? [] : ['ContentType' => $mimeType];
 
         if (is_string($mixed)) {
