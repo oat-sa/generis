@@ -20,59 +20,18 @@
 
 namespace oat\generis\model\Resource;
 
-use oat\generis\model\Resource\exception\UnknownServiceException;
-use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\AbstractServiceAggregator;
 
-class CreateOrReuseService extends ConfigurableService 
+class CreateOrReuseService extends AbstractServiceAggregator
 {
     
     const SERVICE_ID = 'generis/createOrReuse';
-
-
-    /**
-     * list of stored service
-     * @var array
-     */
-    protected $service = [];
-
-    /**
-     * return a configured instance of CreateOrReuseInterface 
-     * @param string $id
-     * @return CreateOrReuseInterface
-     */
-    public function getService($id) {
-        if(array_key_exists($id, $this->service)) {
-            return $this->service[$id];
-        }
-        return $this->createService($id);
-    }
     
     /**
-     * service factory
-     * @param string $id
-     * @return CreateOrReuseInterface
+     * interface subservices must implement
+     * @var string 
      */
-    protected function createService($id) {
-        if($this->hasOption($id)) {
-            $serviceOption       = $this->getOption($id);
-            $classname           = $serviceOption['class'];
-            $options             = $serviceOption['options'];
-            $serviceInstance     = new $classname($options);
-            $serviceInstance->setServiceLocator($this->getServiceLocator());
-            $this->service[$id]  = $serviceInstance;
-            return $serviceInstance;
-        }
-        throw new UnknownServiceException('service ' . $id . 'isn\'t configure');
-    }
-    
-    /**
-     * return if service is configured
-     * @param string $id
-     * @return boolean
-     */
-    public function hasService($id) {
-        return $this->hasOption($id);
-    }
+    protected $subServiceInterface = CreateOrReuseInterface::class;
     
 }
 

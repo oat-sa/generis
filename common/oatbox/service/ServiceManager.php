@@ -124,4 +124,22 @@ class ServiceManager implements ServiceLocatorInterface
     {
         return $this->configService;
     }
+    
+    /**
+     * service or sub-sevice factory
+     * @param string $className
+     * @param array $options
+     * @return oject
+     */
+    public function build($className , array $options = [] ) {
+        
+        $service = new $className();
+        if ($service instanceof ServiceLocatorAwareInterface) {
+            $service->setServiceLocator($this);
+        }
+        if ($service instanceof \oat\oatbox\Configurable) {
+            $service->setOptions($options);
+        }
+        return $service;
+    }
 }

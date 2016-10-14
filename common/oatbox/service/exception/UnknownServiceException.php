@@ -18,12 +18,15 @@
  * 
  */
 
-
-namespace oat\generis\model\Resource\exception;
+namespace oat\oatbox\service\exception;
 
 /**
+ * Description of newPHPClass
+ *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class InvalidService  extends \exception {
+class UnknownServiceException extends \exception {
+    
+    
     
 }

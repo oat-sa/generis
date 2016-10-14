@@ -18,29 +18,29 @@
  * 
  */
 
-namespace oat\generis\test\model\Resource;
+namespace oat\generis\test\oatbox\service;
 
 /**
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class CreateOrReuseServiceTest extends \oat\tao\test\TaoPhpUnitTestRunner {
+class AbstractServiceAggregatorTest extends \oat\tao\test\TaoPhpUnitTestRunner {
     
-    public function testHasService() {
+    public function testHasSubService() {
         
         $fixture  = 'media';
         
-        $instance = $this->getMock(\oat\generis\model\Resource\CreateOrReuseService::class , ['hasOption']);
+        $instance = $this->getMock(\oat\oatbox\service\AbstractServiceAggregator::class , ['hasOption']);
         
         $instance->expects($this->once())
                 ->method('hasOption')
                 ->with($fixture)
                 ->willReturn(true);
         
-        $this->assertTrue($instance->hasService($fixture));
+        $this->assertTrue($instance->hasSubService($fixture));
                 
     }
     
-    public function testCreateService() {
+    public function testCreateSubService() {
         
         $fixture  = 'media';
       
@@ -48,6 +48,7 @@ class CreateOrReuseServiceTest extends \oat\tao\test\TaoPhpUnitTestRunner {
         $MockService = $this->getMockForAbstractClass(\oat\generis\model\Resource\AbstractCreateOrReuse::class);
         
         $mockClassName  = get_class($MockService);
+        $options        = ['toto' , 'titi' , 'tata'];
         
         $fixtureOptions = 
                 [
@@ -55,13 +56,19 @@ class CreateOrReuseServiceTest extends \oat\tao\test\TaoPhpUnitTestRunner {
                     'options' => ['toto' , 'titi' , 'tata'],
                 ];
         
-        $serviceManager = $this->prophesize(\oat\oatbox\service\ServiceManager::class)->reveal();
+        $serviceManager = $this->prophesize(\oat\oatbox\service\ServiceManager::class);
         
-        $instance = $this->getMock(\oat\generis\model\Resource\CreateOrReuseService::class , ['hasOption' , 'getOption' , 'getServiceLocator']);
+        $serviceManager->build($mockClassName , $options)->willReturn($MockService);
+        
+        $serviceManagerMock = $serviceManager->reveal();
+        
+        $instance = $this->getMock(\oat\oatbox\service\AbstractServiceAggregator::class , ['hasOption' , 'getOption' , 'getServiceManager']);
+        
+        $this->setInaccessibleProperty($instance, 'subServiceInterface', \oat\generis\model\Resource\CreateOrReuseInterface::class);
         
         $instance->expects($this->once())
-                ->method('getServiceLocator')
-                ->willReturn($serviceManager);
+                ->method('getServiceManager')
+                ->willReturn($serviceManagerMock);
         
         $instance->expects($this->once())
                 ->method('hasOption')
@@ -73,21 +80,21 @@ class CreateOrReuseServiceTest extends \oat\tao\test\TaoPhpUnitTestRunner {
                 ->with($fixture)
                 ->willReturn($fixtureOptions);
         
-        $this->assertInstanceOf($mockClassName, $this->invokeProtectedMethod($instance, 'createService' , [$fixture]));
+        $this->assertInstanceOf($mockClassName, $this->invokeProtectedMethod($instance, 'createSubService' , [$fixture]));
     }
     
-    public function testGetService() {
+    public function testGetSubService() {
         $fixture  = 'media';
 
         $MockService = $this->getMockForAbstractClass(\oat\generis\model\Resource\AbstractCreateOrReuse::class);
         
-        $instance = $this->getMock(\oat\generis\model\Resource\CreateOrReuseService::class , ['createService' ]);
+        $instance = $this->getMock(\oat\oatbox\service\AbstractServiceAggregator::class , ['createSubService' ]);
         
-        $instance->expects($this->once())->method('createService')->with($fixture)->willReturn($MockService);
+        $instance->expects($this->once())->method('createSubService')->with($fixture)->willReturn($MockService);
         
-        $this->assertSame($MockService , $instance->getService($fixture));
-        $this->setInaccessibleProperty($instance, 'service', [$fixture => $MockService]);
-        $this->assertSame($MockService , $instance->getService($fixture));
+        $this->assertSame($MockService , $instance->getSubService($fixture));
+        $this->setInaccessibleProperty($instance, 'subServices', [$fixture => $MockService]);
+        $this->assertSame($MockService , $instance->getSubService($fixture));
     }
     
 }
