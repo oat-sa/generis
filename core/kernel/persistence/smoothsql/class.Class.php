@@ -486,11 +486,14 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         $limit = (isset($options['limit']) === false) ? 0 : $options['limit'];
         $order = (isset($options['order']) === false) ? '' : $options['order'];
         $orderdir = (isset($options['orderdir']) === false) ? 'ASC' : $options['orderdir'];
-        
-        $search = \oat\oatbox\service\ServiceManager::getServiceManager()->get('generis/complexSearch');
-        $query = $search->getQuery($this->getModel(), $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
-        
-        //$query = core_kernel_persistence_smoothsql_Utils::buildFilterQuery($this->getModel(), $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
+        /* @var $serviceManager \oat\oatbox\service\ServiceManager */
+        $serviceManager = \oat\oatbox\service\ServiceManager::getServiceManager();
+        if($serviceManager->has('generis/complexSearch')) {
+            $search = $serviceManager->get('generis/complexSearch');
+            $query = $search->getQuery($this->getModel(), $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
+        } else {
+            $query = core_kernel_persistence_smoothsql_Utils::buildFilterQuery($this->getModel(), $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
+        }
         return $query;
     }
 }
