@@ -278,6 +278,8 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->getServiceManager()->register(CreateOrReuseService::SERVICE_ID ,$createOrReuse);
             $this->setVersion('3.3.0');
         }
+        
+        $this->skip('3.3.0', '3.4.0');
     }
     
     private function getReadableModelIds() {
