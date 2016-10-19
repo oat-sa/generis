@@ -167,6 +167,7 @@ class Updater extends \common_ext_ExtensionUpdater {
             $currentVersion = '2.11.0';
         }
 
+        $this->skip('2.11.0', '2.11.2');
         return $currentVersion;
     }
     
