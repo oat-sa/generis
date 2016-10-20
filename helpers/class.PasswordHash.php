@@ -3,13 +3,12 @@ use oat\generis\model\user\PasswordConstraintsException;
 use oat\generis\model\user\PasswordConstraintsService;
 
 /**
- * A utility class focusing on Randomization.
- *
- * @author Jérôme Bogaerts <jerome@taotesting.com>
- *
+ * Password Hash class.
+ * 
+ * An helper class focusing on password validation/generation.
  */
-class helpers_PasswordHash {
-
+class helpers_PasswordHash
+{
     private $algorithm;
     private $saltLength;
 
@@ -24,11 +23,12 @@ class helpers_PasswordHash {
      * @return string
      * @throws PasswordConstraintsException
      */
-    public function encrypt($password) {
+    public function encrypt($password)
+    {
 
         if ( PasswordConstraintsService::singleton()->validate($password)){
-            $salt = helpers_Random::generateString($this->saltLength);
-            return $salt.hash($this->algorithm, $salt.$password);
+            $salt = helpers_Random::generateString($this->getSaltLength());
+            return $salt.hash($this->getAlgorithm(), $salt.$password);
         }
 
         throw new PasswordConstraintsException(
@@ -37,10 +37,20 @@ class helpers_PasswordHash {
         ));
     }
 
-    public function verify($password, $hash) {
-        $salt = substr($hash, 0, $this->saltLength);
-        $hashed = substr($hash, $this->saltLength);
-        return hash($this->algorithm, $salt.$password) === $hashed;
+    public function verify($password, $hash) 
+    {
+        $salt = substr($hash, 0, $this->getSaltLength());
+        $hashed = substr($hash, $this->getSaltLength());
+        return hash($this->getAlgorithm(), $salt.$password) === $hashed;
     }
 
+    protected function getAlgorithm()
+    {
+        return $this->algorithm;
+    }
+    
+    protected function getSaltLength()
+    {
+        return $this->saltLength;
+    }
 }
