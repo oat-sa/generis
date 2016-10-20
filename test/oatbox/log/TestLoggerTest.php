@@ -56,12 +56,11 @@ class TestRunnerFeatureTest extends TaoPhpUnitTestRunner
         $this->assertFalse($logger->has(TestLogger::EMERGENCY, 'I haven\'t been logged'));
     }
 
-    /**
-     * @expectedException common_exception_InconsistentData
-     */
     public function testLogBadLevel() {
         $logger = new TestLogger();
         $logger->log('BAD_LEVEL', 'testMessage');
+
+        $this->assertEquals(1, count($logger->getError()));
     }
 
     /**

@@ -23,7 +23,8 @@ use common_exception_InconsistentData;
 use Psr\Log\LoggerInterface;
 
 /**
- * This logger can be used in unit tests to assert that specific messages have been logged
+ * This logger stores messages in an internal registry that can be queried.
+ * It can be used to, for example, assert that specific messages have been logged in unit tests
  */
 class TestLogger implements LoggerInterface {
 
@@ -179,14 +180,13 @@ class TestLogger implements LoggerInterface {
      */
     public function log($level, $message, array $context = array())
     {
-        if (isset($this->registry[$level])) {
-            $this->registry[$level][] = [
-                'message' => $message,
-                'context' => $context
-            ];
-        } else {
-            throw new common_exception_InconsistentData('Unknown level ' . $level);
+        if (! array_key_exists($level, $this->registry)) {
+            $level = self::ERROR;
         }
+        $this->registry[$level][] = [
+            'message' => $message,
+            'context' => $context
+        ];
     }
 
     /**
