@@ -63,9 +63,7 @@ class ServiceManager implements ServiceLocatorInterface
             if ($service === false) {
                 throw new ServiceNotFoundException($serviceKey);
             }
-            if ($service instanceof ServiceLocatorAwareInterface) {
-                $service->setServiceLocator($this);
-            }
+            $this->propagation($service);
             
             $this->services[$serviceKey] = $service;
         }
@@ -123,5 +121,36 @@ class ServiceManager implements ServiceLocatorInterface
     protected function getConfig()
     {
         return $this->configService;
+    }
+    
+    /**
+    * propagate service manager
+    * @param type $service
+    * @return mixed
+    */
+    protected function propagation($service) {
+         if(is_object($service) &&  ($service instanceof ServiceLocatorAwareInterface)){
+            $service->setServiceLocator($this);
+        }
+        return $service;
+    }
+
+
+    /**
+     * service or sub-sevice factory
+     * @param string $className
+     * @param array $options
+     * @return oject
+     */
+    public function build($className , array $options = [] ) {
+        
+        $service = new $className();
+        
+        $this->propagation($service);
+        
+        if ($service instanceof \oat\oatbox\Configurable) {
+            $service->setOptions($options);
+        }
+        return $service;
     }
 }
