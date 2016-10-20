@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
  */
 
@@ -24,7 +24,6 @@ use oat\oatbox\service\exception\InvalidService;
 use oat\oatbox\service\exception\UnknownServiceException;
 
 /**
- * 
  * 
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
