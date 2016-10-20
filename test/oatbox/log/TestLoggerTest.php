@@ -17,11 +17,11 @@
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  */
 
-namespace oat\generis\test\oatbox;
+namespace oat\generis\test\oatbox\log;
 
 use common_exception_InconsistentData;
-use oat\oatbox\log\TestLogger;
 use oat\tao\test\TaoPhpUnitTestRunner;
+use Psr\Log\LogLevel;
 
 /**
  * Test of test logger implementation
@@ -31,36 +31,36 @@ class TestRunnerFeatureTest extends TaoPhpUnitTestRunner
     public function testArbitraryLogger() {
         $logger = new TestLogger();
 
-        $logger->log(TestLogger::EMERGENCY, 'testEmergency1', ["context1" => "value1", "context2" => "value2"]);
-        $logger->log(TestLogger::EMERGENCY, 'testEmergency2', ["context3" => "value3", "context4" => "value4"]);
+        $logger->log(LogLevel::EMERGENCY, 'testEmergency1', ["context1" => "value1", "context2" => "value2"]);
+        $logger->log(LogLevel::EMERGENCY, 'testEmergency2', ["context3" => "value3", "context4" => "value4"]);
 
-        $entries = $logger->get(TestLogger::EMERGENCY);
+        $entries = $logger->get(LogLevel::EMERGENCY);
         $this->assertEquals(2, count($entries));
 
-        $this->assertEquals(0, count($logger->get(TestLogger::ALERT)));
-        $this->assertEquals(0, count($logger->get(TestLogger::CRITICAL)));
-        $this->assertEquals(0, count($logger->get(TestLogger::DEBUG)));
-        $this->assertEquals(0, count($logger->get(TestLogger::ERROR)));
-        $this->assertEquals(0, count($logger->get(TestLogger::INFO)));
-        $this->assertEquals(0, count($logger->get(TestLogger::NOTICE)));
-        $this->assertEquals(0, count($logger->get(TestLogger::WARNING)));
+        $this->assertEquals(0, count($logger->get(LogLevel::ALERT)));
+        $this->assertEquals(0, count($logger->get(LogLevel::CRITICAL)));
+        $this->assertEquals(0, count($logger->get(LogLevel::DEBUG)));
+        $this->assertEquals(0, count($logger->get(LogLevel::ERROR)));
+        $this->assertEquals(0, count($logger->get(LogLevel::INFO)));
+        $this->assertEquals(0, count($logger->get(LogLevel::NOTICE)));
+        $this->assertEquals(0, count($logger->get(LogLevel::WARNING)));
 
         $this->assertEquals('testEmergency1', $entries[0]['message']);
         $this->assertEquals(["context1" => "value1", "context2" => "value2"], $entries[0]['context']);
         $this->assertEquals('testEmergency2', $entries[1]['message']);
         $this->assertEquals(["context3" => "value3", "context4" => "value4"], $entries[1]['context']);
 
-        $this->assertTrue($logger->has(TestLogger::EMERGENCY, 'testEmergency1'));
-        $this->assertTrue($logger->has(TestLogger::EMERGENCY, 'testEmergency2'));
+        $this->assertTrue($logger->has(LogLevel::EMERGENCY, 'testEmergency1'));
+        $this->assertTrue($logger->has(LogLevel::EMERGENCY, 'testEmergency2'));
 
-        $this->assertFalse($logger->has(TestLogger::EMERGENCY, 'I haven\'t been logged'));
+        $this->assertFalse($logger->has(LogLevel::EMERGENCY, 'I haven\'t been logged'));
     }
 
     public function testLogBadLevel() {
         $logger = new TestLogger();
         $logger->log('BAD_LEVEL', 'testMessage');
 
-        $this->assertEquals(1, count($logger->getError()));
+        $this->assertEquals(1, count($logger->get(LogLevel::ERROR)));
     }
 
     /**
@@ -77,71 +77,5 @@ class TestRunnerFeatureTest extends TaoPhpUnitTestRunner
     public function testHasBadLevel() {
         $logger = new TestLogger();
         $logger->has('BAD_LEVEL', 'testMessage');
-    }
-
-    public function provideTestLevelData() {
-        return [
-            [ TestLogger::EMERGENCY, 'emergency',   'getEmergency', 'hasEmergency'],
-            [ TestLogger::ALERT,     'alert',       'getAlert',     'hasAlert'],
-            [ TestLogger::CRITICAL,  'critical',    'getCritical',  'hasCritical'],
-            [ TestLogger::ERROR,     'error',       'getError',     'hasError'],
-            [ TestLogger::WARNING,   'warning',     'getWarning',   'hasWarning'],
-            [ TestLogger::NOTICE,    'notice',      'getNotice',    'hasNotice'],
-            [ TestLogger::INFO,      'info',        'getInfo',      'hasInfo'],
-            [ TestLogger::DEBUG,     'debug',       'getDebug',     'hasDebug'],
-        ];
-    }
-
-    /**
-     * @dataProvider provideTestLevelData
-     * @param string $currentLevel
-     * @param string $logFunction Test Logger method used to log the message
-     * @param string $getFunction Test Logger method used to retrieve a specific level registry
-     * @param string $hasFunction Test Logger method used to check message existence for a specific level
-     */
-    public function testLevel($currentLevel, $logFunction, $getFunction, $hasFunction) {
-        $logger = new TestLogger();
-
-        // log Entries
-        $logMessage1 = 'testLevel ' . $currentLevel . '-1';
-        $logMessage2 = 'testLevel ' . $currentLevel . '-2';
-        call_user_func(array($logger, $logFunction), $logMessage1, [1, 2, 3]);
-        call_user_func(array($logger, $logFunction), $logMessage2, [4, 5, 6]);
-
-        // check entries content
-        $entries = call_user_func(array($logger, $getFunction));
-
-        $this->assertEquals($entries, $logger->get($currentLevel));
-
-        $this->assertEquals(2, count($entries));
-        $this->assertEquals($logMessage1, $entries[0]['message']);
-        $this->assertEquals([1, 2, 3], $entries[0]['context']);
-        $this->assertEquals($logMessage2, $entries[1]['message']);
-        $this->assertEquals([4, 5, 6], $entries[1]['context']);
-
-        // check entries search
-        $this->assertTrue($logger->has($currentLevel, $logMessage1));
-        $this->assertTrue($logger->has($currentLevel, $logMessage2));
-        $this->assertTrue(call_user_func(array($logger, $hasFunction), $logMessage1));
-        $this->assertTrue(call_user_func(array($logger, $hasFunction), $logMessage2));
-        $this->assertFalse(call_user_func(array($logger, $hasFunction), 'I was never logged...'));
-
-        // check for unwanted logs
-        $allLevels = [
-            "emergency",
-            "alert",
-            "critical",
-            "error",
-            "warning",
-            "notice",
-            "info",
-            "debug"
-        ];
-
-        foreach ($allLevels as $level) {
-            if ($level !== $currentLevel) {
-                $this->assertEquals(0, count($logger->get($level)));
-            }
-        }
     }
 }
