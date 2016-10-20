@@ -24,8 +24,7 @@ use oat\oatbox\log\TestLogger;
 use oat\tao\test\TaoPhpUnitTestRunner;
 
 /**
- *
- *
+ * Test of test logger implementation
  */
 class TestRunnerFeatureTest extends TaoPhpUnitTestRunner
 {
