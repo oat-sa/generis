@@ -45,8 +45,15 @@ class common_http_Request
         if (php_sapi_name() == 'cli') {
             throw new common_exception_Error('Cannot call ' . __FUNCTION__ . ' from command line');
         }
-        
-        $scheme = (! isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != "on") ? 'http' : 'https';
+        $https = false;
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") {
+            $https = true;
+        } elseif (//$_SERVER['HTTPS'] is not set behind a proxy / load balancer
+            !empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ||
+            !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+            $https = true;
+        }
+        $scheme = $https ? 'https' : 'http';
         $url = $scheme . '://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'];
         
         $method = $_SERVER['REQUEST_METHOD'];
