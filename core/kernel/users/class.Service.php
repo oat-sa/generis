@@ -113,7 +113,7 @@ class core_kernel_users_Service
         	    RDFS_LABEL => "User ${login}",
         	    RDFS_COMMENT => 'User Created on ' . date(DATE_ISO8601),
         	    PROPERTY_USER_LOGIN => $login,
-        	    PROPERTY_USER_PASSWORD => core_kernel_users_Service::getPasswordHash()->encrypt($password),
+        	    PROPERTY_USER_PASSWORD => static::getPasswordHash()->encrypt($password),
         	    PROPERTY_USER_ROLES => $role
         	));
         	

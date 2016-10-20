@@ -26,7 +26,7 @@ class helpers_PasswordHash
     public function encrypt($password)
     {
 
-        if ( PasswordConstraintsService::singleton()->validate($password)){
+        if (PasswordConstraintsService::singleton()->validate($password)) {
             $salt = helpers_Random::generateString($this->getSaltLength());
             return $salt.hash($this->getAlgorithm(), $salt.$password);
         }
