@@ -94,10 +94,10 @@ class TestRunnerFeatureTest extends TaoPhpUnitTestRunner
 
     /**
      * @dataProvider provideTestLevelData
-     * @param $currentLevel
-     * @param $logFunction
-     * @param $getFunction
-     * @param $hasFunction
+     * @param string $currentLevel
+     * @param string $logFunction Test Logger method used to log the message
+     * @param string $getFunction Test Logger method used to retrieve a specific level registry
+     * @param string $hasFunction Test Logger method used to check message existence for a specific level
      */
     public function testLevel($currentLevel, $logFunction, $getFunction, $hasFunction) {
         $logger = new TestLogger();
