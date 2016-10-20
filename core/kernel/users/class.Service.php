@@ -113,7 +113,7 @@ class core_kernel_users_Service
         	    RDFS_LABEL => "User ${login}",
         	    RDFS_COMMENT => 'User Created on ' . date(DATE_ISO8601),
         	    PROPERTY_USER_LOGIN => $login,
-        	    PROPERTY_USER_PASSWORD => static::getPasswordHash()->encrypt($password),
+        	    PROPERTY_USER_PASSWORD => $this->userAdditionPasswordEncryption($login, $password), 
         	    PROPERTY_USER_ROLES => $role
         	));
         	
@@ -632,5 +632,19 @@ class core_kernel_users_Service
     {
     	$roleClass = new core_kernel_classes_Class(CLASS_ROLE);
     	return $roleClass->getInstances(true);
+    }
+    
+    /**
+     * Trigger user encrypition at user insertion time.
+     * 
+     * @param string $login
+     * @param string $password
+     * 
+     * @return string The encrypted password.
+     */
+    protected function userAdditionPasswordEncryption($login, $password)
+    {
+        // $login not used but might be useful for delegated encryptions in sub classes.
+        return static::getPasswordHash()->encrypt($password);
     }
 }
