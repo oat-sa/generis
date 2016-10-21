@@ -92,7 +92,7 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
                 $this->getServiceManager()->propagate($serviceDefinition);
                 return $serviceDefinition;
             } else {
-                throw new InvalidService('Service must implements ' . $interface);
+                throw new InvalidService('Service must implements ' . $interfaceName);
             }
         } elseif (is_array($serviceDefinition) && isset($serviceDefinition['class'])) {
             $classname = $serviceDefinition['class'];
@@ -100,7 +100,7 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
             if (is_null($interfaceName) || is_a($classname, $interfaceName, true)) {
                 return $this->getServiceManager()->build($classname, $options);
             } else {
-                throw new InvalidService('Service must implements ' . $interface);
+                throw new InvalidService('Service must implements ' . $interfaceName);
             }
         } else {
             throw new InvalidService();
