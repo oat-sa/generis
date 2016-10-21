@@ -17,51 +17,16 @@
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
-use oat\oatbox\service\ServiceManager;
-use oat\oatbox\action\Action;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use oat\oatbox\event\EventManager;
+
+use oat\oatbox\extension\InstallAction;
 /**
  * Abstract action containing some helper functions
  * @author bout
+ * @deprecated since version 3.2.0 please use oat\oatbox\extension\Installer instead
  *
  */
-abstract class common_ext_action_InstallAction implements Action, ServiceLocatorAwareInterface
+abstract class common_ext_action_InstallAction 
+extends InstallAction
 {
-    use ServiceLocatorAwareTrait;
-    
-    /**
-     * 
-     * @param mixed $event either an Event object or a string
-     * @param Callable $callback
-     */
-    public function registerEvent($event, $callback)
-    {
-        $eventManager = $this->getServiceLocator()->get(EventManager::CONFIG_ID);
-        $eventManager->attach($event, $callback);
-        $this->getServiceManager()->register(EventManager::CONFIG_ID, $eventManager);
-    }
-    
-    public function registerService($serviceKey, $service)
-    {
-        if ($service instanceof ServiceLocatorAwareInterface) {
-            $service->setServiceLocator($this->getServiceManager());
-        }
-        $this->getServiceManager()->register($serviceKey, $service);
-    }
-    
-    /**
-     * 
-     * @throws common_exception_Error
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        $serviceManager = $this->getServiceLocator();
-        if (!$serviceManager instanceof ServiceManager) {
-            throw new common_exception_Error('Alternate service locator not compatible with '.__CLASS__);
-        }
-        return $serviceManager;
-    }
+  
 }
