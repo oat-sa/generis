@@ -487,7 +487,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         $order = (isset($options['order']) === false) ? '' : $options['order'];
         $orderdir = (isset($options['orderdir']) === false) ? 'ASC' : $options['orderdir'];
         
-        $search = \oat\oatbox\service\ServiceManager::getServiceManager()->get('generis/complexSearch');
+        $search = $this->getModel()->getSearchInterface();
         $query = $search->getQuery($this->getModel(), $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
         
         //$query = core_kernel_persistence_smoothsql_Utils::buildFilterQuery($this->getModel(), $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);

@@ -20,33 +20,24 @@
  * 
  */
 
-
 /**
- * Short description of class common_exception_InconsistentData
+ * Indicates a serious inconsistency in the database or config
  *
  * @access public
  * @author Joel Bout, <joel.bout@tudor.lu>
  * @package generis
- 
+ *         
  */
-class common_exception_InconsistentData
-    extends common_Exception
-        implements common_log_SeverityLevel
+class common_exception_InconsistentData extends common_Exception implements common_log_SeverityLevel
 {
 
-
     /**
-     * Short description of method getSeverity
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return int
+     * (non-PHPdoc)
+     * 
+     * @see common_log_SeverityLevel::getSeverity()
      */
     public function getSeverity()
     {
         return common_Logger::ERROR_LEVEL;
     }
-
-} 
-
-?>
+}

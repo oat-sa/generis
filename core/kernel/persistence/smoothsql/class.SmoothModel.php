@@ -21,6 +21,7 @@
 use oat\generis\model\data\Model;
 use oat\generis\model\data\ModelManager;
 use oat\oatbox\service\ConfigurableService;
+use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 
 /**
  * transitory model for the smooth sql implementation
@@ -35,6 +36,7 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
     const OPTION_READABLE_MODELS = 'readable';
     const OPTION_WRITEABLE_MODELS = 'writeable';
     const OPTION_NEW_TRIPLE_MODEL = 'addTo';
+    const OPTION_SEARCH_SERVICE = 'search';
     
     /**
      * Persistence to use for the smoothmodel
@@ -47,6 +49,24 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
     
     private static $updatableSubModels = null;
     
+    function getResource($uri) {
+        $resource = new \core_kernel_classes_Resource($uri);
+        $resource->setModel($this);
+        return $resource;
+    }
+
+    function getClass($uri) {
+        $class = new \core_kernel_classes_Class($uri);
+        $class->setModel($this);
+        return $class;
+    }
+
+    function getProperty($uri) {
+        $property = new \core_kernel_classes_Property($uri);
+        $property->setModel($this);
+        return $property;
+    }
+
     public function getPersistence() {
         if (is_null($this->persistence)) {
             $this->persistence = common_persistence_SqlPersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
@@ -70,6 +90,15 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
         return new core_kernel_persistence_smoothsql_SmoothRdfs($this);
     }
     
+    /**
+     * @return ComplexSearchService
+     */
+    public function getSearchInterface() {
+        $search = $this->getServiceManager()->get($this->getOption(self::OPTION_SEARCH_SERVICE));
+        $search->setModel($this);
+        return $search;
+    }
+
     // Manage the sudmodels of the smooth mode
     
     /**
