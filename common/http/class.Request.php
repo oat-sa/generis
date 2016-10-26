@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 20013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2013-2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
 
@@ -36,9 +36,16 @@ class common_http_Request
 
     /**
      * Creates an request from the current call
+     * 
+     * The scheme in used (http|https) will be derived from
+     * 
+     * * $_SERVER['HTTPS'] in case of a standard deployment
+     * * $_SERVER['HTTP_X_FORWARDED_PROTO'] or $_SERVER['HTTP_X_FORWARDED_SSL'] in case of being deployed behing a load balancer/proxy.
+     * 
+     * If no clues about whether HTTPS is in use are found, HTTP will be the scheme of the current request.
      *
-     * @return common_http_Request
-     * @throws common_exception_Error
+     * @return common_http_Request A request corresponding to the current HTTP(S) context.
+     * @throws common_exception_Error In case of a CLI execution context.
      */
     public static function currentRequest()
     {
@@ -46,7 +53,20 @@ class common_http_Request
             throw new common_exception_Error('Cannot call ' . __FUNCTION__ . ' from command line');
         }
         
-        $scheme = (! isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != "on") ? 'http' : 'https';
+        // Default is http scheme.
+        $https = false;
+        
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") {
+            // $_SERVER['HTTPS'] is NOT set behind a proxy / load balancer
+            $https = true;
+        } elseif (
+            // $_SERVER['HTTPS'] is set behind a proxy / load balancer
+            !empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ||
+            !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+            $https = true;
+        }
+        
+        $scheme = $https ? 'https' : 'http';
         $url = $scheme . '://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'];
         
         $method = $_SERVER['REQUEST_METHOD'];
