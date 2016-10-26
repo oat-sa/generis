@@ -59,4 +59,8 @@ interface Model
 	 */
 	function getRdfsInterface();
 	
+	/**
+	 * Get search interface for model
+	 */
+	public function getSearchInterface();
 }

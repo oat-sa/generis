@@ -99,6 +99,14 @@ class FileModel
         throw new \common_exception_NoImplementation('Rdfs interface not implemented for '.__CLASS__);
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see \oat\generis\model\data\Model::getSearchInterface()
+     */
+    public function getSearchInterface() {
+        throw new \common_exception_NoImplementation('Rdfs interface not implemented for '.__CLASS__);
+    }
+
     // helper
     
     /**

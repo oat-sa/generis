@@ -271,6 +271,18 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         $this->skip('3.0.0', '3.6.1');
+
+        if ($this->isVersion('3.6.1')) {
+            $model = ModelManager::getModel();
+            if ($model instanceof \core_kernel_persistence_smoothsql_SmoothModel) {
+                $model->setOption(
+                    \core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE,
+                    ComplexSearchService::SERVICE_ID
+                );
+                ModelManager::setModel($model);
+            }
+            $this->setVersion('3.7.0');
+        }
     }
     
     private function getReadableModelIds() {
