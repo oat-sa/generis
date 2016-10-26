@@ -269,10 +269,10 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->getServiceManager()->register(ComplexSearchService::SERVICE_ID, $complexSearch);
             $this->setVersion('3.0.0');
         }
-        
-        $this->skip('3.0.0', '3.6.0');
 
-        if ($this->isVersion('3.6.0')) {
+        $this->skip('3.0.0', '3.6.1');
+
+        if ($this->isVersion('3.6.1')) {
             $model = ModelManager::getModel();
             if ($model instanceof \core_kernel_persistence_smoothsql_SmoothModel) {
                 $model->setOption(
