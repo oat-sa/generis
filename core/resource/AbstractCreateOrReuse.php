@@ -20,7 +20,6 @@
 
 namespace oat\generis\model\resource;
 
-use core_kernel_classes_Class;
 use core_kernel_classes_Resource;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\kernel\persistence\smoothsql\search\TaoResultSet;
@@ -44,7 +43,7 @@ abstract class AbstractCreateOrReuse
      *
      * @return \core_kernel_classes_Class
      */
-    abstract public function getParentClass();
+    abstract public function getRootClass();
     
     /**
      * List of keys that need to be identical between
