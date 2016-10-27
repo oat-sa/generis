@@ -80,8 +80,13 @@ abstract class AbstractCreateOrReuse
         $criterion = $searchQueryBuilder->newQuery();
         
         foreach ($this->getUniquePredicates() as $field) {
-            $value = $values[$field];
-            $criterion->add($field)->equals($value);
+            if (array_key_exists($field, $values)) {
+                $value = $values[$field];
+                $criterion->add($field)->equals($value);
+            } else {
+                \common_Logger::i('Predicate ' . $field . ' is not found.');
+            }
+
         }
         
         $searchQueryBuilder->setCriteria($criterion)->setLimit(1);
