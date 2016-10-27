@@ -20,6 +20,8 @@
 
 namespace oat\generis\model\data;
 
+use oat\oatbox\service\ServiceManager;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 /**
  * transitory class to manage the ontology driver
  * instead of managing full models, it only handles the rdfs interfaces
@@ -40,6 +42,9 @@ class ModelManager
             $array = \common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig(self::CONFIG_KEY);
             if (is_array($array)) {
                 self::$model = self::array2model($array);
+                if (self::$model instanceof ServiceLocatorAwareInterface) {
+                    self::$model->setServiceLocator(ServiceManager::getServiceManager());
+                }
             } else {
                 throw new \common_exception_InconsistentData('No data model found');
             }

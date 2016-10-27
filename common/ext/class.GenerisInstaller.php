@@ -19,8 +19,9 @@
  * 				 2013-2014 (update and modification) Open Assessment Technologies SA;
  * 
  */
-
 use oat\generis\model\data\ModelManager;
+use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use oat\oatbox\service\ServiceManager;
 
 /**
  * Custom extension installer for generis
@@ -28,20 +29,13 @@ use oat\generis\model\data\ModelManager;
  * @access public
  * @author Joel Bout, <joel.bout@tudor.lu>
  * @package generis
- 
+ *         
  */
-class common_ext_GenerisInstaller
-    extends common_ext_ExtensionInstaller
+class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
-    // --- OPERATIONS ---
 
     /**
-     * Short description of method install
+     * Setup the ontology configuration
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
@@ -49,30 +43,29 @@ class common_ext_GenerisInstaller
      */
     public function install()
     {
-    	if ($this->extension->getId() != 'generis') {
-    		throw new common_ext_ExtensionException('Tried to install "'.$this->extension->getId().'" extension using the GenerisInstaller');
-    	}
-        //$this->installCustomScript();
-		$this->installLoadDefaultConfig();
-		
-		ModelManager::setModel(new \core_kernel_persistence_smoothsql_SmoothModel(array(
+        if ($this->extension->getId() != 'generis') {
+            throw new common_ext_ExtensionException('Tried to install "' . $this->extension->getId() . '" extension using the GenerisInstaller');
+        }
+ 
+        $this->installLoadDefaultConfig();
+        
+        $model = new \core_kernel_persistence_smoothsql_SmoothModel(array(
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'default',
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS => array('1'),
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => array('1'),
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => '1'
-		)));
-		
-		$this->installOntology();
-		//$this->installLocalData();
-		//$this->installModuleModel();
-		$this->installRegisterExt();
-		
-		common_cache_FileCache::singleton()->purge();
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => '1',
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE => ComplexSearchService::SERVICE_ID));
+        $model->setServiceLocator(ServiceManager::getServiceManager());
+        ModelManager::setModel($model);
         
-		common_Logger::d('Installing custom script for extension ' . $this->extension->getId());
-		$this->installCustomScript();
-		
+        $this->installOntology();
+        // $this->installLocalData();
+        // $this->installModuleModel();
+        $this->installRegisterExt();
         
+        common_cache_FileCache::singleton()->purge();
+        
+        common_Logger::d('Installing custom script for extension ' . $this->extension->getId());
+        $this->installCustomScript();
     }
-
 }

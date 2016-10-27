@@ -71,9 +71,6 @@ class GateWay extends TaoSearchGateWay {
      */
     public function search(QueryBuilderInterface $Builder) {
         $this->serialyse($Builder);
-        if(DEBUG_MODE) {
-            \common_Logger::i($this->parsedQuery);
-        }
         $statement = $this->connector->query($this->parsedQuery);
         $result    = $this->statementToArray($statement);
         $cpt       = $this->count($Builder);
@@ -101,9 +98,6 @@ class GateWay extends TaoSearchGateWay {
      */
     public function count(QueryBuilderInterface $Builder) {
         $this->parsedQuery = $this->getSerialyser()->setCriteriaList($Builder)->count(true)->serialyse();
-        if(DEBUG_MODE) {
-            \common_Logger::i($this->parsedQuery);
-        }
         $statement = $this->connector->query($this->parsedQuery);
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
         return $result['cpt'];

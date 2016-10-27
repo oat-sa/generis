@@ -30,6 +30,7 @@ use oat\search\base\SearchGateWayInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 use oat\generis\model\data\ModelManager;
+use oat\generis\model\data\Model;
 /**
  * Complexe search service
  *
@@ -54,6 +55,11 @@ class ComplexSearchService extends ConfigurableService
     protected $gateway;
 
     /**
+     * @var Model
+     */
+    protected $model;
+
+    /**
      * Returns the internal service manager
      * @return \Zend\ServiceManager\ServiceLocatorInterface
      */
@@ -61,7 +67,7 @@ class ComplexSearchService extends ConfigurableService
     {
         if (is_null($this->services)) {
             $options = $this->getOptions();
-            $options['services']['search.options']['model'] = ModelManager::getModel();
+            $options['services']['search.options']['model'] = $this->model;
             $config         = new Config($options);
             $this->services =  new ServiceManager($config);
         }
@@ -81,6 +87,15 @@ class ComplexSearchService extends ConfigurableService
         } 
         
         return $operator;
+    }
+
+    /**
+     * Set the model the search should apply to
+     * @param Model $model
+     */
+    public function setModel(Model $model)
+    {
+        $this->model = $model;
     }
 
     /**
