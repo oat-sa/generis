@@ -23,7 +23,7 @@ namespace oat\generis\model\resource\exception;
 /**
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class DuplicateResourceException extends \Exception {
+class DuplicateResourceException extends \common_Exception  {
     
     public function __construct($type , array $values) {
         $message = 'Resource ' . $type . ' already duplicate for ';
