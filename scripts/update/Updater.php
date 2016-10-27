@@ -284,7 +284,7 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('3.7.0');
         }
 
-        $this->skip('3.7.0', '3.8.2');
+        $this->skip('3.7.0', '3.8.3');
     }
     
     private function getReadableModelIds() {
