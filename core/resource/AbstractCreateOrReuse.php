@@ -32,7 +32,7 @@ use oat\generis\model\OntologyAwareTrait;
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-abstract class AbstractCreateOrReuse 
+abstract class AbstractCreateOrReuse
     extends ConfigurableService
     implements CreateOrReuseInterface
 {
@@ -111,8 +111,8 @@ abstract class AbstractCreateOrReuse
     public function hasResource(array $values) {
         
         $result = $this->searchResource($values);
-        $count = $result->getTotalCount();
-        
+        $count = $result->count();
+
         if($count === 1) {
             return true;
         } elseif($count === 0) {
@@ -131,8 +131,8 @@ abstract class AbstractCreateOrReuse
     public function getResource(array $values) {
         
         $result = $this->searchResource($values);
-        $count = $result->getTotalCount();
-        
+        $count = $result->count();
+
         if($count === 1) {
             return $result->current();
         } elseif($count === 0) {
