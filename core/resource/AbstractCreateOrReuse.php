@@ -74,7 +74,7 @@ abstract class AbstractCreateOrReuse
         
         $searchQueryBuilder = $gateWay->query();
         
-        $searchService->searchType($searchQueryBuilder, $this->getParentClass()->getUri() , true);
+        $searchService->searchType($searchQueryBuilder, $this->getRootClass()->getUri() , true);
         
         $criterion = $searchQueryBuilder->newQuery();
         
@@ -99,7 +99,7 @@ abstract class AbstractCreateOrReuse
      * @return core_kernel_classes_Resource
      */
     protected function createResource(array $values)  {
-        return $this->getParentClass()->createInstanceWithProperties($values);
+        return $this->getRootClass()->createInstanceWithProperties($values);
     }
 
     /**
@@ -118,7 +118,7 @@ abstract class AbstractCreateOrReuse
         } elseif($count === 0) {
             return false;
         } else {
-            throw new DuplicateResourceException($this->getParentClass()->getUri() , $values);
+            throw new DuplicateResourceException($this->getRootClass()->getUri() , $values);
         }
     }
     
@@ -138,7 +138,7 @@ abstract class AbstractCreateOrReuse
         } elseif($count === 0) {
             return $this->createResource($values);
         } else {
-            throw new DuplicateResourceException($this->getParentClass()->getUri() , $values);
+            throw new DuplicateResourceException($this->getRootClass()->getUri() , $values);
         }
     }
     
