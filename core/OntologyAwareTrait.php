@@ -21,6 +21,7 @@
 namespace oat\generis\model;
 
 use oat\generis\model\data\ModelManager;
+use oat\generis\model\data\Model;
 /**
  * Trait for classes that want to access the ontology
  * 
@@ -30,6 +31,10 @@ trait OntologyAwareTrait
 {
     private $model;
     
+    /**
+     * Return the used model
+     * @return Model
+     */
     function getModel()
     {
         if (is_null($this->model)) {
@@ -38,32 +43,36 @@ trait OntologyAwareTrait
         return $this->model;
     }
     
-    function setModel($model)
+    /**
+     * Sets the model to use
+     * @param Model $model
+     */
+    function setModel(Model $model)
     {
         $this->model = $model;
     }
     
+    /**
+     * @param string $uri
+     * @return \core_kernel_classes_Resource
+     */
     function getResource($uri) {
-        $resource = new \core_kernel_classes_Resource($uri);
-        if (!is_null($this->model)) {
-            $resource->setModel($this->getModel());
-        }
-        return $resource;
+        return $this->getModel()->getResource($uri);
     }
     
-    function getClass($uri) {
-        $class = new \core_kernel_classes_Class($uri);
-        if (!is_null($this->model)) {
-            $class->setModel($this->getModel());
-        }
-        return $class;
+    /**
+     * @param string $uri
+     * @return \core_kernel_classes_Class
+     */
+     function getClass($uri) {
+        return $this->getModel()->getClass($uri);
     }
     
+    /**
+     * @param string $uri
+     * @return \core_kernel_classes_Property
+     */
     function getProperty($uri) {
-        $property = new \core_kernel_classes_Property($uri);
-        if (!is_null($this->model)) {
-            $property->setModel($this->getModel());
-        }
-        return $property;
+        return $this->getModel()->getProperty($uri);
     }	
 }
