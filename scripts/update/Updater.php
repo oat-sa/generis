@@ -45,6 +45,11 @@ use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\task\implementation\SyncQueue;
 use oat\oatbox\task\Queue;
+use oat\taoWorkspace\model\generis\WrapperModel;
+use const FILES_PATH;
+use const GENERIS_NS;
+use const LOCAL_NAMESPACE;
+use function League\Flysystem\Util\class_exists;
 
 /**
  * 
@@ -283,8 +288,24 @@ class Updater extends common_ext_ExtensionUpdater {
             }
             $this->setVersion('3.7.0');
         }
+        
+        if($this->isBetween('3.7.0', '3.8.3')) {
+            
+            /* @var $modelWrapper WrapperModel */
+            $modelWrapper = ModelManager::getModel();
+            if ($modelWrapper instanceof WrapperModel) {
+                $inner = $modelWrapper->getInnerModel();
+                $inner->setOption(\core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE , ComplexSearchService::SERVICE_ID);
 
-        $this->skip('3.7.0', '3.8.3');
+                $workspace = $modelWrapper->getWorkspaceModel();
+                $workspace->setOption(core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE , ComplexSearchService::SERVICE_ID);
+
+                $wrapedModel = WrapperModel::wrap($inner, $workspace );
+                $wrapedModel->setServiceLocator($this->getServiceManager());
+                ModelManager::setModel($wrapedModel);
+            }
+            $this->setVersion('3.8.4');
+        }
     }
     
     private function getReadableModelIds() {
