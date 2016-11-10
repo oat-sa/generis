@@ -93,7 +93,51 @@ class ServiceManagerTest  extends GenerisPhpUnitTestRunner
 
 
     public function testRegister() {
-        
+        $fixtureServiceName = 'tao/tao';
+
+        $expectedService    = $this->prophesize(ConfigurableService::class);
+        $expectedService->setServiceLocator($this->instance)->willReturn($expectedService);
+        $expectedService    = $expectedService->reveal();
+
+        $config = $this->prophesize(\common_persistence_PhpFileDriver::class);
+
+        $configMock = $config->reveal();
+
+        $config->set($fixtureServiceName , $expectedService)->willReturn($expectedService);
+
+        $this->setInaccessibleProperty($this->instance , 'configService' , $configMock);
+
+         $this->instance->register($fixtureServiceName , $expectedService);
+
+        $services = $this->getInaccessibleProperty($this->instance , 'services');
+        $this->assertSame($expectedService , $services[$fixtureServiceName]);
+    }
+
+    public function testRegisterWriteFailure() {
+        $fixtureServiceName = 'tao/tao';
+
+        $expectedService    = $this->prophesize(ConfigurableService::class);
+        $expectedService->setServiceLocator($this->instance)->willReturn($expectedService);
+        $expectedService    = $expectedService->reveal();
+
+        $config = $this->prophesize(\common_persistence_PhpFileDriver::class);
+
+        $configMock = $config->reveal();
+
+        $config->set($fixtureServiceName , $expectedService)->willReturn(false);
+
+        $this->setInaccessibleProperty($this->instance , 'configService' , $configMock);
+        $this->setExpectedException(\common_exception_Error::class);
+        $this->instance->register($fixtureServiceName , $expectedService);
+
+    }
+
+    public function testRegisterFailure() {
+
+        $fixtureServiceName = 'tao';
+        $expectedService    = $this->prophesize(ConfigurableService::class)->reveal();
+        $this->setExpectedException(\common_Exception::class);
+        $this->instance->register($fixtureServiceName , $expectedService);
     }
 
     protected function tearDown() {
