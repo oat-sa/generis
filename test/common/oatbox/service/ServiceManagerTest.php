@@ -101,10 +101,10 @@ class ServiceManagerTest  extends GenerisPhpUnitTestRunner
 
         $config = $this->prophesize(\common_persistence_PhpFileDriver::class);
 
-        $configMock = $config->reveal();
-
         $config->set($fixtureServiceName , $expectedService)->willReturn($expectedService);
-
+        
+        $configMock = $config->reveal();
+        
         $this->setInaccessibleProperty($this->instance , 'configService' , $configMock);
 
          $this->instance->register($fixtureServiceName , $expectedService);
@@ -138,6 +138,34 @@ class ServiceManagerTest  extends GenerisPhpUnitTestRunner
         $expectedService    = $this->prophesize(ConfigurableService::class)->reveal();
         $this->setExpectedException(\common_Exception::class);
         $this->instance->register($fixtureServiceName , $expectedService);
+    }
+    
+    public function testUnregister() {
+        $fixtureServiceName = 'tao/tao';
+        
+        $expectedService    = $this->prophesize(ConfigurableService::class)->reveal();
+        $this->setInaccessibleProperty($this->instance , 'services' , [$fixtureServiceName => $expectedService]);
+        $config = $this->prophesize(\common_persistence_PhpFileDriver::class);
+
+        $config->del($fixtureServiceName)->willReturn(true);
+        
+        $configMock = $config->reveal();
+        
+        $this->setInaccessibleProperty($this->instance , 'configService' , $configMock);
+        
+        $this->instance->unregister($fixtureServiceName );
+        
+        $this->assertFalse(in_array($expectedService, $this->getInaccessibleProperty($this->instance, 'services')));
+        $this->assertFalse(array_key_exists($fixtureServiceName, $this->getInaccessibleProperty($this->instance, 'services')));
+        
+    }
+    
+    public function testPropagate() {
+        $expectedService    = $this->prophesize(ConfigurableService::class);
+        $expectedService->setServiceLocator($this->instance)->willReturn($expectedService);
+        $expectedService    = $expectedService->reveal();
+        
+        $this->assertSame($expectedService, $this->instance->propagate($expectedService));
     }
 
     protected function tearDown() {
