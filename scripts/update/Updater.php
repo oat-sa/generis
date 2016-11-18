@@ -46,10 +46,6 @@ use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\task\implementation\SyncQueue;
 use oat\oatbox\task\Queue;
 use oat\taoWorkspace\model\generis\WrapperModel;
-use const FILES_PATH;
-use const GENERIS_NS;
-use const LOCAL_NAMESPACE;
-use function League\Flysystem\Util\class_exists;
 
 /**
  * 
@@ -306,6 +302,7 @@ class Updater extends common_ext_ExtensionUpdater {
             }
             $this->setVersion('3.8.4');
         }
+        $this->skip('3.8.4', '3.8.5');
     }
     
     private function getReadableModelIds() {
