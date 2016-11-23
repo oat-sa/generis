@@ -30,17 +30,25 @@ interface Task
     public function getLabel();
 
     public function getOwner();
-
+    */
     public function getStatus();
 
-    public function setStatus();
-    */
+    public function setStatus($status);
+
     public function getId();
-    
+
+    public function setId($id);
+
     public function getInvocable();
-    
+
+    public function setInvocable($invocable);
+
     public function getParameters();
-    
+
     public function setParameters(array $params);
-    
+
+    public function getReport();
+
+    public function setReport($report);
+
 }
