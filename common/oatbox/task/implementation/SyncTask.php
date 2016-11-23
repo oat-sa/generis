@@ -42,7 +42,7 @@ class SyncTask extends AbstractTask
     public function __construct($invocable, $params)
     {
         $this->id = \common_Utils::getNewUri();
-        $this->set = $invocable;
+        $this->setInvocable($invocable);
         $this->setParameters($params);
         $this->setStatus(self::STATUS_CREATED);
     }
