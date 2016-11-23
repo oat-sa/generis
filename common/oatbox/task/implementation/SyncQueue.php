@@ -95,6 +95,15 @@ class SyncQueue extends ConfigurableService implements Queue
     }
 
     /**
+     * @param $taskId
+     * @return SyncTask
+     */
+    public function getTask($taskId)
+    {
+        return isset($this->tasks[$taskId]) ? $this->tasks[$taskId] : null;
+    }
+
+    /**
      * @param Task $task
      * @return mixed
      */
