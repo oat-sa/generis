@@ -303,6 +303,11 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('3.8.4');
         }
         $this->skip('3.8.4', '3.9.0');
+
+        if ($this->isVersion('3.9.0')) {
+            (new \oat\generis\scripts\install\TaskQueue())();
+            $this->setVersion('3.9.1');
+        }
     }
     
     private function getReadableModelIds() {
