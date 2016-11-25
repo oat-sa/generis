@@ -33,6 +33,8 @@ use common_report_Report as Report;
  */
 class Installer extends ConfigurableService
 {
+    const OPTION_FILESYSTEM_SERVICE = 'fileSystemService';
+
     /**
      * run the install
      */
@@ -44,7 +46,23 @@ class Installer extends ConfigurableService
         $serviceManager = $this->setupServiceManager($configPath);
         
         // setup filesystem service
-        $serviceManager->register(FileSystemService::SERVICE_ID,new FileSystemService(array(FileSystemService::OPTION_FILE_PATH => $this->getOption('file_path'))));
+        $fileSystemService = new FileSystemService(array(FileSystemService::OPTION_FILE_PATH => $this->getOption('file_path')));
+        if($this->hasOption(self::OPTION_FILESYSTEM_SERVICE)){
+            $fileSystemServiceOption = $this->getOption(self::OPTION_FILESYSTEM_SERVICE);
+            $className = $fileSystemServiceOption['class'];
+            if(class_exists($className)){
+                echo print_r(get_parent_class($className),true);
+                if(is_a($className,'oat\\oatbox\\filesystem\\FileSystemService', true)){
+                    $options = array();
+                    foreach($fileSystemServiceOption['options'] as $key => $value){
+                        $options[$key] = $value;
+                    }
+                    $fileSystemService = new $className($options);
+                }
+            }
+        }
+
+        $serviceManager->register(FileSystemService::SERVICE_ID, $fileSystemService);
         
         return new Report(Report::TYPE_SUCCESS, 'Oatbox installed successfully');
     }
