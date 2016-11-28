@@ -19,6 +19,7 @@
  */
 namespace oat\oatbox\install;
 
+use oat\oatbox\action\Action;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\filesystem\FileSystemService;
@@ -51,13 +52,18 @@ class Installer extends ConfigurableService
             $fileSystemServiceOption = $this->getOption(self::OPTION_FILESYSTEM_SERVICE);
             $className = $fileSystemServiceOption['class'];
             if(class_exists($className)){
-                echo print_r(get_parent_class($className),true);
                 if(is_a($className,'oat\\oatbox\\filesystem\\FileSystemService', true)){
                     $options = array();
                     foreach($fileSystemServiceOption['options'] as $key => $value){
                         $options[$key] = $value;
                     }
                     $fileSystemService = new $className($options);
+                    foreach($fileSystemServiceOption['scripts'] as $script){
+                        $object = new $script['class']();
+                        if($object instanceof Action){
+                            call_user_func($object, $script['params']);
+                        }
+                    }
                 }
             }
         }
