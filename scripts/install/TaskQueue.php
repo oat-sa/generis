@@ -43,7 +43,6 @@ class TaskQueue extends \common_ext_action_InstallAction
         $serviceManager = ServiceManager::getServiceManager();
         $fsm = $serviceManager->get(FileSystemService::SERVICE_ID);
         $fsm->createFileSystem(Queue::FILE_SYSTEM_ID, Queue::FILE_SYSTEM_ID);
-
         $serviceManager->register(FileSystemService::SERVICE_ID, $fsm);
 
         return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, 'Task queue storage registered.');
