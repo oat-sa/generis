@@ -69,7 +69,13 @@ class common_ext_Extension
      * @var boolean
      */
     protected $loaded = false;
-    
+
+    /**
+     * Array of configs
+     * @var array
+     */
+    protected $configs = [];
+
     /**
      * Should not be called directly, please use ExtensionsManager
      *
@@ -148,11 +154,18 @@ class common_ext_Extension
      *
      * @param  string $key
      * @param  $value
+     * @param  boolean $persist save config to the file
      * @return boolean
      */
-    public function setConfig($key, $value)
+    public function setConfig($key, $value, $persist = true)
     {
-        return $this->getConfigPersistence()->set($this->getId().'/'.$key, $value);
+        $id = $this->getId().'/'.$key;
+        $this->configs[$id] = $value;
+        $result = true;
+        if ($persist) {
+            $result = $this->getConfigPersistence()->set($id, $value);
+        }
+        return $result;
     }
 
     /**
@@ -164,7 +177,11 @@ class common_ext_Extension
      */
     public function getConfig($key)
     {
-        return $this->getConfigPersistence()->get($this->getId().'/'.$key);
+        $id = $this->getId().'/'.$key;
+        if (!isset($this->configs[$id])) {
+            $this->configs[$id] = $this->getConfigPersistence()->get($this->getId().'/'.$key);
+        }
+        return $this->configs[$id];
     }
 
     /**
