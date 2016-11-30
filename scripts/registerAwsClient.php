@@ -30,24 +30,13 @@ class registerAwsClient implements Action
 {
     public function __invoke($params)
     {
-        if(count($params) !== 4){
+        if(count($params) < 2){
             return Report::createFailure('You should provide region and version');
         }
+        $serviceManager = $params['serviceManager'];
+        unset($params['serviceManager']);
 
-        $region = $params['region'];
-        $version = $params['version'];
-        $key = $params['key'];
-        $secret = $params['secret'];
-
-        $serviceManager = ServiceManager::getServiceManager();
-        $awsClient = new AwsClient([
-            'credentials' => [
-                'key' => $key,
-                'secret' => $secret,
-            ],
-            'region' => $region,
-            'version' => $version
-        ]);
+        $awsClient = new AwsClient($params);
 
         $serviceManager->register('generis/awsClient', $awsClient);
 

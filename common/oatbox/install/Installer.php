@@ -61,6 +61,7 @@ class Installer extends ConfigurableService
                     foreach($fileSystemServiceOption['scripts'] as $script){
                         $object = new $script['class']();
                         if($object instanceof Action){
+                            $script['params']['serviceManager'] = $serviceManager;
                             call_user_func($object, $script['params']);
                         }
                     }
