@@ -19,7 +19,6 @@
  */
 namespace oat\oatbox\install;
 
-use oat\oatbox\action\Action;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\exception\InvalidService;
 use oat\oatbox\service\ServiceManager;
