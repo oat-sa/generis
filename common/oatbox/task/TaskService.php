@@ -25,6 +25,8 @@ use common_report_Report as Report;
 
 class TaskService extends ConfigurableService
 {
+    const TASK_QUEUE_MANAGER_ROLE = 'http://www.tao.lu/Ontologies/TAO.rdf#TaskQueueManager';
+
     const OPTION_LIMIT = 'limit';
 
     /**
