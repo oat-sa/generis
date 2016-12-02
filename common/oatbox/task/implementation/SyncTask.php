@@ -20,39 +20,19 @@
 
 namespace oat\oatbox\task\implementation;
 
-use oat\oatbox\task\Task;
+use oat\oatbox\task\AbstractTask;
 use oat\oatbox\action\Action;
 
 /**
  * Class SyncTask
  *
- * Basic implementation of `Task` interface
+ * Basic implementation of `AbstractTask` class
  *
  * @package oat\oatbox\task\implementation
  * @author Aleh Hutnikau, <huntikau@1pt.com>
  */
-class SyncTask implements Task
+class SyncTask extends AbstractTask
 {
-
-    /**
-     * @var string
-     */
-    private $id;
-
-    /**
-     * @var
-     */
-    private $invocable;
-
-    /**
-     * @var
-     */
-    private $status;
-
-    /**
-     * @var array
-     */
-    private $params;
 
     /**
      * SyncTask constructor.
@@ -62,56 +42,8 @@ class SyncTask implements Task
     public function __construct($invocable, $params)
     {
         $this->id = \common_Utils::getNewUri();
-        $this->invocable = $invocable;
+        $this->setInvocable($invocable);
         $this->setParameters($params);
         $this->setStatus(self::STATUS_CREATED);
-    }
-
-    /**
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return Action|string
-     */
-    public function getInvocable()
-    {
-        return $this->invocable;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param string $status
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-    }
-
-    /**
-     * @return array
-     */
-    public function getParameters()
-    {
-        return $this->params;
-    }
-
-    /**
-     * @param array $params
-     */
-    public function setParameters(array $params)
-    {
-        $this->params = $params;
     }
 }

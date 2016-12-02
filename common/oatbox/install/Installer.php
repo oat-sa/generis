@@ -20,8 +20,10 @@
 namespace oat\oatbox\install;
 
 use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\exception\InvalidService;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\filesystem\FileSystemService;
+use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\service\SimpleConfigDriver;
 use common_report_Report as Report;
  /**
@@ -33,35 +35,45 @@ use common_report_Report as Report;
  */
 class Installer extends ConfigurableService
 {
+
     /**
      * run the install
      */
     public function install()
     {
         $this->validateOptions();
-        
+
         $configPath = $this->getOption('root_path').'config/';
         $serviceManager = $this->setupServiceManager($configPath);
-        
-        // setup filesystem service
-        $serviceManager->register(FileSystemService::SERVICE_ID,new FileSystemService(array(FileSystemService::OPTION_FILE_PATH => $this->getOption('file_path'))));
-        
+
+        try{
+            if(!($serviceManager->get(FileSystemService::SERVICE_ID) instanceof FileSystemService)){
+                throw new InvalidService('Your service must be a oat\oatbox\filesystem\FileSystemService');
+            }
+        } catch(ServiceNotFoundException $e){
+            $fileSystemService = new FileSystemService(array(FileSystemService::OPTION_FILE_PATH => $this->getOption('file_path')));
+            $serviceManager->register(FileSystemService::SERVICE_ID, $fileSystemService);
+        }
+
         return new Report(Report::TYPE_SUCCESS, 'Oatbox installed successfully');
     }
-    
-    protected function setupServiceManager($configPath)
+
+    public function setupServiceManager($configPath)
     {
-        if (!\helpers_File::emptyDirectory($configPath, true)) {
-            throw new common_exception_Error('Unable to empty ' . $configPath . ' folder.');
+        if(is_null($this->getServiceManager())){
+            if (!\helpers_File::emptyDirectory($configPath, true)) {
+                throw new \common_exception_Error('Unable to empty ' . $configPath . ' folder.');
+            }
+            $driver = new SimpleConfigDriver();
+            $configService = $driver->connect('config', array(
+                'dir' => $configPath,
+                'humanReadable' => true
+            ));
+
+            $this->setServiceManager(new ServiceManager($configService));
         }
-        
-        $driver = new SimpleConfigDriver();
-        $configService = $driver->connect('config', array(
-            'dir' => $configPath,
-            'humanReadable' => true
-        ));
-        
-        return new ServiceManager($configService);
+
+        return $this->getServiceManager();
     }
     
     protected function validateOptions()
