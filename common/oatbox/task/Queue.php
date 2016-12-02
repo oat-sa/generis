@@ -24,6 +24,8 @@ interface Queue extends \IteratorAggregate
 {
     const CONFIG_ID = 'generis/taskqueue';
 
+    const FILE_SYSTEM_ID = 'taskQueueStorage';
+
     /**
      * @param $actionId
      * @param $parameters
