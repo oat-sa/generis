@@ -305,7 +305,9 @@ class Updater extends common_ext_ExtensionUpdater {
         $this->skip('3.8.4', '3.9.0');
 
         if ($this->isVersion('3.9.0')) {
-            (new \oat\generis\scripts\install\TaskQueue())();
+            $fsm = $this->getServiceManager()->get(FileSystemService::SERVICE_ID);
+            $fsm->createFileSystem(Queue::FILE_SYSTEM_ID, Queue::FILE_SYSTEM_ID);
+            $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fsm);
             $this->setVersion('3.10.0');
         }
     }
