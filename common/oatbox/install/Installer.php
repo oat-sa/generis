@@ -35,7 +35,6 @@ use common_report_Report as Report;
  */
 class Installer extends ConfigurableService
 {
-    const OPTION_FILESYSTEM_SERVICE = 'fileSystemService';
 
     /**
      * run the install
