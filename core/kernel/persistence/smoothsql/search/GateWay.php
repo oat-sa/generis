@@ -93,7 +93,12 @@ class GateWay extends TaoSearchGateWay {
         $resultSet = $this->resultSetClassName;
         return new $resultSet($result , $cpt);
     }
-    /**
+    
+    public function setResultSet($result , $cpt) {
+        
+    }
+
+        /**
      * 
      * @param \PDOStatement $statement
      * @return array
@@ -117,6 +122,32 @@ class GateWay extends TaoSearchGateWay {
         $statement = $this->connector->query($this->parsedQuery);
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
         return $result['cpt'];
+    }
+    
+        
+    public function getJoiner() {
+        $joiner = new QueryJoiner();
+        $options = $this->getOptions();
+        $joiner->setDriverEscaper($this->getDriverEscaper())->setOptions($options);
+        $joiner->setParent($this);
+        return $joiner;
+    }
+    
+    public function join(QueryBuilderInterface $main , QueryBuilderInterface $join , $on , array $sort = [] , $limit = 0 , $offset = null) {
+        $joiner = $this->getJoiner();
+        $query = $joiner->setQuery($main)->join($join)->on($on)->sort($sort)
+                ->setLimit($limit)->setOffset($offset)->execute();
+ 
+        $queryCount = $joiner->count();
+        
+        $statement = $this->connector->query($queryCount);
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        $cpt = $result['cpt'];
+        
+        $statement = $this->connector->query($query);
+        $result    = $this->statementToArray($statement);
+        $resultSet = $this->resultSetClassName;
+        return new $resultSet($result , $cpt);
     }
 
         /**

@@ -77,4 +77,15 @@ class TaoSearchDriver extends EscaperAbstract {
         return $random[$name]; 
     }
     
+    public function groupAggregation($variable , $separator) {
+        
+        $group = [
+            'mysql'      => 'GROUP_CONCAT', 
+            'postgresql' => 'string_agg',
+        ];
+        
+        $name = $this->persistence->getPlatForm()->getName();
+        return $group[$name] . '(' . $variable . ',' . $this->escape($this->quote($separator)) . ')'; 
+    }
+    
 }
