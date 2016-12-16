@@ -93,10 +93,6 @@ class GateWay extends TaoSearchGateWay {
         $resultSet = $this->resultSetClassName;
         return new $resultSet($result , $cpt);
     }
-    
-    public function setResultSet($result , $cpt) {
-        
-    }
 
         /**
      * 
