@@ -40,6 +40,13 @@ class EventManager extends ConfigurableService
     public function trigger($event, $params = array()) {
         $eventObject = is_object($event) ? $event : new GenericEvent($event, $params);
         foreach ($this->getListeners($eventObject) as $callback) {
+            if (is_array($callback) && count($callback) == 2) {
+                list($key, $function) = $callback;
+                if (is_string($key) && !class_exists($key) && $this->getServiceManager()->has($key)) {
+                    $service = $this->getServiceManager()->get($key);
+                    $callback = [$service, $function];
+                }
+            }
             call_user_func($callback, $eventObject);
         }
     }
