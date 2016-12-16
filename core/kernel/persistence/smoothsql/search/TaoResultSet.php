@@ -21,7 +21,7 @@ namespace oat\generis\model\kernel\persistence\smoothsql\search;
 
 use core_kernel_classes_Resource;
 use oat\search\base\ResultSetInterface;
-use oat\tao\model\search\ResultSet;
+use oat\search\ResultSet;
 
 /**
  * Complex Search resultSet iterator
