@@ -277,11 +277,16 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
                 ' = ' . $this->getDriverEscaper()->reserved('R') . '.' . $this->getDriverEscaper()->reserved('object') . ')';
         
         if($this->getRandom()) {
-            $query .= ' ' .$this->getDriverEscaper()->dbCommand('ORDER') . ' ' . 
-                      $this->getDriverEscaper()->dbCommand('BY') . ' ' .
-                      $this->getDriverEscaper()->random() . ' ';
+            $query =   $this->getDriverEscaper()->dbCommand('SELECT') . ' ' . 
+                       $this->getDriverEscaper()->reserved('subject') . ' ' .
+                       $this->getDriverEscaper()->dbCommand('FROM') . ' ' .
+                       ' ( ' . $query . ' ) ' . $this->getDriverEscaper()->dbCommand('AS') . ' ' . 
+                       $this->getDriverEscaper()->reserved('finalQ') . ' ' . 
+                       $this->getDriverEscaper()->dbCommand('ORDER') . ' ' . 
+                       $this->getDriverEscaper()->dbCommand('BY') . ' ' .
+                       $this->getDriverEscaper()->random() . ' ';
         }
-        
+        var_dump($query);die();
         return  $query;
     }
 
