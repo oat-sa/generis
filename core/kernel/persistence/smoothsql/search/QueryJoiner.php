@@ -176,9 +176,7 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
     protected function sortedQuery($main , $join) {
         
         $sort = $this->getSort();
-        
-        $sortParam = key($sort);
-        $sortSens  = $sort[$sortParam];
+        $index = 1;
         
         $aggrObject = $this->getDriverEscaper()->reserved('J') . '.' .
                  $this->getDriverEscaper()->reserved('object');
@@ -186,11 +184,27 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
         $query = $this->getDriverEscaper()->dbCommand('SELECT') . ' ' . $this->getDriverEscaper()->reserved('subject') . ' ' .
                  $this->getDriverEscaper()->dbCommand('FROM') . ' ( ' . 
                  $this->getDriverEscaper()->dbCommand('SELECT')  . ' ' . $this->getDriverEscaper()->dbCommand('DISTINCT') . ' ' .
-                 $this->getDriverEscaper()->reserved('T') . '.' . $this->getDriverEscaper()->reserved('subject') . ' , ' .
-                 $this->getDriverEscaper()->groupAggregation($aggrObject , ' ') . ' ' . 
-                 $this->getDriverEscaper()->dbCommand('AS') . ' ' .
-                 $this->getDriverEscaper()->reserved('sorter') .
-                 $this->getDriverEscaper()->dbCommand('FROM') . ' ( ' .
+                 $this->getDriverEscaper()->reserved('T') . '.' . $this->getDriverEscaper()->reserved('subject') . ' , ' ;
+        
+        $sortKeys = [];
+        
+        foreach($sort as $predicate => $sortOrder) {
+            
+            $alias = 'J' . $index;
+            $sorterAlias = 'sorter' . $index;
+                    
+            $aggrObject = $this->getDriverEscaper()->reserved($alias) . '.' .
+            $this->getDriverEscaper()->reserved('object');
+            
+            $sortKeys[] = $this->getDriverEscaper()->groupAggregation($aggrObject , ' ') . ' ' . 
+            $this->getDriverEscaper()->dbCommand('AS') . ' ' .
+            $this->getDriverEscaper()->reserved($sorterAlias);
+            
+            $index++;
+                 
+        }    
+        
+        $query .= implode(' , ' , $sortKeys ) . ' ' . $this->getDriverEscaper()->dbCommand('FROM') . ' ( ' .
                  $main . ' )' . 
                  $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved('T') .
                  $this->getDriverEscaper()->dbCommand('JOIN') . ' ( ' . 
@@ -202,35 +216,51 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
                  $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved('R') .
                  $this->getDriverEscaper()->dbCommand('ON') . ' ( ' . 
                  $this->getDriverEscaper()->reserved('T') . '.' . $this->getDriverEscaper()->reserved('subject') .  ' = ' .
-                 $this->getDriverEscaper()->reserved('R') . '.' . $this->getDriverEscaper()->reserved('subject') . ' ) ' .
-                 $this->getDriverEscaper()->dbCommand('JOIN') . ' ( ' . 
+                 $this->getDriverEscaper()->reserved('R') . '.' . $this->getDriverEscaper()->reserved('subject') . ' ) ' ;
+                
+        
+        $index = 1;
+        $sortBy = [];
+        foreach($sort as $predicate => $sortOrder) {
+            
+                 $alias      = 'J' . $index;
+                 $orderSub   = 'SUBJ' . $index;
+                 $orderAlias = 'ORDERJ' . $index;
+                 
+            $query .=  $this->getDriverEscaper()->dbCommand('JOIN') . ' ( ' . 
                  $this->getDriverEscaper()->dbCommand('SELECT') . ' ' .
-                 $this->getDriverEscaper()->reserved('ORDERJ') . '.' . $this->getDriverEscaper()->reserved('subject') . ' , ' .
-                 $this->getDriverEscaper()->reserved('ORDERJ') . '.' . $this->getDriverEscaper()->reserved('object') . ' ' .
+                 $this->getDriverEscaper()->reserved($orderAlias) . '.' . $this->getDriverEscaper()->reserved('subject') . ' , ' .
+                 $this->getDriverEscaper()->reserved($orderAlias) . '.' . $this->getDriverEscaper()->reserved('object') . ' ' .
                  $this->getDriverEscaper()->dbCommand('FROM') . ' ( ' .
                  $join . ')' . 
-                 $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved('SUBJ') . ' ' .
+                 $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved($orderSub) . ' ' .
                  $this->getDriverEscaper()->dbCommand('JOIN') . ' ( ' . 
                  $this->getDriverEscaper()->dbCommand('SELECT') . ' ' . $this->getDriverEscaper()->reserved('subject') . ' , ' .
                  $this->getDriverEscaper()->reserved('object')  . ' ' . $this->getDriverEscaper()->dbCommand('FROM') . ' ' .
                  $this->getDriverEscaper()->reserved('statements') . ' ' . $this->getDriverEscaper()->dbCommand('WHERE') . ' ' .
                  $this->getDriverEscaper()->reserved('predicate') . ' = ' . 
-                 $this->getDriverEscaper()->quote($this->getDriverEscaper()->escape($sortParam)) . ' ' .
+                 $this->getDriverEscaper()->quote($this->getDriverEscaper()->escape($predicate)) . ' ' .
                  $this->getLanguage() . ' ' . $this->getDriverEscaper()->dbCommand('GROUP') . ' ' . $this->getDriverEscaper()->dbCommand('BY') . ' ' .
                  $this->getDriverEscaper()->reserved('subject') . ' , ' .
                  $this->getDriverEscaper()->reserved('object')  . ' ) ' . 
-                 $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved('ORDERJ') . ' ' . 
+                 $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved($orderAlias) . ' ' . 
                  $this->getDriverEscaper()->dbCommand('ON') . ' ( ' . 
-                 $this->getDriverEscaper()->reserved('SUBJ') . '.' . $this->getDriverEscaper()->reserved('subject') . ' = ' .
-                 $this->getDriverEscaper()->reserved('ORDERJ') . '.' . $this->getDriverEscaper()->reserved('subject') . ' ) ) ' .
-                 $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved('J') . ' ' .
+                 $this->getDriverEscaper()->reserved($orderSub) . '.' . $this->getDriverEscaper()->reserved('subject') . ' = ' .
+                 $this->getDriverEscaper()->reserved($orderAlias) . '.' . $this->getDriverEscaper()->reserved('subject') . ' ) ) ' .
+                 $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved($alias) . ' ' .
                  $this->getDriverEscaper()->dbCommand('ON') . ' ( ' . 
-                 $this->getDriverEscaper()->reserved('J') . '.' . $this->getDriverEscaper()->reserved('subject') . ' = ' .
-                 $this->getDriverEscaper()->reserved('R') . '.' . $this->getDriverEscaper()->reserved('object') . ' ) ' .
-                 $this->getDriverEscaper()->dbCommand('GROUP') . ' ' . $this->getDriverEscaper()->dbCommand('BY') . ' ' .
+                 $this->getDriverEscaper()->reserved($alias) . '.' . $this->getDriverEscaper()->reserved('subject') . ' = ' .
+                 $this->getDriverEscaper()->reserved('R') . '.' . $this->getDriverEscaper()->reserved('object') . ' ) ' ;
+            
+            $sortBy[] = $this->getDriverEscaper()->reserved('sorter' . $index) . ' ' . $this->getDriverEscaper()->dbCommand($sortOrder);
+            $index ++;
+            
+        }
+        
+            $query .= $this->getDriverEscaper()->dbCommand('GROUP') . ' ' . $this->getDriverEscaper()->dbCommand('BY') . ' ' .
                  $this->getDriverEscaper()->reserved('T') . '.' . $this->getDriverEscaper()->reserved('subject') . ' ' .
                  $this->getDriverEscaper()->dbCommand('ORDER') . ' ' . $this->getDriverEscaper()->dbCommand('BY') . ' ' .
-                 $this->getDriverEscaper()->reserved('sorter') . ' ' . $this->getDriverEscaper()->dbCommand($sortSens) . ' ) ' .
+                 implode(' , ', $sortBy) . ' ) ' .
                  $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved('rootq');
         
         return  ($query);
