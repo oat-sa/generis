@@ -29,17 +29,35 @@ use oat\tao\model\search\ResultSet;
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
 class TaoResultSet extends ResultSet 
-    implements ResultSetInterface 
+    implements ResultSetInterface, \oat\search\base\ParentFluateInterface
 {
     
-    
+    use \oat\search\UsableTrait\ParentFluateTrait;
     use \oat\generis\model\OntologyAwareTrait;
     
+    /**
+     *
+     * @var \oat\search\QueryBuilder 
+     */
+    protected $countQuery;
+    protected $totalCount = null;
+    
+    public function setCountQuery($query) {
+        $this->countQuery = $query;
+        return $this;
+    }
+
     /**
     * return total number of result
     * @return integer
     */
     public function total() {
+        
+        if(is_null($this->totalCount)) {
+            $cpt = $this->getParent()->fetchQuery($this->countQuery);
+            $this->totalCount = intval($cpt['cpt']);
+        }
+        
         return $this->totalCount;
     }
     

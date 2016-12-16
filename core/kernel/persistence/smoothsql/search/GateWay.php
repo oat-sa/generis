@@ -80,6 +80,7 @@ class GateWay extends TaoSearchGateWay {
     public function connect() {
         return !is_null($this->connector);
     }
+    
     /**
      * execute Parsed Query
      * 
@@ -89,11 +90,14 @@ class GateWay extends TaoSearchGateWay {
         $this->serialyse($Builder);
         $statement = $this->connector->query($this->parsedQuery);
         $result    = $this->statementToArray($statement);
-        $resultSet = $this->resultSetClassName;
-        return new $resultSet($result , count($result));
+        $resultSetClass = $this->resultSetClassName;
+        $resultSet = new $resultSetClass($result);
+        $queryCount = $this->getSerialyser()->setCriteriaList($Builder)->count(true)->serialyse();
+        $resultSet->setParent($this)->setCountQuery($queryCount);
+        return $resultSet;
     }
 
-        /**
+    /**
      * 
      * @param \PDOStatement $statement
      * @return array
@@ -105,7 +109,12 @@ class GateWay extends TaoSearchGateWay {
         }
         return $result;
     }
-
+    
+    public function fetchQuery($query) {
+        $statement = $this->connector->query($query);
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        return $result;
+    }
 
     /**
      * return total count result
@@ -114,8 +123,7 @@ class GateWay extends TaoSearchGateWay {
      */
     public function count(QueryBuilderInterface $Builder) {
         $this->parsedQuery = $this->getSerialyser()->setCriteriaList($Builder)->count(true)->serialyse();
-        $statement = $this->connector->query($this->parsedQuery);
-        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        $result = $this->query($this->parsedQuery);
         return $result['cpt'];
     }
     
@@ -128,15 +136,16 @@ class GateWay extends TaoSearchGateWay {
         return $joiner;
     }
     
-    public function join(QueryBuilderInterface $main , QueryBuilderInterface $join , $on , array $sort = [] , $limit = 0 , $offset = null) {
-        $joiner = $this->getJoiner();
-        $query = $joiner->setQuery($main)->join($join)->on($on)->sort($sort)
-                ->setLimit($limit)->setOffset($offset)->execute();
+    public function join(QueryJoiner $joiner) {
         
+        $query = $joiner->execute();
         $statement = $this->connector->query($query);
         $result    = $this->statementToArray($statement);
-        $resultSet = $this->resultSetClassName;
-        return new $resultSet($result , count($result));
+        $resultSetClass = $this->resultSetClassName;
+        $resultSet = new $resultSetClass($result);
+        $queryCount = $joiner->count();
+        $resultSet->setParent($this)->setCountQuery($queryCount);
+        return $resultSet;
     }
 
         /**
