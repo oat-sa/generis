@@ -89,9 +89,8 @@ class GateWay extends TaoSearchGateWay {
         $this->serialyse($Builder);
         $statement = $this->connector->query($this->parsedQuery);
         $result    = $this->statementToArray($statement);
-        $cpt       = $this->count($Builder);
         $resultSet = $this->resultSetClassName;
-        return new $resultSet($result , $cpt);
+        return new $resultSet($result , count($result));
     }
 
         /**
@@ -133,17 +132,11 @@ class GateWay extends TaoSearchGateWay {
         $joiner = $this->getJoiner();
         $query = $joiner->setQuery($main)->join($join)->on($on)->sort($sort)
                 ->setLimit($limit)->setOffset($offset)->execute();
- 
-        $queryCount = $joiner->count();
-        
-        $statement = $this->connector->query($queryCount);
-        $result = $statement->fetch(\PDO::FETCH_ASSOC);
-        $cpt = $result['cpt'];
         
         $statement = $this->connector->query($query);
         $result    = $this->statementToArray($statement);
         $resultSet = $this->resultSetClassName;
-        return new $resultSet($result , $cpt);
+        return new $resultSet($result , count($result));
     }
 
         /**
