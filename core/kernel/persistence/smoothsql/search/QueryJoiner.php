@@ -74,6 +74,8 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
         $this->query = $query->sort([])->setOffset(null)->setLimit(null);
         return $this;
     }
+    
+
     /**
      * 
      * @param QueryBuilderInterface $query
@@ -273,6 +275,12 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
                  $this->getDriverEscaper()->dbCommand('ON') . 
                 '(' . $this->getDriverEscaper()->reserved('D') . '.' . $this->getDriverEscaper()->reserved('subject')  . 
                 ' = ' . $this->getDriverEscaper()->reserved('R') . '.' . $this->getDriverEscaper()->reserved('object') . ')';
+        
+        if($this->getRandom()) {
+            $query .= ' ' .$this->getDriverEscaper()->dbCommand('ORDER') . ' ' . 
+                      $this->getDriverEscaper()->dbCommand('BY') . ' ' .
+                      $this->getDriverEscaper()->random() . ' ';
+        }
         
         return  $query;
     }
