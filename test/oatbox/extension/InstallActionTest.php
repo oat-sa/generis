@@ -85,7 +85,7 @@ class InstallActionTest extends GenerisPhpUnitTestRunner {
         $prophetServiceManager->register($fixtureService , $serviceMock)->willReturn(null);
         $serviceManagerMock    = $prophetServiceManager->reveal();
         
-        $instance->expects($this->exactly(2))
+        $instance->expects($this->exactly(1))
                 ->method('getServiceManager')
                 ->willReturn($serviceManagerMock);
         

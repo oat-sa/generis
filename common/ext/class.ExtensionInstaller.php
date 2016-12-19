@@ -123,9 +123,11 @@ class common_ext_ExtensionInstaller
     		$defaultIterator = new DirectoryIterator ($defaultsPath);
     		foreach ($defaultIterator as $fileinfo) {
     		    if (!$fileinfo->isDot () && strpos($fileinfo->getFilename(), '.conf.php') > 0) {
-    		        $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
-    		        $config = include $fileinfo->getPathname();
-    		        $this->extension->setConfig($confKey, $config);
+                    $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
+                    if (! $this->extension->hasConfig($confKey)) {
+                        $config = include $fileinfo->getPathname();
+                        $this->extension->setConfig($confKey, $config);
+                    }
     		    }
     		}
 	    }

@@ -103,6 +103,7 @@ class ServiceManager implements ServiceLocatorInterface
         if (count($parts) < 2) {
             throw new \common_Exception('Invalid servicekey '.$serviceKey);
         }
+        $this->propagate($service);
         $this->services[$serviceKey] = $service;
         $success = $this->getConfig()->set($serviceKey, $service);
         if (!$success) {

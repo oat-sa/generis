@@ -20,17 +20,19 @@
 namespace oat\oatbox\extension;
 
 use oat\oatbox\event\EventManager;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use oat\oatbox\service\ConfigurableService;
 
 /**
- * new Abstract action containing some helper functions
+ * New Abstract action containing some helper functions
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-abstract class InstallAction extends AbstractAction {
+abstract class InstallAction extends AbstractAction
+{
     
     /**
-     * add a new event Listener
+     * Add a new event Listener
+     *
      * @param mixed $event either an Event object or a string
      * @param Callable $callback
      */
@@ -42,15 +44,18 @@ abstract class InstallAction extends AbstractAction {
     }
     
     /**
-     * add a new configurable service
+     * Register a new configurable service into config
+     * If $allowOverride is false, existing config will be kept
+     *
      * @param string $serviceKey
-     * @param \oat\oatbox\extension\ServiceLocatorAwareInterface $service
+     * @param ConfigurableService $service
+     * @param boolean $allowOverride
      */
-    public function registerService($serviceKey, $service) {
-        if ($service instanceof ServiceLocatorAwareInterface) {
-            $service->setServiceLocator($this->getServiceManager());
+    public function registerService($serviceKey, $service, $allowOverride = true)
+    {
+        if ($allowOverride || ! $this->getServiceManager()->has($serviceKey)) {
+            $this->getServiceManager()->register($serviceKey, $service);
         }
-        $this->getServiceManager()->register($serviceKey, $service);
     }
-    
+
 }
