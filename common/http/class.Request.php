@@ -1,5 +1,4 @@
 <?php
-
 /**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +66,8 @@ class common_http_Request
         }
         
         $scheme = $https ? 'https' : 'http';
-        $url = $scheme . '://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'];
+        $port = empty($_SERVER['HTTP_X_FORWARDED_PORT']) ? $_SERVER['SERVER_PORT'] : $_SERVER['HTTP_X_FORWARDED_PORT'];
+        $url = $scheme . '://' . $_SERVER['SERVER_NAME'] . ':' . $port . $_SERVER['REQUEST_URI'];
         
         $method = $_SERVER['REQUEST_METHOD'];
         
@@ -96,7 +96,6 @@ class common_http_Request
                 }
             }
         }
-        
         return new self($url, $method, $params, $headers);
     }
 
