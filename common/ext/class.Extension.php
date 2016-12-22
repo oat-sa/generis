@@ -442,7 +442,11 @@ class common_ext_Extension
             $dependencies = $this->getManifest()->getDependencies();
             foreach ($dependencies as $extId => $extVersion) {
                 // triggers loading of extensions
-                \common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
+                try {
+                    \common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
+                } catch (common_ext_ManifestNotFoundException $e) {
+                    throw new common_ext_MissingExtensionException($e->getExtensionId().' not found but required for '.$this->getId());
+                }
             }
             
             $loader = new common_ext_ExtensionLoader($this);
