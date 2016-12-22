@@ -139,7 +139,8 @@ class helpers_ExtensionHelper{
     public static function checkRequiredExtensions(common_ext_Extension $extension)
     {
         $extensionManager = common_ext_ExtensionsManager::singleton();
-        foreach ($extension->getDependencies() as $requiredExt => $requiredVersion) {
+        // read direct dependencies from manifest, do not check recursivly
+        foreach ($extension->getManifest()->getDependencies() as $requiredExt => $requiredVersion) {
             $installedVersion = $extensionManager->getInstalledVersion($requiredExt);
             if (is_null($installedVersion)) {
                 throw new common_ext_MissingExtensionException('Extension '. $requiredExt . ' is needed by the extension to be installed but is missing.',
