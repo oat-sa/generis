@@ -127,24 +127,23 @@ abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
     protected function disableCache()
     {
         $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('generis') ;
-        $this->config = $ext->getConfig(common_persistence_Manager::SERVICE_KEY);
+        $this->config = $ext->getConfig(common_persistence_Manager::SERVICE_ID);
         $conf = $this->config;
         if(isset($conf['cache']) && isset($conf['cache']['driver'])){
             $conf['cache']['driver'] = 'no_storage';
             \common_Logger::i('Set cache on NO STORAGE');
         
-            $ext->setConfig(_common_persistence_Manager::SERVICE_KEY,$conf);
+            $ext->setConfig(_common_persistence_Manager::SERVICE_ID,$conf);
         }
     }
-    
-    
+
     protected function restoreCache()
     {
         \common_Logger::i('Restore cache persistence'); 
         $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('generis') ;
-        $ext->setConfig(common_persistence_Manager::SERVICE_KEY,$this->config);
-        
+        $ext->setConfig(common_persistence_Manager::SERVICE_ID,$this->config);
     }
+
     /**
      * Returns the test session if available
      * @throws common_exception_Error
