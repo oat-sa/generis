@@ -42,6 +42,9 @@ class ServiceManager implements ServiceLocatorInterface
     
     private $services = array();
     
+    /**
+     * @var \common_persistence_KeyValuePersistence
+     */
     private $configService;
     
     public function __construct($configService)

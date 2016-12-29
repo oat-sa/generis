@@ -66,7 +66,7 @@ class GateWay extends TaoSearchGateWay {
     
     public function __construct() {
         $this->connector = ServiceManager::getServiceManager()
-                ->get(common_persistence_Manager::SERVICE_KEY)
+                ->get(common_persistence_Manager::SERVICE_ID)
                 ->getPersistenceById('default');
     }
 
