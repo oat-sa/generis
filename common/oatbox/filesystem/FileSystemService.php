@@ -153,7 +153,8 @@ class FileSystemService extends ConfigurableService
      * inspired by burzum/storage-factory
      * 
      * @param string $id
-     * @throws common_Exception
+     * @throws \common_exception_NotFound if adapter doesn't exist
+     * @throws \common_exception_Error if adapter is not valid
      * @return AdapterInterface
      */
     protected function getFlysystemAdapter($id)
