@@ -53,6 +53,17 @@ class FileSystemService extends ConfigurableService
     }
     
     /**
+     * Returns whenever or not a FS exists
+     * @param string $id
+     * @return boolean
+     */
+    public function hasDirectory($id)
+    {
+        $fsConfig = $this->getOption(self::OPTION_ADAPTERS);
+        return isset($fsConfig[$id]);
+    }
+
+    /**
      * 
      * @param string $id
      * @return FileSystem
@@ -149,7 +160,7 @@ class FileSystemService extends ConfigurableService
     {
         $fsConfig = $this->getOption(self::OPTION_ADAPTERS);
         if (!isset($fsConfig[$id])) {
-            throw new common_exception_Error('Undefined filesystem "'.$id.'"');
+            throw new \common_exception_NotFound('Undefined filesystem "'.$id.'"');
         }
         $adapterConfig = $fsConfig[$id];
         // alias?
