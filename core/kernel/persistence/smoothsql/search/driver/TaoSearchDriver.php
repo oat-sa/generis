@@ -26,7 +26,7 @@ class TaoSearchDriver extends EscaperAbstract {
 
     public function __construct() {
         $this->persistence = ServiceManager::getServiceManager()
-                ->get(\common_persistence_Manager::SERVICE_KEY)
+                ->get(\common_persistence_Manager::SERVICE_ID)
                 ->getPersistenceById('default');
     }
     
@@ -75,6 +75,17 @@ class TaoSearchDriver extends EscaperAbstract {
             ];
         $name = $this->persistence->getPlatForm()->getName();
         return $random[$name]; 
+    }
+    
+    public function groupAggregation($variable , $separator) {
+        
+        $group = [
+            'mysql'      => 'GROUP_CONCAT', 
+            'postgresql' => 'string_agg',
+        ];
+        
+        $name = $this->persistence->getPlatForm()->getName();
+        return $group[$name] . '(' . $variable . ',' . $this->escape($this->quote($separator)) . ')'; 
     }
     
 }

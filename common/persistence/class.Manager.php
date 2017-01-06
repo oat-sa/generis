@@ -34,8 +34,11 @@ use oat\oatbox\service\ServiceNotFoundException;
  */
 class common_persistence_Manager extends ConfigurableService
 {
+    /** @deprecated */
     const SERVICE_KEY = 'generis/persistences';
     
+    const SERVICE_ID = 'generis/persistences';
+
     const OPTION_PERSISTENCES = 'persistences';
 
     /**
@@ -63,7 +66,7 @@ class common_persistence_Manager extends ConfigurableService
     protected static function getDefaultManager()
     {
         try {
-            $manager = ServiceManager::getServiceManager()->get(self::SERVICE_KEY);
+            $manager = ServiceManager::getServiceManager()->get(self::SERVICE_ID);
         } catch (ServiceNotFoundException $ex) {
             $manager = new self(array(
                 self::OPTION_PERSISTENCES => array()
@@ -96,7 +99,7 @@ class common_persistence_Manager extends ConfigurableService
         $configs[$persistenceId] = $persistenceConf;
         $manager->setOption(self::OPTION_PERSISTENCES, $configs);
         
-        $manager->getServiceManager()->register(self::SERVICE_KEY, $manager);
+        $manager->getServiceManager()->register(self::SERVICE_ID, $manager);
     }
     
     /**
