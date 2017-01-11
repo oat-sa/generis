@@ -346,7 +346,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         }
         
 		$query = 'SELECT count(subject) FROM (' . $this->getFilteredQuery($resource, $propertyFilters, $options) . ') as countq';
-		return $this->getPersistence()->query($query)->fetchColumn();
+		return (int)$this->getPersistence()->query($query)->fetchColumn();
     }
 
     /**
