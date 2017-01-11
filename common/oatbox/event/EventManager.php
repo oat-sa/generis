@@ -27,6 +27,11 @@ use oat\oatbox\service\ConfigurableService;
  */
 class EventManager extends ConfigurableService
 {
+    const SERVICE_ID = 'generis/event';
+
+    /**
+     * @deprecated use SERVICE_ID
+     */
     const CONFIG_ID = 'generis/event';
     
     const OPTION_LISTENERS = 'listeners';
