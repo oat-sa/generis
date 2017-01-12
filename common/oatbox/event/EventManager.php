@@ -87,13 +87,15 @@ class EventManager extends ConfigurableService
      */
     protected function removeListener(array $listeners , $eventObject , $callback) {
         if (isset($listeners[$eventObject->getName()])) {
-                if (($index = array_search($callback, $listeners[$eventObject->getName()])) !== false) {
-                    unset($listeners[$eventObject->getName()][$index]);
-                }
+            if (($index = array_search($callback, $listeners[$eventObject->getName()])) !== false) {
+                unset($listeners[$eventObject->getName()][$index]);
                 if(empty($listeners[$eventObject->getName()])) {
                     unset($listeners[$eventObject->getName()]);
+                } else {
+                    $listeners[$eventObject->getName()] = array_values($listeners[$eventObject->getName()]);
                 }
             }
+        }
         return $listeners;
     }
 
