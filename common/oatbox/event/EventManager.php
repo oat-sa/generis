@@ -27,6 +27,11 @@ use oat\oatbox\service\ConfigurableService;
  */
 class EventManager extends ConfigurableService
 {
+    const SERVICE_ID = 'generis/event';
+
+    /**
+     * @deprecated use SERVICE_ID
+     */
     const CONFIG_ID = 'generis/event';
     
     const OPTION_LISTENERS = 'listeners';
@@ -82,13 +87,15 @@ class EventManager extends ConfigurableService
      */
     protected function removeListener(array $listeners , $eventObject , $callback) {
         if (isset($listeners[$eventObject->getName()])) {
-                if (($index = array_search($callback, $listeners[$eventObject->getName()])) !== false) {
-                    unset($listeners[$eventObject->getName()][$index]);
-                }
+            if (($index = array_search($callback, $listeners[$eventObject->getName()])) !== false) {
+                unset($listeners[$eventObject->getName()][$index]);
                 if(empty($listeners[$eventObject->getName()])) {
                     unset($listeners[$eventObject->getName()]);
+                } else {
+                    $listeners[$eventObject->getName()] = array_values($listeners[$eventObject->getName()]);
                 }
             }
+        }
         return $listeners;
     }
 
