@@ -69,7 +69,11 @@ class helpers_ExtensionHelper{
                 }
             }
             if (count($unsorted) == $before) {
-                throw new common_exception_Error('Unable to resolve extension dependencies');
+                if (count($unsorted) == 1) {
+                    throw new common_exception_Error('Missing extensions '.implode(',', $missing).' for: '.implode(',', array_keys($unsorted)));
+                } else {
+                    throw new common_exception_Error('Unable to resolve extension dependencies for: '.implode(',', array_keys($unsorted)));
+                }
             }
         }
         
