@@ -119,12 +119,13 @@ class GateWay extends TaoSearchGateWay {
     /**
      * return total count result
      * @param QueryBuilderInterface $Builder
-     * @return type
+     * @return integer
      */
     public function count(QueryBuilderInterface $Builder) {
         $this->parsedQuery = $this->getSerialyser()->setCriteriaList($Builder)->count(true)->serialyse();
-        $result = $this->query($this->parsedQuery);
-        return $result['cpt'];
+        $statement = $this->connector->query($this->parsedQuery);
+        $result    = $this->statementToArray($statement);
+        return (int)reset($result)->cpt;
     }
     
         
