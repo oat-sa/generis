@@ -211,7 +211,7 @@ use OptionsTrait;
         $query .= implode(' , ', $sortKeys) . ' ' . $this->getDriverEscaper()->dbCommand('FROM') . ' ( ' .
                 $main . ' )' .
                 $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved('T') .
-                $this->getDriverEscaper()->dbCommand('JOIN') . ' ( ' .
+                $this->getDriverEscaper()->dbCommand('LEFT') . ' ' . $this->getDriverEscaper()->dbCommand('JOIN') . ' ( ' .
                 $this->getDriverEscaper()->dbCommand('SELECT') . ' ' . $this->getDriverEscaper()->reserved('subject') . ' , ' .
                 $this->getDriverEscaper()->reserved('object') . ' ' . $this->getDriverEscaper()->dbCommand('FROM') . ' ' .
                 $this->getDriverEscaper()->reserved('statements') . ' ' . $this->getDriverEscaper()->dbCommand('WHERE') . ' ' .
@@ -231,7 +231,7 @@ use OptionsTrait;
             $orderSub = 'SUBJ' . $index;
             $orderAlias = 'ORDERJ' . $index;
 
-            $query .= $this->getDriverEscaper()->dbCommand('JOIN') . ' ( ' .
+            $query .= $this->getDriverEscaper()->dbCommand('LEFT') . ' ' . $this->getDriverEscaper()->dbCommand('JOIN') . ' ( ' .
                     $this->getDriverEscaper()->dbCommand('SELECT') . ' ' .
                     $this->getDriverEscaper()->reserved($orderAlias) . '.' . $this->getDriverEscaper()->reserved('subject') . ' , ' .
                     $this->getDriverEscaper()->reserved($orderAlias) . '.' . $this->getDriverEscaper()->reserved('object') . ' ' .
@@ -343,6 +343,7 @@ use OptionsTrait;
                     $this->getDriverEscaper()->dbCommand('FROM') . ' ( ' . $query . ' ) as cptQ';
             return $query;
         }
+        \common_Logger::i($query);
         return $this->addLimit($query);
     }
 
