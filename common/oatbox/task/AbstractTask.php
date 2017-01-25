@@ -37,6 +37,11 @@ abstract class AbstractTask implements Task
     protected $id;
 
     /**
+     * @var string
+     */
+    protected $label;
+
+    /**
      * @var
      */
     protected $invocable;
@@ -52,6 +57,10 @@ abstract class AbstractTask implements Task
     protected $params;
 
     /**
+     * @var string
+     */
+    protected $type;
+    /**
      * Task execution report
      * @var null|array
      */
@@ -63,6 +72,30 @@ abstract class AbstractTask implements Task
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $label
+     */
+    public function setLabel($label) {
+        $this->label = $label;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel() {
+        return $this->label;
     }
 
     /**

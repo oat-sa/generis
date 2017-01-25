@@ -29,10 +29,12 @@ interface Queue extends \IteratorAggregate
     /**
      * @param $actionId
      * @param $parameters
+     * @param $label
+     * @param $task
      * @param boolean $repeatedly Whether task created repeatedly (for example when execution of task was failed and task puts to the queue again).
      * @return mixed
      */
-    public function createTask($actionId, $parameters, $repeatedly = false);
+    public function createTask($actionId, $parameters, $repeatedly = false , $label = null , $task = null);
     
     public function getIterator();
 
