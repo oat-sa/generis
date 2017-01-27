@@ -35,12 +35,18 @@ interface Task
     public function getType();
 
     public function setLabel($label);
-    /*
-    public function getOwner();
-    */
+
+    public function getCreationDate();
+
+    public function setCreationDate($creationDate);
+
     public function getStatus();
 
     public function setStatus($status);
+
+    public function getOwner();
+
+    public function setOwner($owner);
 
     public function getId();
 

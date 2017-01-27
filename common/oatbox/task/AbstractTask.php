@@ -66,6 +66,10 @@ abstract class AbstractTask implements Task
      */
     protected $report;
 
+    protected $creationDate;
+
+    protected $owner;
+
     /**
      * @return string
      */
@@ -170,4 +174,39 @@ abstract class AbstractTask implements Task
     {
         $this->report = $report;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
+
+    /**
+     * @param mixed $creationDate
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param mixed $owner
+     */
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+    }
+
+
+
 }
