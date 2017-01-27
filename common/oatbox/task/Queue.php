@@ -22,7 +22,12 @@ namespace oat\oatbox\task;
 
 interface Queue extends \IteratorAggregate
 {
+    /**
+     * @deprecated since 3.15.2
+     */
     const CONFIG_ID = 'generis/taskqueue';
+
+    const SERVICE_ID = 'generis/taskqueue';
 
     const FILE_SYSTEM_ID = 'taskQueueStorage';
 
