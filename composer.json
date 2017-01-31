@@ -62,7 +62,7 @@
 		"oat-sa/oatbox-extension-installer": "dev-master",
 		"php" : ">=5.3.2",
 		"psr/log": "~1.0",
-		"oat-sa/lib-generis-search": "~1.2.0"
+		"oat-sa/lib-generis-search": "dev-feature/TAO-3746_LIKE-vs-ILIKE"
 	},
 	"replace": {
      		"oat-sa/generis":"dev-master"
