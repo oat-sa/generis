@@ -21,19 +21,32 @@ namespace oat\oatbox\task;
 
 interface Task
 {
-    const STATUS_CREATED = 'created';
-    const STATUS_STARTED = 'started';
-    const STATUS_RUNNING = 'running';
+    const STATUS_CREATED  = 'created';
+    const STATUS_STARTED  = 'started';
+    const STATUS_RUNNING  = 'running';
     const STATUS_FINISHED = 'finished';
-    
-    /*
+    const STATUS_ARCHIVED = 'archived';
+
+
     public function getLabel();
 
-    public function getOwner();
-    */
+    public function setType($type);
+
+    public function getType();
+
+    public function setLabel($label);
+
+    public function getCreationDate();
+
+    public function setCreationDate($creationDate);
+
     public function getStatus();
 
     public function setStatus($status);
+
+    public function getOwner();
+
+    public function setOwner($owner);
 
     public function getId();
 
