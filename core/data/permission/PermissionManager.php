@@ -25,6 +25,8 @@ use common_ext_ExtensionsManager;
 use common_Logger;
 use oat\generis\model\data\event\ResourceCreated;
 use oat\oatbox\event\Event;
+use oat\oatbox\service\ServiceManager;
+use oat\oatbox\service\ServiceNotFoundException;
 
 /**
  * Proxy for the permission implementation
@@ -35,29 +37,22 @@ class PermissionManager
 {
     const CONFIG_KEY = 'permissions';
     
-    private static $model = null;
-    
     /**
      * @return PermissionInterface
      */
     public static function getPermissionModel() {
-        if (is_null(self::$model)) {
-            $implementation = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig(self::CONFIG_KEY);
-            if (is_object($implementation) && $implementation instanceof PermissionInterface) {
-                self::$model = $implementation;
-            } else {
-                common_Logger::w('No permission implementation found');
-                self::$model = new NoAccess();
-            }
+        try {
+            return ServiceManager::getServiceManager()->get(PermissionInterface::SERVICE_ID);
+        } catch (ServiceNotFoundException $e) {
+            common_Logger::w('No permission implementation found');
+            return new NoAccess();
         }
-        return self::$model;
     }
     
     /**
      * @param core_kernel_persistence_RdfsDriver $model
      */
     public static function setPermissionModel(PermissionInterface $model) {
-        self::$model = $model;
         common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->setConfig(self::CONFIG_KEY, $model);
     }
     
