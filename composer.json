@@ -53,12 +53,6 @@
 	"extra" : {
 		"tao-extension-name" : "generis"
 	},
-        "repositories": [     
- 	{
-            "type" : "vcs",
-            "url" : "https://github.com/oat-sa/lib-generis-search"
-        }
-        ],
 	"require" : {
 		"clearFw/clearFw" : "~1.0",
 		"easyrdf/easyrdf" : "0.9.*",
@@ -68,7 +62,7 @@
 		"oat-sa/oatbox-extension-installer": "dev-master",
 		"php" : ">=5.3.2",
 		"psr/log": "~1.0",
-		"oat-sa/lib-generis-search": "~1.2.0"
+		"oat-sa/lib-generis-search": "2.0.1"
 	},
 	"replace": {
      		"oat-sa/generis":"dev-master"
