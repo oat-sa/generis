@@ -40,7 +40,7 @@ class TaskRunner
             } else if ($invocable instanceof ServiceLocatorAwareInterface) {
                 $invocable->setServiceLocator($this->getServiceLocator());
             }
-            $subReport = call_user_func($invocable, $task->getParameters());
+            $subReport = call_user_func_array($invocable, $task->getParameters());
             $report->add($subReport);
         } catch (\Exception $e) {
             $message = 'Task ' . $task->getId() . ' failed. Error message: ' . $e->getMessage();
