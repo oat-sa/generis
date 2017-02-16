@@ -1,0 +1,122 @@
+<?php
+/**
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
+ *
+ */
+
+namespace oat\oatbox\notification\implementation;
+
+
+use oat\oatbox\notification\exception\NotListedNotification;
+use oat\oatbox\notification\NotificationInterface;
+use oat\oatbox\notification\NotificationServiceInterface;
+use oat\oatbox\service\ConfigurableService;
+
+class NotificationService extends ConfigurableService implements NotificationServiceInterface
+{
+
+
+    public function getSubServices()  {
+        $subServices = $this->getOptions();
+        $services    = [];
+        foreach ($subServices as $name => $subService ) {
+            $services[] = $this->getSubService($name , NotificationServiceInterface::class);
+        }
+        return $services;
+    }
+
+    public function sendNotification(NotificationInterface $notification)
+    {
+        $subServices = $this->getSubServices();
+
+        /**
+         * @var NotificationServiceInterface  $service
+         */
+        foreach ($subServices as $service) {
+            $service->sendNotification($notification);
+        }
+
+        return $notification;
+    }
+
+    public function getNotifications(\core_kernel_classes_Resource $user)
+    {
+        $subServices = $this->getSubServices();
+
+        /**
+         * @var NotificationServiceInterface  $service
+         */
+        foreach ($subServices as $service) {
+            if(($list = $service->getNotifications($user)) !== false) {
+                return $list;
+            }
+        }
+
+        throw new NotListedNotification();
+
+
+    }
+
+    public function getNotification($id)
+    {
+
+        $subServices = $this->getSubServices();
+
+        /**
+         * @var NotificationServiceInterface  $service
+         */
+        foreach ($subServices as $service) {
+            if(($notification = $service->getNotifications($id)) !== false) {
+                return $notification;
+            }
+        }
+
+        throw new NotListedNotification();
+    }
+
+    public function changeStatus(NotificationInterface $notification)
+    {
+        $subServices = $this->getSubServices();
+
+        /**
+         * @var NotificationServiceInterface  $service
+         */
+        foreach ($subServices as $service) {
+            if(($newNotification = $service->changeStatus($notification)) !== false) {
+                return $newNotification;
+            }
+        }
+
+        throw new NotListedNotification();
+    }
+
+    public function notificationCount(\core_kernel_classes_Resource $user)
+    {
+        $subServices = $this->getSubServices();
+
+        /**
+         * @var NotificationServiceInterface  $service
+         */
+        foreach ($subServices as $service) {
+            if(($newNotification = $service->notificationCount($user)) !== false) {
+                return $newNotification;
+            }
+        }
+
+        throw new NotListedNotification();
+    }
+}
