@@ -53,7 +53,7 @@ class NotificationService extends ConfigurableService implements NotificationSer
         return $notification;
     }
 
-    public function getNotifications(\core_kernel_classes_Resource $user)
+    public function getNotifications( $userId)
     {
         $subServices = $this->getSubServices();
 
@@ -61,7 +61,7 @@ class NotificationService extends ConfigurableService implements NotificationSer
          * @var NotificationServiceInterface  $service
          */
         foreach ($subServices as $service) {
-            if(($list = $service->getNotifications($user)) !== false) {
+            if(($list = $service->getNotifications($userId)) !== false) {
                 return $list;
             }
         }
@@ -104,7 +104,7 @@ class NotificationService extends ConfigurableService implements NotificationSer
         throw new NotListedNotification();
     }
 
-    public function notificationCount(\core_kernel_classes_Resource $user)
+    public function notificationCount( $userId)
     {
         $subServices = $this->getSubServices();
 
@@ -112,7 +112,7 @@ class NotificationService extends ConfigurableService implements NotificationSer
          * @var NotificationServiceInterface  $service
          */
         foreach ($subServices as $service) {
-            if(($newNotification = $service->notificationCount($user)) !== false) {
+            if(($newNotification = $service->notificationCount($userId)) !== false) {
                 return $newNotification;
             }
         }

@@ -36,7 +36,7 @@ interface NotificationServiceInterface
      * @param \core_kernel_classes_Resource $user
      * @return array an array of NotificationServiceInterface
      */
-    public function getNotifications(\core_kernel_classes_Resource $user);
+    public function getNotifications($userId);
 
     /**
      * @param string $id
@@ -54,6 +54,6 @@ interface NotificationServiceInterface
      * @param \core_kernel_classes_Resource $user
      * @return array
      */
-    public function notificationCount(\core_kernel_classes_Resource $user);
+    public function notificationCount( $userId);
 
 }
