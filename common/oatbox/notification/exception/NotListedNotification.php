@@ -21,7 +21,7 @@
 namespace oat\oatbox\notification\exception;
 
 
-class NotListedNotification extends \common_exception
+class NotListedNotificationNotListedNotification extends \common_exception_ClientException
 {
 
     public function __construct()
@@ -29,6 +29,11 @@ class NotListedNotification extends \common_exception
         $message = 'unable to search into notification.';
         $code    = 0;
         parent::__construct($message, $code);
+    }
+
+    public function getUserMessage()
+    {
+        return 'used Notification System doesn\'t implement search interface' ;
     }
 
 }
