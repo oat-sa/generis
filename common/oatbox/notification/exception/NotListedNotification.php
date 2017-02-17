@@ -33,7 +33,7 @@ class NotListedNotificationNotListedNotification extends \common_exception_Clien
 
     public function getUserMessage()
     {
-        return 'used Notification System doesn\'t implement search interface' ;
+        return __('used Notification System doesn\'t implement search interface') ;
     }
 
 }
