@@ -26,14 +26,14 @@ class NotListedNotification extends \common_exception_ClientException
 
     public function __construct()
     {
-        $message = 'unable to search into notification.';
+        $message = __('notifications drivers aren\'t persistent. use a persistent database storage driver');
         $code    = 0;
         parent::__construct($message, $code);
     }
 
     public function getUserMessage()
     {
-        return __('used Notification System doesn\'t implement search interface') ;
+        return __('unable to search into notification.') ;
     }
 
 }
