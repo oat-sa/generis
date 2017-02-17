@@ -80,7 +80,7 @@ class NotificationService extends ConfigurableService implements NotificationSer
          * @var NotificationServiceInterface  $service
          */
         foreach ($subServices as $service) {
-            if(($notification = $service->getNotifications($id)) !== false) {
+            if(($notification = $service->getNotification($id)) !== false) {
                 return $notification;
             }
         }

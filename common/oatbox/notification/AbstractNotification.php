@@ -42,6 +42,18 @@ abstract class AbstractNotification implements NotificationInterface, \JsonSeria
 
     protected $updatedAt;
 
+    /**
+     * AbstractNotification constructor.
+     * @param string $userId
+     * @param string $title
+     * @param string $message
+     * @param string $senderId
+     * @param string $senderName
+     * @param null|string $id
+     * @param null|string $createdAt
+     * @param null|string $updatedAt
+     * @param int $status
+     */
     public function __construct($userId , $title , $message , $senderId , $senderName  , $id = null, $createdAt = null , $updatedAt = null,  $status = 0)
     {
         $this->id         = $id;
@@ -93,7 +105,7 @@ abstract class AbstractNotification implements NotificationInterface, \JsonSeria
     }
 
     /**
-     * @return null
+     * @return string
      */
     public function getId()
     {
@@ -101,7 +113,7 @@ abstract class AbstractNotification implements NotificationInterface, \JsonSeria
     }
 
     /**
-     * @return null
+     * @return string
      */
     public function getCreatedAt()
     {
@@ -109,20 +121,33 @@ abstract class AbstractNotification implements NotificationInterface, \JsonSeria
     }
 
     /**
-     * @return null
+     * @return string
      */
     public function getUpdatedAt()
     {
         return strtotime($this->updatedAt);
     }
 
+    /**
+     * @param int $status
+     * @return $this
+     */
     public function setStatus($status)
     {
-        $this->status = $status;
+        if(is_int($status)) {
+            $this->status = $status;
+
+        } else {
+            $this->status = NotificationInterface::DEFAULT_STATUS;
+        }
         $this->updatedAt = date('Y-m-d H:i:s');
         return $this;
     }
 
+    /**
+     * @param string $id
+     * @return $this
+     */
     public function setId($id)
     {
         if(is_null($this->id)) {
