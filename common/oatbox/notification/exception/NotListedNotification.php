@@ -21,7 +21,7 @@
 namespace oat\oatbox\notification\exception;
 
 
-class NotListedNotificationNotListedNotification extends \common_exception_ClientException
+class NotListedNotification extends \common_exception_ClientException
 {
 
     public function __construct()
