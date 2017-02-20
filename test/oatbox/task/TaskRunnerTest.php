@@ -58,7 +58,7 @@ class TaskRunnerTest extends GenerisPhpUnitTestRunner
         $invocableReport = new \common_report_Report(\common_report_Report::TYPE_INFO, 'Invocable Called');
 
         $taskInvocableProphecy = $this->prophet->prophesize('oat\oatbox\action\Action');
-        $taskInvocableProphecy->__invoke(Argument::is(['foo', 'bar']))
+        $taskInvocableProphecy->__invoke(Argument::cetera(['foo', 'bar']))
             ->shouldBeCalledTimes(1)
             ->willReturn($invocableReport);
 
