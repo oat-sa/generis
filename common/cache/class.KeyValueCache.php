@@ -22,6 +22,8 @@
 
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\JsonUnserializable;
+
 /**
  * Caches data in a key-value store
  *
@@ -72,7 +74,7 @@ class common_cache_KeyValueCache extends ConfigurableService
         }
         
         if ($this->getOption(self::OPTION_JSONIFY) === true) {
-            $mixed = json_encode($mixed);
+            $mixed = ($returnValue instanceof \JsonSerializable) ? $mixed->jsonSerialize() : json_encode($mixed);
         }
         
         return $this->getPersistence()->set($serial, $mixed);
@@ -96,7 +98,7 @@ class common_cache_KeyValueCache extends ConfigurableService
         }
         
         if ($this->getOption(self::OPTION_JSONIFY) === true) {
-            $returnValue = json_decode($returnValue, true);
+            $returnValue = ($returnValue instanceof JsonUnserializable) ? $returnValue->jsonUnserialize() : json_decode($returnValue, true);
         }
         
         return $returnValue;
