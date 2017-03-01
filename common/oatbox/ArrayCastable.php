@@ -4,5 +4,5 @@ namespace oat\oatbox;
 
 interface ArrayCastable
 {
-    public function __toArray($mixed);
+    public function __toArray();
 }
