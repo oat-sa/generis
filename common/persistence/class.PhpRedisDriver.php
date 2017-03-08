@@ -25,7 +25,9 @@
 class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDriver
 {
 
-    const DEFAULT_PORT = 6379;
+    const DEFAULT_PORT    = 6379;
+    const DEFAULT_TRY     = 2;
+    const DEFAULT_TIMEOUT = 1.0;
 
     /**
      * @var Redis
@@ -45,12 +47,14 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         if (!isset($params['host'])) {
             throw new common_exception_Error('Missing host information for Redis driver');
         }
-        $host = $params['host'];
-        $port = isset($params['port']) ? $params['port'] : self::DEFAULT_PORT;
+        $host    = $params['host'];
+        $port    = isset($params['port']) ? $params['port'] : self::DEFAULT_PORT;
+        $timeout = isset($params['timeout']) ? $params['timeout'] : self::DEFAULT_TIMEOUT;
+        $retry   = isset($params['retry']) ? $params['retry'] : self::DEFAULT_TRY;
         $persist = isset($params['pconnect']) ? $params['pconnect'] : true;
         
         if ($persist) {
-            $this->connection->pconnect($host, $port);
+            $this->persistentConnection($host, $port , $timeout , $retry );
         } else {
             $this->connection->connect($host, $port);
         }
@@ -59,7 +63,26 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         }
         return new common_persistence_AdvKeyValuePersistence($params, $this);
     }
-    
+
+    /**
+     * @param $host
+     * @param $port
+     * @param $timeout
+     * @param int $tried
+     * @return bool
+     * @throws common_exception_Error
+     */
+    protected function persistentConnection($host, $port , $timeout , $retry , $tried = 1) {
+
+        if($tried <= $retry ) {
+            if($this->connection->pconnect($host, $port , $timeout)) {
+                return true;
+            }
+            return $this->persistentConnection($host, $port , $timeout , $retry , $tried+1);
+        }
+        throw new common_exception_Error('failed to connect to Redis Server');
+    }
+
     public function set($key, $value, $ttl = null)
     {
         if (! is_null($ttl)) {
