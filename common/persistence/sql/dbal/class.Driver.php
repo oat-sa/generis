@@ -74,19 +74,20 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return new common_persistence_sql_dbal_SchemaManager($this->connection->getSchemaManager());
     }
-    
-   
+
+
     /**
      * Execute the statement with provided params
      *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param mixed $statement
      * @param array $params
-     * @return integer number of affected row
+     * @param array $types
+     * @return int number of affected row
      */
-    public function exec($statement,$params = array())
+    public function exec($statement, array $params = array(), array $types = array())
     {
-        return $this->connection->executeUpdate($statement,$params);
+        return $this->connection->executeUpdate($statement, $params, $types);
     }
     
     

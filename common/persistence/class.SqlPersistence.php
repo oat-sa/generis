@@ -32,14 +32,16 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
 {
 
     /**
-     * 
+     *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param unknown $statement
-     * @param unknown $params
+     * @param mixed $statement
+     * @param array $params
+     * @param array $types
+     * @return
      */
-    public function exec($statement,$params = array())
+    public function exec($statement, array $params = array(), array $types = array())
     {
-        return $this->getDriver()->exec($statement,$params);
+        return $this->getDriver()->exec($statement, $params, $types);
     }
 
     
