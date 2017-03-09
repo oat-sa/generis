@@ -26,7 +26,7 @@ interface common_persistence_sql_Driver extends common_persistence_Driver{
     
     public function query($statement,$params);
 
-    public function exec($statement, array $params, array $types);
+    public function exec($statement, array $params);
     
     /**
      * Insert a single row into the database.
