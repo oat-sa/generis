@@ -86,7 +86,11 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      */
     public function exec($statement,$params = array())
     {
-        return $this->connection->executeUpdate($statement,$params);
+        $types = array();
+        foreach ($params as $key => $value) {
+            $types[$key] = $this->getPdoType($value);
+        }
+        return $this->connection->executeUpdate($statement,$params,$types);
     }
     
     
@@ -139,6 +143,28 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         return $this->connection->lastInsertId($name);
     }
 
-    
+    /**
+     * Determines what pdo type best represents the variable
+     * 
+     * @param $value
+     * @return int
+     */
+    private function getPdoType($value)
+    {
+        switch (true) {
+            case is_bool($value):
+                $type = PDO::PARAM_BOOL;
+                break;
+            case is_int($value):
+                $type = PDO::PARAM_INT;
+                break;
+            case is_null($value):
+                $type = PDO::PARAM_NULL;
+                break;
+            default:
+                $type = PDO::PARAM_STR;
+        }
+        return $type;
+    }
 
 }
