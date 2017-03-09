@@ -248,10 +248,7 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
         	$sth = $this->dbConnector->prepare($statement);
         	$this->preparedExec = true;
         	$this->lastPreparedExecStatement = $sth;
-            foreach ($params as $i => $param) {
-                $sth->bindValue(is_numeric($i) ? $i + 1 : $i, $param, $this->getParamType($param));
-            }
-        	$sth->execute();
+        	$sth->execute($params);
         	$returnValue = $sth->rowCount();
         }
         else{
@@ -486,28 +483,6 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
     public function getParams()
     {
         return $this->params;
-    }
-
-    /**
-     * @param $value
-     * @return int
-     */
-    private function getParamType($value)
-    {
-        switch (true) {
-            case is_bool($value):
-                $type = PDO::PARAM_BOOL;
-                break;
-            case is_int($value):
-                $type = PDO::PARAM_INT;
-                break;
-            case is_null($value):
-                $type = PDO::PARAM_NULL;
-                break;
-            default:
-                $type = PDO::PARAM_STR;
-        }
-        return $type;
     }
 
 }
