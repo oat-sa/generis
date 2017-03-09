@@ -237,21 +237,21 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string statement
-     * @param  array params
+     * @param  string $statement
+     * @param  array $params
+     * @param array $types
      * @return int
      */
-    public function exec($statement, $params = array())
+    public function exec($statement, array $params = array(), array $types = array())
     {
 		
         if (count($params) > 0){
         	$sth = $this->dbConnector->prepare($statement);
         	$this->preparedExec = true;
         	$this->lastPreparedExecStatement = $sth;
-            foreach ($params as $i => $param) {
+            foreach ($params as $i => $param) {      //@TODO proper support of $types should be introduced later
                 $sth->bindValue(is_numeric($i) ? $i + 1 : $i, $param, $this->getParamType($param));
             }
-        	$sth->execute();
         	$returnValue = $sth->rowCount();
         }
         else{
