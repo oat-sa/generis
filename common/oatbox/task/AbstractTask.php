@@ -37,6 +37,11 @@ abstract class AbstractTask implements Task
     protected $id;
 
     /**
+     * @var string
+     */
+    protected $label;
+
+    /**
      * @var
      */
     protected $invocable;
@@ -52,10 +57,18 @@ abstract class AbstractTask implements Task
     protected $params;
 
     /**
+     * @var string
+     */
+    protected $type;
+    /**
      * Task execution report
      * @var null|array
      */
     protected $report;
+
+    protected $creationDate;
+
+    protected $owner;
 
     /**
      * @return string
@@ -63,6 +76,30 @@ abstract class AbstractTask implements Task
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $label
+     */
+    public function setLabel($label) {
+        $this->label = $label;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel() {
+        return $this->label;
     }
 
     /**
@@ -137,4 +174,39 @@ abstract class AbstractTask implements Task
     {
         $this->report = $report;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
+
+    /**
+     * @param mixed $creationDate
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param mixed $owner
+     */
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+    }
+
+
+
 }

@@ -22,17 +22,24 @@ namespace oat\oatbox\task;
 
 interface Queue extends \IteratorAggregate
 {
+    /**
+     * @deprecated since 3.15.2
+     */
     const CONFIG_ID = 'generis/taskqueue';
+
+    const SERVICE_ID = 'generis/taskqueue';
 
     const FILE_SYSTEM_ID = 'taskQueueStorage';
 
     /**
      * @param $actionId
      * @param $parameters
+     * @param $label
+     * @param $task
      * @param boolean $repeatedly Whether task created repeatedly (for example when execution of task was failed and task puts to the queue again).
      * @return mixed
      */
-    public function createTask($actionId, $parameters, $repeatedly = false);
+    public function createTask($actionId, $parameters, $repeatedly = false , $label = null , $task = null);
     
     public function getIterator();
 

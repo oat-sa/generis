@@ -26,7 +26,7 @@ class TaoSearchDriver extends EscaperAbstract {
 
     public function __construct() {
         $this->persistence = ServiceManager::getServiceManager()
-                ->get(\common_persistence_Manager::SERVICE_KEY)
+                ->get(\common_persistence_Manager::SERVICE_ID)
                 ->getPersistenceById('default');
     }
     
@@ -87,5 +87,27 @@ class TaoSearchDriver extends EscaperAbstract {
         $name = $this->persistence->getPlatForm()->getName();
         return $group[$name] . '(' . $variable . ',' . $this->escape($this->quote($separator)) . ')'; 
     }
-    
+
+    /**
+     * return case insensitive like operator
+     * @return string
+     */
+    public function like() {
+        $like = [
+            'mysql'      => 'LIKE',
+            'postgresql' => 'ILIKE',
+        ];
+
+        $name = $this->persistence->getPlatForm()->getName();
+        return $like[$name];
+    }
+
+    /**
+     * return case insensitive like operator
+     * @return string
+     */
+    public function notLike() {
+        return 'NOT ' . $this->like() ;
+    }
+
 }

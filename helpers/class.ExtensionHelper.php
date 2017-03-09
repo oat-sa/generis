@@ -147,17 +147,20 @@ class helpers_ExtensionHelper{
                     'GENERIS');
             }
             if ($requiredVersion != '*') {
-                $matches = array();
-                preg_match('/[0-9\.]+/', $requiredVersion, $matches, PREG_OFFSET_CAPTURE);
-                if (count($matches) == 1) {
-                    $match = current($matches);
-                    $nr = $match[0];
-                    $operator = $match[1] > 0 ? substr($requiredVersion, 0, $match[1]) : '=';
-                    if (!version_compare($installedVersion, $nr, $operator)) {
-                        throw new common_ext_OutdatedVersionException('Installed version of '.$requiredExt.' '.$installedVersion.' does not satisfy required '.$requiredVersion.' for '.$extension->getId());
+                $conditions = is_array($requiredVersion) ? $requiredVersion : [$requiredVersion];
+                foreach ($conditions as $condition) {
+                    $matches = array();
+                    preg_match('/[0-9\.]+/', $condition, $matches, PREG_OFFSET_CAPTURE);
+                    if (count($matches) == 1) {
+                        $match = current($matches);
+                        $nr = $match[0];
+                        $operator = $match[1] > 0 ? substr($condition, 0, $match[1]) : '=';
+                        if (!version_compare($installedVersion, $nr, $operator)) {
+                            throw new common_ext_OutdatedVersionException('Installed version of '.$requiredExt.' '.$installedVersion.' does not satisfy required '.$condition.' for '.$extension->getId());
+                        }
+                    } else {
+                        throw new common_exception_Error('Unsupported version requirement: "'.$condition.'"');
                     }
-                } else {
-                    throw new common_exception_Error('Unsupported version requirement: "'.$requiredVersion.'"');
                 }
             }
         }
