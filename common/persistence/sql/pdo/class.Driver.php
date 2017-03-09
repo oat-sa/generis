@@ -249,7 +249,7 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
         	$this->preparedExec = true;
         	$this->lastPreparedExecStatement = $sth;
             foreach ($params as $i => $param) {
-                $sth->bindValue(is_numeric($i) ? $i + 1 : ':' . $i, $param, $this->getParamType($param));
+                $sth->bindValue(is_numeric($i) ? $i + 1 : $i, $param, $this->getParamType($param));
             }
         	$sth->execute();
         	$returnValue = $sth->rowCount();
