@@ -85,7 +85,8 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
             $attempt++;
         }
         if($retry  >= $attempt) {
-            usleep(self::RETRY_DELAY);
+            $delay = rand(self::RETRY_DELAY , self::RETRY_DELAY*2);
+            usleep($delay);
             $result = $this->callWithRetry( $method , $params , $retry , $attempt);
         } else {
             $this->connection->close();
@@ -114,11 +115,11 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     }
     
     public function exists($key) {
-        return $this->connection->exists($key);
+        return $this->callWithRetry('exists' , [$key] , self::DEFAULT_ATTEMPT);
     }
     
     public function del($key) {
-        return $this->connection->del($key);
+        return $this->callWithRetry('del' , [$key] , self::DEFAULT_ATTEMPT);
     }
 
     //O(N) where N is the number of fields being set.
