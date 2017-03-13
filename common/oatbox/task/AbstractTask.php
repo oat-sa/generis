@@ -20,9 +20,10 @@
 
 namespace oat\oatbox\task;
 
-use oat\oatbox\extension\AbstractAction;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\oatbox\filesystem\FileSystemService;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use oat\oatbox\service\ServiceManager as ServiceManager;
 
 /**
  * Class SyncTask
@@ -32,8 +33,10 @@ use oat\oatbox\filesystem\FileSystemService;
  * @package oat\oatbox\task\implementation
  * @author Aleh Hutnikau, <huntikau@1pt.com>
  */
-abstract class AbstractTask extends AbstractAction implements Task
+abstract class AbstractTask implements Task
 {
+
+    use ServiceLocatorAwareTrait;
 
     const FILE_DIR = 'taskQueue';
 
@@ -211,6 +214,20 @@ abstract class AbstractTask extends AbstractAction implements Task
     public function setOwner($owner)
     {
         $this->owner = $owner;
+    }
+
+    /**
+     *
+     * @throws common_exception_Error
+     * @return ServiceManager
+     */
+    public function getServiceManager()
+    {
+        $serviceManager = $this->getServiceLocator();
+        if (!$serviceManager instanceof ServiceManager) {
+            throw new common_exception_Error('Alternate service locator not compatible with '.__CLASS__);
+        }
+        return $serviceManager;
     }
 
     /**
