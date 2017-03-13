@@ -20,11 +20,6 @@
 
 namespace oat\oatbox\task;
 
-use oat\generis\model\fileReference\ResourceFileSerializer;
-use oat\oatbox\filesystem\FileSystemService;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use oat\oatbox\service\ServiceManager as ServiceManager;
-
 /**
  * Class SyncTask
  *
@@ -35,10 +30,6 @@ use oat\oatbox\service\ServiceManager as ServiceManager;
  */
 abstract class AbstractTask implements Task
 {
-
-    use ServiceLocatorAwareTrait;
-
-    const FILE_DIR = 'taskQueue';
 
     /**
      * @var string
@@ -216,67 +207,6 @@ abstract class AbstractTask implements Task
         $this->owner = $owner;
     }
 
-    /**
-     *
-     * @throws common_exception_Error
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        $serviceManager = $this->getServiceLocator();
-        if (!$serviceManager instanceof ServiceManager) {
-            throw new common_exception_Error('Alternate service locator not compatible with '.__CLASS__);
-        }
-        return $serviceManager;
-    }
 
-    /**
-     * Save and serialize file into task queue filesystem.
-     *
-     * @param string $path file path
-     * @param string $name file name
-     * @return string file reference uri
-     */
-    protected function saveFile($path, $name)
-    {
-        $filename = $this->getUniqueFilename($name);
 
-        /** @var \oat\oatbox\filesystem\Directory $dir */
-        $dir = $this->getServiceManager()->get(FileSystemService::SERVICE_ID)
-            ->getDirectory(Queue::FILE_SYSTEM_ID);
-        /** @var \oat\oatbox\filesystem\FileSystem $filesystem */
-        $filesystem = $dir->getFileSystem();
-
-        $stream = fopen($path, 'r+');
-        $filesystem->writeStream($filename, $stream);
-        fclose($stream);
-
-        $file = $dir->getFile($filename);
-        return $this->getFileReferenceSerializer()->serialize($file);
-    }
-
-    /**
-     * Create a new unique filename based on an existing filename
-     *
-     * @param string $fileName
-     * @return string
-     */
-    protected function getUniqueFilename($fileName)
-    {
-        $value = uniqid(md5($fileName));
-        $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-        if (!empty($ext)){
-            $value .= '.' . $ext;
-        }
-        return static::FILE_DIR . '/' . $value;
-    }
-
-    /**
-     * Get serializer to persist filesystem object
-     * @return ResourceFileSerializer
-     */
-    protected function getFileReferenceSerializer()
-    {
-        return $this->getServiceManager()->get(ResourceFileSerializer::SERVICE_ID);
-    }
 }
