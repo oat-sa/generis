@@ -25,9 +25,10 @@
 class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDriver
 {
 
-    const DEFAULT_PORT    = 6379;
-    const DEFAULT_TRY     = 2;
-    const DEFAULT_TIMEOUT = 1.0;
+    const DEFAULT_PORT     = 6379;
+    const DEFAULT_ATTEMPT  = 3;
+    const DEFAULT_TIMEOUT  = 5;
+    const RETRY_DELAY      = 1000000; // Eq to 1s
 
     /**
      * @var Redis
@@ -50,51 +51,66 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         $host    = $params['host'];
         $port    = isset($params['port']) ? $params['port'] : self::DEFAULT_PORT;
         $timeout = isset($params['timeout']) ? $params['timeout'] : self::DEFAULT_TIMEOUT;
-        $retry   = isset($params['retry']) ? $params['retry'] : self::DEFAULT_TRY;
+        $retry   = isset($params['atempt']) ? $params['atempt'] : self::DEFAULT_ATTEMPT;
         $persist = isset($params['pconnect']) ? $params['pconnect'] : true;
-        
+        $connectMethod = 'connect';
+
         if ($persist) {
-            $this->persistentConnection($host, $port , $timeout , $retry );
-        } else {
-            $this->connection->connect($host, $port);
+            $connectMethod = 'pconnect';
         }
+
+        $this->callWithRetry($connectMethod , [$host , $port , $timeout] , $retry);
+
         if (isset($params['password'])) {
             $this->connection->auth($params['password']);
         }
+
         return new common_persistence_AdvKeyValuePersistence($params, $this);
     }
 
     /**
-     * @param $host
-     * @param $port
-     * @param $timeout
-     * @param int $tried
-     * @return bool
-     * @throws common_exception_Error
+     * @param $method
+     * @param array $params
+     * @param $retry
+     * @param int $attempt
+     * @return mixed
+     * @throws Exception
      */
-    protected function persistentConnection($host, $port , $timeout , $retry , $tried = 1) {
-
-        if($tried <= $retry ) {
-            if($this->connection->pconnect($host, $port , $timeout)) {
-                return true;
-            }
-            return $this->persistentConnection($host, $port , $timeout , $retry , $tried+1);
+    protected function callWithRetry( $method , array $params , $retry , $attempt = 1) {
+        try {
+            $result = call_user_func_array([$this->connection , $method] , $params);
+            return $result;
+        } catch (\Exception $e) {
+            \common_Logger::d('Redis  ' . $method . ' failed ' . $attempt . '/' . $retry . ' :  ' . $e->getMessage());
+            $attempt++;
         }
-        throw new common_exception_Error('failed to connect to Redis Server');
+        if($retry  >= $attempt) {
+            usleep(self::RETRY_DELAY);
+            $result = $this->callWithRetry( $method , $params , $retry , $attempt);
+        } else {
+            $this->connection->close();
+            throw $e;
+        }
+
+        return $result;
+
     }
 
     public function set($key, $value, $ttl = null)
     {
         if (! is_null($ttl)) {
-            return $this->connection->set($key, $value, $ttl);
+            $params = [$key, $value, $ttl];
         } else {
-            return $this->connection->set($key, $value);
+            $params = [$key, $value];
         }
+        return $this->callWithRetry('set' , $params , self::DEFAULT_ATTEMPT);
         
     }
     
     public function get($key) {
-        return $this->connection->get($key);
+
+        return $this->callWithRetry('get' , [$key] , self::DEFAULT_ATTEMPT);
+
     }
     
     public function exists($key) {
@@ -133,4 +149,5 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     public function incr($key) {
        return $this->connection->incr($key); 
     }
+
 }
