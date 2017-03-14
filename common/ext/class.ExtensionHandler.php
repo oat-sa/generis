@@ -1,4 +1,6 @@
 <?php
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use oat\oatbox\service\ServiceManager;
 /**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,9 +51,31 @@ abstract class common_ext_ExtensionHandler
 		$this->extension = $extension;
     }
     
+    /**
+     * @return common_ext_Extension
+     */
     protected function getExtension()
     {
         return $this->extension;
     }
-
+    
+    /**
+     * @param mixed $script
+     * @throws common_ext_InstallationException
+     */
+    protected function runExtensionScript($script)
+    {
+        common_Logger::d('Running custom extension script '.$script.' for extension '.$this->getExtension()->getId(), 'INSTALL');
+        if (file_exists($script)) {
+            require_once $script;
+        } elseif (class_exists($script) && is_subclass_of($script, 'oat\\oatbox\\action\\Action')) {
+            $action = new $script();
+            if ($action instanceof ServiceLocatorAwareInterface) {
+                $action->setServiceLocator(ServiceManager::getServiceManager());
+            }
+            $report = call_user_func($action, array());
+        } else {
+            throw new common_ext_InstallationException('Unable to run install script '.$script);
+        }
+    }
 }

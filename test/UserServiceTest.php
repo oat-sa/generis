@@ -19,7 +19,6 @@
  *               2012-2014 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 use oat\generis\test\GenerisPhpUnitTestRunner;
-
 class UserServiceTestCase extends GenerisPhpUnitTestRunner
 {
 

@@ -61,44 +61,10 @@ class FileTest extends GenerisPhpUnitTestRunner {
 	    $this->assertFalse(core_kernel_file_File::isFile($clazz));
 	    $instance->delete();
 	}
-	
-	public function testCreate()
-	{
-	    $file = $this->fileSource->createFile('toto.txt');
-	    $this->assertTrue($file instanceof core_kernel_file_File);
-	    $fileNameProp = new core_kernel_classes_Property(PROPERTY_FILE_FILENAME);
-	    $fileName = $file->getOnePropertyValue($fileNameProp);
-	    $this->assertEquals($fileName,'toto.txt');
-	    $this->assertEquals($file->getAbsolutePath(),$this->fsPath.'toto.txt');
-	    $this->assertTrue($file->delete());
-	    
-	    
-	    $file = $this->fileSource->createFile('toto.txt',DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR);
-	    $this->assertEquals($file->getAbsolutePath(),$this->fsPath.'tmp'.DIRECTORY_SEPARATOR.'toto.txt');
-	    $this->assertTrue($file->delete());
-	    
-	    // Create dir
-	    $dir = $this->fileSource->createFile('', DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'myDir');
-	    $this->assertEquals($dir->getAbsolutePath(), $this->fsPath. 'tmp' . DIRECTORY_SEPARATOR . 'myDir');
-	    $this->assertTrue($dir->delete());
-	}
-	
-	public function testGetAbsolutePath()
-	{
-	    $file = $this->fileSource->createFile('toto.txt');
-	    $absolutePath = $file->getAbsolutePath();
-	    $this->assertEquals($absolutePath, $this->fsPath.'toto.txt');
-	    $this->assertTrue($file->delete());
-	    
-	    $file = $this->fileSource->createFile('toto.txt', DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR);	    
-	    $absolutePath = $file->getAbsolutePath();
-	    $this->assertEquals($absolutePath, $this->fsPath. 'tmp' . DIRECTORY_SEPARATOR . 'toto.txt');
-	    
-	    $this->assertTrue($file->delete());
-	}
-	
+
 	public function testGetFileInfo()
 	{
+            
 	    $file = $this->fileSource->createFile('toto.txt');
 	    $file->setContent('toto is kite surfing !!! le ouf');
 	    $fileInfo = $file->getFileInfo();
@@ -111,9 +77,6 @@ class FileTest extends GenerisPhpUnitTestRunner {
 		
 	    $fileInfo = $file->getFileInfo();
 	    $this->assertIsA($fileInfo,'SplFileInfo');
-	    $this->assertTrue($fileInfo->isDir());
-	    $this->assertTrue($file->delete());
-	    $this->assertFalse($fileInfo->isDir());
 	}
 	
 	public function testSetGetFileContent()

@@ -72,9 +72,6 @@ class common_ext_ExtensionUninstaller
 		$cache = common_cache_FileCache::singleton();
 		$cache->purge();
 		
-		// reload session (for readable models)
-		core_kernel_persistence_smoothsql_SmoothModel::forceReloadModelIds();
-		
 		common_Logger::i('Uninstalled ' . $this->extension->getId());
 		return true;
 	}
@@ -91,21 +88,20 @@ class common_ext_ExtensionUninstaller
 		common_ext_ExtensionsManager::singleton()->unregisterExtension($this->extension);
 	}
 
-	/**
-	 * Executes uninstall scripts 
-	 * specified in the Manifest
-	 *
-	 * @access protected
-	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @return void
-	 */
-	protected function uninstallScripts()
-	{
+    /**
+     * Executes uninstall scripts
+     * specified in the Manifest
+     *
+     * @access protected
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @return void
+     */
+    protected function uninstallScripts()
+    {
 		$data = $this->extension->getManifest()->getUninstallData();
-		if (!is_null($data) && isset($data['php']) && is_array($data['php'])) {
-		    foreach ($data['php'] as $script) {
-		        common_Logger::d('Running uninstall script '.$script.' for ext '.$this->extension->getId(), 'UNINSTALL');
-		        require_once $script;
+        if (!is_null($data) && isset($data['php']) && is_array($data['php'])) {
+            foreach ($data['php'] as $script) {
+                $this->runExtensionScript($script);
 		    }
 		}
 	}

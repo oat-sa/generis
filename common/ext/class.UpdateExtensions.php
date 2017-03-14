@@ -66,6 +66,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
                 $report->add(new common_report_Report(common_report_Report::TYPE_ERROR, $ex->getMessage()));
                 break;
             } catch (Exception $e) {
+                $this->logError('Exception during update of '.$ext->getId().': '.get_class($e).' "'.$e->getMessage().'"');
                 $report->setType(common_report_Report::TYPE_ERROR);
                 $report->setTitle('Update failed');
                 $report->add(new common_report_Report(common_report_Report::TYPE_ERROR, 'Exception during update of '.$ext->getId().'.'));
@@ -113,7 +114,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
                 common_cache_FileCache::singleton()->purge();
             }
         } else {
-            $report = new common_report_Report(common_report_Report::TYPE_INFO, $ext->getName().' already up to data');
+            $report = new common_report_Report(common_report_Report::TYPE_INFO, $ext->getName().' already up to date');
         }
         return $report;
     }

@@ -20,6 +20,9 @@
  *               2012-2014 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+use oat\oatbox\service\ServiceManager;
+use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+
 /**
  * Short description of class core_kernel_persistence_smoothsql_Class
  *
@@ -300,6 +303,8 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
 
     /**
      * (non-PHPdoc)
+     * prefer use 
+     * @deprecated since 3.0
      * @see core_kernel_persistence_ClassInterface::searchInstances()
      */
     public function searchInstances(core_kernel_classes_Class $resource, $propertyFilters = array(), $options = array())
@@ -341,7 +346,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         }
         
 		$query = 'SELECT count(subject) FROM (' . $this->getFilteredQuery($resource, $propertyFilters, $options) . ') as countq';
-		return $this->getPersistence()->query($query)->fetchColumn();
+		return (int)$this->getPersistence()->query($query)->fetchColumn();
     }
 
     /**
@@ -485,8 +490,13 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         $order = (isset($options['order']) === false) ? '' : $options['order'];
         $orderdir = (isset($options['orderdir']) === false) ? 'ASC' : $options['orderdir'];
 
-        $query = core_kernel_persistence_smoothsql_Utils::buildFilterQuery($this->getModel(), $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
-        
+        if(ServiceManager::getServiceManager()->has(ComplexSearchService::SERVICE_ID)) {
+            $search = $this->getModel()->getSearchInterface();
+            $query = $search->getQuery($this->getModel(), $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
+        } else {
+            $query = core_kernel_persistence_smoothsql_Utils::buildFilterQuery($this->getModel(), $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
+        }
+
         return $query;
     }
 }

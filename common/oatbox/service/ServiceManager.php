@@ -21,6 +21,7 @@
 namespace oat\oatbox\service;
 
 use common_ext_ExtensionsManager;
+use oat\oatbox\Configurable;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 /**
@@ -41,6 +42,9 @@ class ServiceManager implements ServiceLocatorInterface
     
     private $services = array();
     
+    /**
+     * @var \common_persistence_KeyValuePersistence
+     */
     private $configService;
     
     public function __construct($configService)
@@ -63,9 +67,7 @@ class ServiceManager implements ServiceLocatorInterface
             if ($service === false) {
                 throw new ServiceNotFoundException($serviceKey);
             }
-            if ($service instanceof ServiceLocatorAwareInterface) {
-                $service->setServiceLocator($this);
-            }
+            $this->propagate($service);
             
             $this->services[$serviceKey] = $service;
         }
@@ -104,8 +106,18 @@ class ServiceManager implements ServiceLocatorInterface
         if (count($parts) < 2) {
             throw new \common_Exception('Invalid servicekey '.$serviceKey);
         }
+        $this->propagate($service);
         $this->services[$serviceKey] = $service;
-        $this->getConfig()->set($serviceKey, $service);
+        $success = $this->getConfig()->set($serviceKey, $service);
+        if (!$success) {
+            throw new \common_exception_Error('Unable to write '.$serviceKey);
+        }
+    }
+
+    public function unregister($serviceKey)
+    {
+        unset($this->services[$serviceKey]);
+        return $this->getConfig()->del($serviceKey);
     }
 
     /**
@@ -114,5 +126,38 @@ class ServiceManager implements ServiceLocatorInterface
     protected function getConfig()
     {
         return $this->configService;
+    }
+    
+    /**
+     * Propagate service dependencies
+     *
+     * @param  $service
+     * @return mixed
+     */
+    public function propagate($service)
+    {
+         if(is_object($service) &&  ($service instanceof ServiceLocatorAwareInterface)){
+            $service->setServiceLocator($this);
+        }
+        return $service;
+    }
+
+
+    /**
+     * Service or sub-service factory
+     *
+     * @param $className
+     * @param array $options
+     * @return mixed
+     */
+    public function build($className , array $options = [] )
+    {
+        if (is_a($className, Configurable::class, true)) {
+            $service = new $className($options);
+            $this->propagate($service);
+            return $service;
+        }
+
+        throw new ServiceNotFoundException($className);
     }
 }

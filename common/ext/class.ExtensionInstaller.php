@@ -21,7 +21,6 @@
 
 use oat\generis\model\data\ModelManager;
 use oat\oatbox\action\ActionResolver;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
 
@@ -124,9 +123,11 @@ class common_ext_ExtensionInstaller
     		$defaultIterator = new DirectoryIterator ($defaultsPath);
     		foreach ($defaultIterator as $fileinfo) {
     		    if (!$fileinfo->isDot () && strpos($fileinfo->getFilename(), '.conf.php') > 0) {
-    		        $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
-    		        $config = include $fileinfo->getPathname();
-    		        $this->extension->setConfig($confKey, $config);
+                    $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
+                    if (! $this->extension->hasConfig($confKey)) {
+                        $config = include $fileinfo->getPathname();
+                        $this->extension->setConfig($confKey, $config);
+                    }
     		    }
     		}
 	    }
@@ -180,18 +181,7 @@ class common_ext_ExtensionInstaller
 		
 		//install script
 		foreach ($this->extension->getManifest()->getInstallPHPFiles() as $script) {
-			common_Logger::d('Running custom install script '.$script.' for extension '.$this->extension->getId(), 'INSTALL');
-			if (file_exists($script)) {
-			    require_once $script;
-			} elseif (class_exists($script) && is_subclass_of($script, 'oat\\oatbox\\action\\Action')) {
-                $action = new $script();
-		        if ($action instanceof ServiceLocatorAwareInterface) {
-		            $action->setServiceLocator(ServiceManager::getServiceManager());
-		        }
-		        $report = call_user_func($action, array());
-			} else {
-			    throw new common_ext_InstallationException('Unable to run install script '.$script);
-			}
+		    $this->runExtensionScript($script);
 		}
 		
 	}
@@ -203,20 +193,17 @@ class common_ext_ExtensionInstaller
 	 * @author Jerome Bogaerts, <jerome@taotesting.com>
 	 * @return void
 	 */
-	protected function installLocalData()
-	{
-		
-		$localData = $this->extension->getManifest()->getLocalData();
-		if(isset($localData['php'])) {
-			$scripts = $localData['php'];
-			$scripts = is_array($scripts) ? $scripts : array($scripts);
-			foreach ($scripts as $script) {
-				common_Logger::d('Running local data script '.$script.' for extension '.$this->extension->getId(), 'INSTALL');
-				require_once $script;
-			}
-		}
-		
-	}
+    protected function installLocalData()
+    {
+        $localData = $this->extension->getManifest()->getLocalData();
+        if(isset($localData['php'])) {
+            $scripts = $localData['php'];
+            $scripts = is_array($scripts) ? $scripts : array($scripts);
+            foreach ($scripts as $script) {
+                $this->runExtensionScript($script);
+            }
+        }
+    }
 
 	/**
 	 * Instantiate a new ExtensionInstaller for a given Extension.

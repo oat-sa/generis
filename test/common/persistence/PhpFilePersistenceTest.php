@@ -32,6 +32,11 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
     
     public function setUp()
     {
+        if (!class_exists('org\bovigo\vfs\vfsStream')) {
+            $this->markTestSkipped(
+                'filepersistence tests require mikey179/vfsStream'
+            );
+        }
         $this->root = vfsStream::setup('data');
     }
     
