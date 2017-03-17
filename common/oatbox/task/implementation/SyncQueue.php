@@ -88,13 +88,24 @@ class SyncQueue extends ConfigurableService implements Queue
     /**
      * @param $taskId
      * @param $status
-     * @param $report
      * @return self
      */
-    public function updateTaskStatus($taskId, $status, $report = '')
+    public function updateTaskStatus($taskId, $status)
     {
         if (isset($this->tasks[$taskId])) {
             $this->tasks[$taskId]->setStatus($status);
+        }
+        return $this;
+    }
+
+    /**
+     * @param $taskId
+     * @param $report
+     * @return self
+     */
+    public function updateTaskReport($taskId, $report)
+    {
+        if (isset($this->tasks[$taskId])) {
             $this->tasks[$taskId]->setReport($report);
         }
         return $this;
