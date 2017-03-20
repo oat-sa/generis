@@ -21,6 +21,7 @@
 namespace oat\oatbox\event;
 
 use oat\oatbox\service\ConfigurableService;
+
 /**
  * The simple placeholder ServiceManager
  * @author Joel Bout <joel@taotesting.com>
@@ -122,10 +123,22 @@ class EventManager extends ConfigurableService
      * @param Event $eventObject
      * @return Callable[] listeners associated with this event
      */
-    protected function getListeners(Event $eventObject) {
+    protected function getListeners(Event $eventObject)
+    {
         $listeners = $this->getOption(self::OPTION_LISTENERS);
-        return isset($listeners[$eventObject->getName()])
-            ? $listeners[$eventObject->getName()]
-            : array();
+
+        if (isset($listeners[$eventObject->getName()])) {
+            return $listeners[$eventObject->getName()];
+        }
+
+        // try to find listeners of the first parent class if exists
+        $parents = class_parents(get_class($eventObject));
+        foreach ($parents as $parent) {
+            if (isset($listeners[$parent])) {
+                return $listeners[$parent];
+            }
+        }
+
+        return [];
     }
 }

@@ -221,7 +221,6 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('2.20.0');
         }
 
-
         $this->skip('2.20.0', '2.29.1');
         if ($this->isVersion('2.29.1')) {
             $this->getServiceManager()->register(FileReferenceSerializer::SERVICE_ID, new ResourceFileSerializer());
