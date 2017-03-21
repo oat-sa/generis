@@ -22,6 +22,7 @@
 
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ConfigurableService;
+
 /**
  * Caches data in a key-value store
  *
@@ -34,6 +35,7 @@ class common_cache_KeyValueCache extends ConfigurableService
 {
     const OPTION_PERSISTENCE = 'persistence';
     
+    const OPTION_JSONIFY = 'jsonify';
     
     /**
      * @var common_persistence_KeyValuePersistence
@@ -69,6 +71,11 @@ class common_cache_KeyValueCache extends ConfigurableService
         	}
         	$serial = $mixed->getSerial();
         }
+        
+        if ($this->getOption(self::OPTION_JSONIFY) === true) {
+            $mixed = json_encode($mixed);
+        }
+        
         return $this->getPersistence()->set($serial, $mixed);
     }
 
@@ -88,6 +95,11 @@ class common_cache_KeyValueCache extends ConfigurableService
             $msg = "No cache entry found for '".$serial."'.";
             throw new common_cache_NotFoundException($msg);
         }
+        
+        if ($this->getOption(self::OPTION_JSONIFY) === true) {
+            $returnValue = json_decode($returnValue, true);
+        }
+        
         return $returnValue;
     }
 
