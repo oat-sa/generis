@@ -20,6 +20,8 @@
 
 namespace oat\oatbox\config;
 
+
+
 /**
  * Configurable base class
  * 
@@ -75,7 +77,25 @@ trait ConfigSets
         $option = $this->getHashOption($key);
         return isset($option[$field]) ? $option[$field] : null;
     }
-    
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    abstract public function getOption($name);
+
+    /**
+     * @param string $name
+     * @return boolean
+     */
+    abstract public function hasOption($name);
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     */
+    abstract public function setOption($name, $value);
+
     /**
      * Retroieve an option and ensure it is an array
      * 
@@ -90,4 +110,5 @@ trait ConfigSets
         }
         return $option;
     }
+
 }
