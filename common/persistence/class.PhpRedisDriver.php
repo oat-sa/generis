@@ -63,7 +63,6 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         $host    = $params['host'];
         $port    = isset($params['port']) ? $params['port'] : self::DEFAULT_PORT;
         $timeout = isset($params['timeout']) ? $params['timeout'] : self::DEFAULT_TIMEOUT;
-        $retry   = isset($params['atempt']) ? $params['atempt'] : self::DEFAULT_ATTEMPT;
         $persist = isset($params['pconnect']) ? $params['pconnect'] : true;
 
         if ($persist) {
