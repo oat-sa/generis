@@ -71,7 +71,7 @@ class SyncQueueTest extends GenerisPhpUnitTestRunner
         $fakeReport = 'My test';
         $queue = new SyncQueue();
         $task = $queue->createTask('Action', []);
-        $this->assertEquals(null, $task->getStatus());
+        $this->assertEquals(null, $task->getReport());
         $queue->updateTaskReport($task->getId(), $fakeReport);
         $this->assertEquals($fakeReport, $task->getReport());
     }
