@@ -311,7 +311,7 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('3.10.0');
         }
 
-        $this->skip('3.10.0', '3.19.0');
+        $this->skip('3.10.0', '3.20.0');
 
     }
     
