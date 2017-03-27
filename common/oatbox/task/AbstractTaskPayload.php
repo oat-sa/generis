@@ -21,6 +21,7 @@
 namespace oat\oatbox\task;
 
 use oat\tao\model\datatable\DatatablePayload;
+use oat\tao\model\datatable\DatatableRequest;
 
 /**
  * Class AbstractTaskPayload
@@ -32,13 +33,25 @@ use oat\tao\model\datatable\DatatablePayload;
 abstract class AbstractTaskPayload implements DatatablePayload
 {
 
+    /** @var DatatableRequest $request */
+    protected $request;
+
     /**
+     * Search task with specific filters
      * @return Task[]
      */
     abstract protected function search();
 
+    /**
+     * Count the number of tasks satisfying the filters
+     * @return integer
+     */
     abstract protected function count();
 
+    /**
+     * Return the payload to display to user
+     * @return array
+     */
     public function getPayload() {
 
         $iterator = $this->search();
