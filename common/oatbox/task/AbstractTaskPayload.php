@@ -82,5 +82,10 @@ abstract class AbstractTaskPayload implements DatatablePayload
 
     }
 
+    public function jsonSerialize()
+    {
+        return $this->getPayload();
+    }
+
 
 }
