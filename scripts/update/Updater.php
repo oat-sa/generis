@@ -26,6 +26,7 @@ use common_Logger;
 use common_ext_ExtensionsManager;
 use oat\generis\model\data\permission\PermissionManager;
 use oat\generis\model\data\ModelManager;
+use oat\oatbox\action\ActionService;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\event\EventManager;
@@ -165,6 +166,11 @@ class Updater extends \common_ext_ExtensionUpdater {
             );
             $this->getServiceManager()->register(EventManager::CONFIG_ID, $eventManager);
             $currentVersion = '2.11.0';
+        }
+
+        if ($this->isVersion('2.11.0')) {
+            $this->getServiceManager()->register(ActionService::SERVICE_ID, new ActionService());
+            $this->setVersion('2.11.2');
         }
 
         return $currentVersion;
