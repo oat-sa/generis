@@ -44,6 +44,7 @@ define('ROOT_URL',  '');
 
 # language
 define('DEFAULT_LANG', '');
+define('DEFAULT_ANONYMOUS_INTERFACE_LANG', '');
 
 #mode
 define('DEBUG_MODE', false);

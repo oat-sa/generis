@@ -129,11 +129,13 @@ class ComplexSearchService extends ConfigurableService
 
         $Class    = new \core_kernel_classes_Class($class_uri);
         $rdftypes = [];
-        
-        foreach($Class->getSubClasses($recursive) as $subClass){
-            $rdftypes[] = $subClass->getUri();
+
+        if ($recursive === true) {
+            foreach($Class->getSubClasses(true) as $subClass) {
+                $rdftypes[] = $subClass->getUri();
+            }
         }
-         
+
         $rdftypes[] = $class_uri;
         
         $criteria = $query->newQuery()
