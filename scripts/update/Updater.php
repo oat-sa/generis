@@ -170,7 +170,7 @@ class Updater extends \common_ext_ExtensionUpdater {
 
         if ($this->isVersion('2.11.0')) {
             $this->getServiceManager()->register(ActionService::SERVICE_ID, new ActionService());
-            $this->setVersion('2.11.2');
+            $this->setVersion('2.11.3');
         }
 
         return $currentVersion;
