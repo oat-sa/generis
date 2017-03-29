@@ -47,7 +47,8 @@ class TaskRunner
             \common_Logger::e($message);
             $report = new \common_report_Report(\common_report_Report::TYPE_ERROR, $message);
         }
-        $queue->updateTaskStatus($task->getId(), Task::STATUS_FINISHED, $report);
+        $queue->updateTaskStatus($task->getId(), Task::STATUS_FINISHED);
+        $queue->updateTaskReport($task->getId(), $report);
         return $report; 
     }
     
