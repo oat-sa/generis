@@ -40,7 +40,7 @@ define('GENERIS_SESSION_NAME', '');
 
 # paths
 define('ROOT_PATH', '');
-define('ROOT_URL',  '');
+define('ROOT_URL',  ''); // deprecated but still used. Saved for BC
 
 # language
 define('DEFAULT_LANG', '');

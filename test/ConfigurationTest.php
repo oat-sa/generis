@@ -97,7 +97,7 @@ class ConfigurationTest extends GenerisPhpUnitTestRunner {
         $this->assertTrue($php->isOptional());
         
         // max & min test.
-        $php = new common_configuration_PHPRuntime('5.3', '7.0.x');
+        $php = new common_configuration_PHPRuntime('5.3', '7.1.x');
         $report = $php->check();
 
         $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
@@ -307,7 +307,7 @@ class ConfigurationTest extends GenerisPhpUnitTestRunner {
     }
     
     public function testComponentFactory(){
-    	$component = common_configuration_ComponentFactory::buildPHPRuntime('5.0', '7.0.x', true);
+    	$component = common_configuration_ComponentFactory::buildPHPRuntime('5.0', '7.1.x', true);
     	$this->assertIsA($component, 'common_configuration_PHPRuntime');
     	$this->assertEquals($component->getMin(), '5.0');
     	// 5.5.x will be replaced internally
@@ -365,7 +365,7 @@ class ConfigurationTest extends GenerisPhpUnitTestRunner {
     	$this->assertFalse($component->isOptional());*/
     	
     	
-    	$array = array('type' => 'PHPRuntime', 'value' => array('min' => '5.0', 'max' => '7.0.x', 'optional' => true));
+    	$array = array('type' => 'PHPRuntime', 'value' => array('min' => '5.0', 'max' => '7.1.x', 'optional' => true));
     	$component = common_configuration_ComponentFactory::buildFromArray($array);
     	$this->assertIsA($component, 'common_configuration_PHPRuntime');
     	$this->assertEquals($component->getMin(), '5.0');
