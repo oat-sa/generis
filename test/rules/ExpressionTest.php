@@ -19,9 +19,9 @@
  * 
  */
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
 
-class ExpressionTest extends GenerisPhpUnitTestRunner {
+class ExpressionTest extends \PHPUnit_Framework_TestCase
+{
 
     public function testEvaluate(){
         $constantResource1 = core_kernel_rules_TermFactory::createConst('test1');

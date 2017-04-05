@@ -26,7 +26,7 @@ use oat\oatbox\task\implementation\SyncTask;
 /**
  * @author Aleh Hutnikau, <huntikau@1pt.com>
  */
-class SyncTaskTest extends GenerisPhpUnitTestRunner
+class SyncTaskTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstruct()
     {

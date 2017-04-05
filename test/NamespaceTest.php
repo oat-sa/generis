@@ -1,5 +1,5 @@
 <?php
-/*  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -19,7 +19,6 @@
  * 
  */
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
 
 /**
  * Test of the common_ext_Namespace and common_ext_NamesapceManager
@@ -28,10 +27,10 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
  * @package generis
  
  */
-class NamespaceTest extends GenerisPhpUnitTestRunner {
+class NamespaceTest extends \PHPUnit_Framework_TestCase
+{
 	
 	public function setUp(){
-        GenerisPhpUnitTestRunner::initTest();
 	}
 
 	/**
@@ -39,12 +38,12 @@ class NamespaceTest extends GenerisPhpUnitTestRunner {
 	 */
 	public function testModel(){
 		$namespaceManager = common_ext_NamespaceManager::singleton();
-		$this->assertIsA($namespaceManager, 'common_ext_NamespaceManager');
+		$this->assertInstanceOf('common_ext_NamespaceManager', $namespaceManager);
 		
 		//$this->assertReference($namespaceManager, common_ext_NamespaceManager::singleton());
 		
 		$tempNamesapce = new common_ext_Namespace();
-		$this->assertIsA($tempNamesapce, 'common_ext_Namespace');
+		$this->assertInstanceOf('common_ext_Namespace', $tempNamesapce);
 	}
 	
 	/**
@@ -56,14 +55,14 @@ class NamespaceTest extends GenerisPhpUnitTestRunner {
 		$this->assertTrue(count($namespaces) > 0);
 		
 		foreach($namespaces as $namespace){
-			$this->assertIsA($namespace, 'common_ext_Namespace');
+			$this->assertInstanceOf('common_ext_Namespace', $namespace);
 		}
 		
 		$localNs = $namespaceManager->getLocalNamespace();
-		$this->assertIsA($localNs, 'common_ext_Namespace');
+		$this->assertInstanceOf('common_ext_Namespace', $localNs);
 
 		$otherLocalNs = $namespaceManager->getNamespace($localNs->getModelId());
-		$this->assertIsA($otherLocalNs, 'common_ext_Namespace');
+		$this->assertInstanceOf('common_ext_Namespace', $otherLocalNs);
 		
 		$this->assertEquals((string)$otherLocalNs, (string)$localNs);
 	}

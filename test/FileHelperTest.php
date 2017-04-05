@@ -19,15 +19,12 @@
  * 
  */
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
 
-
-class FileHelperTest extends GenerisPhpUnitTestRunner 
+class FileHelperTest extends \PHPUnit_Framework_TestCase
 {
     
     protected function setUp()
     {
-        GenerisPhpUnitTestRunner::initTest();
     }
     
 	public function testRemoveFile()
