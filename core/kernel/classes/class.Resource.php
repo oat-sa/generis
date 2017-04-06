@@ -116,11 +116,6 @@ class core_kernel_classes_Resource
 		}
 		
 		$this->uriResource = $uri;
-        
-        if(DEBUG_MODE){
-        	$this->debug = $debug;
-        }
-        
     }
 
 

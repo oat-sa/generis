@@ -58,10 +58,6 @@ class core_kernel_classes_Literal
     {
         
         $this->literal = strval($literal);
-        if(DEBUG_MODE){
-    		$this->debug = $debug;
-        }
-        
     }
 
     /**
