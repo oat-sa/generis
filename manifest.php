@@ -31,7 +31,7 @@ return array(
     'label' => 'Core',
     'description' => 'Core extension, provide the low level framework and an API to manage ontologies',
     'license' => 'GPL-2.0',
-    'version' => '3.21.2',
+    'version' => '3.22.0',
 
     'author' => 'Open Assessment Technologies, CRP Henri Tudor',
     'requires' => array(),

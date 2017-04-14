@@ -21,10 +21,12 @@ namespace oat\oatbox\service;
 
 use common_persistence_PhpFileDriver;
 use common_Utils;
+use oat\oatbox\config\ConfigurationDriver;
+
 /**
  * A simplified config driver 
  */
-class SimpleConfigDriver extends common_persistence_PhpFileDriver
+class SimpleConfigDriver extends common_persistence_PhpFileDriver implements ConfigurationDriver
 {
     /**
      * Override the function to allow an additional header
