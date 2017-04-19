@@ -47,7 +47,7 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
 
     public function get($id)
     {
-        return $this->persistence[$id];
+        return $this->exists($id) ? $this->persistence[$id] : false;
     }
     
     public function exists($id)
