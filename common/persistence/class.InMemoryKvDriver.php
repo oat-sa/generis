@@ -52,7 +52,7 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
     
     public function exists($id)
     {
-        return isset($this->persistence[$id]);
+        return array_key_exists($id, $this->persistence);
     }
 
     public function del($id)
