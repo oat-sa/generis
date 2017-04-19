@@ -147,12 +147,17 @@ class common_ext_Extension
      * sets a configuration value
      *
      * @param  string $key
-     * @param  $value
-     * @return boolean
+     * @param  string $value
+     * @return bool always returns true for backward compatibility
+     * @throws common_exception_Error On error
      */
     public function setConfig($key, $value)
     {
-        return $this->getConfigPersistence()->set($this->getId().'/'.$key, $value);
+        $success = $this->getConfigPersistence()->set($this->getId().'/'.$key, $value);
+        if (!$success) {
+            throw new common_exception_Error('Unable to write '.$this->getId().'/'.$key);
+        }
+        return true;
     }
 
     /**
