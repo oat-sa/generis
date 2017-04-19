@@ -23,10 +23,22 @@
  * Class common_persistence_InMemoryKvDriver
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
-class common_persistence_InMemoryKvDriver extends \common_persistence_NoStorageKvDriver
+class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver, common_persistence_Purgable
 {
 
+    /**
+     * @var array
+     */
     protected $persistence = [];
+
+    /**
+     *
+     * @see common_persistence_Driver::connect()
+     */
+    function connect($id, array $params){
+        common_Logger::t('Init InMemoryKvDriver');
+        return new common_persistence_KeyValuePersistence($params, $this);
+    }
 
     public function set($id, $value, $ttl = null)
     {
