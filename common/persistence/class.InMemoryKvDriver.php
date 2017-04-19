@@ -20,36 +20,39 @@
  */
 
 /**
- * Class common_persistence_KeyValueArrayPersistence
+ * Class common_persistence_InMemoryKvDriver
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
-class common_persistence_KeyValueArrayPersistence extends common_persistence_Persistence
+class common_persistence_InMemoryKvDriver extends \common_persistence_NoStorageKvDriver
 {
 
     protected $persistence = [];
 
-    public function __construct(){}
-
-    public function set($key, $value)
+    public function set($id, $value, $ttl = null)
     {
-        $this->persistence[$key] = $value;
+        return $this->persistence[$id] = $value;
+    }
+
+    public function get($id)
+    {
+        return $this->persistence[$id];
+    }
+    
+    public function exists($id)
+    {
+        return isset($this->persistence[$id]);
+    }
+
+    public function del($id)
+    {
+        unset($this->persistence[$id]);
         return true;
     }
-    
-    public function get($key) {
-        return $this->persistence[$key];
-    }
-    
-    public function exists($key) {
-        return isset($this->persistence[$key]);
-    }
-    
-    public function del($key) {
-        unset($this->persistence[$key]);
-    }
-    
-    public function purge() {
+
+    public function purge()
+    {
         $this->persistence = [];
     }
-    
 }
+
+?>
