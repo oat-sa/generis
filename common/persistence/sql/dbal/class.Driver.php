@@ -63,7 +63,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * @see common_persistence_sql_Driver::getPlatForm()
      */
     public function getPlatForm(){
-        return new common_persistence_sql_Platform($this->connection->getDatabasePlatform());
+        return new common_persistence_sql_Platform($this->connection->getDatabasePlatform(), $this->getDbalConnection());
     }
     
     /**
@@ -139,6 +139,12 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         return $this->connection->lastInsertId($name);
     }
 
+    /**
+     * @return \Doctrine\DBAL\Connection
+     */
+    protected function getDbalConnection()
+    {
+        return $this->connection;
+    }
     
-
 }

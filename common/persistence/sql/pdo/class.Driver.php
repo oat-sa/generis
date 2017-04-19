@@ -485,4 +485,14 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
         return $this->params;
     }
 
+    /**
+     * @return \Doctrine\DBAL\Connection
+     */
+    protected function getDbalConnection()
+    {
+        \common_Logger::d('init dbal connection to get SchemaMangager');
+        $config = new \Doctrine\DBAL\Configuration();
+        $params = $this->getParams();
+        return \Doctrine\DBAL\DriverManager::getConnection($params, $config);
+    }
 }
