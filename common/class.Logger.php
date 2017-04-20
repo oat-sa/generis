@@ -482,7 +482,6 @@ class common_Logger
         
         $error = error_get_last();
         if (($error['type'] & (E_COMPILE_ERROR | E_ERROR | E_PARSE | E_CORE_ERROR)) != 0) {
-            //  echo "\033[" . self::$COLOR[5] . 'm' . @$pData['f'] . ' @L' . @$pData['l'] . "\033[0m\n";
             $msg = (isset($error['file']) && isset($error['line']))
                ? 'php error('.$error['type'].') in '.$error['file'].'@'.$error['line'].': '.$error['message']
                : 'php error('.$error['type'].'): '.$error['message'];
