@@ -430,8 +430,6 @@ class common_Logger
     public function handlePHPErrors($errorNumber, $errorString, $errorFile = null, $errorLine = null, $errorContext = array())
     {
         $returnValue = (bool) false;
-
-        
         if (error_reporting() != 0){
         	if ($errorNumber == E_STRICT) {
         		foreach ($this->ACCEPTABLE_WARNINGS as $pattern) {
@@ -482,14 +480,14 @@ class common_Logger
     public function handlePHPShutdown()
     {
         
-    	$error = error_get_last();
-    	if (($error['type'] & (E_COMPILE_ERROR | E_ERROR | E_PARSE | E_CORE_ERROR)) != 0) {
-    		if (isset($error['file']) && isset($error['line'])) {
-    			self::singleton()->log(self::FATAL_LEVEL, 'php error('.$error['type'].'): '.$error['message'], array('PHPERROR'), $error['file'], $error['line']);
-    		} else {
-    			self::singleton()->log(self::FATAL_LEVEL, 'php error('.$error['type'].'): '.$error['message'], array('PHPERROR'));
-    		}
-    	}
+        $error = error_get_last();
+        if (($error['type'] & (E_COMPILE_ERROR | E_ERROR | E_PARSE | E_CORE_ERROR)) != 0) {
+            //  echo "\033[" . self::$COLOR[5] . 'm' . @$pData['f'] . ' @L' . @$pData['l'] . "\033[0m\n";
+            $msg = (isset($error['file']) && isset($error['line']))
+               ? 'php error('.$error['type'].') in '.$error['file'].'@'.$error['line'].': '.$error['message']
+               : 'php error('.$error['type'].'): '.$error['message'];
+            self::singleton()->log(self::FATAL_LEVEL, $msg, array('PHPERROR'));
+        }
         
     }
 
