@@ -17,22 +17,30 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
-namespace oat\generis\test\common\persistence\sql\dbal;
-
-use oat\generis\test\GenerisPhpUnitTestRunner;
-
 /**
- * Class DriverTest
- * @package oat\generis\test\common\persistence\sql\dbal
+ * Class common_persistence_sql_pdo_sqlite_SchemaManager
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
-class DriverTest extends GenerisPhpUnitTestRunner
+class common_persistence_sql_pdo_sqlite_SchemaManager extends common_persistence_sql_pdo_SchemaManager
 {
-
-    public function testGetPlatForm()
+    /**
+     * Short description of method getIndexAlreadyExistsErrorCode
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @return string
+     */
+    public function getIndexAlreadyExistsErrorCode()
     {
-        $driver = new \common_persistence_sql_dbal_Driver();
-        $driver->connect('test_connection', ['connection' => ['url' => 'sqlite:///:memory:']]);
-        $this->assertTrue($driver->getPlatForm() instanceof \common_persistence_sql_Platform);
+        return (string) "42P07";
     }
+
+    /**
+     * (non-PHPdoc)
+     * @see common_persistence_sql_SchemaManager::getColumnNotFoundErrorCode()
+     */
+    public function getColumnNotFoundErrorCode(){
+        return '42703';
+    }
+
 }

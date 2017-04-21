@@ -21,18 +21,22 @@ namespace oat\generis\test\common\persistence\sql\dbal;
 
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
-/**
- * Class DriverTest
- * @package oat\generis\test\common\persistence\sql\dbal
- * @author Aleh Hutnikau, <hutnikau@1pt.com>
- */
-class DriverTest extends GenerisPhpUnitTestRunner
+class PlatformTest extends GenerisPhpUnitTestRunner
 {
 
-    public function testGetPlatForm()
+    public function testGetQueryBuilder()
+    {
+        $platform = $this->createInstance();
+        $this->assertTrue($platform->getQueryBuilder() instanceof \Doctrine\DBAL\Query\QueryBuilder);
+    }
+
+    /**
+     * @return \common_persistence_sql_Platform
+     */
+    protected function createInstance()
     {
         $driver = new \common_persistence_sql_dbal_Driver();
         $driver->connect('test_connection', ['connection' => ['url' => 'sqlite:///:memory:']]);
-        $this->assertTrue($driver->getPlatForm() instanceof \common_persistence_sql_Platform);
+        return $driver->getPlatForm();
     }
 }

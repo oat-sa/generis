@@ -17,7 +17,7 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
-namespace oat\generis\test\common\persistence\sql\dbal;
+namespace oat\generis\test\common\persistence\sql\pdo;
 
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
@@ -31,8 +31,16 @@ class DriverTest extends GenerisPhpUnitTestRunner
 
     public function testGetPlatForm()
     {
-        $driver = new \common_persistence_sql_dbal_Driver();
-        $driver->connect('test_connection', ['connection' => ['url' => 'sqlite:///:memory:']]);
-        $this->assertTrue($driver->getPlatForm() instanceof \common_persistence_sql_Platform);
+        $driver = new \common_persistence_sql_pdo_sqlite_Driver();
+        $driver->connect('test_connection', [
+            'driver' => 'pdo_sqlite',
+            'user' => null,
+            'password' => null,
+            'host' => null,
+            'dbname' => ':memory:',
+        ]);
+        $platform = $driver->getPlatForm();
+        $this->assertTrue($platform instanceof \common_persistence_sql_Platform);
+        $this->assertTrue($platform->getQueryBuilder() instanceof \Doctrine\DBAL\Query\QueryBuilder);
     }
 }
