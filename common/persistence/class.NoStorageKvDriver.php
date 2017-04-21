@@ -21,6 +21,11 @@
 *
 */
 
+/**
+ * Class common_persistence_NoStorageKvDriver
+ * @deprecated use \common_persistence_InMemoryKvDriver instead
+ * @author Aleh Hutnikau, <hutnikau@1pt.com>
+ */
 class common_persistence_NoStorageKvDriver implements common_persistence_KvDriver, common_persistence_Purgable
 {
     /**
