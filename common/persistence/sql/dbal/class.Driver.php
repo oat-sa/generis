@@ -63,7 +63,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * @see common_persistence_sql_Driver::getPlatForm()
      */
     public function getPlatForm(){
-        return new common_persistence_sql_Platform($this->connection->getDatabasePlatform(), $this->getDbalConnection());
+        return new common_persistence_sql_Platform($this->getDbalConnection());
     }
     
     /**

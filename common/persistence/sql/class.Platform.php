@@ -32,11 +32,10 @@ class common_persistence_sql_Platform{
     
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $dbalPlatform
-     * @param \Doctrine\DBAL\Connection
+     * @param $dbalConnection \Doctrine\DBAL\Connection
      */
-    public function __construct($dbalPlatform, $dbalConnection){
-        $this->dbalPlatform = $dbalPlatform;
+    public function __construct($dbalConnection){
+        $this->dbalPlatform = $dbalConnection->getDatabasePlatform();
         $this->dbalConnection = $dbalConnection;
     }
     
