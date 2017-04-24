@@ -39,7 +39,12 @@ class ServiceManager implements ServiceLocatorInterface
         }
         return self::$instance;
     }
-    
+
+    public static function setServiceManager(ServiceManager $serviceManager)
+    {
+        self::$instance = $serviceManager;
+    }
+
     private $services = array();
     
     /**
