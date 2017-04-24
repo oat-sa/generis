@@ -27,7 +27,12 @@ class common_Config {
 	 * @access
 	 * @author "Lionel Lecaque, <lionel@taotesting.com>"
 	 */
-	public static function load() {
-		include_once dirname ( __FILE__ ) . '/../../config/generis.conf.php';
+	public static function load($config=null)
+    {
+	    if (! is_null($config) && is_readable($config)) {
+            include_once $config;
+        } else {
+            include_once dirname ( __FILE__ ) . '/../../config/generis.conf.php';
+        }
 	}
 }
