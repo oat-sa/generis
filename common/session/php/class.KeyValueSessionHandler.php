@@ -21,35 +21,48 @@ use oat\oatbox\Configurable;
 
 /**
  * Session implementation as a Key Value storage and using the persistence
- * 
+ *
  * @author Joel Bout <joel@taotesting.com>
  * @package generis
  */
 class common_session_php_KeyValueSessionHandler extends Configurable
-    implements common_session_php_SessionHandler
+    implements common_session_php_SessionHandler, common_session_php_sessionStatisticsAware
 {
-    const OPTION_PERSISTENCE = 'persistence'; 
-    
+    const OPTION_PERSISTENCE = 'persistence';
+    const OPTION_TRACK_LAST_ACCESS_TIME = 'track_access';
+
     const KEY_NAMESPACE = "generis:session:";
-    
+    const KEY_LAST_ACCESS_TIME = "generis:session:lastaccesstime";
+
     /**
      * @var common_persistence_KeyValuePersistence
      */
     private $sessionPersistence = null;
-    
-    protected function getPersistence() {
+    private $trackLastAccessTime;
+
+    protected function getPersistence()
+    {
         if (is_null($this->sessionPersistence)) {
             $this->sessionPersistence = common_persistence_KeyValuePersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
         }
         return $this->sessionPersistence;
     }
-    
+
+    protected function isTrackLastAccessTimeRequired()
+    {
+        if (is_null($this->trackLastAccessTime)) {
+            $this->trackLastAccessTime = $this->getOption(self::OPTION_TRACK_LAST_ACCESS_TIME);
+        }
+        return $this->trackLastAccessTime;
+    }
+
     /**
      * (non-PHPdoc)
      * @see common_session_storage_SessionStorage::open()
      */
-    public function open($savePath, $sessionName){
-           return true;
+    public function open($savePath, $sessionName)
+    {
+        return true;
     }
 
     /**
@@ -67,7 +80,12 @@ class common_session_php_KeyValueSessionHandler extends Configurable
      */
     public function read($id)
     {
-        $session = $this->getPersistence()->get(self::KEY_NAMESPACE.$id); 
+        $session = $this->getPersistence()->get(self::KEY_NAMESPACE . $id);
+
+        if ($this->isTrackLastAccessTimeRequired()) {
+            $this->setLastAccessTime((string)time());
+        }
+
         return is_string($session) ? $session : '';
     }
 
@@ -76,16 +94,22 @@ class common_session_php_KeyValueSessionHandler extends Configurable
      * @see common_session_storage_SessionStorage::write()
      */
     public function write($id, $data)
-    {  
-        return $this->getPersistence()->set(self::KEY_NAMESPACE.$id, $data, (int) ini_get('session.gc_maxlifetime'));
+    {
+
+        if ($this->isTrackLastAccessTimeRequired()) {
+            $this->setLastAccessTime((string)time());
+        }
+
+        return $this->getPersistence()->set(self::KEY_NAMESPACE . $id, $data, (int)ini_get('session.gc_maxlifetime'));
     }
 
     /**
      * (non-PHPdoc)
      * @see common_session_storage_SessionStorage::destroy()
      */
-    public function destroy($id){
-        $this->getPersistence()->del(self::KEY_NAMESPACE.$id);
+    public function destroy($id)
+    {
+        $this->getPersistence()->del(self::KEY_NAMESPACE . $id);
         return true;
     }
 
@@ -94,7 +118,7 @@ class common_session_php_KeyValueSessionHandler extends Configurable
      * @see common_session_storage_SessionStorage::gc()
      */
     public function gc($maxlifetime)
-    { 
+    {
         //
         //problem here either 
         // solution 1 : do two explicit handlers for each specific persistence (Redis, SQL) 
@@ -102,4 +126,26 @@ class common_session_php_KeyValueSessionHandler extends Configurable
         //
         return true;
     }
+
+    public function setLastAccessTime($time)
+    {
+        $this->getPersistence()->set(self::KEY_LAST_ACCESS_TIME, $time);
+
+    }
+
+    public function getLastAccessTime()
+    {
+        return $this->getPersistence()->get(self::KEY_LAST_ACCESS_TIME);
+    }
+
+    public function getTotalActiveSessions()
+    {
+        $persistence = $this->getPersistence();
+        if ($persistence->getDriver() instanceof common_persistence_PhpRedisDriver) {
+            return $persistence->getDriver()->dbSize() - 1;
+        }
+        common_Logger::d('Active sessions calculation not implemented');
+        return -1;
+    }
+
 }
