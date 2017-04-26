@@ -25,14 +25,18 @@
 class common_persistence_sql_Platform{
     
     protected  $dbalPlatform;
-    
+
+    /** @var \Doctrine\DBAL\Connection */
+    protected  $dbalConnection;
+
     
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $dbalPlatform
+     * @param $dbalConnection \Doctrine\DBAL\Connection
      */
-    public function __construct($dbalPlatform){
-        $this->dbalPlatform = $dbalPlatform;
+    public function __construct($dbalConnection){
+        $this->dbalPlatform = $dbalConnection->getDatabasePlatform();
+        $this->dbalConnection = $dbalConnection;
     }
     
     /**
@@ -41,7 +45,15 @@ class common_persistence_sql_Platform{
     public function getMultipleInsertsSqlQueryHelper(){
     	return new common_persistence_sql_MultipleInsertsSqlHelper();
     }
-    
+
+    /**
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    public function getQueryBuilder()
+    {
+        return $this->dbalConnection->createQueryBuilder();
+    }
+
     /**
      * Appends the correct LIMIT statement depending on the implementation of
      * wrapper. For instance, limiting results in SQL statements are different
