@@ -20,7 +20,6 @@
  *
  */
 
-
 /**
  * Short description of class common_ext_Extension
  *
@@ -69,30 +68,27 @@ class common_ext_Extension
      * @var boolean
      */
     protected $loaded = false;
-    
+
     /**
+     * The persistence use to access configuration storage
+     *
+     * @var common_persistence_KeyValuePersistence
+     */
+    protected $configurationPersistence;
+
+    /**
+     * common_ext_Extension constructor.
+     *
      * Should not be called directly, please use ExtensionsManager
      *
-     * @access public
-     * @author Joel Bout, <joel@taotesting.com>
-     *
-     * @param string $id
-     * @param string $deprecated1
-     * @param string $deprecated2
-     *
-     * @throws common_ext_ExtensionException
-     * @throws common_ext_ManifestNotFoundException
+     * @param $id
+     * @param common_persistence_KeyValuePersistence $configurationPersistence
      */
-    public function __construct($id, $deprecated1 = null, $deprecated2 = null)
+    public function __construct($id, common_persistence_KeyValuePersistence $configurationPersistence)
     {
 		$this->id = $id;
-    	$manifestFile = $this->getDir().self::MANIFEST_NAME;
-		if(is_file($manifestFile)){
-			$this->manifest = new common_ext_Manifest($manifestFile);
-		} else {
-			//Here the extension is set unvalided to not be displayed by the view
-			throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '${id}'.", $id);
-		}
+		$this->manifest = $this->getManifestFile();
+        $this->configurationPersistence = $configurationPersistence;
     }
 
     /**
@@ -125,11 +121,12 @@ class common_ext_Extension
 
     /**
      * Returns the KV persistence to use for configurations
+     *
      * @return common_persistence_KeyValuePersistence
      */
     private function getConfigPersistence()
     {
-        return common_ext_ConfigDriver::singleton();
+        return $this->configurationPersistence;
     }
     
     /**
@@ -410,11 +407,6 @@ class common_ext_Extension
 	{
 		return $this->getManifest()->getOptimizableClasses();
 	}
-	
-	public function getPhpNamespace()
-	{
-	    return $this->getManifest()->getPhpNamespace();
-	}	
 
 	/**
 	 * Get an array of Property URIs (as strings) that are considered optimizable by the Extension.
@@ -459,5 +451,22 @@ class common_ext_Extension
             //load all dependent extensions
             $this->loaded = true;
         }
+    }
+
+    /**
+     * Get the manifest file associate to the given extension id
+     *
+     * @return common_ext_Manifest
+     * @throws common_ext_ManifestNotFoundException
+     */
+    protected function getManifestFile()
+    {
+        $manifestFile = $this->getDir() . self::MANIFEST_NAME;
+        if (is_file($manifestFile) && is_readable($manifestFile)){
+            return new common_ext_Manifest($manifestFile);
+        }
+
+        //Here the extension is set unvalided to not be displayed by the view
+        throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '" . $this->id . "'.", $this->id);
     }
 }

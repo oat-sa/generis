@@ -52,18 +52,17 @@ class ServiceManager implements ServiceLocatorInterface
      */
     private $configService;
     
-    public function __construct($configService)
+    public function __construct(\common_persistence_KeyValuePersistence $configService)
     {
         $this->configService = $configService;
     }
-    
+
     /**
      * Returns the service configured for the serviceKey
      * or throws a ServiceNotFoundException
-     * 
+     *
      * @param string $serviceKey
-     * @throws \common_Exception
-     * @throws ServiceNotFoundException
+     * @return mixed
      */
     public function get($serviceKey)
     {
@@ -80,7 +79,9 @@ class ServiceManager implements ServiceLocatorInterface
     }
     
     /**
-     * (non-PHPdoc)
+     * Get a service associated to the given key into configuration service
+     * Key has to be composed of two parts
+     *
      * @see \Zend\ServiceManager\ServiceLocatorInterface::has()
      */
     public function has($serviceKey)
@@ -119,6 +120,12 @@ class ServiceManager implements ServiceLocatorInterface
         }
     }
 
+    /**
+     * Unregister a config by deleting it through config service
+     *
+     * @param $serviceKey
+     * @return mixed
+     */
     public function unregister($serviceKey)
     {
         unset($this->services[$serviceKey]);
@@ -126,9 +133,11 @@ class ServiceManager implements ServiceLocatorInterface
     }
 
     /**
+     * Get the configuration service
+     *
      * @return \common_persistence_KeyValuePersistence
      */
-    protected function getConfig()
+    public function getConfig()
     {
         return $this->configService;
     }

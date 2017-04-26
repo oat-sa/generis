@@ -32,7 +32,12 @@ use oat\oatbox\config\ConfigurationDriver;
 class common_ext_ConfigDriver extends common_persistence_PhpFileDriver implements ConfigurationDriver
 {
     private static $singleton = null;
-    
+
+    /**
+     * @deprecated Use constructor instead
+     *
+     * @return common_persistence_KeyValuePersistence|common_persistence_Persistence|null
+     */
     public static function singleton()
     {
         if (is_null(self::$singleton)) {

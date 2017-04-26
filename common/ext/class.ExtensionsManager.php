@@ -1,5 +1,5 @@
 <?php
-/*  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -19,7 +19,6 @@
  * 
  */
 
-
 /**
  * The ExtensionsManager class is dedicated to Extensions Management. It provides
  * methods to know if an extension is enabled/disabled, obtain the list of currently
@@ -30,10 +29,17 @@
  * @authorlionel@taotesting.com
  * @package generis
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
- 
  */
-class common_ext_ExtensionsManager
+
+use oat\oatbox\service\ServiceManager;
+use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\config\ConfigurationDriver;
+use oat\oatbox\service\exception\InvalidService;
+
+class common_ext_ExtensionsManager extends ConfigurableService
 {
+    const SERVICE_ID = 'generis/extensionManager';
+
     const EXTENSIONS_CONFIG_KEY = 'installation';
 
     public static $RESERVED_WORDS = array(
@@ -58,6 +64,15 @@ class common_ext_ExtensionsManager
     private static $instance = null;
 
     /**
+     * The persistence use to access configuration storage
+     *
+     * @var common_persistence_KeyValuePersistence
+     */
+    protected $configurationPersistence;
+
+    /**
+     * @deprecated Use ServiceManager::get(\common_ext_ExtensionsManager::SERVICE_ID) instead
+     *
      * Obtain a reference on a unique common_ext_ExtensionsManager
      * class instance.
      *
@@ -67,14 +82,11 @@ class common_ext_ExtensionsManager
      */
     public static function singleton()
     {
-        $returnValue = null;
 
-		if (!isset(self::$instance)) {
-			self::$instance = new self();
-		}
-		$returnValue = self::$instance;
-
-        return $returnValue;
+        if (! isset(self::$instance)) {
+            self::$instance = ServiceManager::getServiceManager()->get(self::SERVICE_ID);
+        }
+        return self::$instance;
     }
 
     /**
@@ -121,16 +133,6 @@ class common_ext_ExtensionsManager
 			}
 			$extension->load();
 		}
-    }
-
-    /**
-     * Creates a new instance of common_ext_ExtensionsManager
-     *
-     * @access private
-     * @author Joel Bout, <joel@taotesting.com>
-     */
-    private function __construct()
-    {
     }
 
     /**
@@ -187,17 +189,18 @@ class common_ext_ExtensionsManager
      *
      * @access public
      * @author Joel Bout, <joel@taotesting.com>
-     * @param  string id The id of the extension.
+     * @param  string $id The id of the extension.
      * @return common_ext_Extension A common_ext_Extension instance or null if it does not exist.
      * @throws common_ext_ExtensionException If the provided id is empty.
      */
     public function getExtensionById($id)
     {
-        if (!is_string($id) || strlen($id) == 0) {
+        if ( ! is_string($id) || strlen($id) == 0) {
         	throw new common_ext_ExtensionException('No id specified for getExtensionById()');
         }
-        if (!isset($this->extensions[$id])) {
-            $ext = new common_ext_Extension($id, false);
+
+        if ( ! isset($this->extensions[$id])) {
+            $ext = new common_ext_Extension($id, $this->getConfigurationPersistence());
             // loads the extension if it hasn't been loaded yet
             $ext->load();
             // if successfully loaded add to list
@@ -286,7 +289,7 @@ class common_ext_ExtensionsManager
      * @param common_ext_Extension $extension
      * @return boolean
      */
-    public function unregisterExtension(common_ext_Extension $extension)
+    public function unRegisterExtension(common_ext_Extension $extension)
     {
         $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         unset($extensions[$extension->getId()]);
@@ -298,5 +301,50 @@ class common_ext_ExtensionsManager
         $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         $extensions[$extension->getId()]['installed'] = $version;
         $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $extensions);
+    }
+
+    /**
+     * Get the configuration persistence based on extension manager config
+     *
+     * Instantiate the driver & connect it
+     *
+     * @return common_persistence_KeyValuePersistence
+     * @throws InvalidService
+     * @throws common_exception_MissingParameter
+     */
+    protected function getConfigurationPersistence()
+    {
+        return $this->getServiceManager()->getConfig();
+        if (! $this->configurationPersistence) {
+
+
+            if (! $this->hasOption('driver')) {
+                throw new common_exception_MissingParameter('driver', __CLASS__);
+            }
+
+            if (! $this->hasOption('parameters')) {
+                throw new common_exception_MissingParameter('parameters', __CLASS__);
+            }
+            $parameters = $this->getOption('parameters');
+
+            $name = isset($parameters['name']) ? $parameters['name'] : uniqid();
+
+            $driverName = $this->getOption('driver');
+            if (! is_a($driverName, ConfigurationDriver::class, true)) {
+                throw new InvalidService();
+            }
+
+            /** @var ConfigurationDriver $driver */
+            $driver = new $driverName();
+            $this->configurationPersistence = $driver->connect($name, $parameters);
+            $this->configurationPersistence = $this->getServiceLocator()
+                ->get(common_persistence_Manager::SERVICE_ID)->getPersistenceById($this->getOption('persistence'));
+
+//            $this->configurationPersistence = $this->getServiceLocator()
+//                ->get(common_persistence_Manager::SERVICE_ID)->getPersistenceById($this->getOption('persistence'));
+//                common_persistence_Manager::getPersistence($this->getOption('persistence'));
+        }
+
+        return $this->configurationPersistence;
     }
 }

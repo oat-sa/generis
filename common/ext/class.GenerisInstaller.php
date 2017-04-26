@@ -57,7 +57,7 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE => ComplexSearchService::SERVICE_ID));
         $model->setServiceLocator(ServiceManager::getServiceManager());
         ModelManager::setModel($model);
-        
+
         $this->installOntology();
         // $this->installLocalData();
         // $this->installModuleModel();
