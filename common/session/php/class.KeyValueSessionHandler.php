@@ -51,7 +51,7 @@ class common_session_php_KeyValueSessionHandler extends Configurable
     protected function isTrackLastAccessTimeRequired()
     {
         if (is_null($this->trackLastAccessTime)) {
-            $this->trackLastAccessTime = $this->getOption(self::OPTION_TRACK_LAST_ACCESS_TIME);
+            $this->trackLastAccessTime = (bool)$this->getOption(self::OPTION_TRACK_LAST_ACCESS_TIME);
         }
         return $this->trackLastAccessTime;
     }
@@ -95,12 +95,7 @@ class common_session_php_KeyValueSessionHandler extends Configurable
      */
     public function write($id, $data)
     {
-
-        if ($this->isTrackLastAccessTimeRequired()) {
-            $this->setLastAccessTime((string)time());
-        }
-
-        return $this->getPersistence()->set(self::KEY_NAMESPACE . $id, $data, (int)ini_get('session.gc_maxlifetime'));
+        return $this->getPersistence()->set(self::KEY_NAMESPACE . $id, $data, $this->getTTL());
     }
 
     /**
@@ -146,6 +141,14 @@ class common_session_php_KeyValueSessionHandler extends Configurable
         }
         common_Logger::d('Active sessions calculation not implemented');
         return -1;
+    }
+
+    /**
+     * @return int
+     */
+    private function getTTL()
+    {
+        return (int)ini_get('session.gc_maxlifetime');
     }
 
 }
