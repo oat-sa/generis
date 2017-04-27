@@ -36,7 +36,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * 
      * @var string
      */
-    public $directory;
+    private $directory;
     
     /**
      * Nr of subfolder levels in order to prevent filesystem bottlenecks

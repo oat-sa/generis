@@ -38,12 +38,7 @@ class SimpleConfigDriver extends common_persistence_PhpFileDriver implements Con
      */
     protected function getContent($key, $value)
     {
-        $headerPath = $this->getHeaderPath($key);
-        $header = !is_null($headerPath) && file_exists($headerPath)
-            ? file_get_contents($headerPath)
-            : $this->getDefaultHeader($key);
-
-        return $header . PHP_EOL . "return " . common_Utils::toHumanReadablePhpString($value) . ";" . PHP_EOL;
+        return $this->getDefaultHeader($key).PHP_EOL."return ".common_Utils::toHumanReadablePhpString($value).";".PHP_EOL;
     }
     
     /**
@@ -58,24 +53,6 @@ class SimpleConfigDriver extends common_persistence_PhpFileDriver implements Con
             .'/**'.PHP_EOL
             .' * Default config header created during install'.PHP_EOL
             .' */'.PHP_EOL;
-    }
-
-    /**
-     * Returns the path to the expected header file
-     *
-     * @param string $key
-     * @return string|NULL
-     */
-    private function getHeaderPath($key)
-    {
-        $parts = explode('/', $key, 2);
-        if (count($parts) >= 2) {
-            list($extId, $configId) = $parts;
-            $ext = ServiceManager::getServiceManager()->get(\common_ext_ExtensionsManager::SERVICE_ID)->getExtensionById($extId);
-            return $ext->getDir().'config/header/'.$configId.'.conf.php';
-        } else {
-            return null;
-        }
     }
 
     /**

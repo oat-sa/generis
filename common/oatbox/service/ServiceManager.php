@@ -85,8 +85,8 @@ class ServiceManager implements ServiceLocatorInterface
      */
     public function get($serviceKey)
     {
-        $service = $this->getConfig()->get($serviceKey);
         if (! isset($this->services[$serviceKey])) {
+            $service = $this->getConfig()->get($serviceKey);
             if ($service === false) {
                 throw new ServiceNotFoundException($serviceKey);
             }
@@ -153,7 +153,7 @@ class ServiceManager implements ServiceLocatorInterface
      *
      * @return \common_persistence_KeyValuePersistence
      */
-    public function getConfig()
+    protected function getConfig()
     {
         return $this->configService;
     }

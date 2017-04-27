@@ -23,11 +23,18 @@ use common_Utils;
 use oat\oatbox\config\ConfigurationDriver;
 
 /**
- * A simplified config driver 
+ * Class ServiceConfigDriver
+ *
+ * Driver dedicated to store only ConfigurableService into config
+ *
+ * @package oat\oatbox\service
  */
 class ServiceConfigDriver extends \common_persistence_PhpFileDriver implements ConfigurationDriver
 {
     /**
+     * Get the config content associated to given $key
+     * $key has to be a configurable service
+     *
      * @param string $key
      * @param mixed $value
      * @return null|string
@@ -42,19 +49,9 @@ class ServiceConfigDriver extends \common_persistence_PhpFileDriver implements C
     }
 
     /**
-     * @param string $id
-     * @param array $params
-     * @return \common_persistence_KeyValuePersistence|\common_persistence_Persistence
-     */
-    public function connect($id, array $params)
-    {
-        if (! isset($params['dir'])) {
-            $params['dir'] = __DIR__ . '/../../../../config/';
-        }
-        return parent::connect($id, $params);
-    }
-
-    /**
+     * Get the path associated to the given key
+     * Must be a two part key (e.q. path into a config folder)
+     *
      * @param string $key
      * @return string
      */

@@ -21,35 +21,17 @@
 use oat\oatbox\config\ConfigurationDriver;
 
 /**
+ * @deprecated Use oat\oatbox\service\ServiceConfigDriver instead
+ *
  * Short description of class common_ext_Extension
  *
  * @access public
  * @author lionel.lecaque@tudor.lu
  * @package generis
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
- 
  */
 class common_ext_ConfigDriver extends common_persistence_PhpFileDriver implements ConfigurationDriver
 {
-    private static $singleton = null;
-
-    /**
-     * @deprecated Use constructor instead
-     *
-     * @return common_persistence_KeyValuePersistence|common_persistence_Persistence|null
-     */
-    public static function singleton()
-    {
-        if (is_null(self::$singleton)) {
-            $driver = new self();
-            return $driver->connect('config', array(
-                'dir' => CONFIG_PATH,
-                'humanReadable' => true
-            ));
-        }
-        return self::$singleton;
-    }
-    
     /**
      * Override the function to allow an additional header
      * 

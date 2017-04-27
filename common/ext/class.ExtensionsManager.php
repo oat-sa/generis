@@ -64,13 +64,6 @@ class common_ext_ExtensionsManager extends ConfigurableService
     private static $instance = null;
 
     /**
-     * The persistence use to access configuration storage
-     *
-     * @var common_persistence_KeyValuePersistence
-     */
-    protected $configurationPersistence;
-
-    /**
      * @deprecated Use ServiceManager::get(\common_ext_ExtensionsManager::SERVICE_ID) instead
      *
      * Obtain a reference on a unique common_ext_ExtensionsManager
@@ -288,7 +281,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
      * @param common_ext_Extension $extension
      * @return boolean
      */
-    public function unRegisterExtension(common_ext_Extension $extension)
+    public function unregisterExtension(common_ext_Extension $extension)
     {
         $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         unset($extensions[$extension->getId()]);
