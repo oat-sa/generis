@@ -110,7 +110,7 @@ class common_persistence_sql_pdo_mysql_Driver
     */
     public function getPlatform(){
         if($this->platform == null){
-            $this->platform = new common_persistence_sql_Platform(new \Doctrine\DBAL\Platforms\MySqlPlatform());
+            $this->platform = new common_persistence_sql_Platform($this->getDbalConnection());
         }
         return $this->platform;
     }

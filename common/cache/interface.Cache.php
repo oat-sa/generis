@@ -48,14 +48,14 @@ interface common_cache_Cache
      *      * If this is an object and implements Serializable,
      *      * we use the serial provided by the object
      *      * else a serial must be provided
-     *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  mixed
-     * @param  string serial
+     * @param mixed $mixed
+     * @param null $serial
+     * @param null $ttl
      * @return mixed
      */
-    public function put($mixed, $serial = null);
+    public function put($mixed, $serial = null, $ttl = null);
 
     /**
      * gets the entry associted to the serial
