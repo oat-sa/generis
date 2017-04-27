@@ -200,11 +200,12 @@ class common_ext_ExtensionsManager extends ConfigurableService
         }
 
         if ( ! isset($this->extensions[$id])) {
-            $ext = new common_ext_Extension($id, $this->getConfigurationPersistence());
+            $extension = new common_ext_Extension($id);
+            $this->getServiceManager()->propagate($extension);
             // loads the extension if it hasn't been loaded yet
-            $ext->load();
+            $extension->load();
             // if successfully loaded add to list
-            $this->extensions[$id] = $ext;
+            $this->extensions[$id] = $extension;
         }
         
         return $this->extensions[$id];
@@ -227,8 +228,6 @@ class common_ext_ExtensionsManager extends ConfigurableService
         $exts = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         return isset($exts[$extensionId]) ? $exts[$extensionId]['installed'] : null;
     }
-    
-    
 
     public function setEnabled($extensionId, $enabled = true)
     {
@@ -301,50 +300,5 @@ class common_ext_ExtensionsManager extends ConfigurableService
         $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         $extensions[$extension->getId()]['installed'] = $version;
         $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $extensions);
-    }
-
-    /**
-     * Get the configuration persistence based on extension manager config
-     *
-     * Instantiate the driver & connect it
-     *
-     * @return common_persistence_KeyValuePersistence
-     * @throws InvalidService
-     * @throws common_exception_MissingParameter
-     */
-    protected function getConfigurationPersistence()
-    {
-        return $this->getServiceManager()->getConfig();
-        if (! $this->configurationPersistence) {
-
-
-            if (! $this->hasOption('driver')) {
-                throw new common_exception_MissingParameter('driver', __CLASS__);
-            }
-
-            if (! $this->hasOption('parameters')) {
-                throw new common_exception_MissingParameter('parameters', __CLASS__);
-            }
-            $parameters = $this->getOption('parameters');
-
-            $name = isset($parameters['name']) ? $parameters['name'] : uniqid();
-
-            $driverName = $this->getOption('driver');
-            if (! is_a($driverName, ConfigurationDriver::class, true)) {
-                throw new InvalidService();
-            }
-
-            /** @var ConfigurationDriver $driver */
-            $driver = new $driverName();
-            $this->configurationPersistence = $driver->connect($name, $parameters);
-            $this->configurationPersistence = $this->getServiceLocator()
-                ->get(common_persistence_Manager::SERVICE_ID)->getPersistenceById($this->getOption('persistence'));
-
-//            $this->configurationPersistence = $this->getServiceLocator()
-//                ->get(common_persistence_Manager::SERVICE_ID)->getPersistenceById($this->getOption('persistence'));
-//                common_persistence_Manager::getPersistence($this->getOption('persistence'));
-        }
-
-        return $this->configurationPersistence;
     }
 }

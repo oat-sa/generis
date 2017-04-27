@@ -20,6 +20,11 @@
  *
  */
 
+use oat\oatbox\service\ServiceManagerAwareInterface;
+use oat\oatbox\service\ServiceManagerAwareTrait;
+use oat\oatbox\service\ConfigurationService;
+use oat\oatbox\service\ServiceNotFoundException;
+
 /**
  * Short description of class common_ext_Extension
  *
@@ -29,8 +34,10 @@
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
  
  */
-class common_ext_Extension
+class common_ext_Extension implements ServiceManagerAwareInterface
 {
+    use ServiceManagerAwareTrait;
+
     /**
      * Filename of the manifest
      * 
@@ -70,25 +77,16 @@ class common_ext_Extension
     protected $loaded = false;
 
     /**
-     * The persistence use to access configuration storage
-     *
-     * @var common_persistence_KeyValuePersistence
-     */
-    protected $configurationPersistence;
-
-    /**
      * common_ext_Extension constructor.
      *
      * Should not be called directly, please use ExtensionsManager
      *
      * @param $id
-     * @param common_persistence_KeyValuePersistence $configurationPersistence
      */
-    public function __construct($id, common_persistence_KeyValuePersistence $configurationPersistence)
+    public function __construct($id)
     {
 		$this->id = $id;
 		$this->manifest = $this->getManifestFile();
-        $this->configurationPersistence = $configurationPersistence;
     }
 
     /**
@@ -118,16 +116,6 @@ class common_ext_Extension
     /**
      * CONFIGURATION 
      */
-
-    /**
-     * Returns the KV persistence to use for configurations
-     *
-     * @return common_persistence_KeyValuePersistence
-     */
-    private function getConfigPersistence()
-    {
-        return $this->configurationPersistence;
-    }
     
     /**
      * checks if a configuration value exists
@@ -137,7 +125,7 @@ class common_ext_Extension
      */
     public function hasConfig($key)
     {
-        return $this->getConfigPersistence()->exists($this->getId().'/'.$key);
+        return $this->getServiceLocator()->has($this->getId().'/'.$key);
     }
     
     /**
@@ -150,10 +138,9 @@ class common_ext_Extension
      */
     public function setConfig($key, $value)
     {
-        $success = $this->getConfigPersistence()->set($this->getId().'/'.$key, $value);
-        if (!$success) {
-            throw new common_exception_Error('Unable to write '.$this->getId().'/'.$key);
-        }
+        $value = new ConfigurationService(array(ConfigurationService::OPTION_CONFIG => $value));
+        $value->setHeader($this->getConfigHeader($key));
+        $this->registerService($this->getId().'/'.$key, $value);
         return true;
     }
 
@@ -166,7 +153,15 @@ class common_ext_Extension
      */
     public function getConfig($key)
     {
-        return $this->getConfigPersistence()->get($this->getId().'/'.$key);
+        try {
+            $config =  $this->getServiceLocator()->get($this->getId().'/'.$key);
+            if ($config instanceof ConfigurationService) {
+                $config = $config->getOption(ConfigurationService::OPTION_CONFIG);
+            }
+            return $config;
+        } catch (ServiceNotFoundException $e) {
+            return false;
+        }
     }
 
     /**
@@ -177,7 +172,7 @@ class common_ext_Extension
      */
     public function unsetConfig($key)
     {
-        return $this->getConfigPersistence()->del($this->getId().'/'.$key);
+        return $this->getServiceLocator()->unregister($this->getId().'/'.$key);
     }
 
     /**
@@ -360,8 +355,9 @@ class common_ext_Extension
         if (empty($this->dependencies)) {
             foreach ($this->getManifest()->getDependencies() as $id => $version) {
                 $this->dependencies[$id] = $version;
-                $dependence = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
-                $this->dependencies = array_merge($this->dependencies, $dependence->getDependencies());
+                /** @var common_ext_Extension $dependency */
+                $dependency = $this->getServiceLocator()->get(common_ext_ExtensionsManager::SERVICE_ID)->getExtensionById($id);
+                $this->dependencies = array_merge($this->dependencies, $dependency->getDependencies());
             }
         }
         return $this->dependencies;
@@ -440,7 +436,7 @@ class common_ext_Extension
             foreach ($dependencies as $extId => $extVersion) {
                 // triggers loading of extensions
                 try {
-                    \common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
+                    $this->getServiceLocator()->get(common_ext_ExtensionsManager::SERVICE_ID)->getExtensionById($extId);
                 } catch (common_ext_ManifestNotFoundException $e) {
                     throw new common_ext_MissingExtensionException($e->getExtensionId().' not found but required for '.$this->getId());
                 }
@@ -468,5 +464,25 @@ class common_ext_Extension
 
         //Here the extension is set unvalided to not be displayed by the view
         throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '" . $this->id . "'.", $this->id);
+    }
+
+    /**
+     * Get the documentation header for extension config located at key path
+     *
+     * @param $key
+     * @return null|string
+     */
+    protected function getConfigHeader($key)
+    {
+        $parts = explode('/', $key, 2);
+        if (count($parts) >= 2) {
+            list($extId, $configId) = $parts;
+            $path = $this->getDir() . 'config/header/' . $configId . '.conf.php';
+            var_dump($path);
+            if (is_readable($path) && is_file($path)) {
+                return file_get_contents($path);
+            }
+        }
+        return null;
     }
 }

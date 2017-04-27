@@ -20,10 +20,10 @@
 
 namespace oat\oatbox\service;
 
-use common_ext_ExtensionsManager;
 use oat\oatbox\Configurable;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+
 /**
  * The simple placeholder ServiceManager
  * @author Joel Bout <joel@taotesting.com>
@@ -31,27 +31,46 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 class ServiceManager implements ServiceLocatorInterface
 {
     private static $instance;
-    
+
+    /**
+     * @deprecated Use the chain of ServiceLocatorAware/ServiceManagerAware instead
+     *
+     * @return mixed
+     * @throws \common_exception_NotAcceptable
+     */
     public static function getServiceManager()
     {
         if (is_null(self::$instance)) {
-            self::$instance = new ServiceManager(\common_ext_ConfigDriver::singleton());
+            throw new \common_exception_NotAcceptable('Service Manager should be already instantiate by Bootstrap');
         }
         return self::$instance;
     }
 
+    /**
+     * @deprecated Use the chain of ServiceLocatorAware/ServiceManagerAware instead
+     *
+     * @param ServiceManager $serviceManager
+     */
     public static function setServiceManager(ServiceManager $serviceManager)
     {
         self::$instance = $serviceManager;
     }
 
+    /**
+     * @var array List of service already loaded
+     */
     private $services = array();
     
     /**
-     * @var \common_persistence_KeyValuePersistence
+     * @var \common_persistence_KeyValuePersistence The persistence where configurations are stored
      */
     private $configService;
-    
+
+    /**
+     * ServiceManager constructor.
+     *
+     * @param \common_persistence_KeyValuePersistence $configService
+     */
     public function __construct(\common_persistence_KeyValuePersistence $configService)
     {
         $this->configService = $configService;
@@ -66,23 +85,23 @@ class ServiceManager implements ServiceLocatorInterface
      */
     public function get($serviceKey)
     {
-        if (!isset($this->services[$serviceKey])) {
-            $service = $this->getConfig()->get($serviceKey);
+        $service = $this->getConfig()->get($serviceKey);
+        if (! isset($this->services[$serviceKey])) {
             if ($service === false) {
                 throw new ServiceNotFoundException($serviceKey);
             }
             $this->propagate($service);
-            
             $this->services[$serviceKey] = $service;
         }
         return $this->services[$serviceKey];
     }
-    
+
     /**
      * Get a service associated to the given key into configuration service
      * Key has to be composed of two parts
      *
-     * @see \Zend\ServiceManager\ServiceLocatorInterface::has()
+     * @param array|string $serviceKey
+     * @return bool
      */
     public function has($serviceKey)
     {
@@ -93,9 +112,7 @@ class ServiceManager implements ServiceLocatorInterface
         if (count($parts) < 2) {
             return false;
         }
-        list($extId, $configId) = $parts;
-        $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
-        return $extension->hasConfig($configId);
+        return $this->getConfig()->exists($serviceKey);
     }
 
     /**
@@ -112,11 +129,10 @@ class ServiceManager implements ServiceLocatorInterface
         if (count($parts) < 2) {
             throw new \common_Exception('Invalid servicekey '.$serviceKey);
         }
-        $this->propagate($service);
-        $this->services[$serviceKey] = $service;
+        $this->services[$serviceKey] = $this->propagate($service);
         $success = $this->getConfig()->set($serviceKey, $service);
-        if (!$success) {
-            throw new \common_exception_Error('Unable to write '.$serviceKey);
+        if (! $success) {
+            throw new \common_exception_Error('Unable to write ' . $serviceKey);
         }
     }
 
@@ -150,12 +166,14 @@ class ServiceManager implements ServiceLocatorInterface
      */
     public function propagate($service)
     {
-         if(is_object($service) &&  ($service instanceof ServiceLocatorAwareInterface)){
+        if(is_object($service) &&  ($service instanceof ServiceManagerAwareInterface)){
+            $service->setServiceLocator($this);
+        } elseif(is_object($service) &&  ($service instanceof ServiceLocatorAwareInterface)){
             $service->setServiceLocator($this);
         }
+
         return $service;
     }
-
 
     /**
      * Service or sub-service factory

@@ -36,7 +36,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * 
      * @var string
      */
-    private $directory;
+    public $directory;
     
     /**
      * Nr of subfolder levels in order to prevent filesystem bottlenecks
@@ -78,7 +78,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     public function connect($id, array $params)
     {
-        $this->directory = isset($params['dir']) 
+        $this->directory = isset($params['dir'])
             ? $params['dir'].($params['dir'][strlen($params['dir'])-1] === DIRECTORY_SEPARATOR ? '' : DIRECTORY_SEPARATOR)
             : FILES_PATH.'generis'.DIRECTORY_SEPARATOR.$id.DIRECTORY_SEPARATOR;
         $this->levels = isset($params['levels']) ? $params['levels'] : self::DEFAULT_LEVELS;
@@ -204,7 +204,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * of backwards compatibility
      *
      * @param string $key
-     * @return Ambigous string
+     * @return string
      */
     protected function sanitizeReadableFileName($key) {
         $path = '';

@@ -30,7 +30,7 @@ use oat\generis\model\kernel\uri\UriProviderException;
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
  */
-class core_kernel_uri_DatabaseSerialUriProvider extends Configurable
+class core_kernel_uri_DatabaseSerialUriProvider extends \oat\oatbox\service\ConfigurableService
     implements UriProvider
 {
     const OPTION_PERSISTENCE = 'persistence';

@@ -23,29 +23,26 @@ namespace oat\oatbox\extension;
 use common_exception_Error;
 use oat\oatbox\action\Action;
 use oat\oatbox\service\ServiceManager as ServiceManager;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use oat\oatbox\service\ServiceManagerAwareInterface;
+use oat\oatbox\service\ServiceManagerAwareTrait;
 
 /**
  * abstract base for extension actions
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-abstract class AbstractAction implements Action, ServiceLocatorAwareInterface {
-    
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
-    
+abstract class AbstractAction implements Action, ServiceManagerAwareInterface
+{
+    use ServiceManagerAwareTrait;
+
     /**
-     * 
+     *
      * @throws common_exception_Error
      * @return ServiceManager
      */
     public function getServiceManager()
     {
-        $serviceManager = $this->getServiceLocator();
-        if (!$serviceManager instanceof ServiceManager) {
-            throw new common_exception_Error('Alternate service locator not compatible with '.__CLASS__);
-        }
-        return $serviceManager;
+        return $this->getServiceLocator();
     }
     
 }

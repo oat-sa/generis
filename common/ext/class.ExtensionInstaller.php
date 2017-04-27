@@ -20,9 +20,9 @@
  */
 
 use oat\generis\model\data\ModelManager;
-use oat\oatbox\action\ActionResolver;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
+use oat\oatbox\service\ConfigurableService;
 
 /**
  * Generis installer of extensions
@@ -118,15 +118,19 @@ class common_ext_ExtensionInstaller
 	 */
 	protected function installLoadDefaultConfig()
 	{
-	    $defaultsPath = $this->extension->getDir() . 'config/default';
-	    if (is_dir($defaultsPath)) {
-    		$defaultIterator = new DirectoryIterator ($defaultsPath);
-    		foreach ($defaultIterator as $fileinfo) {
-    		    if (!$fileinfo->isDot () && strpos($fileinfo->getFilename(), '.conf.php') > 0) {
+        $defaultsPath = $this->extension->getDir() . 'config/default';
+        if (is_dir($defaultsPath)) {
+            $defaultIterator = new DirectoryIterator ($defaultsPath);
+            foreach ($defaultIterator as $fileinfo) {
+                if (!$fileinfo->isDot () && strpos($fileinfo->getFilename(), '.conf.php') > 0) {
                     $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
                     if (! $this->extension->hasConfig($confKey)) {
                         $config = include $fileinfo->getPathname();
-                        $this->extension->setConfig($confKey, $config);
+                        if ($config instanceof ConfigurableService) {
+                            $this->getServiceManager()->register($this->extension->getId() . '/' . $confKey, $config);
+                        } else {
+                            $this->extension->setConfig($confKey, $config);
+                        }
                     }
     		    }
     		}
@@ -164,8 +168,6 @@ class common_ext_ExtensionInstaller
 		common_Logger::d('Registering extension '.$this->extension->getId(), 'INSTALL');
 		common_ext_ExtensionsManager::singleton()->registerExtension($this->extension);
 		common_ext_ExtensionsManager::singleton()->setEnabled($this->extension->getId());
-		
-		
 	}
 
 	/**
