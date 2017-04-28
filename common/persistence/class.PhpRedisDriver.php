@@ -56,7 +56,9 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
             $this->connection->connect($host, $port);
         }
 
-        $this->connection->select($database);
+        if ($database) {
+            $this->connection->select($database);
+        }
 
         if (isset($params['password'])) {
             $this->connection->auth($params['password']);
