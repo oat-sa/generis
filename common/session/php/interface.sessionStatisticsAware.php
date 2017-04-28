@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,9 +20,19 @@
  */
 interface common_session_php_sessionStatisticsAware
 {
-    public function setLastAccessTime($time);
-
+    /**
+     * Returns the unix timestamp of the start of the last call
+     * to the system by a logged in user
+     *
+     * @return integer
+     */
     public function getLastAccessTime();
 
+    /**
+     * Returns the number of non expired session of the current system
+     * Will return -1 if the current session handling does not implement this
+     *
+     * @return integer
+     */
     public function getTotalActiveSessions();
 }

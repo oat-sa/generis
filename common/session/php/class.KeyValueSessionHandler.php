@@ -38,7 +38,6 @@ class common_session_php_KeyValueSessionHandler extends Configurable
      * @var common_persistence_KeyValuePersistence
      */
     private $sessionPersistence = null;
-    private $trackLastAccessTime;
 
     protected function getPersistence()
     {
@@ -48,12 +47,14 @@ class common_session_php_KeyValueSessionHandler extends Configurable
         return $this->sessionPersistence;
     }
 
+    /**
+     * Whenever or not we need to track the lass time the system was accessed
+     *
+     * @return boolean
+     */
     protected function isTrackLastAccessTimeRequired()
     {
-        if (is_null($this->trackLastAccessTime)) {
-            $this->trackLastAccessTime = (bool)$this->getOption(self::OPTION_TRACK_LAST_ACCESS_TIME);
-        }
-        return $this->trackLastAccessTime;
+        return (bool)$this->getOption(self::OPTION_TRACK_LAST_ACCESS_TIME);
     }
 
     /**
@@ -117,7 +118,7 @@ class common_session_php_KeyValueSessionHandler extends Configurable
         //
         //problem here either 
         // solution 1 : do two explicit handlers for each specific persistence (Redis, SQL) 
-        // solution 2 : Check if the eprsistence is capable of autonomous garbage  
+        // solution 2 : Check if the persistence is capable of autonomous garbage collection
         //
         return true;
     }
@@ -128,11 +129,19 @@ class common_session_php_KeyValueSessionHandler extends Configurable
 
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see common_session_php_sessionStatisticsAware::getLastAccessTime()
+     */
     public function getLastAccessTime()
     {
         return $this->getPersistence()->get(self::KEY_LAST_ACCESS_TIME);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see common_session_php_sessionStatisticsAware::getTotalActiveSessions()
+     */
     public function getTotalActiveSessions()
     {
         $persistence = $this->getPersistence();
