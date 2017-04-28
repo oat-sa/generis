@@ -74,7 +74,7 @@ class common_persistence_sql_pdo_pgsql_Driver
     */
     public function getPlatform(){
         if($this->platform == null){
-            $this->platform = new common_persistence_sql_Platform(new \Doctrine\DBAL\Platforms\PostgreSqlPlatform());
+            $this->platform = new common_persistence_sql_Platform($this->getDbalConnection());
         }
         return $this->platform;
     }

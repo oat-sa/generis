@@ -18,7 +18,7 @@
  * 
  */
 
-
+use oat\oatbox\config\ConfigurationDriver;
 
 /**
  * Short description of class common_ext_Extension
@@ -29,7 +29,7 @@
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
  
  */
-class common_ext_ConfigDriver extends common_persistence_PhpFileDriver
+class common_ext_ConfigDriver extends common_persistence_PhpFileDriver implements ConfigurationDriver
 {
     private static $singleton = null;
     
