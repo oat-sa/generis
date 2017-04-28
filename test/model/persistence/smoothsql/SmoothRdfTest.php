@@ -23,7 +23,7 @@ use \core_kernel_persistence_smoothsql_SmoothRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use Prophecy\Prophet;
 
-class SmoothRdfTest extends GenerisPhpUnitTestRunner
+class SmoothRdfTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -32,7 +32,6 @@ class SmoothRdfTest extends GenerisPhpUnitTestRunner
      */
     public function setUp()
     {
-        GenerisPhpUnitTestRunner::initTest();
     }
 
     /**

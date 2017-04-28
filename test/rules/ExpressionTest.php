@@ -1,5 +1,5 @@
 <?php
-/*  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -16,12 +16,13 @@
  * 
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ *               2017      (update and modification) Open Assessment Technologies SA;
  * 
  */
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
 
-class ExpressionTest extends GenerisPhpUnitTestRunner {
+class ExpressionTest extends \PHPUnit_Framework_TestCase
+{
 
     public function testEvaluate(){
         $constantResource1 = core_kernel_rules_TermFactory::createConst('test1');

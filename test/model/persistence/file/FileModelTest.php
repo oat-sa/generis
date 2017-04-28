@@ -19,11 +19,10 @@
  */
 namespace oat\generis\test\model\kernel\persistence\file;
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
 use oat\generis\model\kernel\persistence\file\FileModel;
 use \common_exception_MissingParameter;
 
-class FileModelTest extends GenerisPhpUnitTestRunner
+class FileModelTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -32,7 +31,6 @@ class FileModelTest extends GenerisPhpUnitTestRunner
      */
     public function setUp()
     {
-        GenerisPhpUnitTestRunner::initTest();
     }
 
     /**

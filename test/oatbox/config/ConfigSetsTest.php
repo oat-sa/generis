@@ -20,7 +20,6 @@
 
 namespace oat\generis\test\config;
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\config\ConfigSets;
 
@@ -29,7 +28,7 @@ use oat\oatbox\config\ConfigSets;
  * @package oat\generis\test\config
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
-class ConfigSetsTest extends GenerisPhpUnitTestRunner
+class ConfigSetsTest extends \PHPUnit_Framework_TestCase
 {
 
     /**

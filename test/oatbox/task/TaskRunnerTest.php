@@ -25,7 +25,7 @@ use oat\oatbox\task\TaskRunner;
 use Prophecy\Argument;
 use Prophecy\Prophet;
 
-class TaskRunnerTest extends GenerisPhpUnitTestRunner
+class TaskRunnerTest extends \PHPUnit_Framework_TestCase
 {
     private $prophet;
 
