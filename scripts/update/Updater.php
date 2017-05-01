@@ -39,6 +39,7 @@ use oat\generis\model\data\permission\PermissionManager;
 use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use oat\generis\scripts\install\InstallStatisticsService;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\filesystem\FileSystemService;
@@ -312,6 +313,15 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         $this->skip('3.10.0', '3.27.0');
+
+
+        if ($this->isVersion('3.27.0')) {
+            $action = new InstallStatisticsService();
+            $action->setServiceLocator($this->getServiceManager());
+            $action->__invoke([]);
+
+            $this->setVersion('3.28.0');
+        }
 
     }
     

@@ -48,12 +48,19 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         $host = $params['host'];
         $port = isset($params['port']) ? $params['port'] : self::DEFAULT_PORT;
         $persist = isset($params['pconnect']) ? $params['pconnect'] : true;
-        
+        $database = isset($params['database']) && is_int($params['database']) ? $params['database'] : 0;
+
         if ($persist) {
-            $this->connection->pconnect($host, $port);
+            $uniqueConnectionKey = $host . $port . $database; // to prevent overriding connection to different db within same server
+            $this->connection->pconnect($host, $port, 0.0, $uniqueConnectionKey);
         } else {
             $this->connection->connect($host, $port);
         }
+
+        if ($database) {
+            $this->connection->select($database);
+        }
+
         if (isset($params['password'])) {
             $this->connection->auth($params['password']);
         }
@@ -109,5 +116,14 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     //Time complexity: O(1)
     public function incr($key) {
        return $this->connection->incr($key); 
+    }
+
+    /**
+     * Returns keys number in active database
+     * @return int
+     */
+    public function dbSize()
+    {
+        return $this->connection->dbSize();
     }
 }
