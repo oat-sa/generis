@@ -314,6 +314,7 @@ class Updater extends common_ext_ExtensionUpdater {
 
         $this->skip('3.10.0', '3.27.0');
 
+
         if ($this->isVersion('3.27.0')) {
             $action = new InstallStatisticsService();
             $action->setServiceLocator($this->getServiceManager());

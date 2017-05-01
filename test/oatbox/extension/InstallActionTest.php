@@ -19,7 +19,6 @@
  */
 namespace oat\generis\test\oatbox\extension;
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\extension\InstallAction;
 use oat\oatbox\service\ServiceManager;
@@ -27,7 +26,8 @@ use oat\oatbox\service\ServiceManager;
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class InstallActionTest extends GenerisPhpUnitTestRunner {
+class InstallActionTest extends \PHPUnit_Framework_TestCase
+{
     
     public function testRegisterEvent() {
         

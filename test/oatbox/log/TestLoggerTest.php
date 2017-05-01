@@ -26,7 +26,7 @@ use Psr\Log\LogLevel;
 /**
  * Test of test logger implementation
  */
-class TestRunnerFeatureTest extends TaoPhpUnitTestRunner
+class TestLoggerTest extends \PHPUnit_Framework_TestCase
 {
     public function testArbitraryLogger() {
         $logger = new TestLogger();
