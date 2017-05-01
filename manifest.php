@@ -51,6 +51,7 @@ return array(
         'checks' => array(),
         'php' => array(
             oat\generis\scripts\install\TaskQueue::class,
+            \oat\generis\scripts\install\InstallStatisticsService::class,
         ),
     ),
     'update' => 'oat\\generis\\scripts\\update\\Updater',

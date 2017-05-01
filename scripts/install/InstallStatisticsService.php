@@ -35,9 +35,9 @@ class InstallStatisticsService extends InstallAction
         \common_persistence_Manager::addPersistence($statisticsPersistence, ['driver' => 'phpfile']);// should be configure to redis-like shared persistence for multi-server configurations
         $this->registerService(StatisticsManager::SERVICE_ID, new StatisticsManager([StatisticsManager::OPTION_PERSISTENCE => $statisticsPersistence]));
 
-        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
-        $eventManager->attach(SessionRead::class, [StatisticsManager::class, 'catchEvent']);
-        $this->getServiceManager()->register(EventManager::SERVICE_ID, $eventManager);
+//        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
+//        $eventManager->attach(SessionRead::class, [StatisticsManager::class, 'catchEvent']);
+//        $this->getServiceManager()->register(EventManager::SERVICE_ID, $eventManager);
 
     }
 }
