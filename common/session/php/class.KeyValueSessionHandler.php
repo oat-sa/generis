@@ -17,6 +17,7 @@
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
+use oat\generis\model\data\event\SessionRead;
 use oat\oatbox\Configurable;
 
 /**
@@ -25,19 +26,19 @@ use oat\oatbox\Configurable;
  * @author Joel Bout <joel@taotesting.com>
  * @package generis
  */
-class common_session_php_KeyValueSessionHandler extends Configurable
-    implements common_session_php_SessionHandler, common_session_php_sessionStatisticsAware
+class common_session_php_KeyValueSessionHandler extends Configurable implements common_session_php_SessionHandler
 {
     const OPTION_PERSISTENCE = 'persistence';
-    const OPTION_TRACK_LAST_ACCESS_TIME = 'track_access';
 
     const KEY_NAMESPACE = "generis:session:";
-    const KEY_LAST_ACCESS_TIME = "generis:session:lastaccesstime";
 
     /**
      * @var common_persistence_KeyValuePersistence
      */
-    private $sessionPersistence = null;
+    private $sessionPersistence;
+
+    /** @var  \oat\oatbox\event\EventManager */
+    private $eventManager;
 
     protected function getPersistence()
     {
@@ -45,16 +46,6 @@ class common_session_php_KeyValueSessionHandler extends Configurable
             $this->sessionPersistence = common_persistence_KeyValuePersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
         }
         return $this->sessionPersistence;
-    }
-
-    /**
-     * Whenever or not we need to track the lass time the system was accessed
-     *
-     * @return boolean
-     */
-    protected function isTrackLastAccessTimeRequired()
-    {
-        return (bool)$this->getOption(self::OPTION_TRACK_LAST_ACCESS_TIME);
     }
 
     /**
@@ -83,9 +74,8 @@ class common_session_php_KeyValueSessionHandler extends Configurable
     {
         $session = $this->getPersistence()->get(self::KEY_NAMESPACE . $id);
 
-        if ($this->isTrackLastAccessTimeRequired()) {
-            $this->setLastAccessTime((string)time());
-        }
+        $event = new SessionRead();
+        $this->getEventManager()->trigger($event);
 
         return is_string($session) ? $session : '';
     }
@@ -123,21 +113,6 @@ class common_session_php_KeyValueSessionHandler extends Configurable
         return true;
     }
 
-    public function setLastAccessTime($time)
-    {
-        $this->getPersistence()->set(self::KEY_LAST_ACCESS_TIME, $time);
-
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see common_session_php_sessionStatisticsAware::getLastAccessTime()
-     */
-    public function getLastAccessTime()
-    {
-        return $this->getPersistence()->get(self::KEY_LAST_ACCESS_TIME);
-    }
-
     /**
      * (non-PHPdoc)
      * @see common_session_php_sessionStatisticsAware::getTotalActiveSessions()
@@ -146,7 +121,7 @@ class common_session_php_KeyValueSessionHandler extends Configurable
     {
         $persistence = $this->getPersistence();
         if ($persistence->getDriver() instanceof common_persistence_PhpRedisDriver) {
-            return $persistence->getDriver()->dbSize() - 1;
+            return $persistence->getDriver()->dbSize();
         }
         common_Logger::d('Active sessions calculation not implemented');
         return -1;
@@ -158,6 +133,25 @@ class common_session_php_KeyValueSessionHandler extends Configurable
     private function getTTL()
     {
         return (int)ini_get('session.gc_maxlifetime');
+    }
+
+    /**
+     * @return \oat\oatbox\service\ServiceManager
+     */
+    private function getServiceManager()
+    {
+        return \oat\oatbox\service\ServiceManager::getServiceManager();
+    }
+
+    /**
+     * @return \oat\oatbox\event\EventManager
+     */
+    private function getEventManager()
+    {
+        if (!$this->eventManager) {
+            $this->eventManager = $this->getServiceManager()->get(\oat\oatbox\event\EventManager::SERVICE_ID);
+        }
+        return $this->eventManager;
     }
 
 }
