@@ -75,9 +75,13 @@ class common_ext_ExtensionsManager extends ConfigurableService
      */
     public static function singleton()
     {
-
         if (! isset(self::$instance)) {
-            self::$instance = ServiceManager::getServiceManager()->get(self::SERVICE_ID);
+            if (ServiceManager::getServiceManager()->has(self::SERVICE_ID)) {
+                self::$instance = ServiceManager::getServiceManager()->get(self::SERVICE_ID);
+            } else {
+                self::$instance = new common_ext_ExtensionsManager();
+                ServiceManager::getServiceManager()->register(self::SERVICE_ID, self::$instance);
+            }
         }
         return self::$instance;
     }
