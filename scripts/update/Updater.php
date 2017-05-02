@@ -311,11 +311,11 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('3.10.0');
         }
 
-        $this->skip('3.10.0', '3.26.0');
+        $this->skip('3.10.0', '4.0.0');
 
-        if ($this->isVersion('3.26.0')) {
+        if ($this->isVersion('4.0.0')) {
             $this->getServiceManager()->register(common_ext_ExtensionsManager::SERVICE_ID, new common_ext_ExtensionsManager());
-            $this->setVersion('4.0.0');
+            $this->setVersion('4.1.0');
         }
 
     }

@@ -19,16 +19,14 @@
  */
 namespace oat\generis\test\model\persistence\smoothsql;
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
 use Prophecy\Promise\ReturnPromise;
 use Prophecy\Argument;
 
-class SmoothModelIteratorTest extends GenerisPhpUnitTestRunner
+class SmoothModelIteratorTest extends \PHPUnit_Framework_TestCase
 {
 
     public function setUp()
     {
-        GenerisPhpUnitTestRunner::initTest();
     }
 
    
