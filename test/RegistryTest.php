@@ -23,7 +23,7 @@ namespace oat\generis\test;
 
 use oat\oatbox\BasicRegistry;
 
-class RegistryTest extends GenerisPhpUnitTestRunner 
+class RegistryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      *
@@ -31,7 +31,6 @@ class RegistryTest extends GenerisPhpUnitTestRunner
      */
     public function setUp()
     {
-        GenerisPhpUnitTestRunner::initTest();
     }
     
     /**

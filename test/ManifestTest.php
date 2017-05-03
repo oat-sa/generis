@@ -1,5 +1,5 @@
 <?php
-/*  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -16,12 +16,12 @@
  * 
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ *               2017      (update and modification) Open Assessment Technologies SA;
  * 
  */
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
 
-class ManifestTest extends GenerisPhpUnitTestRunner {
+class ManifestTest extends \PHPUnit_Framework_TestCase {
 	
 	const SAMPLES_PATH = '/../test/samples/manifests/';
 	const MANIFEST_PATH_DOES_NOT_EXIST = 'idonotexist.php';
@@ -29,7 +29,6 @@ class ManifestTest extends GenerisPhpUnitTestRunner {
 	const MANIFEST_PATH_COMPLEX = 'complexManifest.php';
 	
 	public function setUp(){
-        GenerisPhpUnitTestRunner::initTest();
 	}
 	
 	public function testManifestLoading(){
@@ -42,18 +41,18 @@ class ManifestTest extends GenerisPhpUnitTestRunner {
 			$this->assertTrue(false, "Trying to load a manifest that does not exist should raise an exception");
 		}
 		catch (Exception $e){
-			$this->assertIsA($e, 'common_ext_ManifestNotFoundException');
+			$this->assertInstanceOf('common_ext_ManifestNotFoundException', $e);
 		}
 		
 		// Load a simple lightweight manifest that exists and is well formed.
 		$manifestPath = $currentPath . self::SAMPLES_PATH . self::MANIFEST_PATH_LIGHTWEIGHT;
 		try{
 			$manifest = new common_ext_Manifest($manifestPath);
-			$this->assertIsA($manifest, 'common_ext_Manifest');
-			$this->assertEquals($manifest->getName(), 'lightweight');
-			$this->assertEquals($manifest->getDescription(), 'lightweight testing manifest');
-			$this->assertEquals($manifest->getVersion(), '1.0');
-			$this->assertEquals($manifest->getAuthor(), 'TAO Team');
+			$this->assertInstanceOf('common_ext_Manifest', $manifest);
+			$this->assertEquals('lightweight', $manifest->getName());
+			$this->assertEquals('lightweight testing manifest', $manifest->getDescription());
+			$this->assertEquals('1.0', $manifest->getVersion());
+			$this->assertEquals('TAO Team', $manifest->getAuthor());
 		}
 		catch (common_ext_ManifestException $e){
 			$this->assertTrue(false, "Trying to load a manifest that exists and well formed should not raise an exception.");
@@ -63,17 +62,20 @@ class ManifestTest extends GenerisPhpUnitTestRunner {
 		$manifestPath = $currentPath . self::SAMPLES_PATH . self::MANIFEST_PATH_COMPLEX;
 		try{
 			$manifest = new common_ext_Manifest($manifestPath);
-			$this->assertIsA($manifest, 'common_ext_Manifest');
-			$this->assertEquals($manifest->getName(), 'complex');
-			$this->assertEquals($manifest->getDescription(), 'complex testing manifest');
-			$this->assertEquals($manifest->getVersion(), '1.0');
-			$this->assertEquals($manifest->getAuthor(), 'TAO Team');
-			$this->assertEquals(array_keys($manifest->getDependencies()), array('taoItemBank', 'taoDocuments'));
-			$this->assertEquals($manifest->getInstallModelFiles(), array('/extension/path/models/ontology/taofuncacl.rdf',
-																  		'/extension/path/models/ontology/taoitembank.rdf'));
-			$this->assertEquals($manifest->getConstants(), array('WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/', 'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php'));
-			$this->assertEquals($manifest->getOptimizableClasses(), array('http://www.linkeddata.org/ontologies/data.rdf#myClass1','http://www.linkeddata.org/ontologies/data.rdf#myClass2'));
-			$this->assertEquals($manifest->getOptimizableProperties(), array('http://www.linkeddata.org/ontologies/props.rdf#myProp1','http://www.linkeddata.org/ontologies/props.rdf#myProp2'));
+			$this->assertInstanceOf('common_ext_Manifest', $manifest);
+			$this->assertEquals('complex', $manifest->getName());
+			$this->assertEquals('complex testing manifest', $manifest->getDescription());
+			$this->assertEquals('1.0', $manifest->getVersion());
+			$this->assertEquals('TAO Team', $manifest->getAuthor());
+			$this->assertEquals(array('taoItemBank', 'taoDocuments'), array_keys($manifest->getDependencies()));
+			$this->assertEquals(array(
+			    '/extension/path/models/ontology/taofuncacl.rdf',
+                '/extension/path/models/ontology/taoitembank.rdf'
+            ),
+                $manifest->getInstallModelFiles());
+			$this->assertEquals(array('WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/', 'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php'), $manifest->getConstants());
+			$this->assertEquals(array('http://www.linkeddata.org/ontologies/data.rdf#myClass1','http://www.linkeddata.org/ontologies/data.rdf#myClass2'), $manifest->getOptimizableClasses());
+			$this->assertEquals(array('http://www.linkeddata.org/ontologies/props.rdf#myProp1','http://www.linkeddata.org/ontologies/props.rdf#myProp2'), $manifest->getOptimizableProperties());
 			
 		}
 		catch (common_ext_ManifestException $e){

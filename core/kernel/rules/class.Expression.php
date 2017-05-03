@@ -105,9 +105,7 @@ class core_kernel_rules_Expression
     {
         
         parent::__construct($uri);
-        $this->debug = $debug;
 
-        
     }
 
     /**
