@@ -314,7 +314,9 @@ class Updater extends common_ext_ExtensionUpdater {
         $this->skip('3.10.0', '3.27.0');
 
         if ($this->isVersion('3.27.0')) {
-            $this->getServiceManager()->register(common_ext_ExtensionsManager::SERVICE_ID, new common_ext_ExtensionsManager());
+            if (! $this->getServiceManager()->has(common_ext_ExtensionsManager::SERVICE_ID)) {
+                $this->getServiceManager()->register(common_ext_ExtensionsManager::SERVICE_ID, new common_ext_ExtensionsManager());
+            }
             $this->setVersion('4.0.0');
         }
 
