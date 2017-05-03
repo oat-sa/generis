@@ -166,9 +166,7 @@ class ServiceManager implements ServiceLocatorInterface
      */
     public function propagate($service)
     {
-        if(is_object($service) &&  ($service instanceof ServiceManagerAwareInterface)){
-            $service->setServiceLocator($this);
-        } elseif(is_object($service) &&  ($service instanceof ServiceLocatorAwareInterface)){
+        if(is_object($service) &&  ($service instanceof ServiceLocatorAwareInterface)){
             $service->setServiceLocator($this);
         }
 

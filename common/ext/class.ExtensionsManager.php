@@ -80,7 +80,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
                 self::$instance = ServiceManager::getServiceManager()->get(self::SERVICE_ID);
             } else {
                 self::$instance = new common_ext_ExtensionsManager();
-                ServiceManager::getServiceManager()->register(self::SERVICE_ID, self::$instance);
+                ServiceManager::getServiceManager()->propagate(self::$instance);
             }
         }
         return self::$instance;

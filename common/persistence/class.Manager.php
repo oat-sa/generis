@@ -73,6 +73,7 @@ class common_persistence_Manager extends ConfigurableService
             ));
             $manager->setServiceManager(ServiceManager::getServiceManager());
         }
+
         return $manager;
     }
     

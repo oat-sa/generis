@@ -86,7 +86,6 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     public function __construct($id)
     {
 		$this->id = $id;
-		$this->manifest = $this->getManifestFile();
     }
 
     /**
@@ -110,7 +109,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      */
     public function getConstants()
     {
-        return (array) $this->manifest->getConstants();
+        return (array) $this->getManifest()->getConstants();
     }
 
     /**
@@ -184,7 +183,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      */
     public function getVersion()
     {
-        return (string) $this->manifest->getVersion();
+        return (string) $this->getManifest()->getVersion();
     }
 
     /**
@@ -196,7 +195,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      */
     public function getAuthor()
     {
-        return (string) $this->manifest->getAuthor();
+        return (string) $this->getManifest()->getAuthor();
     }
 
     /**
@@ -208,7 +207,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      */
     public function getName()
     {
-        return (string) $this->manifest->getName();
+        return (string) $this->getManifest()->getName();
     }
 
     /**
@@ -372,6 +371,9 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      */
     public function getManifest()
     {
+        if (! $this->manifest) {
+            $this->manifest = $this->getManifestFile();
+        }
         return $this->manifest;
     }
 
@@ -441,7 +443,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
                     throw new common_ext_MissingExtensionException($e->getExtensionId().' not found but required for '.$this->getId());
                 }
             }
-            
+
             $loader = new common_ext_ExtensionLoader($this);
             $loader->load();
             //load all dependent extensions
