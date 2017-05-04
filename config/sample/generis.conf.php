@@ -50,6 +50,9 @@ define('DEFAULT_ANONYMOUS_INTERFACE_LANG', '');
 define('DEBUG_MODE', false);
 
 #application state
+/**
+ * @deprecated Use \oat\tao\model\maintenance\Maintenance instead
+ */
 define('SYS_READY', true);
 
 #the time zone, required since PHP5.3
@@ -72,6 +75,9 @@ define('FILES_PATH' , '');
 define('GENERIS_CACHE_PATH', FILES_PATH.'generis'.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR);
 
 #path to read configs from
+/**
+ * @deprecated Should not be used anymore
+ */
 define('CONFIG_PATH', ROOT_PATH.'config/');
 
 # users cache

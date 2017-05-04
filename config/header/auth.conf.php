@@ -10,5 +10,10 @@
 /* Default AuthAdapter
 array(
     'driver' => 'oat\\generis\\model\\user\\AuthAdapter',
-)
+),
+array(
+    'driver' => 'oat\authKeyValue\AuthKeyValueAdapter',
+    'persistence' => 'authKeyValue'
+),
+
 */

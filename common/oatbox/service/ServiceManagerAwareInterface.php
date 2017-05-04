@@ -14,13 +14,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
 
-namespace oat\oatbox\config;
+namespace oat\oatbox\service;
 
-interface ConfigurationDriver extends \common_persistence_KvDriver
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+
+interface ServiceManagerAwareInterface extends ServiceLocatorAwareInterface
 {
-
 }

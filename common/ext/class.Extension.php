@@ -1,25 +1,29 @@
 <?php
-/**  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 				 2013-2014 (update and modification) Open Assessment Technologies SA;
  *
  */
 
+use oat\oatbox\service\ServiceManagerAwareInterface;
+use oat\oatbox\service\ServiceManagerAwareTrait;
+use oat\oatbox\service\ConfigurationService;
+use oat\oatbox\service\ServiceNotFoundException;
 
 /**
  * Short description of class common_ext_Extension
@@ -28,13 +32,15 @@
  * @author lionel.lecaque@tudor.lu
  * @package generis
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
- 
+
  */
-class common_ext_Extension
+class common_ext_Extension implements ServiceManagerAwareInterface
 {
+    use ServiceManagerAwareTrait;
+
     /**
      * Filename of the manifest
-     * 
+     *
      * @var string
      */
     const MANIFEST_NAME = 'manifest.php';
@@ -69,30 +75,17 @@ class common_ext_Extension
      * @var boolean
      */
     protected $loaded = false;
-    
+
     /**
+     * common_ext_Extension constructor.
+     *
      * Should not be called directly, please use ExtensionsManager
      *
-     * @access public
-     * @author Joel Bout, <joel@taotesting.com>
-     *
-     * @param string $id
-     * @param string $deprecated1
-     * @param string $deprecated2
-     *
-     * @throws common_ext_ExtensionException
-     * @throws common_ext_ManifestNotFoundException
+     * @param $id
      */
-    public function __construct($id, $deprecated1 = null, $deprecated2 = null)
+    public function __construct($id)
     {
-		$this->id = $id;
-    	$manifestFile = $this->getDir().self::MANIFEST_NAME;
-		if(is_file($manifestFile)){
-			$this->manifest = new common_ext_Manifest($manifestFile);
-		} else {
-			//Here the extension is set unvalided to not be displayed by the view
-			throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '${id}'.", $id);
-		}
+        $this->id = $id;
     }
 
     /**
@@ -116,22 +109,13 @@ class common_ext_Extension
      */
     public function getConstants()
     {
-        return (array) $this->manifest->getConstants();
+        return (array) $this->getManifest()->getConstants();
     }
 
     /**
-     * CONFIGURATION 
+     * CONFIGURATION
      */
 
-    /**
-     * Returns the KV persistence to use for configurations
-     * @return common_persistence_KeyValuePersistence
-     */
-    private function getConfigPersistence()
-    {
-        return common_ext_ConfigDriver::singleton();
-    }
-    
     /**
      * checks if a configuration value exists
      *
@@ -140,9 +124,9 @@ class common_ext_Extension
      */
     public function hasConfig($key)
     {
-        return $this->getConfigPersistence()->exists($this->getId().'/'.$key);
+        return $this->getServiceLocator()->has($this->getId().'/'.$key);
     }
-    
+
     /**
      * sets a configuration value
      *
@@ -153,23 +137,30 @@ class common_ext_Extension
      */
     public function setConfig($key, $value)
     {
-        $success = $this->getConfigPersistence()->set($this->getId().'/'.$key, $value);
-        if (!$success) {
-            throw new common_exception_Error('Unable to write '.$this->getId().'/'.$key);
-        }
+        $value = new ConfigurationService(array(ConfigurationService::OPTION_CONFIG => $value));
+        $value->setHeader($this->getConfigHeader($key));
+        $this->registerService($this->getId().'/'.$key, $value);
         return true;
     }
 
     /**
      * retrieves a configuration value
-	 * returns false if not found
+     * returns false if not found
      *
      * @param  string $key
      * @return mixed
      */
     public function getConfig($key)
     {
-        return $this->getConfigPersistence()->get($this->getId().'/'.$key);
+        try {
+            $config =  $this->getServiceLocator()->get($this->getId().'/'.$key);
+            if ($config instanceof ConfigurationService) {
+                $config = $config->getOption(ConfigurationService::OPTION_CONFIG);
+            }
+            return $config;
+        } catch (ServiceNotFoundException $e) {
+            return false;
+        }
     }
 
     /**
@@ -180,7 +171,7 @@ class common_ext_Extension
      */
     public function unsetConfig($key)
     {
-        return $this->getConfigPersistence()->del($this->getId().'/'.$key);
+        return $this->getServiceLocator()->unregister($this->getId().'/'.$key);
     }
 
     /**
@@ -192,7 +183,7 @@ class common_ext_Extension
      */
     public function getVersion()
     {
-        return (string) $this->manifest->getVersion();
+        return (string) $this->getManifest()->getVersion();
     }
 
     /**
@@ -204,7 +195,7 @@ class common_ext_Extension
      */
     public function getAuthor()
     {
-        return (string) $this->manifest->getAuthor();
+        return (string) $this->getManifest()->getAuthor();
     }
 
     /**
@@ -216,7 +207,7 @@ class common_ext_Extension
      */
     public function getName()
     {
-        return (string) $this->manifest->getName();
+        return (string) $this->getManifest()->getName();
     }
 
     /**
@@ -246,7 +237,7 @@ class common_ext_Extension
         $constants = $this->getConstants();
         return isset($constants[$key]);
     }
-    
+
     /**
      * Retrieves a constant from the manifest.php file of the extension.
      *
@@ -261,12 +252,12 @@ class common_ext_Extension
 
         $constants = $this->getConstants();
         if (isset($constants[$key])) {
-        	$returnValue = $constants[$key];
+            $returnValue = $constants[$key];
         } elseif (defined($key)) {
-        	common_logger::w('constant outside of extension called: '.$key);
-        	$returnValue = constant($key);
+            common_logger::w('constant outside of extension called: '.$key);
+            $returnValue = constant($key);
         } else {
-        	throw new common_exception_Error('Unknown constant \''.$key.'\' for extension '.$this->id);
+            throw new common_exception_Error('Unknown constant \''.$key.'\' for extension '.$this->id);
         }
 
         return $returnValue;
@@ -290,7 +281,7 @@ class common_ext_Extension
             $namespaces[] = trim($ns, '\\');
         }
         if (!empty($namespaces)) {
-        	common_Logger::d('Namespace not empty for extension '. $this->getId() );
+            common_Logger::d('Namespace not empty for extension '. $this->getId() );
             $recDir = new RecursiveDirectoryIterator($this->getDir());
             $recIt = new RecursiveIteratorIterator($recDir);
             $regexIt = new RegexIterator($recIt, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
@@ -303,30 +294,30 @@ class common_ext_Extension
                     }
                 }
             }
-        } 
+        }
         // legacy
         if ($this->hasConstant('DIR_ACTIONS') && file_exists($this->getConstant('DIR_ACTIONS'))) {
-			$dir = new DirectoryIterator($this->getConstant('DIR_ACTIONS'));
-		    foreach ($dir as $fileinfo) {
-				if(preg_match('/^class\.[^.]*\.php$/', $fileinfo->getFilename())) {
-					$module = substr($fileinfo->getFilename(), 6, -4);
-					$returnValue[$module] = $this->getId().'_actions_'.$module;
-				}
-			}
+            $dir = new DirectoryIterator($this->getConstant('DIR_ACTIONS'));
+            foreach ($dir as $fileinfo) {
+                if(preg_match('/^class\.[^.]*\.php$/', $fileinfo->getFilename())) {
+                    $module = substr($fileinfo->getFilename(), 6, -4);
+                    $returnValue[$module] = $this->getId().'_actions_'.$module;
+                }
+            }
         }
-        
+
         // validate the classes
         foreach (array_keys($returnValue) as $key) {
             $class = $returnValue[$key];
             if (!class_exists($class)) {
-				common_Logger::w($class.' not found');
-				unset($returnValue[$key]);
+                common_Logger::w($class.' not found');
+                unset($returnValue[$key]);
             } elseif (!is_subclass_of($class, 'Module')) {
-				common_Logger::w($class.' does not inherit Module');
-				unset($returnValue[$key]);
-            } 
+                common_Logger::w($class.' does not inherit Module');
+                unset($returnValue[$key]);
+            }
         }
-        
+
         return (array) $returnValue;
     }
 
@@ -342,12 +333,12 @@ class common_ext_Extension
     {
         $returnValue = null;
 
-    	$className = $this->getId().'_actions_'.$id;
-		if(class_exists($className)) {
-			$returnValue = new $className;
-		} else {
-			common_Logger::e('could not load '.$className);
-		}
+        $className = $this->getId().'_actions_'.$id;
+        if(class_exists($className)) {
+            $returnValue = new $className;
+        } else {
+            common_Logger::e('could not load '.$className);
+        }
 
         return $returnValue;
     }
@@ -363,8 +354,9 @@ class common_ext_Extension
         if (empty($this->dependencies)) {
             foreach ($this->getManifest()->getDependencies() as $id => $version) {
                 $this->dependencies[$id] = $version;
-                $dependence = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
-                $this->dependencies = array_merge($this->dependencies, $dependence->getDependencies());
+                /** @var common_ext_Extension $dependency */
+                $dependency = $this->getExtensionManager()->getExtensionById($id);
+                $this->dependencies = array_merge($this->dependencies, $dependency->getDependencies());
             }
         }
         return $this->dependencies;
@@ -379,13 +371,16 @@ class common_ext_Extension
      */
     public function getManifest()
     {
+        if (! $this->manifest) {
+            $this->manifest = $this->getManifestFile();
+        }
         return $this->manifest;
     }
 
     /**
      * Get the Management Role of the Extension. Returns null in case of no
      * Role for the Extension.
-     * 
+     *
      * Removing all generis references from framework, please use the Manifest::getManagementRoleUri()
      *
      * @access public
@@ -398,44 +393,39 @@ class common_ext_Extension
     {
         return $this->getManifest()->getManagementRole();
     }
-    
+
     /**
      * Get an array of Class URIs (as strings) that are considered optimizable by the Extension.
-     * 
+     *
      * @access public
      * @author Jerome Bogaerts <jerome@taotesting.com>
      * @return array
      */
     public function getOptimizableClasses()
-	{
-		return $this->getManifest()->getOptimizableClasses();
-	}
-	
-	public function getPhpNamespace()
-	{
-	    return $this->getManifest()->getPhpNamespace();
-	}	
+    {
+        return $this->getManifest()->getOptimizableClasses();
+    }
 
-	/**
-	 * Get an array of Property URIs (as strings) that are considered optimizable by the Extension.
-	 *
-	 * @access public
-	 * @author Jerome Bogaerts <jerome@taotesting.com>
-	 * @return array
-	 */
-	public function getOptimizableProperties()
-	{
-		return $this->getManifest()->getOptimizableProperties();
-	}
+    /**
+     * Get an array of Property URIs (as strings) that are considered optimizable by the Extension.
+     *
+     * @access public
+     * @author Jerome Bogaerts <jerome@taotesting.com>
+     * @return array
+     */
+    public function getOptimizableProperties()
+    {
+        return $this->getManifest()->getOptimizableProperties();
+    }
 
-	/**
-	 * Whenever or not the extension and it's constants have been loaded
-	 * @return boolean
-	 */
-	public function isLoaded()
-	{
-		return $this->loaded;
-	}
+    /**
+     * Whenever or not the extension and it's constants have been loaded
+     * @return boolean
+     */
+    public function isLoaded()
+    {
+        return $this->loaded;
+    }
 
     /**
      * Loads the extension if it hasn't been loaded (using load), yet
@@ -448,16 +438,69 @@ class common_ext_Extension
             foreach ($dependencies as $extId => $extVersion) {
                 // triggers loading of extensions
                 try {
-                    \common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
+                    $this->getExtensionManager()->getExtensionById($extId);
                 } catch (common_ext_ManifestNotFoundException $e) {
                     throw new common_ext_MissingExtensionException($e->getExtensionId().' not found but required for '.$this->getId());
                 }
             }
-            
+
             $loader = new common_ext_ExtensionLoader($this);
             $loader->load();
             //load all dependent extensions
             $this->loaded = true;
         }
+    }
+
+    /**
+     * Get the manifest file associate to the given extension id
+     *
+     * @return common_ext_Manifest
+     * @throws common_ext_ManifestNotFoundException
+     */
+    protected function getManifestFile()
+    {
+        $manifestFile = $this->getDir() . self::MANIFEST_NAME;
+        if (is_file($manifestFile) && is_readable($manifestFile)){
+            return new common_ext_Manifest($manifestFile);
+        }
+
+        //Here the extension is set unvalided to not be displayed by the view
+        throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '" . $this->id . "'.", $this->id);
+    }
+
+    /**
+     * Get the documentation header for extension config located at key path
+     *
+     * @param $key
+     * @return null|string
+     */
+    protected function getConfigHeader($key)
+    {
+        $parts = explode('/', $key, 2);
+        if (count($parts) >= 2) {
+            list($extId, $configId) = $parts;
+            $path = $this->getDir() . 'config/header/' . $configId . '.conf.php';
+            var_dump($path);
+            if (is_readable($path) && is_file($path)) {
+                return file_get_contents($path);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get the ExtensionManager service
+     *
+     * @return common_ext_ExtensionsManager|mixed
+     */
+    protected function getExtensionManager()
+    {
+        if ($this->getServiceLocator()->has(common_ext_ExtensionsManager::SERVICE_ID)) {
+            $service = $this->getServiceLocator()->get(common_ext_ExtensionsManager::SERVICE_ID);
+        } else {
+            $service = new common_ext_ExtensionsManager();
+            $this->getServiceLocator()->propagate($service);
+        }
+        return $service;
     }
 }

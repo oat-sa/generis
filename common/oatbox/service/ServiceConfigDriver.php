@@ -19,55 +19,49 @@
  */
 namespace oat\oatbox\service;
 
-use common_persistence_PhpFileDriver;
 use common_Utils;
 use oat\oatbox\config\ConfigurationDriver;
 
 /**
- * @deprecated Use oat\oatbox\service\ServiceConfigDriver instead
+ * Class ServiceConfigDriver
  *
- * A simplified config driver 
+ * Driver dedicated to store only ConfigurableService into config
+ *
+ * @package oat\oatbox\service
  */
-class SimpleConfigDriver extends common_persistence_PhpFileDriver implements ConfigurationDriver
+class ServiceConfigDriver extends \common_persistence_PhpFileDriver implements ConfigurationDriver
 {
     /**
-     * Override the function to allow an additional header
-     * 
-     * (non-PHPdoc)
-     * @see common_persistence_PhpFileDriver::getContent()
+     * Get the config content associated to given $key
+     * $key has to be a configurable service
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return null|string
      */
     protected function getContent($key, $value)
     {
-        return $this->getDefaultHeader($key).PHP_EOL."return ".common_Utils::toHumanReadablePhpString($value).";".PHP_EOL;
-    }
-    
-    /**
-     * Generates a default header
-     * 
-     * @param string $key
-     * @return string
-     */
-    private function getDefaultHeader($key)
-    {
-        return '<?php'.PHP_EOL
-            .'/**'.PHP_EOL
-            .' * Default config header created during install'.PHP_EOL
-            .' */'.PHP_EOL;
+        if (! $value instanceof ConfigurableService) {
+            return null;
+        }
+
+        return $value->getHeader() . PHP_EOL . "return " . common_Utils::toHumanReadablePhpString($value) . ";" . PHP_EOL;
     }
 
     /**
-     * (non-PHPdoc)
-     * @see common_persistence_PhpFileDriver::getPath()
+     * Get the path associated to the given key
+     * Must be a two part key (e.q. path into a config folder)
+     *
+     * @param string $key
+     * @return string
      */
     protected function getPath($key)
     {
         $parts = explode('/', $key);
         $path = substr(parent::getPath(array_shift($parts)), 0, -4);
         foreach ($parts as $part) {
-            $path .= DIRECTORY_SEPARATOR.$this->sanitizeReadableFileName($part);
+            $path .= DIRECTORY_SEPARATOR . $this->sanitizeReadableFileName($part);
         }
         return $path.'.conf.php';
     }
-    
-    
 }
