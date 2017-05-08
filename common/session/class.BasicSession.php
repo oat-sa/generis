@@ -37,11 +37,6 @@ class common_session_BasicSession implements common_session_Session
      */
     private $user;
 
-    /**
-     * @var common_user_User
-     */
-    private $userTz;
-
     public function __construct(User $user) {
         $this->user = $user;
     }
@@ -130,12 +125,9 @@ class common_session_BasicSession implements common_session_Session
      * @see common_session_Session::getTimeZone()
      */
     public function getTimeZone() {
-        if ($this->userTz === null) {
-            $tzs = $this->user->getPropertyValues(PROPERTY_USER_TIMEZONE);
-            $tz = empty($tzs) ? '' : (string)current($tzs);
-            $this->userTz = empty($tz) ? TIME_ZONE : $tz;
-        }
-        return $this->userTz;
+        $tzs = $this->user->getPropertyValues(PROPERTY_USER_TIMEZONE);
+        $tz = empty($tzs) ? '' : (string)current($tzs);
+        return empty($tz) ? TIME_ZONE : $tz;
     }
     
     public function refresh() {
