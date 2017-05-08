@@ -74,11 +74,15 @@ class common_ext_ExtensionsManager extends ConfigurableService
     public static function singleton()
     {
         if (! isset(self::$instance)) {
-            if (ServiceManager::getServiceManager()->has(self::SERVICE_ID)) {
-                self::$instance = ServiceManager::getServiceManager()->get(self::SERVICE_ID);
-            } else {
-                self::$instance = new common_ext_ExtensionsManager();
-                ServiceManager::getServiceManager()->propagate(self::$instance);
+            if (!tao_install_utils_System::isTAOInstalled()) {
+                self::$instance = new self();
+            }else {
+                if (ServiceManager::getServiceManager()->has(self::SERVICE_ID)) {
+                    self::$instance = ServiceManager::getServiceManager()->get(self::SERVICE_ID);
+                } else {
+                    self::$instance = new common_ext_ExtensionsManager();
+                    ServiceManager::getServiceManager()->propagate(self::$instance);
+                }
             }
         }
         return self::$instance;
