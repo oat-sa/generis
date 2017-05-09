@@ -43,25 +43,23 @@ class Installer extends ConfigurableService
     {
         $this->validateOptions();
 
-        $configPath = $this->getOption('root_path').'config/';
-        $serviceManager = $this->setupServiceManager($configPath);
-
-        try{
-            if(!($serviceManager->get(FileSystemService::SERVICE_ID) instanceof FileSystemService)){
-                throw new InvalidService('Your service must be a oat\oatbox\filesystem\FileSystemService');
-            }
-        } catch(ServiceNotFoundException $e){
-            $fileSystemService = new FileSystemService(array(FileSystemService::OPTION_FILE_PATH => $this->getOption('file_path')));
-            $serviceManager->register(FileSystemService::SERVICE_ID, $fileSystemService);
-        }
+        $this->setupServiceManager($this->getConfigPath());
+        $this->installFilesystem();
 
         return new Report(Report::TYPE_SUCCESS, 'Oatbox installed successfully');
     }
 
+    /**
+     * Setup the service manager with configuration driver associated to config path
+     *
+     * @param $configPath
+     * @return ServiceManager
+     * @throws \common_exception_Error
+     */
     public function setupServiceManager($configPath)
     {
-        if(is_null($this->getServiceManager())){
-            if (!\helpers_File::emptyDirectory($configPath, true)) {
+        if (is_null($this->getServiceManager())) {
+            if (! \helpers_File::emptyDirectory($configPath, true)) {
                 throw new \common_exception_Error('Unable to empty ' . $configPath . ' folder.');
             }
             $driver = new SimpleConfigDriver();
@@ -75,7 +73,29 @@ class Installer extends ConfigurableService
 
         return $this->getServiceManager();
     }
-    
+
+    /**
+     * Install the filesystem service if not already installed
+     *
+     * @throws InvalidService If installed filesystem is not a FileSystemService
+     */
+    protected function installFilesystem()
+    {
+        try {
+            if(! ($this->getServiceManager()->get(FileSystemService::SERVICE_ID) instanceof FileSystemService)) {
+                throw new InvalidService('Your service must be a oat\oatbox\filesystem\FileSystemService');
+            }
+        } catch(ServiceNotFoundException $e){
+            $fileSystemService = new FileSystemService(array(FileSystemService::OPTION_FILE_PATH => $this->getOption('file_path')));
+            $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fileSystemService);
+        }
+    }
+
+    /**
+     * Validate require option e.q. file_path & root_path
+     *
+     * @throws \common_exception_MissingParameter
+     */
     protected function validateOptions()
     {
         if (!$this->hasOption('root_path') || empty($this->getOption('root_path'))) {
@@ -84,8 +104,19 @@ class Installer extends ConfigurableService
         if (!$this->hasOption('file_path') || empty($this->getOption('file_path'))) {
             throw new \common_exception_MissingParameter('file_path', __CLASS__);
         }
-        
     }
-    
+
+    /**
+     * Get the path where to install config
+     *
+     * @return string
+     */
+    protected function getConfigPath()
+    {
+        if ($this->hasOption('config_path') && ! empty($this->getOption('config_path'))) {
+            return $this->getOption('config_path');
+        }
+        return trim($this->getOption('root_path'), '/\\') . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
+    }
     
 }
