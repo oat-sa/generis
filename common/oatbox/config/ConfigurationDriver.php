@@ -14,25 +14,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- * @author "Lionel Lecaque, <lionel@taotesting.com>"
- * @license GPLv2
- * @package generis
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
 
-class common_Config {
-	/**
-	 * @access
-	 * @author "Lionel Lecaque, <lionel@taotesting.com>"
-	 */
-	public static function load($config=null)
-    {
-	    if (! is_null($config) && is_readable($config)) {
-            include_once $config;
-        } else {
-            include_once dirname ( __FILE__ ) . '/../../config/generis.conf.php';
-        }
-	}
+namespace oat\oatbox\config;
+
+interface ConfigurationDriver extends \common_persistence_KvDriver
+{
+
 }

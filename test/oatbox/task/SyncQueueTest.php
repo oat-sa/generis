@@ -31,7 +31,7 @@ use Prophecy\Argument;
  *
  * @author Aleh Hutnikau, <huntikau@1pt.com>
  */
-class SyncQueueTest extends GenerisPhpUnitTestRunner
+class SyncQueueTest extends \PHPUnit_Framework_TestCase
 {
 
     protected $prophet;

@@ -41,7 +41,8 @@ class core_kernel_users_GenerisUser extends common_user_User
         PROPERTY_USER_UILG,
         PROPERTY_USER_FIRSTNAME,
         PROPERTY_USER_LASTNAME,
-        PROPERTY_USER_LOGIN
+        PROPERTY_USER_LOGIN,
+        PROPERTY_USER_TIMEZONE,
     );
 
     public function __construct(core_kernel_classes_Resource $user)

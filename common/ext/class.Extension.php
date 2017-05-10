@@ -147,12 +147,17 @@ class common_ext_Extension
      * sets a configuration value
      *
      * @param  string $key
-     * @param  $value
-     * @return boolean
+     * @param  string $value
+     * @return bool always returns true for backward compatibility
+     * @throws common_exception_Error On error
      */
     public function setConfig($key, $value)
     {
-        return $this->getConfigPersistence()->set($this->getId().'/'.$key, $value);
+        $success = $this->getConfigPersistence()->set($this->getId().'/'.$key, $value);
+        if (!$success) {
+            throw new common_exception_Error('Unable to write '.$this->getId().'/'.$key);
+        }
+        return true;
     }
 
     /**
@@ -358,7 +363,7 @@ class common_ext_Extension
         if (empty($this->dependencies)) {
             foreach ($this->getManifest()->getDependencies() as $id => $version) {
                 $this->dependencies[$id] = $version;
-                $dependence = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
+                $dependence = $this->getExtensionManager()->getExtensionById($id);
                 $this->dependencies = array_merge($this->dependencies, $dependence->getDependencies());
             }
         }
@@ -443,7 +448,7 @@ class common_ext_Extension
             foreach ($dependencies as $extId => $extVersion) {
                 // triggers loading of extensions
                 try {
-                    \common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
+                    $this->getExtensionManager()->getExtensionById($extId);
                 } catch (common_ext_ManifestNotFoundException $e) {
                     throw new common_ext_MissingExtensionException($e->getExtensionId().' not found but required for '.$this->getId());
                 }
@@ -454,5 +459,26 @@ class common_ext_Extension
             //load all dependent extensions
             $this->loaded = true;
         }
+    }
+
+    /**
+     * Get the ExtensionManager service
+     *
+     * @return common_ext_ExtensionsManager|mixed
+     */
+    protected function getExtensionManager()
+    {
+        if ($this->getServiceLocator()->has(common_ext_ExtensionsManager::SERVICE_ID)) {
+            $service = $this->getServiceLocator()->get(common_ext_ExtensionsManager::SERVICE_ID);
+        } else {
+            $service = new common_ext_ExtensionsManager();
+            $this->getServiceLocator()->propagate($service);
+        }
+        return $service;
+    }
+
+    protected function getServiceLocator()
+    {
+        return \oat\oatbox\service\ServiceManager::getServiceManager();
     }
 }

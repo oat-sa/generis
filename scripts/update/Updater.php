@@ -311,8 +311,15 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('3.10.0');
         }
 
-        $this->skip('3.10.0', '3.22.0');
+        $this->skip('3.10.0', '3.27.0');
 
+        if ($this->isVersion('3.27.0')) {
+            if (! $this->getServiceManager()->has(common_ext_ExtensionsManager::SERVICE_ID)) {
+                $this->getServiceManager()->register(common_ext_ExtensionsManager::SERVICE_ID, new common_ext_ExtensionsManager());
+            }
+            $this->setVersion('3.28.0');
+        }
+        $this->skip('3.28.0', '3.30.0');
     }
     
     private function getReadableModelIds() {

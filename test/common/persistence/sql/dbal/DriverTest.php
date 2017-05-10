@@ -14,25 +14,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- * @author "Lionel Lecaque, <lionel@taotesting.com>"
- * @license GPLv2
- * @package generis
- *
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
-class common_Config {
-	/**
-	 * @access
-	 * @author "Lionel Lecaque, <lionel@taotesting.com>"
-	 */
-	public static function load($config=null)
+namespace oat\generis\test\common\persistence\sql\dbal;
+
+use oat\generis\test\GenerisPhpUnitTestRunner;
+
+/**
+ * Class DriverTest
+ * @package oat\generis\test\common\persistence\sql\dbal
+ * @author Aleh Hutnikau, <hutnikau@1pt.com>
+ */
+class DriverTest extends GenerisPhpUnitTestRunner
+{
+
+    public function testGetPlatForm()
     {
-	    if (! is_null($config) && is_readable($config)) {
-            include_once $config;
-        } else {
-            include_once dirname ( __FILE__ ) . '/../../config/generis.conf.php';
-        }
-	}
+        $driver = new \common_persistence_sql_dbal_Driver();
+        $driver->connect('test_connection', ['connection' => ['url' => 'sqlite:///:memory:']]);
+        $this->assertTrue($driver->getPlatForm() instanceof \common_persistence_sql_Platform);
+    }
 }

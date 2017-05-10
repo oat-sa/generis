@@ -18,9 +18,7 @@
  * 
  */
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
-
-class ReportTest extends GenerisPhpUnitTestRunner {
+class ReportTest extends \PHPUnit_Framework_TestCase {
 	
 	public function testBasicReport()
 	{
