@@ -116,7 +116,7 @@ class Installer extends ConfigurableService
         if ($this->hasOption('config_path') && ! empty($this->getOption('config_path'))) {
             return $this->getOption('config_path');
         }
-        return trim($this->getOption('root_path'), '/\\') . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
+        return rtrim($this->getOption('root_path'), '/\\') . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
     }
     
 }
