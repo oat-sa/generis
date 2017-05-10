@@ -71,11 +71,16 @@ abstract class common_ext_ExtensionHandler
         } elseif (class_exists($script) && is_subclass_of($script, 'oat\\oatbox\\action\\Action')) {
             $action = new $script();
             if ($action instanceof ServiceLocatorAwareInterface) {
-                $action->setServiceLocator(ServiceManager::getServiceManager());
+                $action->setServiceLocator($this->getServiceManager());
             }
             $report = call_user_func($action, array());
         } else {
             throw new common_ext_InstallationException('Unable to run install script '.$script);
         }
+    }
+
+    protected function getServiceManager()
+    {
+        return ServiceManager::getServiceManager();
     }
 }

@@ -56,14 +56,13 @@ class ServiceManager implements ServiceLocatorInterface
     {
         $this->configService = $configService;
     }
-    
+
     /**
      * Returns the service configured for the serviceKey
      * or throws a ServiceNotFoundException
-     * 
+     *
      * @param string $serviceKey
-     * @throws \common_Exception
-     * @throws ServiceNotFoundException
+     * @return ConfigurableService
      */
     public function get($serviceKey)
     {
@@ -71,6 +70,9 @@ class ServiceManager implements ServiceLocatorInterface
             $service = $this->getConfig()->get($serviceKey);
             if ($service === false) {
                 throw new ServiceNotFoundException($serviceKey);
+            }
+            if ($service instanceof ConfigurationService) {
+                \common_Logger::w('Service "' . $serviceKey . '" was not registered with serviceManager');
             }
             $this->propagate($service);
             
