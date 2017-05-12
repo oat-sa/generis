@@ -83,4 +83,12 @@ abstract class AbstractTaskAction extends AbstractAction
     {
         return $this->getServiceManager()->get(ResourceFileSerializer::SERVICE_ID);
     }
+
+    /**
+     * @return \core_kernel_classes_Class
+     */
+    protected static function getTaskClass()
+    {
+        return new \core_kernel_classes_Class(Task::TASK_CLASS);
+    }
 }
