@@ -108,7 +108,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
     public function cleanUp($serial)
     {
         $resourceFile = $this->getResource($serial);
-        $file = new \core_kernel_file_File($resourceFile);
+        $file = new \core_kernel_classes_Resource($resourceFile);
         return $file->delete();
     }
 

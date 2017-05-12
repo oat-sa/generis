@@ -51,7 +51,7 @@ class FileTest extends GenerisPhpUnitTestRunner {
         helpers_File::remove($this->fsPath);
     }
     
-    public function testIsFile()
+    /*public function testIsFile()
 	{
 	    $clazz = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
 	    $instance = $clazz->createInstance('toto.txt','toto');
@@ -60,7 +60,7 @@ class FileTest extends GenerisPhpUnitTestRunner {
 	    $this->assertTrue(core_kernel_file_File::isFile($instance));
 	    $this->assertFalse(core_kernel_file_File::isFile($clazz));
 	    $instance->delete();
-	}
+	}*/
 
 	public function testGetFileInfo()
 	{
