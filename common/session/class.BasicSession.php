@@ -36,7 +36,7 @@ class common_session_BasicSession implements common_session_Session
      * @var common_user_User
      */
     private $user;
-    
+
     public function __construct(User $user) {
         $this->user = $user;
     }
