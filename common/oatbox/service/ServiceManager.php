@@ -23,6 +23,7 @@ namespace oat\oatbox\service;
 use oat\oatbox\Configurable;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use oat\oatbox\config\ConfigurationService;
 
 /**
  * The simple placeholder ServiceManager

@@ -23,8 +23,8 @@
 use oat\oatbox\service\ServiceManagerAwareInterface;
 use oat\oatbox\service\ServiceManagerAwareTrait;
 use oat\oatbox\service\ServiceNotFoundException;
-use oat\oatbox\service\ConfigurationService;
 use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\config\ConfigurationService;
 
 /**
  * Short description of class common_ext_Extension
@@ -137,8 +137,8 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     {
         if (! is_object($value) || ! $value instanceof ConfigurableService) {
             $value = new ConfigurationService(array(ConfigurationService::OPTION_CONFIG => $value));
-            $value->setHeader($this->getConfigHeader($key));
         }
+        $value->setHeader($this->getConfigHeader($key));
         $this->registerService($this->getId().'/'.$key, $value);
         return true;
     }
@@ -483,13 +483,9 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      */
     protected function getConfigHeader($key)
     {
-        $parts = explode('/', $key, 2);
-        if (count($parts) >= 2) {
-            list($extId, $configId) = $parts;
-            $path = $this->getDir() . 'config/header/' . $configId . '.conf.php';
-            if (is_readable($path) && is_file($path)) {
-                return file_get_contents($path);
-            }
+        $path = $this->getDir() . 'config/header/' . $key . '.conf.php';
+        if (is_readable($path) && is_file($path)) {
+            return file_get_contents($path);
         }
         return null;
     }

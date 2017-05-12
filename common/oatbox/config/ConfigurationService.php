@@ -17,7 +17,11 @@
  * Copyright (c) 2017 Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
-namespace oat\oatbox\service;
+
+namespace oat\oatbox\config;
+
+use oat\oatbox\service\ConfigurableService;
+
 /**
  * Class ConfigurationService
  *
@@ -43,41 +47,4 @@ class ConfigurationService extends ConfigurableService
     {
         return $this->hasOption(self::OPTION_CONFIG) ? $this->getOption(self::OPTION_CONFIG) : [];
     }
-
-    /**
-     * Return the documentation header
-
-     * @param $header
-     */
-    public function setHeader($header)
-    {
-        $this->header = $header;
-    }
-
-    /**
-     * Set the documentation header uses into config file
-     *
-     * @return string
-     */
-    public function getHeader()
-    {
-         if (is_null($this->header)) {
-             return $this->getDefaultHeader();
-         } else {
-             return $this->header;
-         }
-    }
- 
-     /**
-      * Get the default documentation header
-      *
-      * @return string
-      */
-     protected function getDefaultHeader()
-     {
-        return '<?php'.PHP_EOL
-            .'/**'.PHP_EOL
-            .' * Default config header created during install'.PHP_EOL
-            .' */'.PHP_EOL;
-     }
 }
