@@ -171,7 +171,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      */
     public function unsetConfig($key)
     {
-        return $this->getServiceLocator()->unregister($this->getId().'/'.$key);
+        return $this->getServiceManager()->unregister($this->getId().'/'.$key);
     }
 
     /**

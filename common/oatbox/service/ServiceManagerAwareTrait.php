@@ -29,22 +29,24 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  * It includes tools to register and propagate oat service
  *
  * @package oat\oatbox\service
+ * @author Moyon Camille
  */
 trait ServiceManagerAwareTrait
 {
-    use ServiceLocatorAwareTrait {
-        getServiceLocator as protected getZendServiceLocator;
-    }
+    use ServiceLocatorAwareTrait;
 
     /**
-     * Get the oat service manager
+     * Get the oat service manager.
+     *
+     * It should be used for service building, register, build, propagate
+     * For reading operation please use $this->getServiceLocator() instead
      *
      * @throws \common_exception_Error
      * @return ServiceManager
      */
-    public function getServiceLocator()
+    public function getServiceManager()
     {
-        $serviceManager = $this->getZendServiceLocator();
+        $serviceManager = $this->getServiceLocator();
         if (! $serviceManager instanceof ServiceManager) {
             throw new \common_exception_Error('Alternate service locator not compatible with ' . __CLASS__);
         }
@@ -61,7 +63,7 @@ trait ServiceManagerAwareTrait
     public function registerService($serviceKey, $service, $allowOverride = true)
     {
         if ($allowOverride || ! $this->getServiceLocator()->has($serviceKey)) {
-            $this->getServiceLocator()->register($serviceKey, $service);
+            $this->getServiceManager()->register($serviceKey, $service);
         }
     }
 }
