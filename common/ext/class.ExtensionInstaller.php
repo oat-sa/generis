@@ -99,7 +99,11 @@ class common_ext_ExtensionInstaller
 				
 		}
 		common_Logger::d('Extended install for extension ' . $this->extension->getId());
-			
+
+        /**
+         *
+         */
+		$this->installRoutes();
 		// Method to be overriden by subclasses
 		// to extend the installation mechanism.
 		$this->extendedInstall();
@@ -108,6 +112,57 @@ class common_ext_ExtensionInstaller
 		$eventManager->trigger(new common_ext_event_ExtensionInstalled($this->extension));
 
 	}
+
+    public function installRoutes() {
+        $extRoute    = $this->extension->getManifest()->getRoutes();
+        $tao         = common_ext_ExtensionsManager::singleton()->getExtensionById('tao');
+        if($tao->hasConfig('application')) {
+            $app = $tao->getConfig('application');
+            $routes = $app->getOption('routes');
+            foreach ($extRoute as $routeId => $routeData) {
+
+                $route = [
+                    'ext'          => $this->extension->getId(),
+                    'className'    => '',
+                    'preProcess'   => [],
+                    'process'      => [],
+                    'postProcess'  => [],
+                    'errorHandler' => '',
+                    'options'      => [],
+
+                ];
+
+                if (is_string($routeData)) {
+
+                    $route['className'] = \oat\tao\model\routing\NamespaceRoute::class;
+                    $route['options']   = [\oat\tao\model\routing\NamespaceRoute::OPTION_NAMESPACE => $routeData];
+
+                } else {
+                    if (!isset($routeData['class']) || !is_subclass_of($routeData['class'], 'oat\tao\model\routing\Route')) {
+                        throw new \common_exception_InconsistentData('Invalid route '.$routeId);
+                    }
+                    $route['className'] = $routeData['class'];
+                    $route['options']   = array_key_exists( 'options' , $routeData )? $routeData['options']: [];
+                }
+                $routes[] = $route;
+            }
+            if (empty($extRoute)) {
+                $routes[] = [
+                    'ext'          => $this->extension->getId(),
+                    'className'    => \oat\tao\model\routing\LegacyRoute::class,
+                    'preProcess'   => [],
+                    'process'      => [],
+                    'postProcess'  => [],
+                    'errorHandler' => '',
+                    'options'      => [],
+
+                ];
+            }
+            $app->setOption('routes' , $routes);
+            $tao->setConfig('application', $app);
+
+        }
+    }
 
 	/**
 	 * writes the config based on the config.sample
