@@ -39,21 +39,16 @@ class LoggerService extends ConfigurableService
      * Get the current logger.
      * If options does not contain any Psr3 Logger, NullLogger is set by default
      *
-     * @return bool
+     * @return LoggerInterface
      */
     public function getLogger()
     {
         if (! $this->logger) {
-            if (
-                $this->hasOption(self::LOGGER_OPTION)
-                && $this->getOption(self::LOGGER_OPTION) instanceof LoggerInterface
-            ) {
-                $this->logger = $this->getOption(self::LOGGER_OPTION);
-            } else {
-                $this->logger = new NullLogger();
-            }
+            $this->logger = $this->getSubService(self::LOGGER_OPTION, LoggerInterface::class);
+        } else {
+            $this->logger = new NullLogger();
         }
-        return false;
+        return $this->logger;
     }
 
     /**

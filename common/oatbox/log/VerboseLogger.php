@@ -26,9 +26,14 @@ use Psr\Log\LogLevel;
 class VerboseLogger extends AbstractLogger
 {
     /**
+     * @var int The position of logger verbosity
+     */
+    protected $levelPosition;
+
+    /**
      * @var array List of colors associated to a level
      */
-    private $colors = array(
+    protected $colors = array(
         LogLevel::EMERGENCY => '1;31', // red
         LogLevel::ALERT     => '1;31', // red
         LogLevel::CRITICAL  => '1;31', // red
@@ -54,11 +59,6 @@ class VerboseLogger extends AbstractLogger
     );
 
     /**
-     * @var int The position of logger verbosity
-     */
-    protected $levelPosition;
-
-    /**
      * VerboseLogger constructor.
      *
      * @param $minimumLevel
@@ -67,7 +67,7 @@ class VerboseLogger extends AbstractLogger
     public function __construct($minimumLevel)
     {
         if (! in_array($minimumLevel, $this->levels)) {
-            throw new \common_Exception('Level has to be manage');
+            throw new \common_Exception('Level "' . $minimumLevel . '" is not managed by verbose logger');
         }
         $this->levelPosition = array_search($minimumLevel, $this->levels);
     }
@@ -88,9 +88,7 @@ class VerboseLogger extends AbstractLogger
         }
 
         $this->setLevelColor($level);
-        echo '[' . (new \DateTime())->format('Y-m-d H:i') . ']' .
-            str_pad('[' . $level . ']', 12) .
-            $message . PHP_EOL;
+        echo '[' . (new \DateTime())->format('Y-m-d H:i') . ']' . str_pad('[' . $level . ']', 12) . $message . PHP_EOL;
         $this->setDefaultColor();
     }
 

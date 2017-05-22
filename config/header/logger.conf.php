@@ -5,7 +5,16 @@
  *
  *
  * return new \oat\oatbox\log\LoggerService(array(
- *     new Psr3LoggerInterface,
- *     new AnotherPsr3LoggerInterface
+ *     'logger' => new Psr3LoggerInterface()
+ * ));
+ *
+ * return new \oat\oatbox\log\LoggerService(array(
+ *     'logger' => new \oat\oatbox\log\LoggerAggregator(array(
+ *          new Psr3LoggerInterface(),
+ *          new AnotherPsr3LoggerInterface()
+ *      ))
+ * ));
+ *
+ *
  * ));
  */
