@@ -44,10 +44,13 @@ class LoggerService extends ConfigurableService
     public function getLogger()
     {
         if (! $this->logger) {
-            $this->logger = $this->getSubService(self::LOGGER_OPTION, LoggerInterface::class);
-        } else {
-            $this->logger = new NullLogger();
+            if ($this->hasOption(self::LOGGER_OPTION)) {
+                $this->logger = $this->getSubService(self::LOGGER_OPTION, LoggerInterface::class);
+            } else {
+                $this->logger = new NullLogger();
+            }
         }
+
         return $this->logger;
     }
 
