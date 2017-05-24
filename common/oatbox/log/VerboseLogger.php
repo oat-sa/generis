@@ -33,7 +33,7 @@ class VerboseLogger extends AbstractLogger
     /**
      * @var array List of colors associated to a level
      */
-    protected $colors = array(
+    protected $levels = array(
         LogLevel::EMERGENCY => '1;31', // red
         LogLevel::ALERT     => '1;31', // red
         LogLevel::CRITICAL  => '1;31', // red
@@ -45,20 +45,6 @@ class VerboseLogger extends AbstractLogger
     );
 
     /**
-     * @var array List of ordered LogLevel
-     */
-    private $levels = array(
-        LogLevel::EMERGENCY,
-        LogLevel::ALERT,
-        LogLevel::CRITICAL,
-        LogLevel::ERROR,
-        LogLevel::WARNING,
-        LogLevel::NOTICE,
-        LogLevel::INFO,
-        LogLevel::DEBUG,
-    );
-
-    /**
      * VerboseLogger constructor.
      *
      * @param $minimumLevel
@@ -66,10 +52,10 @@ class VerboseLogger extends AbstractLogger
      */
     public function __construct($minimumLevel)
     {
-        if (! in_array($minimumLevel, $this->levels)) {
+        if (! in_array($minimumLevel, array_keys($this->levels))) {
             throw new \common_Exception('Level "' . $minimumLevel . '" is not managed by verbose logger');
         }
-        $this->levelPosition = array_search($minimumLevel, $this->levels);
+        $this->levelPosition = array_search($minimumLevel, array_keys($this->levels));
     }
 
     /**
@@ -83,7 +69,7 @@ class VerboseLogger extends AbstractLogger
      */
     public function log($level, $message, array $context = array())
     {
-        if (array_search($level, $this->levels) > $this->levelPosition) {
+        if (array_search($level, array_keys($this->levels)) > $this->levelPosition) {
             return;
         }
 
@@ -99,8 +85,8 @@ class VerboseLogger extends AbstractLogger
      */
     protected function setLevelColor($level)
     {
-        if (array_key_exists($level, $this->colors)) {
-            echo "\033[" . $this->colors[$level] . 'm';
+        if (array_key_exists($level, $this->levels)) {
+            echo "\033[" . $this->levels[$level] . 'm';
         } else {
             $this->setDefaultColor();
         }
@@ -111,7 +97,7 @@ class VerboseLogger extends AbstractLogger
      */
     protected function setDefaultColor()
     {
-        echo "\033[1;30m"; // Dark grey
+        echo "\033[0m"; // Dark grey
     }
 
 }

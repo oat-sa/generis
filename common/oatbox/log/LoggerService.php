@@ -65,8 +65,8 @@ class LoggerService extends ConfigurableService
      */
     public function addLogger(LoggerInterface $logger, $replace = false)
     {
-        if (!$replace && (($currentLogger = $this->getLogger()) !== false)) {
-            $logger = new LoggerAggregator([$logger, $currentLogger]);
+        if (!$replace && (! $this->getLogger() instanceof NullLogger)) {
+            $logger = new LoggerAggregator([$logger, $this->getLogger()]);
         }
 
         return $this->logger = $logger;
