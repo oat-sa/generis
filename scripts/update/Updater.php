@@ -42,6 +42,7 @@ use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\filesystem\FileSystemService;
+use oat\oatbox\log\LoggerService;
 use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\task\implementation\SyncQueue;
 use oat\oatbox\task\Queue;
@@ -320,6 +321,14 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('3.28.0');
         }
         $this->skip('3.28.0', '3.29.1');
+
+        if ($this->isVersion('3.29.1')) {
+            $this->getServiceManager()->register(LoggerService::SERVICE_ID, new LoggerService());
+            $this->setVersion('3.30.0');
+        }
+
+        $this->skip('3.30.0', '3.30.1');
+
     }
     
     private function getReadableModelIds() {
