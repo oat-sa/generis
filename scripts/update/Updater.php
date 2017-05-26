@@ -324,8 +324,11 @@ class Updater extends common_ext_ExtensionUpdater {
 
         if ($this->isVersion('3.29.1')) {
             $this->getServiceManager()->register(LoggerService::SERVICE_ID, new LoggerService());
-            $this->setVersion('3.30.1');
+            $this->setVersion('3.30.0');
         }
+
+        $this->skip('3.30.0', '3.30.1');
+
     }
     
     private function getReadableModelIds() {
