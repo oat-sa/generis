@@ -20,10 +20,9 @@
 
 namespace oat\oatbox\task\implementation;
 
-use oat\oatbox\task\Queue;
 use oat\oatbox\task\Task;
 use oat\oatbox\task\TaskRunner;
-use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\task\AbstractQueue;
 
 /**
  * Class SyncQueue
@@ -40,7 +39,7 @@ use oat\oatbox\service\ConfigurableService;
  * @package oat\oatbox\task\implementation
  * @author Aleh Hutnikau, <huntikau@1pt.com>
  */
-class SyncQueue extends ConfigurableService implements Queue
+class SyncQueue extends AbstractQueue
 {
 
     /**
@@ -139,4 +138,23 @@ class SyncQueue extends ConfigurableService implements Queue
         }
         return $this->taskRunner;
     }
+
+    /**
+     * Create task resource in the rdf storage and link placeholder resource to it.
+     * @param Task $task
+     * @param \core_kernel_classes_Resource|null $resource - placeholder resource to be linked with task.
+     * @return \core_kernel_classes_Resource
+     */
+    public function linkTask(Task $task, \core_kernel_classes_Resource $resource = null)
+    {
+        $taskResource = parent::linkTask($task, $resource);
+        if (!empty($task->getReport())) {
+            $taskResource->setPropertyValue(
+                new \core_kernel_classes_Property(Task::PROPERTY_REPORT),
+                json_encode($task->getReport())
+            );
+        }
+        return $taskResource;
+    }
+
 }

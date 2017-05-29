@@ -27,6 +27,9 @@ interface Task
     const STATUS_FINISHED = 'finished';
     const STATUS_ARCHIVED = 'archived';
 
+    const TASK_CLASS = 'http://www.tao.lu/Ontologies/generis.rdf#TaskQueueTask';
+    const PROPERTY_LINKED_RESOURCE = 'http://www.tao.lu/Ontologies/generis.rdf#LinkedResource';
+    const PROPERTY_REPORT = 'http://www.tao.lu/Ontologies/generis.rdf#Report';
 
     public function getLabel();
 

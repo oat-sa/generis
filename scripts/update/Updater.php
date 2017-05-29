@@ -47,6 +47,7 @@ use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\task\implementation\SyncQueue;
 use oat\oatbox\task\Queue;
 use oat\taoWorkspace\model\generis\WrapperModel;
+use oat\tao\scripts\update\OntologyUpdater;
 
 /**
  * 
@@ -329,6 +330,10 @@ class Updater extends common_ext_ExtensionUpdater {
 
         $this->skip('3.30.0', '3.30.1');
 
+        if ($this->isVersion('3.30.1')) {
+            OntologyUpdater::syncModels();
+            $this->setVersion('3.31.0');
+        }
     }
     
     private function getReadableModelIds() {

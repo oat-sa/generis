@@ -53,4 +53,25 @@ interface Queue extends \IteratorAggregate
      * @return Task
      */
     public function getTask($taskId);
+
+    /**
+     * Check whether resource is a placeholder of task in the task queue
+     * @param \core_kernel_classes_Resource $resource
+     * @return mixed
+     */
+    public function isTaskPlaceholder(\core_kernel_classes_Resource $resource);
+
+    /**
+     * @param \core_kernel_classes_Resource $resource
+     * @return \common_report_Report
+     */
+    public function getReportByLinkedResource(\core_kernel_classes_Resource $resource);
+
+    /**
+     * Create task resource in the rdf storage and link placeholder resource to it.
+     * @param Task $task
+     * @param \core_kernel_classes_Resource|null $resource - placeholder resource to be linked with task.
+     */
+    public function linkTask(Task $task, \core_kernel_classes_Resource $resource = null);
+
 }
