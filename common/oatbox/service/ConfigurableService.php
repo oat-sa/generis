@@ -87,7 +87,6 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
      */
     public function setHeader($header)
     {
-        \common_Logger::e(print_r($header,true));
         $this->header = $header;
     }
 

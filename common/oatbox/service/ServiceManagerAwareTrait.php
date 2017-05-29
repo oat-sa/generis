@@ -60,7 +60,7 @@ trait ServiceManagerAwareTrait
      * @param $service
      * @param bool $allowOverride
      */
-    public function registerService($serviceKey, $service, $allowOverride = true)
+    public function registerService($serviceKey, ConfigurableService $service, $allowOverride = true)
     {
         if ($allowOverride || ! $this->getServiceLocator()->has($serviceKey)) {
             $this->getServiceManager()->register($serviceKey, $service);

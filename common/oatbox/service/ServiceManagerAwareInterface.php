@@ -24,4 +24,12 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 interface ServiceManagerAwareInterface extends ServiceLocatorAwareInterface
 {
+    /**
+     * Register a service through ServiceManager
+     *
+     * @param string $serviceKey The unique key to identify service into ServiceManager
+     * @param mixed $service The service to register, should be a ConfigurableService
+     * @param bool $allowOverride Argument to be able to override config if it exists
+     */
+    public function registerService($serviceKey, ConfigurableService $service, $allowOverride = true);
 }

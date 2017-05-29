@@ -155,7 +155,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
         try {
             $config =  $this->getServiceLocator()->get($this->getId().'/'.$key);
             if ($config instanceof ConfigurationService) {
-                $config = $config->getOption(ConfigurationService::OPTION_CONFIG);
+                $config = $config->getConfig();
             }
             return $config;
         } catch (ServiceNotFoundException $e) {
@@ -369,16 +369,13 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      */
     public function getManifest()
     {
-        if (! $this->manifest) {
-            $manifestFile = $this->getDir() . self::MANIFEST_NAME;
-            if (is_file($manifestFile) && is_readable($manifestFile)) {
-                return new common_ext_Manifest($manifestFile);
-            }
+        $manifestFile = $this->getDir() . self::MANIFEST_NAME;
+        if (is_file($manifestFile) && is_readable($manifestFile)) {
+            return new common_ext_Manifest($manifestFile);
         }
-
-         //Here the extension is set unvalided to not be displayed by the view
-         throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '" . $this->id . "'.", $this->id);
-    }
+        //Here the extension is set unvalided to not be displayed by the view
+        throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '" . $this->id . "'.", $this->id);
+     }
 
     /**
      * Get the Management Role of the Extension. Returns null in case of no
