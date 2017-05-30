@@ -61,9 +61,7 @@ class common_ext_ExtensionInstaller
 	 */
 	public function install()
 	{
-		
-		
-		common_Logger::i('Installing extension '.$this->extension->getId(), 'INSTALL');
+		$this->log('i', 'Installing extension '.$this->extension->getId(), 'INSTALL');
 		
 		if ($this->extension->getId() == 'generis') {
 			throw new common_ext_ForbiddenActionException(
@@ -88,22 +86,22 @@ class common_ext_ExtensionInstaller
 		$this->installOntology();
 		$this->installRegisterExt();
 			
-		common_Logger::d('Installing custom script for extension ' . $this->extension->getId());
+		$this->log('d', 'Installing custom script for extension ' . $this->extension->getId());
 		$this->installCustomScript();
-		common_Logger::d('Done installing custom script for extension ' . $this->extension->getId());
+		$this->log('d', 'Done installing custom script for extension ' . $this->extension->getId());
 		
 		if ($this->getLocalData() == true){
-			common_Logger::d('Installing local data for extension ' . $this->extension->getId());
+			$this->log('d', 'Installing local data for extension ' . $this->extension->getId());
 			$this->installLocalData();
-			common_Logger::d('Done installing local data for extension ' . $this->extension->getId());
+			$this->log('d', 'Done installing local data for extension ' . $this->extension->getId());
 				
 		}
-		common_Logger::d('Extended install for extension ' . $this->extension->getId());
+		$this->log('d', 'Extended install for extension ' . $this->extension->getId());
 			
 		// Method to be overriden by subclasses
 		// to extend the installation mechanism.
 		$this->extendedInstall();
-		common_Logger::d('Done extended install for extension ' . $this->extension->getId());
+		$this->log('d', 'Done extended install for extension ' . $this->extension->getId());
 		$eventManager = ServiceManager::getServiceManager()->get(EventManager::CONFIG_ID);
 		$eventManager->trigger(new common_ext_event_ExtensionInstalled($this->extension));
 
@@ -161,7 +159,7 @@ class common_ext_ExtensionInstaller
 	protected function installRegisterExt()
 	{
 		
-		common_Logger::d('Registering extension '.$this->extension->getId(), 'INSTALL');
+		$this->log('d', 'Registering extension '.$this->extension->getId(), 'INSTALL');
 		common_ext_ExtensionsManager::singleton()->registerExtension($this->extension);
 		common_ext_ExtensionsManager::singleton()->setEnabled($this->extension->getId());
 		

@@ -39,7 +39,7 @@ class VerboseLogger extends AbstractLogger
         LogLevel::CRITICAL  => '1;31', // red
         LogLevel::ERROR     => '1;31', // red
         LogLevel::WARNING   => '1;33', // yellow
-        LogLevel::NOTICE    => '1;33', // yellow
+        LogLevel::NOTICE    => '1;34', // yellow
         LogLevel::INFO      => '0;32', // green
         LogLevel::DEBUG     => '0;37', // light grey
     );

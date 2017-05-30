@@ -33,6 +33,12 @@ use oat\oatbox\service\ServiceManager;
  */
 abstract class common_ext_ExtensionHandler
 {
+    // Adding container.
+    use \oat\oatbox\PimpleContainerTrait;
+
+    // Adding logger.
+    use \oat\oatbox\log\LoggerAwareTrait;
+
     /**
      * @var common_ext_Extension
      */
@@ -44,11 +50,24 @@ abstract class common_ext_ExtensionHandler
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Extension extension
+     * @param  common_ext_Extension $extension
      */
     public function __construct( common_ext_Extension $extension)
     {
 		$this->extension = $extension;
+    }
+
+    /**
+     * Initialize the container and the logger.
+     *
+     * @param \Pimple\Container $container
+     */
+    public function initContainer(\Pimple\Container $container)
+    {
+        $this->setContainer($container);
+        $this->setLogger(
+            $this->getContainer()->offsetGet(\oat\oatbox\log\LoggerService::SERVICE_ID)->getLogger()
+        );
     }
     
     /**
@@ -65,7 +84,7 @@ abstract class common_ext_ExtensionHandler
      */
     protected function runExtensionScript($script)
     {
-        common_Logger::d('Running custom extension script '.$script.' for extension '.$this->getExtension()->getId(), 'INSTALL');
+        $this->log('d', 'Running custom extension script '.$script.' for extension '.$this->getExtension()->getId(), 'INSTALL');
         if (file_exists($script)) {
             require_once $script;
         } elseif (class_exists($script) && is_subclass_of($script, 'oat\\oatbox\\action\\Action')) {
@@ -76,6 +95,36 @@ abstract class common_ext_ExtensionHandler
             $report = call_user_func($action, array());
         } else {
             throw new common_ext_InstallationException('Unable to run install script '.$script);
+        }
+    }
+
+    /**
+     * Log message
+     *
+     * @see common_Logger class
+     *
+     * @param string $logLevel
+     * <ul>
+     *   <li>'w' - warning</li>
+     *   <li>'t' - trace</li>
+     *   <li>'d' - debug</li>
+     *   <li>'i' - info</li>
+     *   <li>'e' - error</li>
+     *   <li>'f' - fatal</li>
+     * </ul>
+     * @param string $message
+     * @param array $tags
+     */
+    public function log($logLevel, $message, $tags = array())
+    {
+        if ($this->getLogger() instanceof \Psr\Log\LoggerInterface) {
+            $this->getLogger()->log(
+                common_log_Logger2Psr::getPsrLevelFromCommon($logLevel),
+                $message
+            );
+        }
+        if (method_exists('common_Logger', $logLevel)) {
+            call_user_func('common_Logger::' . $logLevel, $message, $tags);
         }
     }
 }
