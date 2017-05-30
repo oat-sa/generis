@@ -23,6 +23,7 @@ use oat\generis\model\data\ModelManager;
 use oat\oatbox\action\ActionResolver;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
+use oat\oatbox\service\ConfigurableService;
 
 /**
  * Generis installer of extensions
@@ -126,6 +127,11 @@ class common_ext_ExtensionInstaller
                     $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
                     if (! $this->extension->hasConfig($confKey)) {
                         $config = include $fileinfo->getPathname();
+                        if ($config instanceof ConfigurableService) {
+                            $this->getServiceManager()->register($this->extension->getId() . '/' . $confKey, $config);
+                        } else {
+                            $this->extension->setConfig($confKey, $config);
+                        }
                         $this->extension->setConfig($confKey, $config);
                     }
     		    }

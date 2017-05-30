@@ -21,11 +21,12 @@ namespace oat\oatbox\install;
 
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\exception\InvalidService;
+use oat\oatbox\service\ServiceConfigDriver;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\service\ServiceNotFoundException;
-use oat\oatbox\service\SimpleConfigDriver;
 use common_report_Report as Report;
+
  /**
  * A service to install oatbox functionality
  * 
@@ -62,7 +63,7 @@ class Installer extends ConfigurableService
             if (! \helpers_File::emptyDirectory($configPath, true)) {
                 throw new \common_exception_Error('Unable to empty ' . $configPath . ' folder.');
             }
-            $driver = new SimpleConfigDriver();
+            $driver = new ServiceConfigDriver();
             $configService = $driver->connect('config', array(
                 'dir' => $configPath,
                 'humanReadable' => true
