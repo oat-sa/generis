@@ -21,6 +21,7 @@
 namespace oat\oatbox\log;
 
 use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\exception\InvalidService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -40,12 +41,27 @@ class LoggerService extends ConfigurableService
      * If options does not contain any Psr3 Logger, NullLogger is set by default
      *
      * @return LoggerInterface
+     * @throws InvalidService
      */
     public function getLogger()
     {
         if (! $this->logger) {
             if ($this->hasOption(self::LOGGER_OPTION)) {
-                $this->logger = $this->getSubService(self::LOGGER_OPTION, LoggerInterface::class);
+                $loggerOptions = $this->getOption(self::LOGGER_OPTION);
+                if (isset($loggerOptions['class'])) {
+                    $classname = $loggerOptions['class'];
+                    if (is_a($classname, LoggerInterface::class, true)) {
+                        if (isset($loggerOptions['options'])) {
+                            $this->logger = new $classname($loggerOptions['options']);
+                        } else {
+                            $this->logger = new $classname();
+                        }
+                    } else {
+                        throw new InvalidService('Service must implements Psr3 logger interface');
+                    }
+                } else {
+                    $this->logger = new NullLogger();
+                }
             } else {
                 $this->logger = new NullLogger();
             }
@@ -65,8 +81,8 @@ class LoggerService extends ConfigurableService
      */
     public function addLogger(LoggerInterface $logger, $replace = false)
     {
-        if (!$replace && (($currentLogger = $this->getLogger()) !== false)) {
-            $logger = new LoggerAggregator([$logger, $currentLogger]);
+        if (!$replace && (! $this->getLogger() instanceof NullLogger)) {
+            $logger = new LoggerAggregator([$logger, $this->getLogger()]);
         }
 
         return $this->logger = $logger;
