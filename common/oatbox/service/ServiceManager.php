@@ -72,12 +72,7 @@ class ServiceManager implements ServiceLocatorInterface
             if ($service === false) {
                 throw new ServiceNotFoundException($serviceKey);
             }
-            if ($service instanceof ConfigurationService) {
-                \common_Logger::w('Service "' . $serviceKey . '" was not registered with serviceManager');
-            }
-            $this->propagate($service);
-            
-            $this->services[$serviceKey] = $service;
+            $this->services[$serviceKey] = $this->propagate($service);
         }
         return $this->services[$serviceKey];
     }

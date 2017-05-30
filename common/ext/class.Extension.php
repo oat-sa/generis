@@ -64,10 +64,9 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     /**
      * The manifest of the extension
      *
-     * @access public
      * @var common_ext_Manifest
      */
-    public $manifest;
+    protected $manifest;
 
     /**
      * Whenever or not an extension has already been loaded
@@ -369,12 +368,15 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      */
     public function getManifest()
     {
-        $manifestFile = $this->getDir() . self::MANIFEST_NAME;
-        if (is_file($manifestFile) && is_readable($manifestFile)) {
-            return new common_ext_Manifest($manifestFile);
+        if (! $this->manifest) {
+            $manifestFile = $this->getDir() . self::MANIFEST_NAME;
+            if (is_file($manifestFile) && is_readable($manifestFile)) {
+                $this->manifest = new common_ext_Manifest($manifestFile);
+            } else {
+                throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '" . $this->id . "'.", $this->id);
+            }
         }
-        //Here the extension is set unvalided to not be displayed by the view
-        throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '" . $this->id . "'.", $this->id);
+        return $this->manifest;
      }
 
     /**
