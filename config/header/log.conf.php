@@ -51,7 +51,7 @@ return array(
         'host' => '127.0.0.1',
         'port' => 5775,
         'threshold' => 1,
-        'prefix' => '[dev]'
+        'prefix' => 'dev'
     ),
 );
 */
