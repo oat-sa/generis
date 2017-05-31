@@ -28,7 +28,7 @@ namespace oat\oatbox\task;
  * @package oat\oatbox\task\implementation
  * @author Aleh Hutnikau, <huntikau@1pt.com>
  */
-abstract class AbstractTask implements Task
+abstract class AbstractTask implements Task , \JsonSerializable
 {
 
     /**
@@ -206,7 +206,5 @@ abstract class AbstractTask implements Task
     {
         $this->owner = $owner;
     }
-
-
 
 }
