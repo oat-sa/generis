@@ -151,15 +151,14 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      */
     public function getConfig($key)
     {
-        try {
-            $config =  $this->getServiceLocator()->get($this->getId().'/'.$key);
-            if ($config instanceof ConfigurationService) {
-                $config = $config->getConfig();
-            }
-            return $config;
-        } catch (ServiceNotFoundException $e) {
+        if (! $this->getServiceLocator()->has($this->getId().'/'.$key)) {
             return false;
         }
+        $config =  $this->getServiceLocator()->get($this->getId().'/'.$key);
+        if ($config instanceof ConfigurationService) {
+            $config = $config->getConfig();
+        }
+        return $config;
     }
 
     /**
