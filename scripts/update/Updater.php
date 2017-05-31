@@ -28,12 +28,10 @@ use common_ext_NamespaceManager;
 use common_Logger;
 use common_persistence_Manager;
 use core_kernel_classes_Class;
-use core_kernel_fileSystem_Cache;
 use core_kernel_impl_ApiModelOO;
 use core_kernel_persistence_smoothsql_SmoothModel;
 use core_kernel_uri_DatabaseSerialUriProvider;
 use core_kernel_uri_UriService;
-use core_kernel_versioning_Repository;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\permission\PermissionManager;
 use oat\generis\model\fileReference\FileReferenceSerializer;
@@ -192,9 +190,9 @@ class Updater extends common_ext_ExtensionUpdater {
             ));
             
             $class = new core_kernel_classes_Class(GENERIS_NS . '#VersionedRepository');
+            /** @var \core_kernel_classes_Resource $resource */
             foreach ($class->getInstances(true) as $resource) {
-                $oldFs = new core_kernel_versioning_Repository($resource);
-                $path = core_kernel_fileSystem_Cache::getFileSystemPath($oldFs);
+                $path = (string) $resource->getOnePropertyValue(new \core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH));
                 $FsManager->registerLocalFileSystem($resource->getUri(), $path);
             }
             $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $FsManager);
