@@ -23,6 +23,7 @@ namespace oat\oatbox\service;
 use oat\oatbox\Configurable;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use oat\oatbox\config\ConfigurationService;
 
 /**
  * The simple placeholder ServiceManager
@@ -56,14 +57,13 @@ class ServiceManager implements ServiceLocatorInterface
     {
         $this->configService = $configService;
     }
-    
+
     /**
      * Returns the service configured for the serviceKey
      * or throws a ServiceNotFoundException
-     * 
+     *
      * @param string $serviceKey
-     * @throws \common_Exception
-     * @throws ServiceNotFoundException
+     * @return ConfigurableService
      */
     public function get($serviceKey)
     {
@@ -72,9 +72,7 @@ class ServiceManager implements ServiceLocatorInterface
             if ($service === false) {
                 throw new ServiceNotFoundException($serviceKey);
             }
-            $this->propagate($service);
-            
-            $this->services[$serviceKey] = $service;
+            $this->services[$serviceKey] = $this->propagate($service);
         }
         return $this->services[$serviceKey];
     }

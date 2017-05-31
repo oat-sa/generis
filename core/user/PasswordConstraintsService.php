@@ -152,7 +152,7 @@ class PasswordConstraintsService extends \tao_models_classes_Service
      */
     protected function getConfig()
     {
-        if (\tao_install_utils_System::isTAOInstalled()) {
+        if (\tao_install_utils_System::isTAOInstalled() && $this->getServiceLocator()->has(common_ext_ExtensionsManager::SERVICE_ID)) {
             $ext = $this->getServiceLocator()
                 ->get(common_ext_ExtensionsManager::SERVICE_ID)
                 ->getExtensionById('generis');
