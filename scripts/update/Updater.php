@@ -320,6 +320,7 @@ class Updater extends common_ext_ExtensionUpdater {
             }
             $this->setVersion('3.28.0');
         }
+
         $this->skip('3.28.0', '3.29.1');
 
         if ($this->isVersion('3.29.1')) {
@@ -327,7 +328,7 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('3.30.0');
         }
 
-        $this->skip('3.30.0', '3.31.0');
+        $this->skip('3.30.0', '3.32.0');
 
     }
     

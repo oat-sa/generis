@@ -34,10 +34,12 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  */
 abstract class ConfigurableService extends Configurable implements ServiceLocatorAwareInterface
 {
+    use ServiceLocatorAwareTrait;
+
+    /** @var string Documentation header */
+    protected $header = null;
 
     private $subServices = [];
-
-    use ServiceLocatorAwareTrait;
 
     public function setServiceManager(ServiceManager $serviceManager)
     {
@@ -76,6 +78,43 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
             }
         }
         return $this->subServices[$id];
+    }
+
+    /**
+     * Set the documentation header uses into config file
+     *
+     * @param $header
+     */
+    public function setHeader($header)
+    {
+        $this->header = $header;
+    }
+
+    /**
+     * Return the documentation header
+     *
+     * @return string
+     */
+    public function getHeader()
+    {
+        if (is_null($this->header)) {
+            return $this->getDefaultHeader();
+        } else {
+            return $this->header;
+        }
+    }
+
+    /**
+     * Get the documentation header
+     *
+     * @return string
+     */
+    protected function getDefaultHeader()
+    {
+        return '<?php'.PHP_EOL
+            .'/**'.PHP_EOL
+            .' * Default config header created during install'.PHP_EOL
+            .' */'.PHP_EOL;
     }
 
     /**
