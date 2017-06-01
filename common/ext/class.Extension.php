@@ -20,6 +20,11 @@
  *
  */
 
+use oat\oatbox\service\ServiceManagerAwareInterface;
+use oat\oatbox\service\ServiceManagerAwareTrait;
+use oat\oatbox\service\ServiceNotFoundException;
+use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\config\ConfigurationService;
 
 /**
  * Short description of class common_ext_Extension
@@ -30,8 +35,10 @@
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
  
  */
-class common_ext_Extension
+class common_ext_Extension implements ServiceManagerAwareInterface
 {
+    use ServiceManagerAwareTrait;
+
     /**
      * Filename of the manifest
      * 
@@ -57,10 +64,9 @@ class common_ext_Extension
     /**
      * The manifest of the extension
      *
-     * @access public
      * @var common_ext_Manifest
      */
-    public $manifest;
+    protected $manifest;
 
     /**
      * Whenever or not an extension has already been loaded
@@ -69,7 +75,7 @@ class common_ext_Extension
      * @var boolean
      */
     protected $loaded = false;
-    
+
     /**
      * Should not be called directly, please use ExtensionsManager
      *
@@ -77,22 +83,10 @@ class common_ext_Extension
      * @author Joel Bout, <joel@taotesting.com>
      *
      * @param string $id
-     * @param string $deprecated1
-     * @param string $deprecated2
-     *
-     * @throws common_ext_ExtensionException
-     * @throws common_ext_ManifestNotFoundException
      */
-    public function __construct($id, $deprecated1 = null, $deprecated2 = null)
+    public function __construct($id)
     {
 		$this->id = $id;
-    	$manifestFile = $this->getDir().self::MANIFEST_NAME;
-		if(is_file($manifestFile)){
-			$this->manifest = new common_ext_Manifest($manifestFile);
-		} else {
-			//Here the extension is set unvalided to not be displayed by the view
-			throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '${id}'.", $id);
-		}
     }
 
     /**
@@ -116,22 +110,9 @@ class common_ext_Extension
      */
     public function getConstants()
     {
-        return (array) $this->manifest->getConstants();
+        return (array) $this->getManifest()->getConstants();
     }
 
-    /**
-     * CONFIGURATION 
-     */
-
-    /**
-     * Returns the KV persistence to use for configurations
-     * @return common_persistence_KeyValuePersistence
-     */
-    private function getConfigPersistence()
-    {
-        return common_ext_ConfigDriver::singleton();
-    }
-    
     /**
      * checks if a configuration value exists
      *
@@ -140,7 +121,7 @@ class common_ext_Extension
      */
     public function hasConfig($key)
     {
-        return $this->getConfigPersistence()->exists($this->getId().'/'.$key);
+        return $this->getServiceLocator()->has($this->getId().'/'.$key);
     }
     
     /**
@@ -153,10 +134,11 @@ class common_ext_Extension
      */
     public function setConfig($key, $value)
     {
-        $success = $this->getConfigPersistence()->set($this->getId().'/'.$key, $value);
-        if (!$success) {
-            throw new common_exception_Error('Unable to write '.$this->getId().'/'.$key);
+        if (! is_object($value) || ! $value instanceof ConfigurableService) {
+            $value = new ConfigurationService(array(ConfigurationService::OPTION_CONFIG => $value));
         }
+        $value->setHeader($this->getConfigHeader($key));
+        $this->registerService($this->getId().'/'.$key, $value);
         return true;
     }
 
@@ -169,7 +151,19 @@ class common_ext_Extension
      */
     public function getConfig($key)
     {
-        return $this->getConfigPersistence()->get($this->getId().'/'.$key);
+        if (! $this->getServiceLocator()->has($this->getId().'/'.$key)) {
+            return false;
+        }
+
+        try{
+            $config =  $this->getServiceLocator()->get($this->getId().'/'.$key);
+            if ($config instanceof ConfigurationService) {
+                $config = $config->getConfig();
+            }
+        } catch(ServiceNotFoundException $e){
+            $config = false;
+        }
+        return $config;
     }
 
     /**
@@ -180,7 +174,7 @@ class common_ext_Extension
      */
     public function unsetConfig($key)
     {
-        return $this->getConfigPersistence()->del($this->getId().'/'.$key);
+        return $this->getServiceManager()->unregister($this->getId().'/'.$key);
     }
 
     /**
@@ -192,7 +186,7 @@ class common_ext_Extension
      */
     public function getVersion()
     {
-        return (string) $this->manifest->getVersion();
+        return (string) $this->getManifest()->getVersion();
     }
 
     /**
@@ -204,7 +198,7 @@ class common_ext_Extension
      */
     public function getAuthor()
     {
-        return (string) $this->manifest->getAuthor();
+        return (string) $this->getManifest()->getAuthor();
     }
 
     /**
@@ -216,7 +210,7 @@ class common_ext_Extension
      */
     public function getName()
     {
-        return (string) $this->manifest->getName();
+        return (string) $this->getManifest()->getName();
     }
 
     /**
@@ -371,16 +365,23 @@ class common_ext_Extension
     }
 
     /**
-     * returns the manifest of the extension
+     * Returns the manifest of the extension
      *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
      * @return common_ext_Manifest
+     * @throws common_ext_ManifestNotFoundException
      */
     public function getManifest()
     {
+        if (! $this->manifest) {
+            $manifestFile = $this->getDir() . self::MANIFEST_NAME;
+            if (is_file($manifestFile) && is_readable($manifestFile)) {
+                $this->manifest = new common_ext_Manifest($manifestFile);
+            } else {
+                throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '" . $this->id . "'.", $this->id);
+            }
+        }
         return $this->manifest;
-    }
+     }
 
     /**
      * Get the Management Role of the Extension. Returns null in case of no
@@ -476,9 +477,19 @@ class common_ext_Extension
         }
         return $service;
     }
-
-    protected function getServiceLocator()
+    
+    /**
+     * Get the documentation header for extension config located at key path
+     *
+     * @param $key
+     * @return null|string
+     */
+    protected function getConfigHeader($key)
     {
-        return \oat\oatbox\service\ServiceManager::getServiceManager();
+        $path = $this->getDir() . 'config/header/' . $key . '.conf.php';
+        if (is_readable($path) && is_file($path)) {
+            return file_get_contents($path);
+        }
+        return null;
     }
 }
