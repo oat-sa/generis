@@ -21,7 +21,6 @@
 namespace oat\oatbox\task\implementation;
 
 
-use oat\oatbox\task\Queue;
 use oat\oatbox\task\Task;
 use oat\oatbox\task\TaskInterface\TaskPersistenceInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -52,7 +51,7 @@ class SyncQueuePersistence implements TaskPersistenceInterface
         return $task;
     }
 
-    public function search(task $filterTask, $limit, $offset)
+    public function search(array $filterTask, $limit, $offset)
     {
 
         $taskList = array_filter($this->taskList , function($elem) use($filterTask){
@@ -60,22 +59,22 @@ class SyncQueuePersistence implements TaskPersistenceInterface
              * @var $elem Task
              */
 
-            if(!is_null($filterTask->getStatus())) {
-                $result = ($elem->getStatus() === $filterTask->getStatus());
+            if(isset($filterTask['status'])) {
+                $result = ($elem->getStatus() === $filterTask['status']);
             } else {
                 $result = ($elem->getStatus() !== Task::STATUS_ARCHIVED);
             }
 
-            if(!is_null($filterTask->getType())) {
-                $result = ($elem->getType() === $filterTask->getType());
+            if(isset($filterTask['type'])) {
+                $result = ($elem->getType() === $filterTask['type']);
             }
 
-            if(!is_null($filterTask->getOwner())) {
-                $result = ($elem->getOwner() === $filterTask->getOwner());
+            if(isset($filterTask['owner'])) {
+                $result = ($elem->getOwner() === $filterTask['owner']);
             }
 
-            if(!is_null($filterTask->getLabel())) {
-                $result = (strpos(strtolower($filterTask->getLabel()) , strtotime($elem->getLabel())) !== false);
+            if(isset($filterTask['label'])) {
+                $result = (strpos(strtolower($filterTask['label']) , strtotime($elem->getLabel())) !== false);
             }
 
             return $result;

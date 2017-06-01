@@ -22,6 +22,7 @@ namespace oat\oatbox\task\TaskInterface;
 
 
 use oat\oatbox\task\Task;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 
 /**
