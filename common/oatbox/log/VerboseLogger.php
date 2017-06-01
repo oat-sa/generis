@@ -26,22 +26,22 @@ use Psr\Log\LogLevel;
 class VerboseLogger extends AbstractLogger
 {
     /**
-     * @var int The position of logger verbosity
+     * @var int The position of logger verbosity.
      */
     protected $levelPosition;
 
     /**
-     * @var array List of colors associated to a level
+     * @var array Level priority list.
      */
     protected $levels = array(
-        LogLevel::EMERGENCY => '1;31', // red
-        LogLevel::ALERT     => '1;31', // red
-        LogLevel::CRITICAL  => '1;31', // red
-        LogLevel::ERROR     => '1;31', // red
-        LogLevel::WARNING   => '1;33', // yellow
-        LogLevel::NOTICE    => '1;34', // yellow
-        LogLevel::INFO      => '0;32', // green
-        LogLevel::DEBUG     => '0;37', // light grey
+        LogLevel::EMERGENCY,
+        LogLevel::ALERT,
+        LogLevel::CRITICAL,
+        LogLevel::ERROR,
+        LogLevel::WARNING,
+        LogLevel::NOTICE,
+        LogLevel::INFO,
+        LogLevel::DEBUG,
     );
 
     /**
@@ -55,7 +55,7 @@ class VerboseLogger extends AbstractLogger
         if (! in_array($minimumLevel, array_keys($this->levels))) {
             throw new \common_Exception('Level "' . $minimumLevel . '" is not managed by verbose logger');
         }
-        $this->levelPosition = array_search($minimumLevel, array_keys($this->levels));
+        $this->levelPosition = array_search($minimumLevel, $this->levels);
     }
 
     /**
@@ -69,35 +69,41 @@ class VerboseLogger extends AbstractLogger
      */
     public function log($level, $message, array $context = array())
     {
-        if (array_search($level, array_keys($this->levels)) > $this->levelPosition) {
+        $this->logMessage(
+            $level,
+            $this->getFormattedMessage($level, $message)
+        );
+    }
+
+    /**
+     * Log message following minimum level of verbosity
+     * If $level is bigger than minimum verbosity required
+     *
+     * @param mixed $level
+     * @param string $message
+     */
+    protected function logMessage($level, $message)
+    {
+        if (array_search($level, $this->levels) > $this->levelPosition) {
             return;
         }
 
-        $this->setLevelColor($level);
-        echo '[' . (new \DateTime())->format('Y-m-d H:i') . ']' . str_pad('[' . $level . ']', 12) . $message . PHP_EOL;
-        $this->setDefaultColor();
+        echo $message;
     }
 
     /**
-     * Set the CLI color associated to given $level
+     * Returns the formatted message.
      *
      * @param $level
+     * @param $message
+     *
+     * @return string
      */
-    protected function setLevelColor($level)
+    public function getFormattedMessage($level, $message)
     {
-        if (array_key_exists($level, $this->levels)) {
-            echo "\033[" . $this->levels[$level] . 'm';
-        } else {
-            $this->setDefaultColor();
-        }
+        return '[' . (new \DateTime())->format('Y-m-d H:i') . ']'
+            . str_pad('[' . $level . ']', 12)
+            . $message
+            . PHP_EOL;
     }
-
-    /**
-     * Set the default CLI color e.q. dark grey
-     */
-    protected function setDefaultColor()
-    {
-        echo "\033[0m"; // Dark grey
-    }
-
 }

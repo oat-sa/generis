@@ -39,12 +39,14 @@ class helpers_InstallHelper
      *
      * @param \Pimple\Container $container
      */
-    public static function initContainer(\Pimple\Container $container)
+    public static function initContainer($container)
     {
-        static::$container = $container;
-        static::$logger    = static::$container
-            ->offsetGet(\oat\oatbox\log\LoggerService::SERVICE_ID)
+        if ($container instanceof \Pimple\Container) {
+            static::$container = $container;
+            static::$logger = static::$container
+                ->offsetGet(\oat\oatbox\log\LoggerService::SERVICE_ID)
                 ->getLogger();
+        }
     }
 
     /**
@@ -102,14 +104,17 @@ class helpers_InstallHelper
     protected static function install($extension, $installData) {
         $importLocalData = (isset($installData['import_local']) && $installData['import_local'] == true);
         $extinstaller = static::getInstaller($extension, $importLocalData);
-        
+
         helpers_TimeOutHelper::setTimeOutLimit(helpers_TimeOutHelper::LONG);
         $extinstaller->install();
         helpers_TimeOutHelper::reset();;
     }
     
     protected static function getInstaller($extension, $importLocalData) {
-        return new \common_ext_ExtensionInstaller($extension, $importLocalData);
+        $instance = new \common_ext_ExtensionInstaller($extension, $importLocalData);
+        $instance->initContainer(static::$container);
+
+        return $instance;
     }
 
     /**

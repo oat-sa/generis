@@ -33,11 +33,8 @@ use oat\oatbox\service\ServiceManager;
  */
 abstract class common_ext_ExtensionHandler
 {
-    // Adding container.
-    use \oat\oatbox\PimpleContainerTrait;
-
-    // Adding logger.
-    use \oat\oatbox\log\LoggerAwareTrait;
+    // Adding container and logger.
+    use \oat\oatbox\log\ContainerLoggerTrait;
 
     /**
      * @var common_ext_Extension
@@ -55,19 +52,6 @@ abstract class common_ext_ExtensionHandler
     public function __construct( common_ext_Extension $extension)
     {
 		$this->extension = $extension;
-    }
-
-    /**
-     * Initialize the container and the logger.
-     *
-     * @param \Pimple\Container $container
-     */
-    public function initContainer(\Pimple\Container $container)
-    {
-        $this->setContainer($container);
-        $this->setLogger(
-            $this->getContainer()->offsetGet(\oat\oatbox\log\LoggerService::SERVICE_ID)->getLogger()
-        );
     }
     
     /**

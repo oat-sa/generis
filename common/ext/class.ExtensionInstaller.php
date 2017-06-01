@@ -20,7 +20,6 @@
  */
 
 use oat\generis\model\data\ModelManager;
-use oat\oatbox\action\ActionResolver;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
 
@@ -57,8 +56,12 @@ class common_ext_ExtensionInstaller
 	 *
 	 * @access public
 	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @return void
-	 */
+     *
+     * @throws common_ext_ForbiddenActionException When the installable extension is generis.
+     * @throws common_ext_AlreadyInstalledException When the extension is already installed.
+     *
+     * @return void
+     */
 	public function install()
 	{
 		$this->log('i', 'Installing extension '.$this->extension->getId(), 'INSTALL');
@@ -75,11 +78,12 @@ class common_ext_ExtensionInstaller
 		}
 		
 		// we purge the whole cache.
+        $this->log('d', 'Purging cache...');
 		$cache = common_cache_FileCache::singleton();
 		$cache->purge();	
 	
 
-		// check reuired extensions, throws exception if failed
+		// check required extensions, throws exception if failed
 		helpers_ExtensionHelper::checkRequiredExtensions($this->getExtension());
 			
 		$this->installLoadDefaultConfig();
@@ -98,7 +102,7 @@ class common_ext_ExtensionInstaller
 		}
 		$this->log('d', 'Extended install for extension ' . $this->extension->getId());
 			
-		// Method to be overriden by subclasses
+		// Method to be overridden by subclasses
 		// to extend the installation mechanism.
 		$this->extendedInstall();
 		$this->log('d', 'Done extended install for extension ' . $this->extension->getId());
@@ -208,9 +212,9 @@ class common_ext_ExtensionInstaller
 	 *
 	 * @access public
 	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @param  Extension extension The extension to install
-	 * @param  boolean localData Import local data or not.
-	 * @return mixed
+	 * @param  common_ext_Extension $extension The extension to install
+	 * @param  boolean $localData Import local data or not.
+	 * @return void
 	 */
 	public function __construct( common_ext_Extension $extension, $localData = true)
 	{
@@ -225,8 +229,8 @@ class common_ext_ExtensionInstaller
 	 *
 	 * @access public
 	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @param  boolean value
-	 * @return mixed
+	 * @param  boolean $value
+	 * @return void
 	 */
 	public function setLocalData($value)
 	{
