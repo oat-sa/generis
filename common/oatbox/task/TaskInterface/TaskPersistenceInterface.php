@@ -23,11 +23,14 @@ namespace oat\oatbox\task\TaskInterface;
 
 use oat\oatbox\task\Task;
 
+
 /**
  * Interface TaskPersistenceInterface
  * @package oat\oatbox\task\TaskInterface
  */
-interface TaskPersistenceInterface
+
+interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
+
 {
 
     /**
@@ -48,6 +51,7 @@ interface TaskPersistenceInterface
      * @param $offset
      * @return \Iterator
      */
+
     public function search(array $filters, $limit , $offset);
 
     /**

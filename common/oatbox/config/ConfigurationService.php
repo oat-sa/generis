@@ -14,24 +14,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2017 Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
 
-namespace oat\oatbox\task\implementation;
+namespace oat\oatbox\config;
 
-use oat\oatbox\task\AbstractTask;
-use oat\oatbox\action\Action;
+use oat\oatbox\service\ConfigurableService;
 
 /**
- * Class SyncTask
+ * Class ConfigurationService
  *
- * Basic implementation of `AbstractTask` class
+ * Wrapper of array configuration to accept only ConfigurableService as config
  *
- * @package oat\oatbox\task\implementation
- * @author Aleh Hutnikau, <huntikau@1pt.com>
+ * @package oat\oatbox\service
  */
-class SyncTask extends AbstractTask
+class ConfigurationService extends ConfigurableService
 {
+    const OPTION_CONFIG = 'config';
 
+    /**
+     * @var string Documentation header
+     */
+    protected $header;
+
+    /**
+     * Return the config
+     *
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->hasOption(self::OPTION_CONFIG) ? $this->getOption(self::OPTION_CONFIG) : [];
+    }
 }

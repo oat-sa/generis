@@ -14,24 +14,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
 
-namespace oat\oatbox\task\implementation;
+namespace oat\oatbox\service;
 
-use oat\oatbox\task\AbstractTask;
-use oat\oatbox\action\Action;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
-/**
- * Class SyncTask
- *
- * Basic implementation of `AbstractTask` class
- *
- * @package oat\oatbox\task\implementation
- * @author Aleh Hutnikau, <huntikau@1pt.com>
- */
-class SyncTask extends AbstractTask
+interface ServiceManagerAwareInterface extends ServiceLocatorAwareInterface
 {
-
+    /**
+     * Register a service through ServiceManager
+     *
+     * @param string $serviceKey The unique key to identify service into ServiceManager
+     * @param mixed $service The service to register, should be a ConfigurableService
+     * @param bool $allowOverride Argument to be able to override config if it exists
+     */
+    public function registerService($serviceKey, ConfigurableService $service, $allowOverride = true);
 }
