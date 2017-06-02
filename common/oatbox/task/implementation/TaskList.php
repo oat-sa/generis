@@ -25,13 +25,5 @@ use oat\oatbox\task\TaskInterface\TaskListIterator;
 
 class TaskList extends \ArrayIterator implements TaskListIterator
 {
-    /**
-     * @return SyncTask
-     */
-    public function current()
-    {
-        return new SyncTask(parent::current());
-    }
-
 
 }

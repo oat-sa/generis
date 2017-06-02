@@ -25,7 +25,7 @@ use oat\oatbox\task\Task;
 use oat\oatbox\task\TaskInterface\TaskPersistenceInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-class SyncQueuePersistence implements TaskPersistenceInterface
+class InMemoryQueuePersistence implements TaskPersistenceInterface
 {
 
     use ServiceLocatorAwareTrait;
@@ -45,13 +45,13 @@ class SyncQueuePersistence implements TaskPersistenceInterface
 
     public function add(Task $task)
     {
-        $taskId = (microtime(true) * 1000) . rand(10000 , 99999);
+        $taskId = (microtime(true) * 10000) . rand(100000 , 999999);
         $task->setId($taskId);
         $this->taskList[$taskId] = $task;
         return $task;
     }
 
-    public function search(array $filterTask, $limit, $offset)
+    public function search(array $filterTask, $limit = null, $offset = null)
     {
 
         $taskList = array_filter($this->taskList , function($elem) use($filterTask){
@@ -108,6 +108,15 @@ class SyncQueuePersistence implements TaskPersistenceInterface
         return false;
     }
 
+    public function count(array $params)
+    {
+        return count($this->search($params));
+    }
 
+
+    public function getAll()
+    {
+        return $this->taskList;
+    }
 
 }

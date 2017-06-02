@@ -260,7 +260,8 @@ abstract class AbstractTask implements Task , \JsonSerializable
         /**
          * @var $task Task
          */
-        $task = new (self::class)();
+        $class = self::class;
+        $task = new $class();
         if (isset($taskData['report'])) {
             $task->setReport($taskData['report']);
         }

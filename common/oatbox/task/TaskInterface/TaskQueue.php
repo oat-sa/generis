@@ -54,4 +54,10 @@ interface TaskQueue extends Queue
      */
     public function runTask(Task $task);
 
+    /**
+     * @param $currentUserId
+     * @return TaskPayLoad
+     */
+    public function getPayload($currentUserId);
+
 }

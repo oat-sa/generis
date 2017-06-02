@@ -20,10 +20,9 @@
 
 namespace oat\oatbox\task\implementation;
 
-use oat\oatbox\task\Queue;
+use oat\oatbox\task\AbstractQueue;
 use oat\oatbox\task\Task;
 use oat\oatbox\task\TaskRunner;
-use oat\oatbox\service\ConfigurableService;
 
 /**
  * Class SyncQueue
@@ -40,7 +39,7 @@ use oat\oatbox\service\ConfigurableService;
  * @package oat\oatbox\task\implementation
  * @author Aleh Hutnikau, <huntikau@1pt.com>
  */
-class SyncQueue extends ConfigurableService implements Queue
+class SyncQueue extends AbstractQueue
 {
 
     /**
@@ -49,14 +48,9 @@ class SyncQueue extends ConfigurableService implements Queue
     protected $taskRunner;
 
     /**
-     * @var SyncTask[]
-     */
-    protected $tasks = [];
-
-    /**
      * Create and run task
      * @param \oat\oatbox\action\Action|string $action action instance, classname or callback function
-     * @param $parameters parameters to be passed to the action
+     * @param array $parameters parameters to be passed to the action
      * @param boolean $recall Parameter which indicates that task has been created repeatedly after fail of previous.
      * For current implementation in means that the second call will not be executed to avoid loop.
      * @param null|string $label
@@ -72,7 +66,7 @@ class SyncQueue extends ConfigurableService implements Queue
         $task = new SyncTask($action, $parameters);
         $task->setLabel($label);
         $task->setType($type);
-        $this->tasks[$task->getId()] = $task;
+        $this->getPersistence()->add($task);
         $this->runTask($task);
         return $task;
     }
@@ -82,7 +76,7 @@ class SyncQueue extends ConfigurableService implements Queue
      */
     public function getIterator()
     {
-        return new \EmptyIterator;
+        return new TaskList($this->getPersistence()->getAll());
     }
 
     /**
@@ -92,8 +86,8 @@ class SyncQueue extends ConfigurableService implements Queue
      */
     public function updateTaskStatus($taskId, $status)
     {
-        if (isset($this->tasks[$taskId])) {
-            $this->tasks[$taskId]->setStatus($status);
+        if ($this->getPersistence()->has($taskId)) {
+            $this->getPersistence()->update($taskId , $status);
         }
         return $this;
     }
@@ -105,38 +99,29 @@ class SyncQueue extends ConfigurableService implements Queue
      */
     public function updateTaskReport($taskId, $report)
     {
-        if (isset($this->tasks[$taskId])) {
-            $this->tasks[$taskId]->setReport($report);
+        if ($this->getPersistence()->has($taskId)) {
+            $this->getPersistence()->setReport($taskId, $report);
         }
         return $this;
     }
 
     /**
      * @param $taskId
-     * @return SyncTask
+     * @return Task
      */
     public function getTask($taskId)
     {
-        return isset($this->tasks[$taskId]) ? $this->tasks[$taskId] : null;
+        return $this->getPersistence()->get($taskId);
+
     }
 
     /**
      * @param Task $task
      * @return mixed
      */
-    private function runTask(Task $task)
+    public function runTask(Task $task)
     {
-        return $this->getTaskRunner()->run($task);
+        return $this->getRunner()->run($task);
     }
 
-    /**
-     * @return TaskRunner
-     */
-    private function getTaskRunner()
-    {
-        if ($this->taskRunner === null) {
-            $this->taskRunner = new TaskRunner();
-        }
-        return $this->taskRunner;
-    }
 }

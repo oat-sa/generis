@@ -23,9 +23,12 @@ use oat\oatbox\service\ServiceManager;
 use oat\oatbox\action\ActionService;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use \oat\oatbox\task\TaskInterface\TaskRunner as TaskRunnerInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 class TaskRunner implements TaskRunnerInterface
 {
+    use ServiceLocatorAwareTrait;
+
     public function run(Task $task) {
 
         \common_Logger::d('Running task '.$task->getId());
@@ -51,9 +54,5 @@ class TaskRunner implements TaskRunnerInterface
         $queue->updateTaskReport($task->getId(), $report);
         return $report; 
     }
-    
-    public function getServiceLocator()
-    {
-        return ServiceManager::getServiceManager();
-    }
+
 }

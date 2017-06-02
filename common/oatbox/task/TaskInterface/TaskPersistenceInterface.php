@@ -75,4 +75,15 @@ interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
      */
     public function setReport($taskId , \common_report_Report $report);
 
+    /**
+     * @param array $params
+     * @return int
+     */
+    public function count(array $params);
+
+    /**
+     * @return array
+     */
+    public function getAll();
+
 }
