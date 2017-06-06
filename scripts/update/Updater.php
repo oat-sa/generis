@@ -330,6 +330,23 @@ class Updater extends common_ext_ExtensionUpdater {
 
         $this->skip('3.30.0', '3.32.2');
 
+        if ($this->isVersion('3.32.2')) {
+
+            $queue = $this->getServiceManager()->get(Queue::SERVICE_ID);
+
+            $queue->setOptions(
+                [
+                    'payload'     => \oat\oatbox\task\implementation\TaskQueuePayload::class,
+                    'runner'      => \oat\oatbox\task\TaskRunner::class,
+                    'persistence' => \oat\oatbox\task\implementation\InMemoryQueuePersistence::class,
+                    'config'      => [],
+                ]
+            );
+
+            $this->getServiceManager()->register(LoggerService::SERVICE_ID  , $queue);
+            $this->setVersion('3.33.0');
+        }
+
     }
     
     private function getReadableModelIds() {
