@@ -253,8 +253,7 @@ abstract class AbstractTask implements Task , \JsonSerializable
      */
     public static function restore(array $data)
     {
-        $taskData = json_decode($data, true);
-        if (!isset($taskData['invocable'], $taskData['params'])){
+        if (!isset($data['invocable'], $data['params'])){
             return null;
         }
         /**
@@ -262,35 +261,35 @@ abstract class AbstractTask implements Task , \JsonSerializable
          */
         $class = self::class;
         $task = new $class();
-        if (isset($taskData['report'])) {
-            $task->setReport($taskData['report']);
+        if (isset($data['report'])) {
+            $task->setReport($data['report']);
         }
-        if (isset($taskData['status'])) {
-            $task->setStatus($taskData['status']);
+        if (isset($data['status'])) {
+            $task->setStatus($data['status']);
         }
-        if (isset($taskData['id'])) {
-            $task->setId($taskData['id']);
+        if (isset($data['id'])) {
+            $task->setId($data['id']);
         }
-        if (isset($taskData['added'])) {
-            $task->setCreationDate($taskData['added']);
+        if (isset($data['added'])) {
+            $task->setCreationDate($data['added']);
         }
-        if (isset($taskData['owner'])) {
-            $task->setOwner($taskData['owner']);
+        if (isset($data['owner'])) {
+            $task->setOwner($data['owner']);
         }
-        if (isset($taskData['label'])) {
-            $task->setLabel($taskData['label']);
+        if (isset($data['label'])) {
+            $task->setLabel($data['label']);
         }
-        if (isset($taskData['type'])) {
-            $task->setType($taskData['type']);
+        if (isset($data['type'])) {
+            $task->setType($data['type']);
         }
-        if (isset($taskData['added'])) {
-            $task->setType($taskData['added']);
+        if (isset($data['added'])) {
+            $task->setType($data['added']);
         }
-        if(isset($taskData['invocable'])) {
-            $task->setInvocable($taskData['invocable']);
+        if(isset($data['invocable'])) {
+            $task->setInvocable($data['invocable']);
         }
-        if (isset($taskData['params'])) {
-            $task->setParameters($taskData['params']);
+        if (isset($data['params'])) {
+            $task->setParameters($data['params']);
         }
         return $task;
     }

@@ -51,7 +51,7 @@ class InMemoryQueuePersistence implements TaskPersistenceInterface
         return $task;
     }
 
-    public function search(array $filterTask, $limit = null, $offset = null)
+    public function search(array $filterTask, $rows = null, $page = null , $sortBy = null , $sortOrder = null)
     {
 
         $taskList = array_filter($this->taskList , function($elem) use($filterTask){

@@ -22,6 +22,7 @@ namespace oat\oatbox\task\implementation;
 
 use oat\oatbox\task\AbstractTask;
 use oat\oatbox\action\Action;
+use oat\oatbox\task\Task;
 
 /**
  * Class SyncTask

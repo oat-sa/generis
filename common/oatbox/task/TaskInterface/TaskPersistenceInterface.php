@@ -47,13 +47,15 @@ interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
     public function add(Task $task);
 
     /**
-     * @param array $filters
-     * @param $limit
-     * @param $offset
-     * @return \Iterator
+     * @param array $filterTask
+     * @param null $rows
+     * @param null $page
+     * @param null $sortBy
+     * @param null $sortOrder
+     * @return array
      */
 
-    public function search(array $filters, $limit , $offset);
+    public function search(array $filterTask, $rows = null, $page = null , $sortBy = null , $sortOrder = null);
 
     /**
      * @param $taskId

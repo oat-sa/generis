@@ -79,49 +79,6 @@ class SyncQueue extends AbstractQueue
         return new TaskList($this->getPersistence()->getAll());
     }
 
-    /**
-     * @param $taskId
-     * @param $status
-     * @return self
-     */
-    public function updateTaskStatus($taskId, $status)
-    {
-        if ($this->getPersistence()->has($taskId)) {
-            $this->getPersistence()->update($taskId , $status);
-        }
-        return $this;
-    }
 
-    /**
-     * @param $taskId
-     * @param $report
-     * @return self
-     */
-    public function updateTaskReport($taskId, $report)
-    {
-        if ($this->getPersistence()->has($taskId)) {
-            $this->getPersistence()->setReport($taskId, $report);
-        }
-        return $this;
-    }
-
-    /**
-     * @param $taskId
-     * @return Task
-     */
-    public function getTask($taskId)
-    {
-        return $this->getPersistence()->get($taskId);
-
-    }
-
-    /**
-     * @param Task $task
-     * @return mixed
-     */
-    public function runTask(Task $task)
-    {
-        return $this->getRunner()->run($task);
-    }
 
 }
