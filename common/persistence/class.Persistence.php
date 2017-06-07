@@ -64,7 +64,7 @@ abstract class common_persistence_Persistence
      * 
      * @access public
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @return common_persistence_Driver
+     * @return \oat\awsTools\awsDynamoDb\AwsDynamoDbDriver
      */
     public function getDriver(){
         return $this->driver;
