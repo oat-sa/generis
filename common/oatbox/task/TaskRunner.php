@@ -33,7 +33,7 @@ class TaskRunner implements TaskRunnerInterface
 
         \common_Logger::d('Running task '.$task->getId());
         $report = new \common_report_Report(\common_report_Report::TYPE_INFO, __('Running task %s', $task->getId()));
-        $queue = $this->getServiceLocator()->get(Queue::CONFIG_ID);
+        $queue = $this->getServiceLocator()->get(Queue::SERVICE_ID);
         $queue->updateTaskStatus($task->getId(), Task::STATUS_RUNNING);
         try {
             $actionService = $this->getServiceLocator()->get(ActionService::SERVICE_ID);

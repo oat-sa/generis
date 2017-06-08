@@ -45,14 +45,16 @@ abstract class AbstractQueue
     public function __construct(array $options = array())
     {
         parent::__construct($options);
+        if($this->hasOption('runner')) {
+            $classRunner       = $this->getOption('runner');
+            $this->runner      = new $classRunner();
+        }
 
-        $classRunner       = $this->getOption('runner');
-        $this->runner      = new $classRunner();
-
-        $classPersistence  = $this->getOption('persistence');
-        $configPersistence  = $this->getOption('config');
-
-        $this->persistence = new $classPersistence($configPersistence);
+        if($this->hasOption('persistence') && $this->hasOption('config')) {
+            $classPersistence = $this->getOption('persistence');
+            $configPersistence = $this->getOption('config');
+            $this->persistence = new $classPersistence($configPersistence);
+        }
 
     }
 
@@ -81,7 +83,7 @@ abstract class AbstractQueue
      */
     public function getRunner()
     {
-        $this->runner->setServiceLocator($this->getServiceManager());
+        $this->runner->setServiceLocator($this->getServiceLocator());
         return $this->runner;
     }
 
@@ -90,7 +92,7 @@ abstract class AbstractQueue
      */
     public function getPersistence()
     {
-        $this->persistence->setServiceLocator($this->getServiceManager());
+        $this->persistence->setServiceLocator($this->getServiceLocator());
         return $this->persistence;
     }
 
@@ -146,8 +148,8 @@ abstract class AbstractQueue
     public function getPayload($currentUserId = null)
     {
         $class = $this->getOption('payload');
-        $payload = new $class($this->persistence , $currentUserId);
-        $payload->setServiceLocator($this->getServiceManager());
+        $payload = new $class($this->getPersistence() , $currentUserId);
+        $payload->setServiceLocator($this->getServiceLocator());
         /**
          * @var TaskPayLoad $payload
          */
