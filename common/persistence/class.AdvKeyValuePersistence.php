@@ -24,6 +24,7 @@
  */
 class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyValuePersistence
 {
+    
     //O(N) where N is the number of fields being set.
     public function hmSet($key, $fields) {
         return $this->getDriver()->hmSet($key, $fields);

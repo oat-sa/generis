@@ -165,6 +165,6 @@ class AdvKeyLargeValuePersistenceTest extends \PHPUnit_Framework_TestCase
             new \common_persistence_InMemoryAdvKvDriver()
         );
 
-        //$this->testHgetAllHexists();
+        $this->testHgetAllHexists();
     }
 }
