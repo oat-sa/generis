@@ -78,6 +78,7 @@ abstract class AbstractTask implements Task , \JsonSerializable
     public function __construct($invocable = null, $params  = null)
     {
         $this->id = \common_Utils::getNewUri();
+        $this->setOwner(\common_session_SessionManager::getSession()->getUser()->getIdentifier());
         $this->setInvocable($invocable);
         $this->setParameters($params);
         $this->setStatus(self::STATUS_CREATED);

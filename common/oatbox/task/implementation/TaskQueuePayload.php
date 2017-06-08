@@ -9,6 +9,7 @@
 namespace oat\oatbox\task\implementation;
 
 
+use oat\oatbox\task\Task;
 use oat\oatbox\task\TaskInterface\TaskPayLoad;
 use oat\oatbox\task\TaskInterface\TaskPersistenceInterface;
 use oat\tao\model\datatable\DatatableRequest as DatatableRequestInterface;
@@ -44,20 +45,24 @@ class TaskQueuePayload implements TaskPayLoad
         $page = $this->request->getPage();
         $rows = $this->request->getRows();
 
-        $offset = $rows * ($page-1);
+        $sortBy    = $this->request->getSortBy();
+        $sortOrder = $this->request->getSortOrder();
 
-        $iterator = $this->persistence->search($params , $offset , $rows );
+        $iterator = $this->persistence->search($params ,  $rows , $page , $sortBy , $sortOrder );
 
         $taskList = [];
 
+        /**
+         * @var $taskData Task
+         */
         foreach ($iterator as $taskData) {
             $taskList[] =
                 [
-                    "id"           => $taskData['id'],
-                    "label"        => $taskData['label'],
-                    "creationDate" => strtotime($taskData['added']),
-                    "status"       => $taskData['status'],
-                    "report"       => json_decode($taskData['report'], true),
+                    "id"           => $taskData->getId(),
+                    "label"        => $taskData->getLabel(),
+                    "creationDate" => strtotime($taskData->getCreationDate()),
+                    "status"       => $taskData->getStatus(),
+                    "report"       => $taskData->getReport(),
                 ];
         }
         $countTotal = $this->count();
