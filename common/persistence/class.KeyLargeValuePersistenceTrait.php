@@ -39,7 +39,7 @@ trait common_persistence_KeyLargeValuePersistenceTrait
      * @return array
      */
     abstract protected function getParams();
-    
+
     /**
      * Set a $key with a $value
      * If $value is too large, it is split into multiple $mappedKey.
@@ -294,7 +294,7 @@ trait common_persistence_KeyLargeValuePersistenceTrait
     {
         if (! $this->width) {
             $width = $this->getParam(common_persistence_KeyLargeValuePersistence::VALUE_MAX_WIDTH);
-            if (!is_int($width)) {
+            if ($width === false || !is_int($width)) {
                 throw new common_Exception('Persistence max value width has to be an integer');
             }
             $this->width = $width - strlen($this->getMapIdentifier());
@@ -309,11 +309,8 @@ trait common_persistence_KeyLargeValuePersistenceTrait
      */
     protected function getMapIdentifier()
     {
-        try {
-            return $this->getParam(common_persistence_KeyLargeValuePersistence::MAP_IDENTIFIER);
-        } catch (common_Exception $e) {
-            return common_persistence_KeyLargeValuePersistence::DEFAULT_MAP_IDENTIFIER;
-        }
+        return $this->getParam(common_persistence_KeyLargeValuePersistence::MAP_IDENTIFIER)
+            ?: common_persistence_KeyLargeValuePersistence::DEFAULT_MAP_IDENTIFIER;
     }
 
     /**
@@ -323,11 +320,8 @@ trait common_persistence_KeyLargeValuePersistenceTrait
      */
     protected function getStartMapDelimiter()
     {
-        try {
-            return $this->getParam(common_persistence_KeyLargeValuePersistence::START_MAP_DELIMITER);
-        } catch (common_Exception $e) {
-            return common_persistence_KeyLargeValuePersistence::DEFAULT_START_MAP_DELIMITER;
-        }
+        return $this->getParam(common_persistence_KeyLargeValuePersistence::START_MAP_DELIMITER)
+            ?: common_persistence_KeyLargeValuePersistence::DEFAULT_START_MAP_DELIMITER;
     }
 
     /**
@@ -337,11 +331,8 @@ trait common_persistence_KeyLargeValuePersistenceTrait
      */
     protected function getEndMapDelimiter()
     {
-        try {
-            return $this->getParam(common_persistence_KeyLargeValuePersistence::END_MAP_DELIMITER);
-        } catch (common_Exception $e) {
-            return common_persistence_KeyLargeValuePersistence::DEFAULT_END_MAP_DELIMITER;
-        }
+        return $this->getParam(common_persistence_KeyLargeValuePersistence::END_MAP_DELIMITER)
+            ?: common_persistence_KeyLargeValuePersistence::DEFAULT_END_MAP_DELIMITER;
     }
 
     /**
@@ -349,13 +340,12 @@ trait common_persistence_KeyLargeValuePersistenceTrait
      *
      * @param $param
      * @return mixed
-     * @throws common_Exception
      */
     protected function getParam($param)
     {
         $params = $this->getParams();
         if (! isset($params[$param])) {
-            throw new common_Exception('Persistence parameter "' . $param . '" is missing');
+            return false;
         }
         return $params[$param];
     }
