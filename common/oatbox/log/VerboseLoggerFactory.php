@@ -18,11 +18,9 @@
  *
  */
 
-namespace oat\generis\common\oatbox\log;
+namespace oat\oatbox\log;
 
 
-use oat\oatbox\log\ColoredVerboseLogger;
-use oat\oatbox\log\VerboseLogger;
 use Psr\Log\LogLevel;
 
 class VerboseLoggerFactory
@@ -44,6 +42,9 @@ class VerboseLoggerFactory
         '--verbose 1' => LogLevel::ERROR,
     );
 
+    /**
+     * Make sure it can't be instantiated.
+     */
     private function __construct()
     {
     }
