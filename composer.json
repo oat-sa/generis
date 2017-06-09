@@ -57,6 +57,8 @@
 		"clearFw/clearFw" : "~1.0",
 		"easyrdf/easyrdf" : "0.9.*",
 		"doctrine/dbal" : "~2.5.0",
+    "doctrine/common": "~2.6.0",
+    "doctrine/inflector": "~1.0.0",
 		"zendframework/zend-servicemanager" : "~2.5.0",
 		"league/flysystem": "~1.0",
 		"oat-sa/oatbox-extension-installer": "dev-master",
