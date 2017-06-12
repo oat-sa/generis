@@ -328,9 +328,9 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('3.30.0');
         }
 
-        $this->skip('3.30.0', '3.32.2');
+        $this->skip('3.30.0', '3.34.0');
 
-        if ($this->isVersion('3.32.2')) {
+        if ($this->isVersion('3.34.0')) {
 
             $queue = $this->getServiceManager()->get(Queue::SERVICE_ID);
 
@@ -344,7 +344,7 @@ class Updater extends common_ext_ExtensionUpdater {
             );
 
             $this->getServiceManager()->register(LoggerService::SERVICE_ID  , $queue);
-            $this->setVersion('3.33.0');
+            $this->setVersion('3.35.0');
         }
 
     }

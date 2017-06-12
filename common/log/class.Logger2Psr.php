@@ -18,7 +18,6 @@
  * 
  */
 
-use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Psr\Log\AbstractLogger;
 /**
@@ -32,7 +31,7 @@ class common_log_Logger2Psr extends AbstractLogger
 {
     /**
      * A map between the loggers
-     * @var unknown
+     * @var array
      */
     private static $map = array(
         LogLevel::EMERGENCY => common_Logger::FATAL_LEVEL,
@@ -44,7 +43,30 @@ class common_log_Logger2Psr extends AbstractLogger
         LogLevel::NOTICE => common_Logger::DEBUG_LEVEL,
         LogLevel::DEBUG => common_Logger::DEBUG_LEVEL,
     );
-    
+
+    /**
+     * @var array   The common_logger level - PSR3 log level conversion.
+     */
+    private static $reverseMap = array(
+        common_Logger::TRACE_LEVEL   => LogLevel::DEBUG,
+        't'                          => LogLevel::DEBUG,
+
+        common_Logger::DEBUG_LEVEL   => LogLevel::DEBUG,
+        'd'                          => LogLevel::DEBUG,
+
+        common_Logger::INFO_LEVEL    => LogLevel::INFO,
+        'i'                          => LogLevel::INFO,
+
+        common_Logger::WARNING_LEVEL => LogLevel::WARNING,
+        'w'                          => LogLevel::WARNING,
+
+        common_Logger::ERROR_LEVEL   => LogLevel::ERROR,
+        'e'                          => LogLevel::ERROR,
+
+        common_Logger::FATAL_LEVEL   => LogLevel::CRITICAL,
+        'f'                          => LogLevel::CRITICAL,
+    );
+
     /**
      * @var common_Logger
      */
@@ -63,5 +85,23 @@ class common_log_Logger2Psr extends AbstractLogger
     {
         $errorLevel = isset(self::$map[$level]) ? self::$map[$level] : common_Logger::ERROR_LEVEL;
         $this->logger->log($errorLevel, $message, $context);
+    }
+
+    /**
+     * Returns the PSR log level based on the common log level.
+     *
+     * @param string $level
+     *
+     * @return string   The PSR log level.
+     *
+     * @throws Exception   When invalid level was presented.
+     */
+    public static function getPsrLevelFromCommon($level)
+    {
+        if (empty(self::$reverseMap[$level])) {
+            throw new Exception('Invalid error level in PSR to Common level conversion: ' . $level);
+        }
+
+        return self::$reverseMap[$level];
     }
 }
