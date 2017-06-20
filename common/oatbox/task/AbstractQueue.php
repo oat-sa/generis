@@ -67,7 +67,7 @@ abstract class AbstractQueue
         parent::__construct($options);
         if($this->hasOption('runner')) {
             $classRunner       = $this->getOption('runner');
-            if(!is_a($classRunner , TaskRunnerInterface::class)) {
+            if(!is_a($classRunner , TaskRunnerInterface::class,true)) {
                 throw new BadTaskQueueOption('task runner must implement ' . TaskRunnerInterface::class);
             }
             $this->runner      = new $classRunner();
@@ -75,7 +75,7 @@ abstract class AbstractQueue
 
         if($this->hasOption('persistence') && $this->hasOption('config')) {
             $classPersistence = $this->getOption('persistence');
-            if(!is_a($classPersistence , TaskPersistenceInterface::class)) {
+            if(!is_a($classPersistence , TaskPersistenceInterface::class, true)) {
                 throw new BadTaskQueueOption('task persistence must implement ' . TaskPersistenceInterface::class);
             }
             $configPersistence = $this->getOption('config');
