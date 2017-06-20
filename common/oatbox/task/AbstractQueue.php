@@ -21,11 +21,17 @@
 namespace oat\oatbox\task;
 
 use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\task\Exception\BadTaskQueueOption;
 use oat\oatbox\task\TaskInterface\TaskPayLoad;
 use oat\oatbox\task\TaskInterface\TaskPersistenceInterface;
 use oat\oatbox\task\TaskInterface\TaskQueue;
-use oat\oatbox\task\TaskInterface\TaskRunner;
+use oat\oatbox\task\TaskInterface\TaskRunner as TaskRunnerInterface;
 
+/**
+ * Class AbstractQueue
+ * generic abstract queue object
+ * @package oat\oatbox\task
+ */
 abstract class AbstractQueue
     extends ConfigurableService
     implements TaskQueue
@@ -41,17 +47,37 @@ abstract class AbstractQueue
      */
     protected $persistence;
 
-
+    /**
+     * AbstractQueue constructor.
+     *
+     * config exemple :
+     *  'payload'     => payload class name,
+     * 'runner'      => task runner class name,
+     * 'persistence' => persistence class name,
+     * 'config'      => [
+     * persistence options array
+     * custom in function of needs
+     * ],
+     *
+     * @param array $options
+     * @throws BadTaskQueueOption
+     */
     public function __construct(array $options = array())
     {
         parent::__construct($options);
         if($this->hasOption('runner')) {
             $classRunner       = $this->getOption('runner');
+            if(!is_a($classRunner , TaskRunnerInterface::class)) {
+                throw new BadTaskQueueOption('task runner must implement ' . TaskRunnerInterface::class);
+            }
             $this->runner      = new $classRunner();
         }
 
         if($this->hasOption('persistence') && $this->hasOption('config')) {
             $classPersistence = $this->getOption('persistence');
+            if(!is_a($classPersistence , TaskPersistenceInterface::class)) {
+                throw new BadTaskQueueOption('task persistence must implement ' . TaskPersistenceInterface::class);
+            }
             $configPersistence = $this->getOption('config');
             $this->persistence = new $classPersistence($configPersistence);
         }
@@ -59,16 +85,18 @@ abstract class AbstractQueue
     }
 
     /**
-     * @param TaskRunner $runner
+     * set task runner
+     * @param TaskRunnerInterface $runner
      * @return $this
      */
-    public function setRunner(TaskRunner $runner)
+    public function setRunner(TaskRunnerInterface $runner)
     {
         $this->runner = $runner;
         return $this;
     }
 
     /**
+     * set task persistence
      * @param TaskPersistenceInterface $persistence
      * @return $this
      */
@@ -79,6 +107,7 @@ abstract class AbstractQueue
     }
 
     /**
+     * return task runner
      * @return TaskRunner
      */
     public function getRunner()
@@ -88,6 +117,7 @@ abstract class AbstractQueue
     }
 
     /**
+     * return task persistence
      * @return TaskPersistenceInterface
      */
     public function getPersistence()
@@ -97,6 +127,7 @@ abstract class AbstractQueue
     }
 
     /**
+     * change task status using  task persistence
      * @param $taskId
      * @param $status
      * @return self
@@ -110,6 +141,7 @@ abstract class AbstractQueue
     }
 
     /**
+     * set task report using  task persistence
      * @param $taskId
      * @param $report
      * @return self
@@ -123,6 +155,7 @@ abstract class AbstractQueue
     }
 
     /**
+     * get task from persistence
      * @param $taskId
      * @return Task
      */
@@ -133,6 +166,7 @@ abstract class AbstractQueue
     }
 
     /**
+     * execute task with task runner
      * @param Task $task
      * @return mixed
      */
@@ -142,12 +176,20 @@ abstract class AbstractQueue
     }
 
     /**
+     * return a new instance of payload
      * @param $currentUserId
      * @return TaskPayLoad
+     * @throws BadTaskQueueOption
      */
     public function getPayload($currentUserId = null)
     {
         $class = $this->getOption('payload');
+        if(!is_a($class , TaskPayLoad::class)) {
+            throw new BadTaskQueueOption('task payload must implement ' . TaskPayLoad::class);
+        }
+        /**
+         * @var $payload TaskPayLoad
+         */
         $payload = new $class($this->getPersistence() , $currentUserId);
         $payload->setServiceLocator($this->getServiceLocator());
         /**
