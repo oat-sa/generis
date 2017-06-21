@@ -186,6 +186,9 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      */
     public function getVersion()
     {
+        if($this->getExtensionManager()->isInstalled($this->getId())){
+            return $this->getExtensionManager()->getInstalledVersion($this->getId());
+        }
         return (string) $this->getManifest()->getVersion();
     }
 
