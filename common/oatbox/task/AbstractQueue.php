@@ -184,7 +184,7 @@ abstract class AbstractQueue
     public function getPayload($currentUserId = null)
     {
         $class = $this->getOption('payload');
-        if(!is_a($class , TaskPayLoad::class)) {
+        if(!is_a($class , TaskPayLoad::class , true)) {
             throw new BadTaskQueueOption('task payload must implement ' . TaskPayLoad::class);
         }
         /**
