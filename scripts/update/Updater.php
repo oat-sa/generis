@@ -44,8 +44,11 @@ use oat\oatbox\event\EventManager;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\log\LoggerService;
 use oat\oatbox\service\ServiceNotFoundException;
+use oat\oatbox\task\implementation\InMemoryQueuePersistence;
 use oat\oatbox\task\implementation\SyncQueue;
+use oat\oatbox\task\implementation\TaskQueuePayload;
 use oat\oatbox\task\Queue;
+use oat\oatbox\task\TaskRunner;
 use oat\taoWorkspace\model\generis\WrapperModel;
 
 /**
@@ -329,6 +332,24 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         $this->skip('3.30.0', '3.34.0');
+
+        if ($this->isVersion('3.34.0')) {
+
+            $queue = $this->getServiceManager()->get(Queue::SERVICE_ID);
+
+            $queue->setOptions(
+                [
+                    'payload'     => TaskQueuePayload::class,
+                    'runner'      => TaskRunner::class,
+                    'persistence' => InMemoryQueuePersistence::class,
+                    'config'      => [],
+                ]
+            );
+
+            $this->getServiceManager()->register(Queue::SERVICE_ID  , $queue);
+            $this->setVersion('3.35.0');
+        }
+        $this->skip('3.35.0', '3.35.1');
 
     }
     

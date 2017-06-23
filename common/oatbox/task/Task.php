@@ -27,7 +27,6 @@ interface Task
     const STATUS_FINISHED = 'finished';
     const STATUS_ARCHIVED = 'archived';
 
-
     public function getLabel();
 
     public function setType($type);
@@ -63,5 +62,7 @@ interface Task
     public function getReport();
 
     public function setReport($report);
+
+    public static function restore(array $data);
 
 }
