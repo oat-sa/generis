@@ -390,37 +390,6 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->getServiceManager()->register(Queue::SERVICE_ID  , $queue);
             $this->setVersion('3.35.2');
         }
-        if ($this->isVersion('3.34.0')) {
-
-            $queue = $this->getServiceManager()->get(Queue::SERVICE_ID);
-
-            if(get_class($queue) === 'oat\Taskqueue\Persistence\RdsQueue') {
-                $persistence = $queue->getOption('persistence');
-                $queue->setOptions(
-                    [
-                        'payload'     => '\oat\oatbox\task\implementation\TaskQueuePayload',
-                        'runner'      => '\oat\oatbox\task\TaskRunner',
-                        'persistence' => '\oat\Taskqueue\Persistence\TaskSqlPersistence',
-                        'config'      => ['persistence' => $persistence],
-                    ]
-                );
-            } else {
-                $queue->setOptions(
-                    [
-                        'payload'     => TaskQueuePayload::class,
-                        'runner'      => TaskRunner::class,
-                        'persistence' => InMemoryQueuePersistence::class,
-                        'config'      => [],
-                    ]
-                );
-            }
-            $this->getServiceManager()->register(Queue::SERVICE_ID  , $queue);
-            /**
-             * skip because you don't need to fix config
-             */
-            $this->setVersion('3.35.2');
-        }
-
     }
     
     private function getReadableModelIds() {
