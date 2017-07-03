@@ -51,20 +51,9 @@ class common_http_Request
         if (php_sapi_name() == 'cli') {
             throw new common_exception_Error('Cannot call ' . __FUNCTION__ . ' from command line');
         }
-        
-        // Default is http scheme.
-        $https = false;
-        
-        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") {
-            // $_SERVER['HTTPS'] is NOT set behind a proxy / load balancer
-            $https = true;
-        } elseif (
-            // $_SERVER['HTTPS'] is set behind a proxy / load balancer
-            !empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ||
-            !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
-            $https = true;
-        }
-        
+
+        $https = self::isHttps();
+
         $scheme = $https ? 'https' : 'http';
         $port = empty($_SERVER['HTTP_X_FORWARDED_PORT']) ? $_SERVER['SERVER_PORT'] : $_SERVER['HTTP_X_FORWARDED_PORT'];
         $url = $scheme . '://' . $_SERVER['SERVER_NAME'] . ':' . $port . $_SERVER['REQUEST_URI'];
@@ -116,6 +105,27 @@ class common_http_Request
         $this->params = $params;
         $this->headers = $headers;
         $this->body = $body;
+    }
+
+    /**
+     * Detect whether we use https or http
+     * @return bool
+     */
+    public static function isHttps()
+    {
+        // Default is http scheme.
+        $https = false;
+
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") {
+            // $_SERVER['HTTPS'] is NOT set behind a proxy / load balancer
+            $https = true;
+        } elseif (
+            // $_SERVER['HTTPS'] is set behind a proxy / load balancer
+            !empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ||
+            !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+            $https = true;
+        }
+        return $https;
     }
 
     public function getUrl()
@@ -214,11 +224,13 @@ class common_http_Request
         curl_close($curlHandler);
         return $httpResponse;
     }
+
     /**
      * @param array
+     * @return string
      */
 
-   static function postEncode($parameters){
+    public static function postEncode($parameters){
         
         //todo
         //$content_type = isset($this->headers['Content-Type']) ? $this->headers['Content-Type'] : 'text/plain';
@@ -231,7 +243,8 @@ class common_http_Request
 				break;
 		}
     }
-    static function headerEncode($headers){
+
+    public static function headerEncode($headers){
         $encodedHeaders = array();
         //todo using aray_walk
         foreach ($headers as $key => $value) {
