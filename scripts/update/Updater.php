@@ -349,7 +349,7 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->getServiceManager()->register(Queue::SERVICE_ID  , $queue);
             $this->setVersion('3.35.0');
         }
-        $this->skip('3.35.0', '3.36.0');
+        $this->skip('3.35.0', '3.37.0');
 
     }
     
