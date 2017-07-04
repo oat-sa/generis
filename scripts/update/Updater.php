@@ -42,9 +42,13 @@ use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\filesystem\FileSystemService;
+use oat\oatbox\log\LoggerService;
 use oat\oatbox\service\ServiceNotFoundException;
+use oat\oatbox\task\implementation\InMemoryQueuePersistence;
 use oat\oatbox\task\implementation\SyncQueue;
+use oat\oatbox\task\implementation\TaskQueuePayload;
 use oat\oatbox\task\Queue;
+use oat\oatbox\task\TaskRunner;
 use oat\taoWorkspace\model\generis\WrapperModel;
 
 /**
@@ -319,7 +323,34 @@ class Updater extends common_ext_ExtensionUpdater {
             }
             $this->setVersion('3.28.0');
         }
-        $this->skip('3.28.0', '3.30.0');
+
+        $this->skip('3.28.0', '3.29.1');
+
+        if ($this->isVersion('3.29.1')) {
+            $this->getServiceManager()->register(LoggerService::SERVICE_ID, new LoggerService());
+            $this->setVersion('3.30.0');
+        }
+
+        $this->skip('3.30.0', '3.34.0');
+
+        if ($this->isVersion('3.34.0')) {
+
+            $queue = $this->getServiceManager()->get(Queue::SERVICE_ID);
+
+            $queue->setOptions(
+                [
+                    'payload'     => TaskQueuePayload::class,
+                    'runner'      => TaskRunner::class,
+                    'persistence' => InMemoryQueuePersistence::class,
+                    'config'      => [],
+                ]
+            );
+
+            $this->getServiceManager()->register(Queue::SERVICE_ID  , $queue);
+            $this->setVersion('3.35.0');
+        }
+        $this->skip('3.35.0', '3.38.0');
+        
     }
     
     private function getReadableModelIds() {

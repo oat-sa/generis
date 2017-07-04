@@ -29,20 +29,6 @@ class TaskService extends ConfigurableService
 
     const OPTION_LIMIT = 'limit';
 
-    /**
-     * @var TaskRunner
-     */
-    private $taskRunner;
-
-    /**
-     * @param Task $task
-     * @return Report
-     */
-    public function runTask(Task $task)
-    {
-        $taskRunner = $this->getTaskRunner();
-        return $taskRunner->run($task);
-    }
 
     /**
      * @return Report
@@ -56,7 +42,7 @@ class TaskService extends ConfigurableService
         $report = new Report(Report::TYPE_SUCCESS);
         $limit = $this->getLimit();
         foreach ($queue as $task) {
-            $subReport = $this->runTask($task);
+            $subReport = $queue->runTask($task);
             $statistics[$subReport->getType()] = isset($statistics[$subReport->getType()])
             ? $statistics[$subReport->getType()] + 1
             : 1;
@@ -87,14 +73,4 @@ class TaskService extends ConfigurableService
         return (integer) $limit;
     }
 
-    /**
-     * @return TaskRunner
-     */
-    private function getTaskRunner()
-    {
-        if ($this->taskRunner === null) {
-            $this->taskRunner = new TaskRunner();
-        }
-        return $this->taskRunner;
-    }
 }
