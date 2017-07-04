@@ -26,7 +26,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
 
     const DEFAULT_PORT     = 6379;
     const DEFAULT_ATTEMPT  = 3;
-    const DEFAULT_TIMEOUT  = 5;
+    const DEFAULT_TIMEOUT  = 5; // in seconds
     const RETRY_DELAY      = 500000; // Eq to 0.5s
 
     /**
@@ -40,7 +40,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     private $params;
 
     /**
-     * (non-PHPdoc)
+     * store connection params and try to connect
      * @see common_persistence_Driver::connect()
      */
     function connect($key, array $params)
@@ -51,6 +51,11 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         return new common_persistence_AdvKeyValuePersistence($params, $this);
     }
 
+    /**
+     * create a new connection using stored parameters
+     * @param array $params
+     * @throws common_exception_Error
+     */
     function connectionSet(array $params)
     {
         $this->connection = new Redis();
@@ -64,6 +69,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         $port    = isset($params['port']) ? $params['port'] : self::DEFAULT_PORT;
         $timeout = isset($params['timeout']) ? $params['timeout'] : self::DEFAULT_TIMEOUT;
         $persist = isset($params['pconnect']) ? $params['pconnect'] : true;
+        $this->params['attempt'] = isset($params['attempt']) ? $params['attempt'] : self::DEFAULT_ATTEMPT;
 
         if ($persist) {
             $this->connection->pconnect($host , $port , $timeout);
@@ -125,45 +131,47 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     
     public function get($key) {
 
-        return $this->callWithRetry('get' , [$key] , self::DEFAULT_ATTEMPT);
+        return $this->callWithRetry('get' , [$key] , $this->params['attempt']);
 
     }
     
     public function exists($key) {
-        return $this->callWithRetry('exists' , [$key] , self::DEFAULT_ATTEMPT);
+        return $this->callWithRetry('exists' , [$key] , $this->params['attempt']);
     }
     
     public function del($key) {
-        return $this->callWithRetry('del' , [$key] , self::DEFAULT_ATTEMPT);
+        return $this->callWithRetry('del' , [$key] , $this->params['attempt']);
     }
 
     //O(N) where N is the number of fields being set.
     public function hmSet($key, $fields) {
-        return $this->connection->hmSet($key, $fields);
+        return $this->callWithRetry('hmSet' , [$key, $fields] , $this->params['attempt']);
     }
     //Time complexity: O(1)
-    public function hExists($key, $field){
-        return (bool) $this->connection->hExists($key, $field);
+    public function hExists($key, $field)
+    {
+        return (bool)$this->callWithRetry('hExists', [$key, $field], $this->params['attempt']);
     }
+
     //Time complexity: O(1)
     public function hSet($key, $field, $value){
-        return $this->connection->hSet($key, $field, $value);
+        return $this->callWithRetry('hSet' , [$key, $field, $value] , $this->params['attempt']);
     }
     //Time complexity: O(1)
     public function hGet($key, $field){
-        return $this->connection->hGet($key, $field);
+        return $this->callWithRetry('hGet' , [$key, $field] , $this->params['attempt']);
     }
     //Time complexity: O(N) where N is the size of the hash.
     public function hGetAll($key){
-        return $this->connection->hGetAll($key);
+        return $this->callWithRetry('hGetAll' , [$key] , $this->params['attempt']);
     }
     //Time complexity: O(N)
     public function keys($pattern) {
-        return $this->connection->keys($pattern);
+        return $this->callWithRetry('keys' , [$pattern] , $this->params['attempt']);
     }
     //Time complexity: O(1)
     public function incr($key) {
-       return $this->connection->incr($key); 
+        return $this->callWithRetry('incr' , [$key] , $this->params['attempt']);
     }
 
 }
