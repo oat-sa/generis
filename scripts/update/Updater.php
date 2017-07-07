@@ -367,15 +367,16 @@ class Updater extends common_ext_ExtensionUpdater {
              */
             $this->setVersion('3.35.2');
         }
+
         /**
          * you are on a bad version needs to be fixed
          */
         $this->skip('3.35.0', '3.35.1');
+
         /**
          * fix for bad config
          */
         if ($this->isVersion('3.35.1')) {
-
             $queue = $this->getServiceManager()->get(Queue::SERVICE_ID);
             if(get_class($queue) === 'oat\Taskqueue\Persistence\RdsQueue') {
                 $queue->setOptions(
@@ -390,6 +391,8 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->getServiceManager()->register(Queue::SERVICE_ID  , $queue);
             $this->setVersion('3.35.2');
         }
+
+        $this->skip('3.35.2', '3.37.0');
     }
     
     private function getReadableModelIds() {
