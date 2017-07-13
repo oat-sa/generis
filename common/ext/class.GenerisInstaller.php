@@ -65,7 +65,7 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
         
         common_cache_FileCache::singleton()->purge();
         
-        common_Logger::d('Installing custom script for extension ' . $this->extension->getId());
+        $this->log('d', 'Installing custom script for extension ' . $this->extension->getId());
         $this->installCustomScript();
     }
 }

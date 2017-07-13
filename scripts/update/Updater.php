@@ -42,9 +42,13 @@ use oat\oatbox\event\EventManager;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\log\LoggerService;
 use oat\oatbox\service\ServiceNotFoundException;
+use oat\oatbox\task\implementation\InMemoryQueuePersistence;
 use oat\oatbox\task\implementation\SyncQueue;
+use oat\oatbox\task\implementation\TaskQueuePayload;
 use oat\oatbox\task\Queue;
+use oat\oatbox\task\TaskRunner;
 use oat\taoWorkspace\model\generis\WrapperModel;
+
 
 /**
  * 
@@ -326,8 +330,67 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('3.30.0');
         }
 
-        $this->skip('3.30.0', '4.0.0');
+        $this->skip('3.30.0', '3.34.0');
 
+        /**
+         * replaced update script 3.34.0 because of potential config loss
+         */
+        if ($this->isVersion('3.34.0')) {
+
+            $queue = $this->getServiceManager()->get(Queue::SERVICE_ID);
+
+            if(get_class($queue) === 'oat\Taskqueue\Persistence\RdsQueue') {
+                $persistence = $queue->getOption('persistence');
+                $queue->setOptions(
+                    [
+                        'payload'     => '\oat\oatbox\task\implementation\TaskQueuePayload',
+                        'runner'      => '\oat\oatbox\task\TaskRunner',
+                        'persistence' => '\oat\Taskqueue\Persistence\TaskSqlPersistence',
+                        'config'      => ['persistence' => $persistence],
+                    ]
+                );
+            } else {
+                $queue->setOptions(
+                    [
+                        'payload'     => TaskQueuePayload::class,
+                        'runner'      => TaskRunner::class,
+                        'persistence' => InMemoryQueuePersistence::class,
+                        'config'      => [],
+                    ]
+                );
+            }
+            $this->getServiceManager()->register(Queue::SERVICE_ID  , $queue);
+            /**
+             * skip because you don't need to fix config
+             */
+            $this->setVersion('3.35.2');
+        }
+
+        /**
+         * you are on a bad version needs to be fixed
+         */
+        $this->skip('3.35.0', '3.35.1');
+
+        /**
+         * fix for bad config
+         */
+        if ($this->isVersion('3.35.1')) {
+            $queue = $this->getServiceManager()->get(Queue::SERVICE_ID);
+            if(get_class($queue) === 'oat\Taskqueue\Persistence\RdsQueue') {
+                $queue->setOptions(
+                    [
+                        'payload'     => '\oat\oatbox\task\implementation\TaskQueuePayload',
+                        'runner'      => '\oat\oatbox\task\TaskRunner',
+                        'persistence' => '\oat\Taskqueue\Persistence\TaskSqlPersistence',
+                        'config'      => ['persistence' => 'default'],
+                    ]
+                );
+            }
+            $this->getServiceManager()->register(Queue::SERVICE_ID  , $queue);
+            $this->setVersion('3.35.2');
+        }
+
+        $this->skip('3.35.2', '4.0.0');
     }
     
     private function getReadableModelIds() {

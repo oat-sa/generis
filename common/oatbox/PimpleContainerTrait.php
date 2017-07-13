@@ -14,25 +14,40 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
+ *
  *
  */
 
-namespace oat\oatbox\task\implementation;
+namespace oat\oatbox;
 
-use oat\oatbox\task\AbstractTask;
-use oat\oatbox\action\Action;
-use oat\oatbox\task\Task;
 
-/**
- * Class SyncTask
- *
- * Basic implementation of `AbstractTask` class
- *
- * @package oat\oatbox\task\implementation
- * @author Aleh Hutnikau, <huntikau@1pt.com>
- */
-class SyncTask extends AbstractTask
+use Pimple\Container;
+
+trait PimpleContainerTrait
 {
+    /**
+     * @var Container
+     */
+    protected $container;
 
+    /**
+     * Sets the container instance.
+     *
+     * @param Container $container
+     */
+    public function setContainer(Container $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * Returns the container instance.
+     *
+     * @return Container
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
 }

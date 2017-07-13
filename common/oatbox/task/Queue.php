@@ -53,4 +53,5 @@ interface Queue extends \IteratorAggregate
      * @return Task
      */
     public function getTask($taskId);
+
 }
