@@ -61,7 +61,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
     }
 
     /**
-     * This implementation use \core_kernel_file_File URI as serial
+     * This implementation uses resource URI as serial
      *
      * @see FileReferenceSerializer::unserialize
      */
@@ -75,7 +75,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
     }
 
     /**
-     * This implementation use \core_kernel_file_File URI as serial
+     * This implementation uses resource URI as serial
      *
      * @see FileReferenceSerializer::unserializeFile
      */
@@ -88,7 +88,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
     }
 
     /**
-     * This implementation use \core_kernel_file_File URI as serial
+     * This implementation uses resource URI as serial
      *
      * @see FileReferenceSerializer::unserializeDirectory
      */
@@ -101,14 +101,14 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
     }
 
     /**
-     * This implementation use \core_kernel_file_File URI as serial
+     * This implementation uses resource URI as serial
      *
      * @see FileReferenceSerializer::cleanUp
      */
     public function cleanUp($serial)
     {
         $resourceFile = $this->getResource($serial);
-        $file = new \core_kernel_file_File($resourceFile);
+        $file = new \core_kernel_classes_Resource($resourceFile);
         return $file->delete();
     }
 
@@ -126,7 +126,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
      * Return an array with filesystem uri and path following serial
      * Serial is Resource file uri, data are extracted from database
      *
-     * This implementation use \core_kernel_file_File URI as serial
+     * This implementation uses resource URI as serial
      *
      * @param $serial
      * @return array

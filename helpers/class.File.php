@@ -387,4 +387,24 @@ class helpers_File
         
         return false;
     }
+
+    /**
+     * Create a unique file name on basis of the original one.
+     *
+     * @access private
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param  string $originalName
+     * @return string
+     */
+    static public function createFileName($originalName)
+    {
+        $returnValue = uniqid(hash('crc32', $originalName));
+
+        $ext = @pathinfo($originalName, PATHINFO_EXTENSION);
+        if (!empty($ext)){
+            $returnValue .= '.' . $ext;
+        }
+
+        return $returnValue;
+    }
 }
