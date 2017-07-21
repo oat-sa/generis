@@ -81,6 +81,11 @@ class TaskQueuePayload implements TaskPayLoad
 
     public function count() {
         $params = $this->request->getFilters();
+
+        if(!empty($this->currentUserId)) {
+            $params['owner'] = $this->currentUserId;
+        }
+
         return $this->persistence->count($params);
     }
 
