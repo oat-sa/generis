@@ -125,7 +125,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         } else {
             $params = [$key, $value];
         }
-        return $this->callWithRetry('set' , $params , self::DEFAULT_ATTEMPT);
+        return $this->callWithRetry('set' , $params , $this->params['attempt']);
         
     }
     
