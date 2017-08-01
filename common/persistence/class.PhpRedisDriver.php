@@ -90,11 +90,13 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
      * @return mixed
      * @throws Exception
      */
-    protected function callWithRetry( $method , array $params , $retry , $attempt = 1) {
+    protected function callWithRetry( $method , array $params , $attempt = 1) {
 
         $success       = false;
         $lastException = null;
         $result        = false;
+
+        $retry = $this->params['attempt'];
 
         while (!$success && $attempt < $retry) {
             $attempt++;
@@ -125,53 +127,53 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         } else {
             $params = [$key, $value];
         }
-        return $this->callWithRetry('set' , $params , $this->params['attempt']);
+        return $this->callWithRetry('set' , $params );
         
     }
     
     public function get($key) {
 
-        return $this->callWithRetry('get' , [$key] , $this->params['attempt']);
+        return $this->callWithRetry('get' , [$key] );
 
     }
     
     public function exists($key) {
-        return $this->callWithRetry('exists' , [$key] , $this->params['attempt']);
+        return $this->callWithRetry('exists' , [$key] );
     }
     
     public function del($key) {
-        return $this->callWithRetry('del' , [$key] , $this->params['attempt']);
+        return $this->callWithRetry('del' , [$key] );
     }
 
     //O(N) where N is the number of fields being set.
     public function hmSet($key, $fields) {
-        return $this->callWithRetry('hmSet' , [$key, $fields] , $this->params['attempt']);
+        return $this->callWithRetry('hmSet' , [$key, $fields] );
     }
     //Time complexity: O(1)
     public function hExists($key, $field)
     {
-        return (bool)$this->callWithRetry('hExists', [$key, $field], $this->params['attempt']);
+        return (bool)$this->callWithRetry('hExists', [$key, $field]);
     }
 
     //Time complexity: O(1)
     public function hSet($key, $field, $value){
-        return $this->callWithRetry('hSet' , [$key, $field, $value] , $this->params['attempt']);
+        return $this->callWithRetry('hSet' , [$key, $field, $value] );
     }
     //Time complexity: O(1)
     public function hGet($key, $field){
-        return $this->callWithRetry('hGet' , [$key, $field] , $this->params['attempt']);
+        return $this->callWithRetry('hGet' , [$key, $field]);
     }
     //Time complexity: O(N) where N is the size of the hash.
     public function hGetAll($key){
-        return $this->callWithRetry('hGetAll' , [$key] , $this->params['attempt']);
+        return $this->callWithRetry('hGetAll' , [$key] );
     }
     //Time complexity: O(N)
     public function keys($pattern) {
-        return $this->callWithRetry('keys' , [$pattern] , $this->params['attempt']);
+        return $this->callWithRetry('keys' , [$pattern]);
     }
     //Time complexity: O(1)
     public function incr($key) {
-        return $this->callWithRetry('incr' , [$key] , $this->params['attempt']);
+        return $this->callWithRetry('incr' , [$key] );
     }
 
 }
