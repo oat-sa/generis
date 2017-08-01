@@ -98,7 +98,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
 
         $retry = $this->params['attempt'];
 
-        while (!$success && $attempt < $retry) {
+        while (!$success && $attempt <= $retry) {
 
             try {
                 $result = call_user_func_array([$this->connection , $method] , $params);
