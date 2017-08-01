@@ -28,12 +28,10 @@ use common_ext_NamespaceManager;
 use common_Logger;
 use common_persistence_Manager;
 use core_kernel_classes_Class;
-use core_kernel_fileSystem_Cache;
 use core_kernel_impl_ApiModelOO;
 use core_kernel_persistence_smoothsql_SmoothModel;
 use core_kernel_uri_DatabaseSerialUriProvider;
 use core_kernel_uri_UriService;
-use core_kernel_versioning_Repository;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\permission\PermissionManager;
 use oat\generis\model\fileReference\FileReferenceSerializer;
@@ -50,6 +48,7 @@ use oat\oatbox\task\implementation\TaskQueuePayload;
 use oat\oatbox\task\Queue;
 use oat\oatbox\task\TaskRunner;
 use oat\taoWorkspace\model\generis\WrapperModel;
+
 
 /**
  * 
@@ -196,9 +195,9 @@ class Updater extends common_ext_ExtensionUpdater {
             ));
             
             $class = new core_kernel_classes_Class(GENERIS_NS . '#VersionedRepository');
+            /** @var \core_kernel_classes_Resource $resource */
             foreach ($class->getInstances(true) as $resource) {
-                $oldFs = new core_kernel_versioning_Repository($resource);
-                $path = core_kernel_fileSystem_Cache::getFileSystemPath($oldFs);
+                $path = (string) $resource->getOnePropertyValue(new \core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH));
                 $FsManager->registerLocalFileSystem($resource->getUri(), $path);
             }
             $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $FsManager);
@@ -333,23 +332,65 @@ class Updater extends common_ext_ExtensionUpdater {
 
         $this->skip('3.30.0', '3.34.0');
 
+        /**
+         * replaced update script 3.34.0 because of potential config loss
+         */
         if ($this->isVersion('3.34.0')) {
 
             $queue = $this->getServiceManager()->get(Queue::SERVICE_ID);
 
-            $queue->setOptions(
-                [
-                    'payload'     => TaskQueuePayload::class,
-                    'runner'      => TaskRunner::class,
-                    'persistence' => InMemoryQueuePersistence::class,
-                    'config'      => [],
-                ]
-            );
-
+            if(get_class($queue) === 'oat\Taskqueue\Persistence\RdsQueue') {
+                $persistence = $queue->getOption('persistence');
+                $queue->setOptions(
+                    [
+                        'payload'     => '\oat\oatbox\task\implementation\TaskQueuePayload',
+                        'runner'      => '\oat\oatbox\task\TaskRunner',
+                        'persistence' => '\oat\Taskqueue\Persistence\TaskSqlPersistence',
+                        'config'      => ['persistence' => $persistence],
+                    ]
+                );
+            } else {
+                $queue->setOptions(
+                    [
+                        'payload'     => TaskQueuePayload::class,
+                        'runner'      => TaskRunner::class,
+                        'persistence' => InMemoryQueuePersistence::class,
+                        'config'      => [],
+                    ]
+                );
+            }
             $this->getServiceManager()->register(Queue::SERVICE_ID  , $queue);
-            $this->setVersion('3.35.0');
+            /**
+             * skip because you don't need to fix config
+             */
+            $this->setVersion('3.35.2');
         }
-        $this->skip('3.35.0', '3.38.0');
+
+        /**
+         * you are on a bad version needs to be fixed
+         */
+        $this->skip('3.35.0', '3.35.1');
+
+        /**
+         * fix for bad config
+         */
+        if ($this->isVersion('3.35.1')) {
+            $queue = $this->getServiceManager()->get(Queue::SERVICE_ID);
+            if(get_class($queue) === 'oat\Taskqueue\Persistence\RdsQueue') {
+                $queue->setOptions(
+                    [
+                        'payload'     => '\oat\oatbox\task\implementation\TaskQueuePayload',
+                        'runner'      => '\oat\oatbox\task\TaskRunner',
+                        'persistence' => '\oat\Taskqueue\Persistence\TaskSqlPersistence',
+                        'config'      => ['persistence' => 'default'],
+                    ]
+                );
+            }
+            $this->getServiceManager()->register(Queue::SERVICE_ID  , $queue);
+            $this->setVersion('3.35.2');
+        }
+
+        $this->skip('3.35.2', '4.1.0');
 
     }
     
