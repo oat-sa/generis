@@ -99,7 +99,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         $retry = $this->params['attempt'];
 
         while (!$success && $attempt < $retry) {
-            $attempt++;
+
             try {
                 $result = call_user_func_array([$this->connection , $method] , $params);
                 $success = true;
@@ -111,6 +111,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
                 usleep($delay);
                 $this->connectionSet($this->params);
             }
+            $attempt++;
         }
 
         if (!$success) {
