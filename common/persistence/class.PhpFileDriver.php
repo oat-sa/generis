@@ -24,6 +24,8 @@
  */
 class common_persistence_PhpFileDriver implements common_persistence_KvDriver, common_persistence_Purgable
 {
+    use common_persistence_PrefixableDriverTrait;
+
     /**
      * List of characters permited in filename
      * @var array
@@ -78,11 +80,12 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     public function connect($id, array $params)
     {
-        $this->directory = isset($params['dir']) 
+        $this->directory = isset($params['dir'])
             ? $params['dir'].($params['dir'][strlen($params['dir'])-1] === DIRECTORY_SEPARATOR ? '' : DIRECTORY_SEPARATOR)
             : FILES_PATH.'generis'.DIRECTORY_SEPARATOR.$id.DIRECTORY_SEPARATOR;
         $this->levels = isset($params['levels']) ? $params['levels'] : self::DEFAULT_LEVELS;
         $this->humanReadable = isset($params['humanReadable']) ? $params['humanReadable'] : false;
+        $this->setPrefixFromOptions($params);
         return new common_persistence_KeyValuePersistence($params, $this);
     }
     
@@ -92,6 +95,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     public function set($id, $value, $ttl = null)
     {
+        $id = $this->getRealKey($id);
         if (null !== $ttl) {
             throw new common_exception_NotImplemented('TTL not implemented in '.__CLASS__);
         } else {
@@ -134,7 +138,9 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * (non-PHPdoc)
      * @see common_persistence_KvDriver::get()
      */
-    public function get($id) {
+    public function get($id)
+    {
+        $id = $this->getRealKey($id);
         if (isset($this->cache[$id])) {
             // OPcache workaround
             return $this->cache[$id];
@@ -147,7 +153,9 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * (non-PHPdoc)
      * @see common_persistence_KvDriver::exists()
      */
-    public function exists($id) {
+    public function exists($id)
+    {
+        $id = $this->getRealKey($id);
         return file_exists($this->getPath($id));
     }
     
@@ -155,7 +163,9 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * (non-PHPdoc)
      * @see common_persistence_KvDriver::del()
      */
-    public function del($id) {
+    public function del($id)
+    {
+        $id = $this->getRealKey($id);
         if (isset($this->cache[$id])) {
             // OPcache workaround
             unset($this->cache[$id]);
@@ -176,7 +186,8 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * 
      * @return boolean
      */
-    public function purge() {
+    public function purge()
+    {
         // @todo opcache invalidation
         return file_exists($this->directory)
             ? helpers_File::emptyDirectory($this->directory)
@@ -189,7 +200,8 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * @param string $key
      * @return string
      */
-    protected function getPath($key) {
+    protected function getPath($key)
+    {
         if ($this->humanReadable) {
             $path = $this->sanitizeReadableFileName($key);
         } else {
@@ -204,9 +216,10 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * of backwards compatibility
      *
      * @param string $key
-     * @return Ambigous string
+     * @return string $path
      */
-    protected function sanitizeReadableFileName($key) {
+    protected function sanitizeReadableFileName($key)
+    {
         $path = '';
         foreach (str_split($key) as $char) {
             $path .= isset(self::$ALLOWED_CHARACTERS[$char]) ? $char : base64_encode($char);
@@ -221,7 +234,8 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * @param mixed $value
      * @return string
      */
-    protected function getContent($key, $value) {
+    protected function getContent($key, $value)
+    {
         return $this->humanReadable
             ? "<?php return ".common_Utils::toHumanReadablePhpString($value).";".PHP_EOL
             : "<?php return ".common_Utils::toPHPVariableString($value).";";
