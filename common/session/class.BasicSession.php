@@ -29,9 +29,12 @@
  */
 use oat\oatbox\user\User;
 use oat\oatbox\Refreshable;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-class common_session_BasicSession implements common_session_Session
+class common_session_BasicSession implements common_session_Session, ServiceLocatorAwareInterface
 {
+    use ServiceLocatorAwareTrait;
     /**
      * @var common_user_User
      */
