@@ -29,7 +29,7 @@ trait common_persistence_KeyLargeValuePersistenceTrait
     /**
      * Ensure that current persistence has a driver
      *
-     * @return \oat\awsTools\awsDynamoDb\AwsDynamoDbDriver
+     * @return common_persistence_AdvKvDriver
      */
     abstract protected function getDriver();
 
@@ -52,6 +52,7 @@ trait common_persistence_KeyLargeValuePersistenceTrait
      */
     public function set($key, $value, $ttl = null)
     {
+        $key = $this->getRealKey($key);
         if ($this->isLarge($value)) {
             common_Logger::i('Large value detected into KeyValue persistence. Splitting value for key : ' . $key);
             $value = $this->setLargeValue($key, $value);
@@ -67,6 +68,7 @@ trait common_persistence_KeyLargeValuePersistenceTrait
      */
     public function get($key)
     {
+        $key = $this->getRealKey($key);
         $value = $this->getDriver()->get($key);
         if ($this->isSplit($value)) {
             common_Logger::i('Large value detected into KeyValue persistence. Joining value for key : ' . $key);
@@ -84,6 +86,7 @@ trait common_persistence_KeyLargeValuePersistenceTrait
      */
     public function exists($key)
     {
+        $key = $this->getRealKey($key);
         if ($this->isMappedKey($key)) {
             return false;
         } else {
@@ -99,6 +102,7 @@ trait common_persistence_KeyLargeValuePersistenceTrait
      */
     public function del($key)
     {
+        $key = $this->getRealKey($key);
         if ($this->isMappedKey($key)) {
             return false;
         }

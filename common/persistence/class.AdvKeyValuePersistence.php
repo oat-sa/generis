@@ -26,33 +26,51 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
 {
     
     //O(N) where N is the number of fields being set.
-    public function hmSet($key, $fields) {
+    public function hmSet($key, $fields)
+    {
+        $key = $this->getRealKey($key);
         return $this->getDriver()->hmSet($key, $fields);
     }
     
     //Time complexity: O(1)
-    public function hExists($key, $field){
+    public function hExists($key, $field)
+    {
+        $key = $this->getRealKey($key);
         return (bool) $this->getDriver()->hExists($key, $field);
     }
+
     //Time complexity: O(1)
-    public function hSet($key, $field, $value){
+    public function hSet($key, $field, $value)
+    {
+        $key = $this->getRealKey($key);
         return $this->getDriver()->hSet($key, $field, $value);
     }
+
     //Time complexity: O(1)
-    public function hGet($key, $field){
+    public function hGet($key, $field)
+    {
+        $key = $this->getRealKey($key);
         return $this->getDriver()->hGet($key, $field);
     }
+
     //Time complexity: O(N) where N is the size of the hash.
-    public function hGetAll($key){
+    public function hGetAll($key)
+    {
+        $key = $this->getRealKey($key);
         return $this->getDriver()->hGetAll($key);
     }
+
     //o(n)
-    public function keys($pattern) {
+    public function keys($pattern)
+    {
+        $pattern = $this->getRealKey($pattern);
         return $this->getDriver()->keys($pattern);
     }
 
-    public function incr($key) {
-       return $this->getDriver()->incr($key); 
+    public function incr($key)
+    {
+        $key = $this->getRealKey($key);
+        return $this->getDriver()->incr($key);
     }
     
     

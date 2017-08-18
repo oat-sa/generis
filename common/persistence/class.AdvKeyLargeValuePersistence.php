@@ -34,6 +34,7 @@ class common_persistence_AdvKeyLargeValuePersistence extends common_persistence_
      */
     public function hmSet($key, $fields)
     {
+        $key = $this->getRealKey($key);
         foreach ($fields as $field => $value) {
             if ($this->isLarge($value)) {
                 common_Logger::i('Large value detected into KeyValue persistence. Splitting value for key : ' . $key . ' (field : ' . $field . ')');
@@ -53,6 +54,7 @@ class common_persistence_AdvKeyLargeValuePersistence extends common_persistence_
      */
     public function hExists($key, $field)
     {
+        $key = $this->getRealKey($key);
         if ($this->isMappedKey($key) || $this->isMappedKey($field)) {
             return false;
         }
@@ -71,6 +73,7 @@ class common_persistence_AdvKeyLargeValuePersistence extends common_persistence_
      */
     public function hSet($key, $field, $value)
     {
+        $key = $this->getRealKey($key);
         $oldValue = $this->hGet($key, $field);
         if ($this->isSplit($oldValue)) {
             foreach ($this->unSerializeMap($oldValue) as $mappedKey) {
@@ -96,6 +99,7 @@ class common_persistence_AdvKeyLargeValuePersistence extends common_persistence_
      */
     public function hGet($key, $field)
     {
+        $key = $this->getRealKey($key);
         if ($this->isMappedKey($key) || $this->isMappedKey($field)) {
             return false;
         }
@@ -117,6 +121,7 @@ class common_persistence_AdvKeyLargeValuePersistence extends common_persistence_
      */
     public function hGetAll($key)
     {
+        $key = $this->getRealKey($key);
         $fields = $this->getDriver()->hGetAll($key);
         foreach ($fields as $field => $value) {
             if ($this->isSplit($value)) {
@@ -136,6 +141,7 @@ class common_persistence_AdvKeyLargeValuePersistence extends common_persistence_
      */
     public function keys($pattern)
     {
+        $pattern = $this->getRealKey($pattern);
         $keys = $this->getDriver()->keys($pattern);
         foreach ($keys as $index => $key) {
             if ($this->isMappedKey($key)) {
@@ -154,10 +160,11 @@ class common_persistence_AdvKeyLargeValuePersistence extends common_persistence_
      */
     public function incr($key)
     {
+        $key = $this->getRealKey($key);
         if ($this->isMappedKey($key)) {
             return false;
         }
-       return $this->getDriver()->incr($key); 
+        return $this->getDriver()->incr($key);
     }
 
     /**

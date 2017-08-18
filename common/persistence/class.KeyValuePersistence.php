@@ -24,6 +24,8 @@
  */
 class common_persistence_KeyValuePersistence extends common_persistence_Persistence
 {
+    use common_persistence_PrefixableDriverTrait;
+
     /**
      * Returns TRUE if $value is successfully set for the identifier $key
      * or FALSE if something went wrong
@@ -35,7 +37,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      */
     public function set($key, $value, $ttl = null)
     {
-        return $this->getDriver()->set($key, $value, $ttl);
+        return $this->getDriver()->set($this->getRealKey($key), $value, $ttl);
     }
     
     /**
@@ -43,10 +45,11 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      * or FALSE if nothing found
      * 
      * @param string $key
+     * @return string
      */
     public function get($key)
     {
-        return $this->getDriver()->get($key);
+        return $this->getDriver()->get($this->getRealKey($key));
     }
 
     /**
@@ -54,10 +57,11 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      * or FALSE if nothing found
      *
      * @param string $key
+     * @return bool
      */
     public function exists($key)
     {
-        return $this->getDriver()->exists($key);
+        return $this->getDriver()->exists($this->getRealKey($key));
     }
 
     /**
@@ -65,10 +69,11 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      * or FALSE if deletion went wrong
      *
      * @param string $key
+     * @return bool
      */
     public function del($key)
     {
-        return $this->getDriver()->del($key);
+        return $this->getDriver()->del($this->getRealKey($key));
     }
 
     /**
@@ -84,6 +89,28 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
         } else {
             throw new common_exception_NotImplemented("purge not implemented ");
         }
+    }
+
+    /**
+     * Get the driver of current persistence, should be a common_persistence_KvDriver
+     *
+     * @return common_persistence_KvDriver
+     */
+    public function getDriver()
+    {
+        return parent::getDriver();
+    }
+
+
+    /**
+     * Set persistence's parameters
+     *
+     * @param array $params
+     */
+    protected function setParams($params)
+    {
+        $this->setPrefixFromOptions($params);
+        parent::setParams($params);
     }
     
 }
