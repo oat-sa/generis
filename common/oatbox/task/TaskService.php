@@ -22,6 +22,8 @@ namespace oat\oatbox\task;
  
 use oat\oatbox\service\ConfigurableService;
 use common_report_Report as Report;
+use oat\oatbox\task\TaskInterface\LimitablePersistence;
+use oat\oatbox\task\TaskInterface\TaskQueue;
 
 class TaskService extends ConfigurableService
 {
@@ -41,6 +43,12 @@ class TaskService extends ConfigurableService
         $queue = $this->getServiceManager()->get(Queue::CONFIG_ID);
         $report = new Report(Report::TYPE_SUCCESS);
         $limit = $this->getLimit();
+
+        // a temporary solution to pass the limit to the persistence
+        if ($queue instanceof TaskQueue && $queue->getPersistence() instanceof LimitablePersistence) {
+            $queue->getPersistence()->setReturnTaskLimit($limit);
+        }
+
         foreach ($queue as $task) {
             $subReport = $queue->runTask($task);
             $statistics[$subReport->getType()] = isset($statistics[$subReport->getType()])

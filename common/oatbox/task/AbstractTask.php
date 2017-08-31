@@ -75,7 +75,7 @@ abstract class AbstractTask implements Task , \JsonSerializable
      * @param Action|string $invocable
      * @param array $params
      */
-    public function __construct($invocable = null, $params  = null)
+    public function __construct($invocable = null, $params = array())
     {
         $this->id = \common_Utils::getNewUri();
         $this->setOwner(\common_session_SessionManager::getSession()->getUser()->getIdentifier());
@@ -257,10 +257,10 @@ abstract class AbstractTask implements Task , \JsonSerializable
         if (!isset($data['invocable'], $data['params'])){
             return null;
         }
-        /**
-         * @var $task Task
-         */
-        $class = self::class;
+
+        $class = get_called_class();
+
+        /** @var Task $task*/
         $task = new $class();
         if (isset($data['report'])) {
             $task->setReport($data['report']);
