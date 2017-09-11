@@ -28,10 +28,10 @@
  */
 return array(
     'name' => 'generis',
-    'label' => 'Core',
+    'label' => 'Generis Core',
     'description' => 'Core extension, provide the low level framework and an API to manage ontologies',
     'license' => 'GPL-2.0',
-    'version' => '4.1.1',
+    'version' => '4.1.2',
     'author' => 'Open Assessment Technologies, CRP Henri Tudor',
     'requires' => array(),
     'models' => array(
