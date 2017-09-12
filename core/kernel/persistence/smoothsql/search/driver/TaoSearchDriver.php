@@ -25,11 +25,22 @@ class TaoSearchDriver extends EscaperAbstract {
     protected $persistence;
 
     public function __construct() {
-        $this->persistence = ServiceManager::getServiceManager()
-                ->get(\common_persistence_Manager::SERVICE_ID)
-                ->getPersistenceById('default');
+
     }
-    
+
+    public function getPersistence() {
+        if(is_null($this->persistence)) {
+            $options = $this->getOptions();
+            /**
+             * @var $model \core_kernel_persistence_smoothsql_SmoothModel
+             */
+            $model   = $options['model'];
+            $this->persistence = $model->getPersistence();
+        }
+
+        return $this->persistence;
+    }
+
     /**
      * @inherit
      */
@@ -47,21 +58,21 @@ class TaoSearchDriver extends EscaperAbstract {
      * return quoted empty string 
      */
     public function getEmpty() {
-        return $this->persistence->getPlatForm()->getNullString();
+        return $this->getPersistence()->getPlatForm()->getNullString();
     }
     
     /**
      * @inherit
      */
     public function quote($stringValue) {
-        return $this->persistence->quote($stringValue);
+        return $this->getPersistence()->quote($stringValue);
     }
     
     /**
      * @inherit
      */
     public function reserved($stringValue) {
-        return $this->persistence->getPlatForm()->quoteIdentifier($stringValue);
+        return $this->getPersistence()->getPlatForm()->quoteIdentifier($stringValue);
     }
     
     /**
@@ -73,7 +84,7 @@ class TaoSearchDriver extends EscaperAbstract {
             'postgresql' => 'random()', 
             'mssql'      => 'NEWID()',
             ];
-        $name = $this->persistence->getPlatForm()->getName();
+        $name = $this->getPersistence()->getPlatForm()->getName();
         return $random[$name]; 
     }
     
@@ -84,7 +95,7 @@ class TaoSearchDriver extends EscaperAbstract {
             'postgresql' => 'string_agg',
         ];
         
-        $name = $this->persistence->getPlatForm()->getName();
+        $name = $this->getPersistence()->getPlatForm()->getName();
         return $group[$name] . '(' . $variable . ',' . $this->escape($this->quote($separator)) . ')'; 
     }
 
@@ -98,7 +109,7 @@ class TaoSearchDriver extends EscaperAbstract {
             'postgresql' => 'ILIKE',
         ];
 
-        $name = $this->persistence->getPlatForm()->getName();
+        $name = $this->getPersistence()->getPlatForm()->getName();
         return $like[$name];
     }
 
