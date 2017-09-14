@@ -8,6 +8,11 @@ use oat\oatbox\TaskQueue\ActionTaskInterface;
 use oat\oatbox\TaskQueue\MessageInterface;
 use oat\oatbox\TaskQueue\Queue;
 
+/**
+ * Storing message logs in MySql.
+ *
+ * @author Gyula Szucs <gyula@taotesting.com>
+ */
 class MySqlLogBroker implements MessageLogBrokerInterface
 {
     const CONFIG_PERSISTENCE = 'persistence';
@@ -16,9 +21,13 @@ class MySqlLogBroker implements MessageLogBrokerInterface
      * @var \common_persistence_SqlPersistence
      */
     protected $persistence;
-
     protected $tableName;
 
+    /**
+     * MySqlLogBroker constructor.
+     *
+     * @param array $config
+     */
     public function __construct(array $config)
     {
         if(!isset($config[self::CONFIG_PERSISTENCE])) {
@@ -33,6 +42,9 @@ class MySqlLogBroker implements MessageLogBrokerInterface
         $this->tableName = strtolower(Queue::QUEUE_PREFIX .'_'. $config[self::CONFIG_CONTAINER_NAME]);
     }
 
+    /**
+     * Creates the mysql table if it does not exist.
+     */
     public function createContainer()
     {
         /** @var \common_persistence_sql_pdo_mysql_SchemaManager $schemaManager */
@@ -66,6 +78,10 @@ class MySqlLogBroker implements MessageLogBrokerInterface
         }
     }
 
+    /**
+     * @param MessageInterface $message
+     * @param string           $status
+     */
     public function add(MessageInterface $message, $status)
     {
         $this->persistence->insert($this->tableName, [
@@ -78,6 +94,10 @@ class MySqlLogBroker implements MessageLogBrokerInterface
         ]);
     }
 
+    /**
+     * @param string $messageId
+     * @return bool|string
+     */
     public function getStatus($messageId)
     {
         $qb = $this->getQueryBuilder()
@@ -116,6 +136,12 @@ class MySqlLogBroker implements MessageLogBrokerInterface
         return $qb->execute();
     }
 
+    /**
+     * @param string $messageId
+     * @param Report $report
+     * @param null   $status
+     * @return int
+     */
     public function addReport($messageId, Report $report, $status = null)
     {
         $qb = $this->getQueryBuilder()
@@ -155,6 +181,10 @@ class MySqlLogBroker implements MessageLogBrokerInterface
         return null;
     }
 
+    /**
+     * @param string $messageId
+     * @return array
+     */
     public function findById($messageId)
     {
         $qb = $this->getQueryBuilder()

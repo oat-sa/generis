@@ -2,7 +2,11 @@
 
 namespace oat\oatbox\TaskQueue;
 
-
+/**
+ * TaskInterface
+ *
+ * @author Gyula Szucs <gyula@taotesting.com>
+ */
 interface TaskInterface extends MessageInterface
 {
     const JSON_PARAMETERS_KEY = 'parameters';

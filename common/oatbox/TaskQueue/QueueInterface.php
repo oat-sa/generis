@@ -3,15 +3,31 @@
 namespace oat\oatbox\TaskQueue;
 
 use oat\oatbox\action\Action;
+use oat\oatbox\TaskQueue\MessageBroker\MessageBrokerInterface;
 use Psr\Log\LoggerAwareInterface;
 
+/**
+ * Interface QueueInterface
+ *
+ * @author Gyula Szucs <gyula@taotesting.com>
+ */
 interface QueueInterface extends \Countable, LoggerAwareInterface
 {
-    const SERVICE_ID = 'generis/taskQueue';
+    const SERVICE_ID = 'generis/taskQueueG';
     const QUEUE_PREFIX = 'TQG';
 
+    /**
+     * Returns queue name.
+     *
+     * @return string
+     */
     public function getName();
 
+    /**
+     * Returns the message broker being used.
+     *
+     * @return MessageBrokerInterface
+     */
     public function getBroker();
 
     /**

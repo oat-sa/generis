@@ -19,6 +19,8 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  * ```
  * $ sudo -u www-data php index.php 'oat\oatbox\TaskQueue\Action\InitializeQueue'
  * ```
+ *
+ * @author Gyula Szucs <gyula@taotesting.com>
  */
 class InitializeQueue implements Action, ServiceLocatorAwareInterface
 {
@@ -27,7 +29,7 @@ class InitializeQueue implements Action, ServiceLocatorAwareInterface
     public function __invoke($params)
     {
         try {
-            // Create queue
+            // Create the queue
             /** @var Queue $queue */
             $queue = $this->getServiceLocator()->get(Queue::SERVICE_ID);
 
@@ -35,7 +37,7 @@ class InitializeQueue implements Action, ServiceLocatorAwareInterface
                 $queue->getBroker()->createQueue();
             }
 
-            // Create result container
+            // Create message log container
             /** @var MessageLogManagerInterface $resultManager */
             $resultManager = $this->getServiceLocator()->get(MessageLogManagerInterface::SERVICE_ID);
             $resultManager->getBroker()->createContainer();

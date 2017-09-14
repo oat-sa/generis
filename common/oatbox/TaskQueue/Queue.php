@@ -9,6 +9,11 @@ use oat\oatbox\TaskQueue\MessageBroker\InMemoryBroker;
 use oat\oatbox\TaskQueue\MessageBroker\MessageBrokerInterface;
 use oat\oatbox\log\LoggerAwareTrait;
 
+/**
+ * Queue Service
+ *
+ * @author Gyula Szucs <gyula@taotesting.com>
+ */
 final class Queue extends ConfigurableService implements QueueInterface
 {
     use LoggerAwareTrait;
@@ -23,6 +28,11 @@ final class Queue extends ConfigurableService implements QueueInterface
      */
     private $broker;
 
+    /**
+     * Queue constructor.
+     *
+     * @param array $options
+     */
     public function __construct(array $options)
     {
         parent::__construct($options);
@@ -40,11 +50,20 @@ final class Queue extends ConfigurableService implements QueueInterface
         }
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->getOption(self::OPTION_QUEUE_NAME);
     }
 
+    /**
+     * Returns the message broker being used.
+     * If it's not initiated yet, it will be created and configured based on the supplied configs.
+     *
+     * @return MessageBrokerInterface
+     */
     public function getBroker()
     {
         if (is_null($this->broker)) {
@@ -67,6 +86,8 @@ final class Queue extends ConfigurableService implements QueueInterface
     }
 
     /**
+     * Helper method for creating a task from any Action and enqueueing it straightaway.
+     *
      * @param Action $action
      * @param array  $parameters
      * @return ActionTask
@@ -85,6 +106,8 @@ final class Queue extends ConfigurableService implements QueueInterface
     }
 
     /**
+     * Send a Message/Task into the queue.
+     *
      * @param MessageInterface $message
      * @return bool
      */
@@ -113,6 +136,11 @@ final class Queue extends ConfigurableService implements QueueInterface
         return false;
     }
 
+    /**
+     * Returns a Message/Task from the queue.
+     *
+     * @return null|MessageInterface
+     */
     public function dequeue()
     {
         if ($message = $this->getBroker()->popMessage()) {
@@ -125,11 +153,22 @@ final class Queue extends ConfigurableService implements QueueInterface
         return null;
     }
 
+    /**
+     * Acknowledge that the message has been received and consumed.
+     * Usually it deletes the given message from the queue.
+     *
+     * @param MessageInterface $message
+     */
     public function acknowledge(MessageInterface $message)
     {
         $this->getBroker()->acknowledgeMessage($message);
     }
 
+    /**
+     * Count of messages in the queue.
+     *
+     * @return int
+     */
     public function count()
     {
         return $this->getBroker()->count();

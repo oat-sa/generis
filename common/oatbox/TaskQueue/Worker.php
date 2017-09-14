@@ -5,6 +5,11 @@ namespace oat\oatbox\TaskQueue;
 use oat\oatbox\log\LoggerAwareTrait;
 use common_report_Report as Report;
 
+/**
+ * Processes tasks from the queue.
+ *
+ * @author Gyula Szucs <gyula@taotesting.com>
+ */
 final class Worker implements WorkerInterface
 {
     use LoggerAwareTrait;
@@ -17,12 +22,13 @@ final class Worker implements WorkerInterface
     private $waitInterval = 1; //sec
     private $processId;
     private $logContext;
-
-    /**
-     * @var MessageLogManagerInterface
-     */
     private $resultManager;
 
+    /**
+     * @param QueueInterface             $queue
+     * @param MessageLogManagerInterface $resultManager
+     * @param bool                       $handleSignals
+     */
     public function __construct(QueueInterface $queue, MessageLogManagerInterface $resultManager, $handleSignals = true)
     {
         $this->queue = $queue;
@@ -39,6 +45,9 @@ final class Worker implements WorkerInterface
         }
     }
 
+    /**
+     * Start processing tasks from the queue.
+     */
     public function processQueue()
     {
         $this->logInfo('Starting worker.', $this->logContext);
@@ -88,6 +97,12 @@ final class Worker implements WorkerInterface
         $this->logInfo('Worker finished.', $this->logContext);
     }
 
+    /**
+     * Process a task.
+     *
+     * @param TaskInterface $task
+     * @return string
+     */
     public function processTask(TaskInterface $task)
     {
         $report = Report::createInfo(__('Running task %s', $task->getId()));
@@ -100,7 +115,7 @@ final class Worker implements WorkerInterface
             // if the task is being executed by another worker, just return, no report needs to be saved
             if (!$rowsTouched) {
                 $this->logDebug('Task '. $task->getId() .' seems to be running by another worker.', $this->logContext);
-                return;
+                return '';
             }
 
             // execute the task
@@ -118,18 +133,24 @@ final class Worker implements WorkerInterface
             $report = Report::createFailure(__('Executing task %s failed', $task->getId()));
         }
 
-        $this->resultManager->setReport(
-            $task->getId(),
-            $report,
-            $report->getType() == Report::TYPE_ERROR || $report->containsError() ? MessageLogManagerInterface::MESSAGE_STATUS_FAILED : MessageLogManagerInterface::MESSAGE_STATUS_COMPLETED
-        );
+        $status = $report->getType() == Report::TYPE_ERROR || $report->containsError()
+            ? MessageLogManagerInterface::MESSAGE_STATUS_FAILED
+            : MessageLogManagerInterface::MESSAGE_STATUS_COMPLETED;
+
+        $this->resultManager->setReport($task->getId(), $report, $status);
 
         unset($report);
 
         // delete message from queue
         $this->queue->acknowledge($task);
+
+        return $status;
     }
 
+    /**
+     * @param int $maxIterations
+     * @return $this
+     */
     public function setMaxIterations($maxIterations)
     {
         $this->maxIterations = (int) $maxIterations;
@@ -137,6 +158,9 @@ final class Worker implements WorkerInterface
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     private function isRunning()
     {
         if ($this->shutdown) {
@@ -192,5 +216,4 @@ final class Worker implements WorkerInterface
         $this->logInfo('CONT received; resuming task processing...', $this->logContext);
         $this->paused = false;
     }
-
 }

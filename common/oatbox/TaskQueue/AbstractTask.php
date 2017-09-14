@@ -2,10 +2,18 @@
 
 namespace oat\oatbox\TaskQueue;
 
+/**
+ * Class AbstractTask
+ *
+ * @author Gyula Szucs <gyula@taotesting.com>
+ */
 abstract class AbstractTask extends Message implements TaskInterface
 {
     private $parameters = [];
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return 'TASK '. get_called_class() .' ['. $this->getId() .']';

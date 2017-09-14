@@ -2,12 +2,21 @@
 
 namespace oat\oatbox\TaskQueue;
 
-
+/**
+ * Basic Message class
+ *
+ * @author Gyula Szucs <gyula@taotesting.com>
+ */
 class Message implements MessageInterface
 {
     private $body;
     private $metadata = [];
 
+    /**
+     * Message constructor.
+     *
+     * @param null|string $body
+     */
     public function __construct($body = null)
     {
         $this->setMetadata('_id_', \common_Utils::getNewUri());
@@ -22,7 +31,7 @@ class Message implements MessageInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getId()
     {
@@ -30,7 +39,7 @@ class Message implements MessageInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getBody()
     {
@@ -38,7 +47,7 @@ class Message implements MessageInterface
     }
 
     /**
-     * @param mixed $body
+     * @param string $body
      * @return Message
      */
     public function setBody($body)

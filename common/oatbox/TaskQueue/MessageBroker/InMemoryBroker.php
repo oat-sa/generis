@@ -5,6 +5,11 @@ namespace oat\oatbox\TaskQueue\MessageBroker;
 use oat\oatbox\TaskQueue\MessageInterface;
 use oat\oatbox\log\LoggerAwareTrait;
 
+/**
+ * Stores tasks in memory. It accomplishes Sync Queue mechanism.
+ *
+ * @author Gyula Szucs <gyula@taotesting.com>
+ */
 final class InMemoryBroker extends AbstractMessageBroker
 {
     use LoggerAwareTrait;
@@ -26,9 +31,6 @@ final class InMemoryBroker extends AbstractMessageBroker
         return true;
     }
 
-    /**
-     * @return null|MessageInterface
-     */
     public function popMessage()
     {
         if (!$this->count()) {

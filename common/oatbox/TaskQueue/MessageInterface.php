@@ -2,13 +2,19 @@
 
 namespace oat\oatbox\TaskQueue;
 
-
+/**
+ * MessageInterface
+ *
+ * @author Gyula Szucs <gyula@taotesting.com>
+ */
 interface MessageInterface extends \JsonSerializable
 {
     const JSON_BODY_KEY = 'body';
     const JSON_METADATA_KEY = 'metadata';
 
     /**
+     * Gets the internally generated message id.
+     *
      * @return string
      */
     public function getId();

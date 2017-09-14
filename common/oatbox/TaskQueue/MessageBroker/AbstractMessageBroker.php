@@ -6,6 +6,11 @@ namespace oat\oatbox\TaskQueue\MessageBroker;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\TaskQueue\QueueInterface;
 
+/**
+ * Class AbstractMessageBroker
+ *
+ * @author Gyula Szucs <gyula@taotesting.com>
+ */
 abstract class AbstractMessageBroker implements MessageBrokerInterface
 {
     // Maximum amount of messages that can be received when polling the queue; Default is 1.
@@ -16,6 +21,12 @@ abstract class AbstractMessageBroker implements MessageBrokerInterface
     private $cache;
     private $actionResolver;
 
+    /**
+     * AbstractMessageBroker constructor.
+     *
+     * @param string $queueName
+     * @param array  $config
+     */
     public function __construct($queueName, array $config)
     {
         $this->name = $queueName;

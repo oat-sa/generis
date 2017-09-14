@@ -12,7 +12,6 @@ use oat\oatbox\TaskQueue\Worker;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-
 /**
  * Start a new worker.
  *
@@ -20,6 +19,8 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  * $ sudo -u www-data php index.php 'oat\oatbox\TaskQueue\Action\RunWorker'
  * $ sudo -u www-data php index.php 'oat\oatbox\TaskQueue\Action\RunWorker' 10
  * ```
+ *
+ * @author Gyula Szucs <gyula@taotesting.com>
  */
 class RunWorker implements Action, ServiceLocatorAwareInterface
 {

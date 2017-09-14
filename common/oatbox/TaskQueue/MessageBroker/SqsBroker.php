@@ -12,6 +12,11 @@ use oat\oatbox\log\LoggerAwareTrait;
 use oat\oatbox\TaskQueue\TaskInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
+/**
+ * Storing messages/tasks on AWS SQS.
+ *
+ * @author Gyula Szucs <gyula@taotesting.com>
+ */
 final class SqsBroker extends AbstractMessageBroker
 {
     use LoggerAwareTrait;
@@ -24,11 +29,15 @@ final class SqsBroker extends AbstractMessageBroker
      * @var SqsClient
      */
     private $client;
-
     private $queueUrl;
-
     private $preFetchedQueue;
 
+    /**
+     * SqsBroker constructor.
+     *
+     * @param string $queueName
+     * @param array  $config
+     */
     public function __construct($queueName, array $config)
     {
         parent::__construct($queueName, $config);
@@ -53,10 +62,14 @@ final class SqsBroker extends AbstractMessageBroker
         $this->preFetchedQueue = new \SplQueue();
     }
 
+    /**
+     * Creates queue.
+     */
     public function createQueue()
     {
         try {
-            // Note: we are creating a Standard Queue for the time being. More development needed to customize this for creating FIFO Queue.
+            // Note: we are creating a Standard Queue for the time being.
+            // More development needed to be able to customize it, for example creating FIFO Queue or setting attributes from outside.
             /** @see http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-sqs-2012-11-05.html#createqueue */
             $result = $this->client->createQueue([
                 'QueueName' => $this->getNameWithPrefix(),
@@ -80,6 +93,10 @@ final class SqsBroker extends AbstractMessageBroker
         }
     }
 
+    /**
+     * @param MessageInterface $message
+     * @return bool
+     */
     public function pushMessage(MessageInterface $message)
     {
         // ensures that the SQS Queue exist
@@ -226,6 +243,9 @@ final class SqsBroker extends AbstractMessageBroker
         return null;
     }
 
+    /**
+     * @param MessageInterface $message
+     */
     public function acknowledgeMessage(MessageInterface $message)
     {
         $this->deleteMessage($message->getMetadata('ReceiptHandle'), [

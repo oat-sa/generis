@@ -4,12 +4,22 @@ namespace oat\oatbox\TaskQueue;
 
 use Psr\Log\LoggerAwareInterface;
 
+/**
+ * Interface WorkerInterface
+ *
+ * @author Gyula Szucs <gyula@taotesting.com>
+ */
 interface WorkerInterface extends LoggerAwareInterface
 {
+    /**
+     * @param QueueInterface             $queue
+     * @param MessageLogManagerInterface $resultManager
+     * @param bool $handleSignals
+     */
     public function __construct(QueueInterface $queue, MessageLogManagerInterface $resultManager, $handleSignals);
 
     /**
-     * Process tasks in the given queue.
+     * Start processing tasks from the given queue.
      */
     public function processQueue();
 
@@ -17,7 +27,7 @@ interface WorkerInterface extends LoggerAwareInterface
      * Process a job that comes from the given queue
      *
      * @param  TaskInterface $task
-     * @return int Status of the job
+     * @return string Status of the job
      */
     public function processTask(TaskInterface $task);
 

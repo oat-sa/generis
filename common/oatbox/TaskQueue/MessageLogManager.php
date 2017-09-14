@@ -7,6 +7,12 @@ use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\TaskQueue\MessageLogBroker\MessageLogBrokerInterface;
 use oat\oatbox\log\LoggerAwareTrait;
 
+/**
+ * Managing message/task logs:
+ * - storing every information for a message/task like dates, status changes, reports etc.
+ *
+ * @author Gyula Szucs <gyula@taotesting.com>
+ */
 final class MessageLogManager extends ConfigurableService implements MessageLogManagerInterface
 {
     use LoggerAwareTrait;
@@ -19,6 +25,11 @@ final class MessageLogManager extends ConfigurableService implements MessageLogM
      */
     private $broker;
 
+    /**
+     * MessageLogManager constructor.
+     *
+     * @param array $options
+     */
     public function __construct(array $options)
     {
         parent::__construct($options);
@@ -32,6 +43,11 @@ final class MessageLogManager extends ConfigurableService implements MessageLogM
         }
     }
 
+    /**
+     * Gets the message log broker. It will be created if it has not been initialized.
+     *
+     * @return MessageLogBrokerInterface
+     */
     public function getBroker()
     {
         if (is_null($this->broker)) {
@@ -42,6 +58,13 @@ final class MessageLogManager extends ConfigurableService implements MessageLogM
         return $this->broker;
     }
 
+    /**
+     * Inserts a new message log for a message/task with a specified status.
+     *
+     * @param MessageInterface $message
+     * @param string           $status
+     * @return $this
+     */
     public function add(MessageInterface $message, $status)
     {
         try {
@@ -55,6 +78,11 @@ final class MessageLogManager extends ConfigurableService implements MessageLogM
         return $this;
     }
 
+    /**
+     * @param string $messageId
+     * @param string $status
+     * @return $this
+     */
     public function setStatus($messageId, $status)
     {
         try {
@@ -68,6 +96,10 @@ final class MessageLogManager extends ConfigurableService implements MessageLogM
         return $this;
     }
 
+    /**
+     * @param string $messageId
+     * @return string
+     */
     public function getStatus($messageId)
     {
         try {
@@ -79,6 +111,12 @@ final class MessageLogManager extends ConfigurableService implements MessageLogM
         return self::MESSAGE_STATUS_UNKNOWN;
     }
 
+    /**
+     * Running status can be set for those message logs only which have the MESSAGE_STATUS_DEQUEUED status.
+     *
+     * @param string $messageId
+     * @return $this
+     */
     public function saveRunningStatus($messageId)
     {
         try {
@@ -90,6 +128,12 @@ final class MessageLogManager extends ConfigurableService implements MessageLogM
         return $this;
     }
 
+    /**
+     * @param string $messageId
+     * @param Report $report
+     * @param null   $status
+     * @return $this
+     */
     public function setReport($messageId, Report $report, $status = null)
     {
         try {
@@ -119,6 +163,9 @@ final class MessageLogManager extends ConfigurableService implements MessageLogM
         return Report::createFailure(__('Fetching report failed.'));
     }
 
+    /**
+     * @param $status
+     */
     private function validateStatus($status)
     {
         $statuses = [
