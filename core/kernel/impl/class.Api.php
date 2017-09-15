@@ -20,6 +20,8 @@
  * 
  */
 
+use oat\tao\model\TaoOntology;
+
 /**
  * session has been set public because when implementing an interface, the son
  * this class may not read this attribute otherwise in php 5.2
@@ -56,7 +58,7 @@ class core_kernel_impl_Api
 
         
         if($role === true) {
-        	$role = new core_kernel_classes_Resource(INSTANCE_ROLE_GLOBALMANAGER);
+        	$role = new core_kernel_classes_Resource(TaoOntology::INSTANCE_ROLE_GLOBALMANAGER);
         }
        
         core_kernel_users_Service::singleton()->login($login, $password, $role);
