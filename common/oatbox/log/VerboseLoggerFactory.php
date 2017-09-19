@@ -70,7 +70,7 @@ class VerboseLoggerFactory
      *
      * @param array $arguments
      *
-     * @return string   Current log level or as default LogLevel::EMERGENCY
+     * @return string   Current log level or as default LogLevel::ERROR
      */
     protected static function getLogLevel(array $arguments)
     {
@@ -81,6 +81,6 @@ class VerboseLoggerFactory
             }
         }
 
-        return LogLevel::EMERGENCY;
+        return LogLevel::ERROR;
     }
 }

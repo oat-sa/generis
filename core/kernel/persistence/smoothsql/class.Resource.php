@@ -474,7 +474,7 @@ class core_kernel_persistence_smoothsql_Resource
         $returnValue = $this->getPersistence()->exec($sqlQuery, array (
         	$resource->getUri(),
         	$property->getUri(),
-        	$lg
+            ($property->isLgDependent() ? $lg : '')
         ));
         
     	if (!$returnValue){
