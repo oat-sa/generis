@@ -54,10 +54,10 @@ class common_persistence_AdvKeyLargeValuePersistence extends common_persistence_
      */
     public function hExists($key, $field)
     {
-        $key = $this->getRealKey($key);
         if ($this->isMappedKey($key) || $this->isMappedKey($field)) {
             return false;
         }
+        $key = $this->getRealKey($key);
         return (bool) $this->getDriver()->hExists($key, $field);
     }
 
