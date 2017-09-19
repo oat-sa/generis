@@ -39,14 +39,6 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      */
     protected $size = false;
 
-    protected function setParams($params)
-    {
-        parent::setParams($params);
-        if (isset($params[self::MAX_VALUE_SIZE]) && is_int($params[self::MAX_VALUE_SIZE])) {
-            $this->size = $params[self::MAX_VALUE_SIZE];
-        }
-    }
-
     /**
      * Set a $key with a $value
      * If $value is too large, it is split into multiple $mappedKey.
@@ -165,7 +157,11 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      */
     protected function isLarge($value)
     {
-        return strlen($value) > $this->getSize();
+        $size = $this->getSize();
+        if (!$size) {
+            return false;
+        }
+        return strlen($value) > $size;
     }
 
     /**
@@ -309,10 +305,12 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     {
         if (! $this->size) {
             $size = $this->getParam(self::MAX_VALUE_SIZE);
-            if ($size === false || !is_int($size)) {
-                throw new common_Exception('Persistence max value size has to be an integer');
+            if ($size !== false) {
+                if (!is_int($size)) {
+                    throw new common_Exception('Persistence max value size has to be an integer');
+                }
+                $this->size = $size - strlen($this->getMapIdentifier());
             }
-            $this->size = $size - strlen($this->getMapIdentifier());
         }
         return $this->size;
     }

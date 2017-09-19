@@ -37,6 +37,7 @@ class common_Exception extends Exception{
     {
         parent::__construct($message, $code);
         common_Logger::singleton()->handleException($this);
+        common_Logger::w($this->getMessage());
     }
 	
 	public function __toString()
