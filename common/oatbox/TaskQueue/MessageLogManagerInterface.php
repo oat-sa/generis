@@ -13,7 +13,7 @@ use Psr\Log\LoggerAwareInterface;
  */
 interface MessageLogManagerInterface extends LoggerAwareInterface
 {
-    const SERVICE_ID = 'generis/taskQueueMessageLogManager';
+    const SERVICE_ID = 'generis/taskQueueGMessageLogManager';
 
     const MESSAGE_STATUS_ENQUEUED = 'enqueued';
     const MESSAGE_STATUS_DEQUEUED = 'dequeued';

@@ -67,4 +67,11 @@ interface MessageBrokerInterface extends \Countable, LoggerAwareInterface
      * @param MessageInterface $message
      */
     public function acknowledgeMessage(MessageInterface $message);
+
+    /**
+     * Get the pre-set amount of received messages in one pop.
+     *
+     * @return int
+     */
+    public function getMessagesToReceive();
 }

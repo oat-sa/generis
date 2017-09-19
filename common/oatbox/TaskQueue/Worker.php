@@ -153,7 +153,7 @@ final class Worker implements WorkerInterface
      */
     public function setMaxIterations($maxIterations)
     {
-        $this->maxIterations = (int) $maxIterations;
+        $this->maxIterations = (int) $maxIterations * $this->queue->getBroker()->getMessagesToReceive();
 
         return $this;
     }

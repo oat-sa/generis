@@ -19,18 +19,38 @@ final class InMemoryBroker extends AbstractMessageBroker
      */
     private $queue;
 
+    /**
+     * Initiates the SplQueue
+     */
     public function createQueue()
     {
         $this->queue = new \SplQueue();
         $this->logDebug('Memory Queue created');
     }
 
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return $this->queue->count();
+    }
+
+    /**
+     * @param MessageInterface $message
+     * @return bool
+     */
     public function pushMessage(MessageInterface $message)
     {
         $this->queue->enqueue($message);
         return true;
     }
 
+    /**
+     * Overwriting the parent totally because in this case we need a much simpler logic for popping messages.
+     *
+     * @return mixed|null
+     */
     public function popMessage()
     {
         if (!$this->count()) {
@@ -40,13 +60,29 @@ final class InMemoryBroker extends AbstractMessageBroker
         return $this->queue->dequeue();
     }
 
-    public function acknowledgeMessage(MessageInterface $message)
+    /**
+     * Do nothing.
+     */
+    protected function doPop()
     {
-        // do nothing, because dequeue automatically deletes the message from the queue
     }
 
-    public function count()
+    /**
+     * Do nothing, because dequeue automatically deletes the message from the queue
+     *
+     * @param MessageInterface $message
+     */
+    public function acknowledgeMessage(MessageInterface $message)
     {
-        return $this->queue->count();
+    }
+
+    /**
+     * Do nothing.
+     *
+     * @param string $receipt
+     * @param array  $logContext
+     */
+    protected function deleteMessage($receipt, array $logContext = [])
+    {
     }
 }

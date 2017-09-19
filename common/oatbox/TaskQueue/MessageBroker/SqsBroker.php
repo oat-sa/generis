@@ -8,7 +8,6 @@ use oat\oatbox\action\ResolutionException;
 use oat\oatbox\TaskQueue\ActionTaskInterface;
 use oat\oatbox\TaskQueue\Message;
 use oat\oatbox\TaskQueue\MessageInterface;
-use oat\oatbox\log\LoggerAwareTrait;
 use oat\oatbox\TaskQueue\TaskInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
@@ -19,8 +18,6 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  */
 final class SqsBroker extends AbstractMessageBroker
 {
-    use LoggerAwareTrait;
-
     const CONFIG_PROFILE = 'profile';
     const CONFIG_REGION = 'region';
     const CONFIG_VERSION = 'version';
@@ -30,7 +27,6 @@ final class SqsBroker extends AbstractMessageBroker
      */
     private $client;
     private $queueUrl;
-    private $preFetchedQueue;
 
     /**
      * SqsBroker constructor.
@@ -59,7 +55,6 @@ final class SqsBroker extends AbstractMessageBroker
             'region' => $config[self::CONFIG_REGION],
             'version' => $config[self::CONFIG_VERSION]
         ]);
-        $this->preFetchedQueue = new \SplQueue();
     }
 
     /**
@@ -132,15 +127,12 @@ final class SqsBroker extends AbstractMessageBroker
     }
 
     /**
-     * @return MessageInterface|null
+     * Does the SQS specific pop mechanism.
+     *
+     * @see http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-sqs-2012-11-05.html#shape-message
      */
-    public function popMessage()
+    protected function doPop()
     {
-        // if there is item in the pre-fetched queue, let's return that
-        if ($message = $this->popPreFetchedMessage()) {
-            return $message;
-        }
-
         // ensures that the SQS Queue exist
         if (!$this->queueExists()) {
             $this->createQueue();
@@ -163,84 +155,23 @@ final class SqsBroker extends AbstractMessageBroker
                 $this->logDebug('Received '. count($result->get('Messages')) .' messages.', $logContext);
 
                 foreach ($result->get('Messages') as $message) {
-                    if ($messageObject = $this->denormalizeMessage($message)) {
-                        $this->preFetchedQueue->enqueue($messageObject);
+                    $messageObject = $this->denormalizeMessage(
+                        $message['Body'],
+                        $message['ReceiptHandle'],
+                        ['SqsMessageId' => $message['MessageId']]
+                    );
+                    if ($messageObject) {
+                        $messageObject->setMetadata('SqsMessageId', $message['MessageId']);
+                        $messageObject->setMetadata('ReceiptHandle', $message['ReceiptHandle']);
+                        $this->pushPreFetchedMessage($messageObject);
                     }
                 }
             } else {
                 $this->logDebug('No messages in queue.', $logContext);
-                return null;
             }
         } catch (AwsException $e) {
-            $this->logError('Popping messages failed with MSG: '. $e->getAwsErrorMessage());
+            $this->logError('Popping messages failed with MSG: '. $e->getAwsErrorMessage(), $logContext);
         }
-
-        return $this->popPreFetchedMessage();
-    }
-
-    /**
-     * @return MessageInterface|null
-     */
-    private function popPreFetchedMessage()
-    {
-        if ($this->preFetchedQueue->count()) {
-            return $this->preFetchedQueue->dequeue();
-        }
-
-        return null;
-    }
-
-    /**
-     * Denormalize SQS message.
-     *
-     * @see http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-sqs-2012-11-05.html#shape-message
-     * @param array $messageSqsData
-     * @return MessageInterface|null
-     */
-    private function denormalizeMessage(array $messageSqsData)
-    {
-        if (($basicData = json_decode($messageSqsData['Body'], true)) !== null
-            && json_last_error() === JSON_ERROR_NONE
-            && isset($basicData[MessageInterface::JSON_BODY_KEY])
-        ) {
-            $classOrBody = $basicData[MessageInterface::JSON_BODY_KEY];
-
-            // if the body contains a valid class name, let's instantiate it otherwise just creating a simple message object
-            $message = class_exists($classOrBody) ? new $classOrBody() : new Message($classOrBody);
-            $message->setMetadata($basicData[MessageInterface::JSON_METADATA_KEY]);
-            $message->setMetadata('SqsMessageId', $messageSqsData['MessageId']);
-            $message->setMetadata('ReceiptHandle', $messageSqsData['ReceiptHandle']);
-
-            if ($message instanceof TaskInterface) {
-                $message->setParameter($basicData[TaskInterface::JSON_PARAMETERS_KEY]);
-            }
-
-            if ($message instanceof ActionTaskInterface) {
-                try {
-                    $action = $this->getActionResolver()->resolve($message->getAction());
-
-                    if ($action instanceof ServiceLocatorAwareInterface) {
-                        $action->setServiceLocator($this->getActionResolver()->getServiceLocator());
-                    }
-
-                    $message->setAction($action);
-                } catch (ResolutionException $e) {
-                    $this->logError('Action class '. $message->getAction() .' does not exist');
-                    return null;
-                }
-            }
-
-            return $message;
-        }
-
-        // if we have an invalid message:
-        // - just a simple string in the body which is not json-decode-able
-        // - it's a valid json but not containing the 'body' key
-        $this->deleteMessage($messageSqsData['ReceiptHandle'], [
-            'SqsMessageId' => $messageSqsData['MessageId']
-        ]);
-
-        return null;
     }
 
     /**
@@ -260,7 +191,7 @@ final class SqsBroker extends AbstractMessageBroker
      * @param string $receipt
      * @param array $logContext
      */
-    private function deleteMessage($receipt, array $logContext)
+    protected function deleteMessage($receipt, array $logContext = [])
     {
         // ensures that the SQS Queue exist
         if (!$this->queueExists()) {
@@ -363,7 +294,7 @@ final class SqsBroker extends AbstractMessageBroker
      *
      * @return int
      */
-    protected function getMessagesToReceive()
+    public function getMessagesToReceive()
     {
         return parent::getMessagesToReceive() > 10 ? 10 : parent::getMessagesToReceive();
     }

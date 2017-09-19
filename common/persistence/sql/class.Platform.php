@@ -148,13 +148,37 @@ class common_persistence_sql_Platform{
        // return $this->dbalPlatform->getNowExpression();
        return $date;
     }
+
     /**
-     * 
+     *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $functionName
+     * @return string
      */
     public function getSqlFunction($functionName){
         return "SELECT " . $functionName . '(?)';
     }
-    
+
+    /**
+     * @return string
+     */
+    public function getWriteLockSQL()
+    {
+        return $this->dbalPlatform->getWriteLockSQL();
+    }
+
+    public function beginTransaction()
+    {
+        $this->dbalConnection->beginTransaction();
+    }
+
+    public function rollBack()
+    {
+        $this->dbalConnection->rollBack();
+    }
+
+    public function commit()
+    {
+        $this->dbalConnection->commit();
+    }
 }

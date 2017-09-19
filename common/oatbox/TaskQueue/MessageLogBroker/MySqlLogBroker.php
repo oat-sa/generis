@@ -202,6 +202,6 @@ class MySqlLogBroker implements MessageLogBrokerInterface
     private function getQueryBuilder()
     {
         /**@var \common_persistence_sql_pdo_mysql_Driver $driver */
-        return $this->persistence->getDriver()->getPlatform()->getQueryBuilder();
+        return $this->persistence->getPlatform()->getQueryBuilder();
     }
 }

@@ -14,6 +14,7 @@ use Psr\Log\LoggerAwareInterface;
 interface QueueInterface extends \Countable, LoggerAwareInterface
 {
     const SERVICE_ID = 'generis/taskQueueG';
+
     const QUEUE_PREFIX = 'TQG';
 
     /**
