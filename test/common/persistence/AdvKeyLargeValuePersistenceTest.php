@@ -30,7 +30,8 @@ class AdvKeyLargeValuePersistenceTest extends \PHPUnit_Framework_TestCase
     {
         $this->largeValuePersistence = new \common_persistence_AdvKeyLargeValuePersistence(
             array(
-                \common_persistence_KeyLargeValuePersistence::VALUE_MAX_WIDTH => 100
+                \common_persistence_KeyLargeValuePersistence::VALUE_MAX_WIDTH => 100,
+                'fixture-'
             ),
             new \common_persistence_InMemoryAdvKvDriver()
         );
@@ -160,6 +161,7 @@ class AdvKeyLargeValuePersistenceTest extends \PHPUnit_Framework_TestCase
                 \common_persistence_KeyLargeValuePersistence::MAP_IDENTIFIER => 'iamamap',
                 \common_persistence_KeyLargeValuePersistence::START_MAP_DELIMITER => 'mapbegin',
                 \common_persistence_KeyLargeValuePersistence::END_MAP_DELIMITER => 'mapend',
+                'prefix' => 'fixture-'
 
             ),
             new \common_persistence_InMemoryAdvKvDriver()
