@@ -41,6 +41,19 @@ trait common_persistence_KeyLargeValuePersistenceTrait
     abstract protected function getParams();
 
     /**
+     * Set a $key with a $value by wrap the first call to setBigValue()
+     *
+     * @param $key
+     * @param $value
+     * @param null $ttl
+     * @return bool
+     */
+    public function set($key, $value, $ttl = null)
+    {
+        return $this->setBigValue($this->getRealKey($key), $value, $ttl);
+    }
+
+    /**
      * Set a $key with a $value
      * If $value is too large, it is split into multiple $mappedKey.
      * These new keys are serialized and stored into actual $key
@@ -50,9 +63,8 @@ trait common_persistence_KeyLargeValuePersistenceTrait
      * @param null $ttl
      * @return bool
      */
-    public function set($key, $value, $ttl = null)
+    protected function setBigValue($key, $value, $ttl = null)
     {
-        $key = $this->getRealKey($key);
         if ($this->isLarge($value)) {
             common_Logger::i('Large value detected into KeyValue persistence. Splitting value for key : ' . $key);
             $value = $this->setLargeValue($key, $value);
@@ -133,14 +145,14 @@ trait common_persistence_KeyLargeValuePersistenceTrait
 
         if (! $this->isLarge($value)) {
             if ($flush) {
-                $this->set($key, $value);
+                $this->setBigValue($key, $value);
             }
             return $value;
         }
 
         $map = $this->createMap($key, $value);
         foreach ($map as $mappedKey => $valuePart) {
-            $this->set($this->transformReferenceToMappedKey($mappedKey), $valuePart);
+            $this->setBigValue($this->transformReferenceToMappedKey($mappedKey), $valuePart);
         }
 
         return $this->setLargeValue($key, $this->serializeMap($map), $level + 1, $flush);
