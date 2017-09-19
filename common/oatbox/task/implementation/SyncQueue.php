@@ -79,6 +79,22 @@ class SyncQueue extends AbstractQueue
         return new TaskList($this->getPersistence()->getAll());
     }
 
-
+    /**
+     * Create task resource in the rdf storage and link placeholder resource to it.
+     * @param Task $task
+     * @param \core_kernel_classes_Resource|null $resource - placeholder resource to be linked with task.
+     * @return \core_kernel_classes_Resource
+     */
+    public function linkTask(Task $task, \core_kernel_classes_Resource $resource = null)
+    {
+        $taskResource = parent::linkTask($task, $resource);
+        if (!empty($task->getReport())) {
+            $taskResource->setPropertyValue(
+                new \core_kernel_classes_Property(Task::PROPERTY_REPORT),
+                json_encode($task->getReport())
+            );
+        }
+        return $taskResource;
+    }
 
 }

@@ -48,7 +48,7 @@ use oat\oatbox\task\implementation\TaskQueuePayload;
 use oat\oatbox\task\Queue;
 use oat\oatbox\task\TaskRunner;
 use oat\taoWorkspace\model\generis\WrapperModel;
-
+use oat\tao\scripts\update\OntologyUpdater;
 
 /**
  * 
@@ -391,6 +391,11 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         $this->skip('3.35.2', '4.1.3');
+
+        if ($this->isVersion('4.1.3')) {
+            OntologyUpdater::syncModels();
+            $this->setVersion('4.2.0');
+        }
     }
     
     private function getReadableModelIds() {
