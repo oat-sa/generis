@@ -19,18 +19,20 @@
 
 namespace oat\generis\test\common\persistence;
 
-class AdvKeyLargeValuePersistenceTest extends \PHPUnit_Framework_TestCase
+use \PHPUnit_Framework_TestCase as TestCase;
+
+class AdvKeyValuePersistenceTest extends TestCase
 {
     /**
-     * @var \common_persistence_AdvKeyLargeValuePersistence
+     * @var \common_persistence_AdvKeyValuePersistence
      */
     protected $largeValuePersistence;
 
     public function setUp()
     {
-        $this->largeValuePersistence = new \common_persistence_AdvKeyLargeValuePersistence(
+        $this->largeValuePersistence = new \common_persistence_AdvKeyValuePersistence(
             array(
-                \common_persistence_KeyLargeValuePersistence::VALUE_MAX_WIDTH => 100
+                \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100
             ),
             new \common_persistence_InMemoryAdvKvDriver()
         );
@@ -43,7 +45,7 @@ class AdvKeyLargeValuePersistenceTest extends \PHPUnit_Framework_TestCase
 
     protected function get100000bytesValue()
     {
-        return str_repeat('a', 100000);
+        return str_repeat('a', 100);
     }
 
     public function testLargeHmsetHget()
@@ -154,12 +156,12 @@ class AdvKeyLargeValuePersistenceTest extends \PHPUnit_Framework_TestCase
 
     public function testMapMapControl()
     {
-        $this->largeValuePersistence = new \common_persistence_AdvKeyLargeValuePersistence(
+        $this->largeValuePersistence = new \common_persistence_AdvKeyValuePersistence(
             array(
-                \common_persistence_KeyLargeValuePersistence::VALUE_MAX_WIDTH => 100,
-                \common_persistence_KeyLargeValuePersistence::MAP_IDENTIFIER => 'iamamap',
-                \common_persistence_KeyLargeValuePersistence::START_MAP_DELIMITER => 'mapbegin',
-                \common_persistence_KeyLargeValuePersistence::END_MAP_DELIMITER => 'mapend',
+                \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100,
+                \common_persistence_KeyValuePersistence::MAP_IDENTIFIER => 'iamamap',
+                \common_persistence_KeyValuePersistence::START_MAP_DELIMITER => 'mapbegin',
+                \common_persistence_KeyValuePersistence::END_MAP_DELIMITER => 'mapend',
 
             ),
             new \common_persistence_InMemoryAdvKvDriver()
