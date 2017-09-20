@@ -201,15 +201,16 @@ abstract class AbstractQueue
     }
 
     /**
-     * Check whether resource is a placeholder of task in the task queue
+     * Get resource from rdf storage which represents task in the task queue by linked resource
+     * Returns null if there is no task linked to given resource
      * @param \core_kernel_classes_Resource $resource
-     * @return mixed
+     * @return null|\core_kernel_classes_Resource
      */
-    public function isTaskPlaceholder(\core_kernel_classes_Resource $resource)
+    public function getTaskResource(\core_kernel_classes_Resource $resource)
     {
         $tasksRootClass = $this->getClass(Task::TASK_CLASS);
         $task = $tasksRootClass->searchInstances([Task::PROPERTY_LINKED_RESOURCE => $resource->getUri()]);
-        return !empty($task);
+        return empty($task) ? null : current($task);
     }
 
     /**
@@ -218,21 +219,19 @@ abstract class AbstractQueue
      */
     public function getReportByLinkedResource(\core_kernel_classes_Resource $resource)
     {
-        $tasksRootClass = $this->getClass(Task::TASK_CLASS);
-        $taskResource = $tasksRootClass->searchInstances([Task::PROPERTY_LINKED_RESOURCE => $resource->getUri()]);
-        if (!empty($taskResource)) {
-            $taskResource = current($taskResource);
+        $taskResource = $this->getTaskResource($resource);
+        if ($taskResource !== null) {
             $report = $taskResource->getOnePropertyValue($this->getProperty(Task::PROPERTY_REPORT));
             if ($report) {
                 $report = \common_report_Report::jsonUnserialize($report->literal);
             } else {
                 $task = $this->getTask($taskResource->getUri());
                 if ($task) {
-                    $report = \common_report_Report::createInfo(__('Import task is in \'%s\' state', $task->getStatus()));
+                    $report = \common_report_Report::createInfo(__('Task is in \'%s\' state', $task->getStatus()));
                 } else {
                     //this is an assumption.
                     //in case if sync implementation is used task may not be found.
-                    $report = \common_report_Report::createInfo(__('Import task is in progress'));
+                    $report = \common_report_Report::createInfo(__('Task is in progress'));
                 }
             }
         } else {

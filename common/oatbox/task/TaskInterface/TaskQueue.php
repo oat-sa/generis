@@ -61,11 +61,12 @@ interface TaskQueue extends Queue
     public function getPayload($currentUserId);
 
     /**
-     * Check whether resource is a placeholder of task in the task queue
+     * Get resource from rdf storage which represents task in the task queue by linked resource
+     * Returns null if there is no task linked to given resource
      * @param \core_kernel_classes_Resource $resource
      * @return mixed
      */
-    public function isTaskPlaceholder(\core_kernel_classes_Resource $resource);
+    public function getTaskResource(\core_kernel_classes_Resource $resource);
     /**
      * @param \core_kernel_classes_Resource $resource
      * @return \common_report_Report
