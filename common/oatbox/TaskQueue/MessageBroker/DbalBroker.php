@@ -4,7 +4,6 @@ namespace oat\oatbox\TaskQueue\MessageBroker;
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use oat\oatbox\TaskQueue\MessageInterface;
-use oat\oatbox\TaskQueue\Queue;
 
 /**
  * Storing messages/tasks in DB.

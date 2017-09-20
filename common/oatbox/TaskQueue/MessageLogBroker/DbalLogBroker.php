@@ -9,11 +9,11 @@ use oat\oatbox\TaskQueue\MessageInterface;
 use oat\oatbox\TaskQueue\Queue;
 
 /**
- * Storing message logs in MySql.
+ * Storing message logs in RDS.
  *
  * @author Gyula Szucs <gyula@taotesting.com>
  */
-class MySqlLogBroker implements MessageLogBrokerInterface
+class DbalLogBroker implements MessageLogBrokerInterface
 {
     const CONFIG_PERSISTENCE = 'persistence';
 

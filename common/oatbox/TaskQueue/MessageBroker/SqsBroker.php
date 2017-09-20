@@ -4,12 +4,7 @@ namespace oat\oatbox\TaskQueue\MessageBroker;
 
 use Aws\Exception\AwsException;
 use Aws\Sqs\SqsClient;
-use oat\oatbox\action\ResolutionException;
-use oat\oatbox\TaskQueue\ActionTaskInterface;
-use oat\oatbox\TaskQueue\Message;
 use oat\oatbox\TaskQueue\MessageInterface;
-use oat\oatbox\TaskQueue\TaskInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * Storing messages/tasks on AWS SQS.
