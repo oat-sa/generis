@@ -24,6 +24,7 @@
 namespace   oat\generis\model\kernel\persistence\smoothsql\search;
 
 use core_kernel_persistence_smoothsql_SmoothModel;
+use oat\generis\model\kernel\persistence\smoothsql\search\filter\FilterFactory;
 use oat\oatbox\service\ConfigurableService;
 use oat\search\base\QueryBuilderInterface;
 use oat\search\base\SearchGateWayInterface;
@@ -202,7 +203,7 @@ class ComplexSearchService extends ConfigurableService
      * @param array $classUri
      * @param array $propertyFilters
      * @param boolean $and
-     * @param boolean $like
+     * @param boolean $isLikeOperator
      * @param string $lang
      * @param integer $offset
      * @param integer $limit
@@ -210,7 +211,7 @@ class ComplexSearchService extends ConfigurableService
      * @param string $orderDir
      * @return string
      */
-    public function getQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $classUri, array $propertyFilters, $and = true, $like = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC') 
+    public function getQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $classUri, array $propertyFilters, $and = true, $isLikeOperator = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC')
     {
         $query = $this->getGateway()->query()->setLimit( $limit )->setOffset($offset );
         
@@ -219,43 +220,35 @@ class ComplexSearchService extends ConfigurableService
         }
         
         $this->setLanguage($query , $lang);
-        
-        $operator = $this->getOperator($like);
-        
+
         $criteria = $query->newQuery()
                 ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
                 ->in($classUri);
         
         $query->setCriteria($criteria);
         $count     = 0;
-        $maxLength = count($propertyFilters);
-        foreach ($propertyFilters as $predicate => $value ) {
-            
-            $this->validValue($value);
-            $firstValue = $value;
-            $nextValue  = [];
-            
-            if(is_array($value)) {
-                $firstValue = array_shift($value);
-                $nextValue  = $value;
-            } 
-            
-            $criteria->addCriterion($predicate , $operator , $this->parseValue($firstValue));
-            
-            foreach ($nextValue as $val) {
-                $criteria->addOr($this->parseValue($val));
-            }
-            $count++;
+		$propertyFilters = FilterFactory::buildFilters($propertyFilters, $isLikeOperator);
+		$maxLength = count($propertyFilters);
+        foreach ($propertyFilters as $filter) {
+        	$this->validValue($filter->getValue());
 
-            if($and === false && $maxLength > $count) {
-                $criteria = $query->newQuery()
-                ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
-                ->in($classUri);
-                $query->setOr($criteria);
-            }
-            
-            
-        }
+			$criteria->addCriterion($filter->getKey(), $filter->getOperator(), $this->parseValue($filter->getValue()));
+
+			$orValues = $filter->getOrConditionValues();
+
+			foreach ($orValues as $val) {
+				$criteria->addOr($this->parseValue($val));
+			}
+
+			$count++;
+			if($and === false && $maxLength > $count) {
+				$criteria = $query->newQuery()
+					->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
+					->in($classUri);
+				$query->setOr($criteria);
+			}
+		}
+
         $queryString = $this->getGateway()->serialyse($query)->getQuery();
 
         return $queryString;
