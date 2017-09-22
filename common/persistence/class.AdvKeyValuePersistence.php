@@ -36,7 +36,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
     {
         foreach ($fields as $field => $value) {
             if ($this->isLarge($value)) {
-                common_Logger::i('Large value detected into KeyValue persistence. Splitting value for key : ' . $key . ' (field : ' . $field . ')');
+                common_Logger::t('Large value detected into KeyValue persistence. Splitting value for key : ' . $key . ' (field : ' . $field . ')');
                 $fields[$field] = $this->setLargeValue($this->getMappedKey($key, $field), $value, 0, false);
             }
         }
@@ -79,9 +79,10 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
         }
 
         if ($this->isLarge($value)) {
-            common_Logger::i('Large value detected into KeyValue persistence. Splitting value for key : ' . $key . ' (field : ' . $field . ')');
+            common_Logger::t('Large value detected into KeyValue persistence. Splitting value for key : ' . $key . ' (field : ' . $field . ')');
             $value = $this->setLargeValue($this->getMappedKey($key, $field), $value);
         }
+
         return $this->getDriver()->hSet($key, $field, $value);
     }
 
@@ -101,10 +102,12 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
         }
 
         $value = $this->getDriver()->hGet($key, $field);
+
         if ($this->isSplit($value)) {
-            common_Logger::i('Large value detected into KeyValue persistence. Joining value for key : ' . $key . ' (field : ' . $field . ')');
+            common_Logger::t('Large value detected into KeyValue persistence. Joining value for key : ' . $key . ' (field : ' . $field . ')');
             $value =  $this->join($this->getMappedKey($key, $field), $value);
         }
+
         return $value;
     }
 
@@ -120,7 +123,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
         $fields = $this->getDriver()->hGetAll($key);
         foreach ($fields as $field => $value) {
             if ($this->isSplit($value)) {
-                common_Logger::i('Large value detected into KeyValue persistence. Joining value for key : ' . $key . ' (field : ' . $field . ')');
+                common_Logger::t('Large value detected into KeyValue persistence. Joining value for key : ' . $key . ' (field : ' . $field . ')');
                 $fields[$field] = $this->join($this->getMappedKey($key, $field), $value);
             }
         }
@@ -169,7 +172,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
      */
     protected function getMappedKey($key, $field)
     {
-        return $key . '.' . $field;
+        return $this->transformReferenceToMappedKey($key . '.' . $field);
     }
 
 }

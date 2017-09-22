@@ -29,10 +29,12 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     const MAP_IDENTIFIER = 'map_identifier';
     const START_MAP_DELIMITER = 'start_map_delimiter';
     const END_MAP_DELIMITER = 'end_map_delimiter';
+    const MAPPED_KEY_SEPARATOR = '%%';
 
     const DEFAULT_MAP_IDENTIFIER = '<<<<mapped>>>>';
     const DEFAULT_START_MAP_DELIMITER = '<<<<mappedKey>>>>';
     const DEFAULT_END_MAP_DELIMITER = '<<<</mappedKey>>>>';
+
 
     /**
      * @var int The maximum size allowed for the value
@@ -52,7 +54,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     public function set($key, $value, $ttl = null)
     {
         if ($this->isLarge($value)) {
-            common_Logger::i('Large value detected into KeyValue persistence. Splitting value for key : ' . $key);
+            common_Logger::t('Large value detected into KeyValue persistence. Splitting value for key : ' . $key);
             $value = $this->setLargeValue($key, $value);
         }
         return $this->getDriver()->set($key, $value, $ttl);
@@ -68,7 +70,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     {
         $value = $this->getDriver()->get($key);
         if ($this->isSplit($value)) {
-            common_Logger::i('Large value detected into KeyValue persistence. Joining value for key : ' . $key);
+            common_Logger::t('Large value detected into KeyValue persistence. Joining value for key : ' . $key);
             $value =  $this->join($key, $value);
         }
         return $value;
@@ -110,8 +112,9 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
         }
         return $success && $this->getDriver()->del($key);
     }
-    
-    public function purge() {
+
+    public function purge()
+    {
         if ($this->getDriver() instanceof common_persistence_Purgable) {
             return $this->getDriver()->purge();
         } else {
@@ -186,7 +189,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     protected function join($key, $value, $level = 0)
     {
         if ($level > 0) {
-            $key = $key . '-' . $level;
+            $key = $key . self::MAPPED_KEY_SEPARATOR . $level;
         }
 
         $valueParts = [];
@@ -216,7 +219,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
         $splitValue = $this->split($value);
         $map = [];
         foreach ($splitValue as $index => $part) {
-            $map[$key . '-' . $index] = $part;
+            $map[$key . self::MAPPED_KEY_SEPARATOR . $index] = $part;
         }
         return $map;
     }
@@ -255,7 +258,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     {
         $startSize = strlen($this->getStartMapDelimiter()) - 1;
         $key = substr($key, $startSize, strrpos($key, $this->getEndMapDelimiter())-$startSize);
-        return substr($mappedKey, strlen($key . '-'));
+        return substr($mappedKey, strlen($key . self::MAPPED_KEY_SEPARATOR));
     }
 
     /**
