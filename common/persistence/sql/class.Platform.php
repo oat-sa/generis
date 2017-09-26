@@ -61,9 +61,9 @@ class common_persistence_sql_Platform{
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string statement The statement to limit
-     * @param  int limit Limit lower bound.
-     * @param  int offset Limit upper bound.
+     * @param  string $statement The statement to limit
+     * @param  int $limit Limit lower bound.
+     * @param  int $offset Limit upper bound.
      * @return string
      */
     public function limitStatement($statement, $limit, $offset = 0){
@@ -103,27 +103,30 @@ class common_persistence_sql_Platform{
     public function isNullCondition($columnName){
     	return $columnName . ' = ' .$this->getNullString(); 
     }
-    
+
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $parameter
+     * @return string
      */
     public function quoteIdentifier($parameter){
         return $this->dbalPlatform->quoteIdentifier($parameter);
     }
-    
+
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param \Doctrine\DBAL\Schema\Schema $schema
+     * @return array
      */
     public function schemaToSql($schema){
         return $schema->toSql($this->dbalPlatform);
     }
-    
+
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param \Doctrine\DBAL\Schema\Schema $fromSchema
      * @param \Doctrine\DBAL\Schema\Schema $toSchema
+     * @return array
      */
     public function getMigrateSchemaSql($fromSchema,$toSchema){
         return $fromSchema->getMigrateToSql($toSchema,$this->dbalPlatform);     
@@ -148,13 +151,60 @@ class common_persistence_sql_Platform{
        // return $this->dbalPlatform->getNowExpression();
        return $date;
     }
+
     /**
-     * 
+     *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $functionName
+     * @return string
      */
     public function getSqlFunction($functionName){
         return "SELECT " . $functionName . '(?)';
     }
-    
+
+    /**
+     * Returns the SQL snippet to append to any SELECT statement which obtains an exclusive lock on the rows.
+     *
+     * The semantics of this lock mode should equal the SELECT .. FOR UPDATE of the ANSI SQL standard.
+     *
+     * @see https://dev.mysql.com/doc/refman/5.7/en/innodb-locking-reads.html
+     * @see https://www.postgresql.org/docs/9.0/static/sql-select.html#SQL-FOR-UPDATE-SHARE
+     * @return string
+     */
+    public function getWriteLockSQL()
+    {
+        return $this->dbalPlatform->getWriteLockSQL();
+    }
+
+    /**
+     * Starts a transaction by suspending auto-commit mode.
+     *
+     * @return void
+     */
+    public function beginTransaction()
+    {
+        $this->dbalConnection->beginTransaction();
+    }
+
+    /**
+     * Cancels any database changes done during the current transaction.
+     *
+     * @throws \Doctrine\DBAL\ConnectionException If the rollback operation failed.
+     */
+    public function rollBack()
+    {
+        $this->dbalConnection->rollBack();
+    }
+
+    /**
+     * Commits the current transaction.
+     *
+     * @return void
+     * @throws \Doctrine\DBAL\ConnectionException If the commit failed due to no active transaction or
+     *                                            because the transaction was marked for rollback only.
+     */
+    public function commit()
+    {
+        $this->dbalConnection->commit();
+    }
 }
