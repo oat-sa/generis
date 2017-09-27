@@ -39,7 +39,10 @@
  */
 interface common_cache_Cache
 {
-
+    /**
+     * Service manager id.
+     */
+    const SERVICE_ID = 'generis/cache';
 
     // --- OPERATIONS ---
 

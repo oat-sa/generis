@@ -19,11 +19,11 @@
  */
 namespace oat\oatbox\task;
  
-use oat\oatbox\service\ServiceManager;
 use oat\oatbox\action\ActionService;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use \oat\oatbox\task\TaskInterface\TaskRunner as TaskRunnerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use common_report_Report as Report;
 
 class TaskRunner implements TaskRunnerInterface
 {
@@ -32,7 +32,7 @@ class TaskRunner implements TaskRunnerInterface
     public function run(Task $task) {
 
         \common_Logger::d('Running task '.$task->getId());
-        $report = new \common_report_Report(\common_report_Report::TYPE_INFO, __('Running task %s', $task->getId()));
+        $report = new Report(\common_report_Report::TYPE_INFO, __('Running task %s at %s', $task->getId(), microtime(true)));
         $queue = $this->getServiceLocator()->get(Queue::SERVICE_ID);
         $queue->updateTaskStatus($task->getId(), Task::STATUS_RUNNING);
         try {
@@ -45,10 +45,12 @@ class TaskRunner implements TaskRunnerInterface
             }
             $subReport = call_user_func($invocable, $task->getParameters());
             $report->add($subReport);
+            $report->setMessage($report->getMessage() . '; ' . __('Finished at %s', microtime(true)));
         } catch (\Exception $e) {
-            $message = 'Task ' . $task->getId() . ' failed. Error message: ' . $e->getMessage();
+            $message = __('Failed at %s; Error message: %s', microtime(true), $e->getMessage());
             \common_Logger::e($message);
-            $report = new \common_report_Report(\common_report_Report::TYPE_ERROR, $message);
+            $report->setType(Report::TYPE_ERROR);
+            $report->setMessage($report->getMessage() . '; ' . $message);
         }
         $queue->updateTaskStatus($task->getId(), Task::STATUS_FINISHED);
         $queue->updateTaskReport($task->getId(), $report);
