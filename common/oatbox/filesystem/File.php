@@ -250,8 +250,11 @@ class File extends FileSystemHandler
     public function exists()
     {
         try {
-            if ($metadata = $this->getFileSystem()->getMetadata($this->getPrefix())) {
-                return $metadata['type'] == 'file';
+            $path = $this->getPrefix();
+
+            if ($this->getFileSystem()->has($path)) {
+                $metadata = $this->getFileSystem()->getMetadata($this->getPrefix());
+                return $metadata['type'] === 'file';
             }
         } catch (FileNotFoundException $e) {
         }
