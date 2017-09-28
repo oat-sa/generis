@@ -395,8 +395,9 @@ class Updater extends common_ext_ExtensionUpdater {
 //            OntologyUpdater::syncModels();
             $this->setVersion('4.2.0');
         }
+        $this->skip('4.2.0', '4.4.0');
 
-        if ($this->isVersion('4.2.0')) {
+        if ($this->isVersion('4.4.0')) {
             $file = __DIR__ . DIRECTORY_SEPARATOR .
                 '..'.DIRECTORY_SEPARATOR .'..'.DIRECTORY_SEPARATOR .
                 'core' . DIRECTORY_SEPARATOR .
@@ -404,7 +405,7 @@ class Updater extends common_ext_ExtensionUpdater {
                 'taskqueue.rdf';
             $api = core_kernel_impl_ApiModelOO::singleton();
             $api->importXmlRdf('http://www.tao.lu/Ontologies/taskqueue.rdf', $file);
-            $this->setVersion('4.2.1');
+            $this->setVersion('4.4.1');
         }
     }
     
