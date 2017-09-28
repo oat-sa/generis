@@ -26,6 +26,7 @@ use oat\oatbox\task\TaskInterface\TaskPayLoad;
 use oat\oatbox\task\TaskInterface\TaskPersistenceInterface;
 use oat\oatbox\task\TaskInterface\TaskQueue;
 use oat\oatbox\task\TaskInterface\TaskRunner as TaskRunnerInterface;
+use oat\oatbox\TaskQueue\TaskLogInterface;
 
 /**
  * Class AbstractQueue
@@ -46,6 +47,11 @@ abstract class AbstractQueue
      * @var TaskPersistenceInterface
      */
     protected $persistence;
+
+    /**
+     * @var TaskLogInterface
+     */
+    protected $taskLogService;
 
     /**
      * AbstractQueue constructor.
@@ -127,6 +133,18 @@ abstract class AbstractQueue
     }
 
     /**
+     * @return TaskLogInterface
+     */
+    protected function getTaskLogService()
+    {
+        if (is_null($this->taskLogService)) {
+            $this->taskLogService = $this->getServiceManager()->get(TaskLogInterface::SERVICE_ID);
+        }
+
+        return $this->taskLogService;
+    }
+
+    /**
      * change task status using  task persistence
      * @param $taskId
      * @param $status
@@ -137,6 +155,10 @@ abstract class AbstractQueue
         if ($this->getPersistence()->has($taskId)) {
             $this->getPersistence()->update($taskId , $status);
         }
+
+        // update status in task log service as well
+        $this->getTaskLogService()->setStatus($taskId, $status);
+
         return $this;
     }
 
@@ -151,6 +173,10 @@ abstract class AbstractQueue
         if ($this->getPersistence()->has($taskId)) {
             $this->getPersistence()->setReport($taskId, $report);
         }
+
+        // insert report into task log service as well
+        $this->getTaskLogService()->setReport($taskId, $report);
+
         return $this;
     }
 
