@@ -20,6 +20,7 @@
 
 namespace oat\oatbox\task;
 
+use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\task\Exception\BadTaskQueueOption;
 use oat\oatbox\task\TaskInterface\TaskPayLoad;
@@ -37,6 +38,7 @@ abstract class AbstractQueue
     extends ConfigurableService
     implements TaskQueue
 {
+    use OntologyAwareTrait;
 
     /**
      * @var TaskRunner
@@ -224,6 +226,66 @@ abstract class AbstractQueue
         return $payload;
     }
 
+    /**
+     * Get resource from rdf storage which represents task in the task queue by linked resource
+     * Returns null if there is no task linked to given resource
+     * @param \core_kernel_classes_Resource $resource
+     * @return null|\core_kernel_classes_Resource
+     */
+    public function getTaskResource(\core_kernel_classes_Resource $resource)
+    {
+        $tasksRootClass = $this->getClass(Task::TASK_CLASS);
+        $task = $tasksRootClass->searchInstances([Task::PROPERTY_LINKED_RESOURCE => $resource->getUri()]);
+        return empty($task) ? null : current($task);
+    }
 
+    /**
+     * @param \core_kernel_classes_Resource $resource
+     * @return \common_report_Report
+     */
+    public function getReportByLinkedResource(\core_kernel_classes_Resource $resource)
+    {
+        $taskResource = $this->getTaskResource($resource);
+        if ($taskResource !== null) {
+            $report = $taskResource->getOnePropertyValue($this->getProperty(Task::PROPERTY_REPORT));
+            if ($report) {
+                $report = \common_report_Report::jsonUnserialize($report->literal);
+            } else {
+                $task = $this->getTask($taskResource->getUri());
+                if ($task) {
+                    $report = \common_report_Report::createInfo(__('Task is in \'%s\' state', $task->getStatus()));
+                } else {
+                    //this is an assumption.
+                    //in case if sync implementation is used task may not be found.
+                    $report = \common_report_Report::createInfo(__('Task is in progress'));
+                }
+            }
+        } else {
+            $report = \common_report_Report::createFailure(__('Resource is not the task placeholder'));
+        }
+        return $report;
+    }
+
+    /**
+     * Create task resource in the rdf storage and link placeholder resource to it.
+     * @param Task $task
+     * @param \core_kernel_classes_Resource|null $resource - placeholder resource to be linked with task.
+     * @return \core_kernel_classes_Resource
+     */
+    public function linkTask(Task $task, \core_kernel_classes_Resource $resource = null)
+    {
+        $taskResource = $this->getResource($task->getId());
+        if (!$taskResource->exists()) {
+            $tasksRootClass = $this->getClass(Task::TASK_CLASS);
+            $taskResource = $tasksRootClass->createInstance('', '', $task->getId());
+        }
+        if ($resource !== null) {
+            $taskResource->setPropertyValue(
+                $this->getProperty(Task::PROPERTY_LINKED_RESOURCE),
+                $resource->getUri()
+            );
+        }
+        return $taskResource;
+    }
 
 }
