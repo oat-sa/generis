@@ -408,6 +408,8 @@ class Updater extends common_ext_ExtensionUpdater {
             $api->importXmlRdf('http://www.tao.lu/Ontologies/taskqueue.rdf', $file);
             $this->setVersion('4.4.1');
         }
+
+        $this->skip('4.4.1', '4.4.2');
     }
     
     private function getReadableModelIds() {
