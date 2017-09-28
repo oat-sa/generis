@@ -23,6 +23,8 @@ namespace oat\oatbox\task\implementation;
 use oat\oatbox\task\AbstractQueue;
 use oat\oatbox\task\Task;
 use oat\oatbox\task\TaskRunner;
+use oat\oatbox\TaskQueue\TaskLog;
+use oat\oatbox\TaskQueue\TaskLogInterface;
 
 /**
  * Class SyncQueue
@@ -67,6 +69,10 @@ class SyncQueue extends AbstractQueue
         $task->setLabel($label);
         $task->setType($type);
         $this->getPersistence()->add($task);
+
+        // insert task data into task log as well
+        $this->getTaskLogService()->add($task);
+
         $this->runTask($task);
         return $task;
     }

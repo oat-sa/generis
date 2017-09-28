@@ -45,6 +45,7 @@ use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\task\implementation\InMemoryQueuePersistence;
 use oat\oatbox\task\implementation\SyncQueue;
 use oat\oatbox\task\implementation\TaskQueuePayload;
+use oat\oatbox\task\LegacyTaskLog;
 use oat\oatbox\task\Queue;
 use oat\oatbox\task\TaskRunner;
 use oat\taoWorkspace\model\generis\WrapperModel;
@@ -397,6 +398,19 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('4.2.0');
         }
         $this->skip('4.2.0', '4.4.0');
+
+        if ($this->isVersion('4.4.0')) {
+            $taskLogService = new LegacyTaskLog([
+                LegacyTaskLog::CONFIG_PERSISTENCE => 'default',
+                LegacyTaskLog::CONFIG_CONTAINER_NAME => 'task_log'
+            ]);
+
+            $taskLogService->createContainer();
+
+            $this->getServiceManager()->register(LegacyTaskLog::SERVICE_ID, $taskLogService);
+
+            $this->setVersion('4.5.0');
+        }
     }
     
     private function getReadableModelIds() {
