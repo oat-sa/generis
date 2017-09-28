@@ -396,6 +396,7 @@ class Updater extends common_ext_ExtensionUpdater {
             OntologyUpdater::syncModels();
             $this->setVersion('4.2.0');
         }
+        $this->skip('4.2.0', '4.3.0');
     }
     
     private function getReadableModelIds() {
