@@ -392,6 +392,7 @@ class Updater extends common_ext_ExtensionUpdater {
         $this->skip('3.35.2', '4.1.4');
 
         if ($this->isVersion('4.1.4')) {
+            /** Rdf synchronization was moved to version 4.4.1 (see below) because OntologyUpdater is in tao extension */
 //            OntologyUpdater::syncModels();
             $this->setVersion('4.2.0');
         }
