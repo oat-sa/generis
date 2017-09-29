@@ -31,7 +31,7 @@ return array(
     'label' => 'Generis Core',
     'description' => 'Core extension, provide the low level framework and an API to manage ontologies',
     'license' => 'GPL-2.0',
-    'version' => '4.1.4',
+    'version' => '4.4.2',
     'author' => 'Open Assessment Technologies, CRP Henri Tudor',
     'requires' => array(),
     'models' => array(
@@ -46,7 +46,8 @@ return array(
             array('ns' => 'http://www.w3.org/2000/01/rdf-schema','file' => dirname(__FILE__) . '/core/ontology/rdf-schema.rdf'),
             array('ns' => 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf','file' => dirname(__FILE__) . '/core/ontology/widgetdefinitions.rdf'),
             array('ns' => 'http://www.tao.lu/middleware/Rules.rdf','file' => dirname(__FILE__) . '/core/ontology/rules.rdf'),
-            array('ns' => 'http://www.tao.lu/Ontologies/generis.rdf','file' => dirname(__FILE__) . '/core/ontology/generis.rdf')
+            array('ns' => 'http://www.tao.lu/Ontologies/generis.rdf','file' => dirname(__FILE__) . '/core/ontology/generis.rdf'),
+            array('ns' => 'http://www.tao.lu/Ontologies/taskqueue.rdf','file' => dirname(__FILE__) . '/core/ontology/taskqueue.rdf'),
         ),
         'checks' => array(),
         'php' => array(
