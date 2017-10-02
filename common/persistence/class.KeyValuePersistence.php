@@ -27,9 +27,11 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
 {
     const MAX_VALUE_SIZE = 'max_value_size';
     const MAP_IDENTIFIER = 'map_identifier';
+
     const START_MAP_DELIMITER = 'start_map_delimiter';
     const END_MAP_DELIMITER = 'end_map_delimiter';
     const MAPPED_KEY_SEPARATOR = '%%';
+    const LEVEL_SEPARATOR = '%%';
 
     const DEFAULT_MAP_IDENTIFIER = '<<<<mapped>>>>';
     const DEFAULT_START_MAP_DELIMITER = '<<<<mappedKey>>>>';
@@ -50,6 +52,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      * @param $value
      * @param null $ttl
      * @return bool
+     * @throws common_Exception If size is misconfigured
      */
     public function set($key, $value, $ttl = null)
     {
@@ -113,6 +116,13 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
         return $success && $this->getDriver()->del($key);
     }
 
+    /**
+     * Purge the Driver if it implements common_persistence_Purgable
+     * Otherwise throws common_exception_NotImplemented
+     *
+     * @return mixed
+     * @throws common_exception_NotImplemented
+     */
     public function purge()
     {
         if ($this->getDriver() instanceof common_persistence_Purgable) {
@@ -130,11 +140,12 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      * @param $value
      * @param int $level
      * @return bool
+     * @throws common_Exception If size is misconfigured
      */
-    protected function setLargeValue($key, $value, $level = 0, $flush = true)
+    protected function setLargeValue($key, $value, $level = 0, $flush = true, $toTransform = true)
     {
         if ($level > 0) {
-            $key .= '-' . $level;
+            $key = $key . self::LEVEL_SEPARATOR . $level;
         }
 
         if (! $this->isLarge($value)) {
@@ -146,7 +157,11 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
 
         $map = $this->createMap($key, $value);
         foreach ($map as $mappedKey => $valuePart) {
-            $this->set($this->transformReferenceToMappedKey($mappedKey), $valuePart);
+            if ($toTransform) {
+                $this->set($this->transformReferenceToMappedKey($mappedKey), $valuePart);
+            } else {
+                $this->set($mappedKey, $valuePart);
+            }
         }
 
         return $this->setLargeValue($key, $this->serializeMap($map), $level + 1, $flush);
@@ -157,9 +172,11 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      *
      * @param $value
      * @return bool
+     * @throws common_Exception If size is misconfigured
      */
     protected function isLarge($value)
     {
+
         $size = $this->getSize();
         if (!$size) {
             return false;
@@ -172,6 +189,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      *
      * @param $value
      * @return array
+     * @throws common_Exception If size is misconfigured
      */
     protected function split($value)
     {
@@ -189,7 +207,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     protected function join($key, $value, $level = 0)
     {
         if ($level > 0) {
-            $key = $key . self::MAPPED_KEY_SEPARATOR . $level;
+            $key = $key . self::LEVEL_SEPARATOR . $level;
         }
 
         $valueParts = [];
@@ -213,6 +231,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      * @param $key
      * @param $value
      * @return array
+     * @throws common_Exception If size is misconfigured
      */
     protected function createMap($key, $value)
     {

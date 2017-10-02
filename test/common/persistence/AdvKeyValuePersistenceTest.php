@@ -45,13 +45,13 @@ class AdvKeyValuePersistenceTest extends TestCase
 
     protected function get100000bytesValue()
     {
-        return str_repeat('a', 100);
+        return str_repeat('a', 5000);
     }
 
     public function testLargeHmsetHget()
     {
         $bigValue = $this->get100000bytesValue();
-        $this->largeValuePersistence->hmset('test', array(
+        $this->largeValuePersistence->hmSet('test', array(
             'fixture' => $bigValue,
             'fixture1' => 'value1',
             'fixture2' => $bigValue,
@@ -76,7 +76,7 @@ class AdvKeyValuePersistenceTest extends TestCase
 
     public function testHmsetHget()
     {
-        $this->largeValuePersistence->hmset('test', array(
+        $this->largeValuePersistence->hmSet('test', array(
             'fixture' => 'value',
             'fixture1' => 'value1',
             'fixture2' => 'value2',
@@ -97,7 +97,7 @@ class AdvKeyValuePersistenceTest extends TestCase
             'fixture3' => 'value3',
         );
 
-        $this->largeValuePersistence->hmset('test', $attributes);
+        $this->largeValuePersistence->hmSet('test', $attributes);
 
         $this->assertEquals('value', $this->largeValuePersistence->hGet('test', 'fixture'));
         $this->assertEquals('value1', $this->largeValuePersistence->hGet('test', 'fixture1'));
@@ -132,9 +132,9 @@ class AdvKeyValuePersistenceTest extends TestCase
             'fixture3' => 'value3',
         );
 
-        $this->largeValuePersistence->hmset('test', $attributes);
-        $this->largeValuePersistence->hmset('test1', $attributes);
-        $this->largeValuePersistence->hmset('test2', $attributes);
+        $this->largeValuePersistence->hmSet('test', $attributes);
+        $this->largeValuePersistence->hmSet('test1', $attributes);
+        $this->largeValuePersistence->hmSet('test2', $attributes);
 
         $this->assertEquals(['test','test1','test2'] , array_values($this->largeValuePersistence->keys('*')));
     }
@@ -148,7 +148,7 @@ class AdvKeyValuePersistenceTest extends TestCase
             'fixture3' => 'value3',
         );
 
-        $this->largeValuePersistence->hmset(1, $attributes);
+        $this->largeValuePersistence->hmSet(1, $attributes);
         $this->largeValuePersistence->incr(1);
         $this->assertFalse($this->largeValuePersistence->exists(1));
         $this->assertTrue($this->largeValuePersistence->exists(2));
