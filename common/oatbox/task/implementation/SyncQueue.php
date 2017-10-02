@@ -23,6 +23,7 @@ namespace oat\oatbox\task\implementation;
 use oat\oatbox\task\AbstractQueue;
 use oat\oatbox\task\Task;
 use oat\oatbox\task\TaskRunner;
+use \common_report_Report as Report;
 
 /**
  * Class SyncQueue
@@ -83,15 +84,23 @@ class SyncQueue extends AbstractQueue
      * Create task resource in the rdf storage and link placeholder resource to it.
      * @param Task $task
      * @param \core_kernel_classes_Resource|null $resource - placeholder resource to be linked with task.
+     * @throws
      * @return \core_kernel_classes_Resource
      */
     public function linkTask(Task $task, \core_kernel_classes_Resource $resource = null)
     {
         $taskResource = parent::linkTask($task, $resource);
-        if (!empty($task->getReport())) {
+        $report = $task->getReport();
+        if (!empty($report)) {
+            //serialize only two first report levels because sometimes serialized report is huge and it does not fit into `k_po` index of statemetns table.
+            $serializableReport = new Report($report->getType(), $report->getMessage(), $report->getData());
+            foreach ($report as $subReport) {
+                $serializableSubReport = new Report($subReport->getType(), $subReport->getMessage(), $subReport->getData());
+                $serializableReport->add($serializableSubReport);
+            }
             $taskResource->setPropertyValue(
                 new \core_kernel_classes_Property(Task::PROPERTY_REPORT),
-                json_encode($task->getReport())
+                json_encode($serializableReport)
             );
         }
         return $taskResource;
