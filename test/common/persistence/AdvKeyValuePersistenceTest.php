@@ -45,7 +45,7 @@ class AdvKeyValuePersistenceTest extends TestCase
 
     protected function get100000bytesValue()
     {
-        return str_repeat('a', 5000);
+        return str_repeat('a', 100000);
     }
 
     public function testLargeHmsetHget()

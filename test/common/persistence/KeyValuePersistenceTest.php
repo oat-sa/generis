@@ -45,7 +45,7 @@ class KeyValuePersistenceTest extends TestCase
 
     protected function get100000bytesValue()
     {
-        return str_repeat('a', 100);
+        return str_repeat('a', 100000);
     }
 
     public function testSetGet()

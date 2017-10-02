@@ -17,7 +17,7 @@
  * Copyright (c) 2013-2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
- * @author Lionel Lecaque  <camille@taotesting.com>
+ * @author Camille Moyon  <camille@taotesting.com>
  * @license GPLv2
  * @package generis
  
@@ -31,7 +31,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     const START_MAP_DELIMITER = 'start_map_delimiter';
     const END_MAP_DELIMITER = 'end_map_delimiter';
     const MAPPED_KEY_SEPARATOR = '%%';
-    const LEVEL_SEPARATOR = '%%';
+    const LEVEL_SEPARATOR = '-';
 
     const DEFAULT_MAP_IDENTIFIER = '<<<<mapped>>>>';
     const DEFAULT_START_MAP_DELIMITER = '<<<<mappedKey>>>>';
