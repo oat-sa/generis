@@ -524,8 +524,6 @@ class core_kernel_persistence_smoothsql_Resource
      */
     public function duplicate( core_kernel_classes_Resource $resource, $excludedProperties = array())
     {
-        \common_Logger::i('DUPLICATE MY FRIEND!!!');
-        
         $returnValue = null;
     	$newUri = common_Utils::getNewUri();
     	$collection = $this->getRdfTriples($resource);
