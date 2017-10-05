@@ -128,6 +128,17 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         return $this->connection->insert($tableName, $cleanColumns);
     }
     
+    public function insertMultiple($tableName, array $data)
+    {
+        $returnValue = 0;
+        
+        foreach ($data as $d) {
+            $returnValue += intval($this->insert($tableName, $d));
+        }
+        
+        return $returnValue;
+    }
+    
     /**
      * Convenience access to PDO::lastInsertId.
      *
