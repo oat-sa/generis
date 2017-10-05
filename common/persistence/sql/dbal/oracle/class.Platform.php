@@ -26,12 +26,6 @@
 class common_persistence_sql_dbal_oracle_Platform extends common_persistence_sql_Platform {
 	
 	/**
-	 * @return common_persistence_sql_MultipleInsertsSqlHelper
-	 */
-	public function getMultipleInsertsSqlQueryHelper(){
-		return new common_persistence_sql_dbal_oracle_MultipleInsertsSqlHelper();
-	}
-	/**
 	 * (non-PHPdoc)
 	 * @see common_persistence_sql_Platform::getNullString()
 	 */
