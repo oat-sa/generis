@@ -37,12 +37,8 @@
  */
 abstract class common_persistence_sql_pdo_Driver implements common_persistence_sql_Driver
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
-
+    use common_persistence_sql_InsertMultiple;
+    
     /**
      * An established PDO connection object.
      *
@@ -197,37 +193,6 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
         return $this->exec($query, array_values($data));
         
     }
-    
-    public function insertMultiple($tableName, array $data)
-    {
-        if (is_array($data) && count($data) > 0) {
-            
-            $platform = $this->getPlatform();
-            
-            $quotedColumnIdentifiers = array_map(
-                function ($value) use ($platform) {
-                    return $platform->quoteIdentifier($value);
-                },
-                array_keys($data[0])
-            );
-            
-            $query = "INSERT INTO ${tableName} (" . implode(', ', $quotedColumnIdentifiers) . ') VALUES ';
-            $valuesQueries = [];
-            $allValues = [];
-            
-            foreach ($data as $values) {
-                $valuesQueries[] .= '(' . implode(', ', array_fill(0, count($values), '?')) . ')';
-                $allValues = array_merge($allValues, array_values($values));
-            }
-            
-            $query .= implode(', ', $valuesQueries);
-            
-            return $this->exec($query, $allValues);
-        } else {
-            return 0;
-        }
-    }
-
 
     /**
      * Executes an SQL query on the storage engine. Should be used for SELECT
