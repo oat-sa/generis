@@ -255,84 +255,48 @@ class core_kernel_persistence_smoothsql_Resource
     {
         $returnValue = (bool) false;
 
-        
-
-    	if(is_array($properties)){
-        	if(count($properties) > 0){
+    	if (is_array($properties) && count($properties) > 0) {
         		
-	        	$platform = $this->getPersistence()->getPlatForm();
-	        	$mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
-	        	$user		= common_session_SessionManager::isAnonymous()
-                    ? $platform->getNullString()
-                    : $this->getPersistence()->quote(common_session_SessionManager::getSession()->getUser()->getIdentifier());
-	       		
-	      
-	        	$multipleInsertQueryHelper = $platform->getMultipleInsertsSqlQueryHelper();
-	        	
-	       		//$query = 'INSERT INTO "statements" ("modelid","subject","predicate","object","l_language","author","stread","stedit","stdelete","epoch") VALUES ';
-				$columns = array(
-	       							"modelid",
-	       							"subject",
-	       							"predicate",
-	       							"object",
-	       							"l_language",
-	       							"author",
-// 	       							"stread",
-// 	       							"stedit",
-// 	       							"stdelete",
-				                    "epoch"
-				);
-	       		$query = $multipleInsertQueryHelper->getFirstStaticPart('statements', $columns);
+            $session = common_session_SessionManager::getSession();
+            $platform = $this->getPersistence()->getPlatForm();
+            $user = common_session_SessionManager::isAnonymous() ? '' : $session->getUser()->getIdentifier();
 
-	       		foreach($properties as $propertyUri => $value){
-	       			$property = new core_kernel_classes_Property($propertyUri);
-	       			$lang 	= ($property->isLgDependent() ? $this->getPersistence()->quote(\common_session_SessionManager::getSession()->getDataLanguage()) : $platform->getNullString()  );
+            $valuesToInsert = [];
 
-					$formatedValues = array();
-					if($value instanceof core_kernel_classes_Resource){
-						$formatedValues[] = $this->getPersistence()->quote($value->getUri());
-					}else if(is_array($value)){
-						foreach($value as $val){
-							if($val instanceof core_kernel_classes_Resource){
-								$formatedValues[] = $this->getPersistence()->quote($val->getUri());
-							}else{
-								$formatedValues[] = $this->getPersistence()->quote($val);
-							}
-						}
-					}else{
-						if($value == null){
-							$formatedValues[] = $platform->getNullString();
-						}
-						else {
-							$formatedValues[] = $this->getPersistence()->quote($value);
-						}
-					}
-					
-					foreach($formatedValues as $object){
-						$query .= $multipleInsertQueryHelper->getValuePart('statements', $columns,
-								array(
-										"modelid" => $this->getNewTripleModelId(),
-										"subject" => $this->getPersistence()->quote($resource->getUri()),
-										"predicate"=> $this->getPersistence()->quote($property->getUri()),
-										"object" => $object,
-										"l_language" => $lang,
-										"author" => $user,
-// 										"stread" => $this->getPersistence()->quote($mask),
-// 										"stedit" => $this->getPersistence()->quote($mask),
-// 										"stdelete" => $this->getPersistence()->quote($mask),
-								     "epoch" =>	$this->getPersistence()->quote($platform->getNowExpression() )
-								));
-					}
-	       		}
-	       		
-	       		$query = substr($query, 0, strlen($query) -1);
-	       		$query .= $multipleInsertQueryHelper->getEndStaticPart();
-	       		$returnValue = $this->getPersistence()->exec($query);
-        	}
+            foreach ($properties as $propertyUri => $value) {
+                
+                $property = new core_kernel_classes_Property($propertyUri);
+                
+                $lang = ($property->isLgDependent() ? $session->getDataLanguage() : '');
+                $formatedValues = [];
+                
+                if ($value instanceof core_kernel_classes_Resource) {
+                    $formatedValues[] = $value->getUri();
+                    
+                } elseif (is_array($value)) {
+                    foreach($value as $val){
+                        $formatedValues[] = ($val instanceof core_kernel_classes_Resource) ? $val->getUri() : $val;
+                    }
+                } else {
+                    $formatedValues[] = ($value == null) ? '' : $value;
+                }
+                
+                foreach ($formatedValues as $object) {
+                    $valuesToInsert[] = [
+                        'modelid' => $this->getNewTripleModelId(),
+                        'subject' => $resource->getUri(),
+                        'predicate' => $property->getUri(),
+                        'object' => $object,
+                        'l_language' => $lang,
+                        'author' => $user,
+                        'epoch' => $platform->getNowExpression()
+                    ];
+                }
+            }
+
+            $returnValue = $this->getPersistence()->insertMultiple('statements', $valuesToInsert);
         }
         
-        
-
         return (bool) $returnValue;
     }
 
@@ -560,59 +524,37 @@ class core_kernel_persistence_smoothsql_Resource
      */
     public function duplicate( core_kernel_classes_Resource $resource, $excludedProperties = array())
     {
+        \common_Logger::i('DUPLICATE MY FRIEND!!!');
+        
         $returnValue = null;
-
-        
-        
     	$newUri = common_Utils::getNewUri();
-    	
     	$collection = $this->getRdfTriples($resource);
-    	if($collection->count() > 0){
+        
+    	if ($collection->count() > 0) {
     		
     		$platform = $this->getPersistence()->getPlatForm();
-    		$multipleInsertQueryHelper = $platform->getMultipleInsertsSqlQueryHelper();
+        	$user = common_session_SessionManager::isAnonymous() ? '' : \common_session_SessionManager::getSession()->getUser()->getIdentifier();
+            $valuesToInsert = [];
     		
-        	$user    = common_session_SessionManager::isAnonymous()
-        	   ? $platform->getNullString()
-        	   : $this->getPersistence()->quote(\common_session_SessionManager::getSession()->getUser()->getIdentifier());
-	       		
-    		   		
-	    	$columns = array(
-	    			"modelid",
-	    			"subject",
-	    			"predicate",
-	    			"object",
-	    			"l_language",
-	    			"author",
-                    "epoch"
-	    	);
-	    	$query = $multipleInsertQueryHelper->getFirstStaticPart('statements', $columns);
-    		
-    		foreach($collection->getIterator() as $triple){
-    			if(!in_array($triple->predicate, $excludedProperties)){
-	    			$query .= $multipleInsertQueryHelper->getValuePart('statements', $columns,
-	    					array(
-	    							"modelid" => $this->getNewTripleModelId(),
-	    							"subject" => $this->getPersistence()->quote($newUri),
-	    							"predicate"=> $this->getPersistence()->quote($triple->predicate),
-	    							"object" => $triple->object == null ? $platform->getNullString() : $this->getPersistence()->quote($triple->object),
-	    							"l_language" => $triple->lg == null ? $platform->getNullString() : $this->getPersistence()->quote($triple->lg),
-	    							"author" => $user,
-     					            "epoch" => $this->getPersistence()->quote($platform->getNowExpression())
-	    					));
+    		foreach ($collection->getIterator() as $triple) {
+    			if (!in_array($triple->predicate, $excludedProperties)) {
+                    $valuesToInsert[] = [
+                        'modelid' => $this->getNewTripleModelId(),
+                        'subject' => $newUri,
+                        'predicate'=> $triple->predicate,
+                        'object' => ($triple->object == null) ? '' : $triple->object,
+                        'l_language' => ($triple->lg == null) ? '' : $triple->lg,
+                        'author' => $user,
+                        'epoch' => $platform->getNowExpression()
+                    ];
     			}
 	    	}
 	    	
-	    	$query = substr($query, 0, strlen($query) -1);
-	    	$query .= $multipleInsertQueryHelper->getEndStaticPart();
-	    	
-        	if($this->getPersistence()->exec($query)){
+        	if ($this->getPersistence()->insertMultiple('statements', $valuesToInsert)) {
         		$returnValue = new core_kernel_classes_Resource($newUri);
         	}
     	}
         
-        
-
         return $returnValue;
     }
 
