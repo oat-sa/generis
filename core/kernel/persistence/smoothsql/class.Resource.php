@@ -361,17 +361,17 @@ class core_kernel_persistence_smoothsql_Resource
 		$query =  'DELETE FROM statements WHERE subject = ? AND predicate = ?';
 		$objectType = $this->getPersistence()->getPlatForm()->getObjectTypeCondition();
 		$conditions = array();
-		if(is_string($pattern)){
-			if(!is_null($pattern)){
+		if (is_string($pattern)) {
+			if (!is_null($pattern)) {
 				$searchPattern = core_kernel_persistence_smoothsql_Utils::buildSearchPattern($this->getPersistence(), $pattern, $like);
 				$conditions[] = '( '.$objectType . ' ' .$searchPattern.' )';
 			}
-		}else if(is_array($pattern)){
-			if(count($pattern) > 0){
+		} elseif (is_array($pattern)) {
+			if (count($pattern) > 0) {
 				$multiCondition =  "( ";
-				foreach($pattern as $i => $patternToken){
+				foreach($pattern as $i => $patternToken) {
 					$searchPattern = core_kernel_persistence_smoothsql_Utils::buildSearchPattern($this->getPersistence(), $patternToken, $like);
-					if($i > 0) {
+					if ($i > 0) {
                         $multiCondition .= " OR ";
                     }
 					$multiCondition .= '('.$objectType. ' ' .$searchPattern.' )';
@@ -380,36 +380,33 @@ class core_kernel_persistence_smoothsql_Resource
 			}
 		}
 			
-        foreach($conditions as $i => $additionalCondition){
+        foreach ($conditions as $i => $additionalCondition) {
 			$query .= " AND ( {$additionalCondition} ) ";
 		}
         
 		//be sure the property we try to remove is included in an updatable model
 		$query .= ' AND '.$this->getModelWriteSqlCondition();
 		
-        if($property->isLgDependent()){
+        if ($property->isLgDependent()) {
         	
         	$query .=  ' AND (l_language = ? OR l_language = ?) ';
         	$returnValue = $this->getPersistence()->exec($query,array(
 	        		$resource->getUri(),
 	        		$property->getUri(),
-	        		\common_session_SessionManager::getSession()->getDataLanguage(),
-                    ''
+                    '',
+	        		\common_session_SessionManager::getSession()->getDataLanguage()
 	        ));
-        }
-        else{
+        } else{
         	$returnValue = $this->getPersistence()->exec($query,array(
 	        		$resource->getUri(),
 	        		$property->getUri()
 	        ));   
         }
         
-        if (!$returnValue){
+        if (!$returnValue) {
         	$returnValue = false;
         }
         
-        
-
         return (bool) $returnValue;
     }
 
