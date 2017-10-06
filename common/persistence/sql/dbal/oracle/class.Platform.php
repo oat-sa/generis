@@ -23,29 +23,16 @@
  *
  */
 
-class common_persistence_sql_dbal_oracle_Platform extends common_persistence_sql_Platform {
-	
-	/**
-	 * (non-PHPdoc)
-	 * @see common_persistence_sql_Platform::getNullString()
-	 */
-	public function getNullString(){
-		return 'null';
-	}
-	/**
-	 * (non-PHPdoc)
-	 * @see common_persistence_sql_Platform::isNullCondition()
-	 */
-	public function isNullCondition($column){
-		return $column . ' IS ' .$this->getNullString();
-	}
+class common_persistence_sql_dbal_oracle_Platform extends common_persistence_sql_Platform 
+{	
 	/**
 	 * Oracle may return stream in case of LOB type, retreive string if so
 	 * 
 	 * @author "Lionel Lecaque, <lionel@taotesting.com>"
 	 * @param string $text
 	 */
-	public function getPhpTextValue($text){
+	public function getPhpTextValue($text)
+    {
 		$doctrineType = \Doctrine\DBAL\Types\Type::getType('text');
 		return $doctrineType->convertToPHPValue($text, $this->dbalPlatform);
 	}
@@ -55,13 +42,8 @@ class common_persistence_sql_dbal_oracle_Platform extends common_persistence_sql
 	 * @author "Lionel Lecaque, <lionel@taotesting.com>"
 	 * @param string $functionName
 	 */
-	public function getSqlFunction($functionName){
-	    return "SELECT " . $functionName . '(?) from dual';
+	public function getSqlFunction($functionName)
+    {
+	    return "SELECT " . $functionName . '(?) FROM dual';
 	}
-	
-// 	public function getObjectTypeCondition(){
-// 		return 'to_char(object) ';
-// 	}
 }
-
-?>

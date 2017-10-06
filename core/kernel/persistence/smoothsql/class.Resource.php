@@ -116,48 +116,44 @@ class core_kernel_persistence_smoothsql_Resource
     	// Define language if required
 		$lang = '';
 		$defaultLg = '';
-		if (isset($options['lg'])){
+		if (isset($options['lg'])) {
 			$lang = $options['lg'];
-		}
-		else{
+		} else {
 			$lang = \common_session_SessionManager::getSession()->getDataLanguage();
-			$defaultLg = ' OR l_language = '.$this->getPersistence()->quote(DEFAULT_LANG).' ';
+			$defaultLg = ' OR l_language = ' . $this->getPersistence()->quote(DEFAULT_LANG);
 		}
 		
         $query =  'SELECT object, l_language
         			FROM statements 
 		    		WHERE subject = ? 
 		    		AND predicate = ?
-					AND ( l_language = ? OR ' .$platform->isNullCondition('l_language') .$defaultLg.')
+					AND (l_language = ? OR l_language = ' . $this->getPersistence()->quote('') . $defaultLg . ')
 		    		AND '.$this->getModelReadSqlCondition();
         
-    	// Select first
-		if($one){
+    	
+		if ($one) {
+            // Select first
 			$query .= ' ORDER BY id DESC';
 			$query = $platform->limitStatement($query, 1, 0);
 			$result = $this->getPersistence()->query($query,array($resource->getUri(), $property->getUri(), $lang));
-		}
-		// Select All
-		else{
+		} else {
+            // Select All
 			$result = $this->getPersistence()->query($query,array($resource->getUri(), $property->getUri(), $lang));
 		}
         
 		// Treat the query result
         if ($result == true) {
-        	// If a language has been defined, do not filter result by language
-        	if(isset($options['lg'])){
-		    	while ($row = $result->fetch()){
+        	if (isset($options['lg'])) {
+                // If a language has been defined, do not filter result by language
+		    	while ($row = $result->fetch()) {
 					$returnValue[] = $this->getPersistence()->getPlatForm()->getPhpTextValue($row['object']);
 				}
-        	} 
-        	// Filter result by language and return one set of values (User language in top priority, default language in second and the fallback language (null) in third)
-        	else {
-        		 $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage($this->getPersistence(), $result->fetchAll(), 'l_language');
+        	} else {
+                // Filter result by language and return one set of values (User language in top priority, default language in second and the fallback language (null) in third)
+                $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage($this->getPersistence(), $result->fetchAll(), 'l_language');
         	}
         }
         
-        
-
         return (array) $returnValue;
     }
 
@@ -393,11 +389,12 @@ class core_kernel_persistence_smoothsql_Resource
 		
         if($property->isLgDependent()){
         	
-        	$query .=  ' AND (' . $this->getPersistence()->getPlatForm()->isNullCondition('l_language') . ' OR l_language = ?) ';
+        	$query .=  ' AND (l_language = ? OR l_language = ?) ';
         	$returnValue = $this->getPersistence()->exec($query,array(
 	        		$resource->getUri(),
 	        		$property->getUri(),
-	        		\common_session_SessionManager::getSession()->getDataLanguage()
+	        		\common_session_SessionManager::getSession()->getDataLanguage(),
+                    ''
 	        ));
         }
         else{
@@ -629,7 +626,7 @@ class core_kernel_persistence_smoothsql_Resource
             WHERE 
                 subject = '.$this->getPersistence()->quote($resource->getUri()).' 
                 AND predicate IN ('.$predicatesQuery.')
-                AND ('. $platform->isNullCondition('l_language') . 
+                AND (l_language = ' . $this->getPersistence()->quote('') . 
                     ' OR l_language = '.$this->getPersistence()->quote(DEFAULT_LANG). 
                     ' OR l_language = '.$this->getPersistence()->quote(\common_session_SessionManager::getSession()->getDataLanguage()).') 
                 AND '.$this->getModelReadSqlCondition();

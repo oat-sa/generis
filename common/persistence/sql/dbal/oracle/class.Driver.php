@@ -24,38 +24,37 @@
  */
  class common_persistence_sql_dbal_oracle_Driver extends common_persistence_sql_dbal_Driver{
 	
-	/**
-	 * 
-	 * @author "Lionel Lecaque, <lionel@taotesting.com>"
-	 * @param string $id
-	 * @param array $params
-	 * @return Doctrine\DBAL\Connection
-	 */
-	public function connect($id, array $params) {
+    /**
+     * 
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param string $id
+     * @param array $params
+     * @return Doctrine\DBAL\Connection
+     */
+    public function connect($id, array $params) {
 
-		
-		$params['wrapperClass'] = 'Doctrine\DBAL\Portability\Connection';
-		$params['portability'] = \Doctrine\DBAL\Portability\Connection::PORTABILITY_ALL;
-		$params['fetch_case'] = PDO::CASE_LOWER;
-		$returnValue = parent::connect($id, $params);
-		return $returnValue;
-	
-	}
-	
-	/* (non-PHPdoc)
-	 * @see common_persistence_sql_Driver::getPlatForm()
-	*/
-	public function getPlatForm(){
-		return new common_persistence_sql_dbal_oracle_Platform($this->connection->getDatabasePlatform());
-	}
-	
-	/**
-	 * For unknown reasons quote not implemented in PDO 
-	 * (non-PHPdoc)
-	 * @see common_persistence_sql_dbal_Driver::quote()
-	 */
-	public function quote($parameter, $parameter_type = PDO::PARAM_STR){
-		return "'".$parameter."'";
-	}
+        $params['wrapperClass'] = 'Doctrine\DBAL\Portability\Connection';
+        $params['portability'] = \Doctrine\DBAL\Portability\Connection::PORTABILITY_ALL;
+        $params['fetch_case'] = PDO::CASE_LOWER;
+        $returnValue = parent::connect($id, $params);
+        
+        return $returnValue;
+    }
+
+    /* (non-PHPdoc)
+     * @see common_persistence_sql_Driver::getPlatForm()
+    */
+    public function getPlatForm(){
+        return new common_persistence_sql_dbal_oracle_Platform($this->connection->getDatabasePlatform());
+    }
+
+    /**
+     * For unknown reasons quote not implemented in PDO 
+     * (non-PHPdoc)
+     * @see common_persistence_sql_dbal_Driver::quote()
+     */
+    public function quote($parameter, $parameter_type = PDO::PARAM_STR){
+        return "'".$parameter."'";
+    }
 	
 }
