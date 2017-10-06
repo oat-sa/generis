@@ -20,6 +20,8 @@
  * 
  */
 
+use oat\generis\model\OntologyRdf;
+use oat\generis\model\OntologyRdfs;
 
 
 /**
@@ -57,14 +59,14 @@ class core_kernel_classes_ClassFactory
         
 		$newUri = (!empty($uri)) ? self::checkProvidedUri($uri) : common_Utils::getNewUri();
 		$newResource = new core_kernel_classes_Class($newUri);
-		$propertiesValues = array(RDF_TYPE => $clazz->getUri());
+		$propertiesValues = array(OntologyRdf::RDF_TYPE => $clazz->getUri());
 		
 		if (!empty($label)) {
-			$propertiesValues[RDFS_LABEL] = $label;
+			$propertiesValues[OntologyRdfs::RDFS_LABEL] = $label;
 		}
 		
 		if (!empty($comment)) {
-			$propertiesValues[RDFS_COMMENT] = $comment;
+			$propertiesValues[OntologyRdfs::RDFS_COMMENT] = $comment;
 		}
 		
 		$check = $newResource->setPropertiesValues($propertiesValues);
@@ -98,7 +100,7 @@ class core_kernel_classes_ClassFactory
         $returnValue = null;
 
         
-		$property = new core_kernel_classes_Class(RDF_PROPERTY);
+		$property = new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY);
 		$propertyInstance = self::createInstance($property, $label, $comment, $uri);
 		$returnValue = new core_kernel_classes_Property($propertyInstance->getUri());
 		if (!$returnValue->setDomain($clazz)){
@@ -129,7 +131,7 @@ class core_kernel_classes_ClassFactory
         $returnValue = null;
 
         
-		$class = new core_kernel_classes_Class(RDFS_CLASS);
+		$class = new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS);
 		$instance =  self::createInstance($class, $label, $comment, $uri);
 		$returnValue = new core_kernel_classes_Class($instance->getUri());
 		$returnValue->setSubClassOf($clazz);

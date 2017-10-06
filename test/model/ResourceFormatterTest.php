@@ -20,6 +20,7 @@
 namespace oat\generis\test\model;
 
 use \core_kernel_classes_ResourceFormatter;
+use oat\generis\model\GenerisRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use Prophecy\Prophet;
 
@@ -129,7 +130,7 @@ class ResourceFormatterTest extends GenerisPhpUnitTestRunner
                     new \core_kernel_classes_Literal('value2')
                 ),
                 '#propertyUri2' => array(
-                    new \core_kernel_classes_Resource(GENERIS_BOOLEAN)
+                    new \core_kernel_classes_Resource(GenerisRdf::GENERIS_BOOLEAN)
                 )
             ));
         }
@@ -185,7 +186,7 @@ class ResourceFormatterTest extends GenerisPhpUnitTestRunner
          
          $this->assertInstanceOf('stdClass', $result->properties[1]->values[0]);
          $this->assertAttributeEquals('resource', 'valueType',  $result->properties[1]->values[0]);
-         $this->assertAttributeEquals(GENERIS_BOOLEAN, 'value',  $result->properties[1]->values[0]);
+         $this->assertAttributeEquals(GenerisRdf::GENERIS_BOOLEAN, 'value',  $result->properties[1]->values[0]);
 
     }
     
@@ -214,7 +215,7 @@ class ResourceFormatterTest extends GenerisPhpUnitTestRunner
             $triple = new \core_kernel_classes_Triple();
             $triple->subject = '#subject' . $i;
             $triple->predicate = '#predicate' . $i;
-            $triple->object = $i==0 ? GENERIS_BOOLEAN : 'object' . $i;
+            $triple->object = $i==0 ? GenerisRdf::GENERIS_BOOLEAN : 'object' . $i;
             $returnValue[] = $triple; 
         }
         return $returnValue;
@@ -245,7 +246,7 @@ class ResourceFormatterTest extends GenerisPhpUnitTestRunner
         
         $this->assertInstanceOf('stdClass', $result->properties[0]->values[0]);
         $this->assertAttributeEquals('resource', 'valueType',  $result->properties[0]->values[0]);
-        $this->assertAttributeEquals(GENERIS_BOOLEAN, 'value',  $result->properties[0]->values[0]);
+        $this->assertAttributeEquals(GenerisRdf::GENERIS_BOOLEAN, 'value',  $result->properties[0]->values[0]);
         
         for ( $i = 1; $i < 3;$i++ ){
             $this->assertInstanceOf('stdClass', $result->properties[$i]);

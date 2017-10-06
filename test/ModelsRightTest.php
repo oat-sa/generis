@@ -19,6 +19,7 @@
  * 
  */
 
+use oat\generis\model\OntologyRdfs;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class ModelsRightTest extends GenerisPhpUnitTestRunner {
@@ -48,9 +49,9 @@ class ModelsRightTest extends GenerisPhpUnitTestRunner {
 
 		
 		// Try to delete a resource of a locked model
-		$property = new core_kernel_classes_Property(RDFS_LABEL);
-        	$domain = new core_kernel_classes_Property(RDFS_DOMAIN, __METHOD__);
-		$this->assertFalse( $property->removePropertyValues($domain, array('pattern' => RDFS_LABEL)));
+		$property = new core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL);
+        	$domain = new core_kernel_classes_Property(OntologyRdfs::RDFS_DOMAIN, __METHOD__);
+		$this->assertFalse( $property->removePropertyValues($domain, array('pattern' => OntologyRdfs::RDFS_LABEL)));
 		
 		
 		// Try to remove a property value which is lg dependent of a locked model

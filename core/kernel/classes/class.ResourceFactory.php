@@ -20,6 +20,8 @@
  * 
  */
 
+use oat\generis\model\OntologyRdfs;
+
 /**
  * Short description of class core_kernel_classes_ResourceFactory
  *
@@ -55,11 +57,11 @@ class core_kernel_classes_ResourceFactory
         $propertiesValues = array();
         
         if (!empty($label)){
-        	$propertiesValues[RDFS_LABEL] = $label;
+        	$propertiesValues[OntologyRdfs::RDFS_LABEL] = $label;
         }
         
         if (!empty($comment)){
-        	$propertiesValues[RDFS_COMMENT] = $comment;
+        	$propertiesValues[OntologyRdfs::RDFS_COMMENT] = $comment;
         }
         
 		$returnValue = $type->createInstanceWithProperties($propertiesValues);

@@ -18,6 +18,7 @@
  * 
  */
 
+use oat\generis\model\OntologyRdfs;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 use oat\oatbox\service\ServiceManager;
@@ -29,7 +30,7 @@ class ComplexSearchTest extends GenerisPhpUnitTestRunner
     protected function setUp(){
         GenerisPhpUnitTestRunner::initTest();
 
-		$this->object = new core_kernel_classes_Class(RDFS_RESOURCE);
+		$this->object = new core_kernel_classes_Class(OntologyRdfs::RDFS_RESOURCE);
 		$this->object->debug = __METHOD__;
         
         $this->search = ServiceManager::getServiceManager()->get(\oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService::SERVICE_ID);

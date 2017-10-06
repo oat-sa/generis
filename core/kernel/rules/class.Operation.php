@@ -19,6 +19,8 @@
  * 
  */
 
+use oat\generis\model\RulesRdf;
+
 
 /**
  * Short description of class core_kernel_rules_Operation
@@ -75,7 +77,7 @@ class core_kernel_rules_Operation
 
         
         if(empty($this->firstOperation)){
-        	$property = new core_kernel_classes_Property(PROPERTY_OPERATION_FIRST_OP);
+        	$property = new core_kernel_classes_Property(RulesRdf::PROPERTY_OPERATION_FIRST_OP);
         	$resource = $this->getUniquePropertyValue($property);
         	$this->firstOperation = new core_kernel_rules_Term($resource->getUri());
         }
@@ -98,7 +100,7 @@ class core_kernel_rules_Operation
 
         
         if(empty($this->secondOperation)){
-        	$property = new core_kernel_classes_Property(PROPERTY_OPERATION_SECND_OP);
+        	$property = new core_kernel_classes_Property(RulesRdf::PROPERTY_OPERATION_SECOND_OP);
         	$resource = $this->getUniquePropertyValue($property);
         	$this->secondOperation = new core_kernel_rules_Term($resource->getUri());
         }
@@ -121,7 +123,7 @@ class core_kernel_rules_Operation
 
         
         if(empty($this->arithmeticOperator)){
-        	$property = new core_kernel_classes_Property(PROPERTY_OPERATION_OPERATOR);
+        	$property = new core_kernel_classes_Property(RulesRdf::PROPERTY_OPERATION_OPERATOR);
         	$this->arithmeticOperator = $this->getUniquePropertyValue($property);
         }
         $returnValue = $this->arithmeticOperator;
@@ -212,23 +214,23 @@ class core_kernel_rules_Operation
         
         
         switch ($operator->getUri()) {
-        	case INSTANCE_OPERATOR_ADD: {
+        	case RulesRdf::INSTANCE_OPERATOR_ADD: {
         		$returnValue = new core_kernel_classes_Literal($first->literal + $second->literal);
         		break;
         	}
-             case INSTANCE_OPERATOR_MINUS: {
+             case RulesRdf::INSTANCE_OPERATOR_MINUS: {
         		$returnValue = new core_kernel_classes_Literal($first->literal - $second->literal);
         		break;
         	}
-            case INSTANCE_OPERATOR_MULTIPLY: {
+            case RulesRdf::INSTANCE_OPERATOR_MULTIPLY: {
         		$returnValue = new core_kernel_classes_Literal($first->literal * $second->literal);
         		break;
         	}
-        	case INSTANCE_OPERATOR_DIVISION: {
+        	case RulesRdf::INSTANCE_OPERATOR_DIVISION: {
         		$returnValue = new core_kernel_classes_Literal($first->literal / $second->literal);
         		break;
         	}
-        	case INSTANCE_OPERATOR_CONCAT: {
+        	case RulesRdf::INSTANCE_OPERATOR_CONCAT: {
         		// FIXME Hotfix for the concat operator. Can't find why traling spaces are not
         		// kept intact when using concat.
         		// ex: 'february ' CONCAT '2008' -> 'february2008' instead of 'february 2008'.

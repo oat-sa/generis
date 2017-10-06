@@ -19,6 +19,8 @@
  * 
  */
 
+use oat\generis\model\RulesRdf;
+
 
 /**
  * Short description of class core_kernel_rules_Rule
@@ -60,7 +62,7 @@ class core_kernel_rules_Rule
         
 		common_Logger::i('Evaluating rule '.$this->getLabel().'('.$this->getUri().')', array('Generis Rule'));
          if(empty($this->expression)){
-         	$property = new core_kernel_classes_Property(PROPERTY_RULE_IF);
+         	$property = new core_kernel_classes_Property(RulesRdf::PROPERTY_RULE_IF);
          	$this->expression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->getUri() ,__METHOD__);
         }
         $returnValue = $this->expression;

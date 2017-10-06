@@ -20,6 +20,8 @@
  * 
  */
 
+use oat\generis\model\GenerisRdf;
+use oat\generis\model\OntologyRdfs;
 use oat\oatbox\user\LoginService;
 
 /**
@@ -73,10 +75,10 @@ class core_kernel_users_Service
         $returnValue = (bool) false;
 
     	if(is_null($class)){
-        	$class = new core_kernel_classes_Class(CLASS_GENERIS_USER);
+        	$class = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_USER);
         }
         $users = $class->searchInstances(
-        	array(PROPERTY_USER_LOGIN => $login), 
+        	array(GenerisRdf::PROPERTY_USER_LOGIN => $login), 
         	array('like' => false, 'recursive' => true)
         );
         
@@ -106,15 +108,15 @@ class core_kernel_users_Service
         	throw new core_kernel_users_Exception("Login '${login}' already in use.", core_kernel_users_Exception::LOGIN_EXITS);
         }
         else{
-        	$role = (empty($role)) ? new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS) : $role;
+        	$role = (empty($role)) ? new core_kernel_classes_Resource(GenerisRdf::INSTANCE_ROLE_GENERIS) : $role;
         	
-        	$userClass = (!empty($class)) ? $class : new core_kernel_classes_Class(CLASS_GENERIS_USER);
+        	$userClass = (!empty($class)) ? $class : new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_USER);
         	$returnValue = $userClass->createInstanceWithProperties(array(
-        	    RDFS_LABEL => "User ${login}",
-        	    RDFS_COMMENT => 'User Created on ' . date(DATE_ISO8601),
-        	    PROPERTY_USER_LOGIN => $login,
-        	    PROPERTY_USER_PASSWORD => $this->userAdditionPasswordEncryption($login, $password), 
-        	    PROPERTY_USER_ROLES => $role
+                OntologyRdfs::RDFS_LABEL => "User ${login}",
+                OntologyRdfs::RDFS_COMMENT => 'User Created on ' . date(DATE_ISO8601),
+        	    GenerisRdf::PROPERTY_USER_LOGIN => $login,
+        	    GenerisRdf::PROPERTY_USER_PASSWORD => $this->userAdditionPasswordEncryption($login, $password), 
+        	    GenerisRdf::PROPERTY_USER_ROLES => $role
         	));
         	
         	if (empty($returnValue)){
@@ -158,11 +160,11 @@ class core_kernel_users_Service
         $returnValue = null;
 
     	if(empty($class)){
-        	$class = new core_kernel_classes_Class(CLASS_GENERIS_USER);
+        	$class = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_USER);
     	}
         
     	$users = $class->searchInstances(
-    		array(PROPERTY_USER_LOGIN => $login), 
+    		array(GenerisRdf::PROPERTY_USER_LOGIN => $login), 
     		array('like' => false, 'recursive' => true)
     	);
     	
@@ -206,7 +208,7 @@ class core_kernel_users_Service
 			throw new core_kernel_users_Exception('The password must be of "string" type, got '.gettype($password));
 		}
 		
-		$hash = $user->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD));
+		$hash = $user->getUniquePropertyValue(new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_PASSWORD));
 		$returnValue = core_kernel_users_Service::getPasswordHash()->verify($password, $hash);
 
         return (bool) $returnValue;
@@ -226,7 +228,7 @@ class core_kernel_users_Service
 			throw new core_kernel_users_Exception('The password must be of "string" type, got '.gettype($password));
 		}
 		
-		$user->editPropertyValues(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD),core_kernel_users_Service::getPasswordHash()->encrypt($password));
+		$user->editPropertyValues(new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_PASSWORD),core_kernel_users_Service::getPasswordHash()->encrypt($password));
     }
 
     /**
@@ -241,7 +243,7 @@ class core_kernel_users_Service
     {
         $returnValue = array();
         // We use a Depth First Search approach to flatten the Roles Graph.
-        $rolesProperty = new core_kernel_classes_Property(PROPERTY_USER_ROLES);
+        $rolesProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_ROLES);
         $rootRoles = $user->getPropertyValuesCollection($rolesProperty);
         
         foreach ($rootRoles->getIterator() as $r){
@@ -311,7 +313,7 @@ class core_kernel_users_Service
     {
     	try{
 	        if (false === $this->userHasRoles($user, $role)){
-	        	$rolesProperty = new core_kernel_classes_Property(PROPERTY_USER_ROLES);
+	        	$rolesProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_ROLES);
 	        	$user->setPropertyValue($rolesProperty, $role);	
 	        }
         }
@@ -335,7 +337,7 @@ class core_kernel_users_Service
     {
     	try{
         	if (true === $this->userHasRoles($user, $role)){
-        		$rolesProperty = new core_kernel_classes_Property(PROPERTY_USER_ROLES);
+        		$rolesProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_ROLES);
         		$options = array('like' => false, 'pattern' => $role->getUri());
         		$user->removePropertyValues($rolesProperty, $options);
         	}
@@ -363,8 +365,8 @@ class core_kernel_users_Service
         $includedRoles = is_array($includedRoles) ? $includedRoles : array($includedRoles);
 		$includedRoles = empty($includedRoles[0]) ? array() : $includedRoles;
 		
-		$classRole =  (empty($class)) ? new core_kernel_classes_Class(CLASS_ROLE) : $class;
-		$includesRoleProperty = new core_kernel_classes_Property(PROPERTY_ROLE_INCLUDESROLE);
+		$classRole =  (empty($class)) ? new core_kernel_classes_Class(GenerisRdf::CLASS_ROLE) : $class;
+		$includesRoleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_ROLE_INCLUDESROLE);
         $role = $classRole->createInstance($label, "${label} Role");
         
         foreach ($includedRoles as $ir){
@@ -436,7 +438,7 @@ class core_kernel_users_Service
         }
         else{
 	        // We use a Depth First Search approach to flatten the Roles Graph.
-	        $includesRoleProperty = new core_kernel_classes_Property(PROPERTY_ROLE_INCLUDESROLE);
+	        $includesRoleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_ROLE_INCLUDESROLE);
 	        $visitedRoles = array();
 	        $s = array(); // vertex stack.
 	        array_push($s, $role); // begin with $role as the first vertex.
@@ -489,7 +491,7 @@ class core_kernel_users_Service
     {
         $returnValue = array();
 
-        $role = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
+        $role = new core_kernel_classes_Resource(GenerisRdf::INSTANCE_ROLE_GENERIS);
         $returnValue = array($role->getUri() => $role);
 
         return (array) $returnValue;
@@ -508,7 +510,7 @@ class core_kernel_users_Service
     {
         $returnValue = null;
 
-        $returnValue = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
+        $returnValue = new core_kernel_classes_Resource(GenerisRdf::INSTANCE_ROLE_GENERIS);
 
         return $returnValue;
     }
@@ -523,7 +525,7 @@ class core_kernel_users_Service
      */
     public function includeRole( core_kernel_classes_Resource $role,  core_kernel_classes_Resource $roleToInclude)
     {
-        $includesRoleProperty = new core_kernel_classes_Property(PROPERTY_ROLE_INCLUDESROLE);
+        $includesRoleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_ROLE_INCLUDESROLE);
         
         // Clean to avoid double entries...
         $role->removePropertyValues($includesRoleProperty, array('like' => false, 'pattern' => $roleToInclude->getUri()));
@@ -545,7 +547,7 @@ class core_kernel_users_Service
      */
     public function unincludeRole(core_kernel_classes_Resource $role, core_kernel_classes_Resource $roleToUninclude)
     {
-    	$includesRoleProperty = new core_kernel_classes_Property(PROPERTY_ROLE_INCLUDESROLE);
+    	$includesRoleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_ROLE_INCLUDESROLE);
     	$role->removePropertyValues($includesRoleProperty, array('like' => false, 'pattern' => $roleToUninclude->getUri()));
 
     	// invalidate cache for the role.
@@ -630,7 +632,7 @@ class core_kernel_users_Service
      */
     public function getAllRoles()
     {
-    	$roleClass = new core_kernel_classes_Class(CLASS_ROLE);
+    	$roleClass = new core_kernel_classes_Class(GenerisRdf::CLASS_ROLE);
     	return $roleClass->getInstances(true);
     }
     

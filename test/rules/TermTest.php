@@ -20,6 +20,9 @@
  */
 error_reporting(E_ALL);
 
+use oat\generis\model\GenerisRdf;
+use oat\generis\model\OntologyRdfs;
+use oat\generis\model\RulesRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class TermTest extends GenerisPhpUnitTestRunner {
@@ -34,7 +37,7 @@ class TermTest extends GenerisPhpUnitTestRunner {
 		
 		//bad term
 		$badTermResource = core_kernel_classes_ResourceFactory::create(
-				new core_kernel_classes_Class(CLASS_TERM),
+				new core_kernel_classes_Class(RulesRdf::CLASS_TERM),
 				'bad term',
 				__METHOD__);
 		$badTerm = new core_kernel_rules_Term($badTermResource->getUri());
@@ -53,10 +56,10 @@ class TermTest extends GenerisPhpUnitTestRunner {
 		$constantResource->delete();
 		
 		//eval SPX
-		$booleanClass = new core_kernel_classes_Class(GENERIS_BOOLEAN);
+		$booleanClass = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN);
 		
 		$maybe = core_kernel_classes_ResourceFactory::create($booleanClass, 'testCase testCreateSPX',__METHOD__);
-		$SPXResource = core_kernel_rules_TermFactory::createSPX($maybe,new core_kernel_classes_Property(RDFS_COMMENT));
+		$SPXResource = core_kernel_rules_TermFactory::createSPX($maybe,new core_kernel_classes_Property(OntologyRdfs::RDFS_COMMENT));
 		$spxResult = $SPXResource->evaluate();
 		$this->assertIsA($spxResult,'core_kernel_classes_Literal');
 		$this->assertEquals($spxResult,__METHOD__);
@@ -67,7 +70,7 @@ class TermTest extends GenerisPhpUnitTestRunner {
 		$operation = core_kernel_rules_OperationFactory::createOperation(
 				$constant5,
 				$constant12,
-				new core_kernel_classes_Resource(INSTANCE_OPERATOR_ADD)
+				new core_kernel_classes_Resource(RulesRdf::INSTANCE_OPERATOR_ADD)
 		);
 		$operationTerm = new core_kernel_rules_Term($operation->getUri());
 		$result = $operationTerm->evaluate();

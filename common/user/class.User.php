@@ -19,6 +19,7 @@
  * 
  */
 
+use oat\generis\model\GenerisRdf;
 use oat\oatbox\user\User;
 use oat\oatbox\Refreshable;
 
@@ -54,7 +55,7 @@ abstract class common_user_User implements User, Refreshable
 		$returnValue = array();
 		if ( ! $this->roles) {
 			// We use a Depth First Search approach to flatten the Roles Graph.
-			foreach ($this->getPropertyValues(PROPERTY_USER_ROLES) as $roleUri) {
+			foreach ($this->getPropertyValues(GenerisRdf::PROPERTY_USER_ROLES) as $roleUri) {
 				$returnValue[] = $roleUri;
 				foreach (core_kernel_users_Service::singleton()->getIncludedRoles(new core_kernel_classes_Resource($roleUri)) as $role) {
 					$returnValue[] = $role->getUri();

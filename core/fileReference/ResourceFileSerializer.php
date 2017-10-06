@@ -20,6 +20,7 @@
 
 namespace oat\generis\model\fileReference;
 
+use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
@@ -39,7 +40,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
      */
     public function serialize($abstraction)
     {
-        $fileClass = $this->getClass(CLASS_GENERIS_FILE);
+        $fileClass = $this->getClass(GenerisRdf::CLASS_GENERIS_FILE);
 
         if ($abstraction instanceof File) {
             $filename = $abstraction->getBasename();
@@ -52,9 +53,9 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
         }
 
         $resource = $fileClass->createInstanceWithProperties(array(
-            PROPERTY_FILE_FILENAME => $filename,
-            PROPERTY_FILE_FILEPATH => $filePath,
-            PROPERTY_FILE_FILESYSTEM => $this->getResource($abstraction->getFileSystemId())
+            GenerisRdf::PROPERTY_FILE_FILENAME => $filename,
+            GenerisRdf::PROPERTY_FILE_FILEPATH => $filePath,
+            GenerisRdf::PROPERTY_FILE_FILESYSTEM => $this->getResource($abstraction->getFileSystemId())
         ));
 
         return $resource->getUri();
@@ -137,28 +138,28 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
         $file = $this->getResource($serial);
 
         $propertiesDefinition = array(
-            $this->getProperty(PROPERTY_FILE_FILEPATH),
-            $this->getProperty(PROPERTY_FILE_FILESYSTEM),
-            $this->getProperty(PROPERTY_FILE_FILENAME)
+            $this->getProperty(GenerisRdf::PROPERTY_FILE_FILEPATH),
+            $this->getProperty(GenerisRdf::PROPERTY_FILE_FILESYSTEM),
+            $this->getProperty(GenerisRdf::PROPERTY_FILE_FILENAME)
         );
 
         $propertiesValues = $file->getPropertiesValues($propertiesDefinition);
 
         $properties = [];
 
-        $fileSystemProperty	=  current($propertiesValues[PROPERTY_FILE_FILESYSTEM]);
+        $fileSystemProperty	=  current($propertiesValues[GenerisRdf::PROPERTY_FILE_FILESYSTEM]);
         if ($fileSystemProperty instanceof \core_kernel_classes_Resource) {
             $properties[self::RESOURCE_FILE_FILESYSTEM_URI] = $fileSystemProperty->getUri();
         } else {
             $properties[self::RESOURCE_FILE_FILESYSTEM_URI] = $fileSystemProperty->literal;
         }
 
-        $filePath = current($propertiesValues[PROPERTY_FILE_FILEPATH])->literal;
+        $filePath = current($propertiesValues[GenerisRdf::PROPERTY_FILE_FILEPATH])->literal;
         $filePath = str_replace(DIRECTORY_SEPARATOR, '/', $filePath);
         $properties[self::RESOURCE_FILE_PATH] = trim($filePath, '/');
 
-        if (! empty($propertiesValues[PROPERTY_FILE_FILENAME])) {
-            $fileName = current($propertiesValues[PROPERTY_FILE_FILENAME])->literal;
+        if (! empty($propertiesValues[GenerisRdf::PROPERTY_FILE_FILENAME])) {
+            $fileName = current($propertiesValues[GenerisRdf::PROPERTY_FILE_FILENAME])->literal;
             $fileName = str_replace(DIRECTORY_SEPARATOR, '/', $fileName);
 
             $properties[self::RESOURCE_FILE_NAME] = ltrim($fileName, '/');

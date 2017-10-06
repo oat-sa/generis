@@ -25,6 +25,8 @@ use common_exception_InconsistentData;
 use core_kernel_classes_Property;
 use core_kernel_users_InvalidLoginException;
 use core_kernel_users_GenerisUser;
+use oat\generis\model\GenerisRdf;
+use oat\generis\model\OntologyRdfs;
 use oat\oatbox\user\auth\LoginAdapter;
 
 
@@ -86,8 +88,8 @@ class AuthAdapter
      */
     public function authenticate() {
     	
-    	$userClass = new core_kernel_classes_Class(CLASS_GENERIS_USER);
-    	$filters = array(PROPERTY_USER_LOGIN => $this->username);
+    	$userClass = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_USER);
+    	$filters = array(GenerisRdf::PROPERTY_USER_LOGIN => $this->username);
     	$options = array('like' => false, 'recursive' => true);
     	$users = $userClass->searchInstances($filters, $options);
     	
@@ -98,7 +100,7 @@ class AuthAdapter
     	}
         if (empty($users)){
             // fake code execution to prevent timing attacks
-            $label = new core_kernel_classes_Property(RDFS_LABEL);
+            $label = new core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL);
             $hash = $label->getUniquePropertyValue($label);
             if (!core_kernel_users_Service::getPasswordHash()->verify($this->password, $hash)) {
                 throw new core_kernel_users_InvalidLoginException('Unknown user "'.$this->username.'"');
@@ -108,7 +110,7 @@ class AuthAdapter
     	}
     	
 	    $userResource = current($users);
-	    $hash = $userResource->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD));
+	    $hash = $userResource->getUniquePropertyValue(new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_PASSWORD));
 	    if (!core_kernel_users_Service::getPasswordHash()->verify($this->password, $hash)) {
 	        throw new core_kernel_users_InvalidLoginException('Invalid password for user "'.$this->username.'"');
 	    }

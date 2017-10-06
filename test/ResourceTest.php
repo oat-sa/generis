@@ -20,6 +20,8 @@
  */
 namespace oat\generis\test;
 
+use oat\generis\model\GenerisRdf;
+use oat\generis\model\OntologyRdfs;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use \core_kernel_classes_Class;
 use \core_kernel_classes_Resource;
@@ -40,10 +42,10 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	{
         GenerisPhpUnitTestRunner::initTest();
 
-		$this->object = new core_kernel_classes_Resource(GENERIS_BOOLEAN);
+		$this->object = new core_kernel_classes_Resource(GenerisRdf::GENERIS_BOOLEAN);
 		
 		//create test class
-		$clazz = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
+		$clazz = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE);
 		$this->clazz = $clazz->createSubClass($clazz);
 	}
 
@@ -81,16 +83,16 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	public function testGetPropertyValuesCollection()
 	{
 		$session = GenerisPhpUnitTestRunner::getTestSession();
-		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+		$class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
-		$seeAlso = new core_kernel_classes_Property(RDFS_SEEALSO,__METHOD__);
+		$seeAlso = new core_kernel_classes_Property(OntologyRdfs::RDFS_SEEALSO,__METHOD__);
 		$api = core_kernel_impl_ApiModelOO::singleton();
-		$api->setStatement($instance->getUri(), RDFS_SEEALSO, GENERIS_TRUE, '');
-		$api->setStatement($instance->getUri(), RDFS_SEEALSO, GENERIS_FALSE, '');
-		$api->setStatement($instance->getUri(), RDFS_SEEALSO, 'plop', '');
-		$api->setStatement($instance->getUri(), RDFS_SEEALSO, 'plup', 'FR');
-		$api->setStatement($instance->getUri(), RDFS_SEEALSO, 'plip', 'FR');
-		$api->setStatement($instance->getUri(), RDFS_SEEALSO, GENERIS_TRUE, 'FR');
+		$api->setStatement($instance->getUri(), OntologyRdfs::RDFS_SEEALSO, GenerisRdf::GENERIS_TRUE, '');
+		$api->setStatement($instance->getUri(), OntologyRdfs::RDFS_SEEALSO, GenerisRdf::GENERIS_FALSE, '');
+		$api->setStatement($instance->getUri(), OntologyRdfs::RDFS_SEEALSO, 'plop', '');
+		$api->setStatement($instance->getUri(), OntologyRdfs::RDFS_SEEALSO, 'plup', 'FR');
+		$api->setStatement($instance->getUri(), OntologyRdfs::RDFS_SEEALSO, 'plip', 'FR');
+		$api->setStatement($instance->getUri(), OntologyRdfs::RDFS_SEEALSO, GenerisRdf::GENERIS_TRUE, 'FR');
 
 		// Default language is EN (English) so that we should get a collection
 		// containing 3 triples because we will receive the ones with no language
@@ -102,7 +104,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 		foreach ($collection->getIterator() as $value) {
 			$this->assertIsA($value, 'core_kernel_classes_Container' );
 			if($value instanceof core_kernel_classes_Resource ){
-				$this->assertTrue($value->getUri() == GENERIS_TRUE || $value->getUri() == GENERIS_FALSE);
+				$this->assertTrue($value->getUri() == GenerisRdf::GENERIS_TRUE || $value->getUri() == GenerisRdf::GENERIS_FALSE);
 			}
 			if ( $value instanceof core_kernel_classes_Literal){
 				$this->assertEquals($value->literal, 'plop');
@@ -117,7 +119,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 		foreach ($collection->getIterator() as $value) {
 			$this->assertIsA($value, 'core_kernel_classes_Container' );
 			if($value instanceof core_kernel_classes_Resource ){
-				$this->assertTrue($value->getUri() == GENERIS_TRUE || $value->getUri() == GENERIS_FALSE);
+				$this->assertTrue($value->getUri() == GenerisRdf::GENERIS_TRUE || $value->getUri() == GenerisRdf::GENERIS_FALSE);
 			}
 			if ( $value instanceof core_kernel_classes_Literal){
 				$this->assertEquals($value->literal, 'plop');
@@ -132,7 +134,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 		foreach ($collection->getIterator() as $value) {
 			$this->assertIsA($value, 'core_kernel_classes_Container' );
 			if($value instanceof core_kernel_classes_Resource ){
-				$this->assertTrue($value->getUri() == GENERIS_TRUE, $value->getUri() . ' must be equal to ' . GENERIS_TRUE);
+				$this->assertTrue($value->getUri() == GenerisRdf::GENERIS_TRUE, $value->getUri() . ' must be equal to ' . GenerisRdf::GENERIS_TRUE);
 			}
 			if ( $value instanceof core_kernel_classes_Literal){
 				$this->assertTrue($value->literal == 'plup' || $value->literal == 'plip', $value->literal . ' must be equal to plip or plop');
@@ -233,12 +235,12 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 		$this->assertTrue($collectionTriple instanceof common_Collection);
 		foreach ($collectionTriple->getIterator() as $triple){
 			$this->assertTrue( $triple instanceof core_kernel_classes_Triple );
-			$this->assertEquals($triple->subject, GENERIS_BOOLEAN );
-			if ($triple->predicate === RDFS_LABEL) {
+			$this->assertEquals($triple->subject, GenerisRdf::GENERIS_BOOLEAN );
+			if ($triple->predicate === OntologyRdfs::RDFS_LABEL) {
 				$this->assertEquals($triple->object,'Boolean' );
 				$this->assertEquals($triple->lg, DEFAULT_LANG );
 			}
-			if ($triple->predicate === RDFS_COMMENT) {
+			if ($triple->predicate === OntologyRdfs::RDFS_COMMENT) {
 				$this->assertEquals($triple->object,'Boolean' );
 				$this->assertEquals($triple->lg, DEFAULT_LANG );
 			}
@@ -249,14 +251,14 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	public function testDelete()
 	{
 
-		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+		$class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 
 		$instance = $class->createInstance('test' , 'test');
-		$label = new core_kernel_classes_Property(RDFS_LABEL,__METHOD__);
+		$label = new core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL,__METHOD__);
 		$this->assertTrue($instance->delete());
 		$this->assertTrue($instance->getPropertyValuesCollection($label)->isEmpty());
 
-		$class2 = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+		$class2 = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 		$instance2 = $class->createInstance('test2' , 'test2');
 		$property2 = $class->createProperty('multi','multi',true);
 
@@ -276,17 +278,17 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 
 	public function testSetPropertyValue()
 	{
-		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+		$class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test', 'test');
-		$seeAlso = new core_kernel_classes_Property(RDFS_SEEALSO,__METHOD__);
-		$instance->setPropertyValue($seeAlso,GENERIS_TRUE);
-		$instance->setPropertyValue($seeAlso,GENERIS_FALSE);
+		$seeAlso = new core_kernel_classes_Property(OntologyRdfs::RDFS_SEEALSO,__METHOD__);
+		$instance->setPropertyValue($seeAlso,GenerisRdf::GENERIS_TRUE);
+		$instance->setPropertyValue($seeAlso,GenerisRdf::GENERIS_FALSE);
 		$instance->setPropertyValue($seeAlso,"&plop n'\"; plop'\' plop");
 		$collection = $instance->getPropertyValuesCollection($seeAlso);
 		foreach ($collection->getIterator() as $value) {
 			$this->assertIsA($value, 'core_kernel_classes_Container' );
 			if($value instanceof core_kernel_classes_Resource ){
-				$this->assertTrue($value->getUri() == GENERIS_TRUE || $value->getUri() ==GENERIS_FALSE);
+				$this->assertTrue($value->getUri() == GenerisRdf::GENERIS_TRUE || $value->getUri() ==GenerisRdf::GENERIS_FALSE);
 			}
 			if ( $value instanceof core_kernel_classes_Literal){
 				$this->assertEquals($value->literal, "&plop n'\"; plop'\' plop");
@@ -298,17 +300,17 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	public function testSetPropertiesValues()
 	{
 
-		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN );
+		$class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN );
 		$instance = $class->createInstance('a label', 'a comment');
 		$this->assertIsA($instance, 'core_kernel_classes_Resource' );
 
 			$instance->setPropertiesValues(array(
-			RDFS_SEEALSO	=> "&plop n'\"; plop'\' plop",
-			RDFS_LABEL		=> array('new label', 'another label', 'yet a last one'),
-			RDFS_COMMENT 	=> 'new comment'
+            OntologyRdfs::RDFS_SEEALSO	=> "&plop n'\"; plop'\' plop",
+            OntologyRdfs::RDFS_LABEL		=> array('new label', 'another label', 'yet a last one'),
+            OntologyRdfs::RDFS_COMMENT 	=> 'new comment'
 		));
 			
-		$seeAlso = $instance->getOnePropertyValue(new core_kernel_classes_Property(RDFS_SEEALSO));
+		$seeAlso = $instance->getOnePropertyValue(new core_kernel_classes_Property(OntologyRdfs::RDFS_SEEALSO));
 		$this->assertNotNull($seeAlso);
 		$this->assertIsA($seeAlso, 'core_kernel_classes_Literal');
 		$this->assertEquals($seeAlso->literal, "&plop n'\"; plop'\' plop");
@@ -318,13 +320,13 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 
 	public function testGetUsedLanguages()
 	{
-		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+		$class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = $class->createProperty('seeAlso','multilingue',true);
 
 		$api = core_kernel_impl_ApiModelOO::singleton();
-		$api->setStatement($instance->getUri(),$seeAlso->getUri(),GENERIS_TRUE,'FR');
-		$api->setStatement($instance->getUri(),$seeAlso->getUri(),GENERIS_TRUE,'EN');
+		$api->setStatement($instance->getUri(),$seeAlso->getUri(),GenerisRdf::GENERIS_TRUE,'FR');
+		$api->setStatement($instance->getUri(),$seeAlso->getUri(),GenerisRdf::GENERIS_TRUE,'EN');
 		$lg = $instance->getUsedLanguages($seeAlso);
 		$this->assertTrue(in_array('FR',$lg));
 		$this->assertTrue(in_array('EN',$lg));
@@ -334,7 +336,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 
 	public function testGetPropertyValuesByLg()
 	{
-		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+		$class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = $class->createProperty('seeAlso','multilingue',true);
 		$api = core_kernel_impl_ApiModelOO::singleton();
@@ -355,7 +357,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 
 	public function testSetPropertyValueByLg()
 	{
-		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+		$class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = $class->createProperty('seeAlso','multilingue',true);
 
@@ -375,7 +377,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	}
 
 	public function testRemovePropertyValue(){
-	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+	    $class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 	    $instance = $class->createInstance('test' , 'test');
 	    $seeAlso = $class->createProperty('seeAlso','multilingue');
 	    $instance->setPropertyValue($seeAlso,'foo');
@@ -393,7 +395,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	
 	public function testRemovePropertyValueByLg()
 	{
-		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+		$class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = $class->createProperty('seeAlso','multilingue',true);
 
@@ -415,7 +417,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	public function testRemovePropertyValues()
 	{
 		$session = GenerisPhpUnitTestRunner::getTestSession();
-		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+		$class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test', 'test');
 		$instance2 = $class->createInstance('test2', 'test2');
 		
@@ -470,7 +472,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	}
 
 	public function testEditPropertyValues(){
-	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+	    $class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 	    $instance = $class->createInstance('test' , 'test');
 	    $seeAlso = $class->createProperty('seeAlso','multilingue',true);
 	    
@@ -492,7 +494,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	
 	public function testEditPropertyValueByLg()
 	{
-		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+		$class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = $class->createProperty('seeAlso','multilingue',true);
 
@@ -512,7 +514,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	public function testGetOnePropertyValue()
 	{
 		$session = GenerisPhpUnitTestRunner::getTestSession();
-		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+		$class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$seeAlso = $class->createProperty('seeAlsoDo','multilingue',true);
 
@@ -547,17 +549,17 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	}
 
 	public function testGetTypes(){
-		$class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+		$class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 		$instance = $class->createInstance('test' , 'test');
 		$typeUri = array_keys($instance->getTypes());
-		$this->assertEquals($typeUri[0],GENERIS_BOOLEAN);
+		$this->assertEquals($typeUri[0],GenerisRdf::GENERIS_BOOLEAN);
 		$this->assertTrue(count($typeUri) == 1);
 		$instance->delete();
 	}
 	
 	public function testHasType(){
-	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
-	    $file = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
+	    $class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
+	    $file = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_FILE);
 	     
 	    $instance = $class->createInstance('test' , 'test');
 	    $this->assertTrue($instance->hasType($class));
@@ -568,8 +570,8 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	
 	
 	public function testSetType(){
-	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
-	    $file = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
+	    $class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
+	    $file = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_FILE);
 	
 	    $instance = $class->createInstance('test' , 'test');
 	    $this->assertTrue($instance->hasType($class));
@@ -582,10 +584,10 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	}
 	
 	public function testRemoveType(){
-	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+	    $class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 	    $instance = $class->createInstance('test' , 'test');
 	    
-	    $file = new core_kernel_classes_Class(CLASS_GENERIS_FILE);
+	    $file = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_FILE);
 	    $instance->setType($file);
 
 	    $instance->removeType($class);
@@ -597,7 +599,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 
 	public function testGetComment()
 	{
-		$inst = new core_kernel_classes_Resource(CLASS_GENERIS_RESOURCE);
+		$inst = new core_kernel_classes_Resource(GenerisRdf::CLASS_GENERIS_RESOURCE);
 		$this->assertTrue($inst->getLabel()== 'generis_Ressource');
 		$this->assertTrue($inst->getComment() == 'generis_Ressource');
 	}
@@ -605,7 +607,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	
 	public function testIsInstanceOf()
 	{
-		$baseClass = new core_kernel_classes_Class(RDFS_CLASS);
+		$baseClass = new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS);
 		$level1a = $baseClass->createSubClass('level1a');
 		$level1b = $baseClass->createSubClass('level1b');
 		$level2a = $level1a->createSubClass('level2a');
@@ -655,7 +657,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	    $this->assertFalse($instance->isProperty());
 	    
 	    
-	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+	    $class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 	    $this->assertFalse($class->isProperty());
 	    $prop->delete();
 	    $instance->delete();
@@ -686,7 +688,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	    $this->assertFalse($prop->isClass());
 	    $prop->delete();
 	     
-	    $class = new core_kernel_classes_Class(RDFS_CLASS,__METHOD__);
+	    $class = new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS,__METHOD__);
 	    $sublClass = $class->createInstance('subclass','subclass');
 	    $this->assertTrue($class->isClass());
 	    $this->assertTrue($sublClass->isClass());
@@ -705,7 +707,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	 */
 	public function testClone()
 	{
-	    $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+	    $class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
 	    $instance = $class->createInstance('test' , 'test');
 	    $clone = clone $instance;
 	       
@@ -716,7 +718,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 	
 	public function testDuplicate()
 	{
-        $class = new core_kernel_classes_Class(GENERIS_BOOLEAN,__METHOD__);
+        $class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN,__METHOD__);
         $instance = $class->createInstance('test' , 'test');
         $prop = $this->createTestProperty();
         $instance->setPropertyValue($prop,'plop');

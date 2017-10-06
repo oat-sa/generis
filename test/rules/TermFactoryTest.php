@@ -21,6 +21,9 @@
 
 error_reporting(E_ALL);
 
+use oat\generis\model\GenerisRdf;
+use oat\generis\model\OntologyRdfs;
+use oat\generis\model\RulesRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class TermFactoryTest extends GenerisPhpUnitTestRunner {
@@ -34,12 +37,12 @@ class TermFactoryTest extends GenerisPhpUnitTestRunner {
 		$constantResource = core_kernel_rules_TermFactory::createConst('test1');
 		$this->assertIsA($constantResource,'core_kernel_rules_Term');
 		$typeUri = array_keys($constantResource->getTypes());
-		$this->assertEquals($typeUri[0],CLASS_TERM_CONST);
+		$this->assertEquals($typeUri[0],RulesRdf::CLASS_TERM_CONST);
 		$this->assertTrue(count($typeUri) == 1);
 			
-		$termValueProperty = new core_kernel_classes_Property(PROPERTY_TERM_VALUE);
-		$logicalOperatorProperty = new core_kernel_classes_Property(PROPERTY_HASLOGICALOPERATOR);
-		$terminalExpressionProperty = new core_kernel_classes_Property(PROPERTY_TERMINAL_EXPRESSION);
+		$termValueProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_VALUE);
+		$logicalOperatorProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_HASLOGICALOPERATOR);
+		$terminalExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERMINAL_EXPRESSION);
 		
 		$term = $constantResource->getUniquePropertyValue($termValueProperty);
 		$this->assertIsA($term,'core_kernel_classes_Literal');
@@ -47,7 +50,7 @@ class TermFactoryTest extends GenerisPhpUnitTestRunner {
 		
 		$operator = $constantResource->getUniquePropertyValue($logicalOperatorProperty);
 		$this->assertIsA($operator,'core_kernel_classes_Resource');
-		$this->assertEquals($operator->getUri(),INSTANCE_EXISTS_OPERATOR_URI);
+		$this->assertEquals($operator->getUri(),RulesRdf::INSTANCE_EXISTS_OPERATOR_URI);
 	
 		$terminalExpression = $constantResource->getUniquePropertyValue($terminalExpressionProperty);
 		$this->assertIsA($terminalExpression,'core_kernel_classes_Resource');
@@ -57,14 +60,14 @@ class TermFactoryTest extends GenerisPhpUnitTestRunner {
 	}
 	
 	public function testCreateSPX(){
-		$booleanClass = new core_kernel_classes_Class(GENERIS_BOOLEAN);
+		$booleanClass = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN);
 		$maybe = core_kernel_classes_ResourceFactory::create($booleanClass, 'testCase testCreateSPX',__METHOD__);
 		
-		$SPXResource = core_kernel_rules_TermFactory::createSPX($maybe,new core_kernel_classes_Property(RDFS_COMMENT));
+		$SPXResource = core_kernel_rules_TermFactory::createSPX($maybe,new core_kernel_classes_Property(OntologyRdfs::RDFS_COMMENT));
 		$this->assertIsA($SPXResource,'core_kernel_rules_Term');
 		
-		$subjectProperty = new core_kernel_classes_Property(PROPERTY_TERM_SPX_SUBJET);
-		$predicateProperty = new core_kernel_classes_Property(PROPERTY_TERM_SPX_PREDICATE);
+		$subjectProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_SUBJET);
+		$predicateProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_PREDICATE);
      	
 		$subject = $SPXResource->getUniquePropertyValue($subjectProperty);
      	$this->assertIsA($subject,'core_kernel_classes_Resource');
@@ -72,7 +75,7 @@ class TermFactoryTest extends GenerisPhpUnitTestRunner {
      	
      	$predicate = $SPXResource->getUniquePropertyValue($predicateProperty);
 		$this->assertIsA($predicate,'core_kernel_classes_Resource');
-		$this->assertEquals($predicate->getUri(),RDFS_COMMENT);
+		$this->assertEquals($predicate->getUri(),OntologyRdfs::RDFS_COMMENT);
 		
 		$SPXResource->delete();
 		$maybe->delete();

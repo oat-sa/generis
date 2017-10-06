@@ -36,7 +36,7 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner {
     public function setUp()
     {
         GenerisPhpUnitTestRunner::initTest();
-        $class = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
+        $class = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE);
         $this->topClass = $class->createSubClass('test class 1');
         $this->emptyClass = $class->createSubClass('test class 2');
         $class1a = $this->topClass->createSubClass('test class 1a');

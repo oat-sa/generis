@@ -19,6 +19,8 @@
  * 
  */
 
+use oat\generis\model\RulesRdf;
+
 /**
  * Short description of class core_kernel_rules_ExpressionFactory
  *
@@ -53,11 +55,11 @@ class core_kernel_rules_ExpressionFactory
         	var_dump($term);
         	throw new common_Exception('paramaters could not be null');
         }
-        $expressionClass = new core_kernel_classes_Class(CLASS_EXPRESSION,__METHOD__);
+        $expressionClass = new core_kernel_classes_Class(RulesRdf::CLASS_URI_EXPRESSION,__METHOD__);
         $label = 'Terminal Expression : ' . $term->getLabel();
         $comment = 'Terminal Expression : ' . $term->getUri();
         $expressionInst = core_kernel_classes_ResourceFactory::create($expressionClass,$label,$comment);
-      	$terminalExpressionProperty = new core_kernel_classes_Property(PROPERTY_TERMINAL_EXPRESSION,__METHOD__);
+      	$terminalExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERMINAL_EXPRESSION,__METHOD__);
         $returnValue = new core_kernel_rules_Expression($expressionInst->getUri());
         $returnValue->setPropertyValue($terminalExpressionProperty,$term->getUri());
         $returnValue->debug = __METHOD__;
@@ -86,17 +88,17 @@ class core_kernel_rules_ExpressionFactory
         	throw new common_Exception('paramaters could not be null');
         }
 
-        $expressionClass = new core_kernel_classes_Class(CLASS_EXPRESSION,__METHOD__);
+        $expressionClass = new core_kernel_classes_Class(RulesRdf::CLASS_URI_EXPRESSION,__METHOD__);
         $label = 'Expression : ' . $exp1->getLabel() . ' ' . $operator->getLabel() . ' ' . $exp2->getLabel();
         $comment = 'Expression : ' . $exp1->getUri() . ' ' . $operator->getUri() . ' ' . $exp2->getUri();
         $expressionInst = core_kernel_classes_ResourceFactory::create($expressionClass,$label,$comment);
-      	$terminalExpressionProperty = new core_kernel_classes_Property(PROPERTY_TERMINAL_EXPRESSION,__METHOD__);
-        $logicalOperatorProperty = new core_kernel_classes_Property(PROPERTY_HASLOGICALOPERATOR,__METHOD__);
-		$firstExpressionProperty = new core_kernel_classes_Property(PROPERTY_FIRST_EXPRESSION,__METHOD__);
-		$secondExpressionProperty = new core_kernel_classes_Property(PROPERTY_SECOND_EXPRESSION,__METHOD__);
+      	$terminalExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERMINAL_EXPRESSION,__METHOD__);
+        $logicalOperatorProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_HASLOGICALOPERATOR,__METHOD__);
+		$firstExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_FIRST_EXPRESSION,__METHOD__);
+		$secondExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_SECOND_EXPRESSION,__METHOD__);
 		$returnValue = new core_kernel_rules_Expression($expressionInst->getUri());
 		$returnValue->debug = __METHOD__;
-		$returnValue->setPropertyValue($terminalExpressionProperty,INSTANCE_EMPTY_TERM_URI);
+		$returnValue->setPropertyValue($terminalExpressionProperty,RulesRdf::INSTANCE_EMPTY_TERM_URI);
 		$returnValue->setPropertyValue($firstExpressionProperty,$exp1->getUri());
 		$returnValue->setPropertyValue($secondExpressionProperty,$exp2->getUri());
 		$returnValue->setPropertyValue($logicalOperatorProperty,$operator->getUri()); 

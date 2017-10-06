@@ -18,6 +18,7 @@
  * 
  */
 
+use oat\generis\model\GenerisRdf;
 use oat\oatbox\user\AnonymousUser;
 
 /**
@@ -59,7 +60,7 @@ class common_session_AnonymousSession implements common_session_StatelessSession
      * @see common_session_Session::getUserRoles()
      */
     public function getUserRoles() {
-        return array(INSTANCE_ROLE_ANONYMOUS);
+        return array(GenerisRdf::INSTANCE_ROLE_ANONYMOUS);
     }
     
     /**

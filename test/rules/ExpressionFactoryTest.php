@@ -20,6 +20,8 @@
  */
 
 error_reporting(E_ALL);
+
+use oat\generis\model\RulesRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 /**
@@ -33,7 +35,7 @@ class ExpressionFactoryTestCase extends GenerisPhpUnitTestRunner {
     public function testCreateTerminalExpression(){
 		$constantResource = core_kernel_rules_TermFactory::createConst('test1');
 		$terminalExpression = core_kernel_rules_ExpressionFactory::createTerminalExpression($constantResource);
-		$terminalExpressionProperty = new core_kernel_classes_Property(PROPERTY_TERMINAL_EXPRESSION,__METHOD__);
+		$terminalExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERMINAL_EXPRESSION,__METHOD__);
 		$terminalExpressionVal = $terminalExpression->getOnePropertyValue($terminalExpressionProperty);
         $this->assertIsA($terminalExpressionVal,'core_kernel_classes_Resource');
         $this->assertEquals ($terminalExpressionVal->getUri(),$constantResource->getUri());
@@ -54,24 +56,24 @@ class ExpressionFactoryTestCase extends GenerisPhpUnitTestRunner {
         $terminalExpression1 = core_kernel_rules_ExpressionFactory::createTerminalExpression($constantResource1);
         $terminalExpression2 = core_kernel_rules_ExpressionFactory::createTerminalExpression($constantResource2);
 
-        $equalsOperator = new core_kernel_classes_Resource(INSTANCE_EQUALS_OPERATOR_URI);
+        $equalsOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_EQUALS_OPERATOR_URI);
         $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression1,$terminalExpression2,$equalsOperator);
 
         //prop
-        $terminalExpressionProperty = new core_kernel_classes_Property(PROPERTY_TERMINAL_EXPRESSION,__METHOD__);
-        $logicalOperatorProperty = new core_kernel_classes_Property(PROPERTY_HASLOGICALOPERATOR,__METHOD__);
-        $firstExpressionProperty = new core_kernel_classes_Property(PROPERTY_FIRST_EXPRESSION,__METHOD__);
-        $secondExpressionProperty = new core_kernel_classes_Property(PROPERTY_SECOND_EXPRESSION,__METHOD__);
+        $terminalExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERMINAL_EXPRESSION,__METHOD__);
+        $logicalOperatorProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_HASLOGICALOPERATOR,__METHOD__);
+        $firstExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_FIRST_EXPRESSION,__METHOD__);
+        $secondExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_SECOND_EXPRESSION,__METHOD__);
 
         //final expr
         $finalExpressionVal = $finalExpression->getOnePropertyValue($terminalExpressionProperty);
         $this->assertIsA($finalExpressionVal,'core_kernel_classes_Resource');
-        $this->assertEquals ($finalExpressionVal->getUri(),INSTANCE_EMPTY_TERM_URI);
+        $this->assertEquals ($finalExpressionVal->getUri(),RulesRdf::INSTANCE_EMPTY_TERM_URI);
 
         //operator
         $logicalOperatorVal = $finalExpression->getOnePropertyValue($logicalOperatorProperty);
         $this->assertIsA($logicalOperatorVal,'core_kernel_classes_Resource');
-        $this->assertEquals ($logicalOperatorVal->getUri(),INSTANCE_EQUALS_OPERATOR_URI);
+        $this->assertEquals ($logicalOperatorVal->getUri(),RulesRdf::INSTANCE_EQUALS_OPERATOR_URI);
 
         //first expr
         $firstExpressionVal = $finalExpression->getOnePropertyValue($firstExpressionProperty);

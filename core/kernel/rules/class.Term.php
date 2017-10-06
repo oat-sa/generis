@@ -19,6 +19,9 @@
  * 
  */
 
+use oat\generis\model\OntologyRdf;
+use oat\generis\model\RulesRdf;
+
 /**
  * Short description of class core_kernel_rules_Term
  *
@@ -50,31 +53,31 @@ class core_kernel_rules_Term
         
       	common_Logger::i('Evaluating Term uri : '. $this->getUri(), array('Generis Term'));
       	common_Logger::i('Evaluating Term name : '. $this->getLabel(), array('Generis Term'));
-		$termType = $this->getUniquePropertyValue(new core_kernel_classes_Property(RDF_TYPE));
+		$termType = $this->getUniquePropertyValue(new core_kernel_classes_Property(OntologyRdf::RDF_TYPE));
 		common_Logger::d('Term s type : '. $termType->getUri(), array('Generis Term'));
 		switch($termType->getUri()) {
-    		case CLASS_TERM : {
+    		case RulesRdf::CLASS_TERM : {
 				throw new common_Exception("Forbidden Type of Term");
 				
     			break;
     		}
-    		case CLASS_TERM_SUJET_PREDICATE_X : {
+    		case RulesRdf::CLASS_TERM_SUJET_PREDICATE_X : {
     				$returnValue = $this->evaluateSPX($variable);
        			break;
     		}
-		   case CLASS_TERM_X_PREDICATE_OBJECT : {
+		   case RulesRdf::CLASS_URI_TERM_X_PREDICATE_OBJECT : {
 		   			$returnValue = $this->evaluateXPO();
 				break;
     		}
-    		case CLASS_CONSTRUCTED_SET : {
+    		case RulesRdf::CLASS_URI_CONSTRUCTED_SET : {
     				$returnValue = $this->evaluateSet();
     			break;
     		}
-    	   	case CLASS_TERM_CONST : {
+    	   	case RulesRdf::CLASS_TERM_CONST : {
     	   			$returnValue = $this->evaluateConst();
     	   		break;
     		}
-    		case CLASS_OPERATION : {
+    		case RulesRdf::CLASS_OPERATION : {
     				$returnValue = $this->evaluateOperation($variable);
       			break;
     		}
@@ -102,10 +105,10 @@ class core_kernel_rules_Term
         $returnValue = null;
 
         
-    	if($setOperator->getUri() == INSTANCE_OPERATOR_UNION) {
+    	if($setOperator->getUri() == RulesRdf::INSTANCE_OPERATOR_UNION) {
 			$returnValue = $actualSet->union($newSet);
     	}
-    	else if($setOperator->getUri() == INSTANCE_OPERATOR_INTERSECT) {
+    	else if($setOperator->getUri() == RulesRdf::INSTANCE_OPERATOR_INTERSECT) {
     		$returnValue =  $actualSet->intersect($newSet);
     	}
     	else {
@@ -128,7 +131,7 @@ class core_kernel_rules_Term
     {
         
     	common_Logger::d('SPX TYPE', array('Generis Term evaluateSPX'));
-    	$resource = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_TERM_SPX_SUBJET));
+    	$resource = $this->getUniquePropertyValue(new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_SUBJET));
     	if($resource instanceof core_kernel_classes_Resource){
     		if(array_key_exists($resource->getUri(),$variable)) {
     			common_Logger::d('Variable uri : ' .  $resource->getUri() . ' found', array('Generis Term evaluateSPX'));
@@ -140,7 +143,7 @@ class core_kernel_rules_Term
     		
     		try
     		{
-    			$propertyInstance = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_TERM_SPX_PREDICATE));
+    			$propertyInstance = $this->getUniquePropertyValue(new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_PREDICATE));
     		}
     		catch (common_Exception $e)
     		{
@@ -162,9 +165,9 @@ class core_kernel_rules_Term
        		common_Logger::d($returnValue->count() . ' values returned ', array('Generis Term evaluateSPX'));
 
        		if($returnValue->isEmpty()) {
-       			$newEmptyTerm = new core_kernel_rules_Term(INSTANCE_TERM_IS_NULL,__METHOD__);
+       			$newEmptyTerm = new core_kernel_rules_Term(RulesRdf::INSTANCE_TERM_IS_NULL,__METHOD__);
        			common_Logger::d('Empty Term Created', array('Generis Term evaluateSPX'));
-       			$property = new core_kernel_classes_Property(PROPERTY_TERM_VALUE);
+       			$property = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_VALUE);
        			$returnValue = $newEmptyTerm->getUniquePropertyValue($property);	
        		}
        		else {
@@ -190,9 +193,9 @@ class core_kernel_rules_Term
     {
         
         common_Logger::d('XPO TYPE', array('Generis Term evaluateXPO'));
-		$classTerm = new core_kernel_classes_Class(CLASS_TERM_X_PREDICATE_OBJECT);
-		$obj = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_TERM_XPO_OBJECT));
-		$pred = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_TERM_XPO_PREDICATE));
+		$classTerm = new core_kernel_classes_Class(RulesRdf::CLASS_URI_TERM_X_PREDICATE_OBJECT);
+		$obj = $this->getUniquePropertyValue(new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_XPO_OBJECT));
+		$pred = $this->getUniquePropertyValue(new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_XPO_PREDICATE));
 		if($obj instanceof core_kernel_classes_Literal) {
 			$objValue = $obj->literal;
 		}
@@ -220,8 +223,8 @@ class core_kernel_rules_Term
     {
         
         common_Logger::d('Constructed Set TYPE', array('Generis Term evaluateSet'));
-    	$operator = $this->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_SET_OPERATOR));
-    	$subSets = $this->getPropertyValuesCollection(new core_kernel_classes_Property(PROPERTY_SUBSET));
+    	$operator = $this->getUniquePropertyValue(new core_kernel_classes_Property(RulesRdf::PROPERTY_SET_OPERATOR));
+    	$subSets = $this->getPropertyValuesCollection(new core_kernel_classes_Property(RulesRdf::PROPERTY_SUBSET));
     	$returnValue = new core_kernel_classes_ContainerCollection($this);
 
 		foreach ($subSets->getIterator() as $aSet) {
@@ -259,7 +262,7 @@ class core_kernel_rules_Term
     {
         
         common_Logger::d('CONSTANTE TYPE', array('Generis Term evaluateConst'));
-	    $property = new core_kernel_classes_Property(PROPERTY_TERM_VALUE);
+	    $property = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_VALUE);
 	    return $this->getUniquePropertyValue($property); 
         
     }
