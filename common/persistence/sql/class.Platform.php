@@ -38,13 +38,6 @@ class common_persistence_sql_Platform{
         $this->dbalPlatform = $dbalConnection->getDatabasePlatform();
         $this->dbalConnection = $dbalConnection;
     }
-    
-    /**
-     * @return common_persistence_sql_MultipleInsertsSqlHelper
-     */
-    public function getMultipleInsertsSqlQueryHelper(){
-    	return new common_persistence_sql_MultipleInsertsSqlHelper();
-    }
 
     /**
      * @return \Doctrine\DBAL\Query\QueryBuilder

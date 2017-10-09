@@ -118,48 +118,44 @@ class core_kernel_persistence_smoothsql_Resource
     	// Define language if required
 		$lang = '';
 		$defaultLg = '';
-		if (isset($options['lg'])){
+		if (isset($options['lg'])) {
 			$lang = $options['lg'];
-		}
-		else{
+		} else {
 			$lang = \common_session_SessionManager::getSession()->getDataLanguage();
-			$defaultLg = ' OR l_language = '.$this->getPersistence()->quote(DEFAULT_LANG).' ';
+			$defaultLg = ' OR l_language = ' . $this->getPersistence()->quote(DEFAULT_LANG);
 		}
 		
         $query =  'SELECT object, l_language
         			FROM statements 
 		    		WHERE subject = ? 
 		    		AND predicate = ?
-					AND ( l_language = ? OR ' .$platform->isNullCondition('l_language') .$defaultLg.')
+					AND (l_language = ? OR l_language = ' . $this->getPersistence()->quote('') . $defaultLg . ')
 		    		AND '.$this->getModelReadSqlCondition();
         
-    	// Select first
-		if($one){
+    	
+		if ($one) {
+            // Select first
 			$query .= ' ORDER BY id DESC';
 			$query = $platform->limitStatement($query, 1, 0);
 			$result = $this->getPersistence()->query($query,array($resource->getUri(), $property->getUri(), $lang));
-		}
-		// Select All
-		else{
+		} else {
+            // Select All
 			$result = $this->getPersistence()->query($query,array($resource->getUri(), $property->getUri(), $lang));
 		}
         
 		// Treat the query result
         if ($result == true) {
-        	// If a language has been defined, do not filter result by language
-        	if(isset($options['lg'])){
-		    	while ($row = $result->fetch()){
+        	if (isset($options['lg'])) {
+                // If a language has been defined, do not filter result by language
+		    	while ($row = $result->fetch()) {
 					$returnValue[] = $this->getPersistence()->getPlatForm()->getPhpTextValue($row['object']);
 				}
-        	} 
-        	// Filter result by language and return one set of values (User language in top priority, default language in second and the fallback language (null) in third)
-        	else {
-        		 $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage($this->getPersistence(), $result->fetchAll(), 'l_language');
+        	} else {
+                // Filter result by language and return one set of values (User language in top priority, default language in second and the fallback language (null) in third)
+                $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage($this->getPersistence(), $result->fetchAll(), 'l_language');
         	}
         }
         
-        
-
         return (array) $returnValue;
     }
 
@@ -257,84 +253,48 @@ class core_kernel_persistence_smoothsql_Resource
     {
         $returnValue = (bool) false;
 
-        
-
-    	if(is_array($properties)){
-        	if(count($properties) > 0){
+    	if (is_array($properties) && count($properties) > 0) {
         		
-	        	$platform = $this->getPersistence()->getPlatForm();
-	        	$mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
-	        	$user		= common_session_SessionManager::isAnonymous()
-                    ? $platform->getNullString()
-                    : $this->getPersistence()->quote(common_session_SessionManager::getSession()->getUser()->getIdentifier());
-	       		
-	      
-	        	$multipleInsertQueryHelper = $platform->getMultipleInsertsSqlQueryHelper();
-	        	
-	       		//$query = 'INSERT INTO "statements" ("modelid","subject","predicate","object","l_language","author","stread","stedit","stdelete","epoch") VALUES ';
-				$columns = array(
-	       							"modelid",
-	       							"subject",
-	       							"predicate",
-	       							"object",
-	       							"l_language",
-	       							"author",
-// 	       							"stread",
-// 	       							"stedit",
-// 	       							"stdelete",
-				                    "epoch"
-				);
-	       		$query = $multipleInsertQueryHelper->getFirstStaticPart('statements', $columns);
+            $session = common_session_SessionManager::getSession();
+            $platform = $this->getPersistence()->getPlatForm();
+            $user = common_session_SessionManager::isAnonymous() ? '' : $session->getUser()->getIdentifier();
 
-	       		foreach($properties as $propertyUri => $value){
-	       			$property = new core_kernel_classes_Property($propertyUri);
-	       			$lang 	= ($property->isLgDependent() ? $this->getPersistence()->quote(\common_session_SessionManager::getSession()->getDataLanguage()) : $platform->getNullString()  );
+            $valuesToInsert = [];
 
-					$formatedValues = array();
-					if($value instanceof core_kernel_classes_Resource){
-						$formatedValues[] = $this->getPersistence()->quote($value->getUri());
-					}else if(is_array($value)){
-						foreach($value as $val){
-							if($val instanceof core_kernel_classes_Resource){
-								$formatedValues[] = $this->getPersistence()->quote($val->getUri());
-							}else{
-								$formatedValues[] = $this->getPersistence()->quote($val);
-							}
-						}
-					}else{
-						if($value == null){
-							$formatedValues[] = $platform->getNullString();
-						}
-						else {
-							$formatedValues[] = $this->getPersistence()->quote($value);
-						}
-					}
-					
-					foreach($formatedValues as $object){
-						$query .= $multipleInsertQueryHelper->getValuePart('statements', $columns,
-								array(
-										"modelid" => $this->getNewTripleModelId(),
-										"subject" => $this->getPersistence()->quote($resource->getUri()),
-										"predicate"=> $this->getPersistence()->quote($property->getUri()),
-										"object" => $object,
-										"l_language" => $lang,
-										"author" => $user,
-// 										"stread" => $this->getPersistence()->quote($mask),
-// 										"stedit" => $this->getPersistence()->quote($mask),
-// 										"stdelete" => $this->getPersistence()->quote($mask),
-								     "epoch" =>	$this->getPersistence()->quote($platform->getNowExpression() )
-								));
-					}
-	       		}
-	       		
-	       		$query = substr($query, 0, strlen($query) -1);
-	       		$query .= $multipleInsertQueryHelper->getEndStaticPart();
-	       		$returnValue = $this->getPersistence()->exec($query);
-        	}
+            foreach ($properties as $propertyUri => $value) {
+                
+                $property = new core_kernel_classes_Property($propertyUri);
+                
+                $lang = ($property->isLgDependent() ? $session->getDataLanguage() : '');
+                $formatedValues = [];
+                
+                if ($value instanceof core_kernel_classes_Resource) {
+                    $formatedValues[] = $value->getUri();
+                    
+                } elseif (is_array($value)) {
+                    foreach($value as $val){
+                        $formatedValues[] = ($val instanceof core_kernel_classes_Resource) ? $val->getUri() : $val;
+                    }
+                } else {
+                    $formatedValues[] = ($value == null) ? '' : $value;
+                }
+                
+                foreach ($formatedValues as $object) {
+                    $valuesToInsert[] = [
+                        'modelid' => $this->getNewTripleModelId(),
+                        'subject' => $resource->getUri(),
+                        'predicate' => $property->getUri(),
+                        'object' => $object,
+                        'l_language' => $lang,
+                        'author' => $user,
+                        'epoch' => $platform->getNowExpression()
+                    ];
+                }
+            }
+
+            $returnValue = $this->getPersistence()->insertMultiple('statements', $valuesToInsert);
         }
         
-        
-
         return (bool) $returnValue;
     }
 
@@ -403,17 +363,17 @@ class core_kernel_persistence_smoothsql_Resource
 		$query =  'DELETE FROM statements WHERE subject = ? AND predicate = ?';
 		$objectType = $this->getPersistence()->getPlatForm()->getObjectTypeCondition();
 		$conditions = array();
-		if(is_string($pattern)){
-			if(!is_null($pattern)){
+		if (is_string($pattern)) {
+			if (!is_null($pattern)) {
 				$searchPattern = core_kernel_persistence_smoothsql_Utils::buildSearchPattern($this->getPersistence(), $pattern, $like);
 				$conditions[] = '( '.$objectType . ' ' .$searchPattern.' )';
 			}
-		}else if(is_array($pattern)){
-			if(count($pattern) > 0){
+		} elseif (is_array($pattern)) {
+			if (count($pattern) > 0) {
 				$multiCondition =  "( ";
-				foreach($pattern as $i => $patternToken){
+				foreach($pattern as $i => $patternToken) {
 					$searchPattern = core_kernel_persistence_smoothsql_Utils::buildSearchPattern($this->getPersistence(), $patternToken, $like);
-					if($i > 0) {
+					if ($i > 0) {
                         $multiCondition .= " OR ";
                     }
 					$multiCondition .= '('.$objectType. ' ' .$searchPattern.' )';
@@ -422,35 +382,33 @@ class core_kernel_persistence_smoothsql_Resource
 			}
 		}
 			
-        foreach($conditions as $i => $additionalCondition){
+        foreach ($conditions as $i => $additionalCondition) {
 			$query .= " AND ( {$additionalCondition} ) ";
 		}
         
 		//be sure the property we try to remove is included in an updatable model
 		$query .= ' AND '.$this->getModelWriteSqlCondition();
 		
-        if($property->isLgDependent()){
+        if ($property->isLgDependent()) {
         	
-        	$query .=  ' AND (' . $this->getPersistence()->getPlatForm()->isNullCondition('l_language') . ' OR l_language = ?) ';
+        	$query .=  ' AND (l_language = ? OR l_language = ?) ';
         	$returnValue = $this->getPersistence()->exec($query,array(
 	        		$resource->getUri(),
 	        		$property->getUri(),
+                    '',
 	        		\common_session_SessionManager::getSession()->getDataLanguage()
 	        ));
-        }
-        else{
+        } else{
         	$returnValue = $this->getPersistence()->exec($query,array(
 	        		$resource->getUri(),
 	        		$property->getUri()
 	        ));   
         }
         
-        if (!$returnValue){
+        if (!$returnValue) {
         	$returnValue = false;
         }
         
-        
-
         return (bool) $returnValue;
     }
 
@@ -563,58 +521,34 @@ class core_kernel_persistence_smoothsql_Resource
     public function duplicate( core_kernel_classes_Resource $resource, $excludedProperties = array())
     {
         $returnValue = null;
-
-        
-        
     	$newUri = common_Utils::getNewUri();
-    	
     	$collection = $this->getRdfTriples($resource);
-    	if($collection->count() > 0){
+        
+    	if ($collection->count() > 0) {
     		
     		$platform = $this->getPersistence()->getPlatForm();
-    		$multipleInsertQueryHelper = $platform->getMultipleInsertsSqlQueryHelper();
+        	$user = common_session_SessionManager::isAnonymous() ? '' : \common_session_SessionManager::getSession()->getUser()->getIdentifier();
+            $valuesToInsert = [];
     		
-        	$user    = common_session_SessionManager::isAnonymous()
-        	   ? $platform->getNullString()
-        	   : $this->getPersistence()->quote(\common_session_SessionManager::getSession()->getUser()->getIdentifier());
-	       		
-    		   		
-	    	$columns = array(
-	    			"modelid",
-	    			"subject",
-	    			"predicate",
-	    			"object",
-	    			"l_language",
-	    			"author",
-                    "epoch"
-	    	);
-	    	$query = $multipleInsertQueryHelper->getFirstStaticPart('statements', $columns);
-    		
-    		foreach($collection->getIterator() as $triple){
-    			if(!in_array($triple->predicate, $excludedProperties)){
-	    			$query .= $multipleInsertQueryHelper->getValuePart('statements', $columns,
-	    					array(
-	    							"modelid" => $this->getNewTripleModelId(),
-	    							"subject" => $this->getPersistence()->quote($newUri),
-	    							"predicate"=> $this->getPersistence()->quote($triple->predicate),
-	    							"object" => $triple->object == null ? $platform->getNullString() : $this->getPersistence()->quote($triple->object),
-	    							"l_language" => $triple->lg == null ? $platform->getNullString() : $this->getPersistence()->quote($triple->lg),
-	    							"author" => $user,
-     					            "epoch" => $this->getPersistence()->quote($platform->getNowExpression())
-	    					));
+    		foreach ($collection->getIterator() as $triple) {
+    			if (!in_array($triple->predicate, $excludedProperties)) {
+                    $valuesToInsert[] = [
+                        'modelid' => $this->getNewTripleModelId(),
+                        'subject' => $newUri,
+                        'predicate'=> $triple->predicate,
+                        'object' => ($triple->object == null) ? '' : $triple->object,
+                        'l_language' => ($triple->lg == null) ? '' : $triple->lg,
+                        'author' => $user,
+                        'epoch' => $platform->getNowExpression()
+                    ];
     			}
 	    	}
 	    	
-	    	$query = substr($query, 0, strlen($query) -1);
-	    	$query .= $multipleInsertQueryHelper->getEndStaticPart();
-	    	
-        	if($this->getPersistence()->exec($query)){
+        	if ($this->getPersistence()->insertMultiple('statements', $valuesToInsert)) {
         		$returnValue = new core_kernel_classes_Resource($newUri);
         	}
     	}
         
-        
-
         return $returnValue;
     }
 
@@ -691,7 +625,7 @@ class core_kernel_persistence_smoothsql_Resource
             WHERE 
                 subject = '.$this->getPersistence()->quote($resource->getUri()).' 
                 AND predicate IN ('.$predicatesQuery.')
-                AND ('. $platform->isNullCondition('l_language') . 
+                AND (l_language = ' . $this->getPersistence()->quote('') . 
                     ' OR l_language = '.$this->getPersistence()->quote(DEFAULT_LANG). 
                     ' OR l_language = '.$this->getPersistence()->quote(\common_session_SessionManager::getSession()->getDataLanguage()).') 
                 AND '.$this->getModelReadSqlCondition();
