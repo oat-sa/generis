@@ -16,7 +16,7 @@
  * 
  * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg) (under the project TAO-QUAL);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- * 
+ *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
 use oat\generis\model\OntologyRdf;
