@@ -47,7 +47,7 @@ class TaoSearchDriver extends EscaperAbstract {
      * return quoted empty string 
      */
     public function getEmpty() {
-        return $this->persistence->getPlatForm()->getNullString();
+        return $this->quote('');
     }
     
     /**
