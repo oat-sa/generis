@@ -37,12 +37,8 @@
  */
 abstract class common_persistence_sql_pdo_Driver implements common_persistence_sql_Driver
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
-
+    use common_persistence_sql_InsertMultiple;
+    
     /**
      * An established PDO connection object.
      *
@@ -197,7 +193,6 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
         return $this->exec($query, array_values($data));
         
     }
-
 
     /**
      * Executes an SQL query on the storage engine. Should be used for SELECT
@@ -491,8 +486,8 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
     protected function getDbalConnection()
     {
         \common_Logger::d('init dbal connection to get SchemaMangager');
-        $config = new \Doctrine\DBAL\Configuration();
-        $params = $this->getParams();
-        return \Doctrine\DBAL\DriverManager::getConnection($params, $config);
+        $params = (empty($this->dbConnector)) ? $this->getParams() : ['pdo' => $this->dbConnector];
+        
+        return \Doctrine\DBAL\DriverManager::getConnection($params, new \Doctrine\DBAL\Configuration());
     }
 }
