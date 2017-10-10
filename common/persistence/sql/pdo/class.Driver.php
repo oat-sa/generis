@@ -486,7 +486,8 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
     protected function getDbalConnection()
     {
         \common_Logger::d('init dbal connection to get SchemaMangager');
-        $config = new \Doctrine\DBAL\Configuration();
-        return \Doctrine\DBAL\DriverManager::getConnection(['pdo' => $this->dbConnector], $config);
+        $params = (empty($this->dbConnector)) ? $this->getParams() : ['pdo' => $this->dbConnector];
+        
+        return \Doctrine\DBAL\DriverManager::getConnection($params, new \Doctrine\DBAL\Configuration());
     }
 }
