@@ -23,23 +23,24 @@ use \PHPUnit_Framework_TestCase as TestCase;
 
 class KeyValuePersistenceTest extends TestCase
 {
-    /**
-     * @var \common_persistence_KeyValuePersistence
-     */
+    /** @var \common_persistence_KeyValuePersistence */
     protected $largeValuePersistence;
+
+    /** @var \common_persistence_Driver */
     protected $driver;
 
     public function setUp()
     {
         $this->driver = new \common_persistence_InMemoryAdvKvDriver();
-        
-        /*$this->driver = new \common_persistence_PhpRedisDriver();
+
+        /*
+        $this->driver = new \common_persistence_PhpRedisDriver();
         $this->driver->connect('redis', [
             'host' => '127.0.0.1',
             'port' => 6379
-        ]);*/
-        
-        
+        ]);
+        */
+
         $this->largeValuePersistence = new \common_persistence_KeyValuePersistence(
             array(
                 \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100
@@ -62,6 +63,7 @@ class KeyValuePersistenceTest extends TestCase
     {
         $this->largeValuePersistence->set('test', 'fixture');
         $this->assertEquals('fixture', $this->largeValuePersistence->get('test'));
+        $this->assertTrue($this->largeValuePersistence->del('test'));
     }
 
     public function testSetGetLargeValue()
@@ -69,6 +71,7 @@ class KeyValuePersistenceTest extends TestCase
         $bigValue = $this->get100000bytesValue();
         $this->largeValuePersistence->set('test', $bigValue);
         $this->assertEquals($bigValue, $this->largeValuePersistence->get('test'));
+        $this->assertTrue($this->largeValuePersistence->del('test'));
     }
 
     public function testDelExistsLarge()
