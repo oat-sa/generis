@@ -415,8 +415,8 @@ class Updater extends common_ext_ExtensionUpdater {
 
         if ($this->isVersion('5.1.0')) {
 
-            $ss = $this->getServiceManager()->get(DbWrapper::SERVICE_ID);
-            $ss->setOption(DbWrapper::SERVICE_ID, 'default');
+            $ss = new DbWrapper();
+            $ss->setOption(DbWrapper::OPTION_PERSISTENCE, 'default');
             $this->getServiceManager()->register(DbWrapper::SERVICE_ID, $ss);
 
             $this->setVersion('5.2.0');
