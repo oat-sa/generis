@@ -200,4 +200,9 @@ class common_persistence_sql_Platform{
     {
         $this->dbalConnection->commit();
     }
+    
+    public function getTruncateTableSql($tableName)
+    {
+        return $this->dbalPlatform->getTruncateTableSql($tableName);
+    }
 }
