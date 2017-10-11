@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2014-2017 (original work) Open Assessment Technologies SA;
  *
  *
  */
@@ -410,16 +410,16 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('4.4.1');
         }
 
-        $this->skip('4.4.1', '4.4.2');
+        $this->skip('4.4.1', '5.1.0');
 
 
-        if ($this->isVersion('4.4.2')) {
+        if ($this->isVersion('5.1.0')) {
 
             $ss = $this->getServiceManager()->get(DbWrapper::SERVICE_ID);
             $ss->setOption(DbWrapper::SERVICE_ID, 'default');
             $this->getServiceManager()->register(DbWrapper::SERVICE_ID, $ss);
 
-            $this->setVersion('4.5.0');
+            $this->setVersion('5.2.0');
         }
     }
     
