@@ -24,8 +24,8 @@
 
 namespace   oat\generis\model\kernel\persistence\smoothsql\search;
 
-use common_persistence_Manager;
 use common_persistence_SqlPersistence;
+use oat\generis\model\data\DbWrapper;
 use oat\oatbox\service\ServiceManager;
 use oat\search\base\exception\SearchGateWayExeption;
 use oat\search\base\QueryBuilderInterface;
@@ -66,8 +66,7 @@ class GateWay extends TaoSearchGateWay {
     
     public function __construct() {
         $this->connector = ServiceManager::getServiceManager()
-                ->get(common_persistence_Manager::SERVICE_ID)
-                ->getPersistenceById('default');
+                ->get(DbWrapper::SERVICE_ID)->getPersistence();
     }
 
         /**

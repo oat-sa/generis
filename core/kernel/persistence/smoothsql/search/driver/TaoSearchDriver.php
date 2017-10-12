@@ -9,6 +9,7 @@
 namespace  oat\generis\model\kernel\persistence\smoothsql\search\driver;
 
 use common_persistence_SqlPersistence;
+use oat\generis\model\data\DbWrapper;
 use oat\oatbox\service\ServiceManager;
 use oat\search\base\Query\EscaperAbstract;
 
@@ -26,8 +27,7 @@ class TaoSearchDriver extends EscaperAbstract {
 
     public function __construct() {
         $this->persistence = ServiceManager::getServiceManager()
-                ->get(\common_persistence_Manager::SERVICE_ID)
-                ->getPersistenceById('default');
+            ->get(DbWrapper::SERVICE_ID)->getPersistence();
     }
     
     /**
