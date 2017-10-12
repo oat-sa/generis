@@ -57,12 +57,12 @@ trait PhpSerializeTrait
     {
         $reflectionMethod = new \ReflectionMethod($this, '__construct');
         $parameters = $reflectionMethod->getParameters();
-        $names = [];
+        $propertyValues = [];
         foreach ($parameters as $current) {
             $name = $current->getName();
-            $names[] = $this->$name;
+            $propertyValues[] = $this->$name;
         }
 
-        return $names;
+        return $propertyValues;
     }
 }
