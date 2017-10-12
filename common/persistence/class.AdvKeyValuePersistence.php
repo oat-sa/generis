@@ -54,13 +54,6 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
     public function incr($key) {
        return $this->getDriver()->incr($key); 
     }
-    public function incrVal($key) {
-       return $this->getDriver()->incr($key);
-    }
-
-    public function decrVal($key) {
-       return $this->getDriver()->decr($key);
-    }
 
     
 }
