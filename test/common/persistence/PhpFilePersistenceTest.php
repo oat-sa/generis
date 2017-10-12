@@ -79,7 +79,7 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
         $return = $persistence->set('fakeKeyName','value');
         $this->assertTrue($this->root->hasChild('fakeKeyName.php'));
         $content = $this->root->getChild('fakeKeyName.php')->getContent();
-        $this->assertEquals("<?php return 'value';\n", $content);
+        $this->assertEquals("<?php return 'value';".PHP_EOL, $content);
         $this->assertTrue($return);
         
     }
@@ -122,7 +122,35 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
         $this->assertTrue($persistence->del('fakeKeyName'));
         $this->assertFalse($persistence->exists('fakeKeyName'));
     }
-    
+
+    /**
+     * @depends testConnect
+     * @author Lionel Lecaque, lionel@taotesting.com
+     * @param common_persistence_KeyValuePersistence $persistence
+     */
+    public function testIncr($persistence)
+    {
+        $this->assertTrue($persistence->set('fakeKeyName',0));
+        $this->assertTrue($persistence->incr('fakeKeyName'));
+        $this->assertEquals(1, $persistence->get('fakeKeyName'));
+        $this->assertTrue($persistence->incr('fakeKeyName'));
+        $this->assertEquals(2, $persistence->get('fakeKeyName'));
+    }
+
+    /**
+     * @depends testConnect
+     * @author Lionel Lecaque, lionel@taotesting.com
+     * @param common_persistence_KeyValuePersistence $persistence
+     */
+    public function testDecr($persistence)
+    {
+        $this->assertTrue($persistence->set('fakeKeyName', 10));
+        $this->assertTrue($persistence->decr('fakeKeyName'));
+        $this->assertEquals(9, $persistence->get('fakeKeyName'));
+        $this->assertTrue($persistence->decr('fakeKeyName'));
+        $this->assertEquals(8, $persistence->get('fakeKeyName'));
+    }
+
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
