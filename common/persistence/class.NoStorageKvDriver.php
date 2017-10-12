@@ -71,6 +71,29 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
         return true;
         
     }
+
+    /**
+     * Increment existing value
+     * @param string $id
+     * @return mixed
+     */
+    public function incrVal($id)
+    {
+        common_Logger::t('NoStorageKvPersistence : incr id=' . $id );
+        return false;
+    }
+
+    /**
+     * Decrement existing value
+     * @param $id
+     * @return mixed
+     */
+    public function decrVal($id)
+    {
+        common_Logger::t('NoStorageKvPersistence : decr id=' . $id );
+        return false;
+    }
+
     /**
      * 
      * @see common_persistence_Purgable::purge()
@@ -81,5 +104,3 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
         
     }
 }
-
-?>

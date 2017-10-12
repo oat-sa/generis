@@ -169,7 +169,30 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
         }
         return false;
     }
-    
+
+    /**
+     * Increment existing value
+     * @param string $id
+     * @return mixed
+     */
+    public function incrVal($id)
+    {
+        $params = [':id' => $id];
+        $statement = 'UPDATE kv_store SET kv_value = kv_value + 1 WHERE kv_id = :id';
+        return $this->sqlPeristence->exec($statement, $params);
+    }
+
+    /**
+     * Decrement existing value
+     * @param $id
+     * @return mixed
+     */
+    public function decrVal($id) {
+        $params = [':id' => $id];
+        $statement = 'UPDATE kv_store SET kv_value = kv_value - 1 WHERE kv_id = :id';
+        return $this->sqlPeristence->exec($statement, $params);
+    }
+
     /**
      * Should be moved to another interface (session handler) than the persistence, 
      * this class implementing only the persistence side and another class implementing 

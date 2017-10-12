@@ -172,6 +172,89 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     }
 
     /**
+     * Increment existing value
+     * @param string $id
+     * @return mixed
+     */
+    public function incrVal($id)
+    {
+        $filePath = $this->getPath($id);
+        $dirname = dirname($filePath);
+        if (!file_exists($dirname)) {
+            mkdir($dirname, self::DEFAULT_MASK, true);
+        }
+
+        // we first open with 'c' in case the flock fails
+        // 'w' would empty the file that someone else might be working on
+        if (false !== ($fp = @fopen($filePath, 'c')) && true === flock($fp, LOCK_EX)){
+
+            $value = intval($this->get($id));
+            $value++;
+            $string = $this->getContent($id, $value);
+            // We first need to truncate.
+            ftruncate($fp, 0);
+
+            $success = fwrite($fp, $string);
+            @flock($fp, LOCK_UN);
+            @fclose($fp);
+            if ($success) {
+                // OPcache workaround
+                $this->cache[$id] = $value;
+                if (function_exists('opcache_invalidate')) {
+                    opcache_invalidate($filePath, true);
+                }
+            } else {
+                common_Logger::w('Could not write '.$filePath);
+            }
+            return $success !== false;
+        } else {
+            common_Logger::w('Could not obtain lock on '.$filePath);
+            return false;
+        }
+    }
+
+    /**
+     * Decrement existing value
+     * @param $id
+     * @return mixed
+     */
+    public function decrVal($id) {
+        $filePath = $this->getPath($id);
+        $dirname = dirname($filePath);
+        if (!file_exists($dirname)) {
+            mkdir($dirname, self::DEFAULT_MASK, true);
+        }
+
+        // we first open with 'c' in case the flock fails
+        // 'w' would empty the file that someone else might be working on
+        if (false !== ($fp = @fopen($filePath, 'c')) && true === flock($fp, LOCK_EX)){
+
+            $value = intval($this->get($id));
+            $value--;
+            $string = $this->getContent($id, $value);
+            // We first need to truncate.
+            ftruncate($fp, 0);
+
+            $success = fwrite($fp, $string);
+            @flock($fp, LOCK_UN);
+            @fclose($fp);
+            if ($success) {
+                // OPcache workaround
+                $this->cache[$id] = $value;
+                if (function_exists('opcache_invalidate')) {
+                    opcache_invalidate($filePath, true);
+                }
+            } else {
+                common_Logger::w('Could not write '.$filePath);
+            }
+            return $success !== false;
+        } else {
+            common_Logger::w('Could not obtain lock on '.$filePath);
+            return false;
+        }
+    }
+
+    /**
      * purge the persistence directory
      * 
      * @return boolean

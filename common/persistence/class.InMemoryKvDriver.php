@@ -65,6 +65,14 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
     {
         $this->persistence = [];
     }
-}
 
-?>
+    public function incrVal($id) {
+        $this->persistence[$id]++;
+        return true;
+    }
+
+    public function decrVal($id) {
+        $this->persistence[$id]--;
+        return true;
+    }
+}
