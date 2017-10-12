@@ -176,7 +176,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * @param string $id
      * @return mixed
      */
-    public function incrVal($id)
+    public function incr($id)
     {
         $filePath = $this->getPath($id);
         $dirname = dirname($filePath);
@@ -218,7 +218,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * @param $id
      * @return mixed
      */
-    public function decrVal($id) {
+    public function decr($id) {
         $filePath = $this->getPath($id);
         $dirname = dirname($filePath);
         if (!file_exists($dirname)) {

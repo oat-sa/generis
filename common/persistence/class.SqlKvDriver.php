@@ -175,7 +175,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
      * @param string $id
      * @return mixed
      */
-    public function incrVal($id)
+    public function incr($id)
     {
         $params = [':id' => $id];
         $statement = 'UPDATE kv_store SET kv_value = kv_value + 1 WHERE kv_id = :id';
@@ -187,7 +187,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
      * @param $id
      * @return mixed
      */
-    public function decrVal($id) {
+    public function decr($id) {
         $params = [':id' => $id];
         $statement = 'UPDATE kv_store SET kv_value = kv_value - 1 WHERE kv_id = :id';
         return $this->sqlPeristence->exec($statement, $params);

@@ -48,12 +48,12 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
         return $this->getDriver()->del($key);
     }
 
-    public function incrVal($key) {
-        return $this->getDriver()->incrVal($key);
+    public function incr($key) {
+        return $this->getDriver()->incr($key);
     }
 
-    public function decrVal($key) {
-        return $this->getDriver()->decrVal($key);
+    public function decr($key) {
+        return $this->getDriver()->decr($key);
     }
 
     public function purge() {

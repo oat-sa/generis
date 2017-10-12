@@ -128,12 +128,12 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param common_persistence_KeyValuePersistence $persistence
      */
-    public function testIncrVal($persistence)
+    public function testIncr($persistence)
     {
         $this->assertTrue($persistence->set('fakeKeyName',0));
-        $this->assertTrue($persistence->incrVal('fakeKeyName'));
+        $this->assertTrue($persistence->incr('fakeKeyName'));
         $this->assertEquals(1, $persistence->get('fakeKeyName'));
-        $this->assertTrue($persistence->incrVal('fakeKeyName'));
+        $this->assertTrue($persistence->incr('fakeKeyName'));
         $this->assertEquals(2, $persistence->get('fakeKeyName'));
     }
 
@@ -142,12 +142,12 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param common_persistence_KeyValuePersistence $persistence
      */
-    public function testDecrVal($persistence)
+    public function testDecr($persistence)
     {
         $this->assertTrue($persistence->set('fakeKeyName', 10));
-        $this->assertTrue($persistence->decrVal('fakeKeyName'));
+        $this->assertTrue($persistence->decr('fakeKeyName'));
         $this->assertEquals(9, $persistence->get('fakeKeyName'));
-        $this->assertTrue($persistence->decrVal('fakeKeyName'));
+        $this->assertTrue($persistence->decr('fakeKeyName'));
         $this->assertEquals(8, $persistence->get('fakeKeyName'));
     }
 

@@ -176,11 +176,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         return $this->callWithRetry('incr' , [$key] );
     }
     //Time complexity: O(1)
-    public function incrVal($key) {
-        return $this->callWithRetry('incr' , [$key] );
-    }
-    //Time complexity: O(1)
-    public function decrVal($key) {
+    public function decr($key) {
         return $this->callWithRetry('decr' , [$key] );
     }
 

@@ -77,7 +77,7 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
      * @param string $id
      * @return mixed
      */
-    public function incrVal($id)
+    public function incr($id)
     {
         common_Logger::t('NoStorageKvPersistence : incr id=' . $id );
         return false;
@@ -88,7 +88,7 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
      * @param $id
      * @return mixed
      */
-    public function decrVal($id)
+    public function decr($id)
     {
         common_Logger::t('NoStorageKvPersistence : decr id=' . $id );
         return false;
