@@ -81,4 +81,14 @@ class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemory
         return [];
     }
 
+    public function incr($key)
+    {
+        if (! isset($this->persistence[$key])) {
+            return false;
+        }
+        $this->persistence[$key+1] = $this->persistence[$key];
+        unset($this->persistence[$key]);
+        return true;
+    }
+
 }
