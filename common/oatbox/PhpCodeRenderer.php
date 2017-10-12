@@ -40,7 +40,7 @@ class PhpCodeRenderer {
      */
     public static function renderObject($className, array $arguments, $indentNumber = 1)
     {
-        $output = static::getIndent($indentNumber === 1 ? 1 : 0) . 'new ' . $className . '(';
+        $output  = static::getIndent($indentNumber === 1 ? 1 : 0) . 'new ' . $className . '(';
         $output .= static::renderArray(
             $arguments,
             $indentNumber,
@@ -64,10 +64,7 @@ class PhpCodeRenderer {
      */
     public static function renderArray(array $parameters, $indentNumber, $isArgumentList = false)
     {
-        $output = static::getIndent($indentNumber);
-        if ($isArgumentList === false) {
-            $output = '[' . $output;
-        }
+        $output = $isArgumentList ? '' : '[';
         foreach ($parameters as $key => $current) {
             $output .= PHP_EOL . static::getIndent($indentNumber + 1);
             if ($isArgumentList === false) {
