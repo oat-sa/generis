@@ -19,6 +19,7 @@
  * 				 2013-2014 (update and modification) Open Assessment Technologies SA;
  * 
  */
+use oat\generis\model\data\DbWrapper;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\oatbox\service\ServiceManager;
@@ -40,6 +41,7 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
+     * @throws common_ext_ExtensionException
      */
     public function install()
     {
@@ -48,9 +50,11 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
         }
  
         $this->installLoadDefaultConfig();
-        
+
+        $persistenceId = $this->getServiceManager()->get(DbWrapper::SERVICE_ID)->getOption(DbWrapper::OPTION_PERSISTENCE);
+
         $model = new \core_kernel_persistence_smoothsql_SmoothModel(array(
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'default',
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => $persistenceId,
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS => array('1'),
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => array('1'),
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => '1',
@@ -62,8 +66,8 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
         // $this->installLocalData();
         // $this->installModuleModel();
         $this->installRegisterExt();
-        
-        common_cache_FileCache::singleton()->purge();
+
+        ServiceManager::getServiceManager()->get('generis/cache')->purge();
         
         $this->log('d', 'Installing custom script for extension ' . $this->extension->getId());
         $this->installCustomScript();
