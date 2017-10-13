@@ -38,13 +38,6 @@ class common_persistence_sql_Platform{
         $this->dbalPlatform = $dbalConnection->getDatabasePlatform();
         $this->dbalConnection = $dbalConnection;
     }
-    
-    /**
-     * @return common_persistence_sql_MultipleInsertsSqlHelper
-     */
-    public function getMultipleInsertsSqlQueryHelper(){
-    	return new common_persistence_sql_MultipleInsertsSqlHelper();
-    }
 
     /**
      * @return \Doctrine\DBAL\Query\QueryBuilder
@@ -206,5 +199,10 @@ class common_persistence_sql_Platform{
     public function commit()
     {
         $this->dbalConnection->commit();
+    }
+    
+    public function getTruncateTableSql($tableName)
+    {
+        return $this->dbalPlatform->getTruncateTableSql($tableName);
     }
 }

@@ -39,6 +39,8 @@ interface common_persistence_sql_Driver extends common_persistence_Driver{
      */
     public function insert($tableName, array $data);
     
+    public function insertMultiple($tableName, array $data);
+    
     public function getSchemaManager();
     
     public function getPlatForm();
