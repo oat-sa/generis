@@ -410,16 +410,15 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('4.4.1');
         }
 
-        $this->skip('4.4.1', '5.1.0');
+        $this->skip('4.4.1', '5.2.0');
 
-
-        if ($this->isVersion('5.1.0')) {
+        if ($this->isVersion('5.2.0')) {
 
             $ss = new DbWrapper();
             $ss->setOption(DbWrapper::OPTION_PERSISTENCE, 'default');
             $this->getServiceManager()->register(DbWrapper::SERVICE_ID, $ss);
 
-            $this->setVersion('5.2.0');
+            $this->setVersion('5.3.0');
         }
     }
     
