@@ -32,6 +32,7 @@ use core_kernel_impl_ApiModelOO;
 use core_kernel_persistence_smoothsql_SmoothModel;
 use core_kernel_uri_DatabaseSerialUriProvider;
 use core_kernel_uri_UriService;
+use oat\generis\model\data\DbWrapper;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\permission\PermissionManager;
 use oat\generis\model\fileReference\FileReferenceSerializer;
@@ -410,6 +411,15 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         $this->skip('4.4.1', '5.2.0');
+
+        if ($this->isVersion('5.2.0')) {
+
+            $ss = new DbWrapper();
+            $ss->setOption(DbWrapper::OPTION_PERSISTENCE, 'default');
+            $this->getServiceManager()->register(DbWrapper::SERVICE_ID, $ss);
+
+            $this->setVersion('5.3.0');
+        }
     }
     
     private function getReadableModelIds() {
