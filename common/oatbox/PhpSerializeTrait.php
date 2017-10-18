@@ -27,7 +27,7 @@ namespace oat\oatbox;
  * @access public
  * @package generis
  */
-trait PhpSerializeTrait
+trait ConfigSerializable
 {
     /**
      * This function should generate the php code to recreate
@@ -42,7 +42,7 @@ trait PhpSerializeTrait
     public function __toPhpCode($indentNumber = 1)
     {
         return PhpCodeRenderer::renderObject(
-            __CLASS__,
+            get_class($this),
             $this->getAllConstructorPropertyValues(),
             $indentNumber
         );
@@ -56,13 +56,14 @@ trait PhpSerializeTrait
     protected function getAllConstructorPropertyValues()
     {
         $reflectionMethod = new \ReflectionMethod($this, '__construct');
-        $parameters = $reflectionMethod->getParameters();
-        $propertyValues = [];
-        foreach ($parameters as $current) {
-            $name = $current->getName();
-            $propertyValues[] = $this->$name;
+        $parameters       = $reflectionMethod->getParameters();
+        $parameterValues  = [];
+        foreach ($parameters as $currentParameter) {
+            $reflectionProperty = new \ReflectionProperty($this, $currentParameter->getName());
+            $reflectionProperty->setAccessible(true);
+            $parameterValues[]  = $reflectionProperty->getValue($this);
         }
 
-        return $propertyValues;
+        return $parameterValues;
     }
 }
