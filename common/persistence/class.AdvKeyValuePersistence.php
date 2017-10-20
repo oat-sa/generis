@@ -76,11 +76,9 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
      */
     public function hSet($key, $field, $value)
     {
-        $oldValue = $this->hGet($key, $field);
+        $oldValue = $this->getDriver()->hGet($key, $field);
         if ($this->isSplit($oldValue)) {
-            foreach ($this->unSerializeMap($oldValue) as $mappedKey) {
-                $this->getDriver()->del($mappedKey);
-            }
+            $this->deleteMappedKey($field, $oldValue);
         }
 
         try {
@@ -176,6 +174,30 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
             return false;
         }
         return $this->getDriver()->incr($key);
+    }
+
+    /**
+     * Delete a key. If key is split, all associated mapped key are deleted too
+     *
+     * @param $key
+     * @return bool
+     */
+    public function del($key)
+    {
+        if ($this->isMappedKey($key)) {
+            return false;
+        } else {
+            $success = true;
+            $fields = $this->getDriver()->hGetAll($key);
+            if (!empty($fields)) {
+                foreach ($fields as $subKey => $value) {
+                    if ($this->isSplit($value)) {
+                        $success = $success && $this->deleteMappedKey($subKey, $value);
+                    }
+                }
+            }
+            return $this->deleteMappedKey($key) && $this->getDriver()->del($key);
+        }
     }
 
     /**

@@ -32,7 +32,7 @@ class AdvKeyValuePersistenceTest extends TestCase
     {
         $this->largeValuePersistence = new \common_persistence_AdvKeyValuePersistence(
             array(
-                \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100
+                \common_persistence_AdvKeyValuePersistence::MAX_VALUE_SIZE => 100
             ),
             new \common_persistence_InMemoryAdvKvDriver()
         );
@@ -72,6 +72,8 @@ class AdvKeyValuePersistenceTest extends TestCase
         $this->assertEquals($bigValue, $this->largeValuePersistence->hGet('test', 'fixture1'));
         $this->assertEquals('value2', $this->largeValuePersistence->hGet('test', 'fixture2'));
         $this->assertEquals($bigValue, $this->largeValuePersistence->hGet('test', 'fixture3'));
+
+        $this->assertTrue($this->largeValuePersistence->del('test'));
     }
 
     public function testHmsetHget()
@@ -86,6 +88,8 @@ class AdvKeyValuePersistenceTest extends TestCase
         $this->assertEquals('value1', $this->largeValuePersistence->hGet('test', 'fixture1'));
         $this->assertEquals('value2', $this->largeValuePersistence->hGet('test', 'fixture2'));
         $this->assertEquals('value3', $this->largeValuePersistence->hGet('test', 'fixture3'));
+
+        $this->assertTrue($this->largeValuePersistence->del('test'));
     }
 
     public function testHgetAllHexists()
@@ -120,6 +124,8 @@ class AdvKeyValuePersistenceTest extends TestCase
             ),
             $this->largeValuePersistence->hGetAll('test')
         );
+
+        $this->assertTrue($this->largeValuePersistence->del('test'));
     }
 
     public function testKeys()
@@ -137,6 +143,10 @@ class AdvKeyValuePersistenceTest extends TestCase
         $this->largeValuePersistence->hmSet('test2', $attributes);
 
         $this->assertEquals(['test','test1','test2'] , array_values($this->largeValuePersistence->keys('*')));
+
+        $this->assertTrue($this->largeValuePersistence->del('test'));
+        $this->assertTrue($this->largeValuePersistence->del('test1'));
+        $this->assertTrue($this->largeValuePersistence->del('test2'));
     }
 
     public function testIncr()
@@ -152,6 +162,8 @@ class AdvKeyValuePersistenceTest extends TestCase
         $this->largeValuePersistence->incr(1);
         $this->assertFalse($this->largeValuePersistence->exists(1));
         $this->assertTrue($this->largeValuePersistence->exists(2));
+
+        $this->assertTrue($this->largeValuePersistence->del(2));
     }
 
     public function testMapMapControl()

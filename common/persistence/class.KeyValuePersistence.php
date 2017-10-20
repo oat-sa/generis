@@ -30,7 +30,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
 
     const START_MAP_DELIMITER = 'start_map_delimiter';
     const END_MAP_DELIMITER = 'end_map_delimiter';
-    const MAPPED_KEY_SEPARATOR = '%%';
+    const MAPPED_KEY_SEPARATOR = '###';
     const LEVEL_SEPARATOR = '-';
 
     const DEFAULT_MAP_IDENTIFIER = '<<<<mapped>>>>';
@@ -74,7 +74,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
         $value = $this->getDriver()->get($key);
         if ($this->isSplit($value)) {
             common_Logger::t('Large value detected into KeyValue persistence. Joining value for key : ' . $key);
-            $value =  $this->join($key, $value);
+            $value = $this->join($key, $value);
         }
         return $value;
     }
@@ -105,15 +105,48 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     {
         if ($this->isMappedKey($key)) {
             return false;
+        } else {
+            return $this->deleteMappedKey($key) && $this->getDriver()->del($key);
+        }
+    }
+
+    /**
+     * Delete a key and if the value is a map, delete all mapped key recursively
+     *
+     * @param $key
+     * @param null $value
+     * @param int $level
+     * @return bool
+     */
+    protected function deleteMappedKey($key, $value = null, $level=0)
+    {
+        if (is_null($value)) {
+            $value = $this->getDriver()->get($key);
+        }
+
+        if ($level > 0) {
+            $key = $key . self::LEVEL_SEPARATOR . $level;
         }
 
         $success = true;
-        if ($this->isSplit($key)) {
-            foreach ($this->unSerializeMap($this->get($key)) as $mappedKey) {
+
+        if ($this->isSplit($value)) {
+
+            $valueParts = [];
+            foreach ($this->unSerializeMap($value) as $mappedKey) {
+                $mappedKey = $this->transformReferenceToMappedKey($mappedKey);
+                $valueParts[$this->getMappedKeyIndex($mappedKey, $key)] = $this->getDriver()->get($mappedKey);
                 $success = $success && $this->getDriver()->del($mappedKey);
             }
+
+            uksort($valueParts, 'strnatcmp');
+            $value = implode('', $valueParts);
+            if ($this->isSplit($value)) {
+                $success = $success && $this->deleteMappedKey($key, $value, $level + 1, true);
+            }
+
         }
-        return $success && $this->getDriver()->del($key);
+        return $success;
     }
 
     /**
@@ -139,20 +172,19 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      * @param $key
      * @param $value
      * @param int $level
+     * @param bool $flush
+     * @param bool $toTransform
      * @return bool
      * @throws common_Exception If size is misconfigured
      */
     protected function setLargeValue($key, $value, $level = 0, $flush = true, $toTransform = true)
     {
-        if ($level > 0) {
-            $key = $key . self::LEVEL_SEPARATOR . $level;
+        if (!$this->isLarge($value)) {
+            return $value;
         }
 
-        if (! $this->isLarge($value)) {
-            if ($flush) {
-                $this->set($key, $value);
-            }
-            return $value;
+        if ($level > 0) {
+            $key = $key . self::LEVEL_SEPARATOR . $level;
         }
 
         $map = $this->createMap($key, $value);
@@ -176,7 +208,6 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      */
     protected function isLarge($value)
     {
-
         $size = $this->getSize();
         if (!$size) {
             return false;

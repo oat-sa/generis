@@ -31,22 +31,35 @@ class KeyValuePersistenceTest extends TestCase
 
     public function setUp()
     {
-        $this->driver = new \common_persistence_InMemoryAdvKvDriver();
+        $this->driver = new \common_persistence_InMemoryKvDriver();
 
         /*
+         * Php file persistence
+         */
+        $this->largeValuePersistence =
+            (new \common_persistence_PhpFileDriver())->connect('mabite',  array(
+                'dir' => '/var/www/tao/package-tao/data/jeje/mabite2/',
+                \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100
+            ));
+
+        /*
+         * Redis persistence
         $this->driver = new \common_persistence_PhpRedisDriver();
-        $this->driver->connect('redis', [
+         $this->largeValuePersistence = $this->driver->connect('redis', [
             'host' => '127.0.0.1',
             'port' => 6379
         ]);
         */
 
-        $this->largeValuePersistence = new \common_persistence_KeyValuePersistence(
+        /*
+         * In memory persistence
+            $this->largeValuePersistence = new \common_persistence_KeyValuePersistence(
             array(
                 \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100
             ),
             $this->driver
         );
+        */
     }
 
     public function tearDown()
@@ -118,5 +131,6 @@ class KeyValuePersistenceTest extends TestCase
         
         $this->largeValuePersistence->set('equalsMax', $str);
         $this->assertEquals($str, $this->largeValuePersistence->get('equalsMax'));
+        $this->assertTrue($this->largeValuePersistence->del('equalsMax'));
     }
 }
