@@ -58,7 +58,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     {
         if ($this->isLarge($value)) {
             common_Logger::t('Large value detected into KeyValue persistence. Splitting value for key : ' . $key);
-            $value = $this->setLargeValue($key, $value);
+            $value = $this->setLargeValue($key, $value, 0, true, true, $ttl);
         }
         return $this->getDriver()->set($key, $value, $ttl);
     }
@@ -142,7 +142,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
             uksort($valueParts, 'strnatcmp');
             $value = implode('', $valueParts);
             if ($this->isSplit($value)) {
-                $success = $success && $this->deleteMappedKey($key, $value, $level + 1, true);
+                $success = $success && $this->deleteMappedKey($key, $value, $level + 1);
             }
 
         }
@@ -174,12 +174,22 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      * @param int $level
      * @param bool $flush
      * @param bool $toTransform
-     * @return bool
-     * @throws common_Exception If size is misconfigured
+     * @param null $ttl
+     * @return mixed
+     * @throws common_Exception
      */
-    protected function setLargeValue($key, $value, $level = 0, $flush = true, $toTransform = true)
+    protected function setLargeValue($key, $value, $level = 0, $flush = true, $toTransform = true, $ttl = null)
     {
         if (!$this->isLarge($value)) {
+
+            if ($flush) {
+                if (!is_null($ttl)) {
+                    $this->set($key, $value, $ttl);
+                } else {
+                    $this->set($key, $value);
+                }
+            }
+
             return $value;
         }
 
@@ -190,13 +200,19 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
         $map = $this->createMap($key, $value);
         foreach ($map as $mappedKey => $valuePart) {
             if ($toTransform) {
-                $this->set($this->transformReferenceToMappedKey($mappedKey), $valuePart);
+                $transformedKey = $this->transformReferenceToMappedKey($mappedKey);
             } else {
-                $this->set($mappedKey, $valuePart);
+                $transformedKey = $mappedKey;
+            }
+
+            if (!is_null($ttl)) {
+                $this->set($transformedKey, $valuePart, $ttl);
+            } else {
+                $this->set($transformedKey, $valuePart);
             }
         }
 
-        return $this->setLargeValue($key, $this->serializeMap($map), $level + 1, $flush);
+        return $this->setLargeValue($key, $this->serializeMap($map), $level + 1, $flush, $toTransform, $ttl);
     }
 
     /**
