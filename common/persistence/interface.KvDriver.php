@@ -66,4 +66,19 @@ interface common_persistence_KvDriver extends common_persistence_Driver
      */
     public function del($id);
 
+    /**
+     * Increment value
+     *
+     * @param string $id
+     * @return boolean
+     */
+    public function incr($id);
+
+    /**
+     * Decrement value
+     * @param $id
+     * @return boolean
+     */
+    public function decr($id);
+
 }

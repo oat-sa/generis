@@ -177,6 +177,21 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
     }
 
     /**
+     * Decrement $key, only for numeric
+     * Mapped key will be ignored
+     *
+     * @param $key
+     * @return bool|int
+     */
+    public function decr($key)
+    {
+        if ($this->isMappedKey($key)) {
+            return false;
+        }
+        return $this->getDriver()->decr($key);
+    }
+
+    /**
      * Delete a key. If key is split, all associated mapped key are deleted too
      *
      * @param $key

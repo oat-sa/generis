@@ -148,7 +148,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
         }
         return $success;
     }
-
+    
     /**
      * Purge the Driver if it implements common_persistence_Purgable
      * Otherwise throws common_exception_NotImplemented
