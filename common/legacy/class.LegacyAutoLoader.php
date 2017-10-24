@@ -90,14 +90,24 @@ class common_legacy_LegacyAutoLoader
     			$path .= $tokens[$i].'/';
     		}
     		
+            // Search for class.X.php
     		$filePath = '/' . $path . 'class.'.$tokens[$size-1] . '.php';
     		if (file_exists($this->root .'generis'.DIRECTORY_SEPARATOR .$filePath)){
     			require_once $this->root .'generis'.DIRECTORY_SEPARATOR .$filePath;
     			return;
     		}
+            
+            // Search for interface.X.php
     		$filePathInterface = '/' . $path . 'interface.'.$tokens[$size-1] . '.php';
     		if (file_exists($this->root .'generis'.DIRECTORY_SEPARATOR .$filePathInterface)){
     			require_once $this->root .'generis'.DIRECTORY_SEPARATOR .$filePathInterface;
+    			return;
+    		}
+            
+            // Search for trait.X.php
+            $filePathTrait = '/' . $path . 'trait.'.$tokens[$size-1] . '.php';
+    		if (file_exists($this->root .'generis'.DIRECTORY_SEPARATOR .$filePathTrait)){
+    			require_once $this->root .'generis'.DIRECTORY_SEPARATOR .$filePathTrait;
     			return;
     		}
     		

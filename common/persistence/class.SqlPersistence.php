@@ -67,9 +67,13 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      */
     public function insert($tableName, array $data)
     {
-        return $this->getDriver()->insert($tableName,$data);
+        return $this->getDriver()->insert($tableName, $data);
     }
-
+    
+    public function insertMultiple($tableName, array $data)
+    {
+        return $this->getDriver()->insertMultiple($tableName, $data);
+    }
     /**
      * 
      * @author "Lionel Lecaque, <lionel@taotesting.com>"

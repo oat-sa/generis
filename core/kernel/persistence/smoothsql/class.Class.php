@@ -36,20 +36,45 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
      */
     public function getSubClasses( core_kernel_classes_Class $resource, $recursive = false)
     {
+        if (!$recursive) {
+            $returnValue = array();
+            $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ? and '.$this->getPersistence()->getPlatForm()->getObjectTypeCondition() .' = ?';
+            $sqlResult = $this->getPersistence()->query($sqlQuery, array(RDFS_SUBCLASSOF, $resource->getUri()));
+            while ($row = $sqlResult->fetch()) {
+                $returnValue[$row['subject']] = new core_kernel_classes_Class($row['subject']);
+            }
+            return (array) $returnValue;
+        } else {
+            return $this->getRecursiveSubClasses($resource);
+        }
+    }
+
+    /**
+     * Improved recursive class traversal (reduced to 1 query per tree depth)
+     * @param core_kernel_classes_Class $resource
+     * @return array
+     */
+    private function getRecursiveSubClasses( core_kernel_classes_Class $resource)
+    {
         $returnValue = array();
-        
-        $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ? and '.$this->getPersistence()->getPlatForm()->getObjectTypeCondition() .' = ?';
-        $sqlResult = $this->getPersistence()->query($sqlQuery, array(RDFS_SUBCLASSOF, $resource->getUri()));
-        
-        while ($row = $sqlResult->fetch()) {
-            $subClass = new core_kernel_classes_Class($row['subject']);
-            $returnValue[$subClass->getUri()] = $subClass;
-            if ($recursive == true) {
-            	$plop = $subClass->getSubClasses(true);
-            	$returnValue = array_merge($returnValue, $plop);
+        $todo = [$resource];
+        while (!empty($todo)) {
+            $classString = '';
+            foreach ($todo as $class) {
+                $classString .= ", " . $this->getPersistence()->quote($class->getUri()) ;
+            }
+            $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ? and '.$this->getPersistence()->getPlatForm()->getObjectTypeCondition() 
+                .' in ('.substr($classString, 1).')';
+            $sqlResult = $this->getPersistence()->query($sqlQuery, array(RDFS_SUBCLASSOF));
+            $todo = [];
+            while ($row = $sqlResult->fetch()) {
+                $subClass = new core_kernel_classes_Class($row['subject']);
+                if (!isset($returnValue[$subClass->getUri()])) {
+                    $todo[] = $subClass;
+                }
+                $returnValue[$subClass->getUri()] = $subClass;
             }
         }
-        
         return (array) $returnValue;
     }
 

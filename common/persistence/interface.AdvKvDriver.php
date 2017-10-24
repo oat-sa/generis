@@ -38,4 +38,5 @@ interface common_persistence_AdvKvDriver extends common_persistence_KvDriver
     public function hGetAll($key);
     public function keys($pattern);
     public function incr($key);
+    public function decr($key);
 }

@@ -14,9 +14,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2013-2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  * @author Patrick Plichart <patrick@taotesting.com>
+ * @author Camille Moyon  <camille@taotesting.com>
  * @license GPLv2
  * @package generis
  
@@ -24,36 +25,176 @@
  */
 class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyValuePersistence
 {
-    
-    //O(N) where N is the number of fields being set.
-    public function hmSet($key, $fields) {
+    /**
+     * Set all $fields of a $key
+     * If one of field values is large, a map is created into storage, and reference map is the new value of the field/
+     *
+     * @param $key
+     * @param $fields
+     * @return bool
+     */
+    public function hmSet($key, $fields)
+    {
+        foreach ($fields as $field => $value) {
+            try {
+                if ($this->isLarge($value)) {
+                    common_Logger::t('Large value detected into KeyValue persistence. Splitting value for key : ' . $key . ' (field : ' . $field . ')');
+                    $fields[$field] = $this->setLargeValue($this->getMappedKey($key, $field), $value, 0, false);
+                }
+            } catch (common_Exception $e) {
+                common_Logger::w('Max size value is misconfigured: ' . $e->getMessage());
+            }
+        }
         return $this->getDriver()->hmSet($key, $fields);
     }
-    
-    //Time complexity: O(1)
-    public function hExists($key, $field){
+
+    /**
+     * Check if a $field exists for a given $key.
+     * Mapped $key will be ignored
+     *
+     * @param $key
+     * @param $field
+     * @return bool
+     */
+    public function hExists($key, $field)
+    {
+        if ($this->isMappedKey($key) || $this->isMappedKey($field)) {
+            return false;
+        }
         return (bool) $this->getDriver()->hExists($key, $field);
     }
-    //Time complexity: O(1)
-    public function hSet($key, $field, $value){
+
+    /**
+     * Fill a $key $field with the given value
+     * Check if old value is a map to delete all references
+     * Check if value is not too large, otherwise create a map
+     *
+     * @param $key
+     * @param $field
+     * @param $value
+     * @return int
+     */
+    public function hSet($key, $field, $value)
+    {
+        $oldValue = $this->getDriver()->hGet($key, $field);
+        if ($this->isSplit($oldValue)) {
+            $this->deleteMappedKey($field, $oldValue);
+        }
+
+        try {
+            if ($this->isLarge($value)) {
+                common_Logger::t('Large value detected into KeyValue persistence. Splitting value for key : ' . $key . ' (field : ' . $field . ')');
+                $value = $this->setLargeValue($this->getMappedKey($key, $field), $value, 0, false);
+            }
+        } catch (common_Exception $e) {
+            common_Logger::w('Max size value is misconfigured: ' . $e->getMessage());
+        }
+
+
         return $this->getDriver()->hSet($key, $field, $value);
     }
-    //Time complexity: O(1)
-    public function hGet($key, $field){
-        return $this->getDriver()->hGet($key, $field);
-    }
-    //Time complexity: O(N) where N is the size of the hash.
-    public function hGetAll($key){
-        return $this->getDriver()->hGetAll($key);
-    }
-    //o(n)
-    public function keys($pattern) {
-        return $this->getDriver()->keys($pattern);
+
+    /**
+     * Get the value of $field under $key
+     * Mapped key will be ignored
+     * Check if value is a map, in case of yes, join values
+     *
+     * @param $key
+     * @param $field
+     * @return bool|mixed|string
+     */
+    public function hGet($key, $field)
+    {
+        if ($this->isMappedKey($key) || $this->isMappedKey($field)) {
+            return false;
+        }
+
+        $value = $this->getDriver()->hGet($key, $field);
+
+        if ($this->isSplit($value)) {
+            common_Logger::t('Large value detected into KeyValue persistence. Joining value for key : ' . $key . ' (field : ' . $field . ')');
+            $value =  $this->join($this->getMappedKey($key, $field), $value);
+        }
+
+        return $value;
     }
 
-    public function incr($key) {
-       return $this->getDriver()->incr($key); 
+    /**
+     * Get old $field of a $key
+     * If one of values is a map, join related values
+     *
+     * @param $key
+     * @return array
+     */
+    public function hGetAll($key)
+    {
+        $fields = $this->getDriver()->hGetAll($key);
+
+        if (empty($fields)) {
+            return $fields;
+        }
+
+        foreach ($fields as $field => $value) {
+            if ($this->isSplit($value)) {
+                common_Logger::t('Large value detected into KeyValue persistence. Joining value for key : ' . $key . ' (field : ' . $field . ')');
+                $fields[$field] = $this->join($this->getMappedKey($key, $field), $value);
+            }
+        }
+        return $fields;
     }
-    
-    
+
+    /**
+     * Get a list of existing $keys
+     * Mapped will be ignored
+     *
+     * @param $pattern
+     * @return array
+     */
+    public function keys($pattern)
+    {
+        $keys = $this->getDriver()->keys($pattern);
+        foreach ($keys as $index => $key) {
+            if ($this->isMappedKey($key)) {
+                unset($keys[$index]);
+            }
+        }
+        return $keys;
+    }
+
+    /**
+     * Delete a key. If key is split, all associated mapped key are deleted too
+     *
+     * @param $key
+     * @return bool
+     */
+    public function del($key)
+    {
+        if ($this->isMappedKey($key)) {
+            return false;
+        } else {
+            $success = true;
+            $fields = $this->getDriver()->hGetAll($key);
+            if (!empty($fields)) {
+                foreach ($fields as $subKey => $value) {
+                    if ($this->isSplit($value)) {
+                        $success = $success && $this->deleteMappedKey($subKey, $value);
+                    }
+                }
+            }
+            return $this->deleteMappedKey($key) && $this->getDriver()->del($key);
+        }
+    }
+
+    /**
+     * Get a serial to reference mapped $key
+     *
+     * @param $key
+     * @param $field
+     * @return string
+     */
+    protected function getMappedKey($key, $field)
+    {
+        return $key . '.' . $field;
+    }
+
 }

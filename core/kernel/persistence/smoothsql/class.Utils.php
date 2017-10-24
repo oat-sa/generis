@@ -19,6 +19,8 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2012-2014 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+
+use oat\generis\model\kernel\persistence\smoothsql\search\filter\Filter;
 use oat\generis\model\SqlSanitizeHelperTrait;
 
 /**
@@ -266,6 +268,11 @@ class core_kernel_persistence_smoothsql_Utils
         
         $propertyQueries = array(self::buildPropertyQuery($model, RDF_TYPE, $classUri, false));
         foreach ($propertyFilters as $propertyUri => $filterValues) {
+			// no support of Filter object passed in the $propertyFilters array.
+        	if ($filterValues instanceof Filter)
+			{
+				throw new common_exception_NoImplementation();
+			}
             $propertyQueries[] = self::buildPropertyQuery($model, $propertyUri, $filterValues, $like, $lang);
         }
         

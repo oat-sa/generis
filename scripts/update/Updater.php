@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2014-2017 (original work) Open Assessment Technologies SA;
  *
  *
  */
@@ -28,12 +28,10 @@ use common_ext_NamespaceManager;
 use common_Logger;
 use common_persistence_Manager;
 use core_kernel_classes_Class;
-use core_kernel_fileSystem_Cache;
 use core_kernel_impl_ApiModelOO;
 use core_kernel_persistence_smoothsql_SmoothModel;
 use core_kernel_uri_DatabaseSerialUriProvider;
 use core_kernel_uri_UriService;
-use core_kernel_versioning_Repository;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\permission\PermissionManager;
 use oat\generis\model\fileReference\FileReferenceSerializer;
@@ -51,7 +49,6 @@ use oat\oatbox\task\Queue;
 use oat\oatbox\task\TaskRunner;
 use oat\oatbox\user\LoginService;
 use oat\taoWorkspace\model\generis\WrapperModel;
-
 
 /**
  * 
@@ -198,9 +195,9 @@ class Updater extends common_ext_ExtensionUpdater {
             ));
             
             $class = new core_kernel_classes_Class(GENERIS_NS . '#VersionedRepository');
+            /** @var \core_kernel_classes_Resource $resource */
             foreach ($class->getInstances(true) as $resource) {
-                $oldFs = new core_kernel_versioning_Repository($resource);
-                $path = core_kernel_fileSystem_Cache::getFileSystemPath($oldFs);
+                $path = (string) $resource->getOnePropertyValue(new \core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH));
                 $FsManager->registerLocalFileSystem($resource->getUri(), $path);
             }
             $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $FsManager);
@@ -393,9 +390,29 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('3.35.2');
         }
 
-        $this->skip('3.35.2', '3.37.0');
+        $this->skip('3.35.2', '4.1.4');
 
-        if ($this->isVersion('3.37.0')) {
+        if ($this->isVersion('4.1.4')) {
+            /** Rdf synchronization was moved to version 4.4.1 (see below) because OntologyUpdater is in tao extension */
+//            OntologyUpdater::syncModels();
+            $this->setVersion('4.2.0');
+        }
+        $this->skip('4.2.0', '4.4.0');
+
+        if ($this->isVersion('4.4.0')) {
+            $file = __DIR__ . DIRECTORY_SEPARATOR .
+                '..'.DIRECTORY_SEPARATOR .'..'.DIRECTORY_SEPARATOR .
+                'core' . DIRECTORY_SEPARATOR .
+                'ontology' . DIRECTORY_SEPARATOR .
+                'taskqueue.rdf';
+            $api = core_kernel_impl_ApiModelOO::singleton();
+            $api->importXmlRdf('http://www.tao.lu/Ontologies/taskqueue.rdf', $file);
+            $this->setVersion('4.4.1');
+        }
+
+        $this->skip('4.4.1', '5.3.0');
+
+        if ($this->isVersion('5.3.0')) {
 
             // Todo: move configuration from old config in tao
             $config = array(
@@ -411,8 +428,9 @@ class Updater extends common_ext_ExtensionUpdater {
 
             $this->getServiceManager()->register(LoginService::SERVICE_ID, new LoginService($config));
 
-            $this->setVersion('3.38.0');
+            $this->setVersion('5.4.0');
         }
+
     }
     
     private function getReadableModelIds() {
