@@ -35,8 +35,7 @@ use oat\oatbox\user\auth\LoginAdapter;
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
  */
-class AuthAdapter
-	implements LoginAdapter
+class AuthAdapter implements LoginAdapter
 {
     /**
      * Returns the hashing algorithm defined in generis configuration
