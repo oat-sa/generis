@@ -30,7 +30,6 @@
  */
 class core_kernel_users_GenerisUser extends common_user_User
 {
-
     private $userResource;
 
     private $cache;
@@ -75,9 +74,8 @@ class core_kernel_users_GenerisUser extends common_user_User
 
     }
     
-    private function getUncached($property)
+    private function getUnCached($property)
     {
-        $value = array();
         switch ($property) {
             case PROPERTY_USER_DEFLG:
             case PROPERTY_USER_UILG:
@@ -101,7 +99,7 @@ class core_kernel_users_GenerisUser extends common_user_User
 	public function refresh() {
 	    $this->roles = false;
 	    $this->cache = array(
-	        PROPERTY_USER_DEFLG => $this->getUncached(PROPERTY_USER_DEFLG)
+	        PROPERTY_USER_DEFLG => $this->getUnCached(PROPERTY_USER_DEFLG)
 	    );
 	    return true;
 	}	

@@ -20,6 +20,8 @@
  */
 namespace oat\oatbox\user;
 
+use core_kernel_users_Service;
+use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\user\auth\AuthFactory;
 use common_user_auth_AuthFailedException;
@@ -36,6 +38,8 @@ use common_session_SessionManager;
  */
 class LoginService extends ConfigurableService
 {
+    use OntologyAwareTrait;
+
     const SERVICE_ID = 'generis/login';
 
     /** Disable the browser ability to store login/passwords */
@@ -74,7 +78,9 @@ class LoginService extends ConfigurableService
         try {
             $user = $this->authenticate($userLogin, $userPassword);
             $loggedIn = $this->startSession($user);
+            $this->resetLoginFails($userLogin);
         } catch (common_user_auth_AuthFailedException $e) {
+            $this->increaseLoginFails($userLogin);
             $loggedIn = false;
         }
 
@@ -121,5 +127,32 @@ class LoginService extends ConfigurableService
     {
         common_session_SessionManager::startSession(new common_session_DefaultSession($user));
         return true;
+    }
+
+    private function resetLoginFails($login)
+    {
+        $user = core_kernel_users_Service::singleton()->getOneUser($login);
+        $user->editPropertyValues($this->getProperty('http://www.tao.lu/Ontologies/generis.rdf#userFailedLoginCount'), 0);
+    }
+
+    /**
+     * 
+     * @param $login
+     */
+    private function increaseLoginFails($login)
+    {
+        $user = core_kernel_users_Service::singleton()->getOneUser($login);
+
+        $failedLoginCountProperty = $this->getProperty('http://www.tao.lu/Ontologies/generis.rdf#userFailedLoginCount');
+        $failedLoginCount = (intval((string)$user->getOnePropertyValue($failedLoginCountProperty))) + 1;
+
+        // if soft, or not soft
+        // block user
+
+        $user->editPropertyValues($failedLoginCountProperty, $failedLoginCount);
+    }
+
+    public function checkIsBlocked()
+    {
     }
 }
