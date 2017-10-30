@@ -19,22 +19,47 @@
 
 namespace oat\generis\test\common\persistence;
 
-class KeyLargeValuePersistenceTest extends \PHPUnit_Framework_TestCase
+use \PHPUnit_Framework_TestCase as TestCase;
+
+class KeyValuePersistenceTest extends TestCase
 {
-    /**
-     * @var \common_persistence_KeyLargeValuePersistence
-     */
+    /** @var \common_persistence_KeyValuePersistence */
     protected $largeValuePersistence;
+
+    /** @var \common_persistence_Driver */
+    protected $driver;
 
     public function setUp()
     {
-        $this->largeValuePersistence = new \common_persistence_KeyLargeValuePersistence(
+        $this->driver = new \common_persistence_InMemoryKvDriver();
+
+        /*
+         * Php file persistence
+         */
+        $this->largeValuePersistence =
+            (new \common_persistence_PhpFileDriver())->connect('mabite',  array(
+                'dir' => '/var/www/tao/package-tao/data/jeje/mabite2/',
+                \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100
+            ));
+
+        /*
+         * Redis persistence
+        $this->driver = new \common_persistence_PhpRedisDriver();
+         $this->largeValuePersistence = $this->driver->connect('redis', [
+            'host' => '127.0.0.1',
+            'port' => 6379
+        ]);
+        */
+
+        /*
+         * In memory persistence
+            $this->largeValuePersistence = new \common_persistence_KeyValuePersistence(
             array(
-                \common_persistence_KeyLargeValuePersistence::VALUE_MAX_WIDTH => 100,
-                'prefix' => 'fixture-'
+                \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100
             ),
-            new \common_persistence_InMemoryAdvKvDriver()
+            $this->driver
         );
+        */
     }
 
     public function tearDown()
@@ -47,11 +72,19 @@ class KeyLargeValuePersistenceTest extends \PHPUnit_Framework_TestCase
         return str_repeat('a', 100000);
     }
 
+    public function testSetGet()
+    {
+        $this->largeValuePersistence->set('test', 'fixture');
+        $this->assertEquals('fixture', $this->largeValuePersistence->get('test'));
+        $this->assertTrue($this->largeValuePersistence->del('test'));
+    }
+
     public function testSetGetLargeValue()
     {
         $bigValue = $this->get100000bytesValue();
         $this->largeValuePersistence->set('test', $bigValue);
         $this->assertEquals($bigValue, $this->largeValuePersistence->get('test'));
+        $this->assertTrue($this->largeValuePersistence->del('test'));
     }
 
     public function testDelExistsLarge()
@@ -66,12 +99,6 @@ class KeyLargeValuePersistenceTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->largeValuePersistence->get('test'));
     }
 
-    public function testSetGet()
-    {
-        $this->largeValuePersistence->set('test', 'fixture');
-        $this->assertEquals('fixture', $this->largeValuePersistence->get('test'));
-    }
-
     public function testDelExists()
     {
         $this->assertFalse($this->largeValuePersistence->exists('test'));
@@ -84,18 +111,25 @@ class KeyLargeValuePersistenceTest extends \PHPUnit_Framework_TestCase
 
     public function testMapMapControl()
     {
-        $this->largeValuePersistence = new \common_persistence_KeyLargeValuePersistence(
+        $this->largeValuePersistence = new \common_persistence_KeyValuePersistence(
             array(
-                \common_persistence_KeyLargeValuePersistence::VALUE_MAX_WIDTH => 100,
-                \common_persistence_KeyLargeValuePersistence::MAP_IDENTIFIER => 'iamamap',
-                \common_persistence_KeyLargeValuePersistence::START_MAP_DELIMITER => 'mapbegin',
-                \common_persistence_KeyLargeValuePersistence::END_MAP_DELIMITER => 'mapend',
-                'prefix' => 'fixture-',
-
+                \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100,
+                \common_persistence_KeyValuePersistence::MAP_IDENTIFIER => 'iamamap',
+                \common_persistence_KeyValuePersistence::START_MAP_DELIMITER => 'mapbegin',
+                \common_persistence_KeyValuePersistence::END_MAP_DELIMITER => 'mapend',
             ),
-            new \common_persistence_InMemoryAdvKvDriver()
+            $this->driver
         );
 
         $this->testDelExistsLarge();
+    }
+    
+    public function testSetValueLengthEqualsMax()
+    {
+        $str = str_repeat('a', 100);
+        
+        $this->largeValuePersistence->set('equalsMax', $str);
+        $this->assertEquals($str, $this->largeValuePersistence->get('equalsMax'));
+        $this->assertTrue($this->largeValuePersistence->del('equalsMax'));
     }
 }

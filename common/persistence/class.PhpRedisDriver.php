@@ -14,18 +14,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2013-2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
- * @package 
- 
+ * @package
  *
  */
 class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDriver
 {
 
-    const DEFAULT_PORT = 6379;
+    const DEFAULT_PORT     = 6379;
+    const DEFAULT_ATTEMPT  = 3;
+    const DEFAULT_TIMEOUT  = 5; // in seconds
+    const RETRY_DELAY      = 500000; // Eq to 0.5s
 
     /**
      * @var Redis
@@ -33,10 +35,28 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     private $connection;
 
     /**
-     * (non-PHPdoc)
+     * @var $params
+     */
+    private $params;
+
+    /**
+     * store connection params and try to connect
      * @see common_persistence_Driver::connect()
      */
     function connect($key, array $params)
+    {
+        $this->params = $params;
+        $this->connectionSet($params);
+
+        return new common_persistence_AdvKeyValuePersistence($params, $this);
+    }
+
+    /**
+     * create a new connection using stored parameters
+     * @param array $params
+     * @throws common_exception_Error
+     */
+    function connectionSet(array $params)
     {
         $this->connection = new Redis();
         if ($this->connection == false) {
@@ -45,69 +65,119 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         if (!isset($params['host'])) {
             throw new common_exception_Error('Missing host information for Redis driver');
         }
-        $host = $params['host'];
-        $port = isset($params['port']) ? $params['port'] : self::DEFAULT_PORT;
+        $host    = $params['host'];
+        $port    = isset($params['port']) ? $params['port'] : self::DEFAULT_PORT;
+        $timeout = isset($params['timeout']) ? $params['timeout'] : self::DEFAULT_TIMEOUT;
         $persist = isset($params['pconnect']) ? $params['pconnect'] : true;
-        
+        $this->params['attempt'] = isset($params['attempt']) ? $params['attempt'] : self::DEFAULT_ATTEMPT;
+
         if ($persist) {
-            $this->connection->pconnect($host, $port);
+            $this->connection->pconnect($host , $port , $timeout);
         } else {
-            $this->connection->connect($host, $port);
+            $this->connection->connect($host , $port , $timeout);
         }
-        if (isset($params['password'])) {
-            $this->connection->auth($params['password']);
-        }
-        return new common_persistence_AdvKeyValuePersistence($params, $this);
     }
-    
+
+    /**
+     * @param $method
+     * @param array $params
+     * @param $retry
+     * @param int $attempt
+     * @return mixed
+     * @throws Exception
+     */
+    protected function callWithRetry( $method , array $params , $attempt = 1) {
+
+        $success       = false;
+        $lastException = null;
+        $result        = false;
+
+        $retry = $this->params['attempt'];
+
+        while (!$success && $attempt <= $retry) {
+
+            try {
+                $result = call_user_func_array([$this->connection , $method] , $params);
+                $success = true;
+            } catch (\Exception $e) {
+                $lastException = $e;
+                \common_Logger::d('Redis  ' . $method . ' failed ' . $attempt . '/' . $retry . ' :  ' . $e->getMessage());
+                if ($e->getMessage() == 'Failed to AUTH connection' && isset($this->params['password'])) {
+                    \common_Logger::d('Authenticating Redis connection');
+                    $this->connection->auth($this->params['password']);
+                }
+                $delay = rand(self::RETRY_DELAY , self::RETRY_DELAY*2);
+                usleep($delay);
+                $this->connectionSet($this->params);
+            }
+            $attempt++;
+        }
+
+        if (!$success) {
+            throw $lastException;
+        }
+        return $result;
+
+    }
+
     public function set($key, $value, $ttl = null)
     {
         if (! is_null($ttl)) {
-            return $this->connection->set($key, $value, $ttl);
+            $params = [$key, $value, $ttl];
         } else {
-            return $this->connection->set($key, $value);
+            $params = [$key, $value];
         }
+        return $this->callWithRetry('set' , $params );
         
     }
     
     public function get($key) {
-        return $this->connection->get($key);
+
+        return $this->callWithRetry('get' , [$key] );
+
     }
     
     public function exists($key) {
-        return $this->connection->exists($key);
+        return $this->callWithRetry('exists' , [$key] );
     }
     
     public function del($key) {
-        return $this->connection->del($key);
+        return $this->callWithRetry('del' , [$key] );
     }
 
     //O(N) where N is the number of fields being set.
     public function hmSet($key, $fields) {
-        return $this->connection->hmSet($key, $fields);
+        return $this->callWithRetry('hmSet' , [$key, $fields] );
     }
     //Time complexity: O(1)
-    public function hExists($key, $field){
-        return (bool) $this->connection->hExists($key, $field);
+    public function hExists($key, $field)
+    {
+        return (bool)$this->callWithRetry('hExists', [$key, $field]);
     }
+
     //Time complexity: O(1)
     public function hSet($key, $field, $value){
-        return $this->connection->hSet($key, $field, $value);
+        return $this->callWithRetry('hSet' , [$key, $field, $value] );
     }
     //Time complexity: O(1)
     public function hGet($key, $field){
-        return $this->connection->hGet($key, $field);
+        return $this->callWithRetry('hGet' , [$key, $field]);
     }
     //Time complexity: O(N) where N is the size of the hash.
     public function hGetAll($key){
-        return $this->connection->hGetAll($key);
+        return $this->callWithRetry('hGetAll' , [$key] );
     }
     //Time complexity: O(N)
     public function keys($pattern) {
-        return $this->connection->keys($pattern);
+        return $this->callWithRetry('keys' , [$pattern]);
     }
     //Time complexity: O(1)
     public function incr($key) {
-       return $this->connection->incr($key); 
+        return $this->callWithRetry('incr' , [$key] );
     }
+    //Time complexity: O(1)
+    public function decr($key) {
+        return $this->callWithRetry('decr' , [$key] );
+    }
+
 }

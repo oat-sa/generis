@@ -60,4 +60,23 @@ interface TaskQueue extends Queue
      */
     public function getPayload($currentUserId);
 
+    /**
+     * Get resource from rdf storage which represents task in the task queue by linked resource
+     * Returns null if there is no task linked to given resource
+     * @param \core_kernel_classes_Resource $resource
+     * @return mixed
+     */
+    public function getTaskResource(\core_kernel_classes_Resource $resource);
+    /**
+     * @param \core_kernel_classes_Resource $resource
+     * @return \common_report_Report
+     */
+    public function getReportByLinkedResource(\core_kernel_classes_Resource $resource);
+    /**
+     * Create task resource in the rdf storage and link placeholder resource to it.
+     * @param Task $task
+     * @param \core_kernel_classes_Resource|null $resource - placeholder resource to be linked with task.
+     */
+    public function linkTask(Task $task, \core_kernel_classes_Resource $resource = null);
+
 }
