@@ -35,12 +35,13 @@ class KeyValuePersistenceTest extends TestCase
 
         /*
          * Php file persistence
-         */
-        $this->largeValuePersistence =
-            (new \common_persistence_PhpFileDriver())->connect('mabite',  array(
-                'dir' => '/var/www/tao/package-tao/data/jeje/mabite2/',
+         *
+        /*$this->largeValuePersistence =
+            (new \common_persistence_PhpFileDriver())->connect('joystick',  array(
+                'dir' => '/var/www/tao/package-tao/data/jeje/joystick/',
                 \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100
             ));
+        */
 
         /*
          * Redis persistence
@@ -53,13 +54,14 @@ class KeyValuePersistenceTest extends TestCase
 
         /*
          * In memory persistence
+         */
             $this->largeValuePersistence = new \common_persistence_KeyValuePersistence(
             array(
                 \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100
             ),
             $this->driver
         );
-        */
+        
     }
 
     public function tearDown()
