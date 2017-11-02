@@ -19,10 +19,20 @@
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
  * @package generis
- 
  *
  */
+
+use Doctrine\DBAL\Connection;
+
 class common_persistence_sql_Platform{
+    
+    const TRANSACTION_READ_UNCOMMITTED = Connection::TRANSACTION_READ_UNCOMMITTED;
+    
+    const TRANSACTION_READ_COMMITTED = Connection::TRANSACTION_READ_COMMITTED;
+    
+    const TRANSACTION_REPEATABLE_READ = Connection::TRANSACTION_REPEATABLE_READ;
+    
+    const TRANSACTION_SERIALIZABLE = Connection::TRANSACTION_SERIALIZABLE;
     
     protected  $dbalPlatform;
 
@@ -177,6 +187,18 @@ class common_persistence_sql_Platform{
     public function beginTransaction()
     {
         $this->dbalConnection->beginTransaction();
+    }
+    
+    /**
+     * Sets the transaction isolation level.
+     *
+     * @param integer $level The level to set.
+     *
+     * @return integer
+     */
+    public function setTransactionIsolation($level)
+    {
+        $this->dbalConnection->setTransactionIsolation($level);
     }
 
     /**
