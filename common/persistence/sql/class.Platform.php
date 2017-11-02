@@ -191,6 +191,10 @@ class common_persistence_sql_Platform {
      * * TRANSACTION_READ_COMMITTED
      * * TRANSACTION_REPEATABLE_READ
      * * TRANSACTION_SERIALIZABLE
+     * 
+     * Developer's note: We know that we could use DBAL's setTransactionIsolation method. Unfortunately,
+     * it sets a global isolation level for the entire session, which could be dangerous in case of error
+     * or developer absent-mindedness.
      *
      * @param integer $level (optional) A Transaction level. Defaults to platform default.
      * @return void
