@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2014-2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
@@ -24,7 +24,9 @@
 
 use Doctrine\DBAL\Connection;
 
-class common_persistence_sql_Platform{
+class common_persistence_sql_Platform {
+    
+    const TRANSACTION_PLATFORM_DEFAULT = 0;
     
     const TRANSACTION_READ_UNCOMMITTED = Connection::TRANSACTION_READ_UNCOMMITTED;
     
@@ -181,24 +183,48 @@ class common_persistence_sql_Platform{
 
     /**
      * Starts a transaction by suspending auto-commit mode.
+     * 
+     * Transaction levels are:
+     * 
+     * * common_persistence_sql_Platform::TRANSACTION_PLATFORM_DEFAULT
+     * * TRANSACTION_READ_UNCOMMITTED
+     * * TRANSACTION_READ_COMMITTED
+     * * TRANSACTION_REPEATABLE_READ
+     * * TRANSACTION_SERIALIZABLE
      *
+     * @param integer $level (optional) A Transaction level. Defaults to platform default.
      * @return void
      */
-    public function beginTransaction()
+    public function beginTransaction($level = common_persistence_sql_Platform::TRANSACTION_PLATFORM_DEFAULT)
     {
         $this->dbalConnection->beginTransaction();
+        
+        if ($level !== common_persistence_sql_Platform::TRANSACTION_PLATFORM_DEFAULT) {
+            $this->dbalConnection->executeUpdate($this->getSetCurrentTransactionIsolationSQL($level));
+        }
     }
     
-    /**
-     * Sets the transaction isolation level.
-     *
-     * @param integer $level The level to set.
-     *
-     * @return integer
-     */
-    public function setTransactionIsolation($level)
+    protected function getSetCurrentTransactionIsolationSQL($level)
     {
-        $this->dbalConnection->setTransactionIsolation($level);
+        // From DBAL 2.5.X (because the method is actually protected in DBAL's AbstractPlatform).
+        switch ($level) {
+            case self::TRANSACTION_READ_UNCOMMITTED:
+                $strLevel = 'READ UNCOMMITTED';
+                break;
+            case self::TRANSACTION_READ_COMMITTED:
+                $strLevel = 'READ COMMITTED';
+                break;
+            case self::TRANSACTION_REPEATABLE_READ:
+                $strLevel = 'REPEATABLE READ';
+                break;
+            case self::TRANSACTION_SERIALIZABLE:
+                $strLevel = 'SERIALIZABLE';
+                break;
+            default:
+                throw new \InvalidArgumentException('Invalid isolation level:' . $level);
+        }
+        
+        return 'SET TRANSACTION ISOLATION LEVEL ' . $strLevel;
     }
 
     /**
@@ -215,12 +241,28 @@ class common_persistence_sql_Platform{
      * Commits the current transaction.
      *
      * @return void
-     * @throws \Doctrine\DBAL\ConnectionException If the commit failed due to no active transaction or
-     *                                            because the transaction was marked for rollback only.
+     * @throws \Doctrine\DBAL\ConnectionException If the commit failed due to no active transaction or because the transaction was marked for rollback only.
+     * @throws common_persistence_sql_SerializationException In case of SerializationFailure (SQLSTATE 40001).
      */
     public function commit()
     {
-        $this->dbalConnection->commit();
+        try {
+            $this->dbalConnection->commit();
+        } catch (\PDOException $e) {
+            // Surprisingly, DBAL's commit throws a PDOExeption in case
+            // of serialization issue (not documented).
+            if (($code = $e->getCode()) == '40001') {
+                // Serialization failure (SQLSTATE 40001 for at least mysql, pgsql, sqlsrv).
+                throw new common_persistence_sql_SerializationException(
+                    "SQL Transaction Serialization Failure. See previous exception(s) for more information.",
+                    intval($code),
+                    $e
+                );
+            } else {
+                // Another kind of error. Re-throw!
+                throw $e;
+            }
+        }
     }
     
     public function getTruncateTableSql($tableName)
