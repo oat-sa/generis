@@ -184,51 +184,58 @@ class common_persistence_sql_Platform {
     /**
      * Starts a transaction by suspending auto-commit mode.
      * 
+     * @return void
+     */
+    public function beginTransaction()
+    {
+        $this->dbalConnection->beginTransaction();
+    }
+    
+    /**
+     * Sets the transaction isolation level for the current connection.
+     * 
      * Transaction levels are:
      * 
      * * common_persistence_sql_Platform::TRANSACTION_PLATFORM_DEFAULT
-     * * TRANSACTION_READ_UNCOMMITTED
-     * * TRANSACTION_READ_COMMITTED
-     * * TRANSACTION_REPEATABLE_READ
-     * * TRANSACTION_SERIALIZABLE
+     * * common_persistence_sql_Platform::TRANSACTION_READ_UNCOMMITTED
+     * * common_persistence_sql_Platform::TRANSACTION_READ_COMMITTED
+     * * common_persistence_sql_Platform::TRANSACTION_REPEATABLE_READ
+     * * common_persistence_sql_Platform::TRANSACTION_SERIALIZABLE
      * 
-     * Developer's note: We know that we could use DBAL's setTransactionIsolation method. Unfortunately,
-     * it sets a global isolation level for the entire session, which could be dangerous in case of error
-     * or developer absent-mindedness.
+     * IT IS EXTREMELY IMPORTANT than after calling commit() or rollback(),
+     * or in error handly, the developer sets back the initial transaction
+     * level that was in force prior the call to beginTransaction().
      *
-     * @param integer $level (optional) A Transaction level. Defaults to platform default.
-     * @return void
+     * @param integer $level The level to set.
+     *
+     * @return integer
      */
-    public function beginTransaction($level = common_persistence_sql_Platform::TRANSACTION_PLATFORM_DEFAULT)
-    {
-        $this->dbalConnection->beginTransaction();
-        
-        if ($level !== common_persistence_sql_Platform::TRANSACTION_PLATFORM_DEFAULT) {
-            $this->dbalConnection->executeUpdate($this->getSetCurrentTransactionIsolationSQL($level));
+    public function setTransactionIsolation($level) {
+        if ($level === self::TRANSACTION_PLATFORM_DEFAULT) {
+            $level = $this->dbalPlatform->getDefaultTransactionIsolationLevel();
         }
+        
+        $this->dbalConnection->setTransactionIsolation($level);
     }
     
-    protected function getSetCurrentTransactionIsolationSQL($level)
+    /**
+     * Gets the currently active transaction isolation level for the current sesson.
+     *
+     * @return integer The current transaction isolation level for the current session.
+     */
+    public function getTransactionIsolation()
     {
-        // From DBAL 2.5.X (because the method is actually protected in DBAL's AbstractPlatform).
-        switch ($level) {
-            case self::TRANSACTION_READ_UNCOMMITTED:
-                $strLevel = 'READ UNCOMMITTED';
-                break;
-            case self::TRANSACTION_READ_COMMITTED:
-                $strLevel = 'READ COMMITTED';
-                break;
-            case self::TRANSACTION_REPEATABLE_READ:
-                $strLevel = 'REPEATABLE READ';
-                break;
-            case self::TRANSACTION_SERIALIZABLE:
-                $strLevel = 'SERIALIZABLE';
-                break;
-            default:
-                throw new \InvalidArgumentException('Invalid isolation level:' . $level);
-        }
-        
-        return 'SET TRANSACTION ISOLATION LEVEL ' . $strLevel;
+        return $this->dbalConnection->getTransactionIsolation();
+    }
+    
+    /**
+     * Checks whether or not a transaction is currently active.
+     *
+     * @return boolean true if a transaction is currently active for the current session, otherwise false.
+     */
+    public function isTransactionActive()
+    {
+        return $this->dbalConnection->isTransactionActive();
     }
 
     /**
