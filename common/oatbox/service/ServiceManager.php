@@ -162,4 +162,9 @@ class ServiceManager implements ServiceLocatorInterface
 
         throw new ServiceNotFoundException($className);
     }
+    
+    public function __sleep()
+    {
+        return ['configService'];
+    }
 }
