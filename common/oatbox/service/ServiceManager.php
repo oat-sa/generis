@@ -162,4 +162,13 @@ class ServiceManager implements ServiceLocatorInterface
 
         throw new ServiceNotFoundException($className);
     }
+    
+    public function __sleep()
+    {
+        // As there is no way to predict whether or not already
+        // loaded services are serializable, we only save the configService
+        // field. The ServiceManager will behave as a "fresh" component
+        // after unserialization.
+        return ['configService'];
+    }
 }
