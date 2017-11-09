@@ -33,7 +33,25 @@ use oat\oatbox\user\User;
 class IntersectionUnionSupported extends ConfigurableService
     implements PermissionInterface
 {
-    
+
+    public function add(PermissionInterface $service)
+    {
+        $registered = false;
+        $options = $this->getOption('inner');
+        foreach ($options as $impl){
+            if($impl == $service){
+                $registered = true;
+                break;
+            }
+        }
+
+        if(!$registered){
+            $options[] = $service;
+            $this->setOption('inner', $options);
+        }
+
+    }
+
     /**
      * @return PermissionInterface[]
      */
