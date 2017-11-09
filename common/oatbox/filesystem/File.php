@@ -69,12 +69,16 @@ class File extends FileSystemHandler
     /**
      * Get metadata of $this file
      *
-     * @return array
+     * @return array|bool
      */
     public function getMetadata()
     {
         try {
-            return $this->getFileSystem()->get($this->getPrefix())->getMetadata();
+            $path = $this->getPrefix();
+            if ($this->getFileSystem()->has($path)) {
+                return $this->getFileSystem()->get($path)->getMetadata();
+            }
+
         } catch (FileNotFoundException $e) {
         }
         return false;
