@@ -33,19 +33,7 @@ use oat\oatbox\user\User;
 class IntersectionUnionSupported extends ConfigurableService
     implements PermissionInterface
 {
-
-    /**
-     * @param PermissionInterface[] $persmissionMdels
-     * @return IntersectionUnionSupported
-     */
-    static public function spawn($persmissionMdels) {
-        return new self(array('inner' => $persmissionMdels));
-    }
     
-    public function __construct($options = array()) {
-        parent::__construct($options);
-    }
-
     /**
      * @return PermissionInterface[]
      */
