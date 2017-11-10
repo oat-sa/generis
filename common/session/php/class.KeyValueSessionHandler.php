@@ -17,7 +17,7 @@
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
-use oat\oatbox\Configurable;
+use oat\oatbox\service\ConfigurableService;
 
 /**
  * Session implementation as a Key Value storage and using the persistence
@@ -25,7 +25,7 @@ use oat\oatbox\Configurable;
  * @author Joel Bout <joel@taotesting.com>
  * @package generis
  */
-class common_session_php_KeyValueSessionHandler extends Configurable
+class common_session_php_KeyValueSessionHandler extends ConfigurableService
     implements common_session_php_SessionHandler
 {
     const OPTION_PERSISTENCE = 'persistence'; 
