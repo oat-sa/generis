@@ -34,6 +34,11 @@ class IntersectionUnionSupported extends ConfigurableService
     implements PermissionInterface
 {
 
+
+    /**
+     * @param PermissionInterface $service
+     * @return $this
+     */
     public function add(PermissionInterface $service)
     {
         $registered = false;
@@ -49,6 +54,8 @@ class IntersectionUnionSupported extends ConfigurableService
             $options[] = $service;
             $this->setOption('inner', $options);
         }
+
+        return $this;
 
     }
 
