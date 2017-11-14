@@ -19,6 +19,7 @@
  */
 
 namespace oat\oatbox;
+
 use oat\oatbox\log\LoggerAwareTrait;
 use oat\oatbox\log\TaoLoggerAwareInterface;
 
