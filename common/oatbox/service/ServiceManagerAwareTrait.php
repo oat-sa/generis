@@ -57,13 +57,27 @@ trait ServiceManagerAwareTrait
      * Register a service through ServiceManager
      *
      * @param $serviceKey
-     * @param $service
+     * @param ConfigurableService $service
      * @param bool $allowOverride
+     * @throws \common_Exception
      */
     public function registerService($serviceKey, ConfigurableService $service, $allowOverride = true)
     {
         if ($allowOverride || ! $this->getServiceLocator()->has($serviceKey)) {
             $this->getServiceManager()->register($serviceKey, $service);
         }
+    }
+
+    /**
+     * Propagate service dependencies
+     *
+     * @param $service
+     * @param null $originalService
+     * @return mixed
+     * @throws \common_exception_Error
+     */
+    protected function propagate($service, $originalService = null)
+    {
+        return $this->getServiceManager()->propagate($service, $originalService);
     }
 }
