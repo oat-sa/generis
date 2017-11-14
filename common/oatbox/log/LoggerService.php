@@ -23,7 +23,6 @@ namespace oat\oatbox\log;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\exception\InvalidService;
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 
 class LoggerService extends ConfigurableService
 {
@@ -34,7 +33,7 @@ class LoggerService extends ConfigurableService
     /**
      * @var LoggerInterface Logger where log are sent
      */
-    protected $logger;
+    protected $logger = null;
 
     /**
      * Get the current logger.
@@ -59,11 +58,9 @@ class LoggerService extends ConfigurableService
                     } else {
                         throw new InvalidService('Service must implements Psr3 logger interface');
                     }
-                } else {
-                    $this->logger = new NullLogger();
+                } elseif (is_object($loggerOptions) && is_a($loggerOptions, LoggerInterface::class)) {
+                    $this->logger = $loggerOptions;
                 }
-            } else {
-                $this->logger = new NullLogger();
             }
         }
 
@@ -76,12 +73,13 @@ class LoggerService extends ConfigurableService
      * If $replace is set to true, old logger is replaced
      *
      * @param LoggerInterface $logger
-     * @param boolean $replace
-     * @return LoggerInterface
+     * @param bool $replace
+     * @return LoggerAggregator|LoggerInterface
+     * @throws InvalidService
      */
     public function addLogger(LoggerInterface $logger, $replace = false)
     {
-        if (!$replace && (! $this->getLogger() instanceof NullLogger)) {
+        if (!$replace || !is_null($this->logger)) {
             $logger = new LoggerAggregator([$logger, $this->getLogger()]);
         }
 

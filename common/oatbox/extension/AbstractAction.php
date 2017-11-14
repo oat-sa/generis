@@ -14,38 +14,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
 
 namespace oat\oatbox\extension;
 
-use common_exception_Error;
 use oat\oatbox\action\Action;
-use oat\oatbox\service\ServiceManager as ServiceManager;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use oat\oatbox\log\LoggerAwareTrait;
+use oat\oatbox\log\TaoLoggerAwareInterface;
+use oat\oatbox\service\ServiceManagerAwareInterface;
+use oat\oatbox\service\ServiceManagerAwareTrait;
 
 /**
  * abstract base for extension actions
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-abstract class AbstractAction implements Action, ServiceLocatorAwareInterface {
-    
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
-    
-    /**
-     * 
-     * @throws common_exception_Error
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        $serviceManager = $this->getServiceLocator();
-        if (!$serviceManager instanceof ServiceManager) {
-            throw new common_exception_Error('Alternate service locator not compatible with '.__CLASS__);
-        }
-        return $serviceManager;
-    }
-    
+abstract class AbstractAction implements Action, ServiceManagerAwareInterface, TaoLoggerAwareInterface
+{
+    use ServiceManagerAwareTrait;
+    use LoggerAwareTrait;
 }
