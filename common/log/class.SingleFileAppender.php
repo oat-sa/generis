@@ -167,6 +167,7 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
     	if ($this->filehandle !== false) {
 	    	$map = array(
 				'%d' => date('Y-m-d H:i:s',$item->getDateTime()),
+                '%D' => gmdate('Y-m-d H:i:s',$item->getDateTime()),
 				'%m' => $item->getDescription(),
 				'%p' => $this->prefix,
 				'%s' => $item->getSeverityDescriptionString(),
