@@ -174,7 +174,6 @@ class AdvKeyValuePersistenceTest extends TestCase
                 \common_persistence_KeyValuePersistence::MAP_IDENTIFIER => 'iamamap',
                 \common_persistence_KeyValuePersistence::START_MAP_DELIMITER => 'mapbegin',
                 \common_persistence_KeyValuePersistence::END_MAP_DELIMITER => 'mapend',
-
             ),
             new \common_persistence_InMemoryAdvKvDriver()
         );

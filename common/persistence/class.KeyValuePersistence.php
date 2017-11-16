@@ -25,6 +25,7 @@
  */
 class common_persistence_KeyValuePersistence extends common_persistence_Persistence
 {
+
     const MAX_VALUE_SIZE = 'max_value_size';
     const MAP_IDENTIFIER = 'map_identifier';
 
@@ -45,13 +46,16 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
 
     /**
      * Set a $key with a $value
-     * If $value is too large, it is split into multiple $mappedKey.
+     *
+     * Returns TRUE if $value is successfully set for the identifier $key or FALSE if something went wrong
+     *
+     * If $value is too large and a size is set in config, it is split into multiple $mappedKey.
      * These new keys are serialized and stored into actual $key
      *
      * @param $key
      * @param $value
      * @param null $ttl
-     * @return bool
+     * @return TRUE or FALSE depending on successfull of writing
      * @throws common_Exception If size is misconfigured
      */
     public function set($key, $value, $ttl = null)
@@ -64,10 +68,13 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     }
 
     /**
-     * Get $key from driver. If $key is split, all mapped values are retrieved and join to restore original value
+     * Get $key from driver.
+     *
+     * Returns TRUE if value is found for the identifier $key or FALSE if nothing found
+     * If $key is split, all mapped values are retrieved and join to restore original value
      *
      * @param string $key
-     * @return bool|int|null|string
+     * @return string
      */
     public function get($key)
     {
@@ -81,6 +88,8 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
 
     /**
      * Check if a key exists
+     *
+     * Returns TRUE if $key exists or FALSE if it does not exist
      * Return false if $key is a mappedKey
      *
      * @param $key
@@ -96,7 +105,10 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     }
 
     /**
-     * Delete a key. If key is split, all associated mapped key are deleted too
+     * Delete a key.
+     *
+     * Returns TRUE if value has been deleted for the identifier $key or FALSE if deletion went wrong
+     * If key is split, all associated mapped key are deleted too
      *
      * @param $key
      * @return bool
@@ -178,13 +190,13 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
         }
         return $success;
     }
-    
+
     /**
      * Purge the Driver if it implements common_persistence_Purgable
      * Otherwise throws common_exception_NotImplemented
      *
-     * @return mixed
-     * @throws common_exception_NotImplemented
+     * @return TRUE or FALSE depending if purge was successfull
+     * @throws common_exception_NotImplemented If the driver does not implement purgable interface
      */
     public function purge()
     {
@@ -461,4 +473,28 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
         }
         return $params[$param];
     }
+
+    /**
+     * Set persistence's parameters
+     *
+     * @param array $params
+     */
+    protected function setParams($params)
+    {
+        // $this->setPrefixFromOptions($params);
+        parent::setParams($params);
+    }
+
+    /**
+     * Get a serial to reference mapped $key
+     *
+     * @param $key
+     * @param $field
+     * @return string
+     */
+    protected function getMappedKey($key, $field)
+    {
+        return $key . '.' . $field;
+    }
+
 }

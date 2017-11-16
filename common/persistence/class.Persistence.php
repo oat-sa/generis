@@ -37,7 +37,8 @@ abstract class common_persistence_Persistence
      */
     private $params = array();
     
-    public static function getPersistence($driverId) {
+    public static function getPersistence($driverId)
+    {
         $returnValue = common_persistence_Manager::getPersistence($driverId);
         $class = get_called_class();
         if (!$returnValue instanceof $class) {
@@ -54,7 +55,8 @@ abstract class common_persistence_Persistence
      * @param array $params
      * @param common_persistence_driver $driver
      */
-    public function __construct($params = array(), common_persistence_driver $driver){
+    public function __construct($params = array(), common_persistence_driver $driver)
+    {
         $this->setParams($params);
         $this->setDriver($driver);
     }
@@ -66,7 +68,8 @@ abstract class common_persistence_Persistence
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @return common_persistence_driver
      */
-    public function getDriver(){
+    public function getDriver()
+    {
         return $this->driver;
     }
 
@@ -77,7 +80,8 @@ abstract class common_persistence_Persistence
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param common_persistence_Driver $driver
      */
-    protected  function setDriver(common_persistence_Driver $driver){
+    protected  function setDriver(common_persistence_Driver $driver)
+    {
         $this->driver=$driver;
     }
 
@@ -86,9 +90,10 @@ abstract class common_persistence_Persistence
      * 
      * @access protected
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @return multitype:
+     * @return array
      */
-    protected function getParams(){
+    protected function getParams()
+    {
         return $this->params;
     }
 
@@ -97,9 +102,10 @@ abstract class common_persistence_Persistence
      * 
      * @access protected
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param unknown $params
+     * @param array $params
      */
-    protected function setParams($params){
+    protected function setParams($params)
+    {
         $this->params = $params;
     }
 }

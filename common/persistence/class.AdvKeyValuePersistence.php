@@ -185,16 +185,4 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
         }
     }
 
-    /**
-     * Get a serial to reference mapped $key
-     *
-     * @param $key
-     * @param $field
-     * @return string
-     */
-    protected function getMappedKey($key, $field)
-    {
-        return $key . '.' . $field;
-    }
-
 }
