@@ -149,13 +149,6 @@ class ServiceManager implements ServiceLocatorInterface
                 $service->setServiceLocator($this);
             }
 
-            // Propagate Psr3Logger
-            if ($service instanceof LoggerAwareInterface) {
-                if (!is_null($originalService) && $originalService instanceof TaoLoggerAwareInterface) {
-                    $service->setLogger($originalService->getLogger());
-                }
-            }
-
         }
         return $service;
     }
