@@ -21,12 +21,8 @@
 namespace oat\oatbox\service;
 
 use oat\oatbox\Configurable;
-use oat\oatbox\log\LoggerService;
-use oat\oatbox\log\TaoLoggerAwareInterface;
-use Psr\Log\LoggerAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use oat\oatbox\config\ConfigurationService;
 
 /**
  * The simple placeholder ServiceManager
@@ -137,18 +133,12 @@ class ServiceManager implements ServiceLocatorInterface
      * Propagate service dependencies
      *
      * @param $service
-     * @param null $originalService The class where the propagate method is call
      * @return mixed
      */
-    public function propagate($service, $originalService = null)
+    public function propagate($service)
     {
-        if (is_object($service)) {
-
-            // Propagate ServiceLocator
-            if ($service instanceof ServiceLocatorAwareInterface) {
-                $service->setServiceLocator($this);
-            }
-
+        if (is_object($service) && ($service instanceof ServiceLocatorAwareInterface)) {
+            $service->setServiceLocator($this);
         }
         return $service;
     }
