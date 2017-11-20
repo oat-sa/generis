@@ -1,4 +1,5 @@
 <?php
+
 /**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +35,7 @@
  */
 class common_log_SingleFileAppender extends common_log_BaseAppender
 {
+
     /**
      * Name of file with log entries
      *
@@ -42,46 +44,46 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
      */
     protected $filename = '';
 
-	/**
-	 * Format for each log line
-	 *
-	 * %d datestring
-	 * %m description(message)
-	 * %s severity
-	 * %b backtrace
-	 * %r request
-	 * %f file from which the log was called
-	 * %l line from which the log was called
-	 * %t timestamp
-	 * %u user
-	 *
-	 * @access protected
-	 * @var string
-	 */
-	protected $format = '%d [%s] \'%m\' %f %l';
+    /**
+     * Format for each log line
+     *
+     * %d datestring
+     * %m description(message)
+     * %s severity
+     * %b backtrace
+     * %r request
+     * %f file from which the log was called
+     * %l line from which the log was called
+     * %t timestamp
+     * %u user
+     *
+     * @access protected
+     * @var string
+     */
+    protected $format = '%d [%s] \'%m\' %f %l';
 
-	/**
-	 * Prefix for each log line
-	 *
-	 * @var string
-	 */
-	protected $prefix = '';
+    /**
+     * Prefix for each log line
+     *
+     * @var string
+     */
+    protected $prefix = '';
 
-	/**
-	 * Maximum size of the logfile in bytes
-	 *
-	 * @access protected
-	 * @var int
-	 */
-	protected $maxFileSize = 1048576;
+    /**
+     * Maximum size of the logfile in bytes
+     *
+     * @access protected
+     * @var int
+     */
+    protected $maxFileSize = 1048576;
 
-	/**
-	 * Ratio value that using for reducing logfile when size of it reach max value
-	 *
-	 * @var float
-	 */
-	protected $reduceRatio = 0.5;
-    
+    /**
+     * Ratio value that using for reducing logfile when size of it reach max value
+     *
+     * @var float
+     */
+    protected $reduceRatio = 0.5;
+
     /**
      * File descriptor for R/W operations
      *
@@ -91,38 +93,35 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
     protected $filehandle = null;
 
     /**
+     *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  array $configuration
+     * @param array $configuration
      * @return boolean
      */
     public function init($configuration)
     {
-    	if (isset($configuration['file'])) {
-    		$this->filename = $configuration['file'];
-    	}
-    	
-    	if (isset($configuration['format'])) {
-    		$this->format = $configuration['format'];
-    	}
+        if (isset($configuration['file'])) {
+            $this->filename = $configuration['file'];
+        }
         
-    	if (isset($configuration['prefix'])) {
-    		$this->prefix = $configuration['prefix'];
-    	}
-    	
-    	if (isset($configuration['max_file_size'])) {
-    		$this->maxFileSize = $configuration['max_file_size'];
-    	}
+        if (isset($configuration['format'])) {
+            $this->format = $configuration['format'];
+        }
 
-		if (isset($configuration['rotation-ratio'])
-			&& abs($configuration['rotation-ratio']) < 1
-		) {
-			$this->reduceRatio = 1 - abs($configuration['rotation-ratio']);
-		}
+        if (isset($configuration['prefix'])) {
+            $this->prefix = $configuration['prefix'];
+        }
 
-		return !empty($this->filename)
-			? parent::init($configuration)
-			: false;
+        if (isset($configuration['max_file_size'])) {
+            $this->maxFileSize = $configuration['max_file_size'];
+        }
+
+        if (isset($configuration['rotation-ratio']) && abs($configuration['rotation-ratio']) < 1) {
+            $this->reduceRatio = 1 - abs($configuration['rotation-ratio']);
+        }
+
+        return ! empty($this->filename) ? parent::init($configuration) : false;
     }
 
     /**
@@ -134,19 +133,16 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
      */
     protected function initFile()
     {
-        if ($this->maxFileSize > 0
-			&& file_exists($this->filename)
-			&& filesize($this->filename) >= $this->maxFileSize
-		) {
-        	// need to reduce the file size
-        	$file = file($this->filename);
-        	$file = array_splice($file, ceil(count($file) * $this->reduceRatio));
-        	$this->filehandle = @fopen($this->filename, 'w');
-        	foreach ($file as $line) {
-        		@fwrite($this->filehandle, $line);
-        	}
+        if ($this->maxFileSize > 0 && file_exists($this->filename) && filesize($this->filename) >= $this->maxFileSize) {
+            // need to reduce the file size
+            $file = file($this->filename);
+            $file = array_splice($file, ceil(count($file) * $this->reduceRatio));
+            $this->filehandle = @fopen($this->filename, 'w');
+            foreach ($file as $line) {
+                @fwrite($this->filehandle, $line);
+            }
         } else {
-    		$this->filehandle = @fopen($this->filename, 'a');
+            $this->filehandle = @fopen($this->filename, 'a');
         }
     }
 
@@ -160,30 +156,26 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
      */
     public function doLog(common_log_Item $item)
     {
-    	if (is_null($this->filehandle)) {
-    		$this->initFile();
-    	}
-    	
-    	if ($this->filehandle !== false) {
-	    	$map = array(
-                '%d' => gmdate('Y-m-d H:i:s',$item->getDateTime()),
-				'%m' => $item->getDescription(),
-				'%p' => $this->prefix,
-				'%s' => $item->getSeverityDescriptionString(),
-				'%t' => $item->getDateTime(),
-				'%r' => $item->getRequest(),
-				'%f' => $item->getCallerFile(),
-				'%l' => $item->getCallerLine()
-	    	);
-	    	
-	    	if (strpos($this->format, '%b')) {
-	    		$map['%b'] = 'Backtrace not yet supported';
-	    	}
-
-			$str = strtr($this->format, $map) . PHP_EOL;
-
-			@fwrite($this->filehandle, $str);
-    	}
+        if (is_null($this->filehandle)) {
+            $this->initFile();
+        }
+        if ($this->filehandle !== false) {
+            $map = array(
+                '%d' => gmdate('Y-m-d H:i:s', $item->getDateTime()),
+                '%m' => $item->getDescription(),
+                '%p' => $this->prefix,
+                '%s' => $item->getSeverityDescriptionString(),
+                '%t' => $item->getDateTime(),
+                '%r' => $item->getRequest(),
+                '%f' => $item->getCallerFile(),
+                '%l' => $item->getCallerLine()
+            );
+            if (strpos($this->format, '%b')) {
+                $map['%b'] = 'Backtrace not yet supported';
+            }
+            $str = strtr($this->format, $map) . PHP_EOL;
+            @fwrite($this->filehandle, $str);
+        }
     }
 
     /**
@@ -195,8 +187,8 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
      */
     public function __destruct()
     {
-		if (!is_null($this->filehandle) && $this->filehandle !== false) {
-    		@fclose($this->filehandle);
-    	}
+        if (! is_null($this->filehandle) && $this->filehandle !== false) {
+            @fclose($this->filehandle);
+        }
     }
 }
