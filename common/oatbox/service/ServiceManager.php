@@ -162,4 +162,13 @@ class ServiceManager implements ServiceLocatorInterface
 
         throw new ServiceNotFoundException($className);
     }
+
+    /**
+     * Prevents accidental serialisation of the services
+     * @return array
+     */
+    public function __sleep()
+    {
+        return [];
+    }
 }
