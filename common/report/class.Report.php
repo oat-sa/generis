@@ -325,5 +325,16 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
 	        'children' => $this->elements
 	    ];
 	}
-	
+
+    /**
+     * @return array
+     */
+	public function toArray()
+    {
+        return array_merge($this->JsonSerialize(), [
+            'children' => array_map(function(\common_report_Report $report){
+                return $report->toArray();
+            }, $this->elements)
+        ]);
+    }
 }
