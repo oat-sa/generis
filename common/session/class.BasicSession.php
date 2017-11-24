@@ -124,12 +124,18 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
     }
     
     /**
-     * (non-PHPdoc)
+     * Get user timezone.
+     * 
+     * @return type user time zone name (e.g. 'Europe/Helsinki').
      * @see common_session_Session::getTimeZone()
      */
     public function getTimeZone() {
         $tzs = $this->user->getPropertyValues(PROPERTY_USER_TIMEZONE);
         $tz = empty($tzs) ? '' : (string)current($tzs);
+        if (empty($tz) && isset($_COOKIE['userTimezone'])) {
+            $timezoneOffset = intval($_COOKIE['userTimezone']) * 60;
+            $tz = timezone_name_from_abbr(null, $timezoneOffset, false);
+        }
         return empty($tz) ? TIME_ZONE : $tz;
     }
     
