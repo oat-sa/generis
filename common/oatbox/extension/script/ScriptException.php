@@ -20,18 +20,10 @@
 
 namespace oat\oatbox\extension\script;
 
-class MissingOptionException extends ScriptException
+class ScriptException extends \Exception
 {
-    protected $optionName;
-    
-    public function __construct($message, $optionName, $code = 0, \Exception $previous = null)
+    public function __construct($message, $code = 0, \Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
-        $this->optionName = $optionName;
-    }
-    
-    public function getOptionName()
-    {
-        return $this->optionName;
     }
 }

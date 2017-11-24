@@ -20,9 +20,32 @@
 
 namespace oat\oatbox\extension\script;
 
-class OptionExtractor
+class OptionContainer
 {
-    public static function extract(array $options, array $values)
+    protected $options;
+    protected $data;
+    
+    public function __construct(array $options, array $values) {
+        $this->data = self::extract($options, $values);
+        $this->options = $options;
+    }
+    
+    public function has($optionName)
+    {
+        return isset($data[$optionName]);
+    }
+    
+    public function get($optionName)
+    {
+        return ($this->has($optionName)) ? $this->data[$optionName] : null;
+    }
+    
+    public function getOptions()
+    {
+        return $this->options;
+    }
+    
+    private static function extract(array $options, array $values)
     {
         $returnValue = [];
         
@@ -47,7 +70,7 @@ class OptionExtractor
                     $optionIndex = self::searchOptionIndex($prefix, $longPrefix, $values);
                     
                     if ($required && $optionIndex === false) {
-                        throw new MissingOptionException("Required option with name '${optionName}' is missing.");
+                        throw new MissingOptionException("Required option with name '${optionName}' is missing.", $optionName);
                     }
                     
                     if ($optionIndex === false && isset($options[$optionName]['defaultValue'])) {
@@ -61,7 +84,7 @@ class OptionExtractor
                         } else {
                             // Edge case. Option found, but it is the last value of the $value array.
                             if ($required) {
-                                throw new MissingOptionException("No value given for option with name '${optionName}'.");
+                                throw new MissingOptionException("No value given for option with name '${optionName}'.", $optionName);
                             } elseif (isset($options[$optionName]['defaultValue']) {
                                 $returnValue[$optionName] = $options[$optionName]['defaultValue'];
                             }
