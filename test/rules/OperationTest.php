@@ -16,11 +16,12 @@
  * 
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
 error_reporting(E_ALL);
 
+use oat\generis\model\RulesRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class OperationTest extends GenerisPhpUnitTestRunner {
@@ -38,7 +39,7 @@ class OperationTest extends GenerisPhpUnitTestRunner {
 		$operation = core_kernel_rules_OperationFactory::createOperation(
 			$constant5,
 			$constant12,
-			new core_kernel_classes_Resource(INSTANCE_OPERATOR_ADD)
+			new core_kernel_classes_Resource(RulesRdf::INSTANCE_OPERATOR_ADD)
 		);
 		$result = $operation->evaluate();
 		$this->assertIsA($result,'core_kernel_classes_Literal');
@@ -48,7 +49,7 @@ class OperationTest extends GenerisPhpUnitTestRunner {
 		$operation = core_kernel_rules_OperationFactory::createOperation(
 			$constant5,
 			$constant12,
-			new core_kernel_classes_Resource(INSTANCE_OPERATOR_MINUS)
+			new core_kernel_classes_Resource(RulesRdf::INSTANCE_OPERATOR_MINUS)
 		);
 		$result = $operation->evaluate();
 		$this->assertIsA($result,'core_kernel_classes_Literal');
@@ -58,7 +59,7 @@ class OperationTest extends GenerisPhpUnitTestRunner {
 		$operation = core_kernel_rules_OperationFactory::createOperation(
 			$constant5,
 			$constant12,
-			new core_kernel_classes_Resource(INSTANCE_OPERATOR_MULTIPLY)
+			new core_kernel_classes_Resource(RulesRdf::INSTANCE_OPERATOR_MULTIPLY)
 		);
 		$result = $operation->evaluate();
 		$this->assertIsA($result,'core_kernel_classes_Literal');
@@ -69,7 +70,7 @@ class OperationTest extends GenerisPhpUnitTestRunner {
 		$operation = core_kernel_rules_OperationFactory::createOperation(
 			$constant60,
 			$constant12,
-			new core_kernel_classes_Resource(INSTANCE_OPERATOR_DIVISION)
+			new core_kernel_classes_Resource(RulesRdf::INSTANCE_OPERATOR_DIVISION)
 		);
 		$result = $operation->evaluate();
 		$this->assertIsA($result,'core_kernel_classes_Literal');
@@ -79,7 +80,7 @@ class OperationTest extends GenerisPhpUnitTestRunner {
 		$operation = core_kernel_rules_OperationFactory::createOperation(
 			$constant60,
 			$constant12,
-			new core_kernel_classes_Resource(INSTANCE_OPERATOR_CONCAT)
+			new core_kernel_classes_Resource(RulesRdf::INSTANCE_OPERATOR_CONCAT)
 		);
 		$result = $operation->evaluate();
 		$this->assertIsA($result,'core_kernel_classes_Literal');
@@ -89,7 +90,7 @@ class OperationTest extends GenerisPhpUnitTestRunner {
 		$operation = core_kernel_rules_OperationFactory::createOperation(
 			$constant60,
 			$constant12,
-			new core_kernel_classes_Resource(INSTANCE_OPERATOR_UNION)
+			new core_kernel_classes_Resource(RulesRdf::INSTANCE_OPERATOR_UNION)
 		);
 		
 		try {

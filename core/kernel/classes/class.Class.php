@@ -17,11 +17,12 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\event\ResourceCreated;
+use oat\generis\model\OntologyRdf;
 use oat\oatbox\event\EventManager;
 
 /**
@@ -357,15 +358,15 @@ class core_kernel_classes_Class
         // remove the additional types, because they might be implemented differently
         
         $additonalTypes = array();
-        if (isset($properties[RDF_TYPE])) {
-        	$types = is_array($properties[RDF_TYPE]) ? $properties[RDF_TYPE] : array($properties[RDF_TYPE]);
+        if (isset($properties[OntologyRdf::RDF_TYPE])) {
+        	$types = is_array($properties[OntologyRdf::RDF_TYPE]) ? $properties[OntologyRdf::RDF_TYPE] : array($properties[OntologyRdf::RDF_TYPE]);
         	foreach ($types as $type) {
         		$uri = is_object($type) ? $type->getUri() : $type;
         		if ($uri != $this->getUri()) {
         			$additonalTypes[] = $this->getClass($uri);
         		}
         	}
-        	unset($properties[RDF_TYPE]);
+        	unset($properties[OntologyRdf::RDF_TYPE]);
         }
         // create the instance
         $returnValue = $this->getImplementation()->createInstanceWithProperties($this, $properties);

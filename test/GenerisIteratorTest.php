@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
  *               
  * 
  */
@@ -36,7 +36,7 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner {
     public function setUp()
     {
         GenerisPhpUnitTestRunner::initTest();
-        $class = new core_kernel_classes_Class(CLASS_GENERIS_RESOURCE);
+        $class = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE);
         $this->topClass = $class->createSubClass('test class 1');
         $this->emptyClass = $class->createSubClass('test class 2');
         $class1a = $this->topClass->createSubClass('test class 1a');

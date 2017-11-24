@@ -14,11 +14,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *               
  * 
  */
 
+use oat\generis\model\GenerisRdf;
 use oat\oatbox\user\User;
 use oat\oatbox\Refreshable;
 
@@ -54,7 +55,7 @@ abstract class common_user_User implements User, Refreshable
 		$returnValue = array();
 		if ( ! $this->roles) {
 			// We use a Depth First Search approach to flatten the Roles Graph.
-			foreach ($this->getPropertyValues(PROPERTY_USER_ROLES) as $roleUri) {
+			foreach ($this->getPropertyValues(GenerisRdf::PROPERTY_USER_ROLES) as $roleUri) {
 				$returnValue[] = $roleUri;
 				foreach (core_kernel_users_Service::singleton()->getIncludedRoles(new core_kernel_classes_Resource($roleUri)) as $role) {
 					$returnValue[] = $role->getUri();
