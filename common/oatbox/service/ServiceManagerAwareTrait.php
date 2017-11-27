@@ -76,6 +76,7 @@ trait ServiceManagerAwareTrait
      * Propagate service dependencies
      *
      * @param $service
+     * @return mixed
      */
     protected function propagate($service)
     {
@@ -90,11 +91,13 @@ trait ServiceManagerAwareTrait
                 $logger = $this->getLogger();
             } else {
                 if (!$this->getServiceLocator()->has(LoggerService::SERVICE_ID)) {
-                    return;
+                    return $service;
                 }
-                $logger = $this->getServiceLocator()->get(LoggerService::SERVICE_ID);
+                $logger = $this->getServiceLocator()->get(LoggerService::SERVICE_ID)->getLogger();
             }
             $service->setLogger($logger);
         }
+
+        return $service;
     }
 }

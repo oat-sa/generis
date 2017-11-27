@@ -44,10 +44,13 @@ class LoggerService extends ConfigurableService
      */
     public function getLogger()
     {
-        if (! $this->logger) {
+        if (!$this->logger) {
             if ($this->hasOption(self::LOGGER_OPTION)) {
                 $loggerOptions = $this->getOption(self::LOGGER_OPTION);
-                if (isset($loggerOptions['class'])) {
+
+                if (is_object($loggerOptions) && is_a($loggerOptions, LoggerInterface::class)) {
+                    $this->logger = $loggerOptions;
+                } elseif (is_array($loggerOptions) && isset($loggerOptions['class'])) {
                     $classname = $loggerOptions['class'];
                     if (is_a($classname, LoggerInterface::class, true)) {
                         if (isset($loggerOptions['options'])) {
@@ -58,8 +61,6 @@ class LoggerService extends ConfigurableService
                     } else {
                         throw new InvalidService('Service must implements Psr3 logger interface');
                     }
-                } elseif (is_object($loggerOptions) && is_a($loggerOptions, LoggerInterface::class)) {
-                    $this->logger = $loggerOptions;
                 }
             }
         }
