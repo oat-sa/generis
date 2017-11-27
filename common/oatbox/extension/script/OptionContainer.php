@@ -32,7 +32,7 @@ class OptionContainer
     
     public function has($optionName)
     {
-        return isset($data[$optionName]);
+        return isset($this->data[$optionName]);
     }
     
     public function get($optionName)
@@ -59,34 +59,34 @@ class OptionContainer
                     $returnValue[$optionName] = true;
                 } else {
                     // It's a regular option!
-                    $prefix = empty($options['prefix']) ? '' : $options['prefix'];
-                    $longPrefix = empty($options['longPrefix']) ? '' : $options['longPrefix'];
+                    $prefix = empty($optionParams['prefix']) ? '' : $optionParams['prefix'];
+                    $longPrefix = empty($optionParams['longPrefix']) ? '' : $optionParams['longPrefix'];
                     
                     if (empty($prefix) && empty($longPrefix)) {
                         throw new \InvalidArgumentException("Option with name '${optionName}' has no prefix, nor long prefix.");
                     }
                     
-                    $required = empty($options['required']) ? false : true;
+                    $required = empty($optionParams['required']) ? false : true;
                     $optionIndex = self::searchOptionIndex($prefix, $longPrefix, $values);
                     
                     if ($required && $optionIndex === false) {
                         throw new MissingOptionException("Required option with name '${optionName}' is missing.", $optionName);
                     }
                     
-                    if ($optionIndex === false && isset($options[$optionName]['defaultValue'])) {
-                        $returnValue[$optionName] = $options[$optionName]['defaultValue'];
+                    if ($optionIndex === false && isset($optionParams['defaultValue'])) {
+                        $returnValue[$optionName] = $optionParams['defaultValue'];
                     } else {
                         // Option found by prefix or long prefix. Let's get it's value.
                         $valueIndex = $optionIndex + 1;
                         if (isset($values[$valueIndex])) {
-                            $castTo = empty($options[$optionName]['cast']) ? null : $options[$optionName]['cast'];
-                            $returnValue[$optionName] = self::cast($values[$valueIndex], $to);
+                            $castTo = empty($optionParams['cast']) ? null : $optionParams['cast'];
+                            $returnValue[$optionName] = self::cast($values[$valueIndex], $castTo);
                         } else {
                             // Edge case. Option found, but it is the last value of the $value array.
                             if ($required) {
                                 throw new MissingOptionException("No value given for option with name '${optionName}'.", $optionName);
-                            } elseif (isset($options[$optionName]['defaultValue']) {
-                                $returnValue[$optionName] = $options[$optionName]['defaultValue'];
+                            } elseif (isset($optionParams['defaultValue'])) {
+                                $returnValue[$optionName] = $optionParams['defaultValue'];
                             }
                         }
                     }
