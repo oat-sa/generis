@@ -83,6 +83,7 @@ trait common_persistence_sql_MultipleOperations
      * @param string $table
      * @param array $data
      * @return bool
+     * @throws Exception
      */
     public function updateMultiple($table, array $data)
     {
@@ -95,8 +96,13 @@ trait common_persistence_sql_MultipleOperations
         $params = [];
 
         foreach ($data as $row) {
+            if (empty($row['conditions']) || empty($row['updateValues'])) {
+                throw new Exception('You must provide conditions and updateValues');
+            }
+
             $conditions = $row['conditions'];
             $updateValues = $row['updateValues'];
+
             foreach ($updateValues as $updateColumn => $updateValue) {
                 $whens = [];
                 foreach ($conditions as $conditionColumn => $conditionValue) {
