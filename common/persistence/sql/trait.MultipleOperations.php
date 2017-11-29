@@ -21,13 +21,13 @@
  * @package generis
  *
  */
- 
+
 trait common_persistence_sql_MultipleOperations
 {
     public function insertMultiple($tableName, array $data)
     {
         if (is_array($data) && count($data) > 0) {
-            
+
             $platform = $this->getPlatform();
 
             $quotedColumnIdentifiers = array_map(
@@ -36,18 +36,18 @@ trait common_persistence_sql_MultipleOperations
                 },
                 array_keys($data[0])
             );
-            
+
             $query = "INSERT INTO ${tableName} (" . implode(', ', $quotedColumnIdentifiers) . ') VALUES ';
             $valuesQueries = [];
             $allValues = [];
-            
+
             foreach ($data as $values) {
                 $valuesQueries[] .= '(' . implode(', ', array_fill(0, count($values), '?')) . ')';
                 $allValues = array_merge($allValues, array_values($values));
             }
-            
+
             $query .= implode(', ', $valuesQueries);
-            
+
             return $this->exec($query, $allValues);
         } else {
             return 0;
@@ -56,79 +56,103 @@ trait common_persistence_sql_MultipleOperations
 
     /**
      * @example
-     *  $table =  'kv_delivery_monitoring'
-     *  $index = 'column_key',
-     *  $rows =  [
-     *         [
-     *              'column_key' => '123465',
-     *              'values' => [
-     *                  'other_column' => 'other value',
-     *                  'other_column_1' => 'other value_1',
-     *              ]
+     *  'table_name'
+     *  'data' =>
+     * [
+     *      [
+     *          'conditions' => [
+     *              'c1' => 'c1value',
+     *              'c2' => 'c2value'
      *          ]
-     *   ]
-     * $otherWheres = [ 'key_primary' => 'primary_value']
+     *          'updateValues' => [
+     *              'c3' => 'c3value'
+     *          ]
+     *      ],
+     *      [
+     *          'conditions' => [
+     *              'c1' => 'c1value',
+     *              'c2' => 'c2value',
+     *              'c3' => 'c3value',
+     *          ]
+     *          'updateValues' => [
+     *              'c9' => 'c8value'
+     *          ]
+     *      ]
+     *  ]
      *
      * @param string $table
-     * @param string $index
-     * @param array $rows
-     * @param array $otherWheres
+     * @param array $data
      * @return bool
-     * @throws Exception
      */
-    public function updateMultiple($table, $index, array $rows, array $otherWheres = [])
+    public function updateMultiple($table, array $data)
     {
-        $final  = array();
-        $ids    = array();
+        if (empty($data)) {
+            return false;
+        }
+
+        $prepareQueryData = [];
+        $allColumns = [];
         $params = [];
 
-        if(!count($rows))
-            return false;
-
-        if(!isset($index) AND empty($index)) {
-            throw new \Exception('You must specify the index');
-        }
-
-        foreach ($rows as $row)
-        {
-            $ids[] = $row[$index];
-            foreach ($row['values'] as $column => $updatedValue)
-            {
-                if ($column !== $index)
-                {
-                    $final[$column]['values'][] = $updatedValue;
-                    $final[$column]['index'][] = $row[$index];
+        foreach ($data as $row) {
+            $conditions = $row['conditions'];
+            $updateValues = $row['updateValues'];
+            foreach ($updateValues as $updateColumn => $updateValue) {
+                $whens = [];
+                foreach ($conditions as $conditionColumn => $conditionValue) {
+                    $whens[] = ['conditionColumn' => $conditionColumn, 'conditionValue' => $conditionValue];
                 }
+                $prepareQueryData[$updateColumn][] = ['value' => $updateValue, 'conditions' => $whens];
             }
         }
 
-        $cases = '';
-        foreach ($final as $keyColumn => $valuesColumn)
-        {
-            $whens = [];
-            foreach ($valuesColumn['values'] as $key => $value) {
-                $whens [] = 'WHEN '. $index .' = ? THEN ? ';
-                $params[] = $valuesColumn['index'][$key];
-                $params[] = $value;
+
+        $queryColumns = [];
+        foreach ($prepareQueryData as $column => $queryData) {
+            $queryColumnUpdate = " $column = ( CASE ";
+
+            foreach ($queryData as $index => $datum) {
+                $conditions = $datum['conditions'];
+                $updateValue = $datum['value'];
+                $conditionsString = [];
+
+                foreach ($conditions as $indexCondition => $condition) {
+                    $conditionColumn = $condition['conditionColumn'];
+                    $conditionValue = $condition['conditionValue'];
+
+                    $key = ':' .$index . '_' .$column. '_'  . $indexCondition . '_' . $conditionColumn . '_conditionvalue';
+                    $conditionsString[] = " $conditionColumn = $key ";
+                    $allColumns[$conditionColumn][] = $conditionValue;
+                    $params[$key] = $conditionValue;
+                }
+
+
+                $key = ':' . $index . '_' . $column . '_updatedvalue';
+                $queryColumnUpdate .= " WHEN " . implode(' AND ', $conditionsString) . " THEN $key";
+                $params[$key] = $updateValue;
             }
 
-            $cases .= $keyColumn.' = (CASE '. implode("\n", $whens) . "\n"
-                . 'ELSE '. $keyColumn.' END), ';
-        }
-        $idsRepeat = str_repeat('?,', count($ids) - 1) . '?';
 
-        $whereCondition = '';
-        $whereCondition[] =  $index . ' IN('.$idsRepeat.')';
-        foreach ($ids as $myKey => $myValue) {
-            $params[] = ${$myKey} = $myValue;
+            $queryColumnUpdate .= " ELSE $column END)";
+            $queryColumns[] = $queryColumnUpdate;
         }
 
-        foreach ($otherWheres as $columnWhere  => $columnValue) {
-            $whereCondition[] = $columnWhere . ' = ?';
-            $params[] = $columnValue;
+        $query = 'UPDATE ' . $table . ' SET ' . implode(', ', $queryColumns);
+        $wheres = [];
+
+        foreach ($allColumns as $columnWhere => $columnWhereValues) {
+            $uniqueColumnValues = array_unique($columnWhereValues);
+            $placeHolders = [];
+            foreach ($uniqueColumnValues as $index => $value) {
+                $key = ':in_condition_' . $columnWhere . '_' . $index;
+                $placeHolders[] = $key;
+                $params[$key] = $value;
+            }
+            $placeHolders = implode(',', $placeHolders);
+            $wheres[] = " $columnWhere IN ($placeHolders)";
         }
 
-        $query = 'UPDATE ' . $table . ' SET '. substr($cases, 0, -2) . ' WHERE ' . implode(' AND ', $whereCondition);
+        $query .= ' WHERE ' . implode(' AND ', $wheres);
 
         return $this->exec($query, $params);
     }

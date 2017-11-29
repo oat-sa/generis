@@ -83,9 +83,9 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @return bool
      * @throws Exception
      */
-    public function updateMultiple($table, $index, array $rows, array $otherWheres = [])
+    public function updateMultiple($table, array $data)
     {
-        return $this->getDriver()->updateMultiple($table, $index, $rows, $otherWheres);
+        return $this->getDriver()->updateMultiple($table, $data);
     }
 
     /**
