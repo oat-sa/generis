@@ -23,6 +23,7 @@ namespace oat\oatbox\service;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+
 /**
  * Class ServiceManagerAwareTrait
  *

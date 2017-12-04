@@ -42,6 +42,18 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
     private $subServices = [];
 
     /**
+     * Get the service manager
+     *
+     * @deprecated Use $this->propagate instead
+     *
+     * @param $serviceManager
+     */
+    public function setServiceManager($serviceManager)
+    {
+        $this->setServiceLocator($serviceManager);
+    }
+
+    /**
      * Get a subservice from the current service $options
      *
      * @param $id
