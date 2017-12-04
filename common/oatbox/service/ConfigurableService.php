@@ -21,7 +21,6 @@ namespace oat\oatbox\service;
 
 use oat\oatbox\Configurable;
 use oat\oatbox\service\exception\InvalidService;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
