@@ -32,7 +32,7 @@ trait LoggerAwareTrait
      * @var LoggerInterface
      */
     private $logger;
-    
+
     /**
      * 
      * @param LoggerInterface $logger
@@ -49,7 +49,7 @@ trait LoggerAwareTrait
     public function getLogger()
     {
         if (is_null($this->logger)) {
-            $this->logger = new \common_log_Logger2Psr(\common_Logger::singleton());
+            $this->logger = \common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig('logger');
         }
         return $this->logger;
     }

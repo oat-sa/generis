@@ -21,6 +21,9 @@
  * 
  */
 
+use oat\oatbox\service\ServiceManager;
+use oat\oatbox\log\LoggerService;
+
 /**
  * Abstraction for the System Logger
  *
@@ -135,16 +138,10 @@ class common_Logger
      */
     public static function singleton()
     {
-        $returnValue = null;
-
-        
-		if (is_null(self::$instance)){
-			self::$instance = new self();
+        if (is_null(self::$instance)) {
+            self::$instance = new self();
         }
-		$returnValue = self::$instance;
-        
-
-        return $returnValue;
+        return self::$instance;
     }
 
     /**
@@ -204,7 +201,11 @@ class common_Logger
      */
     public function log($level, $message, $tags, $errorFile = '', $errorLine = 0)
     {
-        
+//        $tags = is_array($tags) ? $tags : [$tags];
+//        $logger = ServiceManager::getServiceManager()->get(LoggerService::SERVICE_ID)->getLogger();
+//        $logger->log(common_log_Logger2Psr::getPsrLevelFromCommon($level), $message, $tags);
+//        return;
+
 		if ($this->enabled && $this->getDispatcher()->getLogThreshold() <= $level) {
 			$this->disable();
 			$stack = defined('DEBUG_BACKTRACE_IGNORE_ARGS')
@@ -245,7 +246,7 @@ class common_Logger
 			if(is_string($tags)){
 				$tags = array($tags);
 			}
-			
+
 			$this->getDispatcher()->log(new common_log_Item($message, $level, time(), $stack, $tags, $requestURI, $errorFile, $errorLine));
 			$this->restore();
 		};

@@ -85,7 +85,7 @@ trait ServiceManagerAwareTrait
             $service->setServiceLocator($this->getServiceLocator());
         }
 
-        // Propagate the service logger
+        // Propagate the logger service
         if ($service instanceof LoggerAwareInterface) {
             if ($this instanceof TaoLoggerAwareInterface) {
                 $logger = $this->getLogger();
