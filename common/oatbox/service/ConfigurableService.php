@@ -34,34 +34,21 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  */
 abstract class ConfigurableService extends Configurable implements ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceManagerAwareTrait;
 
     /** @var string Documentation header */
     protected $header = null;
 
     private $subServices = [];
 
-    public function setServiceManager(ServiceManager $serviceManager)
-    {
-        return $this->setServiceLocator($serviceManager);
-    }
-
     /**
-     *
-     * @return \oat\oatbox\service\ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->getServiceLocator();
-    }
-
-    /**
-     * Get a subservice from the current service
+     * Get a subservice from the current service $options
      *
      * @param $id
-     * @param string $interface
-     * @throws ServiceNotFoundException
-     * @return object
+     * @param null $interface
+     * @return mixed
+     * @throws InvalidService
+     * @throws \common_exception_Error
      */
     public function getSubService($id, $interface = null)
     {
@@ -118,17 +105,19 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
     }
 
     /**
-     * @param $serviceDefinition
-     * @param string $interfaceName
+     * Build a sub service from current service $options
      *
-     * @return ConfigurableService
+     * @param $serviceDefinition
+     * @param null $interfaceName
+     * @return mixed
      * @throws InvalidService
+     * @throws \common_exception_Error
      */
     protected function buildService($serviceDefinition, $interfaceName = null)
     {
         if ($serviceDefinition instanceof ConfigurableService) {
             if (is_null($interfaceName) || is_a($serviceDefinition, $interfaceName)) {
-                $this->getServiceManager()->propagate($serviceDefinition);
+                $this->propagate($serviceDefinition);
                 return $serviceDefinition;
             } else {
                 throw new InvalidService('Service must implements ' . $interfaceName);

@@ -21,6 +21,7 @@
 
 namespace oat\oatbox\service;
 
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 /**
  * Class ServiceManagerAwareTrait
@@ -57,13 +58,30 @@ trait ServiceManagerAwareTrait
      * Register a service through ServiceManager
      *
      * @param $serviceKey
-     * @param $service
+     * @param ConfigurableService $service
      * @param bool $allowOverride
+     * @throws \common_Exception
      */
     public function registerService($serviceKey, ConfigurableService $service, $allowOverride = true)
     {
         if ($allowOverride || ! $this->getServiceLocator()->has($serviceKey)) {
             $this->getServiceManager()->register($serviceKey, $service);
         }
+    }
+
+    /**
+     * Propagate service dependencies
+     *
+     * @param $service
+     * @return mixed
+     */
+    protected function propagate($service)
+    {
+        // Propagate the service manager
+        if ($service instanceof ServiceLocatorAwareInterface) {
+            $service->setServiceLocator($this->getServiceLocator());
+        }
+
+        return $service;
     }
 }
