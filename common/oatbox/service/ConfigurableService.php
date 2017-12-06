@@ -119,7 +119,7 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
      * Build a sub service from current service $options
      *
      * @param $serviceDefinition
-     * @param null $interfaceName
+     * @param string $interfaceName
      * @return mixed
      * @throws InvalidService
      * @throws \common_exception_Error
