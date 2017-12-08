@@ -17,8 +17,11 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+
+use oat\generis\model\GenerisRdf;
+use oat\generis\model\OntologyRdfs;
 
 /**
  * Short description of class core_kernel_persistence_smoothsql_Property
@@ -148,7 +151,7 @@ class core_kernel_persistence_smoothsql_Property
         $returnValue = null;
 
         
-        $rangeProp = new core_kernel_classes_Property(RDFS_RANGE, __METHOD__);
+        $rangeProp = new core_kernel_classes_Property(OntologyRdfs::RDFS_RANGE, __METHOD__);
         $returnValue = $this->setPropertyValue($resource, $rangeProp, $class->getUri());
         
 
@@ -167,8 +170,8 @@ class core_kernel_persistence_smoothsql_Property
     public function setMultiple( core_kernel_classes_Resource $resource, $isMultiple)
     {
         
-    	$multipleProperty = new core_kernel_classes_Property(PROPERTY_MULTIPLE);
-        $value = ((bool)$isMultiple) ?  GENERIS_TRUE : GENERIS_FALSE ;
+    	$multipleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_MULTIPLE);
+        $value = ((bool)$isMultiple) ?  GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
         $this->removePropertyValues($resource, $multipleProperty);
         $this->setPropertyValue($resource, $multipleProperty, $value);
         
@@ -186,8 +189,8 @@ class core_kernel_persistence_smoothsql_Property
     public function setLgDependent( core_kernel_classes_Resource $resource, $isLgDependent)
     {
         
-    	$lgDependentProperty = new core_kernel_classes_Property(PROPERTY_IS_LG_DEPENDENT,__METHOD__);
-        $value = ((bool)$isLgDependent) ?  GENERIS_TRUE : GENERIS_FALSE ;
+    	$lgDependentProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_IS_LG_DEPENDENT,__METHOD__);
+        $value = ((bool)$isLgDependent) ?  GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
         $this->removePropertyValues($resource, $lgDependentProperty);
         $this->setPropertyValue($resource, $lgDependentProperty, $value);
         

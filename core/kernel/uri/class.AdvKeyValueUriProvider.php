@@ -20,7 +20,7 @@
  * 
  */
 
-use oat\oatbox\Configurable;
+use oat\oatbox\service\ConfigurableService;
 use oat\generis\model\kernel\uri\UriProvider;
 /**
  * UriProvider implementation based on an advanced key value storage
@@ -29,7 +29,7 @@ use oat\generis\model\kernel\uri\UriProvider;
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
  */
-class core_kernel_uri_AdvKeyValueUriProvider extends Configurable
+class core_kernel_uri_AdvKeyValueUriProvider extends ConfigurableService
     implements UriProvider
 {
     const OPTION_PERSISTENCE = 'persistence';

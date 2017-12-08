@@ -16,8 +16,10 @@
  * 
  * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg) (under the project TAO-QUAL);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- * 
+ *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+
+use oat\generis\model\RulesRdf;
 
 
 /**
@@ -60,7 +62,7 @@ class core_kernel_rules_Rule
         
 		common_Logger::i('Evaluating rule '.$this->getLabel().'('.$this->getUri().')', array('Generis Rule'));
          if(empty($this->expression)){
-         	$property = new core_kernel_classes_Property(PROPERTY_RULE_IF);
+         	$property = new core_kernel_classes_Property(RulesRdf::PROPERTY_RULE_IF);
          	$this->expression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->getUri() ,__METHOD__);
         }
         $returnValue = $this->expression;

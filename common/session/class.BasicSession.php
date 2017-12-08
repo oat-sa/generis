@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
 
@@ -27,6 +27,9 @@
  * @package generis
  
  */
+
+use oat\generis\model\GenerisRdf;
+use oat\generis\model\OntologyRdfs;
 use oat\oatbox\user\User;
 use oat\oatbox\Refreshable;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -70,19 +73,19 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
      */
     public function getUserLabel() {
         $label = '';
-        $first = $this->user->getPropertyValues(PROPERTY_USER_FIRSTNAME);
+        $first = $this->user->getPropertyValues(GenerisRdf::PROPERTY_USER_FIRSTNAME);
         $label .= empty($first) ? '' : current($first);
-        $last = $this->user->getPropertyValues(PROPERTY_USER_LASTNAME);
+        $last = $this->user->getPropertyValues(GenerisRdf::PROPERTY_USER_LASTNAME);
         $label .= empty($last) ? '' : ' '.current($last);
         $label = trim($label);
         if (empty($label)) {
-            $login = $this->user->getPropertyValues(PROPERTY_USER_LOGIN);
+            $login = $this->user->getPropertyValues(GenerisRdf::PROPERTY_USER_LOGIN);
             if (!empty($login)) {
                 $label = current($login);
             }
         }
         if (empty($label)) {
-            $rdflabel = $this->user->getPropertyValues(RDFS_LABEL);
+            $rdflabel = $this->user->getPropertyValues(OntologyRdfs::RDFS_LABEL);
             $label =  empty($rdflabel) ? __('user') : current($rdflabel);
         }
         return $label;
@@ -95,7 +98,7 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
     public function getUserRoles() {
         $returnValue = array();
         // We use a Depth First Search approach to flatten the Roles Graph.
-        foreach ($this->user->getPropertyValues(PROPERTY_USER_ROLES) as $roleUri){
+        foreach ($this->user->getPropertyValues(GenerisRdf::PROPERTY_USER_ROLES) as $roleUri){
             $returnValue[$roleUri] = $roleUri;
             $role = new core_kernel_classes_Resource($roleUri);
             foreach (core_kernel_users_Service::singleton()->getIncludedRoles($role) as $incRole) {
@@ -110,7 +113,7 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
      * @see common_session_Session::getDataLanguage()
      */
     public function getDataLanguage() {
-        $lang = $this->user->getPropertyValues(PROPERTY_USER_DEFLG);
+        $lang = $this->user->getPropertyValues(GenerisRdf::PROPERTY_USER_DEFLG);
         return empty($lang) ? DEFAULT_LANG : (string)current($lang);
     }
     
@@ -119,7 +122,7 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
      * @see common_session_Session::getInterfaceLanguage()
      */
     public function getInterfaceLanguage() {
-        $lang = $this->user->getPropertyValues(PROPERTY_USER_UILG);
+        $lang = $this->user->getPropertyValues(GenerisRdf::PROPERTY_USER_UILG);
         return empty($lang) ? DEFAULT_LANG : (string)current($lang);
     }
     
@@ -128,7 +131,7 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
      * @see common_session_Session::getTimeZone()
      */
     public function getTimeZone() {
-        $tzs = $this->user->getPropertyValues(PROPERTY_USER_TIMEZONE);
+        $tzs = $this->user->getPropertyValues(GenerisRdf::PROPERTY_USER_TIMEZONE);
         $tz = empty($tzs) ? '' : (string)current($tzs);
         return empty($tz) ? TIME_ZONE : $tz;
     }

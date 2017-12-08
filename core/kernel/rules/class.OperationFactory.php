@@ -16,8 +16,12 @@
  * 
  * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg) (under the project TAO-QUAL);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
+ *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ *
  * 
  */
+
+use oat\generis\model\RulesRdf;
 
 /**
  * Short description of class core_kernel_rules_OperationFactory
@@ -51,12 +55,12 @@ class core_kernel_rules_OperationFactory
         $returnValue = null;
 
         
-        $operationClass = new core_kernel_classes_Class(CLASS_OPERATION,__METHOD__); 
+        $operationClass = new core_kernel_classes_Class(RulesRdf::CLASS_OPERATION,__METHOD__);
         $label = 'Def Operation Label ' . $term1->getLabel() . ' ' . $operator->getLabel() . ' ' . $term2->getLabel();
         $comment = 'Def Operation Comment ' . $term1->getUri() . ' ' . $operator->getUri(). ' ' . $term2->getUri();
-		$operatorProperty = new core_kernel_classes_Property(PROPERTY_OPERATION_OPERATOR,__METHOD__);
-        $firstOperand = new core_kernel_classes_Property(PROPERTY_OPERATION_FIRST_OP,__METHOD__);
-		$secondOperand = new core_kernel_classes_Property(PROPERTY_OPERATION_SECND_OP,__METHOD__);		
+		$operatorProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_OPERATION_OPERATOR,__METHOD__);
+        $firstOperand = new core_kernel_classes_Property(RulesRdf::PROPERTY_OPERATION_FIRST_OP,__METHOD__);
+		$secondOperand = new core_kernel_classes_Property(RulesRdf::PROPERTY_OPERATION_SECOND_OP,__METHOD__);
         $termOperationInstance = core_kernel_classes_ResourceFactory::create($operationClass,$label,$comment);
         $returnValue = new core_kernel_rules_Operation($termOperationInstance->getUri());
         $returnValue->debug = __METHOD__;

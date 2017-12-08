@@ -16,8 +16,12 @@
  * 
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2017 ((update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+
+use oat\generis\model\OntologyRdf;
+use oat\generis\model\OntologyRdfs;
+use oat\generis\model\WidgetRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class ApiModelTest extends GenerisPhpUnitTestRunner {
@@ -43,11 +47,11 @@ class ApiModelTest extends GenerisPhpUnitTestRunner {
 		
 		$rootClasses = $this->object->getRootClasses();
 		$this->assertInstanceOf('common_Collection',$rootClasses);
-		$expectedResult = 	array( 	
-			WIDGET_CONSTRAINT_TYPE,
-			CLASS_WIDGET,
-			RDFS_RESOURCE,
-		    CLASS_WIDGETRENDERER
+		$expectedResult = 	array(
+            WidgetRdf::PROPERTY_WIDGET_CONSTRAINT_TYPE,
+            WidgetRdf::CLASS_URI_WIDGET,
+            OntologyRdfs::RDFS_RESOURCE,
+            WidgetRdf::CLASS_URI_WIDGET_RENDERER
 		);
 		
 		$pattern = "/^".preg_quote($localModel, '/')."/";
@@ -61,7 +65,7 @@ class ApiModelTest extends GenerisPhpUnitTestRunner {
 			$types = $rootClass->getTypes(true);
 			$this->assertEquals(1, count($types));
 			foreach($types as $uri => $parent){
-				$this->assertEquals($uri,  RDFS_CLASS);
+				$this->assertEquals($uri,  OntologyRdfs::RDFS_CLASS);
 			}
 			//don't check the user root classes
 			if(!preg_match($pattern, $rootClass->getUri())){
@@ -74,7 +78,7 @@ class ApiModelTest extends GenerisPhpUnitTestRunner {
 		$metaClasses = $this->object->getMetaClasses();
 		$this->assertInstanceOf('core_kernel_classes_ContainerCollection',$metaClasses);
 		foreach ($metaClasses as $metaClass){
-		    if ($metaClass->getUri() == RDFS_DATATYPE) {
+		    if ($metaClass->getUri() == OntologyRdfs::RDFS_DATATYPE) {
         		$this->assertInstanceOf('core_kernel_classes_Class',$metaClass);
         		$this->assertEquals($metaClass->getLabel(),'Datatype');
         		$this->assertEquals($metaClass->getComment(),'The class of RDF datatypes.');
@@ -83,8 +87,8 @@ class ApiModelTest extends GenerisPhpUnitTestRunner {
 	}
 	
 	public function testSetStatement(){
-		$true = new core_kernel_classes_Resource(GENERIS_TRUE, __METHOD__);
-		$predicate = RDFS_SEEALSO;
+		$true = new core_kernel_classes_Resource(GenerisRdf::GENERIS_TRUE, __METHOD__);
+		$predicate = OntologyRdfs::RDFS_SEEALSO;
 		$property = new core_kernel_classes_Property($predicate,__METHOD__); 
 		$this->assertTrue($this->object->setStatement($true->getUri(), $predicate, 'test', DEFAULT_LANG), 
 						  "setStatement should be able to set a value.");
@@ -107,23 +111,23 @@ class ApiModelTest extends GenerisPhpUnitTestRunner {
 	}
 	
 	public function testRemoveStatement(){
-		$true = new core_kernel_classes_Resource(GENERIS_TRUE, __METHOD__);
-		$predicate = RDFS_SEEALSO;
+		$true = new core_kernel_classes_Resource(GenerisRdf::GENERIS_TRUE, __METHOD__);
+		$predicate = OntologyRdfs::RDFS_SEEALSO;
 		$property = new core_kernel_classes_Property($predicate,__METHOD__); 
-		$this->assertTrue($this->object->setStatement(GENERIS_TRUE,$predicate,'test', 'EN'));
-		$remove = $this->object->removeStatement(GENERIS_TRUE,$predicate,'test','EN');
+		$this->assertTrue($this->object->setStatement(GenerisRdf::GENERIS_TRUE,$predicate,'test', 'EN'));
+		$remove = $this->object->removeStatement(GenerisRdf::GENERIS_TRUE,$predicate,'test','EN');
 		$this->assertTrue($remove);
 		$value = $true->getPropertyValuesCollection($property);
 		$this->assertTrue($value->isEmpty());
 	}
 	
 	public function testGetSubject(){
-		$set = $this->object->getSubject(RDFS_LABEL , 'True');
+		$set = $this->object->getSubject(OntologyRdfs::RDFS_LABEL , 'True');
 		if($set instanceof core_kernel_classes_ContainerCollection) {
 			$this->assertFalse($set->isEmpty());
 			$found = false;
 			foreach($set->getIterator() as $resource){
-				if($resource->getUri() == GENERIS_TRUE){
+				if($resource->getUri() == GenerisRdf::GENERIS_TRUE){
 					$found = true;
 					break;
 				}
@@ -140,27 +144,27 @@ class ApiModelTest extends GenerisPhpUnitTestRunner {
 		$this->assertInstanceOf('core_kernel_classes_ContainerCollection',$collection);
 		foreach ($collection->getIterator() as $aClass) {
 			$this->assertInstanceOf('core_kernel_classes_Class',$aClass);
-			if($aClass->getUri() === RDFS_CLASS){
+			if($aClass->getUri() === OntologyRdfs::RDFS_CLASS){
 				$this->assertEquals($aClass->getLabel(),'Class');
 				$this->assertEquals($aClass->getComment(),'The class of classes.');
 			}
-			if($aClass->getUri() === RDF_STATEMENT){
+			if($aClass->getUri() === OntologyRdf::RDF_STATEMENT){
 				$this->assertEquals($aClass->getLabel(),'Statement');
 				$this->assertEquals($aClass->getComment(), 'The class of RDF statements.');
 			}
-			if($aClass->getUri() === RDFS_RESOURCE){
+			if($aClass->getUri() === OntologyRdfs::RDFS_RESOURCE){
 				$this->assertEquals($aClass->getLabel(),'Resource');
 				$this->assertEquals($aClass->getComment(), 'The class resource, everything.');
 			}
-			if($aClass->getUri() ===  RDF_PROPERTY){
+			if($aClass->getUri() ===  OntologyRdf::RDF_PROPERTY){
 				$this->assertEquals($aClass->getLabel(),'Property');
 				$this->assertEquals($aClass->getComment(), 'The class of RDF properties.');
 			}
-			if($aClass->getUri() ===  CLASS_GENERIS_RESOURCE){
+			if($aClass->getUri() ===  GenerisRdf::CLASS_GENERIS_RESOURCE){
 				$this->assertEquals($aClass->getLabel(),'generis_Ressource');
 				$this->assertEquals($aClass->getComment(), 'generis_Ressource');
 			}
-			if($aClass->getUri() ===  RDFS_DATATYPE){
+			if($aClass->getUri() ===  OntologyRdfs::RDFS_DATATYPE){
 				$this->assertEquals($aClass->getLabel(),'Datatype');
 				$this->assertEquals($aClass->getComment(), 'The class of RDF datatypes.');
 			}
