@@ -14,12 +14,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) 2014 Open Assessment Technologies SA
+ * Copyright (c) 2002-2017 (original work) 2014 Open Assessment Technologies SA
  * 
  */
 namespace oat\generis\model\kernel\persistence\wrapper;
 
 use oat\generis\model\data\RdfsInterface;
+use oat\generis\model\GenerisRdf;
+use oat\generis\model\OntologyRdf;
+use oat\generis\model\OntologyRdfs;
+
 /**
  * Wraps the RdfsInterface in a Rdf interface
  * 
@@ -51,31 +55,31 @@ class RdfWrapper
      */
     public function add(\core_kernel_classes_Triple $triple) {
         switch ($triple->predicate) {
-        	case RDF_TYPE :
+        	case OntologyRdf::RDF_TYPE :
                 $resource = new \core_kernel_classes_Resource($triple->subject);
         	    $class = new \core_kernel_classes_Class($triple->object);
         	    return $this->rdfsInterface->getResourceImplementation()->setType($resource, $class);
         	    break;
         	    
-    	    case RDFS_RANGE :
+    	    case OntologyRdfs::RDFS_RANGE :
     	        $resource = new \core_kernel_classes_Property($triple->subject);
     	        $class = new \core_kernel_classes_Class($triple->object);
         	    return $this->rdfsInterface->getPropertyImplementation()->setRange($resource, $class);
         	    break;
         	    
-        	case PROPERTY_MULTIPLE :
+        	case GenerisRdf::PROPERTY_MULTIPLE :
         	    $resource = new \core_kernel_classes_Property($triple->subject);
-        	    $value = $triple->object == GENERIS_TRUE;
+        	    $value = $triple->object == GenerisRdf::GENERIS_TRUE;
         	    return $this->rdfsInterface->getPropertyImplementation()->setMultiple($resource, $value);
         	    break;
         	    
-    	    case PROPERTY_IS_LG_DEPENDENT :
+    	    case GenerisRdf::PROPERTY_IS_LG_DEPENDENT :
     	        $resource = new \core_kernel_classes_Property($triple->subject);
-        	    $value = $triple->object == GENERIS_TRUE;
+        	    $value = $triple->object == GenerisRdf::GENERIS_TRUE;
         	    return $this->rdfsInterface->getPropertyImplementation()->setLgDependent($resource, $value);
         	    break;
     	        
-	        case RDFS_DOMAIN :
+	        case OntologyRdfs::RDFS_DOMAIN :
 	        default:
 	            $resource = new \core_kernel_classes_Resource($triple->subject);
 	            $property = new \core_kernel_classes_Property($triple->predicate);

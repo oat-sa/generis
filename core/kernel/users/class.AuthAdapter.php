@@ -14,10 +14,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *               
  */
 
+use oat\generis\model\GenerisRdf;
+use oat\generis\model\OntologyRdfs;
 use oat\oatbox\user\auth\LoginAdapter;
 
 /**
@@ -71,8 +73,8 @@ class core_kernel_users_AuthAdapter
      */
     public function authenticate() {
     	
-    	$userClass = new core_kernel_classes_Class(CLASS_GENERIS_USER);
-    	$filters = array(PROPERTY_USER_LOGIN => $this->username);
+    	$userClass = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_USER);
+    	$filters = array(GenerisRdf::PROPERTY_USER_LOGIN => $this->username);
     	$options = array('like' => false, 'recursive' => true);
     	$users = $userClass->searchInstances($filters, $options);
     	
@@ -83,7 +85,7 @@ class core_kernel_users_AuthAdapter
     	}
         if (empty($users)){
             // fake code execution to prevent timing attacks
-            $label = new core_kernel_classes_Property(RDFS_LABEL);
+            $label = new core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL);
             $hash = $label->getUniquePropertyValue($label);
             if (!core_kernel_users_Service::getPasswordHash()->verify($this->password, $hash)) {
                 throw new core_kernel_users_InvalidLoginException();
@@ -93,7 +95,7 @@ class core_kernel_users_AuthAdapter
     	}
     	
 	    $userResource = current($users);
-	    $hash = $userResource->getUniquePropertyValue(new core_kernel_classes_Property(PROPERTY_USER_PASSWORD));
+	    $hash = $userResource->getUniquePropertyValue(new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_PASSWORD));
 	    if (!core_kernel_users_Service::getPasswordHash()->verify($this->password, $hash)) {
 	        throw new core_kernel_users_InvalidLoginException();
 	    }
