@@ -22,6 +22,10 @@ namespace oat\generis\model\data\event;
 
 use oat\oatbox\event\Event;
 
+/**
+ * Class ResourceUpdated
+ * @package oat\generis\model\data\event
+ */
 class ResourceUpdated implements Event
 {
     private $resource;
