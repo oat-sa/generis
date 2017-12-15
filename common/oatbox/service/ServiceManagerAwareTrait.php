@@ -21,6 +21,7 @@
 
 namespace oat\oatbox\service;
 
+use oat\oatbox\service\exception\InvalidServiceManagerException;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
@@ -43,14 +44,14 @@ trait ServiceManagerAwareTrait
      * It should be used for service building, register, build, propagate
      * For reading operation please use $this->getServiceLocator() instead
      *
-     * @throws \common_exception_Error
+     * @throws InvalidServiceManagerException
      * @return ServiceManager
      */
     public function getServiceManager()
     {
         $serviceManager = $this->getServiceLocator();
         if (! $serviceManager instanceof ServiceManager) {
-            throw new \common_exception_Error('Alternate service locator not compatible with ' . __CLASS__);
+            throw new InvalidServiceManagerException('Alternate service locator not compatible with ' . __CLASS__);
         }
         return $serviceManager;
     }

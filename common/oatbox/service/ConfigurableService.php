@@ -21,6 +21,7 @@ namespace oat\oatbox\service;
 
 use oat\oatbox\Configurable;
 use oat\oatbox\service\exception\InvalidService;
+use oat\oatbox\service\exception\InvalidServiceManagerException;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
@@ -59,7 +60,7 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
      * @param string $interface
      * @return mixed
      * @throws InvalidService
-     * @throws \common_exception_Error
+     * @throws InvalidServiceManagerException
      */
     public function getSubService($id, $interface = null)
     {
@@ -122,7 +123,7 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
      * @param string $interfaceName
      * @return mixed
      * @throws InvalidService
-     * @throws \common_exception_Error
+     * @throws InvalidServiceManagerException
      */
     protected function buildService($serviceDefinition, $interfaceName = null)
     {

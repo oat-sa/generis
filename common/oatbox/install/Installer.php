@@ -21,6 +21,7 @@ namespace oat\oatbox\install;
 
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\exception\InvalidService;
+use oat\oatbox\service\exception\InvalidServiceManagerException;
 use oat\oatbox\service\ServiceConfigDriver;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\filesystem\FileSystemService;
@@ -56,12 +57,13 @@ class Installer extends ConfigurableService
      * @param $configPath
      * @return ServiceManager
      * @throws \common_exception_Error
+     * @throws InvalidServiceManagerException
      */
     public function setupServiceManager($configPath)
     {
         try {
             $this->getServiceManager();
-        } catch (\common_exception_Error $e) {
+        } catch (InvalidServiceManagerException $e) {
             if (! \helpers_File::emptyDirectory($configPath, true)) {
                 throw new \common_exception_Error('Unable to empty ' . $configPath . ' folder.');
             }
@@ -81,6 +83,8 @@ class Installer extends ConfigurableService
      * Install the filesystem service if not already installed
      *
      * @throws InvalidService If installed filesystem is not a FileSystemService
+     * @throws InvalidServiceManagerException
+     * @throws \common_Exception
      */
     protected function installFilesystem()
     {
