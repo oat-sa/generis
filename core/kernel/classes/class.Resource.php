@@ -395,8 +395,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->setPropertyValue($this, $property, $object);
-        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
-        $eventManager->trigger(new ResourceUpdated($this));
+        $this->onUpdate();
         return (bool) $returnValue;
     }
 
@@ -413,8 +412,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->setPropertiesValues($this, $propertiesValues);
-        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
-        $eventManager->trigger(new ResourceUpdated($this));
+        $this->onUpdate();
         return (bool) $returnValue;
     }
 
@@ -432,8 +430,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->setPropertyValueByLg($this, $property, $value, $lg);
-        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
-        $eventManager->trigger(new ResourceUpdated($this));
+        $this->onUpdate();
         return (bool) $returnValue;
     }
 
@@ -496,8 +493,7 @@ class core_kernel_classes_Resource
         	'pattern'	=> (is_object($value) && $value instanceof self ? $value->getUri() : $value),
         	'like'		=> false 
         ));
-        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
-        $eventManager->trigger(new ResourceUpdated($this));
+        $this->onUpdate();
         return (bool) $returnValue;
     }    
 
@@ -514,8 +510,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->removePropertyValues($this, $property, $options);
-        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
-        $eventManager->trigger(new ResourceUpdated($this));
+        $this->onUpdate();
         return (bool) $returnValue;
     }
 
@@ -533,8 +528,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->removePropertyValueByLg($this, $prop, $lg, $options);
-        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
-        $eventManager->trigger(new ResourceUpdated($this));
+        $this->onUpdate();
         return (bool) $returnValue;
     }
 
@@ -755,6 +749,12 @@ class core_kernel_classes_Resource
     public function getServiceManager()
     {
         return ServiceManager::getServiceManager();
+    }
+
+    private function onUpdate()
+    {
+        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
+        $eventManager->trigger(new ResourceUpdated($this));
     }
   
 }
