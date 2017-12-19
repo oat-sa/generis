@@ -25,6 +25,8 @@ use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\oatbox\service\ServiceManager;
 use oat\generis\model\OntologyAwareTrait;
+use oat\oatbox\event\EventManager;
+use oat\generis\model\data\event\ResourceUpdated;
 
 /**
  * Resource implements rdf:resource container identified by an uri (a string).
@@ -393,6 +395,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->setPropertyValue($this, $property, $object);
+        $this->onUpdate();
         return (bool) $returnValue;
     }
 
@@ -409,6 +412,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->setPropertiesValues($this, $propertiesValues);
+        $this->onUpdate();
         return (bool) $returnValue;
     }
 
@@ -426,6 +430,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->setPropertyValueByLg($this, $property, $value, $lg);
+        $this->onUpdate();
         return (bool) $returnValue;
     }
 
@@ -487,7 +492,8 @@ class core_kernel_classes_Resource
         $returnValue = $this->getImplementation()->removePropertyValues($this, $property, array(
         	'pattern'	=> (is_object($value) && $value instanceof self ? $value->getUri() : $value),
         	'like'		=> false 
-        ));      
+        ));
+        $this->onUpdate();
         return (bool) $returnValue;
     }    
 
@@ -504,6 +510,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->removePropertyValues($this, $property, $options);
+        $this->onUpdate();
         return (bool) $returnValue;
     }
 
@@ -521,6 +528,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->removePropertyValueByLg($this, $prop, $lg, $options);
+        $this->onUpdate();
         return (bool) $returnValue;
     }
 
@@ -741,6 +749,12 @@ class core_kernel_classes_Resource
     public function getServiceManager()
     {
         return ServiceManager::getServiceManager();
+    }
+
+    private function onUpdate()
+    {
+        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
+        $eventManager->trigger(new ResourceUpdated($this));
     }
   
 }
