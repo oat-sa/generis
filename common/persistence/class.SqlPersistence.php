@@ -74,6 +74,20 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
     {
         return $this->getDriver()->insertMultiple($tableName, $data);
     }
+
+    /**
+     * @param string $table
+     * @param string $index
+     * @param array $rows
+     * @param array $otherWheres
+     * @return bool
+     * @throws Exception
+     */
+    public function updateMultiple($table, array $data)
+    {
+        return $this->getDriver()->updateMultiple($table, $data);
+    }
+
     /**
      * 
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
