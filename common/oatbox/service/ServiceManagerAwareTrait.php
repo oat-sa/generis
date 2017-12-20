@@ -21,7 +21,10 @@
 
 namespace oat\oatbox\service;
 
+use oat\oatbox\service\exception\InvalidServiceManagerException;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+
 /**
  * Class ServiceManagerAwareTrait
  *
@@ -41,14 +44,17 @@ trait ServiceManagerAwareTrait
      * It should be used for service building, register, build, propagate
      * For reading operation please use $this->getServiceLocator() instead
      *
-     * @throws \common_exception_Error
+     * @throws InvalidServiceManagerException
      * @return ServiceManager
      */
     public function getServiceManager()
     {
         $serviceManager = $this->getServiceLocator();
         if (! $serviceManager instanceof ServiceManager) {
-            throw new \common_exception_Error('Alternate service locator not compatible with ' . __CLASS__);
+            $msg = is_null($serviceManager)
+                ? 'ServiceLocator not initialized for '.get_class($this)
+                : 'Alternate service locator not compatible with getServiceManager() in ' . __CLASS__;
+            throw new InvalidServiceManagerException($msg);
         }
         return $serviceManager;
     }
@@ -57,13 +63,30 @@ trait ServiceManagerAwareTrait
      * Register a service through ServiceManager
      *
      * @param $serviceKey
-     * @param $service
+     * @param ConfigurableService $service
      * @param bool $allowOverride
+     * @throws \common_Exception
      */
     public function registerService($serviceKey, ConfigurableService $service, $allowOverride = true)
     {
         if ($allowOverride || ! $this->getServiceLocator()->has($serviceKey)) {
             $this->getServiceManager()->register($serviceKey, $service);
         }
+    }
+
+    /**
+     * Propagate service dependencies
+     *
+     * @param $service
+     * @return mixed
+     */
+    protected function propagate($service)
+    {
+        // Propagate the service manager
+        if ($service instanceof ServiceLocatorAwareInterface) {
+            $service->setServiceLocator($this->getServiceLocator());
+        }
+
+        return $service;
     }
 }

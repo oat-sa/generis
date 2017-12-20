@@ -23,7 +23,6 @@ namespace oat\oatbox\service;
 use oat\oatbox\Configurable;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use oat\oatbox\config\ConfigurationService;
 
 /**
  * The simple placeholder ServiceManager
@@ -170,5 +169,16 @@ class ServiceManager implements ServiceLocatorInterface
     public function __sleep()
     {
         return [];
+    }
+
+    /**
+     * Dynamically overload a service without persisting it
+     *
+     * @param $serviceKey
+     * @param ConfigurableService $service
+     */
+    public function overload($serviceKey, ConfigurableService $service)
+    {
+        $this->services[$serviceKey] = $service;
     }
 }
