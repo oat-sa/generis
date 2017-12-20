@@ -21,8 +21,11 @@
 namespace oat\oatbox\extension;
 
 use oat\oatbox\action\Action;
+<<<<<<< HEAD
 use oat\oatbox\log\LoggerAwareTrait;
 use oat\oatbox\log\TaoLoggerAwareInterface;
+=======
+>>>>>>> 826b54335f7184b4ebb7f47eab75cd47615fb49f
 use oat\oatbox\service\ServiceManagerAwareInterface;
 use oat\oatbox\service\ServiceManagerAwareTrait;
 
@@ -31,8 +34,14 @@ use oat\oatbox\service\ServiceManagerAwareTrait;
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
+<<<<<<< HEAD
 abstract class AbstractAction implements Action, ServiceManagerAwareInterface, TaoLoggerAwareInterface
 {
     use ServiceManagerAwareTrait;
     use LoggerAwareTrait;
+=======
+abstract class AbstractAction implements Action, ServiceManagerAwareInterface
+{
+    use ServiceManagerAwareTrait;
+>>>>>>> 826b54335f7184b4ebb7f47eab75cd47615fb49f
 }

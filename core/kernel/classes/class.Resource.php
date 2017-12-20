@@ -17,12 +17,16 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *               2015 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
 use oat\generis\model\data\ModelManager;
+use oat\generis\model\OntologyRdf;
+use oat\generis\model\OntologyRdfs;
 use oat\oatbox\service\ServiceManager;
 use oat\generis\model\OntologyAwareTrait;
+use oat\oatbox\event\EventManager;
+use oat\generis\model\data\event\ResourceUpdated;
 
 /**
  * Resource implements rdf:resource container identified by an uri (a string).
@@ -141,11 +145,11 @@ class core_kernel_classes_Resource
     public function isClass()
     {
         $returnValue = (bool) false;
-        if (count($this->getPropertyValues($this->getProperty(RDFS_SUBCLASSOF))) > 0) {
+        if (count($this->getPropertyValues($this->getProperty(OntologyRdfs::RDFS_SUBCLASSOF))) > 0) {
         	$returnValue = true;
         } else {
 	        foreach($this->getTypes() as $type){
-	        	if($type->getUri() == RDFS_CLASS){
+	        	if($type->getUri() == OntologyRdfs::RDFS_CLASS){
 	        		$returnValue = true;
 	        		break;
 	        	}
@@ -167,7 +171,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         foreach($this->getTypes() as $type){
-        	if($type->getUri() == RDF_PROPERTY){
+        	if($type->getUri() == OntologyRdf::RDF_PROPERTY){
         		$returnValue = true;
         		break;
         	}
@@ -198,7 +202,7 @@ class core_kernel_classes_Resource
     {
         if (is_null($this->label)) {
             
-            $label =  $this->getOnePropertyValue($this->getProperty(RDFS_LABEL));
+            $label =  $this->getOnePropertyValue($this->getProperty(OntologyRdfs::RDFS_LABEL));
             $this->label = is_null($label)
                 ? ''
                 : ($label instanceof core_kernel_classes_Resource
@@ -222,8 +226,8 @@ class core_kernel_classes_Resource
     public function setLabel($label)
     {
         $returnValue = (bool) false;
-        $this->removePropertyValues($this->getProperty(RDFS_LABEL));
-        $this->setPropertyValue($this->getProperty(RDFS_LABEL), $label);
+        $this->removePropertyValues($this->getProperty(OntologyRdfs::RDFS_LABEL));
+        $this->setPropertyValue($this->getProperty(OntologyRdfs::RDFS_LABEL), $label);
         $this->label = $label;
         return (bool) $returnValue;
     }
@@ -239,7 +243,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (string) '';
         if($this->comment == '') {
-            $comment =  $this->getOnePropertyValue($this->getProperty(RDFS_COMMENT));
+            $comment =  $this->getOnePropertyValue($this->getProperty(OntologyRdfs::RDFS_COMMENT));
             $this->comment = $comment != null ? $comment->literal : '';
              
         }
@@ -258,8 +262,8 @@ class core_kernel_classes_Resource
     public function setComment($comment)
     {
         $returnValue = (bool) false;
-        $this->removePropertyValues($this->getProperty(RDFS_COMMENT));
-        $this->setPropertyValue($this->getProperty(RDFS_COMMENT), $comment);
+        $this->removePropertyValues($this->getProperty(OntologyRdfs::RDFS_COMMENT));
+        $this->setPropertyValue($this->getProperty(OntologyRdfs::RDFS_COMMENT), $comment);
         $this->comment = $comment;
         return (bool) $returnValue;
     }
@@ -391,6 +395,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->setPropertyValue($this, $property, $object);
+        $this->onUpdate();
         return (bool) $returnValue;
     }
 
@@ -407,6 +412,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->setPropertiesValues($this, $propertiesValues);
+        $this->onUpdate();
         return (bool) $returnValue;
     }
 
@@ -424,6 +430,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->setPropertyValueByLg($this, $property, $value, $lg);
+        $this->onUpdate();
         return (bool) $returnValue;
     }
 
@@ -485,7 +492,8 @@ class core_kernel_classes_Resource
         $returnValue = $this->getImplementation()->removePropertyValues($this, $property, array(
         	'pattern'	=> (is_object($value) && $value instanceof self ? $value->getUri() : $value),
         	'like'		=> false 
-        ));      
+        ));
+        $this->onUpdate();
         return (bool) $returnValue;
     }    
 
@@ -502,6 +510,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->removePropertyValues($this, $property, $options);
+        $this->onUpdate();
         return (bool) $returnValue;
     }
 
@@ -519,6 +528,7 @@ class core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->removePropertyValueByLg($this, $prop, $lg, $options);
+        $this->onUpdate();
         return (bool) $returnValue;
     }
 
@@ -739,6 +749,12 @@ class core_kernel_classes_Resource
     public function getServiceManager()
     {
         return ServiceManager::getServiceManager();
+    }
+
+    private function onUpdate()
+    {
+        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
+        $eventManager->trigger(new ResourceUpdated($this));
     }
   
 }

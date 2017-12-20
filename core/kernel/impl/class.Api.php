@@ -17,8 +17,10 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2017  (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+
+use oat\tao\model\TaoOntology;
 
 /**
  * session has been set public because when implementing an interface, the son
@@ -56,7 +58,7 @@ class core_kernel_impl_Api
 
         
         if($role === true) {
-        	$role = new core_kernel_classes_Resource(INSTANCE_ROLE_GLOBALMANAGER);
+        	$role = new core_kernel_classes_Resource(TaoOntology::PROPERTY_INSTANCE_ROLE_GLOBALMANAGER);
         }
        
         core_kernel_users_Service::singleton()->login($login, $password, $role);

@@ -14,37 +14,35 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
  *
  *
  */
-namespace oat\oatbox\user;
 
-use oat\generis\model\GenerisRdf;
+namespace oat\generis\model\data\event;
 
-class AnonymousUser implements User
+use oat\oatbox\event\Event;
+
+/**
+ * Class ResourceUpdated
+ * @package oat\generis\model\data\event
+ */
+class ResourceUpdated implements Event
 {
-    /**
-     * (non-PHPdoc)
-     * @see \oat\oatbox\user\User::getIdentifier()
-     */
-    public function getIdentifier() {
-        return null;
-    }
+    private $resource;
     
-    /**
-     * (non-PHPdoc)
-     * @see \oat\oatbox\user\User::getRoles()
-     */
-    public function getRoles() {
-        return array(GenerisRdf::INSTANCE_ROLE_ANONYMOUS);
-    }
+	function __construct(\core_kernel_classes_Resource $resource)
+	{
+	    $this->resource = $resource;
+	}
     
-    /**
-     * (non-PHPdoc)
-     * @see \oat\oatbox\user\User::getPropertyValues()
-     */
-    public function getPropertyValues($property) {
-        return array();
-    }
+	function getResource()
+	{
+	    return $this->resource;
+	}
+
+	function getName()
+	{
+	    return __CLASS__;
+	}
 }

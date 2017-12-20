@@ -14,37 +14,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA
  *
  */
-namespace oat\oatbox\user;
 
-use oat\generis\model\GenerisRdf;
+namespace oat\oatbox\service\exception;
 
-class AnonymousUser implements User
+/**
+ * Class InvalidServiceManagerException
+ *
+ * To be used only when the service manager is not existing, invalid or setup correctly
+ *
+ * @package oat\oatbox\service\exception
+ */
+class InvalidServiceManagerException extends \common_Exception
 {
-    /**
-     * (non-PHPdoc)
-     * @see \oat\oatbox\user\User::getIdentifier()
-     */
-    public function getIdentifier() {
-        return null;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \oat\oatbox\user\User::getRoles()
-     */
-    public function getRoles() {
-        return array(GenerisRdf::INSTANCE_ROLE_ANONYMOUS);
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \oat\oatbox\user\User::getPropertyValues()
-     */
-    public function getPropertyValues($property) {
-        return array();
-    }
+
 }

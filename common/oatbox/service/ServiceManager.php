@@ -31,7 +31,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 class ServiceManager implements ServiceLocatorInterface
 {
     private static $instance;
-    
+
     public static function getServiceManager()
     {
         if (is_null(self::$instance)) {
@@ -160,5 +160,25 @@ class ServiceManager implements ServiceLocatorInterface
         }
 
         throw new ServiceNotFoundException($className);
+    }
+
+    /**
+     * Prevents accidental serialisation of the services
+     * @return array
+     */
+    public function __sleep()
+    {
+        return [];
+    }
+
+    /**
+     * Dynamically overload a service without persisting it
+     *
+     * @param $serviceKey
+     * @param ConfigurableService $service
+     */
+    public function overload($serviceKey, ConfigurableService $service)
+    {
+        $this->services[$serviceKey] = $service;
     }
 }
