@@ -46,12 +46,12 @@ class ServiceManager implements ServiceLocatorInterface
     }
 
     private $services = array();
-    
+
     /**
      * @var \common_persistence_KeyValuePersistence
      */
     private $configService;
-    
+
     public function __construct($configService)
     {
         $this->configService = $configService;
@@ -75,7 +75,7 @@ class ServiceManager implements ServiceLocatorInterface
         }
         return $this->services[$serviceKey];
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \Zend\ServiceManager\ServiceLocatorInterface::has()
@@ -96,7 +96,7 @@ class ServiceManager implements ServiceLocatorInterface
     /**
      * Registers a service, overwritting a potentially already
      * existing service.
-     * 
+     *3
      * @param string $serviceKey
      * @param ConfigurableService $service
      * @throws \common_Exception
@@ -132,12 +132,12 @@ class ServiceManager implements ServiceLocatorInterface
     /**
      * Propagate service dependencies
      *
-     * @param $service
+     * @param  $service
      * @return mixed
      */
     public function propagate($service)
     {
-        if (is_object($service) && ($service instanceof ServiceLocatorAwareInterface)) {
+        if(is_object($service) &&  ($service instanceof ServiceLocatorAwareInterface)){
             $service->setServiceLocator($this);
         }
         return $service;

@@ -21,6 +21,8 @@
 namespace oat\oatbox\log;
 
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
+
 /**
  * Trait for classes that want to use the Logger
  * 
@@ -49,7 +51,7 @@ trait LoggerAwareTrait
     public function getLogger()
     {
         if (is_null($this->logger)) {
-            $this->logger = \common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig('logger');
+            $this->logger = new NullLogger();
         }
         return $this->logger;
     }
