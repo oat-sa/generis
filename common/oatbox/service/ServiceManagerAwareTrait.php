@@ -51,7 +51,10 @@ trait ServiceManagerAwareTrait
     {
         $serviceManager = $this->getServiceLocator();
         if (! $serviceManager instanceof ServiceManager) {
-            throw new InvalidServiceManagerException('Alternate service locator not compatible with ' . __CLASS__);
+            $msg = is_null($serviceManager)
+                ? 'ServiceLocator not initialized for '.get_class($this)
+                : 'Alternate service locator not compatible with getServiceManager() in ' . __CLASS__;
+            throw new InvalidServiceManagerException($msg);
         }
         return $serviceManager;
     }
