@@ -253,4 +253,11 @@
       <rdfs:comment xml:lang="en-US"><![CDATA[Display a literal constant and uneditable value]]></rdfs:comment>
       <widget:rangeConstraint rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#rangeConstraint-Literal"/>
     </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ReadonlyLiteralXhtmlRenderer">
+        <rdf:type rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetRenderer"/>
+        <widget:renderedWidget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ReadonlyLiteral"/>
+        <widget:renderMode><![CDATA[xhtml]]></widget:renderMode>
+        <widget:implementation><![CDATA[tao_helpers_form_elements_xhtml_ReadonlyLiteral]]></widget:implementation>
+      </rdf:Description>
 </rdf:RDF>
