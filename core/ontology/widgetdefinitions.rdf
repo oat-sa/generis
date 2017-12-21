@@ -248,6 +248,7 @@
 
   <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ReadonlyLiteral">
       <rdf:type rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetClass"/>
+      <widget:identifier><![CDATA[ReadonlyLiteral]]></widget:identifier>
       <rdfs:label xml:lang="en-US"><![CDATA[Literal Readonly]]></rdfs:label>
       <rdfs:comment xml:lang="en-US"><![CDATA[Display a literal constant and uneditable value]]></rdfs:comment>
       <widget:rangeConstraint rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#rangeConstraint-Literal"/>
