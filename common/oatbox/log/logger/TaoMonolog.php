@@ -23,21 +23,35 @@ namespace oat\oatbox\log\logger;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
-use oat\oatbox\Configurable;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-class TaoMonolog extends Configurable implements LoggerInterface
+class TaoMonolog implements LoggerInterface
 {
-    use ServiceLocatorAwareTrait;
     use LoggerTrait;
 
     const HANDLERS_OPTION = 'handlers';
 
+    protected $options;
+
     /** @var Logger null  */
     protected $logger = null;
 
+    /**
+     * TaoMonolog constructor.
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        $this->options = $options;
+    }
+
+    /**
+     * @param mixed $level
+     * @param string $message
+     * @param array $context
+     * @throws \common_configuration_ComponentFactoryException
+     */
     public function log($level, $message, array $context = array())
     {
         if (is_null($this->logger)) {
@@ -47,19 +61,39 @@ class TaoMonolog extends Configurable implements LoggerInterface
         $this->logger->log($level, $message, $context);
     }
 
+    /**
+     * @return Logger
+     * @throws \common_configuration_ComponentFactoryException
+     */
     protected function buildLogger()
     {
-        $logger = new Logger($this->getOption('name'));
+        $logger = new Logger($this->options['name']);
 
-        if ($this->hasOption(self::HANDLERS_OPTION)) {
-            foreach ($this->getOption(self::HANDLERS_OPTION) as $handlerOptions) {
+        if ($this->options[self::HANDLERS_OPTION]) {
+            foreach ($this->options[self::HANDLERS_OPTION] as $handlerOptions) {
                 $logger->pushHandler($this->buildHandler($handlerOptions));
+            }
+        }
+
+        if ($this->options['processors']) {
+            $processorsOptions = $this->options['processors'];
+            if (!is_array($processorsOptions)) {
+                throw new \common_configuration_ComponentFactoryException('Handler processors options as to be formatted as array');
+            }
+
+            foreach ($processorsOptions as $processorsOption) {
+                $logger->pushProcessor($this->buildProcessor($processorsOption));
             }
         }
 
         return $logger;
     }
 
+    /**
+     * @param array $options
+     * @return HandlerInterface
+     * @throws \common_configuration_ComponentFactoryException
+     */
     protected function buildHandler(array $options)
     {
         if (!isset($options['class'])) {
@@ -77,8 +111,8 @@ class TaoMonolog extends Configurable implements LoggerInterface
         /** @var HandlerInterface $handler */
         $handler = $this->buildObject($options['class'], $handlerOptions);
 
-        if (isset($handlerOptions['processors'])) {
-            $processorsOptions = $handlerOptions['processors'];
+        if (isset($options['processors'])) {
+            $processorsOptions = $options['processors'];
             if (!is_array($processorsOptions)) {
                 throw new \common_configuration_ComponentFactoryException('Handler processors options as to be formatted as array');
             }
@@ -88,13 +122,18 @@ class TaoMonolog extends Configurable implements LoggerInterface
             }
         }
 
-        if (isset($handlerOptions['formatter'])) {
-            $handler->setFormatter($this->buildFormatter($processorsOption));
+        if (isset($options['formatter'])) {
+            $handler->setFormatter($this->buildFormatter($options['formatter']));
         }
 
         return $handler;
     }
 
+    /**
+     * @param $options
+     * @return callback
+     * @throws \common_configuration_ComponentFactoryException
+     */
     protected function buildProcessor($options)
     {
         if (is_object($options)) {
@@ -113,6 +152,11 @@ class TaoMonolog extends Configurable implements LoggerInterface
         }
     }
 
+    /**
+     * @param $options
+     * @return FormatterInterface
+     * @throws \common_configuration_ComponentFactoryException
+     */
     protected function buildFormatter($options)
     {
         if (is_object($options)) {
@@ -124,7 +168,8 @@ class TaoMonolog extends Configurable implements LoggerInterface
             if (!isset($options['class'])) {
                 throw new \common_configuration_ComponentFactoryException('Formatter options has to contain a class attribute.');
             }
-            if (!is_a($options['class'], FormatterInterface::class)) {
+
+            if (!is_a($options['class'], FormatterInterface::class, true)) {
                 throw new \common_configuration_ComponentFactoryException('Formatter class option has to be a FormatterInterface.');
             }
 
@@ -137,6 +182,11 @@ class TaoMonolog extends Configurable implements LoggerInterface
         }
     }
 
+    /**
+     * @param $className
+     * @param array $args
+     * @return object
+     */
     protected function buildObject($className, array $args)
     {
         $class = new \ReflectionClass($className);
