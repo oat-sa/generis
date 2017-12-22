@@ -93,13 +93,14 @@ abstract class ScriptAction extends AbstractAction
         foreach ($this->optionsDescription as $optionName => $optionParams) {
             // Deal with prefixes.
             $prefixes = [];
+            $optionDisplay = (!empty($optionParams['flag'])) ? '' : " ${optionName}";
             
             if (!empty($optionParams['prefix'])) {
-                $prefixes[] = '-' . $optionParams['prefix'] . " ${optionName}";
+                $prefixes[] = '-' . $optionParams['prefix'] . "${optionDisplay}";
             }
             
             if (!empty($optionParams['longPrefix'])) {
-                $prefixes[] = '-' . $optionParams['longPrefix'] . " ${optionName}";
+                $prefixes[] = '--' . $optionParams['longPrefix'] . "${optionDisplay}";
             }
             
             $optionReport = new Report(Report::TYPE_INFO, implode(', ', $prefixes));
