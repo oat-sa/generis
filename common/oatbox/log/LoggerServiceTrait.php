@@ -20,7 +20,9 @@
 
 namespace oat\oatbox\log;
 
+use oat\oatbox\service\ServiceManager;
 use Psr\Log\LoggerInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Trait for classes that want to use the Logger
@@ -29,19 +31,35 @@ use Psr\Log\LoggerInterface;
  */
 trait LoggerServiceTrait
 {
+    /**
+     * To get the Logger e.q. LoggerService
+     *
+     * @return ServiceLocatorInterface
+     */
     abstract function getServiceLocator();
+
+    /**
+     * To set a new Logger e.q. logger LoggerService
+     *
+     * @return ServiceManager
+     */
     abstract function getServiceManager();
 
     /**
+     * Add a logger in serviceManager memory
      *
      * @param LoggerInterface $logger
      */
     public function setLogger(LoggerInterface $logger)
     {
-        $this->getServiceManager()->overload(LoggerService::SERVICE_ID, $logger);
+        /** @var LoggerService $loggerService */
+        $loggerService = $this->getLogger();
+        $loggerService->addLogger($logger);
+        $this->getServiceManager()->overload(LoggerService::SERVICE_ID, $loggerService);
     }
 
     /**
+     * Get the logger based on service manager
      *
      * @return \Psr\Log\LoggerInterface
      */

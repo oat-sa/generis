@@ -23,6 +23,7 @@ namespace oat\oatbox\log;
 use oat\oatbox\service\ConfigurableService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Psr\Log\NullLogger;
 
 class LoggerService extends ConfigurableService implements LoggerInterface
 {
@@ -44,8 +45,8 @@ class LoggerService extends ConfigurableService implements LoggerInterface
      */
     public function addLogger(LoggerInterface $logger, $replace = false)
     {
-        if (!$replace || $this->isLoggerLoaded()) {
-            $logger = new LoggerAggregator([$logger, $this->getLogger()]);
+        if (!$replace && $this->isLoggerLoaded()) {
+            $logger = new LoggerAggregator([$logger, $this->logger]);
         }
         $this->logger = $logger;
         return $logger;
@@ -221,6 +222,8 @@ class LoggerService extends ConfigurableService implements LoggerInterface
             }
             if (!is_null($logger)) {
                 $this->logger = $logger;
+            } else {
+                $this->logger = new NullLogger();
             }
         }
         return $this->logger;
@@ -233,6 +236,6 @@ class LoggerService extends ConfigurableService implements LoggerInterface
      */
     protected function isLoggerLoaded()
     {
-        return $this->logger instanceof LoggerInterface;
+        return $this->logger instanceof LoggerInterface && !($this->logger instanceof NullLogger);
     }
 }
