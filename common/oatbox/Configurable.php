@@ -20,9 +20,6 @@
 
 namespace oat\oatbox;
 
-use oat\oatbox\log\LoggerAwareTrait;
-use oat\oatbox\log\TaoLoggerAwareInterface;
-
 /**
  * Configurable base class
  * 
@@ -31,10 +28,8 @@ use oat\oatbox\log\TaoLoggerAwareInterface;
  *
  * @author Joel Bout <joel@taotesting.com>
  */
-abstract class Configurable implements PhpSerializable, TaoLoggerAwareInterface
+abstract class Configurable implements PhpSerializable
 {
-    use LoggerAwareTrait;
-
     private $options = array();
     
     /**

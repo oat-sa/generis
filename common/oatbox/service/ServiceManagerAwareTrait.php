@@ -21,10 +21,7 @@
 
 namespace oat\oatbox\service;
 
-use oat\oatbox\log\LoggerService;
-use oat\oatbox\log\TaoLoggerAwareInterface;
 use oat\oatbox\service\exception\InvalidServiceManagerException;
-use Psr\Log\LoggerAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
@@ -88,21 +85,6 @@ trait ServiceManagerAwareTrait
         // Propagate the service manager
         if ($service instanceof ServiceLocatorAwareInterface) {
             $service->setServiceLocator($this->getServiceLocator());
-        }
-
-        // Propagate the logger service
-        if ($service instanceof LoggerAwareInterface) {
-            $logger = null;
-            if ($this instanceof TaoLoggerAwareInterface) {
-                $logger = $this->getLogger();
-            } else {
-                if ($this->getServiceLocator()->has(LoggerService::SERVICE_ID)) {
-                    $logger = $this->getServiceLocator()->get(LoggerService::SERVICE_ID)->getLogger();
-                }
-            }
-            if (!is_null($logger)) {
-                $service->setLogger($logger);
-            }
         }
 
         return $service;

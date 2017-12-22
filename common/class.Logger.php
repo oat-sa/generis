@@ -212,7 +212,7 @@ class common_Logger
             try {
                 if (defined('CONFIG_PATH')) {
                     $tags = is_array($tags) ? $tags : [$tags];
-                    $logger = ServiceManager::getServiceManager()->get(LoggerService::SERVICE_ID)->getLogger();
+                    $logger = ServiceManager::getServiceManager()->get(LoggerService::SERVICE_ID);
                     $logger->log(common_log_Logger2Psr::getPsrLevelFromCommon($level), $message, $tags);
                 }
             } catch (\Exception $e) {
