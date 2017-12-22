@@ -201,10 +201,13 @@ class common_Logger
      */
     public function log($level, $message, $tags, $errorFile = '', $errorLine = 0)
     {
-//        $tags = is_array($tags) ? $tags : [$tags];
-//        $logger = ServiceManager::getServiceManager()->get(LoggerService::SERVICE_ID)->getLogger();
-//        $logger->log(common_log_Logger2Psr::getPsrLevelFromCommon($level), $message, $tags);
-//        return;
+        try {
+            $tags = is_array($tags) ? $tags : [$tags];
+            $logger = ServiceManager::getServiceManager()->get(LoggerService::SERVICE_ID)->getLogger();
+            $logger->log(common_log_Logger2Psr::getPsrLevelFromCommon($level), $message, $tags);
+        } catch (\Exception $e) {
+            // Unable to use the logger service to retrieve the logger
+        }
 
 		if ($this->enabled && $this->getDispatcher()->getLogThreshold() <= $level) {
 			$this->disable();
