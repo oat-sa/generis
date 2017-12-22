@@ -31,8 +31,11 @@ use common_report_Report as Report;
 abstract class ScriptAction extends AbstractAction
 {
     private $options;
+    private $optionsDescription;
     
-    public abstract function describeOptions();
+    public abstract function provideOptions();
+    
+    public abstract function provideDescription();
     
     /**
      * Run Script.
@@ -45,10 +48,12 @@ abstract class ScriptAction extends AbstractAction
     
     public function __invoke($params)
     {
+        $this->optionsDescription = $this->provideOptions();
+        
         // Build option container.
         try {
             $this->options = new OptionContainer(
-                $this->describeOptions(), 
+                $this->optionsDescription, 
                 $params
             );
         } catch (\Exception $e) {
@@ -70,5 +75,45 @@ abstract class ScriptAction extends AbstractAction
     protected function getOption($optionName)
     {
         return $this->options->get($optionName);
+    }
+    
+    protected function usage()
+    {
+        $report = new Report(
+            Report::TYPE_INFO,
+            $this->provideDescription()
+        );
+        
+        $required = new Report(Report::TYPE_INFO, 'Required Arguments');
+        $optional = new Report(Report::TYPE_INFO, 'Optional Arguments');
+        
+        $report->add($required);
+        $report->add($optional);
+        
+        foreach ($this->optionsDescription as $optionName => $optionParams) {
+            // Deal with prefixes.
+            $prefixes = [];
+            
+            if (!empty($optionParams['prefix'])) {
+                $prefixes[] = '-' . $optionParams['prefix'] . " ${optionName}";
+            }
+            
+            if (!empty($optionParams['longPrefix'])) {
+                $prefixes[] = '-' . $optionParams['longPrefix'] . " ${optionName}";
+            }
+            
+            $optionReport = new Report(Report::TYPE_INFO, implode(', ', $prefixes));
+            
+            if (!empty($optionParams['description'])) {
+                $optionReport->add(
+                    new Report(Report::TYPE_INFO, $optionParams['description']);
+                );
+            }
+            
+            $targetReport = (empty($optionParams['required'])) ? $optional : $required;
+            $targetReport->add($optionReport);
+        }
+        
+        return $report;
     }
 }

@@ -45,6 +45,11 @@ class OptionContainer
         return $this->options;
     }
     
+    public function isFlag($optionName)
+    {
+        return isset($this->options[$optionName]) && !empty($this->options[$optionName]['flag']));
+    }
+    
     private static function extract(array $options, array $values)
     {
         $returnValue = [];
