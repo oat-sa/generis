@@ -184,7 +184,7 @@ class common_Logger
 		// the logger initializes to handle this error,  and failes to autoload his files
         set_error_handler(array($this, 'handlePHPErrors'));
 		register_shutdown_function(array($this, 'handlePHPShutdown'));
-        
+
     }
 
     /**
@@ -201,13 +201,21 @@ class common_Logger
      */
     public function log($level, $message, $tags, $errorFile = '', $errorLine = 0)
     {
-        try {
-            $tags = is_array($tags) ? $tags : [$tags];
-            $logger = ServiceManager::getServiceManager()->get(LoggerService::SERVICE_ID)->getLogger();
-            $logger->log(common_log_Logger2Psr::getPsrLevelFromCommon($level), $message, $tags);
-        } catch (\Exception $e) {
-            // Unable to use the logger service to retrieve the logger
+
+        if ($this->enabled) {
+            $this->disable();
+            try {
+                $tags = is_array($tags) ? $tags : [$tags];
+                if (defined('CONFIG_PATH')) {
+                    $logger = ServiceManager::getServiceManager()->get(LoggerService::SERVICE_ID)->getLogger();
+                    $logger->log(common_log_Logger2Psr::getPsrLevelFromCommon($level), $message, $tags);
+                }
+            } catch (\Exception $e) {
+                // Unable to use the logger service to retrieve the logger
+            }
+            $this->restore();
         }
+
 
 		if ($this->enabled && $this->getDispatcher()->getLogThreshold() <= $level) {
 			$this->disable();

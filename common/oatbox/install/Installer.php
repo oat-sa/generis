@@ -61,9 +61,7 @@ class Installer extends ConfigurableService
      */
     public function setupServiceManager($configPath)
     {
-        try {
-            $this->getServiceManager();
-        } catch (InvalidServiceManagerException $e) {
+        if (!$this->serviceLocator instanceof ServiceManager) {
             if (! \helpers_File::emptyDirectory($configPath, true)) {
                 throw new \common_exception_Error('Unable to empty ' . $configPath . ' folder.');
             }
