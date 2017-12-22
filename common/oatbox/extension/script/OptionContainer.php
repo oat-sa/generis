@@ -64,7 +64,7 @@ class OptionContainer
                 if (!empty($optionParams['flag'])) {
                     // It's a flag!
                     $returnValue[$optionName] = is_int(self::searchOptionIndex($prefix, $longPrefix, $values));
-                } else {E
+                } else {
                     // It's a regular option!
                     $required = empty($optionParams['required']) ? false : true;
                     $optionIndex = self::searchOptionIndex($prefix, $longPrefix, $values);
