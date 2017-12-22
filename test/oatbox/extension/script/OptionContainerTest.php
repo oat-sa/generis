@@ -75,7 +75,7 @@ class OptionContainerTest extends \PHPUnit_Framework_TestCase
                 // call = myscript --flag
                 [
                     'myflag' => [
-                        'longPrefix' => 'f',
+                        'longPrefix' => 'flag',
                         'flag' => true
                     ]
                 ],

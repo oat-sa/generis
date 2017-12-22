@@ -54,18 +54,18 @@ class OptionContainer
             // Ignore non string-indexed options.
             if (is_string($optionName)) {
                 
+                $prefix = empty($optionParams['prefix']) ? '' : $optionParams['prefix'];
+                $longPrefix = empty($optionParams['longPrefix']) ? '' : $optionParams['longPrefix'];
+                
+                if (empty($prefix) && empty($longPrefix)) {
+                    throw new \InvalidArgumentException("Option with name '${optionName}' has no prefix, nor long prefix.");
+                }
+                
                 if (!empty($optionParams['flag'])) {
                     // It's a flag!
-                    $returnValue[$optionName] = true;
+                    $returnValue[$optionName] = is_int(self::searchOptionIndex($prefix, $longPrefix, $values));
                 } else {
                     // It's a regular option!
-                    $prefix = empty($optionParams['prefix']) ? '' : $optionParams['prefix'];
-                    $longPrefix = empty($optionParams['longPrefix']) ? '' : $optionParams['longPrefix'];
-                    
-                    if (empty($prefix) && empty($longPrefix)) {
-                        throw new \InvalidArgumentException("Option with name '${optionName}' has no prefix, nor long prefix.");
-                    }
-                    
                     $required = empty($optionParams['required']) ? false : true;
                     $optionIndex = self::searchOptionIndex($prefix, $longPrefix, $values);
                     
