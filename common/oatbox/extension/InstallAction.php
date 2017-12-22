@@ -42,20 +42,5 @@ abstract class InstallAction extends AbstractAction
         $eventManager->attach($event, $callback);
         $this->getServiceManager()->register(EventManager::CONFIG_ID, $eventManager);
     }
-    
-    /**
-     * Register a new configurable service into config
-     * If $allowOverride is false, existing config will be kept
-     *
-     * @param string $serviceKey
-     * @param ConfigurableService $service
-     * @param boolean $allowOverride
-     */
-    public function registerService($serviceKey, $service, $allowOverride = true)
-    {
-        if ($allowOverride || ! $this->getServiceManager()->has($serviceKey)) {
-            $this->getServiceManager()->register($serviceKey, $service);
-        }
-    }
 
 }

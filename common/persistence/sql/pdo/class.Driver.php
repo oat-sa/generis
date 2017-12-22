@@ -37,7 +37,7 @@
  */
 abstract class common_persistence_sql_pdo_Driver implements common_persistence_sql_Driver
 {
-    use common_persistence_sql_InsertMultiple;
+    use common_persistence_sql_MultipleOperations;
     
     /**
      * An established PDO connection object.
