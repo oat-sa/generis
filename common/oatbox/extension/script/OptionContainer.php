@@ -47,7 +47,7 @@ class OptionContainer
     
     public function isFlag($optionName)
     {
-        return isset($this->options[$optionName]) && !empty($this->options[$optionName]['flag']));
+        return isset($this->options[$optionName]) && !empty($this->options[$optionName]['flag']);
     }
     
     private static function extract(array $options, array $values)
@@ -63,19 +63,21 @@ class OptionContainer
                 $longPrefix = empty($optionParams['longPrefix']) ? '' : $optionParams['longPrefix'];
                 
                 if (empty($prefix) && empty($longPrefix)) {
-                    throw new \LogicException("Option with name '${optionName}' has no prefix, nor long prefix.");
+                    throw new \LogicException("Argument with name '${optionName}' has no prefix, nor long prefix.");
                 }
                 
                 if (!empty($optionParams['flag'])) {
                     // It's a flag!
-                    $returnValue[$optionName] = is_int(self::searchOptionIndex($prefix, $longPrefix, $values));
+                    if (is_int(self::searchOptionIndex($prefix, $longPrefix, $values))) {
+                        $returnValue[$optionName] = true;
+                    }
                 } else {
                     // It's a regular option!
                     $required = empty($optionParams['required']) ? false : true;
                     $optionIndex = self::searchOptionIndex($prefix, $longPrefix, $values);
                     
                     if ($required && $optionIndex === false) {
-                        throw new MissingOptionException("Required option with name '${optionName}' is missing.", $optionName);
+                        throw new MissingOptionException("Required argument '${optionName}' is missing.", $optionName);
                     }
                     
                     if ($optionIndex === false && isset($optionParams['defaultValue'])) {
@@ -89,7 +91,7 @@ class OptionContainer
                         } else {
                             // Edge case. Option found, but it is the last value of the $value array.
                             if ($required) {
-                                throw new MissingOptionException("No value given for option with name '${optionName}'.", $optionName);
+                                throw new MissingOptionException("No value given for required argument '${optionName}'.", $optionName);
                             } elseif (isset($optionParams['defaultValue'])) {
                                 $returnValue[$optionName] = $optionParams['defaultValue'];
                             }

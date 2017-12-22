@@ -33,9 +33,9 @@ abstract class ScriptAction extends AbstractAction
     private $options;
     private $optionsDescription;
     
-    public abstract function provideOptions();
+    protected abstract function provideOptions();
     
-    public abstract function provideDescription();
+    protected abstract function provideDescription();
     
     /**
      * Run Script.
@@ -44,11 +44,16 @@ abstract class ScriptAction extends AbstractAction
      * 
      * @return \common_report_Report;
      */
-    public abstract function run();
+    protected abstract function run();
     
     public function __invoke($params)
     {
         $this->optionsDescription = $this->provideOptions();
+        
+        // Display help?
+        if (in_array('-h', $params) || in_array('--help', $params)) {
+            return $this->usage();
+        }
         
         // Build option container.
         try {
@@ -77,18 +82,15 @@ abstract class ScriptAction extends AbstractAction
         return $this->options->get($optionName);
     }
     
-    protected function usage()
+    private function usage()
     {
         $report = new Report(
             Report::TYPE_INFO,
-            $this->provideDescription()
+            $this->provideDescription() . "\n"
         );
         
-        $required = new Report(Report::TYPE_INFO, 'Required Arguments');
-        $optional = new Report(Report::TYPE_INFO, 'Optional Arguments');
-        
-        $report->add($required);
-        $report->add($optional);
+        $required = new Report(Report::TYPE_INFO, 'Required Arguments:');
+        $optional = new Report(Report::TYPE_INFO, 'Optional Arguments:');
         
         foreach ($this->optionsDescription as $optionName => $optionParams) {
             // Deal with prefixes.
@@ -107,12 +109,25 @@ abstract class ScriptAction extends AbstractAction
             
             if (!empty($optionParams['description'])) {
                 $optionReport->add(
-                    new Report(Report::TYPE_INFO, $optionParams['description']);
+                    new Report(Report::TYPE_INFO, $optionParams['description'])
                 );
             }
             
             $targetReport = (empty($optionParams['required'])) ? $optional : $required;
             $targetReport->add($optionReport);
+        }
+        
+        if (count($required) > 0) {
+            $report->add($required);
+        }
+        
+        if (count($optional) > 0) {
+            $report->add($optional);
+        }
+        
+        // A little bit of formatting...
+        if (count($required) > 0 && count($optional) > 0) {
+            $required->add(new Report(Report::TYPE_INFO, "\n"));
         }
         
         return $report;
