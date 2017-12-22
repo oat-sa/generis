@@ -1,38 +1,34 @@
 <?php
-/**  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- * 
- */
-
-namespace oat\oatbox\extension;
-
-use oat\oatbox\action\Action;
-use oat\oatbox\log\LoggerAwareTrait;
-use oat\oatbox\log\TaoLoggerAwareInterface;
-use oat\oatbox\service\ServiceManagerAwareInterface;
-use oat\oatbox\service\ServiceManagerAwareTrait;
-
-/**
- * abstract base for extension actions
  *
- * @author Christophe GARCIA <christopheg@taotesting.com>
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA
+ *
  */
-abstract class AbstractAction implements Action, ServiceManagerAwareInterface, TaoLoggerAwareInterface
+
+namespace oat\oatbox\log;
+
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
+
+interface TaoLoggerAwareInterface extends LoggerAwareInterface
 {
-    use ServiceManagerAwareTrait;
-    use LoggerAwareTrait;
+    /**
+     * Get the current logger
+     *
+     * @return LoggerInterface
+     */
+    public function getLogger();
 }

@@ -454,7 +454,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
                     throw new common_ext_MissingExtensionException($e->getExtensionId().' not found but required for '.$this->getId());
                 }
             }
-            
+
             $loader = new common_ext_ExtensionLoader($this);
             $loader->load();
             //load all dependent extensions
