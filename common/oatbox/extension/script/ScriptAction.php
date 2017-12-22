@@ -21,6 +21,7 @@
 namespace oat\oatbox\extension\script;
 
 use oat\oatbox\extension\AbstractAction;
+use common_report_Report as Report;
 
 /**
  * abstract base for extension scripts.
@@ -33,18 +34,32 @@ abstract class ScriptAction extends AbstractAction
     
     public abstract function describeOptions();
     
+    /**
+     * Run Script.
+     * 
+     * Run the userland script.
+     * 
+     * @return \common_report_Report;
+     */
     public abstract function run();
     
     public function __invoke($params)
     {
         // Build option container.
-        $this->options = new OptionContainer(
-            $this->describeOptions(), 
-            $params
-        );
+        try {
+            $this->options = new OptionContainer(
+                $this->describeOptions(), 
+                $params
+            );
+        } catch (\Exception $e) {
+            return new Report(
+                Report::TYPE_ERROR,
+                $e->getMessage()
+            );
+        }
         
         // Run the userland script.
-        $this->run();
+        return $this->run();
     }
     
     protected function hasOption($optionName)

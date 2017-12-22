@@ -58,13 +58,13 @@ class OptionContainer
                 $longPrefix = empty($optionParams['longPrefix']) ? '' : $optionParams['longPrefix'];
                 
                 if (empty($prefix) && empty($longPrefix)) {
-                    throw new \InvalidArgumentException("Option with name '${optionName}' has no prefix, nor long prefix.");
+                    throw new \LogicException("Option with name '${optionName}' has no prefix, nor long prefix.");
                 }
                 
                 if (!empty($optionParams['flag'])) {
                     // It's a flag!
                     $returnValue[$optionName] = is_int(self::searchOptionIndex($prefix, $longPrefix, $values));
-                } else {
+                } else {E
                     // It's a regular option!
                     $required = empty($optionParams['required']) ? false : true;
                     $optionIndex = self::searchOptionIndex($prefix, $longPrefix, $values);
