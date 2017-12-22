@@ -21,6 +21,9 @@
  * 
  */
 
+use oat\oatbox\service\ServiceManager;
+use oat\oatbox\log\LoggerService;
+
 /**
  * Abstraction for the System Logger
  *
@@ -204,7 +207,20 @@ class common_Logger
      */
     public function log($level, $message, $tags, $errorFile = '', $errorLine = 0)
     {
-        
+        if ($this->enabled) {
+            $this->disable();
+            try {
+                if (defined('CONFIG_PATH')) {
+                    $tags = is_array($tags) ? $tags : [$tags];
+                    $logger = ServiceManager::getServiceManager()->get(LoggerService::SERVICE_ID)->getLogger();
+                    $logger->log(common_log_Logger2Psr::getPsrLevelFromCommon($level), $message, $tags);
+                }
+            } catch (\Exception $e) {
+                // Unable to use the logger service to retrieve the logger
+            }
+            $this->restore();
+        }
+
 		if ($this->enabled && $this->getDispatcher()->getLogThreshold() <= $level) {
 			$this->disable();
 			$stack = defined('DEBUG_BACKTRACE_IGNORE_ARGS')

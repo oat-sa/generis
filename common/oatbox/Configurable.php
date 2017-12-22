@@ -14,11 +14,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2014-2017 (original work) Open Assessment Technologies SA;
  *
  */
 
 namespace oat\oatbox;
+
+use oat\oatbox\log\LoggerAwareTrait;
+use oat\oatbox\log\TaoLoggerAwareInterface;
 
 /**
  * Configurable base class
@@ -28,8 +31,9 @@ namespace oat\oatbox;
  *
  * @author Joel Bout <joel@taotesting.com>
  */
-abstract class Configurable implements PhpSerializable
+abstract class Configurable implements PhpSerializable, TaoLoggerAwareInterface
 {
+    use LoggerAwareTrait;
 
     private $options = array();
     
