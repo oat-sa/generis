@@ -105,7 +105,12 @@ abstract class ScriptAction extends AbstractAction
                 $prefixes[] = '--' . $optionParams['longPrefix'] . "${optionDisplay}";
             }
             
-            $optionReport = new Report(Report::TYPE_INFO, implode(', ', $prefixes));
+            $optionMsg = implode(', ', $prefixes);
+            if (isset($optionParams['defaultValue'])) {
+                $optionMsg .= ' (default: ' . self::valueToString($optionParams['defaultValue']) . ')';
+            }
+            
+            $optionReport = new Report(Report::TYPE_INFO, $optionMsg);
             
             if (!empty($optionParams['description'])) {
                 $optionReport->add(
@@ -127,9 +132,27 @@ abstract class ScriptAction extends AbstractAction
         
         // A little bit of formatting...
         if (count($required) > 0 && count($optional) > 0) {
-            $required->add(new Report(Report::TYPE_INFO, "\n"));
+            $required->add(new Report(Report::TYPE_INFO, ""));
         }
         
         return $report;
+    }
+    
+    private static function valueToString($value)
+    {
+        $string = "\"${value}\"";
+        
+        switch (gettype($value)) {
+            
+            case 'boolean':
+                $string = ($value === true) ? 'true' : 'false';
+                break;
+                
+            case 'integer':
+            case 'double':
+                $string = $value;
+        }
+        
+        return $string;
     }
 }
