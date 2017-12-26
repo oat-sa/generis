@@ -68,13 +68,14 @@ class LoginService extends ConfigurableService
 
     /**
      * Login a user using login, password
-     * 
      * @param string $userLogin
      * @param string $userPassword
      * @return boolean
+     * @throws \core_kernel_persistence_Exception
      */
     public function login($userLogin, $userPassword)
     {
+        // check if blocked ?
         try {
             $user = $this->authenticate($userLogin, $userPassword);
             $loggedIn = $this->startSession($user);
@@ -129,6 +130,10 @@ class LoginService extends ConfigurableService
         return true;
     }
 
+    /**
+     * Resets count of login fails in case successful login
+     * @param $login
+     */
     private function resetLoginFails($login)
     {
         $user = core_kernel_users_Service::singleton()->getOneUser($login);
@@ -136,8 +141,8 @@ class LoginService extends ConfigurableService
     }
 
     /**
-     * 
      * @param $login
+     * @throws \core_kernel_persistence_Exception
      */
     private function increaseLoginFails($login)
     {
@@ -146,8 +151,13 @@ class LoginService extends ConfigurableService
         $failedLoginCountProperty = $this->getProperty('http://www.tao.lu/Ontologies/generis.rdf#userFailedLoginCount');
         $failedLoginCount = (intval((string)$user->getOnePropertyValue($failedLoginCountProperty))) + 1;
 
-        // if soft, or not soft
-        // block user
+        if ($failedLoginCount >= intval($this->getOption(self::OPTION_LOCKOUT_FAILED_ATTEMPTS))) {
+            // block user
+            $user->editPropertyValues($this->getOption('http://www.tao.lu/Ontologies/generis.rdf#status'), 'http://www.tao.lu/Ontologies/generis.rdf#Blocked');
+            if (!$this->getOption(self::OPTION_USE_HARD_LOCKOUT)) {
+                $user->editPropertyValues($this->getProperty("http://www.tao.lu/Ontologies/generis.rdf#until"), 0);
+            }
+        }
 
         $user->editPropertyValues($failedLoginCountProperty, $failedLoginCount);
     }
