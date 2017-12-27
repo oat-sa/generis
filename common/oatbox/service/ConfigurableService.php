@@ -21,7 +21,7 @@ namespace oat\oatbox\service;
 
 use oat\oatbox\Configurable;
 use oat\oatbox\service\exception\InvalidService;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use oat\oatbox\service\exception\InvalidServiceManagerException;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
@@ -34,34 +34,33 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  */
 abstract class ConfigurableService extends Configurable implements ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceManagerAwareTrait;
 
     /** @var string Documentation header */
     protected $header = null;
 
     private $subServices = [];
 
-    public function setServiceManager(ServiceManager $serviceManager)
-    {
-        return $this->setServiceLocator($serviceManager);
-    }
-
     /**
+     * Get the service manager
      *
-     * @return \oat\oatbox\service\ServiceManager
+     * @deprecated Use $this->propagate instead
+     *
+     * @param $serviceManager
      */
-    public function getServiceManager()
+    public function setServiceManager($serviceManager)
     {
-        return $this->getServiceLocator();
+        $this->setServiceLocator($serviceManager);
     }
 
     /**
-     * Get a subservice from the current service
+     * Get a subservice from the current service $options
      *
      * @param $id
      * @param string $interface
-     * @throws ServiceNotFoundException
-     * @return object
+     * @return mixed
+     * @throws InvalidService
+     * @throws InvalidServiceManagerException
      */
     public function getSubService($id, $interface = null)
     {
@@ -118,17 +117,19 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
     }
 
     /**
+     * Build a sub service from current service $options
+     *
      * @param $serviceDefinition
      * @param string $interfaceName
-     *
-     * @return ConfigurableService
+     * @return mixed
      * @throws InvalidService
+     * @throws InvalidServiceManagerException
      */
     protected function buildService($serviceDefinition, $interfaceName = null)
     {
         if ($serviceDefinition instanceof ConfigurableService) {
             if (is_null($interfaceName) || is_a($serviceDefinition, $interfaceName)) {
-                $this->getServiceManager()->propagate($serviceDefinition);
+                $this->propagate($serviceDefinition);
                 return $serviceDefinition;
             } else {
                 throw new InvalidService('Service must implements ' . $interfaceName);

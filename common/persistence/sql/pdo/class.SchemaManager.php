@@ -62,7 +62,7 @@ abstract class common_persistence_sql_pdo_SchemaManager extends common_persisten
      * (non-PHPdoc)
      * @see common_persistence_sql_SchemaManager::getSchemaManager()
      */
-    public function getSchemaManager()
+    protected function getSchemaManager()
     {
         if ($this->schemaManager == null) {
             common_Logger::d('init dbal connection to get SchemaMangager');

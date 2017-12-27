@@ -23,7 +23,6 @@ namespace oat\oatbox\service;
 use oat\oatbox\Configurable;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use oat\oatbox\config\ConfigurationService;
 
 /**
  * The simple placeholder ServiceManager
@@ -32,7 +31,7 @@ use oat\oatbox\config\ConfigurationService;
 class ServiceManager implements ServiceLocatorInterface
 {
     private static $instance;
-    
+
     public static function getServiceManager()
     {
         if (is_null(self::$instance)) {
@@ -47,12 +46,12 @@ class ServiceManager implements ServiceLocatorInterface
     }
 
     private $services = array();
-    
+
     /**
      * @var \common_persistence_KeyValuePersistence
      */
     private $configService;
-    
+
     public function __construct($configService)
     {
         $this->configService = $configService;
@@ -76,7 +75,7 @@ class ServiceManager implements ServiceLocatorInterface
         }
         return $this->services[$serviceKey];
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \Zend\ServiceManager\ServiceLocatorInterface::has()
@@ -97,7 +96,7 @@ class ServiceManager implements ServiceLocatorInterface
     /**
      * Registers a service, overwritting a potentially already
      * existing service.
-     * 
+     *3
      * @param string $serviceKey
      * @param ConfigurableService $service
      * @throws \common_Exception
@@ -129,7 +128,7 @@ class ServiceManager implements ServiceLocatorInterface
     {
         return $this->configService;
     }
-    
+
     /**
      * Propagate service dependencies
      *
@@ -161,5 +160,25 @@ class ServiceManager implements ServiceLocatorInterface
         }
 
         throw new ServiceNotFoundException($className);
+    }
+
+    /**
+     * Prevents accidental serialisation of the services
+     * @return array
+     */
+    public function __sleep()
+    {
+        return [];
+    }
+
+    /**
+     * Dynamically overload a service without persisting it
+     *
+     * @param $serviceKey
+     * @param ConfigurableService $service
+     */
+    public function overload($serviceKey, ConfigurableService $service)
+    {
+        $this->services[$serviceKey] = $service;
     }
 }

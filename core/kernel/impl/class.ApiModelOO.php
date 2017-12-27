@@ -17,10 +17,13 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 ?>
 <?php
+
+use oat\generis\model\OntologyRdf;
+use oat\generis\model\OntologyRdfs;
 
 error_reporting(E_ALL);
 
@@ -279,7 +282,7 @@ class core_kernel_impl_ApiModelOO
         
         $returnValue = new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(__METHOD__),__METHOD__);
         
-        $classClass = new core_kernel_classes_Class(RDFS_CLASS);
+        $classClass = new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS);
         foreach($classClass->getSubClasses(true) as $uri => $subClass){
         	$returnValue->add($subClass);
         }
@@ -308,9 +311,9 @@ class core_kernel_impl_ApiModelOO
         $query =  "SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) 
         			AND subject NOT IN (SELECT subject FROM statements WHERE predicate = ?)";
     	$result	= $dbWrapper->query($query, array(
-        	RDF_TYPE,
-        	RDFS_CLASS,
-        	RDFS_SUBCLASSOF
+			OntologyRdf::RDF_TYPE,
+            OntologyRdfs::RDFS_CLASS,
+            OntologyRdfs::RDFS_SUBCLASSOF
         ));
         
         while ($row = $result->fetch()) {
@@ -387,9 +390,9 @@ class core_kernel_impl_ApiModelOO
         
         $query =  "SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) OR predicate = ?";
     	$result	= $dbWrapper->query($query, array(
-        	RDF_TYPE,
-        	RDFS_CLASS,
-        	RDFS_SUBCLASSOF
+			OntologyRdf::RDF_TYPE,
+            OntologyRdfs::RDFS_CLASS,
+            OntologyRdfs::RDFS_SUBCLASSOF
         ));
         
         while ($row = $result->fetch()) {
