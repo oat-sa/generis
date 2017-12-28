@@ -20,7 +20,11 @@
  */
 namespace oat\oatbox\user;
 
+use core_kernel_classes_Literal;
 use core_kernel_users_Service;
+use DateInterval;
+use DateTimeImmutable;
+use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\user\auth\AuthFactory;
@@ -28,6 +32,7 @@ use common_user_auth_AuthFailedException;
 use common_user_User;
 use common_session_DefaultSession;
 use common_session_SessionManager;
+use oat\oatbox\user\auth\LoginAdapter;
 
 /**
  * Login service
@@ -75,12 +80,11 @@ class LoginService extends ConfigurableService
      */
     public function login($userLogin, $userPassword)
     {
-        // check if blocked ?
         try {
             $user = $this->authenticate($userLogin, $userPassword);
             $loggedIn = $this->startSession($user);
             $this->resetLoginFails($userLogin);
-        } catch (common_user_auth_AuthFailedException $e) {
+        } catch (LoginFailedException $e) {
             $this->increaseLoginFails($userLogin);
             $loggedIn = false;
         }
@@ -102,6 +106,7 @@ class LoginService extends ConfigurableService
         $user = null;
 
         while (!empty($adapters) && is_null($user)) {
+            /** @var LoginAdapter $adapter */
             $adapter = array_shift($adapters);
             $adapter->setCredentials($userLogin, $userPassword);
             try {
@@ -127,6 +132,7 @@ class LoginService extends ConfigurableService
     public function startSession(common_user_User $user)
     {
         common_session_SessionManager::startSession(new common_session_DefaultSession($user));
+
         return true;
     }
 
@@ -137,7 +143,8 @@ class LoginService extends ConfigurableService
     private function resetLoginFails($login)
     {
         $user = core_kernel_users_Service::singleton()->getOneUser($login);
-        $user->editPropertyValues($this->getProperty('http://www.tao.lu/Ontologies/generis.rdf#userFailedLoginCount'), 0);
+        $user->editPropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_LOGON_FAILURES), 0);
+        $user->removePropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_STATUS));
     }
 
     /**
@@ -148,21 +155,43 @@ class LoginService extends ConfigurableService
     {
         $user = core_kernel_users_Service::singleton()->getOneUser($login);
 
-        $failedLoginCountProperty = $this->getProperty('http://www.tao.lu/Ontologies/generis.rdf#userFailedLoginCount');
+        $failedLoginCountProperty = $this->getProperty(GenerisRdf::PROPERTY_USER_LOGON_FAILURES);
         $failedLoginCount = (intval((string)$user->getOnePropertyValue($failedLoginCountProperty))) + 1;
 
         if ($failedLoginCount >= intval($this->getOption(self::OPTION_LOCKOUT_FAILED_ATTEMPTS))) {
-            // block user
-            $user->editPropertyValues($this->getOption('http://www.tao.lu/Ontologies/generis.rdf#status'), 'http://www.tao.lu/Ontologies/generis.rdf#Blocked');
-            if (!$this->getOption(self::OPTION_USE_HARD_LOCKOUT)) {
-                $user->editPropertyValues($this->getProperty("http://www.tao.lu/Ontologies/generis.rdf#until"), 0);
-            }
+            $user->editPropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_STATUS), GenerisRdf::PROPERTY_USER_STATUS_BLOCKED);
         }
 
+        $user->editPropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_LAST_LOGON_FAILURE_TIME), time());
         $user->editPropertyValues($failedLoginCountProperty, $failedLoginCount);
     }
 
-    public function checkIsBlocked()
+    /**
+     * @param $login
+     * @return bool
+     * @throws \core_kernel_persistence_Exception
+     */
+    public function isBlocked($login)
     {
+        $user = core_kernel_users_Service::singleton()->getOneUser($login);
+
+        if (empty((string)$user->getOnePropertyValue($this->getProperty(GenerisRdf::PROPERTY_USER_STATUS)))) {
+            return false;
+        }
+
+        // hard lockout, only admin can reset
+        if ($this->getOption(self::OPTION_USE_HARD_LOCKOUT)) {
+            return true;
+        } else {
+            $lockoutPeriod = new DateInterval($this->getOption(self::OPTION_SOFT_LOCKOUT_PERIOD));
+
+            /** @var core_kernel_classes_Literal $lastFailureTimePropertyValue */
+            $lastFailureTimePropertyValue = $user->getOnePropertyValue($this->getProperty(GenerisRdf::PROPERTY_USER_LAST_LOGON_FAILURE_TIME));
+
+            $lastFailureTime = new DateTimeImmutable;
+            $lastFailureTime = $lastFailureTime->setTimestamp($lastFailureTimePropertyValue->literal);
+
+            return $lastFailureTime->add($lockoutPeriod) > new DateTimeImmutable();
+        }
     }
 }

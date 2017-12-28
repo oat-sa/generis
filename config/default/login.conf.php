@@ -26,6 +26,6 @@ return new LoginService(array(
     LoginService::OPTION_USE_HARD_LOCKOUT => false,
     LoginService::OPTION_CAPTCHA_FAILED_ATTEMPTS => 2,
     LoginService::OPTION_LOCKOUT_FAILED_ATTEMPTS => 5,
-    LoginService::OPTION_SOFT_LOCKOUT_PERIOD => 'P15M',
+    LoginService::OPTION_SOFT_LOCKOUT_PERIOD => 'PT15M',
     LoginService::OPTION_TRUSTED_TERMINAL_TTL => 180,
 ));
