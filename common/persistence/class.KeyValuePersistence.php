@@ -214,7 +214,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     {
         if (!$this->isLarge($value)) {
             if ($flush) {
-                return $this->set($key, $value, $ttl, $nx);
+                $this->set($key, $value, $ttl, $nx);
             }
             return $value;
         }
