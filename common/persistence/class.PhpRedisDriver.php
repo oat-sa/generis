@@ -120,14 +120,20 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
 
     }
 
-    public function set($key, $value, $ttl = null)
+    /**
+     * (non-PHPdoc)
+     * @see common_persistence_KvDriver::set()
+     */
+    public function set($key, $value, $ttl = null, $nx = false)
     {
-        if (! is_null($ttl)) {
-            $params = [$key, $value, $ttl];
-        } else {
-            $params = [$key, $value];
-        }
-        return $this->callWithRetry('set' , $params );
+        $options = [];
+        if (!is_null($ttl)) {
+            $options['ex'] = $ttl;
+        };
+        if ($nx) {
+            $options[] = 'nx';
+        };
+        return $this->callWithRetry('set' , [$key, $value, $options]);
         
     }
     
