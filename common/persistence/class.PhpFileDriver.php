@@ -90,10 +90,12 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * (non-PHPdoc)
      * @see common_persistence_KvDriver::set()
      */
-    public function set($id, $value, $ttl = null)
+    public function set($id, $value, $ttl = null, $nx = false)
     {
         if (null !== $ttl) {
             throw new common_exception_NotImplemented('TTL not implemented in '.__CLASS__);
+        } elseif ($nx) {
+            throw new common_exception_NotImplemented('NX not implemented in '.__CLASS__);
         } else {
             $filePath = $this->getPath($id);
             $dirname = dirname($filePath);

@@ -40,7 +40,8 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
      * 
      * @see common_persistence_KvDriver::set()
      */
-    public function set($id, $value, $ttl = null){
+    public function set($id, $value, $ttl = null, $nx = false)
+    {
         common_Logger::t('NoStorageKvPersistence : set id=' . $id);
         return false;
     }

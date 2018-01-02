@@ -25,6 +25,11 @@
  */
 class common_persistence_KeyValuePersistence extends common_persistence_Persistence
 {
+    /**
+     * Ability to set the key only if it does not already exist
+     */
+    const FEATURE_NX = 'nx';
+
     const MAX_VALUE_SIZE = 'max_value_size';
     const MAP_IDENTIFIER = 'map_identifier';
 
@@ -48,19 +53,20 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      * If $value is too large, it is split into multiple $mappedKey.
      * These new keys are serialized and stored into actual $key
      *
-     * @param $key
-     * @param $value
-     * @param null $ttl
+     * @param string $key
+     * @param string $value
+     * @param string $ttl
+     * @param bool $nx
      * @return bool
      * @throws common_Exception If size is misconfigured
      */
-    public function set($key, $value, $ttl = null)
+    public function set($key, $value, $ttl = null, $nx = false)
     {
         if ($this->isLarge($value)) {
             common_Logger::t('Large value detected into KeyValue persistence. Splitting value for key : ' . $key);
-            $value = $this->setLargeValue($key, $value, 0, true, true, $ttl);
+            $value = $this->setLargeValue($key, $value, 0, true, true, $ttl, $nx);
         }
-        return $this->getDriver()->set($key, $value, $ttl);
+        return $this->getDriver()->set($key, $value, $ttl, $nx);
     }
 
     /**
@@ -205,22 +211,20 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      * @param bool $flush
      * @param bool $toTransform
      * @param null $ttl
+     * @param bool $nx
      * @return mixed
      * @throws common_Exception
      */
-    protected function setLargeValue($key, $value, $level = 0, $flush = true, $toTransform = true, $ttl = null)
+    protected function setLargeValue($key, $value, $level = 0, $flush = true, $toTransform = true, $ttl = null, $nx = false)
     {
         if (!$this->isLarge($value)) {
-
             if ($flush) {
-                if (!is_null($ttl)) {
-                    $this->set($key, $value, $ttl);
-                } else {
-                    $this->set($key, $value);
-                }
+                $this->set($key, $value, $ttl, $nx);
             }
-
             return $value;
+        }
+        if ($nx) {
+            throw new common_exception_NotImplemented("NX not implemented for large values");
         }
 
         if ($level > 0) {
@@ -460,5 +464,22 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
             return false;
         }
         return $params[$param];
+    }
+
+    /**
+     * Test wheever or not a feature is supported
+     * @param string $feature
+     * @throws common_exception_Error if feature is unkown
+     * @return boolean
+     */
+    public function supportsFeature($feature)
+    {
+        switch ($feature) {
+            case self::FEATURE_NX:
+                return ($this->getDriver() instanceof common_persistence_KeyValue_Nx);
+            default:
+                throw new common_exception_Error('Unknown feature '.$feature);
+        }
+        return false;
     }
 }
