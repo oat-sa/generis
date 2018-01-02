@@ -21,7 +21,7 @@
  * @package
  *
  */
-class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDriver
+class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDriver, common_persistence_KeyValue_Nx
 {
 
     const DEFAULT_PORT     = 6379;
