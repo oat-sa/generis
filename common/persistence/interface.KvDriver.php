@@ -32,14 +32,16 @@ interface common_persistence_KvDriver extends common_persistence_Driver
 {
 
     /**
-     * Stores a value, implementing time to live is optional
+     * Stores a value, implementing time to live and nx is optional
+     * Should throw an exception if an option is not supported
      * 
      * @param string $id
      * @param string $value
-     * @param string $ttl
+     * @param string $ttl time to live in seconds
+     * @param boolean Only set the key if it does not already exist
      * @return boolean
      */
-    public function set($id, $value, $ttl = null);
+    public function set($id, $value, $ttl = null, $nx = false);
 
     /**
      * Returns a value from storage
