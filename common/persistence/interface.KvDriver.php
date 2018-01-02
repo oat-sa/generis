@@ -38,8 +38,8 @@ interface common_persistence_KvDriver extends common_persistence_Driver
      * @param string $id
      * @param string $value
      * @param string $ttl time to live in seconds
-     * @param boolean Only set the key if it does not already exist
-     * @return boolean
+     * @param bool $nx Only set the key if it does not already exist
+     * @return bool
      */
     public function set($id, $value, $ttl = null, $nx = false);
 
