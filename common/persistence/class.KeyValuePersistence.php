@@ -25,6 +25,11 @@
  */
 class common_persistence_KeyValuePersistence extends common_persistence_Persistence
 {
+    /**
+     * Ability to set the key only if it does not already exist
+     */
+    const FEATURE_NX = 'nx';
+
     const MAX_VALUE_SIZE = 'max_value_size';
     const MAP_IDENTIFIER = 'map_identifier';
 
@@ -459,5 +464,22 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
             return false;
         }
         return $params[$param];
+    }
+
+    /**
+     * Test wheever or not a feature is supported
+     * @param string $feature
+     * @throws common_exception_Error if feature is unkown
+     * @return boolean
+     */
+    public function supportsFeature($feature)
+    {
+        switch ($feature) {
+            case self::FEATURE_NX:
+                return ($this->getDriver() instanceof common_persistence_KeyValue_Nx);
+            default:
+                throw new common_exception_Error('Unknown feature '.$feature);
+        }
+        return false;
     }
 }
