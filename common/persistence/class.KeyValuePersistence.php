@@ -214,9 +214,12 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     {
         if (!$this->isLarge($value)) {
             if ($flush) {
-                $this->set($key, $value, $ttl, $nx);
+                return $this->set($key, $value, $ttl, $nx);
             }
             return $value;
+        }
+        if ($nx) {
+            throw new common_exception_NotImplemented("NX not implemented for large values");
         }
 
         if ($level > 0) {
@@ -224,24 +227,21 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
         }
 
         $map = $this->createMap($key, $value);
-        // write map
-        $success = $this->setLargeValue($key, $this->serializeMap($map), $level + 1, $flush, $toTransform, $ttl, $nx);
-        // write values
-        if ($success) {
-            foreach ($map as $mappedKey => $valuePart) {
-                if ($toTransform) {
-                    $transformedKey = $this->transformReferenceToMappedKey($mappedKey);
-                } else {
-                    $transformedKey = $mappedKey;
-                }
-                if (!is_null($ttl)) {
-                    $this->set($transformedKey, $valuePart, $ttl);
-                } else {
-                    $this->set($transformedKey, $valuePart);
-                }
+        foreach ($map as $mappedKey => $valuePart) {
+            if ($toTransform) {
+                $transformedKey = $this->transformReferenceToMappedKey($mappedKey);
+            } else {
+                $transformedKey = $mappedKey;
+            }
+
+            if (!is_null($ttl)) {
+                $this->set($transformedKey, $valuePart, $ttl);
+            } else {
+                $this->set($transformedKey, $valuePart);
             }
         }
-        return $success;
+
+        return $this->setLargeValue($key, $this->serializeMap($map), $level + 1, $flush, $toTransform, $ttl);
     }
 
     /**
