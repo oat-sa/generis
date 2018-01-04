@@ -20,8 +20,10 @@
 namespace oat\oatbox\service;
 
 use oat\oatbox\Configurable;
+use oat\oatbox\log\LoggerServiceTrait;
 use oat\oatbox\service\exception\InvalidService;
 use oat\oatbox\service\exception\InvalidServiceManagerException;
+use Psr\Log\LoggerAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
@@ -32,9 +34,10 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  *
  * @author Joel Bout <joel@taotesting.com>
  */
-abstract class ConfigurableService extends Configurable implements ServiceLocatorAwareInterface
+abstract class ConfigurableService extends Configurable implements ServiceLocatorAwareInterface, LoggerAwareInterface
 {
     use ServiceManagerAwareTrait;
+    use LoggerServiceTrait;
 
     /** @var string Documentation header */
     protected $header = null;

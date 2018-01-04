@@ -14,22 +14,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2016-2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
 
 namespace oat\oatbox\extension;
 
 use oat\oatbox\action\Action;
+use oat\oatbox\log\LoggerServiceTrait;
 use oat\oatbox\service\ServiceManagerAwareInterface;
 use oat\oatbox\service\ServiceManagerAwareTrait;
+use Psr\Log\LoggerAwareInterface;
 
 /**
  * abstract base for extension actions
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-abstract class AbstractAction implements Action, ServiceManagerAwareInterface
+abstract class AbstractAction implements Action, ServiceManagerAwareInterface, LoggerAwareInterface
 {
     use ServiceManagerAwareTrait;
+    use LoggerServiceTrait;
 }

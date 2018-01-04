@@ -14,53 +14,65 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA
- * 
+ * Copyright (c) 2016-2017 (original work) Open Assessment Technologies SA
+ *
  */
 
 namespace oat\oatbox\log;
 
+use oat\oatbox\service\ServiceManager;
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Trait for classes that want to use the Logger
  *
  * @author Joel Bout <joel@taotesting.com>
  */
-trait LoggerAwareTrait
+trait LoggerServiceTrait
 {
     /**
-     * @var LoggerInterface
+     * To get the Logger e.q. LoggerService
+     *
+     * @return ServiceLocatorInterface
      */
-    private $logger;
+    abstract function getServiceLocator();
 
     /**
+     * To set a new Logger e.q. logger LoggerService
+     *
+     * @return ServiceManager
+     */
+    abstract function getServiceManager();
+
+    /**
+     * Add a logger in serviceManager memory
      *
      * @param LoggerInterface $logger
      */
     public function setLogger(LoggerInterface $logger)
     {
-        $this->logger = $logger;
+        /** @var LoggerService $loggerService */
+        $loggerService = $this->getLogger();
+        $loggerService->addLogger($logger);
+        $this->getServiceManager()->overload(LoggerService::SERVICE_ID, $loggerService);
     }
 
     /**
+     * Get the logger based on service manager
      *
      * @return \Psr\Log\LoggerInterface
      */
     public function getLogger()
     {
-        if (is_null($this->logger)) {
-            $this->logger = new NullLogger();
-        }
-        return $this->logger;
+        return $this->getServiceLocator()->get(LoggerService::SERVICE_ID);
     }
-    
+
     // Helpers
-    
+
     /**
      * Logs an emergency
-     * 
+     *
      * @param string $message
      * @param array $context
      */
@@ -68,37 +80,37 @@ trait LoggerAwareTrait
     {
         $this->getLogger()->emergency($message, $context);
     }
-    
+
     public function logAlert($message, $context = array())
     {
         $this->getLogger()->alert($message, $context);
     }
-    
+
     public function logCritical($message, $context = array())
     {
         $this->getLogger()->critical($message, $context);
     }
-    
+
     public function logError($message, $context = array())
     {
         $this->getLogger()->error($message, $context);
     }
-    
+
     public function logWarning($message, $context = array())
     {
         $this->getLogger()->warning($message, $context);
     }
-    
+
     public function logNotice($message, $context = array())
     {
         $this->getLogger()->notice($message, $context);
     }
-    
+
     public function logInfo($message, $context = array())
     {
         $this->getLogger()->info($message, $context);
     }
-    
+
     public function logDebug($message, $context = array())
     {
         $this->getLogger()->debug($message, $context);
