@@ -21,74 +21,223 @@
 namespace oat\oatbox\log;
 
 use oat\oatbox\service\ConfigurableService;
-use oat\oatbox\service\exception\InvalidService;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
+use Psr\Log\NullLogger;
 
-class LoggerService extends ConfigurableService
+class LoggerService extends ConfigurableService implements LoggerInterface
 {
     const SERVICE_ID = 'generis/logger';
 
     const LOGGER_OPTION = 'logger';
 
+    /** @var LoggerInterface */
+    protected $logger;
+
     /**
-     * @var LoggerInterface Logger where log are sent
+     * Add a Psr3 logger to LoggerService instance
+     * Previous and new logger are encapsulated into a LoggerAggregator
+     * If $replace is set to true, only new logger is taken
+     *
+     * @param LoggerInterface $logger
+     * @param bool $replace
+     * @return LoggerAggregator|LoggerInterface
+     * @throws \common_Exception
      */
-    protected $logger = null;
+    public function addLogger(LoggerInterface $logger, $replace = false)
+    {
+        if (!$replace && $this->isLoggerLoaded()) {
+            $logger = new LoggerAggregator([$logger, $this->logger]);
+        }
+        $this->logger = $logger;
+        return $logger;
+    }
+
+    /**
+     * Get the logger
+     *
+     * @return LoggerInterface
+     */
+    public function getLogger()
+    {
+        if (!$this->isLoggerLoaded()) {
+            $this->loadLogger();
+        }
+        return $this->logger;
+    }
+
+    /**
+     * Wrap a log to built logger
+     *
+     * @param mixed $level
+     * @param string $message
+     * @param array $context
+     */
+    public function log($level, $message, array $context = array())
+    {
+        $this->getLogger()->log($level, $message, $context);
+    }
+
+
+    /**
+     * System is unusable.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function emergency($message, array $context = array())
+    {
+        $this->log(LogLevel::EMERGENCY, $message, $context);
+    }
+
+    /**
+     * Action must be taken immediately.
+     *
+     * Example: Entire website down, database unavailable, etc. This should
+     * trigger the SMS alerts and wake you up.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function alert($message, array $context = array())
+    {
+        $this->log(LogLevel::ALERT, $message, $context);
+    }
+
+    /**
+     * Critical conditions.
+     *
+     * Example: Application component unavailable, unexpected exception.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function critical($message, array $context = array())
+    {
+        $this->log(LogLevel::CRITICAL, $message, $context);
+    }
+
+    /**
+     * Runtime errors that do not require immediate action but should typically
+     * be logged and monitored.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function error($message, array $context = array())
+    {
+        $this->log(LogLevel::ERROR, $message, $context);
+    }
+
+    /**
+     * Exceptional occurrences that are not errors.
+     *
+     * Example: Use of deprecated APIs, poor use of an API, undesirable things
+     * that are not necessarily wrong.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function warning($message, array $context = array())
+    {
+        $this->log(LogLevel::WARNING, $message, $context);
+    }
+
+    /**
+     * Normal but significant events.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function notice($message, array $context = array())
+    {
+        $this->log(LogLevel::NOTICE, $message, $context);
+    }
+
+    /**
+     * Interesting events.
+     *
+     * Example: User logs in, SQL logs.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function info($message, array $context = array())
+    {
+        $this->log(LogLevel::INFO, $message, $context);
+    }
+
+    /**
+     * Detailed debug information.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function debug($message, array $context = array())
+    {
+        $this->log(LogLevel::DEBUG, $message, $context);
+    }
 
     /**
      * Get the current logger.
      * If options does not contain any Psr3 Logger, NullLogger is set by default
      *
      * @return LoggerInterface
-     * @throws InvalidService
      */
-    public function getLogger()
+    protected function loadLogger()
     {
-        if (!$this->logger) {
+        if (!$this->isLoggerLoaded()) {
+            $logger = null;
             if ($this->hasOption(self::LOGGER_OPTION)) {
                 $loggerOptions = $this->getOption(self::LOGGER_OPTION);
-
                 if (is_object($loggerOptions)) {
-                    if (!is_a($loggerOptions, LoggerInterface::class)) {
-                        throw new InvalidService('Service must implements Psr3 logger interface');
+                    if (is_a($loggerOptions, LoggerInterface::class)) {
+                        $logger = $loggerOptions;
                     }
-                    $this->logger = $loggerOptions;
                 } elseif (is_array($loggerOptions) && isset($loggerOptions['class'])) {
                     $classname = $loggerOptions['class'];
                     if (is_a($classname, LoggerInterface::class, true)) {
                         if (isset($loggerOptions['options'])) {
-                            $this->logger = new $classname($loggerOptions['options']);
+                            $logger = new $classname($loggerOptions['options']);
                         } else {
-                            $this->logger = new $classname();
+                            $logger = new $classname();
                         }
-                    } else {
-                        throw new InvalidService('Service must implements Psr3 logger interface');
                     }
                 }
-
+            }
+            if (!is_null($logger)) {
+                $this->logger = $logger;
+            } else {
+                $this->logger = new NullLogger();
             }
             $this->propagate($this->logger);
         }
-
         return $this->logger;
     }
 
     /**
-     * Add a Psr3 logger to LoggerService instance
-     * If a logger is already set, previous and new logger are encapsulated into a LoggerAggregator
-     * If $replace is set to true, old logger is replaced
+     * Check if the logger is set to default NullLogger
      *
-     * @param LoggerInterface $logger
-     * @param bool $replace
-     * @return LoggerAggregator|LoggerInterface
-     * @throws InvalidService
+     * @return bool
      */
-    public function addLogger(LoggerInterface $logger, $replace = false)
+    protected function isLoggerLoaded()
     {
-        if (!$replace || !is_null($this->logger)) {
-            $logger = new LoggerAggregator([$logger, $this->getLogger()]);
-        }
-
-        return $this->logger = $logger;
+        return $this->logger instanceof LoggerInterface && !($this->logger instanceof NullLogger);
     }
 }
