@@ -34,6 +34,9 @@ class LoggerService extends ConfigurableService implements LoggerInterface
     /** @var LoggerInterface */
     protected $logger;
 
+    /** @var bool Set the logger to active or not to avoid log during logging itself */
+    protected $enabled = true;
+
     /**
      * Add a Psr3 logger to LoggerService instance
      * Previous and new logger are encapsulated into a LoggerAggregator
@@ -46,7 +49,7 @@ class LoggerService extends ConfigurableService implements LoggerInterface
      */
     public function addLogger(LoggerInterface $logger, $replace = false)
     {
-        if (!$replace && $this->isLoggerLoaded()) {
+        if (!$replace && $this->isLoggerLoaded() && !($this->logger instanceof NullLogger)) {
             $logger = new LoggerAggregator([$logger, $this->logger]);
         }
         $this->logger = $logger;
@@ -75,7 +78,11 @@ class LoggerService extends ConfigurableService implements LoggerInterface
      */
     public function log($level, $message, array $context = array())
     {
-        $this->getLogger()->log($level, $message, $context);
+        if ($this->enabled) {
+            $this->enabled = false;
+            $this->getLogger()->log($level, $message, $context);
+            $this->enabled = true;
+        }
     }
 
 
@@ -195,49 +202,50 @@ class LoggerService extends ConfigurableService implements LoggerInterface
     }
 
     /**
-     * Get the current logger.
+     * Load the logger from configuration
+     *
      * If options does not contain any Psr3 Logger, NullLogger is set by default
      *
      * @return LoggerInterface
      */
     protected function loadLogger()
     {
-        if (!$this->isLoggerLoaded()) {
-            $logger = null;
-            if ($this->hasOption(self::LOGGER_OPTION)) {
-                $loggerOptions = $this->getOption(self::LOGGER_OPTION);
-                if (is_object($loggerOptions)) {
-                    if (is_a($loggerOptions, LoggerInterface::class)) {
-                        $logger = $loggerOptions;
-                    }
-                } elseif (is_array($loggerOptions) && isset($loggerOptions['class'])) {
-                    $classname = $loggerOptions['class'];
-                    if (is_a($classname, LoggerInterface::class, true)) {
-                        if (isset($loggerOptions['options'])) {
-                            $logger = new $classname($loggerOptions['options']);
-                        } else {
-                            $logger = new $classname();
-                        }
+        $logger = null;
+        if ($this->hasOption(self::LOGGER_OPTION)) {
+            $loggerOptions = $this->getOption(self::LOGGER_OPTION);
+            if (is_object($loggerOptions)) {
+                if (is_a($loggerOptions, LoggerInterface::class)) {
+                    $logger = $loggerOptions;
+                }
+            } elseif (is_array($loggerOptions) && isset($loggerOptions['class'])) {
+                $classname = $loggerOptions['class'];
+                if (is_a($classname, LoggerInterface::class, true)) {
+                    if (isset($loggerOptions['options'])) {
+                        $logger = new $classname($loggerOptions['options']);
+                    } else {
+                        $logger = new $classname();
                     }
                 }
             }
-            if (!is_null($logger)) {
-                $this->logger = $logger;
-            } else {
-                $this->logger = new NullLogger();
-            }
-            $this->propagate($this->logger);
         }
+
+        if (!is_null($logger)) {
+            $this->logger = $logger;
+        } else {
+            $this->logger = new NullLogger();
+        }
+        $this->propagate($this->logger);
+
         return $this->logger;
     }
 
     /**
-     * Check if the logger is set to default NullLogger
+     * Check if the logger is loaded from configuration
      *
      * @return bool
      */
     protected function isLoggerLoaded()
     {
-        return $this->logger instanceof LoggerInterface && !($this->logger instanceof NullLogger);
+        return $this->logger instanceof LoggerInterface;
     }
 }

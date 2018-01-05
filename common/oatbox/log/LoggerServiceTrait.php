@@ -53,7 +53,7 @@ trait LoggerServiceTrait
     public function setLogger(LoggerInterface $logger)
     {
         /** @var LoggerService $loggerService */
-        $loggerService = $this->getLogger();
+        $loggerService = $this->getServiceLocator()->get(LoggerService::SERVICE_ID);
         $loggerService->addLogger($logger);
         $this->getServiceManager()->overload(LoggerService::SERVICE_ID, $loggerService);
     }

@@ -66,12 +66,35 @@
                             'options' => array(
                                 \Monolog\Logger::WARNING
                             )
+                        ),
+                        array(
+                            'class' => \Monolog\Processor\MemoryUsageProcessor::class,
+                        ),
+                        array(
+                            'class' => \Monolog\Processor\MemoryPeakUsageProcessor::class,
                         )
                     )
                 )
+            ),
+
+            // Processors at logger level
+            'processors' => array(
+
+                // Apply PSR3 rules to message
+                array(
+                    'class' => \Monolog\Processor\PsrLogMessageProcessor::class
+                ),
+
+                // Add UID to logger to identify same logs to different handlers
+                array(
+                    'class' => \Monolog\Processor\UidProcessor::class,
+                    'options' => array (
+                        24
+                    )
+                ),
             )
+
         )
     )
 ));`
- *
- */
+*/
