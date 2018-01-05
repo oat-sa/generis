@@ -26,6 +26,15 @@ use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 
+/**
+ * Class TaoMonolog
+ *
+ * A wrapper to acces monolog from tao platform
+ * Build the logger from configuration with handlers
+ * - see generis/config/header/logger.conf.php
+ *
+ * @package oat\oatbox\log\logger
+ */
 class TaoMonolog implements LoggerInterface
 {
     use LoggerTrait;
@@ -69,13 +78,13 @@ class TaoMonolog implements LoggerInterface
     {
         $logger = new Logger($this->options['name']);
 
-        if ($this->options[self::HANDLERS_OPTION]) {
+        if (isset($this->options[self::HANDLERS_OPTION])) {
             foreach ($this->options[self::HANDLERS_OPTION] as $handlerOptions) {
                 $logger->pushHandler($this->buildHandler($handlerOptions));
             }
         }
 
-        if ($this->options['processors']) {
+        if (isset($this->options['processors'])) {
             $processorsOptions = $this->options['processors'];
             if (!is_array($processorsOptions)) {
                 throw new \common_configuration_ComponentFactoryException('Handler processors options as to be formatted as array');
@@ -131,7 +140,7 @@ class TaoMonolog implements LoggerInterface
 
     /**
      * @param $options
-     * @return callback
+     * @return callable
      * @throws \common_configuration_ComponentFactoryException
      */
     protected function buildProcessor($options)
@@ -186,10 +195,15 @@ class TaoMonolog implements LoggerInterface
      * @param $className
      * @param array $args
      * @return object
+     * @throws \common_configuration_ComponentFactoryException
      */
     protected function buildObject($className, array $args)
     {
-        $class = new \ReflectionClass($className);
-        return $class->newInstanceArgs($args);
+        try {
+            $class = new \ReflectionClass($className);
+            return $class->newInstanceArgs($args);
+        } catch (\ReflectionException $e) {
+            throw new \common_configuration_ComponentFactoryException('Unable to create object for logger', 0, $e);
+        }
     }
 }
