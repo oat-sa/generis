@@ -66,9 +66,12 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
      * @throws common_Exception
      * @return boolean
      */
-    public function set($id, $value, $ttl = null) {
-       
+    public function set($id, $value, $ttl = null, $nx = false)
+    {
         $returnValue = false;
+        if ($nx) {
+            throw new common_exception_NotImplemented('NX not implemented in '.__CLASS__);
+        }
         try{
             
             $expire = is_null($ttl) ? 0 : time() + $ttl;
