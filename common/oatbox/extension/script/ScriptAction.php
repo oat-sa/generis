@@ -51,7 +51,7 @@ abstract class ScriptAction extends AbstractAction
         $this->optionsDescription = $this->provideOptions();
         
         // Display help?
-        if (in_array('-h', $params) || in_array('--help', $params)) {
+        if ($this->displayUsage($params)) {
             return $this->usage();
         }
         
@@ -82,6 +82,31 @@ abstract class ScriptAction extends AbstractAction
         return $this->options->get($optionName);
     }
     
+    protected function provideUsage()
+    {
+		return [];
+	}
+	
+	protected function provideUsageOptionName()
+	{
+		return 'help';
+	}
+	
+	private function displayUsage(array $params)
+	{
+		$usageDescription = $this->provideUsage();
+		
+		if (!empty($usageDescription) && is_array($usageDescription)) {
+			if (!empty($usageDescription['prefix']) && in_array('-' . $usageDescription['prefix'], $params)) {
+				return true;
+			} elseif (!empty($usageDescription['longPrefix']) && in_array('--' . $usageDescription['longPrefix'], $params)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+    
     private function usage()
     {
         $report = new Report(
@@ -89,10 +114,13 @@ abstract class ScriptAction extends AbstractAction
             $this->provideDescription() . "\n"
         );
         
+        $optionsDescription = $this->optionsDescription;
+        $optionsDescription[$this->provideUsageOptionName()] = $this->provideUsage();
+        
         $required = new Report(Report::TYPE_INFO, 'Required Arguments:');
         $optional = new Report(Report::TYPE_INFO, 'Optional Arguments:');
         
-        foreach ($this->optionsDescription as $optionName => $optionParams) {
+        foreach ($optionsDescription as $optionName => $optionParams) {
             // Deal with prefixes.
             $prefixes = [];
             $optionDisplay = (!empty($optionParams['flag'])) ? '' : " ${optionName}";
