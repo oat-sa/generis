@@ -74,6 +74,7 @@ class OptionContainer
                 } else {
                     // It's a regular option!
                     $required = empty($optionParams['required']) ? false : true;
+                    $castTo = empty($optionParams['cast']) ? null : $optionParams['cast'];
                     $optionIndex = self::searchOptionIndex($prefix, $longPrefix, $values);
                     
                     if ($required && $optionIndex === false) {
@@ -81,19 +82,19 @@ class OptionContainer
                     }
                     
                     if ($optionIndex === false && isset($optionParams['defaultValue'])) {
-                        $returnValue[$optionName] = $optionParams['defaultValue'];
+                        $returnValue[$optionName] = self:cast($optionParams['defaultValue'], $castTo);
                     } else {
                         // Option found by prefix or long prefix. Let's get it's value.
                         $valueIndex = $optionIndex + 1;
                         if (isset($values[$valueIndex])) {
-                            $castTo = empty($optionParams['cast']) ? null : $optionParams['cast'];
+                            
                             $returnValue[$optionName] = self::cast($values[$valueIndex], $castTo);
                         } else {
                             // Edge case. Option found, but it is the last value of the $value array.
                             if ($required) {
                                 throw new MissingOptionException("No value given for required argument '${optionName}'.", $optionName);
                             } elseif (isset($optionParams['defaultValue'])) {
-                                $returnValue[$optionName] = $optionParams['defaultValue'];
+                                $returnValue[$optionName] = self:cast($optionParams['defaultValue'], $castTo);
                             }
                         }
                     }
