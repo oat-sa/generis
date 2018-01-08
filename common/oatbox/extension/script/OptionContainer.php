@@ -82,7 +82,7 @@ class OptionContainer
                     }
                     
                     if ($optionIndex === false && isset($optionParams['defaultValue'])) {
-                        $returnValue[$optionName] = self:cast($optionParams['defaultValue'], $castTo);
+                        $returnValue[$optionName] = self::cast($optionParams['defaultValue'], $castTo);
                     } else {
                         // Option found by prefix or long prefix. Let's get it's value.
                         $valueIndex = $optionIndex + 1;
@@ -94,7 +94,7 @@ class OptionContainer
                             if ($required) {
                                 throw new MissingOptionException("No value given for required argument '${optionName}'.", $optionName);
                             } elseif (isset($optionParams['defaultValue'])) {
-                                $returnValue[$optionName] = self:cast($optionParams['defaultValue'], $castTo);
+                                $returnValue[$optionName] = self::cast($optionParams['defaultValue'], $castTo);
                             }
                         }
                     }
