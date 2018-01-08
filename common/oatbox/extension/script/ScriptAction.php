@@ -84,28 +84,28 @@ abstract class ScriptAction extends AbstractAction
     
     protected function provideUsage()
     {
-		return [];
+        return [];
 	}
 	
-	protected function provideUsageOptionName()
-	{
-		return 'help';
-	}
+    protected function provideUsageOptionName()
+    {
+        return 'help';
+    }
 	
-	private function displayUsage(array $params)
-	{
-		$usageDescription = $this->provideUsage();
-		
-		if (!empty($usageDescription) && is_array($usageDescription)) {
-			if (!empty($usageDescription['prefix']) && in_array('-' . $usageDescription['prefix'], $params)) {
-				return true;
-			} elseif (!empty($usageDescription['longPrefix']) && in_array('--' . $usageDescription['longPrefix'], $params)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
+    private function displayUsage(array $params)
+    {
+        $usageDescription = $this->provideUsage();
+        
+        if (!empty($usageDescription) && is_array($usageDescription)) {
+            if (!empty($usageDescription['prefix']) && in_array('-' . $usageDescription['prefix'], $params)) {
+                return true;
+            } elseif (!empty($usageDescription['longPrefix']) && in_array('--' . $usageDescription['longPrefix'], $params)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
     
     private function usage()
     {
