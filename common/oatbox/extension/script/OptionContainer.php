@@ -84,9 +84,8 @@ class OptionContainer
                     if ($optionIndex === false && isset($optionParams['defaultValue'])) {
                         $returnValue[$optionName] = self::cast($optionParams['defaultValue'], $castTo);
                     } else {
-                        // Option found by prefix or long prefix. Let's get it's value.
                         $valueIndex = $optionIndex + 1;
-                        if (isset($values[$valueIndex])) {
+                        if ($optionIndex !== false && isset($values[$valueIndex])) {
                             
                             $returnValue[$optionName] = self::cast($values[$valueIndex], $castTo);
                         } else {
