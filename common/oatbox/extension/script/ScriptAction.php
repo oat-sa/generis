@@ -57,6 +57,7 @@ abstract class ScriptAction extends AbstractAction
     public function __invoke($params)
     {
         $this->optionsDescription = $this->provideOptions();
+        $beginScript = microtime(true);
         
         // Display help?
         if ($this->displayUsage($params)) {
@@ -77,9 +78,21 @@ abstract class ScriptAction extends AbstractAction
         }
         
         // Run the userland script.
-        return $this->run();
+        $report = $this->run();
+
+        $endScript = microtime(true);
+        if ($this->showTime()) {
+            $report->add(
+                new Report(
+                    Report::TYPE_INFO,
+                    'Execution time: ' . self::secondsToDuration($endScript - $beginScript)
+                )
+            );
+        }
+
+        return $report;
     }
-    
+
     protected function hasOption($optionName)
     {
         return $this->options->has($optionName);
@@ -98,6 +111,11 @@ abstract class ScriptAction extends AbstractAction
     protected function provideUsageOptionName()
     {
         return 'help';
+    }
+
+    protected function showTime()
+    {
+        return false;
     }
 	
     private function displayUsage(array $params)
@@ -190,5 +208,23 @@ abstract class ScriptAction extends AbstractAction
         }
         
         return $string;
+    }
+
+    /**
+     * Seconds to Duration
+     *
+     * Format a given number of $seconds into a duration with format [hours]:[minutes]:[seconds].
+     *
+     * @param $seconds
+     * @return string
+     */
+    private static function secondsToDuration($seconds)
+    {
+        $seconds = intval($seconds);
+        $hours = floor($seconds / 3600);
+        $minutes = floor(($seconds / 60) % 60);
+        $seconds = $seconds % 60;
+
+        return "${hours}h ${minutes}m {$seconds}s";
     }
 }
