@@ -40,12 +40,20 @@ abstract class ScriptAction extends AbstractAction
     /**
      * Run Script.
      * 
-     * Run the userland script.
+     * Run the userland script. Implementers will use this method
+     * to implement the main logic of the script.
      * 
-     * @return \common_report_Report;
+     * @return \common_report_Report
      */
     protected abstract function run();
     
+    /**
+     * Invoke
+     * 
+     * This method makes the script invokable programatically.
+     * 
+     * @return \common_report_Report
+     */
     public function __invoke($params)
     {
         $this->optionsDescription = $this->provideOptions();

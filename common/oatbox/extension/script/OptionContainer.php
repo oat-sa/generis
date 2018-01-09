@@ -20,31 +20,78 @@
 
 namespace oat\oatbox\extension\script;
 
+/**
+ * Option Container Class
+ * 
+ * This class implements a container for options provided through CLI scripts.
+ */
 class OptionContainer
 {
+    /**
+     * @var array
+     */
     protected $options;
+    
+    /**
+     * @var array
+     */
     protected $data;
     
+    /**
+     * Constructor
+     * 
+     * Create a new OptionContainer object.
+     * 
+     * @param array $options
+     * @param array $values
+     */
     public function __construct(array $options, array $values) {
         $this->data = self::extract($options, $values);
         $this->options = $options;
     }
     
+    /**
+     * Has Option
+     * 
+     * Wheter an option with name $optionName is extracted.
+     * 
+     * @param string $optionName
+     */
     public function has($optionName)
     {
         return isset($this->data[$optionName]);
     }
     
+    /**
+     * Get Option
+     * 
+     * Returns the value of option with name $optionName. In case of
+     * such a value does not exist, null is returned.
+     * 
+     * @return mixed
+     */
     public function get($optionName)
     {
         return ($this->has($optionName)) ? $this->data[$optionName] : null;
     }
     
+    /**
+     * Get Options
+     * 
+     * Get all options.
+     * 
+     * @return array
+     */
     public function getOptions()
     {
         return $this->options;
     }
     
+    /**
+     * Is Flag
+     * 
+     * Wheter an option with name $optionName is a flag.
+     */
     public function isFlag($optionName)
     {
         return isset($this->options[$optionName]) && !empty($this->options[$optionName]['flag']);
