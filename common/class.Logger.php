@@ -33,10 +33,7 @@ use oat\oatbox\log\LoggerService;
  */
 class common_Logger
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
+    use \oat\oatbox\log\LoggerAwareTrait;
 
     /**
      * whenever or not the Logger is enabled
@@ -206,8 +203,7 @@ class common_Logger
             try {
                 if (defined('CONFIG_PATH')) {
                     $tags = is_array($tags) ? $tags : [$tags];
-                    $logger = ServiceManager::getServiceManager()->get(LoggerService::SERVICE_ID);
-                    $logger->log(common_log_Logger2Psr::getPsrLevelFromCommon($level), $message, $tags);
+                    $this->getLogger()->log(common_log_Logger2Psr::getPsrLevelFromCommon($level), $message, $tags);
                 }
             } catch (\Exception $e) {
                 // Unable to use the logger service to retrieve the logger

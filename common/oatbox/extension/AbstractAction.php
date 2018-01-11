@@ -21,6 +21,7 @@
 namespace oat\oatbox\extension;
 
 use oat\oatbox\action\Action;
+use oat\oatbox\log\LoggerAwareTrait;
 use oat\oatbox\log\LoggerServiceTrait;
 use oat\oatbox\log\TaoLoggerAwareInterface;
 use oat\oatbox\service\ServiceManagerAwareInterface;
@@ -33,5 +34,5 @@ use oat\oatbox\service\ServiceManagerAwareTrait;
 abstract class AbstractAction implements Action, ServiceManagerAwareInterface, TaoLoggerAwareInterface
 {
     use ServiceManagerAwareTrait;
-    use LoggerServiceTrait;
+    use LoggerAwareTrait;
 }

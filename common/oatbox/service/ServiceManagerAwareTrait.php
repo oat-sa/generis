@@ -97,7 +97,7 @@ trait ServiceManagerAwareTrait
                 $logger = $this->getLogger();
             } else {
                 if ($this->getServiceLocator()->has(LoggerService::SERVICE_ID)) {
-                    $logger = $this->getServiceLocator()->get(LoggerService::SERVICE_ID)->getLogger();
+                    $logger = $this->getServiceLocator()->get(LoggerService::SERVICE_ID);
                 }
             }
             if (!is_null($logger)) {
