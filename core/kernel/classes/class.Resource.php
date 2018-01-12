@@ -592,10 +592,10 @@ class core_kernel_classes_Resource
     public function delete($deleteReference = false)
     {
         $returnValue = (bool) false;
-        $uuid = $this->getUri();
         $returnValue = $this->getImplementation()->delete($this, $deleteReference);
         $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
-        $eventManager->trigger(new ResourceDeleted($uuid));
+        $id = $this->getUri();
+        $eventManager->trigger(new ResourceDeleted($id));
         return (bool) $returnValue;
     }
 
