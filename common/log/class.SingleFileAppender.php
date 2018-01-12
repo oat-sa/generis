@@ -56,6 +56,7 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
      * %l line from which the log was called
      * %t timestamp
      * %u user
+     * %g tags
      *
      * @access protected
      * @var string
@@ -168,6 +169,7 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
                 '%t' => $item->getDateTime(),
                 '%r' => $item->getRequest(),
                 '%f' => $item->getCallerFile(),
+                '%g' => implode(',', $item->getTags()),
                 '%l' => $item->getCallerLine()
             );
             if (strpos($this->format, '%b')) {
