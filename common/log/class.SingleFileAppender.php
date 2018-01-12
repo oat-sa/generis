@@ -61,7 +61,7 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
      * @access protected
      * @var string
      */
-    protected $format = '%d [%s] [%g] \'%m\' %f %l';
+    protected $format = '%d [%s] \'%m\' %f %l';
 
     /**
      * Prefix for each log line
