@@ -37,11 +37,10 @@ trait LoggerAwareTrait
      */
     public function setLogger(LoggerInterface $logger)
     {
-        $serviceLocator = (method_exists($this, 'getServiceLocator')) ? $this->getServiceLocator() : ServiceManager::getServiceManager();
         $serviceManager = (method_exists($this, 'getServiceManager')) ? $this->getServiceManager() : ServiceManager::getServiceManager();
 
         /** @var LoggerService $loggerService */
-        $loggerService = $serviceLocator->get(LoggerService::SERVICE_ID);
+        $loggerService = $serviceManager->get(LoggerService::SERVICE_ID);
         $loggerService->addLogger($logger);
         $serviceManager->overload(LoggerService::SERVICE_ID, $loggerService);
     }

@@ -20,7 +20,7 @@
 
 namespace oat\oatbox\log\logger\processor;
 
-use Monolog\Logger;
+use Psr\Log\LogLevel;
 
 /**
  * Class BacktraceProcessor
@@ -35,7 +35,7 @@ class BacktraceProcessor
 {
     protected $level;
 
-    public function __construct($level = Logger::DEBUG)
+    public function __construct($level = LogLevel::DEBUG)
     {
         $this->level = $level;
     }

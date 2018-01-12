@@ -23,6 +23,7 @@ namespace oat\oatbox\log\logger;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
+use oat\oatbox\Configurable;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 
@@ -35,7 +36,7 @@ use Psr\Log\LoggerTrait;
  *
  * @package oat\oatbox\log\logger
  */
-class TaoMonolog implements LoggerInterface
+class TaoMonolog extends Configurable implements LoggerInterface
 {
     use LoggerTrait;
 
@@ -45,15 +46,6 @@ class TaoMonolog implements LoggerInterface
 
     /** @var Logger null  */
     protected $logger = null;
-
-    /**
-     * TaoMonolog constructor.
-     * @param array $options
-     */
-    public function __construct(array $options = [])
-    {
-        $this->options = $options;
-    }
 
     /**
      * @param mixed $level
