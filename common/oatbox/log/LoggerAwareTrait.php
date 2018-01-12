@@ -20,8 +20,8 @@
 
 namespace oat\oatbox\log;
 
-use oat\oatbox\service\ServiceManager;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Trait for classes that want to use the Logger
@@ -30,19 +30,16 @@ use Psr\Log\LoggerInterface;
  */
 trait LoggerAwareTrait
 {
+    private $logger;
+
     /**
-     * Add a logger in serviceManager memory
+     * Set a new logger
      *
      * @param LoggerInterface $logger
      */
     public function setLogger(LoggerInterface $logger)
     {
-        $serviceManager = (method_exists($this, 'getServiceManager')) ? $this->getServiceManager() : ServiceManager::getServiceManager();
-
-        /** @var LoggerService $loggerService */
-        $loggerService = $serviceManager->get(LoggerService::SERVICE_ID);
-        $loggerService->addLogger($logger);
-        $serviceManager->overload(LoggerService::SERVICE_ID, $loggerService);
+        $this->logger = $logger;
     }
 
     /**
@@ -52,11 +49,9 @@ trait LoggerAwareTrait
      */
     public function getLogger()
     {
-        $serviceLocator = (method_exists($this, 'getServiceLocator')) ? $this->getServiceLocator() : ServiceManager::getServiceManager();
-
-        return $serviceLocator->get(LoggerService::SERVICE_ID);
+        return ($this->logger instanceof LoggerInterface) ? $this->logger : new NullLogger();
     }
-    
+
     // Helpers
     
     /**

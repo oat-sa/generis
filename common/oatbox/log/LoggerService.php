@@ -40,16 +40,13 @@ class LoggerService extends ConfigurableService implements LoggerInterface
     /**
      * Add a Psr3 logger to LoggerService instance
      * Previous and new logger are encapsulated into a LoggerAggregator
-     * If $replace is set to true, only new logger is taken
      *
      * @param LoggerInterface $logger
-     * @param bool $replace
      * @return LoggerAggregator|LoggerInterface
-     * @throws \common_Exception
      */
-    public function addLogger(LoggerInterface $logger, $replace = false)
+    public function addLogger(LoggerInterface $logger)
     {
-        if (!$replace && $this->isLoggerLoaded() && !($this->logger instanceof NullLogger)) {
+        if ($this->isLoggerLoaded() && !($this->logger instanceof NullLogger)) {
             $logger = new LoggerAggregator([$logger, $this->logger]);
         }
         $this->logger = $logger;
