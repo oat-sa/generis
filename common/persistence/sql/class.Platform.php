@@ -151,7 +151,7 @@ class common_persistence_sql_Platform {
      * @return string
      */
     public function getNowExpression(){
-        $datetime = new DateTime();
+        $datetime = new DateTime('now', new \DateTimeZone('UTC'));
         $date = $datetime->format('Y-m-d H:i:s');
        // return $this->dbalPlatform->getNowExpression();
        return $date;
