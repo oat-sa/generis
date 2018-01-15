@@ -29,16 +29,16 @@ use oat\oatbox\event\Event;
  */
 class ResourceDeleted implements Event
 {
-    private $uuid;
+    private $uri;
     
-	function __construct($uuid)
+	function __construct($uri)
 	{
-	    $this->uuid = $uuid;
+	    $this->uri = $uri;
 	}
     
 	function getId()
 	{
-	    return $this->uuid;
+	    return $this->uri;
 	}
 
 	function getName()

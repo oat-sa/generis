@@ -591,11 +591,9 @@ class core_kernel_classes_Resource
      */
     public function delete($deleteReference = false)
     {
-        $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->delete($this, $deleteReference);
         $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
-        $uri = $this->getUri();
-        $eventManager->trigger(new ResourceDeleted($uri));
+        $eventManager->trigger(new ResourceDeleted($this->getUri()));
         return (bool) $returnValue;
     }
 
