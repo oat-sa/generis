@@ -30,19 +30,30 @@ use oat\oatbox\event\Event;
 class ResourceDeleted implements Event
 {
     private $uri;
-    
-	function __construct($uri)
-	{
-	    $this->uri = $uri;
-	}
-    
-	function getId()
-	{
-	    return $this->uri;
-	}
 
-	function getName()
-	{
-	    return __CLASS__;
-	}
+    /**
+     * @param string $uri
+     */
+    function __construct($uri)
+    {
+        $this->uri = $uri;
+    }
+
+    /**
+     * Return the URI of the deleted resource
+     * @return string
+     */
+    function getId()
+    {
+        return $this->uri;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \oat\oatbox\event\Event::getName()
+     */
+    function getName()
+    {
+        return __CLASS__;
+    }
 }
