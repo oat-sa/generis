@@ -111,7 +111,6 @@ class common_log_Dispatcher
     {
         $returnValue = (bool) false;
 
-        
     	$this->appenders = array();
     	$this->minLevel = null;
     	foreach ($configuration as $appenderConfig) {
@@ -163,14 +162,16 @@ class common_log_Dispatcher
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
      */
-    private function __construct()
+    public function __construct($config = null)
     {
-        // workaround to prevent errors during install
-        if (defined('EXTENSION_PATH')) {
-            $config = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig(self::CONFIG_ID);
-            if (is_array($config)) {
-                $this->init($config);
+        if (is_null($config)) {
+            // workaround to prevent errors during install
+            if (defined('EXTENSION_PATH')) {
+                $config = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig(self::CONFIG_ID);
             }
+        }
+        if (is_array($config)) {
+            $this->init($config);
         }
     }
 

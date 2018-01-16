@@ -27,7 +27,7 @@ use Psr\Log\NullLogger;
 
 class LoggerService extends ConfigurableService implements LoggerInterface
 {
-    const SERVICE_ID = 'generis/logger';
+    const SERVICE_ID = 'generis/log';
 
     const LOGGER_OPTION = 'logger';
 

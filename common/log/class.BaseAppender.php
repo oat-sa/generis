@@ -76,7 +76,6 @@ abstract class common_log_BaseAppender
      */
     public function log( common_log_Item $item)
     {
-
     	if ((1<<$item->getSeverity() & $this->mask) > 0
     		&& (empty($this->tags) || count(array_intersect($item->getTags(), $this->tags))) > 0) {
         	$this->doLog($item);
