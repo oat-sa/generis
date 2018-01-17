@@ -76,7 +76,7 @@ abstract class ScriptAction extends AbstractAction
                 $e->getMessage()
             );
         }
-        
+
         // Run the userland script.
         $report = $this->run();
 
