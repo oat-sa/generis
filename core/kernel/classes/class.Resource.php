@@ -27,6 +27,7 @@ use oat\oatbox\service\ServiceManager;
 use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\event\EventManager;
 use oat\generis\model\data\event\ResourceUpdated;
+use oat\generis\model\data\event\ResourceDeleted;
 
 /**
  * Resource implements rdf:resource container identified by an uri (a string).
@@ -590,8 +591,9 @@ class core_kernel_classes_Resource
      */
     public function delete($deleteReference = false)
     {
-        $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->delete($this, $deleteReference);
+        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
+        $eventManager->trigger(new ResourceDeleted($this->getUri()));
         return (bool) $returnValue;
     }
 
