@@ -133,7 +133,7 @@ class OptionContainer
                     } else {
                         $valueIndex = $optionIndex + 1;
                         if ($optionIndex !== false && isset($values[$valueIndex])) {
-                            
+
                             $returnValue[$optionName] = self::cast($values[$valueIndex], $castTo);
                         } else {
                             // Edge case. Option found, but it is the last value of the $value array.
@@ -159,10 +159,11 @@ class OptionContainer
         for ($i = 0; $i < count($prefixes); $i++) {
             $dashes = str_repeat('-', $i + 1);
             $p = $prefixes[$i];
-            
-            if (($search = array_search("${dashes}${p}", $values)) !== false) {
-                $optionIndex = $search;
-                break;
+            if (!empty($p)) {
+                if (($search = array_search("${dashes}${p}", $values)) !== false) {
+                    $optionIndex = $search;
+                    break;
+                }
             }
         }
         
