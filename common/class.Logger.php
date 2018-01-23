@@ -151,20 +151,6 @@ class common_Logger
     private function __construct()
     {
     }
-    
-    /**
-     * Returns the dispatcher 
-     * 
-     * @return Appender
-     */
-    private function getDispatcher() {
-        if (is_null($this->dispatcher)) {
-            $this->disable();
-            $this->dispatcher = common_log_Dispatcher::singleton();
-            $this->restore();
-        }
-        return $this->dispatcher;
-    }
 
     /**
      * register the logger as errorhandler
@@ -210,52 +196,6 @@ class common_Logger
             }
             $this->restore();
         }
-
-		if ($this->enabled && $this->getDispatcher()->getLogThreshold() <= $level) {
-			$this->disable();
-			$stack = defined('DEBUG_BACKTRACE_IGNORE_ARGS')
-                ? debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)
-                : debug_backtrace(false);
-			array_shift($stack);
-			// retrieving the user can be a complex procedure, leading to missing log informations
-			$user = null;
-			if ($errorFile == '') {
-				$keys = array_keys($stack);
-				$current = $stack[$keys[0]];
-				if (isset($current['file']) && isset($current['line'])) {
-					$errorFile = $current['file'];
-					$errorLine = $current['line'];
-				}
-			}
-			if(PHP_SAPI != 'cli'){
-				$requestURI = $_SERVER['REQUEST_URI'];
-			}else{
-				$requestURI = implode(' ', $_SERVER['argv']);
-			}
-			
-			//reformat input
-			if(is_object($message)){
-				$message = 'Message is object of type ' . gettype($message);
-
-                //show content of logged object only from debug level
-                if($level <= self::DEBUG_LEVEL){
-                    $message .= ' : ' . PHP_EOL . var_export($message, true);
-                }
-            //same for arrays
-		    }else if (is_array($message) && $level <= self::DEBUG_LEVEL){
-                
-				$message = 'Message is an array : ' . PHP_EOL . var_export($message, true);
-			}else{
-				$message = (string) $message;
-			}
-			if(is_string($tags)){
-				$tags = array($tags);
-			}
-
-			$this->getDispatcher()->log(new common_log_Item($message, $level, time(), $stack, $tags, $requestURI, $errorFile, $errorLine));
-			$this->restore();
-		};
-        
     }
 
     /**

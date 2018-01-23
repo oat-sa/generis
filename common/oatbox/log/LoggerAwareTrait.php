@@ -22,6 +22,7 @@ namespace oat\oatbox\log;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use oat\oatbox\service\ServiceManager;
 
 /**
  * Trait for classes that want to use the Logger
@@ -49,7 +50,11 @@ trait LoggerAwareTrait
      */
     public function getLogger()
     {
-        return ($this->logger instanceof LoggerInterface) ? $this->logger : new NullLogger();
+        if ($this->logger instanceof LoggerInterface) {
+            return $this->logger;
+        }
+        $logger = ServiceManager::getServiceManager()->get(LoggerService::SERVICE_ID);
+        return ($logger instanceof LoggerInterface) ? $logger : new NullLogger();
     }
 
     // Helpers

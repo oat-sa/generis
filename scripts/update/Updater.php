@@ -49,6 +49,7 @@ use oat\oatbox\task\implementation\TaskQueuePayload;
 use oat\oatbox\task\Queue;
 use oat\oatbox\task\TaskRunner;
 use oat\taoWorkspace\model\generis\WrapperModel;
+use oat\oatbox\log\logger\TaoLog;
 
 /**
  * 
@@ -410,7 +411,17 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('4.4.1');
         }
 
-        $this->skip('4.4.1', '6.7.0');
+        $this->skip('4.4.1', '6.6.0');
+
+        if ($this->isVersion('6.6.0')) {
+            $conf = $this->getExtension()->getConfig('log');
+            $this->getServiceManager()->register(LoggerService::SERVICE_ID, new LoggerService([
+                LoggerService::LOGGER_OPTION => new TaoLog([
+                    TaoLog::OPTION_APPENDERS => $conf
+                ])
+            ]));
+            $this->setVersion('6.7.0');
+        }
     }
     
     private function getReadableModelIds() {

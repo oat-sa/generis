@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA
+ * Copyright (c) 2018 (original work) Open Assessment Technologies SA
  *
  */
 
@@ -23,7 +23,7 @@ namespace oat\oatbox\log\logger;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
-use oat\oatbox\Configurable;
+use oat\oatbox\service\ConfigurableService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 
@@ -32,17 +32,15 @@ use Psr\Log\LoggerTrait;
  *
  * A wrapper to acces monolog from tao platform
  * Build the logger from configuration with handlers
- * - see generis/config/header/logger.conf.php
+ * - see generis/config/header/log.conf.php
  *
  * @package oat\oatbox\log\logger
  */
-class TaoMonolog extends Configurable implements LoggerInterface
+class TaoMonolog extends ConfigurableService implements LoggerInterface
 {
     use LoggerTrait;
 
     const HANDLERS_OPTION = 'handlers';
-
-    protected $options;
 
     /** @var Logger null  */
     protected $logger = null;
@@ -68,16 +66,16 @@ class TaoMonolog extends Configurable implements LoggerInterface
      */
     protected function buildLogger()
     {
-        $logger = new Logger($this->options['name']);
+        $logger = new Logger($this->getOption('name'));
 
-        if (isset($this->options[self::HANDLERS_OPTION])) {
-            foreach ($this->options[self::HANDLERS_OPTION] as $handlerOptions) {
+        if ($this->hasOption(self::HANDLERS_OPTION)) {
+            foreach ($this->getOption(self::HANDLERS_OPTION) as $handlerOptions) {
                 $logger->pushHandler($this->buildHandler($handlerOptions));
             }
         }
 
-        if (isset($this->options['processors'])) {
-            $processorsOptions = $this->options['processors'];
+        if ($this->hasOption('processors')) {
+            $processorsOptions = $this->getOption('processors');
             if (!is_array($processorsOptions)) {
                 throw new \common_configuration_ComponentFactoryException('Handler processors options as to be formatted as array');
             }

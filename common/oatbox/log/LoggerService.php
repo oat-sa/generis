@@ -27,15 +27,12 @@ use Psr\Log\NullLogger;
 
 class LoggerService extends ConfigurableService implements LoggerInterface
 {
-    const SERVICE_ID = 'generis/logger';
+    const SERVICE_ID = 'generis/log';
 
     const LOGGER_OPTION = 'logger';
 
     /** @var LoggerInterface */
     protected $logger;
-
-    /** @var bool Set the logger to active or not to avoid log during logging itself */
-    protected $enabled = true;
 
     /**
      * Add a Psr3 logger to LoggerService instance
@@ -75,11 +72,7 @@ class LoggerService extends ConfigurableService implements LoggerInterface
      */
     public function log($level, $message, array $context = array())
     {
-        if ($this->enabled) {
-            $this->enabled = false;
-            $this->getLogger()->log($level, $message, $context);
-            $this->enabled = true;
-        }
+        $this->getLogger()->log($level, $message, $context);
     }
 
 
@@ -231,7 +224,6 @@ class LoggerService extends ConfigurableService implements LoggerInterface
         } else {
             $this->logger = new NullLogger();
         }
-        $this->propagate($this->logger);
 
         return $this->logger;
     }
