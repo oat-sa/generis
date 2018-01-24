@@ -78,7 +78,7 @@ class common_persistence_Manager extends ConfigurableService
     /**
      * Returns TRUE if the requested persistence exist, otherwise FALSE.
      *
-     * @param $persistenceId
+     * @param string $persistenceId
      *
      * @return bool
      */
@@ -87,6 +87,17 @@ class common_persistence_Manager extends ConfigurableService
         $persistenceList = $this->getOption(static::OPTION_PERSISTENCES);
 
         return isset($persistenceList[$persistenceId]);
+    }
+
+    /**
+     * Registers a new persistence.
+     *
+     * @param string $persistenceId
+     * @param array  $persistenceConf
+     */
+    public function registerPersistence($persistenceId, array $persistenceConf)
+    {
+        static::addPersistence($persistenceId, $persistenceConf);
     }
 
     /**
