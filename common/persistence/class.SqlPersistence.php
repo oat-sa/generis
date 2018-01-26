@@ -77,9 +77,7 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
 
     /**
      * @param string $table
-     * @param string $index
-     * @param array $rows
-     * @param array $otherWheres
+     * @param array $data
      * @return bool
      * @throws Exception
      */

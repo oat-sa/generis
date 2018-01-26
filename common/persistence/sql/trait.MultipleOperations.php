@@ -24,6 +24,9 @@
 
 trait common_persistence_sql_MultipleOperations
 {
+    /** @var common_persistence_sql_UpdateMultiple */
+    private $updateMultiple = null;
+
     public function insertMultiple($tableName, array $data)
     {
         if (is_array($data) && count($data) > 0) {
@@ -87,79 +90,10 @@ trait common_persistence_sql_MultipleOperations
      */
     public function updateMultiple($table, array $data)
     {
-        if (empty($data)) {
-            return false;
+        if ($this->updateMultiple === null) {
+            $this->updateMultiple = new common_persistence_sql_UpdateMultiple($this->getDbalConnection());
         }
 
-        $prepareQueryData = [];
-        $allColumns = [];
-        $params = [];
-
-        foreach ($data as $row) {
-            if (empty($row['conditions']) || empty($row['updateValues'])) {
-                throw new Exception('You must provide conditions and updateValues');
-            }
-
-            $conditions = $row['conditions'];
-            $updateValues = $row['updateValues'];
-
-            foreach ($updateValues as $updateColumn => $updateValue) {
-                $whens = [];
-                foreach ($conditions as $conditionColumn => $conditionValue) {
-                    $whens[] = ['conditionColumn' => $conditionColumn, 'conditionValue' => $conditionValue];
-                }
-                $prepareQueryData[$updateColumn][] = ['value' => $updateValue, 'conditions' => $whens];
-            }
-        }
-
-
-        $queryColumns = [];
-        foreach ($prepareQueryData as $column => $queryData) {
-            $queryColumnUpdate = " $column = ( CASE ";
-
-            foreach ($queryData as $index => $datum) {
-                $conditions = $datum['conditions'];
-                $updateValue = $datum['value'];
-                $conditionsString = [];
-
-                foreach ($conditions as $indexCondition => $condition) {
-                    $conditionColumn = $condition['conditionColumn'];
-                    $conditionValue = $condition['conditionValue'];
-
-                    $key = ':' .$index . '_' .$column. '_'  . $indexCondition . '_' . $conditionColumn . '_conditionvalue';
-                    $conditionsString[] = " $conditionColumn = $key ";
-                    $allColumns[$conditionColumn][] = $conditionValue;
-                    $params[$key] = $conditionValue;
-                }
-
-
-                $key = ':' . $index . '_' . $column . '_updatedvalue';
-                $queryColumnUpdate .= " WHEN " . implode(' AND ', $conditionsString) . " THEN $key";
-                $params[$key] = $updateValue;
-            }
-
-
-            $queryColumnUpdate .= " ELSE $column END)";
-            $queryColumns[] = $queryColumnUpdate;
-        }
-
-        $query = 'UPDATE ' . $table . ' SET ' . implode(', ', $queryColumns);
-        $wheres = [];
-
-        foreach ($allColumns as $columnWhere => $columnWhereValues) {
-            $uniqueColumnValues = array_unique($columnWhereValues);
-            $placeHolders = [];
-            foreach ($uniqueColumnValues as $index => $value) {
-                $key = ':in_condition_' . $columnWhere . '_' . $index;
-                $placeHolders[] = $key;
-                $params[$key] = $value;
-            }
-            $placeHolders = implode(',', $placeHolders);
-            $wheres[] = " $columnWhere IN ($placeHolders)";
-        }
-
-        $query .= ' WHERE ' . implode(' AND ', $wheres);
-
-        return $this->exec($query, $params);
+        return $this->updateMultiple->updateMultiple($table, $data);
     }
 }
