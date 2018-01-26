@@ -27,7 +27,7 @@
  */
 class common_persistence_sql_dbal_Driver implements common_persistence_sql_Driver
 {
-    use common_persistence_sql_InsertMultiple;
+    use common_persistence_sql_MultipleOperations;
 
     /**
      * @var \Doctrine\DBAL\Connection

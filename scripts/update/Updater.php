@@ -36,6 +36,7 @@ use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\permission\PermissionManager;
 use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\ResourceFileSerializer;
+use oat\generis\model\GenerisRdf;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\event\EventManager;
@@ -193,10 +194,10 @@ class Updater extends common_ext_ExtensionUpdater {
                 FileSystemService::OPTION_ADAPTERS=> array()
             ));
             
-            $class = new core_kernel_classes_Class(GENERIS_NS . '#VersionedRepository');
+            $class = new core_kernel_classes_Class(GenerisRdf::GENERIS_NS . '#VersionedRepository');
             /** @var \core_kernel_classes_Resource $resource */
             foreach ($class->getInstances(true) as $resource) {
-                $path = (string) $resource->getOnePropertyValue(new \core_kernel_classes_Property(PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH));
+                $path = (string) $resource->getOnePropertyValue(new \core_kernel_classes_Property(GenerisRdf::PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH));
                 $FsManager->registerLocalFileSystem($resource->getUri(), $path);
             }
             $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $FsManager);
@@ -409,7 +410,7 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('4.4.1');
         }
 
-        $this->skip('4.4.1', '5.3.0');
+        $this->skip('4.4.1', '6.8.0');
     }
     
     private function getReadableModelIds() {

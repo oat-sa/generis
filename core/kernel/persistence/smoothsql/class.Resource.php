@@ -17,8 +17,10 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+
+use oat\generis\model\OntologyRdf;
 
 /**
  * Short description of class core_kernel_persistence_smoothsql_Resource
@@ -81,7 +83,7 @@ class core_kernel_persistence_smoothsql_Resource
 
         
 		$sqlQuery = 'SELECT object FROM statements WHERE subject = ? and predicate = ?';
-        $sth = $this->getPersistence()->query($sqlQuery,array($resource->getUri(), RDF_TYPE));
+        $sth = $this->getPersistence()->query($sqlQuery,array($resource->getUri(), OntologyRdf::RDF_TYPE));
 
         while ($row = $sth->fetch()){
             $uri = $this->getPersistence()->getPlatForm()->getPhpTextValue($row['object']);
@@ -660,7 +662,7 @@ class core_kernel_persistence_smoothsql_Resource
 
         
         
-		$returnValue = $this->setPropertyValue($resource, new core_kernel_classes_Property(RDF_TYPE), $class);
+		$returnValue = $this->setPropertyValue($resource, new core_kernel_classes_Property(OntologyRdf::RDF_TYPE), $class);
         
         
 
@@ -690,7 +692,7 @@ class core_kernel_persistence_smoothsql_Resource
         
         $returnValue = $this->getPersistence()->exec($query,array(
         	$resource->getUri(),
-        	RDF_TYPE,
+			OntologyRdf::RDF_TYPE,
         	$class->getUri()
         ));
         

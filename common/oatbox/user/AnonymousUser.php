@@ -14,11 +14,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  *
  */
 namespace oat\oatbox\user;
+
+use oat\generis\model\GenerisRdf;
 
 class AnonymousUser implements User
 {
@@ -35,7 +37,7 @@ class AnonymousUser implements User
      * @see \oat\oatbox\user\User::getRoles()
      */
     public function getRoles() {
-        return array(INSTANCE_ROLE_ANONYMOUS);
+        return array(GenerisRdf::INSTANCE_ROLE_ANONYMOUS);
     }
     
     /**

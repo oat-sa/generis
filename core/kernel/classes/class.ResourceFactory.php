@@ -17,8 +17,10 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+
+use oat\generis\model\OntologyRdfs;
 
 /**
  * Short description of class core_kernel_classes_ResourceFactory
@@ -55,11 +57,11 @@ class core_kernel_classes_ResourceFactory
         $propertiesValues = array();
         
         if (!empty($label)){
-        	$propertiesValues[RDFS_LABEL] = $label;
+        	$propertiesValues[OntologyRdfs::RDFS_LABEL] = $label;
         }
         
         if (!empty($comment)){
-        	$propertiesValues[RDFS_COMMENT] = $comment;
+        	$propertiesValues[OntologyRdfs::RDFS_COMMENT] = $comment;
         }
         
 		$returnValue = $type->createInstanceWithProperties($propertiesValues);

@@ -14,19 +14,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
+ *
  */
 
-class common_persistence_KeyLargeValuePersistence extends common_persistence_KeyValuePersistence
+namespace oat\generis\model;
+
+interface OntologyRdf
 {
-    const VALUE_MAX_WIDTH = 'max_value_width';
-    const MAP_IDENTIFIER = 'map_identifier';
-    const START_MAP_DELIMITER = 'start_map_delimiter';
-    const END_MAP_DELIMITER = 'end_map_delimiter';
-
-    const DEFAULT_MAP_IDENTIFIER = '<<<<mapped>>>>';
-    const DEFAULT_START_MAP_DELIMITER = '<<<<mappedKey>>>>';
-    const DEFAULT_END_MAP_DELIMITER = '<<<</mappedKey>>>>';
-
-    use common_persistence_KeyLargeValuePersistenceTrait;
+	const RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+	const RDF_PROPERTY = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Property';
+	const RDF_VALUE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value';
+	const RDF_STATEMENT = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement';
+	const RDF_FIRST = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#first';
+	const RDF_REST = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest';
+	const RDF_LIST = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#List';
 }

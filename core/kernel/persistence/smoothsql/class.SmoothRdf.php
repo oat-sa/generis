@@ -14,11 +14,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2015 (original work) Open Assessment Technologies SA
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA
  *
  */
 
 use oat\generis\model\data\RdfInterface;
+use oat\generis\model\OntologyRdf;
+use oat\generis\model\OntologyRdfs;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
 use oat\generis\model\data\event\ResourceCreated;
@@ -63,7 +65,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf
         }
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);";
         $success = $this->getPersistence()->exec($query, array($triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg, $this->getPersistence()->getPlatForm()->getNowExpression(), is_null($triple->author) ? '' : $triple->author));
-        if ($triple->predicate == RDFS_SUBCLASSOF || $triple->predicate == RDF_TYPE) {
+        if ($triple->predicate == OntologyRdfs::RDFS_SUBCLASSOF || $triple->predicate == OntologyRdf::RDF_TYPE) {
             $eventManager = $this->getServiceManager()->get(EventManager::CONFIG_ID);
             $eventManager->trigger(new ResourceCreated(new core_kernel_classes_Resource($triple->subject)));
         }

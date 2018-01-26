@@ -14,15 +14,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2014-2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
  * @package generis
- 
  *
  */
-class common_persistence_sql_Platform{
+
+use Doctrine\DBAL\Connection;
+
+class common_persistence_sql_Platform {
+    
+    const TRANSACTION_PLATFORM_DEFAULT = 0;
+    
+    const TRANSACTION_READ_UNCOMMITTED = Connection::TRANSACTION_READ_UNCOMMITTED;
+    
+    const TRANSACTION_READ_COMMITTED = Connection::TRANSACTION_READ_COMMITTED;
+    
+    const TRANSACTION_REPEATABLE_READ = Connection::TRANSACTION_REPEATABLE_READ;
+    
+    const TRANSACTION_SERIALIZABLE = Connection::TRANSACTION_SERIALIZABLE;
     
     protected  $dbalPlatform;
 
@@ -139,7 +151,7 @@ class common_persistence_sql_Platform{
      * @return string
      */
     public function getNowExpression(){
-        $datetime = new DateTime();
+        $datetime = new DateTime('now', new \DateTimeZone('UTC'));
         $date = $datetime->format('Y-m-d H:i:s');
        // return $this->dbalPlatform->getNowExpression();
        return $date;
@@ -171,12 +183,59 @@ class common_persistence_sql_Platform{
 
     /**
      * Starts a transaction by suspending auto-commit mode.
-     *
+     * 
      * @return void
      */
     public function beginTransaction()
     {
         $this->dbalConnection->beginTransaction();
+    }
+    
+    /**
+     * Sets the transaction isolation level for the current connection.
+     * 
+     * Transaction levels are:
+     * 
+     * * common_persistence_sql_Platform::TRANSACTION_PLATFORM_DEFAULT
+     * * common_persistence_sql_Platform::TRANSACTION_READ_UNCOMMITTED
+     * * common_persistence_sql_Platform::TRANSACTION_READ_COMMITTED
+     * * common_persistence_sql_Platform::TRANSACTION_REPEATABLE_READ
+     * * common_persistence_sql_Platform::TRANSACTION_SERIALIZABLE
+     * 
+     * IT IS EXTREMELY IMPORTANT than after calling commit() or rollback(),
+     * or in error handly, the developer sets back the initial transaction
+     * level that was in force prior the call to beginTransaction().
+     *
+     * @param integer $level The level to set.
+     *
+     * @return integer
+     */
+    public function setTransactionIsolation($level) {
+        if ($level === self::TRANSACTION_PLATFORM_DEFAULT) {
+            $level = $this->dbalPlatform->getDefaultTransactionIsolationLevel();
+        }
+        
+        $this->dbalConnection->setTransactionIsolation($level);
+    }
+    
+    /**
+     * Gets the currently active transaction isolation level for the current sesson.
+     *
+     * @return integer The current transaction isolation level for the current session.
+     */
+    public function getTransactionIsolation()
+    {
+        return $this->dbalConnection->getTransactionIsolation();
+    }
+    
+    /**
+     * Checks whether or not a transaction is currently active.
+     *
+     * @return boolean true if a transaction is currently active for the current session, otherwise false.
+     */
+    public function isTransactionActive()
+    {
+        return $this->dbalConnection->isTransactionActive();
     }
 
     /**
@@ -193,12 +252,28 @@ class common_persistence_sql_Platform{
      * Commits the current transaction.
      *
      * @return void
-     * @throws \Doctrine\DBAL\ConnectionException If the commit failed due to no active transaction or
-     *                                            because the transaction was marked for rollback only.
+     * @throws \Doctrine\DBAL\ConnectionException If the commit failed due to no active transaction or because the transaction was marked for rollback only.
+     * @throws common_persistence_sql_SerializationException In case of SerializationFailure (SQLSTATE 40001).
      */
     public function commit()
     {
-        $this->dbalConnection->commit();
+        try {
+            $this->dbalConnection->commit();
+        } catch (\PDOException $e) {
+            // Surprisingly, DBAL's commit throws a PDOExeption in case
+            // of serialization issue (not documented).
+            if (($code = $e->getCode()) == '40001') {
+                // Serialization failure (SQLSTATE 40001 for at least mysql, pgsql, sqlsrv).
+                throw new common_persistence_sql_SerializationException(
+                    "SQL Transaction Serialization Failure. See previous exception(s) for more information.",
+                    intval($code),
+                    $e
+                );
+            } else {
+                // Another kind of error. Re-throw!
+                throw $e;
+            }
+        }
     }
     
     public function getTruncateTableSql($tableName)
