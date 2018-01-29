@@ -53,24 +53,5 @@ class common_ext_ExtensionLoader
                 }
             }
         }
-
-        $constantFile = $this->getExtension()->getDir(). 'includes' .DIRECTORY_SEPARATOR. 'constants.php';
-    	if (file_exists($constantFile)) {
-    		//include the constant file
-    		include_once $constantFile;
-
-            //Removal of global constants definition.
-            //this variable comes from the constant file and contain the const definition
-//            if (isset($todefine)) {
-//                foreach ($todefine as $constName => $constValue) {
-//                    if (!defined($constName)) {
-//                        define($constName, $constValue);    //constants are defined there!
-//                    } else {
-//                        common_Logger::d('Constant ' . $constName . ' in ' . $this->getExtension()->getId() . ' has already been defined');
-//                    }
-//                }
-//                unset($todefine);
-//            }
-    	}
     }
 }
