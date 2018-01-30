@@ -18,17 +18,19 @@
  *
  */
 
+
 /**
  * A utility class focusing on the current instance.
  * 
  * @author Joel Bout <joel@taotesting.com>
- *
+ * @deprecated
  */
-class helpers_PlatformInstance {
-    
+class helpers_PlatformInstance
+{
     /**
      * Returns a whenever or not the current instance is used as demo instance
-     * 
+     *
+     * @deprecated use ApplicationHelper::isDemo
      * @return boolean
      */
     static public function isDemo() {
@@ -37,6 +39,7 @@ class helpers_PlatformInstance {
     
     /**
      * Returns whenever or not Tao is installed on windows
+     * @deprecated use SystemHelper::isWindows
      * @return boolean
      */
     static public function isWindows() {
