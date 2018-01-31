@@ -18,6 +18,9 @@
  *
  */
 
+use oat\generis\Helper\SystemHelper;
+use oat\tao\helpers\ApplicationHelper;
+
 
 /**
  * A utility class focusing on the current instance.
@@ -34,7 +37,7 @@ class helpers_PlatformInstance
      * @return boolean
      */
     static public function isDemo() {
-        return in_array(TAO_RELEASE_STATUS, array('demo', 'demoA', 'demoB', 'demoS'));
+       return ApplicationHelper::isDemo();
     }
     
     /**
@@ -43,6 +46,6 @@ class helpers_PlatformInstance
      * @return boolean
      */
     static public function isWindows() {
-        return strtoupper(substr(PHP_OS, 0, 3)) == 'WIN';
+        return SystemHelper::isWindows();
     }
 }
