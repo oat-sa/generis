@@ -102,19 +102,19 @@ class LogTest extends GenerisPhpUnitTestRunner {
 		));
 		common_Logger::singleton()->enable();
 		
-		common_Logger::t('message');
+		common_Logger::d('message');
 		$this->assertEntriesInFile($tfile, 0);
 		
-		common_Logger::t('message', 'WRONGTAG');
+		common_Logger::d('message', 'WRONGTAG');
 		$this->assertEntriesInFile($tfile, 0);
 		
-		common_Logger::t('message', 'CORRECTTAG');
+		common_Logger::d('message', 'CORRECTTAG');
 		$this->assertEntriesInFile($tfile, 1);
 		
-		common_Logger::t('message', array('WRONGTAG', 'CORRECTTAG'));
+		common_Logger::d('message', array('WRONGTAG', 'CORRECTTAG'));
 		$this->assertEntriesInFile($tfile, 2);
 		
-		common_Logger::t('message', array('WRONGTAG', 'WRONGTAG2'));
+		common_Logger::d('message', array('WRONGTAG', 'WRONGTAG2'));
 		$this->assertEntriesInFile($tfile, 2);
 		
 		common_Logger::singleton()->restore();

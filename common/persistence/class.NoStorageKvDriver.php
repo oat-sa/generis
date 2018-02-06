@@ -33,7 +33,6 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
      * @see common_persistence_Driver::connect()
      */
     function connect($id, array $params){
-        common_Logger::t('Init NoStorageKvPersistence');
         return new common_persistence_KeyValuePersistence($params, $this);
     }
     /**
@@ -42,7 +41,6 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
      */
     public function set($id, $value, $ttl = null, $nx = false)
     {
-        common_Logger::t('NoStorageKvPersistence : set id=' . $id);
         return false;
     }
     
@@ -51,7 +49,6 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
      * @see common_persistence_KvDriver::get()
      */
     public function get($id){
-        common_Logger::t('NoStorageKvPersistence : get id=' . $id );
         return false;
     }
     
@@ -68,9 +65,7 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
      * @see common_persistence_KvDriver::del()
      */
     public function del($id){
-        common_Logger::t('NoStorageKvPersistence : delete id=' . $id );
         return true;
-        
     }
 
     /**
@@ -80,7 +75,6 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
      */
     public function incr($id)
     {
-        common_Logger::t('NoStorageKvPersistence : incr id=' . $id );
         return false;
     }
 
@@ -91,7 +85,6 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
      */
     public function decr($id)
     {
-        common_Logger::t('NoStorageKvPersistence : decr id=' . $id );
         return false;
     }
 
@@ -100,7 +93,6 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
      * @see common_persistence_Purgable::purge()
      */
     public function purge(){
-        common_Logger::t('NoStorageKvPersistence is purged');
         return true;
         
     }
