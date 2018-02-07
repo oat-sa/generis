@@ -50,6 +50,7 @@ use oat\oatbox\task\Queue;
 use oat\oatbox\task\TaskRunner;
 use oat\taoWorkspace\model\generis\WrapperModel;
 use oat\oatbox\log\logger\TaoLog;
+use Psr\Log\LoggerInterface;
 
 /**
  *
@@ -425,17 +426,23 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         if ($this->isVersion('6.8.0')) {
+
+            if ($this->getExtension()->hasConfig('logger')) {
+                $this->getExtension()->unsetConfig('logger');
+            }
+
             $conf = $this->getExtension()->getConfig('log');
-            $logger = new LoggerService([
-                LoggerService::LOGGER_OPTION => new TaoLog([
-                    TaoLog::OPTION_APPENDERS => $conf
-                ])
-            ]);
-            /** @var common_ext_ExtensionsManager $extensionManager */
-            $extensionManager = $this->getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID);
-            $header = $extensionManager->getExtensionById('generis')->getConfigHeader(LoggerService::SERVICE_ID);
-            $logger->setHeader($header);
-            $this->getServiceManager()->register(LoggerService::SERVICE_ID, $logger);
+            if (!$conf instanceof LoggerInterface) {
+                $logger = new LoggerService([
+                    LoggerService::LOGGER_OPTION => new TaoLog([
+                        TaoLog::OPTION_APPENDERS => $conf
+                    ])
+                ]);
+                $header = $this->getExtension()->getConfigHeader('log');
+                $logger->setHeader($header);
+                $this->getServiceManager()->register(LoggerService::SERVICE_ID, $logger);
+
+            }
             $this->setVersion('6.9.0');
         }
     }
