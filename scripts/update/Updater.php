@@ -426,11 +426,16 @@ class Updater extends common_ext_ExtensionUpdater {
 
         if ($this->isVersion('6.8.0')) {
             $conf = $this->getExtension()->getConfig('log');
-            $this->getServiceManager()->register(LoggerService::SERVICE_ID, new LoggerService([
+            $logger = new LoggerService([
                 LoggerService::LOGGER_OPTION => new TaoLog([
                     TaoLog::OPTION_APPENDERS => $conf
                 ])
-            ]));
+            ]);
+            /** @var common_ext_ExtensionsManager $extensionManager */
+            $extensionManager = $this->getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID);
+            $header = $extensionManager->getExtensionById('generis')->getConfigHeader(LoggerService::SERVICE_ID);
+            $logger->setHeader($header);
+            $this->getServiceManager()->register(LoggerService::SERVICE_ID, $logger);
             $this->setVersion('6.9.0');
         }
     }
