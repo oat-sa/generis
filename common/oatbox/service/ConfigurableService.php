@@ -37,7 +37,6 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 abstract class ConfigurableService extends Configurable implements ServiceLocatorAwareInterface, LoggerAwareInterface
 {
     use ServiceManagerAwareTrait;
-    use LoggerAwareTrait;
 
     /** @var string Documentation header */
     protected $header = null;

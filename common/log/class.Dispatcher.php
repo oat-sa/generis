@@ -165,10 +165,7 @@ class common_log_Dispatcher
     public function __construct($config = null)
     {
         if (is_null($config)) {
-            // workaround to prevent errors during install
-            if (defined('EXTENSION_PATH')) {
-                $config = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig(self::CONFIG_ID);
-            }
+            $config = [];
         }
         if (is_array($config)) {
             $this->init($config);
