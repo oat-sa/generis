@@ -32,94 +32,121 @@ class LogTest extends GenerisPhpUnitTestRunner {
 	
 	public function testFileAppender()
 	{
-		$tfile = $this->createFile();
 		$dfile = $this->createFile();
+		$ifile = $this->createFile();
+		$wfile = $this->createFile();
 		$efile = $this->createFile();
+		$cfile = $this->createFile();
 
-		common_log_Dispatcher::singleton()->init(array(
-			array(
-				'class'			=> 'SingleFileAppender',
-				'threshold'		=> common_Logger::TRACE_LEVEL,
-				'file'			=> $tfile,
-			),
-			array(
-				'class'			=> 'SingleFileAppender',
-				'mask'			=> 2 , // 000010
-				'file'			=> $dfile,
-			),
-			array(
-				'class'			=> 'SingleFileAppender',
-				'threshold'		=> common_Logger::ERROR_LEVEL,
-				'file'			=> $efile,
-			)
-		));
-		common_Logger::singleton()->enable();
-		
-		common_Logger::t('message');
-		$this->assertEntriesInFile($tfile, 1);
-		$this->assertEntriesInFile($dfile, 0);
+        $logger = new oat\oatbox\log\LoggerService(array(
+            'logger' => new oat\oatbox\log\logger\TaoLog(array(
+                'appenders' => array(
+                    array(
+                        'class'			=> 'SingleFileAppender',
+                        'threshold'		=> common_Logger::DEBUG_LEVEL,
+                        'file'			=> $dfile,
+                    ),
+                    array(
+                        'class'			=> 'SingleFileAppender',
+                        'threshold'		=> common_Logger::INFO_LEVEL,
+                        'file'			=> $ifile,
+                    ),
+                    array(
+                        'class'			=> 'SingleFileAppender',
+                        'threshold'		=> common_Logger::WARNING_LEVEL,
+                        'file'			=> $wfile,
+                    ),
+                    array(
+                        'class'			=> 'SingleFileAppender',
+                        'threshold'		=> common_Logger::ERROR_LEVEL,
+                        'file'			=> $efile,
+                    ),
+                    array(
+                        'class'			=> 'SingleFileAppender',
+                        'threshold'		=> common_Logger::FATAL_LEVEL,
+                        'file'			=> $cfile,
+                    ),
+                )
+            ))
+        ));
+
+        $logger->logDebug('message');
+        $this->assertEntriesInFile($dfile, 1);
+		$this->assertEntriesInFile($ifile, 0);
+		$this->assertEntriesInFile($wfile, 0);
 		$this->assertEntriesInFile($efile, 0);
-		
-		common_Logger::d('message');
-		$this->assertEntriesInFile($tfile, 2);
-		$this->assertEntriesInFile($dfile, 1);
+		$this->assertEntriesInFile($cfile, 0);
+
+		$logger->logInfo('message');
+        $this->assertEntriesInFile($dfile, 2);
+		$this->assertEntriesInFile($ifile, 1);
+		$this->assertEntriesInFile($wfile, 0);
 		$this->assertEntriesInFile($efile, 0);
-		
-		common_Logger::e('message');
-		$this->assertEntriesInFile($tfile, 3);
-		$this->assertEntriesInFile($dfile, 1);
-		$this->assertEntriesInFile($efile, 1);
-		
-		common_Logger::singleton()->disable();
-		
-		common_Logger::d('message');
-		$this->assertEntriesInFile($tfile, 3);
-		$this->assertEntriesInFile($dfile, 1);
-		$this->assertEntriesInFile($efile, 1);
-		
-		common_Logger::singleton()->restore();
-		
-		common_Logger::d('message');
-		$this->assertEntriesInFile($tfile, 4);
-		$this->assertEntriesInFile($dfile, 2);
-		$this->assertEntriesInFile($efile, 1);
-		
-		common_Logger::singleton()->restore();
+		$this->assertEntriesInFile($cfile, 0);
+
+		$logger->logWarning('message');
+        $this->assertEntriesInFile($dfile, 3);
+		$this->assertEntriesInFile($ifile, 2);
+		$this->assertEntriesInFile($wfile, 1);
+		$this->assertEntriesInFile($efile, 0);
+		$this->assertEntriesInFile($cfile, 0);
+
+        $logger->logError('message');
+        $this->assertEntriesInFile($dfile, 4);
+        $this->assertEntriesInFile($ifile, 3);
+        $this->assertEntriesInFile($wfile, 2);
+        $this->assertEntriesInFile($efile, 1);
+        $this->assertEntriesInFile($cfile, 0);
+
+        $logger->logAlert('message');
+        $this->assertEntriesInFile($dfile, 5);
+        $this->assertEntriesInFile($ifile, 4);
+        $this->assertEntriesInFile($wfile, 3);
+        $this->assertEntriesInFile($efile, 2);
+        $this->assertEntriesInFile($cfile, 1);
+
+        unlink($dfile);
+        unlink($ifile);
+        unlink($wfile);
+        unlink($efile);
+        unlink($cfile);
 	}
 	
 	public function testLogTags()
 	{
-		$tfile = $this->createFile();
-		$this->assertEntriesInFile($tfile, 0);
+        $dfile = $this->createFile();
+        $this->assertEntriesInFile($dfile, 0);
+
+        $logger = new oat\oatbox\log\LoggerService(array(
+            'logger' => new oat\oatbox\log\logger\TaoLog(array(
+                'appenders' => array(
+                    array(
+                        'class'			=> 'SingleFileAppender',
+                        'threshold'		=> common_Logger::DEBUG_LEVEL,
+                        'file'			=> $dfile,
+                        'tags'			=> 'CORRECTTAG'
+                    ),
+                )
+            ))
+        ));
+
+        $logger->logDebug('message');
+		$this->assertEntriesInFile($dfile, 0);
 		
-		common_log_Dispatcher::singleton()->init(array(
-			array(
-				'class'			=> 'SingleFileAppender',
-				'threshold'		=> common_Logger::TRACE_LEVEL,
-				'file'			=> $tfile,
-				'tags'			=> 'CORRECTTAG'
-			)
-		));
-		common_Logger::singleton()->enable();
-		
-		common_Logger::d('message');
-		$this->assertEntriesInFile($tfile, 0);
-		
-		common_Logger::d('message', 'WRONGTAG');
-		$this->assertEntriesInFile($tfile, 0);
-		
-		common_Logger::d('message', 'CORRECTTAG');
-		$this->assertEntriesInFile($tfile, 1);
-		
-		common_Logger::d('message', array('WRONGTAG', 'CORRECTTAG'));
-		$this->assertEntriesInFile($tfile, 2);
-		
-		common_Logger::d('message', array('WRONGTAG', 'WRONGTAG2'));
-		$this->assertEntriesInFile($tfile, 2);
-		
-		common_Logger::singleton()->restore();
-		
-	}
+        $logger->logDebug('message', ['WRONGTAG']);
+		$this->assertEntriesInFile($dfile, 0);
+
+        $logger->logDebug('message', ['CORRECTTAG']);
+		$this->assertEntriesInFile($dfile, 1);
+
+        $logger->logDebug('message', array('WRONGTAG', 'CORRECTTAG'));
+		$this->assertEntriesInFile($dfile, 2);
+
+        $logger->logDebug('message', array('WRONGTAG', 'WRONGTAG2'));
+		$this->assertEntriesInFile($dfile, 2);
+
+        unlink($dfile);
+    }
 	
 	public function assertEntriesInFile($pFile, $pCount) {
 		if (file_exists($pFile)) {
@@ -128,49 +155,6 @@ class LogTest extends GenerisPhpUnitTestRunner {
 			$count = 0;
 		}
 		$this->assertEquals($count, $pCount, 'Expected count '.$pCount.', had '.$count.' in file '.$pFile);
-	}
-
-	
-	public function analyseLogPerformance()
-	{
-		common_Logger::singleton()->enable();
-		$start = microtime(true);
-		for ($i = 0; $i < self::RUNS; $i++) {
-			// nothing
-		}
-		$emptyTime = microtime(true) - $start;
-		echo "Idle run: ".$emptyTime."<br />";
-		
-		$start = microtime(true);
-		for ($i = 0; $i < self::RUNS; $i++) {
-			common_Logger::t('a trace test message');
-		}
-		$traceTime = microtime(true) - $start;
-		echo "Trace run: ".$traceTime."<br />";
-		
-		$start = microtime(true);
-		for ($i = 0; $i < self::RUNS; $i++) {
-			common_Logger::i('a info test message');
-		}
-		$infoTime = microtime(true) - $start;
-		echo "Info run: ".$infoTime."<br />";
-		
-		common_Logger::singleton()->restore();
-		
-		common_Logger::singleton()->disable();
-		$start = microtime(true);
-		for ($i = 0; $i < self::RUNS; $i++) {
-			common_Logger::i('a disabled test message');
-		}
-		$disabledTime = microtime(true) - $start;
-		echo "Disabled run: ".$disabledTime."<br />";
-		common_Logger::singleton()->restore();
-		
-		$start = microtime(true);
-		sleep(1);
-		$testwait = microtime(true) - $start;
-		echo "Wait: ".$testwait."<br />";
-	    echo "ok";
 	}
     
 }
