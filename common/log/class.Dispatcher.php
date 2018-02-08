@@ -164,12 +164,10 @@ class common_log_Dispatcher
      */
     public function __construct($config = null)
     {
-        if (is_null($config)) {
+        if (is_null($config) || !is_array($config)) {
             $config = [];
         }
-        if (is_array($config)) {
-            $this->init($config);
-        }
+        $this->init($config);
     }
 
     /**
