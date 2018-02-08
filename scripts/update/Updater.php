@@ -421,7 +421,7 @@ class Updater extends common_ext_ExtensionUpdater {
             $api->importXmlRdf('http://www.tao.lu/Ontologies/generis.rdf', $file);
             $this->setVersion('6.8.0');
         }
-      
+
         $this->skip('6.8.0', '7.0.0');
     }
 

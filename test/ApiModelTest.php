@@ -23,6 +23,7 @@ use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\model\WidgetRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
+use oat\generis\model\GenerisRdf;
 
 class ApiModelTest extends GenerisPhpUnitTestRunner {
 	protected $object;
