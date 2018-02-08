@@ -34,7 +34,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  *
  * @author Joel Bout <joel@taotesting.com>
  */
-abstract class ConfigurableService extends Configurable implements ServiceLocatorAwareInterface, LoggerAwareInterface
+abstract class ConfigurableService extends Configurable implements ServiceLocatorAwareInterface
 {
     use ServiceManagerAwareTrait;
 

@@ -23,6 +23,7 @@ namespace oat\oatbox\log;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use oat\oatbox\service\ServiceManager;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * Trait for classes that want to use the Logger
@@ -53,7 +54,11 @@ trait LoggerAwareTrait
         if ($this->logger instanceof LoggerInterface) {
             return $this->logger;
         }
-        $logger = ServiceManager::getServiceManager()->get(LoggerService::SERVICE_ID);
+        if ($this instanceof ServiceLocatorAwareInterface) {
+            $logger = $this->getServiceLocator()->get(LoggerService::SERVICE_ID);
+        } else {
+            $logger = ServiceManager::getServiceManager()->get(LoggerService::SERVICE_ID);
+        }
         return ($logger instanceof LoggerInterface) ? $logger : new NullLogger();
     }
 
