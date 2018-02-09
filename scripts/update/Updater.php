@@ -425,7 +425,9 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('6.8.0');
         }
 
-        if ($this->isVersion('6.8.0')) {
+        $this->skip('6.8.0', '6.8.1');
+
+        if ($this->isVersion('6.8.1')) {
 
             if ($this->getExtension()->hasConfig('logger')) {
                 $this->getExtension()->unsetConfig('logger');
@@ -445,6 +447,7 @@ class Updater extends common_ext_ExtensionUpdater {
             }
             $this->setVersion('6.9.0');
         }
+
     }
 
     private function getReadableModelIds() {
