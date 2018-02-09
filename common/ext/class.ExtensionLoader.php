@@ -45,8 +45,6 @@ class common_ext_ExtensionLoader
             throw new common_exception_Error('Loading extra constants in '.__CLASS__.' nolonger supported');
         }
 
-        common_Logger::t('Loading extension ' . $this->getExtension()->getId() . ' constants');
-
         // load the constants from the manifest
         if ($this->extension->getId() != "generis"){
             foreach ($this->extension->getConstants() as $key => $value) {

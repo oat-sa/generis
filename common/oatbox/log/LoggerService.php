@@ -21,70 +21,106 @@
 namespace oat\oatbox\log;
 
 use oat\oatbox\service\ConfigurableService;
-use oat\oatbox\service\exception\InvalidService;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerTrait;
 use Psr\Log\NullLogger;
 
-class LoggerService extends ConfigurableService
+class LoggerService extends ConfigurableService implements LoggerInterface
 {
-    const SERVICE_ID = 'generis/logger';
+    use LoggerTrait;
+
+    const SERVICE_ID = 'generis/log';
 
     const LOGGER_OPTION = 'logger';
 
-    /**
-     * @var LoggerInterface Logger where log are sent
-     */
+    /** @var LoggerInterface */
     protected $logger;
 
     /**
-     * Get the current logger.
-     * If options does not contain any Psr3 Logger, NullLogger is set by default
+     * Add a Psr3 logger to LoggerService instance
+     * Previous and new logger are encapsulated into a LoggerAggregator
+     *
+     * @param LoggerInterface $logger
+     * @return LoggerAggregator|LoggerInterface
+     */
+    public function addLogger(LoggerInterface $logger)
+    {
+        if ($this->isLoggerLoaded() && !($this->logger instanceof NullLogger)) {
+            $logger = new LoggerAggregator([$logger, $this->logger]);
+        }
+        $this->logger = $logger;
+        return $logger;
+    }
+
+    /**
+     * Get the logger
      *
      * @return LoggerInterface
-     * @throws InvalidService
      */
     public function getLogger()
     {
-        if (! $this->logger) {
-            if ($this->hasOption(self::LOGGER_OPTION)) {
-                $loggerOptions = $this->getOption(self::LOGGER_OPTION);
-                if (isset($loggerOptions['class'])) {
-                    $classname = $loggerOptions['class'];
-                    if (is_a($classname, LoggerInterface::class, true)) {
-                        if (isset($loggerOptions['options'])) {
-                            $this->logger = new $classname($loggerOptions['options']);
-                        } else {
-                            $this->logger = new $classname();
-                        }
-                    } else {
-                        throw new InvalidService('Service must implements Psr3 logger interface');
-                    }
-                } else {
-                    $this->logger = new NullLogger();
+        if (!$this->isLoggerLoaded()) {
+            $this->loadLogger();
+        }
+        return $this->logger;
+    }
+
+    /**
+     * Wrap a log to built logger
+     *
+     * @param mixed $level
+     * @param string $message
+     * @param array $context
+     */
+    public function log($level, $message, array $context = array())
+    {
+        $this->getLogger()->log($level, $message, $context);
+    }
+
+    /**
+     * Load the logger from configuration
+     *
+     * If options does not contain any Psr3 Logger, NullLogger is set by default
+     *
+     * @return LoggerInterface
+     */
+    protected function loadLogger()
+    {
+        $logger = null;
+        if ($this->hasOption(self::LOGGER_OPTION)) {
+            $loggerOptions = $this->getOption(self::LOGGER_OPTION);
+            if (is_object($loggerOptions)) {
+                if (is_a($loggerOptions, LoggerInterface::class)) {
+                    $logger = $loggerOptions;
                 }
-            } else {
-                $this->logger = new NullLogger();
+            } elseif (is_array($loggerOptions) && isset($loggerOptions['class'])) {
+                $classname = $loggerOptions['class'];
+                if (is_a($classname, LoggerInterface::class, true)) {
+                    if (isset($loggerOptions['options'])) {
+                        $logger = new $classname($loggerOptions['options']);
+                    } else {
+                        $logger = new $classname();
+                    }
+                }
             }
+        }
+
+        if (!is_null($logger)) {
+            $this->logger = $logger;
+        } else {
+            $this->logger = new NullLogger();
         }
 
         return $this->logger;
     }
 
     /**
-     * Add a Psr3 logger to LoggerService instance
-     * If a logger is already set, previous and new logger are encapsulated into a LoggerAggregator
-     * If $replace is set to true, old logger is replaced
+     * Check if the logger is loaded from configuration
      *
-     * @param LoggerInterface $logger
-     * @param boolean $replace
-     * @return LoggerInterface
+     * @return bool
      */
-    public function addLogger(LoggerInterface $logger, $replace = false)
+    protected function isLoggerLoaded()
     {
-        if (!$replace && (! $this->getLogger() instanceof NullLogger)) {
-            $logger = new LoggerAggregator([$logger, $this->getLogger()]);
-        }
-
-        return $this->logger = $logger;
+        return $this->logger instanceof LoggerInterface;
     }
 }

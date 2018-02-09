@@ -49,13 +49,15 @@ use oat\oatbox\task\implementation\TaskQueuePayload;
 use oat\oatbox\task\Queue;
 use oat\oatbox\task\TaskRunner;
 use oat\taoWorkspace\model\generis\WrapperModel;
+use oat\oatbox\log\logger\TaoLog;
+use Psr\Log\LoggerInterface;
 
 /**
- * 
+ *
  * @author Joel Bout <joel@taotesting.com>
  */
 class Updater extends common_ext_ExtensionUpdater {
-    
+
     /**
      * @param string $initialVersion
      * @return string $versionUpdatedTo
@@ -64,33 +66,33 @@ class Updater extends common_ext_ExtensionUpdater {
 
         $currentVersion = $initialVersion;
         if ($currentVersion == '2.7') {
-        
+
             $file = dirname(__FILE__).DIRECTORY_SEPARATOR.'widgetdefinitions_2.7.1.rdf';
-        
+
             $api = core_kernel_impl_ApiModelOO::singleton();
             $success = $api->importXmlRdf('http://www.tao.lu/datatypes/WidgetDefinitions.rdf', $file);
-            
+
             if ($success) {
                 $currentVersion = '2.7.1';
             } else{
                 common_Logger::w('Import failed for '.$file);
             }
         }
-        
+
         if ($currentVersion == '2.7.1') {
-        
+
             $file = dirname(__FILE__).DIRECTORY_SEPARATOR.'widgetdefinitions_2.7.2.rdf';
-        
+
             $api = core_kernel_impl_ApiModelOO::singleton();
             $success = $api->importXmlRdf('http://www.tao.lu/datatypes/WidgetDefinitions.rdf', $file);
-        
+
             if ($success) {
                 $currentVersion = '2.7.2';
             } else{
                 common_Logger::w('Import failed for '.$file);
             }
         }
-        
+
         if ($currentVersion == '2.7.2') {
             $implClass = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig(PermissionManager::CONFIG_KEY);
             if (is_string($implClass)) {
@@ -105,7 +107,7 @@ class Updater extends common_ext_ExtensionUpdater {
                 common_Logger::w('Unexpected permission manager config type: '.gettype($implClass));
             }
         }
-        
+
         if ($currentVersion == '2.7.3') {
             ModelManager::setModel(new core_kernel_persistence_smoothsql_SmoothModel(array(
                 core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'default',
@@ -131,15 +133,15 @@ class Updater extends common_ext_ExtensionUpdater {
             core_kernel_uri_UriService::singleton()->setUriProvider($provider);
             $currentVersion = '2.7.5';
         }
-        
+
         // service manager support
-        if ($currentVersion == '2.7.5' 
-            || $currentVersion == '2.7.6' 
+        if ($currentVersion == '2.7.5'
+            || $currentVersion == '2.7.6'
             || $currentVersion == '2.7.7'
             || $currentVersion == '2.8.0') {
             $currentVersion = '2.9.0';
         }
-        
+
         if ($currentVersion == '2.9.0') {
             // skip, unused
             //try {
@@ -151,7 +153,7 @@ class Updater extends common_ext_ExtensionUpdater {
             //
             //    $this->getServiceManager()->register('generis/FsManager', $FsManager);
             //}
-            
+
             // update persistences
             $persistenceConfig = $this->getServiceManager()->get('generis/persistences');
             if (is_array($persistenceConfig)) {
@@ -160,7 +162,7 @@ class Updater extends common_ext_ExtensionUpdater {
                 ));
                 $this->getServiceManager()->register('generis/persistences', $service);
             }
-            
+
             // update cache
             try {
                 $this->getServiceManager()->get('generis/cache');
@@ -169,13 +171,13 @@ class Updater extends common_ext_ExtensionUpdater {
                     common_cache_KeyValueCache::OPTION_PERSISTENCE => 'cache'
                 ));
                 $cache->setServiceManager($this->getServiceManager());
-                
+
                 $this->getServiceManager()->register('generis/cache', $cache);
             }
-            
+
             $currentVersion = '2.10.0';
         }
-        
+
         if ($currentVersion == '2.10.0') {
             $eventManager = new EventManager();
             $eventManager->attach(
@@ -185,15 +187,15 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->getServiceManager()->register(EventManager::CONFIG_ID, $eventManager);
             $currentVersion = '2.11.0';
         }
-        
+
         $this->setVersion($currentVersion);
-        
+
         if ($this->isVersion('2.11.0')) {
             $FsManager = new FileSystemService(array(
                 FileSystemService::OPTION_FILE_PATH => FILES_PATH,
                 FileSystemService::OPTION_ADAPTERS=> array()
             ));
-            
+
             $class = new core_kernel_classes_Class(GenerisRdf::GENERIS_NS . '#VersionedRepository');
             /** @var \core_kernel_classes_Resource $resource */
             foreach ($class->getInstances(true) as $resource) {
@@ -201,10 +203,10 @@ class Updater extends common_ext_ExtensionUpdater {
                 $FsManager->registerLocalFileSystem($resource->getUri(), $path);
             }
             $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $FsManager);
-            
+
             $this->setVersion('2.12.0');
         }
-        
+
         $this->skip('2.12.0', '2.18.0');
 
         if ($this->isVersion('2.18.0')) {
@@ -232,9 +234,9 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         $this->skip('2.30.0', '2.31.6');
-        
+
         if ($this->isVersion('2.31.6')) {
-            
+
             $complexSearch = new ComplexSearchService(
                 array(
                     'shared' => array(
@@ -269,7 +271,7 @@ class Updater extends common_ext_ExtensionUpdater {
                     )
                 )
             );
-            
+
             $this->getServiceManager()->register(ComplexSearchService::SERVICE_ID, $complexSearch);
             $this->setVersion('3.0.0');
         }
@@ -287,9 +289,9 @@ class Updater extends common_ext_ExtensionUpdater {
             }
             $this->setVersion('3.7.0');
         }
-        
+
         if($this->isBetween('3.7.0', '3.8.3')) {
-            
+
             /* @var $modelWrapper WrapperModel */
             $modelWrapper = ModelManager::getModel();
             if ($modelWrapper instanceof WrapperModel) {
@@ -411,12 +413,48 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         $this->skip('4.4.1', '6.7.0');
+
+        if ($this->isVersion('6.7.0')) {
+            $file = __DIR__ . DIRECTORY_SEPARATOR .
+                '..'.DIRECTORY_SEPARATOR .'..'.DIRECTORY_SEPARATOR .
+                'core' . DIRECTORY_SEPARATOR .
+                'ontology' . DIRECTORY_SEPARATOR .
+                'generis.rdf';
+            $api = core_kernel_impl_ApiModelOO::singleton();
+            $api->importXmlRdf('http://www.tao.lu/Ontologies/generis.rdf', $file);
+            $this->setVersion('6.8.0');
+        }
+
+        $this->skip('6.8.0', '6.8.1');
+
+        if ($this->isVersion('6.8.1')) {
+
+            if ($this->getExtension()->hasConfig('logger')) {
+                $this->getExtension()->unsetConfig('logger');
+            }
+
+            $conf = $this->getExtension()->getConfig('log');
+            if (!$conf instanceof LoggerInterface) {
+                $logger = new LoggerService([
+                    LoggerService::LOGGER_OPTION => new TaoLog([
+                        TaoLog::OPTION_APPENDERS => $conf
+                    ])
+                ]);
+                $header = $this->getExtension()->getConfigHeader('log');
+                $logger->setHeader($header);
+                $this->getServiceManager()->register(LoggerService::SERVICE_ID, $logger);
+
+            }
+            $this->setVersion('6.9.0');
+        }
+
+        $this->skip('6.9.0', '6.10.0');
     }
-    
+
     private function getReadableModelIds() {
         $extensionManager = \common_ext_ExtensionsManager::singleton();
         common_ext_NamespaceManager::singleton()->reset();
-        
+
         $uris = array(LOCAL_NAMESPACE.'#');
         foreach ($extensionManager->getModelsToLoad() as $subModelUri){
             if(!preg_match("/#$/", $subModelUri)){

@@ -1,57 +1,185 @@
 <?php
 /**
- * Log config
  *
- * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
- * @package generis
- * @license GPLv2  http://www.opensource.org/licenses/gpl-2.0.php
- */
-
-/**
- * Threshold variants
+ * To set the platform logger use the logger service to specify a PSR3 compliant logger
  *
- * trace_level   = 0;
- * debug_level   = 1;
- * info_level    = 2;
- * warning_level = 3;
- * error_level   = 4;
- * fatal_level   = 5;
- */
+ * To use monolog logger, taoMonolog wrapper can be set as following
+ *
+ * `return new oat\oatbox\log\LoggerService(array(
+ *     'logger' => array(
+ *         'class' => \oat\oatbox\log\logger\TaoMonolog::class,
+ *         'options' => array(
+ *             'name' => 'tao',
+ *             'handlers' => array(
+ *                  [...]
+ *             ),
+ *         )
+ *     )
+ * ));`
+ *
+ * Examples :
+ *
+`return new oat\oatbox\log\LoggerService(array(
+    'logger' => array(
+        'class' => \oat\oatbox\log\logger\TaoMonolog::class,
+        'options' => array(
+            'name' => 'tao',
+            'handlers' => array(
 
-/*
+                // Send log to a stream, could be a file or a daemon
+                array(
+                    'class' => \Monolog\Handler\StreamHandler::class,
+                    'options' => array(
+                        '/var/www/tao/package-tao/test-log.log',
+                        \Monolog\Logger::DEBUG
+                    ),
+                ),
 
-Examples of logger configurations
+                // Send log to web console
+                array(
+                    'class' => \Monolog\Handler\BrowserConsoleHandler::class,
+                    'options' => array(
+                        \Monolog\Logger::INFO
+                    ),
+                ),
 
-return array(
-    // Example of a Single File Appender
-    array(
-        'class' => 'SingleFileAppender',
-        'threshold' => 4,
-        'max_file_size' => 1048576, // 1Mb
-        'rotation-ratio' => .5,
-        'file' => dirname(__FILE__) . '/../../log/error.txt',
-        'format' => '%m',
-        'prefix' => '[dev]'
-    ),
+                // Send log to Slack channel
+                array(
+                    'class' => \Monolog\Handler\SlackWebhookHandler::class,
+                    'options' => array(
+                        'https://hooks.slack.com/services/XXXXXX/XXXXXX/XXXXXX',
+                        '#test',
+                        'tao-bot',
+                    ),
+                ),
 
-    // Example of a Multiple File Appender with archiving
-    array(
-        'class' => 'ArchiveFileAppender',
-        'mask' => 62, // 111110
-        'tags' => array('GENERIS', 'TAO'),
-        'file' => '/var/log/tao/debug.txt',
-        'directory' => '/var/log/tao/',
-        'max_file_size' => 10000000,
-        'prefix' => '[dev]'
-    ),
+                // Send log to UDP port
+                array(
+                    'class' => \Monolog\Handler\SyslogUdpHandler::class,
+                    'options' => array(
+                        '127.0.0.1',
+                        '5775'
+                    ),
+                    'processors' => array(
+                        array(
+                            'class' => \oat\oatbox\log\logger\processor\BacktraceProcessor::class,
+                            'options' => array(
+                                \Monolog\Logger::WARNING
+                            )
+                        ),
+                        array(
+                            'class' => \Monolog\Processor\MemoryUsageProcessor::class,
+                        ),
+                        array(
+                            'class' => \Monolog\Processor\MemoryPeakUsageProcessor::class,
+                        )
+                    )
+                )
+            ),
 
-    // Example of a UDP Appender
-    array(
-        'class' => 'UDPAppender',
-        'host' => '127.0.0.1',
-        'port' => 5775,
-        'threshold' => 1,
-        'prefix' => 'dev'
-    ),
-);
-*/
+            // Processors at logger level
+            'processors' => array(
+
+                // Apply PSR3 rules to message
+                array(
+                    'class' => \Monolog\Processor\PsrLogMessageProcessor::class
+                ),
+
+                // Add UID to logger to identify same logs to different handlers
+                array(
+                    'class' => \Monolog\Processor\UidProcessor::class,
+                    'options' => array (
+                        24
+                    )
+                ),
+            )
+
+        )
+    )
+));`
+ *
+ * To use the old logger, a wrapper exists:
+ *
+ * Examples:
+`
+return new oat\oatbox\log\LoggerService(array(
+    'logger' => new oat\oatbox\log\logger\TaoLog(array(
+        'appenders' => array(
+
+            //Example of a UDP Appender
+            array(
+                'class' => 'UDPAppender',
+                'host' => '127.0.0.1',
+                'port' => 5775,
+                'threshold' => 1,
+                'prefix' => 'tao'
+            ),
+
+            // Example of a Single File Appender
+            array(
+                'class' => 'SingleFileAppender',
+                'threshold' => 4,
+                'max_file_size' => 1048576, // 1Mb
+                'rotation-ratio' => .5,
+                'file' => dirname(__FILE__) . '/../../log/error.txt',
+                'format' => '%m',
+                'prefix' => '[dev]'
+            ),
+
+            // Example of a Multiple File Appender with archiving
+            array(
+                'class' => 'ArchiveFileAppender',
+                'mask' => 62, // 111110
+                'tags' => array('GENERIS', 'TAO'),
+                'file' => '/var/log/tao/debug.txt',
+                'directory' => '/var/log/tao/',
+                'max_file_size' => 10000000,
+                'prefix' => '[dev]'
+            ),
+
+        )
+    ))
+));
+`
+ *
+ * Old and new logger can be used in same time with LoggerAggregator object
+ * Example:
+`
+return new oat\oatbox\log\LoggerService(array(
+    'logger' => new \oat\oatbox\log\LoggerAggregator(
+        array(
+
+            new oat\oatbox\log\logger\TaoLog(array(
+                'appenders' => array(
+                    array(
+                        'class' => 'UDPAppender',
+                        'host' => '127.0.0.1',
+                        'port' => 5775,
+                        'threshold' => 1,
+                        'prefix' => 'tao'
+                    )
+                )
+            )),
+
+            new \oat\oatbox\log\logger\TaoMonolog(array(
+                'name' => 'tao',
+                'handlers' => array(
+
+                    // Send log to a stream, could be a file or a daemon
+                    array(
+                        'class' => \Monolog\Handler\StreamHandler::class,
+                        'options' => array(
+                            '/var/www/tao/package-tao/test-log.log',
+                            \Monolog\Logger::DEBUG
+                        ),
+                    ),
+
+                )
+            ))
+
+        )
+    )
+));
+`
+ *
+ **/
