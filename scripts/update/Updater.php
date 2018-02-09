@@ -49,6 +49,8 @@ use oat\oatbox\task\implementation\TaskQueuePayload;
 use oat\oatbox\task\Queue;
 use oat\oatbox\task\TaskRunner;
 use oat\taoWorkspace\model\generis\WrapperModel;
+use oat\oatbox\log\logger\TaoLog;
+use Psr\Log\LoggerInterface;
 
 /**
  *
@@ -422,7 +424,30 @@ class Updater extends common_ext_ExtensionUpdater {
             $api->importXmlRdf('http://www.tao.lu/Ontologies/generis.rdf', $file);
             $this->setVersion('6.8.0');
         }
+
         $this->skip('6.8.0', '6.8.1');
+
+        if ($this->isVersion('6.8.1')) {
+
+            if ($this->getExtension()->hasConfig('logger')) {
+                $this->getExtension()->unsetConfig('logger');
+            }
+
+            $conf = $this->getExtension()->getConfig('log');
+            if (!$conf instanceof LoggerInterface) {
+                $logger = new LoggerService([
+                    LoggerService::LOGGER_OPTION => new TaoLog([
+                        TaoLog::OPTION_APPENDERS => $conf
+                    ])
+                ]);
+                $header = $this->getExtension()->getConfigHeader('log');
+                $logger->setHeader($header);
+                $this->getServiceManager()->register(LoggerService::SERVICE_ID, $logger);
+
+            }
+            $this->setVersion('6.9.0');
+        }
+
     }
 
     private function getReadableModelIds() {
