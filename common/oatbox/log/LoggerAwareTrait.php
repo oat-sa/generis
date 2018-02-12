@@ -54,7 +54,7 @@ trait LoggerAwareTrait
         if ($this->logger instanceof LoggerInterface) {
             return $this->logger;
         }
-        if ($this instanceof ServiceLocatorAwareInterface) {
+        if ($this instanceof ServiceLocatorAwareInterface && $this->getServiceLocator()->has(LoggerService::SERVICE_ID)) {
             $logger = $this->getServiceLocator()->get(LoggerService::SERVICE_ID);
         } else {
             $logger = ServiceManager::getServiceManager()->get(LoggerService::SERVICE_ID);
