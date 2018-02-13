@@ -29,21 +29,68 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService
     implements common_session_php_SessionHandler
 {
     const OPTION_PERSISTENCE = 'persistence'; 
-    
+
+    const OPTION_USE_LOCKING = 'use_locking';
+
     const KEY_NAMESPACE = "generis:session:";
-    
+
+    /**
+     * Wait time (1ms) after first locking attempt. It doubles
+     * for every unsuccessful retry until it either reaches
+     * MAX_WAIT_TIME or succeeds.
+     */
+    const MIN_WAIT_TIME = 1000;
+
+    /**
+     * Maximum wait time (128ms) between locking attempts.
+     */
+    const MAX_WAIT_TIME = 128000;
+
+    /**
+     * @var int
+     */
+    private $sessionTtl;
+
+    /**
+     * A collection of every session ID that is being locked by
+     * the current thread of execution. When session_write_close()
+     * is called the locks on all these IDs are removed.
+     *
+     * @var string[]
+     */
+    private $openSessions = [];
+
     /**
      * @var common_persistence_KeyValuePersistence
      */
     private $sessionPersistence = null;
-    
+
+    /**
+     * @param array $options
+     */
+    public function __construct(array $options = array())
+    {
+        parent::__construct($options);
+
+        $this->sessionTtl = (int) ini_get('session.gc_maxlifetime');
+    }
+
     protected function getPersistence() {
         if (is_null($this->sessionPersistence)) {
             $this->sessionPersistence = common_persistence_KeyValuePersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
         }
         return $this->sessionPersistence;
     }
-    
+
+    /**
+     * @return bool
+     */
+    protected function isLockingEnabled()
+    {
+        $val = $this->getOption(static::OPTION_USE_LOCKING) !== null ? $this->getOption(static::OPTION_USE_LOCKING) : 0;
+        return boolval($val);
+    }
+
     /**
      * (non-PHPdoc)
      * @see common_session_storage_SessionStorage::open()
@@ -58,26 +105,36 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService
      */
     public function close()
     {
+        if ($this->isLockingEnabled()) {
+            $this->releaseLocks();
+        }
+
         return true;
     }
 
     /**
      * (non-PHPdoc)
      * @see common_session_storage_SessionStorage::read()
+     * @throws common_Exception
      */
     public function read($id)
     {
-        $session = $this->getPersistence()->get(self::KEY_NAMESPACE.$id); 
+        if ($this->isLockingEnabled()){
+            $this->acquireLockOn($id);
+        }
+
+        $session = $this->getPersistence()->get(self::KEY_NAMESPACE.$id);
         return is_string($session) ? $session : '';
     }
 
     /**
      * (non-PHPdoc)
      * @see common_session_storage_SessionStorage::write()
+     * @throws common_Exception
      */
     public function write($id, $data)
     {  
-        return $this->getPersistence()->set(self::KEY_NAMESPACE.$id, $data, (int) ini_get('session.gc_maxlifetime'));
+        return $this->getPersistence()->set(self::KEY_NAMESPACE.$id, $data, $this->sessionTtl);
     }
 
     /**
@@ -85,6 +142,9 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService
      * @see common_session_storage_SessionStorage::destroy()
      */
     public function destroy($id){
+        if ($this->isLockingEnabled()){
+            $this->getPersistence()->del("{$id}_lock");
+        }
         $this->getPersistence()->del(self::KEY_NAMESPACE.$id);
         return true;
     }
@@ -101,5 +161,33 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService
         // solution 2 : Check if the eprsistence is capable of autonomous garbage  
         //
         return true;
+    }
+
+    /**
+     * @param $sessionId
+     * @throws common_Exception
+     */
+    private function acquireLockOn($sessionId)
+    {
+        $wait = self::MIN_WAIT_TIME;
+
+        while (false === $this->getPersistence()->set("{$sessionId}_lock", '', $this->sessionTtl)) {
+            usleep($wait);
+
+            if (self::MAX_WAIT_TIME > $wait) {
+                $wait *= 2;
+            }
+        }
+
+        $this->openSessions[] = $sessionId;
+    }
+
+    private function releaseLocks()
+    {
+        foreach ($this->openSessions as $session_id) {
+            $this->getPersistence()->del("{$session_id}_lock");
+        }
+
+        $this->openSessions = [];
     }
 }
