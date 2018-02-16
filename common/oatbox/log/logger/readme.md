@@ -200,6 +200,7 @@ To use the old format:
 **Parameters** 
 - error level (minimum error level to apply the data)
 - skip logger classes (skipping the Monolog and Tao logger classes when it's true)
+- custom class keywords to skip if the previous parameter is true
 
 ##### EnvironmentProcessor
 > It's adding the current environment details to the "extra" offset in the log record under the "stack" offset.  
