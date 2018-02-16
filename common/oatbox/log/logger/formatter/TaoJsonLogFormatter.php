@@ -32,14 +32,44 @@ use oat\oatbox\log\logger\processor\EnvironmentProcessorAbstract;
  */
 class TaoJsonLogFormatter implements FormatterInterface
 {
+    /**
+     * Used datetime format.
+     */
     const DATETIME_FORMAT = 'd/m/Y:H:i:s O';
 
+    /**
+     * Datetime offset in the generated output.
+     */
     const DATETIME_OFFSET = 'datetime';
+
+    /**
+     * Stack offset in the generated output.
+     */
     const STACK_OFFSET    = 'stack';
+
+    /**
+     * Severity offset in the generated output.
+     */
     const SEVERITY_OFFSET = 'severity';
+
+    /**
+     * Line offset in the generated output.
+     */
     const LINE_OFFSET     = 'line';
+
+    /**
+     * File offset in the generated output.
+     */
     const FILE_OFFSET     = 'file';
+
+    /**
+     * Content/message offset in the generated output.
+     */
     const CONTENT_OFFSET  = 'content';
+
+    /**
+     * Backtrace offset in the generated output.
+     */
     const TRACE_OFFSET    = 'trace';
 
     /**
@@ -50,23 +80,6 @@ class TaoJsonLogFormatter implements FormatterInterface
     public function format(array $record)
     {
         $jsonString = json_encode($this->getOutputRecord($record));
-
-        $outputRecord = $this->getOutputRecord($record);
-        file_put_contents(
-            'a.txt',
-            var_export($record, true),
-            FILE_APPEND
-        );
-        file_put_contents(
-            'a.txt',
-            var_export($outputRecord, true),
-            FILE_APPEND
-        );
-        file_put_contents(
-            'a.txt',
-            PHP_EOL . '---------------------------' . PHP_EOL . PHP_EOL,
-            FILE_APPEND
-        );
 
         if ($jsonString === false) {
             throw new \ErrorException('Error happened during the log format process! (json encode error)');
