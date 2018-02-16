@@ -38,7 +38,10 @@ class BacktraceProcessor
      */
     const TRACE_OFFSET = 'trace';
 
-    private $skippableClassKeywords = [
+    /**
+     * @var array
+     */
+    private $classKeywordsToSkip = [
         'Monolog\\',
         '\\TaoMonolog',
         '\\LoggerService',
@@ -50,14 +53,35 @@ class BacktraceProcessor
      */
     private $skipLoggerClasses;
 
+    /**
+     * @var string
+     */
     protected $level;
 
-    public function __construct($level = LogLevel::DEBUG, $skipLoggerClasses = false)
+    /**
+     * BacktraceProcessor constructor.
+     *
+     * @param string $level
+     * @param bool   $skipLoggerClasses
+     * @param array  $classKeywordsToSkip
+     */
+    public function __construct($level = LogLevel::DEBUG, $skipLoggerClasses = false, $classKeywordsToSkip = [])
     {
-        $this->level             = $level;
-        $this->skipLoggerClasses = $skipLoggerClasses;
+        $this->level               = $level;
+        $this->skipLoggerClasses   = $skipLoggerClasses;
+        $this->classKeywordsToSkip = array_merge(
+            $this->classKeywordsToSkip,
+            $classKeywordsToSkip
+        );
     }
 
+    /**
+     * Returns the record decorated with the backtrace.
+     *
+     * @param array $record
+     *
+     * @return array
+     */
     public function __invoke(array $record)
     {
         // return if the level is not high enough
@@ -140,7 +164,7 @@ class BacktraceProcessor
             return false;
         }
 
-        foreach ($this->skippableClassKeywords as $current) {
+        foreach ($this->classKeywordsToSkip as $current) {
             if (strpos($trace['class'], $current) !== false) {
                 return true;
             }
