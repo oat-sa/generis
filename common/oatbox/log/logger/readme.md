@@ -191,3 +191,44 @@ To use the old format:
   }
 }
 ```
+
+### Tao Monolog Classes
+#### Processor
+##### BacktraceProcessor
+> It's adding the debug backtrace to the "extra" offset in the log record under the "trace" offset.  
+
+**Parameters** 
+- error level (minimum error level to apply the data)
+- skip logger classes (skipping the Monolog and Tao logger classes when it's true)
+
+##### EnvironmentProcessor
+> It's adding the current environment details to the "extra" offset in the log record under the "stack" offset.  
+
+**Parameters** 
+- error level (minimum error level to apply the data)
+
+
+#### Formatter
+##### TaoJsonLogFormatter
+> It's formatting the collected log record to a TAO specific json log string.  
+
+**Parameters**  
+- error level (minimum error level to apply the data)
+- skip logger classes (skipping the Monolog and Tao logger classes when it's true)
+
+**Example**  
+```json
+{
+   "datetime":"15\/02\/2018:16:18:18 +0100",
+   "severity":"ERROR",
+   "content":"Hello world",
+   "file":"\/var\/www\/tango\/generis\/common\/oatbox\/Configurable.php",
+   "line":89,
+   "stack":{
+      "id":"bench-2017-0",
+      "type":"tango",
+      "name":"blackberry",
+      "host_type":"ws"
+   }
+}
+```
