@@ -23,6 +23,7 @@
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\oatbox\user\LoginService;
+use \oat\oatbox\service\ServiceManagerAwareTrait;
 
 /**
  * The UserService aims at providing an API to manage Users and Roles within Generis.
@@ -32,10 +33,9 @@ use oat\oatbox\user\LoginService;
  * @package generis
  
  */
-class core_kernel_users_Service
-        implements core_kernel_users_UsersManagement,
-                   core_kernel_users_RolesManagement
+class core_kernel_users_Service implements core_kernel_users_UsersManagement, core_kernel_users_RolesManagement
 {
+    use ServiceManagerAwareTrait;
     
     CONST LEGACY_ALGORITHM = 'md5';
     CONST LEGACY_SALT_LENGTH = 0;
@@ -579,7 +579,9 @@ class core_kernel_users_Service
      */
     public function login($login, $password, $allowedRoles)
     {
-        return LoginService::login($login, $password);
+        /** @var LoginService $loginService */
+        $loginService = $this->getServiceManager()->get(LoginService::SERVICE_ID);
+        return $loginService->login($login, $password);
     }
 
     /**

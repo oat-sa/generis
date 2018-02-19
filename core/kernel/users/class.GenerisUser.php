@@ -33,7 +33,6 @@ use oat\generis\model\OntologyRdf;
  */
 class core_kernel_users_GenerisUser extends common_user_User
 {
-
     private $userResource;
 
     private $cache;
@@ -78,9 +77,8 @@ class core_kernel_users_GenerisUser extends common_user_User
 
     }
     
-    private function getUncached($property)
+    private function getUnCached($property)
     {
-        $value = array();
         switch ($property) {
             case GenerisRdf::PROPERTY_USER_DEFLG:
             case GenerisRdf::PROPERTY_USER_UILG:
@@ -103,9 +101,7 @@ class core_kernel_users_GenerisUser extends common_user_User
 	
 	public function refresh() {
 	    $this->roles = false;
-	    $this->cache = array(
-	        GenerisRdf::PROPERTY_USER_DEFLG => $this->getUncached(GenerisRdf::PROPERTY_USER_DEFLG)
-	    );
+	    $this->cache = [GenerisRdf::PROPERTY_USER_DEFLG => $this->getUncached(GenerisRdf::PROPERTY_USER_DEFLG)];
 	    return true;
 	}	
 	

@@ -14,33 +14,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- *
+ * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
  */
-namespace oat\oatbox\user;
 
-interface User
-{
-    /**
-     * Returns the unique identifier of the user
-     * 
-     * @return string
-     */
-    public function getIdentifier();
-    
-    /**
-     * Extends the users explizit roles with the implizit rules
-     * of the local system
-     *
-     * @return array the identifiers of the roles:
-    */
-    public function getRoles();
+use oat\oatbox\user\LoginService;
 
-    /**
-     * Retrieve custom attributes of a user
-     * @param $property
-     * @return array an array of strings
-     */
-    public function getPropertyValues($property);
-}
+return new LoginService(array(
+    LoginService::OPTION_DISABLE_AUTO_COMPLETE => false,
+    LoginService::OPTION_BLOCK_IFRAME_USAGE => true,
+    LoginService::OPTION_USE_CAPTCHA => false,
+    LoginService::OPTION_USE_HARD_LOCKOUT => false,
+    LoginService::OPTION_CAPTCHA_FAILED_ATTEMPTS => 2,
+    LoginService::OPTION_LOCKOUT_FAILED_ATTEMPTS => 5,
+    LoginService::OPTION_SOFT_LOCKOUT_PERIOD => 'PT15M',
+    LoginService::OPTION_TRUSTED_TERMINAL_TTL => 180,
+));

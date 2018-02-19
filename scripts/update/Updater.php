@@ -48,6 +48,7 @@ use oat\oatbox\task\implementation\SyncQueue;
 use oat\oatbox\task\implementation\TaskQueuePayload;
 use oat\oatbox\task\Queue;
 use oat\oatbox\task\TaskRunner;
+use oat\oatbox\user\LoginService;
 use oat\taoWorkspace\model\generis\WrapperModel;
 use oat\oatbox\log\logger\TaoLog;
 use Psr\Log\LoggerInterface;
@@ -449,6 +450,26 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         $this->skip('6.9.0', '6.10.0');
+
+        if ($this->isVersion('6.10.0')) {
+
+            // Todo: move configuration from old config in tao
+
+            $config = array(
+                LoginService::OPTION_DISABLE_AUTO_COMPLETE => false,
+                LoginService::OPTION_BLOCK_IFRAME_USAGE => true,
+                LoginService::OPTION_USE_CAPTCHA => false,
+                LoginService::OPTION_USE_HARD_LOCKOUT => false,
+                LoginService::OPTION_CAPTCHA_FAILED_ATTEMPTS => 2,
+                LoginService::OPTION_LOCKOUT_FAILED_ATTEMPTS => 5,
+                LoginService::OPTION_SOFT_LOCKOUT_PERIOD => 'PT15M',
+                LoginService::OPTION_TRUSTED_TERMINAL_TTL => 180,
+            );
+
+            $this->getServiceManager()->register(LoginService::SERVICE_ID, new LoginService($config));
+
+            $this->setVersion('7.0.0');
+        }
     }
 
     private function getReadableModelIds() {
