@@ -61,6 +61,8 @@ interface GenerisRdf
     const PROPERTY_USER_TIMEZONE = 'http://www.tao.lu/Ontologies/generis.rdf#userTimezone';
     const PROPERTY_USER_STATUS = 'http://www.tao.lu/Ontologies/generis.rdf#userStatus';
     const PROPERTY_USER_STATUS_BLOCKED = 'http://www.tao.lu/Ontologies/generis.rdf#Blocked';
+    const PROPERTY_USER_STATUS_SELF_BLOCKED = 'http://www.tao.lu/Ontologies/generis.rdf#SelfBlocked';
+    const PROPERTY_USER_BLOCKED_BY = 'http://www.tao.lu/Ontologies/generis.rdf#blockedBy';
     const PROPERTY_USER_LOGON_FAILURES = 'http://www.tao.lu/Ontologies/generis.rdf#userLogonFailures';
     const PROPERTY_USER_LAST_LOGON_FAILURE_TIME = 'http://www.tao.lu/Ontologies/generis.rdf#lastLogonFailureTime';
     const INSTANCE_ROLE_GENERIS = 'http://www.tao.lu/Ontologies/generis.rdf#GenerisRole';
