@@ -142,7 +142,7 @@ class ClassTest extends GenerisPhpUnitTestRunner {
 
 	
  	public function testGetInstances(){
- 		$class = new core_kernel_classes_Class(WidgetRdf::CLASS_WIDGET);
+        $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
  		$plop = $class->createInstance('test','comment');
  		$instances = $class->getInstances();
 		$subclass = $class->createSubClass('subTest Class', 'subTest Class');

@@ -20,6 +20,7 @@
  */
 
 use oat\generis\test\GenerisPhpUnitTestRunner;
+use oat\generis\model\GenerisRdf;
 
 class GenerisIteratorTest extends GenerisPhpUnitTestRunner {
     

@@ -36,11 +36,10 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
      * @see common_persistence_Driver::connect()
      */
     function connect($id, array $params){
-        common_Logger::t('Init InMemoryKvDriver');
         return new common_persistence_KeyValuePersistence($params, $this);
     }
 
-    public function set($id, $value, $ttl = null)
+    public function set($id, $value, $ttl = null, $nx = false)
     {
         return $this->persistence[$id] = $value;
     }

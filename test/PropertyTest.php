@@ -68,7 +68,7 @@ class PropertyTest extends GenerisPhpUnitTestRunner{
 	    $domain = $prop->getDomain();
 	    $this->assertEquals(1, $domain->count());
 	    $this->assertEquals($class, $domain->get(0));
-	    $widget = new core_kernel_classes_Class(WidgetRdf::CLASS_WIDGET,__METHOD__);
+	    $widget = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET,__METHOD__);
 	     
 	    $this->assertTrue($prop->setDomain($widget));
 	    $this->assertEquals(2, $prop->getDomain()->count());
@@ -90,7 +90,7 @@ class PropertyTest extends GenerisPhpUnitTestRunner{
 	public function testGetRange(){
 		$range = $this->object->getRange();
 		$this->assertTrue($range instanceof core_kernel_classes_Class );
-		$this->assertEquals($range->getUri(),WidgetRdf::CLASS_WIDGET);
+		$this->assertEquals($range->getUri(),WidgetRdf::CLASS_URI_WIDGET);
 		$this->assertEquals($range->getLabel(), 'Widget Class');
 		$this->assertEquals($range->getComment(), 'The class of all possible widgets');
 	}

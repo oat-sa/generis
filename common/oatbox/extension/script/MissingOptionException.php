@@ -14,24 +14,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2016-2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * 
  */
 
-namespace oat\oatbox\extension;
+namespace oat\oatbox\extension\script;
 
-use oat\oatbox\action\Action;
-use oat\oatbox\log\LoggerAwareTrait;
-use oat\oatbox\log\TaoLoggerAwareInterface;
-use oat\oatbox\service\ServiceManagerAwareInterface;
-use oat\oatbox\service\ServiceManagerAwareTrait;
-
-/**
- * Abstract base for extension actions
- *
- */
-abstract class AbstractAction implements Action, ServiceManagerAwareInterface, TaoLoggerAwareInterface
+class MissingOptionException extends ScriptException
 {
-    use ServiceManagerAwareTrait;
-    use LoggerAwareTrait;
+    protected $optionName;
+    
+    public function __construct($message, $optionName, $code = 0, \Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+        $this->optionName = $optionName;
+    }
+    
+    public function getOptionName()
+    {
+        return $this->optionName;
+    }
 }
