@@ -148,6 +148,7 @@ class LoginService extends ConfigurableService
         $user = core_kernel_users_Service::singleton()->getOneUser($login);
         $user->editPropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_LOGON_FAILURES), 0);
         $user->removePropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_STATUS));
+        $user->removePropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_BLOCKED_BY));
     }
 
     /**
@@ -162,7 +163,9 @@ class LoginService extends ConfigurableService
         $failedLoginCount = (intval((string)$user->getOnePropertyValue($failedLoginCountProperty))) + 1;
 
         if ($failedLoginCount >= intval($this->getOption(self::OPTION_LOCKOUT_FAILED_ATTEMPTS))) {
+            // @todo move to separate method
             $user->editPropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_STATUS), GenerisRdf::PROPERTY_USER_STATUS_BLOCKED);
+            $user->editPropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_BLOCKED_BY), $user);
         }
 
         $user->editPropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_LAST_LOGON_FAILURE_TIME), time());
@@ -173,6 +176,7 @@ class LoginService extends ConfigurableService
      * @param $login
      * @return bool
      * @throws \core_kernel_persistence_Exception
+     * @throws \Exception
      */
     public function isBlocked($login)
     {
