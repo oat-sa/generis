@@ -50,6 +50,9 @@ class LoginService extends ConfigurableService
     /** Disable the browser ability to store login/passwords */
     const OPTION_DISABLE_AUTO_COMPLETE = 'disable_auto_complete';
 
+    /** Allow or disallow to see password value in login form */
+    const OPTION_ENABLE_PASSWORD_REVEAL = 'enable_password_reveal';
+
     /** Use captcha on login page or not */
     const OPTION_USE_CAPTCHA = 'use_captcha';
 

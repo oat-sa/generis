@@ -457,6 +457,7 @@ class Updater extends common_ext_ExtensionUpdater {
 
             $config = array(
                 LoginService::OPTION_DISABLE_AUTO_COMPLETE => false,
+                LoginService::OPTION_ENABLE_PASSWORD_REVEAL => false,
                 LoginService::OPTION_BLOCK_IFRAME_USAGE => true,
                 LoginService::OPTION_USE_CAPTCHA => false,
                 LoginService::OPTION_USE_HARD_LOCKOUT => false,
