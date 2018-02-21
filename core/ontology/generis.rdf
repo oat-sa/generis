@@ -324,12 +324,6 @@
     <rdf:type rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#BlockedStatus"/>
   </rdf:Description>
 
-  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#SelfBlocked">
-    <rdfs:label xml:lang="en-US"><![CDATA[Yes]]></rdfs:label>
-    <rdfs:comment xml:lang="en-US"><![CDATA[Yes]]></rdfs:comment>
-    <rdf:type rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#BlockedStatus"/>
-  </rdf:Description>
-
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#userLogonFailures">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
     <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#User"/>
