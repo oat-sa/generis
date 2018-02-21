@@ -21,6 +21,7 @@
 namespace oat\oatbox\user;
 
 use core_kernel_classes_Literal;
+use core_kernel_classes_Resource;
 use core_kernel_users_Service;
 use DateInterval;
 use DateTimeImmutable;
@@ -163,13 +164,36 @@ class LoginService extends ConfigurableService
         $failedLoginCount = (intval((string)$user->getOnePropertyValue($failedLoginCountProperty))) + 1;
 
         if ($failedLoginCount >= intval($this->getOption(self::OPTION_LOCKOUT_FAILED_ATTEMPTS))) {
-            // @todo move to separate method
-            $user->editPropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_STATUS), GenerisRdf::PROPERTY_USER_STATUS_BLOCKED);
-            $user->editPropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_BLOCKED_BY), $user);
+            $this->blockUser($user);
         }
 
         $user->editPropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_LAST_LOGON_FAILURE_TIME), time());
         $user->editPropertyValues($failedLoginCountProperty, $failedLoginCount);
+    }
+
+    /**
+     * // should be public for using in controller
+     * @param core_kernel_classes_Resource $user
+     * @param core_kernel_classes_Resource $by
+     */
+    public function blockUser($user, $by = null)
+    {
+        $user->editPropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_STATUS), GenerisRdf::PROPERTY_USER_STATUS_BLOCKED);
+        $user->editPropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_BLOCKED_BY), $by ?: $user);
+
+        return true;
+    }
+
+    /**
+     * @param core_kernel_classes_Resource $user
+     * @return bool
+     */
+    public function resetUser(core_kernel_classes_Resource $user)
+    {
+        $user->removePropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_STATUS));
+        $user->removePropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_BLOCKED_BY));
+
+        return true;
     }
 
     /**
@@ -200,5 +224,17 @@ class LoginService extends ConfigurableService
 
             return $lastFailureTime->add($lockoutPeriod) > new DateTimeImmutable();
         }
+    }
+
+    public function getActualStatus($login)
+    {
+        if (!$this->isBlocked($login)) {
+            $this->resetUser($login);
+        }
+
+        // process status and return status info
+        //        проверить актуальный статус, если не актуально - обновить состояние и вернуть данные
+
+
     }
 }
