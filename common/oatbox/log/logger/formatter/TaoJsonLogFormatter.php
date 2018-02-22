@@ -75,17 +75,17 @@ class TaoJsonLogFormatter implements FormatterInterface
     /**
      * @inheritdoc
      *
-     * @throws \ErrorException
+     * @throws \RuntimeException
      */
     public function format(array $record)
     {
         $jsonString = json_encode($this->getOutputRecord($record));
 
         if ($jsonString === false) {
-            throw new \ErrorException('Error happened during the log format process! (json encode error)');
+            throw new \RuntimeException('Error happened during the log format process! (json encode error)');
         }
 
-        return $jsonString;
+        return $jsonString . PHP_EOL;
     }
 
     /**
