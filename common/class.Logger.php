@@ -189,6 +189,14 @@ class common_Logger
             try {
                 if (defined('CONFIG_PATH')) {
                     $tags = is_array($tags) ? $tags : [$tags];
+
+                    // Gets the log context.
+                    $context = $this->getContext();
+                    if (!empty($context['file']) && !empty($context['line'])) {
+                        $tags['file'] = $context['file'];
+                        $tags['line'] = $context['line'];
+                    }
+
                     $this->getLogger()->log(common_log_Logger2Psr::getPsrLevelFromCommon($level), $message, $tags);
                 }
             } catch (\Exception $e) {
@@ -323,7 +331,7 @@ class common_Logger
      */
     public static function e($message, $tags = array())
     {
-        
+
 		self::singleton()->log(self::ERROR_LEVEL, $message, $tags);
         
     }
@@ -436,4 +444,28 @@ class common_Logger
         
     }
 
+    /**
+     * Returns the calling context.
+     *
+     * @return array
+     */
+    protected function getContext()
+    {
+        $trace = debug_backtrace();
+
+        $file = isset($trace[2]['file'])
+            ? $trace[2]['file']
+            : ''
+        ;
+
+        $line = isset($trace[2]['line'])
+            ? $trace[2]['line']
+            : ''
+        ;
+
+        return [
+            'file' => $file,
+            'line' => $line,
+        ];
+    }
 }
