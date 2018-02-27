@@ -484,7 +484,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * @param $key
      * @return null|string
      */
-    protected function getConfigHeader($key)
+    public function getConfigHeader($key)
     {
         $path = $this->getDir() . 'config/header/' . $key . '.conf.php';
         if (is_readable($path) && is_file($path)) {

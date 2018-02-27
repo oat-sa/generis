@@ -63,7 +63,6 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     public function set($key, $value, $ttl = null, $nx = false)
     {
         if ($this->isLarge($value)) {
-            common_Logger::t('Large value detected into KeyValue persistence. Splitting value for key : ' . $key);
             $value = $this->setLargeValue($key, $value, 0, true, true, $ttl, $nx);
         }
         return $this->getDriver()->set($key, $value, $ttl, $nx);
@@ -79,7 +78,6 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     {
         $value = $this->getDriver()->get($key);
         if ($this->isSplit($value)) {
-            common_Logger::t('Large value detected into KeyValue persistence. Joining value for key : ' . $key);
             $value = $this->join($key, $value);
         }
         return $value;
