@@ -29,12 +29,31 @@ use oat\generis\model\kernel\persistence\file\FileIterator;
  */
 class common_ext_ExtensionModel extends AppendIterator
 {
-    public function __construct(common_ext_Extension $extension) {
+    /**
+     * @param common_ext_Extension $extension
+     * @param int $modelId
+     *
+     * @throws common_exception_MissingParameter
+     * @throws common_ext_InstallationException
+     * @throws common_ext_ManifestNotFoundException
+     */
+    public function __construct(common_ext_Extension $extension, $modelId) {
+        if (!isset($modelId) || !is_int($modelId)) {
+            throw new common_exception_MissingParameter('ModelId must be set');
+        }
+
         parent::__construct();
-        $this->addModelFiles($extension);
+        $this->addModelFiles($extension, $modelId);
     }
-    
-    public function addModelFiles($extension) {
+
+    /**
+     * @param common_ext_Extension $extension
+     *
+     * @param int|null $modelId
+     * @throws common_ext_InstallationException
+     * @throws common_ext_ManifestNotFoundException
+     */
+    public function addModelFiles(common_ext_Extension $extension, $modelId) {
         foreach ($extension->getManifest()->getInstallModelFiles() as $rdfpath) {
             if (!file_exists($rdfpath)) {
                 throw new common_ext_InstallationException("Unable to load ontology in '${rdfpath}' because the file does not exist.");
@@ -44,7 +63,7 @@ class common_ext_ExtensionModel extends AppendIterator
                 throw new common_ext_InstallationException("Unable to load ontology in '${rdfpath}' because the file is not readable.");
             }
             
-            $iterator = new FileIterator($rdfpath);
+            $iterator = new FileIterator($rdfpath, $modelId);
             $this->append($iterator->getIterator());
         }
     }

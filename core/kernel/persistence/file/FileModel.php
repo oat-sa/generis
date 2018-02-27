@@ -23,7 +23,6 @@ use oat\generis\model\data\Model;
 use \common_ext_NamespaceManager;
 use \common_exception_MissingParameter;
 use \common_exception_Error;
-use oat\generis\model\kernel\persistence\file\FileRdf;
 
 /**
  * transitory model for the smooth sql implementation
@@ -138,5 +137,45 @@ class FileModel
             
         }
         return $modelId;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getReadableModels()
+    {
+        // TODO: Implement getReadableModels() method.
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getWritableModels()
+    {
+        // TODO: Implement getWritableModels() method.
+    }
+
+    /**
+     * @param int $modelId
+     */
+    public function addReadableModel($modelId)
+    {
+        // TODO: Implement addReadableModel() method.
+    }
+
+    /**
+     * @param int $modelId
+     */
+    public function addWritableModel($modelId)
+    {
+        // TODO: Implement addWritableModel() method.
+    }
+
+    /**
+     * @param int $modelId
+     */
+    public function cleanUpPermissions($modelId)
+    {
+        // TODO: Implement cleanUpPermissions() method.
     }
 }

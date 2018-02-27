@@ -20,9 +20,9 @@
  */
 
 use oat\generis\model\data\ModelManager;
-use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\ServiceManager;
 
 /**
  * Generis installer of extensions
@@ -52,16 +52,22 @@ class common_ext_ExtensionInstaller
 
 	// --- OPERATIONS ---
 
-	/**
-	 * install an extension
-	 *
-	 * @access public
-	 * @author Jerome Bogaerts, <jerome@taotesting.com>
+    /**
+     * install an extension
      *
-     * @throws common_ext_ForbiddenActionException When the installable extension is generis.
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
+     * @throws common_exception_Error
+     * @throws common_exception_InconsistentData
+     * @throws common_exception_MissingParameter
      * @throws common_ext_AlreadyInstalledException When the extension is already installed.
-     *
-     * @return void
+     * @throws common_ext_ExtensionException
+     * @throws common_ext_ForbiddenActionException When the installable extension is generis.
+     * @throws common_ext_InstallationException
+     * @throws common_ext_ManifestNotFoundException
+     * @throws common_ext_MissingExtensionException
+     * @throws common_ext_OutdatedVersionException
      */
 	public function install()
 	{
@@ -88,8 +94,12 @@ class common_ext_ExtensionInstaller
 		helpers_ExtensionHelper::checkRequiredExtensions($this->getExtension());
 			
 		$this->installLoadDefaultConfig();
-		$this->installOntology();
-		$this->installRegisterExt();
+
+		// TODO: inject from outside
+        $modelId = $this->getNewNumericExtensionId();
+
+		$this->installOntology($modelId);
+		$this->installRegisterExt($modelId);
 			
 		$this->log('d', 'Installing custom script for extension ' . $this->extension->getId());
 		$this->installCustomScript();
@@ -141,40 +151,117 @@ class common_ext_ExtensionInstaller
 	    }
 	}
 
-	/**
-	 * inserts the datamodels
-	 * specified in the Manifest
-	 *
-	 * @access protected
-	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @return void
-	 */
-	protected function installOntology()
+    /**
+     * inserts the datamodels
+     * specified in the Manifest
+     *
+     * @access protected
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
+     * @param int $modelId
+     *
+     * @return void
+     *
+     * @throws common_exception_InconsistentData
+     * @throws common_exception_MissingParameter
+     * @throws common_ext_InstallationException
+     * @throws common_ext_ManifestNotFoundException
+     */
+	protected function installOntology($modelId)
 	{
 	    helpers_TimeOutHelper::setTimeOutLimit(helpers_TimeOutHelper::MEDIUM);
 	    $rdf = ModelManager::getModel()->getRdfInterface();
-	    foreach ($this->getExtensionModel() as $triple) {
+        common_Logger::f(__METHOD__ . ' ModelId: ' . $modelId . ' Rdf: ' . get_class($rdf));
+
+        $tripples = $this->getExtensionModel($modelId);
+
+	    foreach ($tripples as $triple) {
 	        $rdf->add($triple);
 	    }
 	    helpers_TimeOutHelper::reset();
 	}
 
-	/**
-	 * Registers the Extension with the extensionManager
-	 *
-	 * @access protected
-	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @return void
-	 */
-	protected function installRegisterExt()
+    /**
+     * @return int
+     * @throws common_ext_ExtensionException
+     */
+	protected function getNewNumericExtensionId()
+    {
+        $installedExtensions = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig(
+            common_ext_ExtensionsManager::EXTENSIONS_CONFIG_KEY
+        );
+
+        // No extension installed
+        if ($installedExtensions === false) {
+            return 0;
+        }
+
+        $greatestNumericExtensionIdId = -1;
+
+        foreach ($installedExtensions as $extension) {
+            if (
+                isset($extension['extension_numeric_id'])
+                && $greatestNumericExtensionIdId < (int)$extension['extension_numeric_id']
+            ) {
+                $greatestNumericExtensionIdId = (int)$extension['extension_numeric_id'];
+            }
+        }
+
+        return ++$greatestNumericExtensionIdId;
+    }
+
+    /**
+     * Registers the Extension with the extensionManager
+     *
+     * @access protected
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
+     * @param int $modelId
+     *
+     * @return void
+     *
+     * @throws common_exception_Error
+     * @throws common_exception_InconsistentData
+     * @throws common_ext_ExtensionException
+     * @throws common_ext_ManifestNotFoundException
+     */
+	protected function installRegisterExt($modelId)
 	{
-		
-		$this->log('d', 'Registering extension '.$this->extension->getId(), 'INSTALL');
-		common_ext_ExtensionsManager::singleton()->registerExtension($this->extension);
-		common_ext_ExtensionsManager::singleton()->setEnabled($this->extension->getId());
-		
-		
+        $this->log('d', 'Registering extension ' . $this->extension->getId(), 'INSTALL');
+
+        common_ext_ExtensionsManager::singleton()->registerExtension(
+            $this->extension,
+            $modelId
+        );
+        common_ext_ExtensionsManager::singleton()->setEnabled($this->extension->getId());
+
+        $this->setExtensionPermissions($modelId);
 	}
+
+    /**
+     * @param int $modelId
+     *
+     * @throws common_exception_InconsistentData
+     * @throws common_ext_ManifestNotFoundException
+     */
+    protected function setExtensionPermissions($modelId)
+    {
+        $extra = $this->extension->getManifest()->getExtra();
+
+        if (is_array($extra)) {
+
+            $model = ModelManager::getModel();
+
+            if (!empty($extra['readable'])) {
+                $model->addReadableModel($modelId);
+            }
+
+            // TODO: check [sergii.chernenko[
+            if (!empty($extra['writable'])) {
+//                    $model->addWritableModel($modelId);
+            }
+        }
+    }
 
 	/**
 	 * Executes custom install scripts 
@@ -186,12 +273,10 @@ class common_ext_ExtensionInstaller
 	 */
 	protected function installCustomScript()
 	{
-		
 		//install script
 		foreach ($this->extension->getManifest()->getInstallPHPFiles() as $script) {
 		    $this->runExtensionScript($script);
 		}
-		
 	}
 
 	/**
@@ -224,10 +309,8 @@ class common_ext_ExtensionInstaller
 	 */
 	public function __construct( common_ext_Extension $extension, $localData = true)
 	{
-		
 		parent::__construct($extension);
 		$this->setLocalData($localData);
-		
 	}
 
 	/**
@@ -254,15 +337,20 @@ class common_ext_ExtensionInstaller
 	{
 		return $this->localData;
 	}
-	
-	/**
-	 * Returns the ontology model of the extension
-	 * 
-	 * @return common_ext_ExtensionModel
-	 */
-	public function getExtensionModel()
+
+    /**
+     * Returns the ontology model of the extension
+     *
+     * @param int|null $modelId
+     *
+     * @return common_ext_ExtensionModel
+     * @throws common_exception_MissingParameter
+     * @throws common_ext_InstallationException
+     * @throws common_ext_ManifestNotFoundException
+     */
+	public function getExtensionModel($modelId = null)
 	{
-	    return new common_ext_ExtensionModel($this->extension);
+	    return new common_ext_ExtensionModel($this->extension, $modelId);
 	}
 
 	/**
@@ -276,5 +364,4 @@ class common_ext_ExtensionInstaller
 	{
 		return;
 	}
-
 }

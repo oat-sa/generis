@@ -109,11 +109,17 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
     public function getNewTripleModelId() {
         return $this->getOption(self::OPTION_NEW_TRIPLE_MODEL);
     }
-    
+
+    /**
+     * @return int[]
+     */
     public function getReadableModels() {
         return $this->getOption(self::OPTION_READABLE_MODELS);
     }
 
+    /**
+     * @return int[]
+     */
     public function getWritableModels() {
         return $this->getOption(self::OPTION_WRITEABLE_MODELS);
     }
@@ -184,4 +190,19 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
         common_Logger::w('Call to deprecated '.__FUNCTION__.' no longer does anything');
     }
 
+    /**
+     * @param int $modelId
+     */
+    public function addWritableModel($modelId)
+    {
+        // TODO: Implement addWritableModel() method.
+    }
+
+    /**
+     * @param int $modelId
+     */
+    public function cleanUpPermissions($modelId)
+    {
+        // TODO: Implement cleanUpPermissions() method. [sergii.chernenko]
+    }
 }

@@ -63,4 +63,29 @@ interface Model
 	 * Get search interface for model
 	 */
 	public function getSearchInterface();
+
+    /**
+     * @return int[]
+     */
+    public function getReadableModels();
+
+    /**
+     * @return int[]
+     */
+    public function getWritableModels();
+
+    /**
+     * @param int $modelId
+     */
+    public function addReadableModel($modelId);
+
+    /**
+     * @param int $modelId
+     */
+    public function addWritableModel($modelId);
+
+    /**
+     * @param int $modelId
+     */
+    public function cleanUpPermissions($modelId);
 }

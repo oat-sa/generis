@@ -21,6 +21,7 @@
 
 namespace oat\generis\model\kernel\persistence\file;
 
+use common_exception_MissingParameter;
 use EasyRdf_Graph;
 use core_kernel_classes_Triple;
 use IteratorAggregate;
@@ -30,14 +31,19 @@ use ArrayIterator;
 class FileIterator implements IteratorAggregate {
     
     private $triples = array();
-    
+
     /**
-     * 
      * @param string $file
-     * @param string $forceModelId
+     * @param int $modelId
+     *
+     * @throws common_exception_MissingParameter
      */
-    public function __construct($file, $forceModelId = null) {
-        $modelId = is_null($forceModelId) ? FileModel::getModelIdFromXml($file) : $forceModelId;
+    public function __construct($file, $modelId)
+    {
+        if (is_null($modelId) || !is_int($modelId)) {
+            throw new common_exception_MissingParameter('modelId must be set');
+        }
+
         $this->load($modelId, $file);
     }
     
@@ -58,7 +64,7 @@ class FileIterator implements IteratorAggregate {
         
         $easyRdf = new EasyRdf_Graph();
         $easyRdf->parseFile($file);
-        
+
         foreach ($easyRdf->toRdfPhp() as $subject => $propertiesValues){
             foreach ($propertiesValues as $predicate => $values){
                 foreach ($values as $k => $v) {

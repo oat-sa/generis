@@ -29,10 +29,11 @@ class core_kernel_persistence_smoothsql_SmoothIterator
 {
     /**
      * Constructor of the iterator expecting the model ids
-     * 
+     *
+     * @param common_persistence_SqlPersistence $persistence
      * @param array $modelIds
      */
-    public function __construct(common_persistence_SqlPersistence $persistence, $modelIds = null) {
+    public function __construct(common_persistence_SqlPersistence $persistence, array $modelIds = null) {
         $query = 'SELECT * FROM statements '
             .(is_null($modelIds) ? '' : 'WHERE modelid IN ('.implode(',', $modelIds).') ')
             .'ORDER BY id';
@@ -46,7 +47,7 @@ class core_kernel_persistence_smoothsql_SmoothIterator
      */
     function current() {
         $statement = parent::current();
-        
+
         $triple = new core_kernel_classes_Triple();
         $triple->modelid = $statement["modelid"];
         $triple->subject = $statement["subject"];

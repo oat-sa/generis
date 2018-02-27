@@ -19,8 +19,8 @@
  * 
  */
 
-use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\ServiceManager;
 
 /**
  * The ExtensionsManager class is dedicated to Extensions Management. It provides
@@ -101,6 +101,8 @@ class common_ext_ExtensionsManager extends ConfigurableService
      * @access public
      * @author Joel Bout, <joel@taotesting.com>
      * @return array
+     *
+     * @throws common_ext_ExtensionException
      */
     public function getInstalledExtensions()
     {
@@ -108,6 +110,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
         foreach ($this->getInstalledExtensionsIds() as $extId) {
             $returnValue[$extId] = $this->getExtensionById($extId);
         }
+
         return $returnValue;
     }
 
@@ -255,33 +258,44 @@ class common_ext_ExtensionsManager extends ConfigurableService
     
         return (array) $returnValue;
     }
-    
+
     /**
      * Add the end of an installation register the new extension
      *
      * @access public
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @param common_ext_Extension $extension
+     * @param int $extensionNumericId
+     *
      * @return boolean
+     *
+     * @throws common_exception_Error
+     * @throws common_ext_ExtensionException
+     * @throws common_ext_ManifestNotFoundException
      */
-    public function registerExtension(common_ext_Extension $extension)
+    public function registerExtension(common_ext_Extension $extension, $extensionNumericId)
     {
         $entry = array(
-        	'installed' => $extension->getManifest()->getVersion(),
-            'enabled' => false 
+            'installed'            => $extension->getManifest()->getVersion(),
+            'enabled'              => false,
+            'extension_numeric_id' => $extensionNumericId
         );
         $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         $extensions[$extension->getId()] = $entry;
+
         return $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $extensions);
     }
-    
+
     /**
      * Add the end of an uninstallation unregister the extension
      *
      * @access public
      * @author Joel Bout, <joel@taotesting.com>
      * @param common_ext_Extension $extension
-     * @return boolean
+     *
+     * @throws common_exception_Error
+     * @throws common_ext_ExtensionException
      */
     public function unregisterExtension(common_ext_Extension $extension)
     {
@@ -295,5 +309,26 @@ class common_ext_ExtensionsManager extends ConfigurableService
         $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         $extensions[$extension->getId()]['installed'] = $version;
         $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $extensions);
+    }
+
+    /**
+     * @param string $extensionId
+     *
+     * @return int
+     *
+     * @throws common_exception_InconsistentData
+     * @throws common_ext_ExtensionException
+     */
+    public function getModelIdByExtensionId($extensionId)
+    {
+        $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+
+        if (isset($extensions[$extensionId]['extension_numeric_id'])
+            && is_int($extensions[$extensionId]['extension_numeric_id'])
+        ) {
+            return $extensions[$extensionId]['extension_numeric_id'];
+        }
+
+        throw new common_exception_InconsistentData('Can not find numeric extension');
     }
 }

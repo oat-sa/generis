@@ -18,12 +18,12 @@
  *
  */
 
+use oat\generis\model\data\event\ResourceCreated;
 use oat\generis\model\data\RdfInterface;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
-use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
-use oat\generis\model\data\event\ResourceCreated;
+use oat\oatbox\service\ServiceManager;
 
 /**
  * Implementation of the RDF interface for the smooth sql driver
@@ -96,5 +96,15 @@ class core_kernel_persistence_smoothsql_SmoothRdf
     public function getServiceManager()
     {
         return ServiceManager::getServiceManager();
+    }
+
+    /**
+     * @param int $modelId
+     */
+    public function removeByModelId($modelId)
+    {
+        $query = 'DELETE FROM statements WHERE modelid = ?;';
+
+        $this->getPersistence()->exec($query, array($modelId));
     }
 }

@@ -33,13 +33,20 @@ use oat\oatbox\service\ServiceManager;
  */
 class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
 {
-
     /**
      * Setup the ontology configuration
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return mixed
+     *
+     * @throws common_exception_Error
+     * @throws common_exception_InconsistentData
+     * @throws common_exception_MissingParameter
+     * @throws common_ext_ExtensionException
+     * @throws common_ext_InstallationException
+     * @throws common_ext_ManifestNotFoundException
      */
     public function install()
     {
@@ -48,20 +55,22 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
         }
  
         $this->installLoadDefaultConfig();
+
+        $modelId = $this->getNewNumericExtensionId();
         
         $model = new \core_kernel_persistence_smoothsql_SmoothModel(array(
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'default',
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS => array('1'),
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => array('1'),
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => '1',
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS => array($modelId),
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => array($modelId),
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => $modelId,
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE => ComplexSearchService::SERVICE_ID));
         $model->setServiceLocator(ServiceManager::getServiceManager());
         ModelManager::setModel($model);
-        
-        $this->installOntology();
+
+        $this->installOntology($modelId);
         // $this->installLocalData();
         // $this->installModuleModel();
-        $this->installRegisterExt();
+        $this->installRegisterExt($modelId);
         
         common_cache_FileCache::singleton()->purge();
         

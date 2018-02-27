@@ -20,8 +20,6 @@
  */               
 namespace oat\generis\model\data;
 
-use core_kernel_classes_Triple;
-
 /**
  * Rdf interface to access the ontology
  * This is an experimental interface that has not been implemented yet
@@ -54,6 +52,13 @@ interface RdfInterface extends \IteratorAggregate
      * @param \core_kernel_classes_Triple $triple
      */
     public function remove(\core_kernel_classes_Triple $triple);
+
+    /**
+     * Removes set of tripples with defined modelId.
+     *
+     * @param int $modelId
+     */
+    public function removeByModelId($modelId);
     
     /**
      * Returns an array of the triples with the given predicate, object

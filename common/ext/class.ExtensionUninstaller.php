@@ -19,6 +19,8 @@
  * 
  */
 
+use oat\generis\model\data\ModelManager;
+
 /**
  * Uninstall of extensions
  *
@@ -32,13 +34,19 @@ class common_ext_ExtensionUninstaller
 	extends common_ext_ExtensionHandler
 {
 
-	/**
-	 * uninstall an extension
-	 *
-	 * @access public
-	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @return boolean
-	 */
+    /**
+     * uninstall an extension
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
+     * @return boolean
+     *
+     * @throws common_Exception
+     * @throws common_exception_InconsistentData
+     * @throws common_ext_ExtensionException
+     * @throws common_ext_ManifestNotFoundException
+     */
 	public function uninstall()
 	{
 		
@@ -61,7 +69,12 @@ class common_ext_ExtensionUninstaller
 
 		common_Logger::d('uninstall script for ' . $this->extension->getId());
 		$this->uninstallScripts();
-		
+
+		$modelId = $this->getModelId();
+
+		$this->uninstallRdf($modelId);
+		$this->cleanUpPermissions($modelId);
+
 		// hook
 		$this->extendedUninstall();
 		
@@ -113,4 +126,44 @@ class common_ext_ExtensionUninstaller
 	{
 	    return;
 	}
+
+    /**
+     * @param int $modelId
+     */
+    public function uninstallRdf($modelId)
+    {
+        common_Logger::d('Uninstall RDF. modelId = ' . $modelId);
+        try {
+            ModelManager::getModel()->getRdfInterface()->removeByModelId($modelId);
+        } catch (common_exception_InconsistentData $e) {
+            common_Logger::e($e->getMessage());
+        }
+	}
+
+    /**
+     * @param int $modelId
+     */
+    public function cleanUpPermissions($modelId)
+    {
+        common_Logger::d('Cleaning up permissions. modelId = ' . $modelId);
+        try {
+            ModelManager::getModel()->cleanUpPermissions($modelId);
+        } catch (common_exception_InconsistentData $e) {
+            common_Logger::e($e->getMessage());
+        }
+    }
+
+    /**
+     * @return int
+     *
+     * @throws common_exception_InconsistentData
+     * @throws common_ext_ExtensionException
+     */
+    protected function getModelId()
+    {
+        /** @var common_ext_ExtensionsManager $extensionManager */
+        $extensionManager = $this->getServiceManager()->get(\common_ext_ExtensionsManager::SERVICE_ID);
+
+        return $extensionManager->getModelIdByExtensionId($this->extension->getId());
+    }
 }
