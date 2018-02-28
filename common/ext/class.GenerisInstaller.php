@@ -41,6 +41,7 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
      *
      * @return mixed
      *
+     * @throws common_Exception
      * @throws common_exception_Error
      * @throws common_exception_InconsistentData
      * @throws common_exception_MissingParameter
@@ -56,7 +57,7 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
  
         $this->installLoadDefaultConfig();
 
-        $modelId = $this->getNewNumericExtensionId();
+        $modelId = $this->newModeIdFactory->create();
         
         $model = new \core_kernel_persistence_smoothsql_SmoothModel(array(
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'default',

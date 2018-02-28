@@ -21,6 +21,7 @@
 
 use oat\generis\model\data\ModelManager;
 use oat\oatbox\event\EventManager;
+use oat\oatbox\NewModeIdFactory;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceManager;
 
@@ -49,8 +50,12 @@ class common_ext_ExtensionInstaller
 	 * @var boolean
 	 */
 	private $localData = false;
+    /**
+     * @var NewModeIdFactory
+     */
+    protected $newModeIdFactory;
 
-	// --- OPERATIONS ---
+    // --- OPERATIONS ---
 
     /**
      * install an extension
@@ -58,6 +63,7 @@ class common_ext_ExtensionInstaller
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      *
+     * @throws common_Exception
      * @throws common_exception_Error
      * @throws common_exception_InconsistentData
      * @throws common_exception_MissingParameter
@@ -95,8 +101,7 @@ class common_ext_ExtensionInstaller
 			
 		$this->installLoadDefaultConfig();
 
-		// TODO: inject from outside
-        $modelId = $this->getNewNumericExtensionId();
+        $modelId = $this->newModeIdFactory->create();
 
 		$this->installOntology($modelId);
 		$this->installRegisterExt($modelId);
@@ -122,13 +127,17 @@ class common_ext_ExtensionInstaller
 
 	}
 
-	/**
-	 * writes the config based on the config.sample
-	 *
-	 * @access protected
-	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @return void
-	 */
+    /**
+     * writes the config based on the config.sample
+     *
+     * @access protected
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @return void
+     *
+     * @throws common_Exception
+     * @throws common_exception_Error
+     * @throws common_ext_ExtensionException
+     */
 	protected function installLoadDefaultConfig()
 	{
 	    $defaultsPath = $this->extension->getDir() . 'config/default';
@@ -182,35 +191,6 @@ class common_ext_ExtensionInstaller
 	}
 
     /**
-     * @return int
-     * @throws common_ext_ExtensionException
-     */
-	protected function getNewNumericExtensionId()
-    {
-        $installedExtensions = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig(
-            common_ext_ExtensionsManager::EXTENSIONS_CONFIG_KEY
-        );
-
-        // No extension installed
-        if ($installedExtensions === false) {
-            return 0;
-        }
-
-        $greatestNumericExtensionIdId = -1;
-
-        foreach ($installedExtensions as $extension) {
-            if (
-                isset($extension['extension_numeric_id'])
-                && $greatestNumericExtensionIdId < (int)$extension['extension_numeric_id']
-            ) {
-                $greatestNumericExtensionIdId = (int)$extension['extension_numeric_id'];
-            }
-        }
-
-        return ++$greatestNumericExtensionIdId;
-    }
-
-    /**
      * Registers the Extension with the extensionManager
      *
      * @access protected
@@ -249,28 +229,28 @@ class common_ext_ExtensionInstaller
         $extra = $this->extension->getManifest()->getExtra();
 
         if (is_array($extra)) {
-
             $model = ModelManager::getModel();
 
             if (!empty($extra['readable'])) {
                 $model->addReadableModel($modelId);
             }
 
-            // TODO: check [sergii.chernenko[
             if (!empty($extra['writable'])) {
-//                    $model->addWritableModel($modelId);
+                $model->addWritableModel($modelId);
             }
         }
     }
 
-	/**
-	 * Executes custom install scripts 
-	 * specified in the Manifest
-	 *
-	 * @access protected
-	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @return void
-	 */
+    /**
+     * Executes custom install scripts
+     * specified in the Manifest
+     *
+     * @access protected
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
+     * @throws common_ext_InstallationException
+     * @throws common_ext_ManifestNotFoundException
+     */
 	protected function installCustomScript()
 	{
 		//install script
@@ -279,13 +259,15 @@ class common_ext_ExtensionInstaller
 		}
 	}
 
-	/**
-	 * Installs example files and other non essential content
-	 *
-	 * @access protected
-	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @return void
-	 */
+    /**
+     * Installs example files and other non essential content
+     *
+     * @access protected
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
+     * @throws common_ext_InstallationException
+     * @throws common_ext_ManifestNotFoundException
+     */
     protected function installLocalData()
     {
         $localData = $this->extension->getManifest()->getLocalData();
@@ -298,20 +280,22 @@ class common_ext_ExtensionInstaller
         }
     }
 
-	/**
-	 * Instantiate a new ExtensionInstaller for a given Extension.
-	 *
-	 * @access public
-	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @param  common_ext_Extension $extension The extension to install
-	 * @param  boolean $localData Import local data or not.
-	 * @return void
-	 */
-	public function __construct( common_ext_Extension $extension, $localData = true)
+    /**
+     * Instantiate a new ExtensionInstaller for a given Extension.
+     *
+     * @access public
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
+     * @param NewModeIdFactory $newModeIdFactory
+     * @param  common_ext_Extension $extension The extension to install
+     * @param  boolean $localData Import local data or not.
+     */
+	public function __construct(NewModeIdFactory $newModeIdFactory, common_ext_Extension $extension, $localData = true)
 	{
 		parent::__construct($extension);
 		$this->setLocalData($localData);
-	}
+        $this->newModeIdFactory = $newModeIdFactory;
+    }
 
 	/**
 	 * Sets localData field.
@@ -341,14 +325,14 @@ class common_ext_ExtensionInstaller
     /**
      * Returns the ontology model of the extension
      *
-     * @param int|null $modelId
+     * @param int $modelId
      *
      * @return common_ext_ExtensionModel
      * @throws common_exception_MissingParameter
      * @throws common_ext_InstallationException
      * @throws common_ext_ManifestNotFoundException
      */
-	public function getExtensionModel($modelId = null)
+	public function getExtensionModel($modelId)
 	{
 	    return new common_ext_ExtensionModel($this->extension, $modelId);
 	}

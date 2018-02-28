@@ -109,9 +109,20 @@ class helpers_InstallHelper
         $extinstaller->install();
         helpers_TimeOutHelper::reset();;
     }
-    
-    protected static function getInstaller($extension, $importLocalData) {
-        $instance = new \common_ext_ExtensionInstaller($extension, $importLocalData);
+
+    /**
+     * @param $extension
+     * @param $importLocalData
+     *
+     * @return common_ext_ExtensionInstaller
+     */
+    protected static function getInstaller($extension, $importLocalData)
+    {
+        $instance = new \common_ext_ExtensionInstaller(
+            new \oat\oatbox\NewModeIdFactory(),
+            $extension,
+            $importLocalData
+        );
         $instance->initContainer(static::$container);
 
         return $instance;

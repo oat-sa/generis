@@ -26,6 +26,7 @@ use \common_ext_ExtensionsManager;
 use \common_ext_ExtensionInstaller;
 use \common_ext_ExtensionUninstaller;
 use \common_persistence_Manager;
+use oat\oatbox\NewModeIdFactory;
 
 /**
  * @author CRP Henri Tudor - TAO Team
@@ -107,11 +108,26 @@ abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
     public function assertIsA($var,$className){
     	$this->assertInstanceOf($className,$var);
     }
-    
-    public function installExtension($extid){
+
+    /**
+     * @param $extid
+     * @throws \common_Exception
+     * @throws \common_exception_Error
+     * @throws \common_exception_InconsistentData
+     * @throws \common_exception_MissingParameter
+     * @throws \common_ext_AlreadyInstalledException
+     * @throws \common_ext_ExtensionException
+     * @throws \common_ext_ForbiddenActionException
+     * @throws \common_ext_InstallationException
+     * @throws \common_ext_ManifestNotFoundException
+     * @throws \common_ext_MissingExtensionException
+     * @throws \common_ext_OutdatedVersionException
+     */
+    public function installExtension($extid)
+    {
         if (!common_ext_ExtensionsManager::singleton()->isInstalled($extid)) {
             $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extid);
-            $installer = new common_ext_ExtensionInstaller($extension);
+            $installer = new common_ext_ExtensionInstaller(new NewModeIdFactory(), $extension);
             $installer->install();
         }
     }

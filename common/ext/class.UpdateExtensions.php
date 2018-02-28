@@ -17,12 +17,14 @@
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
-use oat\oatbox\service\ServiceManager;
+
 use oat\oatbox\action\Action;
+use oat\oatbox\log\LoggerAwareTrait;
+use oat\oatbox\NewModeIdFactory;
+use Psr\Log\LoggerAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Psr\Log\LoggerAwareInterface;
-use oat\oatbox\log\LoggerAwareTrait;
+
 /**
  * Run the extension updater 
  *
@@ -41,7 +43,6 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
      */
     public function __invoke($params)
     {
-        
         $merged = array_merge(
             common_ext_ExtensionsManager::singleton()->getInstalledExtensions(),
             $this->getMissingExtensions()
@@ -53,7 +54,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
         foreach ($sorted as $ext) {
             try {
                 if(!common_ext_ExtensionsManager::singleton()->isInstalled($ext->getId())) {
-                    $installer = new \tao_install_ExtensionInstaller($ext);
+                    $installer = new \tao_install_ExtensionInstaller(new NewModeIdFactory(), $ext);
                     $installer->install();
                     $report->add(new common_report_Report(common_report_Report::TYPE_SUCCESS, 'Installed '.$ext->getName()));
                 } else {
