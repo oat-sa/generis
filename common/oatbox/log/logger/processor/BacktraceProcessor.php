@@ -33,13 +33,55 @@ use Psr\Log\LogLevel;
  */
 class BacktraceProcessor
 {
+    /**
+     * Trace offset name under the log extra offset.
+     */
+    const TRACE_OFFSET = 'trace';
+
+    /**
+     * @var array
+     */
+    private $classKeywordsToSkip = [
+        'Monolog\\',
+        '\\TaoMonolog',
+        '\\LoggerService',
+        'common_Logger',
+    ];
+
+    /**
+     * @var bool
+     */
+    private $skipLoggerClasses;
+
+    /**
+     * @var string
+     */
     protected $level;
 
-    public function __construct($level = LogLevel::DEBUG)
+    /**
+     * BacktraceProcessor constructor.
+     *
+     * @param string $level
+     * @param bool   $skipLoggerClasses
+     * @param array  $classKeywordsToSkip
+     */
+    public function __construct($level = LogLevel::DEBUG, $skipLoggerClasses = false, $classKeywordsToSkip = [])
     {
-        $this->level = $level;
+        $this->level               = $level;
+        $this->skipLoggerClasses   = $skipLoggerClasses;
+        $this->classKeywordsToSkip = array_merge(
+            $this->classKeywordsToSkip,
+            $classKeywordsToSkip
+        );
     }
 
+    /**
+     * Returns the record decorated with the backtrace.
+     *
+     * @param array $record
+     *
+     * @return array
+     */
     public function __invoke(array $record)
     {
         // return if the level is not high enough
@@ -60,6 +102,12 @@ class BacktraceProcessor
         array_shift($trace);
 
         foreach ($trace as $key => $row) {
+            // If we need to skip the trace row.
+            if ($this->isTheClassSkippable($row)) {
+                unset($trace[$key]);
+
+                continue;
+            }
 
             if (isset($trace[$key]['object'])) {
                 unset($trace[$key]['object']);
@@ -92,11 +140,36 @@ class BacktraceProcessor
         $record['extra'] = array_merge(
             $record['extra'],
             array(
-                'trace' => $trace
+                static::TRACE_OFFSET => array_values($trace)
             )
         );
 
         return $record;
     }
 
+    /**
+     * Returns TRUE if the given trace is skippable.
+     *
+     * @param array $trace
+     *
+     * @return bool
+     */
+    private function isTheClassSkippable(array $trace)
+    {
+        if ($this->skipLoggerClasses === false) {
+            return false;
+        }
+
+        if (empty($trace['class'])) {
+            return false;
+        }
+
+        foreach ($this->classKeywordsToSkip as $current) {
+            if (strpos($trace['class'], $current) !== false) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
