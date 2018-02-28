@@ -21,7 +21,7 @@
 
 use oat\generis\model\data\ModelManager;
 use oat\oatbox\event\EventManager;
-use oat\oatbox\NewModeIdFactory;
+use oat\oatbox\NewModelIdFactory;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceManager;
 
@@ -51,7 +51,7 @@ class common_ext_ExtensionInstaller
 	 */
 	private $localData = false;
     /**
-     * @var NewModeIdFactory
+     * @var NewModelIdFactory
      */
     protected $newModeIdFactory;
 
@@ -286,11 +286,11 @@ class common_ext_ExtensionInstaller
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      *
-     * @param NewModeIdFactory $newModeIdFactory
+     * @param NewModelIdFactory $newModeIdFactory
      * @param  common_ext_Extension $extension The extension to install
      * @param  boolean $localData Import local data or not.
      */
-	public function __construct(NewModeIdFactory $newModeIdFactory, common_ext_Extension $extension, $localData = true)
+	public function __construct(NewModelIdFactory $newModeIdFactory, common_ext_Extension $extension, $localData = true)
 	{
 		parent::__construct($extension);
 		$this->setLocalData($localData);

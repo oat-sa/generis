@@ -26,7 +26,7 @@ use \common_ext_ExtensionsManager;
 use \common_ext_ExtensionInstaller;
 use \common_ext_ExtensionUninstaller;
 use \common_persistence_Manager;
-use oat\oatbox\NewModeIdFactory;
+use oat\oatbox\NewModelIdFactory;
 
 /**
  * @author CRP Henri Tudor - TAO Team
@@ -127,7 +127,7 @@ abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
     {
         if (!common_ext_ExtensionsManager::singleton()->isInstalled($extid)) {
             $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extid);
-            $installer = new common_ext_ExtensionInstaller(new NewModeIdFactory(), $extension);
+            $installer = new common_ext_ExtensionInstaller(new NewModelIdFactory(), $extension);
             $installer->install();
         }
     }

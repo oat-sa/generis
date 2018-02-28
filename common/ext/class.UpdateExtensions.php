@@ -20,7 +20,7 @@
 
 use oat\oatbox\action\Action;
 use oat\oatbox\log\LoggerAwareTrait;
-use oat\oatbox\NewModeIdFactory;
+use oat\oatbox\NewModelIdFactory;
 use Psr\Log\LoggerAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -54,7 +54,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
         foreach ($sorted as $ext) {
             try {
                 if(!common_ext_ExtensionsManager::singleton()->isInstalled($ext->getId())) {
-                    $installer = new \tao_install_ExtensionInstaller(new NewModeIdFactory(), $ext);
+                    $installer = new \tao_install_ExtensionInstaller(new NewModelIdFactory(), $ext);
                     $installer->install();
                     $report->add(new common_report_Report(common_report_Report::TYPE_SUCCESS, 'Installed '.$ext->getName()));
                 } else {
