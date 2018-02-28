@@ -44,6 +44,8 @@ class OptionContainer
      * 
      * @param array $options
      * @param array $values
+     *
+     * @throws MissingOptionException
      */
     public function __construct(array $options, array $values) {
         $this->data = self::extract($options, $values);
@@ -56,6 +58,8 @@ class OptionContainer
      * Wheter an option with name $optionName is extracted.
      * 
      * @param string $optionName
+     *
+     * @return bool
      */
     public function has($optionName)
     {
