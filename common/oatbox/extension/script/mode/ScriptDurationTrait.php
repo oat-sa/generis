@@ -77,8 +77,7 @@ trait ScriptDurationTrait
     {
         return [
             'showDuration' => [
-                'longPrefix'  => 'show-duration',
-                'required'    => false,
+                'longPrefix'  => 'showDuration',
                 'flag'        => true,
                 'description' => 'Shows the script running duration.'
             ],
@@ -96,8 +95,6 @@ trait ScriptDurationTrait
 
     /**
      * Finalizes the show duration mode.
-     *
-     * @return \common_report_Report
      */
     protected function finalizeTheShowDurationMode()
     {
@@ -106,7 +103,7 @@ trait ScriptDurationTrait
 
             return new \common_report_Report(
                 \common_report_Report::TYPE_INFO,
-                'Execution time: ' . $this->secondsToDuration($duration)
+                'Execution time: ' . $this->duration($duration)
             );
         }
     }
@@ -119,7 +116,7 @@ trait ScriptDurationTrait
      * @param $seconds
      * @return string
      */
-    private function secondsToDuration($seconds)
+    private function duration($seconds)
     {
         $seconds = intval($seconds);
         $hours = floor($seconds / 3600);

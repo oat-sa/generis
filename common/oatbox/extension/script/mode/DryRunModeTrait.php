@@ -44,13 +44,13 @@ trait DryRunModeTrait
     {
         return [
             'dryRun' => [
-                'longPrefix'  => 'dry-run',
+                'longPrefix'  => 'dryRun',
                 'required'    => false,
                 'flag'        => true,
                 'description' => 'Runs the script in dry run mode.'
             ],
             'wetRun' => [
-                'longPrefix'  => 'wet-run',
+                'longPrefix'  => 'wetRun',
                 'required'    => false,
                 'flag'        => true,
                 'description' => 'Runs the script in wet run mode.'
@@ -60,8 +60,6 @@ trait DryRunModeTrait
 
     /**
      * Initializes the dry run mode.
-     *
-     * @return \common_report_Report
      *
      * @throws \ErrorException
      */
@@ -74,12 +72,5 @@ trait DryRunModeTrait
         } else {
             throw new \ErrorException('Define script run mode with --dry-run or --wet-run parameters!');
         }
-
-        return new \common_report_Report(
-            \common_report_Report::TYPE_INFO,
-            $this->isDryRunMode()
-                ? 'Script runs in DRY RUN mode!' . PHP_EOL
-                : 'Script runs in WET RUN mode!' . PHP_EOL
-        );
     }
 }

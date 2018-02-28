@@ -37,7 +37,7 @@ abstract class ScriptAction extends AbstractAction
     private $options;
 
     /**
-     * @var string
+     * @var array
      */
     private $optionsDescription;
     
@@ -83,11 +83,21 @@ abstract class ScriptAction extends AbstractAction
             $this->provideDescription() . "\n"
         );
 
+        // Legacy start time.
+        $beginScript = microtime(true);
+
         try {
+            $this->optionsDescription = $this->provideOptions();
+
+            // Display help (old deprecated way)?
+            if ($this->displayUsage($params)) {
+                return $this->usage();
+            }
+
             // Collecting possible options.
             $this->optionsDescription = array_merge(
                 $this->provideTraitOptions(),
-                $this->provideOptions()
+                $this->optionsDescription
             );
 
             // Build option container.
@@ -97,13 +107,24 @@ abstract class ScriptAction extends AbstractAction
             );
 
             // Initializes the trait options.
-            $report = $this->initializeTraitOptions($report);
+            $this->initializeTraitOptions();
 
             // Run the userland script.
-            $report->add($this->run());
+            $report = $this->run();
 
             // Initializes the trait options.
-            $report = $this->finalizeTraitOptions($report);
+            $this->finalizeTraitOptions($report);
+
+            $endScript = microtime(true);
+
+            if ($this->showTime()) {
+                $report->add(
+                    new Report(
+                        Report::TYPE_INFO,
+                        'Execution time: ' . self::secondsToDuration($endScript - $beginScript)
+                    )
+                );
+            }
         }
         catch (ShowUsageException $e) {
             return $this->usage();
@@ -125,7 +146,6 @@ abstract class ScriptAction extends AbstractAction
      *
      * @return array
      *
-     * @throws \ReflectionException
      */
     private function provideTraitOptions()
     {
@@ -152,34 +172,24 @@ abstract class ScriptAction extends AbstractAction
     /**
      * Runs the trait option initialization methods.
      *
-     * @param Report $report
-     *
      * @return Report
      *
-     * @throws \ReflectionException
      * @throws \common_exception_Error
      */
-    private function initializeTraitOptions(Report $report)
+    private function initializeTraitOptions()
     {
         $methods = $this->getClassMethods();
         /** @var \ReflectionMethod $method */
         foreach ($methods as $method) {
             if (strpos($method->getName(), 'initializeThe') === 0) {
-                $report = $this->callTraitMethod($method, $report);
+                $this->callTraitMethod($method);
             }
         }
-
-        return $report;
     }
 
     /**
      * Runs the trait option finalization methods.
      *
-     * @param Report $report
-     *
-     * @return Report
-     *
-     * @throws \ReflectionException
      * @throws \common_exception_Error
      */
     private function finalizeTraitOptions(Report $report)
@@ -188,11 +198,9 @@ abstract class ScriptAction extends AbstractAction
         /** @var \ReflectionMethod $method */
         foreach ($methods as $method) {
             if (strpos($method->getName(), 'finalizeThe') === 0) {
-                $report = $this->callTraitMethod($method, $report);
+                $this->callTraitMethod($method, $report);
             }
         }
-
-        return $report;
     }
 
     /**
@@ -201,11 +209,9 @@ abstract class ScriptAction extends AbstractAction
      * @param \ReflectionMethod $method
      * @param Report            $report
      *
-     * @return Report
-     *
      * @throws \common_exception_Error
      */
-    private function callTraitMethod(\ReflectionMethod $method, Report $report)
+    private function callTraitMethod(\ReflectionMethod $method, Report $report = null)
     {
         $result = call_user_func(
             [
@@ -214,11 +220,9 @@ abstract class ScriptAction extends AbstractAction
             ]
         );
 
-        if ($result instanceof Report) {
+        if ($report && $result instanceof Report) {
             $report->add($result);
         }
-
-        return $report;
     }
 
     /**
@@ -226,7 +230,6 @@ abstract class ScriptAction extends AbstractAction
      *
      * @return \ReflectionMethod[]
      *
-     * @throws \ReflectionException
      */
     private function getClassMethods()
     {
@@ -276,7 +279,14 @@ abstract class ScriptAction extends AbstractAction
         $required = new Report(Report::TYPE_INFO, 'Required Arguments:');
         $optional = new Report(Report::TYPE_INFO, 'Optional Arguments:');
 
-        foreach ($this->optionsDescription as $optionName => $optionParams) {
+        $optionsDescription = $this->optionsDescription;
+        $legacyUsageDescription = $this->provideUsage();
+
+        if (!empty($legacyUsageDescription)) {
+            $optionsDescription[$this->provideUsageOptionName()] = $legacyUsageDescription;
+        }
+
+        foreach ($optionsDescription as $optionName => $optionParams) {
             // Deal with prefixes.
             $prefixes = [];
             $optionDisplay = (!empty($optionParams['flag'])) ? '' : " ${optionName}";
@@ -338,5 +348,71 @@ abstract class ScriptAction extends AbstractAction
         }
 
         return $string;
+    }
+
+    /**
+     * @param array $params
+     * @return bool
+     * @deprecated
+     */
+    private function displayUsage(array $params)
+    {
+        $usageDescription = $this->provideUsage();
+
+        if (!empty($usageDescription) && is_array($usageDescription)) {
+            if (!empty($usageDescription['prefix']) && in_array('-' . $usageDescription['prefix'], $params)) {
+                return true;
+            } elseif (!empty($usageDescription['longPrefix']) && in_array('--' . $usageDescription['longPrefix'], $params)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array
+     * @deprecated
+     */
+    protected function provideUsage()
+    {
+        return [];
+    }
+
+    /**
+     * @return string
+     * @deprecated
+     */
+    protected function provideUsageOptionName()
+    {
+        return 'help';
+    }
+
+    /**
+     * @return bool
+     * @deprecated
+     */
+    protected function showTime()
+    {
+        return false;
+    }
+
+    /**
+     * Seconds to Duration
+     *
+     * Format a given number of $seconds into a duration with format [hours]:[minutes]:[seconds].
+     *
+     * @param $seconds
+     * @return string
+     * @deprecated
+     */
+    private static function secondsToDuration($seconds)
+    {
+        $seconds = intval($seconds);
+        $hours = floor($seconds / 3600);
+        $minutes = floor(($seconds / 60) % 60);
+        $seconds = $seconds % 60;
+
+        return "${hours}h ${minutes}m {$seconds}s";
     }
 }
