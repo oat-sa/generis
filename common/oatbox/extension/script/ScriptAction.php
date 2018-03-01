@@ -23,6 +23,8 @@ namespace oat\oatbox\extension\script;
 use oat\oatbox\extension\AbstractAction;
 use common_report_Report as Report;
 use oat\oatbox\extension\script\exception\ShowUsageException;
+use oat\oatbox\extension\script\mode\duration\LegacyDurationModeTrait;
+use oat\oatbox\extension\script\mode\LegacyHelpModeTrait;
 
 /**
  * abstract base for extension scripts.
@@ -31,6 +33,12 @@ use oat\oatbox\extension\script\exception\ShowUsageException;
  */
 abstract class ScriptAction extends AbstractAction
 {
+    /**
+     * Backward compatibility.
+     */
+    use LegacyHelpModeTrait;
+    use LegacyDurationModeTrait;
+
     /**
      * @var array
      */
