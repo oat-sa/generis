@@ -14,26 +14,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- * @author Bout Joel, <joel@taotesting.com>
- * @license GPLv2
- * @package generis
+ * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
  *
  */
-return array(
-    array(
-        'driver' => 'oat\\generis\\model\\user\\AuthAdapter',
-        'user_factory' => 'tao/userFactory',
-        'hash' => array(
-            'algorithm' => 'sha256',
-            'salt' => 10
-        )
-    ),
-    /*
-    array(
-	    'driver' => 'oat\authKeyValue\AuthKeyValueAdapter',
-	    'persistence' => 'authKeyValue'
-	),
-	*/
-);
+namespace oat\generis\scripts\install;
+
+use oat\generis\model\user\UserFactoryService;
+use oat\oatbox\extension\InstallAction;
+
+class SetupUserFactoryService extends InstallAction
+{
+    /**
+     * @param $params
+     * @throws \common_Exception
+     * @throws \oat\oatbox\service\exception\InvalidServiceManagerException
+     */
+    public function __invoke($params)
+    {
+        $userFactory = new UserFactoryService([
+            UserFactoryService::OPTION_CLASS_USER => \core_kernel_users_GenerisUser::class
+        ]);
+
+        $this->getServiceManager()->register(UserFactoryService::SERVICE_ID, $userFactory);
+    }
+
+}
