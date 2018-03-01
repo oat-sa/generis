@@ -73,7 +73,7 @@ trait HideDurationModeTrait
      */
     protected function finalizeTheHideDurationMode()
     {
-        if ($this->hideDurationMode()) {
+        if (!$this->hideDurationMode()) {
             $duration = $this->getCurrentDuration();
 
             return new \common_report_Report(
