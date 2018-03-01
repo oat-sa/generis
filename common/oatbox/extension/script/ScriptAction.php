@@ -1,27 +1,30 @@
 <?php
-/**  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- * 
+ *
  */
 
 namespace oat\oatbox\extension\script;
 
 use oat\oatbox\extension\AbstractAction;
 use common_report_Report as Report;
+use oat\oatbox\extension\script\exception\ShowUsageException;
+use oat\oatbox\extension\script\mode\duration\LegacyDurationModeTrait;
+use oat\oatbox\extension\script\mode\LegacyHelpModeTrait;
 
 /**
  * abstract base for extension scripts.
@@ -30,201 +33,359 @@ use common_report_Report as Report;
  */
 abstract class ScriptAction extends AbstractAction
 {
+    /**
+     * Backward compatibility.
+     */
+    use LegacyHelpModeTrait;
+    use LegacyDurationModeTrait;
+
+    /**
+     * @var array
+     */
     private $options;
+
+    /**
+     * @var array
+     */
     private $optionsDescription;
-    
-    protected abstract function provideOptions();
-    
+
+    /**
+     * @var Report
+     */
+    private $report;
+
+    /**
+     * Provides the title of the script.
+     *
+     * @return string
+     */
     protected abstract function provideDescription();
-    
+
+    /**
+     * Provides the possible options.
+     *
+     * @return array
+     */
+    protected abstract function provideOptions();
+
     /**
      * Run Script.
-     * 
+     *
      * Run the userland script. Implementers will use this method
      * to implement the main logic of the script.
-     * 
-     * @return \common_report_Report
+     *
+     * @return Report
      */
     protected abstract function run();
-    
+
     /**
      * Invoke
-     * 
+     *
      * This method makes the script invokable programatically.
-     * 
-     * @return \common_report_Report
+     *
+     * @param array $params
+     *
+     * @throws \common_exception_Error
+     *
+     * @return Report
      */
     public function __invoke($params)
     {
-        $this->optionsDescription = $this->provideOptions();
-        $beginScript = microtime(true);
-        
-        // Display help?
-        if ($this->displayUsage($params)) {
-            return $this->usage();
-        }
-        
-        // Build option container.
+        // Sets the initial report.
+        $this->setReport(
+            new Report(
+                Report::TYPE_INFO,
+                $this->provideDescription() . "\n"
+            )
+        );
+
         try {
+            // Collecting possible options.
+            $this->optionsDescription = array_merge(
+                $this->provideTraitOptions(),
+                $this->provideOptions()
+            );
+
+            // Build option container.
             $this->options = new OptionContainer(
-                $this->optionsDescription, 
+                $this->optionsDescription,
                 $params
             );
-        } catch (\Exception $e) {
-            return new Report(
-                Report::TYPE_ERROR,
-                $e->getMessage()
+
+            // Initializes the trait options.
+            $this->setReport(
+                $this->initializeTraitOptions($this->getReport())
+            );
+
+            // Run the userland script.
+            $this->setReport($this->run());
+
+            // Initializes the trait options.
+            $this->setReport(
+                $this->finalizeTraitOptions($this->getReport())
+            );
+        }
+        catch (MissingOptionException $e) {
+            $this->setReport($this->usage());
+            $this->getReport()->add(
+                new Report(
+                    Report::TYPE_ERROR,
+                    $e->getMessage()
+                )
+            );
+        }
+        catch (ShowUsageException $e) {
+            return $this->usage();
+        }
+        catch (\Exception $e) {
+            $this->getReport()->add(
+                new Report(
+                    Report::TYPE_ERROR,
+                    $e->getMessage()
+                )
             );
         }
 
-        // Run the userland script.
-        $report = $this->run();
+        return $this->getReport();
+    }
 
-        $endScript = microtime(true);
-        if ($this->showTime()) {
-            $report->add(
-                new Report(
-                    Report::TYPE_INFO,
-                    'Execution time: ' . self::secondsToDuration($endScript - $beginScript)
-                )
-            );
+    /**
+     * Returns the possible options from traits.
+     *
+     * @return array
+     *
+     * @throws \ReflectionException
+     */
+    private function provideTraitOptions()
+    {
+        $options = [];
+        $methods = $this->getClassMethods();
+        /** @var \ReflectionMethod $method */
+        foreach ($methods as $method) {
+            if (strpos($method->getName(), 'provideOptionsFor') === 0) {
+                $options = array_merge(
+                    $options,
+                    call_user_func(
+                        [
+                            $this,
+                            $method->getName()
+                        ]
+                    )
+                );
+            }
+        }
+
+        return $options;
+    }
+
+    /**
+     * Runs the trait option initialization methods.
+     *
+     * @param Report $report
+     *
+     * @return Report
+     *
+     * @throws \ReflectionException
+     * @throws \common_exception_Error
+     */
+    private function initializeTraitOptions(Report $report)
+    {
+        $methods = $this->getClassMethods();
+        /** @var \ReflectionMethod $method */
+        foreach ($methods as $method) {
+            if (strpos($method->getName(), 'initializeThe') === 0) {
+                $report = $this->callTraitMethod($method, $report);
+            }
         }
 
         return $report;
     }
 
+    /**
+     * Runs the trait option finalization methods.
+     *
+     * @param Report $report
+     *
+     * @return Report
+     *
+     * @throws \ReflectionException
+     * @throws \common_exception_Error
+     */
+    private function finalizeTraitOptions(Report $report)
+    {
+        $methods = $this->getClassMethods();
+        /** @var \ReflectionMethod $method */
+        foreach ($methods as $method) {
+            if (strpos($method->getName(), 'finalizeThe') === 0) {
+                $report = $this->callTraitMethod($method, $report);
+            }
+        }
+
+        return $report;
+    }
+
+    /**
+     * Calls the given method.
+     *
+     * @param \ReflectionMethod $method
+     * @param Report            $report
+     *
+     * @return Report
+     *
+     * @throws \common_exception_Error
+     */
+    private function callTraitMethod(\ReflectionMethod $method, Report $report)
+    {
+        $result = call_user_func(
+            [
+                $this,
+                $method->getName()
+            ]
+        );
+
+        if ($result instanceof Report) {
+            $report->add($result);
+        }
+
+        return $report;
+    }
+
+    /**
+     * Returns the class methods.
+     *
+     * @return \ReflectionMethod[]
+     *
+     * @throws \ReflectionException
+     */
+    private function getClassMethods()
+    {
+        $class = new \ReflectionClass($this);
+
+        return $class->getMethods();
+    }
+
+    /**
+     * Has the requested option set.
+     *
+     * @param string $optionName
+     *
+     * @return bool
+     */
     protected function hasOption($optionName)
     {
         return $this->options->has($optionName);
     }
-    
+
+    /**
+     * Returns the requested option. If it does not exist then null.
+     *
+     * @param string $optionName
+     *
+     * @return mixed
+     */
     protected function getOption($optionName)
     {
         return $this->options->get($optionName);
     }
-    
-    protected function provideUsage()
-    {
-        return [];
-	}
-	
-    protected function provideUsageOptionName()
-    {
-        return 'help';
-    }
 
-    protected function showTime()
-    {
-        return false;
-    }
-	
-    private function displayUsage(array $params)
-    {
-        $usageDescription = $this->provideUsage();
-        
-        if (!empty($usageDescription) && is_array($usageDescription)) {
-            if (!empty($usageDescription['prefix']) && in_array('-' . $usageDescription['prefix'], $params)) {
-                return true;
-            } elseif (!empty($usageDescription['longPrefix']) && in_array('--' . $usageDescription['longPrefix'], $params)) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
+    /**
+     * Returns the usage as report.
+     *
+     * @return Report
+     *
+     * @throws \common_exception_Error
+     */
     private function usage()
     {
         $report = new Report(
             Report::TYPE_INFO,
             $this->provideDescription() . "\n"
         );
-        
-        $optionsDescription = $this->optionsDescription;
-        $optionsDescription[$this->provideUsageOptionName()] = $this->provideUsage();
-        
+
         $required = new Report(Report::TYPE_INFO, 'Required Arguments:');
         $optional = new Report(Report::TYPE_INFO, 'Optional Arguments:');
-        
-        foreach ($optionsDescription as $optionName => $optionParams) {
+
+        foreach ($this->optionsDescription as $optionName => $optionParams) {
             // Deal with prefixes.
             $prefixes = [];
             $optionDisplay = (!empty($optionParams['flag'])) ? '' : " ${optionName}";
-            
+
             if (!empty($optionParams['prefix'])) {
                 $prefixes[] = '-' . $optionParams['prefix'] . "${optionDisplay}";
             }
-            
+
             if (!empty($optionParams['longPrefix'])) {
                 $prefixes[] = '--' . $optionParams['longPrefix'] . "${optionDisplay}";
             }
-            
+
             $optionMsg = implode(', ', $prefixes);
             if (isset($optionParams['defaultValue'])) {
-                $optionMsg .= ' (default: ' . self::valueToString($optionParams['defaultValue']) . ')';
+                $optionMsg .= ' (default: ' . $this->valueToString($optionParams['defaultValue']) . ')';
             }
-            
+
             $optionReport = new Report(Report::TYPE_INFO, $optionMsg);
-            
+
             if (!empty($optionParams['description'])) {
                 $optionReport->add(
                     new Report(Report::TYPE_INFO, $optionParams['description'])
                 );
             }
-            
+
             $targetReport = (empty($optionParams['required'])) ? $optional : $required;
             $targetReport->add($optionReport);
         }
-        
+
         if (count($required) > 0) {
             $report->add($required);
         }
-        
+
         if (count($optional) > 0) {
             $report->add($optional);
         }
-        
+
         // A little bit of formatting...
         if (count($required) > 0 && count($optional) > 0) {
             $required->add(new Report(Report::TYPE_INFO, ""));
         }
-        
+
         return $report;
     }
-    
-    private static function valueToString($value)
+
+    private function valueToString($value)
     {
         $string = "\"${value}\"";
-        
+
         switch (gettype($value)) {
-            
+
             case 'boolean':
                 $string = ($value === true) ? 'true' : 'false';
                 break;
-                
+
             case 'integer':
             case 'double':
                 $string = $value;
         }
-        
+
         return $string;
     }
 
     /**
-     * Seconds to Duration
+     * Returns the current report.
      *
-     * Format a given number of $seconds into a duration with format [hours]:[minutes]:[seconds].
-     *
-     * @param $seconds
-     * @return string
+     * @return Report
      */
-    private static function secondsToDuration($seconds)
+    public function getReport()
     {
-        $seconds = intval($seconds);
-        $hours = floor($seconds / 3600);
-        $minutes = floor(($seconds / 60) % 60);
-        $seconds = $seconds % 60;
+        return $this->report;
+    }
 
-        return "${hours}h ${minutes}m {$seconds}s";
+    /**
+     * Sets the current report.
+     *
+     * @param Report $report
+     */
+    public function setReport($report)
+    {
+        $this->report = $report;
     }
 }
