@@ -1,21 +1,21 @@
 <?php
-/**  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- * 
+ *
  */
 
 namespace oat\oatbox\extension\script;
@@ -45,10 +45,15 @@ abstract class ScriptAction extends AbstractAction
     private $options;
 
     /**
-     * @var string
+     * @var array
      */
     private $optionsDescription;
-    
+
+    /**
+     * @var Report
+     */
+    private $report;
+
     /**
      * Provides the title of the script.
      *
@@ -65,30 +70,33 @@ abstract class ScriptAction extends AbstractAction
 
     /**
      * Run Script.
-     * 
+     *
      * Run the userland script. Implementers will use this method
      * to implement the main logic of the script.
      *
-     * @return \common_report_Report
+     * @return Report
      */
     protected abstract function run();
-    
+
     /**
      * Invoke
-     * 
+     *
      * This method makes the script invokable programatically.
      *
      * @param array $params
      *
      * @throws \common_exception_Error
      *
-     * @return \common_report_Report
+     * @return Report
      */
     public function __invoke($params)
     {
-        $report = new Report(
-            Report::TYPE_INFO,
-            $this->provideDescription() . "\n"
+        // Sets the initial report.
+        $this->setReport(
+            new Report(
+                Report::TYPE_INFO,
+                $this->provideDescription() . "\n"
+            )
         );
 
         try {
@@ -105,19 +113,32 @@ abstract class ScriptAction extends AbstractAction
             );
 
             // Initializes the trait options.
-            $report = $this->initializeTraitOptions($report);
+            $this->setReport(
+                $this->initializeTraitOptions($this->getReport())
+            );
 
             // Run the userland script.
-            $report->add($this->run());
+            $this->setReport($this->run());
 
             // Initializes the trait options.
-            $report = $this->finalizeTraitOptions($report);
+            $this->setReport(
+                $this->finalizeTraitOptions($this->getReport())
+            );
+        }
+        catch (MissingOptionException $e) {
+            $this->setReport($this->usage());
+            $this->getReport()->add(
+                new Report(
+                    Report::TYPE_ERROR,
+                    $e->getMessage()
+                )
+            );
         }
         catch (ShowUsageException $e) {
             return $this->usage();
         }
         catch (\Exception $e) {
-            $report->add(
+            $this->getReport()->add(
                 new Report(
                     Report::TYPE_ERROR,
                     $e->getMessage()
@@ -125,7 +146,7 @@ abstract class ScriptAction extends AbstractAction
             );
         }
 
-        return $report;
+        return $this->getReport();
     }
 
     /**
@@ -346,5 +367,25 @@ abstract class ScriptAction extends AbstractAction
         }
 
         return $string;
+    }
+
+    /**
+     * Returns the current report.
+     *
+     * @return Report
+     */
+    public function getReport()
+    {
+        return $this->report;
+    }
+
+    /**
+     * Sets the current report.
+     *
+     * @param Report $report
+     */
+    public function setReport($report)
+    {
+        $this->report = $report;
     }
 }
