@@ -44,13 +44,13 @@ trait DryRunModeTrait
     {
         return [
             'dryRun' => [
-                'longPrefix'  => 'dry-run',
+                'longPrefix'  => 'dryRun',
                 'required'    => false,
                 'flag'        => true,
                 'description' => 'Runs the script in dry run mode.'
             ],
             'wetRun' => [
-                'longPrefix'  => 'wet-run',
+                'longPrefix'  => 'wetRun',
                 'required'    => false,
                 'flag'        => true,
                 'description' => 'Runs the script in wet run mode.'

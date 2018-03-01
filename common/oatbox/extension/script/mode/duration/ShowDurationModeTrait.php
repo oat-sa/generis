@@ -49,7 +49,7 @@ trait ShowDurationModeTrait
     {
         return [
             'showDuration' => [
-                'longPrefix'  => 'show-duration',
+                'longPrefix'  => 'showDuration',
                 'required'    => false,
                 'flag'        => true,
                 'description' => 'Shows the script running duration.'

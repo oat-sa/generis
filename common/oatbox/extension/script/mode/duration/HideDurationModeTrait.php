@@ -49,7 +49,7 @@ trait HideDurationModeTrait
     {
         return [
             'showDuration' => [
-                'longPrefix'  => 'hide-duration',
+                'longPrefix'  => 'hideDuration',
                 'required'    => false,
                 'flag'        => true,
                 'description' => 'Hides the script running duration.'
