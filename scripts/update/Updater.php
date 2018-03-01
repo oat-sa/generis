@@ -38,6 +38,7 @@ use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use oat\generis\model\user\UserFactoryService;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\filesystem\FileSystemService;
@@ -61,6 +62,7 @@ class Updater extends common_ext_ExtensionUpdater {
     /**
      * @param string $initialVersion
      * @return string $versionUpdatedTo
+     * @throws \common_Exception
      */
     public function update($initialVersion) {
 
@@ -449,6 +451,15 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         $this->skip('6.9.0', '6.11.0');
+
+
+        if ($this->isVersion('6.11.0')){
+            $userFactory = new UserFactoryService([
+                UserFactoryService::OPTION_CLASS_USER => \core_kernel_users_GenerisUser::class
+            ]);
+            $this->getServiceManager()->register(UserFactoryService::SERVICE_ID, $userFactory);
+            $this->setVersion('6.12.0');
+        }
     }
 
     private function getReadableModelIds() {
