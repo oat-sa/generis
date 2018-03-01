@@ -20,13 +20,13 @@
  */
 namespace oat\generis\test;
 
-use \common_session_SessionManager;
-use \common_test_TestUserSession;
-use \common_ext_ExtensionsManager;
-use \common_ext_ExtensionInstaller;
-use \common_ext_ExtensionUninstaller;
-use \common_persistence_Manager;
-use oat\oatbox\NewModelIdFactory;
+use common_ext_ExtensionInstaller;
+use common_ext_ExtensionsManager;
+use common_ext_ExtensionUninstaller;
+use common_persistence_Manager;
+use common_session_SessionManager;
+use common_test_TestUserSession;
+use oat\generis\model\data\NewModelIdFactory;
 
 /**
  * @author CRP Henri Tudor - TAO Team

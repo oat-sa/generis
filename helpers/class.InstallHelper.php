@@ -119,7 +119,7 @@ class helpers_InstallHelper
     protected static function getInstaller($extension, $importLocalData)
     {
         $instance = new \common_ext_ExtensionInstaller(
-            new \oat\oatbox\NewModelIdFactory(),
+            new \oat\generis\model\data\NewModelIdFactory(),
             $extension,
             $importLocalData
         );

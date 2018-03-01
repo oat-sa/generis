@@ -20,8 +20,8 @@
  */
 
 use oat\generis\model\data\ModelManager;
+use oat\generis\model\data\NewModelIdFactory;
 use oat\oatbox\event\EventManager;
-use oat\oatbox\NewModelIdFactory;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceManager;
 
@@ -180,7 +180,6 @@ class common_ext_ExtensionInstaller
 	{
 	    helpers_TimeOutHelper::setTimeOutLimit(helpers_TimeOutHelper::MEDIUM);
 	    $rdf = ModelManager::getModel()->getRdfInterface();
-        common_Logger::f(__METHOD__ . ' ModelId: ' . $modelId . ' Rdf: ' . get_class($rdf));
 
         $tripples = $this->getExtensionModel($modelId);
 

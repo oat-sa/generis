@@ -18,14 +18,14 @@
  *
  */
 
-namespace oat\oatbox;
+namespace oat\generis\model\data;
 
 use common_ext_ExtensionException;
 use common_ext_ExtensionsManager;
 
 class NewModelIdFactory
 {
-    const MIN_INDEX = 0;
+    const MIN_INDEX = 100;
 
     /**
      * @return int

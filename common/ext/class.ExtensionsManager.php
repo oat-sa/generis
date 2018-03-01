@@ -329,6 +329,28 @@ class common_ext_ExtensionsManager extends ConfigurableService
             return $extensions[$extensionId]['extension_numeric_id'];
         }
 
-        throw new common_exception_InconsistentData('Can not find numeric extension');
+        throw new common_exception_InconsistentData('Can not find numeric extension for ' . $extensionId);
+    }
+
+    /**
+     * @return array
+     *
+     * @throws common_ext_ExtensionException
+     */
+    public function getInstalledModelIds()
+    {
+        $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+
+        if (!$extensions) {
+            return [];
+        }
+
+        $modelIds = [];
+
+        foreach ($extensions as $extension) {
+            $modelIds[] = $extension['extension_numeric_id'];
+        }
+
+        return $modelIds;
     }
 }
