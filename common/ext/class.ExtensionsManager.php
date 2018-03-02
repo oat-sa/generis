@@ -85,12 +85,16 @@ class common_ext_ExtensionsManager extends ConfigurableService
     }
 
     /**
-     * Get list of ids of installed extensions
+     * Get list of ids of installed extensions.
+     *
      * @return mixed
+     *
+     * @throws common_ext_ExtensionException
      */
     public function getInstalledExtensionsIds()
     {
         $installData = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+
         return is_array($installData) ? array_keys($installData) : array();
     }
 
@@ -266,7 +270,6 @@ class common_ext_ExtensionsManager extends ConfigurableService
      * @author Joel Bout, <joel@taotesting.com>
      *
      * @param common_ext_Extension $extension
-     * @param int $extensionNumericId
      *
      * @return boolean
      *
@@ -274,12 +277,11 @@ class common_ext_ExtensionsManager extends ConfigurableService
      * @throws common_ext_ExtensionException
      * @throws common_ext_ManifestNotFoundException
      */
-    public function registerExtension(common_ext_Extension $extension, $extensionNumericId)
+    public function registerExtension(common_ext_Extension $extension)
     {
         $entry = array(
             'installed'            => $extension->getManifest()->getVersion(),
-            'enabled'              => false,
-            'extension_numeric_id' => $extensionNumericId
+            'enabled'              => false
         );
         $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         $extensions[$extension->getId()] = $entry;
@@ -309,48 +311,5 @@ class common_ext_ExtensionsManager extends ConfigurableService
         $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         $extensions[$extension->getId()]['installed'] = $version;
         $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $extensions);
-    }
-
-    /**
-     * @param string $extensionId
-     *
-     * @return int
-     *
-     * @throws common_exception_InconsistentData
-     * @throws common_ext_ExtensionException
-     */
-    public function getModelIdByExtensionId($extensionId)
-    {
-        $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
-
-        if (isset($extensions[$extensionId]['extension_numeric_id'])
-            && is_int($extensions[$extensionId]['extension_numeric_id'])
-        ) {
-            return $extensions[$extensionId]['extension_numeric_id'];
-        }
-
-        throw new common_exception_InconsistentData('Can not find numeric extension for ' . $extensionId);
-    }
-
-    /**
-     * @return array
-     *
-     * @throws common_ext_ExtensionException
-     */
-    public function getInstalledModelIds()
-    {
-        $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
-
-        if (!$extensions) {
-            return [];
-        }
-
-        $modelIds = [];
-
-        foreach ($extensions as $extension) {
-            $modelIds[] = $extension['extension_numeric_id'];
-        }
-
-        return $modelIds;
     }
 }

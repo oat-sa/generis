@@ -20,12 +20,12 @@
 
 use oat\generis\model\data\Model;
 use oat\generis\model\data\ModelManager;
-use oat\oatbox\service\ConfigurableService;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use oat\oatbox\service\ConfigurableService;
 
 /**
  * transitory model for the smooth sql implementation
- * 
+ *
  * @author joel bout <joel@taotesting.com>
  * @package generis
  */
@@ -37,10 +37,10 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
     const OPTION_WRITEABLE_MODELS = 'writeable';
     const OPTION_NEW_TRIPLE_MODEL = 'addTo';
     const OPTION_SEARCH_SERVICE = 'search';
-    
+
     /**
      * Persistence to use for the smoothmodel
-     * 
+     *
      * @var common_persistence_SqlPersistence
      */
     private $persistence;

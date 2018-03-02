@@ -18,7 +18,6 @@
  *
  */
 
-use oat\generis\model\data\NewModelIdFactory;
 use oat\oatbox\action\Action;
 use oat\oatbox\log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
@@ -54,7 +53,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
         foreach ($sorted as $ext) {
             try {
                 if(!common_ext_ExtensionsManager::singleton()->isInstalled($ext->getId())) {
-                    $installer = new \tao_install_ExtensionInstaller(new NewModelIdFactory(), $ext);
+                    $installer = new \tao_install_ExtensionInstaller($ext);
                     $installer->install();
                     $report->add(new common_report_Report(common_report_Report::TYPE_SUCCESS, 'Installed '.$ext->getName()));
                 } else {

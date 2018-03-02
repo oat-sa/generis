@@ -26,7 +26,6 @@ use common_ext_ExtensionUninstaller;
 use common_persistence_Manager;
 use common_session_SessionManager;
 use common_test_TestUserSession;
-use oat\generis\model\data\NewModelIdFactory;
 
 /**
  * @author CRP Henri Tudor - TAO Team
@@ -127,7 +126,7 @@ abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
     {
         if (!common_ext_ExtensionsManager::singleton()->isInstalled($extid)) {
             $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extid);
-            $installer = new common_ext_ExtensionInstaller(new NewModelIdFactory(), $extension);
+            $installer = new common_ext_ExtensionInstaller($extension);
             $installer->install();
         }
     }

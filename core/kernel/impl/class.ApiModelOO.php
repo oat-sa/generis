@@ -1,31 +1,29 @@
 <?php
-/*  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
-?>
-<?php
 
+use oat\generis\model\data\ModelIdManager;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
-
-error_reporting(E_ALL);
+use oat\oatbox\service\ServiceManager;
 
 /**
  * Generis Object Oriented API - core\kernel\impl\class.ApiModelOO.php
@@ -97,29 +95,32 @@ class core_kernel_impl_ApiModelOO
      *
      * @access public
      * @author firstname and lastname of author, <author@example.org>
-     * @param  string targetNameSpace
-     * @param  string fileLocation
+     *
+     * @param $targetNameSpace
+     * @param $fileLocation
+     *
      * @return boolean
+     *
+     * @throws EasyRdf_Exception
+     * @throws common_Exception
      */
     public function importXmlRdf($targetNameSpace, $fileLocation)
     {
-        $returnValue = (bool) false;
-
-        if(!file_exists($fileLocation) || !is_readable($fileLocation)){
+        if (!file_exists($fileLocation) || !is_readable($fileLocation)) {
             throw new common_Exception("Unable to load ontology : $fileLocation");
         }
-        
-	    if(!preg_match("/#$/", $targetNameSpace)){
-			$targetNameSpace .= '#';
-		}
-		$modFactory = new core_kernel_api_ModelFactory();
-		$returnValue = $modFactory->createModel($targetNameSpace, file_get_contents($fileLocation));
-		
 
+        if (!preg_match("/#$/", $targetNameSpace)) {
+            $targetNameSpace .= '#';
+        }
 
-        return (bool) $returnValue;
+        /** @var ModelIdManager $modelManager */
+        $modelManager = ServiceManager::getServiceManager()->get(ModelIdManager::SERVICE_ID);
+
+        $modFactory = new core_kernel_api_ModelFactory($modelManager);
+
+        return $modFactory->createModel($targetNameSpace, file_get_contents($fileLocation));
     }
-
 
 
     /**
@@ -518,30 +519,10 @@ class core_kernel_impl_ApiModelOO
      */
     public static function singleton()
     {
-        $returnValue = null;
-
-        
 		if (!isset(self::$instance)) {
-			$c = __CLASS__;
-			self::$instance = new $c();
+			self::$instance = new static();
 		}
-		$returnValue = self::$instance;
-        
 
-        return $returnValue;
+        return self::$instance;
     }
-
-    /**
-     * Short description of method __construct
-     *
-     * @access private
-     * @author firstname and lastname of author, <author@example.org>
-     * @return void
-     */
-    private function __construct()
-    {
-        
-        
-    }
-
 }

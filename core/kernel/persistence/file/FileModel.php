@@ -106,39 +106,6 @@ class FileModel
         throw new \common_exception_NoImplementation('Rdfs interface not implemented for '.__CLASS__);
     }
 
-    // helper
-    
-    /**
-     * @param string $file
-     * @throws common_exception_Error
-     */
-    public static function getModelIdFromXml($file) {
-        $xml = simplexml_load_file($file);
-        $attrs = $xml->attributes('xml', true);
-        if(!isset($attrs['base']) || empty($attrs['base'])){
-            throw new common_exception_Error('The namespace of '.$file.' has to be defined with the "xml:base" attribute of the ROOT node');
-        }
-        $namespaceUri = (string) $attrs['base'];
-        $modelId = null;
-        foreach (common_ext_NamespaceManager::singleton()->getAllNamespaces() as $namespace) {
-            if ($namespace->getUri() == $namespaceUri) {
-                $modelId = $namespace->getModelId();
-            }
-        }
-        if (is_null($modelId)) {
-            \common_Logger::d('modelId not found, need to add namespace '. $namespaceUri);
-            
-            //TODO bad way, need to find better
-            $dbWrapper = \core_kernel_classes_DbWrapper::singleton();
-            $results = $dbWrapper->insert('models', array('modeluri' =>$namespaceUri));
-            $result = $dbWrapper->query('select modelid from models where modeluri = ?', array($namespaceUri));
-            $modelId = $result->fetch()['modelid'];
-            common_ext_NamespaceManager::singleton()->reset();
-            
-        }
-        return $modelId;
-    }
-
     /**
      * @return int[]
      */

@@ -61,19 +61,22 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
 
         $this->installLoadDefaultConfig();
 
-        $modelId = $this->newModeIdFactory->create();
-        $userSpaceTripleModelId = 1;
+        $modelId = $this->getModelIdManager()->setModelId($this->extension->getId());
+
+        $userSpaceModelId = $this->getModelIdManager()->getUserModelId();
 
         $model = new SmoothModel(
             [
                 SmoothModel::OPTION_PERSISTENCE      => 'default',
-                SmoothModel::OPTION_READABLE_MODELS  => [$modelId, $userSpaceTripleModelId],
-                SmoothModel::OPTION_WRITEABLE_MODELS => [$userSpaceTripleModelId],
-                SmoothModel::OPTION_NEW_TRIPLE_MODEL => $userSpaceTripleModelId,
+                SmoothModel::OPTION_READABLE_MODELS  => [$modelId, $userSpaceModelId],
+                SmoothModel::OPTION_WRITEABLE_MODELS => [$userSpaceModelId],
+                SmoothModel::OPTION_NEW_TRIPLE_MODEL => $userSpaceModelId,
                 SmoothModel::OPTION_SEARCH_SERVICE   => ComplexSearchService::SERVICE_ID
             ]
         );
+
         $model->setServiceLocator(ServiceManager::getServiceManager());
+
         ModelManager::setModel($model);
 
         $this->installOntology($modelId);

@@ -111,26 +111,4 @@ class FileModelTest extends \PHPUnit_Framework_TestCase
             )
         );
     }
-
-    /**
-     * @dataProvider modelProvider
-     * 
-     * @author Lionel Lecaque, lionel@taotesting.com
-     */
-    public function testGetModelIdFromXml($id, $file)
-    {
-        try {
-            $modelid = FileModel::getModelIdFromXml($file);
-            $this->assertEquals($id, $modelid);
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('\common_exception_Error', $e);
-            if ($id == 100) {
-                $this->assertContains('has to be defined with the "xml:base" attribute of the ROOT node', $e->getMessage());
-            } else {
-                $this->fail('unexpected error');
-            }
-        }
-    }
 }
-
-?>

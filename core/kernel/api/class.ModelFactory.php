@@ -1,4 +1,7 @@
 <?php
+
+use oat\generis\model\data\ModelIdManagerInterface;
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,83 +25,79 @@
  
  *
  */
-class core_kernel_api_ModelFactory{
-    
-    
+class core_kernel_api_ModelFactory
+{
     /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param string $namespace
-     * @return string
+     * @var ModelIdManagerInterface
      */
-    private function getModelId($namespace){
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        
-        $query = 'SELECT modelid FROM models WHERE (modeluri = ?)';
-        $results = $dbWrapper->query($query, array($namespace));
-       
-        return $results->fetchColumn(0);
+    private $modelIdManager;
 
-    }
-    
     /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param string $namespace
+     * @param ModelIdManagerInterface $modelIdManager
      */
-    private function addNewModel($namespace){
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $results = $dbWrapper->insert('models', array('modeluri' =>$namespace));
-        
-        
+    public function __construct(ModelIdManagerInterface $modelIdManager)
+    {
+        $this->modelIdManager = $modelIdManager;
     }
-    
+
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
      * @param string $namespace
      * @param string $data xml content
+     *
+     * @return bool
+     *
+     * @throws EasyRdf_Exception
+     * @throws core_kernel_persistence_Exception
      */
-    public function createModel($namespace, $data){
+    public function createModel($namespace, $data)
+    {
+        $modelId = $this->modelIdManager->getUserModelId();
 
-        $modelId = $this->getModelId($namespace);
-        if($modelId === false){
-            common_Logger::d('modelId not found, need to add namespace '. $namespace);
-            $this->addNewModel($namespace);
-            //TODO bad way, need to find better
-            $modelId = $this->getModelId($namespace);
-        }
         $modelDefinition = new EasyRdf_Graph($namespace);
-        if(is_file($data)){
+        if (is_file($data)) {
             $modelDefinition->parseFile($data);
-        }else {
+        } else {
             $modelDefinition->parse($data);
         }
         $graph = $modelDefinition->toRdfPhp();
         $resources = $modelDefinition->resources();
         $format = EasyRdf_Format::getFormat('php');
-        
+
         $data = $modelDefinition->serialise($format);
-        
-        foreach ($data as $subjectUri => $propertiesValues){
-            foreach ($propertiesValues as $prop=>$values){
+
+        foreach ($data as $subjectUri => $propertiesValues) {
+            foreach ($propertiesValues as $prop => $values) {
                 foreach ($values as $k => $v) {
-                    $this->addStatement($modelId, $subjectUri, $prop, $v['value'], isset($v['lang']) ? $v['lang'] : null);
+                    $this->addStatement(
+                        $modelId,
+                        $subjectUri,
+                        $prop,
+                        $v['value'],
+                        isset($v['lang']) ? $v['lang'] : null
+                    );
                 }
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Adds a statement to the ontology if it does not exist yet
-     * 
+     *
      * @author "Joel Bout, <joel@taotesting.com>"
      * @param int $modelId
      * @param string $subject
      * @param string $predicate
      * @param string $object
      * @param string $lang
+     *
+     * @throws core_kernel_persistence_Exception
      */
-    private function addStatement($modelId, $subject, $predicate, $object, $lang = null) {
+    private function addStatement($modelId, $subject, $predicate, $object, $lang = null)
+    {
         $result = core_kernel_classes_DbWrapper::singleton()->query(
             'SELECT count(*) FROM statements WHERE modelid = ? AND subject = ? AND predicate = ? AND object = ? AND l_language = ?',
             array($modelId, $subject, $predicate, $object, (is_null($lang)) ? '' : $lang)
@@ -122,6 +121,4 @@ class core_kernel_api_ModelFactory{
             );
         }
     }
-    
-
 }

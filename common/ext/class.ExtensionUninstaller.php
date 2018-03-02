@@ -19,6 +19,8 @@
  * 
  */
 
+use oat\generis\model\data\ModelIdManager;
+use oat\generis\model\data\ModelIdNotFoundException;
 use oat\generis\model\data\ModelManager;
 
 /**
@@ -141,6 +143,8 @@ class common_ext_ExtensionUninstaller
 	}
 
     /**
+     * Remove modelId from readable and writable list.
+     *
      * @param int $modelId
      */
     public function cleanUpPermissions($modelId)
@@ -154,16 +158,17 @@ class common_ext_ExtensionUninstaller
     }
 
     /**
+     * Get modelId for specified extension.
+     *
      * @return int
      *
-     * @throws common_exception_InconsistentData
-     * @throws common_ext_ExtensionException
+     * @throws ModelIdNotFoundException
      */
     protected function getModelId()
     {
-        /** @var common_ext_ExtensionsManager $extensionManager */
-        $extensionManager = $this->getServiceManager()->get(\common_ext_ExtensionsManager::SERVICE_ID);
+        /** @var ModelIdManager $modelIdManager */
+        $modelIdManager = $this->getServiceManager()->get(ModelIdManager::SERVICE_ID);
 
-        return $extensionManager->getModelIdByExtensionId($this->extension->getId());
+        return $modelIdManager->getModelId($this->extension->getId());
     }
 }
