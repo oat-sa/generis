@@ -458,6 +458,14 @@ class Updater extends common_ext_ExtensionUpdater {
                 UserFactoryService::OPTION_CLASS_USER => \core_kernel_users_GenerisUser::class
             ]);
             $this->getServiceManager()->register(UserFactoryService::SERVICE_ID, $userFactory);
+
+            /** @var common_ext_ExtensionsManager $extensionManager */
+            $extensionManager = $this->getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID);
+            $config = $extensionManager ->getExtensionById('generis')->getConfig('auth');
+            $config[0]['user_factory'] = UserFactoryService::SERVICE_ID;
+
+            $extensionManager->getExtensionById('generis')->setConfig('auth', array_values($config));
+
             $this->setVersion('6.12.0');
         }
     }
