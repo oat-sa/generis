@@ -110,4 +110,14 @@ class RdfWrapper
     public function getIterator() {
         throw new \common_Exception('Not implemented');
     }
+
+    /**
+     * Removes set of tripples with defined modelId.
+     *
+     * @param int $modelId
+     */
+    public function removeByModelId($modelId)
+    {
+        // TODO: Implement removeByModelId() method.
+    }
 }

@@ -52,4 +52,9 @@ interface ModelIdManagerInterface
      * @return int
      */
     public function getUserModelId();
+
+    /**
+     * @param string $key
+     */
+    public function removeKey($key);
 }

@@ -51,11 +51,21 @@ class ModelIdManager extends ConfigurableService implements ModelIdManagerInterf
         $modelIds = $this->getModelIds();
         $modelIds[$extensionId] = $modelId;
 
+        $this->setModelIds($modelIds);
+
+        return $modelId;
+    }
+
+    /**
+     * @param array $modelIds
+     *
+     * @throws \common_Exception
+     */
+    private function setModelIds(array $modelIds)
+    {
         $this->setOption(self::MODEL_ID_OPTION, $modelIds);
 
         $this->registerService(self::SERVICE_ID, $this, true);
-
-        return $modelId;
     }
 
     /**
@@ -134,5 +144,19 @@ class ModelIdManager extends ConfigurableService implements ModelIdManagerInterf
         $modelIds = $this->getModelIds();
 
         return isset($modelIds[$key]);
+    }
+
+    /**
+     * @param string $key
+     *
+     * @throws \common_Exception
+     */
+    public function removeKey($key)
+    {
+        $modelIds = $this->getModelIds();
+
+        unset($modelIds[$key]);
+
+        $this->setModelIds($modelIds);
     }
 }

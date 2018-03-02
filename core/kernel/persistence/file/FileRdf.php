@@ -20,6 +20,7 @@
 namespace oat\generis\model\kernel\persistence\file;
 
 use oat\generis\model\data\RdfInterface;
+
 /**
  * Implementation of the RDF interface for the file driver
  * 
@@ -72,5 +73,15 @@ class FileRdf
     
     public function getIterator() {
         return new FileIterator($this->file);
+    }
+
+    /**
+     * Removes set of tripples with defined modelId.
+     *
+     * @param int $modelId
+     */
+    public function removeByModelId($modelId)
+    {
+        // TODO: Implement removeByModelId() method.
     }
 }
