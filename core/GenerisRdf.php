@@ -59,10 +59,10 @@ interface GenerisRdf
     const PROPERTY_USER_LASTNAME = 'http://www.tao.lu/Ontologies/generis.rdf#userLastName';
     const PROPERTY_USER_ROLES = 'http://www.tao.lu/Ontologies/generis.rdf#userRoles';
     const PROPERTY_USER_TIMEZONE = 'http://www.tao.lu/Ontologies/generis.rdf#userTimezone';
-    const PROPERTY_USER_STATUS = 'http://www.tao.lu/Ontologies/generis.rdf#userStatus';
-    const PROPERTY_USER_STATUS_BLOCKED = 'http://www.tao.lu/Ontologies/generis.rdf#Blocked';
-    const PROPERTY_USER_BLOCKED_BY = 'http://www.tao.lu/Ontologies/generis.rdf#blockedBy';
-    const PROPERTY_USER_LOGON_FAILURES = 'http://www.tao.lu/Ontologies/generis.rdf#userLogonFailures';
+    const PROPERTY_USER_ACCOUNT_STATUS = 'http://www.tao.lu/Ontologies/generis.rdf#accountStatus';
+    const PROPERTY_USER_STATUS_LOCKED = 'http://www.tao.lu/Ontologies/generis.rdf#Locked';
+    const PROPERTY_USER_LOCKED_BY = 'http://www.tao.lu/Ontologies/generis.rdf#lockedBy';
+    const PROPERTY_USER_LOGON_FAILURES = 'http://www.tao.lu/Ontologies/generis.rdf#logonFailures';
     const PROPERTY_USER_LAST_LOGON_FAILURE_TIME = 'http://www.tao.lu/Ontologies/generis.rdf#lastLogonFailureTime';
     const INSTANCE_ROLE_GENERIS = 'http://www.tao.lu/Ontologies/generis.rdf#GenerisRole';
     const INSTANCE_ROLE_ANONYMOUS = 'http://www.tao.lu/Ontologies/generis.rdf#AnonymousRole';
