@@ -25,6 +25,7 @@
  *
  * @access public
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ * @deprecated Please, use https://github.com/oat-sa/lib-tao-dtms library for work with microseconds
  * @package helpers
  */
 class helpers_Time
@@ -41,6 +42,7 @@ class helpers_Time
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     * @deprecated
      * @return helpers_double
      */
     public static function getMicroTime()
