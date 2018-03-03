@@ -75,6 +75,24 @@ class LoginService extends ConfigurableService
     /** ??? */
     const OPTION_BLOCK_IFRAME_USAGE = 'block_iframe_usage';
 
+    /** @var core_kernel_classes_Resource */
+    private $user;
+
+    /**
+     * @param String $login
+     * @return core_kernel_classes_Resource
+     */
+    private function getUser($login)
+    {
+        if ($this->user && $this->user instanceof core_kernel_classes_Resource && $this->user->exists()) {
+            return $this->user;
+        }
+
+        $this->user = core_kernel_users_Service::singleton()->getOneUser($login);
+
+        return $this->user;
+    }
+
     /**
      * Login a user using login, password
      * @param string $userLogin
@@ -142,18 +160,17 @@ class LoginService extends ConfigurableService
 
     /**
      * Resets count of login fails in case successful login
-     * @param $login
+     * @param $user
      */
     private function resetLoginFails($login)
     {
-        $user = core_kernel_users_Service::singleton()->getOneUser($login);
-        $user->editPropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_LOGON_FAILURES), 0);
-        $user->removePropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_STATUS));
-        $user->removePropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_BLOCKED_BY));
+        $this->getUser($login)->editPropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_LOGON_FAILURES), 0);
+        $this->getUser($login)->removePropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_STATUS));
+        $this->getUser($login)->removePropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_BLOCKED_BY));
     }
 
     /**
-     * @param $login
+     * @param string $login
      * @throws \core_kernel_persistence_Exception
      */
     private function increaseLoginFails($login)
@@ -176,7 +193,7 @@ class LoginService extends ConfigurableService
      * @param core_kernel_classes_Resource $user
      * @param core_kernel_classes_Resource $by
      */
-    public function blockUser($user, $by = null)
+    public function lockUser($user, $by = null)
     {
         $user->editPropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_STATUS), GenerisRdf::PROPERTY_USER_STATUS_BLOCKED);
         $user->editPropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_BLOCKED_BY), $by ?: $user);
@@ -188,7 +205,7 @@ class LoginService extends ConfigurableService
      * @param core_kernel_classes_Resource $user
      * @return bool
      */
-    public function resetUser(core_kernel_classes_Resource $user)
+    public function unlockUser(core_kernel_classes_Resource $user)
     {
         $user->removePropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_STATUS));
         $user->removePropertyValues($this->getProperty(GenerisRdf::PROPERTY_USER_BLOCKED_BY));
@@ -202,7 +219,7 @@ class LoginService extends ConfigurableService
      * @throws \core_kernel_persistence_Exception
      * @throws \Exception
      */
-    public function isBlocked($login)
+    public function isLocked($login)
     {
         $user = core_kernel_users_Service::singleton()->getOneUser($login);
 
