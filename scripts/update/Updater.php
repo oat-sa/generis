@@ -449,9 +449,9 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('6.9.0');
         }
 
-        $this->skip('6.9.0', '6.10.0');
+        $this->skip('6.9.0', '6.11.0');
 
-        if ($this->isVersion('6.10.0')) {
+        if ($this->isVersion('6.11.0')) {
 
             // Todo: move configuration from old config in tao
 
