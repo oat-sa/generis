@@ -1,21 +1,21 @@
 <?php
-/**  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
- * 
+ *
  */
 
 use oat\generis\model\kernel\persistence\file\FileIterator;
@@ -30,6 +30,11 @@ use oat\generis\model\kernel\persistence\file\FileIterator;
 class common_ext_ExtensionModel extends AppendIterator
 {
     /**
+     * @var int
+     */
+    private $modelId;
+
+    /**
      * @param common_ext_Extension $extension
      * @param int $modelId
      *
@@ -37,33 +42,40 @@ class common_ext_ExtensionModel extends AppendIterator
      * @throws common_ext_InstallationException
      * @throws common_ext_ManifestNotFoundException
      */
-    public function __construct(common_ext_Extension $extension, $modelId) {
+    public function __construct(common_ext_Extension $extension, $modelId)
+    {
         if (!isset($modelId) || !is_int($modelId)) {
             throw new common_exception_MissingParameter('ModelId must be set');
         }
 
         parent::__construct();
-        $this->addModelFiles($extension, $modelId);
+        $this->modelId = $modelId;
+        $this->addModelFiles($extension);
     }
 
     /**
      * @param common_ext_Extension $extension
      *
-     * @param int|null $modelId
+     * @throws common_exception_MissingParameter
      * @throws common_ext_InstallationException
      * @throws common_ext_ManifestNotFoundException
      */
-    public function addModelFiles(common_ext_Extension $extension, $modelId) {
+    private function addModelFiles(common_ext_Extension $extension)
+    {
         foreach ($extension->getManifest()->getInstallModelFiles() as $rdfpath) {
             if (!file_exists($rdfpath)) {
-                throw new common_ext_InstallationException("Unable to load ontology in '${rdfpath}' because the file does not exist.");
+                throw new common_ext_InstallationException(
+                    "Unable to load ontology in '${rdfpath}' because the file does not exist."
+                );
             }
-        
+
             if (!is_readable($rdfpath)) {
-                throw new common_ext_InstallationException("Unable to load ontology in '${rdfpath}' because the file is not readable.");
+                throw new common_ext_InstallationException(
+                    "Unable to load ontology in '${rdfpath}' because the file is not readable."
+                );
             }
-            
-            $iterator = new FileIterator($rdfpath, $modelId);
+
+            $iterator = new FileIterator($rdfpath, $this->modelId);
             $this->append($iterator->getIterator());
         }
     }
