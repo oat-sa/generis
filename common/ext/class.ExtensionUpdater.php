@@ -32,6 +32,10 @@ use oat\oatbox\service\ServiceManager;
 abstract class common_ext_ExtensionUpdater
 	extends common_ext_ExtensionHandler
 {
+
+    /** @var common_report_Report */
+    private $report;
+
     /**
      * 
      * @param string $currentVersion
@@ -99,7 +103,30 @@ abstract class common_ext_ExtensionUpdater
             $this->setVersion($to);
         }
     }
-    
+
+    /**
+     * @return \common_report_Report
+     */
+    public function getReport()
+    {
+        return $this->report;
+    }
+
+    /**
+     * @param common_report_Report $report
+     * @throws common_exception_Error
+     */
+    public function addReport(\common_report_Report $report)
+    {
+        if ($this->report === null) {
+            $this->report = new \common_report_Report(
+                \common_report_Report::TYPE_INFO,
+                $this->getExtension()->getName(). ' updater report:'
+            );
+        }
+        $this->report->add($report);
+    }
+
     /**
      * Loads a service in a "safe" way, trying to convert
      * unknown classes to abstract services

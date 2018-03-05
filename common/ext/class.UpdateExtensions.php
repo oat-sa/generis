@@ -111,6 +111,12 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
                 } else {
                     $report->add(new common_report_Report(common_report_Report::TYPE_WARNING, 'Update of '.$ext->getName().' exited with version '.$currentVersion));
                 }
+
+                $updaterReport = $updater->getReport();
+                if ($updaterReport !== null) {
+                    $report->add($updater->getReport());
+                }
+
                 common_cache_FileCache::singleton()->purge();
             }
         } else {
