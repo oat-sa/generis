@@ -32,7 +32,7 @@ class common_ext_ExtensionModel extends AppendIterator
     /**
      * @var int
      */
-    private $modelId;
+    protected $modelId;
 
     /**
      * @param common_ext_Extension $extension
