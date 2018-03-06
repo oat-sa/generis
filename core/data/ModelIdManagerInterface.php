@@ -57,4 +57,11 @@ interface ModelIdManagerInterface
      * @param string $key
      */
     public function removeKey($key);
+
+    /**
+     * @param array|null $keys get all model ids when null.
+     *
+     * @return int[]
+     */
+    public function getModelIds(array $keys = null);
 }
