@@ -160,7 +160,6 @@ class PhpFilePersistenceTtlModeTest extends GenerisPhpUnitTestRunner
         $persistence->getDriver()->setOpCacheMode($opCacheMode);
     }
 
-
     /**
      * @depends testConnect
      *
@@ -172,10 +171,17 @@ class PhpFilePersistenceTtlModeTest extends GenerisPhpUnitTestRunner
      */
     public function testExists($persistence)
     {
+        $persistence->getDriver()->setTtlMode(true);
+
+        // Try to get entry.
         $this->assertFalse($persistence->exists('fakeKeyName'));
         $this->assertTrue($persistence->set('fakeKeyName', 'value'));
         $this->assertTrue($persistence->exists('fakeKeyName'));
 
+        // Try to get expired entry.
+        $this->assertFalse($persistence->exists('fakeKeyNameExistTest'));
+        $this->assertTrue($persistence->set('fakeKeyNameExistTest', 'value', -100000));
+        $this->assertFalse($persistence->exists('fakeKeyNameExistTest'));
     }
 
     /**

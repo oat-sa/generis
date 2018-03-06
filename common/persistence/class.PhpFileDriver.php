@@ -250,7 +250,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      *
      * @return mixed
      */
-    protected function getRaw($id)
+    public function getRaw($id)
     {
         $raw = @include $this->getPath($id);
 
@@ -298,7 +298,23 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     public function exists($id)
     {
-        return file_exists($this->getPath($id));
+        if (!file_exists($this->getPath($id))) {
+            return false;
+        }
+
+        if ($this->isTtlMode()) {
+            $value = $this->getRaw($id);
+
+            if (
+                !isset($value[static::CACHE_VALUE_OFFSET]) ||
+                $value[static::CACHE_VALUE_OFFSET] === false
+            )
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
     
     /**
