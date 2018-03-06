@@ -33,8 +33,8 @@ abstract class common_ext_ExtensionUpdater
 	extends common_ext_ExtensionHandler
 {
 
-    /** @var common_report_Report */
-    private $report;
+    /** @var common_report_Report[] */
+    private $reports = [];
 
     /**
      * 
@@ -105,26 +105,19 @@ abstract class common_ext_ExtensionUpdater
     }
 
     /**
-     * @return \common_report_Report
+     * @return \common_report_Report[]
      */
-    public function getReport()
+    public function getReports()
     {
-        return $this->report;
+        return $this->reports;
     }
 
     /**
      * @param common_report_Report $report
-     * @throws common_exception_Error
      */
     public function addReport(\common_report_Report $report)
     {
-        if ($this->report === null) {
-            $this->report = new \common_report_Report(
-                \common_report_Report::TYPE_INFO,
-                $this->getExtension()->getName(). ' updater report:'
-            );
-        }
-        $this->report->add($report);
+        $this->reports[] = $report;
     }
 
     /**
