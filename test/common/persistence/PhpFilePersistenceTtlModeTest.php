@@ -161,6 +161,7 @@ class PhpFilePersistenceTtlModeTest extends GenerisPhpUnitTestRunner
         $fakeCurrentTime = 1520259448;
 
         $persistence = $this->getFakedGetTimePersistenceMock($fakeCurrentTime);
+        $this->assertFalse($persistence->getDriver()->get('fakeKeyName'));
 
         // Adding to cache and op cache.
         $this->assertTrue($persistence->set('fakeKeyName', 'value', static::TTL));
