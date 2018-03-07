@@ -203,6 +203,14 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
      */
     public function cleanUpPermissions($modelId)
     {
-        // TODO: Implement cleanUpPermissions() method. [sergii.chernenko]
+        $readableModels = array_diff($this->getReadableModels(), [$modelId]);
+
+        $this->setOption(self::OPTION_READABLE_MODELS, $readableModels);
+
+        $writableModels = array_diff($this->getWritableModels(), [$modelId]);
+
+        $this->setOption(self::OPTION_WRITEABLE_MODELS, $writableModels);
+
+        ModelManager::setModel($this);
     }
 }
