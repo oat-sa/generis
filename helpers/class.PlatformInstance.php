@@ -19,7 +19,6 @@
  */
 
 use oat\generis\Helper\SystemHelper;
-use oat\tao\helpers\ApplicationHelper;
 
 
 /**
@@ -37,7 +36,8 @@ class helpers_PlatformInstance
      * @return boolean
      */
     static public function isDemo() {
-       return ApplicationHelper::isDemo();
+        common_Logger::w('Deprecated fucntion helpers_PlatformInstance::isDemo called, please use oat\tao\helpers\ApplicationHelper');
+        return false;
     }
     
     /**
