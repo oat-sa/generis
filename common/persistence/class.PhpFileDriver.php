@@ -284,11 +284,11 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     /**
      * Processes the given entry.
      *
-     * @param array $entry
+     * @param $entry
      *
      * @return array
      */
-    private function processValue(array $entry)
+    private function processValue($entry)
     {
         $expiresAt = isset($entry[static::ENTRY_EXPIRATION])
             ? $entry[static::ENTRY_EXPIRATION]
