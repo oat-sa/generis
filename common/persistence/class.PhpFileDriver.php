@@ -211,21 +211,56 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     public function get($id)
     {
+        return $this->isTtlMode()
+            ? $this->getTtlMode($id)
+            : $this->getNormalMode($id)
+        ;
+    }
+
+    /**
+     * Returns the entry in normal mode.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    protected function getNormalMode($id)
+    {
         // OPcache workaround
         if ($this->hasInCache($id)) {
             $entry = $this->getFromCache($id);
-            if ($this->isTtlMode()) {
-                $entry = $this->processValue($entry);
-            }
         } else {
             $entry = $this->getProcessedEntry($id);
-            $this->setToCache($id, $entry);
+            if ($entry !== false) {
+                $this->setToCache($id, $entry);
+            }
         }
 
-        return $this->isTtlMode()
-            ? $entry[static::ENTRY_VALUE]
-            : $entry
-        ;
+        return $entry;
+    }
+
+    /**
+     * Returns the entry in ttl mode.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    protected function getTtlMode($id)
+    {
+        // OPcache workaround
+        if ($this->hasInCache($id)) {
+            $entry = $this->processValue(
+                $this->getFromCache($id)
+            );
+        } else {
+            $entry = $this->getProcessedEntry($id);
+            if (isset($entry[static::ENTRY_VALUE]) && $entry[static::ENTRY_VALUE] !== false) {
+                $this->setToCache($id, $entry);
+            }
+        }
+
+        return $entry[static::ENTRY_VALUE];
     }
 
     /**
