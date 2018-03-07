@@ -311,68 +311,100 @@ class PhpFilePersistenceTtlModeTest extends GenerisPhpUnitTestRunner
 
         return [
             'emptyValueEmptyTtl' => [
-                false,
+                [
+                    common_persistence_PhpFileDriver::ENTRY_VALUE => false
+                ],
                 [],
             ],
+
             'emptyStringValueEmptyTtl' => [
-                '',
+                [
+                    common_persistence_PhpFileDriver::ENTRY_VALUE => ''
+                ],
                 [
                     common_persistence_PhpFileDriver::ENTRY_VALUE => '',
                 ],
             ],
+
             'stringValueEmptyTtl' => [
-                'abc',
+                [
+                    common_persistence_PhpFileDriver::ENTRY_VALUE => 'abc',
+                ],
                 [
                     common_persistence_PhpFileDriver::ENTRY_VALUE => 'abc',
                 ],
             ],
+
             'nullValueNullTtl' => [
-                null,
                 [
-                    common_persistence_PhpFileDriver::ENTRY_VALUE => null,
+                    common_persistence_PhpFileDriver::ENTRY_VALUE      => null,
+                    common_persistence_PhpFileDriver::ENTRY_EXPIRATION => null
+                ],
+                [
+                    common_persistence_PhpFileDriver::ENTRY_VALUE      => null,
                     common_persistence_PhpFileDriver::ENTRY_EXPIRATION => null
                 ],
             ],
+
             'stringValueNullTtl' => [
-                'abc',
                 [
-                    common_persistence_PhpFileDriver::ENTRY_VALUE => 'abc',
+                    common_persistence_PhpFileDriver::ENTRY_VALUE      => 'abc',
+                    common_persistence_PhpFileDriver::ENTRY_EXPIRATION => null
+                ],
+                [
+                    common_persistence_PhpFileDriver::ENTRY_VALUE      => 'abc',
                     common_persistence_PhpFileDriver::ENTRY_EXPIRATION => null
                 ],
             ],
+
             'emptyValueWithTtl' => [
-                false,
+                [
+                    common_persistence_PhpFileDriver::ENTRY_VALUE      => false,
+                    common_persistence_PhpFileDriver::ENTRY_EXPIRATION => $ttlRaisedTimestamp
+                ],
                 [
                     common_persistence_PhpFileDriver::ENTRY_EXPIRATION => $ttlRaisedTimestamp
                 ],
                 $timeStamp
             ],
             'emptyStringValueWithTtl' => [
-                '',
                 [
-                    common_persistence_PhpFileDriver::ENTRY_VALUE => '',
+                    common_persistence_PhpFileDriver::ENTRY_VALUE      => '',
+                    common_persistence_PhpFileDriver::ENTRY_EXPIRATION => $ttlRaisedTimestamp
+                ],
+                [
+                    common_persistence_PhpFileDriver::ENTRY_VALUE      => '',
                     common_persistence_PhpFileDriver::ENTRY_EXPIRATION => $ttlRaisedTimestamp
                 ],
                 $timeStamp
             ],
             'stringValueWithTtl' => [
-                'abc',
                 [
-                    common_persistence_PhpFileDriver::ENTRY_VALUE => 'abc',
+                    common_persistence_PhpFileDriver::ENTRY_VALUE      => 'abc',
+                    common_persistence_PhpFileDriver::ENTRY_EXPIRATION => $ttlRaisedTimestamp
+                ],
+                [
+                    common_persistence_PhpFileDriver::ENTRY_VALUE      => 'abc',
                     common_persistence_PhpFileDriver::ENTRY_EXPIRATION => $ttlRaisedTimestamp
                 ],
                 $timeStamp
             ],
             'stringValueWithExpiredTtl' => [
-                false,
                 [
-                    common_persistence_PhpFileDriver::ENTRY_VALUE => 'abc',
+                    common_persistence_PhpFileDriver::ENTRY_VALUE      => false,
+                    common_persistence_PhpFileDriver::ENTRY_EXPIRATION => $timeStamp
+                ],
+                [
+                    common_persistence_PhpFileDriver::ENTRY_VALUE      => 'abc',
                     common_persistence_PhpFileDriver::ENTRY_EXPIRATION => $timeStamp
                 ],
                 ($timeStamp + static::TTL)
             ],
             'stringValueWithEqualTtl' => [
-                false,
+                [
+                    common_persistence_PhpFileDriver::ENTRY_VALUE      => false,
+                    common_persistence_PhpFileDriver::ENTRY_EXPIRATION => $timeStamp
+                ],
                 [
                     common_persistence_PhpFileDriver::ENTRY_VALUE => 'abc',
                     common_persistence_PhpFileDriver::ENTRY_EXPIRATION => $timeStamp
