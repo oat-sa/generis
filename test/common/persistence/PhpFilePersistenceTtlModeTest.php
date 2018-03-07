@@ -51,24 +51,17 @@ class PhpFilePersistenceTtlModeTest extends GenerisPhpUnitTestRunner
         $this->root = vfsStream::setup('data');
     }
 
-    public function testGetPersistence()
-    {
-        $driver = common_persistence_Persistence::getPersistence('cache');
-        $this->assertInstanceOf('common_persistence_KeyValuePersistence', $driver);
-
-    }
-
-
     public function testConnect()
     {
         $params = array(
             'dir' => vfsStream::url('data'),
             'humanReadable' => true,
-            common_persistence_PhpFileDriver::TTL_MODE_OFFSET => true,
+            common_persistence_PhpFileDriver::OPTION_TTL => true,
         );
         $driver = new common_persistence_PhpFileDriver();
         $persistence = $driver->connect('test', $params);
         $this->assertInstanceOf('common_persistence_KeyValuePersistence', $persistence);
+
         return $persistence;
     }
 
@@ -113,7 +106,7 @@ class PhpFilePersistenceTtlModeTest extends GenerisPhpUnitTestRunner
         $params = array(
             'dir' => vfsStream::url('data'),
             'humanReadable' => true,
-            common_persistence_PhpFileDriver::TTL_MODE_OFFSET => true,
+            common_persistence_PhpFileDriver::OPTION_TTL => true,
         );
         $persistence = $driverMock->connect('testSetWithTtl', $params);
 
@@ -139,25 +132,12 @@ class PhpFilePersistenceTtlModeTest extends GenerisPhpUnitTestRunner
      */
     public function testGet($persistence)
     {
-        $opCacheMode = $persistence->getDriver()->isOpCacheMode();
-        // Forcing op cache mode.
-        $persistence->getDriver()->setOpCacheMode(true);
-
         // Adding to cache and op cache.
         $this->assertTrue($persistence->set('fakeKeyName', 'value'));
         $this->assertEquals('value', $persistence->getDriver()->get('fakeKeyName'));
 
-        // Reading from op cache.
         $this->assertTrue($persistence->set('fakeKeyName', 'value'));
         $this->assertEquals('value', $persistence->getDriver()->get('fakeKeyName'));
-
-        // Reading from cache.
-        $persistence->getDriver()->setOpCacheMode(false);
-        $this->assertTrue($persistence->set('fakeKeyName', 'value'));
-        $this->assertEquals('value', $persistence->getDriver()->get('fakeKeyName'));
-
-        // Restoring to original op cache mode.
-        $persistence->getDriver()->setOpCacheMode($opCacheMode);
     }
 
     /**
@@ -212,32 +192,12 @@ class PhpFilePersistenceTtlModeTest extends GenerisPhpUnitTestRunner
      */
     public function testIncr($persistence)
     {
-        $opCacheMode = $persistence->getDriver()->isOpCacheMode();
-        // Forcing op cache mode.
-        $persistence->getDriver()->setOpCacheMode(true);
-
-        $this->assertTrue($persistence->set('fakeKeyName', 0));
-        $this->assertTrue($persistence->incr('fakeKeyName'));
-        $this->assertEquals(1, $persistence->get('fakeKeyName'));
-        $this->assertTrue($persistence->incr('fakeKeyName'));
-        $this->assertEquals(2, $persistence->get('fakeKeyName'));
-
-        // Forcing cache mode.
-        $persistence->getDriver()->setOpCacheMode(false);
-        $this->assertTrue($persistence->incr('fakeKeyName'));
-        $this->assertEquals(3, $persistence->get('fakeKeyName'));
-        $this->assertTrue($persistence->incr('fakeKeyName'));
-        $this->assertEquals(4, $persistence->get('fakeKeyName'));
-
-        // Forcing op cache mode.
-        $persistence->getDriver()->setOpCacheMode(true);
-        $this->assertTrue($persistence->incr('fakeKeyName'));
-        $this->assertEquals(5, $persistence->get('fakeKeyName'));
-        $this->assertTrue($persistence->incr('fakeKeyName'));
-        $this->assertEquals(6, $persistence->get('fakeKeyName'));
-
-        // Restoring to original op cache mode.
-        $persistence->getDriver()->setOpCacheMode($opCacheMode);
+        $key = 'testIncr';
+        $this->assertTrue($persistence->set($key, 0));
+        $this->assertTrue($persistence->incr($key));
+        $this->assertEquals(1, $persistence->get($key));
+        $this->assertTrue($persistence->incr($key));
+        $this->assertEquals(2, $persistence->get($key));
     }
 
     /**
@@ -251,32 +211,13 @@ class PhpFilePersistenceTtlModeTest extends GenerisPhpUnitTestRunner
      */
     public function testDecr($persistence)
     {
-        $opCacheMode = $persistence->getDriver()->isOpCacheMode();
-        // Forcing op cache mode.
-        $persistence->getDriver()->setOpCacheMode(true);
+        $key = 'testDecr';
 
-        $this->assertTrue($persistence->set('fakeKeyName', 10));
-        $this->assertTrue($persistence->decr('fakeKeyName'));
-        $this->assertEquals(9, $persistence->get('fakeKeyName'));
-        $this->assertTrue($persistence->decr('fakeKeyName'));
-        $this->assertEquals(8, $persistence->get('fakeKeyName'));
-
-        // Forcing cache mode.
-        $persistence->getDriver()->setOpCacheMode(false);
-        $this->assertTrue($persistence->decr('fakeKeyName'));
-        $this->assertEquals(7, $persistence->get('fakeKeyName'));
-        $this->assertTrue($persistence->decr('fakeKeyName'));
-        $this->assertEquals(6, $persistence->get('fakeKeyName'));
-
-        // Forcing op cache mode.
-        $persistence->getDriver()->setOpCacheMode(true);
-        $this->assertTrue($persistence->decr('fakeKeyName'));
-        $this->assertEquals(5, $persistence->get('fakeKeyName'));
-        $this->assertTrue($persistence->decr('fakeKeyName'));
-        $this->assertEquals(4, $persistence->get('fakeKeyName'));
-
-        // Restoring to original op cache mode.
-        $persistence->getDriver()->setOpCacheMode($opCacheMode);
+        $this->assertTrue($persistence->set($key, 10));
+        $this->assertTrue($persistence->decr($key));
+        $this->assertEquals(9, $persistence->get($key));
+        $this->assertTrue($persistence->decr($key));
+        $this->assertEquals(8, $persistence->get($key));
     }
 
     /**
@@ -330,23 +271,6 @@ class PhpFilePersistenceTtlModeTest extends GenerisPhpUnitTestRunner
     }
 
     /**
-     * Tests the op cache mode.
-     */
-    public function testOpCacheMode()
-    {
-        $driver = new common_persistence_PhpFileDriver();
-
-        $persistence = $driver->connect('testOpCache', []);
-        $this->assertTrue($persistence->getDriver()->isOpCacheMode());
-
-        $persistence = $driver->connect('testOpCache', [common_persistence_PhpFileDriver::OP_CACHE_MODE_OFFSET => true]);
-        $this->assertTrue($persistence->getDriver()->isOpCacheMode());
-
-        $persistence = $driver->connect('testOpCache', [common_persistence_PhpFileDriver::OP_CACHE_MODE_OFFSET => false]);
-        $this->assertFalse($persistence->getDriver()->isOpCacheMode());
-    }
-
-    /**
      * Tests the processValue method.
      *
      * @param $expected
@@ -393,65 +317,65 @@ class PhpFilePersistenceTtlModeTest extends GenerisPhpUnitTestRunner
             'emptyStringValueEmptyTtl' => [
                 '',
                 [
-                    common_persistence_PhpFileDriver::CACHE_VALUE_OFFSET => '',
+                    common_persistence_PhpFileDriver::ENTRY_VALUE => '',
                 ],
             ],
             'stringValueEmptyTtl' => [
                 'abc',
                 [
-                    common_persistence_PhpFileDriver::CACHE_VALUE_OFFSET => 'abc',
+                    common_persistence_PhpFileDriver::ENTRY_VALUE => 'abc',
                 ],
             ],
             'nullValueNullTtl' => [
                 null,
                 [
-                    common_persistence_PhpFileDriver::CACHE_VALUE_OFFSET => null,
-                    common_persistence_PhpFileDriver::CACHE_EXPIRES_AT_OFFSET => null
+                    common_persistence_PhpFileDriver::ENTRY_VALUE => null,
+                    common_persistence_PhpFileDriver::ENTRY_EXPIRATION => null
                 ],
             ],
             'stringValueNullTtl' => [
                 'abc',
                 [
-                    common_persistence_PhpFileDriver::CACHE_VALUE_OFFSET => 'abc',
-                    common_persistence_PhpFileDriver::CACHE_EXPIRES_AT_OFFSET => null
+                    common_persistence_PhpFileDriver::ENTRY_VALUE => 'abc',
+                    common_persistence_PhpFileDriver::ENTRY_EXPIRATION => null
                 ],
             ],
             'emptyValueWithTtl' => [
                 false,
                 [
-                    common_persistence_PhpFileDriver::CACHE_EXPIRES_AT_OFFSET => $ttlRaisedTimestamp
+                    common_persistence_PhpFileDriver::ENTRY_EXPIRATION => $ttlRaisedTimestamp
                 ],
                 $timeStamp
             ],
             'emptyStringValueWithTtl' => [
                 '',
                 [
-                    common_persistence_PhpFileDriver::CACHE_VALUE_OFFSET => '',
-                    common_persistence_PhpFileDriver::CACHE_EXPIRES_AT_OFFSET => $ttlRaisedTimestamp
+                    common_persistence_PhpFileDriver::ENTRY_VALUE => '',
+                    common_persistence_PhpFileDriver::ENTRY_EXPIRATION => $ttlRaisedTimestamp
                 ],
                 $timeStamp
             ],
             'stringValueWithTtl' => [
                 'abc',
                 [
-                    common_persistence_PhpFileDriver::CACHE_VALUE_OFFSET => 'abc',
-                    common_persistence_PhpFileDriver::CACHE_EXPIRES_AT_OFFSET => $ttlRaisedTimestamp
+                    common_persistence_PhpFileDriver::ENTRY_VALUE => 'abc',
+                    common_persistence_PhpFileDriver::ENTRY_EXPIRATION => $ttlRaisedTimestamp
                 ],
                 $timeStamp
             ],
             'stringValueWithExpiredTtl' => [
                 false,
                 [
-                    common_persistence_PhpFileDriver::CACHE_VALUE_OFFSET => 'abc',
-                    common_persistence_PhpFileDriver::CACHE_EXPIRES_AT_OFFSET => $timeStamp
+                    common_persistence_PhpFileDriver::ENTRY_VALUE => 'abc',
+                    common_persistence_PhpFileDriver::ENTRY_EXPIRATION => $timeStamp
                 ],
                 ($timeStamp + static::TTL)
             ],
             'stringValueWithEqualTtl' => [
                 false,
                 [
-                    common_persistence_PhpFileDriver::CACHE_VALUE_OFFSET => 'abc',
-                    common_persistence_PhpFileDriver::CACHE_EXPIRES_AT_OFFSET => $timeStamp
+                    common_persistence_PhpFileDriver::ENTRY_VALUE => 'abc',
+                    common_persistence_PhpFileDriver::ENTRY_EXPIRATION => $timeStamp
                 ],
                 $timeStamp
             ],

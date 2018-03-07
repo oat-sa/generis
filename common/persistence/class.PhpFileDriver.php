@@ -25,24 +25,19 @@
 class common_persistence_PhpFileDriver implements common_persistence_KvDriver, common_persistence_Purgable
 {
     /**
-     * The op cache mode offset in the connection parameters.
-     */
-    const OP_CACHE_MODE_OFFSET = 'opCacheMode';
-
-    /**
      * The TTL mode offset in the connection parameters.
      */
-    const TTL_MODE_OFFSET = 'ttlMode';
+    const OPTION_TTL = 'ttlMode';
 
     /**
      * The value offset in the cache record.
      */
-    const CACHE_VALUE_OFFSET = 'value';
+    const ENTRY_VALUE = 'value';
 
     /**
      * The expiration timestamp of the cache record.
      */
-    const CACHE_EXPIRES_AT_OFFSET = 'expiresAt';
+    const ENTRY_EXPIRATION = 'expiresAt';
 
     /**
      * List of characters permited in filename
@@ -73,11 +68,6 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * @var boolean
      */
     private $humanReadable;
-
-    /**
-     * @var bool
-     */
-    private $opCacheMode;
 
     /**
      * @var bool
@@ -116,12 +106,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
 
         // Sets ttl mode TRUE when the passed ttl mode is true.
         $this->setTtlMode(
-            (isset($params[static::TTL_MODE_OFFSET]) && $params[static::TTL_MODE_OFFSET] == true)
-        );
-
-        // Sets op cache mode to false when the passed op cache mode is false.
-        $this->setOpCacheMode(
-            !(isset($params[static::OP_CACHE_MODE_OFFSET]) && $params[static::OP_CACHE_MODE_OFFSET] == false)
+            (isset($params[static::OPTION_TTL]) && $params[static::OPTION_TTL] == true)
         );
 
         return new common_persistence_KeyValuePersistence($params, $this);
@@ -138,8 +123,8 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     {
         if ($this->isTtlMode()) {
             $value = [
-                static::CACHE_VALUE_OFFSET      => $value,
-                static::CACHE_EXPIRES_AT_OFFSET => $this->calculateExpiresAt($ttl),
+                static::ENTRY_VALUE      => $value,
+                static::ENTRY_EXPIRATION => $this->calculateExpiresAt($ttl),
             ];
         } else {
             if (null !== $ttl) {
@@ -150,7 +135,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             }
         }
 
-        return $this->writeCacheFile($id, $value);
+        return $this->writeFile($id, $value);
     }
 
     /**
@@ -178,7 +163,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      *
      * @throws \common_exception_Error
      */
-    private function writeCacheFile($id, $value)
+    private function writeFile($id, $value, $preWriteCallable = [])
     {
         $filePath = $this->getPath($id);
         $dirname = dirname($filePath);
@@ -186,27 +171,26 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             mkdir($dirname, self::DEFAULT_MASK, true);
         }
 
-        $string = $this->getContent($id, $value);
-
         // we first open with 'c' in case the flock fails
         // 'w' would empty the file that someone else might be working on
         if (false !== ($fp = @fopen($filePath, 'c')) && true === flock($fp, LOCK_EX)) {
             // We first need to truncate.
             ftruncate($fp, 0);
 
+            // Runs the pre write callable.
+            if (is_callable($preWriteCallable)) {
+                $value = call_user_func($preWriteCallable, $id);
+            }
+
+            $string = $this->getContent($id, $value);
             $success = fwrite($fp, $string);
             @flock($fp, LOCK_UN);
             @fclose($fp);
             if ($success) {
                 // OPcache workaround
-                if ($this->isOpCacheMode()) {
-                    $this->cache[$id] = $value;
-                    if ($this->isTtlMode() && isset($value[static::CACHE_VALUE_OFFSET])) {
-                        $this->cache[$id] = $value[static::CACHE_VALUE_OFFSET];
-                    }
-                    if (function_exists('opcache_invalidate')) {
-                        opcache_invalidate($filePath, true);
-                    }
+                $this->setToCache($id, $value);
+                if (function_exists('opcache_invalidate')) {
+                    opcache_invalidate($filePath, true);
                 }
             } else {
                 common_Logger::w('Could not write '.$filePath);
@@ -226,21 +210,20 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     public function get($id)
     {
-        if ($this->isOpCacheMode() && isset($this->cache[$id])) {
-            // OPcache workaround
-            return $this->cache[$id];
+        // OPcache workaround
+        $value = $this->getFromCache($id);
+        if ($value !== false) {
+            return $this->isTtlMode()
+                ? $value[static::ENTRY_VALUE]
+                : $value
+            ;
         }
+        $this->setToCache($id, $value);
 
-        $value = $this->isTtlMode()
-            ? $this->getRaw($id)[static::CACHE_VALUE_OFFSET]
-            : $this->getRaw($id)
+        return $this->isTtlMode()
+            ? $this->getProcessedEntry($id)[static::ENTRY_VALUE]
+            : $this->getProcessedEntry($id)
         ;
-
-        if ($this->isOpCacheMode()) {
-            $this->cache[$id] = $value;
-        }
-
-        return $value;
     }
 
     /**
@@ -250,12 +233,12 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      *
      * @return mixed
      */
-    public function getRaw($id)
+    public function getProcessedEntry($id)
     {
         $raw = @include $this->getPath($id);
 
         if ($this->isTtlMode()) {
-            $raw[static::CACHE_VALUE_OFFSET] = $this->processValue($raw);
+            $raw[static::ENTRY_VALUE] = $this->processValue($raw);
         }
 
         return $raw;
@@ -270,13 +253,13 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     private function processValue($value)
     {
-        $expiresAt = isset($value[static::CACHE_EXPIRES_AT_OFFSET])
-            ? $value[static::CACHE_EXPIRES_AT_OFFSET]
+        $expiresAt = isset($value[static::ENTRY_EXPIRATION])
+            ? $value[static::ENTRY_EXPIRATION]
             : null
         ;
 
-        if (isset($value[static::CACHE_VALUE_OFFSET]) && ($expiresAt === null || $expiresAt > $this->getTime())) {
-            return $value[static::CACHE_VALUE_OFFSET];
+        if (isset($value[static::ENTRY_VALUE]) && ($expiresAt === null || $expiresAt > $this->getTime())) {
+            return $value[static::ENTRY_VALUE];
         }
 
         return false;
@@ -303,11 +286,11 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
         }
 
         if ($this->isTtlMode()) {
-            $value = $this->getRaw($id);
+            $value = $this->getProcessedEntry($id);
 
             if (
-                !isset($value[static::CACHE_VALUE_OFFSET]) ||
-                $value[static::CACHE_VALUE_OFFSET] === false
+                !isset($value[static::ENTRY_VALUE]) ||
+                $value[static::ENTRY_VALUE] === false
             )
             {
                 return false;
@@ -326,14 +309,13 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
         $filePath = $this->getPath($id);
 
         // OPcache workaround
-        if ($this->isOpCacheMode()) {
-            unset($this->cache[$id]);
+        unset($this->cache[$id]);
 
-            // invalidate opcache first, fails on already deleted file
-            if (function_exists('opcache_invalidate')) {
-                opcache_invalidate($filePath, true);
-            }
+        // invalidate opcache first, fails on already deleted file
+        if (function_exists('opcache_invalidate')) {
+            opcache_invalidate($filePath, true);
         }
+
         $success = @unlink($filePath);
         
         return $success;
@@ -350,15 +332,30 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     public function incr($id)
     {
-        $value = $this->getRaw($id);
+        return $this->writeFile($id, '', [$this, 'getIncreasedValueEntry']);
+    }
+
+    /**
+     * Returns the increased value entry.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    private function getIncreasedValueEntry($id)
+    {
+        $value = $this->getFromCache($id);
+        if ($value === false) {
+            $value = $this->getProcessedEntry($id);
+        }
 
         if ($this->isTtlMode()) {
-            $value[static::CACHE_VALUE_OFFSET]++;
+            $value[static::ENTRY_VALUE]++;
         } else {
             $value++;
         }
 
-        return $this->writeCacheFile($id, $value);
+        return $value;
     }
 
     /**
@@ -372,15 +369,30 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     public function decr($id)
     {
-        $value = $this->getRaw($id);
+        return $this->writeFile($id, '', [$this, 'getDecreasedValueEntry']);
+    }
+
+    /**
+     * Returns the decreased value entry.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    private function getDecreasedValueEntry($id)
+    {
+        $value = $this->getFromCache($id);
+        if ($value === false) {
+            $value = $this->getProcessedEntry($id);
+        }
 
         if ($this->isTtlMode()) {
-            $value[static::CACHE_VALUE_OFFSET]--;
+            $value[static::ENTRY_VALUE]--;
         } else {
             $value--;
         }
 
-        return $this->writeCacheFile($id, $value);
+        return $value;
     }
 
     /**
@@ -447,23 +459,29 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     }
 
     /**
-     * Returns TRUE when the connection is in op cache mode.
+     * Sets the requested value to the cache.
      *
-     * @return bool
+     * @param $id
+     * @param $value
      */
-    public function isOpCacheMode()
+    protected function setToCache($id, $value)
     {
-        return $this->opCacheMode;
+        $this->cache[$id] = $value;
     }
 
     /**
-     * Sets the op cache mode.
+     * Returns the requested element from cache or FALSE if it does not exist.
      *
-     * @param bool $opCacheMode
+     * @param $id
+     *
+     * @return bool|mixed
      */
-    public function setOpCacheMode($opCacheMode)
+    protected function getFromCache($id)
     {
-        $this->opCacheMode = $opCacheMode;
+        return isset($this->cache[$id])
+            ? $this->cache[$id]
+            : false
+        ;
     }
 
     /**
