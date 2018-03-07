@@ -213,15 +213,18 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     {
         // OPcache workaround
         if ($this->hasInCache($id)) {
-            $value = $this->getFromCache($id);
+            $entry = $this->getFromCache($id);
+            if ($this->isTtlMode()) {
+                $entry = $this->processValue($entry);
+            }
         } else {
-            $value = $this->getProcessedEntry($id);
-            $this->setToCache($id, $value);
+            $entry = $this->getProcessedEntry($id);
+            $this->setToCache($id, $entry);
         }
 
         return $this->isTtlMode()
-            ? $value[static::ENTRY_VALUE]
-            : $value
+            ? $entry[static::ENTRY_VALUE]
+            : $entry
         ;
     }
 
@@ -286,11 +289,11 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
         }
 
         if ($this->isTtlMode()) {
-            $value = $this->getProcessedEntry($id);
+            $entry = $this->getProcessedEntry($id);
 
             if (
-                !isset($value[static::ENTRY_VALUE]) ||
-                $value[static::ENTRY_VALUE] === false
+                !isset($entry[static::ENTRY_VALUE]) ||
+                $entry[static::ENTRY_VALUE] === false
             )
             {
                 return false;
@@ -347,18 +350,18 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     private function getIncreasedValueEntry($id)
     {
         if ($this->hasInCache($id)) {
-            $value = $this->getFromCache($id);
+            $entry = $this->getFromCache($id);
         } else {
-            $value = $this->getProcessedEntry($id);
+            $entry = $this->getProcessedEntry($id);
         }
 
         if ($this->isTtlMode()) {
-            $value[static::ENTRY_VALUE]++;
+            $entry[static::ENTRY_VALUE]++;
         } else {
-            $value++;
+            $entry++;
         }
 
-        return $value;
+        return $entry;
     }
 
     /**
@@ -385,18 +388,18 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     private function getDecreasedValueEntry($id)
     {
         if ($this->hasInCache($id)) {
-            $value = $this->getFromCache($id);
+            $entry = $this->getFromCache($id);
         } else {
-            $value = $this->getProcessedEntry($id);
+            $entry = $this->getProcessedEntry($id);
         }
 
         if ($this->isTtlMode()) {
-            $value[static::ENTRY_VALUE]--;
+            $entry[static::ENTRY_VALUE]--;
         } else {
-            $value--;
+            $entry--;
         }
 
-        return $value;
+        return $entry;
     }
 
     /**
@@ -463,18 +466,18 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     }
 
     /**
-     * Sets the requested value to the cache.
+     * Sets the requested entry to the cache.
      *
      * @param $id
-     * @param $value
+     * @param $entry
      */
-    protected function setToCache($id, $value)
+    protected function setToCache($id, $entry)
     {
-        $this->cache[$id] = $value;
+        $this->cache[$id] = $entry;
     }
 
     /**
-     * Returns the requested element from cache.
+     * Returns the requested entry from cache.
      *
      * @param $id
      *
@@ -492,7 +495,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     }
 
     /**
-     * Returns TRUE if the requested element exists in the cache, otherwise FALSE.
+     * Returns TRUE if the requested entry exists in the cache, otherwise FALSE.
      *
      * @param $id
      *

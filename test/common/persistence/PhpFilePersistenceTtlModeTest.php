@@ -94,21 +94,7 @@ class PhpFilePersistenceTtlModeTest extends GenerisPhpUnitTestRunner
         $timeStamp = 1520259448;
         $ttlRaisedTimestamp = $timeStamp + static::TTL;
 
-        $driverMock = $this->getMockBuilder(common_persistence_PhpFileDriver::class)
-            ->setMethods(['getTime'])
-            ->getMock()
-        ;
-        $driverMock->expects($this->once())
-            ->method('getTime')
-            ->willReturn($timeStamp)
-        ;
-
-        $params = array(
-            'dir' => vfsStream::url('data'),
-            'humanReadable' => true,
-            common_persistence_PhpFileDriver::OPTION_TTL => true,
-        );
-        $persistence = $driverMock->connect('testSetWithTtl', $params);
+        $persistence = $this->getFakedGetTimePersistenceMock($timeStamp);
 
         $return = $persistence->set('fakeKeyName', 'value', static::TTL);
         $this->assertTrue($this->root->hasChild('fakeKeyName.php'));
@@ -119,6 +105,33 @@ class PhpFilePersistenceTtlModeTest extends GenerisPhpUnitTestRunner
             preg_replace('/\s+/', '', $content)
         );
         $this->assertTrue($return);
+    }
+
+    /**
+     * Returns a persistence instance with a php file driver where the getTime method is mocked.
+     *
+     * @param int $fakeTimeStamp
+     *
+     * @return mixed
+     */
+    private function getFakedGetTimePersistenceMock($fakeTimeStamp)
+    {
+        $driverMock = $this->getMockBuilder(common_persistence_PhpFileDriver::class)
+            ->setMethods(['getTime'])
+            ->getMock()
+        ;
+        $driverMock->expects($this->any())
+            ->method('getTime')
+            ->willReturn($fakeTimeStamp)
+        ;
+
+        $params = array(
+            'dir' => vfsStream::url('data'),
+            'humanReadable' => true,
+            common_persistence_PhpFileDriver::OPTION_TTL => true,
+        );
+
+        return $driverMock->connect('testWithTtl', $params);
     }
 
     /**
@@ -138,6 +151,23 @@ class PhpFilePersistenceTtlModeTest extends GenerisPhpUnitTestRunner
 
         $this->assertTrue($persistence->set('fakeKeyName', 'value'));
         $this->assertEquals('value', $persistence->getDriver()->get('fakeKeyName'));
+    }
+
+    /**
+     * Test for the get method with ttl.
+     */
+    public function testGetTtl()
+    {
+        $fakeCurrentTime = 1520259448;
+
+        $persistence = $this->getFakedGetTimePersistenceMock($fakeCurrentTime);
+
+        // Adding to cache and op cache.
+        $this->assertTrue($persistence->set('fakeKeyName', 'value', static::TTL));
+        $this->assertEquals('value', $persistence->getDriver()->get('fakeKeyName'));
+
+        $this->assertTrue($persistence->set('fakeKeyName', 'value', -10000));
+        $this->assertFalse($persistence->getDriver()->get('fakeKeyName'));
     }
 
     /**
