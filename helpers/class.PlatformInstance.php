@@ -18,28 +18,34 @@
  *
  */
 
+use oat\generis\Helper\SystemHelper;
+
+
 /**
  * A utility class focusing on the current instance.
  * 
  * @author Joel Bout <joel@taotesting.com>
- *
+ * @deprecated
  */
-class helpers_PlatformInstance {
-    
+class helpers_PlatformInstance
+{
     /**
      * Returns a whenever or not the current instance is used as demo instance
-     * 
+     *
+     * @deprecated use ApplicationHelper::isDemo
      * @return boolean
      */
     static public function isDemo() {
-        return in_array(TAO_RELEASE_STATUS, array('demo', 'demoA', 'demoB', 'demoS'));
+        common_Logger::w('Deprecated fucntion helpers_PlatformInstance::isDemo called, please use oat\tao\helpers\ApplicationHelper');
+        return false;
     }
     
     /**
      * Returns whenever or not Tao is installed on windows
+     * @deprecated use SystemHelper::isWindows
      * @return boolean
      */
     static public function isWindows() {
-        return strtoupper(substr(PHP_OS, 0, 3)) == 'WIN';
+        return SystemHelper::isWindows();
     }
 }
