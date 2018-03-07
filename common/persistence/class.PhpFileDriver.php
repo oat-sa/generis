@@ -218,11 +218,13 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
                 : $value
             ;
         }
+
+        $value = $this->getProcessedEntry($id);
         $this->setToCache($id, $value);
 
         return $this->isTtlMode()
-            ? $this->getProcessedEntry($id)[static::ENTRY_VALUE]
-            : $this->getProcessedEntry($id)
+            ? $value[static::ENTRY_VALUE]
+            : $value
         ;
     }
 
