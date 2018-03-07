@@ -64,9 +64,14 @@ class FileSystemService extends ConfigurableService
     }
 
     /**
-     * 
+     * Get FileSystem by ID
+     *
+     * Retrieve an existing FileSystem by ID.
+     *
      * @param string $id
      * @return FileSystem
+     * @throws \common_exception_Error
+     * @throws \common_exception_NotFound
      */
     public function getFileSystem($id)
     {
