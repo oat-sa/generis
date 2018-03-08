@@ -21,8 +21,9 @@ namespace oat\generis\test\model\kernel\persistence\file;
 
 use oat\generis\model\kernel\persistence\file\FileModel;
 use \common_exception_MissingParameter;
+use oat\generis\test\GenerisPhpUnitTestRunner;
 
-class FileModelTest extends \PHPUnit_Framework_TestCase
+class FileModelTest extends GenerisPhpUnitTestRunner
 {
 
     /**
@@ -95,7 +96,7 @@ class FileModelTest extends \PHPUnit_Framework_TestCase
      */
     public function modelProvider()
     {
-        $dir = GenerisPhpUnitTestRunner::getSampleDir();
+        $dir = $this->getSampleDir();
         return array(
             array(
                 6,

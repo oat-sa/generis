@@ -70,6 +70,7 @@
     "autoload" : {
         "psr-4" : {
             "oat\\generis\\model\\" : "core/",
+            "oat\\generis\\Helper\\" : "helpers/",
             "oat\\oatbox\\" : "common/oatbox/",
             "oat\\generis\\test\\": "test/",
             "oat\\generis\\scripts\\": "scripts/"
