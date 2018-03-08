@@ -30,12 +30,12 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     const OPTION_TTL = 'ttlMode';
 
     /**
-     * The value offset in the cache record.
+     * The value offset in the record.
      */
     const ENTRY_VALUE = 'value';
 
     /**
-     * The expiration timestamp of the cache record.
+     * The expiration timestamp of the record.
      */
     const ENTRY_EXPIRATION = 'expiresAt';
 
@@ -74,14 +74,6 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     private $ttlMode;
 
-    /**
-     * Workaround to prevent opcaches from providing
-     * deprecated values
-     * 
-     * @var array
-     */
-    private $cache = array();
-    
     /**
      * Using 3 default levels, so the files get split up into
      * 16^3 = 4096 induvidual directories 
@@ -134,7 +126,6 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             throw new common_exception_NotImplemented('NX not implemented in '.__CLASS__);
         }
 
-
         return $this->writeFile($id, $value);
     }
 
@@ -154,7 +145,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     }
 
     /**
-     * Writes the cache file.
+     * Writes the file.
      *
      * @param $id
      * @param $value
@@ -175,21 +166,20 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
         // we first open with 'c' in case the flock fails
         // 'w' would empty the file that someone else might be working on
         if (false !== ($fp = @fopen($filePath, 'c')) && true === flock($fp, LOCK_EX)) {
-            // We first need to truncate.
-            ftruncate($fp, 0);
 
             // Runs the pre write callable.
             if (is_callable($preWriteValueProcessor)) {
                 $value = call_user_func($preWriteValueProcessor, $id);
             }
 
+            // We first need to truncate.
+            ftruncate($fp, 0);
             $string = $this->getContent($id, $value);
             $success = fwrite($fp, $string);
             @flock($fp, LOCK_UN);
             @fclose($fp);
             if ($success) {
                 // OPcache workaround
-                $this->setToCache($id, $value);
                 if (function_exists('opcache_invalidate')) {
                     opcache_invalidate($filePath, true);
                 }
@@ -211,56 +201,14 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     public function get($id)
     {
-        return $this->isTtlMode()
-            ? $this->getTtlMode($id)
-            : $this->getNormalMode($id)
-        ;
-    }
-
-    /**
-     * Returns the entry in normal mode.
-     *
-     * @param $id
-     *
-     * @return mixed
-     */
-    protected function getNormalMode($id)
-    {
-        // OPcache workaround
-        if ($this->hasInCache($id)) {
-            $entry = $this->getFromCache($id);
-        } else {
-            $entry = $this->getProcessedEntry($id);
-            if ($entry !== false) {
-                $this->setToCache($id, $entry);
-            }
+        $entry = $this->readFile($id);
+        if ($entry != false && $this->isTtlMode()) {
+            $entry = (is_null($entry[static::ENTRY_EXPIRATION]) || $entry[static::ENTRY_EXPIRATION] > $this->getTime())
+                ? $entry[static::ENTRY_VALUE]
+                : false
+            ;
         }
-
         return $entry;
-    }
-
-    /**
-     * Returns the entry in ttl mode.
-     *
-     * @param $id
-     *
-     * @return mixed
-     */
-    protected function getTtlMode($id)
-    {
-        // OPcache workaround
-        if ($this->hasInCache($id)) {
-            $entry = $this->processValue(
-                $this->getFromCache($id)
-            );
-        } else {
-            $entry = $this->getProcessedEntry($id);
-            if (isset($entry[static::ENTRY_VALUE]) && $entry[static::ENTRY_VALUE] !== false) {
-                $this->setToCache($id, $entry);
-            }
-        }
-
-        return $entry[static::ENTRY_VALUE];
     }
 
     /**
@@ -270,37 +218,9 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      *
      * @return mixed
      */
-    protected function getProcessedEntry($id)
+    private function readFile($id)
     {
-        $entry = @include $this->getPath($id);
-
-        if ($this->isTtlMode()) {
-            $entry = $this->processValue($entry);
-        }
-
-        return $entry;
-    }
-
-    /**
-     * Processes the given entry.
-     *
-     * @param $entry
-     *
-     * @return array
-     */
-    private function processValue($entry)
-    {
-        $expiresAt = isset($entry[static::ENTRY_EXPIRATION])
-            ? $entry[static::ENTRY_EXPIRATION]
-            : null
-        ;
-
-        // If not null or expired.
-        if (!isset($entry[static::ENTRY_VALUE]) || ($expiresAt !== null && $expiresAt <= $this->getTime())) {
-            $entry[static::ENTRY_VALUE] = false;
-        }
-
-        return $entry;
+        return @include $this->getPath($id);
     }
 
     /**
@@ -319,23 +239,11 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     public function exists($id)
     {
-        if (!file_exists($this->getPath($id))) {
-            return false;
+        if (!$this->isTtlMode()) {
+            return file_exists($this->getPath($id));
+        } else {
+            return $this->get($id) !== false;
         }
-
-        if ($this->isTtlMode()) {
-            $entry = $this->getProcessedEntry($id);
-
-            if (
-                !isset($entry[static::ENTRY_VALUE]) ||
-                $entry[static::ENTRY_VALUE] === false
-            )
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
     
     /**
@@ -346,18 +254,12 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     {
         $filePath = $this->getPath($id);
 
-        // OPcache workaround
-        if ($this->hasInCache($id)) {
-            unset($this->cache[$id]);
-        }
-
         // invalidate opcache first, fails on already deleted file
         if (function_exists('opcache_invalidate')) {
             opcache_invalidate($filePath, true);
         }
 
         $success = @unlink($filePath);
-        
         return $success;
     }
 
@@ -384,19 +286,15 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     private function getIncreasedValueEntry($id)
     {
-        if ($this->hasInCache($id)) {
-            $entry = $this->getFromCache($id);
-        } else {
-            $entry = $this->getProcessedEntry($id);
-        }
-
+        $value = intval($this->get($id));
+        $value++;
         if ($this->isTtlMode()) {
-            $entry[static::ENTRY_VALUE]++;
-        } else {
-            $entry++;
+            $value = [
+                static::ENTRY_VALUE      => $value,
+                static::ENTRY_EXPIRATION => null,
+            ];
         }
-
-        return $entry;
+        return $value;
     }
 
     /**
@@ -422,19 +320,15 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     private function getDecreasedValueEntry($id)
     {
-        if ($this->hasInCache($id)) {
-            $entry = $this->getFromCache($id);
-        } else {
-            $entry = $this->getProcessedEntry($id);
-        }
-
+        $value = intval($this->get($id));
+        $value--;
         if ($this->isTtlMode()) {
-            $entry[static::ENTRY_VALUE]--;
-        } else {
-            $entry--;
+            $value = [
+                static::ENTRY_VALUE      => $value,
+                static::ENTRY_EXPIRATION => null,
+            ];
         }
-
-        return $entry;
+        return $value;
     }
 
     /**
@@ -498,47 +392,6 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
         return $this->humanReadable
             ? "<?php return ".common_Utils::toHumanReadablePhpString($value).";".PHP_EOL
             : "<?php return ".common_Utils::toPHPVariableString($value).";";
-    }
-
-    /**
-     * Sets the requested entry to the cache.
-     *
-     * @param $id
-     * @param $entry
-     */
-    protected function setToCache($id, $entry)
-    {
-        $this->cache[$id] = $entry;
-    }
-
-    /**
-     * Returns the requested entry from cache.
-     *
-     * @param $id
-     *
-     * @return mixed
-     *
-     * @throws common_cache_NotFoundException
-     */
-    protected function getFromCache($id)
-    {
-        if (isset($this->cache[$id])) {
-            return $this->cache[$id];
-        }
-
-        throw new \common_cache_NotFoundException('No cache entry found for \'' . $id . '\'');
-    }
-
-    /**
-     * Returns TRUE if the requested entry exists in the cache, otherwise FALSE.
-     *
-     * @param $id
-     *
-     * @return bool
-     */
-    protected function hasInCache($id)
-    {
-        return isset($this->cache[$id]);
     }
 
     /**
