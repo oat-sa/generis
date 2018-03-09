@@ -18,6 +18,7 @@
  *
  */
 
+use oat\generis\Helper\SystemHelper;
 /**
  * This helper aims at providing utility methods to render
  * reports into TXT.
@@ -54,7 +55,7 @@ class helpers_Report {
                 $color = '0;37'; // light grey
         }
         if ($useColor == self::AUTOSENSE) {
-            $useColor = getenv('TAO_CONSOLE') !== 'nocolor' && !helpers_PlatformInstance::isWindows();
+            $useColor = getenv('TAO_CONSOLE') !== 'nocolor' && !SystemHelper::isWindows();
         }
             
         $output =  ($useColor ? "\033[".$color.'m' : '')
