@@ -66,7 +66,7 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
      */
     public function testSetException($persistence)
     {
-        $persistence->set('emtpy','empty',6);
+        $persistence->set('empty','empty',6);
     }
     
     /**
@@ -183,6 +183,16 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
         $this->assertEquals('value', $persistence->get('fakeKeyName'));
        
     }
-}
 
-?>
+    /**
+     * Tests the ttl mode.
+     *
+     * @param \common_persistence_KeyValuePersistence $persistence
+     *
+     * @depends testConnect
+     */
+    public function testTtlMode($persistence)
+    {
+        $this->assertFalse($persistence->getDriver()->isTtlMode());
+    }
+}
