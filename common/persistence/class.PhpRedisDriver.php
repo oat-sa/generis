@@ -81,13 +81,12 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     /**
      * @param $method
      * @param array $params
-     * @param $retry
      * @param int $attempt
      * @return mixed
      * @throws Exception
      */
-    protected function callWithRetry( $method , array $params , $attempt = 1) {
-
+    protected function callWithRetry($method, array $params, $attempt = 1)
+    {
         $success       = false;
         $lastException = null;
         $result        = false;
@@ -95,9 +94,8 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         $retry = $this->params['attempt'];
 
         while (!$success && $attempt <= $retry) {
-
             try {
-                $result = call_user_func_array([$this->connection , $method] , $params);
+                $result = call_user_func_array([$this->connection, $method], $params);
                 $success = true;
             } catch (\Exception $e) {
                 $lastException = $e;
@@ -106,22 +104,22 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
                     \common_Logger::d('Authenticating Redis connection');
                     $this->connection->auth($this->params['password']);
                 }
-                $delay = rand(self::RETRY_DELAY , self::RETRY_DELAY*2);
+                $delay = rand(self::RETRY_DELAY, self::RETRY_DELAY*2);
                 usleep($delay);
                 $this->connectionSet($this->params);
             }
             $attempt++;
         }
 
-        if (!$success) {
+        if (!$success && $lastException) {
             throw $lastException;
         }
-        return $result;
 
+        return $result;
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritdoc
      * @see common_persistence_KvDriver::set()
      */
     public function set($key, $value, $ttl = null, $nx = false)
@@ -133,8 +131,11 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         if ($nx) {
             $options[] = 'nx';
         };
-        return $this->callWithRetry('set' , [$key, $value, $options]);
-        
+        $result = $this->callWithRetry('set', [$key, $value, $options]);
+        if ($result === false) {
+            throw new common_exception_Error('Can\'t write into redis storage.');
+        }
+        return $result;
     }
     
     public function get($key) {
