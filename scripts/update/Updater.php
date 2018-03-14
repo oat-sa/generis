@@ -29,6 +29,7 @@ use oat\generis\model\data\ModelManager;
 use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use oat\generis\model\user\AuthAdapter;
 use oat\generis\model\user\UserFactoryService;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\filesystem\FileSystemService;
@@ -310,7 +311,13 @@ class Updater extends common_ext_ExtensionUpdater {
             /** @var common_ext_ExtensionsManager $extensionManager */
             $extensionManager = $this->getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID);
             $config = $extensionManager ->getExtensionById('generis')->getConfig('auth');
-            $config[0]['user_factory'] = UserFactoryService::SERVICE_ID;
+
+            foreach ($config as $index => $adapter){
+                if ($adapter['driver'] === AuthAdapter::class){
+                    $adapter['user_factory'] = UserFactoryService::SERVICE_ID;
+                }
+                $config[$index] = $adapter;
+            }
 
             $extensionManager->getExtensionById('generis')->setConfig('auth', array_values($config));
 

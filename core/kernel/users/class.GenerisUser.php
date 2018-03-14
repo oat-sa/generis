@@ -60,7 +60,6 @@ class core_kernel_users_GenerisUser extends common_user_User
         return $this->userResource->getUri();
     }
     
-    // protected $cache = array();
     protected function getUserResource()
     {
         return new core_kernel_classes_Resource($this->getIdentifier());
