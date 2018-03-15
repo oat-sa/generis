@@ -407,4 +407,15 @@ class helpers_File
 
         return $returnValue;
     }
+
+    /**
+     * @param string $type
+     * @return boolean
+     */
+    static public function isZipMimeType($type)
+    {
+        return in_array($type, [
+            'application/zip', 'application/x-zip', 'application/x-zip-compressed', 'application/octet-stream'
+        ]);
+    }
 }
