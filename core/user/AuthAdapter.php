@@ -123,10 +123,10 @@ class AuthAdapter
 
         $userFactory = ServiceManager::getServiceManager()->get($this->options['user_factory']) ;
 
-	    if ($userFactory instanceof UserFactoryService) {
+	    if ($userFactory instanceof UserFactoryServiceInterface) {
             return $userFactory->createUser($userResource, $this->password);
         }
 
-        return new core_kernel_users_GenerisUser($userResource);
+        return (new UserFactoryService())->createUser($userResource);
     }
 }
