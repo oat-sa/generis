@@ -31,7 +31,7 @@ use oat\oatbox\log\TaoLoggerAwareInterface;
  *
  * @author Joel Bout <joel@taotesting.com>
  */
-abstract class Configurable implements PhpSerializable, TaoLoggerAwareInterface
+abstract class Configurable implements PhpSerializable, TaoLoggerAwareInterface, ConfigurableInterface
 {
     use LoggerAwareTrait;
 
