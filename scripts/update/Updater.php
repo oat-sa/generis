@@ -300,9 +300,9 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('6.9.0');
         }
 
-        $this->skip('6.9.0', '6.15.0');
+        $this->skip('6.9.0', '6.16.0');
 
-        if ($this->isVersion('6.15.0')){
+        if ($this->isVersion('6.16.0')){
             $userFactory = new UserFactoryService([]);
             $this->getServiceManager()->register(UserFactoryService::SERVICE_ID, $userFactory);
 
@@ -319,7 +319,7 @@ class Updater extends common_ext_ExtensionUpdater {
 
             $extensionManager->getExtensionById('generis')->setConfig('auth', array_values($config));
 
-            $this->setVersion('6.16.0');
+            $this->setVersion('6.17.0');
         }
     }
 }
