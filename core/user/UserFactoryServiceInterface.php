@@ -17,30 +17,18 @@
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
-
 namespace oat\generis\model\user;
 
 use core_kernel_classes_Resource;
-use oat\oatbox\service\ConfigurableService;
 
-class UserFactoryService extends ConfigurableService implements UserFactoryServiceInterface
+interface UserFactoryServiceInterface
 {
+    const SERVICE_ID = 'generis/userFactory';
     /**
      * @param core_kernel_classes_Resource $userResource
      * @param string $password
      * @return \common_user_User
      * @throws \Exception
      */
-    public function createUser(core_kernel_classes_Resource $userResource, $password = null)
-    {
-        $user = new \core_kernel_users_GenerisUser($userResource);
-
-        if (!$user instanceof \common_user_User) {
-            throw new \Exception('Incorrect user class provided to the factory.');
-        }
-
-        $this->propagate($user);
-
-        return $user;
-    }
+    public function createUser(core_kernel_classes_Resource $userResource, $password = null);
 }

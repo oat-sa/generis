@@ -303,9 +303,7 @@ class Updater extends common_ext_ExtensionUpdater {
         $this->skip('6.9.0', '6.15.0');
 
         if ($this->isVersion('6.15.0')){
-            $userFactory = new UserFactoryService([
-                UserFactoryService::OPTION_CLASS_USER => \core_kernel_users_GenerisUser::class
-            ]);
+            $userFactory = new UserFactoryService([]);
             $this->getServiceManager()->register(UserFactoryService::SERVICE_ID, $userFactory);
 
             /** @var common_ext_ExtensionsManager $extensionManager */
