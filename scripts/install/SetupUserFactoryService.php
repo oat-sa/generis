@@ -31,9 +31,7 @@ class SetupUserFactoryService extends InstallAction
      */
     public function __invoke($params)
     {
-        $userFactory = new UserFactoryService([
-            UserFactoryService::OPTION_CLASS_USER => \core_kernel_users_GenerisUser::class
-        ]);
+        $userFactory = new UserFactoryService([]);
 
         $this->getServiceManager()->register(UserFactoryService::SERVICE_ID, $userFactory);
     }
