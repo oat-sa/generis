@@ -34,6 +34,8 @@ class SetupUserFactoryService extends InstallAction
         $userFactory = new UserFactoryService([]);
 
         $this->getServiceManager()->register(UserFactoryService::SERVICE_ID, $userFactory);
+
+        return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, 'UserFactoryService registered.');
     }
 
 }
