@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,29 +19,16 @@
  *
  */
 
-namespace oat\generis\model\user;
+namespace oat\generis\Helper;
 
-use core_kernel_classes_Resource;
-use oat\oatbox\service\ConfigurableService;
-
-class UserFactoryService extends ConfigurableService implements UserFactoryServiceInterface
+class UserHashForEncryption
 {
     /**
-     * @param core_kernel_classes_Resource $userResource
-     * @param string $hashForEncryption
-     * @return \common_user_User
-     * @throws \Exception
+     * @param $plainPassword
+     * @return mixed
      */
-    public function createUser(core_kernel_classes_Resource $userResource, $hashForEncryption = null)
+    public static function hash($plainPassword)
     {
-        $user = new \core_kernel_users_GenerisUser($userResource);
-
-        if (!$user instanceof \common_user_User) {
-            throw new \Exception('Incorrect user class provided to the factory.');
-        }
-
-        $this->propagate($user);
-
-        return $user;
+        return hash_pbkdf2("sha256", $plainPassword, '', 500, 8);
     }
 }

@@ -24,7 +24,7 @@ use core_kernel_classes_Class;
 use common_exception_InconsistentData;
 use core_kernel_classes_Property;
 use core_kernel_users_InvalidLoginException;
-use core_kernel_users_GenerisUser;
+use oat\generis\Helper\UserHashForEncryption;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\oatbox\service\ServiceManager;
@@ -124,7 +124,7 @@ class AuthAdapter
         $userFactory = ServiceManager::getServiceManager()->get($this->options['user_factory']) ;
 
 	    if ($userFactory instanceof UserFactoryServiceInterface) {
-            return $userFactory->createUser($userResource, $this->password);
+            return $userFactory->createUser($userResource, UserHashForEncryption::hash($this->password));
         }
 
         return (new UserFactoryService())->createUser($userResource);
