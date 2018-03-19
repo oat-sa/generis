@@ -121,10 +121,12 @@ class AuthAdapter
 	        throw new core_kernel_users_InvalidLoginException('Invalid password for user "'.$this->username.'"');
 	    }
 
-        $userFactory = ServiceManager::getServiceManager()->get($this->options['user_factory']) ;
+	    if (isset($this->options['user_factory'])){
+            $userFactory = ServiceManager::getServiceManager()->get($this->options['user_factory']) ;
 
-	    if ($userFactory instanceof UserFactoryServiceInterface) {
-            return $userFactory->createUser($userResource, UserHashForEncryption::hash($this->password));
+            if ($userFactory instanceof UserFactoryServiceInterface) {
+                return $userFactory->createUser($userResource, UserHashForEncryption::hash($this->password));
+            }
         }
 
         return (new UserFactoryService())->createUser($userResource);
