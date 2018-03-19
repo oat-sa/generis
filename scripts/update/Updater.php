@@ -29,6 +29,8 @@ use oat\generis\model\data\ModelManager;
 use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use oat\generis\model\user\AuthAdapter;
+use oat\generis\model\user\UserFactoryService;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\log\LoggerService;
@@ -51,6 +53,7 @@ class Updater extends common_ext_ExtensionUpdater {
     /**
      * @param string $initialVersion
      * @return string $versionUpdatedTo
+     * @throws \common_Exception
      */
     public function update($initialVersion) {
         if ($this->isBetween('0.0.0', '2.11.0')) {
@@ -298,5 +301,25 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         $this->skip('6.9.0', '6.16.0');
+
+        if ($this->isVersion('6.16.0')){
+            $userFactory = new UserFactoryService([]);
+            $this->getServiceManager()->register(UserFactoryService::SERVICE_ID, $userFactory);
+
+            /** @var common_ext_ExtensionsManager $extensionManager */
+            $extensionManager = $this->getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID);
+            $config = $extensionManager ->getExtensionById('generis')->getConfig('auth');
+
+            foreach ($config as $index => $adapter){
+                if ($adapter['driver'] === AuthAdapter::class){
+                    $adapter['user_factory'] = UserFactoryService::SERVICE_ID;
+                }
+                $config[$index] = $adapter;
+            }
+
+            $extensionManager->getExtensionById('generis')->setConfig('auth', array_values($config));
+
+            $this->setVersion('6.17.0');
+        }
     }
 }

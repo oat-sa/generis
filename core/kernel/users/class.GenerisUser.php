@@ -34,11 +34,11 @@ use oat\generis\model\OntologyRdf;
 class core_kernel_users_GenerisUser extends common_user_User
 {
 
-    private $userResource;
+    protected $userResource;
 
-    private $cache;
+    protected $cache;
 
-    private $cachedProperties = array(
+    protected $cachedProperties = array(
         GenerisRdf::PROPERTY_USER_DEFLG,
         GenerisRdf::PROPERTY_USER_ROLES,
         GenerisRdf::PROPERTY_USER_UILG,
@@ -60,8 +60,7 @@ class core_kernel_users_GenerisUser extends common_user_User
         return $this->userResource->getUri();
     }
     
-    // private $cache = array();
-    private function getUserResource()
+    protected function getUserResource()
     {
         return new core_kernel_classes_Resource($this->getIdentifier());
     }
@@ -78,7 +77,7 @@ class core_kernel_users_GenerisUser extends common_user_User
 
     }
     
-    private function getUncached($property)
+    protected function getUncached($property)
     {
         $value = array();
         switch ($property) {
