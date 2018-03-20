@@ -21,35 +21,35 @@
 
 /**
  * Iterates over the resources of classes
- * 
+ *
  * @author Joel Bout <joel@taotesting.com>
  */
 class core_kernel_classes_ResourceIterator implements \Iterator
-{	
+{
     const CACHE_SIZE = 100;
     
-    private $classIterator;
+    protected $classIterator;
     
     /**
      * Id of the current instance
-     * 
+     *
      * @var int
      */
-    private $currentInstance = 0;
+    protected $currentInstance = 0;
 
     /**
      * List of resource uris currently being iterated over
-     * 
+     *
      * @var array
      */
-    private $instanceCache = null;
+    protected $instanceCache = null;
     
     /**
-     * Indicater whenever the end of  the current cache is also the end of the current class
-     * 
+     * Indicator whenever the end of  the current cache is also the end of the current class
+     *
      * @var boolean
      */
-    private $endOfClass = false;
+    protected $endOfClass = false;
     
     /**
      * Whenever we already moved the pointer, used to prevent unnecessary rewinds
