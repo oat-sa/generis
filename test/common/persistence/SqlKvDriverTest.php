@@ -25,6 +25,11 @@ use oat\oatbox\service\ServiceManager;
 
 class SqlKvDriverTest extends TaoPhpUnitTestRunner
 {
+    /**
+     * @throws \common_Exception
+     * @throws \common_exception_Error
+     * @runInSeparateProcess
+     */
     public function testSet()
     {
         $this->getServiceManager();
@@ -36,6 +41,7 @@ class SqlKvDriverTest extends TaoPhpUnitTestRunner
     /**
      * @expectedException \oat\oatbox\persistence\WriteException
      * @expectedExceptionMessage Unable to write the key value storage table in the database
+     * @runInSeparateProcess
      */
     public function testSetException()
     {
