@@ -57,14 +57,14 @@ class AuthAdapter
      * 
      * @var string
      */
-    private $username;
+    protected $username;
     
     /**
      * Password to verify
      * 
      * @var $password
      */
-	private $password;
+    protected $password;
 
 	/** @var array */
 	private $options;
