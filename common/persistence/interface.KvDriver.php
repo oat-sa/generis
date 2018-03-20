@@ -19,7 +19,6 @@
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
  * @package generis
- 
  *
  */
 
@@ -34,12 +33,14 @@ interface common_persistence_KvDriver extends common_persistence_Driver
     /**
      * Stores a value, implementing time to live and nx is optional
      * Should throw an exception if an option is not supported
-     * 
+     *
      * @param string $id
      * @param string $value
      * @param string $ttl time to live in seconds
      * @param bool $nx Only set the key if it does not already exist
      * @return bool
+     * @throws \common_exception_NotImplemented if option not implemented
+     * @throws \oat\oatbox\persistence\WriteException if operation was not performed
      */
     public function set($id, $value, $ttl = null, $nx = false);
 

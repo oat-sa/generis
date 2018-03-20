@@ -19,9 +19,11 @@
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
  * @package 
-
  *
  */
+
+use oat\oatbox\persistence\WriteException;
+
 class common_persistence_PhpFileDriver implements common_persistence_KvDriver, common_persistence_Purgable
 {
     /**
@@ -105,11 +107,8 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     }
     
     /**
-     * (non-PHPdoc)
-     * @see common_persistence_KvDriver::set()
-     *
-     * @throws common_exception_NotImplemented
-     * @throws \common_exception_Error
+     * @inheritdoc
+     * @throws \common_exception_NotImplemented
      */
     public function set($id, $value, $ttl = null, $nx = false)
     {
@@ -126,7 +125,15 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             throw new common_exception_NotImplemented('NX not implemented in '.__CLASS__);
         }
 
-        return $this->writeFile($id, $value);
+        try {
+            $result = $this->writeFile($id, $value);
+        } catch (\common_exception_Error $e) {
+            $result = false;
+        }
+        if ($result === false) {
+            throw new WriteException('Can\'t write into php file storage.');
+        }
+        return $result;
     }
 
     /**

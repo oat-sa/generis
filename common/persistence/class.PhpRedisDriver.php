@@ -21,6 +21,9 @@
  * @package
  *
  */
+
+use oat\oatbox\persistence\WriteException;
+
 class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDriver, common_persistence_KeyValue_Nx
 {
 
@@ -133,7 +136,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         };
         $result = $this->callWithRetry('set', [$key, $value, $options]);
         if ($result === false) {
-            throw new common_exception_Error('Can\'t write into redis storage.');
+            throw new WriteException('Can\'t write into redis storage.');
         }
         return $result;
     }

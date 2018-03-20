@@ -18,6 +18,8 @@
  *
  */
 
+use oat\oatbox\persistence\WriteException;
+
 /**
  * A key value driver based upon an existing sql persistence
  * 
@@ -91,25 +93,27 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
                 $statement = "MERGE INTO kv_store USING DUAL ON(kv_id = :id) 
                     WHEN NOT MATCHED THEN INSERT (kv_id, kv_value, kv_time) VALUES (:id, :data, sysdate) 
                     WHEN MATHED THEN UPDATE SET kv_value = :data WHERE kv_id = :id";
-            }
-            
-            else {
+            } else {
                 $statement = 'UPDATE kv_store SET kv_value = :data , kv_time = :time WHERE kv_id = :id';
                 $returnValue = $this->sqlPeristence->exec($statement,$params);
                 if ($returnValue == 0){
                     $returnValue = $this->sqlPeristence->insert('kv_store', array('kv_id' => $id, 'kv_time' => $expire, 'kv_value' => $encoded));
                 }
             }
-            
-          
+
             if ($this->garbageCollection != 0 && rand(0, $this->garbageCollection) == 1) {
                 $this->gc();
-            } 
+            }
+            $result = (boolean)$returnValue;
+        } catch (Exception $e) {
+            $result = false;
         }
-        catch (Exception $e){
-            throw new common_Exception("Unable to write the key value storage table in the database "  .$e->getMessage());
+
+        if ($result === false) {
+            throw new WriteException('Unable to write the key value storage table in the database');
         }
-        return (boolean)$returnValue;
+
+        return $result;
     }
     /**
      * 

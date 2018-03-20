@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
 namespace oat\generis\test\common\persistence;
@@ -44,7 +44,7 @@ class PhpRedisDriverTest extends TestCase
     }
 
     /**
-     * @expectedException \common_exception_Error
+     * @expectedException \oat\oatbox\persistence\WriteException
      * @expectedExceptionMessage Can't write into redis storage.
      */
     public function testSetException()
@@ -63,6 +63,6 @@ class PhpRedisDriverTest extends TestCase
         $reflectionParams->setAccessible(true);
         $reflectionParams->setValue($driver, ['attempt' => 1]);
 
-        $this->assertTrue($driver->set('foo', 'bar'));
+        $driver->set('foo', 'bar');
     }
 }
