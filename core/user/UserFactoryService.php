@@ -35,10 +35,6 @@ class UserFactoryService extends ConfigurableService implements UserFactoryServi
     {
         $user = new \core_kernel_users_GenerisUser($userResource);
 
-        if (!$user instanceof \common_user_User) {
-            throw new \Exception('Incorrect user class provided to the factory.');
-        }
-
         $this->propagate($user);
 
         return $user;
