@@ -44,6 +44,7 @@ class ResourceIteratorTest extends TaoPhpUnitTestRunner
         $class = new \core_kernel_classes_Class(self::$sampleClass);
 
         $iterator = new ResourceIterator([$class->getUri()]);
+        $this->assertTrue($iterator->valid() === false);
         $this->assertTrue($iterator->current() === null);
         $this->assertTrue($iterator->valid() === false);
 

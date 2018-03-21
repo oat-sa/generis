@@ -130,6 +130,9 @@ class core_kernel_classes_ResourceIterator implements \Iterator
      * @see Iterator::valid()
      */
     function valid() {
+        if ($this->instanceCache === null) {
+            $this->ensureNotEmpty();
+        }
         return $this->classIterator->valid();
     }
     
