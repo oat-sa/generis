@@ -65,7 +65,6 @@ class core_kernel_classes_ResourceIterator implements \Iterator
      */
     public function __construct($classes) {
         $this->classIterator = new core_kernel_classes_ClassIterator($classes);
-        $this->ensureNotEmpty();
     }
     
     /**
@@ -79,15 +78,22 @@ class core_kernel_classes_ResourceIterator implements \Iterator
             $this->unmoved = true;
         }
     }
-    
+
     /**
-     * (non-PHPdoc)
-     * @see Iterator::current()
+     * @return core_kernel_classes_Resource|null
+     * @throws common_exception_Error
      */
-    function current() {
-        return new \core_kernel_classes_Resource($this->instanceCache[$this->currentInstance]);
+    public function current()
+    {
+        if ($this->instanceCache === null) {
+            $this->ensureNotEmpty();
+        }
+
+        return isset($this->instanceCache[$this->currentInstance]) ?
+            new \core_kernel_classes_Resource($this->instanceCache[$this->currentInstance]) :
+            null;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Iterator::key()
