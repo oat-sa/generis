@@ -27,29 +27,29 @@
 class core_kernel_classes_ResourceIterator implements \Iterator
 {
     const CACHE_SIZE = 100;
-    
-    protected $classIterator;
+
+    private $classIterator;
     
     /**
      * Id of the current instance
      *
      * @var int
      */
-    protected $currentInstance = 0;
+    private $currentInstance = 0;
 
     /**
      * List of resource uris currently being iterated over
      *
      * @var array
      */
-    protected $instanceCache = null;
+    private $instanceCache = null;
     
     /**
      * Indicator whenever the end of  the current cache is also the end of the current class
      *
      * @var boolean
      */
-    protected $endOfClass = false;
+    private $endOfClass = false;
     
     /**
      * Whenever we already moved the pointer, used to prevent unnecessary rewinds
@@ -148,17 +148,14 @@ class core_kernel_classes_ResourceIterator implements \Iterator
 
     /**
      * Load instances into cache
-     * 
+     *
      * @param core_kernel_classes_Class $class
      * @param int $offset
      * @return boolean
      */
-    protected function load(core_kernel_classes_Class $class, $offset) {
-        $results = $class->searchInstances(array(), array(
-            'recursive' => false,
-            'limit' => self::CACHE_SIZE,
-            'offset' => $offset
-        ));
+    protected function load(core_kernel_classes_Class $class, $offset)
+    {
+        $results = $this->loadResources($class, $offset);
         $this->instanceCache = array();
         foreach ($results as $resource) {
             $this->instanceCache[$offset] = $resource->getUri();
@@ -168,5 +165,21 @@ class core_kernel_classes_ResourceIterator implements \Iterator
         $this->endOfClass = count($results) < self::CACHE_SIZE;
         
         return count($results) > 0;
+    }
+
+    /**
+     * Load resources from storage
+     *
+     * @param core_kernel_classes_Class $class
+     * @param integer $offset
+     * @return core_kernel_classes_Resource[]
+     */
+    protected function loadResources(core_kernel_classes_Class $class, $offset)
+    {
+        return $class->searchInstances([], [
+            'recursive' => false,
+            'limit' => self::CACHE_SIZE,
+            'offset' => $offset,
+        ]);
     }
 }
