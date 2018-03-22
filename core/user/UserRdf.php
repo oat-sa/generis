@@ -22,13 +22,13 @@ namespace oat\generis\model\user;
 interface UserRdf
 {
     const CLASS_URI = 'http://www.tao.lu/Ontologies/generis.rdf#User';
-    const PROPERTY_USER_LOGIN = 'http://www.tao.lu/Ontologies/generis.rdf#login';
-    const PROPERTY_USER_PASSWORD = 'http://www.tao.lu/Ontologies/generis.rdf#password';
-    const PROPERTY_USER_UILG = 'http://www.tao.lu/Ontologies/generis.rdf#userUILg';
-    const PROPERTY_USER_DEFLG = 'http://www.tao.lu/Ontologies/generis.rdf#userDefLg';
-    const PROPERTY_USER_MAIL = 'http://www.tao.lu/Ontologies/generis.rdf#userMail';
-    const PROPERTY_USER_FIRSTNAME = 'http://www.tao.lu/Ontologies/generis.rdf#userFirstName';
-    const PROPERTY_USER_LASTNAME = 'http://www.tao.lu/Ontologies/generis.rdf#userLastName';
-    const PROPERTY_USER_ROLES = 'http://www.tao.lu/Ontologies/generis.rdf#userRoles';
-    const PROPERTY_USER_TIMEZONE = 'http://www.tao.lu/Ontologies/generis.rdf#userTimezone';
+    const PROPERTY_LOGIN = 'http://www.tao.lu/Ontologies/generis.rdf#login';
+    const PROPERTY_PASSWORD = 'http://www.tao.lu/Ontologies/generis.rdf#password';
+    const PROPERTY_UILG = 'http://www.tao.lu/Ontologies/generis.rdf#userUILg';
+    const PROPERTY_DEFLG = 'http://www.tao.lu/Ontologies/generis.rdf#userDefLg';
+    const PROPERTY_MAIL = 'http://www.tao.lu/Ontologies/generis.rdf#userMail';
+    const PROPERTY_FIRSTNAME = 'http://www.tao.lu/Ontologies/generis.rdf#userFirstName';
+    const PROPERTY_LASTNAME = 'http://www.tao.lu/Ontologies/generis.rdf#userLastName';
+    const PROPERTY_ROLES = 'http://www.tao.lu/Ontologies/generis.rdf#userRoles';
+    const PROPERTY_TIMEZONE = 'http://www.tao.lu/Ontologies/generis.rdf#userTimezone';
 }

@@ -60,22 +60,22 @@ interface GenerisRdf
     const PROPERTY_MASK_OBJECT = 'http://www.tao.lu/Ontologies/generis.rdf#MaskObject';
     //@deprecated use UserRdf::CLASS_URI
     const CLASS_GENERIS_USER = 'http://www.tao.lu/Ontologies/generis.rdf#User';
-    //@deprecated use UserRdf::PROPERTY_USER_LOGIN
+    //@deprecated use UserRdf::PROPERTY_LOGIN
     const PROPERTY_USER_LOGIN = 'http://www.tao.lu/Ontologies/generis.rdf#login';
-    //@deprecated use UserRdf::PROPERTY_USER_PASSWORD
+    //@deprecated use UserRdf::PROPERTY_PASSWORD
     const PROPERTY_USER_PASSWORD = 'http://www.tao.lu/Ontologies/generis.rdf#password';
-    //@deprecated use UserRdf::PROPERTY_USER_UILG
+    //@deprecated use UserRdf::PROPERTY_UILG
     const PROPERTY_USER_UILG = 'http://www.tao.lu/Ontologies/generis.rdf#userUILg';
-    //@deprecated use UserRdf::PROPERTY_USER_DEFLG
+    //@deprecated use UserRdf::PROPERTY_DEFLG
     const PROPERTY_USER_DEFLG = 'http://www.tao.lu/Ontologies/generis.rdf#userDefLg';
-    //@deprecated use UserRdf::PROPERTY_USER_MAIL
+    //@deprecated use UserRdf::PROPERTY_MAIL
     const PROPERTY_USER_MAIL = 'http://www.tao.lu/Ontologies/generis.rdf#userMail';
-    //@deprecated use UserRdf::PROPERTY_USER_FIRSTNAME
+    //@deprecated use UserRdf::PROPERTY_FIRSTNAME
     const PROPERTY_USER_FIRSTNAME = 'http://www.tao.lu/Ontologies/generis.rdf#userFirstName';
     //@deprecated use UserRdf::PROPERTY_USER_LASTNAME
     const PROPERTY_USER_LASTNAME = 'http://www.tao.lu/Ontologies/generis.rdf#userLastName';
-    //@deprecated use UserRdf::PROPERTY_USER_ROLES
+    //@deprecated use UserRdf::PROPERTY_ROLES
     const PROPERTY_USER_ROLES = 'http://www.tao.lu/Ontologies/generis.rdf#userRoles';
-    //@deprecated use UserRdf::PROPERTY_USER_TIMEZONE
+    //@deprecated use UserRdf::PROPERTY_TIMEZONE
     const PROPERTY_USER_TIMEZONE = 'http://www.tao.lu/Ontologies/generis.rdf#userTimezone';
 }
