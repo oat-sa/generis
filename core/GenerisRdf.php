@@ -61,8 +61,8 @@ interface GenerisRdf
     //@deprecated use UserRdf::CLASS_URI
     const CLASS_GENERIS_USER = 'http://www.tao.lu/Ontologies/generis.rdf#User';
     //@deprecated use UserRdf::PROPERTY_USER_LOGIN
-    const PROPERTY_USER_LOGIN = 'PROPERTY_USER_PASSWORD';
-    //@deprecated use UserRdf::PROPERTY_USER_LOGIN
+    const PROPERTY_USER_LOGIN = 'http://www.tao.lu/Ontologies/generis.rdf#login';
+    //@deprecated use UserRdf::PROPERTY_USER_PASSWORD
     const PROPERTY_USER_PASSWORD = 'http://www.tao.lu/Ontologies/generis.rdf#password';
     //@deprecated use UserRdf::PROPERTY_USER_UILG
     const PROPERTY_USER_UILG = 'http://www.tao.lu/Ontologies/generis.rdf#userUILg';
