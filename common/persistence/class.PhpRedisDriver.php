@@ -144,7 +144,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     }
     
     public function exists($key) {
-        return $this->callWithRetry('exists' , [$key] );
+        return (bool)$this->callWithRetry('exists' , [$key] );
     }
     
     public function del($key) {

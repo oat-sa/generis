@@ -24,9 +24,10 @@ use core_kernel_classes_Class;
 use common_exception_InconsistentData;
 use core_kernel_classes_Property;
 use core_kernel_users_InvalidLoginException;
-use core_kernel_users_GenerisUser;
+use oat\generis\Helper\UserHashForEncryption;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
+use oat\oatbox\service\ServiceManager;
 use oat\oatbox\user\auth\LoginAdapter;
 
 
@@ -56,21 +57,25 @@ class AuthAdapter
      * 
      * @var string
      */
-    private $username;
+    protected $username;
     
     /**
      * Password to verify
      * 
      * @var $password
      */
-	private $password;
-	
+    protected $password;
+
+	/** @var array */
+	private $options;
+
 	/**
 	 * 
 	 * @param array $configuration
 	 */
-	public function setOptions(array $options) {
-	    // nothing to configure
+	public function setOptions(array $options)
+    {
+        $this->options = $options;
 	}
 	
 	/**
@@ -81,10 +86,11 @@ class AuthAdapter
 	    $this->username = $login;
 	    $this->password = $password;
 	}
-	
-	/**
+
+    /**
      * (non-PHPdoc)
      * @see common_user_auth_Adapter::authenticate()
+     * @throws \Exception
      */
     public function authenticate() {
     	
@@ -114,7 +120,15 @@ class AuthAdapter
 	    if (!core_kernel_users_Service::getPasswordHash()->verify($this->password, $hash)) {
 	        throw new core_kernel_users_InvalidLoginException('Invalid password for user "'.$this->username.'"');
 	    }
-    	
-    	return new core_kernel_users_GenerisUser($userResource);
+
+	    if (isset($this->options['user_factory'])){
+            $userFactory = ServiceManager::getServiceManager()->get($this->options['user_factory']) ;
+
+            if ($userFactory instanceof UserFactoryServiceInterface) {
+                return $userFactory->createUser($userResource, UserHashForEncryption::hash($this->password));
+            }
+        }
+
+        return (new UserFactoryService())->createUser($userResource);
     }
 }

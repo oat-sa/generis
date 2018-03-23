@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,26 +15,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- * @author Bout Joel, <joel@taotesting.com>
- * @license GPLv2
- * @package generis
+ * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
-return array(
-    array(
-        'driver' => 'oat\\generis\\model\\user\\AuthAdapter',
-        'user_factory' => 'generis/userFactory',
-        'hash' => array(
-            'algorithm' => 'sha256',
-            'salt' => 10
-        )
-    ),
-    /*
-    array(
-	    'driver' => 'oat\authKeyValue\AuthKeyValueAdapter',
-	    'persistence' => 'authKeyValue'
-	),
-	*/
-);
+
+namespace oat\generis\Helper;
+
+class UserHashForEncryption
+{
+    /**
+     * @param $plainPassword
+     * @return mixed
+     */
+    public static function hash($plainPassword)
+    {
+        return hash_pbkdf2("sha256", $plainPassword, '', 500, 8);
+    }
+}

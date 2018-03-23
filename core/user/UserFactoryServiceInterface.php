@@ -14,26 +14,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- * @author Bout Joel, <joel@taotesting.com>
- * @license GPLv2
- * @package generis
+ * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
-return array(
-    array(
-        'driver' => 'oat\\generis\\model\\user\\AuthAdapter',
-        'user_factory' => 'generis/userFactory',
-        'hash' => array(
-            'algorithm' => 'sha256',
-            'salt' => 10
-        )
-    ),
-    /*
-    array(
-	    'driver' => 'oat\authKeyValue\AuthKeyValueAdapter',
-	    'persistence' => 'authKeyValue'
-	),
-	*/
-);
+namespace oat\generis\model\user;
+
+use core_kernel_classes_Resource;
+
+interface UserFactoryServiceInterface
+{
+    const SERVICE_ID = 'generis/userFactory';
+    /**
+     * @param core_kernel_classes_Resource $userResource
+     * @param string $hashForEncryption
+     * @return \common_user_User
+     * @throws \Exception
+     */
+    public function createUser(core_kernel_classes_Resource $userResource, $hashForEncryption = null);
+}
