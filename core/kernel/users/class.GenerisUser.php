@@ -29,16 +29,16 @@ use oat\generis\model\OntologyRdf;
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- 
+
  */
 class core_kernel_users_GenerisUser extends common_user_User
 {
 
-    protected $userResource;
+    private $userResource;
 
-    protected $cache;
+    private $cache;
 
-    protected $cachedProperties = array(
+    private $cachedProperties = array(
         GenerisRdf::PROPERTY_USER_DEFLG,
         GenerisRdf::PROPERTY_USER_ROLES,
         GenerisRdf::PROPERTY_USER_UILG,
@@ -59,8 +59,8 @@ class core_kernel_users_GenerisUser extends common_user_User
     {
         return $this->userResource->getUri();
     }
-    
-    protected function getUserResource()
+
+    private function getUserResource()
     {
         return new core_kernel_classes_Resource($this->getIdentifier());
     }
@@ -76,8 +76,8 @@ class core_kernel_users_GenerisUser extends common_user_User
         return $this->cache[$property];
 
     }
-    
-    protected function getUncached($property)
+
+    private function getUncached($property)
     {
         $value = array();
         switch ($property) {
