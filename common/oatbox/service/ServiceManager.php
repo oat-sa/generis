@@ -66,7 +66,7 @@ class ServiceManager implements ServiceLocatorInterface
      */
     public function get($serviceKey)
     {
-        if (class_exists($serviceKey) && defined($serviceKey . '::SERVICE_ID')) {
+        if ((interface_exists($serviceKey) || class_exists($serviceKey)) && defined($serviceKey . '::SERVICE_ID')) {
             $serviceKey = $serviceKey::SERVICE_ID;
         }
         if (!isset($this->services[$serviceKey])) {
