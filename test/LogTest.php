@@ -105,12 +105,15 @@ class LogTest extends GenerisPhpUnitTestRunner {
         $this->assertEntriesInFile($efile, 2);
         $this->assertEntriesInFile($cfile, 1);
 
+        //destroy logger object to release files
+        unset($logger);
+
         unlink($dfile);
         unlink($ifile);
         unlink($wfile);
         unlink($efile);
         unlink($cfile);
-	}
+    }
 	
 	public function testLogTags()
 	{
@@ -144,6 +147,8 @@ class LogTest extends GenerisPhpUnitTestRunner {
 
         $logger->logDebug('message', array('WRONGTAG', 'WRONGTAG2'));
 		$this->assertEntriesInFile($dfile, 2);
+        //destroy logger object to release files
+        unset($logger);
 
         unlink($dfile);
     }
