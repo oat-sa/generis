@@ -34,6 +34,7 @@ use oat\oatbox\user\User;
 use oat\oatbox\Refreshable;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use oat\oatbox\user\UserLanguageServiceInterface;
 
 class common_session_BasicSession implements common_session_Session, ServiceLocatorAwareInterface
 {
@@ -107,23 +108,21 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
         }
         return $returnValue;
     }
-    
+
     /**
-     * (non-PHPdoc)
-     * @see common_session_Session::getDataLanguage()
+     * @return string language code (e.g. 'en-US')
      */
-    public function getDataLanguage() {
-        $lang = $this->user->getPropertyValues(GenerisRdf::PROPERTY_USER_DEFLG);
-        return empty($lang) ? DEFAULT_LANG : (string)current($lang);
+    public function getDataLanguage()
+    {
+        return $this->getServiceLocator()->get(UserLanguageServiceInterface::class)->getDataLanguage($this->user);
     }
-    
+
     /**
-     * (non-PHPdoc)
-     * @see common_session_Session::getInterfaceLanguage()
+     * @return string language code (e.g. 'en-US')
      */
-    public function getInterfaceLanguage() {
-        $lang = $this->user->getPropertyValues(GenerisRdf::PROPERTY_USER_UILG);
-        return empty($lang) ? DEFAULT_LANG : (string)current($lang);
+    public function getInterfaceLanguage()
+    {
+        return $this->getServiceLocator()->get(UserLanguageServiceInterface::class)->getInterfaceLanguage($this->user);
     }
     
     /**

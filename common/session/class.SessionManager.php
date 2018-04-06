@@ -19,6 +19,9 @@
  * 
  */
 
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use oat\oatbox\service\ServiceManager;
+
 /**
  * Represents a Session on Generis.
  *
@@ -52,6 +55,9 @@ abstract class common_session_SessionManager
             } else {
                 self::$session = new common_session_AnonymousSession();
             }
+        }
+        if (self::$session instanceof ServiceLocatorAwareInterface) {
+            self::$session->setServiceLocator(ServiceManager::getServiceManager());
         }
         return self::$session;
     } 

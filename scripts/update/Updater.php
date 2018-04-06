@@ -43,6 +43,7 @@ use oat\oatbox\task\TaskRunner;
 use oat\taoWorkspace\model\generis\WrapperModel;
 use oat\oatbox\log\logger\TaoLog;
 use Psr\Log\LoggerInterface;
+use oat\oatbox\user\UserLanguageService;
 
 /**
  *
@@ -323,5 +324,10 @@ class Updater extends common_ext_ExtensionUpdater {
         }
         
         $this->skip('6.17.0', '7.1.1');
+
+        if ($this->isVersion('7.1.1')) {
+            $this->getServiceManager()->register(UserLanguageService::SERVICE_ID, new UserLanguageService());
+            $this->setVersion('7.2.0');
+        }
     }
 }
