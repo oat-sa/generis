@@ -25,9 +25,12 @@ use GuzzleHttp\Psr7\StreamWrapper;
 use League\Flysystem\FileNotFoundException;
 use Psr\Http\Message\StreamInterface;
 use League\Flysystem\FileExistsException;
+use oat\oatbox\log\LoggerAwareTrait;
 
 class File extends FileSystemHandler
 {
+    use LoggerAwareTrait;
+
     /**
      * Get basename of $this file
      *
@@ -143,7 +146,7 @@ class File extends FileSystemHandler
             throw new \FileNotFoundException('File "' . $this->getPrefix() . '" not found."');
         }
 
-        \common_Logger::i('Writting in ' . $this->getPrefix());
+        $this->logDebug('Writting in ' . $this->getPrefix());
         $config = (is_null($mimeType)) ? [] : ['ContentType' => $mimeType];
 
         if (is_string($mixed)) {
@@ -185,7 +188,7 @@ class File extends FileSystemHandler
      */
     public function put($mixed, $mimeType = null)
     {
-        \common_Logger::i('Writting in ' . $this->getPrefix());
+        $this->logDebug('Writting in ' . $this->getPrefix());
         $config = (is_null($mimeType)) ? [] : ['ContentType' => $mimeType];
 
         if (is_string($mixed)) {
