@@ -19,10 +19,10 @@
  */
 namespace oat\generis\test\helpers;
 
-use oat\tao\test\TaoPhpUnitTestRunner;
+use oat\generis\test\GenerisPhpUnitTestRunner;
 use oat\generis\Helper\SystemHelper;
 
-class SystemHelperTest extends TaoPhpUnitTestRunner
+class SystemHelperTest extends GenerisPhpUnitTestRunner
 {
 
     /**
