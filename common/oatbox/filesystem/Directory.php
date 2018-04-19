@@ -144,4 +144,9 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
     {
         return $this->getPrefix() . '/' . $this->sanitizePath($path);
     }
+
+    public function rename($path)
+    {
+        return $this->getFileSystem()->rename($this->getPrefix(), $path);
+    }
 }
