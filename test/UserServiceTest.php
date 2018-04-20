@@ -187,16 +187,16 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
         
         // single role.
         $role1 = $this->service->addRole('ADDUSERROLE 1');
-        if ($this->service->loginExists('user1')) {
-            $this->service->getOneUser('user1')->delete();
+        if ($this->service->loginExists('user-fixture-1')) {
+            $this->service->getOneUser('user-fixture-1')->delete();
         }
-        $user = $this->service->addUser('user1', 'password1', $role1);
+        $user = $this->service->addUser('user-fixture-1', 'password1', $role1);
         
-        $this->assertTrue($this->service->loginExists('user1'));
+        $this->assertTrue($this->service->loginExists('user-fixture-1'));
         $userRoles = $user->getUniquePropertyValue($userRolesProperty);
         $this->assertEquals($userRoles->getUri(), $role1->getUri());
         $this->assertTrue($this->service->logout());
-        $this->assertTrue($this->service->login('user1', 'password1', $role1));
+        $this->assertTrue($this->service->login('user-fixture-1', 'password1', $role1));
         $this->assertTrue($this->service->logout());
         $this->assertTrue($this->restoreTestSession());
         
@@ -204,9 +204,12 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
         $this->assertFalse($user->exists());
         $role1->delete();
         $this->assertFalse($role1->exists());
-        
+
+        if ($this->service->loginExists('user-fixture-2')) {
+            $this->service->getOneUser('user-fixture-2')->delete();
+        }
         // No role provided. Will be given the genuine GENERIS ROLE.
-        $user = $this->service->addUser('user2', 'password2');
+        $user = $this->service->addUser('user-fixture-2', 'password2');
         $this->assertTrue($this->service->loginExists('user2'));
         $userRoles = $user->getUniquePropertyValue($userRolesProperty);
         $this->assertEquals($userRoles->getUri(), GenerisRdf::INSTANCE_ROLE_GENERIS);
