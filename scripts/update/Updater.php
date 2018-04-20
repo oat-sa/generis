@@ -329,6 +329,6 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->getServiceManager()->register(UserLanguageService::SERVICE_ID, new UserLanguageService());
             $this->setVersion('7.2.0');
         }
-        $this->skip('7.2.0', '7.2.2');
+        $this->skip('7.2.0', '7.2.3');
     }
 }
