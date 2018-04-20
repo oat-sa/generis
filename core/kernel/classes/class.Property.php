@@ -249,30 +249,10 @@ class core_kernel_classes_Property
      */
     public function isLgDependent()
     {
-        $returnValue = (bool) false;
-        if (is_null($this->lgDependent )){
-
+        if (is_null($this->lgDependent)) {
             $this->lgDependent  = helpers_PropertyLgCacheHelper::getLgDependencyCache($this->getUri());
-
-            if (is_null($this->lgDependent)) {
-                $lgDependentProperty = $this->getProperty(GenerisRdf::PROPERTY_IS_LG_DEPENDENT);
-                $lgDependent = $this->getOnePropertyValue($lgDependentProperty);
-
-
-			 
-    			if (is_null($lgDependent) || !$lgDependent instanceof  core_kernel_classes_Resource){
-    				$returnValue = false;
-    			}
-    			else{
-    				$returnValue = ($lgDependent->getUri() == GenerisRdf::GENERIS_TRUE);
-    			}
-                helpers_PropertyLgCacheHelper::setLgDependencyCache($this->getUri(), $returnValue);    
-            	$this->lgDependent = $returnValue;
-            }
         }
- 
-        $returnValue = $this->lgDependent;
-        return (bool) $returnValue;
+        return (bool) $this->lgDependent;
     }
 
     /**
