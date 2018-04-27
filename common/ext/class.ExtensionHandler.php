@@ -78,7 +78,9 @@ abstract class common_ext_ExtensionHandler
             }
             $report = call_user_func($action, array());
         } else {
-            throw new common_ext_InstallationException('Unable to run install script '.$script);
+            $error = new common_ext_InstallationException('Unable to run install script '.$script);
+            $error->setExtensionId($this->getExtension()->getId());
+            throw $error;
         }
     }
 
