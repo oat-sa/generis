@@ -20,6 +20,8 @@
 
 namespace oat\oatbox\filesystem;
 
+use League\Flysystem\Exception;
+
 class Directory extends FileSystemHandler implements \IteratorAggregate
 {
     const ITERATOR_RECURSIVE = '1';
@@ -145,8 +147,25 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         return $this->getPrefix() . '/' . $this->sanitizePath($path);
     }
 
+    /**
+     * Rename
+     *
+     * Rename directory into $path
+     *
+     * @param $path
+     * @return bool
+     * @throws \common_exception_FileSystemError
+     */
     public function rename($path)
     {
-        return $this->getFileSystem()->rename($this->getPrefix(), $path);
+        try {
+            return $this->getFileSystem()->rename($this->getPrefix(), $path);
+        } catch (Exception $e) {
+            throw new \common_exception_FileSystemError(
+                "Directory could not be renamed into '${path}'.",
+                0,
+                $e
+            );
+        }
     }
 }
