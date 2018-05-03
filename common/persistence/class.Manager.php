@@ -161,7 +161,7 @@ class common_persistence_Manager extends ConfigurableService
             if (!class_exists($driverClassName)){
                 throw new common_exception_Error('Driver '.$driverStr.' not found check your database configuration');
             }
-            $driver = new $driverClassName();
+            $driver = $this->propagate(new $driverClassName());
             return $driver->connect($persistenceId, $config);
         } else {
             throw new common_Exception('Persistence Configuration for persistence '.$persistenceId.' not found');
