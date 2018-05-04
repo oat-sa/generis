@@ -41,7 +41,8 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
 
     public function set($id, $value, $ttl = null, $nx = false)
     {
-        return $this->persistence[$id] = $value;
+        $this->persistence[$id] = $value;
+        return true;
     }
 
     public function get($id)
