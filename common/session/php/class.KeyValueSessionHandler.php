@@ -67,7 +67,7 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService
      */
     public function read($id)
     {
-        $session = $this->getPersistence()->get(self::KEY_NAMESPACE.$id);
+        $session = $this->getPersistence()->get(self::KEY_NAMESPACE.$id); 
         return is_string($session) ? $session : '';
     }
 
