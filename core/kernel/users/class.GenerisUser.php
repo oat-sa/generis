@@ -21,6 +21,7 @@
  */
 
 use oat\generis\model\GenerisRdf;
+use oat\generis\model\kernel\users\UserInternalInterface;
 use oat\generis\model\OntologyRdf;
 
 /**
@@ -31,7 +32,7 @@ use oat\generis\model\OntologyRdf;
  * @package generis
 
  */
-class core_kernel_users_GenerisUser extends common_user_User
+class core_kernel_users_GenerisUser extends common_user_User implements UserInternalInterface
 {
 
     private $userResource;
