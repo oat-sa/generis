@@ -182,4 +182,46 @@ return new oat\oatbox\log\LoggerService(array(
 ));
 `
  *
+ * TAO Fluentd Logger config with backtrace on error
+ * Example:
+`
+return new oat\oatbox\log\LoggerService(array(
+    'logger' => array(
+        'class' => 'oat\\oatbox\\log\\logger\\TaoMonolog',
+        'options' => array(
+            'name' => 'tao',
+            'handlers' => array(
+                array(
+                    'class' => \oat\oatbox\log\logger\handler\FluentdHandler::class,
+                    'options' => [
+                        new \Fluent\Logger\FluentLogger(
+                            \Fluent\Logger\FluentLogger::DEFAULT_ADDRESS,
+                            \Fluent\Logger\FluentLogger::DEFAULT_LISTEN_PORT
+                        )
+                    ],
+                    'processors' => array(
+                        array(
+                            'class' => \oat\oatbox\log\logger\processor\EnvironmentProcessor::class,
+                            'options' => array(
+                                100, // Monolog level e.q. debug
+                            )
+                        ),
+                        array(
+                            'class' => \oat\oatbox\log\logger\processor\BacktraceProcessor::class,
+                            'options' => array(
+                                300, // Monolog level e.q. error
+                                true,
+                            )
+                        )
+                    ),
+                    'formatter' => array(
+                        'class' => \oat\oatbox\log\logger\formatter\TaoJsonLogFormatter::class,
+                    ),
+                ),
+            ),
+        )
+    )
+));
+`
+ *
  **/
