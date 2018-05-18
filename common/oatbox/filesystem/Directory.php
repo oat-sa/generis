@@ -180,7 +180,7 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
                     throw new \common_exception_FileSystemError("Unable to rename '" . $this->getPrefix() . "' into '${path}'.");
                 }
             } catch (FileExistsException $e) {
-                return new \common_exception_FileSystemError("Unable to rename '" . $this->getPrefix() . "' into '${path}'. File already exists.");
+                throw new \common_exception_FileSystemError("Unable to rename '" . $this->getPrefix() . "' into '${path}'. File already exists.");
             }
         }
 
