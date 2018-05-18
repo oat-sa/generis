@@ -21,6 +21,7 @@
 namespace oat\oatbox\filesystem;
 
 use League\Flysystem\Exception;
+use League\Flysystem\FileExistsException;
 
 class Directory extends FileSystemHandler implements \IteratorAggregate
 {
@@ -174,8 +175,12 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         }
 
         foreach ($filePaths as $renaming) {
-            if ($this->getFileSystem()->rename($renaming['source'], $renaming['destination']) === false) {
-                throw new \common_exception_FileSystemError("Unable to rename '" . $this->getPrefix() . "' into '${path}'.");
+            try {
+                if ($this->getFileSystem()->rename($renaming['source'], $renaming['destination']) === false) {
+                    throw new \common_exception_FileSystemError("Unable to rename '" . $this->getPrefix() . "' into '${path}'.");
+                }
+            } catch (FileExistsException $e) {
+                return new \common_exception_FileSystemError("Unable to rename '" . $this->getPrefix() . "' into '${path}'. File already exists.");
             }
         }
 
