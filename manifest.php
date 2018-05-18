@@ -31,7 +31,7 @@ return array(
     'label' => 'Generis Core',
     'description' => 'Core extension, provide the low level framework and an API to manage ontologies',
     'license' => 'GPL-2.0',
-    'version' => '7.3.1',
+    'version' => '7.5.1',
     'author' => 'Open Assessment Technologies, CRP Henri Tudor',
     'requires' => array(),
     'models' => array(
