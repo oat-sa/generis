@@ -63,23 +63,29 @@ abstract class common_ext_ExtensionHandler
     }
     
     /**
-     * @param mixed $script
+     * Run Extension Script
+     *
+     * @param string $script
+     * @param array $arguments (optional)
      * @throws common_ext_InstallationException
      */
-    protected function runExtensionScript($script)
+    protected function runExtensionScript($script, array $arguments = [])
     {
-        $this->log('d', 'Running custom extension script '.$script.' for extension '.$this->getExtension()->getId(), 'INSTALL');
+        $this->log('d', 'Running custom extension script ' . $script . ' for extension ' . $this->getExtension()->getId(), 'INSTALL');
         if (file_exists($script)) {
             require_once $script;
-        } elseif (class_exists($script) && is_subclass_of($script, 'oat\\oatbox\\action\\Action')) {
+        } elseif (class_exists($script) && is_subclass_of($script, \oat\oatbox\action\Action::class)) {
             $action = new $script();
+
             if ($action instanceof ServiceLocatorAwareInterface) {
                 $action->setServiceLocator($this->getServiceManager());
             }
-            $report = call_user_func($action, array());
+
+            call_user_func($action, $arguments);
         } else {
-            $error = new common_ext_InstallationException('Unable to run install script '.$script);
+            $error = new common_ext_InstallationException('Unable to run install script ' . $script);
             $error->setExtensionId($this->getExtension()->getId());
+
             throw $error;
         }
     }
