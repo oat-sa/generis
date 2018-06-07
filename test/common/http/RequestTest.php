@@ -27,7 +27,7 @@ use \common_http_Request;
  *
  * @author Bertrand Chevrier <bertrand@taotesting.com>
  */
-class ReqyestTest extends GenerisPhpUnitTestRunner {
+class RequestTest extends GenerisPhpUnitTestRunner {
 
     /**
      * Test the method getHeaderValue
