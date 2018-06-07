@@ -176,22 +176,27 @@ class common_ext_ExtensionInstaller
 		
 	}
 
-	/**
-	 * Executes custom install scripts 
-	 * specified in the Manifest
-	 *
-	 * @access protected
-	 * @author Jerome Bogaerts, <jerome@taotesting.com>
-	 * @return void
-	 */
+    /**
+     * Install Custom Scripts
+     *
+     * Executes custom install scripts specified in the Manifest
+     *
+     * @throws common_ext_InstallationException
+     * @throws common_ext_ManifestNotFoundException
+     */
 	protected function installCustomScript()
 	{
-		
 		//install script
 		foreach ($this->extension->getManifest()->getInstallPHPFiles() as $script) {
-		    $this->runExtensionScript($script);
+		    if (is_string($script)) {
+                $this->runExtensionScript($script);
+            } elseif (is_array($script) && isset($script[0]) && is_string($script[0]) && !empty($script[0]) && isset($script[1]) && is_array($script[1])) {
+                $this->runExtensionScript($script[0], $script[1]);
+            } else {
+		        \common_Logger::w("Ignored custom install script because it's call definition is malformed in extension manifest!");
+            }
 		}
-		
+
 	}
 
 	/**
