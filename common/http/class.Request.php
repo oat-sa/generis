@@ -156,6 +156,25 @@ class common_http_Request
     {
         return $this->headers;
     }
+
+    /**
+     * Get the value of an HTTP header
+     * The lookup is case insensitive.
+     * @param string $headerName the HTTP header name, 'Content-Type' for example
+     * @return boolean|string the value or false if not found
+     */
+    public function getHeaderValue($headerName)
+    {
+        if (is_string($headerName) && count($this->headers) > 0) {
+            $lowCaseHeaders = array_change_key_case($this->headers, CASE_LOWER);
+            $lowCaseHeaderName = strtolower($headerName);
+            if (isset($lowCaseHeaders[$lowCaseHeaderName])) {
+                return $lowCaseHeaders[$lowCaseHeaderName];
+            }
+        }
+        return false;
+    }
+
     /**
      * set request body to send
      */
