@@ -24,11 +24,7 @@
 return array(
     array(
         'driver' => 'oat\\generis\\model\\user\\AuthAdapter',
-        'user_factory' => 'generis/userFactory',
-        'hash' => array(
-            'algorithm' => 'sha256',
-            'salt' => 10
-        )
+        'user_factory' => 'generis/userFactory'
     ),
     /*
     array(
