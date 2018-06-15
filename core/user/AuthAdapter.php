@@ -27,6 +27,7 @@ use core_kernel_users_InvalidLoginException;
 use oat\generis\Helper\UserHashForEncryption;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
+use oat\oatbox\Configurable;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\user\auth\LoginAdapter;
 
@@ -38,14 +39,16 @@ use oat\oatbox\user\auth\LoginAdapter;
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
  */
-class AuthAdapter
-	implements LoginAdapter
+class AuthAdapter extends Configurable implements LoginAdapter
 {
+    const OPTION_PATTERN = 'pattern';
+    const OPTION_USERFACTORY = 'user_factory';
+
     /**
      * Returns the hashing algorithm defined in generis configuration
      * use core_kernel_users_Service::getPasswordHash() instead
      * 
-     * @return helpers_PasswordHash
+     * @return \helpers_PasswordHash
      * @deprecated
      */
     public static function getPasswordHash() {
@@ -65,18 +68,6 @@ class AuthAdapter
      * @var $password
      */
     protected $password;
-
-	/** @var array */
-	private $options;
-
-	/**
-	 * 
-	 * @param array $configuration
-	 */
-	public function setOptions(array $options)
-    {
-        $this->options = $options;
-	}
 	
 	/**
 	 * (non-PHPdoc)
@@ -93,7 +84,13 @@ class AuthAdapter
      * @throws \Exception
      */
     public function authenticate() {
-    	
+
+        if ($this->hasOption(self::OPTION_PATTERN)) {
+            if (preg_match($this->getOption(self::OPTION_PATTERN), $this->username) === 0) {
+                throw new core_kernel_users_InvalidLoginException("Invalid pattern for user '" . $this->username . "'.");
+            }
+        }
+
     	$userClass = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_USER);
     	$filters = array(GenerisRdf::PROPERTY_USER_LOGIN => $this->username);
     	$options = array('like' => false, 'recursive' => true);
@@ -121,8 +118,8 @@ class AuthAdapter
 	        throw new core_kernel_users_InvalidLoginException('Invalid password for user "'.$this->username.'"');
 	    }
 
-	    if (isset($this->options['user_factory'])){
-            $userFactory = ServiceManager::getServiceManager()->get($this->options['user_factory']) ;
+	    if ($this->hasOption(self::OPTION_USERFACTORY)){
+            $userFactory = ServiceManager::getServiceManager()->get($this->getOption(self::OPTION_USERFACTORY)) ;
 
             if ($userFactory instanceof UserFactoryServiceInterface) {
                 return $userFactory->createUser($userResource, UserHashForEncryption::hash($this->password));

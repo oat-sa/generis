@@ -782,11 +782,7 @@ class common_ext_Manifest
      */
     public function getInstallPHPFiles()
     {
-        $returnValue = array();
-
-        $returnValue = $this->installPHPFiles;
-
-        return (array) $returnValue;
+        return $this->installPHPFiles;
     }
     
     /**
