@@ -75,20 +75,21 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
      */
     public function hSet($key, $field, $value)
     {
-        $oldValue = $this->getDriver()->hGet($key, $field);
-        if ($this->isSplit($oldValue)) {
-            $this->deleteMappedKey($field, $oldValue);
-        }
-
-        try {
-            if ($this->isLarge($value)) {
-                $value = $this->setLargeValue($this->getMappedKey($key, $field), $value, 0, false);
+        if ($this->hasMaxSize()) {
+            $oldValue = $this->getDriver()->hGet($key, $field);
+            if ($this->isSplit($oldValue)) {
+                $this->deleteMappedKey($field, $oldValue);
             }
-        } catch (common_Exception $e) {
-            common_Logger::w('Max size value is misconfigured: ' . $e->getMessage());
+
+            try {
+                if ($this->isLarge($value)) {
+                    $value = $this->setLargeValue($this->getMappedKey($key, $field), $value, 0, false);
+                }
+            } catch (common_Exception $e) {
+                common_Logger::w('Max size value is misconfigured: ' . $e->getMessage());
+            }
         }
-
-
+        
         return $this->getDriver()->hSet($key, $field, $value);
     }
 
