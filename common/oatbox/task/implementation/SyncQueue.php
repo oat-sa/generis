@@ -20,10 +20,10 @@
 
 namespace oat\oatbox\task\implementation;
 
-use oat\oatbox\task\Queue;
+use oat\oatbox\task\AbstractQueue;
 use oat\oatbox\task\Task;
 use oat\oatbox\task\TaskRunner;
-use oat\oatbox\service\ConfigurableService;
+use \common_report_Report as Report;
 
 /**
  * Class SyncQueue
@@ -40,7 +40,7 @@ use oat\oatbox\service\ConfigurableService;
  * @package oat\oatbox\task\implementation
  * @author Aleh Hutnikau, <huntikau@1pt.com>
  */
-class SyncQueue extends ConfigurableService implements Queue
+class SyncQueue extends AbstractQueue
 {
 
     /**
@@ -49,14 +49,9 @@ class SyncQueue extends ConfigurableService implements Queue
     protected $taskRunner;
 
     /**
-     * @var SyncTask[]
-     */
-    protected $tasks = [];
-
-    /**
      * Create and run task
      * @param \oat\oatbox\action\Action|string $action action instance, classname or callback function
-     * @param $parameters parameters to be passed to the action
+     * @param array $parameters parameters to be passed to the action
      * @param boolean $recall Parameter which indicates that task has been created repeatedly after fail of previous.
      * For current implementation in means that the second call will not be executed to avoid loop.
      * @param null|string $label
@@ -72,7 +67,7 @@ class SyncQueue extends ConfigurableService implements Queue
         $task = new SyncTask($action, $parameters);
         $task->setLabel($label);
         $task->setType($type);
-        $this->tasks[$task->getId()] = $task;
+        $this->getPersistence()->add($task);
         $this->runTask($task);
         return $task;
     }
@@ -82,50 +77,33 @@ class SyncQueue extends ConfigurableService implements Queue
      */
     public function getIterator()
     {
-        return new \EmptyIterator;
+        return new TaskList($this->getPersistence()->getAll());
     }
 
     /**
-     * @param $taskId
-     * @param $status
-     * @param $report
-     * @return self
-     */
-    public function updateTaskStatus($taskId, $status, $report = '')
-    {
-        if (isset($this->tasks[$taskId])) {
-            $this->tasks[$taskId]->setStatus($status);
-            $this->tasks[$taskId]->setReport($report);
-        }
-        return $this;
-    }
-
-    /**
-     * @param $taskId
-     * @return SyncTask
-     */
-    public function getTask($taskId)
-    {
-        return isset($this->tasks[$taskId]) ? $this->tasks[$taskId] : null;
-    }
-
-    /**
+     * Create task resource in the rdf storage and link placeholder resource to it.
      * @param Task $task
-     * @return mixed
+     * @param \core_kernel_classes_Resource|null $resource - placeholder resource to be linked with task.
+     * @throws
+     * @return \core_kernel_classes_Resource
      */
-    private function runTask(Task $task)
+    public function linkTask(Task $task, \core_kernel_classes_Resource $resource = null)
     {
-        return $this->getTaskRunner()->run($task);
+        $taskResource = parent::linkTask($task, $resource);
+        $report = $task->getReport();
+        if (!empty($report)) {
+            //serialize only two first report levels because sometimes serialized report is huge and it does not fit into `k_po` index of statemetns table.
+            $serializableReport = new Report($report->getType(), $report->getMessage(), $report->getData());
+            foreach ($report as $subReport) {
+                $serializableSubReport = new Report($subReport->getType(), $subReport->getMessage(), $subReport->getData());
+                $serializableReport->add($serializableSubReport);
+            }
+            $taskResource->setPropertyValue(
+                new \core_kernel_classes_Property(Task::PROPERTY_REPORT),
+                json_encode($serializableReport)
+            );
+        }
+        return $taskResource;
     }
 
-    /**
-     * @return TaskRunner
-     */
-    private function getTaskRunner()
-    {
-        if ($this->taskRunner === null) {
-            $this->taskRunner = new TaskRunner();
-        }
-        return $this->taskRunner;
-    }
 }

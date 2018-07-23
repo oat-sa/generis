@@ -66,9 +66,12 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
      * @throws common_Exception
      * @return boolean
      */
-    public function set($id, $value, $ttl = null) {
-       
+    public function set($id, $value, $ttl = null, $nx = false)
+    {
         $returnValue = false;
+        if ($nx) {
+            throw new common_exception_NotImplemented('NX not implemented in '.__CLASS__);
+        }
         try{
             
             $expire = is_null($ttl) ? 0 : time() + $ttl;
@@ -169,7 +172,30 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
         }
         return false;
     }
-    
+
+    /**
+     * Increment existing value
+     * @param string $id
+     * @return mixed
+     */
+    public function incr($id)
+    {
+        $params = [':id' => $id];
+        $statement = 'UPDATE kv_store SET kv_value = kv_value + 1 WHERE kv_id = :id';
+        return $this->sqlPeristence->exec($statement, $params);
+    }
+
+    /**
+     * Decrement existing value
+     * @param $id
+     * @return mixed
+     */
+    public function decr($id) {
+        $params = [':id' => $id];
+        $statement = 'UPDATE kv_store SET kv_value = kv_value - 1 WHERE kv_id = :id';
+        return $this->sqlPeristence->exec($statement, $params);
+    }
+
     /**
      * Should be moved to another interface (session handler) than the persistence, 
      * this class implementing only the persistence side and another class implementing 

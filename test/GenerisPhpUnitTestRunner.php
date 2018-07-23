@@ -30,7 +30,7 @@ use \common_persistence_Manager;
 /**
  * @author CRP Henri Tudor - TAO Team
  * @license GPLv2
- *
+ * @deprecated it uses constants
  */
 
 abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase

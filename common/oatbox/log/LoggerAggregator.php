@@ -20,33 +20,43 @@
 
 namespace oat\oatbox\log;
 
+use oat\oatbox\Configurable;
+use oat\oatbox\service\ConfigurableService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\AbstractLogger;
+use Psr\Log\LoggerTrait;
+
 /**
  * An aggregator that broadcast logs to multiple loggers
  * 
  * @author Joel Bout <joel@taotesting.com>
  */
-class LoggerAggregator extends AbstractLogger
+class LoggerAggregator extends ConfigurableService implements LoggerInterface
 {
+    use LoggerTrait;
+
     /**
      * @var LoggerInterface[]
      */
     private $loggers;
-    
+
     /**
-     * Instantiate the aggregator
+     * Instantiate the aggregator.
      *
-     * @param LoggerInterface[] $loggers
+     * @param LoggerInterface[] $options
+     * @throws \common_Exception If one of logger isnot a Psr3 logger
      */
-    public function __construct($loggers)
+    public function __construct($options = array())
     {
-        foreach ($loggers as $logger) {
+        parent::__construct($options);
+
+        foreach ($this->getOptions() as $logger) {
             if (!$logger instanceof LoggerInterface) {
-                throw new \common_Exception('Non PSR-3 compatible logger '.get_class($logger).' added to '.__CLASS__);
+                throw new \common_Exception('Non PSR-3 compatible logger ' . get_class($logger) . ' added to '.__CLASS__);
             }
         }
-        $this->loggers = $loggers;
+
+        $this->loggers = $this->getOptions();
     }
     
     /**

@@ -31,6 +31,8 @@ use oat\oatbox\user\User;
  */
 interface PermissionInterface
 {
+    const SERVICE_ID = 'generis/permissions';
+
     /**
      * All unsupported rigths will be mapped to this right
      * 

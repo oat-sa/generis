@@ -19,19 +19,18 @@
  */
 namespace oat\generis\test\model\data\permission;
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
 use oat\generis\model\data\permission\implementation\NoAccess;
+use oat\oatbox\user\User;
 
-class NoAccessTest extends GenerisPhpUnitTestRunner
+class NoAccessTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var oat\oatbox\user\User
+     * @var User
      */
     private $user;
 
     public function setUp()
     {
-        GenerisPhpUnitTestRunner::initTest();
         $user = $this->prophesize('oat\oatbox\user\User');
         $user->getIdentifier()->willReturn('tastIdentifier\\_of_//User');
         

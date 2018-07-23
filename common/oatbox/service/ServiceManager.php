@@ -20,10 +20,10 @@
 
 namespace oat\oatbox\service;
 
-use common_ext_ExtensionsManager;
 use oat\oatbox\Configurable;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+
 /**
  * The simple placeholder ServiceManager
  * @author Joel Bout <joel@taotesting.com>
@@ -31,7 +31,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 class ServiceManager implements ServiceLocatorInterface
 {
     private static $instance;
-    
+
     public static function getServiceManager()
     {
         if (is_null(self::$instance)) {
@@ -39,41 +39,46 @@ class ServiceManager implements ServiceLocatorInterface
         }
         return self::$instance;
     }
-    
+
+    public static function setServiceManager(ServiceManager $serviceManager)
+    {
+        self::$instance = $serviceManager;
+    }
+
     private $services = array();
-    
+
     /**
      * @var \common_persistence_KeyValuePersistence
      */
     private $configService;
-    
+
     public function __construct($configService)
     {
         $this->configService = $configService;
     }
-    
+
     /**
      * Returns the service configured for the serviceKey
      * or throws a ServiceNotFoundException
-     * 
+     *
      * @param string $serviceKey
-     * @throws \common_Exception
-     * @throws ServiceNotFoundException
+     * @return ConfigurableService
      */
     public function get($serviceKey)
     {
+        if ((interface_exists($serviceKey) || class_exists($serviceKey)) && defined($serviceKey . '::SERVICE_ID')) {
+            $serviceKey = $serviceKey::SERVICE_ID;
+        }
         if (!isset($this->services[$serviceKey])) {
             $service = $this->getConfig()->get($serviceKey);
             if ($service === false) {
                 throw new ServiceNotFoundException($serviceKey);
             }
-            $this->propagate($service);
-            
-            $this->services[$serviceKey] = $service;
+            $this->services[$serviceKey] = $this->propagate($service);
         }
         return $this->services[$serviceKey];
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \Zend\ServiceManager\ServiceLocatorInterface::has()
@@ -87,15 +92,14 @@ class ServiceManager implements ServiceLocatorInterface
         if (count($parts) < 2) {
             return false;
         }
-        list($extId, $configId) = $parts;
-        $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
-        return $extension->hasConfig($configId);
+
+        return $this->getConfig()->exists($serviceKey);
     }
 
     /**
      * Registers a service, overwritting a potentially already
      * existing service.
-     * 
+     *3
      * @param string $serviceKey
      * @param ConfigurableService $service
      * @throws \common_Exception
@@ -127,7 +131,7 @@ class ServiceManager implements ServiceLocatorInterface
     {
         return $this->configService;
     }
-    
+
     /**
      * Propagate service dependencies
      *
@@ -136,7 +140,7 @@ class ServiceManager implements ServiceLocatorInterface
      */
     public function propagate($service)
     {
-         if(is_object($service) &&  ($service instanceof ServiceLocatorAwareInterface)){
+        if(is_object($service) &&  ($service instanceof ServiceLocatorAwareInterface)){
             $service->setServiceLocator($this);
         }
         return $service;
@@ -159,5 +163,25 @@ class ServiceManager implements ServiceLocatorInterface
         }
 
         throw new ServiceNotFoundException($className);
+    }
+
+    /**
+     * Prevents accidental serialisation of the services
+     * @return array
+     */
+    public function __sleep()
+    {
+        return [];
+    }
+
+    /**
+     * Dynamically overload a service without persisting it
+     *
+     * @param $serviceKey
+     * @param ConfigurableService $service
+     */
+    public function overload($serviceKey, ConfigurableService $service)
+    {
+        $this->services[$serviceKey] = $service;
     }
 }

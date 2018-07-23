@@ -47,21 +47,21 @@ class common_cache_KeyValueCache extends ConfigurableService
         }
         return $this->persistence;
     }
-    
+
     /**
      * puts "something" into the cache,
      *      * If this is an object and implements Serializable,
      *      * we use the serial provided by the object
      *      * else a serial must be provided
-     *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  mixed
-     * @param  string serial
-     * @return boolean
+     * @param mixed $mixed
+     * @param null $serial
+     * @param null $ttl
+     * @return bool
      * @throws common_exception_Error
      */
-    public function put($mixed, $serial = null)
+    public function put($mixed, $serial = null, $ttl = null)
     {
         if ($mixed instanceof common_Serializable) {
         	if (!is_null($serial) && $serial != $mixed->getSerial()) {
@@ -69,7 +69,8 @@ class common_cache_KeyValueCache extends ConfigurableService
         	}
         	$serial = $mixed->getSerial();
         }
-        return $this->getPersistence()->set($serial, $mixed);
+
+        return $this->getPersistence()->set($serial, $mixed, $ttl);
     }
 
     /**

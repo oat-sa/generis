@@ -21,11 +21,13 @@ namespace oat\oatbox\install;
 
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\exception\InvalidService;
+use oat\oatbox\service\exception\InvalidServiceManagerException;
+use oat\oatbox\service\ServiceConfigDriver;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\service\ServiceNotFoundException;
-use oat\oatbox\service\SimpleConfigDriver;
 use common_report_Report as Report;
+
  /**
  * A service to install oatbox functionality
  * 
@@ -43,28 +45,29 @@ class Installer extends ConfigurableService
     {
         $this->validateOptions();
 
-        $configPath = $this->getOption('root_path').'config/';
-        $serviceManager = $this->setupServiceManager($configPath);
-
-        try{
-            if(!($serviceManager->get(FileSystemService::SERVICE_ID) instanceof FileSystemService)){
-                throw new InvalidService('Your service must be a oat\oatbox\filesystem\FileSystemService');
-            }
-        } catch(ServiceNotFoundException $e){
-            $fileSystemService = new FileSystemService(array(FileSystemService::OPTION_FILE_PATH => $this->getOption('file_path')));
-            $serviceManager->register(FileSystemService::SERVICE_ID, $fileSystemService);
-        }
+        $this->setupServiceManager($this->getConfigPath());
+        $this->installFilesystem();
 
         return new Report(Report::TYPE_SUCCESS, 'Oatbox installed successfully');
     }
 
+    /**
+     * Setup the service manager with configuration driver associated to config path
+     *
+     * @param $configPath
+     * @return ServiceManager
+     * @throws \common_exception_Error
+     * @throws InvalidServiceManagerException
+     */
     public function setupServiceManager($configPath)
     {
-        if(is_null($this->getServiceManager())){
-            if (!\helpers_File::emptyDirectory($configPath, true)) {
+        try {
+            $this->getServiceManager();
+        } catch (InvalidServiceManagerException $e) {
+            if (! \helpers_File::emptyDirectory($configPath, true)) {
                 throw new \common_exception_Error('Unable to empty ' . $configPath . ' folder.');
             }
-            $driver = new SimpleConfigDriver();
+            $driver = new ServiceConfigDriver();
             $configService = $driver->connect('config', array(
                 'dir' => $configPath,
                 'humanReadable' => true
@@ -75,7 +78,31 @@ class Installer extends ConfigurableService
 
         return $this->getServiceManager();
     }
-    
+
+    /**
+     * Install the filesystem service if not already installed
+     *
+     * @throws InvalidService If installed filesystem is not a FileSystemService
+     * @throws InvalidServiceManagerException
+     * @throws \common_Exception
+     */
+    protected function installFilesystem()
+    {
+        try {
+            if(! ($this->getServiceManager()->get(FileSystemService::SERVICE_ID) instanceof FileSystemService)) {
+                throw new InvalidService('Your service must be a oat\oatbox\filesystem\FileSystemService');
+            }
+        } catch(ServiceNotFoundException $e){
+            $fileSystemService = new FileSystemService(array(FileSystemService::OPTION_FILE_PATH => $this->getOption('file_path')));
+            $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fileSystemService);
+        }
+    }
+
+    /**
+     * Validate require option e.q. file_path & root_path
+     *
+     * @throws \common_exception_MissingParameter
+     */
     protected function validateOptions()
     {
         if (!$this->hasOption('root_path') || empty($this->getOption('root_path'))) {
@@ -84,8 +111,19 @@ class Installer extends ConfigurableService
         if (!$this->hasOption('file_path') || empty($this->getOption('file_path'))) {
             throw new \common_exception_MissingParameter('file_path', __CLASS__);
         }
-        
     }
-    
+
+    /**
+     * Get the path where to install config
+     *
+     * @return string
+     */
+    protected function getConfigPath()
+    {
+        if ($this->hasOption('config_path') && ! empty($this->getOption('config_path'))) {
+            return $this->getOption('config_path');
+        }
+        return rtrim($this->getOption('root_path'), '/\\') . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
+    }
     
 }

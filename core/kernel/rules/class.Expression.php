@@ -16,8 +16,11 @@
  * 
  * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg) (under the project TAO-QUAL);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
+ *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
+
+use oat\generis\model\RulesRdf;
 
 
 /**
@@ -78,10 +81,10 @@ class core_kernel_rules_Expression
         
         common_Logger::i('Evaluating Expression uri: '. $this->getUri(), array('Generis Expression'));
         common_Logger::i('Evaluating Expression name: '. $this->getLabel(), array('Generis Expression'));
-		if ($this->getUri() == INSTANCE_EXPRESSION_TRUE) {
+		if ($this->getUri() == RulesRdf::INSTANCE_EXPRESSION_TRUE) {
 			return true;
 		}
-    	if ($this->getUri() == INSTANCE_EXPRESSION_FALSE) {
+    	if ($this->getUri() == RulesRdf::INSTANCE_EXPRESSION_FALSE) {
 			return false;
 		}
 		$returnValue = $this->expEval($variable);
@@ -105,9 +108,7 @@ class core_kernel_rules_Expression
     {
         
         parent::__construct($uri);
-        $this->debug = $debug;
 
-        
     }
 
     /**
@@ -123,7 +124,7 @@ class core_kernel_rules_Expression
 
         
          if(empty($this->logicalOperator)){
-         	$property = new core_kernel_classes_Property(PROPERTY_HASLOGICALOPERATOR);
+         	$property = new core_kernel_classes_Property(RulesRdf::PROPERTY_HASLOGICALOPERATOR);
 			$this->logicalOperator = $this->getUniquePropertyValue($property);
          }
          $returnValue = $this->logicalOperator;
@@ -144,7 +145,7 @@ class core_kernel_rules_Expression
         $returnValue = null;
 
         
-        $property = new core_kernel_classes_Property(PROPERTY_TERMINAL_EXPRESSION);
+        $property = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERMINAL_EXPRESSION);
         $propertyValue = $this->getUniquePropertyValue($property);
         if ($propertyValue instanceof core_kernel_classes_Resource ) {
        		$returnValue = new core_kernel_rules_Term($propertyValue->getUri() );
@@ -171,7 +172,7 @@ class core_kernel_rules_Expression
 
         
         if(empty($this->firstExpression)){
-        	$property = new core_kernel_classes_Property(PROPERTY_FIRST_EXPRESSION);
+        	$property = new core_kernel_classes_Property(RulesRdf::PROPERTY_FIRST_EXPRESSION);
 			$this->firstExpression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->getUri());
         }
 		$returnValue = $this->firstExpression;
@@ -193,7 +194,7 @@ class core_kernel_rules_Expression
 
         
         if(empty($this->secondExpression)){
-	        $property = new core_kernel_classes_Property(PROPERTY_SECOND_EXPRESSION);
+	        $property = new core_kernel_classes_Property(RulesRdf::PROPERTY_SECOND_EXPRESSION);
 			$this->secondExpression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->getUri());
         }
         $returnValue = $this->secondExpression;
@@ -216,16 +217,16 @@ class core_kernel_rules_Expression
 		$terminalExpression = $this->getTerminalExpression();
 		
 
-    	if ($terminalExpression->getUri() == INSTANCE_EMPTY_TERM_URI){
+    	if ($terminalExpression->getUri() == RulesRdf::INSTANCE_EMPTY_TERM_URI){
 			$firstPart = $this->getFirstExpression()->expEval($variable) ;
 			
-			if($this->getLogicalOperator()->getUri() == INSTANCE_AND_OPERATOR) {
+			if($this->getLogicalOperator()->getUri() == RulesRdf::INSTANCE_AND_OPERATOR) {
 				if ($firstPart == false) {
 					common_Logger::i('CUT : first Expression == FALSE and OPERATOR = AND', array('Generis Expression'));
 					return false;
 				}
 			}
-			if($this->getLogicalOperator()->getUri() == INSTANCE_OR_OPERATOR) {
+			if($this->getLogicalOperator()->getUri() == RulesRdf::INSTANCE_OR_OPERATOR) {
 
 				if ($firstPart == true) {
 					common_Logger::i('CUT : first Expression == TRUE and OPERATOR = OR', array('Generis Expression'));
@@ -276,7 +277,7 @@ class core_kernel_rules_Expression
 					
 					//TODO exist unique need to be added
 					
-					if ($this->getLogicalOperator()->getUri() != INSTANCE_DIFFERENT_OPERATOR_URI)
+					if ($this->getLogicalOperator()->getUri() != RulesRdf::INSTANCE_DIFFERENT_OPERATOR_URI)
 					{
 						$tempResult = $tempResult || $this->operatorEval($container,$secondPart);
 					}
@@ -313,12 +314,12 @@ class core_kernel_rules_Expression
 				common_Logger::d('Both part are boolean', array('Generis Expression'));
 			
 				switch($this->getLogicalOperator()->getUri()) {
-					case INSTANCE_OR_OPERATOR : {
+					case RulesRdf::INSTANCE_OR_OPERATOR : {
 						$returnValue = $firstPart || $secondPart ;
 						
 						break;
 					}
-					case INSTANCE_AND_OPERATOR : {
+					case RulesRdf::INSTANCE_AND_OPERATOR : {
 						$returnValue = $firstPart &&  $secondPart ;
 						break;
 					}
@@ -502,28 +503,28 @@ class core_kernel_rules_Expression
         common_Logger::d('Operator : '. $this->getLogicalOperator()->getLabel(), array('Generis Expression'));
         
         switch($this->getLogicalOperator()->getUri()) {
-			case INSTANCE_EQUALS_OPERATOR_URI : {
+			case RulesRdf::INSTANCE_EQUALS_OPERATOR_URI : {
 				$returnValue = $this->evalEquals($firstPart,$secondPart);
 				break;
 			}
-			case INSTANCE_DIFFERENT_OPERATOR_URI : {
+			case RulesRdf::INSTANCE_DIFFERENT_OPERATOR_URI : {
 				$returnValue = $this->evalDifferent($firstPart,$secondPart);
 				break;
 			}
 
-			case INSTANCE_SUP_EQ_OPERATOR_URI : {
+			case RulesRdf::INSTANCE_SUP_EQ_OPERATOR_URI : {
 				$returnValue = $this->evalSupEquals($firstPart,$secondPart);
 				break;
 			}
-			case INSTANCE_INF_EQ_OPERATOR_URI : {
+			case RulesRdf::INSTANCE_INF_EQ_OPERATOR_URI : {
 				$returnValue = $this->evalInfEquals($firstPart,$secondPart);
 				break;
 			}
-			case INSTANCE_SUP_OPERATOR_URI : {
+			case RulesRdf::INSTANCE_SUP_OPERATOR_URI : {
 				$returnValue = $this->evalSup($firstPart,$secondPart);				
 				break;			
 			}
-			case INSTANCE_INF_OPERATOR_URI : {
+			case RulesRdf::INSTANCE_INF_OPERATOR_URI : {
 				$returnValue = $this->evalInf($firstPart,$secondPart);
 				break;
 			}

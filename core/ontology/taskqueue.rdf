@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xml:base="http://www.tao.lu/Ontologies/taskqueue.rdf#"
+	xmlns:generis="http://www.tao.lu/Ontologies/generis.rdf#"
+	xmlns:widget="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#"
+>
+    <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#TaskQueueTask">
+        <rdfs:label xml:lang="en-US"><![CDATA[Task in the taskqueue]]></rdfs:label>
+        <rdfs:comment xml:lang="en-US"><![CDATA[Task in the taskqueue]]></rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#LinkedResource">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:label xml:lang="en-US"><![CDATA[Linked resource]]></rdfs:label>
+        <rdfs:comment xml:lang="en-US"><![CDATA[Resource linked to the task]]></rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#TaskQueueTask"/>
+        <rdfs:range rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource"/>
+        <generis:is_language_dependent rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#False"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#Report">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:label xml:lang="en-US"><![CDATA[Report]]></rdfs:label>
+        <rdfs:comment xml:lang="en-US"><![CDATA[Task execution report]]></rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#TaskQueueTask"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <generis:is_language_dependent rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#False"/>
+    </rdf:Description>
+</rdf:RDF>

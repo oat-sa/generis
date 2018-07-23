@@ -20,6 +20,9 @@
 
 namespace oat\oatbox\filesystem;
 
+use League\Flysystem\Exception;
+use League\Flysystem\FileExistsException;
+
 class Directory extends FileSystemHandler implements \IteratorAggregate
 {
     const ITERATOR_RECURSIVE = '1';
@@ -143,5 +146,48 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
     protected function getFullPath($path)
     {
         return $this->getPrefix() . '/' . $this->sanitizePath($path);
+    }
+
+    /**
+     * Rename
+     *
+     * Rename directory into $path
+     *
+     * @param $path
+     * @return bool
+     * @throws \common_exception_FileSystemError
+     */
+    public function rename($path)
+    {
+        // This implementation supersedes the Flysystem's one. Indeed, while using connectors
+        // such as the Amazon S3 (v3) connector, rename on directories does not work. A custom
+        // implementation is then needed.
+        $contents = $this->getFileSystem()->listContents($this->getPrefix(), true);
+
+        // Filter files only.
+        $filePaths = [];
+        foreach ($contents as $content) {
+            if ($content['type'] === 'file') {
+                $filePaths[]= [
+                    'source' => $content['path'],
+                    'destination' => str_replace($this->getPrefix(), $path, $content['path'])];
+            }
+        }
+
+        foreach ($filePaths as $renaming) {
+            try {
+                if ($this->getFileSystem()->rename($renaming['source'], $renaming['destination']) === false) {
+                    throw new \common_exception_FileSystemError("Unable to rename '" . $this->getPrefix() . "' into '${path}'.");
+                }
+            } catch (FileExistsException $e) {
+                throw new \common_exception_FileSystemError("Unable to rename '" . $this->getPrefix() . "' into '${path}'. File already exists.");
+            }
+        }
+
+        if (!$this->deleteSelf()) {
+            throw new \common_exception_FileSystemError("Could not finalize renaming of '" . $this->getPrefix() . "' into '${path}'.");
+        }
+
+        return true;
     }
 }

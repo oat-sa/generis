@@ -387,4 +387,35 @@ class helpers_File
         
         return false;
     }
+
+    /**
+     * Create a unique file name on basis of the original one.
+     *
+     * @access private
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     * @param  string $originalName
+     * @return string
+     */
+    static public function createFileName($originalName)
+    {
+        $returnValue = uniqid(hash('crc32', $originalName));
+
+        $ext = @pathinfo($originalName, PATHINFO_EXTENSION);
+        if (!empty($ext)){
+            $returnValue .= '.' . $ext;
+        }
+
+        return $returnValue;
+    }
+
+    /**
+     * @param string $type
+     * @return boolean
+     */
+    static public function isZipMimeType($type)
+    {
+        return in_array($type, [
+            'application/zip', 'application/x-zip', 'application/x-zip-compressed', 'application/octet-stream'
+        ]);
+    }
 }

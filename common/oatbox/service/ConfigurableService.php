@@ -20,8 +20,10 @@
 namespace oat\oatbox\service;
 
 use oat\oatbox\Configurable;
+use oat\oatbox\log\LoggerAwareTrait;
 use oat\oatbox\service\exception\InvalidService;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use oat\oatbox\service\exception\InvalidServiceManagerException;
+use Psr\Log\LoggerAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
@@ -34,32 +36,33 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  */
 abstract class ConfigurableService extends Configurable implements ServiceLocatorAwareInterface
 {
+    use ServiceManagerAwareTrait;
+
+    /** @var string Documentation header */
+    protected $header = null;
 
     private $subServices = [];
 
-    use ServiceLocatorAwareTrait;
-
-    public function setServiceManager(ServiceManager $serviceManager)
-    {
-        return $this->setServiceLocator($serviceManager);
-    }
-
     /**
+     * Get the service manager
      *
-     * @return \oat\oatbox\service\ServiceManager
+     * @deprecated Use $this->propagate instead
+     *
+     * @param $serviceManager
      */
-    public function getServiceManager()
+    public function setServiceManager($serviceManager)
     {
-        return $this->getServiceLocator();
+        $this->setServiceLocator($serviceManager);
     }
 
     /**
-     * Get a subservice from the current service
+     * Get a subservice from the current service $options
      *
      * @param $id
      * @param string $interface
-     * @throws ServiceNotFoundException
-     * @return object
+     * @return mixed
+     * @throws InvalidService
+     * @throws InvalidServiceManagerException
      */
     public function getSubService($id, $interface = null)
     {
@@ -79,17 +82,56 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
     }
 
     /**
+     * Set the documentation header uses into config file
+     *
+     * @param $header
+     */
+    public function setHeader($header)
+    {
+        $this->header = $header;
+    }
+
+    /**
+     * Return the documentation header
+     *
+     * @return string
+     */
+    public function getHeader()
+    {
+        if (is_null($this->header)) {
+            return $this->getDefaultHeader();
+        } else {
+            return $this->header;
+        }
+    }
+
+    /**
+     * Get the documentation header
+     *
+     * @return string
+     */
+    protected function getDefaultHeader()
+    {
+        return '<?php'.PHP_EOL
+            .'/**'.PHP_EOL
+            .' * Default config header created during install'.PHP_EOL
+            .' */'.PHP_EOL;
+    }
+
+    /**
+     * Build a sub service from current service $options
+     *
      * @param $serviceDefinition
      * @param string $interfaceName
-     *
-     * @return ConfigurableService
+     * @return mixed
      * @throws InvalidService
+     * @throws InvalidServiceManagerException
      */
     protected function buildService($serviceDefinition, $interfaceName = null)
     {
         if ($serviceDefinition instanceof ConfigurableService) {
             if (is_null($interfaceName) || is_a($serviceDefinition, $interfaceName)) {
-                $this->getServiceManager()->propagate($serviceDefinition);
+                $this->propagate($serviceDefinition);
                 return $serviceDefinition;
             } else {
                 throw new InvalidService('Service must implements ' . $interfaceName);

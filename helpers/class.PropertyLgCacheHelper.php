@@ -18,22 +18,35 @@
  *
  */
 
+use oat\generis\model\GenerisRdf;
+
 class helpers_PropertyLgCacheHelper
 {
 
     private static function getSerial($uri){
         return 'isPropertyLg' . md5($uri);
     }
-    
-    
-    public static function getLgDependencyCache($uri){
-           
+
+    /**
+     * @param string $uri property uri
+     * @return bool
+     * @throws core_kernel_persistence_Exception
+     */
+    public static function getLgDependencyCache($uri)
+    {
         try {
             $lgDependencyCache = common_cache_FileCache::singleton()->get(self::getSerial($uri));
-        }
-        catch (common_cache_NotFoundException $e) {
-            common_Logger::i('Could not find Lgdependent cache , initializing for ' . $uri);
-            return null;
+        } catch (common_cache_NotFoundException $e) {
+            $prop = new \core_kernel_classes_Property($uri);
+            $lgDependentProperty = new \core_kernel_classes_Property(GenerisRdf::PROPERTY_IS_LG_DEPENDENT);
+            $lgDependent = $prop->getOnePropertyValue($lgDependentProperty);
+
+            if (is_null($lgDependent) || !$lgDependent instanceof \core_kernel_classes_Resource){
+                $lgDependencyCache = false;
+            } else {
+                $lgDependencyCache = ($lgDependent->getUri() == GenerisRdf::GENERIS_TRUE);
+            }
+            self::setLgDependencyCache($uri, $lgDependencyCache);
         }
         return $lgDependencyCache;
     }
@@ -44,5 +57,3 @@ class helpers_PropertyLgCacheHelper
     }
     
 }
-
-?>

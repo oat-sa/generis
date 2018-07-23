@@ -21,6 +21,7 @@
 namespace oat\generis\model\data\permission\implementation;
 
 use oat\generis\model\data\permission\PermissionInterface;
+use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\user\User;
 
 /**
@@ -32,7 +33,7 @@ use oat\oatbox\user\User;
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  */
-class NoAccess
+class NoAccess extends ConfigurableService
     implements PermissionInterface
 {
     /**

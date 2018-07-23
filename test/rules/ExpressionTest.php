@@ -1,5 +1,8 @@
 <?php
-/*  
+
+use oat\generis\model\RulesRdf;
+
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -16,12 +19,13 @@
  * 
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ *               2017      (update and modification) Open Assessment Technologies SA;
  * 
  */
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
 
-class ExpressionTest extends GenerisPhpUnitTestRunner {
+class ExpressionTest extends \PHPUnit_Framework_TestCase
+{
 
     public function testEvaluate(){
         $constantResource1 = core_kernel_rules_TermFactory::createConst('test1');
@@ -31,10 +35,10 @@ class ExpressionTest extends GenerisPhpUnitTestRunner {
         $constantResource12 = core_kernel_rules_TermFactory::createConst('12');
         $constantResource12b = core_kernel_rules_TermFactory::createConst('12');
 
-        $true = new core_kernel_rules_Expression(INSTANCE_EXPRESSION_TRUE);
+        $true = new core_kernel_rules_Expression(RulesRdf::INSTANCE_EXPRESSION_TRUE);
         $this->assertTrue($true->evaluate());
 
-        $false = new core_kernel_rules_Expression(INSTANCE_EXPRESSION_FALSE);
+        $false = new core_kernel_rules_Expression(RulesRdf::INSTANCE_EXPRESSION_FALSE);
         $this->assertFalse($false->evaluate());
 
         $terminalExpression1 = core_kernel_rules_ExpressionFactory::createTerminalExpression($constantResource1);
@@ -46,7 +50,7 @@ class ExpressionTest extends GenerisPhpUnitTestRunner {
 
 
         // test1 == test2
-        $equalsOperator = new core_kernel_classes_Resource(INSTANCE_EQUALS_OPERATOR_URI);
+        $equalsOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_EQUALS_OPERATOR_URI);
         $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression1,$terminalExpression2,$equalsOperator);
         $this->assertFalse($finalExpression->evaluate());
         $finalExpression->delete();
@@ -57,7 +61,7 @@ class ExpressionTest extends GenerisPhpUnitTestRunner {
         $finalExpression->delete();
 
         // test1 != test2
-        $diffOperator = new core_kernel_classes_Resource(INSTANCE_DIFFERENT_OPERATOR_URI);
+        $diffOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_DIFFERENT_OPERATOR_URI);
         $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression1,$terminalExpression2,$diffOperator);
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
@@ -68,7 +72,7 @@ class ExpressionTest extends GenerisPhpUnitTestRunner {
         $finalExpression->delete();
 
         // 14 <= 12
-        $infEqOperator = new core_kernel_classes_Resource(INSTANCE_INF_EQ_OPERATOR_URI);
+        $infEqOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_INF_EQ_OPERATOR_URI);
         $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression14,$terminalExpression12,$infEqOperator);
         $this->assertFalse($finalExpression->evaluate());
         $finalExpression->delete();
@@ -84,7 +88,7 @@ class ExpressionTest extends GenerisPhpUnitTestRunner {
         $finalExpression->delete();
 
         // 14 >= 12
-        $supEqOperator = new core_kernel_classes_Resource(INSTANCE_SUP_EQ_OPERATOR_URI);
+        $supEqOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_SUP_EQ_OPERATOR_URI);
         $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression14,$terminalExpression12,$supEqOperator);
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
@@ -101,7 +105,7 @@ class ExpressionTest extends GenerisPhpUnitTestRunner {
 
 
         // 14 < 12
-        $infOperator = new core_kernel_classes_Resource(INSTANCE_INF_OPERATOR_URI);
+        $infOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_INF_OPERATOR_URI);
         $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression14,$terminalExpression12,$infOperator);
         $this->assertFalse($finalExpression->evaluate());
         $finalExpression->delete();
@@ -117,7 +121,7 @@ class ExpressionTest extends GenerisPhpUnitTestRunner {
         $finalExpression->delete();
 
         // 14 > 12
-        $supOperator = new core_kernel_classes_Resource(INSTANCE_SUP_OPERATOR_URI);
+        $supOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_SUP_OPERATOR_URI);
         $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression14,$terminalExpression12,$supOperator);
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
@@ -143,7 +147,7 @@ class ExpressionTest extends GenerisPhpUnitTestRunner {
 
 
         // 12 < 14 AND test1 == test2
-        $andOperator = new core_kernel_classes_Resource(INSTANCE_AND_OPERATOR);
+        $andOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_AND_OPERATOR);
         $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($trueExpression,$falseExpression,$andOperator);
         $this->assertFalse($finalExpression->evaluate());
         $finalExpression->delete();
@@ -154,7 +158,7 @@ class ExpressionTest extends GenerisPhpUnitTestRunner {
         $finalExpression->delete();
 
         // 12 < 14 OR test1 == test2
-        $orOperator = new core_kernel_classes_Resource(INSTANCE_OR_OPERATOR);
+        $orOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_OR_OPERATOR);
         $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($trueExpression,$falseExpression,$orOperator);
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();

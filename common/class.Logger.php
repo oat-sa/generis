@@ -21,6 +21,9 @@
  * 
  */
 
+use oat\oatbox\service\ServiceManager;
+use oat\oatbox\log\LoggerService;
+
 /**
  * Abstraction for the System Logger
  *
@@ -30,10 +33,7 @@
  */
 class common_Logger
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
+    use \oat\oatbox\log\LoggerAwareTrait;
 
     /**
      * whenever or not the Logger is enabled
@@ -135,16 +135,10 @@ class common_Logger
      */
     public static function singleton()
     {
-        $returnValue = null;
-
-        
-		if (is_null(self::$instance)){
-			self::$instance = new self();
+        if (is_null(self::$instance)) {
+            self::$instance = new self();
         }
-		$returnValue = self::$instance;
-        
-
-        return $returnValue;
+        return self::$instance;
     }
 
     /**
@@ -156,20 +150,6 @@ class common_Logger
      */
     private function __construct()
     {
-    }
-    
-    /**
-     * Returns the dispatcher 
-     * 
-     * @return Appender
-     */
-    private function getDispatcher() {
-        if (is_null($this->dispatcher)) {
-            $this->disable();
-            $this->dispatcher = common_log_Dispatcher::singleton();
-            $this->restore();
-        }
-        return $this->dispatcher;
     }
 
     /**
@@ -204,52 +184,26 @@ class common_Logger
      */
     public function log($level, $message, $tags, $errorFile = '', $errorLine = 0)
     {
-        
-		if ($this->enabled && $this->getDispatcher()->getLogThreshold() <= $level) {
-			$this->disable();
-			$stack = defined('DEBUG_BACKTRACE_IGNORE_ARGS')
-                ? debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)
-                : debug_backtrace(false);
-			array_shift($stack);
-			// retrieving the user can be a complex procedure, leading to missing log informations
-			$user = null;
-			if ($errorFile == '') {
-				$keys = array_keys($stack);
-				$current = $stack[$keys[0]];
-				if (isset($current['file']) && isset($current['line'])) {
-					$errorFile = $current['file'];
-					$errorLine = $current['line'];
-				}
-			}
-			if(PHP_SAPI != 'cli'){
-				$requestURI = $_SERVER['REQUEST_URI'];
-			}else{
-				$requestURI = implode(' ', $_SERVER['argv']);
-			}
-			
-			//reformat input
-			if(is_object($message)){
-				$message = 'Message is object of type ' . gettype($message);
+        if ($this->enabled) {
+            $this->disable();
+            try {
+                if (defined('CONFIG_PATH')) {
+                    $tags = is_array($tags) ? $tags : [$tags];
 
-                //show content of logged object only from debug level
-                if($level <= self::DEBUG_LEVEL){
-                    $message .= ' : ' . PHP_EOL . var_export($message, true);
+                    // Gets the log context.
+                    $context = $this->getContext();
+                    if (!empty($context['file']) && !empty($context['line'])) {
+                        $tags['file'] = $context['file'];
+                        $tags['line'] = $context['line'];
+                    }
+
+                    $this->getLogger()->log(common_log_Logger2Psr::getPsrLevelFromCommon($level), $message, $tags);
                 }
-            //same for arrays
-		    }else if (is_array($message) && $level <= self::DEBUG_LEVEL){
-                
-				$message = 'Message is an array : ' . PHP_EOL . var_export($message, true);
-			}else{
-				$message = (string) $message;
-			}
-			if(is_string($tags)){
-				$tags = array($tags);
-			}
-			
-			$this->getDispatcher()->log(new common_log_Item($message, $level, time(), $stack, $tags, $requestURI, $errorFile, $errorLine));
-			$this->restore();
-		};
-        
+            } catch (\Exception $e) {
+                // Unable to use the logger service to retrieve the logger
+            }
+            $this->restore();
+        }
     }
 
     /**
@@ -377,7 +331,7 @@ class common_Logger
      */
     public static function e($message, $tags = array())
     {
-        
+
 		self::singleton()->log(self::ERROR_LEVEL, $message, $tags);
         
     }
@@ -430,8 +384,6 @@ class common_Logger
     public function handlePHPErrors($errorNumber, $errorString, $errorFile = null, $errorLine = null, $errorContext = array())
     {
         $returnValue = (bool) false;
-
-        
         if (error_reporting() != 0){
         	if ($errorNumber == E_STRICT) {
         		foreach ($this->ACCEPTABLE_WARNINGS as $pattern) {
@@ -482,15 +434,38 @@ class common_Logger
     public function handlePHPShutdown()
     {
         
-    	$error = error_get_last();
-    	if (($error['type'] & (E_COMPILE_ERROR | E_ERROR | E_PARSE | E_CORE_ERROR)) != 0) {
-    		if (isset($error['file']) && isset($error['line'])) {
-    			self::singleton()->log(self::FATAL_LEVEL, 'php error('.$error['type'].'): '.$error['message'], array('PHPERROR'), $error['file'], $error['line']);
-    		} else {
-    			self::singleton()->log(self::FATAL_LEVEL, 'php error('.$error['type'].'): '.$error['message'], array('PHPERROR'));
-    		}
-    	}
+        $error = error_get_last();
+        if (($error['type'] & (E_COMPILE_ERROR | E_ERROR | E_PARSE | E_CORE_ERROR)) != 0) {
+            $msg = (isset($error['file']) && isset($error['line']))
+               ? 'php error('.$error['type'].') in '.$error['file'].'@'.$error['line'].': '.$error['message']
+               : 'php error('.$error['type'].'): '.$error['message'];
+            self::singleton()->log(self::FATAL_LEVEL, $msg, array('PHPERROR'));
+        }
         
     }
 
+    /**
+     * Returns the calling context.
+     *
+     * @return array
+     */
+    protected function getContext()
+    {
+        $trace = debug_backtrace();
+
+        $file = isset($trace[2]['file'])
+            ? $trace[2]['file']
+            : ''
+        ;
+
+        $line = isset($trace[2]['line'])
+            ? $trace[2]['line']
+            : ''
+        ;
+
+        return [
+            'file' => $file,
+            'line' => $line,
+        ];
+    }
 }

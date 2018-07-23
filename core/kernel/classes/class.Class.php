@@ -1,27 +1,27 @@
 <?php
-/**  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
-use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\event\ResourceCreated;
+use oat\generis\model\OntologyRdf;
 use oat\oatbox\event\EventManager;
 
 /**
@@ -32,25 +32,18 @@ use oat\oatbox\event\EventManager;
  *
  * @author patrick.plichart@tudor.lu
  * @package generis
- 
  * @see http://www.w3.org/RDF/
  * @see http://www.w3.org/TR/rdf-schema/
  *
  */
-class core_kernel_classes_Class
-    extends core_kernel_classes_Resource
+class core_kernel_classes_Class extends core_kernel_classes_Resource
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
-    // --- OPERATIONS ---
     /**
-     * 
+     *
      * @return core_kernel_persistence_ClassInterface
      */
-    protected function getImplementation() {
+    protected function getImplementation()
+    {
         return $this->getModel()->getRdfsInterface()->getClassImplementation();
     }
     
@@ -62,7 +55,7 @@ class core_kernel_classes_Class
      * @access public
      * @author patrick.plichart@tudor.lu
      * @param  boolean recursive
-     * @return array
+     * @return \core_kernel_classes_Class[]
      * @see http://www.w3.org/TR/rdf-schema/
      */
     public function getSubClasses($recursive = false)
@@ -75,10 +68,10 @@ class core_kernel_classes_Class
      *
      * @access public
      * @author patrick.plichart@tudor.lu
-     * @param  Class parentClass
+     * @param  \core_kernel_classes_Class parentClass
      * @return boolean
      */
-    public function isSubClassOf( core_kernel_classes_Class $parentClass)
+    public function isSubClassOf(core_kernel_classes_Class $parentClass)
     {
         return (bool) $this->getImplementation()->isSubClassOf($this, $parentClass);
     }
@@ -89,11 +82,11 @@ class core_kernel_classes_Class
      * @access public
      * @author patrick.plichart@tudor.lu
      * @param  boolean recursive
-     * @return array
+     * @return \core_kernel_classes_Class[]
      */
     public function getParentClasses($recursive = false)
     {
-       return (array) $this->getImplementation()->getParentClasses($this, $recursive);
+        return (array) $this->getImplementation()->getParentClasses($this, $recursive);
     }
 
     /**
@@ -104,7 +97,7 @@ class core_kernel_classes_Class
      * @access public
      * @author patrick.plichart@tudor.lu
      * @param  boolean recursive Recursive Properties retrieval accross the Class hierarchy.
-     * @return array
+     * @return \core_kernel_classes_Property[]
      */
     public function getProperties($recursive = false)
     {
@@ -118,7 +111,7 @@ class core_kernel_classes_Class
      * @author patrick.plichart@tudor.lu
      * @param  boolean recursive
      * @param  array params
-     * @return array
+     * @return \core_kernel_classes_Resource[]
      */
     public function getInstances($recursive = false, $params = array())
     {
@@ -131,21 +124,13 @@ class core_kernel_classes_Class
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource instance
+     * @param  \core_kernel_classes_Resource instance
      * @return core_kernel_classes_Resource
      * @deprecated
      */
-    public function setInstance( core_kernel_classes_Resource $instance)
+    public function setInstance(core_kernel_classes_Resource $instance)
     {
-        $returnValue = null;
-
-        
-		
-        $returnValue = $this->getImplementation()->setInstance($this, $instance);
-        
-        
-
-        return $returnValue;
+        return $this->getImplementation()->setInstance($this, $instance);
     }
 
     /**
@@ -154,10 +139,10 @@ class core_kernel_classes_Class
      *
      * @access public
      * @author patrick.plichart@tudor.lu
-     * @param  Class iClass
+     * @param  \core_kernel_classes_Class iClass
      * @return boolean
      */
-    public function setSubClassOf( core_kernel_classes_Class $iClass)
+    public function setSubClassOf(core_kernel_classes_Class $iClass)
     {
         return (bool) $this->getImplementation()->setSubClassOf($this, $iClass);
     }
@@ -168,11 +153,11 @@ class core_kernel_classes_Class
      *
      * @access public
      * @author patrick.plichart@tudor.lu
-     * @param  Property property
+     * @param  \core_kernel_classes_Property property
      * @return boolean
      * @deprecated
      */
-    public function setProperty( core_kernel_classes_Property $property)
+    public function setProperty(core_kernel_classes_Property $property)
     {
         return (bool) $this->getImplementation()->setProperty($this, $property);
     }
@@ -182,14 +167,13 @@ class core_kernel_classes_Class
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  string uri
-     * @param  string debug
+     * @param string uri
+     * @param string debug
+     * @throws common_exception_Error
      */
     public function __construct($uri, $debug = '')
     {
-        
-		parent::__construct($uri, $debug);
-        
+        parent::__construct($uri, $debug);
     }
 
 
@@ -202,14 +186,12 @@ class core_kernel_classes_Class
      * @param  string label
      * @param  string comment
      * @param  string uri
-     * @return core_kernel_classes_Resource
+     * @return \core_kernel_classes_Resource
      */
     public function createInstance($label = '', $comment = '', $uri = '')
     {
-        $returnValue = null;
-
         $returnValue = $this->getImplementation()->createInstance($this, $label, $comment, $uri);
-        $eventManager = $this->getServiceManager()->get(EventManager::CONFIG_ID);
+        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
         $eventManager->trigger(new ResourceCreated($returnValue));
 
         return $returnValue;
@@ -227,12 +209,10 @@ class core_kernel_classes_Class
      */
     public function createSubClass($label = '', $comment = '', $uri = "")
     {
-        $returnValue = null;
-		
         $returnValue = $this->getImplementation()->createSubClass($this, $label, $comment, $uri);
-        $eventManager = $this->getServiceManager()->get(EventManager::CONFIG_ID);
+        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
         $eventManager->trigger(new ResourceCreated($returnValue));
-        
+
         return $returnValue;
     }
 
@@ -248,15 +228,7 @@ class core_kernel_classes_Class
      */
     public function createProperty($label = '', $comment = '', $isLgDependent = false)
     {
-        $returnValue = null;
-
-        
-		
-        $returnValue = $this->getImplementation()->createProperty($this, $label, $comment, $isLgDependent);
-        
-        
-
-        return $returnValue;
+        return $this->getImplementation()->createProperty($this, $label, $comment, $isLgDependent);
     }
 
     /**
@@ -273,22 +245,22 @@ class core_kernel_classes_Class
 
     /**
      * Search for a specific instances according to filters and options
-     * 
+     *
      * options lists:
-     * like			: (bool) 	true/false (default: true)
-     * chaining		: (string) 	'or'/'and' (default: 'and')
-     * recursive	: (bool) 	saerch in subvlasses(default: false)
-     * lang			: (string) 	e.g. 'en-US', 'fr-FR' (default: '') for all properties!
-     * offset  		: default 0
+     * like         : (bool)    true/false (default: true)
+     * chaining     : (string)  'or'/'and' (default: 'and')
+     * recursive    : (bool)    search in subvlasses(default: false)
+     * lang         : (string)  e.g. 'en-US', 'fr-FR' (default: '') for all properties!
+     * offset       : default 0
      * limit        : default select all
-     * order		: property to order by
-     * orderdir		: direction of order (default: 'ASC')
-     * 
+     * order        : property to order by
+     * orderdir     : direction of order (default: 'ASC')
+     *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  array propertyFilters
      * @param  array options
-     * @return array
+     * @return \core_kernel_classes_Resource[]
      */
     public function searchInstances($propertyFilters = array(), $options = array())
     {
@@ -302,11 +274,11 @@ class core_kernel_classes_Class
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @param  array propertyFilters
      * @param  array options
-     * @return Integer
+     * @return integer
      */
     public function countInstances($propertyFilters = array(), $options = array())
     {
-		return $this->getImplementation()->countInstances($this, $propertyFilters, $options);
+        return $this->getImplementation()->countInstances($this, $propertyFilters, $options);
     }
 
     /**
@@ -315,12 +287,12 @@ class core_kernel_classes_Class
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Property property
+     * @param  core_kernel_classes_Property property
      * @param  array propertyFilters
      * @param  array options
-     * @return array
+     * @return \core_kernel_classes_Resource[]
      */
-    public function getInstancesPropertyValues( core_kernel_classes_Property $property, $propertyFilters = array(), $options = array())
+    public function getInstancesPropertyValues(core_kernel_classes_Property $property, $propertyFilters = array(), $options = array())
     {
         return (array) $this->getImplementation()->getInstancesPropertyValues($this, $property, $propertyFilters, $options);
     }
@@ -330,10 +302,10 @@ class core_kernel_classes_Class
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Property property
+     * @param  core_kernel_classes_Property property
      * @deprecated
      */
-    public function unsetProperty( core_kernel_classes_Property $property)
+    public function unsetProperty(core_kernel_classes_Property $property)
     {
         $this->getImplementation()->unsetProperty($this, $property);
     }
@@ -355,23 +327,23 @@ class core_kernel_classes_Class
         $returnValue = null;
 
         // remove the additional types, because they might be implemented differently
-        
-        $additonalTypes = array();
-        if (isset($properties[RDF_TYPE])) {
-        	$types = is_array($properties[RDF_TYPE]) ? $properties[RDF_TYPE] : array($properties[RDF_TYPE]);
-        	foreach ($types as $type) {
-        		$uri = is_object($type) ? $type->getUri() : $type;
-        		if ($uri != $this->getUri()) {
-        			$additonalTypes[] = $this->getClass($uri);
-        		}
-        	}
-        	unset($properties[RDF_TYPE]);
+
+        $additionalTypes = array();
+        if (isset($properties[OntologyRdf::RDF_TYPE])) {
+            $types = is_array($properties[OntologyRdf::RDF_TYPE]) ? $properties[OntologyRdf::RDF_TYPE] : array($properties[OntologyRdf::RDF_TYPE]);
+            foreach ($types as $type) {
+                $uri = is_object($type) ? $type->getUri() : $type;
+                if ($uri != $this->getUri()) {
+                    $additionalTypes[] = $this->getClass($uri);
+                }
+            }
+            unset($properties[OntologyRdf::RDF_TYPE]);
         }
         // create the instance
         $returnValue = $this->getImplementation()->createInstanceWithProperties($this, $properties);
         
-        foreach ($additonalTypes as $type) {
-        	$returnValue->setType($type);
+        foreach ($additionalTypes as $type) {
+            $returnValue->setType($type);
         }
         $eventManager = $this->getServiceManager()->get(EventManager::CONFIG_ID);
         $eventManager->trigger(new ResourceCreated($returnValue));
@@ -418,8 +390,7 @@ class core_kernel_classes_Class
     public function exists()
     {
         // If the Class has one or more direct parent classes (this rdfs:isSubClassOf C),
-        // we know that the class exists. 
+        // we know that the class exists.
         return (bool) (count($this->getParentClasses(false)) > 0);
     }
-
 }

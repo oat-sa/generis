@@ -16,9 +16,10 @@
  * 
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+use oat\generis\model\OntologyRdfs;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class ModelsRightTest extends GenerisPhpUnitTestRunner {
@@ -48,9 +49,9 @@ class ModelsRightTest extends GenerisPhpUnitTestRunner {
 
 		
 		// Try to delete a resource of a locked model
-		$property = new core_kernel_classes_Property(RDFS_LABEL);
-        	$domain = new core_kernel_classes_Property(RDFS_DOMAIN, __METHOD__);
-		$this->assertFalse( $property->removePropertyValues($domain, array('pattern' => RDFS_LABEL)));
+		$property = new core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL);
+        	$domain = new core_kernel_classes_Property(OntologyRdfs::RDFS_DOMAIN, __METHOD__);
+		$this->assertFalse( $property->removePropertyValues($domain, array('pattern' => OntologyRdfs::RDFS_LABEL)));
 		
 		
 		// Try to remove a property value which is lg dependent of a locked model

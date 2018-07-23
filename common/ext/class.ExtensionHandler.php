@@ -33,6 +33,9 @@ use oat\oatbox\service\ServiceManager;
  */
 abstract class common_ext_ExtensionHandler
 {
+    // Adding container and logger.
+    use \oat\oatbox\log\ContainerLoggerTrait;
+
     /**
      * @var common_ext_Extension
      */
@@ -44,7 +47,7 @@ abstract class common_ext_ExtensionHandler
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Extension extension
+     * @param  common_ext_Extension $extension
      */
     public function __construct( common_ext_Extension $extension)
     {
@@ -60,22 +63,65 @@ abstract class common_ext_ExtensionHandler
     }
     
     /**
-     * @param mixed $script
+     * Run Extension Script
+     *
+     * @param string $script
+     * @param array $arguments (optional)
      * @throws common_ext_InstallationException
      */
-    protected function runExtensionScript($script)
+    protected function runExtensionScript($script, array $arguments = [])
     {
-        common_Logger::d('Running custom extension script '.$script.' for extension '.$this->getExtension()->getId(), 'INSTALL');
+        $this->log('d', 'Running custom extension script ' . $script . ' for extension ' . $this->getExtension()->getId(), 'INSTALL');
         if (file_exists($script)) {
             require_once $script;
-        } elseif (class_exists($script) && is_subclass_of($script, 'oat\\oatbox\\action\\Action')) {
+        } elseif (class_exists($script) && is_subclass_of($script, \oat\oatbox\action\Action::class)) {
             $action = new $script();
+
             if ($action instanceof ServiceLocatorAwareInterface) {
-                $action->setServiceLocator(ServiceManager::getServiceManager());
+                $action->setServiceLocator($this->getServiceManager());
             }
-            $report = call_user_func($action, array());
+
+            call_user_func($action, $arguments);
         } else {
-            throw new common_ext_InstallationException('Unable to run install script '.$script);
+            $error = new common_ext_InstallationException('Unable to run install script ' . $script);
+            $error->setExtensionId($this->getExtension()->getId());
+
+            throw $error;
+        }
+    }
+
+    protected function getServiceManager()
+    {
+        return ServiceManager::getServiceManager();
+    }
+
+    /**
+     * Log message
+     *
+     * @see common_Logger class
+     *
+     * @param string $logLevel
+     * <ul>
+     *   <li>'w' - warning</li>
+     *   <li>'t' - trace</li>
+     *   <li>'d' - debug</li>
+     *   <li>'i' - info</li>
+     *   <li>'e' - error</li>
+     *   <li>'f' - fatal</li>
+     * </ul>
+     * @param string $message
+     * @param array $tags
+     */
+    public function log($logLevel, $message, $tags = array())
+    {
+        if ($this->getLogger() instanceof \Psr\Log\LoggerInterface) {
+            $this->getLogger()->log(
+                common_log_Logger2Psr::getPsrLevelFromCommon($logLevel),
+                $message
+            );
+        }
+        if (method_exists('common_Logger', $logLevel)) {
+            call_user_func('common_Logger::' . $logLevel, $message, $tags);
         }
     }
 }

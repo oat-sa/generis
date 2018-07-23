@@ -21,6 +21,11 @@
 *
 */
 
+/**
+ * Class common_persistence_NoStorageKvDriver
+ * @deprecated use \common_persistence_InMemoryKvDriver instead
+ * @author Aleh Hutnikau, <hutnikau@1pt.com>
+ */
 class common_persistence_NoStorageKvDriver implements common_persistence_KvDriver, common_persistence_Purgable
 {
     /**
@@ -28,15 +33,14 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
      * @see common_persistence_Driver::connect()
      */
     function connect($id, array $params){
-        common_Logger::t('Init NoStorageKvPersistence');
         return new common_persistence_KeyValuePersistence($params, $this);
     }
     /**
      * 
      * @see common_persistence_KvDriver::set()
      */
-    public function set($id, $value, $ttl = null){
-        common_Logger::t('NoStorageKvPersistence : set id=' . $id);
+    public function set($id, $value, $ttl = null, $nx = false)
+    {
         return false;
     }
     
@@ -45,7 +49,6 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
      * @see common_persistence_KvDriver::get()
      */
     public function get($id){
-        common_Logger::t('NoStorageKvPersistence : get id=' . $id );
         return false;
     }
     
@@ -62,19 +65,35 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
      * @see common_persistence_KvDriver::del()
      */
     public function del($id){
-        common_Logger::t('NoStorageKvPersistence : delete id=' . $id );
         return true;
-        
     }
+
+    /**
+     * Increment existing value
+     * @param string $id
+     * @return mixed
+     */
+    public function incr($id)
+    {
+        return false;
+    }
+
+    /**
+     * Decrement existing value
+     * @param $id
+     * @return mixed
+     */
+    public function decr($id)
+    {
+        return false;
+    }
+
     /**
      * 
      * @see common_persistence_Purgable::purge()
      */
     public function purge(){
-        common_Logger::t('NoStorageKvPersistence is purged');
         return true;
         
     }
 }
-
-?>

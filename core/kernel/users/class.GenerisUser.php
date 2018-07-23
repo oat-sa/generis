@@ -15,10 +15,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *               
  * 
  */
+
+use oat\generis\model\GenerisRdf;
+use oat\generis\model\kernel\users\UserInternalInterface;
+use oat\generis\model\OntologyRdf;
 
 /**
  * Authentication adapter interface to be implemented by authentication methodes
@@ -26,9 +30,9 @@
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- 
+
  */
-class core_kernel_users_GenerisUser extends common_user_User
+class core_kernel_users_GenerisUser extends common_user_User implements UserInternalInterface
 {
 
     private $userResource;
@@ -36,27 +40,27 @@ class core_kernel_users_GenerisUser extends common_user_User
     private $cache;
 
     private $cachedProperties = array(
-        PROPERTY_USER_DEFLG,
-        PROPERTY_USER_ROLES,
-        PROPERTY_USER_UILG,
-        PROPERTY_USER_FIRSTNAME,
-        PROPERTY_USER_LASTNAME,
-        PROPERTY_USER_LOGIN
+        GenerisRdf::PROPERTY_USER_DEFLG,
+        GenerisRdf::PROPERTY_USER_ROLES,
+        GenerisRdf::PROPERTY_USER_UILG,
+        GenerisRdf::PROPERTY_USER_FIRSTNAME,
+        GenerisRdf::PROPERTY_USER_LASTNAME,
+        GenerisRdf::PROPERTY_USER_LOGIN,
+        GenerisRdf::PROPERTY_USER_TIMEZONE,
     );
 
     public function __construct(core_kernel_classes_Resource $user)
     {
         $this->userResource = $user;
         // load datalanguage to prevent cycle later on
-        $this->getPropertyValues(PROPERTY_USER_DEFLG);
+        $this->getPropertyValues(GenerisRdf::PROPERTY_USER_DEFLG);
     }
 
     public function getIdentifier()
     {
         return $this->userResource->getUri();
     }
-    
-    // private $cache = array();
+
     private function getUserResource()
     {
         return new core_kernel_classes_Resource($this->getIdentifier());
@@ -73,17 +77,17 @@ class core_kernel_users_GenerisUser extends common_user_User
         return $this->cache[$property];
 
     }
-    
+
     private function getUncached($property)
     {
         $value = array();
         switch ($property) {
-            case PROPERTY_USER_DEFLG:
-            case PROPERTY_USER_UILG:
+            case GenerisRdf::PROPERTY_USER_DEFLG:
+            case GenerisRdf::PROPERTY_USER_UILG:
                 $resource = $this->getUserResource()->getOnePropertyValue(new core_kernel_classes_Property($property));
 	    	    if (!is_null($resource)) {
 	    	        if ($resource instanceof core_kernel_classes_Resource) {
-                        return array($resource->getUniquePropertyValue(new core_kernel_classes_Property(RDF_VALUE)));
+                        return array($resource->getUniquePropertyValue(new core_kernel_classes_Property(OntologyRdf::RDF_VALUE)));
 	    	        } else {
 	    	            common_Logger::w('Language '.$resource.' is not a resource');
 	    	            return array(DEFAULT_LANG);
@@ -100,7 +104,7 @@ class core_kernel_users_GenerisUser extends common_user_User
 	public function refresh() {
 	    $this->roles = false;
 	    $this->cache = array(
-	        PROPERTY_USER_DEFLG => $this->getUncached(PROPERTY_USER_DEFLG)
+	        GenerisRdf::PROPERTY_USER_DEFLG => $this->getUncached(GenerisRdf::PROPERTY_USER_DEFLG)
 	    );
 	    return true;
 	}	

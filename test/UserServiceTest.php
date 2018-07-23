@@ -16,8 +16,10 @@
  * 
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *               2012-2014 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ *               2012-2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+
+use oat\generis\model\GenerisRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 class UserServiceTestCase extends GenerisPhpUnitTestRunner
 {
@@ -55,11 +57,11 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
     public function initRoles()
     {
         // Main parent role.
-        $roleClass = new core_kernel_classes_Class(CLASS_ROLE);
-        $isSystemProperty = new core_kernel_classes_Property(PROPERTY_ROLE_ISSYSTEM);
-        $includesRoleProperty = new core_kernel_classes_Property(PROPERTY_ROLE_INCLUDESROLE);
-        $trueInstance = new core_kernel_classes_Resource(GENERIS_TRUE);
-        $falseInstance = new core_kernel_classes_Resource(GENERIS_FALSE);
+        $roleClass = new core_kernel_classes_Class(GenerisRdf::CLASS_ROLE);
+        $isSystemProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_ROLE_ISSYSTEM);
+        $includesRoleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_ROLE_INCLUDESROLE);
+        $trueInstance = new core_kernel_classes_Resource(GenerisRdf::GENERIS_TRUE);
+        $falseInstance = new core_kernel_classes_Resource(GenerisRdf::GENERIS_FALSE);
         $prefix = LOCAL_NAMESPACE . '#';
         
         // Do not forget that more you go deep in the Roles hierarchy, more rights you have.
@@ -96,23 +98,23 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
     public function testModel()
     {
         // We must have a property dedicated to Roles in the Generis User class.
-        $userClass = new core_kernel_classes_Class(CLASS_GENERIS_USER);
+        $userClass = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_USER);
         $this->assertTrue($userClass->exists());
         
         // The userClass must have a dedicated userRoles property.
-        $this->assertTrue(array_key_exists(PROPERTY_USER_ROLES, $userClass->getProperties()));
+        $this->assertTrue(array_key_exists(GenerisRdf::PROPERTY_USER_ROLES, $userClass->getProperties()));
         
         // The class that gather all Roles instances together must exist.
-        $roleClass = new core_kernel_classes_Class(CLASS_ROLE);
+        $roleClass = new core_kernel_classes_Class(GenerisRdf::CLASS_ROLE);
         $this->assertTrue($roleClass->exists());
         
         // The Role class must have the right properties (isSystem and includesRole)
         $roleClassProperties = $roleClass->getProperties();
-        $this->assertTrue(array_key_exists(PROPERTY_ROLE_ISSYSTEM, $roleClassProperties));
-        $this->assertTrue(array_key_exists(PROPERTY_ROLE_INCLUDESROLE, $roleClassProperties));
+        $this->assertTrue(array_key_exists(GenerisRdf::PROPERTY_ROLE_ISSYSTEM, $roleClassProperties));
+        $this->assertTrue(array_key_exists(GenerisRdf::PROPERTY_ROLE_INCLUDESROLE, $roleClassProperties));
         
         // The Generis Role must exist after installation.
-        $generisRole = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
+        $generisRole = new core_kernel_classes_Resource(GenerisRdf::INSTANCE_ROLE_GENERIS);
         $this->assertTrue($generisRole->exists());
     }
 
@@ -121,7 +123,7 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
         $sysUser = $this->service->getOneUser(self::TESTCASE_USER_LOGIN);
         $this->assertFalse(empty($sysUser));
         $this->assertIsA($sysUser, 'core_kernel_classes_Resource');
-        $loginProperty = new core_kernel_classes_Property(PROPERTY_USER_LOGIN);
+        $loginProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_LOGIN);
         $login = $sysUser->getUniquePropertyValue($loginProperty);
         $this->assertIsA($login, 'core_kernel_classes_Literal');
         $this->assertEquals($login->literal, self::TESTCASE_USER_LOGIN);
@@ -146,7 +148,7 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
 
     public function testIsPasswordValid()
     {
-        $role = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
+        $role = new core_kernel_classes_Resource(GenerisRdf::INSTANCE_ROLE_GENERIS);
         $user = $this->service->addUser('passwordValid', 'passwordValid', $role);
         $this->assertIsA($user, 'core_kernel_classes_Resource');
         $this->assertTrue($this->service->isPasswordValid('passwordValid', $user));
@@ -181,20 +183,20 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
 
     public function testAddUser()
     {
-        $userRolesProperty = new core_kernel_classes_Property(PROPERTY_USER_ROLES);
+        $userRolesProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_ROLES);
         
         // single role.
         $role1 = $this->service->addRole('ADDUSERROLE 1');
-        if ($this->service->loginExists('user1')) {
-            $this->service->getOneUser('user1')->delete();
+        if ($this->service->loginExists('user-fixture-1')) {
+            $this->service->getOneUser('user-fixture-1')->delete();
         }
-        $user = $this->service->addUser('user1', 'password1', $role1);
+        $user = $this->service->addUser('user-fixture-1', 'password1', $role1);
         
-        $this->assertTrue($this->service->loginExists('user1'));
+        $this->assertTrue($this->service->loginExists('user-fixture-1'));
         $userRoles = $user->getUniquePropertyValue($userRolesProperty);
         $this->assertEquals($userRoles->getUri(), $role1->getUri());
         $this->assertTrue($this->service->logout());
-        $this->assertTrue($this->service->login('user1', 'password1', $role1));
+        $this->assertTrue($this->service->login('user-fixture-1', 'password1', $role1));
         $this->assertTrue($this->service->logout());
         $this->assertTrue($this->restoreTestSession());
         
@@ -202,19 +204,22 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
         $this->assertFalse($user->exists());
         $role1->delete();
         $this->assertFalse($role1->exists());
-        
+
+        if ($this->service->loginExists('user-fixture-2')) {
+            $this->service->getOneUser('user-fixture-2')->delete();
+        }
         // No role provided. Will be given the genuine GENERIS ROLE.
-        $user = $this->service->addUser('user2', 'password2');
+        $user = $this->service->addUser('user-fixture-2', 'password2');
         $this->assertTrue($this->service->loginExists('user2'));
         $userRoles = $user->getUniquePropertyValue($userRolesProperty);
-        $this->assertEquals($userRoles->getUri(), INSTANCE_ROLE_GENERIS);
+        $this->assertEquals($userRoles->getUri(), GenerisRdf::INSTANCE_ROLE_GENERIS);
         $user->delete();
     }
 
     public function testAddRole()
     {
-        $roleClass = new core_kernel_classes_Class(CLASS_ROLE);
-        $includesRoleProperty = new core_kernel_classes_Property(PROPERTY_ROLE_INCLUDESROLE);
+        $roleClass = new core_kernel_classes_Class(GenerisRdf::CLASS_ROLE);
+        $includesRoleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_ROLE_INCLUDESROLE);
         
         // Prepare roles to be included to others.
         $iRole1 = $this->service->addRole('INCLUDED ROLE 1');
@@ -391,7 +396,7 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
 
     public function testRemoveUser()
     {
-        $role = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
+        $role = new core_kernel_classes_Resource(GenerisRdf::INSTANCE_ROLE_GENERIS);
         $user = $this->service->addUser('removeUser', 'removeUser', $role);
         $this->assertTrue($user->exists());
         $this->service->removeUser($user);
@@ -400,7 +405,7 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
 
     public function testSetPassword()
     {
-        $role = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
+        $role = new core_kernel_classes_Resource(GenerisRdf::INSTANCE_ROLE_GENERIS);
         $user = $this->service->addUser('passwordUser', 'passwordUser', $role);
         $this->assertTrue($user->exists());
         $this->assertTrue($this->service->isPasswordValid('passwordUser', $user));
@@ -434,13 +439,13 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
     public function testGetDefaultRole()
     {
         $defaultRole = $this->service->getDefaultRole();
-        $expectedRole = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
+        $expectedRole = new core_kernel_classes_Resource(GenerisRdf::INSTANCE_ROLE_GENERIS);
         $this->assertEquals($defaultRole->getUri(), $expectedRole->getUri());
     }
 
     public function testGetAllowedRoles()
     {
-        $expectedRole = new core_kernel_classes_Resource(INSTANCE_ROLE_GENERIS);
+        $expectedRole = new core_kernel_classes_Resource(GenerisRdf::INSTANCE_ROLE_GENERIS);
         $allowedRoles = $this->service->getAllowedRoles();
         $this->assertEquals(count($allowedRoles), 1);
         $this->assertTrue(array_key_exists($expectedRole->getUri(), $allowedRoles));

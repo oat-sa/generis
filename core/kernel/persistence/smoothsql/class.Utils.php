@@ -17,8 +17,11 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *               2012-2014 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ *               2012-2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+
+use oat\generis\model\kernel\persistence\smoothsql\search\filter\Filter;
+use oat\generis\model\OntologyRdf;
 use oat\generis\model\SqlSanitizeHelperTrait;
 
 /**
@@ -264,15 +267,20 @@ class core_kernel_persistence_smoothsql_Utils
             $classUri = array($classUri);
         }
         
-        $propertyQueries = array(self::buildPropertyQuery($model, RDF_TYPE, $classUri, false));
+        $propertyQueries = array(self::buildPropertyQuery($model, OntologyRdf::RDF_TYPE, $classUri, false));
         foreach ($propertyFilters as $propertyUri => $filterValues) {
+			// no support of Filter object passed in the $propertyFilters array.
+        	if ($filterValues instanceof Filter)
+			{
+				throw new common_exception_NoImplementation();
+			}
             $propertyQueries[] = self::buildPropertyQuery($model, $propertyUri, $filterValues, $like, $lang);
         }
         
         $unionQuery = self::buildUnionQuery($propertyQueries);
         
         if (($propCount = count($propertyFilters)) === 0) {
-            $query = self::buildPropertyQuery($model, RDF_TYPE, $classUri, false, $lang);
+            $query = self::buildPropertyQuery($model, OntologyRdf::RDF_TYPE, $classUri, false, $lang);
         } else {
             $unionCount = ($and === true) ? ($propCount + 1) : 2;
             $query = "SELECT subject FROM (${unionQuery}) AS unionq GROUP BY subject HAVING count(*) >= ${unionCount}";

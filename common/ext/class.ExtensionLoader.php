@@ -36,17 +36,10 @@ class common_ext_ExtensionLoader
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param array $extraConstants
      * @return mixed
      */
-    public function load($extraConstants = array())
+    public function load()
     {
-        if (!empty($extraConstants)) {
-            throw new common_exception_Error('Loading extra constants in '.__CLASS__.' nolonger supported');
-        }
-
-        common_Logger::t('Loading extension ' . $this->getExtension()->getId() . ' constants');
-
         // load the constants from the manifest
         if ($this->extension->getId() != "generis"){
             foreach ($this->extension->getConstants() as $key => $value) {
@@ -55,23 +48,5 @@ class common_ext_ExtensionLoader
                 }
             }
         }
-
-        $constantFile = $this->getExtension()->getDir(). 'includes' .DIRECTORY_SEPARATOR. 'constants.php';
-    	if (file_exists($constantFile)) {
-    		//include the constant file
-    		include_once $constantFile;
-
-    		//this variable comes from the constant file and contain the const definition
-    		if(isset($todefine)){
-    			foreach($todefine as $constName => $constValue){
-    				if(!defined($constName)){
-    					define($constName, $constValue);	//constants are defined there!
-    				} else {
-    					common_Logger::d('Constant '.$constName.' in '.$this->getExtension()->getId().' has already been defined');
-    				}
-    			}
-    			unset($todefine);
-    		}
-    	}
     }
 }

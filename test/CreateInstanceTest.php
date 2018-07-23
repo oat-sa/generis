@@ -16,9 +16,11 @@
  * 
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+use oat\generis\model\OntologyRdf;
+use oat\generis\model\OntologyRdfs;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 /**
@@ -35,10 +37,10 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner {
 	protected function setUp(){
 
         GenerisPhpUnitTestRunner::initTest();
-	    $classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDFS_CLASS), 'TestClass');
+	    $classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS), 'TestClass');
 	    $this->class = new core_kernel_classes_Class($classres->getUri());
 	    $this->assertIsA($this->class, 'core_kernel_classes_Class');
-	    $this->assertTrue($this->class->hasType(new core_kernel_classes_Class(RDFS_CLASS)));
+	    $this->assertTrue($this->class->hasType(new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS)));
 	    common_Logger::i('using class '.$this->class->getUri().' for Create instance Tests');
 	}
 	
@@ -71,16 +73,16 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner {
 		// simple case, without params
 
 		$class			= $this->class;
-		$litproperty	= new core_kernel_classes_Property(core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDF_PROPERTY))->getUri());
-		$property		= new core_kernel_classes_Property(core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDF_PROPERTY))->getUri());
+		$litproperty	= new core_kernel_classes_Property(core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY))->getUri());
+		$property		= new core_kernel_classes_Property(core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY))->getUri());
 		
 		$instance = $class->createInstanceWithProperties(array());
 		$this->assertTrue($instance->hasType($class));
 		
 		// simple literal properties
 		$instance1 = $class->createInstanceWithProperties(array(
-			RDFS_LABEL		=> 'testlabel',
-			RDFS_COMMENT	=> 'testcomment'
+            OntologyRdfs::RDFS_LABEL		=> 'testlabel',
+            OntologyRdfs::RDFS_COMMENT	=> 'testcomment'
 		));
 		
 		$this->assertTrue($instance1->hasType($class));
@@ -89,7 +91,7 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner {
 		
 		// multiple literal properties
 		$instance2 = $class->createInstanceWithProperties(array(
-			RDFS_LABEL				=> 'testlabel',
+            OntologyRdfs::RDFS_LABEL				=> 'testlabel',
 			$litproperty->getUri()	=> array('testlit1', 'testlit2')
 		));
 		$this->assertTrue($instance2->hasType($class));
@@ -101,8 +103,8 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner {
 		// single ressource properties
 		$propInst = core_kernel_classes_ResourceFactory::create($class);				
 		$instance3 = $class->createInstanceWithProperties(array(
-			RDFS_LABEL			=> 'testlabel',
-			RDFS_COMMENT		=> 'testcomment',
+            OntologyRdfs::RDFS_LABEL			=> 'testlabel',
+            OntologyRdfs::RDFS_COMMENT		=> 'testcomment',
 			$property->getUri()	=> $propInst
 		));
 		$this->assertTrue($instance3->hasType($class));
@@ -113,8 +115,8 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner {
 		// multiple ressource properties
 		$propInst2 = core_kernel_classes_ResourceFactory::create($class);
 		$instance4 = $class->createInstanceWithProperties(array(
-			RDFS_LABEL			=> 'testlabel',
-			RDFS_COMMENT		=> 'testcomment',
+            OntologyRdfs::RDFS_LABEL			=> 'testlabel',
+            OntologyRdfs::RDFS_COMMENT		=> 'testcomment',
 			$property->getUri()	=> array($propInst, $propInst2)
 		));
 		$this->assertTrue($instance4->hasType($class));
@@ -127,15 +129,15 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner {
 		$this->assertEquals($propActual, $propNormative);
 		
 		// multiple classes
-		$classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDFS_CLASS), 'TestClass2');
+		$classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS), 'TestClass2');
 	    $class2 = new core_kernel_classes_Class($classres);
-		$classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(RDFS_CLASS), 'TestClass3');
+		$classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS), 'TestClass3');
 	    $class3 = new core_kernel_classes_Class($classres);
 	    
 		// 2 classes (by ressource)
 	    $instance5 = $class->createInstanceWithProperties(array(
-			RDFS_LABEL			=> 'testlabel5',
-			RDF_TYPE			=> $classres
+            OntologyRdfs::RDFS_LABEL			=> 'testlabel5',
+			OntologyRdf::RDF_TYPE			=> $classres
 		));
 
 	    
@@ -145,8 +147,8 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner {
 		
 		// 3 classes (by uri + class)
 		$instance6 = $class->createInstanceWithProperties(array(
-			RDFS_LABEL			=> 'testlabel6',
-			RDF_TYPE			=> array($class2, $class3->getUri())
+            OntologyRdfs::RDFS_LABEL			=> 'testlabel6',
+			OntologyRdf::RDF_TYPE			=> array($class2, $class3->getUri())
 		));
 		$this->assertTrue($instance6->hasType($class));
 		$this->assertTrue($instance6->hasType($class2));

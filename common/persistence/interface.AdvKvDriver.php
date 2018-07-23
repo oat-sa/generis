@@ -37,5 +37,19 @@ interface common_persistence_AdvKvDriver extends common_persistence_KvDriver
     public function hGet($key, $field);
     public function hGetAll($key);
     public function keys($pattern);
+
+    /**
+     * Increment value
+     *
+     * @param string $id
+     * @return boolean
+     */
     public function incr($key);
+
+    /**
+     * Decrement value
+     * @param $id
+     * @return boolean
+     */
+    public function decr($key);
 }

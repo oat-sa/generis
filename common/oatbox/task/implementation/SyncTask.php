@@ -22,6 +22,7 @@ namespace oat\oatbox\task\implementation;
 
 use oat\oatbox\task\AbstractTask;
 use oat\oatbox\action\Action;
+use oat\oatbox\task\Task;
 
 /**
  * Class SyncTask
@@ -34,16 +35,4 @@ use oat\oatbox\action\Action;
 class SyncTask extends AbstractTask
 {
 
-    /**
-     * SyncTask constructor.
-     * @param Action|string $invocable
-     * @param array $params
-     */
-    public function __construct($invocable, $params)
-    {
-        $this->id = \common_Utils::getNewUri();
-        $this->setInvocable($invocable);
-        $this->setParameters($params);
-        $this->setStatus(self::STATUS_CREATED);
-    }
 }

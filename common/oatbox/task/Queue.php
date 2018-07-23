@@ -45,10 +45,13 @@ interface Queue extends \IteratorAggregate
 
     public function updateTaskStatus($taskId, $status);
 
+    public function updateTaskReport($taskId, $report);
+
     /**
      * Get task instance by id
      * @param $taskId
      * @return Task
      */
     public function getTask($taskId);
+
 }
