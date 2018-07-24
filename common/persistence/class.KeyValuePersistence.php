@@ -417,6 +417,16 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     }
 
     /**
+     * Check if the current persistence has a max size parameter
+     *
+     * @return boolean
+     */
+    protected function hasMaxSize()
+    {
+        return $this->getParam(self::MAX_VALUE_SIZE) !== false;
+    }
+
+    /**
      * Get the identifier to identify a value as split. Should be no used into beginning of none mapped key
      *
      * @return string

@@ -48,6 +48,20 @@ class AdvKeyValuePersistenceTest extends TestCase
         return str_repeat('a', 100000);
     }
 
+    /**
+     * @expectedException \common_Exception
+     */
+    public function testLargeHmsetSetWithWrongSize()
+    {
+        $this->largeValuePersistence = new \common_persistence_AdvKeyValuePersistence(
+            array(
+                \common_persistence_AdvKeyValuePersistence::MAX_VALUE_SIZE => 'toto'
+            ),
+            new \common_persistence_InMemoryAdvKvDriver()
+        );
+        $this->largeValuePersistence->hSet('test', 'fixture', 'value');
+    }
+
     public function testLargeHmsetHget()
     {
         $bigValue = $this->get100000bytesValue();
