@@ -17,7 +17,7 @@
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
  */
-namespace oat\generis\test\integration\oatbox\extension;
+namespace oat\generis\test\unit\oatbox\extension;
 
 use oat\oatbox\event\EventManager;
 use oat\oatbox\extension\UninstallAction;

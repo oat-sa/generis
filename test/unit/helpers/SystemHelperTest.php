@@ -17,7 +17,7 @@
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
  *
  */
-namespace oat\generis\test\helpers;
+namespace oat\generis\test\unit\helpers;
 
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use oat\generis\Helper\SystemHelper;

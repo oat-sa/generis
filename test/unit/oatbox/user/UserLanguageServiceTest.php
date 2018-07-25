@@ -18,7 +18,7 @@
  *
  */
 
-namespace oat\generis\test\integration\oatbox\user;
+namespace oat\generis\test\unit\oatbox\user;
 
 use oat\oatbox\user\UserLanguageService;
 use oat\oatbox\user\User;

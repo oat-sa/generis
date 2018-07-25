@@ -18,7 +18,7 @@
  *
  */
 
-namespace oat\generis\test\integration\oatbox\service;
+namespace oat\generis\test\unit\oatbox\service;
 
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ConfigurableService;
