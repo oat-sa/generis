@@ -17,7 +17,7 @@
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
  */
 
-namespace oat\generis\test\integration\common\http;
+namespace oat\generis\test\unit\common\http;
 
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use \common_http_Request;

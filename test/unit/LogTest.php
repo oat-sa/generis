@@ -27,7 +27,6 @@ class LogTest extends GenerisPhpUnitTestRunner {
     
     protected function setUp()
     {
-        GenerisPhpUnitTestRunner::initTest();
 	}
 	
 	public function testFileAppender()
