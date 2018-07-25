@@ -21,6 +21,9 @@
 
 use oat\generis\model\GenerisRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
+
+include_once dirname ( __FILE__ ) . '/../../config/generis.conf.php';
+
 class UserServiceTestCase extends GenerisPhpUnitTestRunner
 {
 
@@ -210,7 +213,7 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
         }
         // No role provided. Will be given the genuine GENERIS ROLE.
         $user = $this->service->addUser('user-fixture-2', 'password2');
-        $this->assertTrue($this->service->loginExists('user2'));
+        $this->assertTrue($this->service->loginExists('user-fixture-2'));
         $userRoles = $user->getUniquePropertyValue($userRolesProperty);
         $this->assertEquals($userRoles->getUri(), GenerisRdf::INSTANCE_ROLE_GENERIS);
         $user->delete();
