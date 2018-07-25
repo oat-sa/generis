@@ -56,6 +56,10 @@ class FileHelperTest extends \PHPUnit_Framework_TestCase
 	
 	
 	/**
+     * @todo fix problematic test case
+     * why does this case try to read files 'ExpressionFactoryTest.php', 'ExpressionTest.php', 'OperationFactoryTest.php', 'OperationTest.php', 'TermFactoryTest.php', 'TermTest.php'?
+     *
+     *
 	 * @dataProvider scandirDataProvider
 	 * 
 	 * @param string $toScan Directory path to be scanned
