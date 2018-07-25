@@ -45,7 +45,6 @@ class CollectionTest extends GenerisPhpUnitTestRunner {
      *
      */
     protected function setUp(){
-        GenerisPhpUnitTestRunner::initTest();
 		$this->object = new common_Collection(new common_Object(__METHOD__));
 		$this->toto =  new core_kernel_classes_Literal('toto',__METHOD__);
 		$this->tata =  new core_kernel_classes_Literal('tata',__METHOD__);
