@@ -17,7 +17,7 @@
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  */
 
-namespace oat\generis\test\oatbox\log;
+namespace oat\generis\test\unit\oatbox\log;
 
 use common_exception_InconsistentData;
 use oat\tao\test\TaoPhpUnitTestRunner;

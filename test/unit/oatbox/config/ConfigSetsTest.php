@@ -18,7 +18,7 @@
  *
  */
 
-namespace oat\generis\test\config;
+namespace oat\generis\test\unit\config;
 
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\config\ConfigSets;

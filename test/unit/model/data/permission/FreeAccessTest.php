@@ -17,7 +17,7 @@
  * Copyright (c) (original work) 2015 Open Assessment Technologies SA
  * 
  */
-namespace oat\generis\test\model\data\permission;
+namespace oat\generis\test\unit\model\data\permission;
 
 use oat\generis\model\data\permission\implementation\FreeAccess;
 use oat\oatbox\user\User;

@@ -17,7 +17,7 @@
  * Copyright (c) (original work) 2015 Open Assessment Technologies SA
  * 
  */
-namespace oat\generis\test\oatbox;
+namespace oat\generis\test\unit\oatbox;
 
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use oat\generis\model\data\permission\implementation\FreeAccess;
@@ -44,7 +44,7 @@ class EventManagerTest extends GenerisPhpUnitTestRunner
     public function testInit()
     {
         $eventManager = new EventManager();
-        $this->assertInstanceOf('oat\\oatbox\\event\\EventManager', $eventManager);
+        $this->assertInstanceOf(EventManager::class, $eventManager);
         
         return $eventManager;
         //no cleanup required, not persisted
@@ -55,7 +55,7 @@ class EventManagerTest extends GenerisPhpUnitTestRunner
      */
     public function testAttachOne($eventManager)
     {
-        $callable = $this->prophesize('oat\\generis\\test\\oatbox\\EmptyClass');
+        $callable = $this->prophesize(EmptyClass::class);
         $callable->testfunction(Argument::any())->should(new CallTimesPrediction(1));
         
         $eventManager->attach('testEvent', array($callable->reveal(), 'testfunction'));
@@ -67,7 +67,7 @@ class EventManagerTest extends GenerisPhpUnitTestRunner
      */
     public function testAttachMultiple($eventManager)
     {
-        $callable = $this->prophesize('oat\\generis\\test\\oatbox\\EmptyClass');
+        $callable = $this->prophesize(EmptyClass::class);
         $callable->testfunction(Argument::any())->should(new CallTimesPrediction(2));
     
         $eventManager->attach(array('testEvent1','testEvent2'), array($callable->reveal(), 'testfunction'));
@@ -83,7 +83,7 @@ class EventManagerTest extends GenerisPhpUnitTestRunner
     {
         $genericEvent = new GenericEvent('objEvent', array('param1' => '1'));
         
-        $callable = $this->prophesize('oat\\generis\\test\\oatbox\\EmptyClass');
+        $callable = $this->prophesize(EmptyClass::class);
         $callable->testfunction($genericEvent)->should(new CallTimesPrediction(1));
         
     
@@ -96,7 +96,7 @@ class EventManagerTest extends GenerisPhpUnitTestRunner
      */
     public function testDetatch($eventManager)
     {
-        $callable = $this->prophesize('oat\\generis\\test\\oatbox\\EmptyClass');
+        $callable = $this->prophesize(EmptyClass::class);
 
         $callable->testfunction(Argument::any())->should(new CallTimesPrediction(1));
         $callable->testfunction2(Argument::any())->should(new CallTimesPrediction(1));
