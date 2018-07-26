@@ -1,9 +1,9 @@
 <?php
 
-namespace oat\generis\test\integration\common\persistence\sql\dbal;
+namespace oat\generis\test\unit\common\persistence\sql\dbal;
 
 use common_persistence_sql_dbal_Driver;
-use oat\generis\test\integration\common\persistence\sql\UpdateMultipleTestAbstract;
+use oat\generis\test\unit\common\persistence\sql\UpdateMultipleTestAbstract;
 
 class UpdateMultipleTest extends UpdateMultipleTestAbstract
 {

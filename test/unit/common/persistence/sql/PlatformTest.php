@@ -17,7 +17,7 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
-namespace oat\generis\test\integration\common\persistence\sql\dbal;
+namespace oat\generis\test\unit\common\persistence\sql\dbal;
 
 use oat\generis\test\GenerisPhpUnitTestRunner;
 

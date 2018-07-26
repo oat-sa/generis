@@ -1,6 +1,6 @@
 <?php
 
-namespace oat\generis\test\integration\common\persistence\sql;
+namespace oat\generis\test\unit\common\persistence\sql;
 
 use common_persistence_sql_dbal_Driver;
 use common_persistence_sql_pdo_sqlite_Driver;

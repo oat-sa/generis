@@ -19,7 +19,7 @@
  *
  */
 
-namespace oat\generis\test\integration\common\persistence;
+namespace oat\generis\test\unit\common\persistence;
 
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use \common_persistence_Persistence;

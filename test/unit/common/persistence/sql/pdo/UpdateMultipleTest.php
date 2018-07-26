@@ -1,9 +1,9 @@
 <?php
 
-namespace oat\generis\test\integration\common\persistence\sql\pdo;
+namespace oat\generis\test\unit\common\persistence\sql\pdo;
 
 use common_persistence_sql_pdo_sqlite_Driver;
-use oat\generis\test\integration\common\persistence\sql\UpdateMultipleTestAbstract;
+use oat\generis\test\unit\common\persistence\sql\UpdateMultipleTestAbstract;
 
 class UpdateMultipleTest extends UpdateMultipleTestAbstract
 {
