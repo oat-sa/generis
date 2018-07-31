@@ -19,10 +19,10 @@
  */
 namespace oat\generis\test\unit\helpers;
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
 use oat\generis\Helper\SystemHelper;
+use oat\generis\test\TestCase;
 
-class SystemHelperTest extends GenerisPhpUnitTestRunner
+class SystemHelperTest extends TestCase
 {
 
     /**

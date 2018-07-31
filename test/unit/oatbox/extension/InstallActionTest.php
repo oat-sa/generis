@@ -22,11 +22,12 @@ namespace oat\generis\test\unit\oatbox\extension;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\extension\InstallAction;
 use oat\oatbox\service\ServiceManager;
+use oat\generis\test\TestCase;
 /**
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class InstallActionTest extends \PHPUnit_Framework_TestCase
+class InstallActionTest extends TestCase
 {
     
     public function testRegisterEvent() {

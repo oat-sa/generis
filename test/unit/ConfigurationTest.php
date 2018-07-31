@@ -21,9 +21,9 @@
 
 namespace oat\generis\test\unit;
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
+use oat\generis\test\TestCase;
 
-class ConfigurationTest extends GenerisPhpUnitTestRunner
+class ConfigurationTest extends TestCase
 {
     const TESTKEY = 'config_test_key';
 
@@ -310,126 +310,101 @@ class ConfigurationTest extends GenerisPhpUnitTestRunner
     public function testComponentFactory()
     {
         $component = \common_configuration_ComponentFactory::buildPHPRuntime('5.0', '7.2.x', true);
-        $this->assertIsA($component, \common_configuration_PHPRuntime::class);
+        $this->assertInstanceOf(\common_configuration_PHPRuntime::class, $component);
         $this->assertEquals($component->getMin(), '5.0');
         // 5.5.x will be replaced internally
         //$this->assertEquals($component->getMax(), '5.5.x');
         $this->assertTrue($component->isOptional());
         $report = $component->check();
-        $this->assertIsA($report, 'common_configuration_Report');
+        $this->assertInstanceOf(\common_configuration_Report::class, $report);
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
         $component = \common_configuration_ComponentFactory::buildPHPExtension('spl');
-        $this->assertIsA($component, 'common_configuration_PHPExtension');
+        $this->assertInstanceOf(\common_configuration_PHPExtension::class, $component);
         $this->assertNull($component->getMin());
         $this->assertNull($component->getMax());
         $this->assertEquals($component->getName(), 'spl');
         $this->assertFalse($component->isOptional());
         $report = $component->check();
-        $this->assertIsA($report, 'common_configuration_Report');
+        $this->assertInstanceOf(\common_configuration_Report::class, $report);
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
         $component = \common_configuration_ComponentFactory::buildPHPExtension('spl', null, null, true);
-        $this->assertIsA($component, 'common_configuration_PHPExtension');
+        $this->assertInstanceOf(\common_configuration_PHPExtension::class, $component);
         $this->assertEquals($component->getName(), 'spl');
         $this->assertTrue($component->isOptional());
         $report = $component->check();
-        $this->assertIsA($report, 'common_configuration_Report');
+        $this->assertInstanceOf(\common_configuration_Report::class, $report);
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
         $component = \common_configuration_ComponentFactory::buildPHPINIValue('magic_quotes_gpc', '0');
-        $this->assertIsA($component, 'common_configuration_PHPINIValue');
+        $this->assertInstanceOf(\common_configuration_PHPINIValue::class, $component);
         $this->assertEquals($component->getName(), 'magic_quotes_gpc');
         $this->assertFalse($component->isOptional());
 
         $component = \common_configuration_ComponentFactory::buildPHPDatabaseDriver('pdo_mysql', true);
-        $this->assertIsA($component, 'common_configuration_PHPDatabaseDriver');
+        $this->assertInstanceOf(\common_configuration_PHPDatabaseDriver::class, $component);
         $this->assertEquals($component->getName(), 'pdo_mysql');
         $this->assertTrue($component->isOptional());
         $report = $component->check();
-        $this->assertIsA($report, 'common_configuration_Report');
+        $this->assertInstanceOf(\common_configuration_Report::class, $report);
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
         $location = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ConfigurationTest.php';
         $component = \common_configuration_ComponentFactory::buildFileSystemComponent($location, 'r');
-        $this->assertIsA($component, 'common_configuration_FileSystemComponent');
+        $this->assertInstanceOf(\common_configuration_FileSystemComponent::class, $component);
         $this->assertFalse($component->isOptional());
         $this->assertEquals($component->getLocation(), $location);
         $this->assertEquals($component->getExpectedRights(), 'r');
         $report = $component->check();
-        $this->assertIsA($report, 'common_configuration_Report');
+        $this->assertInstanceOf(\common_configuration_Report::class, $report);
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
-
-        // TAO Dependency
-        /*$component = \common_configuration_ComponentFactory::buildCustom('database_drivers', 'tao', false);
-        $this->assertIsA($component, 'common_configuration_Component');
-        $this->assertEquals($component->getName(), 'custom_tao_DatabaseDrivers');
-        $this->assertFalse($component->isOptional());*/
-
 
         $array = array('type' => 'PHPRuntime', 'value' => array('min' => '5.0', 'max' => '7.1.x', 'optional' => true));
         $component = \common_configuration_ComponentFactory::buildFromArray($array);
-        $this->assertIsA($component, \common_configuration_PHPRuntime::class);
+        $this->assertInstanceOf(\common_configuration_PHPRuntime::class, $component);
         $this->assertEquals($component->getMin(), '5.0');
         // 5.5.x will be replaced internally
         // $this->assertEquals($component->getMax(), '5.5');
         $this->assertTrue($component->isOptional());
         $report = $component->check();
-        $this->assertIsA($report, 'common_configuration_Report');
+        $this->assertInstanceOf(\common_configuration_Report::class, $report);
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
         $array = array('type' => 'PHPExtension', 'value' => array('name' => 'spl'));
         $component = \common_configuration_ComponentFactory::buildFromArray($array);
-        $this->assertIsA($component, 'common_configuration_PHPExtension');
+        $this->assertInstanceOf(\common_configuration_PHPExtension::class, $component);
         $this->assertEquals($component->getName(), 'spl');
         $this->assertFalse($component->isOptional());
         $report = $component->check();
-        $this->assertIsA($report, 'common_configuration_Report');
+        $this->assertInstanceOf(\common_configuration_Report::class, $report);
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
         // 'Check' before the Component type is accepted.
         $array = array('type' => 'CheckPHPINIValue', 'value' => array('name' => 'magic_quotes_gpc', 'value' => '0'));
         $component = \common_configuration_ComponentFactory::buildFromArray($array);
-        $this->assertIsA($component, 'common_configuration_PHPINIValue');
+        $this->assertInstanceOf(\common_configuration_PHPINIValue::class, $component);
         $this->assertEquals($component->getName(), 'magic_quotes_gpc');
         $this->assertFalse($component->isOptional());
 
         $array = array('type' => 'PHPDatabaseDriver', 'value' => array('name' => 'pdo_mysql', 'optional' => true));
         $component = \common_configuration_ComponentFactory::buildFromArray($array);
-        $this->assertIsA($component, 'common_configuration_PHPDatabaseDriver');
+        $this->assertInstanceOf(\common_configuration_PHPDatabaseDriver::class, $component);
         $this->assertEquals($component->getName(), 'pdo_mysql');
         $this->assertTrue($component->isOptional());
         $report = $component->check();
-        $this->assertIsA($report, 'common_configuration_Report');
+        $this->assertInstanceOf(\common_configuration_Report::class, $report);
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
         $array = array('type' => 'FileSystemComponent', 'value' => array('location' => $location, 'rights' => 'r'));
         $component = \common_configuration_ComponentFactory::buildFromArray($array);
-        $this->assertIsA($component, 'common_configuration_FileSystemComponent');
+        $this->assertInstanceOf(\common_configuration_FileSystemComponent::class, $component);
         $this->assertFalse($component->isOptional());
         $this->assertEquals($component->getLocation(), $location);
         $this->assertEquals($component->getExpectedRights(), 'r');
         $report = $component->check();
-        $this->assertIsA($report, 'common_configuration_Report');
+        $this->assertInstanceOf(\common_configuration_Report::class, $report);
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
-
-        // TAO Dependency
-        /*
-        $array = array('type' => 'Custom', 'value' => array('name' => 'database_drivers', 'extension' => 'tao', 'optional' => false));
-        $component = \common_configuration_ComponentFactory::buildFromArray($array);
-        $this->assertIsA($component, 'common_configuration_Component');
-        $this->assertEquals($component->getName(), 'custom_tao_DatabaseDrivers');
-        $this->assertFalse($component->isOptional());
-
-        try{
-            $array = array('type' => 'Custom', 'value' => array('name' => 'mod_rewrite'));
-            $component = \common_configuration_ComponentFactory::buildFromArray($array);
-            $this->assertTrue(false, 'An exception should be raised because mod_rewrite check does not exist for default extension generis.');
-        }
-        catch (common_configuration_ComponentFactoryException $e){
-            $this->assertTrue(true);
-        }
-        */
 
         try {
             $array = array('type' => 'PHPINIValue', 'value' => array());

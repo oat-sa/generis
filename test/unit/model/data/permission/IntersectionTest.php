@@ -21,8 +21,9 @@ namespace oat\generis\test\unit\model\data\permission;
 
 use oat\generis\model\data\permission\implementation\Intersection;
 use oat\oatbox\user\User;
+use oat\generis\test\TestCase;
 
-class IntersectionTest extends \PHPUnit_Framework_TestCase
+class IntersectionTest extends TestCase
 {
     /**
      * @var User

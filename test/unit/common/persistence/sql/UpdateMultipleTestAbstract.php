@@ -4,8 +4,9 @@ namespace oat\generis\test\unit\common\persistence\sql;
 
 use common_persistence_sql_dbal_Driver;
 use common_persistence_sql_pdo_sqlite_Driver;
+use oat\generis\test\TestCase;
 
-abstract class UpdateMultipleTestAbstract extends \PHPUnit_Framework_TestCase
+abstract class UpdateMultipleTestAbstract extends TestCase
 {
     /** @var common_persistence_sql_dbal_Driver|common_persistence_sql_pdo_sqlite_Driver */
     protected $driver;

@@ -23,12 +23,13 @@ namespace oat\generis\test\unit\oatbox\user;
 use oat\oatbox\user\UserLanguageService;
 use oat\oatbox\user\User;
 use oat\generis\model\GenerisRdf;
+use oat\generis\test\TestCase;
 
 /**
  * class UserLanguageServiceTest
  * @package oat\oatbox\user
  */
-class UserLanguageServiceTest extends \PHPUnit_Framework_TestCase
+class UserLanguageServiceTest extends TestCase
 {
 
     public function setUp()

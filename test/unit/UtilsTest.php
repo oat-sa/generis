@@ -21,7 +21,7 @@
 
 error_reporting(E_ALL);
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
+use oat\generis\test\TestCase;
 use Prophecy\Prophet;
 
 /**
@@ -29,7 +29,7 @@ use Prophecy\Prophet;
  * /**
  * Test class for Expression.
  */
-class generis_test_UtilsTest extends GenerisPhpUnitTestRunner
+class generis_test_UtilsTest extends TestCase
 {
     public function testIsUri()
     {

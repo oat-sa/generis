@@ -19,9 +19,9 @@
  *               2017      (update and modification) Open Assessment Technologies SA;
  *
  */
+use oat\generis\test\TestCase;
 
-
-class FileHelperTest extends \PHPUnit_Framework_TestCase
+class FileHelperTest extends TestCase
 {
 
     protected function setUp()
