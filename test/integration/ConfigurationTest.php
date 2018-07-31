@@ -18,36 +18,40 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
+
+namespace oat\generis\test\integration;
+
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
-class ConfigurationTest extends GenerisPhpUnitTestRunner {
+class ConfigurationTest extends GenerisPhpUnitTestRunner
+{
 
-	const TESTKEY = 'config_test_key';
+    const TESTKEY = 'config_test_key';
 
-	/**
-	 * A version of php that we can be sure will not be present on the system
-	 * and that we can use in our test cases as not supposed to be installed
-	 *
-	 * @var int
-	 */
-	const UNSUPPORTED_PHP_MAJOR_VERSION = 9;
+    /**
+     * A version of php that we can be sure will not be present on the system
+     * and that we can use in our test cases as not supposed to be installed
+     *
+     * @var int
+     */
+    const UNSUPPORTED_PHP_MAJOR_VERSION = 9;
 
     protected function setUp()
     {
         GenerisPhpUnitTestRunner::initTest();
     }
 
-	public function testUserConfig()
-	{
-		$generis = common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
+    public function testUserConfig()
+    {
+        $generis = \common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
 
-		$this->assertFalse($generis->getConfig(self::TESTKEY));
+        $this->assertFalse($generis->getConfig(self::TESTKEY));
 
-		$random = rand(0, 999999);
-		$generis->setConfig(self::TESTKEY, $random);
-		$this->assertEquals($generis->getConfig(self::TESTKEY), $random);
+        $random = rand(0, 999999);
+        $generis->setConfig(self::TESTKEY, $random);
+        $this->assertEquals($generis->getConfig(self::TESTKEY), $random);
 
-		$generis->unsetConfig(self::TESTKEY);
-		$this->assertFalse($generis->getConfig(self::TESTKEY));
-	}
+        $generis->unsetConfig(self::TESTKEY);
+        $this->assertFalse($generis->getConfig(self::TESTKEY));
+    }
 }
