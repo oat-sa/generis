@@ -82,7 +82,7 @@ class FileHelperTest extends \PHPUnit_Framework_TestCase
         $ds = DIRECTORY_SEPARATOR;
 
         return array(
-            array(dirname(__FILE__) . $ds . '..' . $ds . 'samples' . $ds . 'scandir', array(1, 2)),
+            array(dirname(__FILE__) . $ds . '..' . $ds . 'samples' . $ds . 'scandir', array('1', '2')),
         );
     }
 
