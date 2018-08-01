@@ -1,5 +1,5 @@
 <?php
-/*  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -21,5 +21,12 @@ namespace oat\generis\test;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
-
+    /**
+     * Forward compatibility function for PHPUnit 7.0
+     * @param string $exception
+     */
+    public function expectException($exception)
+    {
+        $this->setExpectedException($exception);
+    }
 }
