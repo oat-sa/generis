@@ -21,5 +21,12 @@ namespace oat\generis\test;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
-
+    /**
+     * Forward compatibility function for PHPUnit 7.0
+     * @param string $exception
+     */
+    public function expectException($exception)
+    {
+        self::setExpectedException($exception);
+    }
 }
