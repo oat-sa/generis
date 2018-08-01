@@ -27,6 +27,6 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     public function expectException($exception)
     {
-        self::setExpectedException($exception);
+        $this->setExpectedException($exception);
     }
 }
