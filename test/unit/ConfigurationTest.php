@@ -210,7 +210,7 @@ class ConfigurationTest extends TestCase
         $this->assertFalse($f->isOptional());
         $this->assertTrue($f->isReadable());
 
-        $this->setExpectedException('common_configuration_MalformedRightsException');
+        $this->expectException('common_configuration_MalformedRightsException');
         $f->setExpectedRights('fail');
 
         try {
