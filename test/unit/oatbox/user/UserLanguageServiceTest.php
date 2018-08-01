@@ -90,20 +90,12 @@ class UserLanguageServiceTest extends TestCase
      */
     private function getUser($uiLg = null, $dataLg = null)
     {
-        $user = $this->getMock(User::class, ['getIdentifier', 'getRoles', 'getPropertyValues']);
-
-        $user->expects($this->any())
-            ->method('getPropertyValues')
-            ->will($this->returnCallback(function ($prop) use ($uiLg, $dataLg) {
-                if ($prop === GenerisRdf::PROPERTY_USER_DEFLG) {
-                    return $dataLg === null ? [] : [$dataLg];
-                }
-                if ($prop === GenerisRdf::PROPERTY_USER_UILG) {
-                    return $uiLg === null ? [] : [$uiLg];
-                }
-            }));
-
-        return $user;
+        $user= $this->prophesize(User::class);
+        $user->getPropertyValues(GenerisRdf::PROPERTY_USER_DEFLG)
+            ->willReturn($dataLg === null ? [] : [$dataLg]);
+        $user->getPropertyValues(GenerisRdf::PROPERTY_USER_UILG)
+            ->willReturn($uiLg === null ? [] : [$uiLg]);
+        return $user->reveal();
     }
 
     /**
