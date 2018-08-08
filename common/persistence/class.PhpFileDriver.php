@@ -338,10 +338,17 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     public function purge()
     {
-        // @todo opcache invalidation
-        return file_exists($this->directory)
-            ? helpers_File::emptyDirectory($this->directory)
-            : false;
+        if (file_exists($this->directory)) {
+            $files          = $this->getCachedFiles();
+            $successDeleted = [];
+            foreach ($files as $file) {
+                $successDeleted[] = $this->removeCacheFile($this->directory . $file);
+            }
+
+            return !in_array(false, $files);
+        }
+
+        return false;
     }
 
     /**
@@ -412,5 +419,40 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     public function setTtlMode($ttlMode)
     {
         $this->ttlMode = $ttlMode;
+    }
+
+    /**
+     * @return array
+     */
+    private function getCachedFiles()
+    {
+        try {
+            $files = helpers_File::scandir($this->directory);
+        } catch (common_Exception $exception) {
+            \common_Logger::e($exception->getMessage());
+            return [];
+        }
+
+        return $files;
+    }
+
+    /**
+     * @param string $filePath
+     * @return bool
+     */
+    private function removeCacheFile($filePath)
+    {
+        try {
+            $deleted = helpers_File::remove($filePath);
+            if ($deleted && function_exists('opcache_invalidate')) {
+                opcache_invalidate($filePath, true);
+                return true;
+            }
+        } catch (common_exception_Error $exception) {
+            \common_Logger::e($exception->getMessage());
+            return false;
+        }
+
+        return false;
     }
 }
