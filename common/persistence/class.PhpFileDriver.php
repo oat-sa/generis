@@ -345,8 +345,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
                 $successDeleted &= $this->removeCacheFile($file);
             }
 
-            $successDeleted &= helpers_File::emptyDirectory($this->directory);
-            return $successDeleted;
+            return (bool)$successDeleted;
         }
 
         return false;
@@ -448,16 +447,14 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     private function removeCacheFile($filePath)
     {
         try {
-            $deleted = helpers_File::remove($filePath);
-            if ($deleted && function_exists('opcache_invalidate')) {
+            if (function_exists('opcache_invalidate')) {
                 opcache_invalidate($filePath, true);
-                return true;
             }
+
+            return helpers_File::remove($filePath);
         } catch (common_exception_Error $exception) {
             \common_Logger::e($exception->getMessage());
             return false;
         }
-
-        return false;
     }
 }
