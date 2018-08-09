@@ -340,13 +340,13 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     {
         if (file_exists($this->directory)) {
             $files          = $this->getCachedFiles();
-            $successDeleted = [];
+            $successDeleted = true;
             foreach ($files as $file) {
-                $successDeleted[] = $this->removeCacheFile($file);
+                $successDeleted &= $this->removeCacheFile($file);
             }
 
-            $successDeleted[] = helpers_File::emptyDirectory($this->directory);
-            return !in_array(false, $files);
+            $successDeleted &= helpers_File::emptyDirectory($this->directory);
+            return $successDeleted;
         }
 
         return false;
@@ -430,8 +430,8 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
         try {
             $files = helpers_File::scandir($this->directory,[
                 'recursive' => true,
-                'only'      => 1,
-                'absolute' => true,
+                'only'      => helpers_File::$FILE,
+                'absolute'  => true,
             ]);
         } catch (common_Exception $exception) {
             \common_Logger::e($exception->getMessage());
