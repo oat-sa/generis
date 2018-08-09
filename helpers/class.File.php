@@ -49,7 +49,7 @@ class helpers_File
      * Directory Mode
      *
      * @access public
-     * @deprecated
+     * @deprecated use helpers_File::SCAN_DIRECTORY
      * @var int
      */
     public static $DIR = 2;
@@ -58,7 +58,7 @@ class helpers_File
      * File Mode
      *
      * @access public
-     * @deprecated
+     * @deprecated use helpers_File::SCAN_FILE
      * @var int
      */
     public static $FILE = 1;
