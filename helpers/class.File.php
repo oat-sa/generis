@@ -34,6 +34,9 @@
  */
 class helpers_File
 {
+    const SCAN_FILE = 1;
+    const SCAN_DIRECTORY = 2;
+
     // --- ATTRIBUTES ---
     
     /**
@@ -46,6 +49,7 @@ class helpers_File
      * Directory Mode
      *
      * @access public
+     * @deprecated
      * @var int
      */
     public static $DIR = 2;
@@ -54,6 +58,7 @@ class helpers_File
      * File Mode
      *
      * @access public
+     * @deprecated
      * @var int
      */
     public static $FILE = 1;
@@ -259,10 +264,10 @@ class helpers_File
                 
                 if (! $fileinfo->isDot()) {
                     if (! is_null($only)) {
-                        if ($only == self::$DIR && $fileinfo->isDir()) {
+                        if ($only == self::SCAN_DIRECTORY && $fileinfo->isDir()) {
                             array_push($returnValue, $fileName);
                         } else {
-                            if ($only == self::$FILE && $fileinfo->isFile()) {
+                            if ($only == self::SCAN_FILE && $fileinfo->isFile()) {
                                 array_push($returnValue, $fileName);
                             }
                         }

@@ -430,7 +430,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
         try {
             $files = helpers_File::scandir($this->directory,[
                 'recursive' => true,
-                'only'      => helpers_File::$FILE,
+                'only'      => helpers_File::SCAN_FILE,
                 'absolute'  => true,
             ]);
         } catch (common_Exception $exception) {
