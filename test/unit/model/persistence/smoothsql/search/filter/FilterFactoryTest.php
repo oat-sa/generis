@@ -4,9 +4,9 @@ namespace oat\generis\test\integration\model\persistence\smoothsql\search\filter
 
 use oat\generis\model\kernel\persistence\smoothsql\search\filter\Filter;
 use oat\generis\model\kernel\persistence\smoothsql\search\filter\FilterFactory;
-use PHPUnit_Framework_TestCase;
+use oat\generis\test\TestCase;
 
-class FilterFactoryTest extends PHPUnit_Framework_TestCase
+class FilterFactoryTest extends TestCase
 {
 	public function testBuildFiltersReturnArrayOfFilters()
 	{

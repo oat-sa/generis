@@ -21,8 +21,9 @@ namespace oat\generis\test\unit\model\persistence\smoothsql;
 
 use Prophecy\Promise\ReturnPromise;
 use Prophecy\Argument;
+use oat\generis\test\TestCase;
 
-class SmoothModelIteratorTest extends \PHPUnit_Framework_TestCase
+class SmoothModelIteratorTest extends TestCase
 {
 
     public function setUp()

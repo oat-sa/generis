@@ -21,8 +21,9 @@ namespace oat\generis\test\unit\model\data\permission;
 
 use oat\generis\model\data\permission\implementation\NoAccess;
 use oat\oatbox\user\User;
+use oat\generis\test\TestCase;
 
-class NoAccessTest extends \PHPUnit_Framework_TestCase
+class NoAccessTest extends TestCase
 {
     /**
      * @var User

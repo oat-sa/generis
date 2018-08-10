@@ -20,20 +20,11 @@
 namespace oat\generis\test\unit\model\persistence\smoothsql;
 
 use \core_kernel_persistence_smoothsql_SmoothRdf;
-use oat\generis\test\GenerisPhpUnitTestRunner;
 use Prophecy\Prophet;
+use oat\generis\test\TestCase;
 
-class SmoothRdfTest extends \PHPUnit_Framework_TestCase
+class SmoothRdfTest extends TestCase
 {
-
-    /**
-     *
-     * @see PHPUnit_Framework_TestCase::setUp()
-     */
-    public function setUp()
-    {
-    }
-
     /**
      * @expectedException common_Exception
      * @expectedExceptionMessage Not implemented

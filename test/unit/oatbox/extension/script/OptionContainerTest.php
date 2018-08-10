@@ -20,8 +20,9 @@
 namespace oat\generis\test\integration\oatbox\extension\script;
 
 use oat\oatbox\extension\script\OptionContainer;
+use oat\generis\test\TestCase;
 
-class OptionContainerTest extends \PHPUnit_Framework_TestCase
+class OptionContainerTest extends TestCase
 {
     
     /**

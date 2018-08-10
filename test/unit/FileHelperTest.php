@@ -19,9 +19,9 @@
  *               2017      (update and modification) Open Assessment Technologies SA;
  *
  */
+use oat\generis\test\TestCase;
 
-
-class FileHelperTest extends \PHPUnit_Framework_TestCase
+class FileHelperTest extends TestCase
 {
 
     protected function setUp()
@@ -69,7 +69,7 @@ class FileHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function testScandir($toScan, $expectedResult, $recursive = false, $absolute = false)
     {
-        $result = helpers_File::scanDir($toScan, array('recursive' => $recursive, 'absolute' => $absolute, 'only' => helpers_File::$FILE));
+        $result = helpers_File::scanDir($toScan, array('recursive' => $recursive, 'absolute' => $absolute, 'only' => helpers_File::SCAN_FILE));
         $this->assertEquals(count($expectedResult), count($result));
         // The order might vary depending on the file system implementation...
         foreach ($expectedResult as $expected) {

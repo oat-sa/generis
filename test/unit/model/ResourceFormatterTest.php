@@ -21,26 +21,10 @@ namespace oat\generis\test\unit\model;
 
 use \core_kernel_classes_ResourceFormatter;
 use oat\generis\model\GenerisRdf;
-use oat\generis\test\GenerisPhpUnitTestRunner;
-use Prophecy\Prophet;
+use oat\generis\test\TestCase;
 
-class ResourceFormatterTest extends GenerisPhpUnitTestRunner
+class ResourceFormatterTest extends TestCase
 {
-    /**
-     *
-     * @var Prophet
-     */
-    private $prophet;
-
-    /**
-     *
-     * @see PHPUnit_Framework_TestCase::setUp()
-     */
-    public function setUp()
-    {
-        $this->prophet = new Prophet();
-    }
-
     /**
      *
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -60,7 +44,7 @@ class ResourceFormatterTest extends GenerisPhpUnitTestRunner
      */
     private function createResourceProphecy($uri)
     {
-        $resourceProphecy = $this->prophet->prophesize('core_kernel_classes_Resource');
+        $resourceProphecy = $this->prophesize('core_kernel_classes_Resource');
         $resourceProphecy->getUri()->willReturn($uri);
         return $resourceProphecy;
     }
@@ -72,7 +56,7 @@ class ResourceFormatterTest extends GenerisPhpUnitTestRunner
      */
     private function createClassProphecy($uri)
     {
-        $classProphecy = $this->prophet->prophesize('core_kernel_classes_Class');
+        $classProphecy = $this->prophesize('core_kernel_classes_Class');
         $classProphecy->getUri()->willReturn($uri);
         return $classProphecy;
     }

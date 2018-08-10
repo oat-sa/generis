@@ -23,12 +23,13 @@ namespace oat\generis\test\unit\oatbox\user;
 use oat\oatbox\user\UserLanguageService;
 use oat\oatbox\user\User;
 use oat\generis\model\GenerisRdf;
+use oat\generis\test\TestCase;
 
 /**
  * class UserLanguageServiceTest
  * @package oat\oatbox\user
  */
-class UserLanguageServiceTest extends \PHPUnit_Framework_TestCase
+class UserLanguageServiceTest extends TestCase
 {
 
     public function setUp()
@@ -89,20 +90,12 @@ class UserLanguageServiceTest extends \PHPUnit_Framework_TestCase
      */
     private function getUser($uiLg = null, $dataLg = null)
     {
-        $user = $this->getMock(User::class, ['getIdentifier', 'getRoles', 'getPropertyValues']);
-
-        $user->expects($this->any())
-            ->method('getPropertyValues')
-            ->will($this->returnCallback(function ($prop) use ($uiLg, $dataLg) {
-                if ($prop === GenerisRdf::PROPERTY_USER_DEFLG) {
-                    return $dataLg === null ? [] : [$dataLg];
-                }
-                if ($prop === GenerisRdf::PROPERTY_USER_UILG) {
-                    return $uiLg === null ? [] : [$uiLg];
-                }
-            }));
-
-        return $user;
+        $user= $this->prophesize(User::class);
+        $user->getPropertyValues(GenerisRdf::PROPERTY_USER_DEFLG)
+            ->willReturn($dataLg === null ? [] : [$dataLg]);
+        $user->getPropertyValues(GenerisRdf::PROPERTY_USER_UILG)
+            ->willReturn($uiLg === null ? [] : [$uiLg]);
+        return $user->reveal();
     }
 
     /**

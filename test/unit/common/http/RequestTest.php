@@ -19,15 +19,15 @@
 
 namespace oat\generis\test\unit\common\http;
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
 use \common_http_Request;
+use oat\generis\test\TestCase;
 
 /**
  * Test the \common_http_Request class
  *
  * @author Bertrand Chevrier <bertrand@taotesting.com>
  */
-class RequestTest extends GenerisPhpUnitTestRunner {
+class RequestTest extends TestCase {
 
     /**
      * Test the method getHeaderValue

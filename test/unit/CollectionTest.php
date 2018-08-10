@@ -20,7 +20,7 @@
  */
 error_reporting(E_ALL);
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
+use oat\generis\test\TestCase;
 
 /**
  * Test class for Collection.
@@ -28,18 +28,12 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
  * @author lionel.lecaque@tudor.lu
  * @package test
  */
-
-
-class CollectionTest extends GenerisPhpUnitTestRunner {
+class CollectionTest extends TestCase {
 
 	protected $object;
 	private $toto;
 	private $tata;
 
-	function __construct() {
-    	parent::__construct();
-    }
-	
     /**
      * Setting the collection to test
      *
@@ -118,7 +112,7 @@ class CollectionTest extends GenerisPhpUnitTestRunner {
 		$collection = new common_Collection(new common_Object('__METHOD__'));
 		$collection->add(new core_kernel_classes_Literal('plop'));
 		$results = $this->object->union($collection);
-		$this->assertIsA($results,'common_Collection');
+		$this->assertInstanceOf('common_Collection', $results);
 		$this->assertFalse($results->isEmpty());
 		$this->assertTrue($results->count() == 3);
 		$this->assertTrue($results->get($results->indexOf($this->toto))->literal == 'toto');
@@ -136,7 +130,7 @@ class CollectionTest extends GenerisPhpUnitTestRunner {
 		$collection->add($this->toto);
 		$collection->add($this->tata);
 		$results = $collection->intersect($this->object);
-		$this->assertIsA($results,'common_Collection');
+		$this->assertInstanceOf('common_Collection', $results);
 		$this->assertTrue($results->count() == 2);
 		$this->assertTrue($results->get($results->indexOf($this->toto))->literal == 'toto');
 		$this->assertTrue($results->get($results->indexOf($this->tata))->literal == 'tata');

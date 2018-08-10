@@ -19,12 +19,11 @@
  */
 namespace oat\generis\test\unit\oatbox;
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
-use oat\generis\model\data\permission\implementation\FreeAccess;
 use oat\oatbox\event\EventManager;
 use Prophecy\Argument;
 use Prophecy\Prediction\CallTimesPrediction;
 use oat\oatbox\event\GenericEvent;
+use oat\generis\test\TestCase;
 
 class EmptyClass
 {
@@ -39,7 +38,7 @@ class EmptyClass
     }
 }
 
-class EventManagerTest extends GenerisPhpUnitTestRunner
+class EventManagerTest extends TestCase
 {
     public function testInit()
     {

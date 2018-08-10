@@ -20,17 +20,17 @@
  */
 namespace oat\generis\test\unit\common\persistence;
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
 use \common_persistence_NoStorageKvDriver;
+use oat\generis\test\TestCase;
 
 
-class NoStaragePersistenceTest extends GenerisPhpUnitTestRunner
+class NoStaragePersistenceTest extends TestCase
 {
     
     /**
      * 
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @return common_persistence_KeyValuePersistence
+     * @return \common_persistence_KeyValuePersistence
      */
     public function testConnect()
     {
@@ -44,7 +44,7 @@ class NoStaragePersistenceTest extends GenerisPhpUnitTestRunner
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param common_persistence_KeyValuePersistence $persistence
+     * @param \common_persistence_KeyValuePersistence $persistence
      */
     public function testSet($persistence)
     {
@@ -55,7 +55,7 @@ class NoStaragePersistenceTest extends GenerisPhpUnitTestRunner
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param common_persistence_KeyValuePersistence $persistence
+     * @param \common_persistence_KeyValuePersistence $persistence
      */
     public function testGet($persistence)
     {
@@ -66,7 +66,7 @@ class NoStaragePersistenceTest extends GenerisPhpUnitTestRunner
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param common_persistence_KeyValuePersistence $persistence
+     * @param \common_persistence_KeyValuePersistence $persistence
      */
     public function testExists($persistence)
     {
@@ -77,7 +77,7 @@ class NoStaragePersistenceTest extends GenerisPhpUnitTestRunner
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param common_persistence_KeyValuePersistence $persistence
+     * @param \common_persistence_KeyValuePersistence $persistence
      */
     public function testDel($persistence)
     {
@@ -88,7 +88,7 @@ class NoStaragePersistenceTest extends GenerisPhpUnitTestRunner
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param common_persistence_KeyValuePersistence $persistence
+     * @param \common_persistence_KeyValuePersistence $persistence
      */
     public function testPurge($persistence)
     {
@@ -96,5 +96,3 @@ class NoStaragePersistenceTest extends GenerisPhpUnitTestRunner
     }
     
 }
-
-?>

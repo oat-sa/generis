@@ -22,13 +22,14 @@ namespace oat\generis\test\unit\oatbox\service;
 
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ConfigurableService;
+use oat\generis\test\TestCase;
 
 /**
  * Class ServiceManager
  * @package oat\generis\test\integration\oatbox\service
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
-class ServiceManagerTest extends \PHPUnit_Framework_TestCase
+class ServiceManagerTest extends TestCase
 {
     public function testGet()
     {
