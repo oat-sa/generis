@@ -19,9 +19,9 @@
 
 namespace oat\generis\test\unit\common\persistence\sql\dbal;
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
+use oat\generis\test\TestCase;
 
-class PlatformTest extends GenerisPhpUnitTestRunner
+class PlatformTest extends TestCase
 {
 
     public function testGetQueryBuilder()

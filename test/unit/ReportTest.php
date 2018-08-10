@@ -17,8 +17,9 @@
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
+use oat\generis\test\TestCase;
 
-class ReportTest extends \PHPUnit_Framework_TestCase {
+class ReportTest extends TestCase {
 	
 	public function testBasicReport()
 	{

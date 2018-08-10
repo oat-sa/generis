@@ -19,9 +19,9 @@
  *               2017      (update and modification) Open Assessment Technologies SA;
  * 
  */
+use oat\generis\test\TestCase;
 
-
-class ManifestTest extends \PHPUnit_Framework_TestCase {
+class ManifestTest extends TestCase {
 	
 	const SAMPLES_PATH = '/../../test/samples/manifests/';
 	const MANIFEST_PATH_DOES_NOT_EXIST = 'idonotexist.php';

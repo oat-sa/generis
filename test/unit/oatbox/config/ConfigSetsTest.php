@@ -22,13 +22,14 @@ namespace oat\generis\test\unit\config;
 
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\config\ConfigSets;
+use oat\generis\test\TestCase;
 
 /**
  * Class ConfigSetsTest
  * @package oat\generis\test\config
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
-class ConfigSetsTest extends \PHPUnit_Framework_TestCase
+class ConfigSetsTest extends TestCase
 {
 
     /**

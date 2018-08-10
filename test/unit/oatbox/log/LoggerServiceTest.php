@@ -18,10 +18,13 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
+namespace oat\generis\test\unit\oatbox\log;
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
+use oat\oatbox\log\LoggerService;
+use oat\oatbox\log\logger\TaoLog;
+use oat\generis\test\TestCase;
 
-class LogTest extends GenerisPhpUnitTestRunner {
+class LoggerServiceTest extends TestCase {
 	
 	const RUNS = 1000;
     
@@ -31,38 +34,38 @@ class LogTest extends GenerisPhpUnitTestRunner {
 	
 	public function testFileAppender()
 	{
-		$dfile = $this->createFile();
-		$ifile = $this->createFile();
-		$wfile = $this->createFile();
-		$efile = $this->createFile();
-		$cfile = $this->createFile();
+		$dfile = tempnam(sys_get_temp_dir(), "logtest");
+		$ifile = tempnam(sys_get_temp_dir(), "logtest");
+		$wfile = tempnam(sys_get_temp_dir(), "logtest");
+		$efile = tempnam(sys_get_temp_dir(), "logtest");
+		$cfile = tempnam(sys_get_temp_dir(), "logtest");
 
-        $logger = new oat\oatbox\log\LoggerService(array(
-            'logger' => new oat\oatbox\log\logger\TaoLog(array(
+        $logger = new LoggerService(array(
+            'logger' => new TaoLog(array(
                 'appenders' => array(
                     array(
                         'class'			=> 'SingleFileAppender',
-                        'threshold'		=> common_Logger::DEBUG_LEVEL,
+                        'threshold'		=> \common_Logger::DEBUG_LEVEL,
                         'file'			=> $dfile,
                     ),
                     array(
                         'class'			=> 'SingleFileAppender',
-                        'threshold'		=> common_Logger::INFO_LEVEL,
+                        'threshold'		=> \common_Logger::INFO_LEVEL,
                         'file'			=> $ifile,
                     ),
                     array(
                         'class'			=> 'SingleFileAppender',
-                        'threshold'		=> common_Logger::WARNING_LEVEL,
+                        'threshold'		=> \common_Logger::WARNING_LEVEL,
                         'file'			=> $wfile,
                     ),
                     array(
                         'class'			=> 'SingleFileAppender',
-                        'threshold'		=> common_Logger::ERROR_LEVEL,
+                        'threshold'		=> \common_Logger::ERROR_LEVEL,
                         'file'			=> $efile,
                     ),
                     array(
                         'class'			=> 'SingleFileAppender',
-                        'threshold'		=> common_Logger::FATAL_LEVEL,
+                        'threshold'		=> \common_Logger::FATAL_LEVEL,
                         'file'			=> $cfile,
                     ),
                 )
@@ -116,15 +119,15 @@ class LogTest extends GenerisPhpUnitTestRunner {
 	
 	public function testLogTags()
 	{
-        $dfile = $this->createFile();
+        $dfile = tempnam(sys_get_temp_dir(), "logtest");
         $this->assertEntriesInFile($dfile, 0);
 
-        $logger = new oat\oatbox\log\LoggerService(array(
-            'logger' => new oat\oatbox\log\logger\TaoLog(array(
+        $logger = new LoggerService(array(
+            'logger' => new TaoLog(array(
                 'appenders' => array(
                     array(
                         'class'			=> 'SingleFileAppender',
-                        'threshold'		=> common_Logger::DEBUG_LEVEL,
+                        'threshold'		=> \common_Logger::DEBUG_LEVEL,
                         'file'			=> $dfile,
                         'tags'			=> 'CORRECTTAG'
                     ),
@@ -160,5 +163,4 @@ class LogTest extends GenerisPhpUnitTestRunner {
 		}
 		$this->assertEquals($count, $pCount, 'Expected count '.$pCount.', had '.$count.' in file '.$pFile);
 	}
-    
 }

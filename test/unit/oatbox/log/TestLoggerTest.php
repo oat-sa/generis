@@ -19,14 +19,13 @@
 
 namespace oat\generis\test\unit\oatbox\log;
 
-use common_exception_InconsistentData;
-use oat\tao\test\TaoPhpUnitTestRunner;
 use Psr\Log\LogLevel;
+use oat\generis\test\TestCase;
 
 /**
  * Test of test logger implementation
  */
-class TestLoggerTest extends \PHPUnit_Framework_TestCase
+class TestLoggerTest extends TestCase
 {
     public function testArbitraryLogger() {
         $logger = new TestLogger();

@@ -19,14 +19,14 @@
 
 namespace oat\generis\test\unit\common\persistence\sql\pdo;
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
+use oat\generis\test\TestCase;
 
 /**
  * Class DriverTest
  * @package oat\generis\test\unit\common\persistence\sql\dbal
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
-class DriverTest extends GenerisPhpUnitTestRunner
+class DriverTest extends TestCase
 {
 
     public function testGetPlatForm()

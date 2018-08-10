@@ -21,13 +21,12 @@
 
 namespace oat\generis\test\unit\common\persistence;
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
-use \common_persistence_Persistence;
 use \common_persistence_PhpFileDriver;
 use oat\generis\test\integration\tools\InvokeMethodTrait;
 use org\bovigo\vfs\vfsStream;
+use oat\generis\test\TestCase;
 
-class PhpFilePersistenceTtlModeTest extends GenerisPhpUnitTestRunner
+class PhpFilePersistenceTtlModeTest extends TestCase
 {
     /**
      * Adds invokeMethod() method.

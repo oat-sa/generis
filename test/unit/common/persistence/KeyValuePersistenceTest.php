@@ -19,7 +19,7 @@
 
 namespace oat\generis\test\unit\common\persistence;
 
-use \PHPUnit_Framework_TestCase as TestCase;
+use oat\generis\test\TestCase;
 
 class KeyValuePersistenceTest extends TestCase
 {

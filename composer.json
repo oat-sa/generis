@@ -66,6 +66,10 @@
 		"monolog/monolog": "^1.23.0",
 		"fluent/logger": "^1.0.1"
 	},
+        "require-dev" : {
+		"mikey179/vfsStream" : "1.4.0",
+		"phpunit/phpunit": "^4.8"
+        },
     "autoload" : {
         "psr-4" : {
             "oat\\generis\\model\\" : "core/",
