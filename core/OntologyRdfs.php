@@ -32,4 +32,5 @@ interface OntologyRdfs
     const RDFS_DOMAIN = 'http://www.w3.org/2000/01/rdf-schema#domain';
     const RDFS_RESOURCE = 'http://www.w3.org/2000/01/rdf-schema#Resource';
     const RDFS_RANGE = 'http://www.w3.org/2000/01/rdf-schema#range';
+    const RDFS_SUBPROPERTYOF = 'http://www.w3.org/2000/01/rdf-schema#subPropertyOf';
 }
