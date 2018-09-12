@@ -360,7 +360,7 @@ class ConfigurationTest extends TestCase
         $this->assertInstanceOf(\common_configuration_Report::class, $report);
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
-        $array = array('type' => 'PHPRuntime', 'value' => array('min' => '5.0', 'max' => '7.1.x', 'optional' => true));
+        $array = array('type' => 'PHPRuntime', 'value' => array('min' => '5.0', 'max' => '7.2.x', 'optional' => true));
         $component = \common_configuration_ComponentFactory::buildFromArray($array);
         $this->assertInstanceOf(\common_configuration_PHPRuntime::class, $component);
         $this->assertEquals($component->getMin(), '5.0');

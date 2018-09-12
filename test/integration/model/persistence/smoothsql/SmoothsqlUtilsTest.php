@@ -28,7 +28,23 @@ use \core_kernel_persistence_smoothsql_Utils;
 use oat\generis\model\data\ModelManager;
 
 class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner {
-    
+
+    /**
+     * SmootsqlUtilsTest constructor.
+     * @param null $name
+     * @param array $data
+     * @param string $dataName
+     */
+    public function __construct($name = null, array $data = array(), $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+
+        // TODO: remove it after fixing problem with dependency on generis config in integration tests.
+        // dataProvider is called before setUpBefore method - https://github.com/sebastianbergmann/phpunit/issues/1206
+        // We have to init generis config before that to be able to use ModelManager.
+        parent::loadGenerisConfig();
+    }
+
     /**
      * @dataProvider buildSearchPatternProvider
      * 

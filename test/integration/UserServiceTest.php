@@ -22,8 +22,6 @@
 use oat\generis\model\GenerisRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
-include_once dirname ( __FILE__ ) . '/../../../config/generis.conf.php';
-
 class UserServiceTestCase extends GenerisPhpUnitTestRunner
 {
 
@@ -37,10 +35,10 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
 
     private $sampleUser;
 
-    public function __construct($label = false)
+    public static function setUpBeforeClass()
     {
-        parent::__construct($label);
-        $this->initRoles();
+        parent::setUpBeforeClass();
+        self::initRoles();
     }
 
     public function setUp()
@@ -54,10 +52,9 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
     {
         parent::tearDown();
         $this->sampleUser->delete();
-        ;
     }
 
-    public function initRoles()
+    public static function initRoles()
     {
         // Main parent role.
         $roleClass = new core_kernel_classes_Class(GenerisRdf::CLASS_ROLE);

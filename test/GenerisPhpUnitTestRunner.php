@@ -26,6 +26,7 @@ use \common_ext_ExtensionsManager;
 use \common_ext_ExtensionInstaller;
 use \common_ext_ExtensionUninstaller;
 use \common_persistence_Manager;
+use common_Config;
 
 /**
  * @author CRP Henri Tudor - TAO Team
@@ -33,7 +34,7 @@ use \common_persistence_Manager;
  * @deprecated it uses constants
  */
 
-abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
+abstract class GenerisPhpUnitTestRunner extends TestCase
 {
     /**
      *
@@ -44,7 +45,15 @@ abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
     private $config; 
     
     private $files = array();
-    
+
+    /**
+     * @inheritdoc
+     */
+    public static function setUpBeforeClass()
+    {
+        self::loadGenerisConfig();
+    }
+
     /**
      * Create a new temporary file
      * @param string $pContent
@@ -158,5 +167,9 @@ abstract class GenerisPhpUnitTestRunner extends \PHPUnit_Framework_TestCase
             throw new common_exception_Error('current session is no longer a common_test_TestUserSession');
         }
         return $session;
+    }
+
+    protected static function loadGenerisConfig(){
+        common_Config::load();
     }
 }
