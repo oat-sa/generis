@@ -169,6 +169,9 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
         return $session;
     }
 
+    /**
+     * Should be used only from integration tests to bootstrap application.
+     */
     protected static function loadGenerisConfig(){
         common_Config::load();
     }
