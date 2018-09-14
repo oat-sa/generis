@@ -42,7 +42,7 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner {
         // TODO: remove it after fixing problem with dependency on generis config in integration tests.
         // dataProvider is called before setUpBefore method - https://github.com/sebastianbergmann/phpunit/issues/1206
         // We have to init generis config before that to be able to use ModelManager.
-        parent::loadGenerisConfig();
+        self::loadGenerisConfig();
     }
 
     /**
