@@ -342,14 +342,6 @@ class ConfigurationTest extends TestCase
         $this->assertEquals($component->getName(), 'magic_quotes_gpc');
         $this->assertFalse($component->isOptional());
 
-        $component = \common_configuration_ComponentFactory::buildPHPDatabaseDriver('pdo_mysql', true);
-        $this->assertInstanceOf(\common_configuration_PHPDatabaseDriver::class, $component);
-        $this->assertEquals($component->getName(), 'pdo_mysql');
-        $this->assertTrue($component->isOptional());
-        $report = $component->check();
-        $this->assertInstanceOf(\common_configuration_Report::class, $report);
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
-
         $location = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ConfigurationTest.php';
         $component = \common_configuration_ComponentFactory::buildFileSystemComponent($location, 'r');
         $this->assertInstanceOf(\common_configuration_FileSystemComponent::class, $component);
@@ -386,15 +378,6 @@ class ConfigurationTest extends TestCase
         $this->assertInstanceOf(\common_configuration_PHPINIValue::class, $component);
         $this->assertEquals($component->getName(), 'magic_quotes_gpc');
         $this->assertFalse($component->isOptional());
-
-        $array = array('type' => 'PHPDatabaseDriver', 'value' => array('name' => 'pdo_mysql', 'optional' => true));
-        $component = \common_configuration_ComponentFactory::buildFromArray($array);
-        $this->assertInstanceOf(\common_configuration_PHPDatabaseDriver::class, $component);
-        $this->assertEquals($component->getName(), 'pdo_mysql');
-        $this->assertTrue($component->isOptional());
-        $report = $component->check();
-        $this->assertInstanceOf(\common_configuration_Report::class, $report);
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
         $array = array('type' => 'FileSystemComponent', 'value' => array('location' => $location, 'rights' => 'r'));
         $component = \common_configuration_ComponentFactory::buildFromArray($array);
