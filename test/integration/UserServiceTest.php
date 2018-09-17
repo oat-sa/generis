@@ -22,8 +22,6 @@
 use oat\generis\model\GenerisRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
-include_once dirname ( __FILE__ ) . '/../../../config/generis.conf.php';
-
 class UserServiceTestCase extends GenerisPhpUnitTestRunner
 {
 
@@ -37,10 +35,10 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
 
     private $sampleUser;
 
-    public function __construct($label = false)
+    public static function setUpBeforeClass()
     {
-        parent::__construct($label);
-        $this->initRoles();
+        parent::setUpBeforeClass();
+        self::initRoles();
     }
 
     public function setUp()
@@ -54,10 +52,9 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
     {
         parent::tearDown();
         $this->sampleUser->delete();
-        ;
     }
 
-    public function initRoles()
+    public static function initRoles()
     {
         // Main parent role.
         $roleClass = new core_kernel_classes_Class(GenerisRdf::CLASS_ROLE);
@@ -171,7 +168,7 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
         $this->assertTrue($this->service->login('login', 'password', $role));
         $this->assertTrue($this->service->isASessionOpened());
         $this->assertTrue($this->service->logout());
-        $this->assertTrue($this->restoreTestSession()); // relog sys user.
+        $this->assertFalse($this->service->isASessionOpened());
         $this->assertFalse($this->service->login('toto', '', $taoManagerRole));
         
         $role->delete();
@@ -201,7 +198,7 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
         $this->assertTrue($this->service->logout());
         $this->assertTrue($this->service->login('user-fixture-1', 'password1', $role1));
         $this->assertTrue($this->service->logout());
-        $this->assertTrue($this->restoreTestSession());
+        $this->assertFalse($this->service->isASessionOpened());
         
         $user->delete();
         $this->assertFalse($user->exists());
@@ -519,12 +516,5 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
             $r->delete(true);
             $this->assertFalse($r->exists());
         }
-    }
-
-    public function testLogout()
-    {
-        $this->assertTrue($this->service->isASessionOpened());
-        $this->service->logout();
-        $this->assertFalse($this->service->isASessionOpened());
     }
 }
