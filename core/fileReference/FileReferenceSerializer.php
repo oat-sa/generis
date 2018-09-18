@@ -42,9 +42,9 @@ interface FileReferenceSerializer
     public function unserializeDirectory($serial);
 
     /**
-     * Delete
+     * Delete the reference
      * @param $serial
-     * @return mixed
+     * @return boolean
      */
     public function cleanUp($serial);
 }
