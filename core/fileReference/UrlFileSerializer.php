@@ -66,11 +66,8 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
      */
     public function unserializeFile($serial)
     {
-        $parts = explode('/', substr($serial, strpos($serial, '://')+3), 2);
-        if (count($parts) != 2) {
-            throw new FileSerializerException('Unsupported dir in '.__CLASS__);
-        }
-        return $this->getRootDirectory(urldecode($parts[0]))->getFile(urldecode($parts[1]));
+        $parts = $this->extract($serial);
+        return $this->getRootDirectory(urldecode($parts['fs']))->getFile(urldecode($parts['path']));
     }
 
     /**
@@ -79,11 +76,23 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
      */
     public function unserializeDirectory($serial)
     {
+        $parts = $this->extract($serial);
+        return $this->getRootDirectory(urldecode($parts['fs']))->getDirectory(urldecode($parts['path']));
+    }
+
+    /**
+     * Extract filesystem id and path from serial
+     * @param string $serial
+     * @throws FileSerializerException
+     * @return string[]
+     */
+    protected function extract($serial)
+    {
         $parts = explode('/', substr($serial, strpos($serial, '://')+3), 2);
         if (count($parts) != 2) {
             throw new FileSerializerException('Unsupported dir in '.__CLASS__);
         }
-        return $this->getRootDirectory(urldecode($parts[0]))->getDirectory(urldecode($parts[1]));
+        return ['fs' => $parts[0], 'path' => $parts[1]];
     }
     
     /**
