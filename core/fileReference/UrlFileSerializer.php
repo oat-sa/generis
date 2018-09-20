@@ -50,6 +50,9 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
      */
     public function unserialize($serial)
     {
+        if (!is_string($serial)) {
+            throw new FileSerializerException('Unsupported serial "'.gettype($serial).'" in '.__CLASS__);
+        }
         $type = substr($serial, 0, strpos($serial, ':'));
         if ($type == 'file') {
             return $this->unserializeFile($serial);

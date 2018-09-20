@@ -73,15 +73,13 @@ class UrlFileSerializerTest extends TestCase
     {
         $this->expectException(FileSerializerException::class);
         $serializer = new UrlFileSerializer();
-        $serializer->unserialize('file://aaa');
+        $serializer->unserialize($url);
     }
     
     public function invalidUrlReferenceProvider()
     {
         return [
             ['file://aaa'],
-            ['dir://a/b/c/d'],
-            ['dir://notexistingfilesystem/i153729158396311274%2FitemContent%2Fen-US'],
             ['cloudy://default/lalala'],
             ['randomstuff'],
             [null],
