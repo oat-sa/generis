@@ -20,7 +20,6 @@
 
 namespace oat\oatbox\filesystem;
 
-use League\Flysystem\Exception;
 use League\Flysystem\FileExistsException;
 
 class Directory extends FileSystemHandler implements \IteratorAggregate
