@@ -28,8 +28,8 @@ use oat\oatbox\service\ConfigurableService;
 class UrlFileSerializer extends ConfigurableService implements FileReferenceSerializer
 {
     /**
-     * (non-PHPdoc)
-     * @see \oat\generis\model\kernel\fileSystem\FileReferenceSerializer::serialize()
+     * {@inheritDoc}
+     * @see FileReferenceSerializer::serialize()
      */
     public function serialize($abstraction)
     {
@@ -45,11 +45,14 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \oat\generis\model\kernel\fileSystem\FileReferenceSerializer::unserialize()
+     * {@inheritDoc}
+     * @see FileReferenceSerializer::unserialize()
      */
     public function unserialize($serial)
     {
+        if (!is_string($serial)) {
+            throw new FileSerializerException('Unsupported serial "'.gettype($serial).'" in '.__CLASS__);
+        }
         $type = substr($serial, 0, strpos($serial, ':'));
         if ($type == 'file') {
             return $this->unserializeFile($serial);
@@ -61,23 +64,38 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
     }
     
     /**
-     * (non-PHPdoc)
-     * @see \oat\generis\model\kernel\fileSystem\FileReferenceSerializer::unserializeFile()
+     * {@inheritDoc}
+     * @see FileReferenceSerializer::unserializeFile()
      */
     public function unserializeFile($serial)
     {
-        list($dir, $path) = explode('/', substr($serial, strpos($serial, '://')+3), 2);
-        return $this->getRootDirectory(urldecode($dir))->getFile(urldecode($path));
+        $parts = $this->extract($serial);
+        return $this->getRootDirectory(urldecode($parts['fs']))->getFile(urldecode($parts['path']));
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \oat\generis\model\kernel\fileSystem\FileReferenceSerializer::unserializeDirectory()
+     * {@inheritDoc}
+     * @see FileReferenceSerializer::unserializeDirectory()
      */
     public function unserializeDirectory($serial)
     {
-        list($dir, $path) = explode('/', substr($serial, strpos($serial, '://')+3), 2);
-        return $this->getRootDirectory(urldecode($dir))->getDirectory(urldecode($path));
+        $parts = $this->extract($serial);
+        return $this->getRootDirectory(urldecode($parts['fs']))->getDirectory(urldecode($parts['path']));
+    }
+
+    /**
+     * Extract filesystem id and path from serial
+     * @param string $serial
+     * @throws FileSerializerException
+     * @return string[]
+     */
+    protected function extract($serial)
+    {
+        $parts = explode('/', substr($serial, strpos($serial, '://')+3), 2);
+        if (count($parts) != 2) {
+            throw new FileSerializerException('Unsupported dir in '.__CLASS__);
+        }
+        return ['fs' => $parts[0], 'path' => $parts[1]];
     }
     
     /**
@@ -91,12 +109,13 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
     }
     
     /**
-     * (non-PHPdoc)
-     * @see \oat\generis\model\kernel\fileSystem\FileReferenceSerializer::cleanUp()
+     * {@inheritDoc}
+     * @see FileReferenceSerializer::cleanUp()
      */
     public function cleanUp($serial)
     {
         // nothing to do
+        return true;
     }
 
 }
