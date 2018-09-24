@@ -50,13 +50,7 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
      */
     public function unserialize($serial)
     {
-	if ($serial instanceof \core_kernel_classes_Resource) {
-		$serial = $serial->getUri();
-	} elseif ($serial instanceof \core_kernel_classes_Literal) {
-                $serial = $serial->__toString();
-        } elseif (!is_string($serial)) {
-            throw new FileSerializerException('Unsupported serial "'.gettype($serial).'" in '.__CLASS__);
-        }
+	$serial = $this->cleanSerial($serial);
         $type = substr($serial, 0, strpos($serial, ':'));
         if ($type == 'file') {
             return $this->unserializeFile($serial);
@@ -88,6 +82,24 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
     }
 
     /**
+     * Ensure serial is a string
+     * @param string $serial
+     * @throws FileSerializerException
+     * @return string
+     */
+    protected function cleanSerial($serial)
+    {
+        if ($serial instanceof \core_kernel_classes_Resource) {
+            $serial = $serial->getUri();
+        } elseif ($serial instanceof \core_kernel_classes_Literal) {
+            $serial = $serial->__toString();
+        } elseif (!is_string($serial)) {
+            throw new FileSerializerException('Unsupported serial "'.gettype($serial).'" in '.__CLASS__);
+        }
+        return $serial;
+    }
+
+    /**
      * Extract filesystem id and path from serial
      * @param string $serial
      * @throws FileSerializerException
@@ -95,6 +107,7 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
      */
     protected function extract($serial)
     {
+        $serial = $this->cleanSerial($serial);
         $parts = explode('/', substr($serial, strpos($serial, '://')+3), 2);
         if (count($parts) != 2) {
             throw new FileSerializerException('Unsupported dir in '.__CLASS__);
