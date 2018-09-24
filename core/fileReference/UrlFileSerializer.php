@@ -50,7 +50,11 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
      */
     public function unserialize($serial)
     {
-        if (!is_string($serial)) {
+	if ($serial instanceof \core_kernel_classes_Resource) {
+		$serial = $serial->getUri();
+	} elseif ($serial instanceof \core_kernel_classes_Literal) {
+                $serial = $serial->__toString();
+        } elseif (!is_string($serial)) {
             throw new FileSerializerException('Unsupported serial "'.gettype($serial).'" in '.__CLASS__);
         }
         $type = substr($serial, 0, strpos($serial, ':'));

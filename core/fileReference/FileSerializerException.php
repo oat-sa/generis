@@ -20,6 +20,10 @@
 
 namespace oat\generis\model\fileReference;
 
-class FileSerializerException extends \common_Exception
+class FileSerializerException extends \common_Exception implements \common_log_SeverityLevel
 {
+    public function getSeverity()
+    {
+        return \common_Logger::ERROR_LEVEL;
+    }
 }
