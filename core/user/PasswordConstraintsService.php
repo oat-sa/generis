@@ -20,25 +20,27 @@
  */
 namespace oat\generis\model\user;
 
-use common_ext_ExtensionException;
-use common_ext_ExtensionsManager;
+use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\ServiceManager;
 
 /**
  * Class PasswordConstraintsService used to verify password strength
  * @package generis
  */
-class PasswordConstraintsService extends \tao_models_classes_Service
+class PasswordConstraintsService extends ConfigurableService
 {
+    const SERVICE_ID = 'generis/passwords';
+
+    const OPTION_CONSTRAINTS = 'constrains';
+
     /**
      * @var array
      */
-    protected $validators = array();
+    protected $validators = null;
 
-    protected function __construct()
+    public static function singleton()
     {
-        parent::__construct();
-        $config = $this->getConfig();
-        $this->register( $config );
+        return ServiceManager::getServiceManager()->get(self::SERVICE_ID);
     }
 
 
@@ -53,7 +55,7 @@ class PasswordConstraintsService extends \tao_models_classes_Service
     {
         $result = true;
         /** @var \tao_helpers_form_Validator $validator */
-        foreach ($this->validators as $validator) {
+        foreach ($this->getValidators() as $validator) {
             $result &= $validator->evaluate( $password );
         }
 
@@ -143,25 +145,9 @@ class PasswordConstraintsService extends \tao_models_classes_Service
      */
     public function getValidators()
     {
+        if (is_null($this->validators)) {
+            $this->register($this->getOption(self::OPTION_CONSTRAINTS));
+        }
         return $this->validators;
     }
-
-    /**
-     * Retrieve at least default config ( if extension is not yet installed )
-     * @return array
-     */
-    protected function getConfig()
-    {
-        if (\tao_install_utils_System::isTAOInstalled() && $this->getServiceLocator()->has(common_ext_ExtensionsManager::SERVICE_ID)) {
-            $ext = $this->getServiceLocator()
-                ->get(common_ext_ExtensionsManager::SERVICE_ID)
-                ->getExtensionById('generis');
-            $config = $ext->getConfig('passwords');
-        } else {
-            $config = require_once( __DIR__ . '/../../config/default/passwords.conf.php' );
-        }
-
-        return (array) $config['constrains'];
-    }
-
 }

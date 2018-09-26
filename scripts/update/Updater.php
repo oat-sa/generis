@@ -44,6 +44,7 @@ use oat\taoWorkspace\model\generis\WrapperModel;
 use oat\oatbox\log\logger\TaoLog;
 use Psr\Log\LoggerInterface;
 use oat\oatbox\user\UserLanguageService;
+use oat\generis\model\user\PasswordConstraintsService;
 
 /**
  *
@@ -331,5 +332,12 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         $this->skip('7.2.0', '7.9.8');
+
+        if ($this->isVersion('7.9.8')) {
+            $extMng = $this->getServiceManager()->get(\common_ext_ExtensionsManager::SERVICE_ID);
+            $service = new PasswordConstraintsService($extMng->getOptions());
+            $this->getServiceManager()->register(PasswordConstraintsService::SERVICE_ID, $service);
+            $this->setVersion('7.10.0');
+        }
     }
 }

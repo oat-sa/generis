@@ -1,8 +1,10 @@
 <?php
+use oat\generis\model\user\PasswordConstraintsService;
+
 /**
  * Default config header
  */
-return array(
+return new PasswordConstraintsService(array(
     'constrains' =>//constrains configuration params
         array(
             'length' => 4,
@@ -21,4 +23,4 @@ return array(
         'dictionary' => '/usr/share/dict/words'
     )
 
-);
+));
