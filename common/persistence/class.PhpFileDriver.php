@@ -203,7 +203,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     {
         $entry = $this->readFile($id);
         if ($entry != false && $this->isTtlMode()) {
-            $entry = (is_null($entry[static::ENTRY_EXPIRATION]) || $entry[static::ENTRY_EXPIRATION] > $this->getTime())
+            $entry = isset($entry[static::ENTRY_EXPIRATION]) && (is_null($entry[static::ENTRY_EXPIRATION]) || $entry[static::ENTRY_EXPIRATION] > $this->getTime())
                 ? $entry[static::ENTRY_VALUE]
                 : false
             ;
