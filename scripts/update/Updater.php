@@ -181,7 +181,9 @@ class Updater extends common_ext_ExtensionUpdater {
         $this->skip('3.28.0', '3.29.1');
 
         if ($this->isVersion('3.29.1')) {
-            $this->getServiceManager()->register(LoggerService::SERVICE_ID, new LoggerService());
+            if (!$this->getServiceManager()->has(LoggerService::SERVICE_ID)) {
+                $this->getServiceManager()->register(LoggerService::SERVICE_ID, new LoggerService());
+            }
             $this->setVersion('3.30.0');
         }
 
@@ -330,6 +332,6 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('7.2.0');
         }
 
-        $this->skip('7.2.0', '7.9.8');
+        $this->skip('7.2.0', '7.9.9');
     }
 }
