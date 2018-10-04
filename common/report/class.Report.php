@@ -26,7 +26,7 @@
  * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
  * @package generis
  */
-class common_report_Report implements IteratorAggregate, JsonSerializable
+class common_report_Report implements IteratorAggregate, JsonSerializable, Countable
 {
     const TYPE_SUCCESS = 'success';
     
@@ -337,4 +337,13 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
             }, $this->elements)
         ]);
     }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return $this->getIterator()->count();
+    }
+
 }
