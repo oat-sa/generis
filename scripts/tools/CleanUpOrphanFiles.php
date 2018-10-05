@@ -117,7 +117,7 @@ class CleanUpOrphanFiles extends ScriptAction
                     continue;
                 }
 
-                $this->manageOrpane($resource, $file);
+                $this->manageOrphan($resource, $file);
 
             } catch (\Exception $exception) {
                 $this->errorsCount++;
@@ -203,7 +203,7 @@ class CleanUpOrphanFiles extends ScriptAction
      * @param core_kernel_classes_Resource $resource
      * @param FileSystemHandler $file
      */
-    protected function manageOrpane(core_kernel_classes_Resource $resource, FileSystemHandler $file)
+    protected function manageOrphan(core_kernel_classes_Resource $resource, FileSystemHandler $file)
     {
         $isOrphan = $this->isOrphan($resource);
 
