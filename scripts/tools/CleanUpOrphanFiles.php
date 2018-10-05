@@ -44,6 +44,8 @@ class CleanUpOrphanFiles extends ScriptAction
     private $affectedCount = 0;
     private $errorsCount = 0;
     private $report;
+    private $limit;
+    private $offset;
 
 
     protected function provideOptions()
@@ -60,6 +62,22 @@ class CleanUpOrphanFiles extends ScriptAction
                 'flag' => true,
                 'longPrefix' => 'Verbose',
                 'description' => 'Force script to be more details',
+            ],
+
+            'limit' => [
+                'prefix' => 'l',
+                'longPrefix' => 'limit',
+                'description' => 'Used for resource pagination',
+                'defaultValue' => 5000,
+                'cast' => 'integer',
+            ],
+
+            'offset' => [
+                'prefix' => 'o',
+                'longPrefix' => 'offset',
+                'description' => 'Used for resource pagination.',
+                'defaultValue' => 5000,
+                'cast' => 'integer',
             ],
         ];
     }
@@ -93,36 +111,36 @@ class CleanUpOrphanFiles extends ScriptAction
         /** @var ResourceFileSerializer $serializer */
         $serializer = $this->getServiceManager()->get(ResourceFileSerializer::SERVICE_ID);
 
-        /** @var ComplexSearchService $search */
-        $search = $this->getServiceManager()->get(ComplexSearchService::class);
-        $builder = $search->getGateway()->query();
+        $resultSet = $this->getFiles($this->limit, $this->offset);
 
-        $list = $search->searchType($builder, GenerisRdf::CLASS_GENERIS_FILE, true);
+        $total = $resultSet->total();
 
-        $builder->setCriteria($list);
+        $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s Total Files Found in RDS, where: ', $total)));
 
-        $resultSet = $search->getGateway()->search($builder);
+        while ($this->offset <= $total) {
 
-        $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s Total Files Found in RDS, where: ', $resultSet->total())));
+            /** @var core_kernel_classes_Resource $resource */
+            foreach ($resultSet as $resource) {
+                try {
+                    $file = $serializer->unserialize($resource);
 
-        /** @var core_kernel_classes_Resource $resource */
-        foreach ($resultSet as $resource) {
-            try {
-                $file = $serializer->unserialize($resource);
+                    $isRedundant = $this->isRedundant($file);
 
-                $isRedundant = $this->isRedundant($file);
+                    if ($isRedundant) {
+                        $this->manageRedundant($resource, $file);
+                        continue;
+                    }
 
-                if ($isRedundant) {
-                    $this->manageRedundant($resource, $file);
-                    continue;
+                    $this->manageOrphan($resource, $file);
+
+                } catch (\Exception $exception) {
+                    $this->errorsCount++;
+                    $this->report->add(Report::createFailure($exception->getMessage()));
                 }
-
-                $this->manageOrphan($resource, $file);
-
-            } catch (\Exception $exception) {
-                $this->errorsCount++;
-                $this->report->add(Report::createFailure($exception->getMessage()));
             }
+
+            $this->offset += $this->limit;
+            $resultSet = $this->getFiles($this->limit, $this->offset);
         }
 
         $this->prepareReport();
@@ -136,6 +154,8 @@ class CleanUpOrphanFiles extends ScriptAction
             $this->wetRun = true;
         }
         $this->verbose = $this->getOption('verbose');
+        $this->limit = $this->getOption('limit');
+        $this->offset = $this->getOption('offset');
 
     }
 
@@ -237,6 +257,29 @@ class CleanUpOrphanFiles extends ScriptAction
         if ($this->errorsCount) {
             $this->report->add(new Report(Report::TYPE_ERROR, sprintf('%s errors happened, check details above', $this->errorsCount)));
         }
+    }
+
+    /**
+     * @param $limit
+     * @param $offset
+     * @return \oat\search\base\ResultSetInterface
+     * @throws \oat\oatbox\service\exception\InvalidServiceManagerException
+     * @throws \oat\search\base\exception\SearchGateWayExeption
+     */
+    private function getFiles($limit, $offset)
+    {
+        /** @var ComplexSearchService $search */
+        $search = $this->getServiceManager()->get(ComplexSearchService::class);
+
+        $builder = $search->getGateway()->query()->setLimit($limit)->setOffset($offset);
+
+        $list = $search->searchType($builder, GenerisRdf::CLASS_GENERIS_FILE, true);
+
+        $builder->setCriteria($list);
+
+        $resultSet = $search->getGateway()->search($builder);
+
+        return $resultSet;
     }
 
 }
