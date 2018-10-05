@@ -119,24 +119,24 @@ class CleanUpOrphanFiles extends ScriptAction
 
         while ($this->offset <= $total) {
 
-            /** @var core_kernel_classes_Resource $resource */
-            foreach ($resultSet as $resource) {
+            while ($resultSet->valid()) {
                 try {
-                    $file = $serializer->unserialize($resource);
+                    $file = $serializer->unserialize($resultSet->current());
 
                     $isRedundant = $this->isRedundant($file);
 
                     if ($isRedundant) {
-                        $this->manageRedundant($resource, $file);
+                        $this->manageRedundant($resultSet->current(), $file);
                         continue;
                     }
 
-                    $this->manageOrphan($resource, $file);
+                    $this->manageOrphan($resultSet->current(), $file);
 
                 } catch (\Exception $exception) {
                     $this->errorsCount++;
                     $this->report->add(Report::createFailure($exception->getMessage()));
                 }
+                $resultSet->next();
             }
 
             $this->offset += $this->limit;
@@ -278,7 +278,6 @@ class CleanUpOrphanFiles extends ScriptAction
         $builder->setCriteria($list);
 
         $resultSet = $search->getGateway()->search($builder);
-
         return $resultSet;
     }
 
