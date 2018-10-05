@@ -127,6 +127,7 @@ class CleanUpOrphanFiles extends ScriptAction
 
                     if ($isRedundant) {
                         $this->manageRedundant($resultSet->current(), $file);
+                        $resultSet->next();
                         continue;
                     }
 
