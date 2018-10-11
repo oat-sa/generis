@@ -103,13 +103,8 @@ class CleanUpOrphanFiles extends ScriptAction
         /** @var ResourceFileSerializer $serializer */
         $serializer = $this->getServiceManager()->get(ResourceFileSerializer::SERVICE_ID);
 
-        $resultSet = $this->getFiles($this->chunk, $offset);
-
-        $total = $resultSet->total();
-
-        $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s Total Files Found in RDS, where: ', $total)));
-
-        while ($offset <= $total) {
+        do {
+            $resultSet = $this->getFiles($this->chunk, $offset);
 
             while ($resultSet->valid()) {
                 try {
@@ -132,9 +127,11 @@ class CleanUpOrphanFiles extends ScriptAction
                 $resultSet->next();
             }
 
-            $offset+= $this->chunk;
-            $resultSet = $this->getFiles($this->chunk, $offset);
-        }
+            $offset += $this->chunk;
+
+        } while ($offset <= $resultSet->total());
+
+        $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s Total Files Found in RDS, where: ', $resultSet->total())));
 
         $this->prepareReport();
 
@@ -245,6 +242,7 @@ class CleanUpOrphanFiles extends ScriptAction
         $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s redundant at RDS', $this->redundantCount)));
         $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s missing at FS', $this->affectedCount)));
         $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s removed at FS', $this->removedCount)));
+        $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('memory %s', memory_get_peak_usage() / 1024 / 1024)));
 
         if ($this->errorsCount) {
             $this->report->add(new Report(Report::TYPE_ERROR, sprintf('%s errors happened, check details above', $this->errorsCount)));
