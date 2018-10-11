@@ -24,6 +24,7 @@
 
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
+use Doctrine\DBAL\DBALException;
 
 error_reporting(E_ALL);
 
@@ -360,7 +361,7 @@ class core_kernel_impl_ApiModelOO
 	             
 	        ));
         }
-        catch (PDOException $e){
+        catch (DBALException $e){
 	        if($e->getCode() !== '00000'){
 				throw new common_Exception ("Unable to setStatement (SPO) {$subject}, {$predicate}, {$object} : " . $e->getMessage());
 			}
