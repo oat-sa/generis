@@ -44,9 +44,7 @@ class CleanUpOrphanFiles extends ScriptAction
     private $affectedCount = 0;
     private $errorsCount = 0;
     private $report;
-    private $limit;
-    private $offset;
-
+    private $chunk;
 
     protected function provideOptions()
     {
@@ -64,18 +62,10 @@ class CleanUpOrphanFiles extends ScriptAction
                 'description' => 'Force script to be more details',
             ],
 
-            'limit' => [
-                'prefix' => 'l',
-                'longPrefix' => 'limit',
-                'description' => 'Used for resource pagination',
-                'defaultValue' => 5000,
-                'cast' => 'integer',
-            ],
-
-            'offset' => [
-                'prefix' => 'o',
-                'longPrefix' => 'offset',
-                'description' => 'Used for resource pagination.',
+            'chunk' => [
+                'prefix' => 'c',
+                'longPrefix' => 'chunk',
+                'description' => 'Chunk size for resources pagination',
                 'defaultValue' => 5000,
                 'cast' => 'integer',
             ],
@@ -104,6 +94,8 @@ class CleanUpOrphanFiles extends ScriptAction
      */
     protected function run()
     {
+        $offset = 0;
+
         $this->init();
 
         $this->report = Report::createInfo('Following files');
@@ -111,13 +103,13 @@ class CleanUpOrphanFiles extends ScriptAction
         /** @var ResourceFileSerializer $serializer */
         $serializer = $this->getServiceManager()->get(ResourceFileSerializer::SERVICE_ID);
 
-        $resultSet = $this->getFiles($this->limit, $this->offset);
+        $resultSet = $this->getFiles($this->chunk, $offset);
 
         $total = $resultSet->total();
 
         $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s Total Files Found in RDS, where: ', $total)));
 
-        while ($this->offset <= $total) {
+        while ($offset <= $total) {
 
             while ($resultSet->valid()) {
                 try {
@@ -140,8 +132,8 @@ class CleanUpOrphanFiles extends ScriptAction
                 $resultSet->next();
             }
 
-            $this->offset += $this->limit;
-            $resultSet = $this->getFiles($this->limit, $this->offset);
+            $offset+= $this->chunk;
+            $resultSet = $this->getFiles($this->chunk, $offset);
         }
 
         $this->prepareReport();
@@ -155,8 +147,7 @@ class CleanUpOrphanFiles extends ScriptAction
             $this->wetRun = true;
         }
         $this->verbose = $this->getOption('verbose');
-        $this->limit = $this->getOption('limit');
-        $this->offset = $this->getOption('offset');
+        $this->chunk = $this->getOption('chunk');
 
     }
 
