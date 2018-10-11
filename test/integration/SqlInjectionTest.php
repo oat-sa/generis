@@ -22,6 +22,7 @@
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\test\GenerisPhpUnitTestRunner;
+use Doctrine\DBAL\DBALException;
 
 class SqlInjectionTestCase extends GenerisPhpUnitTestRunner {
 	
@@ -36,7 +37,7 @@ class SqlInjectionTestCase extends GenerisPhpUnitTestRunner {
                 OntologyRdfs::RDFS_COMMENT => '"hi"'
             ));
             $this->assertEquals($testInstance->getUniquePropertyValue(new core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL)), "\"hi\"");
-        } catch (PDOException $e) {
+        } catch (DBALException $e) {
             $this->fail('SQL Error: '.$e->getMessage());
         }
         $testInstance->delete();

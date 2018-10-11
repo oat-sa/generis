@@ -23,6 +23,7 @@
  */
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 
 class common_persistence_sql_Platform {
     
@@ -253,13 +254,14 @@ class common_persistence_sql_Platform {
      *
      * @return void
      * @throws \Doctrine\DBAL\ConnectionException If the commit failed due to no active transaction or because the transaction was marked for rollback only.
+     * @throws DBALException
      * @throws common_persistence_sql_SerializationException In case of SerializationFailure (SQLSTATE 40001).
      */
     public function commit()
     {
         try {
             $this->dbalConnection->commit();
-        } catch (\PDOException $e) {
+        } catch (DBALException $e) {
             // Surprisingly, DBAL's commit throws a PDOExeption in case
             // of serialization issue (not documented).
             if (($code = $e->getCode()) == '40001') {

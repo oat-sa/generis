@@ -331,5 +331,28 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         $this->skip('7.2.0', '7.9.8');
+
+        if ($this->isVersion('7.9.8')) {
+            /** @var common_ext_ExtensionsManager $extensionManager */
+            $extensionManager = $this->getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID);
+            $persistenceManager = $extensionManager->getExtensionById('generis')->getConfig('persistences');
+
+            $persistenceManagerConfig = $persistenceManager->getOption('persistences');
+
+            $pdoDriverPrefix = 'pdo_';
+            foreach ($persistenceManagerConfig as $persistenceId => $persistenceParams) {
+                if (substr($persistenceParams['driver'], 0, strlen($pdoDriverPrefix)) === $pdoDriverPrefix) {
+                    $newParams = [
+                        'driver' => 'dbal',
+                        'connection' => $persistenceParams,
+                    ];
+                    $persistenceManagerConfig[$persistenceId] = $newParams;
+                }
+            }
+            $persistenceManager->setOption('persistences', $persistenceManagerConfig);
+            $this->getServiceManager()->register(\common_persistence_Manager::SERVICE_ID, $persistenceManager);
+
+            $this->setVersion('7.9.9');
+        }
     }
 }
