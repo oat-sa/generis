@@ -23,7 +23,6 @@ use common_report_Report as Report;
 use core_kernel_classes_Resource;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\GenerisRdf;
-use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\extension\script\ScriptAction;
 use oat\oatbox\filesystem\Directory;
@@ -44,7 +43,7 @@ class CleanUpOrphanFiles extends ScriptAction
     private $affectedCount = 0;
     private $errorsCount = 0;
     private $report;
-    private $chunk;
+    private $markedTobeRemoved =[];
 
     protected function provideOptions()
     {
@@ -62,13 +61,6 @@ class CleanUpOrphanFiles extends ScriptAction
                 'description' => 'Force script to be more details',
             ],
 
-            'chunk' => [
-                'prefix' => 'c',
-                'longPrefix' => 'chunk',
-                'description' => 'Chunk size for resources pagination',
-                'defaultValue' => 5000,
-                'cast' => 'integer',
-            ],
         ];
     }
 
@@ -89,44 +81,40 @@ class CleanUpOrphanFiles extends ScriptAction
     /**
      * @return Report
      * @throws \oat\oatbox\service\exception\InvalidServiceManagerException
-     * @throws \oat\search\base\exception\SearchGateWayExeption
      * @throws \common_exception_Error
      */
     protected function run()
     {
-        $offset = 0;
-
         $this->init();
 
         $this->report = Report::createInfo('Following files');
 
         /** @var ResourceFileSerializer $serializer */
         $serializer = $this->getServiceManager()->get(ResourceFileSerializer::SERVICE_ID);
+        $total = 0;
+        $resourceIterator = new \core_kernel_classes_ResourceIterator(GenerisRdf::CLASS_GENERIS_FILE);
+        foreach ($resourceIterator as $resource) {
+            $total++;
+            try {
 
-        do {
-            $resultSet = $this->getFiles($this->chunk, $offset);
-            foreach ($resultSet as $result) {
-                try {
+                $file = $serializer->unserialize($resource);
+                $isRedundant = $this->isRedundant($file);
 
-                    $file = $serializer->unserialize($result);
-                    $isRedundant = $this->isRedundant($file);
-
-                    if ($isRedundant) {
-                        $this->manageRedundant($result, $file);
-                    } else {
-                        $this->manageOrphan($result, $file);
-                    }
-
-                } catch (\Exception $exception) {
-                    $this->errorsCount++;
-                    $this->report->add(Report::createFailure($exception->getMessage()));
+                if ($isRedundant) {
+                    $this->manageRedundant($resource, $file);
+                } else {
+                    $this->manageOrphan($resource, $file);
                 }
+
+            } catch (\Exception $exception) {
+                $this->errorsCount++;
+                $this->report->add(Report::createFailure($exception->getMessage()));
             }
+        }
 
-            $offset += $this->chunk;
-        } while ($offset <= $resultSet->total());
+        $this->cleanUp();
 
-        $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s Total Files Found in RDS, where: ', $resultSet->total())));
+        $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s Total Files Found in RDS, where: ', $total)));
 
         $this->prepareReport();
 
@@ -139,7 +127,6 @@ class CleanUpOrphanFiles extends ScriptAction
             $this->wetRun = true;
         }
         $this->verbose = $this->getOption('verbose');
-        $this->chunk = $this->getOption('chunk');
 
     }
 
@@ -179,12 +166,10 @@ class CleanUpOrphanFiles extends ScriptAction
      * @param $resource
      * @return void
      */
-    protected function remove(core_kernel_classes_Resource $resource)
+    private function markForRemoval(core_kernel_classes_Resource $resource)
     {
         if ($this->wetRun) {
-            $resource->delete();
-            $this->removedCount++;
-            $this->getLogger()->info(sprintf('%s has been removed', $resource->getUri()));
+            $this->markedTobeRemoved[]= $resource;
         }
     }
 
@@ -192,7 +177,7 @@ class CleanUpOrphanFiles extends ScriptAction
      * @param core_kernel_classes_Resource $resource
      * @param FileSystemHandler $file
      */
-    protected function manageRedundant(core_kernel_classes_Resource $resource, FileSystemHandler $file)
+    private function manageRedundant(core_kernel_classes_Resource $resource, FileSystemHandler $file)
     {
         $this->redundantCount++;
         $message = sprintf('resource URI %s : attached file %s', $resource->getUri(), $file->getPrefix());
@@ -200,14 +185,14 @@ class CleanUpOrphanFiles extends ScriptAction
             $this->report->add(new Report(Report::TYPE_INFO, $message));
         }
         $this->getLogger()->info($message);
-        $this->remove($resource);
+        $this->markForRemoval($resource);
     }
 
     /**
      * @param core_kernel_classes_Resource $resource
      * @param FileSystemHandler $file
      */
-    protected function manageOrphan(core_kernel_classes_Resource $resource, FileSystemHandler $file)
+    private function manageOrphan(core_kernel_classes_Resource $resource, FileSystemHandler $file)
     {
         $isOrphan = $this->isOrphan($resource);
 
@@ -215,8 +200,19 @@ class CleanUpOrphanFiles extends ScriptAction
             if ($this->verbose) {
                 $this->report->add(new Report(Report::TYPE_INFO, sprintf('URI %s : File %s', $resource->getUri(), $file->getPrefix())));
             }
-            $this->remove($resource);
+            $this->markForRemoval($resource);
             $this->affectedCount++;
+        }
+    }
+
+    private function cleanUp(){
+        if ($this->wetRun) {
+            foreach ($this->markedTobeRemoved as $resource){
+                $resource->delete();
+                $this->removedCount++;
+                $this->getLogger()->info(sprintf('%s has been removed', $resource->getUri()));
+            }
+
         }
     }
 
@@ -224,7 +220,7 @@ class CleanUpOrphanFiles extends ScriptAction
      * @param $file
      * @return bool
      */
-    protected function isRedundant(FileSystemHandler $file)
+    private function isRedundant(FileSystemHandler $file)
     {
         $isDirectory = $file instanceof Directory;
         $isRedundant = !$isDirectory && in_array($file->getBasename(), $this->getRedundantFiles());
@@ -242,28 +238,6 @@ class CleanUpOrphanFiles extends ScriptAction
         if ($this->errorsCount) {
             $this->report->add(new Report(Report::TYPE_ERROR, sprintf('%s errors happened, check details above', $this->errorsCount)));
         }
-    }
-
-    /**
-     * @param $limit
-     * @param $offset
-     * @return \oat\search\base\ResultSetInterface
-     * @throws \oat\oatbox\service\exception\InvalidServiceManagerException
-     * @throws \oat\search\base\exception\SearchGateWayExeption
-     */
-    private function getFiles($limit, $offset)
-    {
-        /** @var ComplexSearchService $search */
-        $search = $this->getServiceManager()->get(ComplexSearchService::class);
-
-        $builder = $search->getGateway()->query()->setLimit($limit)->setOffset($offset);
-
-        $list = $search->searchType($builder, GenerisRdf::CLASS_GENERIS_FILE, true);
-
-        $builder->setCriteria($list);
-
-        $resultSet = $search->getGateway()->search($builder);
-        return $resultSet;
     }
 
 }
