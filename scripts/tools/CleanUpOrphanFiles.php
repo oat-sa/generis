@@ -105,30 +105,25 @@ class CleanUpOrphanFiles extends ScriptAction
 
         do {
             $resultSet = $this->getFiles($this->chunk, $offset);
-
-            while ($resultSet->valid()) {
+            foreach ($resultSet as $result) {
                 try {
-                    $file = $serializer->unserialize($resultSet->current());
 
+                    $file = $serializer->unserialize($result);
                     $isRedundant = $this->isRedundant($file);
 
                     if ($isRedundant) {
-                        $this->manageRedundant($resultSet->current(), $file);
-                        $resultSet->next();
-                        continue;
+                        $this->manageRedundant($result, $file);
+                    } else {
+                        $this->manageOrphan($result, $file);
                     }
-
-                    $this->manageOrphan($resultSet->current(), $file);
 
                 } catch (\Exception $exception) {
                     $this->errorsCount++;
                     $this->report->add(Report::createFailure($exception->getMessage()));
                 }
-                $resultSet->next();
             }
 
             $offset += $this->chunk;
-
         } while ($offset <= $resultSet->total());
 
         $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s Total Files Found in RDS, where: ', $resultSet->total())));
@@ -242,7 +237,7 @@ class CleanUpOrphanFiles extends ScriptAction
         $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s redundant at RDS', $this->redundantCount)));
         $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s missing at FS', $this->affectedCount)));
         $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s removed at FS', $this->removedCount)));
-        $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('memory %s', memory_get_peak_usage() / 1024 / 1024)));
+        $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('Peak memory %s Mb', memory_get_peak_usage() / 1024 / 1024)));
 
         if ($this->errorsCount) {
             $this->report->add(new Report(Report::TYPE_ERROR, sprintf('%s errors happened, check details above', $this->errorsCount)));
