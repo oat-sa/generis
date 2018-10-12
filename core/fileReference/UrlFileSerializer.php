@@ -50,7 +50,7 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
      */
     public function unserialize($serial)
     {
-	$serial = $this->cleanSerial($serial);
+        $serial = $this->cleanSerial($serial);
         $type = substr($serial, 0, strpos($serial, ':'));
         if ($type == 'file') {
             return $this->unserializeFile($serial);

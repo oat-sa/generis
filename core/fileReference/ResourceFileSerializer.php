@@ -27,6 +27,12 @@ use oat\oatbox\filesystem\File;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\service\ConfigurableService;
 
+/**
+ * Class ResourceFileSerializer
+ *
+ * @deprecated
+ * @see UrlFileSerializer
+ */
 class ResourceFileSerializer extends ConfigurableService implements FileReferenceSerializer
 {
     use OntologyAwareTrait;

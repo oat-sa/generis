@@ -28,6 +28,7 @@ use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\ResourceFileSerializer;
+use oat\generis\model\fileReference\UrlFileSerializer;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\user\AuthAdapter;
 use oat\generis\model\user\UserFactoryService;
@@ -331,5 +332,10 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         $this->skip('7.2.0', '7.9.8');
+
+        if ($this->isVersion('7.9.8')) {
+            $this->getServiceManager()->register(FileReferenceSerializer::SERVICE_ID, new UrlFileSerializer());
+            $this->setVersion('7.10.0');
+        }
     }
 }
