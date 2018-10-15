@@ -119,7 +119,7 @@ class FileSerializerMigration extends ScriptAction
 
         $this->report = Report::createInfo('Starting file serializer migration.');
 
-        $oldItemResourceGroups = $this->getOldResources();
+        $oldItemResourceGroups = $this->getOldResourceGroups();
 
         $this->report->add(Report::createInfo(
             sprintf('%s File resource references were found', $this->oldResourceCount)
@@ -130,26 +130,7 @@ class FileSerializerMigration extends ScriptAction
             return $this->report;
         }
 
-        $this->report->add(Report::createInfo('Starting migration of old file reference resources'));
-
-        if ($this->migrateResources($oldItemResourceGroups) === false) {
-            $this->report->add(Report::createFailure('Stopping execution.'));
-            return $this->report;
-        }
-
-        if ($this->oldResourceCount === 0) {
-            $this->report->add(Report::createSuccess('All file resources are using the new file serializer.'));
-            return $this->report;
-        }
-
-        $this->report->add(Report::createSuccess(sprintf(
-                'Successfully migrated %s old references to %s new file serializer references.',
-                $this->oldResourceCount,
-                $this->migratedCount
-            ))
-        );
-
-        return $this->report;
+        return $this->wetRun($oldItemResourceGroups);
     }
 
     /**
@@ -195,44 +176,23 @@ class FileSerializerMigration extends ScriptAction
     /**
      * Migrate ResourceFileSerializer resources to UrlFileSerializer resources
      *
-     * @param core_kernel_classes_Resource[] $oldItemResourceGroups
+     * @param core_kernel_classes_Resource[][] $oldItemResourceGroups
      * @return bool
      * @throws common_exception_Error
      */
-    private function migrateResources(array $oldItemResourceGroups)
+    private function migrateResourceGroups(array $oldItemResourceGroups)
     {
         $serviceLocator = $this->getServiceLocator();
         $this->urlFileSerializer->setServiceLocator($serviceLocator);
         $this->resourceFileSerializer->setServiceLocator($serviceLocator);
 
-        // Reset counter for migration count
+        // Reset counter for migration count.
         $this->oldResourceCount = 0;
 
         foreach ($oldItemResourceGroups as $itemClass => $oldItemResources) {
             $this->report->add(Report::createInfo(sprintf('Migrating files in class %s', $itemClass)));
             foreach ($oldItemResources as $oldItem) {
-                $property = $oldItem->getProperty($itemClass);
-                $oldValues = $oldItem->getPropertyValues($property);
-                $oldValue = reset($oldValues);
-                if (strpos($oldValue, 'dir://') !== false || strpos($oldValue, 'file://') !== false) {
-                    continue;
-                }
-
-                $oldResource = $this->getResource($oldValue);
-                $this->oldResourceCount++;
-
-                try {
-                    /** @var Directory|File $unserializedFileResource */
-                    $unserializedFileResource = $this->resourceFileSerializer->unserialize($oldResource);
-                    $migratedValue = $this->urlFileSerializer->serialize($unserializedFileResource);
-                    $oldItem->editPropertyValues($property, $migratedValue);
-                    $oldResource->delete();
-                    $this->migratedCount++;
-                } catch (FileSerializerException $e) {
-                    $this->report->add(Report::createFailure(
-                        sprintf('Unable to serialize file resource "%s"', $unserializedFileResource->getBasename())
-                    ));
-                }
+                $this->migrateResource($itemClass, $oldItem);
             }
         }
 
@@ -275,7 +235,7 @@ class FileSerializerMigration extends ScriptAction
      * @return core_kernel_classes_Resource[][]
      * @throws common_exception_Error
      */
-    private function getOldResources()
+    private function getOldResourceGroups()
     {
         $itemClasses = $this->getItemClasses();
 
@@ -288,22 +248,102 @@ class FileSerializerMigration extends ScriptAction
 
         $records = [];
         foreach ($itemClasses as $itemClass) {
-            $queryBuilder = $search->query();
-            $query = $queryBuilder->newQuery();
-            $query->add($itemClass)->notNull();
-            $queryBuilder->setCriteria($query);
-            try {
-                $results = $search->getGateway()->search($queryBuilder);
-                $this->oldResourceCount += $results->total();
-                foreach ($results as $result) {
-                    $records[$itemClass][] = $result;
-                }
-            } catch (SearchGateWayExeption $e) {
-                $this->report->add(Report::createFailure(
-                    sprintf('Unable to execute search. %s', $e->getMessage())
-                ));
-                return [];
+            $records[$itemClass] = $this->getOldResources($itemClass, $search);
+        }
+
+        return $records;
+    }
+
+    /**
+     * Migrate a single resource.
+     *
+     * @param $itemClass
+     * @param core_kernel_classes_Resource $oldItem
+     * @throws common_exception_Error
+     */
+    private function migrateResource($itemClass, $oldItem)
+    {
+        $property = $oldItem->getProperty($itemClass);
+        $oldValues = $oldItem->getPropertyValues($property);
+        $oldValue = reset($oldValues);
+
+        if (strpos($oldValue, 'dir://') !== false || strpos($oldValue, 'file://') !== false) {
+            return;
+        }
+
+        $oldResource = $this->getResource($oldValue);
+        $this->oldResourceCount++;
+
+        try {
+            /** @var Directory|File $unserializedFileResource */
+            $unserializedFileResource = $this->resourceFileSerializer->unserialize($oldResource);
+            $migratedValue = $this->urlFileSerializer->serialize($unserializedFileResource);
+            $oldItem->editPropertyValues($property, $migratedValue);
+            $oldResource->delete();
+            $this->migratedCount++;
+        } catch (FileSerializerException $e) {
+            $this->report->add(Report::createFailure(
+                sprintf('Unable to serialize file resource "%s"', $unserializedFileResource->getBasename())
+            ));
+        }
+    }
+
+    /**
+     * Continue script execution with actual migration step.
+     *
+     * @param core_kernel_classes_Resource[][] $oldItemResourceGroups
+     * @return Report
+     * @throws common_exception_Error
+     */
+    private function wetRun($oldItemResourceGroups)
+    {
+        $this->report->add(Report::createInfo('Starting migration of old file reference resources'));
+
+        if ($this->migrateResourceGroups($oldItemResourceGroups) === false) {
+            $this->report->add(Report::createFailure('Stopping execution.'));
+            return $this->report;
+        }
+
+        if ($this->oldResourceCount === 0) {
+            $this->report->add(Report::createSuccess('All file resources are using the new file serializer.'));
+            return $this->report;
+        }
+
+        $this->report->add(Report::createSuccess(sprintf(
+            'Successfully migrated %s old references to %s new file serializer references.',
+            $this->oldResourceCount,
+            $this->migratedCount
+        )));
+
+        return $this->report;
+    }
+
+    /**
+     * Get the old resources, based on item class.
+     *
+     * @param string $itemClass
+     * @param ComplexSearchService $search
+     * @return core_kernel_classes_Resource[]
+     * @throws common_exception_Error
+     */
+    private function getOldResources($itemClass, $search)
+    {
+        $records = [];
+        $queryBuilder = $search->query();
+        $query = $queryBuilder->newQuery();
+        $query->add($itemClass)->notNull();
+        $queryBuilder->setCriteria($query);
+        try {
+            $results = $search->getGateway()->search($queryBuilder);
+            $this->oldResourceCount += $results->total();
+            foreach ($results as $result) {
+                $records[] = $result;
             }
+        } catch (SearchGateWayExeption $e) {
+            $this->report->add(Report::createFailure(
+                sprintf('Unable to execute search. %s', $e->getMessage())
+            ));
+            return [];
         }
 
         return $records;
