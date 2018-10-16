@@ -16,15 +16,15 @@
  *
  * Copyright (c) 2017  (original work) Open Assessment Technologies SA;
  *
- * @author Alexander Zagovorichev <zagovorichev@1pt.com>
+ * @author Martijn Swinkels <m.swinkels@taotesting.com>
  */
 
 namespace oat\generis\scripts\tools;
 
 use common_exception_Error;
-use common_persistence_Manager as PersistanceManager;
 use common_report_Report as Report;
 use core_kernel_classes_Resource;
+use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\FileSerializerException;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\fileReference\UrlFileSerializer;
@@ -35,15 +35,11 @@ use oat\oatbox\extension\script\ScriptAction;
 use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
 use oat\oatbox\service\exception\InvalidServiceManagerException;
-use oat\search\base\exception\SearchGateWayExeption;
-use taoItems_models_classes_ItemsService;
-use taoTests_models_classes_TestsService;
-
 
 /**
  * Migrate ResourceFileSerializer references to the new UrlFileSerializer system
  *   [properties]
- *      -- fix - Execute the migration
+ *      --wet-run (-w) - Execute the migration
  */
 class FileSerializerMigration extends ScriptAction
 {
@@ -61,11 +57,6 @@ class FileSerializerMigration extends ScriptAction
     private $resourceFileSerializer;
 
     /**
-     * @var PersistanceManager
-     */
-    private $persistence;
-
-    /**
      * @var Report
      */
     private $report;
@@ -76,6 +67,11 @@ class FileSerializerMigration extends ScriptAction
     private $search;
 
     /**
+     * @var bool
+     */
+    private $isDryRun;
+
+    /**
      * @var int
      */
     private $oldResourceCount = 0;
@@ -84,16 +80,6 @@ class FileSerializerMigration extends ScriptAction
      * @var int
      */
     private $migratedCount = 0;
-
-    /**
-     * @var string[]
-     */
-    protected $itemClasses = [
-        taoItems_models_classes_ItemsService::PROPERTY_ITEM_CONTENT,
-        taoTests_models_classes_TestsService::PROPERTY_TEST_CONTENT
-    ];
-
-
 
     /**
      * FileSerializerMigration constructor.
@@ -108,29 +94,42 @@ class FileSerializerMigration extends ScriptAction
      * Run the script.
      *
      * @return \common_report_Report
+     * @throws InvalidServiceManagerException
+     * @throws \oat\search\base\exception\SearchGateWayExeption
      * @throws common_exception_Error
      */
     protected function run()
     {
-        $dryRun = true;
-        if ($this->hasOption('wetRun')) {
-            $dryRun = false;
-        }
-
         $this->report = Report::createInfo('Starting file serializer migration.');
 
-        $oldItemResourceGroups = $this->getOldResourceGroups();
+        $oldResourcesData = $this->getOldResourcesData();
+        $this->oldResourceCount = count($oldResourcesData);
 
-        $this->report->add(Report::createInfo(
-            sprintf('%s File resource references were found', $this->oldResourceCount)
-        ));
+        $this->report->add(Report::createInfo(sprintf('%s old file resources were found', $this->oldResourceCount)));
 
-        if ($dryRun) {
-            $this->report->add(Report::createFailure('Use the --fix parameter to migrate the references.'));
+        if ($this->oldResourceCount !== 0) {
+            $this->report->add(Report::createInfo('Starting migration of old file reference resources'));
+            $this->migrateResources($oldResourcesData);
+            $this->report->add(Report::createSuccess(sprintf(
+                'Successfully migrated %s old references to %s new file serializer references.',
+                $this->oldResourceCount,
+                $this->migratedCount
+            )));
+        } else {
+            $this->report->add(Report::createSuccess('All file resources are already using the new file serializer.'));
+        }
+
+
+        if ($this->isDryRun()) {
+            $this->report->add(Report::createFailure('Use the --wet-run (-w) parameter to execute reference migration.'));
             return $this->report;
         }
 
-        return $this->wetRun($oldItemResourceGroups);
+        $this->updateFileReferenceSerializer();
+
+        $this->report->add(Report::createSuccess('Completed file migration process.'));
+
+        return $this->report;
     }
 
     /**
@@ -151,15 +150,10 @@ class FileSerializerMigration extends ScriptAction
     protected function provideOptions()
     {
         return [
-            'itemClasses' => [
-                'prefix' => 'i',
-                'longPrefix' => 'itemClasses',
-                'description' => 'A list of additional item classes to migrate, seperated by spaces.'
-            ],
             'wetRun' => [
                 'flag' => true,
-                    'prefix' => 'f',
-                    'longPrefix' => 'fix',
+                    'prefix' => 'w',
+                    'longPrefix' => 'wet-run',
                     'description' => 'Add this flag to migrate the references, as opposed to just listing them (dry/wet run)'
                 ]
             ];
@@ -176,29 +170,26 @@ class FileSerializerMigration extends ScriptAction
     /**
      * Migrate ResourceFileSerializer resources to UrlFileSerializer resources
      *
-     * @param core_kernel_classes_Resource[][] $oldItemResourceGroups
-     * @return bool
+     * @param mixed[][] $oldResourcesData
+     * @return void
+     * @throws InvalidServiceManagerException
+     * @throws \oat\search\base\exception\SearchGateWayExeption
      * @throws common_exception_Error
      */
-    private function migrateResourceGroups(array $oldItemResourceGroups)
+    private function migrateResources(array $oldResourcesData)
     {
+        $this->oldResourceCount = 0;
         $serviceLocator = $this->getServiceLocator();
         $this->urlFileSerializer->setServiceLocator($serviceLocator);
         $this->resourceFileSerializer->setServiceLocator($serviceLocator);
 
-        // Reset counter for migration count.
-        $this->oldResourceCount = 0;
-
-        foreach ($oldItemResourceGroups as $itemClass => $oldItemResources) {
-            $this->report->add(Report::createInfo(sprintf('Migrating files in class %s', $itemClass)));
-            foreach ($oldItemResources as $oldItem) {
-                $this->migrateResource($itemClass, $oldItem);
+        foreach ($oldResourcesData as $oldResourceData) {
+            foreach ($oldResourceData['properties'] as $data) {
+                $this->migrateResource($oldResourceData['resource'], $data['predicate']);
             }
         }
 
         $this->report->add(Report::createSuccess('Migration of old file references completed'));
-
-        return true;
     }
 
     /**
@@ -216,70 +207,51 @@ class FileSerializerMigration extends ScriptAction
     }
 
     /**
-     * Gather the item classes that should be migrated.
-     *
-     * @return string[]
-     */
-    private function getItemClasses()
-    {
-        if ($this->hasOption('itemClasses')) {
-            $this->itemClasses = array_merge($this->itemClasses, explode(' ', $this->getOption('itemClasses')));
-        }
-
-        return $this->itemClasses;
-    }
-
-    /**
      * Get the resources that should be migrated.
      *
-     * @return core_kernel_classes_Resource[][]
-     * @throws common_exception_Error
+     * @return mixed[][]
      */
-    private function getOldResourceGroups()
+    private function getOldResourcesData()
     {
-        $itemClasses = $this->getItemClasses();
+        $oldResources = [];
+        $fileResources = $this->getClass(GenerisRdf::CLASS_GENERIS_FILE)->getInstances(true);
 
-        try {
-            $search = $this->getSearch();
-        } catch (InvalidServiceManagerException $e) {
-            $this->report->add(Report::createFailure('Unable to get the search service.'));
-            return [];
+        foreach ($fileResources as $fileResource) {
+            $oldResources[$fileResource->getUri()]['properties'] = $this->getPropertiesForResource($fileResource);
+            $oldResources[$fileResource->getUri()]['resource'] = $fileResource;
         }
 
-        $records = [];
-        foreach ($itemClasses as $itemClass) {
-            $records[$itemClass] = $this->getOldResources($itemClass, $search);
-        }
-
-        return $records;
+        return $oldResources;
     }
 
     /**
      * Migrate a single resource.
      *
-     * @param $itemClass
-     * @param core_kernel_classes_Resource $oldItem
+     * @param core_kernel_classes_Resource $oldResource
+     * @param string $predicateUri
+     * @return void
+     * @throws InvalidServiceManagerException
+     * @throws \oat\search\base\exception\SearchGateWayExeption
      * @throws common_exception_Error
      */
-    private function migrateResource($itemClass, $oldItem)
+    private function migrateResource($oldResource, $predicateUri)
     {
-        $property = $oldItem->getProperty($itemClass);
-        $oldValues = $oldItem->getPropertyValues($property);
-        $oldValue = reset($oldValues);
+        $property = $this->getProperty($predicateUri);
 
-        if (strpos($oldValue, 'dir://') !== false || strpos($oldValue, 'file://') !== false) {
+        $resource = $this->getParentResource($oldResource, $predicateUri);
+
+        if ($resource === null) {
             return;
         }
-
-        $oldResource = $this->getResource($oldValue);
-        $this->oldResourceCount++;
 
         try {
             /** @var Directory|File $unserializedFileResource */
             $unserializedFileResource = $this->resourceFileSerializer->unserialize($oldResource);
             $migratedValue = $this->urlFileSerializer->serialize($unserializedFileResource);
-            $oldItem->editPropertyValues($property, $migratedValue);
-            $oldResource->delete();
+            if (!$this->isDryRun()) {
+                $resource->editPropertyValues($property, $migratedValue);
+                $oldResource->delete();
+            }
             $this->migratedCount++;
         } catch (FileSerializerException $e) {
             $this->report->add(Report::createFailure(
@@ -289,63 +261,88 @@ class FileSerializerMigration extends ScriptAction
     }
 
     /**
-     * Continue script execution with actual migration step.
+     * Check whether we're running a dry run or not.
      *
-     * @param core_kernel_classes_Resource[][] $oldItemResourceGroups
-     * @return Report
-     * @throws common_exception_Error
+     * @return bool
      */
-    private function wetRun($oldItemResourceGroups)
+    private function isDryRun()
     {
-        $this->report->add(Report::createInfo('Starting migration of old file reference resources'));
-
-        if ($this->migrateResourceGroups($oldItemResourceGroups) === false) {
-            $this->report->add(Report::createFailure('Stopping execution.'));
-            return $this->report;
+        if ($this->isDryRun !== null) {
+            return $this->isDryRun;
         }
 
-        if ($this->oldResourceCount === 0) {
-            $this->report->add(Report::createSuccess('All file resources are using the new file serializer.'));
-            return $this->report;
+        $this->isDryRun = true;
+        if ($this->hasOption('wetRun')) {
+            $this->isDryRun = false;
         }
 
-        $this->report->add(Report::createSuccess(sprintf(
-            'Successfully migrated %s old references to %s new file serializer references.',
-            $this->oldResourceCount,
-            $this->migratedCount
-        )));
-
-        return $this->report;
+        return $this->isDryRun;
     }
 
     /**
-     * Get the old resources, based on item class.
+     * Update the FileReferenceSerializer service to use the UrlFileSerializer.
      *
-     * @param string $itemClass
-     * @param ComplexSearchService $search
-     * @return core_kernel_classes_Resource[]
      * @throws common_exception_Error
+     * @throws InvalidServiceManagerException
+     * @return void
      */
-    private function getOldResources($itemClass, $search)
+    private function updateFileReferenceSerializer()
     {
-        $records = [];
-        $queryBuilder = $search->query();
-        $query = $queryBuilder->newQuery();
-        $query->add($itemClass)->notNull();
-        $queryBuilder->setCriteria($query);
-        try {
-            $results = $search->getGateway()->search($queryBuilder);
-            $this->oldResourceCount += $results->total();
-            foreach ($results as $result) {
-                $records[] = $result;
-            }
-        } catch (SearchGateWayExeption $e) {
-            $this->report->add(Report::createFailure(
-                sprintf('Unable to execute search. %s', $e->getMessage())
-            ));
-            return [];
+        $serviceManager = $this->getServiceManager();
+        $currentFileReferenceSerializer = $serviceManager->get(FileReferenceSerializer::SERVICE_ID);
+
+        if ($currentFileReferenceSerializer instanceof UrlFileSerializer) {
+            $this->report->add(Report::createInfo('System is already using the UrlFileSerializer'));
+            return;
         }
 
-        return $records;
+        if (!$this->isDryRun()) {
+            try {
+                $serviceManager->register(FileReferenceSerializer::SERVICE_ID, new UrlFileSerializer());
+            } catch (InvalidServiceManagerException $e) {
+                $this->report->add(Report::createFailure($e->getMessage()));
+            } catch (\common_Exception $e) {
+                $this->report->add(Report::createFailure('Unable to update FileReferenceSerializer service to UrlFileSerializer service'));
+            }
+        }
+
+        $this->report->add(Report::createSuccess('Successfully updated FileReferenceSerializer service to use UrlFileSerializer service'));
+    }
+
+    /**
+     * Get the properties that are using this resource
+     *
+     * @param core_kernel_classes_Resource $fileResource
+     * @return string[][]
+     */
+    private function getPropertiesForResource($fileResource)
+    {
+        $sql = "SELECT predicate FROM statements WHERE object = '" . $fileResource->getUri() . "'";
+        $persistence = $fileResource->getModel()->getPersistence();
+        return $persistence->query($sql)->fetchAll();
+    }
+
+    /**
+     * @param $oldResource
+     * @param $predicateUri
+     * @return core_kernel_classes_Resource|null
+     * @throws InvalidServiceManagerException
+     * @throws \oat\search\base\exception\SearchGateWayExeption
+     */
+    private function getParentResource($oldResource, $predicateUri)
+    {
+        $search = $this->getSearch();
+        $queryBuilder = $search->query();
+        $query = $queryBuilder->newQuery();
+        $criteria = $query->add($predicateUri)->equals($oldResource->getUri());
+        $queryBuilder = $queryBuilder->setCriteria($criteria);
+        $results = $search->getGateway()->search($queryBuilder);
+        if ($results->total() === 0) {
+            return null;
+        }
+
+        $this->oldResourceCount++;
+
+        return $results->current();
     }
 }

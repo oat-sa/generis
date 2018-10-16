@@ -332,10 +332,5 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         $this->skip('7.2.0', '7.9.8');
-
-        if ($this->isVersion('7.9.8')) {
-            $this->getServiceManager()->register(FileReferenceSerializer::SERVICE_ID, new UrlFileSerializer());
-            $this->setVersion('7.10.0');
-        }
     }
 }
