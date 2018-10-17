@@ -429,8 +429,7 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Rebuild the indexes of a given table. This method throws DBALException in
-     * of error.
+     * Rebuild the indexes of a given table. This method throws DBALException in case of error.
      *
      * @abstract
      * @access public
