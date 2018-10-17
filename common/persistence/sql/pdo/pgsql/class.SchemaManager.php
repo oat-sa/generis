@@ -19,7 +19,7 @@
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
  * @package generis
- 
+ * @deprecated
  *
  */
 class common_persistence_sql_pdo_pgsql_SchemaManager extends common_persistence_sql_pdo_SchemaManager{

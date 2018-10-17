@@ -29,6 +29,7 @@
  *
  * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package generis
+ * @deprecated
  */
 
 

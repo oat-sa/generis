@@ -17,7 +17,9 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
-
+/**
+ * @deprecated
+ */
 class common_persistence_sql_pdo_sqlite_Driver extends \common_persistence_sql_pdo_Driver
 {
     private $platform = null;

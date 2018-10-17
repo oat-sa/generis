@@ -20,6 +20,7 @@
 /**
  * Class common_persistence_sql_pdo_sqlite_SchemaManager
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
+ * @deprecated
  */
 class common_persistence_sql_pdo_sqlite_SchemaManager extends common_persistence_sql_pdo_SchemaManager
 {

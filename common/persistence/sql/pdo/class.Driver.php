@@ -32,7 +32,7 @@ use Doctrine\DBAL\DBALException;
  * @access public
  * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package generis
- 
+ * @deprecated
  */
 abstract class common_persistence_sql_pdo_Driver implements common_persistence_sql_Driver
 {

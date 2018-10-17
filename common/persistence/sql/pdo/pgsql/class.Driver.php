@@ -31,6 +31,8 @@
  * @access public
  * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package generis
+ *
+ * @deprecated
  */
 class common_persistence_sql_pdo_pgsql_Driver
     extends common_persistence_sql_pdo_Driver
