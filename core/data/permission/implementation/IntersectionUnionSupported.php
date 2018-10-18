@@ -128,7 +128,7 @@ class IntersectionUnionSupported extends ConfigurableService
             $model = array_pop($models);
             $supported = array_merge($supported, $model->getSupportedRights());
         }
-        
-        return array_values($supported);
+
+        return array_values(array_unique($supported));
     }
 }
