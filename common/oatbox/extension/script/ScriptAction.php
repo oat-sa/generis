@@ -175,20 +175,21 @@ abstract class ScriptAction extends AbstractAction
             $targetReport = (empty($optionParams['required'])) ? $optional : $required;
             $targetReport->add($optionReport);
         }
-        
-        if (count($required) > 0) {
+
+        if ($required->hasChildren()) {
             $report->add($required);
         }
-        
-        if (count($optional) > 0) {
+
+        if ($optional->hasChildren()) {
             $report->add($optional);
         }
-        
+
         // A little bit of formatting...
-        if (count($required) > 0 && count($optional) > 0) {
+        if ($required->hasChildren() && $optional->hasChildren()) {
             $required->add(new Report(Report::TYPE_INFO, ""));
         }
-        
+
+
         return $report;
     }
     
