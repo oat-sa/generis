@@ -165,48 +165,77 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
 	public function setData($data = null) {
 	    $this->data = $data;
 	}
-	
-	/**
-	 * returns all success elements
-	 * @return array
-	 */
-	public function getSuccesses() {
+
+    /**
+     * returns all success elements
+     *
+     * @param bool $recursive
+     * @return array
+     */
+	public function getSuccesses($recursive = false)
+    {
+        $iterator = true === $recursive
+            ? $this->getRecursiveIterator()
+            : $this;
+
         $successes = array();
-		foreach ($this as $element) {
+		foreach ($iterator as $element) {
 		    if ($element->getType() == self::TYPE_SUCCESS) {
 		        $successes[] = $element;
 		    }
 		}
 		return $successes;
 	}
-	
-	/**
-	 * returns all info elements
-	 * @return array
-	 */
-	public function getInfos() {
+
+    /**
+     * returns all info elements
+     *
+     * @param bool $recursive
+     * @return array
+     */
+	public function getInfos($recursive = false)
+    {
+        $iterator = true === $recursive
+            ? $this->getRecursiveIterator()
+            : $this;
+
 	    $infos = array();
-	    foreach ($this as $element) {
+	    foreach ($iterator as $element) {
 	        if ($element->getType() == self::TYPE_INFO) {
 	            $infos[] = $element;
 	        }
 	    }
 	    return $infos;
 	}
-	
-	/**
-	 * returns all error elements
-	 * @return array
-	 */
-	public function getErrors() {
+
+    /**
+     * returns all error elements
+     *
+     * @param bool $recursive
+     * @return array
+     */
+	public function getErrors($recursive = false)
+    {
+        $iterator = true === $recursive
+            ? $this->getRecursiveIterator()
+            : $this;
+
         $errors = array();
-		foreach ($this as $element) {
+		foreach ($iterator as $element) {
     		if ($element->getType() == self::TYPE_ERROR) {
                 $errors[] = $element;
             }
 		}
 		return $errors;
 	}
+
+	private function getRecursiveIterator()
+    {
+        return new \RecursiveIteratorIterator(
+            new \common_report_RecursiveReportIterator($this->elements),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+    }
 	
 	/**
 	 * Whenever or not teh report contains errors
@@ -274,6 +303,11 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
 	public function hasChildren() {
 	    return count($this->elements) > 0;
 	}
+
+	public function getChildren()
+    {
+        return $this->elements;
+    }
 
 	/**
 	 * user feedback message
