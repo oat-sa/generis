@@ -30,7 +30,6 @@ use oat\oatbox\service\ConfigurableService;
 /**
  * Class ResourceFileSerializer
  *
- * @deprecated
  * @see UrlFileSerializer
  */
 class ResourceFileSerializer extends ConfigurableService implements FileReferenceSerializer
