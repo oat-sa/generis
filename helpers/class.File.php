@@ -96,6 +96,20 @@ class helpers_File
     }
 
     /**
+     * Helps prevent 'path traversal' attacks
+     *
+     * @param $filename
+     * @param $directory
+     * @return bool
+     */
+    static public function isFileInsideDirectory($filename, $directory)
+    {
+        $canonicalDirectory = realpath($directory);
+        $canonicalFilename = realpath($canonicalDirectory . DIRECTORY_SEPARATOR . $filename);
+        return 0 === strpos($canonicalFilename, $canonicalDirectory);
+    }
+
+    /**
      * deletes a file or a directory recursively
      *
      * @access public
