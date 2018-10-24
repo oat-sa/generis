@@ -330,9 +330,9 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('7.2.0');
         }
 
-        $this->skip('7.2.0', '7.9.8');
+        $this->skip('7.2.0', '7.9.10');
 
-        if ($this->isVersion('7.9.8')) {
+        if ($this->isVersion('7.9.10')) {
             /** @var common_ext_ExtensionsManager $extensionManager */
             $extensionManager = $this->getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID);
             $persistenceManager = $extensionManager->getExtensionById('generis')->getConfig('persistences');
@@ -352,7 +352,7 @@ class Updater extends common_ext_ExtensionUpdater {
             $persistenceManager->setOption('persistences', $persistenceManagerConfig);
             $this->getServiceManager()->register(\common_persistence_Manager::SERVICE_ID, $persistenceManager);
 
-            $this->setVersion('7.9.9');
+            $this->setVersion('7.9.11');
         }
     }
 }
