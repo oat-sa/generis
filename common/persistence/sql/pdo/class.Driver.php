@@ -101,7 +101,7 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
      * @access public
      * @author Joel Bout, <joel@taotesting.com>
      * @return common_persistence_SqlPersistence
-     * @throws DBALException
+     * @throws PDOException
      */
     public function connect($id, array $params)
     {
@@ -134,7 +134,7 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
                     // We are connected. Get out of the loop.
                     break;
                 }
-                catch (DBALException $e){
+                catch (PDOException $e){
                     $this->dbConnector = null;
                     $counter++;
                 
@@ -158,14 +158,14 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param string $name
      * @param string $value
-     * @throws DBALException
+     * @throws PDOException
      */
     public function setAttribute($name,$value){
         try{
             common_Logger::d('setattri ' . $name . ' => ' . $value);
             $this->dbConnector->setAttribute($name, $value);
             
-        } catch (DBALException $e){
+        } catch (PDOException $e){
             common_Logger::e('Fail to set attribute ' . $name . ' with value ' . $value);
             throw $e;
         }
@@ -235,7 +235,7 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
      * @param  string statement
      * @param  array params
      * @return int
-     * @throws DBALException
+     * @throws PDOException
      */
     public function exec($statement, $params = array())
     {
@@ -251,7 +251,7 @@ abstract class common_persistence_sql_pdo_Driver implements common_persistence_s
         	$this->preparedExec = false;
         	try {
         	    $returnValue = $this->dbConnector->exec($statement);
-        	} catch (DBALException $e) {
+        	} catch (PDOException $e) {
         	    common_Logger::w('Error in statement: '.$statement);
         	    throw $e;
         	}
