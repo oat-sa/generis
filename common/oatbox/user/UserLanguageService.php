@@ -33,14 +33,23 @@ class UserLanguageService extends ConfigurableService implements UserLanguageSer
     const OPTION_LOCK_DATA_LANGUAGE = 'lock_data_language';
 
     /**
+     * {@inheritDoc}
+     * @see \oat\oatbox\user\UserLanguageServiceInterface::getDefaultLanguage()
+     */
+    public function getDefaultLanguage()
+    {
+        return DEFAULT_LANG;
+    }
+
+    /**
      * @inheritdoc
      */
     public function getDataLanguage(User $user)
     {
-        $result = DEFAULT_LANG;
+        $result = $this->getDefaultLanguage();
         if ($this->isDataLanguageEnabled()) {
             $lang = $user->getPropertyValues(GenerisRdf::PROPERTY_USER_DEFLG);
-            $result = empty($lang) ? DEFAULT_LANG : (string)current($lang);
+            $result = empty($lang) ? $this->getDefaultLanguage() : (string)current($lang);
         }
         return $result;
     }
@@ -51,7 +60,7 @@ class UserLanguageService extends ConfigurableService implements UserLanguageSer
     public function getInterfaceLanguage(User $user)
     {
         $lang = $user->getPropertyValues(GenerisRdf::PROPERTY_USER_UILG);
-        return empty($lang) ? DEFAULT_LANG : (string)current($lang);
+        return empty($lang) ? $this->getDefaultLanguage() : (string)current($lang);
     }
 
     /**

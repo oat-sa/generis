@@ -22,6 +22,7 @@
 
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * Short description of class core_kernel_persistence_smoothsql_Property
@@ -61,15 +62,19 @@ class core_kernel_persistence_smoothsql_Property
      */
     public function isLgDependent( core_kernel_classes_Resource $resource)
     {
-        $returnValue = (bool) false;
-
-        
-
-        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        
-        
-
-        return (bool) $returnValue;
+        if ($this->getLgCache()->has($resource->getUri())) {
+            $lgDependencyCache = $this->getLgCache()->get($resource->getUri());
+        } else {
+            $lgDependentProperty = new \core_kernel_classes_Property(GenerisRdf::PROPERTY_IS_LG_DEPENDENT);
+            $lgDependent = $resource->getOnePropertyValue($lgDependentProperty);
+            if (is_null($lgDependent) || !$lgDependent instanceof \core_kernel_classes_Resource){
+                $lgDependencyCache = false;
+            } else {
+                $lgDependencyCache = ($lgDependent->getUri() == GenerisRdf::GENERIS_TRUE);
+            }
+            $this->getLgCache()->set($resource->getUri(), $lgDependencyCache);
+        }
+        return (bool) $lgDependencyCache;
     }
 
     /**
@@ -194,6 +199,14 @@ class core_kernel_persistence_smoothsql_Property
         $this->removePropertyValues($resource, $lgDependentProperty);
         $this->setPropertyValue($resource, $lgDependentProperty, $value);
         
+    }
+
+    /**
+     * @return CacheInterface
+     */
+    public function getLgCache()
+    {
+        return $this->getModel()->getCache();
     }
 
     /**

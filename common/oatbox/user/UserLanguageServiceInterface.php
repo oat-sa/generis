@@ -30,6 +30,11 @@ interface UserLanguageServiceInterface
     const SERVICE_ID = 'generis/UserLanguageService';
 
     /**
+     * @return string language code (e.g. 'en-US')
+     */
+    public function getDefaultLanguage();
+
+    /**
      * @param User $user
      * @return string language code (e.g. 'en-US')
      */

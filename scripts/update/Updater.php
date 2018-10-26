@@ -44,6 +44,7 @@ use oat\taoWorkspace\model\generis\WrapperModel;
 use oat\oatbox\log\logger\TaoLog;
 use Psr\Log\LoggerInterface;
 use oat\oatbox\user\UserLanguageService;
+use oat\oatbox\session\SessionService;
 
 /**
  *
@@ -331,5 +332,9 @@ class Updater extends common_ext_ExtensionUpdater {
         }
 
         $this->skip('7.2.0', '7.9.10');
+        if ($this->isVersion('7.9.10')) {
+            $this->getServiceManager()->register(SessionService::SERVICE_ID, new SessionService());
+            $this->setVersion('8.0.0');
+        }
     }
 }

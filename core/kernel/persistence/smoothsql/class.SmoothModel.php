@@ -45,6 +45,8 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
      */
     private $persistence;
     
+    private $cache;
+
     private static $readableSubModels = null;
     
     private static $updatableSubModels = null;
@@ -69,9 +71,16 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
 
     public function getPersistence() {
         if (is_null($this->persistence)) {
-            $this->persistence = common_persistence_SqlPersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
+            $this->persistence = $this->getServiceLocator()->get(common_persistence_Manager::SERVICE_ID)->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
         }
         return $this->persistence;
+    }
+
+    public function getCache() {
+        if (is_null($this->cache)) {
+            $this->cache = $this->getOption('cache');
+        }
+        return $this->cache;
     }
 
     /**
@@ -165,23 +174,4 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
         }
         return $model->getWritableModels();
     }
-    
-    /**
-     * For hardification we need to ba able to bypass the model restriction
-     *
-     * @deprecated
-     * @param array $ids
-     */
-    public static function forceUpdatableModelIds($ids)
-    {
-        throw new common_exception_Error(__FUNCTION__.' no longer supported');
-    }
-    
-    /**
-     * @deprecated
-     */
-    public static function forceReloadModelIds() {
-        common_Logger::w('Call to deprecated '.__FUNCTION__.' no longer does anything');
-    }
-
 }
