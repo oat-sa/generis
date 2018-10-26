@@ -51,47 +51,47 @@ class FileSerializerMigration extends ScriptAction
     /**
      * Run the script.
      *
-     * @param int $resourceOffset
      * @return \common_report_Report
      * @throws InvalidServiceManagerException
      * @throws \oat\search\base\exception\SearchGateWayExeption
      * @throws common_Exception
      * @throws common_exception_Error
      */
-    protected function run($resourceOffset = 0)
+    protected function run()
     {
-        $start =  microtime(true);
-        $this->migrationHelper = new FileSerializerMigrationHelper($this->isWetRun());
         $this->report = Report::createInfo('Starting file serializer migration.');
 
-        $this->migrate();
+        $migrationHelper = $this->getMigrationHelper();
 
-        $this->report->add(Report::createSuccess(sprintf(
-            'Successfully migrated %s old references to %s new file serializer references.',
-            $this->migrationHelper->migrationInformation['old_resource_migration_count'],
-            $this->migrationHelper->migrationInformation['migrated_count']
-        )));
+        $migrationHelper->migrateFiles(
+            $this->hasOption('resourceLimit') ? $this->getOption('resourceLimit') : self::RESOURCE_LIMIT
+        );
 
-        if (count($this->migrationHelper->failedResources)) {
-            $this->reportMigrationErrors();
-        }
+        $this->addMigrationReport();
 
-        if ($this->migrationHelper->updateFileSerializer()) {
+        if ($migrationHelper->updateFileSerializer()) {
             $this->report->add(Report::createSuccess(
                 'Successfully updated FileReferenceSerializer service to use UrlFileSerializer service'
             ));
         }
 
-        $end = microtime(true);
-        $this->report->add(Report::createSuccess(
-            sprintf('Completed file migration process. \'Process took %s Seconds to complete\'', round($end - $start, 2))
-        ));
+        $this->report->add(Report::createSuccess('Completed file migration process.'));
 
         if (!$this->isWetRun()) {
             $this->report->add(Report::createFailure('Use the --wet-run (-w) parameter to execute reference migration.'));
         }
 
         return $this->report;
+    }
+
+    /**
+     * Show script execution time.
+     *
+     * @return bool
+     */
+    protected function showTime()
+    {
+        return true;
     }
 
     /**
@@ -147,49 +147,49 @@ class FileSerializerMigration extends ScriptAction
     }
 
     /**
-     * @param int $resourceOffset
-     * @return void
-     * @throws InvalidServiceManagerException
-     * @throws \oat\generis\model\fileReference\FileSerializerException
-     * @throws \oat\search\base\exception\SearchGateWayExeption
+     * Add the reports related to the migration
+     *
      * @throws common_exception_Error
+     * @throws InvalidServiceManagerException
      */
-    private function migrate()
+    private function addMigrationReport()
     {
-        $oldResourcesData = $this->migrationHelper->getOldResourcesData();
-        $oldResourceCount = $this->migrationHelper->migrationInformation['old_resource_count'];
+        $migrationHelper = $this->getMigrationHelper();
+        $this->report->add(Report::createSuccess(sprintf(
+            'Successfully migrated %s old references to %s new file serializer references.',
+            $migrationHelper->migrationInformation['migrated_count'],
+            $migrationHelper->migrationInformation['old_resource_count']
+        )));
 
-        $chuncks = array_chunk($oldResourcesData, self::RESOURCE_LIMIT);
+        if (count($migrationHelper->failedResources)) {
+            $this->report->add(Report::createFailure(sprintf(
+                    'Unable to migrate %s resources. Please verify the following resources:',
+                    count($migrationHelper->failedResources
+                    ))
+            ));
 
-        $this->report->add(Report::createInfo(
-            sprintf('%s old file resources were found', $oldResourceCount)
-        ));
-
-        if ($this->migrationHelper->migrationInformation['old_resource_count'] !== 0) {
-            $this->report->add(Report::createInfo('Starting migration of old file reference resources'));
-
-            foreach ($chuncks as $chunck) {
-                $this->migrationHelper->migrateResources($chunck);
-                $this->report->add(Report::createSuccess('Batched finished. Processing next batch.'));
+            foreach ($migrationHelper->failedResources as $uri => $errorMessages) {
+                $this->report->add(Report::createFailure(
+                    sprintf("> %s \n    - %s", $uri, implode("\n    - ", $errorMessages))
+                ));
             }
-
-        } else {
-            $this->report->add(Report::createSuccess('All file resources are using the new file serializer.'));
         }
     }
 
-    private function reportMigrationErrors()
+    /**
+     * Get the file serializer migration helper
+     *
+     * @return FileSerializerMigrationHelper
+     * @throws InvalidServiceManagerException
+     */
+    private function getMigrationHelper()
     {
-        $this->report->add(Report::createFailure(sprintf(
-                'Unable to migrate %s resources. Please verify the following resources:',
-                count($this->migrationHelper->failedResources
-            ))
-        ));
-
-        foreach ($this->migrationHelper->failedResources as $uri => $errorMessages) {
-            $this->report->add(Report::createFailure(
-                sprintf("> %s \n    - %s", $uri, implode("\n    - ", $errorMessages))
-            ));
+        if ($this->migrationHelper === null) {
+            $this->migrationHelper = new FileSerializerMigrationHelper($this->isWetRun());
+            $this->migrationHelper->setServiceLocator($this->getServiceLocator());
+            $this->migrationHelper->setServiceManager($this->getServiceManager());
         }
+
+        return $this->migrationHelper;
     }
 }
