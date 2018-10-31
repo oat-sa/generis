@@ -25,8 +25,9 @@ use common_Exception;
 use common_exception_Error;
 use common_report_Report as Report;
 use oat\generis\Helper\FileSerializerMigrationHelper;
+use oat\generis\model\fileReference\FileReferenceSerializer;
+use oat\generis\model\fileReference\UrlFileSerializer;
 use oat\oatbox\extension\script\ScriptAction;
-use oat\oatbox\service\exception\InvalidServiceManagerException;
 
 /**
  * Migrate ResourceFileSerializer references to the new UrlFileSerializer system
@@ -36,7 +37,8 @@ use oat\oatbox\service\exception\InvalidServiceManagerException;
  */
 class FileSerializerMigration extends ScriptAction
 {
-    const RESOURCE_LIMIT = 200;
+
+    const CHUNK_SIZE = 200;
 
     /**
      * @var FileSerializerMigrationHelper
@@ -51,32 +53,30 @@ class FileSerializerMigration extends ScriptAction
     /**
      * Run the script.
      *
-     * @param int $resourceOffset
-     * @return \common_report_Report
-     * @throws InvalidServiceManagerException
-     * @throws \oat\search\base\exception\SearchGateWayExeption
+     * @return Report
      * @throws common_Exception
      * @throws common_exception_Error
      */
-    protected function run($resourceOffset = 0)
+    protected function run()
     {
         $start =  microtime(true);
-        $this->migrationHelper = new FileSerializerMigrationHelper($this->isWetRun());
+        $this->migrationHelper = new FileSerializerMigrationHelper($this->getServiceLocator());
         $this->report = Report::createInfo('Starting file serializer migration.');
 
-        $this->migrate();
-
-        $this->report->add(Report::createSuccess(sprintf(
-            'Successfully migrated %s old references to %s new file serializer references.',
-            $this->migrationHelper->migrationInformation['old_resource_migration_count'],
-            $this->migrationHelper->migrationInformation['migrated_count']
-        )));
+        try {
+            $this->migrate();
+        } catch (\Exception $e) {
+            $this->report->add(Report::createFailure(
+                'Migration process was stopped with error message: '. $e->getMessage()
+            ));
+            return $this->report;
+        }
 
         if (count($this->migrationHelper->failedResources)) {
             $this->reportMigrationErrors();
         }
 
-        if ($this->migrationHelper->updateFileSerializer()) {
+        if ($this->updateFileSerializer()) {
             $this->report->add(Report::createSuccess(
                 'Successfully updated FileReferenceSerializer service to use UrlFileSerializer service'
             ));
@@ -118,13 +118,14 @@ class FileSerializerMigration extends ScriptAction
                 'longPrefix' => 'wet-run',
                 'description' => 'Add this flag to migrate the references, as opposed to just listing them (dry/wet run)'
             ],
-            'resourceLimit' => [
-                'prefix' => 'l',
-                'longPrefix' => 'limit',
+            'chunkSize' => [
+                'prefix' => 'c',
+                'defaultValue' => self::CHUNK_SIZE,
+                'longPrefix' => 'chunk-size',
                 'cast' => 'integer',
-                'defaultValue' => self::RESOURCE_LIMIT,
-                'description' => 'How many items should be processed each run?'
-            ]
+                'required' => false,
+                'description' => 'Specifies items amount for processing (chunk size) per iteration for migration. Default value is '.self::CHUNK_SIZE
+            ],
         ];
     }
 
@@ -147,37 +148,31 @@ class FileSerializerMigration extends ScriptAction
     }
 
     /**
-     * @param int $resourceOffset
-     * @return void
-     * @throws InvalidServiceManagerException
      * @throws \oat\generis\model\fileReference\FileSerializerException
      * @throws \oat\search\base\exception\SearchGateWayExeption
      * @throws common_exception_Error
      */
     private function migrate()
     {
-        $oldResourcesData = $this->migrationHelper->getOldResourcesData();
-        $oldResourceCount = $this->migrationHelper->migrationInformation['old_resource_count'];
+        $oldResourcesData = $this->migrationHelper->getOldResourcesData(
+            $this->hasOption('chunkSize'),
+            $this->isWetRun() ? false : true
+        );
 
-        $chuncks = array_chunk($oldResourcesData, self::RESOURCE_LIMIT);
-
-        $this->report->add(Report::createInfo(
-            sprintf('%s old file resources were found', $oldResourceCount)
-        ));
-
-        if ($this->migrationHelper->migrationInformation['old_resource_count'] !== 0) {
-            $this->report->add(Report::createInfo('Starting migration of old file reference resources'));
-
-            foreach ($chuncks as $chunck) {
-                $this->migrationHelper->migrateResources($chunck);
-                $this->report->add(Report::createSuccess('Batched finished. Processing next batch.'));
+        $count = 0;
+        foreach ($oldResourcesData as $resourceDocument) {
+            if ($this->isWetRun()) {
+                $this->migrationHelper->migrateResources($resourceDocument);
             }
-
-        } else {
-            $this->report->add(Report::createSuccess('All file resources are using the new file serializer.'));
+            $count++;
         }
+
+        $this->report->add(Report::createInfo("Was migrated '{$count}' items."));
     }
 
+    /**
+     * @throws common_exception_Error
+     */
     private function reportMigrationErrors()
     {
         $this->report->add(Report::createFailure(sprintf(
@@ -191,5 +186,40 @@ class FileSerializerMigration extends ScriptAction
                 sprintf("> %s \n    - %s", $uri, implode("\n    - ", $errorMessages))
             ));
         }
+    }
+
+    /**
+     * Update the FileReferenceSerializer service to use the UrlFileSerializer.
+     *
+     * @return bool
+     * @throws common_Exception
+     */
+    private function updateFileSerializer()
+    {
+        $updated = false;
+        if ($this->fileSerializerNeedsUpdate()) {
+            if ($this->isWetRun()) {
+                $this->getServiceManager()->register(FileReferenceSerializer::SERVICE_ID, new UrlFileSerializer());
+            }
+            $updated = true;
+        }
+
+        return $updated;
+    }
+
+    /**
+     * Check if the file serializer service needs to be updated
+     *
+     * @return bool
+     */
+    private function fileSerializerNeedsUpdate()
+    {
+        $needsUpdate = true;
+        $currentFileReferenceSerializer = $this->getServiceLocator()->get(FileReferenceSerializer::SERVICE_ID);
+        if ($currentFileReferenceSerializer instanceof UrlFileSerializer) {
+            $needsUpdate = false;
+        }
+
+        return $needsUpdate;
     }
 }
