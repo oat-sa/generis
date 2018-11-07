@@ -31,9 +31,9 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
 {
     use OntologyAwareTrait;
 
-    const RESOURCE_FILE_FILESYSTEM_URI  = 'fileSystemUri';
-    const RESOURCE_FILE_PATH            = 'path';
-    const RESOURCE_FILE_NAME            = 'fileName';
+    const RESOURCE_FILE_FILESYSTEM_URI = 'fileSystemUri';
+    const RESOURCE_FILE_PATH = 'path';
+    const RESOURCE_FILE_NAME = 'fileName';
 
     /**
      * @see FileReferenceSerializer::serialize
@@ -49,14 +49,18 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
             $filename = '';
             $filePath = $abstraction->getPrefix();
         } else {
-            throw new FileSerializerException(__CLASS__ . '::' . __FUNCTION__ . ' expects parameter to be an instance of Directory or File');
+            throw new FileSerializerException(
+                __CLASS__.'::'.__FUNCTION__.' expects parameter to be an instance of Directory or File'
+            );
         }
 
-        $resource = $fileClass->createInstanceWithProperties(array(
-            GenerisRdf::PROPERTY_FILE_FILENAME => $filename,
-            GenerisRdf::PROPERTY_FILE_FILEPATH => $filePath,
-            GenerisRdf::PROPERTY_FILE_FILESYSTEM => $this->getResource($abstraction->getFileSystemId())
-        ));
+        $resource = $fileClass->createInstanceWithProperties(
+            [
+                GenerisRdf::PROPERTY_FILE_FILENAME => $filename,
+                GenerisRdf::PROPERTY_FILE_FILEPATH => $filePath,
+                GenerisRdf::PROPERTY_FILE_FILESYSTEM => $this->getResource($abstraction->getFileSystemId()),
+            ]
+        );
 
         return $resource->getUri();
     }
@@ -70,7 +74,8 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
     {
         $properties = $this->getResourceFilePropertiesValues($serial);
         $dir = $this->getRootDirectory($properties[self::RESOURCE_FILE_FILESYSTEM_URI]);
-        return (isset($properties[self::RESOURCE_FILE_NAME]) && ! empty($properties[self::RESOURCE_FILE_NAME]))
+
+        return (isset($properties[self::RESOURCE_FILE_NAME]) && !empty($properties[self::RESOURCE_FILE_NAME]))
             ? $dir->getFile($properties[self::RESOURCE_FILE_PATH].'/'.$properties[self::RESOURCE_FILE_NAME])
             : $dir->getDirectory($properties[self::RESOURCE_FILE_PATH]);
     }
@@ -83,7 +88,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
     public function unserializeFile($serial)
     {
         $properties = $this->getResourceFilePropertiesValues($serial);
-    
+
         return $this->getRootDirectory($properties[self::RESOURCE_FILE_FILESYSTEM_URI])
             ->getFile($properties[self::RESOURCE_FILE_PATH].'/'.$properties[self::RESOURCE_FILE_NAME]);
     }
@@ -110,6 +115,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
     {
         $resourceFile = $this->getResource($serial);
         $file = new \core_kernel_classes_Resource($resourceFile);
+
         return $file->delete();
     }
 
@@ -132,22 +138,27 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
      * @param $serial
      * @return array
      * @throws \common_exception_InvalidArgumentType
+     * @throws FileSerializerException
      */
     protected function getResourceFilePropertiesValues($serial)
     {
         $file = $this->getResource($serial);
 
-        $propertiesDefinition = array(
+        if (!$file->exists()) {
+            throw new \common_exception_NotFound('File reference serial "'. $serial .'" not exist as resource');
+        }
+
+        $propertiesDefinition = [
             $this->getProperty(GenerisRdf::PROPERTY_FILE_FILEPATH),
             $this->getProperty(GenerisRdf::PROPERTY_FILE_FILESYSTEM),
-            $this->getProperty(GenerisRdf::PROPERTY_FILE_FILENAME)
-        );
+            $this->getProperty(GenerisRdf::PROPERTY_FILE_FILENAME),
+        ];
 
         $propertiesValues = $file->getPropertiesValues($propertiesDefinition);
 
         $properties = [];
 
-        $fileSystemProperty	=  current($propertiesValues[GenerisRdf::PROPERTY_FILE_FILESYSTEM]);
+        $fileSystemProperty = current($propertiesValues[GenerisRdf::PROPERTY_FILE_FILESYSTEM]);
         if ($fileSystemProperty instanceof \core_kernel_classes_Resource) {
             $properties[self::RESOURCE_FILE_FILESYSTEM_URI] = $fileSystemProperty->getUri();
         } else {
@@ -158,7 +169,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
         $filePath = str_replace(DIRECTORY_SEPARATOR, '/', $filePath);
         $properties[self::RESOURCE_FILE_PATH] = trim($filePath, '/');
 
-        if (! empty($propertiesValues[GenerisRdf::PROPERTY_FILE_FILENAME])) {
+        if (!empty($propertiesValues[GenerisRdf::PROPERTY_FILE_FILENAME])) {
             $fileName = current($propertiesValues[GenerisRdf::PROPERTY_FILE_FILENAME])->literal;
             $fileName = str_replace(DIRECTORY_SEPARATOR, '/', $fileName);
 

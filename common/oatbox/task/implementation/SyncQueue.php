@@ -39,6 +39,8 @@ use \common_report_Report as Report;
  *
  * @package oat\oatbox\task\implementation
  * @author Aleh Hutnikau, <huntikau@1pt.com>
+ *
+ * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\QueueDispatcher instead.
  */
 class SyncQueue extends AbstractQueue
 {
@@ -50,6 +52,9 @@ class SyncQueue extends AbstractQueue
 
     /**
      * Create and run task
+     *
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param \oat\oatbox\action\Action|string $action action instance, classname or callback function
      * @param array $parameters parameters to be passed to the action
      * @param boolean $recall Parameter which indicates that task has been created repeatedly after fail of previous.
@@ -74,6 +79,8 @@ class SyncQueue extends AbstractQueue
 
     /**
      * not implemented
+     *
+     * @deprecated since version 7.10.0, to be removed in 8.0.
      */
     public function getIterator()
     {
@@ -82,6 +89,9 @@ class SyncQueue extends AbstractQueue
 
     /**
      * Create task resource in the rdf storage and link placeholder resource to it.
+     *
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *             
      * @param Task $task
      * @param \core_kernel_classes_Resource|null $resource - placeholder resource to be linked with task.
      * @throws

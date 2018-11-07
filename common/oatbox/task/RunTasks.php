@@ -30,6 +30,8 @@ use oat\oatbox\action\Action;
  * ```
  * sudo -u www-data php index.php 'oat\oatbox\task\RunTasks' 10
  * ```
+ * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\taoTaskQueue\scripts\tools\RunWorker instead.
+ *
  * @package oat\oatbox\task
  */
 class RunTasks extends ConfigurableService implements Action
