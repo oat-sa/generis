@@ -17,9 +17,7 @@
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA ;
  */
 
-namespace oat\generis\common\exception;
-
-class FileReadFailedException extends \Exception
+class common_exception_FileReadFailedException extends \Exception
 {
 
 }

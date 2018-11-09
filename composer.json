@@ -76,8 +76,7 @@
             "oat\\generis\\Helper\\" : "helpers/",
             "oat\\oatbox\\" : "common/oatbox/",
             "oat\\generis\\test\\": "test/",
-            "oat\\generis\\scripts\\": "scripts/",
-            "oat\\generis\\common\\": "generis/common"
+            "oat\\generis\\scripts\\": "scripts/"
         },
         "files": [
         	"common/legacy/class.LegacyAutoLoader.php",
