@@ -20,15 +20,11 @@
 
 namespace oat\generis\test\unit\helpers;
 
-use core_kernel_classes_Class;
 use core_kernel_classes_Resource;
 use oat\generis\Helper\FileSerializerMigrationHelper;
-use oat\generis\model\fileReference\FileReferenceSerializer;
-use oat\generis\model\fileReference\ResourceFileSerializer;
-use oat\generis\model\fileReference\UrlFileSerializer;
+use oat\generis\model\GenerisRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use oat\oatbox\service\ServiceManager;
-use oat\taoDevTools\helper\DataGenerator;
 
 /**
  * Test cases for the File serializer migration script helper
@@ -48,19 +44,14 @@ class FileSerializerMigrationHelperTest extends GenerisPhpUnitTestRunner
     private $testItems;
 
     /**
-     * @var UrlFileSerializer
+     * @var core_kernel_classes_Resource[]
      */
-    private $urlFileSerializer;
+    private $testResources;
 
     /**
-     * @var ResourceFileSerializer
+     * @var \core_kernel_classes_Class
      */
-    private $resourceFileSerializer;
-
-    /**
-     * @var bool
-     */
-    private $fileSerializerSwitched = false;
+    protected $testClass;
 
     /**
      * Initialize test
@@ -68,15 +59,7 @@ class FileSerializerMigrationHelperTest extends GenerisPhpUnitTestRunner
      */
     public function setUp()
     {
-        $this->fileMigrationHelper = new FileSerializerMigrationHelper(true);
-        $this->urlFileSerializer = new UrlFileSerializer();
-        $this->resourceFileSerializer = new ResourceFileSerializer();
-
-        $currentFileSerializer = ServiceManager::getServiceManager()->get(FileReferenceSerializer::SERVICE_ID);
-        if ($currentFileSerializer instanceof UrlFileSerializer) {
-            $this->fileSerializerSwitched = true;
-            ServiceManager::getServiceManager()->register(FileReferenceSerializer::SERVICE_ID, new ResourceFileSerializer());
-        }
+        $this->fileMigrationHelper = new FileSerializerMigrationHelper(ServiceManager::getServiceManager());
     }
 
     /**
@@ -86,13 +69,14 @@ class FileSerializerMigrationHelperTest extends GenerisPhpUnitTestRunner
     {
         $this->generateFileResources();
         foreach ($this->testItems as $testItem) {
+            /** @var \core_kernel_classes_Resource $resource */
             $resource = $testItem->getOnePropertyValue(
                 $testItem->getProperty('http://www.tao.lu/Ontologies/TAOItem.rdf#ItemContent')
             );
             $this->fileMigrationHelper->migrateResource($resource, 'http://www.tao.lu/Ontologies/TAOItem.rdf#ItemContent');
         }
 
-        static::assertSame($this->fileMigrationHelper->migrationInformation['migrated_count'], 10);
+        static::assertSame($this->fileMigrationHelper->migrationInformation['migrated_count'], 2);
 
     }
 
@@ -101,13 +85,33 @@ class FileSerializerMigrationHelperTest extends GenerisPhpUnitTestRunner
      */
     private function generateFileResources()
     {
-        if ($this->testItems !== null) {
-            $this->tearDown();
-        }
+        $clazz = new \core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOItem.rdf#Item');
+        if ($clazz->isClass()) {
+            $clazz = new \core_kernel_classes_Class($clazz);
+            $this->testClass = \core_kernel_classes_ClassFactory::createSubClass($clazz, 'testClass1', '');
+            $fileClass = new \core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_FILE);
 
-        /** @var core_kernel_classes_Class $itemClass */
-        $itemClass = DataGenerator::generateItems(10);
-        $this->testItems = $itemClass->getInstances(true);
+            $item1 = \core_kernel_classes_ResourceFactory::create($this->testClass, 'testItem1', '');
+            $item1->setPropertiesValues(['http://www.tao.lu/Ontologies/TAOItem.rdf#ItemModel' => 'http://www.tao.lu/Ontologies/TAOItem.rdf#QTI']);
+            $resource1 = $fileClass->createInstanceWithProperties(array(
+                GenerisRdf::PROPERTY_FILE_FILENAME => 'testFile1',
+                GenerisRdf::PROPERTY_FILE_FILEPATH => 'testPath1',
+                GenerisRdf::PROPERTY_FILE_FILESYSTEM => 'itemDirectory1'
+            ));
+            $item1->setPropertiesValues(['http://www.tao.lu/Ontologies/TAOItem.rdf#ItemContent' => $resource1->getUri()]);
+            $this->testResources[] = $resource1;
+            $this->testItems[] = $item1;
+            $item2 = \core_kernel_classes_ResourceFactory::create($this->testClass, 'testItem2', '');
+            $item2->setPropertiesValues(['http://www.tao.lu/Ontologies/TAOItem.rdf#ItemModel' => 'http://www.tao.lu/Ontologies/TAOItem.rdf#QTI']);
+            $resource2 = $fileClass->createInstanceWithProperties(array(
+                GenerisRdf::PROPERTY_FILE_FILENAME => 'testFile2',
+                GenerisRdf::PROPERTY_FILE_FILEPATH => 'testPath2',
+                GenerisRdf::PROPERTY_FILE_FILESYSTEM => 'itemDirectory2'
+            ));
+            $item2->setPropertiesValues(['http://www.tao.lu/Ontologies/TAOItem.rdf#ItemContent' => $resource2->getUri()]);
+            $this->testItems[] = $item2;
+            $this->testResources[] = $resource2;
+        }
     }
 
     /**
@@ -115,15 +119,19 @@ class FileSerializerMigrationHelperTest extends GenerisPhpUnitTestRunner
      */
     public function tearDown()
     {
-        if ($this->fileSerializerSwitched === true) {
-            ServiceManager::getServiceManager()->register(
-                FileReferenceSerializer::SERVICE_ID, new UrlFileSerializer()
-            );
+        if ($this->testClass !== null) {
+            $this->testClass->delete();
         }
 
         if ($this->testItems !== null) {
-            foreach ($this->testItems as $testItem) {
-                $testItem->delete();
+            foreach ($this->testItems as $item) {
+                $item->delete();
+            }
+        }
+
+        if ($this->testResources !== null) {
+            foreach ($this->testResources as $resource) {
+                $resource->delete();
             }
         }
     }
