@@ -148,6 +148,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
             throw new \common_exception_NotFound('File reference serial "'. $serial .'" not exist as resource');
         }
 
+        $properties = [];
         $propertiesDefinition = [
             $this->getProperty(GenerisRdf::PROPERTY_FILE_FILEPATH),
             $this->getProperty(GenerisRdf::PROPERTY_FILE_FILESYSTEM),
@@ -155,25 +156,17 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
         ];
 
         $propertiesValues = $file->getPropertiesValues($propertiesDefinition);
-
-        $properties = [];
-
         $fileSystemProperty = current($propertiesValues[GenerisRdf::PROPERTY_FILE_FILESYSTEM]);
-        if ($fileSystemProperty instanceof \core_kernel_classes_Resource) {
-            $properties[self::RESOURCE_FILE_FILESYSTEM_URI] = $fileSystemProperty->getUri();
-        } else {
-            $properties[self::RESOURCE_FILE_FILESYSTEM_URI] = $fileSystemProperty->literal;
-        }
+        $properties[self::RESOURCE_FILE_FILESYSTEM_URI] = $fileSystemProperty instanceof \core_kernel_classes_Resource
+            ? $fileSystemProperty->getUri()
+            : $fileSystemProperty->literal;
 
         $filePath = current($propertiesValues[GenerisRdf::PROPERTY_FILE_FILEPATH])->literal;
-        $filePath = str_replace(DIRECTORY_SEPARATOR, '/', $filePath);
-        $properties[self::RESOURCE_FILE_PATH] = trim($filePath, '/');
+        $properties[self::RESOURCE_FILE_PATH] = trim(str_replace(DIRECTORY_SEPARATOR, '/', $filePath), '/');
 
         if (!empty($propertiesValues[GenerisRdf::PROPERTY_FILE_FILENAME])) {
             $fileName = current($propertiesValues[GenerisRdf::PROPERTY_FILE_FILENAME])->literal;
-            $fileName = str_replace(DIRECTORY_SEPARATOR, '/', $fileName);
-
-            $properties[self::RESOURCE_FILE_NAME] = ltrim($fileName, '/');
+            $properties[self::RESOURCE_FILE_NAME] = ltrim(str_replace(DIRECTORY_SEPARATOR, '/', $fileName), '/');
         }
 
         return $properties;
