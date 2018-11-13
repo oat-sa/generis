@@ -15,12 +15,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\generis\model\fileReference;
 
+use core_kernel_classes_Class;
+use core_kernel_classes_ClassIterator;
+use core_kernel_classes_Resource;
+use Iterator;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
@@ -28,12 +30,15 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  *
  * @author Aleksej Tikhanovich <aleksej@taotesting.com>
  */
-class ResourceFileIterator implements \Iterator
+class ResourceFileIterator implements Iterator
 {
     use ServiceLocatorAwareTrait;
 
     const CACHE_SIZE = 100;
 
+    /**
+     * @var core_kernel_classes_ClassIterator
+     */
     private $classIterator;
 
     /**
@@ -48,7 +53,7 @@ class ResourceFileIterator implements \Iterator
      *
      * @var array
      */
-    private $instanceCache = null;
+    private $instanceCache = [];
 
     /**
      * Indicator whenever the end of  the current cache is also the end of the current class
@@ -66,10 +71,9 @@ class ResourceFileIterator implements \Iterator
 
     private $cacheSize;
 
-    private $isOffset = true;
+    private $isOffset;
 
     public $failedResources = [];
-
 
     /**
      * ResourceFileIterator constructor.
@@ -78,17 +82,16 @@ class ResourceFileIterator implements \Iterator
      * @param boolean $isOffset
      */
     public function __construct($classes, $cacheSize = self::CACHE_SIZE, $isOffset = true) {
-        $this->classIterator = new \core_kernel_classes_ClassIterator($classes);
+        $this->classIterator = new core_kernel_classes_ClassIterator($classes);
         $this->ensureNotEmpty();
         $this->cacheSize = $cacheSize;
         $this->isOffset = $isOffset;
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Iterator::rewind()
+     * @inheritdoc
      */
-    function rewind() {
+    public function rewind() {
         if (!$this->unmoved) {
             $this->classIterator->rewind();
             $this->ensureNotEmpty();
@@ -97,32 +100,30 @@ class ResourceFileIterator implements \Iterator
     }
 
     /**
-     * @return array|null
+     * @inheritdoc
      * @throws \common_exception_Error
      */
     public function current()
     {
-        if ($this->instanceCache === null) {
+        if (empty($this->instanceCache)) {
             $this->ensureNotEmpty();
         }
         return isset($this->instanceCache[$this->currentInstance]) ?
-            $this->createDocument(new \core_kernel_classes_Resource($this->instanceCache[$this->currentInstance])) :
+            $this->createDocument(new core_kernel_classes_Resource($this->instanceCache[$this->currentInstance])) :
             null;
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Iterator::key()
+     * @inheritdoc
      */
-    function key() {
+    public function key() {
         return $this->classIterator->key().'#'.$this->currentInstance;
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Iterator::next()
+     * @inheritdoc
      */
-    function next() {
+    public function next() {
         $this->unmoved = false;
         if ($this->valid()) {
             $this->currentInstance++;
@@ -142,10 +143,9 @@ class ResourceFileIterator implements \Iterator
     /**
      * While there are remaining classes there are instances to load
      *
-     * (non-PHPdoc)
      * @see Iterator::valid()
      */
-    function valid() {
+    public function valid() {
         if ($this->instanceCache === null) {
             $this->ensureNotEmpty();
         }
@@ -166,14 +166,14 @@ class ResourceFileIterator implements \Iterator
     /**
      * Load instances into cache
      *
-     * @param \core_kernel_classes_Class $class
+     * @param core_kernel_classes_Class $class
      * @param int $offset
      * @return boolean
      */
-    protected function load(\core_kernel_classes_Class $class, $offset)
+    protected function load(core_kernel_classes_Class $class, $offset)
     {
         $results = $this->loadResources($class, $offset);
-        $this->instanceCache = array();
+        $this->instanceCache = [];
         foreach ($results as $resource) {
             $this->instanceCache[$offset] = $resource->getUri();
             $offset++;
@@ -187,11 +187,11 @@ class ResourceFileIterator implements \Iterator
     /**
      * Load resources from storage
      *
-     * @param \core_kernel_classes_Class $class
+     * @param core_kernel_classes_Class $class
      * @param integer $offset
-     * @return \core_kernel_classes_Resource[]
+     * @return core_kernel_classes_Resource[]
      */
-    protected function loadResources(\core_kernel_classes_Class $class, $offset)
+    protected function loadResources(core_kernel_classes_Class $class, $offset)
     {
         return $class->searchInstances([], [
             'recursive' => false,
@@ -201,22 +201,23 @@ class ResourceFileIterator implements \Iterator
     }
 
     /**
-     * @param \core_kernel_classes_Resource $resource
+     * @param core_kernel_classes_Resource $resource
      * @return array
      */
-    protected function createDocument(\core_kernel_classes_Resource $resource)
+    protected function createDocument(core_kernel_classes_Resource $resource)
     {
-        $oldResources = [];
-        $oldResources[$resource->getUri()]['properties'] = $this->getPropertiesForResource($resource);
-        $oldResources[$resource->getUri()]['resource'] = $resource;
-
-        return $oldResources;
+        return [
+            $resource->getUri() => [
+                'properties' => $this->getPropertiesForResource($resource),
+                'resource' => $resource
+            ]
+        ];
     }
 
     /**
      * Get the properties that are using this resource
      *
-     * @param \core_kernel_classes_Resource $fileResource
+     * @param core_kernel_classes_Resource $fileResource
      * @return string[][]
      */
     public function getPropertiesForResource($fileResource)
@@ -224,8 +225,7 @@ class ResourceFileIterator implements \Iterator
         $fileResourceUri = $fileResource->getUri();
         $sql = "SELECT predicate FROM statements WHERE object = '" . $fileResourceUri . "'";
         $persistence = $fileResource->getModel()->getPersistence();
-        $properties = $persistence->query($sql)->fetchAll();
 
-        return $properties;
+        return $persistence->query($sql)->fetchAll();
     }
 }

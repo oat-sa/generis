@@ -24,6 +24,7 @@ namespace oat\generis\scripts\tools;
 use common_Exception;
 use common_exception_Error;
 use common_report_Report as Report;
+use Exception;
 use oat\generis\Helper\FileSerializerMigrationHelper;
 use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\UrlFileSerializer;
@@ -59,15 +60,14 @@ class FileSerializerMigration extends ScriptAction
      */
     protected function run()
     {
-        $start =  microtime(true);
-        $this->migrationHelper = new FileSerializerMigrationHelper($this->getServiceLocator());
+        $this->migrationHelper = new FileSerializerMigrationHelper($this->getServiceLocator(), $this->isWetRun());
         $this->report = Report::createInfo('Starting file serializer migration.');
 
         try {
             $this->migrate();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->report->add(Report::createFailure(
-                'Migration process was stopped with error message: '. $e->getMessage()
+                sprintf('Migration process was stopped with error message: %s', $e->getMessage())
             ));
             return $this->report;
         }
@@ -82,10 +82,7 @@ class FileSerializerMigration extends ScriptAction
             ));
         }
 
-        $end = microtime(true);
-        $this->report->add(Report::createSuccess(
-            sprintf('Completed file migration process. \'Process took %s Seconds to complete\'', round($end - $start, 2))
-        ));
+        $this->report->add(Report::createSuccess('Completed file migration process.'));
 
         if (!$this->isWetRun()) {
             $this->report->add(Report::createFailure('Use the --wet-run (-w) parameter to execute reference migration.'));
@@ -130,6 +127,17 @@ class FileSerializerMigration extends ScriptAction
     }
 
     /**
+     * Show how long it took to run the script.
+     *
+     * @return bool
+     */
+    protected function showTime()
+    {
+        return true;
+    }
+
+
+    /**
      * @inheritdoc
      */
     protected function provideDescription()
@@ -154,20 +162,17 @@ class FileSerializerMigration extends ScriptAction
      */
     private function migrate()
     {
-        $oldResourcesData = $this->migrationHelper->getOldResourcesData(
-            $this->hasOption('chunkSize'),
-            $this->isWetRun() ? false : true
-        );
+        $oldResourcesData = $this->migrationHelper->getOldResourcesData($this->getOption('chunkSize') ?: self::CHUNK_SIZE);
 
-        $count = 0;
         foreach ($oldResourcesData as $resourceDocument) {
-            if ($this->isWetRun()) {
-                $this->migrationHelper->migrateResources($resourceDocument);
-            }
-            $count++;
+            $this->migrationHelper->migrateResources($resourceDocument);
         }
 
-        $this->report->add(Report::createInfo("Was migrated '{$count}' items."));
+        $this->report->add(Report::createSuccess(sprintf(
+            'Successfully migrated %s old references to %s new file serializer references.',
+            $this->migrationHelper->migrationInformation['old_resource_migration_count'],
+            $this->migrationHelper->migrationInformation['migrated_count']
+        )));
     }
 
     /**

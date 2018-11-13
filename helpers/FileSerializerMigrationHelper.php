@@ -73,12 +73,19 @@ class FileSerializerMigrationHelper
     public $failedResources = [];
 
     /**
+     * @var bool
+     */
+    private $wetRun;
+
+    /**
      * FileSerializerMigrationHelper constructor.
      * @param ServiceLocatorInterface $serviceLocator
+     * @param bool $wetRun
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator)
+    public function __construct(ServiceLocatorInterface $serviceLocator, $wetRun = false)
     {
         $this->setServiceLocator($serviceLocator);
+        $this->wetRun = $wetRun;
     }
 
     /**
@@ -86,7 +93,7 @@ class FileSerializerMigrationHelper
      */
     protected function getUrlFileSerializer()
     {
-        if (empty($this->urlFileSerializer)) {
+        if ($this->urlFileSerializer === null) {
             $this->urlFileSerializer = new UrlFileSerializer();
             $this->urlFileSerializer->setServiceLocator($this->getServiceLocator());
         }
@@ -98,7 +105,7 @@ class FileSerializerMigrationHelper
      */
     protected function getResourceFileSerializer()
     {
-        if (empty($this->resourceFileSerializer)) {
+        if ($this->resourceFileSerializer === null) {
             $this->resourceFileSerializer = new ResourceFileSerializer();
             $this->resourceFileSerializer->setServiceLocator($this->getServiceLocator());
         }
@@ -113,8 +120,7 @@ class FileSerializerMigrationHelper
      */
     public function getOldResourcesData($cacheSize = 100)
     {
-        $iterator = new ResourceFileIterator([GenerisRdf::CLASS_GENERIS_FILE], $cacheSize);
-        return $iterator;
+        return new ResourceFileIterator([GenerisRdf::CLASS_GENERIS_FILE], $cacheSize);
     }
 
     /**
@@ -138,8 +144,10 @@ class FileSerializerMigrationHelper
         $unserializedFileResource = $this->getResourceFileSerializer()->unserialize($oldResource);
         $migratedValue = $this->getUrlFileSerializer()->serialize($unserializedFileResource);
 
-        $resource->editPropertyValues($property, $migratedValue);
-        $oldResource->delete();
+        if ($this->wetRun === true) {
+            $resource->editPropertyValues($property, $migratedValue);
+            $oldResource->delete();
+        }
 
         ++$this->migrationInformation['migrated_count'];
     }
@@ -178,8 +186,8 @@ class FileSerializerMigrationHelper
      *
      * @param mixed[][] $oldResourcesData
      * @return void
-     * @throws SearchGateWayExeption
      * @throws FileSerializerException
+     * @throws SearchGateWayExeption
      */
     public function migrateResources(array $oldResourcesData)
     {
