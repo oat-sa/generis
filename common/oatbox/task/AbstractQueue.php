@@ -31,7 +31,10 @@ use oat\generis\model\OntologyAwareTrait;
 /**
  * Class AbstractQueue
  * generic abstract queue object
+ *
  * @package oat\oatbox\task
+ *
+ * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\QueueDispatcher instead.
  */
 abstract class AbstractQueue
     extends ConfigurableService
@@ -88,6 +91,9 @@ abstract class AbstractQueue
 
     /**
      * set task runner
+     *
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param TaskRunnerInterface $runner
      * @return $this
      */
@@ -99,6 +105,9 @@ abstract class AbstractQueue
 
     /**
      * set task persistence
+     *
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param TaskPersistenceInterface $persistence
      * @return $this
      */
@@ -110,6 +119,9 @@ abstract class AbstractQueue
 
     /**
      * return task runner
+     *
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @return TaskRunner
      */
     public function getRunner()
@@ -120,6 +132,9 @@ abstract class AbstractQueue
 
     /**
      * return task persistence
+     *
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @return TaskPersistenceInterface
      */
     public function getPersistence()
@@ -130,6 +145,9 @@ abstract class AbstractQueue
 
     /**
      * change task status using  task persistence
+     *
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param $taskId
      * @param $status
      * @return self
@@ -144,6 +162,9 @@ abstract class AbstractQueue
 
     /**
      * set task report using  task persistence
+     *
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param $taskId
      * @param $report
      * @return self
@@ -158,6 +179,9 @@ abstract class AbstractQueue
 
     /**
      * get task from persistence
+     *
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param $taskId
      * @return Task
      */
@@ -169,6 +193,9 @@ abstract class AbstractQueue
 
     /**
      * execute task with task runner
+     *
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param Task $task
      * @return mixed
      */
@@ -179,6 +206,9 @@ abstract class AbstractQueue
 
     /**
      * return a new instance of payload
+     *
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param $currentUserId
      * @return TaskPayLoad
      * @throws BadTaskQueueOption
@@ -203,6 +233,9 @@ abstract class AbstractQueue
     /**
      * Get resource from rdf storage which represents task in the task queue by linked resource
      * Returns null if there is no task linked to given resource
+     *
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param \core_kernel_classes_Resource $resource
      * @return null|\core_kernel_classes_Resource
      */
@@ -214,6 +247,8 @@ abstract class AbstractQueue
     }
 
     /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param \core_kernel_classes_Resource $resource
      * @return \common_report_Report
      */
@@ -242,6 +277,9 @@ abstract class AbstractQueue
 
     /**
      * Create task resource in the rdf storage and link placeholder resource to it.
+     *
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param Task $task
      * @param \core_kernel_classes_Resource|null $resource - placeholder resource to be linked with task.
      * @return \core_kernel_classes_Resource

@@ -20,33 +20,35 @@
 
 namespace oat\oatbox\task\TaskInterface;
 
-
 use oat\oatbox\task\Task;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-
 
 /**
  * Interface TaskPersistenceInterface
  * @package oat\oatbox\task\TaskInterface
+ *
+ * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\QueueDispatcher instead.
  */
-
 interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
-
 {
-
     /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
      * @param $taskId
      * @return Task
      */
     public function get($taskId);
 
     /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param Task $task
      * @return boolean
      */
     public function add(Task $task);
 
     /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param array $filterTask
      * @param null $rows
      * @param null $page
@@ -54,16 +56,19 @@ interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
      * @param null $sortOrder
      * @return array
      */
-
     public function search(array $filterTask, $rows = null, $page = null , $sortBy = null , $sortOrder = null);
 
     /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param $taskId
      * @return boolean
      */
     public function has($taskId);
 
     /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param $taskId
      * @param $status
      * @return boolean
@@ -71,6 +76,8 @@ interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
     public function update($taskId , $status);
 
     /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param $taskId
      * @param \common_report_Report $report
      * @return boolean
@@ -78,12 +85,16 @@ interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
     public function setReport($taskId , \common_report_Report $report);
 
     /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param array $params
      * @return int
      */
     public function count(array $params);
 
     /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @return array
      */
     public function getAll();
