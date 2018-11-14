@@ -23,6 +23,8 @@ use core_kernel_classes_Class;
 use core_kernel_classes_ClassIterator;
 use core_kernel_classes_Resource;
 use Iterator;
+use oat\generis\model\OntologyAwareTrait;
+use PDO;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
@@ -33,6 +35,7 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 class ResourceFileIterator implements Iterator
 {
     use ServiceLocatorAwareTrait;
+    use OntologyAwareTrait;
 
     const CACHE_SIZE = 100;
 
@@ -69,29 +72,40 @@ class ResourceFileIterator implements Iterator
      */
     private $unmoved = true;
 
+    /**
+     * @var int
+     */
     private $cacheSize;
 
-    private $isOffset;
+    /**
+     * @var bool
+     */
+    private $useOffset;
 
+    /**
+     * @var array
+     */
     public $failedResources = [];
 
     /**
      * ResourceFileIterator constructor.
      * @param $classes
      * @param int $cacheSize
-     * @param boolean $isOffset
+     * @param boolean $useOffset
      */
-    public function __construct($classes, $cacheSize = self::CACHE_SIZE, $isOffset = true) {
+    public function __construct($classes, $cacheSize = self::CACHE_SIZE, $useOffset = true)
+    {
         $this->classIterator = new core_kernel_classes_ClassIterator($classes);
-        $this->ensureNotEmpty();
         $this->cacheSize = $cacheSize;
-        $this->isOffset = $isOffset;
+        $this->useOffset = $useOffset;
+        $this->ensureNotEmpty();
     }
 
     /**
      * @inheritdoc
      */
-    public function rewind() {
+    public function rewind()
+    {
         if (!$this->unmoved) {
             $this->classIterator->rewind();
             $this->ensureNotEmpty();
@@ -108,9 +122,7 @@ class ResourceFileIterator implements Iterator
         if (empty($this->instanceCache)) {
             $this->ensureNotEmpty();
         }
-        return isset($this->instanceCache[$this->currentInstance]) ?
-            $this->createDocument(new core_kernel_classes_Resource($this->instanceCache[$this->currentInstance])) :
-            null;
+        return $this->instanceCache[$this->currentInstance] ?: null;
     }
 
     /**
@@ -123,7 +135,8 @@ class ResourceFileIterator implements Iterator
     /**
      * @inheritdoc
      */
-    public function next() {
+    public function next()
+    {
         $this->unmoved = false;
         if ($this->valid()) {
             $this->currentInstance++;
@@ -145,7 +158,8 @@ class ResourceFileIterator implements Iterator
      *
      * @see Iterator::valid()
      */
-    public function valid() {
+    public function valid()
+    {
         if ($this->instanceCache === null) {
             $this->ensureNotEmpty();
         }
@@ -156,7 +170,8 @@ class ResourceFileIterator implements Iterator
      * Ensure the class iterator is pointin to a non empty class
      * Loads the first resource block to test this
      */
-    protected function ensureNotEmpty() {
+    protected function ensureNotEmpty()
+    {
         $this->currentInstance = 0;
         while ($this->classIterator->valid() && !$this->load($this->classIterator->current(), 0)) {
             $this->classIterator->next();
@@ -175,7 +190,7 @@ class ResourceFileIterator implements Iterator
         $results = $this->loadResources($class, $offset);
         $this->instanceCache = [];
         foreach ($results as $resource) {
-            $this->instanceCache[$offset] = $resource->getUri();
+            $this->instanceCache[$offset] = $resource;
             $offset++;
         }
 
@@ -189,43 +204,30 @@ class ResourceFileIterator implements Iterator
      *
      * @param core_kernel_classes_Class $class
      * @param integer $offset
-     * @return core_kernel_classes_Resource[]
+     * @return mixed[][]
      */
     protected function loadResources(core_kernel_classes_Class $class, $offset)
     {
-        return $class->searchInstances([], [
+        $fileResources = $class->searchInstances([], [
             'recursive' => false,
             'limit' => $this->cacheSize,
-            'offset' => $this->isOffset ? $offset : 0,
+            'offset' => $this->useOffset ? $offset : 0,
         ]);
-    }
 
-    /**
-     * @param core_kernel_classes_Resource $resource
-     * @return array
-     */
-    protected function createDocument(core_kernel_classes_Resource $resource)
-    {
-        return [
-            $resource->getUri() => [
-                'properties' => $this->getPropertiesForResource($resource),
-                'resource' => $resource
-            ]
-        ];
-    }
+        $sql = "SELECT object, predicate, subject FROM statements WHERE object IN('" . implode("', '", array_keys($fileResources)) . "')";
+        $persistence = $this->getModel()->getPersistence();
+        $query = $persistence->query($sql);
+        $resourcesData = [];
+        $results = $query->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE);
 
-    /**
-     * Get the properties that are using this resource
-     *
-     * @param core_kernel_classes_Resource $fileResource
-     * @return string[][]
-     */
-    public function getPropertiesForResource($fileResource)
-    {
-        $fileResourceUri = $fileResource->getUri();
-        $sql = "SELECT predicate FROM statements WHERE object = '" . $fileResourceUri . "'";
-        $persistence = $fileResource->getModel()->getPersistence();
+        foreach ($fileResources as $resourceUri => $fileResource) {
+            $resourcesData[$resourceUri]['resource'] = $fileResource;
+            if (isset($results[$resourceUri])) {
+                $resourcesData[$resourceUri]['property'] = $results[$resourceUri]['predicate'];
+                $resourcesData[$resourceUri]['parent'] = $results[$resourceUri]['subject'];
+            }
+        }
 
-        return $persistence->query($sql)->fetchAll();
+        return $resourcesData;
     }
 }

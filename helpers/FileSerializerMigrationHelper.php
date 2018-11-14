@@ -15,23 +15,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\generis\Helper;
 
+use common_Exception;
 use core_kernel_classes_Resource;
+use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\FileSerializerException;
 use oat\generis\model\fileReference\ResourceFileIterator;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\fileReference\UrlFileSerializer;
 use oat\generis\model\GenerisRdf;
-use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
-use oat\oatbox\service\ServiceManagerAwareTrait;
-use oat\search\base\exception\SearchGateWayExeption;
+use oat\oatbox\service\ServiceManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -40,8 +39,8 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class FileSerializerMigrationHelper
 {
+
     use OntologyAwareTrait;
-    use ServiceManagerAwareTrait;
 
     /**
      * @var UrlFileSerializer
@@ -54,9 +53,9 @@ class FileSerializerMigrationHelper
     private $resourceFileSerializer;
 
     /**
-     * @var ComplexSearchService
+     * @var bool
      */
-    private $search;
+    private $isWetRun;
 
     /**
      * @var int[]
@@ -73,54 +72,52 @@ class FileSerializerMigrationHelper
     public $failedResources = [];
 
     /**
-     * @var bool
+     * @var ServiceManager
      */
-    private $wetRun;
+    private $serviceLocator;
+
+    /**
+     * @var ServiceManager
+     */
+    private $serviceManager;
 
     /**
      * FileSerializerMigrationHelper constructor.
-     * @param ServiceLocatorInterface $serviceLocator
+     *
      * @param bool $wetRun
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator, $wetRun = false)
+    public function __construct($wetRun = false)
     {
-        $this->setServiceLocator($serviceLocator);
-        $this->wetRun = $wetRun;
-    }
-
-    /**
-     * @return UrlFileSerializer
-     */
-    protected function getUrlFileSerializer()
-    {
-        if ($this->urlFileSerializer === null) {
-            $this->urlFileSerializer = new UrlFileSerializer();
-            $this->urlFileSerializer->setServiceLocator($this->getServiceLocator());
-        }
-        return $this->urlFileSerializer;
-    }
-
-    /**
-     * @return ResourceFileSerializer
-     */
-    protected function getResourceFileSerializer()
-    {
-        if ($this->resourceFileSerializer === null) {
-            $this->resourceFileSerializer = new ResourceFileSerializer();
-            $this->resourceFileSerializer->setServiceLocator($this->getServiceLocator());
-        }
-        return $this->resourceFileSerializer;
+        $this->isWetRun = $wetRun;
     }
 
     /**
      * Get the resources that should be migrated.
      *
-     * @param int $cacheSize
-     * @return ResourceFileIterator
+     * @param int $limit
+     * @return void
+     * @throws FileSerializerException
      */
-    public function getOldResourcesData($cacheSize = 100)
+    public function migrateFiles($limit)
     {
-        return new ResourceFileIterator([GenerisRdf::CLASS_GENERIS_FILE], $cacheSize);
+        $fileResources = new ResourceFileIterator(GenerisRdf::CLASS_GENERIS_FILE, $limit, !$this->isWetRun);
+
+        foreach ($fileResources as $fileResourceData) {
+            $resourceUri = $fileResourceData['resource']->getUri();
+            if (!isset($fileResourceData['property'])) {
+                $this->failedResources[$resourceUri][] = 'Unable to find property';
+                continue;
+            }
+            if (!isset($fileResourceData['parent'])) {
+                $this->failedResources[$resourceUri][] = 'Unable to find parent resource';
+                continue;
+            }
+
+            ++$this->migrationInformation['old_resource_count'];
+            $this->migrateResource(
+                $fileResourceData['resource'], $fileResourceData['property'], $fileResourceData['parent']
+            );
+        }
     }
 
     /**
@@ -128,14 +125,14 @@ class FileSerializerMigrationHelper
      *
      * @param core_kernel_classes_Resource $oldResource
      * @param string $predicateUri
+     * @param string $parentResourceUri
      * @return void
      * @throws FileSerializerException
-     * @throws SearchGateWayExeption
      */
-    public function migrateResource($oldResource, $predicateUri)
+    public function migrateResource(core_kernel_classes_Resource $oldResource, $predicateUri, $parentResourceUri)
     {
         $property = $this->getProperty($predicateUri);
-        $resource = $this->getParentResource($oldResource, $predicateUri);
+        $resource = $this->getResource($parentResourceUri);
         if ($resource === null) {
             return;
         }
@@ -144,8 +141,9 @@ class FileSerializerMigrationHelper
         $unserializedFileResource = $this->getResourceFileSerializer()->unserialize($oldResource);
         $migratedValue = $this->getUrlFileSerializer()->serialize($unserializedFileResource);
 
-        if ($this->wetRun === true) {
-            $resource->editPropertyValues($property, $migratedValue);
+
+        if ($this->isWetRun) {
+            $property->editPropertyValues($property, $migratedValue);
             $oldResource->delete();
         }
 
@@ -153,62 +151,102 @@ class FileSerializerMigrationHelper
     }
 
     /**
-     * @param $oldResource
-     * @param $predicateUri
-     * @return core_kernel_classes_Resource|null
-     * @throws SearchGateWayExeption
-     */
-    private function getParentResource(core_kernel_classes_Resource $oldResource, $predicateUri)
-    {
-        $parentResource = null;
-        $oldResourceUri = $oldResource->getUri();
-        $search = $this->getSearch();
-        $queryBuilder = $search->query();
-        $query = $queryBuilder->newQuery();
-        $criteria = $query->add($predicateUri)->equals($oldResourceUri);
-        $queryBuilder = $queryBuilder->setCriteria($criteria);
-        $results = $search->getGateway()->search($queryBuilder);
-
-        if ($results->total() !== 0) {
-            $parentResource = $results->current();
-            ++$this->migrationInformation['old_resource_migration_count'];
-        }
-
-        if ($parentResource === null) {
-            $this->failedResources[$oldResourceUri][] = 'Unable to retrieve parent resource';
-        }
-
-        return $parentResource;
-    }
-
-    /**
-     * Migrate ResourceFileSerializer resources to UrlFileSerializer resources
+     * Update the FileReferenceSerializer service to use the UrlFileSerializer.
      *
-     * @param mixed[][] $oldResourcesData
-     * @return void
-     * @throws FileSerializerException
-     * @throws SearchGateWayExeption
+     * @return bool
+     * @throws common_Exception
      */
-    public function migrateResources(array $oldResourcesData)
+    public function updateFileSerializer()
     {
-        foreach ($oldResourcesData as $key => $oldResourceData) {
-            if (empty($oldResourceData['properties'])) {
-                $this->failedResources[$key][] = 'Resource is not used by any property';
+        $updated = false;
+        if ($this->fileSerializerNeedsUpdate()) {
+            if ($this->isWetRun) {
+                $this->getServiceManager()->register(FileReferenceSerializer::SERVICE_ID, new UrlFileSerializer());
             }
-            foreach ($oldResourceData['properties'] as $data) {
-                $this->migrateResource($oldResourceData['resource'], $data['predicate']);
-            }
+            $updated = true;
         }
+
+        return $updated;
     }
 
     /**
-     * Get the search service
+     * Check if the file serializer service needs to be updated
+     *
+     * @return bool
      */
-    private function getSearch()
+    private function fileSerializerNeedsUpdate()
     {
-        if ($this->search === null) {
-            $this->search = $this->getServiceLocator()->get(ComplexSearchService::SERVICE_ID);
+        $needsUpdate = true;
+        $currentFileReferenceSerializer = $this->getServiceManager()->get(FileReferenceSerializer::SERVICE_ID);
+        if ($currentFileReferenceSerializer instanceof UrlFileSerializer) {
+            $needsUpdate = false;
         }
-        return $this->search;
+
+        return $needsUpdate;
+    }
+
+    /**
+     * Get the URL file serializer
+     */
+    private function getUrlFileSerializer()
+    {
+        if ($this->urlFileSerializer === null) {
+            $this->urlFileSerializer = new UrlFileSerializer();
+            $this->urlFileSerializer->setServiceLocator($this->getServiceLocator());
+        }
+
+        return $this->urlFileSerializer;
+    }
+
+    /**
+     * Get the Resource file serializer
+     */
+    private function getResourceFileSerializer()
+    {
+        if ($this->resourceFileSerializer === null) {
+            $this->resourceFileSerializer = new ResourceFileSerializer();
+            $this->resourceFileSerializer->setServiceLocator($this->getServiceLocator());
+        }
+
+        return $this->resourceFileSerializer;
+    }
+
+    /**
+     * Set the Service Locator for this class
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+    }
+
+    /**
+     * Get the Service Locator
+     *
+     * @return ServiceLocatorInterface
+     */
+    private function getServiceLocator()
+    {
+        return $this->serviceLocator;
+    }
+
+    /**
+     * Set the Service Manager for this class
+     * @param ServiceManager $serviceManager
+     */
+    public function setServiceManager(ServiceManager $serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
+    }
+
+    /**
+     * Get the Service Manager
+     *
+     * @return ServiceManager
+     */
+    private function getServiceManager()
+    {
+        return $this->serviceManager;
     }
 }
