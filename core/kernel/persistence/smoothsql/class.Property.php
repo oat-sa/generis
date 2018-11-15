@@ -22,7 +22,6 @@
 
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
-use Psr\SimpleCache\CacheInterface;
 
 /**
  * Short description of class core_kernel_persistence_smoothsql_Property
@@ -62,8 +61,8 @@ class core_kernel_persistence_smoothsql_Property
      */
     public function isLgDependent( core_kernel_classes_Resource $resource)
     {
-        if ($this->getLgCache()->has($resource->getUri())) {
-            $lgDependencyCache = $this->getLgCache()->get($resource->getUri());
+        if ($this->getModel()->getCache()->has($resource->getUri())) {
+            $lgDependencyCache = $this->getModel()->getCache()->get($resource->getUri());
         } else {
             $lgDependentProperty = new \core_kernel_classes_Property(GenerisRdf::PROPERTY_IS_LG_DEPENDENT);
             $lgDependent = $resource->getOnePropertyValue($lgDependentProperty);
@@ -72,7 +71,7 @@ class core_kernel_persistence_smoothsql_Property
             } else {
                 $lgDependencyCache = ($lgDependent->getUri() == GenerisRdf::GENERIS_TRUE);
             }
-            $this->getLgCache()->set($resource->getUri(), $lgDependencyCache);
+            $this->getModel()->getCache()->put($lgDependencyCache, $resource->getUri());
         }
         return (bool) $lgDependencyCache;
     }
@@ -199,14 +198,6 @@ class core_kernel_persistence_smoothsql_Property
         $this->removePropertyValues($resource, $lgDependentProperty);
         $this->setPropertyValue($resource, $lgDependentProperty, $value);
         
-    }
-
-    /**
-     * @return CacheInterface
-     */
-    public function getLgCache()
-    {
-        return $this->getModel()->getCache();
     }
 
     /**

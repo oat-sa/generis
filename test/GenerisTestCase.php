@@ -23,10 +23,12 @@ use common_persistence_Manager;
 use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use oat\oatbox\session\SessionService;
-use oat\oatbox\user\AnonymousUser;
 use Prophecy\Argument;
 use Symfony\Component\Cache\Simple\NullCache;
 use oat\oatbox\event\EventManager;
+use oat\oatbox\config\SymfonyCacheWrapper;
+use Psr\Log\LoggerInterface;
+use oat\oatbox\log\LoggerService;
 
 class GenerisTestCase extends TestCase
 {
@@ -42,27 +44,30 @@ class GenerisTestCase extends TestCase
             $rds->query($query);
         }
         
+        $session = new \common_session_AnonymousSession();
         $sl = $this->getServiceLocatorMock([
             common_persistence_Manager::SERVICE_ID => $pm,
             UserLanguageServiceInterface::SERVICE_ID => $this->getUserLanguageServiceMock('xx_XX'),
-            SessionService::SERVICE_ID => $this->getSessionServiceMock(),
-            EventManager::SERVICE_ID => new EventManager()
+            SessionService::SERVICE_ID => $this->getSessionServiceMock($session),
+            EventManager::SERVICE_ID => new EventManager(),
+            LoggerService::SERVICE_ID => $this->prophesize(LoggerInterface::class)->reveal(),
+            'smoothcache' => new \common_cache_NoCache()
         ]);
+        $session->setServiceLocator($sl);
         $model = new \core_kernel_persistence_smoothsql_SmoothModel([
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'mockSql',
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS=> [123],
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS=> [123],
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL=> 123,
-            'cache' => new NullCache()
+            'cache' => 'smoothcache'
         ]);
         $model->setServiceLocator($sl);
 
         return $model;
     }
-    
-    protected function getSessionServiceMock($session = null)
+
+    protected function getSessionServiceMock($session)
     {
-        $session = is_null($session) ? new \common_session_AnonymousSession() : $session;
         $prophet = $this->prophesize(SessionService::class);
         $prophet->getCurrentUser()->willReturn($session->getUser());
         $prophet->getCurrentSession()->willReturn($session);

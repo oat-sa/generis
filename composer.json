@@ -64,12 +64,12 @@
 		"psr/log": "~1.0",
 		"oat-sa/lib-generis-search": "^2.0.1",
 		"monolog/monolog": "^1.23.0",
-		"fluent/logger": "^1.0.1",
-		"symfony/cache": "~4.1"
+		"fluent/logger": "^1.0.1"
 	},
         "require-dev" : {
 		"mikey179/vfsStream" : "1.4.0",
-		"phpunit/phpunit": "^4.8"
+		"phpunit/phpunit": "^4.8",
+		"symfony/cache": "~4.1"
         },
     "autoload" : {
         "psr-4" : {

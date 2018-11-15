@@ -18,10 +18,10 @@
  *
  */
 
-use oat\generis\model\data\Model;
 use oat\generis\model\data\ModelManager;
 use oat\oatbox\service\ConfigurableService;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use oat\generis\model\data\Ontology;
 
 /**
  * transitory model for the smooth sql implementation
@@ -30,14 +30,20 @@ use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
  * @package generis
  */
 class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
-    implements Model
+    implements Ontology
 {
     const OPTION_PERSISTENCE = 'persistence';
     const OPTION_READABLE_MODELS = 'readable';
     const OPTION_WRITEABLE_MODELS = 'writeable';
     const OPTION_NEW_TRIPLE_MODEL = 'addTo';
     const OPTION_SEARCH_SERVICE = 'search';
-    
+
+    /**
+     * Cache service to use
+     * @var string
+     */
+    const OPTION_CACHE_SERVICE = 'cache';
+
     /**
      * Persistence to use for the smoothmodel
      * 
@@ -69,6 +75,9 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
         return $property;
     }
 
+    /**
+     * @return common_persistence_SqlPersistence
+     */
     public function getPersistence() {
         if (is_null($this->persistence)) {
             $this->persistence = $this->getServiceLocator()->get(common_persistence_Manager::SERVICE_ID)->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
@@ -76,9 +85,12 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
         return $this->persistence;
     }
 
+    /**
+     * @return common_cache_Cache
+     */
     public function getCache() {
         if (is_null($this->cache)) {
-            $this->cache = $this->getOption('cache');
+            $this->cache = $this->getServiceLocator()->get($this->getOption(self::OPTION_CACHE_SERVICE));
         }
         return $this->cache;
     }

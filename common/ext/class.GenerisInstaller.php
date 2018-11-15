@@ -22,7 +22,6 @@
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\oatbox\service\ServiceManager;
-use Symfony\Component\Cache\Simple\NullCache;
 
 /**
  * Custom extension installer for generis
@@ -56,7 +55,7 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => array('1'),
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => '1',
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE => ComplexSearchService::SERVICE_ID,
-            'cache' => new NullCache()
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_CACHE_SERVICE => common_cache_Cache::SERVICE_ID
         ));
         $model->setServiceLocator(ServiceManager::getServiceManager());
         ModelManager::setModel($model);
