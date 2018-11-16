@@ -20,19 +20,27 @@
 namespace oat\oatbox\task;
  
 use oat\oatbox\action\ActionService;
+use oat\oatbox\task\TaskInterface\TaskQueue;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use \oat\oatbox\task\TaskInterface\TaskRunner as TaskRunnerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use common_report_Report as Report;
 
+/**
+ * @deprecated since version 7.10.0, to be removed in 8.0. Use any implementation of \oat\tao\model\taskQueue\Worker\WorkerInterface instead.
+ */
 class TaskRunner implements TaskRunnerInterface
 {
     use ServiceLocatorAwareTrait;
 
+    /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     */
     public function run(Task $task) {
 
         \common_Logger::d('Running task '.$task->getId());
         $report = new Report(\common_report_Report::TYPE_INFO, __('Running task %s at %s', $task->getId(), microtime(true)));
+        /** @var TaskQueue $queue */
         $queue = $this->getServiceLocator()->get(Queue::SERVICE_ID);
         $queue->updateTaskStatus($task->getId(), Task::STATUS_RUNNING);
         try {
