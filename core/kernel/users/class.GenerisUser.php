@@ -78,6 +78,16 @@ class core_kernel_users_GenerisUser extends common_user_User implements UserInte
 
     }
 
+    public function getPropertiesValues($properties)
+    {
+        $returnValues = [];
+        foreach ($properties as $property) {
+            $returnValues[$property] = new \core_kernel_classes_Literal(current($this->getPropertyValues($property)));
+        }
+        return $returnValues;
+
+    }
+
     private function getUncached($property)
     {
         $value = array();

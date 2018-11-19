@@ -47,4 +47,12 @@ class AnonymousUser implements User
     public function getPropertyValues($property) {
         return array();
     }
+
+    /**
+     * (non-PHPdoc)
+     * @see \oat\oatbox\user\User::getPropertiesValues()
+     */
+    public function getPropertiesValues($properties) {
+        return array();
+    }
 }

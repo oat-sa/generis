@@ -42,6 +42,8 @@ abstract class common_user_User implements User, Refreshable
 	
 	abstract public function getPropertyValues($property);
 
+	abstract public function getPropertiesValues($properties);
+
 	abstract public function refresh();
 
 	/**

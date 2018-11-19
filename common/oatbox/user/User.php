@@ -44,4 +44,12 @@ interface User
      * @return array an array of strings
     */
     public function getPropertyValues($property);
+
+    /**
+     * Retrieve custom attributes of a user
+     *
+     * @param array $properties
+     * @return array an array of strings
+     */
+    public function getPropertiesValues($properties);
 }
