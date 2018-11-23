@@ -97,10 +97,11 @@ class FileSerializerMigrationHelper
      * @param int $limit
      * @return void
      * @throws FileSerializerException
+     * @throws \common_exception_Error
      */
     public function migrateFiles($limit)
     {
-        $fileResources = new ResourceFileIterator(GenerisRdf::CLASS_GENERIS_FILE, $limit, !$this->isWetRun);
+        $fileResources = new ResourceFileIterator(GenerisRdf::CLASS_GENERIS_FILE, $limit);
 
         foreach ($fileResources as $fileResourceData) {
             $resourceUri = $fileResourceData['resource']->getUri();

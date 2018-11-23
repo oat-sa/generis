@@ -19,11 +19,12 @@
 
 namespace oat\generis\model\fileReference;
 
-use core_kernel_classes_Class;
 use core_kernel_classes_ClassIterator;
 use core_kernel_classes_Resource;
 use Iterator;
+use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyAwareTrait;
+use oat\generis\model\OntologyRdf;
 use PDO;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
@@ -78,31 +79,36 @@ class ResourceFileIterator implements Iterator
     private $cacheSize;
 
     /**
-     * @var bool
-     */
-    private $useOffset;
-
-    /**
      * @var array
      */
     public $failedResources = [];
 
     /**
+     * @var int
+     */
+    private $lastId = 0;
+
+    /**
+     * @var int[]
+     */
+    private $corruptFileIds = [];
+
+    /**
      * ResourceFileIterator constructor.
      * @param $classes
      * @param int $cacheSize
-     * @param boolean $useOffset
+     * @throws \common_exception_Error
      */
-    public function __construct($classes, $cacheSize = self::CACHE_SIZE, $useOffset = true)
+    public function __construct($classes, $cacheSize = self::CACHE_SIZE)
     {
         $this->classIterator = new core_kernel_classes_ClassIterator($classes);
         $this->cacheSize = $cacheSize;
-        $this->useOffset = $useOffset;
         $this->ensureNotEmpty();
     }
 
     /**
      * @inheritdoc
+     * @throws \common_exception_Error
      */
     public function rewind()
     {
@@ -122,7 +128,14 @@ class ResourceFileIterator implements Iterator
         if (empty($this->instanceCache)) {
             $this->ensureNotEmpty();
         }
-        return $this->instanceCache[$this->currentInstance] ?: null;
+
+        $instance = $this->instanceCache[$this->currentInstance] ?: null;
+
+        if (isset($instance['id'])) {
+            $this->lastId = $instance['id'];
+        }
+
+        return $instance;
     }
 
     /**
@@ -134,6 +147,7 @@ class ResourceFileIterator implements Iterator
 
     /**
      * @inheritdoc
+     * @throws \common_exception_Error
      */
     public function next()
     {
@@ -142,7 +156,7 @@ class ResourceFileIterator implements Iterator
             $this->currentInstance++;
             if (!isset($this->instanceCache[$this->currentInstance])) {
                 // try to load next block (unless we know it's empty)
-                $remainingInstances = !$this->endOfClass && $this->load($this->classIterator->current(), $this->currentInstance);
+                $remainingInstances = !$this->endOfClass && $this->load();
 
                 // endOfClass or failed loading
                 if (!$remainingInstances) {
@@ -157,23 +171,26 @@ class ResourceFileIterator implements Iterator
      * While there are remaining classes there are instances to load
      *
      * @see Iterator::valid()
+     * @throws \common_exception_Error
      */
     public function valid()
     {
         if ($this->instanceCache === null) {
             $this->ensureNotEmpty();
         }
+
         return $this->classIterator->valid();
     }
 
     /**
      * Ensure the class iterator is pointin to a non empty class
      * Loads the first resource block to test this
+     * @throws \common_exception_Error
      */
     protected function ensureNotEmpty()
     {
         $this->currentInstance = 0;
-        while ($this->classIterator->valid() && !$this->load($this->classIterator->current(), 0)) {
+        while ($this->classIterator->valid() && !$this->load()) {
             $this->classIterator->next();
         }
     }
@@ -181,17 +198,16 @@ class ResourceFileIterator implements Iterator
     /**
      * Load instances into cache
      *
-     * @param core_kernel_classes_Class $class
-     * @param int $offset
      * @return boolean
+     * @throws \common_exception_Error
      */
-    protected function load(core_kernel_classes_Class $class, $offset)
+    protected function load()
     {
-        $results = $this->loadResources($class, $offset);
+        $results = $this->loadResources();
         $this->instanceCache = [];
-        foreach ($results as $resource) {
-            $this->instanceCache[$offset] = $resource;
-            $offset++;
+        $this->currentInstance = 0;
+        foreach ($results as $resourceData) {
+            $this->instanceCache[] = $resourceData;
         }
 
         $this->endOfClass = count($results) < $this->cacheSize;
@@ -202,32 +218,66 @@ class ResourceFileIterator implements Iterator
     /**
      * Load resources from storage
      *
-     * @param core_kernel_classes_Class $class
-     * @param integer $offset
      * @return mixed[][]
+     * @throws \common_exception_Error
      */
-    protected function loadResources(core_kernel_classes_Class $class, $offset)
+    protected function loadResources()
     {
-        $fileResources = $class->searchInstances([], [
-            'recursive' => false,
-            'limit' => $this->cacheSize,
-            'offset' => $this->useOffset ? $offset : 0,
-        ]);
+        $fileResources = $this->getFileResources();
+        $parentData = $this->getFileParentResources($fileResources);
 
-        $sql = "SELECT object, predicate, subject FROM statements WHERE object IN('" . implode("', '", array_keys($fileResources)) . "')";
-        $persistence = $this->getModel()->getPersistence();
-        $query = $persistence->query($sql);
         $resourcesData = [];
-        $results = $query->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE);
-
         foreach ($fileResources as $resourceUri => $fileResource) {
-            $resourcesData[$resourceUri]['resource'] = $fileResource;
-            if (isset($results[$resourceUri])) {
-                $resourcesData[$resourceUri]['property'] = $results[$resourceUri]['predicate'];
-                $resourcesData[$resourceUri]['parent'] = $results[$resourceUri]['subject'];
+            $resourcesData[$resourceUri]['resource'] = new core_kernel_classes_Resource($resourceUri);
+            $resourcesData[$resourceUri]['id'] = $fileResource['id'];
+            if (!isset($parentData[$resourceUri])) {
+                $this->corruptFileIds[] = $fileResource['id'];
+                continue;
             }
+            $resourcesData[$resourceUri]['property'] = $parentData[$resourceUri]['predicate'];
+            $resourcesData[$resourceUri]['parent'] = $parentData[$resourceUri]['subject'];
         }
 
         return $resourcesData;
+    }
+
+    /**
+     * Get the file resources
+     *
+     * @return mixed[]
+     */
+    private function getFileResources()
+    {
+        $sql = "
+            SELECT `subject`, `id` FROM ((
+                SELECT DISTINCT `id`, `subject` FROM `statements`
+                    WHERE  `predicate` = '" . OntologyRdf::RDF_TYPE . "'
+                    AND (`object` = '" . GenerisRdf::CLASS_GENERIS_FILE . "')
+                    AND `id` > " . $this->lastId . "
+                    AND `id` NOT IN('" . implode("', '", array_keys($this->corruptFileIds)) . "')
+            )) AS unionq GROUP BY `id`, `subject` HAVING COUNT(*) >=1 LIMIT ". $this->cacheSize;
+
+        $persistence = $this->getModel()->getPersistence();
+        $query = $persistence->query($sql);
+
+        return $query->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE);
+    }
+
+    /**
+     * Get the parent resources for the loaded file resources
+     *
+     * @param mixed[] $fileResources
+     * @return mixed[]
+     */
+    private function getFileParentResources($fileResources)
+    {
+        $sql = "
+          SELECT object, predicate, subject, id FROM statements
+          WHERE object IN('" . implode("', '", array_keys($fileResources)) . "')";
+
+        $persistence = $this->getModel()->getPersistence();
+        $query = $persistence->query($sql);
+
+        return $query->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE);
     }
 }
