@@ -24,9 +24,7 @@ use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use oat\oatbox\session\SessionService;
 use Prophecy\Argument;
-use Symfony\Component\Cache\Simple\NullCache;
 use oat\oatbox\event\EventManager;
-use oat\oatbox\config\SymfonyCacheWrapper;
 use Psr\Log\LoggerInterface;
 use oat\oatbox\log\LoggerService;
 
