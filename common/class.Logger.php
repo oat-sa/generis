@@ -189,9 +189,15 @@ class common_Logger
             try {
                 if (defined('CONFIG_PATH')) {
                     $tags = is_array($tags) ? $tags : [$tags];
-
+                    if (!empty($errorFile)) {
+                        $tags['file'] = $errorFile;
+                    }
+                    if (!empty($errorLine)) {
+                        $tags['line'] = $errorLine;
+                    }
                     // Gets the log context.
                     $context = $this->getContext();
+                    $context = array_merge($context, $tags);
                     if (!empty($context['file']) && !empty($context['line'])) {
                         $tags['file'] = $context['file'];
                         $tags['line'] = $context['line'];

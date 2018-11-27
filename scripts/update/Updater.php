@@ -332,9 +332,9 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('7.2.0');
         }
 
-        $this->skip('7.2.0', '7.13.0');
+        $this->skip('7.2.0', '7.14.0');
 
-        if ($this->isVersion('7.13.0')) {
+        if ($this->isVersion('7.14.0')) {
             $this->getServiceManager()->register(SessionService::SERVICE_ID, new SessionService());
             $modelConfig = $this->getServiceManager()->get(Ontology::SERVICE_ID)->getConfig();
             $className = $modelConfig['class'];
