@@ -205,20 +205,16 @@ class core_kernel_persistence_smoothsql_Resource
      */
     public function setPropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $object, $lg = null)
     {
-        $returnValue = (bool) false;
-
-        
-        
+        $userId = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
         $object  = $object instanceof core_kernel_classes_Resource ? $object->getUri() : (string) $object;
     	$platform = $this->getPersistence()->getPlatForm();
-        $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
         $lang = "";
         // Define language if required
         if ($property->isLgDependent()){
         	if ($lg!=null){
         		$lang = $lg;
         	} else {
-        		$lang = \common_session_SessionManager::getSession()->getDataLanguage();
+                $lang = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage();
         	}
         }
         
@@ -231,10 +227,7 @@ class core_kernel_persistence_smoothsql_Resource
        		$property->getUri(),
        		$object,
        		$lang,
-       		\common_session_SessionManager::getSession()->getUserUri(),
-//        		$mask,
-//        		$mask,
-//        		$mask,
+            $userId,
             $platform->getNowExpression()
         ));
         
@@ -258,9 +251,8 @@ class core_kernel_persistence_smoothsql_Resource
 
     	if (is_array($properties) && count($properties) > 0) {
         		
-            $session = common_session_SessionManager::getSession();
+            $session = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession();
             $platform = $this->getPersistence()->getPlatForm();
-            $user = common_session_SessionManager::isAnonymous() ? '' : $session->getUser()->getIdentifier();
 
             $valuesToInsert = [];
 
@@ -289,7 +281,7 @@ class core_kernel_persistence_smoothsql_Resource
                         'predicate' => $property->getUri(),
                         'object' => $object,
                         'l_language' => $lang,
-                        'author' => $user,
+                        'author' => $session->getUser()->getIdentifier(),
                         'epoch' => $platform->getNowExpression()
                     ];
                 }
@@ -319,9 +311,7 @@ class core_kernel_persistence_smoothsql_Resource
         
 
 		$platform = $this->getPersistence()->getPlatForm();
-		$userId     = common_session_SessionManager::isAnonymous()
-    		? null : \common_session_SessionManager::getSession()->getUser()->getIdentifier();
-        $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
+		$userId = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
         
         $query = 'INSERT INTO statements (modelid,subject,predicate,object,l_language,author,epoch)
         			VALUES  (?, ?, ?, ?, ?, ?, ?)';
@@ -333,9 +323,6 @@ class core_kernel_persistence_smoothsql_Resource
        		$value,
        		($property->isLgDependent() ? $lg : ''),
        		$userId,
-//        		$mask,
-//        		$mask,
-//        		$mask,
             $platform->getNowExpression()
         ));
 		
@@ -399,7 +386,7 @@ class core_kernel_persistence_smoothsql_Resource
 	        		$resource->getUri(),
 	        		$property->getUri(),
                     '',
-	        		\common_session_SessionManager::getSession()->getDataLanguage()
+                    $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage()
 	        ));
         } else{
         	$returnValue = $this->getPersistence()->exec($query,array(
@@ -530,7 +517,7 @@ class core_kernel_persistence_smoothsql_Resource
     	if ($collection->count() > 0) {
     		
     		$platform = $this->getPersistence()->getPlatForm();
-        	$user = common_session_SessionManager::isAnonymous() ? '' : \common_session_SessionManager::getSession()->getUser()->getIdentifier();
+            $user = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
             $valuesToInsert = [];
     		
     		foreach ($collection->getIterator() as $triple) {
