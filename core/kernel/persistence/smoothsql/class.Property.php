@@ -62,18 +62,16 @@ class core_kernel_persistence_smoothsql_Property
     public function isLgDependent( core_kernel_classes_Resource $resource)
     {
         if ($this->getModel()->getCache()->has($resource->getUri())) {
-            $lgDependencyCache = $this->getModel()->getCache()->get($resource->getUri());
+            $lgDependent = $this->getModel()->getCache()->get($resource->getUri());
         } else {
             $lgDependentProperty = new \core_kernel_classes_Property(GenerisRdf::PROPERTY_IS_LG_DEPENDENT);
-            $lgDependent = $resource->getOnePropertyValue($lgDependentProperty);
-            if (is_null($lgDependent) || !$lgDependent instanceof \core_kernel_classes_Resource){
-                $lgDependencyCache = false;
-            } else {
-                $lgDependencyCache = ($lgDependent->getUri() == GenerisRdf::GENERIS_TRUE);
-            }
-            $this->getModel()->getCache()->put($lgDependencyCache, $resource->getUri());
+            $lgDependentResource = $resource->getOnePropertyValue($lgDependentProperty);
+            $lgDependent = !is_null($lgDependentResource)
+                && $lgDependentResource instanceof \core_kernel_classes_Resource
+                && $lgDependentResource->getUri() == GenerisRdf::GENERIS_TRUE;
+            $this->getModel()->getCache()->put($lgDependent, $resource->getUri());
         }
-        return (bool) $lgDependencyCache;
+        return (bool) $lgDependent;
     }
 
     /**
