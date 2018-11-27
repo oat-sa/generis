@@ -650,14 +650,7 @@ class core_kernel_persistence_smoothsql_Resource
      */
     public function setType( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $class)
     {
-        $returnValue = (bool) false;
-
-        
-        
-		$returnValue = $this->setPropertyValue($resource, new core_kernel_classes_Property(OntologyRdf::RDF_TYPE), $class);
-        
-        
-
+        $returnValue = $this->setPropertyValue($resource, $this->getModel()->getProperty(OntologyRdf::RDF_TYPE), $class);
         return (bool) $returnValue;
     }
 
