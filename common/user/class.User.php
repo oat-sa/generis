@@ -20,6 +20,7 @@
  */
 
 use oat\generis\model\GenerisRdf;
+use oat\generis\model\OntologyRdfs;
 use oat\oatbox\user\User;
 use oat\oatbox\Refreshable;
 
@@ -66,5 +67,31 @@ abstract class common_user_User implements User, Refreshable
 		}
 		return $this->roles;
 	}
-	
+
+    /**
+     * @return string
+     */
+    public function getUri()
+    {
+        return $this->getIdentifier();
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel()
+    {
+        $label = current(
+            $this->getPropertyValues(
+                new core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL)
+            )
+        );
+        $label = is_null($label)
+            ? ''
+            : ($label instanceof core_kernel_classes_Resource
+                ? $label->getUri()
+                : (string)$label
+            );
+        return $label;
+    }
 }
