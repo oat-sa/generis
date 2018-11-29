@@ -20,7 +20,9 @@
 
 namespace oat\oatbox\task\TaskInterface;
 
-
+/**
+ * @deprecated since version 7.10.0, to be removed in 8.0.
+ */
 interface TaskListIterator extends \Iterator, \Countable
 {
 

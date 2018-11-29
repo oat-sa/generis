@@ -23,14 +23,25 @@ namespace oat\oatbox\task;
 use oat\oatbox\service\ConfigurableService;
 use common_report_Report as Report;
 
+/**
+ * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\QueueDispatcher instead.
+ */
 class TaskService extends ConfigurableService
 {
+    /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     */
     const TASK_QUEUE_MANAGER_ROLE = 'http://www.tao.lu/Ontologies/TAO.rdf#TaskQueueManager';
 
+    /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     */
     const OPTION_LIMIT = 'limit';
 
 
     /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @return Report
      * @throws \common_exception_Error
      */
