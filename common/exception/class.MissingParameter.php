@@ -29,10 +29,13 @@
  */
 class common_exception_MissingParameter extends common_exception_BadRequest
 {
-
-    public function __construct($parameterName = "", $service = "")
+    public function __construct($parameterName = '', $service = '')
     {
-        $message = 'Expected parameter "' . $parameterName . '" passed to ' . $service . ' is missing';
+        $message = sprintf(
+            'Expected parameter%s%s is missing',
+            $parameterName ? ' ' . $parameterName : '',
+            $service ? ' passed to ' . $service : ''
+        );
         parent::__construct($message);
     }
 
