@@ -137,6 +137,8 @@ class ServiceManager implements ServiceLocatorInterface
      *
      * @param  $service
      * @return mixed
+     *
+     * @deprecated - If class uses ServiceManagerAwareTrait use $this->propagate($service)
      */
     public function propagate($service)
     {
