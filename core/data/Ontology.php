@@ -19,8 +19,7 @@
  */
 namespace oat\generis\model\data;
 /**
- * transitory class to manage the ontology driver
- * instead of managing full models, it only handles the rdfs interfaces
+ * Interface to manage the instantiating of resources
  *
  * @author Joel Bout <joel@taotesting.com>
  */

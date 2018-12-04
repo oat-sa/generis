@@ -21,6 +21,8 @@
  */
 
 use oat\generis\model\OntologyRdf;
+use oat\oatbox\session\SessionService;
+use oat\oatbox\user\UserLanguageServiceInterface;
 
 /**
  * Short description of class core_kernel_persistence_smoothsql_Resource
@@ -121,8 +123,9 @@ class core_kernel_persistence_smoothsql_Resource
 		if (isset($options['lg'])) {
 			$lang = $options['lg'];
 		} else {
-			$lang = \common_session_SessionManager::getSession()->getDataLanguage();
-			$defaultLg = ' OR l_language = ' . $this->getPersistence()->quote(DEFAULT_LANG);
+            $lang = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage();
+            $default = $this->getServiceLocator()->get(UserLanguageServiceInterface::SERVICE_ID)->getDefaultLanguage();
+            $defaultLg = ' OR l_language = ' . $this->getPersistence()->quote($default);
 		}
 		
         $query =  'SELECT object, l_language
@@ -152,7 +155,7 @@ class core_kernel_persistence_smoothsql_Resource
 				}
         	} else {
                 // Filter result by language and return one set of values (User language in top priority, default language in second and the fallback language (null) in third)
-                $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage($this->getPersistence(), $result->fetchAll(), 'l_language');
+                $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage($this->getPersistence(), $result->fetchAll(), 'l_language', $lang, $default);
         	}
         }
         
@@ -202,20 +205,16 @@ class core_kernel_persistence_smoothsql_Resource
      */
     public function setPropertyValue( core_kernel_classes_Resource $resource,  core_kernel_classes_Property $property, $object, $lg = null)
     {
-        $returnValue = (bool) false;
-
-        
-        
+        $userId = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
         $object  = $object instanceof core_kernel_classes_Resource ? $object->getUri() : (string) $object;
     	$platform = $this->getPersistence()->getPlatForm();
-        $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
         $lang = "";
         // Define language if required
         if ($property->isLgDependent()){
         	if ($lg!=null){
         		$lang = $lg;
         	} else {
-        		$lang = \common_session_SessionManager::getSession()->getDataLanguage();
+                $lang = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage();
         	}
         }
         
@@ -228,10 +227,7 @@ class core_kernel_persistence_smoothsql_Resource
        		$property->getUri(),
        		$object,
        		$lang,
-       		\common_session_SessionManager::getSession()->getUserUri(),
-//        		$mask,
-//        		$mask,
-//        		$mask,
+            $userId,
             $platform->getNowExpression()
         ));
         
@@ -255,9 +251,8 @@ class core_kernel_persistence_smoothsql_Resource
 
     	if (is_array($properties) && count($properties) > 0) {
         		
-            $session = common_session_SessionManager::getSession();
+            $session = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession();
             $platform = $this->getPersistence()->getPlatForm();
-            $user = common_session_SessionManager::isAnonymous() ? '' : $session->getUser()->getIdentifier();
 
             $valuesToInsert = [];
 
@@ -286,7 +281,7 @@ class core_kernel_persistence_smoothsql_Resource
                         'predicate' => $property->getUri(),
                         'object' => $object,
                         'l_language' => $lang,
-                        'author' => $user,
+                        'author' => $session->getUser()->getIdentifier(),
                         'epoch' => $platform->getNowExpression()
                     ];
                 }
@@ -316,9 +311,7 @@ class core_kernel_persistence_smoothsql_Resource
         
 
 		$platform = $this->getPersistence()->getPlatForm();
-		$userId     = common_session_SessionManager::isAnonymous()
-    		? null : \common_session_SessionManager::getSession()->getUser()->getIdentifier();
-        $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
+		$userId = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
         
         $query = 'INSERT INTO statements (modelid,subject,predicate,object,l_language,author,epoch)
         			VALUES  (?, ?, ?, ?, ?, ?, ?)';
@@ -330,9 +323,6 @@ class core_kernel_persistence_smoothsql_Resource
        		$value,
        		($property->isLgDependent() ? $lg : ''),
        		$userId,
-//        		$mask,
-//        		$mask,
-//        		$mask,
             $platform->getNowExpression()
         ));
 		
@@ -396,7 +386,7 @@ class core_kernel_persistence_smoothsql_Resource
 	        		$resource->getUri(),
 	        		$property->getUri(),
                     '',
-	        		\common_session_SessionManager::getSession()->getDataLanguage()
+                    $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage()
 	        ));
         } else{
         	$returnValue = $this->getPersistence()->exec($query,array(
@@ -527,7 +517,7 @@ class core_kernel_persistence_smoothsql_Resource
     	if ($collection->count() > 0) {
     		
     		$platform = $this->getPersistence()->getPlatForm();
-        	$user = common_session_SessionManager::isAnonymous() ? '' : \common_session_SessionManager::getSession()->getUser()->getIdentifier();
+            $user = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
             $valuesToInsert = [];
     		
     		foreach ($collection->getIterator() as $triple) {
@@ -618,21 +608,23 @@ class core_kernel_persistence_smoothsql_Resource
 		}
     	$predicatesQuery=substr($predicatesQuery, 1);
 
- 		$platform = $this->getPersistence()->getPlatForm();
-    	//the unique sql query
+        $platform = $this->getPersistence()->getPlatForm();
+        $lang = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage();
+        $default = $this->getServiceLocator()->get(UserLanguageServiceInterface::SERVICE_ID)->getDefaultLanguage();
+        //the unique sql query
         $query =  'SELECT predicate, object, l_language 
             FROM statements 
             WHERE 
                 subject = '.$this->getPersistence()->quote($resource->getUri()).' 
                 AND predicate IN ('.$predicatesQuery.')
                 AND (l_language = ' . $this->getPersistence()->quote('') . 
-                    ' OR l_language = '.$this->getPersistence()->quote(DEFAULT_LANG). 
-                    ' OR l_language = '.$this->getPersistence()->quote(\common_session_SessionManager::getSession()->getDataLanguage()).') 
+                    ' OR l_language = '.$this->getPersistence()->quote($default).
+                    ' OR l_language = '.$this->getPersistence()->quote($lang).')
                 AND '.$this->getModelReadSqlCondition();
         $result	= $this->getPersistence()->query($query);
         
         $rows = $result->fetchAll();
-        $sortedByLg = core_kernel_persistence_smoothsql_Utils::sortByLanguage($this->getPersistence(), $rows, 'l_language');
+        $sortedByLg = core_kernel_persistence_smoothsql_Utils::sortByLanguage($this->getPersistence(), $rows, 'l_language', $lang, $default);
         $identifiedLg = core_kernel_persistence_smoothsql_Utils::identifyFirstLanguage($sortedByLg);
 
         foreach($rows as $row){
@@ -658,14 +650,7 @@ class core_kernel_persistence_smoothsql_Resource
      */
     public function setType( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $class)
     {
-        $returnValue = (bool) false;
-
-        
-        
-		$returnValue = $this->setPropertyValue($resource, new core_kernel_classes_Property(OntologyRdf::RDF_TYPE), $class);
-        
-        
-
+        $returnValue = $this->setPropertyValue($resource, $this->getModel()->getProperty(OntologyRdf::RDF_TYPE), $class);
         return (bool) $returnValue;
     }
 
@@ -701,6 +686,14 @@ class core_kernel_persistence_smoothsql_Resource
         
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * @return \Zend\ServiceManager\ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->getModel()->getServiceLocator();
     }
 
     /**
