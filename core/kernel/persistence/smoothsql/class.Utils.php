@@ -42,12 +42,10 @@ class core_kernel_persistence_smoothsql_Utils
      * @param string langColname The name of the column corresponding to the language of results.
      * @return array An array representing the sorted $dataset.
      */
-    static public function sortByLanguage($persistence, $dataset, $langColname)
+    static public function sortByLanguage($persistence, $dataset, $langColname, $selectedLanguage, $defaultLanguage)
     {
         $returnValue = array();
         
-        $selectedLanguage = \common_session_SessionManager::getSession()->getDataLanguage();
-        $defaultLanguage = DEFAULT_LANG;
         $fallbackLanguage = '';
         				  
         $sortedResults = array(
@@ -104,11 +102,11 @@ class core_kernel_persistence_smoothsql_Utils
      * @param string langColname
      * @return array
      */
-    static public function filterByLanguage(common_persistence_SqlPersistence $persistence, $dataset, $langColname)
+    static public function filterByLanguage(common_persistence_SqlPersistence $persistence, $dataset, $langColname, $selectedLanguage, $defaultLanguage)
     {
         $returnValue = array();
         
-        $result = self::sortByLanguage($persistence, $dataset, $langColname);
+        $result = self::sortByLanguage($persistence, $dataset, $langColname, $selectedLanguage, $defaultLanguage);
         $returnValue = self::getFirstLanguage($result);
         
         return $returnValue;
