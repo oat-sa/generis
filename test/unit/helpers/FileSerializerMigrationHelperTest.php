@@ -15,23 +15,33 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\generis\test\unit\helpers;
 
-use core_kernel_classes_Resource;
+use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\generis\Helper\FileSerializerMigrationHelper;
+use oat\generis\model\fileReference\FileSerializerException;
+use oat\generis\model\fileReference\ResourceFileSerializer;
+use oat\generis\model\fileReference\UrlFileSerializer;
 use oat\generis\model\GenerisRdf;
-use oat\generis\test\GenerisPhpUnitTestRunner;
+use oat\generis\test\GenerisTestCase;
+use oat\oatbox\filesystem\Directory;
+use oat\oatbox\filesystem\File;
+use oat\oatbox\filesystem\FileSystemService;
+use oat\oatbox\filesystem\FileSystemHandler;
 use oat\oatbox\service\ServiceManager;
+use Psr\Log\NullLogger;
 
 /**
  * Test cases for the File serializer migration script helper
  * @see \oat\generis\Helper\FileSerializerMigrationHelper
  */
-class FileSerializerMigrationHelperTest extends GenerisPhpUnitTestRunner
+class FileSerializerMigrationHelperTest extends GenerisTestCase
 {
+
+    const PARENT_RESOURCE_URI = 'http://www.tao.lu/Ontologies/generis.rdf#UnitTest';
+    const PROPERTY_URI = 'http://www.tao.lu/Ontologies/generis.rdf#TestFile';
 
     /**
      * @var FileSerializerMigrationHelper
@@ -39,27 +49,60 @@ class FileSerializerMigrationHelperTest extends GenerisPhpUnitTestRunner
     protected $fileMigrationHelper;
 
     /**
-     * @var core_kernel_classes_Resource[]
-     */
-    private $testItems;
-
-    /**
-     * @var core_kernel_classes_Resource[]
-     */
-    private $testResources;
-
-    /**
      * @var \core_kernel_classes_Class
      */
     protected $testClass;
 
     /**
+     * @var core_kernel_persistence_smoothsql_SmoothModel
+     */
+    private $ontologyMock;
+
+    /**
+     * @var ResourceFileSerializer
+     */
+    private $resourceFileSerializer;
+
+    /**
+     * @var UrlFileSerializer
+     */
+    private $urlFileSerializer;
+
+    /**
+     * @var string
+     */
+    private $tempFileSystemId;
+
+    /**
+     * @var
+     */
+    private $tempDirectory;
+
+    /**
+     * @var File|Directory
+     */
+    private $testFile;
+
+    /**
+     * @var FileSystemService
+     */
+    private $fileSystemService;
+
+    /**
      * Initialize test
-     * @throws \oat\oatbox\service\exception\InvalidServiceManagerException
      */
     public function setUp()
     {
-        $this->fileMigrationHelper = new FileSerializerMigrationHelper(ServiceManager::getServiceManager());
+        $this->fileMigrationHelper = new FileSerializerMigrationHelper();
+        $this->resourceFileSerializer = new ResourceFileSerializer();
+        $this->urlFileSerializer = new UrlFileSerializer();
+
+        $serviceLocator = $this->getServiceLocatorMock([FileSystemService::SERVICE_ID => $this->getMockFileSystem()]);
+        $this->fileMigrationHelper->setServiceLocator($serviceLocator);
+        $this->resourceFileSerializer->setServiceLocator($serviceLocator);
+        $this->urlFileSerializer->setServiceLocator($serviceLocator);
+
+        $this->ontologyMock = $this->getOntologyMock();
     }
 
     /**
@@ -67,51 +110,58 @@ class FileSerializerMigrationHelperTest extends GenerisPhpUnitTestRunner
      */
     public function testResourceMigration()
     {
-        $this->generateFileResources();
-        foreach ($this->testItems as $testItem) {
-            /** @var \core_kernel_classes_Resource $resource */
-            $resource = $testItem->getOnePropertyValue(
-                $testItem->getProperty('http://www.tao.lu/Ontologies/TAOItem.rdf#ItemContent')
-            );
-            $this->fileMigrationHelper->migrateResource($resource, 'http://www.tao.lu/Ontologies/TAOItem.rdf#ItemContent');
+        try {
+            $fileResource = $this->getFileResource();
+            $this->fileMigrationHelper->migrateResource($fileResource, self::PARENT_RESOURCE_URI, self::PROPERTY_URI);
+        } catch (\Exception $e) {
+            if ($this->testFile !== null) {
+                $this->testFile->delete();
+            }
+            throw new \Exception($e->getMessage());
         }
 
-        static::assertSame($this->fileMigrationHelper->migrationInformation['migrated_count'], 2);
+        self::assertSame($this->fileMigrationHelper->migrationInformation['migrated_count'], 1);
 
+        $this->testFile->delete();
     }
 
     /**
-     * Generate 10 file resources used for testing
+     * Generate a file resource used for testing
      */
-    private function generateFileResources()
+    private function getFileResource()
     {
-        $clazz = new \core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOItem.rdf#Item');
-        if ($clazz->isClass()) {
-            $clazz = new \core_kernel_classes_Class($clazz);
-            $this->testClass = \core_kernel_classes_ClassFactory::createSubClass($clazz, 'testClass1', '');
-            $fileClass = new \core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_FILE);
+        $dir = $this->getTempDirectory();
 
-            $item1 = \core_kernel_classes_ResourceFactory::create($this->testClass, 'testItem1', '');
-            $item1->setPropertiesValues(['http://www.tao.lu/Ontologies/TAOItem.rdf#ItemModel' => 'http://www.tao.lu/Ontologies/TAOItem.rdf#QTI']);
-            $resource1 = $fileClass->createInstanceWithProperties(array(
-                GenerisRdf::PROPERTY_FILE_FILENAME => 'testFile1',
-                GenerisRdf::PROPERTY_FILE_FILEPATH => 'testPath1',
-                GenerisRdf::PROPERTY_FILE_FILESYSTEM => 'itemDirectory1'
-            ));
-            $item1->setPropertiesValues(['http://www.tao.lu/Ontologies/TAOItem.rdf#ItemContent' => $resource1->getUri()]);
-            $this->testResources[] = $resource1;
-            $this->testItems[] = $item1;
-            $item2 = \core_kernel_classes_ResourceFactory::create($this->testClass, 'testItem2', '');
-            $item2->setPropertiesValues(['http://www.tao.lu/Ontologies/TAOItem.rdf#ItemModel' => 'http://www.tao.lu/Ontologies/TAOItem.rdf#QTI']);
-            $resource2 = $fileClass->createInstanceWithProperties(array(
-                GenerisRdf::PROPERTY_FILE_FILENAME => 'testFile2',
-                GenerisRdf::PROPERTY_FILE_FILEPATH => 'testPath2',
-                GenerisRdf::PROPERTY_FILE_FILESYSTEM => 'itemDirectory2'
-            ));
-            $item2->setPropertiesValues(['http://www.tao.lu/Ontologies/TAOItem.rdf#ItemContent' => $resource2->getUri()]);
-            $this->testItems[] = $item2;
-            $this->testResources[] = $resource2;
+        $sampleFile = 'sampleFile.txt';
+        $fileClass = $this->ontologyMock->getClass(GenerisRdf::CLASS_GENERIS_FILE);
+        $this->testFile = $dir->getFile($sampleFile);
+        $this->testFile->write($sampleFile, 'PHP Unit test file');
+
+        if ($this->testFile instanceof File) {
+            $filename = $this->testFile->getBasename();
+            $filePath = dirname($this->testFile->getPrefix());
+        } elseif ($this->testFile instanceof Directory) {
+            $filename = '';
+            $filePath = $this->testFile->getPrefix();
+        } else {
+            return false;
         }
+
+        $resource = $fileClass->createInstanceWithProperties(
+            [
+                GenerisRdf::PROPERTY_FILE_FILENAME => $filename,
+                GenerisRdf::PROPERTY_FILE_FILEPATH => $filePath,
+                GenerisRdf::PROPERTY_FILE_FILESYSTEM => $this->ontologyMock->getResource($this->testFile->getFileSystemId()),
+            ]
+        );
+
+        self::assertInstanceOf(FileSystemHandler::class, $this->resourceFileSerializer->unserialize($resource));
+
+        $unitTestResource = $this->ontologyMock->getResource(self::PARENT_RESOURCE_URI);
+        $testFileProperty = $this->ontologyMock->getProperty(self::PROPERTY_URI);
+        $unitTestResource->setPropertyValue($testFileProperty, $unitTestResource);
+
+        return $resource;
     }
 
     /**
@@ -119,20 +169,50 @@ class FileSerializerMigrationHelperTest extends GenerisPhpUnitTestRunner
      */
     public function tearDown()
     {
-        if ($this->testClass !== null) {
-            $this->testClass->delete();
+
+    }
+
+    /**
+     * @return Directory
+     */
+    private function getTempDirectory()
+    {
+        if (!$this->tempDirectory) {
+            $fileSystemService = $this->getMockFileSystem();
+            $this->tempFileSystemId = uniqid('unit-test-', true);
+
+            $adapters = $fileSystemService->getOption(FileSystemService::OPTION_ADAPTERS);
+            if (class_exists('League\Flysystem\Memory\MemoryAdapter')) {
+                $adapters[$this->tempFileSystemId] = [
+                    'class' => \League\Flysystem\Memory\MemoryAdapter::class
+                ];
+            } else {
+                $adapters[$this->tempFileSystemId] = [
+                    'class' => FileSystemService::FLYSYSTEM_LOCAL_ADAPTER,
+                    'options' => ['root' => '/tmp/testing']
+                ];
+            }
+            $fileSystemService->setOption(FileSystemService::OPTION_ADAPTERS, $adapters);
+            $fileSystemService->setOption(FileSystemService::OPTION_FILE_PATH, '/tmp/unit-test');
+
+            $fileSystemService->setServiceLocator($this->getServiceLocatorMock([
+                FileSystemService::SERVICE_ID => $fileSystemService
+            ]));
+
+            $this->tempDirectory = $fileSystemService->getDirectory($this->tempFileSystemId);
+        }
+        return $this->tempDirectory;
+    }
+
+    /**
+     * @return FileSystemService
+     */
+    private function getMockFileSystem()
+    {
+        if ($this->fileSystemService === null) {
+            $this->fileSystemService = $this->getServiceLocatorMock([FileSystemService::SERVICE_ID => new FileSystemService()])->get(FileSystemService::SERVICE_ID);
         }
 
-        if ($this->testItems !== null) {
-            foreach ($this->testItems as $item) {
-                $item->delete();
-            }
-        }
-
-        if ($this->testResources !== null) {
-            foreach ($this->testResources as $resource) {
-                $resource->delete();
-            }
-        }
+        return $this->fileSystemService;
     }
 }
