@@ -19,9 +19,11 @@
 
 namespace oat\generis\test\unit\helpers;
 
+use common_Config;
+use common_session_SessionManager;
+use common_test_TestUserSession;
 use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\generis\Helper\FileSerializerMigrationHelper;
-use oat\generis\model\fileReference\FileSerializerException;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\fileReference\UrlFileSerializer;
 use oat\generis\model\GenerisRdf;
@@ -30,8 +32,6 @@ use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\filesystem\FileSystemHandler;
-use oat\oatbox\service\ServiceManager;
-use Psr\Log\NullLogger;
 
 /**
  * Test cases for the File serializer migration script helper
@@ -93,6 +93,8 @@ class FileSerializerMigrationHelperTest extends GenerisTestCase
      */
     public function setUp()
     {
+        common_Config::load();
+        common_session_SessionManager::startSession(new common_test_TestUserSession());
         $this->fileMigrationHelper = new FileSerializerMigrationHelper();
         $this->resourceFileSerializer = new ResourceFileSerializer();
         $this->urlFileSerializer = new UrlFileSerializer();
