@@ -57,7 +57,7 @@ class TaoLog extends ConfigurableService implements LoggerInterface
 		// retrieving the user can be a complex procedure, leading to missing log informations
 		$user = null;
 		$keys = array_keys($stack);
-		$current = $stack[$keys[2]];
+		$current = isset($keys[2]) ? $stack[$keys[2]] : $stack[end($keys)];
         $current = array_merge($current, $context);
         if (isset($current['file']) && isset($current['line'])) {
             $errorFile = $current['file'];
