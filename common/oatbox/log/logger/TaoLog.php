@@ -59,10 +59,15 @@ class TaoLog extends ConfigurableService implements LoggerInterface
 		$keys = array_keys($stack);
 		$current = $stack[$keys[2]];
         $current = array_merge($current, $context);
-		if (isset($current['file']) && isset($current['line'])) {
-			$errorFile = $current['file'];
-			$errorLine = $current['line'];
-		}
+        if (isset($current['file']) && isset($current['line'])) {
+            $errorFile = $current['file'];
+            $errorLine = $current['line'];
+        } elseif (isset($current['class']) && isset($current['function'])) {
+            $errorFile = $current['class'];
+            $errorLine = $current['function'];
+        } else {
+            $errorFile = $errorLine = 'undefined';
+        }
 		if(PHP_SAPI != 'cli'){
 			$requestURI = $_SERVER['REQUEST_URI'];
 		} else {
