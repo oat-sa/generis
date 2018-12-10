@@ -18,6 +18,11 @@
  * 
  */
 
+/**
+ * Custom RecursiveIterator for reports.
+ *
+ * @author Gyula Szucs, <gyula@taotesting.com>
+ */
 class common_report_RecursiveReportIterator extends ArrayIterator implements RecursiveIterator
 {
     public function hasChildren()
