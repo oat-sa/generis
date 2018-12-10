@@ -14,28 +14,34 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2018 (original work) 2014 Open Assessment Technologies SA
  *
  */
-
-namespace oat\oatbox\task\TaskInterface;
-
-
-use oat\tao\model\datatable\DatatablePayload;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use oat\tao\model\datatable\DatatableRequest as DatatableRequestInterface;
-
+namespace oat\generis\model\data;
 /**
- * @deprecated since version 7.10.0, to be removed in 8.0.
+ * Interface to manage the instantiating of resources
+ *
+ * @author Joel Bout <joel@taotesting.com>
  */
-interface TaskPayLoad extends DatatablePayload , ServiceLocatorAwareInterface
+interface Ontology extends Model
 {
-
-    public function __construct(TaskPersistenceInterface $persistence , $currentUserId = null , DatatableRequestInterface $request = null);
+    const SERVICE_ID = 'generis/ontology';
 
     /**
-     * @deprecated since version 7.10.0, to be removed in 8.0.
+     * @param string $uri
+     * @return \core_kernel_classes_Resource
      */
-    public function count();
+    function getResource($uri);
 
+    /**
+     * @param string $uri
+     * @return \core_kernel_classes_Class
+     */
+    function getClass($uri);
+
+    /**
+     * @param string $uri
+     * @return \core_kernel_classes_Property
+     */
+    function getProperty($uri);
 }

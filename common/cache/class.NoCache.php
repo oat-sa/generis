@@ -1,54 +1,53 @@
 <?php
-/**
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *
+ * 
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
-namespace oat\oatbox\user;
-
+use oat\oatbox\service\ConfigurableService;
 /**
- * Interface UserLanguageServiceInterface
- * @package oat\oatbox\user
+ * Implementation that does not cache, useful for testing
+ *
+ * @package generis
  */
-interface UserLanguageServiceInterface
+class common_cache_NoCache extends ConfigurableService implements common_cache_Cache
 {
 
-    const SERVICE_ID = 'generis/UserLanguageService';
+    public function has($key)
+    {
+        return false;
+    }
 
-    /**
-     * @return string language code (e.g. 'en-US')
-     */
-    public function getDefaultLanguage();
+    public function purge()
+    {
+        return true;
+    }
 
-    /**
-     * @param User $user
-     * @return string language code (e.g. 'en-US')
-     */
-    public function getDataLanguage(User $user);
+    public function put($mixed, $serial = null, $ttl = null)
+    {
+        return true;
+    }
 
-    /**
-     * @param User $user
-     * @return string language code (e.g. 'en-US')
-     */
-    public function getInterfaceLanguage(User $user);
-
-    /**
-     * Whether users data language enabled or not
-     * @return boolean
-     */
-    public function isDataLanguageEnabled();
+    public function remove($serial)
+    {
+        return true;
+    }
+    
+    public function get($serial)
+    {
+        throw new common_cache_NotFoundException();
+    }
 }
