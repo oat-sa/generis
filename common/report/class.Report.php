@@ -169,12 +169,12 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
     /**
      * returns all success elements
      *
-     * @param bool $recursive
+     * @param bool $asFlat
      * @return array
      */
-	public function getSuccesses($recursive = false)
+	public function getSuccesses($asFlat = false)
     {
-        $iterator = true === $recursive
+        $iterator = true === $asFlat
             ? $this->getRecursiveIterator()
             : $this;
 
@@ -190,12 +190,12 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
     /**
      * returns all info elements
      *
-     * @param bool $recursive
+     * @param bool $asFlat
      * @return array
      */
-	public function getInfos($recursive = false)
+	public function getInfos($asFlat = false)
     {
-        $iterator = true === $recursive
+        $iterator = true === $asFlat
             ? $this->getRecursiveIterator()
             : $this;
 
@@ -211,12 +211,12 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
     /**
      * returns all error elements
      *
-     * @param bool $recursive
+     * @param bool $asFlat
      * @return array
      */
-	public function getErrors($recursive = false)
+	public function getErrors($asFlat = false)
     {
-        $iterator = true === $recursive
+        $iterator = true === $asFlat
             ? $this->getRecursiveIterator()
             : $this;
 
@@ -229,6 +229,9 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
 		return $errors;
 	}
 
+    /**
+     * @return RecursiveIteratorIterator
+     */
 	private function getRecursiveIterator()
     {
         return new \RecursiveIteratorIterator(
