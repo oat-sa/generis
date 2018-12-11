@@ -19,8 +19,10 @@
 
 namespace oat\generis\model\fileReference;
 
+use common_persistence_SqlPersistence;
 use core_kernel_classes_ClassIterator;
 use core_kernel_classes_Resource;
+use Doctrine\DBAL\Connection;
 use Iterator;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyAwareTrait;
@@ -248,19 +250,31 @@ class ResourceFileIterator implements Iterator
      */
     private function getFileResources()
     {
-        $sql = "
-            SELECT `subject`, `id` FROM ((
-                SELECT DISTINCT `id`, `subject` FROM `statements`
-                    WHERE  `predicate` = '" . OntologyRdf::RDF_TYPE . "'
-                    AND (`object` = '" . GenerisRdf::CLASS_GENERIS_FILE . "')
-                    AND `id` > " . $this->lastId . "
-                    AND `id` NOT IN('" . implode("', '", array_keys($this->corruptFileIds)) . "')
-            )) AS unionq GROUP BY `id`, `subject` HAVING COUNT(*) >=1 LIMIT ". $this->cacheSize;
+        $queryParams = [
+            'corrupt_ids' => implode(', ', array_keys($this->corruptFileIds)),
+            'rdf_type' => OntologyRdf::RDF_TYPE,
+            'rdf_file_class' => GenerisRdf::CLASS_GENERIS_FILE
+        ];
 
+        /** @var common_persistence_SqlPersistence $persistence */
         $persistence = $this->getModel()->getPersistence();
-        $query = $persistence->query($sql);
+        $platform = $persistence->getPlatForm();
+        $subSelect = $platform->getQueryBuilder()
+            ->select('DISTINCT id, subject')
+            ->from('statements')
+            ->where('predicate = :rdf_type')
+            ->andWhere('object = :rdf_file_class')
+            ->andWhere('id > ' . $this->lastId)
+            ->andWhere('id NOT IN(:corrupt_ids)')
+            ->setParameters($queryParams);
 
-        return $query->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE);
+        $select = $platform->getQueryBuilder()
+            ->select('subject, id')
+            ->from(sprintf('(%s)', $subSelect->getSQL()), 'unionq')
+            ->setParameters($queryParams)
+            ->groupBy('id, subject HAVING COUNT(*) >=1')->setMaxResults($this->cacheSize);
+
+        return $select->execute()->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE);
     }
 
     /**
@@ -271,13 +285,19 @@ class ResourceFileIterator implements Iterator
      */
     private function getFileParentResources($fileResources)
     {
-        $sql = "
-          SELECT object, predicate, subject, id FROM statements
-          WHERE object IN('" . implode("', '", array_keys($fileResources)) . "')";
+//        $sql = "
+//          SELECT object, predicate, subject, id FROM statements
+//          WHERE object IN('" . implode(', ', array_keys($fileResources))')";
 
+        /** @var common_persistence_SqlPersistence $persistence */
         $persistence = $this->getModel()->getPersistence();
-        $query = $persistence->query($sql);
+        $platform = $persistence->getPlatForm();
+        $select = $platform->getQueryBuilder()
+            ->select('object, predicate, subject, id')
+            ->from('statements')
+            ->andWhere('object IN(:resources) ')
+            ->setParameter('resources',  array_keys($fileResources), Connection::PARAM_STR_ARRAY);
 
-        return $query->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE);
+        return $select->execute()->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE);
     }
 }

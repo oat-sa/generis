@@ -38,6 +38,20 @@ use oat\oatbox\service\exception\InvalidServiceManagerException;
 class FileSerializerMigration extends ScriptAction
 {
     const RESOURCE_LIMIT = 200;
+    const MIGRATION_REPORT_LINES = [
+        'migration_success' => [
+            'dry' => '%s old references will be migrated into %s new file serializer references.',
+            'wet' => 'Successfully migrated %s old references to %s new file serializer references.'
+        ],
+        'migration_errors' => [
+            'dry' => '%s resources will fail to migrate. Please verify the following resources:',
+            'wet' => 'Unable to migrate %s resources. Please verify the following resources:'
+        ],
+        'serializer_update_success' => [
+            'dry' => 'FileReferenceSerializer service will be updated to use UrlFileSerializer service.',
+            'wet' => 'Successfully updated FileReferenceSerializer service to use UrlFileSerializer service.'
+        ],
+    ];
 
     /**
      * @var FileSerializerMigrationHelper
@@ -71,7 +85,7 @@ class FileSerializerMigration extends ScriptAction
 
         if ($migrationHelper->updateFileSerializer()) {
             $this->report->add(Report::createSuccess(
-                'Successfully updated FileReferenceSerializer service to use UrlFileSerializer service'
+                self::MIGRATION_REPORT_LINES['serializer_update_success'][$this->getMigrationReportKey()]
             ));
         }
 
@@ -156,17 +170,16 @@ class FileSerializerMigration extends ScriptAction
     {
         $migrationHelper = $this->getMigrationHelper();
         $this->report->add(Report::createSuccess(sprintf(
-            'Successfully migrated %s old references to %s new file serializer references.',
+            self::MIGRATION_REPORT_LINES['migration_success'][$this->getMigrationReportKey()],
             $migrationHelper->migrationInformation['migrated_count'],
             $migrationHelper->migrationInformation['old_resource_count']
         )));
 
         if (count($migrationHelper->failedResources)) {
             $this->report->add(Report::createFailure(sprintf(
-                    'Unable to migrate %s resources. Please verify the following resources:',
-                    count($migrationHelper->failedResources
-                    ))
-            ));
+                self::MIGRATION_REPORT_LINES['migration_errors'][$this->getMigrationReportKey()],
+                count($migrationHelper->failedResources)
+            )));
 
             foreach ($migrationHelper->failedResources as $uri => $errorMessages) {
                 $this->report->add(Report::createFailure(
@@ -191,5 +204,16 @@ class FileSerializerMigration extends ScriptAction
         }
 
         return $this->migrationHelper;
+    }
+
+    /**
+     * Retrieve key used to differentiate between reporting for the wet and dry run.
+     *
+     * @see self::MIGRATION_REPORT_LINES
+     * @return string
+     */
+    private function getMigrationReportKey()
+    {
+        return $this->isWetRun() ? 'wet' : 'dry';
     }
 }
