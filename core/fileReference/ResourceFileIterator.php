@@ -250,11 +250,6 @@ class ResourceFileIterator implements Iterator
      */
     private function getFileResources()
     {
-        $queryParams = [
-            'rdf_type' => OntologyRdf::RDF_TYPE,
-            'rdf_file_class' => GenerisRdf::CLASS_GENERIS_FILE
-        ];
-
         /** @var common_persistence_SqlPersistence $persistence */
         $persistence = $this->getModel()->getPersistence();
         $platform = $persistence->getPlatForm();
@@ -263,18 +258,19 @@ class ResourceFileIterator implements Iterator
             ->from('statements')
             ->where('predicate = :rdf_type')
             ->andWhere('object = :rdf_file_class')
-            ->andWhere('id > ' . $this->lastId)
-            ->setParameters($queryParams);
+            ->andWhere('id > ' . $this->lastId);
 
         if (!empty($this->corruptFileIds)) {
-            $subSelect->andWhere('id NOT IN(:corrupt_ids)')
-                ->setParameter('corrupt_ids', array_keys($this->corruptFileIds), Connection::PARAM_INT_ARRAY);
+            $subSelect->andWhere('id NOT IN(:corrupt_ids)');
         }
 
         $select = $platform->getQueryBuilder()
             ->select('subject, id')
             ->from(sprintf('(%s)', $subSelect->getSQL()), 'unionq')
-            ->setParameters($queryParams)
+            ->setParameters([
+                'rdf_type' => OntologyRdf::RDF_TYPE,
+                'rdf_file_class' => GenerisRdf::CLASS_GENERIS_FILE
+            ])
             ->groupBy('id, subject HAVING COUNT(*) >=1')->setMaxResults($this->cacheSize);
 
         if (!empty($this->corruptFileIds)) {
