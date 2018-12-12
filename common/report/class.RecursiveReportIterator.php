@@ -18,8 +18,17 @@
  * 
  */
 
+/**
+ * Custom RecursiveIterator for reports.
+ *
+ * @author Gyula Szucs, <gyula@taotesting.com>
+ */
 class common_report_RecursiveReportIterator extends ArrayIterator implements RecursiveIterator
 {
+    /**
+     * @inheritdoc
+     * @return bool
+     */
     public function hasChildren()
     {
         /** @var common_report_Report $report */
@@ -28,6 +37,10 @@ class common_report_RecursiveReportIterator extends ArrayIterator implements Rec
         return $report->hasChildren();
     }
 
+    /**
+     * @inheritdoc
+     * @return common_report_RecursiveReportIterator|RecursiveIterator
+     */
     public function getChildren()
     {
         /** @var common_report_Report $report */

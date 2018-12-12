@@ -20,6 +20,9 @@
 
 use oat\generis\model\GenerisRdf;
 use oat\oatbox\user\AnonymousUser;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use oat\oatbox\user\UserLanguageServiceInterface;
 
 /**
  * Represents a userless Session.
@@ -29,8 +32,10 @@ use oat\oatbox\user\AnonymousUser;
  * @package generis
  
  */
-class common_session_AnonymousSession implements common_session_StatelessSession
+class common_session_AnonymousSession implements common_session_StatelessSession, ServiceLocatorAwareInterface
 {
+    use ServiceLocatorAwareTrait;
+
     /**
      * (non-PHPdoc)
      * @see common_session_Session::getUser()
@@ -68,7 +73,7 @@ class common_session_AnonymousSession implements common_session_StatelessSession
      * @see common_session_Session::getDataLanguage()
      */
     public function getDataLanguage() {
-        return DEFAULT_LANG;
+        return $this->getServiceLocator()->get(UserLanguageServiceInterface::SERVICE_ID)->getDefaultLanguage();
     }
     
     /**
@@ -76,7 +81,10 @@ class common_session_AnonymousSession implements common_session_StatelessSession
      * @see common_session_Session::getInterfaceLanguage()
      */
     public function getInterfaceLanguage() {
-        return defined('DEFAULT_ANONYMOUS_INTERFACE_LANG') ? DEFAULT_ANONYMOUS_INTERFACE_LANG : DEFAULT_LANG;
+        return defined('DEFAULT_ANONYMOUS_INTERFACE_LANG')
+            ? DEFAULT_ANONYMOUS_INTERFACE_LANG
+            : $this->getServiceLocator()->get(UserLanguageServiceInterface::SERVICE_ID)->getDefaultLanguage();
+        ;
     }
     
     /**

@@ -20,7 +20,6 @@
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
-use oat\generis\model\data\ModelManager;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\oatbox\service\ServiceManager;
@@ -28,6 +27,7 @@ use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\event\EventManager;
 use oat\generis\model\data\event\ResourceUpdated;
 use oat\generis\model\data\event\ResourceDeleted;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * Resource implements rdf:resource container identified by an uri (a string).
@@ -750,7 +750,9 @@ class core_kernel_classes_Resource
     
     public function getServiceManager()
     {
-        return ServiceManager::getServiceManager();
+        return ($this->getModel() instanceof ServiceLocatorAwareInterface)
+            ? $this->getModel()->getServiceLocator()
+            : ServiceManager::getServiceManager();
     }
 
     private function onUpdate()

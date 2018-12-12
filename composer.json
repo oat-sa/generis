@@ -68,7 +68,8 @@
 	},
         "require-dev" : {
 		"mikey179/vfsStream" : "1.4.0",
-		"phpunit/phpunit": "^4.8"
+		"phpunit/phpunit": "^4.8",
+		"symfony/cache": "~4.1"
         },
     "autoload" : {
         "psr-4" : {
