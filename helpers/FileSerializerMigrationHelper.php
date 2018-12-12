@@ -144,7 +144,7 @@ class FileSerializerMigrationHelper
 
 
         if ($this->isWetRun) {
-            $property->editPropertyValues($property, $migratedValue);
+            $resource->editPropertyValues($property, $migratedValue);
             $oldResource->delete();
         }
 
