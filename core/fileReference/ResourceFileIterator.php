@@ -266,6 +266,11 @@ class ResourceFileIterator implements Iterator
             ->andWhere('id > ' . $this->lastId)
             ->setParameters($queryParams);
 
+        if (!empty($this->corruptFileIds)) {
+            $subSelect->andWhere('id NOT IN(:corrupt_ids)')
+                ->setParameter('corrupt_ids', array_keys($this->corruptFileIds), Connection::PARAM_INT_ARRAY);
+        }
+
         $select = $platform->getQueryBuilder()
             ->select('subject, id')
             ->from(sprintf('(%s)', $subSelect->getSQL()), 'unionq')
@@ -273,8 +278,6 @@ class ResourceFileIterator implements Iterator
             ->groupBy('id, subject HAVING COUNT(*) >=1')->setMaxResults($this->cacheSize);
 
         if (!empty($this->corruptFileIds)) {
-            $subSelect->andWhere('id NOT IN(:corrupt_ids)')
-                ->setParameter('corrupt_ids', array_keys($this->corruptFileIds), Connection::PARAM_INT_ARRAY);
             $select->setParameter('corrupt_ids', array_keys($this->corruptFileIds), Connection::PARAM_INT_ARRAY);
         }
 
