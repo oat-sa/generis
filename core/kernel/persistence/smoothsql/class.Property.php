@@ -61,15 +61,17 @@ class core_kernel_persistence_smoothsql_Property
      */
     public function isLgDependent( core_kernel_classes_Resource $resource)
     {
-        $returnValue = (bool) false;
-
-        
-
-        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        
-        
-
-        return (bool) $returnValue;
+        if ($this->getModel()->getCache()->has($resource->getUri())) {
+            $lgDependent = $this->getModel()->getCache()->get($resource->getUri());
+        } else {
+            $lgDependentProperty = new \core_kernel_classes_Property(GenerisRdf::PROPERTY_IS_LG_DEPENDENT);
+            $lgDependentResource = $resource->getOnePropertyValue($lgDependentProperty);
+            $lgDependent = !is_null($lgDependentResource)
+                && $lgDependentResource instanceof \core_kernel_classes_Resource
+                && $lgDependentResource->getUri() == GenerisRdf::GENERIS_TRUE;
+            $this->getModel()->getCache()->put($lgDependent, $resource->getUri());
+        }
+        return (bool) $lgDependent;
     }
 
     /**

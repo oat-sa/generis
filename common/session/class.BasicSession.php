@@ -53,8 +53,8 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
     }
     
     /**
-     * (non-PHPdoc)
-     * @see common_session_AbstractSession::getUserUri()
+     * {@inheritDoc}
+     * @see common_session_Session::getUserUri()
      */
     public function getUserUri() {
         return $this->user->getIdentifier();
@@ -93,8 +93,8 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
     }
     
     /**
-     * (non-PHPdoc)
-     * @see common_session_AbstractSession::getUserRoles()
+     * {@inheritDoc}
+     * @see common_session_Session::getUserRoles()
      */
     public function getUserRoles() {
         $returnValue = array();
@@ -114,7 +114,7 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
      */
     public function getDataLanguage()
     {
-        return $this->getServiceLocator()->get(UserLanguageServiceInterface::class)->getDataLanguage($this->user);
+        return $this->getServiceLocator()->get(UserLanguageServiceInterface::class)->getDataLanguage($this->getUser());
     }
 
     /**
@@ -122,7 +122,7 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
      */
     public function getInterfaceLanguage()
     {
-        return $this->getServiceLocator()->get(UserLanguageServiceInterface::class)->getInterfaceLanguage($this->user);
+        return $this->getServiceLocator()->get(UserLanguageServiceInterface::class)->getInterfaceLanguage($this->getUser());
     }
     
     /**
