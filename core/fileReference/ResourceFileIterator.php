@@ -251,7 +251,6 @@ class ResourceFileIterator implements Iterator
     private function getFileResources()
     {
         $queryParams = [
-            'corrupt_ids' => implode(', ', array_keys($this->corruptFileIds)),
             'rdf_type' => OntologyRdf::RDF_TYPE,
             'rdf_file_class' => GenerisRdf::CLASS_GENERIS_FILE
         ];
@@ -265,7 +264,6 @@ class ResourceFileIterator implements Iterator
             ->where('predicate = :rdf_type')
             ->andWhere('object = :rdf_file_class')
             ->andWhere('id > ' . $this->lastId)
-            ->andWhere('id NOT IN(:corrupt_ids)')
             ->setParameters($queryParams);
 
         $select = $platform->getQueryBuilder()
@@ -273,6 +271,12 @@ class ResourceFileIterator implements Iterator
             ->from(sprintf('(%s)', $subSelect->getSQL()), 'unionq')
             ->setParameters($queryParams)
             ->groupBy('id, subject HAVING COUNT(*) >=1')->setMaxResults($this->cacheSize);
+
+        if (!empty($this->corruptFileIds)) {
+            $subSelect->andWhere('id NOT IN(:corrupt_ids)')
+                ->setParameter('corrupt_ids', array_keys($this->corruptFileIds), Connection::PARAM_INT_ARRAY);
+            $select->setParameter('corrupt_ids', array_keys($this->corruptFileIds), Connection::PARAM_INT_ARRAY);
+        }
 
         return $select->execute()->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE);
     }
@@ -285,10 +289,6 @@ class ResourceFileIterator implements Iterator
      */
     private function getFileParentResources($fileResources)
     {
-//        $sql = "
-//          SELECT object, predicate, subject, id FROM statements
-//          WHERE object IN('" . implode(', ', array_keys($fileResources))')";
-
         /** @var common_persistence_SqlPersistence $persistence */
         $persistence = $this->getModel()->getPersistence();
         $platform = $persistence->getPlatForm();
