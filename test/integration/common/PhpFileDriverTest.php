@@ -19,6 +19,11 @@
  * @author Alexander Zagovorichev <zagovorichev@1pt.com>
  */
 
+namespace oat\generis\test\integration\common;
+
+use common_persistence_PhpFileDriver;
+use PHPUnit_Framework_TestCase;
+
 class PhpFileDriverTest extends PHPUnit_Framework_TestCase
 {
     /**
