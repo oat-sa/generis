@@ -44,6 +44,8 @@ use oat\taoWorkspace\model\generis\WrapperModel;
 use oat\oatbox\log\logger\TaoLog;
 use Psr\Log\LoggerInterface;
 use oat\oatbox\user\UserLanguageService;
+use oat\oatbox\session\SessionService;
+use oat\generis\model\data\Ontology;
 
 /**
  *
@@ -330,9 +332,26 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('7.2.0');
         }
 
-        $this->skip('7.2.0', '7.9.10');
+        $this->skip('7.2.0', '7.14.2');
 
-        if ($this->isVersion('7.9.10')) {
+        if ($this->isVersion('7.14.2')) {
+            $this->getServiceManager()->register(SessionService::SERVICE_ID, new SessionService());
+            $modelConfig = $this->getServiceManager()->get(Ontology::SERVICE_ID)->getConfig();
+            $className = $modelConfig['class'];
+            $ontologyModel = new $className($modelConfig['config']);
+            if ($ontologyModel instanceof core_kernel_persistence_smoothsql_SmoothModel) {
+                $ontologyModel->setOption(
+                    \core_kernel_persistence_smoothsql_SmoothModel::OPTION_CACHE_SERVICE,
+                    \common_cache_Cache::SERVICE_ID
+                );
+            }
+            $this->getServiceManager()->register(Ontology::SERVICE_ID, $ontologyModel);
+            $this->setVersion('8.0.0');
+        }
+
+        $this->skip('8.0.0', '8.1.0');
+
+        if ($this->isVersion('8.1.0')) {
             /** @var \common_persistence_Manager $persistenceManager */
             $persistenceManager = $this->getServiceManager()->get(\common_persistence_Manager::SERVICE_ID);
 
@@ -351,7 +370,7 @@ class Updater extends common_ext_ExtensionUpdater {
             $persistenceManager->setOption('persistences', $persistenceManagerConfig);
             $this->getServiceManager()->register(\common_persistence_Manager::SERVICE_ID, $persistenceManager);
 
-            $this->setVersion('7.9.11');
+            $this->setVersion('8.1.1');
         }
     }
 }

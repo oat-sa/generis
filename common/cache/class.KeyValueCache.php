@@ -19,8 +19,6 @@
  *               2010-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-
-use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ConfigurableService;
 /**
  * Caches data in a key-value store

@@ -266,7 +266,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
 				$subject = $uri;
 		}
 
-		$returnValue = new core_kernel_classes_Resource($subject, __METHOD__);
+		$returnValue = $this->getModel()->getResource($subject);
 		if (!$returnValue->hasType($resource)){
 			$returnValue->setType($resource);
 		}

@@ -1,4 +1,6 @@
 <?php
+use oat\generis\model\GenerisRdf;
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +36,11 @@ class common_test_TestUserSession implements common_session_StatelessSession
     private $dataLanguage = DEFAULT_LANG;
     
     private $uiLanguage = DEFAULT_LANG;
+
+    /**
+     * @var common_test_TestUser
+     */
+    private $user;
     
     /**
      * Code of the timezone to use during the test
@@ -43,22 +50,26 @@ class common_test_TestUserSession implements common_session_StatelessSession
     private $timezone = TIME_ZONE;
     
     public function __construct() {
+        $this->user = new common_test_TestUser([
+            GenerisRdf::PROPERTY_USER_DEFLG => [DEFAULT_LANG],
+            GenerisRdf::PROPERTY_USER_UILG => [DEFAULT_LANG]
+        ]);
     }
     
     public function getUser() {
-        return new common_test_TestUser();
+        return $this->user;
     }
     
     /**
-     * (non-PHPdoc)
-     * @see common_session_AbstractSession::getUserUri()
+     * {@inheritDoc}
+     * @see common_session_Session::getUserUri()
      */
     public function getUserUri() {
         return $this->getUser()->getIdentifier();
     }
     
     /**
-     * (non-PHPdoc)
+     * {@inheritDoc}
      * @see common_session_Session::getUserLabel()
      */
     public function getUserLabel() {
@@ -66,8 +77,8 @@ class common_test_TestUserSession implements common_session_StatelessSession
     }
     
     /**
-     * (non-PHPdoc)
-     * @see common_session_AbstractSession::getUserRoles()
+     * {@inheritDoc}
+     * @see common_session_Session::getUserRoles()
      */
     public function getUserRoles() {
         return array();
@@ -88,7 +99,7 @@ class common_test_TestUserSession implements common_session_StatelessSession
      * @param string $languageCode
      */
     public function setDataLanguage($languageCode) {
-        $this->dataLanguage = $languageCode;
+        $this->getUser()->setPropertyValues(GenerisRdf::PROPERTY_USER_DEFLG, [$languageCode]);
     }
     
     /**
@@ -96,7 +107,8 @@ class common_test_TestUserSession implements common_session_StatelessSession
      * @see common_session_Session::getDataLanguage()
      */
     public function getDataLanguage() {
-        return $this->dataLanguage;
+        $values = $this->getUser()->getPropertyValues(GenerisRdf::PROPERTY_USER_DEFLG);
+        return $values[0];
     }
     
     /**
@@ -105,7 +117,7 @@ class common_test_TestUserSession implements common_session_StatelessSession
      * @param string $languageCode
      */
     public function setInterfaceLanguage($languageCode) {
-        $this->uiLanguage = $languageCode;
+        return $this->getUser()->setPropertyValues(GenerisRdf::PROPERTY_USER_UILG, [$languageCode]);
     }
     
     /**
@@ -113,7 +125,8 @@ class common_test_TestUserSession implements common_session_StatelessSession
      * @see common_session_Session::getInterfaceLanguage()
      */
     public function getInterfaceLanguage() {
-        return $this->uiLanguage;
+        $values = $this->getUser()->getPropertyValues(GenerisRdf::PROPERTY_USER_UILG);
+        return $values[0];
     }
     
     /**

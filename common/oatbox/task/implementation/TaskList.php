@@ -23,6 +23,9 @@ namespace oat\oatbox\task\implementation;
 
 use oat\oatbox\task\TaskInterface\TaskListIterator;
 
+/**
+ * @deprecated since version 7.10.0, to be removed in 8.0.
+ */
 class TaskList extends \ArrayIterator implements TaskListIterator
 {
 
