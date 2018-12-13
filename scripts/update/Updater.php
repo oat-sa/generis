@@ -350,7 +350,9 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('8.0.0');
         }
 
-        if ($this->isVersion('8.0.0')) {
+        $this->skip('8.0.0', '8.1.0');
+
+        if ($this->isVersion('8.1.0')) {
             $this->getServiceManager()->register(
                 ActionProtector::SERVICE_ID,
                 new ActionProtector(
@@ -359,7 +361,7 @@ class Updater extends common_ext_ExtensionUpdater {
                     ]
                 )
             );
-            $this->setVersion('8.1.0');
+            $this->setVersion('8.2.0');
         }
 
     }
