@@ -31,6 +31,7 @@ use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\user\AuthAdapter;
 use oat\generis\model\user\UserFactoryService;
+use oat\oatbox\action\ActionProtector;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\log\LoggerService;
@@ -347,6 +348,18 @@ class Updater extends common_ext_ExtensionUpdater {
             }
             $this->getServiceManager()->register(Ontology::SERVICE_ID, $ontologyModel);
             $this->setVersion('8.0.0');
+        }
+
+        if ($this->isVersion('8.0.0')) {
+            $this->getServiceManager()->register(
+                ActionProtector::SERVICE_ID,
+                new ActionProtector(
+                    [
+                        'frameSourceWhitelist' => ['self']
+                    ]
+                )
+            );
+            $this->setVersion('8.1.0');
         }
 
     }
