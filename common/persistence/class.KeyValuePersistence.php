@@ -20,7 +20,7 @@
  * @author Camille Moyon  <camille@taotesting.com>
  * @license GPLv2
  * @package generis
- 
+
  *
  */
 class common_persistence_KeyValuePersistence extends common_persistence_Persistence
@@ -62,8 +62,10 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      */
     public function set($key, $value, $ttl = null, $nx = false)
     {
-        if ($this->isLarge($value)) {
-            $value = $this->setLargeValue($key, $value, 0, true, true, $ttl, $nx);
+        if ($this->getParam(self::MAX_VALUE_SIZE) !== false) {
+            if ($this->isLarge($value)) {
+                $value = $this->setLargeValue($key, $value, 0, true, true, $ttl, $nx);
+            }
         }
         return $this->getDriver()->set($key, $value, $ttl, $nx);
     }
@@ -77,8 +79,10 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     public function get($key)
     {
         $value = $this->getDriver()->get($key);
-        if ($this->isSplit($value)) {
-            $value = $this->join($key, $value);
+        if ($this->getParam(self::MAX_VALUE_SIZE) !== false) {
+            if ($this->isSplit($value)) {
+                $value = $this->join($key, $value);
+            }
         }
         return $value;
     }
@@ -110,7 +114,11 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
         if ($this->isMappedKey($key)) {
             return false;
         } else {
-            return $this->deleteMappedKey($key) && $this->getDriver()->del($key);
+            $success = true;
+            if ($this->getParam(self::MAX_VALUE_SIZE) !== false) {
+                $success = $this->deleteMappedKey($key);
+            }
+            return $success && $this->getDriver()->del($key);
         }
     }
 
@@ -182,7 +190,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
         }
         return $success;
     }
-    
+
     /**
      * Purge the Driver if it implements common_persistence_Purgable
      * Otherwise throws common_exception_NotImplemented

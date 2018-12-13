@@ -20,7 +20,7 @@
  * @author Camille Moyon  <camille@taotesting.com>
  * @license GPLv2
  * @package generis
- 
+
  *
  */
 class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyValuePersistence
@@ -80,13 +80,16 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
             return $this->getDriver()->hSet($key, $field, $value);
         }
 
-        if ($this->isLarge($value)) {
-            $value = $this->setLargeValue($this->getMappedKey($key, $field), $value, 0, false);
+        if ($this->getParam(self::MAX_VALUE_SIZE) !== false) {
+            if ($this->isLarge($value)) {
+                $value = $this->setLargeValue($this->getMappedKey($key, $field), $value, 0, false);
+            }
+            $oldValue = $this->getDriver()->hGet($key, $field);
+            if ($this->isSplit($oldValue)) {
+                $this->deleteMappedKey($field, $oldValue);
+            }
         }
-        $oldValue = $this->getDriver()->hGet($key, $field);
-        if ($this->isSplit($oldValue)) {
-            $this->deleteMappedKey($field, $oldValue);
-        }
+
         return $this->getDriver()->hSet($key, $field, $value);
     }
 
@@ -101,16 +104,15 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
      */
     public function hGet($key, $field)
     {
-        if ($this->isMappedKey($key) || $this->isMappedKey($field)) {
-            return false;
-        }
-
         $value = $this->getDriver()->hGet($key, $field);
-
-        if ($this->isSplit($value)) {
-            $value =  $this->join($this->getMappedKey($key, $field), $value);
+        if ($this->getParam(self::MAX_VALUE_SIZE) !== false) {
+            if ($this->isMappedKey($key) || $this->isMappedKey($field)) {
+                return false;
+            }
+            if ($this->isSplit($value)) {
+                $value =  $this->join($this->getMappedKey($key, $field), $value);
+            }
         }
-
         return $value;
     }
 
@@ -129,11 +131,14 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
             return $fields;
         }
 
-        foreach ($fields as $field => $value) {
-            if ($this->isSplit($value)) {
-                $fields[$field] = $this->join($this->getMappedKey($key, $field), $value);
+        if ($this->getParam(self::MAX_VALUE_SIZE) !== false) {
+            foreach ($fields as $field => $value) {
+                if ($this->isSplit($value)) {
+                    $fields[$field] = $this->join($this->getMappedKey($key, $field), $value);
+                }
             }
         }
+
         return $fields;
     }
 
@@ -147,9 +152,12 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
     public function keys($pattern)
     {
         $keys = $this->getDriver()->keys($pattern);
-        foreach ($keys as $index => $key) {
-            if ($this->isMappedKey($key)) {
-                unset($keys[$index]);
+
+        if ($this->getParam(self::MAX_VALUE_SIZE) !== false) {
+            foreach ($keys as $index => $key) {
+                if ($this->isMappedKey($key)) {
+                    unset($keys[$index]);
+                }
             }
         }
         return $keys;
@@ -167,15 +175,19 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
             return false;
         } else {
             $success = true;
-            $fields = $this->getDriver()->hGetAll($key);
-            if (!empty($fields)) {
-                foreach ($fields as $subKey => $value) {
-                    if ($this->isSplit($value)) {
-                        $success = $success && $this->deleteMappedKey($subKey, $value);
+            if ($this->getParam(self::MAX_VALUE_SIZE) !== false) {
+                $fields = $this->getDriver()->hGetAll($key);
+                if (!empty($fields)) {
+                    foreach ($fields as $subKey => $value) {
+                        if ($this->isSplit($value)) {
+                            $success = $success && $this->deleteMappedKey($subKey, $value);
+                        }
                     }
                 }
+                $success = $success && $this->deleteMappedKey($key);
             }
-            return $this->deleteMappedKey($key) && $this->getDriver()->del($key);
+
+            return $success && $this->getDriver()->del($key);
         }
     }
 
