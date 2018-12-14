@@ -26,14 +26,28 @@ use oat\oatbox\user\User;
  */
 class common_test_TestUser implements User
 {
+    private $properties;
+
+    public function __construct($properties = [])
+    {
+        $this->properties = $properties;
+    }
+
    	public function getIdentifier()
    	{
    	    return LOCAL_NAMESPACE.'virtualTestUser';
    	}
-	
-	public function getPropertyValues($property)
+
+    public function setPropertyValues($property, $values)
+    {
+        $this->properties[$property] = $values;
+    }
+
+    public function getPropertyValues($property)
 	{
-	    return array();
+	    return isset($this->properties[$property])
+	       ? $this->properties[$property]
+	       : array();
 	}
 
 	public function getRoles()

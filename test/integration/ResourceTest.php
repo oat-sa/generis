@@ -31,8 +31,6 @@ use \common_Utils;
 use \core_kernel_classes_Literal;
 use \common_Collection;
 use \core_kernel_classes_Triple;
-use \Exception;
-use Prophecy\Prophet;
 
 class ResourceTest extends GenerisPhpUnitTestRunner{
 
@@ -132,7 +130,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 		$collection = $instance->getPropertyValuesCollection($seeAlso);
 		$this->assertTrue($collection->count() == 3);
 		foreach ($collection->getIterator() as $value) {
-			$this->assertIsA($value, 'core_kernel_classes_Container' );
+		    $this->assertInstanceOf('core_kernel_classes_Container', $value);
 			if($value instanceof core_kernel_classes_Resource ){
 				$this->assertTrue($value->getUri() == GenerisRdf::GENERIS_TRUE, $value->getUri() . ' must be equal to ' . GenerisRdf::GENERIS_TRUE);
 			}
@@ -521,12 +519,13 @@ class ResourceTest extends GenerisPhpUnitTestRunner{
 		// If there is no value for the targeted property,
 		// it should return null.
 		$one = $instance->getOnePropertyValue($seeAlso);
-		$this->assertEquals($one,null);
+		$this->assertEquals(null, $one);
 
 		
 		$instance->setPropertyValue($seeAlso,'plop');
 		$one = $instance->getOnePropertyValue($seeAlso);
-		$this->assertEquals($one->literal,'plop');
+		$this->assertInstanceOf(\core_kernel_classes_Literal::class, $one);
+		$this->assertEquals('plop', $one->literal);
 
         try {		
 		  $one = $instance->getOnePropertyValue($seeAlso, true);

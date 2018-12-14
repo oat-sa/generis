@@ -80,7 +80,7 @@ class AuthAdapter extends Configurable implements LoginAdapter
 
     /**
      * (non-PHPdoc)
-     * @see common_user_auth_Adapter::authenticate()
+     * @see \common_user_auth_Adapter::authenticate()
      * @throws \Exception
      */
     public function authenticate() {
