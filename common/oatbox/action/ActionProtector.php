@@ -38,13 +38,13 @@ class ActionProtector extends ConfigurableService
      */
     public function setFrameAncestorsHeader()
     {
-        $whitelistedSources = (array) $this->getOption('frameSourceWhitelist');
+        $whitelistedSources = $this->getOption('frameSourceWhitelist');
         if (empty($whitelistedSources)) {
             $whitelistedSources = ['none'];
         }
 
         header(sprintf(
-            'Content-Security-Policy: frame-ancestor %s',
+            'Content-Security-Policy: frame-ancestors %s',
             implode(' ', $whitelistedSources)
         ));
     }
