@@ -62,7 +62,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      */
     public function set($key, $value, $ttl = null, $nx = false)
     {
-        if ($this->getParam(self::MAX_VALUE_SIZE) !== false) {
+        if ($this->hasMaxSize()) {
             if ($this->isLarge($value)) {
                 $value = $this->setLargeValue($key, $value, 0, true, true, $ttl, $nx);
             }
@@ -79,7 +79,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     public function get($key)
     {
         $value = $this->getDriver()->get($key);
-        if ($this->getParam(self::MAX_VALUE_SIZE) !== false) {
+        if ($this->hasMaxSize()) {
             if ($this->isSplit($value)) {
                 $value = $this->join($key, $value);
             }
@@ -115,7 +115,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
             return false;
         } else {
             $success = true;
-            if ($this->getParam(self::MAX_VALUE_SIZE) !== false) {
+            if ($this->hasMaxSize()) {
                 $success = $this->deleteMappedKey($key);
             }
             return $success && $this->getDriver()->del($key);

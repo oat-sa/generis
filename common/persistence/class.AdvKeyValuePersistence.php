@@ -35,15 +35,18 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
      */
     public function hmSet($key, $fields)
     {
-        foreach ($fields as $field => $value) {
-            try {
-                if ($this->isLarge($value)) {
-                    $fields[$field] = $this->setLargeValue($this->getMappedKey($key, $field), $value, 0, false);
+        if ($this->hasMaxSize()) {
+            foreach ($fields as $field => $value) {
+                try {
+                    if ($this->isLarge($value)) {
+                        $fields[$field] = $this->setLargeValue($this->getMappedKey($key, $field), $value, 0, false);
+                    }
+                } catch (common_Exception $e) {
+                    common_Logger::w('Max size value is misconfigured: ' . $e->getMessage());
                 }
-            } catch (common_Exception $e) {
-                common_Logger::w('Max size value is misconfigured: ' . $e->getMessage());
             }
         }
+
         return $this->getDriver()->hmSet($key, $fields);
     }
 
@@ -80,14 +83,12 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
             return $this->getDriver()->hSet($key, $field, $value);
         }
 
-        if ($this->getParam(self::MAX_VALUE_SIZE) !== false) {
-            if ($this->isLarge($value)) {
-                $value = $this->setLargeValue($this->getMappedKey($key, $field), $value, 0, false);
-            }
-            $oldValue = $this->getDriver()->hGet($key, $field);
-            if ($this->isSplit($oldValue)) {
-                $this->deleteMappedKey($field, $oldValue);
-            }
+        if ($this->isLarge($value)) {
+            $value = $this->setLargeValue($this->getMappedKey($key, $field), $value, 0, false);
+        }
+        $oldValue = $this->getDriver()->hGet($key, $field);
+        if ($this->isSplit($oldValue)) {
+            $this->deleteMappedKey($field, $oldValue);
         }
 
         return $this->getDriver()->hSet($key, $field, $value);
@@ -105,7 +106,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
     public function hGet($key, $field)
     {
         $value = $this->getDriver()->hGet($key, $field);
-        if ($this->getParam(self::MAX_VALUE_SIZE) !== false) {
+        if ($this->hasMaxSize()) {
             if ($this->isMappedKey($key) || $this->isMappedKey($field)) {
                 return false;
             }
@@ -131,7 +132,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
             return $fields;
         }
 
-        if ($this->getParam(self::MAX_VALUE_SIZE) !== false) {
+        if ($this->hasMaxSize()) {
             foreach ($fields as $field => $value) {
                 if ($this->isSplit($value)) {
                     $fields[$field] = $this->join($this->getMappedKey($key, $field), $value);
@@ -153,7 +154,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
     {
         $keys = $this->getDriver()->keys($pattern);
 
-        if ($this->getParam(self::MAX_VALUE_SIZE) !== false) {
+        if ($this->hasMaxSize()) {
             foreach ($keys as $index => $key) {
                 if ($this->isMappedKey($key)) {
                     unset($keys[$index]);
@@ -175,7 +176,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
             return false;
         } else {
             $success = true;
-            if ($this->getParam(self::MAX_VALUE_SIZE) !== false) {
+            if ($this->hasMaxSize()) {
                 $fields = $this->getDriver()->hGetAll($key);
                 if (!empty($fields)) {
                     foreach ($fields as $subKey => $value) {
