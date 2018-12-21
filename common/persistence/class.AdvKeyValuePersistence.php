@@ -105,11 +105,13 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
      */
     public function hGet($key, $field)
     {
-        $value = $this->getDriver()->hGet($key, $field);
         if ($this->hasMaxSize()) {
             if ($this->isMappedKey($key) || $this->isMappedKey($field)) {
                 return false;
             }
+        }
+        $value = $this->getDriver()->hGet($key, $field);
+        if ($this->hasMaxSize()) {
             if ($this->isSplit($value)) {
                 $value =  $this->join($this->getMappedKey($key, $field), $value);
             }
