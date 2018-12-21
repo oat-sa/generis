@@ -19,6 +19,7 @@
  */
 namespace oat\generis\test;
 
+use oat\oatbox\service\ServiceManager;
 use Prophecy\Argument;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use common_persistence_Manager;
@@ -41,12 +42,20 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      */
     public function getServiceLocatorMock(array $services = [])
     {
-        $serviceLocatorProphecy = $this->prophesize(ServiceLocatorInterface::class);
+        $serviceLocator = new ServiceManager(
+            new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver())
+        );
         foreach ($services as $key => $service) {
-            $serviceLocatorProphecy->get($key)->willReturn($service);
+            $serviceLocator->register($key, $service);
         }
-
-        return $serviceLocatorProphecy->reveal();
+        return $serviceLocator;
+//        $serviceLocatorProphecy = $this->prophesize(ServiceLocatorInterface::class);
+//        foreach ($services as $key => $service) {
+//            $serviceLocatorProphecy->get($key)->willReturn($service);
+//        }
+//        $serviceLocatorProphecy->register($key, $service)->willReturn($service);
+//
+//        return $serviceLocatorProphecy->reveal();
     }
 
     /**

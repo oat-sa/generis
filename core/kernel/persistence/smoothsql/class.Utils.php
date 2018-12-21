@@ -246,7 +246,7 @@ class core_kernel_persistence_smoothsql_Utils
             // Add parenthesis.
             $finalPropertyQueries = array();
             foreach ($propertyQueries as $query) {
-                $finalPropertyQueries[] = "(${query})";
+                $finalPropertyQueries[] = "${query}";
             }
             
             return implode(' UNION ALL ', $finalPropertyQueries);
