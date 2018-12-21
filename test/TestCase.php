@@ -49,13 +49,6 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
             $serviceLocator->register($key, $service);
         }
         return $serviceLocator;
-//        $serviceLocatorProphecy = $this->prophesize(ServiceLocatorInterface::class);
-//        foreach ($services as $key => $service) {
-//            $serviceLocatorProphecy->get($key)->willReturn($service);
-//        }
-//        $serviceLocatorProphecy->register($key, $service)->willReturn($service);
-//
-//        return $serviceLocatorProphecy->reveal();
     }
 
     /**
