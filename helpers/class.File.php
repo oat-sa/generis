@@ -105,12 +105,18 @@ class helpers_File
     static public function isFileInsideDirectory($filename, $directory)
     {
         $canonicalDirectory = realpath($directory);
+        if (false === $canonicalDirectory) {
+            return false;
+        }
         $canonicalFilename = realpath($canonicalDirectory . DIRECTORY_SEPARATOR . $filename);
+        if (false === $canonicalFilename) {
+            return false;
+        }
         return 0 === strpos($canonicalFilename, $canonicalDirectory);
     }
 
     /**
-     * deletes a file or a directory recursively
+     * deletes a file or a direcstory recursively
      *
      * @access public
      * @author Lionel Lecaque, <lionel@taotesting.com>
