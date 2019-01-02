@@ -67,12 +67,22 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
     }
 
     public function incr($id) {
-        $this->persistence[$id]++;
-        return true;
+        if (!isset($this->persistence[$id])) {
+            $this->persistence[$id] = 0;
+        }
+        if (!is_int($this->persistence[$id])) {
+            throw new common_exception_InconsistentData('Cannot increment non intvalue for '.$id);
+        }
+        return ++$this->persistence[$id];
     }
 
     public function decr($id) {
-        $this->persistence[$id]--;
-        return true;
+        if (!isset($this->persistence[$id])) {
+            $this->persistence[$id] = 0;
+        }
+        if (!is_int($this->persistence[$id])) {
+            throw new common_exception_InconsistentData('Cannot decrement non intvalue for '.$id);
+        }
+        return --$this->persistence[$id];
     }
 }
