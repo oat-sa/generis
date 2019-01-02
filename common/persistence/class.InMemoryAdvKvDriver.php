@@ -61,7 +61,7 @@ class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemory
     public function hGetAll($key)
     {
         if (! isset($this->persistence[$key])) {
-            return false;
+            return [];
         }
         $data = [];
         $prefixLength = strlen(self::HPREFIX);
