@@ -188,7 +188,7 @@ class AdvKeyValuePersistenceTest extends TestCase
 
         $this->assertEquals(true, $persist->set('testIncr3', 'a'));
         $this->expectException(\common_exception_InconsistentData::class);
-        $this->assertEquals($persist->incr('testIncr3'));
+        $persist->incr('testIncr3');
     }
 
     public function testDecr()
@@ -211,7 +211,7 @@ class AdvKeyValuePersistenceTest extends TestCase
 
         $this->assertEquals(true, $persist->set('testDecr3', '-'));
         $this->expectException(\common_exception_InconsistentData::class);
-        $this->assertEquals($persist->decr('testDecr3'));
+        $persist->decr('testDecr3');
     }
 
     public function testMapMapControl()
