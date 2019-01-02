@@ -183,7 +183,7 @@ class AdvKeyValuePersistenceTest extends TestCase
         $this->assertEquals(2, $persist->get('testIncr0'));
         $this->assertEquals(0, $persist->get('testIncr1'));
 
-        $this->assertEquals(1, $persist->inc('testIncrUnset'));
+        $this->assertEquals(1, $persist->incr('testIncrUnset'));
         $this->assertEquals(1, $persist->get('testIncrUnset'));
 
         $this->assertEquals(true, $persist->set('testIncr3', 'a'));
