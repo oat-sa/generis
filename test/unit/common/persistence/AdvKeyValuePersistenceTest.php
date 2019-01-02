@@ -142,11 +142,6 @@ class AdvKeyValuePersistenceTest extends TestCase
         $this->assertTrue($this->largeValuePersistence->del('test'));
     }
 
-    public function testHgetAllReturnsArrayIfNoRecordsFound()
-    {
-        $this->assertEquals([], $this->largeValuePersistence->hGetAll('NOT_EXISTING_KEY'));
-    }
-
     public function testKeys()
     {
         $bigValue = $this->get100000bytesValue();
