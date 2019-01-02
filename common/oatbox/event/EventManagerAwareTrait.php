@@ -31,8 +31,8 @@ trait EventManagerAwareTrait
     /**
      * @return EventManager
      */
-    public function getEventManager()
+    protected function getEventManager()
     {
-        return ServiceManager::getServiceManager()->get(EventManager::CONFIG_ID);
+        return ServiceManager::getServiceManager()->get(EventManager::SERVICE_ID);
     }
 }
