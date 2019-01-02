@@ -176,12 +176,16 @@ class AdvKeyValuePersistenceTest extends TestCase
 
         $this->assertEquals(0, $persist->get('testIncr0'));
         $this->assertEquals(0, $persist->get('testIncr1'));
-        $this->assertEquals(true, $persist->incr('testIncr0'));
+        $this->assertEquals(1, $persist->incr('testIncr0'));
         $this->assertEquals(1, $persist->get('testIncr0'));
         $this->assertEquals(0, $persist->get('testIncr1'));
-        $this->assertEquals(true, $persist->incr('testIncr0'));
+        $this->assertEquals(2, $persist->incr('testIncr0'));
         $this->assertEquals(2, $persist->get('testIncr0'));
         $this->assertEquals(0, $persist->get('testIncr1'));
+
+        $this->assertEquals(true, $persist->set('testIncr3', 'a'));
+        $this->assertEquals(false, $persist->incr('testIncr3'));
+        $this->assertEquals('a', $persist->get('testIncr3'));
     }
 
     public function testDecr()
@@ -192,12 +196,16 @@ class AdvKeyValuePersistenceTest extends TestCase
 
         $this->assertEquals(1, $persist->get('testDecr0'));
         $this->assertEquals(0, $persist->get('testDecr1'));
-        $this->assertEquals(true, $persist->decr('testDecr0'));
+        $this->assertEquals(0, $persist->decr('testDecr0'));
         $this->assertEquals(0, $persist->get('testDecr0'));
         $this->assertEquals(0, $persist->get('testDecr1'));
-        $this->assertEquals(true, $persist->decr('testDecr0'));
+        $this->assertEquals(-1, $persist->decr('testDecr0'));
         $this->assertEquals(-1, $persist->get('testDecr0'));
         $this->assertEquals(0, $persist->get('testDecr1'));
+
+        $this->assertEquals(true, $persist->set('testdecr3', '-'));
+        $this->assertEquals(false, $persist->decr('testdecr3'));
+        $this->assertEquals('-', $persist->get('testdecr3'));
     }
 
     public function testMapMapControl()
