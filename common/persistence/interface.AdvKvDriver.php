@@ -40,19 +40,19 @@ interface common_persistence_AdvKvDriver extends common_persistence_KvDriver
 
     /**
      * Increment value and return the new value, can return negative numbers
-     * Returns false on non integer value
      *
      * @param string $key
      * @return integer
+     * @throws common_exception_InconsistentData on non int value
      */
     public function incr($key);
 
     /**
      * Decrement value and return the new value, can return negative numbers
-     * Returns false on non integer value
      *
      * @param $key
      * @return integer
+     * @throws common_exception_InconsistentData on non int value
      */
     public function decr($key);
 }

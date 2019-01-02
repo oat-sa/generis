@@ -183,7 +183,11 @@ class AdvKeyValuePersistenceTest extends TestCase
         $this->assertEquals(2, $persist->get('testIncr0'));
         $this->assertEquals(0, $persist->get('testIncr1'));
 
+        $this->assertEquals(1, $persist->inc('testIncrUnset'));
+        $this->assertEquals(1, $persist->get('testIncrUnset'));
+
         $this->assertEquals(true, $persist->set('testIncr3', 'a'));
+        $this->expectException(\common_exception_InconsistentData::class);
         $this->assertEquals(false, $persist->incr('testIncr3'));
         $this->assertEquals('a', $persist->get('testIncr3'));
     }
@@ -203,9 +207,13 @@ class AdvKeyValuePersistenceTest extends TestCase
         $this->assertEquals(-1, $persist->get('testDecr0'));
         $this->assertEquals(0, $persist->get('testDecr1'));
 
-        $this->assertEquals(true, $persist->set('testdecr3', '-'));
-        $this->assertEquals(false, $persist->decr('testdecr3'));
-        $this->assertEquals('-', $persist->get('testdecr3'));
+        $this->assertEquals(-1, $persist->decr('testDecrUnset'));
+        $this->assertEquals(-1, $persist->get('testDecrUnset'));
+
+        $this->assertEquals(true, $persist->set('testDecr3', '-'));
+        $this->expectException(\common_exception_InconsistentData::class);
+        $this->assertEquals(false, $persist->decr('testDecr3'));
+        $this->assertEquals('-', $persist->get('testDecr3'));
     }
 
     public function testMapMapControl()
