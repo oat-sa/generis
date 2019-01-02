@@ -49,10 +49,10 @@ class AdvKeyValuePersistenceTest extends TestCase
     }
 
     /**
-     * @expectedException \common_Exception
      */
     public function testLargeHmsetSetWithWrongSize()
     {
+        $this->expectException(\common_Exception::class);
         $this->largeValuePersistence = new \common_persistence_AdvKeyValuePersistence(
             array(
                 \common_persistence_AdvKeyValuePersistence::MAX_VALUE_SIZE => 'toto'
@@ -170,19 +170,34 @@ class AdvKeyValuePersistenceTest extends TestCase
 
     public function testIncr()
     {
-        $attributes = array(
-            'fixture' => 'value',
-            'fixture1' => 'value1',
-            'fixture2' => 'value2',
-            'fixture3' => 'value3',
-        );
+        $persist = $this->largeValuePersistence;
+        $persist->set('testIncr0', 0);
+        $persist->set('testIncr1', 0);
 
-        $this->largeValuePersistence->hmSet(1, $attributes);
-        $this->largeValuePersistence->incr(1);
-        $this->assertFalse($this->largeValuePersistence->exists(1));
-        $this->assertTrue($this->largeValuePersistence->exists(2));
+        $this->assertEquals(0, $persist->get('testIncr0'));
+        $this->assertEquals(0, $persist->get('testIncr1'));
+        $this->assertEquals(true, $persist->incr('testIncr0'));
+        $this->assertEquals(1, $persist->get('testIncr0'));
+        $this->assertEquals(0, $persist->get('testIncr1'));
+        $this->assertEquals(true, $persist->incr('testIncr0'));
+        $this->assertEquals(2, $persist->get('testIncr0'));
+        $this->assertEquals(0, $persist->get('testIncr1'));
+    }
 
-        $this->assertTrue($this->largeValuePersistence->del(2));
+    public function testDecr()
+    {
+        $persist = $this->largeValuePersistence;
+        $persist->set('testDecr0', 1);
+        $persist->set('testDecr1', 0);
+
+        $this->assertEquals(1, $persist->get('testDecr0'));
+        $this->assertEquals(0, $persist->get('testDecr1'));
+        $this->assertEquals(true, $persist->decr('testDecr0'));
+        $this->assertEquals(0, $persist->get('testDecr0'));
+        $this->assertEquals(0, $persist->get('testDecr1'));
+        $this->assertEquals(true, $persist->decr('testDecr0'));
+        $this->assertEquals(-1, $persist->get('testDecr0'));
+        $this->assertEquals(0, $persist->get('testDecr1'));
     }
 
     public function testMapMapControl()

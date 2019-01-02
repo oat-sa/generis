@@ -39,17 +39,20 @@ interface common_persistence_AdvKvDriver extends common_persistence_KvDriver
     public function keys($pattern);
 
     /**
-     * Increment value
+     * Increment value and return the new value, can return negative numbers
+     * Returns false on non integer value
      *
-     * @param string $id
-     * @return boolean
+     * @param string $key
+     * @return integer
      */
     public function incr($key);
 
     /**
-     * Decrement value
-     * @param $id
-     * @return boolean
+     * Decrement value and return the new value, can return negative numbers
+     * Returns false on non integer value
+     *
+     * @param $key
+     * @return integer
      */
     public function decr($key);
 }
