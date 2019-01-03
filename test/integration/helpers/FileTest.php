@@ -18,7 +18,7 @@
  *
  */
 
-namespace oat\generis\test\unit\helpers;
+namespace oat\generis\test\integration\helpers;
 
 use oat\generis\test\TestCase;
 
