@@ -20,6 +20,9 @@
  */
 namespace oat\oatbox\task;
 
+/**
+ * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\QueueDispatcher instead.
+ */
 interface Queue extends \IteratorAggregate
 {
     /**
@@ -27,8 +30,14 @@ interface Queue extends \IteratorAggregate
      */
     const CONFIG_ID = 'generis/taskqueue';
 
+    /**
+     * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\QueueDispatcherInterface::SERVICE_ID instead.
+     */
     const SERVICE_ID = 'generis/taskqueue';
 
+    /**
+     * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\QueueDispatcherInterface::FILE_SYSTEM_ID instead.
+     */
     const FILE_SYSTEM_ID = 'taskQueueStorage';
 
     /**
@@ -38,19 +47,32 @@ interface Queue extends \IteratorAggregate
      * @param $task
      * @param boolean $repeatedly Whether task created repeatedly (for example when execution of task was failed and task puts to the queue again).
      * @return mixed
+     *
+     * @deprecated since version 7.10.0, to be removed in 8.0.
      */
     public function createTask($actionId, $parameters, $repeatedly = false , $label = null , $task = null);
-    
+
+    /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     */
     public function getIterator();
 
+    /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     */
     public function updateTaskStatus($taskId, $status);
 
+    /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     */
     public function updateTaskReport($taskId, $report);
 
     /**
      * Get task instance by id
      * @param $taskId
      * @return Task
+     *
+     * @deprecated since version 7.10.0, to be removed in 8.0.
      */
     public function getTask($taskId);
 

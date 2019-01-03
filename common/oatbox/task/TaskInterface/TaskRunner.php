@@ -25,9 +25,14 @@ namespace oat\oatbox\task\TaskInterface;
 use oat\oatbox\task\Task;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
+/**
+ * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\Worker\WorkerInterface instead.
+ */
 interface TaskRunner extends ServiceLocatorAwareInterface
 {
     /**
+     * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param Task $task
      * @return \common_report_Report
      */

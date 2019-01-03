@@ -17,7 +17,9 @@
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * 
  */
+
 use oat\generis\test\TestCase;
+use common_report_Report as Report;
 
 class ReportTest extends TestCase {
 	
@@ -127,4 +129,61 @@ class ReportTest extends TestCase {
 		$this->assertTrue($report->contains(common_report_Report::TYPE_INFO));
 		$this->assertTrue($report->contains(common_report_Report::TYPE_ERROR));
 	}
+
+    public function testGetSuccessesAsFlat()
+    {
+        $report = new Report(Report::TYPE_INFO);
+        $succes_1 = new Report(Report::TYPE_SUCCESS, 'success_1');
+        $succes_1_1 = new Report(Report::TYPE_SUCCESS, 'success_1_1');
+        $succes_1->add($succes_1_1);
+        $succes_2 = new Report(Report::TYPE_SUCCESS, 'success_2');
+
+        $report->add($succes_1);
+        $report->add($succes_2);
+
+        $successes = $report->getSuccesses(true);
+
+        $this->assertCount(3, $successes, '3 successes should be returned');
+        $this->assertEquals('success_1', (string) array_shift($successes));
+        $this->assertEquals('success_1_1', (string) array_shift($successes));
+        $this->assertEquals('success_2', (string) array_shift($successes));
+    }
+
+    public function testGetInfosAsFlat()
+    {
+        $report = new Report(Report::TYPE_SUCCESS);
+        $info_1 = new Report(Report::TYPE_INFO, 'info_1');
+        $info_1_1 = new Report(Report::TYPE_INFO, 'info_1_1');
+        $info_1->add($info_1_1);
+        $info_2 = new Report(Report::TYPE_INFO, 'info_2');
+
+        $report->add($info_1);
+        $report->add($info_2);
+
+        $infos = $report->getInfos(true);
+
+        $this->assertCount(3, $infos, '3 infos should be returned');
+        $this->assertEquals('info_1', (string) array_shift($infos));
+        $this->assertEquals('info_1_1', (string) array_shift($infos));
+        $this->assertEquals('info_2', (string) array_shift($infos));
+    }
+
+    public function testGetErrosAsFlat()
+    {
+        $report = new Report(Report::TYPE_SUCCESS);
+        $error_1 = new Report(Report::TYPE_ERROR, 'error_1');
+        $error_1_1 = new Report(Report::TYPE_ERROR, 'error_1_1');
+        $error_1->add($error_1_1);
+        $error_2 = new Report(Report::TYPE_ERROR, 'error_2');
+
+        $report->add($error_1);
+        $report->add($error_2);
+
+        $errors = $report->getErrors(true);
+
+        $this->assertCount(3, $errors, '3 errors should be returned');
+        $this->assertEquals('error_1', (string) array_shift($errors));
+        $this->assertEquals('error_1_1', (string) array_shift($errors));
+        $this->assertEquals('error_2', (string) array_shift($errors));
+    }
 }

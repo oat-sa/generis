@@ -24,7 +24,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use common_persistence_Manager;
 use common_persistence_sql_dbal_Driver;
 
-class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
     /**
      * Forward compatibility function for PHPUnit 7.0
@@ -67,5 +67,24 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $pmProphecy->getPersistenceById($key)->willReturn($persistence);
 
         return $pmProphecy->reveal();
+    }
+
+    /**
+     * Forward compatibility function for PHPUnit 5.4+
+     *
+     * Returns a test double for the specified class.
+     *
+     * @param string $originalClassName
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @throws \PHPUnit_Framework_Exception
+     * @since Method available since Release 5.4.0
+     */
+    protected function createMock($originalClassName)
+    {
+        return $this->getMockBuilder($originalClassName)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->getMock();
     }
 }

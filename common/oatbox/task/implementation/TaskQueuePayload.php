@@ -16,6 +16,9 @@ use oat\tao\model\datatable\DatatableRequest as DatatableRequestInterface;
 use oat\tao\model\datatable\implementation\DatatableRequest;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
+/**
+ * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\TaskLog\DataTablePayload instead.
+ */
 class TaskQueuePayload implements TaskPayLoad
 {
 
