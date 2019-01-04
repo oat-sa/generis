@@ -18,7 +18,7 @@
  *
  */
 
-class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemoryKvDriver
+class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemoryKvDriver implements common_persistence_AdvKvDriver
 {
     const HPREFIX = 'hPrfx_';
 
@@ -61,7 +61,7 @@ class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemory
     public function hGetAll($key)
     {
         if (! isset($this->persistence[$key])) {
-            return false;
+            return [];
         }
         $data = [];
         $prefixLength = strlen(self::HPREFIX);
@@ -80,15 +80,4 @@ class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemory
         }
         return [];
     }
-
-    public function incr($key)
-    {
-        if (! isset($this->persistence[$key])) {
-            return false;
-        }
-        $this->persistence[$key+1] = $this->persistence[$key];
-        unset($this->persistence[$key]);
-        return true;
-    }
-
 }
