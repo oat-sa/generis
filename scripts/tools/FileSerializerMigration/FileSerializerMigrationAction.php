@@ -19,13 +19,15 @@
  * @author Martijn Swinkels <m.swinkels@taotesting.com>
  */
 
-namespace oat\generis\scripts\tools;
+namespace oat\generis\scripts\tools\FileSerializerMigration;
 
 use common_Exception;
 use common_exception_Error;
 use common_report_Report as Report;
 use common_report_Report;
-use oat\generis\Helper\FileSerializerMigrationHelper;
+
+use oat\generis\model\fileReference\FileReferenceSerializer;
+use oat\generis\model\fileReference\UrlFileSerializer;
 use oat\oatbox\extension\script\ScriptAction;
 use oat\oatbox\service\exception\InvalidServiceManagerException;
 
@@ -33,11 +35,9 @@ use oat\oatbox\service\exception\InvalidServiceManagerException;
  * Migrate ResourceFileSerializer references to the new UrlFileSerializer system
  *   [properties]
  *      --wet-run (-w) - Execute the migration
- *      --limit (-l) - The amount of resources that are processed in one batch
  */
-class FileSerializerMigration extends ScriptAction
+class FileSerializerMigrationAction extends ScriptAction
 {
-    const RESOURCE_LIMIT = 200;
     const MIGRATION_REPORT_LINES = [
         'migration_success' => [
             'dry' => '%s old references will be migrated into %s new file serializer references.',
@@ -77,13 +77,11 @@ class FileSerializerMigration extends ScriptAction
 
         $migrationHelper = $this->getMigrationHelper();
 
-        $migrationHelper->migrateFiles(
-            $this->hasOption('resourceLimit') ? $this->getOption('resourceLimit') : self::RESOURCE_LIMIT
-        );
+        $migrationHelper->migrateFiles();
 
         $this->addMigrationReport();
 
-        if ($migrationHelper->updateFileSerializer()) {
+        if ($this->updateFileSerializer()) {
             $this->report->add(Report::createSuccess(
                 self::MIGRATION_REPORT_LINES['serializer_update_success'][$this->getMigrationReportKey()]
             ));
@@ -131,13 +129,6 @@ class FileSerializerMigration extends ScriptAction
                 'prefix' => 'w',
                 'longPrefix' => 'wet-run',
                 'description' => 'Add this flag to migrate the references, as opposed to just listing them (dry/wet run)'
-            ],
-            'resourceLimit' => [
-                'prefix' => 'l',
-                'longPrefix' => 'limit',
-                'cast' => 'integer',
-                'defaultValue' => self::RESOURCE_LIMIT,
-                'description' => 'How many items should be processed each run?'
             ]
         ];
     }
@@ -187,6 +178,42 @@ class FileSerializerMigration extends ScriptAction
                 ));
             }
         }
+    }
+
+    /**
+     * Update the FileReferenceSerializer service to use the UrlFileSerializer.
+     *
+     * @return bool
+     * @throws common_Exception
+     */
+    public function updateFileSerializer()
+    {
+        $updated = false;
+        if ($this->fileSerializerNeedsUpdate()) {
+            if ($this->isWetRun) {
+                $this->getServiceManager()->register(FileReferenceSerializer::SERVICE_ID, new UrlFileSerializer());
+            }
+            $updated = true;
+        }
+
+        return $updated;
+    }
+
+    /**
+     * Check if the file serializer service needs to be updated
+     *
+     * @return bool
+     * @throws InvalidServiceManagerException
+     */
+    private function fileSerializerNeedsUpdate()
+    {
+        $needsUpdate = true;
+        $currentFileReferenceSerializer = $this->getServiceManager()->get(FileReferenceSerializer::SERVICE_ID);
+        if ($currentFileReferenceSerializer instanceof UrlFileSerializer) {
+            $needsUpdate = false;
+        }
+
+        return $needsUpdate;
     }
 
     /**

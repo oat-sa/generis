@@ -17,7 +17,7 @@
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
  */
 
-namespace oat\generis\model\fileReference;
+namespace oat\generis\scripts\tools\FileSerializerMigration;
 
 use common_persistence_SqlPersistence;
 use core_kernel_classes_ClassIterator;
@@ -89,11 +89,6 @@ class ResourceFileIterator implements Iterator
      * @var int
      */
     private $lastId = 0;
-
-    /**
-     * @var int[]
-     */
-    private $corruptFileIds = [];
 
     /**
      * ResourceFileIterator constructor.
@@ -233,7 +228,6 @@ class ResourceFileIterator implements Iterator
             $resourcesData[$resourceUri]['resource'] = new core_kernel_classes_Resource($resourceUri);
             $resourcesData[$resourceUri]['id'] = $fileResource['id'];
             if (!isset($parentData[$resourceUri])) {
-                $this->corruptFileIds[] = $fileResource['id'];
                 continue;
             }
             $resourcesData[$resourceUri]['property'] = $parentData[$resourceUri]['predicate'];
@@ -260,10 +254,6 @@ class ResourceFileIterator implements Iterator
             ->andWhere('object = :rdf_file_class')
             ->andWhere('id > ' . $this->lastId);
 
-        if (!empty($this->corruptFileIds)) {
-            $subSelect->andWhere('id NOT IN(:corrupt_ids)');
-        }
-
         $select = $platform->getQueryBuilder()
             ->select('subject, id')
             ->from(sprintf('(%s)', $subSelect->getSQL()), 'unionq')
@@ -272,10 +262,6 @@ class ResourceFileIterator implements Iterator
                 'rdf_file_class' => GenerisRdf::CLASS_GENERIS_FILE
             ])
             ->groupBy('id, subject HAVING COUNT(*) >=1')->setMaxResults($this->cacheSize);
-
-        if (!empty($this->corruptFileIds)) {
-            $select->setParameter('corrupt_ids', array_keys($this->corruptFileIds), Connection::PARAM_INT_ARRAY);
-        }
 
         return $select->execute()->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE);
     }

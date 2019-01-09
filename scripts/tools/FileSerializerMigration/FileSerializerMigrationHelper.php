@@ -17,13 +17,10 @@
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
-namespace oat\generis\Helper;
+namespace oat\generis\scripts\tools\FileSerializerMigration;
 
-use common_Exception;
 use core_kernel_classes_Resource;
-use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\FileSerializerException;
-use oat\generis\model\fileReference\ResourceFileIterator;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\fileReference\UrlFileSerializer;
 use oat\generis\model\GenerisRdf;
@@ -31,11 +28,11 @@ use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
 use oat\oatbox\service\ServiceManager;
+use oat\tao\model\resources\ResourceIterator;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Helper class for the File serializer migration script
- * @see \oat\generis\scripts\tools\FileSerializerMigration
  */
 class FileSerializerMigrationHelper
 {
@@ -92,16 +89,15 @@ class FileSerializerMigrationHelper
     }
 
     /**
-     * Get the resources that should be migrated.
+     * Get the file resources and migrate them.
      *
-     * @param int $limit
      * @return void
      * @throws FileSerializerException
      * @throws \common_exception_Error
      */
-    public function migrateFiles($limit)
+    public function migrateFiles()
     {
-        $fileResources = new ResourceFileIterator(GenerisRdf::CLASS_GENERIS_FILE, $limit);
+        $fileResources = new ResourceFileIterator(GenerisRdf::CLASS_GENERIS_FILE);
 
         foreach ($fileResources as $fileResourceData) {
             $resourceUri = $fileResourceData['resource']->getUri();
@@ -149,41 +145,6 @@ class FileSerializerMigrationHelper
         }
 
         ++$this->migrationInformation['migrated_count'];
-    }
-
-    /**
-     * Update the FileReferenceSerializer service to use the UrlFileSerializer.
-     *
-     * @return bool
-     * @throws common_Exception
-     */
-    public function updateFileSerializer()
-    {
-        $updated = false;
-        if ($this->fileSerializerNeedsUpdate()) {
-            if ($this->isWetRun) {
-                $this->getServiceManager()->register(FileReferenceSerializer::SERVICE_ID, new UrlFileSerializer());
-            }
-            $updated = true;
-        }
-
-        return $updated;
-    }
-
-    /**
-     * Check if the file serializer service needs to be updated
-     *
-     * @return bool
-     */
-    private function fileSerializerNeedsUpdate()
-    {
-        $needsUpdate = true;
-        $currentFileReferenceSerializer = $this->getServiceManager()->get(FileReferenceSerializer::SERVICE_ID);
-        if ($currentFileReferenceSerializer instanceof UrlFileSerializer) {
-            $needsUpdate = false;
-        }
-
-        return $needsUpdate;
     }
 
     /**
