@@ -81,11 +81,6 @@ class ResourceFileIterator implements Iterator
     private $cacheSize;
 
     /**
-     * @var array
-     */
-    public $failedResources = [];
-
-    /**
      * @var int
      */
     private $lastId = 0;
