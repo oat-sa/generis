@@ -21,9 +21,6 @@
  * 
  */
 
-use oat\oatbox\service\ServiceManager;
-use oat\oatbox\log\LoggerService;
-
 /**
  * Abstraction for the System Logger
  *
@@ -369,10 +366,8 @@ class common_Logger
      */
     public function handleException( Exception $exception)
     {
-        
-        $severity = method_exists($exception, 'getSeverity') ? $exception->getSeverity() : self::INFO_LEVEL;
+        $severity = method_exists($exception, 'getSeverity') ? $exception->getSeverity() : self::ERROR_LEVEL;
         self::singleton()->log($severity, $exception->getMessage(), array(get_class($exception)), $exception->getFile(), $exception->getLine());
-        
     }
 
     /**
