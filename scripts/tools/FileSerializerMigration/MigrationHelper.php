@@ -19,7 +19,9 @@
 
 namespace oat\generis\scripts\tools\FileSerializerMigration;
 
+use core_kernel_classes_Property;
 use core_kernel_classes_Resource;
+use oat\generis\model\resource\ResourceCollection;
 use oat\generis\model\fileReference\FileSerializerException;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\fileReference\UrlFileSerializer;
@@ -28,16 +30,19 @@ use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
 use oat\oatbox\service\ServiceManager;
-use oat\tao\model\resources\ResourceIterator;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Helper class for the File serializer migration script
  */
-class FileSerializerMigrationHelper
+class MigrationHelper
 {
-
     use OntologyAwareTrait;
+
+    /**
+     * Amount of resources processed in one batch
+     */
+    const BATCH_LIMIT = 100;
 
     /**
      * @var UrlFileSerializer
@@ -79,6 +84,16 @@ class FileSerializerMigrationHelper
     private $serviceManager;
 
     /**
+     * @var bool
+     */
+    public $endReached = false;
+
+    /**
+     * @var ResourceCollection
+     */
+    private $fileResourceCollection;
+
+    /**
      * FileSerializerMigrationHelper constructor.
      *
      * @param bool $wetRun
@@ -93,26 +108,25 @@ class FileSerializerMigrationHelper
      *
      * @return void
      * @throws FileSerializerException
-     * @throws \common_exception_Error
      */
     public function migrateFiles()
     {
-        $fileResources = new ResourceFileIterator(GenerisRdf::CLASS_GENERIS_FILE);
+        $fileResources = $this->getFileResourceData();
 
         foreach ($fileResources as $fileResourceData) {
-            $resourceUri = $fileResourceData['resource']->getUri();
+            $resourceUri = $fileResourceData['fileResource']->getUri();
             if (!isset($fileResourceData['property'])) {
                 $this->failedResources[$resourceUri][] = 'Unable to find property';
                 continue;
             }
-            if (!isset($fileResourceData['parent'])) {
-                $this->failedResources[$resourceUri][] = 'Unable to find parent resource';
+            if (!isset($fileResourceData['subject'])) {
+                $this->failedResources[$resourceUri][] = 'Unable to find subject';
                 continue;
             }
 
             ++$this->migrationInformation['old_resource_count'];
             $this->migrateResource(
-                $fileResourceData['resource'], $fileResourceData['property'], $fileResourceData['parent']
+                $fileResourceData['fileResource'], $fileResourceData['property'], $fileResourceData['subject']
             );
         }
     }
@@ -120,28 +134,21 @@ class FileSerializerMigrationHelper
     /**
      * Migrate a single resource.
      *
-     * @param core_kernel_classes_Resource $oldResource
-     * @param string $predicateUri
-     * @param string $parentResourceUri
+     * @param core_kernel_classes_Resource $fileResource
+     * @param core_kernel_classes_Property $property
+     * @param core_kernel_classes_Resource $subject
      * @return void
      * @throws FileSerializerException
      */
-    public function migrateResource(core_kernel_classes_Resource $oldResource, $predicateUri, $parentResourceUri)
+    public function migrateResource(core_kernel_classes_Resource $fileResource, core_kernel_classes_Property $property, core_kernel_classes_Resource $subject)
     {
-        $property = $this->getProperty($predicateUri);
-        $resource = $this->getResource($parentResourceUri);
-        if ($resource === null) {
-            return;
-        }
-
         /** @var Directory|File $unserializedFileResource */
-        $unserializedFileResource = $this->getResourceFileSerializer()->unserialize($oldResource);
+        $unserializedFileResource = $this->getResourceFileSerializer()->unserialize($fileResource);
         $migratedValue = $this->getUrlFileSerializer()->serialize($unserializedFileResource);
 
-
         if ($this->isWetRun) {
-            $resource->editPropertyValues($property, $migratedValue);
-            $oldResource->delete();
+            $subject->editPropertyValues($property, $migratedValue);
+            $fileResource->delete();
         }
 
         ++$this->migrationInformation['migrated_count'];
@@ -210,5 +217,32 @@ class FileSerializerMigrationHelper
     private function getServiceManager()
     {
         return $this->serviceManager;
+    }
+
+    /**
+     * @return array
+     */
+    private function getFileResourceData()
+    {
+        $mappedResourceData = [];
+        if ($this->fileResourceCollection === null) {
+            $this->fileResourceCollection = new ResourceCollection(self::BATCH_LIMIT);
+            $this->fileResourceCollection->addTypeFilter(GenerisRdf::CLASS_GENERIS_FILE);
+        }
+        $this->fileResourceCollection->nextBlock();
+        $fileResourceUris = $this->fileResourceCollection->getUris();
+        $this->endReached = $this->fileResourceCollection->endReached();
+
+        $parentFileResources = new ResourceCollection(0);
+        $parentFileResources->addFilter('object', 'IN', $fileResourceUris);
+        foreach ($parentFileResources as $resourceUri => $parentFileResource) {
+            $mappedResourceData[] = [
+                'fileResource' => $this->getResource($parentFileResource['object']),
+                'property' => $this->getProperty($parentFileResource['predicate']),
+                'subject' => $this->getResource($parentFileResource['subject']),
+            ];
+        }
+
+        return $mappedResourceData;
     }
 }

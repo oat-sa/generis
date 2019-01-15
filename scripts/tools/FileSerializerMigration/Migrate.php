@@ -36,7 +36,7 @@ use oat\oatbox\service\exception\InvalidServiceManagerException;
  *   [properties]
  *      --wet-run (-w) - Execute the migration
  */
-class FileSerializerMigrationAction extends ScriptAction
+class Migrate extends ScriptAction
 {
     const MIGRATION_REPORT_LINES = [
         'migration_success' => [
@@ -54,7 +54,7 @@ class FileSerializerMigrationAction extends ScriptAction
     ];
 
     /**
-     * @var FileSerializerMigrationHelper
+     * @var MigrationHelper
      */
     private $migrationHelper;
 
@@ -77,7 +77,9 @@ class FileSerializerMigrationAction extends ScriptAction
 
         $migrationHelper = $this->getMigrationHelper();
 
-        $migrationHelper->migrateFiles();
+        while ($migrationHelper->endReached === false) {
+            $migrationHelper->migrateFiles();
+        }
 
         $this->addMigrationReport();
 
@@ -190,7 +192,7 @@ class FileSerializerMigrationAction extends ScriptAction
     {
         $updated = false;
         if ($this->fileSerializerNeedsUpdate()) {
-            if ($this->isWetRun) {
+            if ($this->isWetRun()) {
                 $this->getServiceManager()->register(FileReferenceSerializer::SERVICE_ID, new UrlFileSerializer());
             }
             $updated = true;
@@ -219,13 +221,13 @@ class FileSerializerMigrationAction extends ScriptAction
     /**
      * Get the file serializer migration helper
      *
-     * @return FileSerializerMigrationHelper
+     * @return MigrationHelper
      * @throws InvalidServiceManagerException
      */
     private function getMigrationHelper()
     {
         if ($this->migrationHelper === null) {
-            $this->migrationHelper = new FileSerializerMigrationHelper($this->isWetRun());
+            $this->migrationHelper = new MigrationHelper($this->isWetRun());
             $this->migrationHelper->setServiceLocator($this->getServiceLocator());
             $this->migrationHelper->setServiceManager($this->getServiceManager());
         }
