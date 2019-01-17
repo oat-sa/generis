@@ -37,7 +37,7 @@ class common_configuration_FileSystemComponent
     // --- ATTRIBUTES ---
 
     /**
-     * Whether should be checked recursively (if passed location of dirrectory).
+     * Whether should be checked recursively (if passed location of directory).
      *
      * @access private
      * @var boolean
@@ -60,6 +60,14 @@ class common_configuration_FileSystemComponent
      */
     private $expectedRights = '';
 
+    /**
+     * Whether must check if is empty (if passed location of directory).
+     *
+     * @access private
+     * @var boolean
+     */
+    private $mustCheckIfEmpty = false;
+
     // --- OPERATIONS ---
 
     /**
@@ -70,15 +78,17 @@ class common_configuration_FileSystemComponent
      * @param  string location
      * @param  string expectedRights
      * @param  boolean optional
+     * @throws common_configuration_MalformedRightsException
      * @return mixed
      */
-    public function __construct($location, $expectedRights, $optional = false, $recursive = false)
+    public function __construct($location, $expectedRights, $optional = false, $recursive = false, $mustCheckIfEmpty = false)
     {
-        
         parent::__construct('tao.configuration.filesystem', $optional);
+
         $this->setExpectedRights($expectedRights);
         $this->setLocation($location);
         $this->setRecursive($recursive);
+        $this->setMustCheckIfEmpty($mustCheckIfEmpty);
     }
 
     /**
@@ -90,11 +100,7 @@ class common_configuration_FileSystemComponent
      */
     public function getLocation()
     {
-        $returnValue = (string) '';
-
-        
         $returnValue = $this->location;
-        
 
         return (string) $returnValue;
     }
@@ -109,9 +115,7 @@ class common_configuration_FileSystemComponent
      */
     public function setLocation($location)
     {
-        
         $this->location = $location;
-        
     }
     
     /**
@@ -140,6 +144,31 @@ class common_configuration_FileSystemComponent
     }
 
     /**
+     * Set $this->mustCheckIfEmpty value
+     *
+     * @access public
+     * @author Jonathan VUiLLEMIN, <jonathan@taotesting.com>
+     * @param boolean $mustCheckIfEmpty
+     * @return void
+     */
+    public function setMustCheckIfEmpty($mustCheckIfEmpty)
+    {
+        $this->mustCheckIfEmpty = $mustCheckIfEmpty;
+    }
+
+    /**
+     * Get $this->mustCheckIfEmpty value
+     *
+     * @access public
+     * @author Jonathan VUiLLEMIN, <jonathan@taotesting.com>
+     * @return boolean
+     */
+    public function getMustCheckIfEmpty()
+    {
+        return $this->mustCheckIfEmpty;
+    }
+
+    /**
      * Short description of method exists
      *
      * @access public
@@ -148,11 +177,7 @@ class common_configuration_FileSystemComponent
      */
     public function exists()
     {
-        $returnValue = (bool) false;
-
-        
         $returnValue = @file_exists($this->getLocation());
-        
 
         return (bool) $returnValue;
     }
@@ -166,11 +191,7 @@ class common_configuration_FileSystemComponent
      */
     public function getExpectedRights()
     {
-        $returnValue = (string) '';
-
-        
         $returnValue = $this->expectedRights;
-        
 
         return (string) $returnValue;
     }
@@ -186,7 +207,7 @@ class common_configuration_FileSystemComponent
     public function setExpectedRights($expectedRights)
     {
         
-        if (!empty($expectedRights) && preg_match('/^r*w*x*$/', $expectedRights) !== 0){
+        if (!empty($expectedRights) && preg_match('/^r*w*x*$/', $expectedRights) !== 0) {
             $this->expectedRights = $expectedRights;    
         }
         else{
@@ -206,40 +227,58 @@ class common_configuration_FileSystemComponent
     {
         $returnValue = null;
 
-        
         $expectedRights = $this->getExpectedRights();
         $location = $this->getLocation();
         $name = $this->getName();
         
-        if (!$this->exists()){
-            return new common_configuration_Report(common_configuration_Report::UNKNOWN,
-                                                   "File system component '${name}' could not be found in '${location}'.",
-                                                   $this);
-        }
-        else{
-            if (strpos($expectedRights, 'r') !== false && !$this->isReadable($location)){
-                return new common_configuration_Report(common_configuration_Report::INVALID,
-                                                       "File system component '${name}' in '${location} is not readable.",
-                                                       $this);
+        if (!$this->exists()) {
+            return new common_configuration_Report(
+                common_configuration_Report::UNKNOWN,
+                "File system component '${name}' could not be found in '${location}'.",
+                $this
+            );
+        } else {
+            if (strpos($expectedRights, 'r') !== false && !$this->isReadable($location)) {
+                return new common_configuration_Report(
+                    common_configuration_Report::INVALID,
+                    "File system component '${name}' in '${location} is not readable.",
+                    $this
+                );
             }
             
-            if (strpos($expectedRights, 'w') !== false && !$this->isWritable($location)){
-                return new common_configuration_Report(common_configuration_Report::INVALID,
-                                                       "File system component '${name}' in '${location} is not writable.",
-                                                       $this);
+            if (strpos($expectedRights, 'w') !== false && !$this->isWritable($location)) {
+                return new common_configuration_Report(
+                    common_configuration_Report::INVALID,
+                    "File system component '${name}' in '${location} is not writable.",
+                    $this
+                );
             }
 
-            if (strpos($expectedRights, 'x') !== false && !$this->isExecutable($location)){
-                return new common_configuration_Report(common_configuration_Report::INVALID,
-                                                       "File system component '${name}' in '${location} is not executable.",
-                                                       $this);
+            if (strpos($expectedRights, 'x') !== false && !$this->isExecutable($location)) {
+                return new common_configuration_Report(
+                    common_configuration_Report::INVALID,
+                    "File system component '${name}' in '${location} is not executable.",
+                    $this
+                );
+            }
+
+            if ($this->getMustCheckIfEmpty()) {
+                if (!$this->isEmptyDirectory($location)) {
+                    return new common_configuration_Report(
+                        common_configuration_Report::INVALID,
+                        "File system component '${name}' in '${location} is not empty.",
+                        $this
+                    );
+                }
             }
             
-            return new common_configuration_Report(common_configuration_Report::VALID,
-                                                   "File system component '${name}' in '${location} is compliant with expected rights (${expectedRights}).'",
-                                                   $this);
-        } 
-        
+            return new common_configuration_Report(
+                common_configuration_Report::VALID,
+                "File system component '${name}' in '${location} is compliant with expected rights (${expectedRights}).'",
+                $this
+            );
+        }
+
 
         return $returnValue;
     }
@@ -320,6 +359,30 @@ class common_configuration_FileSystemComponent
     public function isExecutable($location = null)
     {
         return $this->hasLocationAccess($location, 'Executable');
+    }
+
+    /**
+     * If directory is empty.
+     *
+     * @access public
+     * @author Jonathan VUILLEMIN <jonathan@taotesting.com>
+     * @param string $location location
+     * @return boolean
+     */
+    public function isEmptyDirectory($location = null)
+    {
+        $returnValue = false;
+
+        if ($location === null) {
+            $location = $this->getLocation();
+        }
+
+        if (is_dir($location)) {
+            $iterator = new RecursiveDirectoryIterator($location, RecursiveDirectoryIterator::SKIP_DOTS);
+            $returnValue = $iterator->getSize() === 0;
+        }
+
+        return $returnValue;
     }
 
 }
