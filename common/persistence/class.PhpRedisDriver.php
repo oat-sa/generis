@@ -76,6 +76,10 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         } else {
             $this->connection->connect($host , $port , $timeout);
         }
+
+        if (isset($params['database'])) {
+            $this->connection->select($params['database']);
+        }
     }
 
     /**
