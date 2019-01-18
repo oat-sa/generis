@@ -379,7 +379,7 @@ class common_configuration_FileSystemComponent
 
         if (is_dir($location)) {
             $iterator = new RecursiveDirectoryIterator($location, RecursiveDirectoryIterator::SKIP_DOTS);
-            $returnValue = $iterator->getSize() === 0;
+            $returnValue = iterator_count($iterator) === 0;
         }
 
         return $returnValue;
