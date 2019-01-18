@@ -31,7 +31,7 @@ use org\bovigo\vfs\vfsStream;
  */
 class FileSystemComponentTest extends TestCase
 {
-    /** @var common_configuration_FileSystemComponent*/
+    /** @var common_configuration_FileSystemComponent */
     private $subject;
 
     protected function setUp()

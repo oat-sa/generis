@@ -36,7 +36,7 @@ use oat\generis\test\TestCase;
  */
 class ComponentFactoryTest extends TestCase
 {
-    /** @var common_configuration_ComponentFactory*/
+    /** @var common_configuration_ComponentFactory */
     private $subject;
 
     protected function setUp()
