@@ -377,7 +377,7 @@ class common_configuration_FileSystemComponent
             $location = $this->getLocation();
         }
 
-        if (is_dir($location)) {
+        if (is_readable($location) && is_dir($location)) {
             $iterator = new RecursiveDirectoryIterator($location, RecursiveDirectoryIterator::SKIP_DOTS);
             $returnValue = iterator_count($iterator) === 0;
         }
