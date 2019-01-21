@@ -43,7 +43,7 @@ abstract class Controller extends \Module
     /**
      * @return ServerRequestInterface
      */
-    public function getRequest()
+    protected function getPsrRequest()
     {
 //        return Context::getInstance()->getRequest();
         return $this->request;
@@ -52,7 +52,7 @@ abstract class Controller extends \Module
     /**
      * @return ResponseInterface
      */
-    public function getResponse()
+    public function getPsrResponse()
     {
 //        return Context::getInstance()->getResponse();
         return $this->response;
@@ -60,15 +60,18 @@ abstract class Controller extends \Module
 
     public function getRequestParameters()
     {
+//        return parent::getRequestParameters();
         return array_merge(
-            $this->getRequest()->getParsedBody(),
-            $this->getRequest()->getQueryParams(),
-            $this->getHeaders()
-        );
+            $this->getPsrRequest()->getParsedBody(),
+            $this->getPsrRequest()->getQueryParams(),
+            $this->getPsrRequest()->getAttributes());
+
+//            $this->getPsrRequest()->getBody()->getContents()        );
     }
 
     public function hasRequestParameter($name)
     {
+        \common_Logger::w(print_r($_POST  , true));
         return isset($this->getRequestParameters()[$name]);
     }
 
@@ -83,8 +86,13 @@ abstract class Controller extends \Module
 
     public function getHeaders()
     {
+        if (!$this->request) {
+            \common_Logger::w('Depecated usage of ' . __METHOD__);
+            return parent::getHeaders();
+        }
+
         $headers = [];
-        foreach ($this->getRequest()->getHeaders() as $name => $values) {
+        foreach ($this->getPsrRequest()->getHeaders() as $name => $values) {
             $headers[$name] = $values[0];
         }
         return $headers;
@@ -92,23 +100,31 @@ abstract class Controller extends \Module
 
     public function getHeader($name)
     {
-        return $this->getRequest()->getHeader($name);
+        if (!$this->request) {
+            \common_Logger::w('Depecated usage of ' . __METHOD__);
+            return parent::getHeader($name);
+        }
+        return $this->getPsrRequest()->getHeader($name);
     }
 
     public function hasHeader($name)
     {
-        return $this->getRequest()->hasHeader($name);
+        if (!$this->request) {
+            \common_Logger::w('Depecated usage of ' . __METHOD__);
+            return parent::hasHeader($name);
+        }
+        return $this->getPsrRequest()->hasHeader($name);
     }
 
     public function hasCookie($name)
     {
-        return isset($this->getRequest()->getCookieParams()[$name]);
+        return isset($this->getPsrRequest()->getCookieParams()[$name]);
     }
 
     public function getCookie($name)
     {
         if ($this->hasCookie($name)) {
-            return $this->getRequest()->getCookieParams()[$name];
+            return $this->getPsrRequest()->getCookieParams()[$name];
         } else {
             return false;
         }
@@ -116,7 +132,7 @@ abstract class Controller extends \Module
 
     public function getRequestMethod()
     {
-        return $this->getRequest()->getMethod();
+        return $this->getPsrRequest()->getMethod();
     }
 
     public function isRequestGet()
@@ -146,17 +162,17 @@ abstract class Controller extends \Module
 
     public function getUserAgent()
     {
-        return $this->getRequest()->getHeader('user-agent');
+        return $this->getPsrRequest()->getHeader('user-agent');
     }
 
     public function getQueryString()
     {
-        return $this->getRequest()->getUri()->getQuery();
+        return $this->getPsrRequest()->getUri()->getQuery();
     }
 
     public function getRequestURI()
     {
-        return $this->getRequest()->getUri()->getPath();
+        return $this->getPsrRequest()->getUri()->getPath();
     }
 
     public function setCookie($name, $value = null, $expire = null, $domainPath = null, $https = null, $httpOnly = null)
@@ -166,12 +182,12 @@ abstract class Controller extends \Module
 
     public function setContentHeader($contentType, $charset = 'UTF-8')
     {
-        $response = $this->getResponse()->withHeader('content-type', $contentType . ';' . $charset);
+        $response = $this->getPsrResponse()->withHeader('content-type', $contentType . ';' . $charset);
         $this->response = $response;
     }
 
     public function getContentType()
     {
-        return $this->getResponse()->getHeader('content-type');
+        return $this->getPsrRequest()->getHeader('content-type');
     }
 }

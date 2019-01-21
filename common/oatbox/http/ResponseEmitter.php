@@ -21,7 +21,6 @@
 namespace oat\oatbox\http;
 
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Class ResponseEmitter
@@ -34,10 +33,9 @@ class ResponseEmitter
      * Emit a Http Response to client
      *
      * @see https://github.com/http-interop/response-sender
-     * @param ServerRequestInterface $request
      * @param ResponseInterface $response
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
+    public function __invoke(ResponseInterface $response)
     {
         $http_line = sprintf('HTTP/%s %s %s',
             $response->getProtocolVersion(),
