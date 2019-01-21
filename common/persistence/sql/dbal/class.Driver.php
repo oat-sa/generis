@@ -35,13 +35,19 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     protected $connection;
 
     /**
+     * @var string
+     */
+    private $driverManagerClass;
+
+    /**
      * Connect to Dbal
      * 
      * @param string $id
      * @param array $params
-     * @return \Doctrine\DBAL\Connection;
+     * @return common_persistence_Persistence|common_persistence_SqlPersistence
+     * @throws \Doctrine\DBAL\DBALException
      */
-    function connect($id, array $params)
+    public function connect($id, array $params)
     {
         if (isset($params['connection'])) {
             $connectionParams = $params['connection'];
@@ -52,12 +58,60 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         $config = new \Doctrine\DBAL\Configuration();
 //          $logger = new Doctrine\DBAL\Logging\EchoSQLLogger();
 //          $config->setSQLLogger($logger);
-        $this->connection = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
+
+        $connLimit = 3; // Max connection attempts.
+        $counter = 0; // Connection attempts counter.
+
+        while (true) {
+            try {
+                $this->connection = $this->getConnection($connectionParams, $config);
+                break;
+            } catch (\Doctrine\DBAL\DBALException $e) {
+                $this->connection = null;
+                $counter++;
+
+                if ($counter === $connLimit){
+                    // Connection attempts exceeded.
+                    throw $e;
+                }
+            }
+        }
+
         return new common_persistence_SqlPersistence($params, $this);
     }
-    
-    
-   
+
+    /**
+     * @param $params
+     * @param $config
+     * @return \Doctrine\DBAL\Connection
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     *
+     */
+    private function getConnection($params, $config)
+    {
+        return call_user_func($this->getDriverManagerClass() . '::getConnection', $params, $config);
+    }
+
+    /**
+     * @return string
+     */
+    private function getDriverManagerClass()
+    {
+        if (!$this->driverManagerClass || !class_exists($this->driverManagerClass))
+        {
+            $this->driverManagerClass = \Doctrine\DBAL\DriverManager::class;
+        }
+        return $this->driverManagerClass;
+    }
+
+    /**
+     * @param $driverManagerClass
+     */
+    protected function setDriverManagerClass($driverManagerClass)
+    {
+        $this->driverManagerClass = $driverManagerClass;
+    }
 
     /**
      * (non-PHPdoc)
