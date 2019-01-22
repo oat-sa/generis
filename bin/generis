@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$commands = include __DIR__ . '/../config/generis/commands.conf.php';
+
+use Symfony\Component\Console\Application;
+
+$app = new Application();
+
+foreach ($commands as $command) {
+    $app->add($command);
+}
+
+$app->run();
