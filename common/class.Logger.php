@@ -338,7 +338,7 @@ class common_Logger
         self::singleton()->log(self::ERROR_LEVEL, $message, self::addTrace($tags));
     }
 
-    private static function addTrace(array $tags)
+    private static function addTrace(array $tags = [])
     {
         if (!isset($tags[self::CONTEXT_TRACE])) {
             $trace = defined('DEBUG_BACKTRACE_IGNORE_ARGS')
@@ -434,13 +434,15 @@ class common_Logger
         			$severity = self::ERROR_LEVEL;
         			break;
         	}
+
             self::singleton()
                 ->log($severity,
                     'php error(' . $errorNumber . '): ' . $errorString,
                     [
                         'PHPERROR',
                         self::CONTEXT_ERROR_FILE => $errorFile,
-                        self::CONTEXT_ERROR_LINE => $errorLine
+                        self::CONTEXT_ERROR_LINE => $errorLine,
+                        self::CONTEXT_TRACE => self::addTrace()
                     ]
                 );
         }
