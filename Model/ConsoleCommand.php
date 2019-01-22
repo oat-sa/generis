@@ -38,6 +38,96 @@ class ConsoleCommand extends Command
     }
 
     /**
+     * Write a title to the output.
+     *
+     * @param string|array $message
+     */
+    protected function title($message)
+    {
+        $this->io->title($message);
+    }
+
+    /**
+     * Write $count newline(s) to the output.
+     *
+     * @param int $count
+     */
+    protected function newLine($count = 1)
+    {
+        $this->io->newLine($count);
+    }
+
+    /**
+     * Write a section to the output.
+     *
+     * @param string|array $message
+     */
+    protected function section($message)
+    {
+        $this->io->section($message);
+    }
+
+    /**
+     * Write a note to the output.
+     *
+     * @param string|array $message
+     */
+    protected function note($message)
+    {
+        $this->io->note($message);
+    }
+
+    /**
+     * Write a success message to the output.
+     *
+     * @param string|array $message
+     */
+    protected function success($message)
+    {
+        $this->io->success($message);
+    }
+
+    /**
+     * Write an error to the output.
+     *
+     * @param string|array $message
+     */
+    protected function error($message)
+    {
+        $this->io->error($message);
+    }
+
+    /**
+     * Write a warning to the output.
+     *
+     * @param string|array $message
+     */
+    protected function caution($message)
+    {
+        $this->io->caution($message);
+    }
+
+    /**
+     * Write a warning to the output.
+     *
+     * @param string|array $message
+     */
+    protected function warning($message)
+    {
+        $this->io->warning($message);
+    }
+
+    /**
+     * Write a message with a newline to the output.
+     *
+     * @param string|array $message
+     */
+    protected function writeln($message)
+    {
+        $this->io->writeln($message);
+    }
+
+    /**
      * @return ServiceManager
      */
     public function getServiceManager()
