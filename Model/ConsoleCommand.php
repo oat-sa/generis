@@ -6,6 +6,7 @@ use common_Config;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ServiceManagerAwareTrait;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -26,6 +27,26 @@ class ConsoleCommand extends Command
     protected $io;
 
     /**
+     * @var bool
+     */
+    protected $loadConfig = true;
+
+    /**
+     * @var ProgressBar
+     */
+    private $progressBar;
+
+    /**
+     * @var InputInterface
+     */
+    private $initialInput;
+
+    /**
+     * @var OutputInterface
+     */
+    private $initialOutput;
+
+    /**
      * Initialize the command.
      *
      * @param InputInterface $input
@@ -33,8 +54,36 @@ class ConsoleCommand extends Command
      */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        common_Config::load();
+        if ($this->loadConfig === true) {
+            common_Config::load();
+        }
+        $this->initialInput = new SymfonyStyle($input, $output);
+        $this->initialOutput = new SymfonyStyle($input, $output);
         $this->io = new SymfonyStyle($input, $output);
+    }
+
+    /**
+     * Create a progress bar
+     *
+     * @param int $max
+     * @return ProgressBar
+     */
+    protected function createProgressBar($max = 0)
+    {
+        $this->initialOutput->setDecorated(true);
+        $progressBar = new ProgressBar($this->initialOutput, $max);
+        $progressBar->setOverwrite(true);
+        $progressBar->setBarCharacter('<fg=green>▓</>');
+        $progressBar->setEmptyBarCharacter('<fg=white>░</>');
+        $progressBar->setProgressCharacter('<fg=yellow>▓</>');
+
+        if ($max > 0) {
+            $progressBar->setFormat('%bar%%percent:3s%% - %memory:6s%');
+        } else {
+            $progressBar->setFormat('%bar%');
+        }
+
+        return $progressBar;
     }
 
     /**
@@ -75,6 +124,16 @@ class ConsoleCommand extends Command
     protected function note($message)
     {
         $this->io->note($message);
+    }
+
+    /**
+     * Write a list to the output.
+     *
+     * @param array $elements
+     */
+    protected function listing(array $elements)
+    {
+        $this->io->listing($elements);
     }
 
     /**
@@ -134,5 +193,4 @@ class ConsoleCommand extends Command
     {
         return ServiceManager::getServiceManager();
     }
-
 }
