@@ -1,6 +1,6 @@
 <?php
 
-namespace oat\generis\test\unit\common\persistence\sql;
+namespace oat\generis\test\integration\common\persistence\sql;
 
 use common_persistence_sql_dbal_Driver;
 use common_persistence_sql_pdo_sqlite_Driver;
@@ -29,7 +29,7 @@ abstract class UpdateMultipleTestAbstract extends TestCase
 
         $sql = 'INSERT INTO test_table(column_1, column_2, column_3, column_4, column_5, column_6)
               VALUES(:value_1, :value_2, :value_3, :value_4, :value_5, :value_6)';
-        $this->driver->query($sql,[
+        $this->driver->query($sql, [
             ':value_1' => 'value_1',
             ':value_2' => 'value_2',
             ':value_3' => 'value_3',
@@ -40,7 +40,7 @@ abstract class UpdateMultipleTestAbstract extends TestCase
 
         $sql = 'INSERT INTO test_table(column_1, column_2, column_3, column_4, column_5, column_6)
               VALUES(:value_1, :value_2, :value_3, :value_4, :value_5, :value_6)';
-        $this->driver->query($sql,[
+        $this->driver->query($sql, [
             ':value_1' => 'value_1',
             ':value_2' => 'value_2',
             ':value_3' => 'value_3_2',
@@ -51,7 +51,7 @@ abstract class UpdateMultipleTestAbstract extends TestCase
 
         $sql = 'INSERT INTO test_table(column_1, column_2, column_3, column_4, column_5, column_6)
               VALUES(:value_1, :value_2, :value_3, :value_4, :value_5, :value_6)';
-        $this->driver->query($sql,[
+        $this->driver->query($sql, [
             ':value_1' => 'value_1_3',
             ':value_2' => 'value_2_3',
             ':value_3' => 'value_3_3',
@@ -86,7 +86,7 @@ abstract class UpdateMultipleTestAbstract extends TestCase
                 'updateValues' => [
                     'column_3' => 'update value 3',
                     'column_4' => 'update value 4',
-                ]
+                ],
             ],
             [
                 'conditions' => [
@@ -95,8 +95,8 @@ abstract class UpdateMultipleTestAbstract extends TestCase
                 'updateValues' => [
                     'column_5' => 'update value 5',
                     'column_6' => 'update value 6',
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $all = $this->driver->query('SELECT * FROM test_table')->fetchAll();
