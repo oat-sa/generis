@@ -64,7 +64,10 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
 
         while (true) {
             try {
+                /** @var \Doctrine\DBAL\Connection connection */
                 $this->connection = $this->getConnection($connectionParams, $config);
+                // to generate DBALException if no connection
+                $this->connection->ping();
                 break;
             } catch (\Doctrine\DBAL\DBALException $e) {
                 $this->connection = null;
@@ -98,15 +101,14 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      */
     private function getDriverManagerClass()
     {
-        if (!$this->driverManagerClass || !class_exists($this->driverManagerClass))
-        {
+        if (!$this->driverManagerClass || !class_exists($this->driverManagerClass)) {
             $this->driverManagerClass = \Doctrine\DBAL\DriverManager::class;
         }
         return $this->driverManagerClass;
     }
 
     /**
-     * @param $driverManagerClass
+     * @param string $driverManagerClass
      */
     protected function setDriverManagerClass($driverManagerClass)
     {
