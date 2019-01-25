@@ -24,45 +24,6 @@ use common_persistence_sql_Platform;
 use Doctrine\DBAL\Query\QueryBuilder;
 use oat\generis\test\TestCase;
 
-class TestDbalDriver extends \common_persistence_sql_dbal_Driver  {
-    public function setDriverManagerClass($class)
-    {
-        parent::setDriverManagerClass($class);
-    }
-}
-
-class TestDbalDriverManager
-{
-    private static $connection;
-    private static $try = 0;
-    private static $allowed = 1;
-
-    /**
-     * @param $params
-     * @param $conf
-     * @return mixed
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    public static function getConnection($params, $conf) {
-        if (!self::$try || self::$try > self::$allowed) {
-            self::$try++;
-            throw new \Doctrine\DBAL\DBALException('Testing');
-        }
-        return self::$connection;
-    }
-
-    public static function setConnection($connection) {
-        self::$try = 0;
-        self::$connection = $connection;
-    }
-
-    public static function setLimit($limit)
-    {
-        self::$try = 0;
-        self::$allowed = $limit;
-    }
-}
-
 /**
  * @package oat\generis\test\unit\common\persistence\sql\dbal
  * @author  Aleh Hutnikau, <hutnikau@1pt.com>
@@ -82,49 +43,5 @@ class DriverTest extends TestCase
         $platform = $driver->getPlatform();
         $this->assertInstanceOf(common_persistence_sql_Platform::class, $platform);
         $this->assertInstanceOf(QueryBuilder::class, $platform->getQueryBuilder());
-    }
-
-    public function testReconnectionOnException()
-    {
-        $driver = new TestDbalDriver();
-
-        $connectionMock = $this->prophesize(\Doctrine\DBAL\Connection::class);
-
-        TestDbalDriverManager::setConnection($connectionMock->reveal());
-        $driver->setDriverManagerClass(TestDbalDriverManager::class);
-
-        $connection = $driver->connect('test_connection', [
-            'driver' => 'pdo_sqlite',
-            'user' => null,
-            'password' => null,
-            'host' => null,
-            'dbname' => ':memory:',
-        ]);
-        $this->assertInstanceOf(\common_persistence_SqlPersistence::class, $connection);
-        $platform = $driver->getPlatForm();
-        $this->assertInstanceOf(\common_persistence_sql_Platform::class, $platform);
-    }
-
-    /**
-     * @expectedException  \Doctrine\DBAL\DBALException
-     * @expectedExceptionMessage Testing
-     */
-    public function testMaxAttemptsToConnect()
-    {
-        $driver = new TestDbalDriver();
-
-        $connectionMock = $this->prophesize(\Doctrine\DBAL\Connection::class);
-
-        TestDbalDriverManager::setConnection($connectionMock->reveal());
-        TestDbalDriverManager::setLimit(0);
-        $driver->setDriverManagerClass(TestDbalDriverManager::class);
-
-        $driver->connect('test_connection', [
-            'driver' => 'pdo_sqlite',
-            'user' => null,
-            'password' => null,
-            'host' => null,
-            'dbname' => ':memory:',
-        ]);
     }
 }
