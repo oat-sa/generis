@@ -25,6 +25,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 abstract class Controller extends \Module
 {
+
     protected $request;
     protected $response;
 
@@ -45,7 +46,6 @@ abstract class Controller extends \Module
      */
     protected function getPsrRequest()
     {
-//        return Context::getInstance()->getRequest();
         return $this->request;
     }
 
@@ -54,24 +54,20 @@ abstract class Controller extends \Module
      */
     public function getPsrResponse()
     {
-//        return Context::getInstance()->getResponse();
         return $this->response;
     }
 
     public function getRequestParameters()
     {
-//        return parent::getRequestParameters();
         return array_merge(
-            $this->getPsrRequest()->getParsedBody(),
+            (array) $this->getPsrRequest()->getParsedBody(),
             $this->getPsrRequest()->getQueryParams(),
-            $this->getPsrRequest()->getAttributes());
-
-//            $this->getPsrRequest()->getBody()->getContents()        );
+            $this->getPsrRequest()->getAttributes()
+        );
     }
 
     public function hasRequestParameter($name)
     {
-        \common_Logger::w(print_r($_POST  , true));
         return isset($this->getRequestParameters()[$name]);
     }
 
@@ -87,7 +83,7 @@ abstract class Controller extends \Module
     public function getHeaders()
     {
         if (!$this->request) {
-            \common_Logger::w('Depecated usage of ' . __METHOD__);
+            \common_Logger::w('Deprecated usage of ' . __METHOD__);
             return parent::getHeaders();
         }
 
@@ -101,7 +97,7 @@ abstract class Controller extends \Module
     public function getHeader($name)
     {
         if (!$this->request) {
-            \common_Logger::w('Depecated usage of ' . __METHOD__);
+            \common_Logger::w('Deprecated usage of ' . __METHOD__);
             return parent::getHeader($name);
         }
         return $this->getPsrRequest()->getHeader($name);
@@ -110,7 +106,7 @@ abstract class Controller extends \Module
     public function hasHeader($name)
     {
         if (!$this->request) {
-            \common_Logger::w('Depecated usage of ' . __METHOD__);
+            \common_Logger::w('Deprecated usage of ' . __METHOD__);
             return parent::hasHeader($name);
         }
         return $this->getPsrRequest()->hasHeader($name);
@@ -190,4 +186,5 @@ abstract class Controller extends \Module
     {
         return $this->getPsrRequest()->getHeader('content-type');
     }
+
 }
