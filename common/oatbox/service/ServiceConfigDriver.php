@@ -31,6 +31,7 @@ use oat\oatbox\config\ConfigurationDriver;
  */
 class ServiceConfigDriver extends \common_persistence_PhpFileDriver implements ConfigurationDriver
 {
+
     /**
      * Get the config content associated to given $key
      * $key has to be a configurable service
