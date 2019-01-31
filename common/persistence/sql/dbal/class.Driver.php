@@ -55,6 +55,20 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
             $connectionParams = $params;
             $connectionParams['driver'] = str_replace('dbal_', '', $connectionParams['driver']);
         }
+
+        $this->persistentConnect($connectionParams);
+
+        return new common_persistence_SqlPersistence($params, $this);
+    }
+
+    /**
+     * Endless connection
+     *
+     * @param $connectionParams
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    protected function persistentConnect($connectionParams)
+    {
         $config = new \Doctrine\DBAL\Configuration();
 //          $logger = new Doctrine\DBAL\Logging\EchoSQLLogger();
 //          $config->setSQLLogger($logger);
@@ -79,8 +93,6 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
                 }
             }
         }
-
-        return new common_persistence_SqlPersistence($params, $this);
     }
 
     /**
