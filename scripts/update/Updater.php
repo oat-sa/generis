@@ -31,7 +31,6 @@ use EasyRdf_Exception;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\ResourceFileSerializer;
-use oat\generis\model\fileReference\UrlFileSerializer;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\user\AuthAdapter;
 use oat\generis\model\user\UserFactoryService;

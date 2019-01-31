@@ -17,18 +17,16 @@
  * Copyright (c) 2019 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
-namespace oat\generis\Helper;
-
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use InvalidArgumentException;
+use oat\generis\model\kernel\persistence\smoothsql\search\filter\Filter;
 
 /**
  * Handles the application of filters.
  *
  * @author Martijn Swinkels <martijn@taotesting.com>
  */
-class Filter
+class common_persistence_sql_Filter
 {
     const OP_EQ  = '=';
     const OP_NEQ = '!=';
@@ -76,7 +74,7 @@ class Filter
 
     /**
      * @param mixed $sortBy
-     * @return Filter
+     * @return common_persistence_sql_Filter
      */
     public function setSortBy($sortBy)
     {
@@ -94,7 +92,7 @@ class Filter
 
     /**
      * @param string $sortOrder
-     * @return Filter
+     * @return common_persistence_sql_Filter
      */
     public function setSortOrder($sortOrder)
     {
@@ -112,7 +110,7 @@ class Filter
 
     /**
      * @param int $limit
-     * @return Filter
+     * @return common_persistence_sql_Filter
      */
     public function setLimit($limit)
     {
@@ -130,7 +128,7 @@ class Filter
 
     /**
      * @param int $offset
-     * @return Filter
+     * @return common_persistence_sql_Filter
      */
     public function setOffset($offset)
     {
@@ -152,7 +150,7 @@ class Filter
      * @param string $field
      * @param string $operator
      * @param mixed $value
-     * @return Filter
+     * @return common_persistence_sql_Filter
      */
     public function addFilter($field, $operator, $value)
     {
@@ -197,7 +195,7 @@ class Filter
      *
      * @param string $field
      * @param mixed $value
-     * @return Filter
+     * @return common_persistence_sql_Filter
      */
     public function eq($field, $value)
     {
@@ -209,7 +207,7 @@ class Filter
      *
      * @param string $field
      * @param mixed $value
-     * @return Filter
+     * @return common_persistence_sql_Filter
      */
     public function neq($field, $value)
     {
@@ -221,7 +219,7 @@ class Filter
      *
      * @param string $field
      * @param mixed $value
-     * @return Filter
+     * @return common_persistence_sql_Filter
      */
     public function lt($field, $value)
     {
@@ -233,7 +231,7 @@ class Filter
      *
      * @param string $field
      * @param mixed $value
-     * @return Filter
+     * @return common_persistence_sql_Filter
      */
     public function lte($field, $value)
     {
@@ -245,7 +243,7 @@ class Filter
      *
      * @param string $field
      * @param mixed $value
-     * @return Filter
+     * @return common_persistence_sql_Filter
      */
     public function gt($field, $value)
     {
@@ -257,7 +255,7 @@ class Filter
      *
      * @param string $field
      * @param mixed $value
-     * @return Filter
+     * @return common_persistence_sql_Filter
      */
     public function gte($field, $value)
     {
@@ -269,7 +267,7 @@ class Filter
      *
      * @param string $field
      * @param mixed $value
-     * @return Filter
+     * @return common_persistence_sql_Filter
      */
     public function like($field, $value)
     {
@@ -281,7 +279,7 @@ class Filter
      *
      * @param string $field
      * @param mixed $value
-     * @return Filter
+     * @return common_persistence_sql_Filter
      */
     public function notLike($field, $value)
     {
@@ -293,7 +291,7 @@ class Filter
      *
      * @param string $field
      * @param array $value
-     * @return Filter
+     * @return common_persistence_sql_Filter
      */
     public function in($field, array $value)
     {
@@ -305,7 +303,7 @@ class Filter
      *
      * @param string $field
      * @param array $value
-     * @return Filter
+     * @return common_persistence_sql_Filter
      */
     public function notIn($field, array $value)
     {
@@ -332,7 +330,7 @@ class Filter
         ];
 
         if (!in_array(strtoupper($op), $operators, true)) {
-            throw new InvalidArgumentException('Operator "'. $op .'"" is not a valid operator.');
+            throw new InvalidArgumentException('Operator "' . $op . '" is not a valid operator.');
         }
     }
 }

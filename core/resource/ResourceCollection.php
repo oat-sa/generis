@@ -19,13 +19,12 @@
 
 namespace oat\generis\model\resource;
 
-use ArrayIterator;
 use common_persistence_SqlPersistence;
-use core_kernel_classes_ClassIterator;
+use core_kernel_classes_Class;
 use core_kernel_classes_Resource;
 use Countable;
-use IteratorAggregate;
-use oat\generis\Helper\Filter;
+use Iterator;
+use common_persistence_sql_Filter as Filter;
 use oat\generis\model\OntologyAwareTrait;
 use oat\generis\model\OntologyRdf;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -35,21 +34,38 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  *
  * @author Martijn Swinkels <martijn@taotesting.com>
  */
-class ResourceCollection implements IteratorAggregate, Countable
+class ResourceCollection implements Iterator, Countable
 {
 
     use ServiceLocatorAwareTrait;
     use OntologyAwareTrait;
 
+    const CACHE_SIZE = 100;
+
     /**
-     * @var core_kernel_classes_Resource[]
+     * @var string[]
      */
     private $resources;
+
+    /**
+     * @var int
+     */
+    private $index = 0;
 
     /**
      * @var Filter
      */
     private $filter;
+
+    /**
+     * @var bool
+     */
+    private $endOfClass;
+
+    /**
+     * @var core_kernel_classes_Class
+     */
+    private $class;
 
     /**
      * @var int
@@ -64,38 +80,42 @@ class ResourceCollection implements IteratorAggregate, Countable
     /**
      * @var bool
      */
-    private $endOfClass;
+    private $classFilterSet = false;
 
     /**
-     * ResourceFileIterator constructor.
+     * @var int
+     */
+    private $limit;
+
+    /**
+     * ResourceCollection constructor.
      *
+     * @param null $class
      * @param int $cacheSize
      */
-    public function __construct($cacheSize = 100)
+    public function __construct($class = null, $cacheSize = self::CACHE_SIZE)
     {
-        $this->cacheSize = $cacheSize;
+        $this->class = $class;
         $this->filter = new Filter();
+        $this->cacheSize = $cacheSize;
     }
 
     /**
-     * Load instances into cache
+     * Load a collection of resources
      *
      * @return bool
      */
     protected function load()
     {
         if ($this->resources !== null) {
-            return count($this->resources) > 0;
+            return $this->count() > 0;
         }
 
-        $this->resources = [];
+        $this->resources = null;
+        $this->index = 0;
         $this->loadResources();
 
-        if ($this->cacheSize > 0) {
-            $this->endOfClass = count($this->resources) < $this->cacheSize;
-        }
-
-        return count($this->resources) > 0;
+        return $this->count() > 0;
     }
 
     /**
@@ -103,24 +123,33 @@ class ResourceCollection implements IteratorAggregate, Countable
      */
     private function loadResources()
     {
+        if ($this->class !== null && $this->classFilterSet === false) {
+            $this->addClassFilter();
+        }
+
         /** @var common_persistence_SqlPersistence $persistence */
         $persistence = $this->getModel()->getPersistence();
         $platform = $persistence->getPlatForm();
         $query = $platform->getQueryBuilder()
             ->select('*')
-            ->from('statements');
-        $query = $this->filter->applyFilters($query);
-        $query->andWhere('id > ' . $this->lastId);
+            ->from('statements')
+            ->andWhere('id > ' . $this->lastId)
+            ->orderBy('id');
 
         if ($this->cacheSize > 0) {
             $query->setMaxResults($this->cacheSize);
         }
 
-        $results = $query->execute()->fetchAll();
+        $query = $this->filter->applyFilters($query);
+        $results = $query->execute();
 
-        foreach ($results as $result) {
-            $this->resources[$result['subject']] = $result;
-            $this->lastId = $result['id'];
+        if ($this->cacheSize > 0) {
+            $this->endOfClass = $results->rowCount() < $this->cacheSize;
+        }
+
+        foreach ($results->fetchAll() as $result) {
+            $this->resources[] = $result;
+            $this->lastId = $result['id'] > $this->lastId ? $result['id'] : $this->lastId;
         }
     }
 
@@ -146,29 +175,9 @@ class ResourceCollection implements IteratorAggregate, Countable
      */
     public function addTypeFilter($type)
     {
-        $this->filter->addFilter('predicate', Filter::OP_EQ, OntologyRdf::RDF_TYPE);
-        $this->filter->addFilter('object', Filter::OP_EQ, $type);
+        $this->filter->eq('predicate', OntologyRdf::RDF_TYPE)
+                     ->eq('object', $type);
         return $this;
-    }
-
-    /**
-     * Return an array containing the uris of the found resources
-     *
-     * @return string[]
-     */
-    public function getUris()
-    {
-        $this->load();
-        return array_keys($this->resources);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getIterator()
-    {
-        $this->load();
-        return new ArrayIterator($this->resources);
     }
 
     /**
@@ -176,27 +185,100 @@ class ResourceCollection implements IteratorAggregate, Countable
      */
     public function count()
     {
-        $this->load();
         return count($this->resources);
     }
 
     /**
-     * Checks if there are more items available.
+     * @inheritdoc
+     */
+    public function current()
+    {
+        return $this->resources[$this->index];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function next()
+    {
+        $this->index++;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function key()
+    {
+        return $this->index;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function valid()
+    {
+        if ($this->resources === null) {
+            return $this->load();
+        }
+
+        if ($this->endOfClass === false && !isset($this->resources[$this->index])) {
+            if ($this->isLimitReached()) {
+                $this->resources = null;
+                return false;
+            }
+            $this->resources = null;
+            return $this->load();
+        }
+
+        return isset($this->resources[$this->index]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rewind()
+    {
+        $this->index = 0;
+    }
+
+    /**
+     * Activate a limitation of how many resources should be processed. This is different from cache size, since it
+     * limits the amount of items that are processed in e.g. a foreach loop without loading remaining resources.
+     */
+    public function useLimit()
+    {
+        $this->limit = $this->cacheSize;
+    }
+
+    /**
+     * Check if we reached the limit of the amount of items we should process.
      *
      * @return bool
      */
-    public function endReached()
+    private function isLimitReached()
     {
-        $this->load();
+        return $this->limit !== null && (!$this->count()) < $this->limit;
+    }
+
+    /**
+     * Check if the end of the current class is reached (no more records available)
+     * @return bool
+     */
+    public function getEndReached()
+    {
         return $this->endOfClass;
     }
 
     /**
-     * Load the next block in the collection
+     * Adds a filter for a class
      */
-    public function nextBlock()
+    private function addClassFilter()
     {
-        $this->resources = null;
-        $this->load();
+        if (is_string($this->class)) {
+            $this->getClass($this->class);
+        }
+
+        $this->addTypeFilter($this->class->getUri());
+        $this->classFilterSet = true;
     }
 }

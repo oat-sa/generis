@@ -201,40 +201,26 @@ class MigrationHelper
     }
 
     /**
-     * Set the Service Manager for this class
-     * @param ServiceManager $serviceManager
-     */
-    public function setServiceManager(ServiceManager $serviceManager)
-    {
-        $this->serviceManager = $serviceManager;
-    }
-
-    /**
-     * Get the Service Manager
-     *
-     * @return ServiceManager
-     */
-    private function getServiceManager()
-    {
-        return $this->serviceManager;
-    }
-
-    /**
      * @return array
      */
     private function getFileResourceData()
     {
         $mappedResourceData = [];
         if ($this->fileResourceCollection === null) {
-            $this->fileResourceCollection = new ResourceCollection(self::BATCH_LIMIT);
-            $this->fileResourceCollection->addTypeFilter(GenerisRdf::CLASS_GENERIS_FILE);
+            $this->fileResourceCollection = $this->getClass(GenerisRdf::CLASS_GENERIS_FILE)->getInstanceCollection();
+            $this->fileResourceCollection->useLimit();
         }
-        $this->fileResourceCollection->nextBlock();
-        $fileResourceUris = $this->fileResourceCollection->getUris();
-        $this->endReached = $this->fileResourceCollection->endReached();
 
-        $parentFileResources = new ResourceCollection(0);
+        $fileResourceUris = [];
+        foreach ($this->fileResourceCollection as $fileResource) {
+            $fileResourceUris[] = $fileResource['subject'];
+        }
+
+        $this->endReached = $this->fileResourceCollection->getEndReached();
+
+        $parentFileResources = new ResourceCollection(null, 0);
         $parentFileResources->addFilter('object', 'IN', $fileResourceUris);
+
         foreach ($parentFileResources as $resourceUri => $parentFileResource) {
             $mappedResourceData[] = [
                 'fileResource' => $this->getResource($parentFileResource['object']),

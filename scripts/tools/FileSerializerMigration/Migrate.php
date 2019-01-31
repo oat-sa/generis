@@ -222,14 +222,12 @@ class Migrate extends ScriptAction
      * Get the file serializer migration helper
      *
      * @return MigrationHelper
-     * @throws InvalidServiceManagerException
      */
     private function getMigrationHelper()
     {
         if ($this->migrationHelper === null) {
             $this->migrationHelper = new MigrationHelper($this->isWetRun());
             $this->migrationHelper->setServiceLocator($this->getServiceLocator());
-            $this->migrationHelper->setServiceManager($this->getServiceManager());
         }
 
         return $this->migrationHelper;
