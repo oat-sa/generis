@@ -21,10 +21,13 @@
 
 namespace oat\generis\scripts\update;
 
+use common_Exception;
+use common_exception_NotImplemented;
 use common_ext_ExtensionsManager;
 use common_ext_ExtensionUpdater;
 use core_kernel_impl_ApiModelOO;
 use core_kernel_persistence_smoothsql_SmoothModel;
+use EasyRdf_Exception;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\ResourceFileSerializer;
@@ -48,19 +51,23 @@ use oat\oatbox\session\SessionService;
 use oat\generis\model\data\Ontology;
 
 /**
- *
  * @author Joel Bout <joel@taotesting.com>
  */
-class Updater extends common_ext_ExtensionUpdater {
-
+class Updater extends common_ext_ExtensionUpdater
+{
     /**
      * @param string $initialVersion
+     *
      * @return string $versionUpdatedTo
-     * @throws \common_Exception
+     * @throws common_Exception
+     * @throws EasyRdf_Exception
      */
-    public function update($initialVersion) {
+    public function update($initialVersion)
+    {
         if ($this->isBetween('0.0.0', '2.11.0')) {
-            throw new \common_exception_NotImplemented('Updates from versions prior to Tao 3.1 are not longer supported, please update to Tao 3.1 first');
+            throw new common_exception_NotImplemented(
+                'Updates from versions prior to Tao 3.1 are not longer supported, please update to Tao 3.1 first'
+            );
         }
         $this->skip('2.12.0', '2.18.0');
 
@@ -91,17 +98,16 @@ class Updater extends common_ext_ExtensionUpdater {
         $this->skip('2.30.0', '2.31.6');
 
         if ($this->isVersion('2.31.6')) {
-
             $complexSearch = new ComplexSearchService(
-                array(
-                    'shared' => array(
+                [
+                    'shared' => [
                         'search.query.query' => false,
                         'search.query.builder' => false,
                         'search.query.criterion' => false,
                         'search.tao.serialyser' => false,
-                        'search.tao.result' => false
-                    ),
-                    'invokables' => array(
+                        'search.tao.result' => false,
+                    ],
+                    'invokables' => [
                         'search.query.query' => '\\oat\\search\\Query',
                         'search.query.builder' => '\\oat\\search\\QueryBuilder',
                         'search.query.criterion' => '\\oat\\search\\QueryCriterion',
@@ -113,18 +119,18 @@ class Updater extends common_ext_ExtensionUpdater {
                         'search.factory.builder' => '\\oat\\search\\factory\\QueryBuilderFactory',
                         'search.factory.criterion' => '\\oat\\search\\factory\\QueryCriterionFactory',
                         'search.tao.gateway' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\GateWay',
-                        'search.tao.result' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\TaoResultSet'
-                    ),
-                    'abstract_factories' => array(
-                        '\\oat\\search\\Command\\OperatorAbstractfactory'
-                    ),
-                    'services' => array(
-                        'search.options' => array(
+                        'search.tao.result' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\TaoResultSet',
+                    ],
+                    'abstract_factories' => [
+                        '\\oat\\search\\Command\\OperatorAbstractfactory',
+                    ],
+                    'services' => [
+                        'search.options' => [
                             'table' => 'statements',
-                            'driver' => 'taoRdf'
-                        )
-                    )
-                )
+                            'driver' => 'taoRdf',
+                        ],
+                    ],
+                ]
             );
 
             $this->getServiceManager()->register(ComplexSearchService::SERVICE_ID, $complexSearch);
@@ -135,9 +141,9 @@ class Updater extends common_ext_ExtensionUpdater {
 
         if ($this->isVersion('3.6.1')) {
             $model = ModelManager::getModel();
-            if ($model instanceof \core_kernel_persistence_smoothsql_SmoothModel) {
+            if ($model instanceof core_kernel_persistence_smoothsql_SmoothModel) {
                 $model->setOption(
-                    \core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE,
+                    core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE,
                     ComplexSearchService::SERVICE_ID
                 );
                 ModelManager::setModel($model);
@@ -145,20 +151,25 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('3.7.0');
         }
 
-        if($this->isBetween('3.7.0', '3.8.3')) {
-
+        if ($this->isBetween('3.7.0', '3.8.3')) {
             /* @var $modelWrapper WrapperModel */
             $modelWrapper = ModelManager::getModel();
             if ($modelWrapper instanceof WrapperModel) {
                 $inner = $modelWrapper->getInnerModel();
-                $inner->setOption(\core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE , ComplexSearchService::SERVICE_ID);
+                $inner->setOption(
+                    core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE,
+                    ComplexSearchService::SERVICE_ID
+                );
 
                 $workspace = $modelWrapper->getWorkspaceModel();
-                $workspace->setOption(core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE , ComplexSearchService::SERVICE_ID);
+                $workspace->setOption(
+                    core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE,
+                    ComplexSearchService::SERVICE_ID
+                );
 
-                $wrapedModel = WrapperModel::wrap($inner, $workspace );
-                $wrapedModel->setServiceLocator($this->getServiceManager());
-                ModelManager::setModel($wrapedModel);
+                $wrappedModel = WrapperModel::wrap($inner, $workspace);
+                $wrappedModel->setServiceLocator($this->getServiceManager());
+                ModelManager::setModel($wrappedModel);
             }
             $this->setVersion('3.8.4');
         }
@@ -174,8 +185,11 @@ class Updater extends common_ext_ExtensionUpdater {
         $this->skip('3.10.0', '3.27.0');
 
         if ($this->isVersion('3.27.0')) {
-            if (! $this->getServiceManager()->has(common_ext_ExtensionsManager::SERVICE_ID)) {
-                $this->getServiceManager()->register(common_ext_ExtensionsManager::SERVICE_ID, new common_ext_ExtensionsManager());
+            if (!$this->getServiceManager()->has(common_ext_ExtensionsManager::SERVICE_ID)) {
+                $this->getServiceManager()->register(
+                    common_ext_ExtensionsManager::SERVICE_ID,
+                    new common_ext_ExtensionsManager()
+                );
             }
             $this->setVersion('3.28.0');
         }
@@ -193,30 +207,29 @@ class Updater extends common_ext_ExtensionUpdater {
          * replaced update script 3.34.0 because of potential config loss
          */
         if ($this->isVersion('3.34.0')) {
-
             $queue = $this->getServiceManager()->get(Queue::SERVICE_ID);
 
-            if(get_class($queue) === 'oat\Taskqueue\Persistence\RdsQueue') {
+            if (get_class($queue) === 'oat\Taskqueue\Persistence\RdsQueue') {
                 $persistence = $queue->getOption('persistence');
                 $queue->setOptions(
                     [
-                        'payload'     => '\oat\oatbox\task\implementation\TaskQueuePayload',
-                        'runner'      => '\oat\oatbox\task\TaskRunner',
+                        'payload' => '\oat\oatbox\task\implementation\TaskQueuePayload',
+                        'runner' => '\oat\oatbox\task\TaskRunner',
                         'persistence' => '\oat\Taskqueue\Persistence\TaskSqlPersistence',
-                        'config'      => ['persistence' => $persistence],
+                        'config' => ['persistence' => $persistence],
                     ]
                 );
             } else {
                 $queue->setOptions(
                     [
-                        'payload'     => TaskQueuePayload::class,
-                        'runner'      => TaskRunner::class,
+                        'payload' => TaskQueuePayload::class,
+                        'runner' => TaskRunner::class,
                         'persistence' => InMemoryQueuePersistence::class,
-                        'config'      => [],
+                        'config' => [],
                     ]
                 );
             }
-            $this->getServiceManager()->register(Queue::SERVICE_ID  , $queue);
+            $this->getServiceManager()->register(Queue::SERVICE_ID, $queue);
             /**
              * skip because you don't need to fix config
              */
@@ -233,17 +246,17 @@ class Updater extends common_ext_ExtensionUpdater {
          */
         if ($this->isVersion('3.35.1')) {
             $queue = $this->getServiceManager()->get(Queue::SERVICE_ID);
-            if(get_class($queue) === 'oat\Taskqueue\Persistence\RdsQueue') {
+            if (get_class($queue) === 'oat\Taskqueue\Persistence\RdsQueue') {
                 $queue->setOptions(
                     [
-                        'payload'     => '\oat\oatbox\task\implementation\TaskQueuePayload',
-                        'runner'      => '\oat\oatbox\task\TaskRunner',
+                        'payload' => '\oat\oatbox\task\implementation\TaskQueuePayload',
+                        'runner' => '\oat\oatbox\task\TaskRunner',
                         'persistence' => '\oat\Taskqueue\Persistence\TaskSqlPersistence',
-                        'config'      => ['persistence' => 'default'],
+                        'config' => ['persistence' => 'default'],
                     ]
                 );
             }
-            $this->getServiceManager()->register(Queue::SERVICE_ID  , $queue);
+            $this->getServiceManager()->register(Queue::SERVICE_ID, $queue);
             $this->setVersion('3.35.2');
         }
 
@@ -258,7 +271,7 @@ class Updater extends common_ext_ExtensionUpdater {
 
         if ($this->isVersion('4.4.0')) {
             $file = __DIR__ . DIRECTORY_SEPARATOR .
-                '..'.DIRECTORY_SEPARATOR .'..'.DIRECTORY_SEPARATOR .
+                '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
                 'core' . DIRECTORY_SEPARATOR .
                 'ontology' . DIRECTORY_SEPARATOR .
                 'taskqueue.rdf';
@@ -271,7 +284,7 @@ class Updater extends common_ext_ExtensionUpdater {
 
         if ($this->isVersion('6.7.0')) {
             $file = __DIR__ . DIRECTORY_SEPARATOR .
-                '..'.DIRECTORY_SEPARATOR .'..'.DIRECTORY_SEPARATOR .
+                '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
                 'core' . DIRECTORY_SEPARATOR .
                 'ontology' . DIRECTORY_SEPARATOR .
                 'generis.rdf';
@@ -283,7 +296,6 @@ class Updater extends common_ext_ExtensionUpdater {
         $this->skip('6.8.0', '6.8.1');
 
         if ($this->isVersion('6.8.1')) {
-
             if ($this->getExtension()->hasConfig('logger')) {
                 $this->getExtension()->unsetConfig('logger');
             }
@@ -292,8 +304,8 @@ class Updater extends common_ext_ExtensionUpdater {
             if (!$conf instanceof LoggerInterface) {
                 $logger = new LoggerService([
                     LoggerService::LOGGER_OPTION => new TaoLog([
-                        TaoLog::OPTION_APPENDERS => $conf
-                    ])
+                        TaoLog::OPTION_APPENDERS => $conf,
+                    ]),
                 ]);
                 $header = $this->getExtension()->getConfigHeader('log');
                 $logger->setHeader($header);
@@ -305,16 +317,16 @@ class Updater extends common_ext_ExtensionUpdater {
 
         $this->skip('6.9.0', '6.16.0');
 
-        if ($this->isVersion('6.16.0')){
+        if ($this->isVersion('6.16.0')) {
             $userFactory = new UserFactoryService([]);
             $this->getServiceManager()->register(UserFactoryService::SERVICE_ID, $userFactory);
 
             /** @var common_ext_ExtensionsManager $extensionManager */
             $extensionManager = $this->getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID);
-            $config = $extensionManager ->getExtensionById('generis')->getConfig('auth');
+            $config = $extensionManager->getExtensionById('generis')->getConfig('auth');
 
-            foreach ($config as $index => $adapter){
-                if ($adapter['driver'] === AuthAdapter::class){
+            foreach ($config as $index => $adapter) {
+                if ($adapter['driver'] === AuthAdapter::class) {
                     $adapter['user_factory'] = UserFactoryService::SERVICE_ID;
                 }
                 $config[$index] = $adapter;
@@ -349,6 +361,6 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('8.0.0');
         }
 
-        $this->skip('8.0.0', '8.1.3');
+        $this->skip('8.0.0', '8.2.1');
     }
 }
