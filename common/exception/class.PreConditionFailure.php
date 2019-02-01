@@ -16,43 +16,15 @@
  *
  *
  */
-/**
- * Generis Object Oriented API - common/exception/class.InvalidArgumentType.php
- *
- * $Id$
- *
- * This file is part of Generis Object Oriented API.
- *
- * Automatically generated on 30.01.2012, 16:44:05 with ArgoUML PHP module
- * (last revised $Date: 2010-01-12 20:14:42 +0100 (Tue, 12 Jan 2010) $)
- *
- * @author patrick,
- * @package generis
- 
- */
-
-
-
-/* user defined includes */
-
-
-
-/* user defined constants */
-
-
 
 /**
- * a useful exception
  * @access public
  * @author Patrick Plichart
  * @package generis
- 
  */
-class common_exception_PreConditionFailure
-    extends common_exception_ClientException
+class common_exception_PreConditionFailure extends common_exception_ClientException
 {
-  
-       public function getUserMessage() {
-	return __("One of the precondition for this type of request was not satisfied");
+    public function getUserMessage() {
+	    return $this->getMessage();
     }
 } 
