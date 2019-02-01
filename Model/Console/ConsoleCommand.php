@@ -1,6 +1,6 @@
 <?php
 
-namespace oat\generis\Model;
+namespace oat\generis\Model\Console;
 
 use common_Config;
 use oat\oatbox\service\ServiceManager;
