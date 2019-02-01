@@ -25,7 +25,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 abstract class Controller extends \Module
 {
-
     protected $request;
     protected $response;
 
@@ -62,19 +61,37 @@ abstract class Controller extends \Module
         return array_merge(
             (array) $this->getPsrRequest()->getParsedBody(),
             $this->getPsrRequest()->getQueryParams(),
-            $this->getPsrRequest()->getAttributes()
+            $this->getPsrRequest()->getAttributes(),
+            $this->getHeaders()
         );
     }
 
     public function hasRequestParameter($name)
     {
-        return isset($this->getRequestParameters()[$name]);
+        return $this->hasHeader($name) || $this->hasGetParameter($name) || $this->hasPostParameter($name);
+    }
+
+    public function hasHeader($name)
+    {
+        return $this->getPsrRequest()->hasHeader(strtolower($name));
+    }
+
+    public function hasPostParameter($name)
+    {
+        return in_array($name, array_keys((array) $this->getPsrRequest()->getParsedBody()));
+    }
+
+    public function hasGetParameter($name)
+    {
+        return in_array($name, array_keys((array) $this->getPsrRequest()->getQueryParams()));
     }
 
     public function getRequestParameter($name)
     {
         if ($this->hasRequestParameter($name)) {
             return $this->getRequestParameters()[$name];
+        } elseif ($this->getPsrRequest()->hasHeader($name)) {
+            return $this->getHeaders()[strtolower($name)];
         } else {
             return false;
         }
@@ -89,7 +106,8 @@ abstract class Controller extends \Module
 
         $headers = [];
         foreach ($this->getPsrRequest()->getHeaders() as $name => $values) {
-            $headers[$name] = $values[0];
+//            $values = explode(',', $header);
+            $headers[strtolower($name)] = (count($values) == 1) ? reset($values) : $values;
         }
         return $headers;
     }
@@ -101,15 +119,6 @@ abstract class Controller extends \Module
             return parent::getHeader($name);
         }
         return $this->getPsrRequest()->getHeader($name);
-    }
-
-    public function hasHeader($name)
-    {
-        if (!$this->request) {
-            \common_Logger::w('Deprecated usage of ' . __METHOD__);
-            return parent::hasHeader($name);
-        }
-        return $this->getPsrRequest()->hasHeader($name);
     }
 
     public function hasCookie($name)
