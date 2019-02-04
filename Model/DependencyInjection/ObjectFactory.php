@@ -43,21 +43,25 @@ class ObjectFactory
         return new $className(...$dependencies);
     }
 
-    private function resolveClassDependencies(ReflectionClass $dependencyClass)
+    private function resolveClassDependencies(ReflectionClass $class)
     {
-        $dependencyClassName = $dependencyClass->getName();
-        $params = $dependencyClass->getConstructor()->getParameters();
         $dependencies = [];
+        $constructor = $class->getConstructor();
+        if ($constructor === null) {
+            return $dependencies;
+        }
+
+        $params = $constructor->getParameters();
 
         foreach ($params as $index => $param) {
-            if (isset($parameters[$param->getName()])) {
+            if (isset($params[$param->getName()])) {
                 $dependencies[$index] = $params[$param->getName()];
             } elseif ($param->isDefaultValueAvailable() === false) {
                 if ($param->getType() instanceof ReflectionNamedType) {
                     $dependencies[$index] = $this->create($param->getType()->getName());
                     continue;
                 }
-                throw new \Exception('Unable to resolve dependencies.');
+                throw new \Exception('Unable to resolve dependencies for class "' . $class->getName() . '". Failed to resolve parameter "' . $param->getName() . '"');
             }
         }
 
