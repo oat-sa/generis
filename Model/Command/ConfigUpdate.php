@@ -2,7 +2,6 @@
 
 namespace oat\generis\Model\Command;
 
-use oat\generis\Model\DependencyInjection\AutoWiringInitializer;
 use oat\generis\Model\Config\ConfigInitializer;
 use oat\generis\Model\Console\ConsoleCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,10 +33,5 @@ class ConfigUpdate extends ConsoleCommand
         $configInitializer = new ConfigInitializer();
         $configInitializer->initialize(true);
         $this->success('Config has been rebuilt!');
-
-        $this->writeln('Rebuilding AutoWiring');
-        $configInitializer = new AutoWiringInitializer();
-        $configInitializer->initialize(true);
-        $this->success('AutoWiring has been rebuilt!');
     }
 }
