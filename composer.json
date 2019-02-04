@@ -75,11 +75,8 @@
     "autoload" : {
         "psr-4" : {
             "oat\\generis\\model\\" : "core/",
-            "oat\\generis\\Model\\" : "Model/",
             "oat\\generis\\Helper\\" : "helpers/",
-            "oat\\oatbox\\" : "common/oatbox/",
-            "oat\\generis\\test\\": "test/",
-            "oat\\generis\\scripts\\": "scripts/"
+            "oat\\oatbox\\" : "common/oatbox/"
         },
         "files": [
             "common/legacy/class.LegacyAutoLoader.php",

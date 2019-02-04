@@ -2,6 +2,7 @@
 
 namespace oat\generis\Model\DependencyInjection;
 
+use LogicException;
 use ReflectionClass;
 use ReflectionNamedType;
 
@@ -14,35 +15,26 @@ class ObjectFactory
 {
 
     /**
-     * @var array
-     */
-    private $autoWiringConfig;
-
-    /**
-     * AutoWiring constructor.
-     */
-    public function __construct()
-    {
-        if ($this->autoWiringConfig === null) {
-            $initializer = new AutoWiringInitializer();
-            $this->autoWiringConfig = $initializer->initialize();
-        }
-    }
-
-    /**
      * @param string $className
+     * @return mixed
+     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function create($className)
     {
-        if (!class_exists($className)) {
-            $oeps = 'jeetje';
-        }
         $reflector = new ReflectionClass($className);
         $dependencies = $this->resolveClassDependencies($reflector);
 
         return new $className(...$dependencies);
     }
 
+    /**
+     * Gather the resolved dependencies needed to instantiate a class.
+     *
+     * @param ReflectionClass $class
+     * @return array
+     * @throws \Exception
+     */
     private function resolveClassDependencies(ReflectionClass $class)
     {
         $dependencies = [];
@@ -61,7 +53,7 @@ class ObjectFactory
                     $dependencies[$index] = $this->create($param->getType()->getName());
                     continue;
                 }
-                throw new \Exception('Unable to resolve dependencies for class "' . $class->getName() . '". Failed to resolve parameter "' . $param->getName() . '"');
+                throw new LogicException('Unable to resolve dependencies for class "' . $class->getName() . '". Failed to resolve parameter "' . $param->getName() . '"');
             }
         }
 
