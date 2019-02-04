@@ -83,8 +83,7 @@
         },
         "files": [
             "common/legacy/class.LegacyAutoLoader.php",
-            "common/constants.php",
-            "register.php"
+            "common/constants.php"
         ]
     },
     "autoload-dev": {

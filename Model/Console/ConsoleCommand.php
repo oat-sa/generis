@@ -57,6 +57,7 @@ class ConsoleCommand extends Command
         if ($this->loadConfig === true) {
             common_Config::load();
         }
+
         $this->initialInput = new SymfonyStyle($input, $output);
         $this->initialOutput = new SymfonyStyle($input, $output);
         $this->io = new SymfonyStyle($input, $output);
