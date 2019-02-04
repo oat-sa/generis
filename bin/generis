@@ -12,7 +12,7 @@ $app = new Application();
 $configReader = new Reader();
 $objectFactory = new ObjectFactory();
 
-$commands = (array) $configReader->get('generis/commands');
+$commands = (array) $configReader->get('commands');
 foreach ($commands as $command) {
     $app->add($objectFactory->create($command));
 }
