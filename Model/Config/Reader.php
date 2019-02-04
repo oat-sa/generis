@@ -23,7 +23,7 @@ class Reader
     private function getConfig()
     {
         if ($this->config === null) {
-            $initializer = new Initialize();
+            $initializer = new ConfigInitializer();
             $this->config = $initializer->initialize();
         }
 

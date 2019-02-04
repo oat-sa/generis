@@ -8,21 +8,21 @@ use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Class used to initialize the configuration for the platform
+ * Class used to initialize configuration files based on a given file name
  *
  * @author Martijn Swinkels <m.swinkels@taotesting.com>
  */
-class Initialize
+abstract class AbstractInitializer
 {
 
-    const CONFIG_DIR      = 'config';
-    const CACHE_PATH      = 'config/config_cache.yml';
-    const CACHE_LIFETIME  = 18000;
+    const CONFIG_DIR       = 'config';
+    const CONFIG_CACHE_DIR = 'config' . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR;
+    const CACHE_LIFETIME   = 18000;
 
     /**
      * @var string
      */
-    private $filePattern;
+    private $fileName;
 
     /**
      * @var ConfigCache
@@ -42,16 +42,17 @@ class Initialize
     ];
 
     /**
-     * Reader constructor.
-     * @param string $filePattern
+     * AbstractInitializer constructor.
+     *
+     * @param string $fileName
      */
-    public function __construct($filePattern = 'config.yml')
+    public function __construct($fileName)
     {
         $rootPathParts = explode(DIRECTORY_SEPARATOR, __DIR__);
         $rootPathParts = array_splice($rootPathParts, 0, -3);
         $this->rootPath = implode(DIRECTORY_SEPARATOR, $rootPathParts) . DIRECTORY_SEPARATOR;
-        $this->configCache = new ConfigCache($this->rootPath . self::CACHE_PATH, false);
-        $this->filePattern = $filePattern;
+        $this->fileName = $fileName;
+        $this->configCache = new ConfigCache($this->rootPath . self::CONFIG_CACHE_DIR . $this->fileName, false);
     }
 
 
@@ -64,12 +65,12 @@ class Initialize
     public function initialize($rebuild = false)
     {
         if (!$rebuild && $this->configCache->isFresh() && !$this->isCacheExpired()) {
-            return Yaml::parseFile($this->rootPath . self::CACHE_PATH);
+            return Yaml::parseFile($this->rootPath . self::CONFIG_CACHE_DIR . $this->fileName);
         }
 
         $configPaths = $this->getConfigPaths();
         $fileLocator = new FileLocator($configPaths);
-        $fileList = $fileLocator->locate(self::CONFIG_DIR . DIRECTORY_SEPARATOR . $this->filePattern, null, false);
+        $fileList = $fileLocator->locate(self::CONFIG_DIR . DIRECTORY_SEPARATOR . $this->fileName, null, false);
 
         if (!count($fileList)) {
             return [];
@@ -119,7 +120,7 @@ class Initialize
      */
     private function isCacheExpired()
     {
-        $lastModificationTime = filemtime($this->rootPath . self::CACHE_PATH);
+        $lastModificationTime = filemtime($this->rootPath . self::CONFIG_CACHE_DIR . $this->fileName);
 
         return time() > $lastModificationTime + self::CACHE_LIFETIME;
     }

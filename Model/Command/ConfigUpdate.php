@@ -2,7 +2,8 @@
 
 namespace oat\generis\Model\Command;
 
-use oat\generis\Model\Config\Initialize;
+use oat\generis\Model\DependencyInjection\AutoWiringInitializer;
+use oat\generis\Model\Config\ConfigInitializer;
 use oat\generis\Model\Console\ConsoleCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,7 +21,7 @@ class ConfigUpdate extends ConsoleCommand
      */
     protected function configure()
     {
-        $this->setName('tao:config:update')
+        $this->setName('config:update')
             ->setDescription('Rebuilds the configuration for the platform');
     }
 
@@ -29,9 +30,14 @@ class ConfigUpdate extends ConsoleCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->title('Rebuilding config');
-        $configInitalizer = new Initialize();
-        $configInitalizer->initialize(true);
+        $this->writeln('Rebuilding config');
+        $configInitializer = new ConfigInitializer();
+        $configInitializer->initialize(true);
         $this->success('Config has been rebuilt!');
+
+        $this->writeln('Rebuilding AutoWiring');
+        $configInitializer = new AutoWiringInitializer();
+        $configInitializer->initialize(true);
+        $this->success('AutoWiring has been rebuilt!');
     }
 }
